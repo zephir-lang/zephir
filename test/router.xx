@@ -1,0 +1,23 @@
+
+class Router
+{
+	protected _dependencyInjector;
+
+	protected _uriSource;
+
+	public function __construct()
+	{
+
+	}	
+
+	public function setDI()
+	{
+		
+	}
+
+	public function getDI()
+	{
+		
+	}
+
+}

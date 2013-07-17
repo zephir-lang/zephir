@@ -1,0 +1,288 @@
+
+%token_prefix XX_
+%token_type {xx_parser_token*}
+%default_type {json_object*}
+%extra_argument {xx_parser_status *status}
+%name xx_
+
+%left COMMA .
+
+%include {
+
+#include "json/json.h"
+
+#include "string.h"
+#include "parser.h"
+#include "scanner.h"
+#include "xx.h"
+
+static json_object *xx_ret_literal(int type, xx_parser_token *T)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_int(type));
+	json_object_object_add(ret, "value", json_object_new_string(T->token));
+	
+	return ret;
+}
+
+static json_object *xx_ret_namespace(xx_parser_token *T)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("namespace"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	return ret;
+}
+
+static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("class"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	if (class_definition) {
+		json_object_object_add(ret, "definition", class_definition);		
+	}
+
+	return ret;
+}
+
+static json_object *xx_ret_class_definition(json_object *properties, json_object *methods)
+{
+	json_object *ret = json_object_new_object();
+
+	if (properties) {
+		json_object_object_add(ret, "properties", properties);
+	}
+	if (methods) {
+		json_object_object_add(ret, "methods", methods);
+	}
+
+	return ret;
+}
+
+static json_object *xx_ret_class_property(int visibility, xx_parser_token *T)
+{
+	json_object *ret = json_object_new_object();
+
+	if (visibility == XX_T_PUBLIC) {
+		json_object_object_add(ret, "visibility", json_object_new_string("public"));	
+	} else {
+		json_object_object_add(ret, "visibility", json_object_new_string("protected"));	
+	}
+	json_object_object_add(ret, "type", json_object_new_string("property"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	return ret;
+}
+
+static json_object *xx_ret_class_method(int visibility, xx_parser_token *T, json_object *statements)
+{
+	json_object *ret = json_object_new_object();
+
+	if (visibility == XX_T_PUBLIC) {
+		json_object_object_add(ret, "visibility", json_object_new_string("public"));	
+	} else {
+		json_object_object_add(ret, "visibility", json_object_new_string("protected"));	
+	}
+	json_object_object_add(ret, "type", json_object_new_string("method"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+
+	return ret;
+}
+
+static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
+{
+	json_object *ret;
+	int i, array_length;
+
+	if (list_left) {
+
+		ret = json_object_new_array();
+
+		if (json_object_get_type(list_left) == json_type_array) {
+			array_length = json_object_array_length(list_left);
+			for (i = 0; i < array_length; i++){			
+				json_object_array_add(ret, json_object_array_get_idx(list_left, i));
+			}			
+			//json_object_put(list_left);
+		} else {
+			json_object_array_add(ret, list_left);			
+		}
+
+		json_object_array_add(ret, right_list);			
+
+		return ret;
+	}
+
+	return right_list;	
+}
+
+static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("let"));
+	json_object_object_add(ret, "variable", json_object_new_string(T->token));
+	json_object_object_add(ret, "expr", expr);
+
+	return ret;
+}
+
+}
+
+%syntax_error {
+
+	//fprintf(stderr, "error!\n");
+
+	if (status->scanner_state->start_length) {
+		fprintf(stderr, "Syntax error, %s", status->scanner_state->start);
+	} else {
+		fprintf(stderr, "EOF");
+	}
+
+	//status->syntax_error_len = 48 + Z_STRLEN_P(status->scanner_state->active_file);
+	//status->syntax_error = emalloc(sizeof(char) * status->syntax_error_len);
+	
+
+	status->status = XX_PARSING_FAILED;
+}
+
+%token_destructor {
+	/*if ($$) {
+		if ($$->free_flag) {
+			efree($$->token);
+		}
+		efree($$);
+	}*/
+}
+
+program ::= xx_language(Q) . {
+	status->ret = Q;
+}
+
+%destructor xx_language { json_object_put($$); }
+
+xx_language(R) ::= xx_namespace_def(L) . {
+	R = L;
+}
+
+xx_language(R) ::= xx_class_def(L) . {
+	R = L;
+}
+
+xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_namespace(I);
+}
+
+xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
+	R = xx_ret_class(I, C);
+}
+
+xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class(I, NULL);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) . {
+	R = xx_ret_class_definition(C, NULL);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M);
+}
+
+xx_class_definition(R) ::= xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(NULL, M);
+}
+
+xx_class_properties_definition(R) ::= xx_class_properties_definition(L) xx_class_property_definition(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
+xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_class_property(XX_T_PUBLIC, I);
+}
+
+xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_class_property(XX_T_PROTECTED, I);
+}
+
+xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_method_definition(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
+xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL);	
+}
+
+xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(XX_T_PUBLIC, I, S);	
+}
+
+xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL);	
+}
+
+xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(XX_T_PROTECTED, I, S);	
+}
+
+xx_statement_list(R) ::= xx_statement_list(L) xx_statement(S) . {
+	R = xx_ret_list(L, S);
+}
+
+xx_statement_list(R) ::= xx_statement(S) . {
+	R = xx_ret_list(NULL, S);
+}
+
+xx_statement(R) ::= xx_let_statement(S) . {
+	R = S;
+}
+
+xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
+	R = xx_ret_let_statement(I, E);
+}
+
+xx_expr(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+}
+
+xx_expr(R) ::= INTEGER(I) . {
+	R = xx_ret_literal(XX_T_INTEGER, I);
+}
+
+xx_expr(R) ::= STRING(S) . {
+	R = xx_ret_literal(XX_T_STRING, S);
+}
+
+xx_expr(R) ::= DOUBLE(D) . {
+	R = xx_ret_literal(XX_T_DOUBLE, D);
+}
+
+xx_expr(R) ::= NULL . {
+	R = xx_ret_literal(XX_T_NULL, NULL);
+}
+
+xx_expr(R) ::= FALSE . {
+	R = xx_ret_literal(XX_T_FALSE, NULL);
+}
+
+xx_expr(R) ::= TRUE . {
+	R = xx_ret_literal(XX_T_TRUE, NULL);
+}
+
