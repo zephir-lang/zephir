@@ -14,7 +14,7 @@ class Compiler
 		return json_decode(file_get_contents(".temp/router.xx.js"), true);
 	}
 
-	public function compileClass($topStatement)
+	public function compileClass($codePrinter, $topStatement)
 	{
 
 		$classDefinition = new ClassDefinition($topStatement['name']);
@@ -41,14 +41,12 @@ class Compiler
 			}
 		}
 
-		$code = $classDefinition->compile();
-
-		return $code;
+		$classDefinition->compile($codePrinter);		
 	}
 
-	public function compileComment($topStatement)
+	public function compileComment($codePrinter, $topStatement)
 	{
-		return '/'. $topStatement['value'] . '/' . PHP_EOL;
+		$codePrinter->output('/'. $topStatement['value'] . '/');
 	}
 
 	/**
@@ -56,26 +54,24 @@ class Compiler
 	 */
 	public function compile($ir)
 	{
-		//echo $ir['name'], PHP_EOL;
-
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
 
-		$code = '';
+		$codePrinter = new codePrinter();
+
 		foreach ($ir as $topStatement) {
 
 			switch ($topStatement['type']) {
 				case 'class':
-					$code .= $this->compileClass($topStatement);
+					$this->compileClass($codePrinter, $topStatement);
 					break;
 				case 'comment':
-					$code .= $this->compileComment($topStatement);
+					$this->compileComment($codePrinter, $topStatement);
 					break;
 			}
 		}
 
-		return $code;
-
+		file_put_contents('ext/router.c', $codePrinter->getOutput());
 	}
 }

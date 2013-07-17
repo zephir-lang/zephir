@@ -11,13 +11,13 @@ You will need json-c installed on your machine:
 
 Compilation:
 
-``bash
+```bash
 gcc parser.c scanner.c -o xx -ljson-c -g3
-``
+```
 
 Compile a xx file:
 
-``bash
+```bash
 php compiler.php
-``
+```
 

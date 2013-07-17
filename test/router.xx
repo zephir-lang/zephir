@@ -18,13 +18,8 @@ class Router
 
 	public function setDI()
 	{
-		int a = 0, b, c;					
-		double 
-			a = 0, 
-			b, 
-			x = "hello";
-
-		let a = 100;
+		int a = 0, b, c;
+		double d, e, f;							
 
 		echo a;
 		echo "\n";

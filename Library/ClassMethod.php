@@ -26,11 +26,15 @@ class ClassMethod
 		return 'ZEND_ACC_PROTECTED';
 	}
 
-	public function compile(ClassDefinition $classDefinition)
+	public function compile(CodePrinter $codePrinter, ClassDefinition $classDefinition)
 	{
+
+		$symbolTable = new SymbolTable();		
+
 		if (is_object($this->_statements)) {
-			return $this->_statements->compile();
-		}
+			$this->_statements->compile($codePrinter, $symbolTable);						
+		}				
+
 		return null;
 	}
 

@@ -342,8 +342,12 @@ xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
 	R = xx_ret_let_statement(I, E);
 }
 
-xx_echo_statement(R) ::= ECHO xx_expr(E) DOTCOMMA . {
+xx_echo_statement(R) ::= ECHO xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_echo_statement(E);
+}
+
+xx_echo_statement(R) ::= ECHO IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, I));
 }
 
 xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . {

@@ -26,25 +26,25 @@ class ClassProperty
 		return 'ZEND_ACC_PROTECTED';
 	}
 
-	public function compile(ClassDefinition $classDefinition)
+	public function compile(CodePrinter $codePrinter, ClassDefinition $classDefinition)
 	{
 		if (!is_array($this->_defaultValue)) {			
-			return "\tzend_declare_property_null(" . 
+			$codePrinter->output("zend_declare_property_null(" . 
 				$classDefinition->getClassEntry() . 
 				", SL(\"" . $this->getName() . "\"), " . 
-				$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+				$this->getVisibilityAccesor() . " TSRMLS_CC);");
 		} else {
 			switch ($this->_defaultValue['type']) {
 				case 305:
-					return "\tzend_declare_property_bool(" . 
+					$codePrinter->output("zend_declare_property_bool(" . 
 						$classDefinition->getClassEntry() . 
 						", SL(\"" . $this->getName() . "\"), 0, " . 
-						$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				default:
-					return "\tzend_declare_property_null(" . 
+					$codePrinter->output("zend_declare_property_null(" . 
 						$classDefinition->getClassEntry() . 
 						", SL(\"" . $this->getName() . "\"), " . 
-						$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 			}
 		}
 	}

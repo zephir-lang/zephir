@@ -43,26 +43,45 @@ class ClassDefinition
 		return strtolower($this->_name) . '_ce';
 	}
 
-	public function compile()
-	{
-		$code = 'PHP_INIT_CLASS(' . $this->getName() . ') {' . PHP_EOL . PHP_EOL;
+	public function compile(CodePrinter $codePrinter)
+	{		
+		$codePrinter->outputBlankLine();
+		$codePrinter->output('PHP_INIT_CLASS(' . $this->getName() . ') {');
+
+		$codePrinter->increaseLevel();
+		$codePrinter->outputBlankLine();
 
 		/**
 		 * Compile properties
 		 */
-		foreach ($this->getProperties() as $property) {
-			$code .= $property->compile($this);	
+		foreach ($this->getProperties() as $property) {			
+			$property->compile($codePrinter, $this);				
 		}
 
-		$code .= '}' . PHP_EOL . PHP_EOL;
+		$codePrinter->outputBlankLine();
+		$codePrinter->decreaseLevel();
 
-		foreach ($this->getMethods() as $method) {
-			$code .= 'PHP_METHOD(' . $this->getName() . ', ' . $method->getName() . ') {' . PHP_EOL . PHP_EOL;
-			$code .= $method->compile($this);
-			$code .= '}' . PHP_EOL . PHP_EOL;
+		$codePrinter->output('}');
+		$codePrinter->outputBlankLine();
+
+		/**
+		 * Compile methods
+		 */
+		foreach ($this->getMethods() as $method) {			
+
+			$codePrinter->output('PHP_METHOD(' . $this->getName() . ', ' . $method->getName() . ') {');
+			$codePrinter->outputBlankLine();
+
+			$codePrinter->increaseLevel();
+
+			$method->compile($codePrinter, $this);
+
+			$codePrinter->decreaseLevel();
+
+			$codePrinter->output('}');
+			$codePrinter->outputBlankLine();
 		}
 
-		return $code;
 	}
 
 }
