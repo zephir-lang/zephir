@@ -15,7 +15,11 @@
 #define XX_T_TRUE 306
 #define XX_T_IDENTIFIER 307
 #define XX_T_ARRAY 308
-#define XX_T_ARBITRARY_TEXT 309
+
+#define XX_T_TYPE_INTEGER 309
+#define XX_T_TYPE_DOUBLE 310
+#define XX_T_TYPE_BOOL 311
+#define XX_T_TYPE_STRING 312
 
 #define XX_T_NAMESPACE 350
 #define XX_T_CLASS 351
@@ -25,6 +29,7 @@
 #define XX_T_FUNCTION 355
 #define XX_T_LET 356
 #define XX_T_COMMENT 357
+#define XX_T_ECHO 358
 
 /* Operators */
 #define XX_T_AT '@'

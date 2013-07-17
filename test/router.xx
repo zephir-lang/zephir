@@ -10,13 +10,24 @@ class Router
 
 	public function __construct()
 	{
-		/* This is an assignment */
+		/* 
+		 This is an assignment 
+		 */
 		let x = 100;
 	}	
 
 	public function setDI()
 	{
-		
+		int a = 0, b, c;					
+		double 
+			a = 0, 
+			b, 
+			x = "hello";
+
+		let a = 100;
+
+		echo a;
+		echo "\n";
 	}
 
 	public function getDI()

@@ -92,6 +92,31 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'echo' {
+			token->opcode = XX_T_ECHO;
+			return 0;
+		}
+
+		'int' {
+			token->opcode = XX_T_TYPE_INTEGER;
+			return 0;
+		}
+
+		'double' {
+			token->opcode = XX_T_TYPE_DOUBLE;
+			return 0;
+		}
+
+		'bool' {
+			token->opcode = XX_T_TYPE_BOOL;
+			return 0;
+		}
+
+		'string' {
+			token->opcode = XX_T_TYPE_STRING;
+			return 0;
+		}
+
 		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		STRING {
 			token->opcode = XX_T_STRING;
@@ -101,7 +126,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		COMMENT = ([/][\*] ([\001-\377]\[\\\*])* [\*][/]);
+		COMMENT = ([/][\*] ([\001-\377]\[\*])* [\*][/]);
 		COMMENT {
 			token->opcode = XX_T_COMMENT;
 			token->value = strndup(q, YYCURSOR - q - 1);

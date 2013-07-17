@@ -193,12 +193,15 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_LET:
 				xx_(xx_parser, XX_LET, NULL, parser_status);
 				break;
+			case XX_T_ECHO:
+				xx_(xx_parser, XX_ECHO, NULL, parser_status);
+				break;
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
 				break;
-			/*case XX_T_COMMA:
+			case XX_T_COMMA:
 				xx_(xx_parser, XX_COMMA, NULL, parser_status);
-				break;*/
+				break;
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
 				break;
@@ -240,6 +243,13 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
 				break;
 
+			case XX_T_TYPE_INTEGER:
+				xx_(xx_parser, XX_TYPE_INTEGER, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_DOUBLE:
+				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
+				break;			
+
 			case XX_T_INTEGER:
 				xx_parse_with_token(xx_parser, XX_T_INTEGER, XX_INTEGER, &token, parser_status);
 				break;
@@ -251,10 +261,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);
-				break;
-			/*case XX_T_ARBITRARY_TEXT:
-				XX_parse_with_token(xx_parser, XX_T_ARBITRARY_TEXT, XX_ARBITRARY_TEXT, &token, parser_status);
-				break;*/
+				break;			
 
 			default:
 				parser_status->status = XX_PARSING_FAILED;

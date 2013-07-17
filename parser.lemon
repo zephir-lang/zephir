@@ -141,6 +141,39 @@ static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
 	return ret;
 }
 
+static json_object *xx_ret_echo_statement(json_object *expr)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("echo"));
+	json_object_object_add(ret, "expr", expr);
+
+	return ret;
+}
+
+static json_object *xx_ret_declare_statement(int type, json_object *variables)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("declare"));
+	json_object_object_add(ret, "data-type", json_object_new_int(type));
+	json_object_object_add(ret, "variables", variables);	
+
+	return ret;
+}
+
+static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *expr)
+{
+	json_object *ret = json_object_new_object();
+	
+	json_object_object_add(ret, "variable", json_object_new_string(T->token));
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
+	}
+
+	return ret;
+}
+
 static json_object *xx_ret_comment(xx_parser_token *T)
 {
 	json_object *ret = json_object_new_object();
@@ -293,12 +326,48 @@ xx_statement(R) ::= xx_let_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_echo_statement(S) . {
+	R = S;
+}
+
+xx_statement(R) ::= xx_declare_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_comment(S) . {
 	R = S;
 }
 
 xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
 	R = xx_ret_let_statement(I, E);
+}
+
+xx_echo_statement(R) ::= ECHO xx_expr(E) DOTCOMMA . {
+	R = xx_ret_echo_statement(E);
+}
+
+xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_INTEGER, L);
+}
+
+xx_declare_statement(R) ::= TYPE_DOUBLE xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_INTEGER, L);
+}
+
+xx_declare_variable_list(R) ::= xx_declare_variable_list(L) COMMA xx_declare_variable(V) . {
+	R = xx_ret_list(L, V);
+}
+
+xx_declare_variable_list(R) ::= xx_declare_variable(V) . {
+	R = xx_ret_list(NULL, V);
+}
+
+xx_declare_variable(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_declare_variable(I, NULL);
+}
+
+xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+	R = xx_ret_declare_variable(I, E);
 }
 
 xx_expr(R) ::= IDENTIFIER(I) . {

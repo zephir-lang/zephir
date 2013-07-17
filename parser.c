@@ -139,6 +139,39 @@ static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
 	return ret;
 }
 
+static json_object *xx_ret_echo_statement(json_object *expr)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("echo"));
+	json_object_object_add(ret, "expr", expr);
+
+	return ret;
+}
+
+static json_object *xx_ret_declare_statement(int type, json_object *variables)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("declare"));
+	json_object_object_add(ret, "data-type", json_object_new_int(type));
+	json_object_object_add(ret, "variables", variables);	
+
+	return ret;
+}
+
+static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *expr)
+{
+	json_object *ret = json_object_new_object();
+	
+	json_object_object_add(ret, "variable", json_object_new_string(T->token));
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
+	}
+
+	return ret;
+}
+
 static json_object *xx_ret_comment(xx_parser_token *T)
 {
 	json_object *ret = json_object_new_object();
@@ -150,7 +183,7 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 }
 
 
-// 154 "parser.c"
+// 187 "parser.c"
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -200,23 +233,23 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 41
+#define YYNOCODE 48
 #define YYACTIONTYPE unsigned char
 #define xx_TOKENTYPE xx_parser_token*
 typedef union {
   xx_TOKENTYPE yy0;
-  json_object* yy15;
-  int yy81;
+  json_object* yy25;
+  int yy95;
 } YYMINORTYPE;
 #define YYSTACKDEPTH 100
 #define xx_ARG_SDECL xx_parser_status *status;
 #define xx_ARG_PDECL ,xx_parser_status *status
 #define xx_ARG_FETCH xx_parser_status *status = yypParser->status
 #define xx_ARG_STORE yypParser->status = status
-#define YYNSTATE 77
-#define YYNRULE 44
-#define YYERRORSYMBOL 22
-#define YYERRSYMDT yy81
+#define YYNSTATE 94
+#define YYNRULE 53
+#define YYERRORSYMBOL 25
+#define YYERRSYMDT yy95
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -269,66 +302,76 @@ typedef union {
 **  yy_default[]       Default action for each state.
 */
 static YYACTIONTYPE yy_action[] = {
- /*     0 */    36,  122,    1,    2,   76,    4,    5,    6,    3,    4,
- /*    10 */     5,    6,   37,   38,   39,   40,   41,   42,   61,   62,
- /*    20 */    63,   64,   65,   66,   13,   16,   74,   75,   78,   73,
- /*    30 */     7,   30,    7,   10,   30,   10,   30,   23,   26,   44,
- /*    40 */    29,   52,   44,   29,   28,   29,   56,   87,   55,   43,
- /*    50 */    67,   43,   88,   19,   20,   45,   15,   55,   51,   67,
- /*    60 */    25,   17,   54,   27,   73,   31,   53,   31,   89,   19,
- /*    70 */    31,   45,   43,   31,   43,  118,   57,   43,   69,  109,
- /*    80 */    43,   58,   68,   70,  119,   14,  110,   24,  111,    9,
- /*    90 */    46,   71,   72,  112,   46,   18,  113,   47,   11,   48,
- /*   100 */     8,   77,   50,   49,   12,   34,   32,   59,   35,   33,
- /*   110 */    20,   60,   21,   86,   22,  114,  107,  115,   86,  116,
- /*   120 */   108,  117,
+ /*     0 */    38,  148,    1,    2,   93,    4,    5,    6,   56,   57,
+ /*    10 */    58,   59,   60,   61,   32,   39,   40,   41,   42,   43,
+ /*    20 */    44,   26,   67,   29,   30,   31,   76,   54,   17,   77,
+ /*    30 */    27,   90,   20,   33,   45,   48,   63,   33,   45,   48,
+ /*    40 */    63,   74,   88,   66,   89,   32,   94,   66,   33,   45,
+ /*    50 */    48,   63,   75,   67,   29,   30,   31,   25,   66,   21,
+ /*    60 */     3,    4,    5,    6,   33,   45,   48,   63,   32,   34,
+ /*    70 */    13,   16,   91,   92,   66,   90,   28,   29,   30,   31,
+ /*    80 */    95,    7,    7,   51,   10,   10,   65,   18,  105,   19,
+ /*    90 */    79,   68,   15,   78,   85,   84,  106,   19,   20,   68,
+ /*   100 */    49,   62,   69,   66,   66,  104,   78,   51,   84,   80,
+ /*   110 */    50,   86,   64,   62,   81,   22,   87,   35,   36,   37,
+ /*   120 */    55,   14,   23,   24,  133,    9,  134,   53,   71,  135,
+ /*   130 */   136,  137,  138,   70,   69,  139,   46,   47,   73,   11,
+ /*   140 */    52,   82,   72,   83,    8,  102,   12,
 };
 static YYCODETYPE yy_lookahead[] = {
- /*     0 */     3,   23,   24,   25,   26,   27,   28,   29,   26,   27,
- /*    10 */    28,   29,   15,   16,   17,   18,   19,   20,   15,   16,
- /*    20 */    17,   18,   19,   20,   30,   31,   32,   33,    0,   35,
- /*    30 */     2,   29,    2,    5,   29,    5,   29,   13,   36,   37,
- /*    40 */    38,   36,   37,   38,   37,   38,    3,    7,    8,   21,
- /*    50 */    10,   21,    7,    8,   11,   10,    7,    8,    7,   10,
- /*    60 */     7,   32,   33,    7,   35,   14,    7,   14,    7,    8,
- /*    70 */    14,   10,   21,   14,   21,    4,    4,   21,    4,    4,
- /*    80 */    21,    9,    3,    9,    4,    7,    4,    6,    4,    4,
- /*    90 */    11,   34,    4,    4,   11,   35,    4,    3,    3,   12,
- /*   100 */     3,    0,    6,   13,    6,   39,    3,   34,    4,    9,
- /*   110 */    11,    4,    3,   40,   12,    4,    4,    4,   40,    4,
- /*   120 */     4,    4,
+ /*     0 */     3,   26,   27,   28,   29,   30,   31,   32,   18,   19,
+ /*    10 */    20,   21,   22,   23,   32,   18,   19,   20,   21,   22,
+ /*    20 */    23,   39,   40,   41,   42,   43,    7,    9,   35,   36,
+ /*    30 */     7,   38,   11,   14,   15,   16,   17,   14,   15,   16,
+ /*    40 */    17,    7,   37,   24,    4,   32,    0,   24,   14,   15,
+ /*    50 */    16,   17,   39,   40,   41,   42,   43,    7,   24,    3,
+ /*    60 */    29,   30,   31,   32,   14,   15,   16,   17,   32,    3,
+ /*    70 */    33,   34,   35,   36,   24,   38,   40,   41,   42,   43,
+ /*    80 */     0,    2,    2,    1,    5,    5,    4,   38,    7,    8,
+ /*    90 */     3,   10,    7,    8,    3,   10,    7,    8,   11,   10,
+ /*   100 */    45,   46,   11,   24,   24,    7,    8,    1,   10,    4,
+ /*   110 */     4,    4,   45,   46,    9,   12,    9,    9,   44,    4,
+ /*   120 */    37,    7,   13,    6,    4,    4,    4,    3,   12,    4,
+ /*   130 */     4,    4,    4,    3,   11,    4,   44,    4,    6,    3,
+ /*   140 */    46,   37,   13,    4,    3,   47,    6,
 };
-#define YY_SHIFT_USE_DFLT (-4)
-static signed char yy_shift_ofst[] = {
- /*     0 */    30,  101,   28,   -4,   -4,   -4,   -4,   97,   85,   -4,
- /*    10 */    95,   98,   49,   78,   -4,   -4,   40,   45,   -4,   99,
- /*    20 */   109,  102,   24,   81,   53,   -4,   56,   -4,   -4,   -4,
- /*    30 */    -4,  103,  100,   -3,  104,   -4,  112,  116,   75,   82,
- /*    40 */    84,   89,   92,   -4,   -4,   83,   94,   87,   90,   96,
- /*    50 */    51,   -4,   59,   -4,   -4,   43,   72,   -4,    3,  107,
- /*    60 */    -4,  111,  113,  115,  117,   71,   80,   79,   74,   -4,
- /*    70 */     3,   88,   -4,   -4,   61,   -4,   -4,
+#define YY_SHIFT_USE_DFLT (-11)
+static short yy_shift_ofst[] = {
+ /*     0 */    79,   46,   80,  -11,  -11,  -11,  -11,  141,  121,  -11,
+ /*    10 */   136,  140,   85,  114,  -11,  -11,   98,   81,  -11,   21,
+ /*    20 */    56,  103,  109,  117,   50,  -11,   23,  -11,  -11,  -11,
+ /*    30 */   -11,  -11,  -11,   66,  108,   -3,  115,  -11,  120,  122,
+ /*    40 */   125,  126,  127,  128,  131,   -3,  133,  -11,  124,  106,
+ /*    50 */   -11,  124,  -11,   18,  -10,  -11,  -11,  -11,  -11,  -11,
+ /*    60 */   -11,  -11,  -11,  124,   82,  -11,  -11,  -11,  123,  130,
+ /*    70 */   116,  129,  132,   34,  -11,   19,  -11,  -11,   87,  105,
+ /*    80 */   -11,  -10,  139,  -11,   91,  107,  -11,  -10,   40,  -11,
+ /*    90 */   -11,   89,  -11,  -11,
 };
-#define YY_REDUCE_USE_DFLT (-23)
+#define YY_REDUCE_USE_DFLT (-26)
 static signed char yy_reduce_ofst[] = {
- /*     0 */   -22,  -23,  -18,  -23,  -23,  -23,  -23,  -23,  -23,  -23,
- /*    10 */   -23,  -23,   -6,  -23,  -23,  -23,   29,   60,  -23,  -23,
- /*    20 */   -23,  -23,  -23,  -23,    2,  -23,    7,  -23,  -23,  -23,
- /*    30 */   -23,  -23,  -23,   66,  -23,  -23,  -23,  -23,  -23,  -23,
- /*    40 */   -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,
- /*    50 */     5,  -23,    7,  -23,  -23,  -23,  -23,  -23,   73,  -23,
- /*    60 */   -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,
- /*    70 */    57,  -23,  -23,  -23,   60,  -23,  -23,
+ /*     0 */   -25,  -26,   31,  -26,  -26,  -26,  -26,  -26,  -26,  -26,
+ /*    10 */   -26,  -26,   37,  -26,  -26,  -26,   -7,   49,  -26,  -26,
+ /*    20 */   -26,  -26,  -26,  -26,  -18,  -26,   36,  -26,  -26,  -26,
+ /*    30 */   -26,  -26,  -26,  -26,  -26,   74,  -26,  -26,  -26,  -26,
+ /*    40 */   -26,  -26,  -26,  -26,  -26,   92,  -26,  -26,   55,  -26,
+ /*    50 */   -26,   94,  -26,  -26,   83,  -26,  -26,  -26,  -26,  -26,
+ /*    60 */   -26,  -26,  -26,   67,  -26,  -26,  -26,  -26,  -26,  -26,
+ /*    70 */   -26,  -26,  -26,   13,  -26,   36,  -26,  -26,  -26,  -26,
+ /*    80 */   -26,  104,  -26,  -26,  -26,  -26,  -26,    5,  -26,  -26,
+ /*    90 */   -26,   49,  -26,  -26,
 };
 static YYACTIONTYPE yy_default[] = {
- /*     0 */   121,  121,  121,   79,   81,   82,   83,  121,  121,   84,
- /*    10 */   121,  121,  121,  121,   85,   86,  121,  121,   96,  121,
- /*    20 */   121,  121,  121,  121,  121,   98,  121,   99,  102,  104,
- /*    30 */   105,  121,  121,  121,  121,  106,  121,  121,  121,  121,
- /*    40 */   121,  121,  121,  120,  103,  121,  121,  121,  121,  121,
- /*    50 */   121,  100,  121,  101,   90,  121,  121,   92,  121,  121,
- /*    60 */    93,  121,  121,  121,  121,  121,  121,  121,  121,   94,
- /*    70 */   121,  121,   95,   97,  121,   91,   80,
+ /*     0 */   147,  147,  147,   96,   98,   99,  100,  147,  147,  101,
+ /*    10 */   147,  147,  147,  147,  102,  103,  147,  147,  113,  147,
+ /*    20 */   147,  147,  147,  147,  147,  115,  147,  116,  119,  121,
+ /*    30 */   122,  123,  124,  147,  147,  147,  147,  125,  147,  147,
+ /*    40 */   147,  147,  147,  147,  147,  147,  147,  126,  147,  147,
+ /*    50 */   127,  147,  129,  131,  147,  132,  140,  141,  142,  143,
+ /*    60 */   144,  145,  130,  147,  147,  128,  146,  120,  147,  147,
+ /*    70 */   147,  147,  147,  147,  117,  147,  118,  107,  147,  147,
+ /*    80 */   109,  147,  147,  110,  147,  147,  111,  147,  147,  112,
+ /*    90 */   114,  147,  108,   97,
 };
 #define YY_SZ_ACTTAB (sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -417,13 +460,15 @@ static const char *yyTokenName[] = {
   "$",             "COMMA",         "NAMESPACE",     "IDENTIFIER",  
   "DOTCOMMA",      "CLASS",         "BRACKET_OPEN",  "BRACKET_CLOSE",
   "PUBLIC",        "ASSIGN",        "PROTECTED",     "FUNCTION",    
-  "PARENTHESES_OPEN",  "PARENTHESES_CLOSE",  "LET",           "INTEGER",     
-  "STRING",        "DOUBLE",        "NULL",          "FALSE",       
-  "TRUE",          "COMMENT",       "error",         "program",     
-  "xx_language",   "xx_top_statement_list",  "xx_top_statement",  "xx_namespace_def",
-  "xx_class_def",  "xx_comment",    "xx_class_definition",  "xx_class_properties_definition",
-  "xx_class_methods_definition",  "xx_class_property_definition",  "xx_literal_expr",  "xx_class_method_definition",
-  "xx_statement_list",  "xx_statement",  "xx_let_statement",  "xx_expr",     
+  "PARENTHESES_OPEN",  "PARENTHESES_CLOSE",  "LET",           "ECHO",        
+  "TYPE_INTEGER",  "TYPE_DOUBLE",   "INTEGER",       "STRING",      
+  "DOUBLE",        "NULL",          "FALSE",         "TRUE",        
+  "COMMENT",       "error",         "program",       "xx_language", 
+  "xx_top_statement_list",  "xx_top_statement",  "xx_namespace_def",  "xx_class_def",
+  "xx_comment",    "xx_class_definition",  "xx_class_properties_definition",  "xx_class_methods_definition",
+  "xx_class_property_definition",  "xx_literal_expr",  "xx_class_method_definition",  "xx_statement_list",
+  "xx_statement",  "xx_let_statement",  "xx_echo_statement",  "xx_declare_statement",
+  "xx_expr",       "xx_declare_variable_list",  "xx_declare_variable",
 };
 #endif /* NDEBUG */
 
@@ -459,22 +504,31 @@ static const char *yyRuleName[] = {
  /*  25 */ "xx_statement_list ::= xx_statement_list xx_statement",
  /*  26 */ "xx_statement_list ::= xx_statement",
  /*  27 */ "xx_statement ::= xx_let_statement",
- /*  28 */ "xx_statement ::= xx_comment",
- /*  29 */ "xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA",
- /*  30 */ "xx_expr ::= IDENTIFIER",
- /*  31 */ "xx_expr ::= INTEGER",
- /*  32 */ "xx_expr ::= STRING",
- /*  33 */ "xx_expr ::= DOUBLE",
- /*  34 */ "xx_expr ::= NULL",
- /*  35 */ "xx_expr ::= FALSE",
- /*  36 */ "xx_expr ::= TRUE",
- /*  37 */ "xx_literal_expr ::= INTEGER",
- /*  38 */ "xx_literal_expr ::= STRING",
- /*  39 */ "xx_literal_expr ::= DOUBLE",
- /*  40 */ "xx_literal_expr ::= NULL",
- /*  41 */ "xx_literal_expr ::= FALSE",
- /*  42 */ "xx_literal_expr ::= TRUE",
- /*  43 */ "xx_comment ::= COMMENT",
+ /*  28 */ "xx_statement ::= xx_echo_statement",
+ /*  29 */ "xx_statement ::= xx_declare_statement",
+ /*  30 */ "xx_statement ::= xx_comment",
+ /*  31 */ "xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA",
+ /*  32 */ "xx_echo_statement ::= ECHO xx_expr DOTCOMMA",
+ /*  33 */ "xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list DOTCOMMA",
+ /*  34 */ "xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list DOTCOMMA",
+ /*  35 */ "xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable",
+ /*  36 */ "xx_declare_variable_list ::= xx_declare_variable",
+ /*  37 */ "xx_declare_variable ::= IDENTIFIER",
+ /*  38 */ "xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr",
+ /*  39 */ "xx_expr ::= IDENTIFIER",
+ /*  40 */ "xx_expr ::= INTEGER",
+ /*  41 */ "xx_expr ::= STRING",
+ /*  42 */ "xx_expr ::= DOUBLE",
+ /*  43 */ "xx_expr ::= NULL",
+ /*  44 */ "xx_expr ::= FALSE",
+ /*  45 */ "xx_expr ::= TRUE",
+ /*  46 */ "xx_literal_expr ::= INTEGER",
+ /*  47 */ "xx_literal_expr ::= STRING",
+ /*  48 */ "xx_literal_expr ::= DOUBLE",
+ /*  49 */ "xx_literal_expr ::= NULL",
+ /*  50 */ "xx_literal_expr ::= FALSE",
+ /*  51 */ "xx_literal_expr ::= TRUE",
+ /*  52 */ "xx_comment ::= COMMENT",
 };
 #endif /* NDEBUG */
 
@@ -553,7 +607,10 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     case 19:
     case 20:
     case 21:
-// 173 "parser.lemon"
+    case 22:
+    case 23:
+    case 24:
+// 206 "parser.lemon"
 {
 	/*if ((yypminor->yy0)) {
 		if ((yypminor->yy0)->free_flag) {
@@ -562,12 +619,12 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
 		efree((yypminor->yy0));
 	}*/
 }
-// 566 "parser.c"
+// 623 "parser.c"
       break;
-    case 24:
-// 186 "parser.lemon"
-{ json_object_put((yypminor->yy15)); }
-// 571 "parser.c"
+    case 27:
+// 219 "parser.lemon"
+{ json_object_put((yypminor->yy25)); }
+// 628 "parser.c"
       break;
     default:  break;   /* If no destructor action specified: do nothing */
   }
@@ -743,50 +800,59 @@ static struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 23, 1 },
-  { 24, 1 },
-  { 25, 2 },
-  { 25, 1 },
   { 26, 1 },
-  { 26, 1 },
-  { 26, 1 },
-  { 27, 3 },
-  { 28, 5 },
-  { 28, 4 },
-  { 30, 1 },
-  { 30, 2 },
-  { 30, 1 },
-  { 31, 2 },
-  { 31, 1 },
-  { 33, 3 },
-  { 33, 5 },
-  { 33, 3 },
-  { 33, 5 },
-  { 32, 2 },
-  { 32, 1 },
-  { 35, 7 },
-  { 35, 8 },
-  { 35, 7 },
-  { 35, 8 },
-  { 36, 2 },
-  { 36, 1 },
-  { 37, 1 },
-  { 37, 1 },
-  { 38, 5 },
-  { 39, 1 },
-  { 39, 1 },
-  { 39, 1 },
-  { 39, 1 },
-  { 39, 1 },
-  { 39, 1 },
-  { 39, 1 },
-  { 34, 1 },
-  { 34, 1 },
-  { 34, 1 },
-  { 34, 1 },
-  { 34, 1 },
-  { 34, 1 },
+  { 27, 1 },
+  { 28, 2 },
+  { 28, 1 },
   { 29, 1 },
+  { 29, 1 },
+  { 29, 1 },
+  { 30, 3 },
+  { 31, 5 },
+  { 31, 4 },
+  { 33, 1 },
+  { 33, 2 },
+  { 33, 1 },
+  { 34, 2 },
+  { 34, 1 },
+  { 36, 3 },
+  { 36, 5 },
+  { 36, 3 },
+  { 36, 5 },
+  { 35, 2 },
+  { 35, 1 },
+  { 38, 7 },
+  { 38, 8 },
+  { 38, 7 },
+  { 38, 8 },
+  { 39, 2 },
+  { 39, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 41, 5 },
+  { 42, 3 },
+  { 43, 3 },
+  { 43, 3 },
+  { 45, 3 },
+  { 45, 1 },
+  { 46, 1 },
+  { 46, 3 },
+  { 44, 1 },
+  { 44, 1 },
+  { 44, 1 },
+  { 44, 1 },
+  { 44, 1 },
+  { 44, 1 },
+  { 44, 1 },
+  { 37, 1 },
+  { 37, 1 },
+  { 37, 1 },
+  { 37, 1 },
+  { 37, 1 },
+  { 37, 1 },
+  { 32, 1 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -824,11 +890,11 @@ static void yy_reduce(
   **     break;
   */
       case 0:
-// 182 "parser.lemon"
+// 215 "parser.lemon"
 {
-	status->ret = yymsp[0].minor.yy15;
+	status->ret = yymsp[0].minor.yy25;
 }
-// 832 "parser.c"
+// 898 "parser.c"
         break;
       case 1:
       case 4:
@@ -836,124 +902,127 @@ static void yy_reduce(
       case 6:
       case 27:
       case 28:
-// 188 "parser.lemon"
+      case 29:
+      case 30:
+// 221 "parser.lemon"
 {
-	yygotominor.yy15 = yymsp[0].minor.yy15;
+	yygotominor.yy25 = yymsp[0].minor.yy25;
 }
-// 844 "parser.c"
+// 912 "parser.c"
         break;
       case 2:
       case 13:
       case 19:
       case 25:
-// 192 "parser.lemon"
+// 225 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_list(yymsp[-1].minor.yy15, yymsp[0].minor.yy15);
+	yygotominor.yy25 = xx_ret_list(yymsp[-1].minor.yy25, yymsp[0].minor.yy25);
 }
-// 854 "parser.c"
+// 922 "parser.c"
         break;
       case 3:
       case 14:
       case 20:
       case 26:
-// 196 "parser.lemon"
+      case 36:
+// 229 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_list(NULL, yymsp[0].minor.yy15);
-}
-// 864 "parser.c"
-        break;
-      case 7:
-// 212 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_namespace(yymsp[-1].minor.yy0);
-  yy_destructor(2,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 873 "parser.c"
-        break;
-      case 8:
-// 216 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy15);
-  yy_destructor(5,&yymsp[-4].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 883 "parser.c"
-        break;
-      case 9:
-// 220 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class(yymsp[-2].minor.yy0, NULL);
-  yy_destructor(5,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 893 "parser.c"
-        break;
-      case 10:
-// 224 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class_definition(yymsp[0].minor.yy15, NULL);
-}
-// 900 "parser.c"
-        break;
-      case 11:
-// 228 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class_definition(yymsp[-1].minor.yy15, yymsp[0].minor.yy15);
-}
-// 907 "parser.c"
-        break;
-      case 12:
-// 232 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class_definition(NULL, yymsp[0].minor.yy15);
-}
-// 914 "parser.c"
-        break;
-      case 15:
-// 244 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL);
-  yy_destructor(8,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 923 "parser.c"
-        break;
-      case 16:
-// 248 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy15);
-  yy_destructor(8,&yymsp[-4].minor);
-  yy_destructor(9,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy25 = xx_ret_list(NULL, yymsp[0].minor.yy25);
 }
 // 933 "parser.c"
         break;
-      case 17:
-// 252 "parser.lemon"
+      case 7:
+// 245 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL);
-  yy_destructor(10,&yymsp[-2].minor);
+	yygotominor.yy25 = xx_ret_namespace(yymsp[-1].minor.yy0);
+  yy_destructor(2,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
 // 942 "parser.c"
         break;
-      case 18:
-// 256 "parser.lemon"
+      case 8:
+// 249 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy15);
+	yygotominor.yy25 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+  yy_destructor(5,&yymsp[-4].minor);
+  yy_destructor(6,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[0].minor);
+}
+// 952 "parser.c"
+        break;
+      case 9:
+// 253 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class(yymsp[-2].minor.yy0, NULL);
+  yy_destructor(5,&yymsp[-3].minor);
+  yy_destructor(6,&yymsp[-1].minor);
+  yy_destructor(7,&yymsp[0].minor);
+}
+// 962 "parser.c"
+        break;
+      case 10:
+// 257 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_definition(yymsp[0].minor.yy25, NULL);
+}
+// 969 "parser.c"
+        break;
+      case 11:
+// 261 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_definition(yymsp[-1].minor.yy25, yymsp[0].minor.yy25);
+}
+// 976 "parser.c"
+        break;
+      case 12:
+// 265 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_definition(NULL, yymsp[0].minor.yy25);
+}
+// 983 "parser.c"
+        break;
+      case 15:
+// 277 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL);
+  yy_destructor(8,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
+}
+// 992 "parser.c"
+        break;
+      case 16:
+// 281 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+  yy_destructor(8,&yymsp[-4].minor);
+  yy_destructor(9,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
+}
+// 1002 "parser.c"
+        break;
+      case 17:
+// 285 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL);
+  yy_destructor(10,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
+}
+// 1011 "parser.c"
+        break;
+      case 18:
+// 289 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
   yy_destructor(10,&yymsp[-4].minor);
   yy_destructor(9,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 952 "parser.c"
+// 1021 "parser.c"
         break;
       case 21:
-// 268 "parser.lemon"
+// 301 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL);	
+	yygotominor.yy25 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL);	
   yy_destructor(8,&yymsp[-6].minor);
   yy_destructor(11,&yymsp[-5].minor);
   yy_destructor(12,&yymsp[-3].minor);
@@ -961,12 +1030,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-1].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 965 "parser.c"
+// 1034 "parser.c"
         break;
       case 22:
-// 272 "parser.lemon"
+// 305 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-1].minor.yy15);	
+	yygotominor.yy25 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-1].minor.yy25);	
   yy_destructor(8,&yymsp[-7].minor);
   yy_destructor(11,&yymsp[-6].minor);
   yy_destructor(12,&yymsp[-4].minor);
@@ -974,12 +1043,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-2].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 978 "parser.c"
+// 1047 "parser.c"
         break;
       case 23:
-// 276 "parser.lemon"
+// 309 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL);	
+	yygotominor.yy25 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL);	
   yy_destructor(10,&yymsp[-6].minor);
   yy_destructor(11,&yymsp[-5].minor);
   yy_destructor(12,&yymsp[-3].minor);
@@ -987,12 +1056,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-1].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 991 "parser.c"
+// 1060 "parser.c"
         break;
       case 24:
-// 280 "parser.lemon"
+// 313 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, yymsp[-1].minor.yy15);	
+	yygotominor.yy25 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, yymsp[-1].minor.yy25);	
   yy_destructor(10,&yymsp[-7].minor);
   yy_destructor(11,&yymsp[-6].minor);
   yy_destructor(12,&yymsp[-4].minor);
@@ -1000,82 +1069,132 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-2].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 1004 "parser.c"
+// 1073 "parser.c"
         break;
-      case 29:
-// 300 "parser.lemon"
+      case 31:
+// 341 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_let_statement(yymsp[-3].minor.yy0, yymsp[-1].minor.yy15);
+	yygotominor.yy25 = xx_ret_let_statement(yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
   yy_destructor(14,&yymsp[-4].minor);
   yy_destructor(9,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1014 "parser.c"
-        break;
-      case 30:
-// 304 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
-}
-// 1021 "parser.c"
-        break;
-      case 31:
-      case 37:
-// 308 "parser.lemon"
-{
-	yygotominor.yy15 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
-}
-// 1029 "parser.c"
+// 1083 "parser.c"
         break;
       case 32:
-      case 38:
-// 312 "parser.lemon"
+// 345 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
+	yygotominor.yy25 = xx_ret_echo_statement(yymsp[-1].minor.yy25);
+  yy_destructor(15,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
 }
-// 1037 "parser.c"
+// 1092 "parser.c"
         break;
       case 33:
-      case 39:
-// 316 "parser.lemon"
+// 349 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
+	yygotominor.yy25 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy25);
+  yy_destructor(16,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
 }
-// 1045 "parser.c"
+// 1101 "parser.c"
         break;
       case 34:
-      case 40:
-// 320 "parser.lemon"
+// 353 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_literal(XX_T_NULL, NULL);
-  yy_destructor(18,&yymsp[0].minor);
+	yygotominor.yy25 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy25);
+  yy_destructor(17,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
 }
-// 1054 "parser.c"
+// 1110 "parser.c"
         break;
       case 35:
-      case 41:
-// 324 "parser.lemon"
+// 357 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_literal(XX_T_FALSE, NULL);
-  yy_destructor(19,&yymsp[0].minor);
+	yygotominor.yy25 = xx_ret_list(yymsp[-2].minor.yy25, yymsp[0].minor.yy25);
+  yy_destructor(1,&yymsp[-1].minor);
 }
-// 1063 "parser.c"
+// 1118 "parser.c"
         break;
-      case 36:
-      case 42:
-// 328 "parser.lemon"
+      case 37:
+// 365 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_literal(XX_T_TRUE, NULL);
-  yy_destructor(20,&yymsp[0].minor);
+	yygotominor.yy25 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
 }
-// 1072 "parser.c"
+// 1125 "parser.c"
+        break;
+      case 38:
+// 369 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy25);
+  yy_destructor(9,&yymsp[-1].minor);
+}
+// 1133 "parser.c"
+        break;
+      case 39:
+// 373 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
+}
+// 1140 "parser.c"
+        break;
+      case 40:
+      case 46:
+// 377 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
+}
+// 1148 "parser.c"
+        break;
+      case 41:
+      case 47:
+// 381 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
+}
+// 1156 "parser.c"
+        break;
+      case 42:
+      case 48:
+// 385 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
+}
+// 1164 "parser.c"
         break;
       case 43:
-// 356 "parser.lemon"
+      case 49:
+// 389 "parser.lemon"
 {
-	yygotominor.yy15 = xx_ret_comment(yymsp[0].minor.yy0);
+	yygotominor.yy25 = xx_ret_literal(XX_T_NULL, NULL);
+  yy_destructor(21,&yymsp[0].minor);
 }
-// 1079 "parser.c"
+// 1173 "parser.c"
+        break;
+      case 44:
+      case 50:
+// 393 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_FALSE, NULL);
+  yy_destructor(22,&yymsp[0].minor);
+}
+// 1182 "parser.c"
+        break;
+      case 45:
+      case 51:
+// 397 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_literal(XX_T_TRUE, NULL);
+  yy_destructor(23,&yymsp[0].minor);
+}
+// 1191 "parser.c"
+        break;
+      case 52:
+// 425 "parser.lemon"
+{
+	yygotominor.yy25 = xx_ret_comment(yymsp[0].minor.yy0);
+}
+// 1198 "parser.c"
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -1117,7 +1236,7 @@ static void yy_syntax_error(
 ){
   xx_ARG_FETCH;
 #define TOKEN (yyminor.yy0)
-// 156 "parser.lemon"
+// 189 "parser.lemon"
 
 
 	//fprintf(stderr, "error!\n");
@@ -1134,7 +1253,7 @@ static void yy_syntax_error(
 
 	status->status = XX_PARSING_FAILED;
 
-// 1138 "parser.c"
+// 1257 "parser.c"
   xx_ARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -1500,12 +1619,15 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_LET:
 				xx_(xx_parser, XX_LET, NULL, parser_status);
 				break;
+			case XX_T_ECHO:
+				xx_(xx_parser, XX_ECHO, NULL, parser_status);
+				break;
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
 				break;
-			/*case XX_T_COMMA:
+			case XX_T_COMMA:
 				xx_(xx_parser, XX_COMMA, NULL, parser_status);
-				break;*/
+				break;
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
 				break;
@@ -1547,6 +1669,13 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
 				break;
 
+			case XX_T_TYPE_INTEGER:
+				xx_(xx_parser, XX_TYPE_INTEGER, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_DOUBLE:
+				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
+				break;			
+
 			case XX_T_INTEGER:
 				xx_parse_with_token(xx_parser, XX_T_INTEGER, XX_INTEGER, &token, parser_status);
 				break;
@@ -1558,10 +1687,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);
-				break;
-			/*case XX_T_ARBITRARY_TEXT:
-				XX_parse_with_token(xx_parser, XX_T_ARBITRARY_TEXT, XX_ARBITRARY_TEXT, &token, parser_status);
-				break;*/
+				break;			
 
 			default:
 				parser_status->status = XX_PARSING_FAILED;
