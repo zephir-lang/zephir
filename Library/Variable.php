@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Variable 
+ * 
+ * This represents a variable in a symbol table
+ */
 class Variable 
 {
 	protected $_type;

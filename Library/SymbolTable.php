@@ -15,6 +15,13 @@ class SymbolTable
 		return isset($this->_variables[$name]);
 	}
 
+	/**
+	 * Adds a variable to the symbol table
+	 *
+	 * @param int $type
+	 * @param string $name
+	 * @return \Variable
+	 */
 	public function addVariable($type, $name)
 	{
 		$variable = new Variable($type, $name);
