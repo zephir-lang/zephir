@@ -8,7 +8,7 @@
  */
 class SymbolTable
 {
-	protected $_variables;
+	protected $_variables = array();
 	
 	public function hasVariable($name)
 	{
@@ -29,9 +29,24 @@ class SymbolTable
 		return $variable;
 	}
 
-	public function getVariable()
+	/**
+	 * Returns a variable in the symbol table
+	 *
+	 * @return \Variable
+	 */ 
+	public function getVariable($name)
 	{
-		
+		return $this->_variables[$name];
+	}
+
+	/**
+	 * Returns all the variables defined in the symbol table
+	 *
+	 * @return \Variable[]
+	 */
+	public function getVariables()
+	{
+		return $this->_variables;
 	}
 
 }

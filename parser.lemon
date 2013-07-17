@@ -355,7 +355,19 @@ xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . 
 }
 
 xx_declare_statement(R) ::= TYPE_DOUBLE xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_INTEGER, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, L);
+}
+
+xx_declare_statement(R) ::= TYPE_STRING xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_STRING, L);
+}
+
+xx_declare_statement(R) ::= TYPE_BOOL xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_BOOL, L);
+}
+
+xx_declare_statement(R) ::= TYPE_VAR xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_VAR, L);
 }
 
 xx_declare_variable_list(R) ::= xx_declare_variable_list(L) COMMA xx_declare_variable(V) . {

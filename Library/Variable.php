@@ -9,7 +9,9 @@ class Variable
 {
 	protected $_type;
 
-	protected $_name;	
+	protected $_name;
+
+	protected $_numberUses = 0;
 
 	public function __construct($type, $name)
 	{
@@ -26,4 +28,15 @@ class Variable
 	{
 		return $this->_name;
 	}
+
+	public function increaseUses()
+	{
+		$this->_numberUses++;
+	}
+
+	public function getNumberUses()
+	{
+		return $this->_numberUses;
+	}
+
 }

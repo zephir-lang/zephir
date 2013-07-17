@@ -20,6 +20,7 @@
 #define XX_T_TYPE_DOUBLE 310
 #define XX_T_TYPE_BOOL 311
 #define XX_T_TYPE_STRING 312
+#define XX_T_TYPE_VAR 313
 
 #define XX_T_NAMESPACE 350
 #define XX_T_CLASS 351

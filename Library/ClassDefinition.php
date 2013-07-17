@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * ClassDefinition
+ *
+ * Represents a class and their properties and methods 
+ */
 class ClassDefinition
 {
 	protected $_name;
@@ -43,13 +48,24 @@ class ClassDefinition
 		return strtolower($this->_name) . '_ce';
 	}
 
+	/**
+	 * Compiles a class
+	 *
+	 */
 	public function compile(CodePrinter $codePrinter)
 	{		
 		$codePrinter->outputBlankLine();
-		$codePrinter->output('PHP_INIT_CLASS(' . $this->getName() . ') {');
+
+		$codePrinter->output('TEST_INIT_CLASS(' . $this->getName() . ') {');
+		$codePrinter->outputBlankLine();
 
 		$codePrinter->increaseLevel();
-		$codePrinter->outputBlankLine();
+
+		/**
+		 * Register the class
+		 */
+		$codePrinter->output('TEST_REGISTER_CLASS(Test, Router, router, router_method_entry, 0);');
+		$codePrinter->outputBlankLine();		
 
 		/**
 		 * Compile properties

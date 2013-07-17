@@ -15,6 +15,9 @@ class DeclareStatement
 		$this->_statement = $statement;
 	}
 
+	/**
+	 * Compiles the statement
+	 */
 	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable)
 	{
 		$statement = $this->_statement;
@@ -26,6 +29,9 @@ class DeclareStatement
 		switch ($statement['data-type']) {
 			case VAR_TYPE_INT:
 				$codePrinter->outputNoLineFeed('int ');
+				break;		
+			case VAR_TYPE_DOUBLE:
+				$codePrinter->outputNoLineFeed('double ');
 				break;		
 		}
 
@@ -42,6 +48,5 @@ class DeclareStatement
 		}
 
 		$codePrinter->outputNoLevel(join(', ', $variables) . ';');
-
 	}
 }

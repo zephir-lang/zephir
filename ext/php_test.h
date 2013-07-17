@@ -93,8 +93,8 @@ extern zend_module_entry test_module_entry;
 
 /** Macros for branch prediction */
 #if defined(__GNUC__) && ZEND_GCC_VERSION >= 3004 && defined(__i386__)
-#define likely(x)       __builtin_expect((x),1)
-#define unlikely(x)     __builtin_expect((x),0)
+#define likely(x)       __builtin_expect((x), 1)
+#define unlikely(x)     __builtin_expect((x), 0)
 #else
 #define likely(x)       EXPECTED(x)
 #define unlikely(x)     UNEXPECTED(x)

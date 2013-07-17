@@ -40,6 +40,7 @@ class ClassProperty
 						$classDefinition->getClassEntry() . 
 						", SL(\"" . $this->getName() . "\"), 0, " . 
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					break;
 				default:
 					$codePrinter->output("zend_declare_property_null(" . 
 						$classDefinition->getClassEntry() . 

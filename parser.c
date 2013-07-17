@@ -233,23 +233,23 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 48
+#define YYNOCODE 51
 #define YYACTIONTYPE unsigned char
 #define xx_TOKENTYPE xx_parser_token*
 typedef union {
   xx_TOKENTYPE yy0;
-  json_object* yy25;
-  int yy95;
+  json_object* yy75;
+  int yy101;
 } YYMINORTYPE;
 #define YYSTACKDEPTH 100
 #define xx_ARG_SDECL xx_parser_status *status;
 #define xx_ARG_PDECL ,xx_parser_status *status
 #define xx_ARG_FETCH xx_parser_status *status = yypParser->status
 #define xx_ARG_STORE yypParser->status = status
-#define YYNSTATE 96
-#define YYNRULE 54
-#define YYERRORSYMBOL 25
-#define YYERRSYMDT yy95
+#define YYNSTATE 105
+#define YYNRULE 57
+#define YYERRORSYMBOL 28
+#define YYERRSYMDT yy101
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -302,78 +302,85 @@ typedef union {
 **  yy_default[]       Default action for each state.
 */
 static YYACTIONTYPE yy_action[] = {
- /*     0 */   151,    1,    2,   95,    4,    5,    6,   38,   32,   50,
- /*    10 */    51,   52,   53,   54,   55,   77,   69,   29,   30,   31,
- /*    20 */    57,   64,   39,   40,   41,   42,   43,   44,   48,   32,
- /*    30 */     3,    4,    5,    6,   87,   96,   26,   69,   29,   30,
- /*    40 */    31,   37,   71,   50,   51,   52,   53,   54,   55,    7,
- /*    50 */    14,   27,   10,  107,   19,   25,   70,    8,   33,   45,
- /*    60 */    56,   65,   33,   45,   56,   65,   78,   11,   68,   20,
- /*    70 */    76,   68,   68,   33,   45,   56,   65,   33,   45,   56,
- /*    80 */    65,   32,   12,   68,    9,  108,   19,   68,   70,   28,
- /*    90 */    29,   30,   31,   13,   16,   93,   94,   97,   92,    7,
- /*   100 */    17,   79,   10,   92,   59,   15,   80,   67,   86,  106,
- /*   110 */    80,   59,   86,   82,   58,   81,   66,   64,   83,   88,
- /*   120 */    18,   68,   21,   20,   89,   22,   24,   23,   34,   36,
- /*   130 */    35,  136,  137,  138,  139,  140,  141,  142,   46,   47,
- /*   140 */    49,   61,   60,   62,   63,   72,  103,   75,   71,   85,
- /*   150 */    91,   73,  103,   74,   84,   90,
+ /*     0 */    85,   50,   51,   52,   53,   54,   55,   33,   45,   56,
+ /*    10 */    65,   68,   71,   74,   62,   27,    3,    4,    5,    6,
+ /*    20 */    77,   90,   33,   45,   56,   65,   68,   71,   74,   20,
+ /*    30 */    87,   13,   16,  102,  103,   77,  101,   33,   45,   56,
+ /*    40 */    65,   68,   71,   74,  100,   25,   75,   64,   17,   88,
+ /*    50 */    77,  101,   33,   45,   56,   65,   68,   71,   74,   48,
+ /*    60 */   116,   19,   97,   79,  150,   77,  148,   98,  163,    1,
+ /*    70 */     2,  104,    4,    5,    6,   38,   32,   50,   51,   52,
+ /*    80 */    53,   54,   55,   26,   78,   29,   30,   31,  115,   89,
+ /*    90 */     9,   95,   32,   39,   40,   41,   42,   43,   44,   86,
+ /*   100 */    78,   29,   30,   31,   32,  106,   18,    7,   15,   89,
+ /*   110 */    10,   95,   28,   29,   30,   31,    7,  117,   19,   10,
+ /*   120 */    79,   59,   69,   64,   76,   59,   59,  149,   70,   58,
+ /*   130 */    57,   64,   77,   63,   96,   72,   64,   59,   66,   64,
+ /*   140 */    73,   77,   80,   91,   59,   61,   24,   67,   92,  151,
+ /*   150 */   152,  153,  154,   46,   47,   11,   82,   49,   81,    8,
+ /*   160 */    80,  105,   36,   12,   83,   84,   22,   21,   34,   20,
+ /*   170 */    93,   35,   94,   37,   14,   60,   23,   99,
 };
 static YYCODETYPE yy_lookahead[] = {
- /*     0 */    26,   27,   28,   29,   30,   31,   32,    3,   32,   18,
- /*    10 */    19,   20,   21,   22,   23,   39,   40,   41,   42,   43,
- /*    20 */    45,   46,   18,   19,   20,   21,   22,   23,    3,   32,
- /*    30 */    29,   30,   31,   32,    3,    0,   39,   40,   41,   42,
- /*    40 */    43,    4,   11,   18,   19,   20,   21,   22,   23,    2,
- /*    50 */     7,    7,    5,    7,    8,    7,   10,    3,   14,   15,
- /*    60 */    16,   17,   14,   15,   16,   17,    7,    3,   24,   11,
- /*    70 */     7,   24,   24,   14,   15,   16,   17,   14,   15,   16,
- /*    80 */    17,   32,    6,   24,    4,    7,    8,   24,   10,   40,
- /*    90 */    41,   42,   43,   33,   34,   35,   36,    0,   38,    2,
- /*   100 */    35,   36,    5,   38,    1,    7,    8,    4,   10,    7,
- /*   110 */     8,    1,   10,    4,    4,    3,   45,   46,    9,    4,
- /*   120 */    38,   24,    3,   11,    9,   12,    6,   13,    3,   44,
- /*   130 */     9,    4,    4,    4,    4,    4,    4,    4,   37,    4,
- /*   140 */     4,    3,   46,    9,   37,    3,   47,    6,   11,    4,
- /*   150 */     4,   12,   47,   13,   37,   37,
+ /*     0 */     7,   21,   22,   23,   24,   25,   26,   14,   15,   16,
+ /*    10 */    17,   18,   19,   20,    9,    7,   32,   33,   34,   35,
+ /*    20 */    27,    3,   14,   15,   16,   17,   18,   19,   20,   11,
+ /*    30 */     7,   36,   37,   38,   39,   27,   41,   14,   15,   16,
+ /*    40 */    17,   18,   19,   20,    4,    7,   48,   49,   38,   39,
+ /*    50 */    27,   41,   14,   15,   16,   17,   18,   19,   20,    3,
+ /*    60 */     7,    8,    4,   10,    4,   27,    4,    9,   29,   30,
+ /*    70 */    31,   32,   33,   34,   35,    3,   35,   21,   22,   23,
+ /*    80 */    24,   25,   26,   42,   43,   44,   45,   46,    7,    8,
+ /*    90 */     4,   10,   35,   21,   22,   23,   24,   25,   26,   42,
+ /*   100 */    43,   44,   45,   46,   35,    0,   41,    2,    7,    8,
+ /*   110 */     5,   10,   43,   44,   45,   46,    2,    7,    8,    5,
+ /*   120 */    10,    1,   48,   49,    4,    1,    1,    4,    4,    4,
+ /*   130 */    48,   49,   27,   40,    3,   48,   49,    1,   48,   49,
+ /*   140 */     4,   27,   11,    4,    1,    3,    6,    4,    9,    4,
+ /*   150 */     4,    4,    4,   40,    4,    3,   12,    4,    3,    3,
+ /*   160 */    11,    0,   47,    6,   13,    6,   12,    3,    3,   11,
+ /*   170 */    40,    9,    4,    4,    7,   49,   13,   40,
 };
-#define YY_SHIFT_USE_DFLT (-10)
+#define YY_SHIFT_USE_DFLT (-21)
 static short yy_shift_ofst[] = {
- /*     0 */    47,   35,   97,  -10,  -10,  -10,  -10,   54,   80,  -10,
- /*    10 */    64,   76,   98,   43,  -10,  -10,  102,   46,  -10,   58,
- /*    20 */   119,  113,  114,  120,   48,  -10,   44,  -10,  -10,  -10,
- /*    30 */   -10,  -10,  -10,  125,  121,    4,   37,  -10,  127,  128,
- /*    40 */   129,  130,  131,  132,  133,   25,  135,  -10,  136,  -10,
- /*    50 */   -10,  -10,  -10,  -10,  -10,  -10,  138,  110,  -10,  138,
- /*    60 */   -10,  134,   -9,  -10,  -10,  138,  103,  -10,  -10,  -10,
- /*    70 */   137,  142,  139,  140,  141,   63,  -10,   59,  -10,  -10,
- /*    80 */   112,  109,  -10,   -9,  145,  -10,   31,  115,  -10,   -9,
- /*    90 */   146,  -10,  -10,   78,  -10,  -10,
+ /*     0 */   114,  161,  105,  -21,  -21,  -21,  -21,  156,   86,  -21,
+ /*    10 */   152,  157,  101,  167,  -21,  -21,   81,   53,  -21,  158,
+ /*    20 */   164,  154,  163,  140,   38,  -21,    8,  -21,  -21,  -21,
+ /*    30 */   -21,  -21,  -21,  165,  162,   72,  169,  -21,   62,  123,
+ /*    40 */    60,  145,  146,  147,  148,   56,  150,  -21,  153,  -21,
+ /*    50 */   -21,  -21,  -21,  -21,  -21,  -21,  142,  125,  -21,  142,
+ /*    60 */   -21,    5,  -20,  -21,  -21,  142,  143,  -21,  142,  124,
+ /*    70 */   -21,  142,  136,  -21,  142,  120,  -21,  -21,  -21,  149,
+ /*    80 */   155,  144,  151,  159,   -7,  -21,   23,  -21,  -21,   18,
+ /*    90 */   139,  -21,  -20,  168,  -21,  131,   58,  -21,  -20,   40,
+ /*   100 */   -21,  -21,  110,  -21,  -21,
 };
-#define YY_REDUCE_USE_DFLT (-27)
-static signed char yy_reduce_ofst[] = {
- /*     0 */   -26,  -27,    1,  -27,  -27,  -27,  -27,  -27,  -27,  -27,
- /*    10 */   -27,  -27,   60,  -27,  -27,  -27,   65,   82,  -27,  -27,
- /*    20 */   -27,  -27,  -27,  -27,   -3,  -27,   49,  -27,  -27,  -27,
- /*    30 */   -27,  -27,  -27,  -27,  -27,   85,  -27,  -27,  -27,  -27,
- /*    40 */   -27,  -27,  -27,  -27,  -27,  101,  -27,  -27,  -27,  -27,
- /*    50 */   -27,  -27,  -27,  -27,  -27,  -27,  -25,  -27,  -27,   96,
- /*    60 */   -27,  -27,  107,  -27,  -27,   71,  -27,  -27,  -27,  -27,
- /*    70 */   -27,  -27,  -27,  -27,  -27,  -24,  -27,   49,  -27,  -27,
- /*    80 */   -27,  -27,  -27,  117,  -27,  -27,  -27,  -27,  -27,  118,
- /*    90 */   -27,  -27,  -27,   82,  -27,  -27,
+#define YY_REDUCE_USE_DFLT (-17)
+static short yy_reduce_ofst[] = {
+ /*     0 */    39,  -17,  -16,  -17,  -17,  -17,  -17,  -17,  -17,  -17,
+ /*    10 */   -17,  -17,   -5,  -17,  -17,  -17,   10,   65,  -17,  -17,
+ /*    20 */   -17,  -17,  -17,  -17,   41,  -17,   69,  -17,  -17,  -17,
+ /*    30 */   -17,  -17,  -17,  -17,  -17,  115,  -17,  -17,  -17,  -17,
+ /*    40 */   -17,  -17,  -17,  -17,  -17,  113,  -17,  -17,  -17,  -17,
+ /*    50 */   -17,  -17,  -17,  -17,  -17,  -17,   82,  -17,  -17,  126,
+ /*    60 */   -17,  -17,   93,  -17,  -17,   90,  -17,  -17,   74,  -17,
+ /*    70 */   -17,   87,  -17,  -17,   -2,  -17,  -17,  -17,  -17,  -17,
+ /*    80 */   -17,  -17,  -17,  -17,   57,  -17,   69,  -17,  -17,  -17,
+ /*    90 */   -17,  -17,  130,  -17,  -17,  -17,  -17,  -17,  137,  -17,
+ /*   100 */   -17,  -17,   65,  -17,  -17,
 };
 static YYACTIONTYPE yy_default[] = {
- /*     0 */   150,  150,  150,   98,  100,  101,  102,  150,  150,  103,
- /*    10 */   150,  150,  150,  150,  104,  105,  150,  150,  115,  150,
- /*    20 */   150,  150,  150,  150,  150,  117,  150,  118,  121,  123,
- /*    30 */   124,  125,  126,  150,  150,  150,  150,  127,  150,  150,
- /*    40 */   150,  150,  150,  150,  150,  150,  150,  128,  150,  129,
- /*    50 */   143,  144,  145,  146,  147,  148,  150,  150,  130,  150,
- /*    60 */   132,  134,  150,  135,  133,  150,  150,  131,  149,  122,
- /*    70 */   150,  150,  150,  150,  150,  150,  119,  150,  120,  109,
- /*    80 */   150,  150,  111,  150,  150,  112,  150,  150,  113,  150,
- /*    90 */   150,  114,  116,  150,  110,   99,
+ /*     0 */   162,  162,  162,  107,  109,  110,  111,  162,  162,  112,
+ /*    10 */   162,  162,  162,  162,  113,  114,  162,  162,  124,  162,
+ /*    20 */   162,  162,  162,  162,  162,  126,  162,  127,  130,  132,
+ /*    30 */   133,  134,  135,  162,  162,  162,  162,  136,  162,  162,
+ /*    40 */   162,  162,  162,  162,  162,  162,  162,  137,  162,  138,
+ /*    50 */   155,  156,  157,  158,  159,  160,  162,  162,  139,  162,
+ /*    60 */   144,  146,  162,  147,  145,  162,  162,  140,  162,  162,
+ /*    70 */   141,  162,  162,  142,  162,  162,  143,  161,  131,  162,
+ /*    80 */   162,  162,  162,  162,  162,  128,  162,  129,  118,  162,
+ /*    90 */   162,  120,  162,  162,  121,  162,  162,  122,  162,  162,
+ /*   100 */   123,  125,  162,  119,  108,
 };
 #define YY_SZ_ACTTAB (sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -463,14 +470,15 @@ static const char *yyTokenName[] = {
   "DOTCOMMA",      "CLASS",         "BRACKET_OPEN",  "BRACKET_CLOSE",
   "PUBLIC",        "ASSIGN",        "PROTECTED",     "FUNCTION",    
   "PARENTHESES_OPEN",  "PARENTHESES_CLOSE",  "LET",           "ECHO",        
-  "TYPE_INTEGER",  "TYPE_DOUBLE",   "INTEGER",       "STRING",      
-  "DOUBLE",        "NULL",          "FALSE",         "TRUE",        
-  "COMMENT",       "error",         "program",       "xx_language", 
-  "xx_top_statement_list",  "xx_top_statement",  "xx_namespace_def",  "xx_class_def",
-  "xx_comment",    "xx_class_definition",  "xx_class_properties_definition",  "xx_class_methods_definition",
-  "xx_class_property_definition",  "xx_literal_expr",  "xx_class_method_definition",  "xx_statement_list",
-  "xx_statement",  "xx_let_statement",  "xx_echo_statement",  "xx_declare_statement",
-  "xx_expr",       "xx_declare_variable_list",  "xx_declare_variable",
+  "TYPE_INTEGER",  "TYPE_DOUBLE",   "TYPE_STRING",   "TYPE_BOOL",   
+  "TYPE_VAR",      "INTEGER",       "STRING",        "DOUBLE",      
+  "NULL",          "FALSE",         "TRUE",          "COMMENT",     
+  "error",         "program",       "xx_language",   "xx_top_statement_list",
+  "xx_top_statement",  "xx_namespace_def",  "xx_class_def",  "xx_comment",  
+  "xx_class_definition",  "xx_class_properties_definition",  "xx_class_methods_definition",  "xx_class_property_definition",
+  "xx_literal_expr",  "xx_class_method_definition",  "xx_statement_list",  "xx_statement",
+  "xx_let_statement",  "xx_echo_statement",  "xx_declare_statement",  "xx_expr",     
+  "xx_declare_variable_list",  "xx_declare_variable",
 };
 #endif /* NDEBUG */
 
@@ -514,24 +522,27 @@ static const char *yyRuleName[] = {
  /*  33 */ "xx_echo_statement ::= ECHO IDENTIFIER DOTCOMMA",
  /*  34 */ "xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list DOTCOMMA",
  /*  35 */ "xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list DOTCOMMA",
- /*  36 */ "xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable",
- /*  37 */ "xx_declare_variable_list ::= xx_declare_variable",
- /*  38 */ "xx_declare_variable ::= IDENTIFIER",
- /*  39 */ "xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr",
- /*  40 */ "xx_expr ::= IDENTIFIER",
- /*  41 */ "xx_expr ::= INTEGER",
- /*  42 */ "xx_expr ::= STRING",
- /*  43 */ "xx_expr ::= DOUBLE",
- /*  44 */ "xx_expr ::= NULL",
- /*  45 */ "xx_expr ::= FALSE",
- /*  46 */ "xx_expr ::= TRUE",
- /*  47 */ "xx_literal_expr ::= INTEGER",
- /*  48 */ "xx_literal_expr ::= STRING",
- /*  49 */ "xx_literal_expr ::= DOUBLE",
- /*  50 */ "xx_literal_expr ::= NULL",
- /*  51 */ "xx_literal_expr ::= FALSE",
- /*  52 */ "xx_literal_expr ::= TRUE",
- /*  53 */ "xx_comment ::= COMMENT",
+ /*  36 */ "xx_declare_statement ::= TYPE_STRING xx_declare_variable_list DOTCOMMA",
+ /*  37 */ "xx_declare_statement ::= TYPE_BOOL xx_declare_variable_list DOTCOMMA",
+ /*  38 */ "xx_declare_statement ::= TYPE_VAR xx_declare_variable_list DOTCOMMA",
+ /*  39 */ "xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable",
+ /*  40 */ "xx_declare_variable_list ::= xx_declare_variable",
+ /*  41 */ "xx_declare_variable ::= IDENTIFIER",
+ /*  42 */ "xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr",
+ /*  43 */ "xx_expr ::= IDENTIFIER",
+ /*  44 */ "xx_expr ::= INTEGER",
+ /*  45 */ "xx_expr ::= STRING",
+ /*  46 */ "xx_expr ::= DOUBLE",
+ /*  47 */ "xx_expr ::= NULL",
+ /*  48 */ "xx_expr ::= FALSE",
+ /*  49 */ "xx_expr ::= TRUE",
+ /*  50 */ "xx_literal_expr ::= INTEGER",
+ /*  51 */ "xx_literal_expr ::= STRING",
+ /*  52 */ "xx_literal_expr ::= DOUBLE",
+ /*  53 */ "xx_literal_expr ::= NULL",
+ /*  54 */ "xx_literal_expr ::= FALSE",
+ /*  55 */ "xx_literal_expr ::= TRUE",
+ /*  56 */ "xx_comment ::= COMMENT",
 };
 #endif /* NDEBUG */
 
@@ -613,6 +624,9 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     case 22:
     case 23:
     case 24:
+    case 25:
+    case 26:
+    case 27:
 // 206 "parser.lemon"
 {
 	/*if ((yypminor->yy0)) {
@@ -622,12 +636,12 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
 		efree((yypminor->yy0));
 	}*/
 }
-// 626 "parser.c"
+// 640 "parser.c"
       break;
-    case 27:
+    case 30:
 // 219 "parser.lemon"
-{ json_object_put((yypminor->yy25)); }
-// 631 "parser.c"
+{ json_object_put((yypminor->yy75)); }
+// 645 "parser.c"
       break;
     default:  break;   /* If no destructor action specified: do nothing */
   }
@@ -803,60 +817,63 @@ static struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 26, 1 },
-  { 27, 1 },
-  { 28, 2 },
-  { 28, 1 },
   { 29, 1 },
-  { 29, 1 },
-  { 29, 1 },
-  { 30, 3 },
-  { 31, 5 },
-  { 31, 4 },
-  { 33, 1 },
-  { 33, 2 },
-  { 33, 1 },
-  { 34, 2 },
-  { 34, 1 },
-  { 36, 3 },
-  { 36, 5 },
-  { 36, 3 },
-  { 36, 5 },
-  { 35, 2 },
-  { 35, 1 },
-  { 38, 7 },
-  { 38, 8 },
-  { 38, 7 },
-  { 38, 8 },
-  { 39, 2 },
-  { 39, 1 },
-  { 40, 1 },
-  { 40, 1 },
-  { 40, 1 },
-  { 40, 1 },
-  { 41, 5 },
-  { 42, 3 },
-  { 42, 3 },
-  { 43, 3 },
-  { 43, 3 },
-  { 45, 3 },
-  { 45, 1 },
-  { 46, 1 },
-  { 46, 3 },
-  { 44, 1 },
-  { 44, 1 },
-  { 44, 1 },
-  { 44, 1 },
-  { 44, 1 },
-  { 44, 1 },
-  { 44, 1 },
-  { 37, 1 },
-  { 37, 1 },
-  { 37, 1 },
-  { 37, 1 },
-  { 37, 1 },
-  { 37, 1 },
+  { 30, 1 },
+  { 31, 2 },
+  { 31, 1 },
   { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 33, 3 },
+  { 34, 5 },
+  { 34, 4 },
+  { 36, 1 },
+  { 36, 2 },
+  { 36, 1 },
+  { 37, 2 },
+  { 37, 1 },
+  { 39, 3 },
+  { 39, 5 },
+  { 39, 3 },
+  { 39, 5 },
+  { 38, 2 },
+  { 38, 1 },
+  { 41, 7 },
+  { 41, 8 },
+  { 41, 7 },
+  { 41, 8 },
+  { 42, 2 },
+  { 42, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 43, 1 },
+  { 44, 5 },
+  { 45, 3 },
+  { 45, 3 },
+  { 46, 3 },
+  { 46, 3 },
+  { 46, 3 },
+  { 46, 3 },
+  { 46, 3 },
+  { 48, 3 },
+  { 48, 1 },
+  { 49, 1 },
+  { 49, 3 },
+  { 47, 1 },
+  { 47, 1 },
+  { 47, 1 },
+  { 47, 1 },
+  { 47, 1 },
+  { 47, 1 },
+  { 47, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 40, 1 },
+  { 35, 1 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -896,9 +913,9 @@ static void yy_reduce(
       case 0:
 // 215 "parser.lemon"
 {
-	status->ret = yymsp[0].minor.yy25;
+	status->ret = yymsp[0].minor.yy75;
 }
-// 902 "parser.c"
+// 919 "parser.c"
         break;
       case 1:
       case 4:
@@ -910,9 +927,9 @@ static void yy_reduce(
       case 30:
 // 221 "parser.lemon"
 {
-	yygotominor.yy25 = yymsp[0].minor.yy25;
+	yygotominor.yy75 = yymsp[0].minor.yy75;
 }
-// 916 "parser.c"
+// 933 "parser.c"
         break;
       case 2:
       case 13:
@@ -920,113 +937,113 @@ static void yy_reduce(
       case 25:
 // 225 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_list(yymsp[-1].minor.yy25, yymsp[0].minor.yy25);
+	yygotominor.yy75 = xx_ret_list(yymsp[-1].minor.yy75, yymsp[0].minor.yy75);
 }
-// 926 "parser.c"
+// 943 "parser.c"
         break;
       case 3:
       case 14:
       case 20:
       case 26:
-      case 37:
+      case 40:
 // 229 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_list(NULL, yymsp[0].minor.yy25);
+	yygotominor.yy75 = xx_ret_list(NULL, yymsp[0].minor.yy75);
 }
-// 937 "parser.c"
+// 954 "parser.c"
         break;
       case 7:
 // 245 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_namespace(yymsp[-1].minor.yy0);
+	yygotominor.yy75 = xx_ret_namespace(yymsp[-1].minor.yy0);
   yy_destructor(2,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 946 "parser.c"
+// 963 "parser.c"
         break;
       case 8:
 // 249 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy75);
   yy_destructor(5,&yymsp[-4].minor);
   yy_destructor(6,&yymsp[-2].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 956 "parser.c"
+// 973 "parser.c"
         break;
       case 9:
 // 253 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class(yymsp[-2].minor.yy0, NULL);
+	yygotominor.yy75 = xx_ret_class(yymsp[-2].minor.yy0, NULL);
   yy_destructor(5,&yymsp[-3].minor);
   yy_destructor(6,&yymsp[-1].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 966 "parser.c"
+// 983 "parser.c"
         break;
       case 10:
 // 257 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_definition(yymsp[0].minor.yy25, NULL);
+	yygotominor.yy75 = xx_ret_class_definition(yymsp[0].minor.yy75, NULL);
 }
-// 973 "parser.c"
+// 990 "parser.c"
         break;
       case 11:
 // 261 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_definition(yymsp[-1].minor.yy25, yymsp[0].minor.yy25);
+	yygotominor.yy75 = xx_ret_class_definition(yymsp[-1].minor.yy75, yymsp[0].minor.yy75);
 }
-// 980 "parser.c"
+// 997 "parser.c"
         break;
       case 12:
 // 265 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_definition(NULL, yymsp[0].minor.yy25);
+	yygotominor.yy75 = xx_ret_class_definition(NULL, yymsp[0].minor.yy75);
 }
-// 987 "parser.c"
+// 1004 "parser.c"
         break;
       case 15:
 // 277 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL);
+	yygotominor.yy75 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL);
   yy_destructor(8,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 996 "parser.c"
+// 1013 "parser.c"
         break;
       case 16:
 // 281 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy75);
   yy_destructor(8,&yymsp[-4].minor);
   yy_destructor(9,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1006 "parser.c"
+// 1023 "parser.c"
         break;
       case 17:
 // 285 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL);
+	yygotominor.yy75 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL);
   yy_destructor(10,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1015 "parser.c"
+// 1032 "parser.c"
         break;
       case 18:
 // 289 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy75);
   yy_destructor(10,&yymsp[-4].minor);
   yy_destructor(9,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1025 "parser.c"
+// 1042 "parser.c"
         break;
       case 21:
 // 301 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL);	
+	yygotominor.yy75 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL);	
   yy_destructor(8,&yymsp[-6].minor);
   yy_destructor(11,&yymsp[-5].minor);
   yy_destructor(12,&yymsp[-3].minor);
@@ -1034,12 +1051,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-1].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 1038 "parser.c"
+// 1055 "parser.c"
         break;
       case 22:
 // 305 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-1].minor.yy25);	
+	yygotominor.yy75 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-1].minor.yy75);	
   yy_destructor(8,&yymsp[-7].minor);
   yy_destructor(11,&yymsp[-6].minor);
   yy_destructor(12,&yymsp[-4].minor);
@@ -1047,12 +1064,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-2].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 1051 "parser.c"
+// 1068 "parser.c"
         break;
       case 23:
 // 309 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL);	
+	yygotominor.yy75 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL);	
   yy_destructor(10,&yymsp[-6].minor);
   yy_destructor(11,&yymsp[-5].minor);
   yy_destructor(12,&yymsp[-3].minor);
@@ -1060,12 +1077,12 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-1].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 1064 "parser.c"
+// 1081 "parser.c"
         break;
       case 24:
 // 313 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, yymsp[-1].minor.yy25);	
+	yygotominor.yy75 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, yymsp[-1].minor.yy75);	
   yy_destructor(10,&yymsp[-7].minor);
   yy_destructor(11,&yymsp[-6].minor);
   yy_destructor(12,&yymsp[-4].minor);
@@ -1073,141 +1090,168 @@ static void yy_reduce(
   yy_destructor(6,&yymsp[-2].minor);
   yy_destructor(7,&yymsp[0].minor);
 }
-// 1077 "parser.c"
+// 1094 "parser.c"
         break;
       case 31:
 // 341 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_let_statement(yymsp[-3].minor.yy0, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_let_statement(yymsp[-3].minor.yy0, yymsp[-1].minor.yy75);
   yy_destructor(14,&yymsp[-4].minor);
   yy_destructor(9,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1087 "parser.c"
+// 1104 "parser.c"
         break;
       case 32:
 // 345 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_echo_statement(yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_echo_statement(yymsp[-1].minor.yy75);
   yy_destructor(15,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1096 "parser.c"
+// 1113 "parser.c"
         break;
       case 33:
 // 349 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0));
+	yygotominor.yy75 = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0));
   yy_destructor(15,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1105 "parser.c"
+// 1122 "parser.c"
         break;
       case 34:
 // 353 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy75);
   yy_destructor(16,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1114 "parser.c"
+// 1131 "parser.c"
         break;
       case 35:
 // 357 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy25);
+	yygotominor.yy75 = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, yymsp[-1].minor.yy75);
   yy_destructor(17,&yymsp[-2].minor);
   yy_destructor(4,&yymsp[0].minor);
 }
-// 1123 "parser.c"
+// 1140 "parser.c"
         break;
       case 36:
 // 361 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_list(yymsp[-2].minor.yy25, yymsp[0].minor.yy25);
-  yy_destructor(1,&yymsp[-1].minor);
+	yygotominor.yy75 = xx_ret_declare_statement(XX_T_TYPE_STRING, yymsp[-1].minor.yy75);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
 }
-// 1131 "parser.c"
+// 1149 "parser.c"
+        break;
+      case 37:
+// 365 "parser.lemon"
+{
+	yygotominor.yy75 = xx_ret_declare_statement(XX_T_TYPE_BOOL, yymsp[-1].minor.yy75);
+  yy_destructor(19,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
+}
+// 1158 "parser.c"
         break;
       case 38:
 // 369 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
+	yygotominor.yy75 = xx_ret_declare_statement(XX_T_TYPE_VAR, yymsp[-1].minor.yy75);
+  yy_destructor(20,&yymsp[-2].minor);
+  yy_destructor(4,&yymsp[0].minor);
 }
-// 1138 "parser.c"
+// 1167 "parser.c"
         break;
       case 39:
 // 373 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy25);
-  yy_destructor(9,&yymsp[-1].minor);
+	yygotominor.yy75 = xx_ret_list(yymsp[-2].minor.yy75, yymsp[0].minor.yy75);
+  yy_destructor(1,&yymsp[-1].minor);
 }
-// 1146 "parser.c"
-        break;
-      case 40:
-// 377 "parser.lemon"
-{
-	yygotominor.yy25 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
-}
-// 1153 "parser.c"
+// 1175 "parser.c"
         break;
       case 41:
-      case 47:
 // 381 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
+	yygotominor.yy75 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
 }
-// 1161 "parser.c"
+// 1182 "parser.c"
         break;
       case 42:
-      case 48:
 // 385 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
+	yygotominor.yy75 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy75);
+  yy_destructor(9,&yymsp[-1].minor);
 }
-// 1169 "parser.c"
+// 1190 "parser.c"
         break;
       case 43:
-      case 49:
 // 389 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
+	yygotominor.yy75 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
 }
-// 1177 "parser.c"
+// 1197 "parser.c"
         break;
       case 44:
       case 50:
 // 393 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_NULL, NULL);
-  yy_destructor(21,&yymsp[0].minor);
+	yygotominor.yy75 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
 }
-// 1186 "parser.c"
+// 1205 "parser.c"
         break;
       case 45:
       case 51:
 // 397 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_FALSE, NULL);
-  yy_destructor(22,&yymsp[0].minor);
+	yygotominor.yy75 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
 }
-// 1195 "parser.c"
+// 1213 "parser.c"
         break;
       case 46:
       case 52:
 // 401 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_literal(XX_T_TRUE, NULL);
-  yy_destructor(23,&yymsp[0].minor);
+	yygotominor.yy75 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
 }
-// 1204 "parser.c"
+// 1221 "parser.c"
         break;
+      case 47:
       case 53:
-// 429 "parser.lemon"
+// 405 "parser.lemon"
 {
-	yygotominor.yy25 = xx_ret_comment(yymsp[0].minor.yy0);
+	yygotominor.yy75 = xx_ret_literal(XX_T_NULL, NULL);
+  yy_destructor(24,&yymsp[0].minor);
 }
-// 1211 "parser.c"
+// 1230 "parser.c"
+        break;
+      case 48:
+      case 54:
+// 409 "parser.lemon"
+{
+	yygotominor.yy75 = xx_ret_literal(XX_T_FALSE, NULL);
+  yy_destructor(25,&yymsp[0].minor);
+}
+// 1239 "parser.c"
+        break;
+      case 49:
+      case 55:
+// 413 "parser.lemon"
+{
+	yygotominor.yy75 = xx_ret_literal(XX_T_TRUE, NULL);
+  yy_destructor(26,&yymsp[0].minor);
+}
+// 1248 "parser.c"
+        break;
+      case 56:
+// 441 "parser.lemon"
+{
+	yygotominor.yy75 = xx_ret_comment(yymsp[0].minor.yy0);
+}
+// 1255 "parser.c"
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -1266,7 +1310,7 @@ static void yy_syntax_error(
 
 	status->status = XX_PARSING_FAILED;
 
-// 1270 "parser.c"
+// 1314 "parser.c"
   xx_ARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -1687,6 +1731,15 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;			
 			case XX_T_TYPE_DOUBLE:
 				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_STRING:
+				xx_(xx_parser, XX_TYPE_STRING, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_BOOL:
+				xx_(xx_parser, XX_TYPE_BOOL, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_VAR:
+				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
 				break;			
 
 			case XX_T_INTEGER:

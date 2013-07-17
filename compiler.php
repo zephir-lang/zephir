@@ -6,6 +6,7 @@ define('EXPR_IDENTIFIER', 307);
 define('EXPR_STRING', 303);
 
 define('VAR_TYPE_INT', 309);
+define('VAR_TYPE_DOUBLE', 310);
 
 require 'Library/ClassDefinition.php';
 require 'Library/ClassProperty.php';

@@ -249,6 +249,15 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_TYPE_DOUBLE:
 				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
 				break;			
+			case XX_T_TYPE_STRING:
+				xx_(xx_parser, XX_TYPE_STRING, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_BOOL:
+				xx_(xx_parser, XX_TYPE_BOOL, NULL, parser_status);
+				break;			
+			case XX_T_TYPE_VAR:
+				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
+				break;			
 
 			case XX_T_INTEGER:
 				xx_parse_with_token(xx_parser, XX_T_INTEGER, XX_INTEGER, &token, parser_status);

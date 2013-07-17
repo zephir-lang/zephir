@@ -17,7 +17,19 @@ class EchoStatement
 				if (!$symbolTable->hasVariable($expr['value'])) {
 					throw new Exception("Cannot echo variable '" . $expr['value'] . "' because it wasn't defined");					
 				}
-				$codePrinter->output('fprintf(stdout, "%d\n", ' . $expr['value'] . ');');
+
+				$variable = $symbolTable->getVariable($expr['value']);
+
+				switch ($variable->getType()) {
+					case VAR_TYPE_INT:
+						$variable->increaseUses();
+						$codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
+						break;
+					default:
+						throw new Exception("Unknown type: " . $variable->getType());
+				}
+
+				
 		}
 		
 	}
