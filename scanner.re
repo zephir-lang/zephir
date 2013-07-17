@@ -101,6 +101,15 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		COMMENT = ([/][\*] ([\001-\377]\[\\\*])* [\*][/]);
+		COMMENT {
+			token->opcode = XX_T_COMMENT;
+			token->value = strndup(q, YYCURSOR - q - 1);
+			token->len = YYCURSOR - q - 1;
+			q = YYCURSOR;
+			return 0;
+		}
+
 		IDENTIFIER = [\\\_]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
 			token->opcode = XX_T_IDENTIFIER;

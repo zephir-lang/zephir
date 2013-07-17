@@ -18,3 +18,4 @@
 #define XX_NULL                           18
 #define XX_FALSE                          19
 #define XX_TRUE                           20
+#define XX_COMMENT                        21

@@ -4,13 +4,7 @@
 #define XX_SCANNER_RETCODE_IMPOSSIBLE -3
 
 /** Modes */
-#define XX_MODE_RAW 0
-#define XX_MODE_ANNOTATION 1
-
 #define XX_T_IGNORE 297
-
-#define XX_T_DOCBLOCK_ANNOTATION 299
-#define XX_T_ANNOTATION 300
 
 /* Literals & Identifiers */
 #define XX_T_INTEGER 301
@@ -30,6 +24,7 @@
 #define XX_T_EXTENDS 354
 #define XX_T_FUNCTION 355
 #define XX_T_LET 356
+#define XX_T_COMMENT 357
 
 /* Operators */
 #define XX_T_AT '@'

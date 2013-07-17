@@ -150,7 +150,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 	state->active_token = 0;
 	state->start = program;
 	state->start_length = 0;
-	state->mode = XX_MODE_RAW;
+	//state->mode = XX_MODE_RAW;
 	//state->active_file = file_path;
 
 	/**
@@ -235,6 +235,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_FALSE:
 				xx_(xx_parser, XX_FALSE, NULL, parser_status);
+				break;
+			case XX_T_COMMENT:
+				xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
 				break;
 
 			case XX_T_INTEGER:

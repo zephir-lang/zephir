@@ -109,9 +109,9 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 	json_object *ret;
 	int i, array_length;
 
-	if (list_left) {
+	ret = json_object_new_array();
 
-		ret = json_object_new_array();
+	if (list_left) {		
 
 		if (json_object_get_type(list_left) == json_type_array) {
 			array_length = json_object_array_length(list_left);
@@ -122,13 +122,12 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 		} else {
 			json_object_array_add(ret, list_left);			
 		}
-
-		json_object_array_add(ret, right_list);			
-
-		return ret;
+		
 	}
 
-	return right_list;	
+	json_object_array_add(ret, right_list);
+
+	return ret;
 }
 
 static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
@@ -138,6 +137,16 @@ static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
 	json_object_object_add(ret, "type", json_object_new_string("let"));
 	json_object_object_add(ret, "variable", json_object_new_string(T->token));
 	json_object_object_add(ret, "expr", expr);
+
+	return ret;
+}
+
+static json_object *xx_ret_comment(xx_parser_token *T)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("comment"));
+	json_object_object_add(ret, "value", json_object_new_string(T->token));	
 
 	return ret;
 }
@@ -176,12 +185,28 @@ program ::= xx_language(Q) . {
 
 %destructor xx_language { json_object_put($$); }
 
-xx_language(R) ::= xx_namespace_def(L) . {
+xx_language(R) ::= xx_top_statement_list(L) . {
 	R = L;
 }
 
-xx_language(R) ::= xx_class_def(L) . {
-	R = L;
+xx_top_statement_list(R) ::= xx_top_statement_list(L) xx_top_statement(T) . {
+	R = xx_ret_list(L, T);
+}
+
+xx_top_statement_list(R) ::= xx_top_statement(T) . {
+	R = xx_ret_list(NULL, T);
+} 
+
+xx_top_statement(R) ::= xx_namespace_def(T) . {
+	R = T;
+}
+
+xx_top_statement(R) ::= xx_class_def(T) . {
+	R = T;
+}
+
+xx_top_statement(R) ::= xx_comment(T) . {
+	R = T;
 }
 
 xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
@@ -268,6 +293,10 @@ xx_statement(R) ::= xx_let_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_comment(S) . {
+	R = S;
+}
+
 xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
 	R = xx_ret_let_statement(I, E);
 }
@@ -324,3 +353,6 @@ xx_literal_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL);
 }
 
+xx_comment(R) ::= COMMENT(C) . {
+	R = xx_ret_comment(C);
+}

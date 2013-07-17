@@ -1,4 +1,5 @@
 
+/* hello */
 class Router
 {
 	protected _dependencyInjector;
@@ -9,7 +10,8 @@ class Router
 
 	public function __construct()
 	{
-
+		/* This is an assignment */
+		let x = 100;
 	}	
 
 	public function setDI()

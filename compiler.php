@@ -156,20 +156,12 @@ class Compiler
 		return json_decode(file_get_contents(".temp/router.xx.js"), true);
 	}
 
-	/**
-	 *
-	 */
-	public function compileClass($ir)
+	public function compileClass($topStatement)
 	{
-		//echo $ir['name'], PHP_EOL;
 
-		if (!is_dir('.temp')) {
-			mkdir('.temp');
-		}
+		$classDefinition = new ClassDefinition($topStatement['name']);
 
-		$definition = $ir['definition'];
-
-		$classDefinition = new ClassDefinition($ir['name']);
+		$definition = $topStatement['definition'];
 
 		if (isset($definition['properties'])) {
 			foreach ($definition['properties'] as $property) {
@@ -192,7 +184,39 @@ class Compiler
 
 		$code = $classDefinition->compile();
 
-		echo $code;
+		return $code;
+	}
+
+	public function compileComment($topStatement)
+	{
+		return '/'. $topStatement['value'] . '/' . PHP_EOL;
+	}
+
+	/**
+	 *
+	 */
+	public function compile($ir)
+	{
+		//echo $ir['name'], PHP_EOL;
+
+		if (!is_dir('.temp')) {
+			mkdir('.temp');
+		}
+
+		$code = '';
+		foreach ($ir as $topStatement) {
+
+			switch ($topStatement['type']) {
+				case 'class':
+					$code .= $this->compileClass($topStatement);
+					break;
+				case 'comment':
+					$code .= $this->compileComment($topStatement);
+					break;
+			}
+		}
+
+		return $code;
 
 	}
 }
@@ -200,4 +224,4 @@ class Compiler
 $c = new Compiler();
 $ir = $c->genIR();
 
-$c->compileClass($ir);
+echo $c->compile($ir);
