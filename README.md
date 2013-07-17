@@ -21,3 +21,11 @@ Compile a xx file:
 php compiler.php
 ```
 
+The code produced is placed in ext/, there you can perform the standard compilation:
+
+```bash
+cd ext/
+phpize 
+./configure --enable-test
+make && sudo make install
+```
