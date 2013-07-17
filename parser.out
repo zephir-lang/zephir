@@ -64,7 +64,9 @@ State 9:
           xx_class_properties_definition ::= * xx_class_properties_definition xx_class_property_definition
           xx_class_properties_definition ::= * xx_class_property_definition
           xx_class_property_definition ::= * PUBLIC IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= * PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_property_definition ::= * PROTECTED IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= * PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_methods_definition ::= * xx_class_methods_definition xx_class_method_definition
           xx_class_methods_definition ::= * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -74,12 +76,12 @@ State 9:
 
                  BRACKET_CLOSE shift  12
                         PUBLIC shift  50
-                     PROTECTED shift  53
+                     PROTECTED shift  62
            xx_class_definition shift  10
 xx_class_properties_definition shift  13
-   xx_class_methods_definition shift  57
-  xx_class_property_definition shift  58
-    xx_class_method_definition shift  56
+   xx_class_methods_definition shift  69
+  xx_class_property_definition shift  70
+    xx_class_method_definition shift  68
 
 State 10:
           xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN xx_class_definition * BRACKET_CLOSE
@@ -101,7 +103,9 @@ State 13:
           xx_class_definition ::= xx_class_properties_definition * xx_class_methods_definition
           xx_class_properties_definition ::= xx_class_properties_definition * xx_class_property_definition
           xx_class_property_definition ::= * PUBLIC IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= * PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_property_definition ::= * PROTECTED IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= * PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_methods_definition ::= * xx_class_methods_definition xx_class_method_definition
           xx_class_methods_definition ::= * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -111,10 +115,10 @@ State 13:
 
                  BRACKET_CLOSE reduce 6
                         PUBLIC shift  50
-                     PROTECTED shift  53
+                     PROTECTED shift  62
    xx_class_methods_definition shift  14
   xx_class_property_definition shift  49
-    xx_class_method_definition shift  56
+    xx_class_method_definition shift  68
 
 State 14:
       (7) xx_class_definition ::= xx_class_properties_definition xx_class_methods_definition *
@@ -130,9 +134,9 @@ State 14:
     xx_class_method_definition shift  15
 
 State 15:
-     (13) xx_class_methods_definition ::= xx_class_methods_definition xx_class_method_definition *
+     (15) xx_class_methods_definition ::= xx_class_methods_definition xx_class_method_definition *
 
-                     {default} reduce 13
+                     {default} reduce 15
 
 State 16:
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -179,9 +183,9 @@ State 21:
               xx_let_statement shift  26
 
 State 22:
-     (15) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
+     (17) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
-                     {default} reduce 15
+                     {default} reduce 17
 
 State 23:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
@@ -195,19 +199,19 @@ State 23:
               xx_let_statement shift  26
 
 State 24:
-     (16) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
+     (18) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
-                     {default} reduce 16
+                     {default} reduce 18
 
 State 25:
-     (19) xx_statement_list ::= xx_statement_list xx_statement *
-
-                     {default} reduce 19
-
-State 26:
-     (21) xx_statement ::= xx_let_statement *
+     (21) xx_statement_list ::= xx_statement_list xx_statement *
 
                      {default} reduce 21
+
+State 26:
+     (23) xx_statement ::= xx_let_statement *
+
+                     {default} reduce 23
 
 State 27:
           xx_let_statement ::= LET * IDENTIFIER ASSIGN xx_expr DOTCOMMA
@@ -244,49 +248,49 @@ State 30:
                       DOTCOMMA shift  31
 
 State 31:
-     (22) xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA *
+     (24) xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA *
 
-                     {default} reduce 22
+                     {default} reduce 24
 
 State 32:
-     (23) xx_expr ::= IDENTIFIER *
-
-                      DOTCOMMA reduce 23
-
-State 33:
-     (24) xx_expr ::= INTEGER *
-
-                      DOTCOMMA reduce 24
-
-State 34:
-     (25) xx_expr ::= STRING *
+     (25) xx_expr ::= IDENTIFIER *
 
                       DOTCOMMA reduce 25
 
-State 35:
-     (26) xx_expr ::= DOUBLE *
+State 33:
+     (26) xx_expr ::= INTEGER *
 
                       DOTCOMMA reduce 26
 
-State 36:
-     (27) xx_expr ::= NULL *
+State 34:
+     (27) xx_expr ::= STRING *
 
                       DOTCOMMA reduce 27
 
-State 37:
-     (28) xx_expr ::= FALSE *
+State 35:
+     (28) xx_expr ::= DOUBLE *
 
                       DOTCOMMA reduce 28
 
-State 38:
-     (29) xx_expr ::= TRUE *
+State 36:
+     (29) xx_expr ::= NULL *
 
                       DOTCOMMA reduce 29
 
-State 39:
-     (20) xx_statement_list ::= xx_statement *
+State 37:
+     (30) xx_expr ::= FALSE *
 
-                     {default} reduce 20
+                      DOTCOMMA reduce 30
+
+State 38:
+     (31) xx_expr ::= TRUE *
+
+                      DOTCOMMA reduce 31
+
+State 39:
+     (22) xx_statement_list ::= xx_statement *
+
+                     {default} reduce 22
 
 State 40:
           xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -333,9 +337,9 @@ State 45:
               xx_let_statement shift  26
 
 State 46:
-     (17) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
+     (19) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
-                     {default} reduce 17
+                     {default} reduce 19
 
 State 47:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
@@ -349,9 +353,9 @@ State 47:
               xx_let_statement shift  26
 
 State 48:
-     (18) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
+     (20) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
-                     {default} reduce 18
+                     {default} reduce 20
 
 State 49:
       (9) xx_class_properties_definition ::= xx_class_properties_definition xx_class_property_definition *
@@ -360,6 +364,7 @@ State 49:
 
 State 50:
           xx_class_property_definition ::= PUBLIC * IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= PUBLIC * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
@@ -368,8 +373,10 @@ State 50:
 
 State 51:
           xx_class_property_definition ::= PUBLIC IDENTIFIER * DOTCOMMA
+          xx_class_property_definition ::= PUBLIC IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
                       DOTCOMMA shift  52
+                        ASSIGN shift  53
 
 State 52:
      (11) xx_class_property_definition ::= PUBLIC IDENTIFIER DOTCOMMA *
@@ -377,29 +384,116 @@ State 52:
                      {default} reduce 11
 
 State 53:
-          xx_class_property_definition ::= PROTECTED * IDENTIFIER DOTCOMMA
-          xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
-          xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
+          xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
+          xx_literal_expr ::= * INTEGER
+          xx_literal_expr ::= * STRING
+          xx_literal_expr ::= * DOUBLE
+          xx_literal_expr ::= * NULL
+          xx_literal_expr ::= * FALSE
+          xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  54
-                      FUNCTION shift  41
+                       INTEGER shift  56
+                        STRING shift  57
+                        DOUBLE shift  58
+                          NULL shift  59
+                         FALSE shift  60
+                          TRUE shift  61
+               xx_literal_expr shift  54
 
 State 54:
-          xx_class_property_definition ::= PROTECTED IDENTIFIER * DOTCOMMA
+          xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
                       DOTCOMMA shift  55
 
 State 55:
-     (12) xx_class_property_definition ::= PROTECTED IDENTIFIER DOTCOMMA *
+     (12) xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 12
 
 State 56:
-     (14) xx_class_methods_definition ::= xx_class_method_definition *
+     (32) xx_literal_expr ::= INTEGER *
+
+                      DOTCOMMA reduce 32
+
+State 57:
+     (33) xx_literal_expr ::= STRING *
+
+                      DOTCOMMA reduce 33
+
+State 58:
+     (34) xx_literal_expr ::= DOUBLE *
+
+                      DOTCOMMA reduce 34
+
+State 59:
+     (35) xx_literal_expr ::= NULL *
+
+                      DOTCOMMA reduce 35
+
+State 60:
+     (36) xx_literal_expr ::= FALSE *
+
+                      DOTCOMMA reduce 36
+
+State 61:
+     (37) xx_literal_expr ::= TRUE *
+
+                      DOTCOMMA reduce 37
+
+State 62:
+          xx_class_property_definition ::= PROTECTED * IDENTIFIER DOTCOMMA
+          xx_class_property_definition ::= PROTECTED * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
+          xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
+          xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
+
+                    IDENTIFIER shift  63
+                      FUNCTION shift  41
+
+State 63:
+          xx_class_property_definition ::= PROTECTED IDENTIFIER * DOTCOMMA
+          xx_class_property_definition ::= PROTECTED IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
+
+                      DOTCOMMA shift  64
+                        ASSIGN shift  65
+
+State 64:
+     (13) xx_class_property_definition ::= PROTECTED IDENTIFIER DOTCOMMA *
+
+                     {default} reduce 13
+
+State 65:
+          xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
+          xx_literal_expr ::= * INTEGER
+          xx_literal_expr ::= * STRING
+          xx_literal_expr ::= * DOUBLE
+          xx_literal_expr ::= * NULL
+          xx_literal_expr ::= * FALSE
+          xx_literal_expr ::= * TRUE
+
+                       INTEGER shift  56
+                        STRING shift  57
+                        DOUBLE shift  58
+                          NULL shift  59
+                         FALSE shift  60
+                          TRUE shift  61
+               xx_literal_expr shift  66
+
+State 66:
+          xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
+
+                      DOTCOMMA shift  67
+
+State 67:
+     (14) xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 14
 
-State 57:
+State 68:
+     (16) xx_class_methods_definition ::= xx_class_method_definition *
+
+                     {default} reduce 16
+
+State 69:
       (8) xx_class_definition ::= xx_class_methods_definition *
           xx_class_methods_definition ::= xx_class_methods_definition * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -412,7 +506,7 @@ State 57:
                      PROTECTED shift  40
     xx_class_method_definition shift  15
 
-State 58:
+State 70:
      (10) xx_class_properties_definition ::= xx_class_property_definition *
 
                      {default} reduce 10

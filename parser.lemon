@@ -21,7 +21,9 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T)
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_int(type));
-	json_object_object_add(ret, "value", json_object_new_string(T->token));
+	if (T) {
+		json_object_object_add(ret, "value", json_object_new_string(T->token));
+	}
 	
 	return ret;
 }
@@ -64,7 +66,7 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	return ret;
 }
 
-static json_object *xx_ret_class_property(int visibility, xx_parser_token *T)
+static json_object *xx_ret_class_property(int visibility, xx_parser_token *T, json_object *default_value)
 {
 	json_object *ret = json_object_new_object();
 
@@ -75,6 +77,10 @@ static json_object *xx_ret_class_property(int visibility, xx_parser_token *T)
 	}
 	json_object_object_add(ret, "type", json_object_new_string("property"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	if (default_value) {		
+		json_object_object_add(ret, "default", default_value);		
+	}
 
 	return ret;
 }
@@ -211,11 +217,19 @@ xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
 }
 
 xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I);
+	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL);
+}
+
+xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_property(XX_T_PUBLIC, I, E);
 }
 
 xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I);
+	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL);
+}
+
+xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_property(XX_T_PROTECTED, I, E);
 }
 
 xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_method_definition(P) . {
@@ -283,6 +297,30 @@ xx_expr(R) ::= FALSE . {
 }
 
 xx_expr(R) ::= TRUE . {
+	R = xx_ret_literal(XX_T_TRUE, NULL);
+}
+
+xx_literal_expr(R) ::= INTEGER(I) . {
+	R = xx_ret_literal(XX_T_INTEGER, I);
+}
+
+xx_literal_expr(R) ::= STRING(S) . {
+	R = xx_ret_literal(XX_T_STRING, S);
+}
+
+xx_literal_expr(R) ::= DOUBLE(D) . {
+	R = xx_ret_literal(XX_T_DOUBLE, D);
+}
+
+xx_literal_expr(R) ::= NULL . {
+	R = xx_ret_literal(XX_T_NULL, NULL);
+}
+
+xx_literal_expr(R) ::= FALSE . {
+	R = xx_ret_literal(XX_T_FALSE, NULL);
+}
+
+xx_literal_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL);
 }
 

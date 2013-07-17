@@ -5,6 +5,8 @@ class Router
 
 	protected _uriSource;
 
+	protected _wasMatched = false;
+
 	public function __construct()
 	{
 

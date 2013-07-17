@@ -27,6 +27,29 @@ class ClassProperty
 	{
 		return 'ZEND_ACC_PROTECTED';
 	}
+
+	public function compile(ClassDefinition $classDefinition)
+	{
+		if (!is_array($this->_defaultValue)) {			
+			return "\tzend_declare_property_null(" . 
+				$classDefinition->getClassEntry() . 
+				", SL(\"" . $this->getName() . "\"), " . 
+				$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+		} else {
+			switch ($this->_defaultValue['type']) {
+				case 305:
+					return "\tzend_declare_property_bool(" . 
+						$classDefinition->getClassEntry() . 
+						", SL(\"" . $this->getName() . "\"), 0, " . 
+						$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+				default:
+					return "\tzend_declare_property_null(" . 
+						$classDefinition->getClassEntry() . 
+						", SL(\"" . $this->getName() . "\"), " . 
+						$this->getVisibilityAccesor() . " TSRMLS_CC);\n";
+			}
+		}
+	}
 }
 
 class ClassMethod
@@ -96,6 +119,27 @@ class ClassDefinition
 		return strtolower($this->_name) . '_ce';
 	}
 
+	public function compile()
+	{
+		$code = 'PHP_INIT_CLASS(' . $this->getName() . ') {' . PHP_EOL . PHP_EOL;
+
+		/**
+		 * Compile properties
+		 */
+		foreach ($this->getProperties() as $property) {
+			$code .= $property->compile($this);	
+		}
+
+		$code .= '}' . PHP_EOL . PHP_EOL;
+
+		foreach ($this->getMethods() as $method) {
+			$code .= 'PHP_METHOD(' . $this->getName() . ', ' . $method->getName() . ') {' . PHP_EOL . PHP_EOL;
+			$code .= '}' . PHP_EOL . PHP_EOL;
+		}
+
+		return $code;
+	}
+
 }
 
 class Compiler 
@@ -119,6 +163,10 @@ class Compiler
 	{
 		//echo $ir['name'], PHP_EOL;
 
+		if (!is_dir('.temp')) {
+			mkdir('.temp');
+		}
+
 		$definition = $ir['definition'];
 
 		$classDefinition = new ClassDefinition($ir['name']);
@@ -128,7 +176,7 @@ class Compiler
 				$classDefinition->addProperty(new ClassProperty(
 					$property['visibility'], 
 					$property['name'], 
-					isset($property['defaultValue']) ? $property['defaultValue'] : null
+					isset($property['default']) ? $property['default'] : null
 				));
 			}
 		}
@@ -142,24 +190,7 @@ class Compiler
 			}
 		}
 
-		$code = 'PHP_INIT_CLASS(' . $classDefinition->getName() . ') {' . PHP_EOL . PHP_EOL;
-
-		/**
-		 * Compile properties
-		 */
-		foreach ($classDefinition->getProperties() as $property) {
-			$code .= "\tzend_declare_property_null(" . 
-				$classDefinition->getClassEntry() . 
-				", SL(\"" . $property->getName() . "\"), " . 
-				$property->getVisibilityAccesor() . " TSRMLS_CC);\n";
-		}
-
-		$code .= '}' . PHP_EOL . PHP_EOL;
-
-		foreach ($classDefinition->getMethods() as $method) {
-			$code .= 'PHP_METHOD(' . $classDefinition->getName() . ', ' . $method->getName() . ') {' . PHP_EOL . PHP_EOL;
-			$code .= '}' . PHP_EOL . PHP_EOL;
-		}
+		$code = $classDefinition->compile();
 
 		echo $code;
 
