@@ -27,11 +27,11 @@ typedef struct _test_symbol_table {
 ZEND_BEGIN_MODULE_GLOBALS(test)
 
 	/** Memory */
-	phalcon_memory_entry *start_memory;
-	phalcon_memory_entry *active_memory;
+	test_memory_entry *start_memory;
+	test_memory_entry *active_memory;
 
 	/** Virtual Symbol Tables */
-	phalcon_symbol_table *active_symbol_table;
+	test_symbol_table *active_symbol_table;
 
 	/** Function cache */
 	HashTable *function_cache;

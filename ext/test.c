@@ -1,11 +1,10 @@
 
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "php.h"
-#include "php_phalcon.h"
+#include "php_test.h"
 
 #include "Zend/zend_operators.h"
 #include "Zend/zend_exceptions.h"
@@ -20,7 +19,7 @@ PHP_MINIT_FUNCTION(test){
 	/** Init globals */
 	//ZEND_INIT_MODULE_GLOBALS(phalcon, php_phalcon_init_globals, NULL);
 
-	PHALCON_INIT(Router);
+	TEST_INIT_CLASS(Router);
 
 	return SUCCESS;
 }
@@ -77,7 +76,7 @@ zend_module_entry test_module_entry = {
 	PHP_RSHUTDOWN(test),
 	NULL,
 #if ZEND_MODULE_API_NO >= 20010901
-	PHP_PHALCON_VERSION,
+	PHP_TEST_VERSION,
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
