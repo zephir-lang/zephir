@@ -18,7 +18,7 @@ class DeclareStatement
 	/**
 	 * Compiles the statement
 	 */
-	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable)
+	public function compile(CompilationContext $compilationContext)
 	{
 		$statement = $this->_statement;
 
@@ -29,14 +29,14 @@ class DeclareStatement
 		$pointer = null;
 		switch ($statement['data-type']) {
 			case VAR_TYPE_INT:
-				$codePrinter->outputNoLineFeed('int ');
+				$compilationContext->codePrinter->outputNoLineFeed('int ');
 				break;
 			case VAR_TYPE_DOUBLE:
-				$codePrinter->outputNoLineFeed('double ');
+				$compilationContext->codePrinter->outputNoLineFeed('double ');
 				break;
 			case VAR_TYPE_VAR:
 				$pointer = '*';
-				$codePrinter->outputNoLineFeed('zval ');
+				$compilationContext->codePrinter->outputNoLineFeed('zval ');
 				break;
 			default:
 				throw new Exception("Unsupported type in declare");
@@ -45,11 +45,11 @@ class DeclareStatement
 		$variables = array();
 		foreach ($statement['variables'] as $variable) {
 
-			if ($symbolTable->hasVariable($variable['variable'])) {
+			if ($compilationContext->symbolTable->hasVariable($variable['variable'])) {
 				throw new Exception("Variable '" . $variable['variable'] . "' is already defined");
 			}
 
-			$symbolVariable = $symbolTable->addVariable($statement['data-type'], $variable['variable']);
+			$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable']);
 
 			if (isset($variable['expr'])) {
 				$defaultValue = $variable['expr']['value'];
@@ -68,6 +68,6 @@ class DeclareStatement
 			}
 		}
 
-		$codePrinter->outputNoLevel(join(', ', $variables) . ';');
+		$compilationContext->codePrinter->outputNoLevel(join(', ', $variables) . ';');
 	}
 }

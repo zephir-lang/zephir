@@ -70,13 +70,13 @@ TEST_INIT_CLASS(Test_Router) {
 
 PHP_METHOD(Test_Router, __construct) {
 
-	test_fetch_params(&defaultRoutes);
+test_fetch_params(&defaultRoutes);
 
 }
 
 PHP_METHOD(Test_Router, setDI) {
 
-	test_fetch_params(&dependencyInjector);
+test_fetch_params(&dependencyInjector);
 
 }
 
@@ -86,12 +86,11 @@ PHP_METHOD(Test_Router, getDI) {
 
 PHP_METHOD(Test_Router, add) {
 
-	test_fetch_params(&pattern, &paths, &httpMethods);
+test_fetch_params(&pattern, &paths, &httpMethods);
 
 	zval *method;
-
 	if (ZEPHIR_IS_LONG(method, 1)) {
-
+		zval_print(method);
 	}
 }
 

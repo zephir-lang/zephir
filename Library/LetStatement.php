@@ -14,41 +14,41 @@ class LetStatement
 		$this->_statement = $statement;
 	}
 
-	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable, ClassDefinition $classDefinition=null)
+	public function compile(CompilationContext $compilationContext)
 	{
 		$expr = new Expression($this->_statement['expr']);
 
 		$variable = $this->_statement['variable'];
 
-		$symbolVariable = $symbolTable->getVariableForWrite($variable);
+		$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
 
 		$symbolVariable->setInitialized(true);
 
-		$resolvedExpr = $expr->resolve($symbolTable, $classDefinition);
+		$resolvedExpr = $expr->resolve($compilationContext);
 
 		$type = $symbolVariable->getType();
 		switch ($type) {
-			case VAR_TYPE_INT:
+			case 'int':
 				switch ($resolvedExpr['type']) {
-					case EXPR_INT:
-						$codePrinter->output($variable . ' = ' . $resolvedExpr['value'] . ';');
+					case 'int':
+						$compilationContext->codePrinter->output($variable . ' = ' . $resolvedExpr['value'] . ';');
 						break;
 				}
 				break;
-			case VAR_TYPE_VAR:
+			case 'var':
 				$symbolVariable->initVariant($codePrinter);
 				switch ($resolvedExpr['type']) {
-					case EXPR_INT:
-						$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr['value'] . ');');
+					case 'int':
+						$compilationContext->codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr['value'] . ');');
 						break;
-					case EXPR_STRING:
-						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr['value'] . '", 1);');
+					case 'string':
+						$compilationContext->codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr['value'] . '", 1);');
 						break;
 				}
 				break;
 		}
 
-		echo $resolvedExpr['type'];
+		//echo $resolvedExpr['type'];
 
 		//echo $type;
 	}

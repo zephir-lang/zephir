@@ -15,27 +15,32 @@ class StatementsBlock
 		$this->_statements = $statements;
 	}
 
-	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable, ClassDefinition $classDefinition=null)
+	public function compile(CompilationContext $compilationContext)
 	{
+
+		$compilationContext->codePrinter->increaseLevel();
+
 		foreach ($this->_statements as $statement) {
 			switch ($statement['type']) {
 				case 'let':
 					$letStatement = new LetStatement($statement);
-					$letStatement->compile($codePrinter, $symbolTable, $classDefinition);
+					$letStatement->compile($compilationContext);
 					break;
 				case 'echo':
 					$echoStatement = new EchoStatement($statement);
-					$echoStatement->compile($codePrinter, $symbolTable, $classDefinition);
+					$echoStatement->compile($compilationContext);
 					break;
 				case 'declare':
 					$declareStatement = new DeclareStatement($statement);
-					$declareStatement->compile($codePrinter, $symbolTable, $classDefinition);
+					$declareStatement->compile($compilationContext);
 					break;
 				case 'if':
 					$ifStatement = new IfStatement($statement);
-					$ifStatement->compile($codePrinter, $symbolTable, $classDefinition);
+					$ifStatement->compile($compilationContext);
 					break;
 			}
 		}
+
+		$compilationContext->codePrinter->decreaseLevel();
 	}
 }

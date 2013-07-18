@@ -9,22 +9,25 @@ class EchoStatement
 		$this->_statement = $statement;
 	}
 
-	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable)
+	public function compile(CompilationContext $compilationContext)
 	{
 		$expr = $this->_statement['expr'];
 		switch ($expr['type']) {
-			case EXPR_IDENTIFIER:				
+			case 'variable':
 
-				$variable = $symbolTable->getVariableForRead($expr['value']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($expr['value']);
 
 				switch ($variable->getType()) {
-					case VAR_TYPE_INT:						
-						$codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
+					case 310:
+						$compilationContext->codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
+						break;
+					case 313:
+						$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
 						break;
 					default:
 						throw new Exception("Unknown type: " . $variable->getType());
-				}				
-		}		
+				}
+		}
 	}
-	
+
 }

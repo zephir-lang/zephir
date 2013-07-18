@@ -10,6 +10,7 @@ define('VAR_TYPE_INT', 309);
 define('VAR_TYPE_DOUBLE', 310);
 define('VAR_TYPE_VAR', 313);
 
+require 'Library/CompilationContext.php';
 require 'Library/ClassDefinition.php';
 require 'Library/ClassProperty.php';
 require 'Library/ClassMethod.php';

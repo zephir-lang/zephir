@@ -118,7 +118,7 @@ abstract class Router
 
 		let method = 'GET';
 		if (method == 1) {
-
+			echo method;
 		}
 
 	}

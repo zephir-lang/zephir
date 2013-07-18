@@ -19,7 +19,7 @@ class Compiler
 		return json_decode(file_get_contents(".temp/router.xx.js"), true);
 	}
 
-	public function compileClass($namespace, $codePrinter, $topStatement)
+	public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
 	{
 
 		$classDefinition = new ClassDefinition($namespace, $topStatement['name']);
@@ -47,31 +47,34 @@ class Compiler
 			}
 		}
 
-		$codePrinter->outputBlankLine();
-		$codePrinter->output('#ifdef HAVE_CONFIG_H');
-		$codePrinter->output('#include "config.h"');
-		$codePrinter->output('#endif');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('#ifdef HAVE_CONFIG_H');
+		$compilationContext->codePrinter->output('#include "config.h"');
+		$compilationContext->codePrinter->output('#endif');
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$codePrinter->output('#include "php.h"');
-		$codePrinter->output('#include "php_test.h"');
-		$codePrinter->output('#include "test.h"');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('#include "php.h"');
+		$compilationContext->codePrinter->output('#include "php_test.h"');
+		$compilationContext->codePrinter->output('#include "test.h"');
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$codePrinter->output('#include "Zend/zend_operators.h"');
-		$codePrinter->output('#include "Zend/zend_exceptions.h"');
-		$codePrinter->output('#include "Zend/zend_interfaces.h"');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('#include "Zend/zend_operators.h"');
+		$compilationContext->codePrinter->output('#include "Zend/zend_exceptions.h"');
+		$compilationContext->codePrinter->output('#include "Zend/zend_interfaces.h"');
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$codePrinter->output('#include "kernel/main.h"');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('#include "kernel/main.h"');
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$classDefinition->compile($codePrinter);
+		$classDefinition->compile($compilationContext);
 	}
 
-	public function compileComment($codePrinter, $topStatement)
+	/**
+	 * Compiles a comment as a top-level statement
+	 */
+	public function compileComment(CompilationContext $compilationContext, $topStatement)
 	{
-		$codePrinter->output('/' . $topStatement['value'] . '/');
+		$compilationContext->codePrinter->output('/' . $topStatement['value'] . '/');
 	}
 
 	/**
@@ -104,7 +107,11 @@ class Compiler
 			throw new Exception("Every file need a namespace");
 		}
 
+		$compilationContext = new CompilationContext;
+
 		$codePrinter = new codePrinter();
+
+		$compilationContext->codePrinter = $codePrinter;
 
 		$codePrinter->outputBlankLine();
 
@@ -112,14 +119,15 @@ class Compiler
 
 			switch ($topStatement['type']) {
 				case 'class':
-					$this->compileClass($namespace, $codePrinter, $topStatement);
+					$this->compileClass($compilationContext, $namespace, $topStatement);
 					break;
 				case 'comment':
-					$this->compileComment($codePrinter, $topStatement);
+					$this->compileComment($compilationContext, $topStatement);
 					break;
 			}
 		}
 
 		file_put_contents('ext/router.c', $codePrinter->getOutput());
 	}
+
 }

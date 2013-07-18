@@ -42,28 +42,28 @@ class ClassMethod
 	/**
 	 * Compiles the method
 	 *
-	 * @param CodePrinter $codePrinter
-	 * @param ClassDefinition $classDefinition
 	 */
-	public function compile(CodePrinter $codePrinter, ClassDefinition $classDefinition)
+	public function compile(CompilationContext $compilationContext)
 	{
 
 		$symbolTable = new SymbolTable();
+
+		$compilationContext->symbolTable = $symbolTable;
 
 		if (is_object($this->_parameters)) {
 			$params = array();
 			foreach ($this->_parameters->getParameters() as $parameter) {
 				$params[] = '&' . $parameter['name'];
 			}
-			$codePrinter->output('test_fetch_params(' . join(', ', $params) . ');');
-			$codePrinter->outputBlankLine();
+			$compilationContext->codePrinter->output('test_fetch_params(' . join(', ', $params) . ');');
+			$compilationContext->codePrinter->outputBlankLine();
 		}
 
 		/**
 		 * <comment>Compile the block of statements if any</comment>
 		 */
 		if (is_object($this->_statements)) {
-			$this->_statements->compile($codePrinter, $symbolTable, $classDefinition);
+			$this->_statements->compile($compilationContext);
 		}
 
 		/**
@@ -72,7 +72,7 @@ class ClassMethod
 		foreach ($symbolTable->getVariables() as $variable) {
 			if ($variable->getNumberUses() <= 0) {
 				echo 'Warning: Variable "' . $variable->getName() . '" declared but not used in ' .
-					$classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
+					$compilationContext->classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
 			}
 		}
 

@@ -272,6 +272,10 @@ static json_object *xx_ret_if_statement(json_object *expr, json_object *statemen
 	json_object_object_add(ret, "type", json_object_new_string("if"));
 	json_object_object_add(ret, "expr", expr);
 
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+
 	return ret;
 }
 

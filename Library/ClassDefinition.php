@@ -64,56 +64,53 @@ class ClassDefinition
 	 * Compiles a class
 	 *
 	 */
-	public function compile(CodePrinter $codePrinter)
+	public function compile(CompilationContext $compilationContext)
 	{
+		$compilationContext->classDefinition = $this;
 
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$codePrinter->output('TEST_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('TEST_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
+		$compilationContext->codePrinter->outputBlankLine();
 
-		$codePrinter->increaseLevel();
+		$compilationContext->codePrinter->increaseLevel();
 
 		/**
 		 * Register the class
 		 */
-		$codePrinter->output('TEST_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
+		$compilationContext->codePrinter->output('TEST_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
 			strtolower($this->getName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
 			strtolower($this->getName()) . '_method_entry, 0);');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->outputBlankLine();
 
 		/**
 		 * Compile properties
 		 */
 		foreach ($this->getProperties() as $property) {
-			$property->compile($codePrinter, $this);
+			$property->compile($compilationContext);
 		}
 
-		$codePrinter->outputBlankLine();
-		$codePrinter->output('return SUCCESS;');
+		$compilationContext->codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('return SUCCESS;');
 
-		$codePrinter->outputBlankLine();
-		$codePrinter->decreaseLevel();
+		$compilationContext->codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->decreaseLevel();
 
-		$codePrinter->output('}');
-		$codePrinter->outputBlankLine();
+		$compilationContext->codePrinter->output('}');
+		$compilationContext->codePrinter->outputBlankLine();
 
 		/**
 		 * Compile methods
 		 */
 		foreach ($this->getMethods() as $method) {
 
-			$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
-			$codePrinter->outputBlankLine();
+			$compilationContext->codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+			$compilationContext->codePrinter->outputBlankLine();
 
-			$codePrinter->increaseLevel();
+			$method->compile($compilationContext);
 
-			$method->compile($codePrinter, $this);
-
-			$codePrinter->decreaseLevel();
-
-			$codePrinter->output('}');
-			$codePrinter->outputBlankLine();
+			$compilationContext->codePrinter->output('}');
+			$compilationContext->codePrinter->outputBlankLine();
 		}
 
 	}

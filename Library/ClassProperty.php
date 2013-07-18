@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * ClassProperty
+ *
+ * Represents a property class
+ */
 class ClassProperty
 {
 
@@ -26,27 +31,28 @@ class ClassProperty
 		return 'ZEND_ACC_PROTECTED';
 	}
 
-	public function compile(CodePrinter $codePrinter, ClassDefinition $classDefinition)
+	public function compile(CompilationContext $compilationContext)
 	{
-		if (!is_array($this->_defaultValue)) {			
-			$codePrinter->output("zend_declare_property_null(" . 
-				$classDefinition->getClassEntry() . 
-				", SL(\"" . $this->getName() . "\"), " . 
+		if (!is_array($this->_defaultValue)) {
+			$compilationContext->codePrinter->output("zend_declare_property_null(" .
+				$compilationContext->classDefinition->getClassEntry() .
+				", SL(\"" . $this->getName() . "\"), " .
 				$this->getVisibilityAccesor() . " TSRMLS_CC);");
 		} else {
 			switch ($this->_defaultValue['type']) {
 				case 305:
-					$codePrinter->output("zend_declare_property_bool(" . 
-						$classDefinition->getClassEntry() . 
-						", SL(\"" . $this->getName() . "\"), 0, " . 
+					$compilationContext->codePrinter->output("zend_declare_property_bool(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), 0, " .
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 					break;
 				default:
-					$codePrinter->output("zend_declare_property_null(" . 
-						$classDefinition->getClassEntry() . 
-						", SL(\"" . $this->getName() . "\"), " . 
+					$compilationContext->codePrinter->output("zend_declare_property_null(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), " .
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 			}
 		}
 	}
+
 }
