@@ -12,6 +12,8 @@ class ClassMethod
 
 	protected $_name;
 
+	protected $_parameters;
+
 	protected $_statements;
 
 	/**
@@ -19,10 +21,11 @@ class ClassMethod
 	 *
 	 * @param string $visibility
 	 */
-	public function __construct($visibility, $name, StatementsBlock $statements=null)
+	public function __construct($visibility, $name, $parameters, StatementsBlock $statements=null)
 	{
 		$this->_visibility = $visibility;
 		$this->_name = $name;
+		$this->_parameters = $parameters;
 		$this->_statements = $statements;
 	}
 
@@ -45,10 +48,22 @@ class ClassMethod
 	public function compile(CodePrinter $codePrinter, ClassDefinition $classDefinition)
 	{
 
-		$symbolTable = new SymbolTable();		
+		$symbolTable = new SymbolTable();
 
+		if (is_object($this->_parameters)) {
+			$params = array();
+			foreach ($this->_parameters->getParameters() as $parameter) {
+				$params[] = '&' . $parameter['name'];
+			}
+			$codePrinter->output('test_fetch_params(' . join(', ', $params) . ');');
+			$codePrinter->outputBlankLine();
+		}
+
+		/**
+		 * <comment>Compile the block of statements if any</comment>
+		 */
 		if (is_object($this->_statements)) {
-			$this->_statements->compile($codePrinter, $symbolTable);						
+			$this->_statements->compile($codePrinter, $symbolTable, $classDefinition);
 		}
 
 		/**
@@ -56,10 +71,10 @@ class ClassMethod
 		 */
 		foreach ($symbolTable->getVariables() as $variable) {
 			if ($variable->getNumberUses() <= 0) {
-				echo 'Warning: Variable "' . $variable->getName() . '" declreated but not used in ' . 
+				echo 'Warning: Variable "' . $variable->getName() . '" declared but not used in ' .
 					$classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
 			}
-		}				
+		}
 
 		return null;
 	}

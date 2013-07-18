@@ -5,12 +5,13 @@
 
 #include "php.h"
 #include "php_test.h"
+#include "test.h"
 
 #include "Zend/zend_operators.h"
 #include "Zend/zend_exceptions.h"
 #include "Zend/zend_interfaces.h"
 
-zend_class_entry *router_ce;
+zend_class_entry *test_router_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
@@ -19,7 +20,9 @@ PHP_MINIT_FUNCTION(test){
 	/** Init globals */
 	//ZEND_INIT_MODULE_GLOBALS(phalcon, php_phalcon_init_globals, NULL);
 
-	TEST_INIT_CLASS(Router);
+	TEST_INIT(Test_Router);
+
+	fprintf(stderr, "here");
 
 	return SUCCESS;
 }

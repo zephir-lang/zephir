@@ -10,9 +10,22 @@ class Expression
 		$this->_expression = $expression;
 	}
 
-	public function compile(SymbolTable $symbolTable)
+	/**
+	 * Resolves an expression
+	 *
+	 */
+	public function resolve(SymbolTable $symbolTable, ClassDefinition $classDefinition=null)
 	{
-
+		$type = $this->_expression['type'];
+		switch ($type) {
+			case 301:
+				return $this->_expression;
+				break;
+			case 303:
+				return $this->_expression;
+				break;
+		}
+		echo $type;
 	}
-	
+
 }

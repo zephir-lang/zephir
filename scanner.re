@@ -97,6 +97,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'const' {
+			token->opcode = XX_T_CONST;
+			return 0;
+		}
+
 		'int' {
 			token->opcode = XX_T_TYPE_INTEGER;
 			return 0;
@@ -186,6 +191,16 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		"=" {
 			token->opcode = XX_T_ASSIGN;
+			return 0;
+		}
+
+		"<" {
+			token->opcode = XX_T_LESS;
+			return 0;
+		}
+
+		">" {
+			token->opcode = XX_T_GREATER;
 			return 0;
 		}
 

@@ -17,7 +17,7 @@ const xx_token_names xx_tokens[] =
 	{ XX_T_BRACKET_OPEN,     	"{" },
 	{ XX_T_BRACKET_CLOSE,    	"}" },
  	{ XX_T_SBRACKET_OPEN,    	"[" },
-	{ XX_T_SBRACKET_CLOSE,   	"]" },	
+	{ XX_T_SBRACKET_CLOSE,   	"]" },
 	{  0, NULL }
 };
 
@@ -196,6 +196,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_ECHO:
 				xx_(xx_parser, XX_ECHO, NULL, parser_status);
 				break;
+			case XX_T_CONST:
+				xx_(xx_parser, XX_CONST, NULL, parser_status);
+				break;
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
 				break;
@@ -204,6 +207,12 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
+				break;
+			case XX_T_LESS:
+				xx_(xx_parser, XX_LESS, NULL, parser_status);
+				break;
+			case XX_T_GREATER:
+				xx_(xx_parser, XX_GREATER, NULL, parser_status);
 				break;
 			/*case XX_T_COLON:
 				xx_(xx_parser, XX_COLON, NULL, parser_status);
@@ -245,19 +254,19 @@ int xx_parse_program(char *program, unsigned int program_length) {
 
 			case XX_T_TYPE_INTEGER:
 				xx_(xx_parser, XX_TYPE_INTEGER, NULL, parser_status);
-				break;			
+				break;
 			case XX_T_TYPE_DOUBLE:
 				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
-				break;			
+				break;
 			case XX_T_TYPE_STRING:
 				xx_(xx_parser, XX_TYPE_STRING, NULL, parser_status);
-				break;			
+				break;
 			case XX_T_TYPE_BOOL:
 				xx_(xx_parser, XX_TYPE_BOOL, NULL, parser_status);
-				break;			
+				break;
 			case XX_T_TYPE_VAR:
 				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
-				break;			
+				break;
 
 			case XX_T_INTEGER:
 				xx_parse_with_token(xx_parser, XX_T_INTEGER, XX_INTEGER, &token, parser_status);
@@ -270,7 +279,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);
-				break;			
+				break;
 
 			default:
 				parser_status->status = XX_PARSING_FAILED;
@@ -282,7 +291,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
 					efree(error);
-				}*/				
+				}*/
 				break;
 		}
 
@@ -325,7 +334,7 @@ int xx_parse_program(char *program, unsigned int program_length) {
 		fprintf(stderr, "error!\n");
 	}
 
-	
+
 
 	xx_Free(xx_parser, xx_wrapper_free);
 
@@ -359,8 +368,8 @@ int main(int argc, char **argv) {
 
 	program = malloc(sizeof(char) * 2048);
 
-	if (argc > 0) {		
-		
+	if (argc > 0) {
+
 		fp = fopen(argv[1], "r");
 		if (!fp) {
 			fprintf(stderr, "Cant open file\n");

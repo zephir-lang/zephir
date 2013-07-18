@@ -13,24 +13,18 @@ class EchoStatement
 	{
 		$expr = $this->_statement['expr'];
 		switch ($expr['type']) {
-			case EXPR_IDENTIFIER:
-				if (!$symbolTable->hasVariable($expr['value'])) {
-					throw new Exception("Cannot echo variable '" . $expr['value'] . "' because it wasn't defined");					
-				}
+			case EXPR_IDENTIFIER:				
 
-				$variable = $symbolTable->getVariable($expr['value']);
+				$variable = $symbolTable->getVariableForRead($expr['value']);
 
 				switch ($variable->getType()) {
-					case VAR_TYPE_INT:
-						$variable->increaseUses();
+					case VAR_TYPE_INT:						
 						$codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
 						break;
 					default:
 						throw new Exception("Unknown type: " . $variable->getType());
-				}
-
-				
-		}
-		
+				}				
+		}		
 	}
+	
 }

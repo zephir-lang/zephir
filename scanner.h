@@ -31,12 +31,15 @@
 #define XX_T_LET 356
 #define XX_T_COMMENT 357
 #define XX_T_ECHO 358
+#define XX_T_CONST 359
 
 /* Operators */
 #define XX_T_AT '@'
 #define XX_T_DOT '.'
 #define XX_T_COMMA ','
 #define XX_T_ASSIGN '='
+#define XX_T_LESS '<'
+#define XX_T_GREATER '>'
 #define XX_T_COLON ':'
 #define XX_T_DOTCOMMA ':'
 #define XX_T_BRACKET_OPEN '{'

@@ -1,33 +1,122 @@
 
-/* hello */
+/*
+ | Phalcon\Mvc\Router
+ |
+ | <p>Phalcon\Mvc\Router is the standard framework router. Routing is the
+ | process of taking a URI endpoint (that part of the URI which comes after the base URL) and
+ | decomposing it into parameters to determine which module, controller, and
+ | action of that controller should receive the request</p>
+ |
+ |<code>
+ |
+ |	$router = new Phalcon\Mvc\Router();
+ |
+ |  $router->add(
+ |		"/documentation/{chapter}/{name}.{type:[a-z]+}",
+ |		array(
+ |			"controller" => "documentation",
+ |			"action"     => "show"
+ |		)
+ |	);
+ |
+ |	$router->handle();
+ |
+ |	echo $router->getControllerName();
+ |</code>
+ |
+ */
+
+namespace Test;
+
 class Router
 {
 	protected _dependencyInjector;
 
 	protected _uriSource;
 
+	protected _namespace = null;
+
+	protected _module = null;
+
+	protected _controller = null;
+
+	protected _action = null;
+
+	protected _params;
+
+	protected _routes;
+
+	protected _matchedRoute;
+
+	protected _matches;
+
 	protected _wasMatched = false;
 
-	public function __construct()
-	{
-		/* 
-		 This is an assignment 
-		 */
-		let x = 100;
-	}	
+	protected _defaultNamespace;
 
-	public function setDI()
-	{
-		int a = 0, b, c;
-		double d, e, f;							
+	protected _defaultModule;
 
-		echo a;
-		echo "\n";
+	protected _defaultController;
+
+	protected _defaultAction;
+
+	protected _defaultParams;
+
+	protected _removeExtraSlashes;
+
+	protected _notFoundPaths;
+
+	const URI_SOURCE_GET_URL = 0;
+
+	const URI_SOURCE_SERVER_REQUEST_URI = 1;
+
+	/*
+	 | Phalcon\Mvc\Router constructor
+	 |
+	 | @param boolean $defaultRoutes
+	 */
+	public function __construct(defaultRoutes)
+	{
+
 	}
 
+	/*
+	 | Sets the dependency injector
+	 |
+	 | @param Phalcon\DiInterface $dependencyInjector
+	 */
+	public function setDI(dependencyInjector)
+	{
+		/*$this->_dependencyInjector = $dependencyInjector;*/
+	}
+
+	/*
+	 | Returns the internal dependency injector
+	 |
+	 | @return Phalcon\DiInterface
+	 */
 	public function getDI()
 	{
-		
+		/*return $this->_dependencyInjector;*/
+	}
+
+	/*
+	 | Adds a route to the router without any HTTP constraint
+	 |
+	 |<code>
+	 | $router->add('/about', 'About::index');
+	 |</code>
+	 |
+	 | @param string pattern
+	 | @param string/array paths
+	 | @param string httpMethods
+	 | @return Phalcon\Mvc\Router\Route
+	 */
+	public function add(int pattern, paths=null, httpMethods=null)
+	{
+		var method;
+
+		let method = 'GET';
 	}
 
 }

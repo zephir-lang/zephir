@@ -9,7 +9,13 @@
 class SymbolTable
 {
 	protected $_variables = array();
-	
+
+	/**
+	 * Check if a variable is declared in the current symbol table
+	 *
+	 * @param string $name
+	 * @return boolean
+	 */	
 	public function hasVariable($name)
 	{
 		return isset($this->_variables[$name]);
@@ -47,6 +53,45 @@ class SymbolTable
 	public function getVariables()
 	{
 		return $this->_variables;
+	}
+	
+	/**
+	 * Return a variable in the symbol table, it will be used for a read operation
+	 *
+	 * @return \Variable
+	 */
+	public function getVariableForRead($name)
+	{
+
+		if (!$this->hasVariable($name)) {
+			throw new Exception("Cannot read variable '" . $name. "' because it wasn't defined");					
+		}
+
+		$variable = $this->getVariable($name);
+		if (!$variable->isInitialized()) {
+			throw new Exception("Variable '" . $expr['value'] . "' can't be used because is not initialized");					
+		}
+
+		$variable->increaseUses();
+		return $variable;
+	}
+
+	/**
+	 * Return a variable in the symbol table, it will be used for a write operation
+	 *
+	 * @return \Variable
+	 */
+	public function getVariableForWrite($name)
+	{
+
+		if (!$this->hasVariable($name)) {
+			throw new Exception("Cannot write variable '" . $name. "' because it wasn't defined");					
+		}
+
+		$variable = $this->getVariable($name);		
+		$variable->increaseUses();
+
+		return $variable;
 	}
 
 }
