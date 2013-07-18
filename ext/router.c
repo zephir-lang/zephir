@@ -1,29 +1,29 @@
 
-/*
- | Phalcon\Mvc\Router
- |
- | <p>Phalcon\Mvc\Router is the standard framework router. Routing is the
- | process of taking a URI endpoint (that part of the URI which comes after the base URL) and
- | decomposing it into parameters to determine which module, controller, and
- | action of that controller should receive the request</p>
- |
- |<code>
- |
- |	$router = new Phalcon\Mvc\Router();
- |
- |  $router->add(
- |		"/documentation/{chapter}/{name}.{type:[a-z]+}",
- |		array(
- |			"controller" => "documentation",
- |			"action"     => "show"
- |		)
- |	);
- |
- |	$router->handle();
- |
- |	echo $router->getControllerName();
- |</code>
- |
+/**
+ * Phalcon\Mvc\Router
+ *
+ * <p>Phalcon\Mvc\Router is the standard framework router. Routing is the
+ * process of taking a URI endpoint (that part of the URI which comes after the base URL) and
+ * decomposing it into parameters to determine which module, controller, and
+ * action of that controller should receive the request</p>
+ *
+ *<code>
+ *
+ *	$router = new Phalcon\Mvc\Router();
+ *
+ *  $router->add(
+ *		"/documentation/{chapter}/{name}.{type:[a-z]+}",
+ *		array(
+ *			"controller" => "documentation",
+ *			"action"     => "show"
+ *		)
+ *	);
+ *
+ *	$router->handle();
+ *
+ *	echo $router->getControllerName();
+ *</code>
+ *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -90,5 +90,7 @@ PHP_METHOD(Test_Router, add) {
 
 	zval *method;
 	ZVAL_STRING(method, "GET", 1);
+	if (method == 1) {
+	}
 }
 

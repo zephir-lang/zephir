@@ -4,7 +4,7 @@
 /* First off, code is include which follows the "include" declaration
 ** in the input file. */
 #include <stdio.h>
-// 10 "parser.lemon"
+// 11 "parser.lemon"
 
 
 #include "json/json.h"
@@ -26,6 +26,25 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T)
 	return ret;
 }
 
+static json_object *xx_ret_expr(int type, json_object *left, json_object *right, json_object *extra)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_int(type));
+
+	if (left) {
+		json_object_object_add(ret, "left", left);
+	}
+	if (right) {
+		json_object_object_add(ret, "right", right);
+	}
+	if (extra) {
+		json_object_object_add(ret, "extra", extra);
+	}
+
+	return ret;
+}
+
 static json_object *xx_ret_namespace(xx_parser_token *T)
 {
 	json_object *ret = json_object_new_object();
@@ -36,12 +55,17 @@ static json_object *xx_ret_namespace(xx_parser_token *T)
 	return ret;
 }
 
-static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition)
+static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, xx_parser_token *E)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("class"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	json_object_object_add(ret, "abtract", json_object_new_int(is_abstract));
+
+	if (E) {
+		json_object_object_add(ret, "extends", json_object_new_string(E->token));
+	}
 
 	if (class_definition) {
 		json_object_object_add(ret, "definition", class_definition);
@@ -195,12 +219,25 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 	return ret;
 }
 
-static json_object *xx_ret_let_statement(xx_parser_token *T, json_object *expr)
+static json_object *xx_ret_let_statement(xx_parser_token *D, xx_parser_token *T, json_object *expr)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("let"));
+	if (D) {
+		json_object_object_add(ret, "domain", json_object_new_string(D->token));
+	}
 	json_object_object_add(ret, "variable", json_object_new_string(T->token));
+	json_object_object_add(ret, "expr", expr);
+
+	return ret;
+}
+
+static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *else_statements)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("if"));
 	json_object_object_add(ret, "expr", expr);
 
 	return ret;
@@ -250,7 +287,7 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 }
 
 
-// 254 "parser.c"
+// 291 "parser.c"
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -300,23 +337,23 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 61
+#define YYNOCODE 68
 #define YYACTIONTYPE unsigned short int
 #define xx_TOKENTYPE xx_parser_token*
 typedef union {
   xx_TOKENTYPE yy0;
-  json_object* yy55;
-  int yy121;
+  json_object* yy95;
+  int yy135;
 } YYMINORTYPE;
 #define YYSTACKDEPTH 100
 #define xx_ARG_SDECL xx_parser_status *status;
 #define xx_ARG_PDECL ,xx_parser_status *status
 #define xx_ARG_FETCH xx_parser_status *status = yypParser->status
 #define xx_ARG_STORE yypParser->status = status
-#define YYNSTATE 193
-#define YYNRULE 93
-#define YYERRORSYMBOL 32
-#define YYERRSYMDT yy121
+#define YYNSTATE 231
+#define YYNRULE 107
+#define YYERRORSYMBOL 37
+#define YYERRSYMDT yy135
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -369,162 +406,198 @@ typedef union {
 **  yy_default[]       Default action for each state.
 */
 static YYACTIONTYPE yy_action[] = {
- /*     0 */   124,   77,   50,   51,   52,   53,   54,   55,   27,   77,
- /*    10 */    83,   56,   65,   71,   68,   80,   33,   45,   74,   56,
- /*    20 */    65,   71,   68,  150,   33,   45,   74,  122,   77,  204,
- /*    30 */   159,  172,  135,  178,  152,  118,   77,   61,   56,   65,
- /*    40 */    71,   68,   32,   33,   45,   74,   56,   65,   71,   68,
- /*    50 */     9,   33,   45,   74,  140,   77,   28,   29,   30,   31,
- /*    60 */   187,  158,  142,   77,  157,   56,   65,   71,   68,  153,
- /*    70 */    33,   45,   74,   56,   65,   71,   68,   83,   33,   45,
- /*    80 */    74,  133,   77,  143,   17,  158,  161,  184,  157,  116,
- /*    90 */    77,  120,   56,   65,   71,   68,  111,   33,   45,   74,
- /*   100 */    56,   65,   71,   68,  154,   33,   45,   74,   82,   77,
- /*   110 */   207,  146,   19,  167,  134,  152,  131,   77,   11,   56,
- /*   120 */    65,   71,   68,  126,   33,   45,   74,   56,   65,   71,
- /*   130 */    68,  278,   33,   45,   74,   25,   77,  287,    1,    2,
- /*   140 */   192,    4,    5,    6,   66,   64,   56,   65,   71,   68,
- /*   150 */    85,   33,   45,   74,  160,  144,  166,   85,  145,  157,
- /*   160 */    24,   59,  114,   96,   67,   99,  100,  101,  102,  103,
- /*   170 */    96,   77,   99,  100,  101,  102,  103,   85,  110,   14,
- /*   180 */   125,   56,   65,   71,   68,   85,   33,   45,   74,   23,
- /*   190 */    96,   38,   99,  100,  101,  102,  103,   48,   96,   86,
- /*   200 */    99,  100,  101,  102,  103,  162,   13,   16,  185,  191,
- /*   210 */   190,  163,  184,  157,   39,   40,   41,   42,   43,   44,
- /*   220 */    50,   51,   52,   53,   54,   55,   32,  203,  159,  172,
- /*   230 */    59,  178,  152,   70,   32,  173,  117,   69,   64,  130,
- /*   240 */    78,   29,   30,   31,  141,   20,   32,  168,   78,   29,
- /*   250 */    30,   31,    7,  169,   32,   10,  123,  155,   77,  156,
- /*   260 */    78,   29,   30,   31,   26,   32,   72,   64,   78,   29,
- /*   270 */    30,   31,  277,   59,   32,  132,   73,   75,   64,   78,
- /*   280 */    29,   30,   31,   59,   81,   87,   76,   89,   78,   29,
- /*   290 */    30,   31,   15,  159,  172,  129,  178,  152,  186,   59,
- /*   300 */   189,  190,   58,  145,  157,  194,  110,    7,  125,  147,
- /*   310 */    10,  174,  105,   77,  104,   88,   92,  175,  209,  109,
- /*   320 */    19,  179,  134,  206,  109,   19,   18,  134,  205,  109,
- /*   330 */    19,  135,  134,  208,  188,  172,  128,  178,  210,  109,
- /*   340 */    19,  119,  134,  104,   88,   92,  211,  109,   19,   79,
- /*   350 */   134,  104,   88,   92,    8,    3,    4,    5,    6,   84,
- /*   360 */    88,   92,  160,  180,  166,  147,   57,   64,   83,  181,
- /*   370 */   107,   90,   12,  127,   91,  164,  165,  193,   20,   93,
- /*   380 */   170,   62,  106,   34,   94,   21,   95,   22,  126,  276,
- /*   390 */   171,   35,  111,  121,   97,   98,  272,  176,  177,  248,
- /*   400 */   108,  249,   63,  275,  250,   36,  251,  182,  274,  183,
- /*   410 */    37,  252,  253,   60,  113,  112,  115,  273,   49,  155,
- /*   420 */    47,  139,  138,  151,  148,  137,  136,  149,   46,
+ /*     0 */    38,   77,   75,   88,   13,   16,  204,  210,  209,  168,
+ /*    10 */   203,  176,  181,   67,   76,   82,   79,   33,   34,   39,
+ /*    20 */   182,   56,   85,  152,  102,  163,   88,  100,  164,  176,
+ /*    30 */    99,   89,   29,   30,   31,   32,   67,   76,   82,   79,
+ /*    40 */     7,   34,   39,   10,   56,   85,  150,  217,   88,   88,
+ /*    50 */   227,   16,  204,  210,  209,  184,  203,  176,  102,   67,
+ /*    60 */    76,   82,   79,   33,   34,   39,  231,   56,   85,  135,
+ /*    70 */   206,  177,   88,  160,  176,  139,   55,   89,   29,   30,
+ /*    80 */    31,   32,   67,   76,   82,   79,  187,   34,   39,   70,
+ /*    90 */    56,   85,   25,   78,  188,   88,  339,    1,    2,  230,
+ /*   100 */     4,    5,    6,   92,  102,   67,   76,   82,   79,   33,
+ /*   110 */    34,   39,   91,   56,   85,  137,   93,   36,   88,  151,
+ /*   120 */   129,  125,  144,   89,   29,   30,   31,   32,   67,   76,
+ /*   130 */    82,   79,  167,   34,   39,  180,   56,   85,  101,   80,
+ /*   140 */    75,   88,  221,   16,  204,  210,  209,  130,  203,  176,
+ /*   150 */   193,   67,   76,   82,   79,   33,   34,   39,  194,   56,
+ /*   160 */    85,  161,   59,   70,   88,  142,   42,   81,   92,   89,
+ /*   170 */    29,   30,   31,   32,   67,   76,   82,   79,   21,   34,
+ /*   180 */    39,   95,   56,   85,  141,   83,   75,   88,   92,   61,
+ /*   190 */    62,   63,   64,   65,   66,  226,  104,   67,   76,   82,
+ /*   200 */    79,   35,   34,   39,   70,   56,   85,  159,   84,  105,
+ /*   210 */    88,  115,   54,  118,  119,  120,  121,  122,   18,  199,
+ /*   220 */    67,   76,   82,   79,   33,   34,   39,  200,   56,   85,
+ /*   230 */   143,   44,   53,   88,  136,   86,   75,  189,   89,   29,
+ /*   240 */    30,   31,   32,   67,   76,   82,   79,  190,   34,   39,
+ /*   250 */    70,   56,   85,   27,   87,   11,   88,   91,   45,   46,
+ /*   260 */    47,   48,   49,   50,  130,  186,   67,   76,   82,   79,
+ /*   270 */    33,   34,   39,   96,   56,   85,   90,  145,   70,   88,
+ /*   280 */    37,   12,   69,  211,   89,   29,   30,   31,   32,   67,
+ /*   290 */    76,   82,   79,   41,   34,   39,   97,   56,   85,   68,
+ /*   300 */    75,   88,   61,   62,   63,   64,   65,   66,   51,   94,
+ /*   310 */   192,   67,   76,   82,   79,   14,   34,   39,  104,   56,
+ /*   320 */    85,  108,   20,   61,   62,   63,   64,   65,   66,  104,
+ /*   330 */   132,  106,   23,  115,   74,  118,  119,  120,  121,  122,
+ /*   340 */    22,   52,  104,  133,  115,   24,  118,  119,  120,  121,
+ /*   350 */   122,  162,   17,  177,   33,  203,  176,  115,  109,  118,
+ /*   360 */   119,  120,  121,  122,   26,  220,  195,  224,   89,   29,
+ /*   370 */    30,   31,   32,  214,   16,  204,  210,  209,   33,  203,
+ /*   380 */   176,   15,  158,  196,  178,  191,  198,  197,  171,  179,
+ /*   390 */   157,  185,   28,   29,   30,   31,   32,  232,  154,  205,
+ /*   400 */     7,  208,  209,   10,  164,  176,  216,  217,   88,  178,
+ /*   410 */   191,  110,  197,  171,  129,  247,  144,  166,  178,  191,
+ /*   420 */   228,  197,  171,  179,  223,  185,  166,  178,  191,  326,
+ /*   430 */   197,  171,   43,  251,  156,  112,  165,   19,  154,  153,
+ /*   440 */   171,  201,  248,  202,  155,  178,  191,  325,  197,  171,
+ /*   450 */    72,  229,  113,  114,  178,  191,  324,  197,  171,  146,
+ /*   460 */   249,  149,  148,  128,   19,  147,  153,  253,  126,   40,
+ /*   470 */   128,   19,  124,  153,  123,  107,  111,  116,    3,    4,
+ /*   480 */     5,    6,   98,  145,  123,  107,  111,  250,  323,  212,
+ /*   490 */   128,   19,  117,  153,  138,  213,  123,  107,  111,  254,
+ /*   500 */   140,  322,  128,   19,  292,  153,  252,  215,   73,  207,
+ /*   510 */   191,  255,  197,  293,  128,   19,  127,  153,  294,  103,
+ /*   520 */   107,  111,  218,  320,  219,  295,  131,  222,    9,  321,
+ /*   530 */   296,  174,  134,  175,   57,   58,    8,  297,  172,  225,
+ /*   540 */    71,  170,  173,   20,  169,   60,  176,  183,
 };
 static YYCODETYPE yy_lookahead[] = {
- /*     0 */     7,    8,   26,   27,   28,   29,   30,   31,    7,    8,
- /*    10 */     1,   18,   19,   20,   21,    6,   23,   24,   25,   18,
- /*    20 */    19,   20,   21,   45,   23,   24,   25,    7,    8,    7,
- /*    30 */     8,    9,   13,   11,   12,    7,    8,    3,   18,   19,
- /*    40 */    20,   21,   39,   23,   24,   25,   18,   19,   20,   21,
- /*    50 */     4,   23,   24,   25,    7,    8,   53,   54,   55,   56,
- /*    60 */    43,   44,    7,    8,   47,   18,   19,   20,   21,    3,
- /*    70 */    23,   24,   25,   18,   19,   20,   21,    1,   23,   24,
- /*    80 */    25,    7,    8,   42,   43,   44,    3,   46,   47,    7,
- /*    90 */     8,   15,   18,   19,   20,   21,   13,   23,   24,   25,
- /*   100 */    18,   19,   20,   21,   10,   23,   24,   25,    7,    8,
- /*   110 */     7,    8,    9,    3,   11,   12,    7,    8,    3,   18,
- /*   120 */    19,   20,   21,   13,   23,   24,   25,   18,   19,   20,
- /*   130 */    21,    4,   23,   24,   25,    7,    8,   33,   34,   35,
- /*   140 */    36,   37,   38,   39,   58,   59,   18,   19,   20,   21,
- /*   150 */     3,   23,   24,   25,    9,   43,   11,    3,   46,   47,
- /*   160 */     6,    1,   15,   16,    4,   18,   19,   20,   21,   22,
- /*   170 */    16,    8,   18,   19,   20,   21,   22,    3,    9,    7,
- /*   180 */    11,   18,   19,   20,   21,    3,   23,   24,   25,   15,
- /*   190 */    16,    3,   18,   19,   20,   21,   22,    3,   16,   10,
- /*   200 */    18,   19,   20,   21,   22,    4,   40,   41,   42,   43,
- /*   210 */    44,   10,   46,   47,   26,   27,   28,   29,   30,   31,
- /*   220 */    26,   27,   28,   29,   30,   31,   39,    7,    8,    9,
- /*   230 */     1,   11,   12,    4,   39,    3,   49,   58,   59,    6,
- /*   240 */    53,   54,   55,   56,   49,   13,   39,    4,   53,   54,
- /*   250 */    55,   56,    2,   10,   39,    5,   49,   45,    8,    4,
- /*   260 */    53,   54,   55,   56,   49,   39,   58,   59,   53,   54,
- /*   270 */    55,   56,    4,    1,   39,   49,    4,   58,   59,   53,
- /*   280 */    54,   55,   56,    1,   49,   45,    4,    3,   53,   54,
- /*   290 */    55,   56,    7,    8,    9,   15,   11,   12,   41,    1,
- /*   300 */    43,   44,    4,   46,   47,    0,    9,    2,   11,   12,
- /*   310 */     5,    4,   48,    8,   50,   51,   52,   10,    7,    8,
- /*   320 */     9,    3,   11,    7,    8,    9,   47,   11,    7,    8,
- /*   330 */     9,   13,   11,    7,    8,    9,   14,   11,    7,    8,
- /*   340 */     9,   48,   11,   50,   51,   52,    7,    8,    9,   48,
- /*   350 */    11,   50,   51,   52,    3,   36,   37,   38,   39,   50,
- /*   360 */    51,   52,    9,    4,   11,   12,   58,   59,    1,   10,
- /*   370 */     6,   10,    6,    3,   45,   45,    4,    0,   13,    3,
- /*   380 */    45,   10,   15,    3,   10,    3,   45,   14,   13,    4,
- /*   390 */     4,   10,   13,    6,    3,   17,    4,   45,    4,    3,
- /*   400 */     7,    3,   45,    4,    3,   57,    3,   45,    4,    4,
- /*   410 */     4,    3,    3,   59,   14,    3,    6,    4,    4,   60,
- /*   420 */     4,    6,   15,    4,    3,   14,    3,   10,   45,
+ /*     0 */     8,   65,   66,   11,   45,   46,   47,   48,   49,   13,
+ /*    10 */    51,   52,    5,   21,   22,   23,   24,   44,   26,   27,
+ /*    20 */    13,   29,   30,    8,    1,   48,   11,   54,   51,   52,
+ /*    30 */     7,   58,   59,   60,   61,   62,   21,   22,   23,   24,
+ /*    40 */     3,   26,   27,    6,   29,   30,    8,   10,   11,   11,
+ /*    50 */    45,   46,   47,   48,   49,    5,   51,   52,    1,   21,
+ /*    60 */    22,   23,   24,   44,   26,   27,    0,   29,   30,    8,
+ /*    70 */    48,   49,   11,   54,   52,   18,    5,   58,   59,   60,
+ /*    80 */    61,   62,   21,   22,   23,   24,    5,   26,   27,    1,
+ /*    90 */    29,   30,    8,    5,   13,   11,   38,   39,   40,   41,
+ /*   100 */    42,   43,   44,   50,    1,   21,   22,   23,   24,   44,
+ /*   110 */    26,   27,    2,   29,   30,    8,   63,    7,   11,   54,
+ /*   120 */    12,   18,   14,   58,   59,   60,   61,   62,   21,   22,
+ /*   130 */    23,   24,    4,   26,   27,    4,   29,   30,    8,   65,
+ /*   140 */    66,   11,   45,   46,   47,   48,   49,   16,   51,   52,
+ /*   150 */     5,   21,   22,   23,   24,   44,   26,   27,   13,   29,
+ /*   160 */    30,    8,    4,    1,   11,   54,   64,    5,   50,   58,
+ /*   170 */    59,   60,   61,   62,   21,   22,   23,   24,    4,   26,
+ /*   180 */    27,   63,   29,   30,    8,   65,   66,   11,   50,   31,
+ /*   190 */    32,   33,   34,   35,   36,    7,    4,   21,   22,   23,
+ /*   200 */    24,   63,   26,   27,    1,   29,   30,    8,    5,   13,
+ /*   210 */    11,   19,   64,   21,   22,   23,   24,   25,   52,    5,
+ /*   220 */    21,   22,   23,   24,   44,   26,   27,   13,   29,   30,
+ /*   230 */     8,    4,   13,   11,   54,   65,   66,   50,   58,   59,
+ /*   240 */    60,   61,   62,   21,   22,   23,   24,    5,   26,   27,
+ /*   250 */     1,   29,   30,    8,    5,    4,   11,    2,   31,   32,
+ /*   260 */    33,   34,   35,   36,   16,    4,   21,   22,   23,   24,
+ /*   270 */    44,   26,   27,   18,   29,   30,    8,   16,    1,   11,
+ /*   280 */    54,    7,    5,    9,   58,   59,   60,   61,   62,   21,
+ /*   290 */    22,   23,   24,   13,   26,   27,    4,   29,   30,   65,
+ /*   300 */    66,   11,   31,   32,   33,   34,   35,   36,   28,   17,
+ /*   310 */     4,   21,   22,   23,   24,    8,   26,   27,    4,   29,
+ /*   320 */    30,    4,   16,   31,   32,   33,   34,   35,   36,    4,
+ /*   330 */    17,   50,   18,   19,   50,   21,   22,   23,   24,   25,
+ /*   340 */    17,    4,    4,   18,   19,    7,   21,   22,   23,   24,
+ /*   350 */    25,   47,   48,   49,   44,   51,   52,   19,   13,   21,
+ /*   360 */    22,   23,   24,   25,   54,    7,   50,    9,   58,   59,
+ /*   370 */    60,   61,   62,   45,   46,   47,   48,   49,   44,   51,
+ /*   380 */    52,    8,    7,    5,   11,   12,    4,   14,   15,   12,
+ /*   390 */    18,   14,   58,   59,   60,   61,   62,    0,   16,   46,
+ /*   400 */     3,   48,   49,    6,   51,   52,    8,   10,   11,   11,
+ /*   410 */    12,   50,   14,   15,   12,    8,   14,   15,   11,   12,
+ /*   420 */     8,   14,   15,   12,    8,   14,   15,   11,   12,    5,
+ /*   430 */    14,   15,    5,    8,   17,    4,   11,   12,   16,   14,
+ /*   440 */    15,   50,    8,    5,    4,   11,   12,    5,   14,   15,
+ /*   450 */     4,    8,   13,   50,   11,   12,    5,   14,   15,    4,
+ /*   460 */     8,    7,   18,   11,   12,   17,   14,    8,    7,    4,
+ /*   470 */    11,   12,   53,   14,   55,   56,   57,    4,   41,   42,
+ /*   480 */    43,   44,   53,   16,   55,   56,   57,    8,    5,    4,
+ /*   490 */    11,   12,   20,   14,   53,    7,   55,   56,   57,    8,
+ /*   500 */     7,    5,   11,   12,    4,   14,    8,    8,   13,   11,
+ /*   510 */    12,    8,   14,    4,   11,   12,    8,   14,    4,   55,
+ /*   520 */    56,   57,    6,    5,    4,    4,    4,    8,    5,    5,
+ /*   530 */     4,   50,    7,    5,   50,    5,    4,    4,    4,    4,
+ /*   540 */    66,    5,   13,   16,   50,    5,   67,   50,
 };
-#define YY_SHIFT_USE_DFLT (-25)
+#define YY_SHIFT_USE_DFLT (-9)
 static short yy_shift_ofst[] = {
- /*     0 */   250,  377,  305,  -25,  -25,  -25,  -25,  351,   46,  -25,
- /*    10 */   115,  366,  285,  172,  -25,  -25,  220,  316,  -25,  365,
- /*    20 */   382,  373,  174,  154,  128,  -25,    1,  -25,  -25,  -25,
- /*    30 */   -25,  -25,  -25,  380,  381,  188,  406,  -25,  392,  413,
- /*    40 */   404,  399,  385,  268,  127,  194,  416,  -25,  414,  -25,
- /*    50 */   -25,  -25,  -25,  -25,  -25,  -25,   34,  298,  -25,   34,
- /*    60 */   -25,  371,  -24,  -25,  -25,   34,  160,  -25,   34,  229,
- /*    70 */   -25,   34,  272,  -25,   34,  282,  -25,  -25,  -25,    9,
- /*    80 */   163,  101,  -25,  182,  -25,  189,  -24,  -25,  284,  361,
- /*    90 */   -24,  -25,  376,  374,  -24,  -25,  391,  378,  396,  398,
- /*   100 */   401,  403,  408,  409,  -25,  367,  364,  393,  -25,  169,
- /*   110 */   379,  412,  400,  147,  410,   82,  -25,   28,  -25,   76,
- /*   120 */   387,   20,  -25,   -7,  -25,  375,  370,  322,  280,  233,
- /*   130 */   109,  -25,   74,  -25,   19,  423,  411,  407,  415,   47,
- /*   140 */   -25,   55,  -25,  103,  331,  -25,  297,  421,  417,  -24,
- /*   150 */   419,  -25,   66,   94,  -24,  255,  -25,  -25,  -25,  353,
- /*   160 */    83,  201,  -25,  -24,  372,  -25,  110,  243,  -25,  -24,
- /*   170 */   386,  -25,  232,  307,  -25,  -24,  394,  -25,  318,  359,
- /*   180 */   -25,  -24,  405,  -25,  -25,   22,  326,  339,  145,  311,
- /*   190 */   -25,  321,  -25,
+ /*     0 */    37,   66,  397,   -9,   -9,   -9,   -9,  532,  523,   -9,
+ /*    10 */   251,  274,  373,  307,   -9,   -9,  407,  479,   -9,  527,
+ /*    20 */   174,  323,  314,  338,   84,   -9,  245,   -9,   -9,   -9,
+ /*    30 */    -9,   -9,   -9,   -9,  292,  110,  268,   -8,   -9,  465,
+ /*    40 */   280,  227,  427,   -9,  518,  524,  496,  483,  451,  442,
+ /*    50 */   424,  337,  219,  227,   71,   -9,  158,  530,   -9,  540,
+ /*    60 */    -9,   -9,   -9,   -9,   -9,   -9,   -9,  446,  277,   -9,
+ /*    70 */   446,   -9,  495,  271,   -9,   -9,  446,   88,   -9,  446,
+ /*    80 */   162,   -9,  446,  203,   -9,  446,  249,   -9,   -9,   -9,
+ /*    90 */    -9,  292,   -9,   -9,  292,  255,   -9,   -9,   23,  290,
+ /*   100 */   130,   -9,  192,   -9,  196,  271,   -9,  317,  345,  271,
+ /*   110 */    -9,  431,  439,  271,   -9,  473,  472,  500,  509,  514,
+ /*   120 */   521,  526,  533,   -9,  103,  461,  508,   -9,  108,  248,
+ /*   130 */   522,  313,  325,  525,   61,   -9,  107,   -9,   57,  493,
+ /*   140 */   176,   -9,  222,   -9,  467,  455,  448,  444,  454,   38,
+ /*   150 */    -9,   15,   -9,  422,  440,  417,  372,  375,  199,   -9,
+ /*   160 */   153,   -9,  425,  491,   -9,  402,  128,   -4,  271,  536,
+ /*   170 */    -9,  534,  529,  271,  528,   -9,   -9,   -9,  411,  131,
+ /*   180 */     7,   -9,  271,   50,   -9,  261,   81,   -9,  271,  242,
+ /*   190 */    -9,  306,  145,   -9,  271,  378,   -9,  382,  214,   -9,
+ /*   200 */   271,  438,   -9,   -9,  434,  498,  503,  377,  459,   -9,
+ /*   210 */   452,  485,  488,  398,  499,   -9,   -9,  516,  520,  358,
+ /*   220 */   416,  519,   -9,   -9,  535,  188,  443,  412,   -9,   -9,
+ /*   230 */    -9,
 };
-#define YY_REDUCE_USE_DFLT (-23)
+#define YY_REDUCE_USE_DFLT (-65)
 static short yy_reduce_ofst[] = {
- /*     0 */   104,  -23,  319,  -23,  -23,  -23,  -23,  -23,  -23,  -23,
- /*    10 */   -23,  -23,  166,  -23,  -23,  -23,   41,  279,  -23,  -23,
- /*    20 */   -23,  -23,  264,  301,  215,  -23,    3,  -23,  -23,  -23,
- /*    30 */   -23,  -23,  -23,  -23,  -23,  348,  -23,  -23,  -23,  -23,
- /*    40 */   -23,  -23,  -23,  -23,  -23,  383,  -23,  -23,  -23,  -23,
- /*    50 */   -23,  -23,  -23,  -23,  -23,  -23,  308,  -23,  -23,  354,
- /*    60 */   -23,  -23,  357,  -23,  -23,   86,  -23,  -23,  179,  -23,
- /*    70 */   -23,  208,  -23,  -23,  219,  -23,  -23,  -23,  -23,  -23,
- /*    80 */   235,    3,  -23,  309,  -23,  -23,  240,  -23,  -23,  -23,
- /*    90 */   329,  -23,  -23,  -23,  341,  -23,  -23,  -23,  -23,  -23,
- /*   100 */   -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,  -23,
- /*   110 */   -23,  -23,  -23,  293,  -23,  187,  -23,    3,  -23,  -23,
- /*   120 */   -23,  207,  -23,    3,  -23,  -23,  -23,  -23,  -23,  -23,
- /*   130 */   226,  -23,    3,  -23,  -23,  -23,  -23,  -23,  -23,  195,
- /*   140 */   -23,    3,  -23,  112,  279,  -23,  -23,  -23,  -23,  -22,
- /*   150 */   -23,  -23,  -23,  -23,  212,  -23,  -23,  -23,  -23,  -23,
- /*   160 */   -23,  -23,  -23,  330,  -23,  -23,  -23,  -23,  -23,  335,
- /*   170 */   -23,  -23,  -23,  -23,  -23,  352,  -23,  -23,  -23,  -23,
- /*   180 */   -23,  362,  -23,  -23,  -23,  257,   17,  279,  -23,  279,
- /*   190 */   -23,  279,  -23,
+ /*     0 */    58,  -65,  437,  -65,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*    10 */   -65,  -65,  -41,  -65,  -65,  -65,  304,  166,  -65,  -65,
+ /*    20 */   -65,  -65,  419,  429,  310,  -65,  334,  -65,  -65,  -65,
+ /*    30 */   -65,  -65,  -65,  -65,  138,  -65,  226,  334,  -65,  -65,
+ /*    40 */   -65,  102,  -65,  -65,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*    50 */   -65,  -65,  -65,  148,  -65,  -65,  484,  -65,  -65,  -65,
+ /*    60 */   -65,  -65,  -65,  -65,  -65,  -65,  -65,  234,  -65,  -65,
+ /*    70 */   474,  -65,  -65,  284,  -65,  -65,  -64,  -65,  -65,   74,
+ /*    80 */   -65,  -65,  120,  -65,  -65,  170,  -65,  -65,  -65,  -65,
+ /*    90 */   -65,   53,  -65,  -65,  118,  -65,  -65,  -65,  -65,  -27,
+ /*   100 */   334,  -65,  464,  -65,  -65,  281,  -65,  -65,  -65,  361,
+ /*   110 */   -65,  -65,  -65,  403,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*   120 */   -65,  -65,  -65,  -65,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*   130 */   -65,  -65,  441,  -65,  180,  -65,  334,  -65,  -65,  -65,
+ /*   140 */   111,  -65,  334,  -65,  -65,  -65,  -65,  -65,  -65,   65,
+ /*   150 */   -65,  334,  -65,  -65,  -65,  -65,  -65,  -65,   19,  -65,
+ /*   160 */   334,  -65,  -23,  166,  -65,  -65,  -65,  -65,  494,  -65,
+ /*   170 */   -65,  -65,  -65,  481,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*   180 */   -65,  -65,  497,  -65,  -65,  -65,  -65,  -65,  187,  -65,
+ /*   190 */   -65,  -65,  -65,  -65,  316,  -65,  -65,  -65,  -65,  -65,
+ /*   200 */   391,  -65,  -65,  -65,  353,   22,  166,  -65,  166,  -65,
+ /*   210 */   166,  -65,  -65,  328,  -65,  -65,  -65,  -65,  -65,  -65,
+ /*   220 */    97,  -65,  -65,  -65,  -65,  -65,    5,  -65,  -65,  -65,
+ /*   230 */   -65,
 };
 static YYACTIONTYPE yy_default[] = {
- /*     0 */   286,  286,  286,  195,  197,  198,  199,  286,  286,  200,
- /*    10 */   286,  286,  286,  286,  201,  202,  286,  286,  224,  286,
- /*    20 */   286,  286,  286,  286,  286,  228,  286,  232,  254,  256,
- /*    30 */   257,  258,  259,  286,  286,  286,  286,  260,  286,  286,
- /*    40 */   286,  286,  286,  286,  286,  286,  286,  261,  286,  262,
- /*    50 */   279,  280,  281,  282,  283,  284,  286,  286,  263,  286,
- /*    60 */   268,  270,  286,  271,  269,  286,  286,  264,  286,  286,
- /*    70 */   265,  286,  286,  266,  286,  286,  267,  285,  255,  286,
- /*    80 */   286,  286,  233,  286,  240,  242,  286,  245,  286,  243,
- /*    90 */   286,  246,  286,  244,  286,  247,  286,  286,  286,  286,
- /*   100 */   286,  286,  286,  286,  241,  286,  286,  286,  229,  286,
- /*   110 */   286,  286,  286,  286,  286,  286,  230,  286,  234,  286,
- /*   120 */   286,  286,  231,  286,  235,  286,  286,  286,  286,  286,
- /*   130 */   286,  237,  286,  239,  286,  286,  286,  286,  286,  286,
- /*   140 */   236,  286,  238,  286,  286,  222,  286,  286,  286,  286,
- /*   150 */   286,  225,  286,  286,  286,  286,  226,  227,  212,  286,
- /*   160 */   286,  286,  214,  286,  286,  217,  286,  286,  219,  286,
- /*   170 */   286,  221,  286,  286,  215,  286,  286,  216,  286,  286,
- /*   180 */   218,  286,  286,  220,  223,  286,  286,  286,  286,  286,
- /*   190 */   213,  286,  196,
+ /*     0 */   338,  338,  338,  233,  235,  236,  237,  338,  338,  238,
+ /*    10 */   338,  338,  338,  338,  239,  243,  338,  338,  268,  338,
+ /*    20 */   338,  338,  338,  338,  338,  272,  338,  276,  298,  300,
+ /*    30 */   301,  302,  303,  304,  338,  338,  338,  338,  306,  338,
+ /*    40 */   338,  338,  338,  307,  338,  338,  338,  338,  338,  338,
+ /*    50 */   338,  338,  338,  338,  338,  308,  338,  338,  309,  338,
+ /*    60 */   310,  327,  328,  329,  330,  331,  332,  338,  338,  311,
+ /*    70 */   338,  316,  318,  338,  319,  317,  338,  338,  312,  338,
+ /*    80 */   338,  313,  338,  338,  314,  338,  338,  315,  337,  299,
+ /*    90 */   305,  338,  333,  334,  338,  338,  335,  336,  338,  338,
+ /*   100 */   338,  277,  338,  284,  286,  338,  289,  338,  287,  338,
+ /*   110 */   290,  338,  288,  338,  291,  338,  338,  338,  338,  338,
+ /*   120 */   338,  338,  338,  285,  338,  338,  338,  273,  338,  338,
+ /*   130 */   338,  338,  338,  338,  338,  274,  338,  278,  338,  338,
+ /*   140 */   338,  275,  338,  279,  338,  338,  338,  338,  338,  338,
+ /*   150 */   281,  338,  283,  338,  338,  338,  338,  338,  338,  280,
+ /*   160 */   338,  282,  338,  338,  266,  338,  338,  338,  338,  338,
+ /*   170 */   269,  338,  338,  338,  338,  270,  271,  256,  338,  338,
+ /*   180 */   338,  258,  338,  338,  261,  338,  338,  263,  338,  338,
+ /*   190 */   265,  338,  338,  259,  338,  338,  260,  338,  338,  262,
+ /*   200 */   338,  338,  264,  267,  338,  338,  338,  338,  338,  257,
+ /*   210 */   338,  338,  338,  338,  338,  240,  244,  338,  338,  338,
+ /*   220 */   338,  338,  241,  245,  338,  338,  338,  338,  242,  246,
+ /*   230 */   234,
 };
 #define YY_SZ_ACTTAB (sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -610,21 +683,23 @@ void xx_Trace(FILE *TraceFILE, char *zTracePrompt){
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
 static const char *yyTokenName[] = { 
-  "$",             "COMMA",         "NAMESPACE",     "IDENTIFIER",  
-  "DOTCOMMA",      "CLASS",         "BRACKET_OPEN",  "BRACKET_CLOSE",
-  "COMMENT",       "PUBLIC",        "ASSIGN",        "PROTECTED",   
-  "CONST",         "FUNCTION",      "PARENTHESES_OPEN",  "PARENTHESES_CLOSE",
-  "LESS",          "GREATER",       "TYPE_INTEGER",  "TYPE_DOUBLE", 
-  "TYPE_BOOL",     "TYPE_STRING",   "TYPE_ARRAY",    "LET",         
-  "ECHO",          "TYPE_VAR",      "INTEGER",       "STRING",      
-  "DOUBLE",        "NULL",          "FALSE",         "TRUE",        
-  "error",         "program",       "xx_language",   "xx_top_statement_list",
-  "xx_top_statement",  "xx_namespace_def",  "xx_class_def",  "xx_comment",  
-  "xx_class_definition",  "xx_class_properties_definition",  "xx_class_consts_definition",  "xx_class_methods_definition",
-  "xx_class_property_definition",  "xx_literal_expr",  "xx_class_const_definition",  "xx_class_method_definition",
-  "xx_parameter_list",  "xx_statement_list",  "xx_parameter",  "xx_parameter_type",
-  "xx_parameter_cast",  "xx_statement",  "xx_let_statement",  "xx_echo_statement",
-  "xx_declare_statement",  "xx_expr",       "xx_declare_variable_list",  "xx_declare_variable",
+  "$",             "COMMA",         "EQUALS",        "NAMESPACE",   
+  "IDENTIFIER",    "DOTCOMMA",      "CLASS",         "BRACKET_OPEN",
+  "BRACKET_CLOSE",  "EXTENDS",       "ABSTRACT",      "COMMENT",     
+  "PUBLIC",        "ASSIGN",        "PROTECTED",     "CONST",       
+  "FUNCTION",      "PARENTHESES_OPEN",  "PARENTHESES_CLOSE",  "LESS",        
+  "GREATER",       "TYPE_INTEGER",  "TYPE_DOUBLE",   "TYPE_BOOL",   
+  "TYPE_STRING",   "TYPE_ARRAY",    "IF",            "LET",         
+  "ARROW",         "ECHO",          "TYPE_VAR",      "INTEGER",     
+  "STRING",        "DOUBLE",        "NULL",          "FALSE",       
+  "TRUE",          "error",         "program",       "xx_language", 
+  "xx_top_statement_list",  "xx_top_statement",  "xx_namespace_def",  "xx_class_def",
+  "xx_comment",    "xx_class_definition",  "xx_class_properties_definition",  "xx_class_consts_definition",
+  "xx_class_methods_definition",  "xx_class_property_definition",  "xx_literal_expr",  "xx_class_const_definition",
+  "xx_class_method_definition",  "xx_parameter_list",  "xx_statement_list",  "xx_parameter",
+  "xx_parameter_type",  "xx_parameter_cast",  "xx_statement",  "xx_let_statement",
+  "xx_if_statement",  "xx_echo_statement",  "xx_declare_statement",  "xx_eval_expr",
+  "xx_expr",       "xx_declare_variable_list",  "xx_declare_variable",
 };
 #endif /* NDEBUG */
 
@@ -641,90 +716,104 @@ static const char *yyRuleName[] = {
  /*   6 */ "xx_top_statement ::= xx_comment",
  /*   7 */ "xx_namespace_def ::= NAMESPACE IDENTIFIER DOTCOMMA",
  /*   8 */ "xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE",
- /*   9 */ "xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE",
- /*  10 */ "xx_class_definition ::= xx_class_properties_definition",
- /*  11 */ "xx_class_definition ::= xx_class_consts_definition",
- /*  12 */ "xx_class_definition ::= xx_class_methods_definition",
- /*  13 */ "xx_class_definition ::= xx_class_properties_definition xx_class_methods_definition",
- /*  14 */ "xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition",
- /*  15 */ "xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition",
- /*  16 */ "xx_class_definition ::= xx_class_consts_definition xx_class_methods_definition",
- /*  17 */ "xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition xx_class_methods_definition",
- /*  18 */ "xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition xx_class_methods_definition",
- /*  19 */ "xx_class_properties_definition ::= xx_class_properties_definition xx_class_property_definition",
- /*  20 */ "xx_class_properties_definition ::= xx_class_property_definition",
- /*  21 */ "xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER DOTCOMMA",
- /*  22 */ "xx_class_property_definition ::= PUBLIC IDENTIFIER DOTCOMMA",
- /*  23 */ "xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  24 */ "xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  25 */ "xx_class_property_definition ::= PROTECTED IDENTIFIER DOTCOMMA",
- /*  26 */ "xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER DOTCOMMA",
- /*  27 */ "xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  28 */ "xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  29 */ "xx_class_consts_definition ::= xx_class_consts_definition xx_class_const_definition",
- /*  30 */ "xx_class_consts_definition ::= xx_class_const_definition",
- /*  31 */ "xx_class_methods_definition ::= xx_class_methods_definition xx_class_method_definition",
- /*  32 */ "xx_class_const_definition ::= COMMENT CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  33 */ "xx_class_const_definition ::= CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
- /*  34 */ "xx_class_methods_definition ::= xx_class_method_definition",
- /*  35 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  36 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  37 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  38 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  39 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  40 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  41 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  42 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  43 */ "xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  44 */ "xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
- /*  45 */ "xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  46 */ "xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
- /*  47 */ "xx_parameter_list ::= xx_parameter_list COMMA xx_parameter",
- /*  48 */ "xx_parameter_list ::= xx_parameter",
- /*  49 */ "xx_parameter ::= IDENTIFIER",
- /*  50 */ "xx_parameter ::= xx_parameter_type IDENTIFIER",
- /*  51 */ "xx_parameter ::= xx_parameter_cast IDENTIFIER",
- /*  52 */ "xx_parameter ::= IDENTIFIER ASSIGN xx_literal_expr",
- /*  53 */ "xx_parameter ::= xx_parameter_type IDENTIFIER ASSIGN xx_literal_expr",
- /*  54 */ "xx_parameter ::= xx_parameter_cast IDENTIFIER ASSIGN xx_literal_expr",
- /*  55 */ "xx_parameter_cast ::= LESS IDENTIFIER GREATER",
- /*  56 */ "xx_parameter_type ::= TYPE_INTEGER",
- /*  57 */ "xx_parameter_type ::= TYPE_DOUBLE",
- /*  58 */ "xx_parameter_type ::= TYPE_BOOL",
- /*  59 */ "xx_parameter_type ::= TYPE_STRING",
- /*  60 */ "xx_parameter_type ::= TYPE_ARRAY",
- /*  61 */ "xx_statement_list ::= xx_statement_list xx_statement",
- /*  62 */ "xx_statement_list ::= xx_statement",
- /*  63 */ "xx_statement ::= xx_let_statement",
- /*  64 */ "xx_statement ::= xx_echo_statement",
- /*  65 */ "xx_statement ::= xx_declare_statement",
- /*  66 */ "xx_statement ::= xx_comment",
- /*  67 */ "xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA",
- /*  68 */ "xx_echo_statement ::= ECHO xx_literal_expr DOTCOMMA",
- /*  69 */ "xx_echo_statement ::= ECHO IDENTIFIER DOTCOMMA",
- /*  70 */ "xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list DOTCOMMA",
- /*  71 */ "xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list DOTCOMMA",
- /*  72 */ "xx_declare_statement ::= TYPE_STRING xx_declare_variable_list DOTCOMMA",
- /*  73 */ "xx_declare_statement ::= TYPE_BOOL xx_declare_variable_list DOTCOMMA",
- /*  74 */ "xx_declare_statement ::= TYPE_VAR xx_declare_variable_list DOTCOMMA",
- /*  75 */ "xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable",
- /*  76 */ "xx_declare_variable_list ::= xx_declare_variable",
- /*  77 */ "xx_declare_variable ::= IDENTIFIER",
- /*  78 */ "xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr",
- /*  79 */ "xx_expr ::= IDENTIFIER",
- /*  80 */ "xx_expr ::= INTEGER",
- /*  81 */ "xx_expr ::= STRING",
- /*  82 */ "xx_expr ::= DOUBLE",
- /*  83 */ "xx_expr ::= NULL",
- /*  84 */ "xx_expr ::= FALSE",
- /*  85 */ "xx_expr ::= TRUE",
- /*  86 */ "xx_literal_expr ::= INTEGER",
- /*  87 */ "xx_literal_expr ::= STRING",
- /*  88 */ "xx_literal_expr ::= DOUBLE",
- /*  89 */ "xx_literal_expr ::= NULL",
- /*  90 */ "xx_literal_expr ::= FALSE",
- /*  91 */ "xx_literal_expr ::= TRUE",
- /*  92 */ "xx_comment ::= COMMENT",
+ /*   9 */ "xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE",
+ /*  10 */ "xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE",
+ /*  11 */ "xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE",
+ /*  12 */ "xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE",
+ /*  13 */ "xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE",
+ /*  14 */ "xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE",
+ /*  15 */ "xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE",
+ /*  16 */ "xx_class_definition ::= xx_class_properties_definition",
+ /*  17 */ "xx_class_definition ::= xx_class_consts_definition",
+ /*  18 */ "xx_class_definition ::= xx_class_methods_definition",
+ /*  19 */ "xx_class_definition ::= xx_class_properties_definition xx_class_methods_definition",
+ /*  20 */ "xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition",
+ /*  21 */ "xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition",
+ /*  22 */ "xx_class_definition ::= xx_class_consts_definition xx_class_methods_definition",
+ /*  23 */ "xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition xx_class_methods_definition",
+ /*  24 */ "xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition xx_class_methods_definition",
+ /*  25 */ "xx_class_properties_definition ::= xx_class_properties_definition xx_class_property_definition",
+ /*  26 */ "xx_class_properties_definition ::= xx_class_property_definition",
+ /*  27 */ "xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER DOTCOMMA",
+ /*  28 */ "xx_class_property_definition ::= PUBLIC IDENTIFIER DOTCOMMA",
+ /*  29 */ "xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  30 */ "xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  31 */ "xx_class_property_definition ::= PROTECTED IDENTIFIER DOTCOMMA",
+ /*  32 */ "xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER DOTCOMMA",
+ /*  33 */ "xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  34 */ "xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  35 */ "xx_class_consts_definition ::= xx_class_consts_definition xx_class_const_definition",
+ /*  36 */ "xx_class_consts_definition ::= xx_class_const_definition",
+ /*  37 */ "xx_class_methods_definition ::= xx_class_methods_definition xx_class_method_definition",
+ /*  38 */ "xx_class_const_definition ::= COMMENT CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  39 */ "xx_class_const_definition ::= CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA",
+ /*  40 */ "xx_class_methods_definition ::= xx_class_method_definition",
+ /*  41 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  42 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  43 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  44 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  45 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  46 */ "xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  47 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  48 */ "xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  49 */ "xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  50 */ "xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE",
+ /*  51 */ "xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  52 */ "xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  53 */ "xx_parameter_list ::= xx_parameter_list COMMA xx_parameter",
+ /*  54 */ "xx_parameter_list ::= xx_parameter",
+ /*  55 */ "xx_parameter ::= IDENTIFIER",
+ /*  56 */ "xx_parameter ::= xx_parameter_type IDENTIFIER",
+ /*  57 */ "xx_parameter ::= xx_parameter_cast IDENTIFIER",
+ /*  58 */ "xx_parameter ::= IDENTIFIER ASSIGN xx_literal_expr",
+ /*  59 */ "xx_parameter ::= xx_parameter_type IDENTIFIER ASSIGN xx_literal_expr",
+ /*  60 */ "xx_parameter ::= xx_parameter_cast IDENTIFIER ASSIGN xx_literal_expr",
+ /*  61 */ "xx_parameter_cast ::= LESS IDENTIFIER GREATER",
+ /*  62 */ "xx_parameter_type ::= TYPE_INTEGER",
+ /*  63 */ "xx_parameter_type ::= TYPE_DOUBLE",
+ /*  64 */ "xx_parameter_type ::= TYPE_BOOL",
+ /*  65 */ "xx_parameter_type ::= TYPE_STRING",
+ /*  66 */ "xx_parameter_type ::= TYPE_ARRAY",
+ /*  67 */ "xx_statement_list ::= xx_statement_list xx_statement",
+ /*  68 */ "xx_statement_list ::= xx_statement",
+ /*  69 */ "xx_statement ::= xx_let_statement",
+ /*  70 */ "xx_statement ::= xx_if_statement",
+ /*  71 */ "xx_statement ::= xx_echo_statement",
+ /*  72 */ "xx_statement ::= xx_declare_statement",
+ /*  73 */ "xx_statement ::= xx_comment",
+ /*  74 */ "xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE",
+ /*  75 */ "xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN xx_statement_list BRACKET_CLOSE",
+ /*  76 */ "xx_let_statement ::= LET IDENTIFIER ASSIGN xx_expr DOTCOMMA",
+ /*  77 */ "xx_let_statement ::= LET IDENTIFIER ARROW IDENTIFIER ASSIGN xx_expr DOTCOMMA",
+ /*  78 */ "xx_echo_statement ::= ECHO xx_literal_expr DOTCOMMA",
+ /*  79 */ "xx_echo_statement ::= ECHO IDENTIFIER DOTCOMMA",
+ /*  80 */ "xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list DOTCOMMA",
+ /*  81 */ "xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list DOTCOMMA",
+ /*  82 */ "xx_declare_statement ::= TYPE_STRING xx_declare_variable_list DOTCOMMA",
+ /*  83 */ "xx_declare_statement ::= TYPE_BOOL xx_declare_variable_list DOTCOMMA",
+ /*  84 */ "xx_declare_statement ::= TYPE_VAR xx_declare_variable_list DOTCOMMA",
+ /*  85 */ "xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable",
+ /*  86 */ "xx_declare_variable_list ::= xx_declare_variable",
+ /*  87 */ "xx_declare_variable ::= IDENTIFIER",
+ /*  88 */ "xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr",
+ /*  89 */ "xx_expr ::= IDENTIFIER",
+ /*  90 */ "xx_expr ::= INTEGER",
+ /*  91 */ "xx_expr ::= STRING",
+ /*  92 */ "xx_expr ::= DOUBLE",
+ /*  93 */ "xx_expr ::= NULL",
+ /*  94 */ "xx_expr ::= FALSE",
+ /*  95 */ "xx_expr ::= TRUE",
+ /*  96 */ "xx_literal_expr ::= INTEGER",
+ /*  97 */ "xx_literal_expr ::= STRING",
+ /*  98 */ "xx_literal_expr ::= DOUBLE",
+ /*  99 */ "xx_literal_expr ::= NULL",
+ /* 100 */ "xx_literal_expr ::= FALSE",
+ /* 101 */ "xx_literal_expr ::= TRUE",
+ /* 102 */ "xx_eval_expr ::= xx_literal_expr",
+ /* 103 */ "xx_eval_expr ::= xx_eval_expr EQUALS xx_eval_expr",
+ /* 104 */ "xx_eval_expr ::= PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE",
+ /* 105 */ "xx_eval_expr ::= IDENTIFIER",
+ /* 106 */ "xx_comment ::= COMMENT",
 };
 #endif /* NDEBUG */
 
@@ -813,7 +902,12 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     case 29:
     case 30:
     case 31:
-// 272 "parser.lemon"
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+// 310 "parser.lemon"
 {
 	/*if ((yypminor->yy0)) {
 		if ((yypminor->yy0)->free_flag) {
@@ -822,12 +916,12 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
 		efree((yypminor->yy0));
 	}*/
 }
-// 826 "parser.c"
+// 920 "parser.c"
       break;
-    case 34:
-// 285 "parser.lemon"
-{ json_object_put((yypminor->yy55)); }
-// 831 "parser.c"
+    case 39:
+// 323 "parser.lemon"
+{ json_object_put((yypminor->yy95)); }
+// 925 "parser.c"
       break;
     default:  break;   /* If no destructor action specified: do nothing */
   }
@@ -1003,99 +1097,113 @@ static struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 33, 1 },
-  { 34, 1 },
-  { 35, 2 },
-  { 35, 1 },
-  { 36, 1 },
-  { 36, 1 },
-  { 36, 1 },
-  { 37, 3 },
-  { 38, 5 },
-  { 38, 4 },
-  { 40, 1 },
-  { 40, 1 },
-  { 40, 1 },
-  { 40, 2 },
-  { 40, 2 },
-  { 40, 2 },
-  { 40, 2 },
-  { 40, 3 },
-  { 40, 3 },
-  { 41, 2 },
-  { 41, 1 },
-  { 44, 4 },
-  { 44, 3 },
-  { 44, 5 },
-  { 44, 6 },
-  { 44, 3 },
-  { 44, 4 },
-  { 44, 5 },
-  { 44, 6 },
-  { 42, 2 },
-  { 42, 1 },
-  { 43, 2 },
-  { 46, 6 },
-  { 46, 5 },
-  { 43, 1 },
-  { 47, 7 },
-  { 47, 8 },
-  { 47, 8 },
-  { 47, 9 },
-  { 47, 8 },
-  { 47, 9 },
-  { 47, 9 },
-  { 47, 10 },
-  { 47, 7 },
-  { 47, 8 },
-  { 47, 8 },
-  { 47, 9 },
-  { 48, 3 },
-  { 48, 1 },
-  { 50, 1 },
-  { 50, 2 },
-  { 50, 2 },
-  { 50, 3 },
-  { 50, 4 },
-  { 50, 4 },
-  { 52, 3 },
-  { 51, 1 },
-  { 51, 1 },
-  { 51, 1 },
-  { 51, 1 },
-  { 51, 1 },
-  { 49, 2 },
-  { 49, 1 },
-  { 53, 1 },
-  { 53, 1 },
-  { 53, 1 },
-  { 53, 1 },
-  { 54, 5 },
-  { 55, 3 },
-  { 55, 3 },
-  { 56, 3 },
-  { 56, 3 },
-  { 56, 3 },
-  { 56, 3 },
-  { 56, 3 },
-  { 58, 3 },
-  { 58, 1 },
-  { 59, 1 },
-  { 59, 3 },
-  { 57, 1 },
-  { 57, 1 },
-  { 57, 1 },
-  { 57, 1 },
-  { 57, 1 },
-  { 57, 1 },
-  { 57, 1 },
-  { 45, 1 },
-  { 45, 1 },
-  { 45, 1 },
-  { 45, 1 },
-  { 45, 1 },
-  { 45, 1 },
+  { 38, 1 },
   { 39, 1 },
+  { 40, 2 },
+  { 40, 1 },
+  { 41, 1 },
+  { 41, 1 },
+  { 41, 1 },
+  { 42, 3 },
+  { 43, 5 },
+  { 43, 7 },
+  { 43, 6 },
+  { 43, 8 },
+  { 43, 4 },
+  { 43, 6 },
+  { 43, 5 },
+  { 43, 7 },
+  { 45, 1 },
+  { 45, 1 },
+  { 45, 1 },
+  { 45, 2 },
+  { 45, 2 },
+  { 45, 2 },
+  { 45, 2 },
+  { 45, 3 },
+  { 45, 3 },
+  { 46, 2 },
+  { 46, 1 },
+  { 49, 4 },
+  { 49, 3 },
+  { 49, 5 },
+  { 49, 6 },
+  { 49, 3 },
+  { 49, 4 },
+  { 49, 5 },
+  { 49, 6 },
+  { 47, 2 },
+  { 47, 1 },
+  { 48, 2 },
+  { 51, 6 },
+  { 51, 5 },
+  { 48, 1 },
+  { 52, 7 },
+  { 52, 8 },
+  { 52, 8 },
+  { 52, 9 },
+  { 52, 8 },
+  { 52, 9 },
+  { 52, 9 },
+  { 52, 10 },
+  { 52, 7 },
+  { 52, 8 },
+  { 52, 8 },
+  { 52, 9 },
+  { 53, 3 },
+  { 53, 1 },
+  { 55, 1 },
+  { 55, 2 },
+  { 55, 2 },
+  { 55, 3 },
+  { 55, 4 },
+  { 55, 4 },
+  { 57, 3 },
+  { 56, 1 },
+  { 56, 1 },
+  { 56, 1 },
+  { 56, 1 },
+  { 56, 1 },
+  { 54, 2 },
+  { 54, 1 },
+  { 58, 1 },
+  { 58, 1 },
+  { 58, 1 },
+  { 58, 1 },
+  { 58, 1 },
+  { 60, 4 },
+  { 60, 5 },
+  { 59, 5 },
+  { 59, 7 },
+  { 61, 3 },
+  { 61, 3 },
+  { 62, 3 },
+  { 62, 3 },
+  { 62, 3 },
+  { 62, 3 },
+  { 62, 3 },
+  { 65, 3 },
+  { 65, 1 },
+  { 66, 1 },
+  { 66, 3 },
+  { 64, 1 },
+  { 64, 1 },
+  { 64, 1 },
+  { 64, 1 },
+  { 64, 1 },
+  { 64, 1 },
+  { 64, 1 },
+  { 50, 1 },
+  { 50, 1 },
+  { 50, 1 },
+  { 50, 1 },
+  { 50, 1 },
+  { 50, 1 },
+  { 63, 1 },
+  { 63, 3 },
+  { 63, 3 },
+  { 63, 1 },
+  { 44, 1 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -1133,649 +1241,768 @@ static void yy_reduce(
   **     break;
   */
       case 0:
-// 281 "parser.lemon"
+// 319 "parser.lemon"
 {
-	status->ret = yymsp[0].minor.yy55;
+	status->ret = yymsp[0].minor.yy95;
 }
-// 1141 "parser.c"
+// 1249 "parser.c"
         break;
       case 1:
       case 4:
       case 5:
       case 6:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-// 287 "parser.lemon"
+      case 69:
+      case 70:
+      case 71:
+      case 72:
+      case 73:
+      case 102:
+// 325 "parser.lemon"
 {
-	yygotominor.yy55 = yymsp[0].minor.yy55;
+	yygotominor.yy95 = yymsp[0].minor.yy95;
 }
-// 1155 "parser.c"
+// 1265 "parser.c"
         break;
       case 2:
-      case 19:
-      case 29:
-      case 31:
-      case 61:
-// 291 "parser.lemon"
+      case 25:
+      case 35:
+      case 37:
+      case 67:
+// 329 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_list(yymsp[-1].minor.yy55, yymsp[0].minor.yy55);
+	yygotominor.yy95 = xx_ret_list(yymsp[-1].minor.yy95, yymsp[0].minor.yy95);
 }
-// 1166 "parser.c"
+// 1276 "parser.c"
         break;
       case 3:
-      case 20:
-      case 30:
-      case 34:
-      case 48:
-      case 62:
-      case 76:
-// 295 "parser.lemon"
+      case 26:
+      case 36:
+      case 40:
+      case 54:
+      case 68:
+      case 86:
+// 333 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_list(NULL, yymsp[0].minor.yy55);
-}
-// 1179 "parser.c"
-        break;
-      case 7:
-// 311 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_namespace(yymsp[-1].minor.yy0);
-  yy_destructor(2,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1188 "parser.c"
-        break;
-      case 8:
-// 315 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy55);
-  yy_destructor(5,&yymsp[-4].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 1198 "parser.c"
-        break;
-      case 9:
-// 319 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class(yymsp[-2].minor.yy0, NULL);
-  yy_destructor(5,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 1208 "parser.c"
-        break;
-      case 10:
-// 323 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[0].minor.yy55, NULL, NULL);
-}
-// 1215 "parser.c"
-        break;
-      case 11:
-// 327 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(NULL, NULL, yymsp[0].minor.yy55);
-}
-// 1222 "parser.c"
-        break;
-      case 12:
-// 331 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(NULL, yymsp[0].minor.yy55, NULL);
-}
-// 1229 "parser.c"
-        break;
-      case 13:
-// 335 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[-1].minor.yy55, yymsp[0].minor.yy55, NULL);
-}
-// 1236 "parser.c"
-        break;
-      case 14:
-// 339 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[-1].minor.yy55, NULL, yymsp[0].minor.yy55);
-}
-// 1243 "parser.c"
-        break;
-      case 15:
-// 343 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[0].minor.yy55, NULL, yymsp[-1].minor.yy55);
-}
-// 1250 "parser.c"
-        break;
-      case 16:
-// 347 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(NULL, yymsp[0].minor.yy55, yymsp[-1].minor.yy55);
-}
-// 1257 "parser.c"
-        break;
-      case 17:
-// 351 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[-2].minor.yy55, yymsp[0].minor.yy55, yymsp[-1].minor.yy55);
-}
-// 1264 "parser.c"
-        break;
-      case 18:
-// 355 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_definition(yymsp[-1].minor.yy55, yymsp[0].minor.yy55, yymsp[-2].minor.yy55);
-}
-// 1271 "parser.c"
-        break;
-      case 21:
-// 367 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
-  yy_destructor(9,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1280 "parser.c"
-        break;
-      case 22:
-// 371 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, NULL);
-  yy_destructor(9,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_list(NULL, yymsp[0].minor.yy95);
 }
 // 1289 "parser.c"
         break;
-      case 23:
-// 375 "parser.lemon"
+      case 7:
+// 349 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, NULL);
+	yygotominor.yy95 = xx_ret_namespace(yymsp[-1].minor.yy0);
+  yy_destructor(3,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1298 "parser.c"
+        break;
+      case 8:
+// 353 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, 0, NULL);
+  yy_destructor(6,&yymsp[-4].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1308 "parser.c"
+        break;
+      case 9:
+// 357 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class(yymsp[-5].minor.yy0, yymsp[-1].minor.yy95, 0, yymsp[-3].minor.yy0);
+  yy_destructor(6,&yymsp[-6].minor);
   yy_destructor(9,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1299 "parser.c"
+// 1319 "parser.c"
         break;
-      case 24:
-// 379 "parser.lemon"
+      case 10:
+// 361 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, yymsp[-5].minor.yy0);
+	yygotominor.yy95 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, 1, NULL);
+  yy_destructor(10,&yymsp[-5].minor);
+  yy_destructor(6,&yymsp[-4].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1330 "parser.c"
+        break;
+      case 11:
+// 365 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class(yymsp[-5].minor.yy0, yymsp[-1].minor.yy95, 1, yymsp[-3].minor.yy0);
+  yy_destructor(10,&yymsp[-7].minor);
+  yy_destructor(6,&yymsp[-6].minor);
   yy_destructor(9,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1309 "parser.c"
+// 1342 "parser.c"
         break;
-      case 25:
-// 383 "parser.lemon"
+      case 12:
+// 369 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, NULL);
-  yy_destructor(11,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class(yymsp[-2].minor.yy0, NULL, 0, NULL);
+  yy_destructor(6,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1318 "parser.c"
+// 1352 "parser.c"
         break;
-      case 26:
-// 387 "parser.lemon"
+      case 13:
+// 373 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
-  yy_destructor(11,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class(yymsp[-4].minor.yy0, NULL, 0, yymsp[-2].minor.yy0);
+  yy_destructor(6,&yymsp[-5].minor);
+  yy_destructor(9,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1327 "parser.c"
+// 1363 "parser.c"
         break;
-      case 27:
-// 391 "parser.lemon"
+      case 14:
+// 377 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, NULL);
-  yy_destructor(11,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class(yymsp[-2].minor.yy0, NULL, 1, NULL);
+  yy_destructor(10,&yymsp[-4].minor);
+  yy_destructor(6,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1337 "parser.c"
+// 1374 "parser.c"
         break;
-      case 28:
-// 395 "parser.lemon"
+      case 15:
+// 381 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, yymsp[-5].minor.yy0);
-  yy_destructor(11,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class(yymsp[-4].minor.yy0, NULL, 1, yymsp[-2].minor.yy0);
+  yy_destructor(10,&yymsp[-6].minor);
+  yy_destructor(6,&yymsp[-5].minor);
+  yy_destructor(9,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1347 "parser.c"
+// 1386 "parser.c"
         break;
-      case 32:
-// 411 "parser.lemon"
+      case 16:
+// 385 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, yymsp[-5].minor.yy0);
-  yy_destructor(12,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1357 "parser.c"
-        break;
-      case 33:
-// 415 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy55, NULL);
-  yy_destructor(12,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1367 "parser.c"
-        break;
-      case 35:
-// 423 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, NULL);
-  yy_destructor(9,&yymsp[-6].minor);
-  yy_destructor(13,&yymsp[-5].minor);
-  yy_destructor(14,&yymsp[-3].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 1380 "parser.c"
-        break;
-      case 36:
-// 427 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy55, NULL, NULL);
-  yy_destructor(9,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[0].minor.yy95, NULL, NULL);
 }
 // 1393 "parser.c"
         break;
-      case 37:
-// 431 "parser.lemon"
+      case 17:
+// 389 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
-  yy_destructor(9,&yymsp[-6].minor);
-  yy_destructor(13,&yymsp[-5].minor);
-  yy_destructor(14,&yymsp[-3].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(NULL, NULL, yymsp[0].minor.yy95);
 }
-// 1406 "parser.c"
+// 1400 "parser.c"
         break;
-      case 38:
-// 435 "parser.lemon"
+      case 18:
+// 393 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy55, NULL, yymsp[-8].minor.yy0);
-  yy_destructor(9,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(NULL, yymsp[0].minor.yy95, NULL);
 }
-// 1419 "parser.c"
+// 1407 "parser.c"
         break;
-      case 39:
-// 439 "parser.lemon"
+      case 19:
+// 397 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy55, NULL);
-  yy_destructor(9,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, yymsp[0].minor.yy95, NULL);
 }
-// 1432 "parser.c"
+// 1414 "parser.c"
         break;
-      case 40:
-// 443 "parser.lemon"
+      case 20:
+// 401 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-3].minor.yy55, yymsp[-1].minor.yy55, NULL);
-  yy_destructor(9,&yymsp[-8].minor);
-  yy_destructor(13,&yymsp[-7].minor);
-  yy_destructor(14,&yymsp[-5].minor);
-  yy_destructor(15,&yymsp[-4].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, NULL, yymsp[0].minor.yy95);
 }
-// 1445 "parser.c"
+// 1421 "parser.c"
         break;
-      case 41:
-// 447 "parser.lemon"
+      case 21:
+// 405 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy55, yymsp[-8].minor.yy0);
-  yy_destructor(9,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[0].minor.yy95, NULL, yymsp[-1].minor.yy95);
+}
+// 1428 "parser.c"
+        break;
+      case 22:
+// 409 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_definition(NULL, yymsp[0].minor.yy95, yymsp[-1].minor.yy95);
+}
+// 1435 "parser.c"
+        break;
+      case 23:
+// 413 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[-2].minor.yy95, yymsp[0].minor.yy95, yymsp[-1].minor.yy95);
+}
+// 1442 "parser.c"
+        break;
+      case 24:
+// 417 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, yymsp[0].minor.yy95, yymsp[-2].minor.yy95);
+}
+// 1449 "parser.c"
+        break;
+      case 27:
+// 429 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
+  yy_destructor(12,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
 }
 // 1458 "parser.c"
         break;
-      case 42:
-// 451 "parser.lemon"
+      case 28:
+// 433 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-4].minor.yy55, yymsp[-1].minor.yy55, yymsp[-9].minor.yy0);
-  yy_destructor(9,&yymsp[-8].minor);
-  yy_destructor(13,&yymsp[-7].minor);
-  yy_destructor(14,&yymsp[-5].minor);
-  yy_destructor(15,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, NULL);
+  yy_destructor(12,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
 }
-// 1471 "parser.c"
+// 1467 "parser.c"
+        break;
+      case 29:
+// 437 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(12,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1477 "parser.c"
+        break;
+      case 30:
+// 441 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
+  yy_destructor(12,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1487 "parser.c"
+        break;
+      case 31:
+// 445 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, NULL);
+  yy_destructor(14,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1496 "parser.c"
+        break;
+      case 32:
+// 449 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
+  yy_destructor(14,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1505 "parser.c"
+        break;
+      case 33:
+// 453 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(14,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1515 "parser.c"
+        break;
+      case 34:
+// 457 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
+  yy_destructor(14,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1525 "parser.c"
+        break;
+      case 38:
+// 473 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
+  yy_destructor(15,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1535 "parser.c"
+        break;
+      case 39:
+// 477 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(15,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1545 "parser.c"
+        break;
+      case 41:
+// 485 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, NULL);
+  yy_destructor(12,&yymsp[-6].minor);
+  yy_destructor(16,&yymsp[-5].minor);
+  yy_destructor(17,&yymsp[-3].minor);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1558 "parser.c"
+        break;
+      case 42:
+// 489 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy95, NULL, NULL);
+  yy_destructor(12,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1571 "parser.c"
         break;
       case 43:
-// 455 "parser.lemon"
+// 493 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, NULL);
-  yy_destructor(11,&yymsp[-6].minor);
-  yy_destructor(13,&yymsp[-5].minor);
-  yy_destructor(14,&yymsp[-3].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
+  yy_destructor(12,&yymsp[-6].minor);
+  yy_destructor(16,&yymsp[-5].minor);
+  yy_destructor(17,&yymsp[-3].minor);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1484 "parser.c"
+// 1584 "parser.c"
         break;
       case 44:
-// 459 "parser.lemon"
+// 497 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
-  yy_destructor(11,&yymsp[-6].minor);
-  yy_destructor(13,&yymsp[-5].minor);
-  yy_destructor(14,&yymsp[-3].minor);
-  yy_destructor(15,&yymsp[-2].minor);
-  yy_destructor(6,&yymsp[-1].minor);
-  yy_destructor(7,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy95, NULL, yymsp[-8].minor.yy0);
+  yy_destructor(12,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1497 "parser.c"
+// 1597 "parser.c"
         break;
       case 45:
-// 463 "parser.lemon"
+// 501 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy55, NULL);
-  yy_destructor(11,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 1510 "parser.c"
-        break;
-      case 46:
-// 467 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy55, yymsp[-8].minor.yy0);
-  yy_destructor(11,&yymsp[-7].minor);
-  yy_destructor(13,&yymsp[-6].minor);
-  yy_destructor(14,&yymsp[-4].minor);
-  yy_destructor(15,&yymsp[-3].minor);
-  yy_destructor(6,&yymsp[-2].minor);
-  yy_destructor(7,&yymsp[0].minor);
-}
-// 1523 "parser.c"
-        break;
-      case 47:
-      case 75:
-// 471 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_list(yymsp[-2].minor.yy55, yymsp[0].minor.yy55);
-  yy_destructor(1,&yymsp[-1].minor);
-}
-// 1532 "parser.c"
-        break;
-      case 49:
-// 479 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(NULL, NULL, yymsp[0].minor.yy0, NULL);
-}
-// 1539 "parser.c"
-        break;
-      case 50:
-// 483 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(yymsp[-1].minor.yy55, NULL, yymsp[0].minor.yy0, NULL);
-}
-// 1546 "parser.c"
-        break;
-      case 51:
-// 487 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(NULL, yymsp[-1].minor.yy55, yymsp[0].minor.yy0, NULL);
-}
-// 1553 "parser.c"
-        break;
-      case 52:
-// 491 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(NULL, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy55);
-  yy_destructor(10,&yymsp[-1].minor);
-}
-// 1561 "parser.c"
-        break;
-      case 53:
-// 495 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(yymsp[-3].minor.yy55, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy55);
-  yy_destructor(10,&yymsp[-1].minor);
-}
-// 1569 "parser.c"
-        break;
-      case 54:
-// 499 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_parameter(NULL, yymsp[-3].minor.yy55, yymsp[-2].minor.yy0, yymsp[0].minor.yy55);
-  yy_destructor(10,&yymsp[-1].minor);
-}
-// 1577 "parser.c"
-        break;
-      case 55:
-// 503 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0);
-  yy_destructor(16,&yymsp[-2].minor);
-  yy_destructor(17,&yymsp[0].minor);
-}
-// 1586 "parser.c"
-        break;
-      case 56:
-// 507 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_type(XX_TYPE_INTEGER);
-  yy_destructor(18,&yymsp[0].minor);
-}
-// 1594 "parser.c"
-        break;
-      case 57:
-// 511 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_type(XX_TYPE_DOUBLE);
-  yy_destructor(19,&yymsp[0].minor);
-}
-// 1602 "parser.c"
-        break;
-      case 58:
-// 515 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_type(XX_TYPE_BOOL);
-  yy_destructor(20,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(12,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
 // 1610 "parser.c"
         break;
-      case 59:
-// 519 "parser.lemon"
+      case 46:
+// 505 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_type(XX_TYPE_STRING);
-  yy_destructor(21,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-3].minor.yy95, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(12,&yymsp[-8].minor);
+  yy_destructor(16,&yymsp[-7].minor);
+  yy_destructor(17,&yymsp[-5].minor);
+  yy_destructor(18,&yymsp[-4].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1618 "parser.c"
+// 1623 "parser.c"
         break;
-      case 60:
-// 523 "parser.lemon"
+      case 47:
+// 509 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_type(XX_TYPE_ARRAY);
-  yy_destructor(22,&yymsp[0].minor);
-}
-// 1626 "parser.c"
-        break;
-      case 67:
-// 551 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_let_statement(yymsp[-3].minor.yy0, yymsp[-1].minor.yy55);
-  yy_destructor(23,&yymsp[-4].minor);
-  yy_destructor(10,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, yymsp[-8].minor.yy0);
+  yy_destructor(12,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
 // 1636 "parser.c"
         break;
-      case 68:
-// 555 "parser.lemon"
+      case 48:
+// 513 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_echo_statement(yymsp[-1].minor.yy55);
-  yy_destructor(24,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-4].minor.yy95, yymsp[-1].minor.yy95, yymsp[-9].minor.yy0);
+  yy_destructor(12,&yymsp[-8].minor);
+  yy_destructor(16,&yymsp[-7].minor);
+  yy_destructor(17,&yymsp[-5].minor);
+  yy_destructor(18,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1645 "parser.c"
+// 1649 "parser.c"
         break;
-      case 69:
-// 559 "parser.lemon"
+      case 49:
+// 517 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0));
-  yy_destructor(24,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1654 "parser.c"
-        break;
-      case 70:
-// 563 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy55);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, NULL);
+  yy_destructor(14,&yymsp[-6].minor);
+  yy_destructor(16,&yymsp[-5].minor);
+  yy_destructor(17,&yymsp[-3].minor);
   yy_destructor(18,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1663 "parser.c"
+// 1662 "parser.c"
         break;
-      case 71:
-// 567 "parser.lemon"
+      case 50:
+// 521 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, yymsp[-1].minor.yy55);
-  yy_destructor(19,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
+  yy_destructor(14,&yymsp[-6].minor);
+  yy_destructor(16,&yymsp[-5].minor);
+  yy_destructor(17,&yymsp[-3].minor);
+  yy_destructor(18,&yymsp[-2].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1672 "parser.c"
+// 1675 "parser.c"
         break;
-      case 72:
-// 571 "parser.lemon"
+      case 51:
+// 525 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_declare_statement(XX_T_TYPE_STRING, yymsp[-1].minor.yy55);
-  yy_destructor(21,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(14,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1681 "parser.c"
+// 1688 "parser.c"
         break;
-      case 73:
-// 575 "parser.lemon"
+      case 52:
+// 529 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_declare_statement(XX_T_TYPE_BOOL, yymsp[-1].minor.yy55);
-  yy_destructor(20,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, yymsp[-8].minor.yy0);
+  yy_destructor(14,&yymsp[-7].minor);
+  yy_destructor(16,&yymsp[-6].minor);
+  yy_destructor(17,&yymsp[-4].minor);
+  yy_destructor(18,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
 }
-// 1690 "parser.c"
+// 1701 "parser.c"
         break;
-      case 74:
-// 579 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_declare_statement(XX_T_TYPE_VAR, yymsp[-1].minor.yy55);
-  yy_destructor(25,&yymsp[-2].minor);
-  yy_destructor(4,&yymsp[0].minor);
-}
-// 1699 "parser.c"
-        break;
-      case 77:
-// 591 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
-}
-// 1706 "parser.c"
-        break;
-      case 78:
-// 595 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy55);
-  yy_destructor(10,&yymsp[-1].minor);
-}
-// 1714 "parser.c"
-        break;
-      case 79:
-// 599 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
-}
-// 1721 "parser.c"
-        break;
-      case 80:
-      case 86:
-// 603 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
-}
-// 1729 "parser.c"
-        break;
-      case 81:
-      case 87:
-// 607 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
-}
-// 1737 "parser.c"
-        break;
-      case 82:
-      case 88:
-// 611 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
-}
-// 1745 "parser.c"
-        break;
-      case 83:
-      case 89:
-// 615 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_NULL, NULL);
-  yy_destructor(29,&yymsp[0].minor);
-}
-// 1754 "parser.c"
-        break;
-      case 84:
-      case 90:
-// 619 "parser.lemon"
-{
-	yygotominor.yy55 = xx_ret_literal(XX_T_FALSE, NULL);
-  yy_destructor(30,&yymsp[0].minor);
-}
-// 1763 "parser.c"
-        break;
+      case 53:
       case 85:
-      case 91:
-// 623 "parser.lemon"
+// 533 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_literal(XX_T_TRUE, NULL);
-  yy_destructor(31,&yymsp[0].minor);
+	yygotominor.yy95 = xx_ret_list(yymsp[-2].minor.yy95, yymsp[0].minor.yy95);
+  yy_destructor(1,&yymsp[-1].minor);
+}
+// 1710 "parser.c"
+        break;
+      case 55:
+// 541 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(NULL, NULL, yymsp[0].minor.yy0, NULL);
+}
+// 1717 "parser.c"
+        break;
+      case 56:
+// 545 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(yymsp[-1].minor.yy95, NULL, yymsp[0].minor.yy0, NULL);
+}
+// 1724 "parser.c"
+        break;
+      case 57:
+// 549 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(NULL, yymsp[-1].minor.yy95, yymsp[0].minor.yy0, NULL);
+}
+// 1731 "parser.c"
+        break;
+      case 58:
+// 553 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(NULL, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
+  yy_destructor(13,&yymsp[-1].minor);
+}
+// 1739 "parser.c"
+        break;
+      case 59:
+// 557 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(yymsp[-3].minor.yy95, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
+  yy_destructor(13,&yymsp[-1].minor);
+}
+// 1747 "parser.c"
+        break;
+      case 60:
+// 561 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_parameter(NULL, yymsp[-3].minor.yy95, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
+  yy_destructor(13,&yymsp[-1].minor);
+}
+// 1755 "parser.c"
+        break;
+      case 61:
+// 565 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0);
+  yy_destructor(19,&yymsp[-2].minor);
+  yy_destructor(20,&yymsp[0].minor);
+}
+// 1764 "parser.c"
+        break;
+      case 62:
+// 569 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_type(XX_TYPE_INTEGER);
+  yy_destructor(21,&yymsp[0].minor);
 }
 // 1772 "parser.c"
         break;
-      case 92:
-// 651 "parser.lemon"
+      case 63:
+// 573 "parser.lemon"
 {
-	yygotominor.yy55 = xx_ret_comment(yymsp[0].minor.yy0);
+	yygotominor.yy95 = xx_ret_type(XX_TYPE_DOUBLE);
+  yy_destructor(22,&yymsp[0].minor);
 }
-// 1779 "parser.c"
+// 1780 "parser.c"
+        break;
+      case 64:
+// 577 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_type(XX_TYPE_BOOL);
+  yy_destructor(23,&yymsp[0].minor);
+}
+// 1788 "parser.c"
+        break;
+      case 65:
+// 581 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_type(XX_TYPE_STRING);
+  yy_destructor(24,&yymsp[0].minor);
+}
+// 1796 "parser.c"
+        break;
+      case 66:
+// 585 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_type(XX_TYPE_ARRAY);
+  yy_destructor(25,&yymsp[0].minor);
+}
+// 1804 "parser.c"
+        break;
+      case 74:
+// 617 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_if_statement(yymsp[-2].minor.yy95, NULL, NULL);
+  yy_destructor(26,&yymsp[-3].minor);
+  yy_destructor(7,&yymsp[-1].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1814 "parser.c"
+        break;
+      case 75:
+// 621 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_if_statement(yymsp[-3].minor.yy95, yymsp[-1].minor.yy95, NULL);
+  yy_destructor(26,&yymsp[-4].minor);
+  yy_destructor(7,&yymsp[-2].minor);
+  yy_destructor(8,&yymsp[0].minor);
+}
+// 1824 "parser.c"
+        break;
+      case 76:
+// 625 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_let_statement(NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95);
+  yy_destructor(27,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1834 "parser.c"
+        break;
+      case 77:
+// 629 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_let_statement(yymsp[-5].minor.yy0, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95);
+  yy_destructor(27,&yymsp[-6].minor);
+  yy_destructor(28,&yymsp[-4].minor);
+  yy_destructor(13,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1845 "parser.c"
+        break;
+      case 78:
+// 633 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_echo_statement(yymsp[-1].minor.yy95);
+  yy_destructor(29,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1854 "parser.c"
+        break;
+      case 79:
+// 637 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0));
+  yy_destructor(29,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1863 "parser.c"
+        break;
+      case 80:
+// 641 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy95);
+  yy_destructor(21,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1872 "parser.c"
+        break;
+      case 81:
+// 645 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, yymsp[-1].minor.yy95);
+  yy_destructor(22,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1881 "parser.c"
+        break;
+      case 82:
+// 649 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_STRING, yymsp[-1].minor.yy95);
+  yy_destructor(24,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1890 "parser.c"
+        break;
+      case 83:
+// 653 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_BOOL, yymsp[-1].minor.yy95);
+  yy_destructor(23,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1899 "parser.c"
+        break;
+      case 84:
+// 657 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_VAR, yymsp[-1].minor.yy95);
+  yy_destructor(30,&yymsp[-2].minor);
+  yy_destructor(5,&yymsp[0].minor);
+}
+// 1908 "parser.c"
+        break;
+      case 87:
+// 669 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
+}
+// 1915 "parser.c"
+        break;
+      case 88:
+// 673 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
+  yy_destructor(13,&yymsp[-1].minor);
+}
+// 1923 "parser.c"
+        break;
+      case 89:
+      case 105:
+// 677 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
+}
+// 1931 "parser.c"
+        break;
+      case 90:
+      case 96:
+// 681 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
+}
+// 1939 "parser.c"
+        break;
+      case 91:
+      case 97:
+// 685 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
+}
+// 1947 "parser.c"
+        break;
+      case 92:
+      case 98:
+// 689 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
+}
+// 1955 "parser.c"
+        break;
+      case 93:
+      case 99:
+// 693 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_NULL, NULL);
+  yy_destructor(34,&yymsp[0].minor);
+}
+// 1964 "parser.c"
+        break;
+      case 94:
+      case 100:
+// 697 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_FALSE, NULL);
+  yy_destructor(35,&yymsp[0].minor);
+}
+// 1973 "parser.c"
+        break;
+      case 95:
+      case 101:
+// 701 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_literal(XX_T_TRUE, NULL);
+  yy_destructor(36,&yymsp[0].minor);
+}
+// 1982 "parser.c"
+        break;
+      case 103:
+// 733 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_expr(XX_T_EQUALS, yymsp[-2].minor.yy95, yymsp[0].minor.yy95, NULL);
+  yy_destructor(2,&yymsp[-1].minor);
+}
+// 1990 "parser.c"
+        break;
+      case 104:
+// 737 "parser.lemon"
+{
+	yygotominor.yy95 = yymsp[-1].minor.yy95;
+  yy_destructor(17,&yymsp[-2].minor);
+  yy_destructor(18,&yymsp[0].minor);
+}
+// 1999 "parser.c"
+        break;
+      case 106:
+// 745 "parser.lemon"
+{
+	yygotominor.yy95 = xx_ret_comment(yymsp[0].minor.yy0);
+}
+// 2006 "parser.c"
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -1817,7 +2044,7 @@ static void yy_syntax_error(
 ){
   xx_ARG_FETCH;
 #define TOKEN (yyminor.yy0)
-// 256 "parser.lemon"
+// 294 "parser.lemon"
 
 
 	//fprintf(stderr, "error!\n");
@@ -1833,7 +2060,7 @@ static void yy_syntax_error(
 
 	status->status = XX_PARSING_FAILED;
 
-// 1837 "parser.c"
+// 2064 "parser.c"
   xx_ARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
@@ -2184,6 +2411,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_NAMESPACE:
 				xx_(xx_parser, XX_NAMESPACE, NULL, parser_status);
 				break;
+			case XX_T_ABSTRACT:
+				xx_(xx_parser, XX_ABSTRACT, NULL, parser_status);
+				break;
 			case XX_T_CLASS:
 				xx_(xx_parser, XX_CLASS, NULL, parser_status);
 				break;
@@ -2202,6 +2432,12 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_ECHO:
 				xx_(xx_parser, XX_ECHO, NULL, parser_status);
 				break;
+			case XX_T_IF:
+				xx_(xx_parser, XX_IF, NULL, parser_status);
+				break;
+			/*case XX_T_ELSE:
+				xx_(xx_parser, XX_ELSE, NULL, parser_status);
+				break;*/
 			case XX_T_CONST:
 				xx_(xx_parser, XX_CONST, NULL, parser_status);
 				break;
@@ -2213,6 +2449,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
+				break;
+			case XX_T_EQUALS:
+				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
 				break;
 			case XX_T_LESS:
 				xx_(xx_parser, XX_LESS, NULL, parser_status);

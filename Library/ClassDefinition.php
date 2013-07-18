@@ -3,7 +3,7 @@
 /**
  * ClassDefinition
  *
- * Represents a class and their properties and methods 
+ * Represents a class and their properties and methods
  */
 class ClassDefinition
 {
@@ -19,7 +19,7 @@ class ClassDefinition
 	public function __construct($namespace, $name)
 	{
 		$this->_namespace = $namespace;
-		$this->_name = $name;		
+		$this->_name = $name;
 	}
 
 	public function getName()
@@ -65,7 +65,7 @@ class ClassDefinition
 	 *
 	 */
 	public function compile(CodePrinter $codePrinter)
-	{	
+	{
 
 		$codePrinter->outputBlankLine();
 
@@ -77,16 +77,16 @@ class ClassDefinition
 		/**
 		 * Register the class
 		 */
-		$codePrinter->output('TEST_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' . 
-			strtolower($this->getName()) . ', ' . strtolower($this->getCNamespace()) . '_' . 
+		$codePrinter->output('TEST_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
+			strtolower($this->getName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
 			strtolower($this->getName()) . '_method_entry, 0);');
-		$codePrinter->outputBlankLine();		
+		$codePrinter->outputBlankLine();
 
 		/**
 		 * Compile properties
 		 */
-		foreach ($this->getProperties() as $property) {			
-			$property->compile($codePrinter, $this);				
+		foreach ($this->getProperties() as $property) {
+			$property->compile($codePrinter, $this);
 		}
 
 		$codePrinter->outputBlankLine();
@@ -101,7 +101,7 @@ class ClassDefinition
 		/**
 		 * Compile methods
 		 */
-		foreach ($this->getMethods() as $method) {			
+		foreach ($this->getMethods() as $method) {
 
 			$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
 			$codePrinter->outputBlankLine();

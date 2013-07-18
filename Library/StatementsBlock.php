@@ -11,12 +11,12 @@ class StatementsBlock
 	protected $_statements;
 
 	public function __construct(array $statements)
-	{	
+	{
 		$this->_statements = $statements;
-	}	
+	}
 
 	public function compile(CodePrinter $codePrinter, SymbolTable $symbolTable, ClassDefinition $classDefinition=null)
-	{		
+	{
 		foreach ($this->_statements as $statement) {
 			switch ($statement['type']) {
 				case 'let':
@@ -31,7 +31,11 @@ class StatementsBlock
 					$declareStatement = new DeclareStatement($statement);
 					$declareStatement->compile($codePrinter, $symbolTable, $classDefinition);
 					break;
+				case 'if':
+					$ifStatement = new IfStatement($statement);
+					$ifStatement->compile($codePrinter, $symbolTable, $classDefinition);
+					break;
 			}
-		}		
+		}
 	}
 }

@@ -178,6 +178,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_NAMESPACE:
 				xx_(xx_parser, XX_NAMESPACE, NULL, parser_status);
 				break;
+			case XX_T_ABSTRACT:
+				xx_(xx_parser, XX_ABSTRACT, NULL, parser_status);
+				break;
 			case XX_T_CLASS:
 				xx_(xx_parser, XX_CLASS, NULL, parser_status);
 				break;
@@ -196,6 +199,12 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_ECHO:
 				xx_(xx_parser, XX_ECHO, NULL, parser_status);
 				break;
+			case XX_T_IF:
+				xx_(xx_parser, XX_IF, NULL, parser_status);
+				break;
+			/*case XX_T_ELSE:
+				xx_(xx_parser, XX_ELSE, NULL, parser_status);
+				break;*/
 			case XX_T_CONST:
 				xx_(xx_parser, XX_CONST, NULL, parser_status);
 				break;
@@ -207,6 +216,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
+				break;
+			case XX_T_EQUALS:
+				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
 				break;
 			case XX_T_LESS:
 				xx_(xx_parser, XX_LESS, NULL, parser_status);

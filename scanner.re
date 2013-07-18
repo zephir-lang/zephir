@@ -57,6 +57,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'abstract' {
+			token->opcode = XX_T_ABSTRACT;
+			return 0;
+		}
+
 		'class' {
 			token->opcode = XX_T_CLASS;
 			return 0;
@@ -127,6 +132,21 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'if' {
+			token->opcode = XX_T_IF;
+			return 0;
+		}
+
+		'else' {
+			token->opcode = XX_T_ELSE;
+			return 0;
+		}
+
+		'while' {
+			token->opcode = XX_T_WHILE;
+			return 0;
+		}
+
 		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		STRING {
 			token->opcode = XX_T_STRING;
@@ -136,7 +156,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		COMMENT = ([/][\*] ([\001-\377]\[\*])* [\*][/]);
+		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/"|"--"[^\r\n]*);
 		COMMENT {
 			token->opcode = XX_T_COMMENT;
 			token->value = strndup(q, YYCURSOR - q - 1);
@@ -191,6 +211,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		"=" {
 			token->opcode = XX_T_ASSIGN;
+			return 0;
+		}
+
+		"==" {
+			token->opcode = XX_T_EQUALS;
 			return 0;
 		}
 

@@ -32,6 +32,12 @@
 #define XX_T_COMMENT 357
 #define XX_T_ECHO 358
 #define XX_T_CONST 359
+#define XX_T_ABSTRACT 360
+#define XX_T_IMPLEMENTS 361
+#define XX_T_INTERFACE 362
+#define XX_T_IF 363
+#define XX_T_ELSE 364
+#define XX_T_WHILE 365
 
 /* Operators */
 #define XX_T_AT '@'
@@ -48,6 +54,7 @@
 #define XX_T_SBRACKET_CLOSE ']'
 #define XX_T_PARENTHESES_OPEN '('
 #define XX_T_PARENTHESES_CLOSE ')'
+#define XX_T_EQUALS 400
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {
