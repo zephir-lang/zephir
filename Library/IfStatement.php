@@ -20,6 +20,9 @@ class IfStatement
 
 		$compiledExpression = $expr->compile($compilationContext);
 
+		/**
+		 * Generate the condition according to the value returned by the evaluted expression
+		 */
 		switch ($compiledExpression->getType()) {
 			case 'bool':
 				$compilationContext->codePrinter->output('if (' . $compiledExpression->getCode() . ') {');

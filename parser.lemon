@@ -221,6 +221,10 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("string");
 		case XX_TYPE_ARRAY:
 			return json_object_new_string("array");
+		case XX_TYPE_VAR:
+			return json_object_new_string("variable");
+		default:
+			fprintf(stderr, "err 1?\n");
 	}
 
 }
@@ -294,7 +298,30 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables)
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("declare"));
-	json_object_object_add(ret, "data-type", json_object_new_int(type));
+
+	switch (type) {
+		case XX_T_TYPE_INTEGER:
+			json_object_object_add(ret, "data-type", json_object_new_string("int"));
+			break;
+		case XX_T_TYPE_DOUBLE:
+			json_object_object_add(ret, "data-type", json_object_new_string("double"));
+			break;
+		case XX_T_TYPE_BOOL:
+			json_object_object_add(ret, "data-type", json_object_new_string("bool"));
+			break;
+		case XX_T_TYPE_STRING:
+			json_object_object_add(ret, "data-type", json_object_new_string("string"));
+			break;
+		/*case XX_T_TYPE_ARRAY:
+			json_object_object_add(ret, "data-type", json_object_new_string("array"));
+			break;*/
+		case XX_T_TYPE_VAR:
+			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
+			break;
+		default:
+			fprintf(stderr, "err 2?\n");
+	}
+
 	json_object_object_add(ret, "variables", variables);
 
 	return ret;

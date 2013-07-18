@@ -28,18 +28,18 @@ class DeclareStatement
 
 		$pointer = null;
 		switch ($statement['data-type']) {
-			case VAR_TYPE_INT:
+			case 'int':
 				$compilationContext->codePrinter->outputNoLineFeed('int ');
 				break;
-			case VAR_TYPE_DOUBLE:
+			case 'double':
 				$compilationContext->codePrinter->outputNoLineFeed('double ');
 				break;
-			case VAR_TYPE_VAR:
+			case 'variable':
 				$pointer = '*';
 				$compilationContext->codePrinter->outputNoLineFeed('zval ');
 				break;
 			default:
-				throw new Exception("Unsupported type in declare");
+				throw new Exception("Unsupported type in declare " . $statement['data-type']);
 		}
 
 		$variables = array();

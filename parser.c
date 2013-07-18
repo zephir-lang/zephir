@@ -218,6 +218,10 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("string");
 		case XX_TYPE_ARRAY:
 			return json_object_new_string("array");
+		case XX_TYPE_VAR:
+			return json_object_new_string("variable");
+		default:
+			fprintf(stderr, "err 1?\n");
 	}
 
 }
@@ -291,7 +295,30 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables)
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("declare"));
-	json_object_object_add(ret, "data-type", json_object_new_int(type));
+
+	switch (type) {
+		case XX_T_TYPE_INTEGER:
+			json_object_object_add(ret, "data-type", json_object_new_string("int"));
+			break;
+		case XX_T_TYPE_DOUBLE:
+			json_object_object_add(ret, "data-type", json_object_new_string("double"));
+			break;
+		case XX_T_TYPE_BOOL:
+			json_object_object_add(ret, "data-type", json_object_new_string("bool"));
+			break;
+		case XX_T_TYPE_STRING:
+			json_object_object_add(ret, "data-type", json_object_new_string("string"));
+			break;
+		/*case XX_T_TYPE_ARRAY:
+			json_object_object_add(ret, "data-type", json_object_new_string("array"));
+			break;*/
+		case XX_T_TYPE_VAR:
+			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
+			break;
+		default:
+			fprintf(stderr, "err 2?\n");
+	}
+
 	json_object_object_add(ret, "variables", variables);
 
 	return ret;
@@ -320,7 +347,7 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 }
 
 
-// 324 "parser.c"
+// 351 "parser.c"
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -940,7 +967,7 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     case 34:
     case 35:
     case 36:
-// 343 "parser.lemon"
+// 370 "parser.lemon"
 {
 	/*if ((yypminor->yy0)) {
 		if ((yypminor->yy0)->free_flag) {
@@ -949,12 +976,12 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
 		efree((yypminor->yy0));
 	}*/
 }
-// 953 "parser.c"
+// 980 "parser.c"
       break;
     case 39:
-// 356 "parser.lemon"
+// 383 "parser.lemon"
 { json_object_put((yypminor->yy95)); }
-// 958 "parser.c"
+// 985 "parser.c"
       break;
     default:  break;   /* If no destructor action specified: do nothing */
   }
@@ -1274,11 +1301,11 @@ static void yy_reduce(
   **     break;
   */
       case 0:
-// 352 "parser.lemon"
+// 379 "parser.lemon"
 {
 	status->ret = yymsp[0].minor.yy95;
 }
-// 1282 "parser.c"
+// 1309 "parser.c"
         break;
       case 1:
       case 4:
@@ -1290,22 +1317,22 @@ static void yy_reduce(
       case 72:
       case 73:
       case 102:
-// 358 "parser.lemon"
+// 385 "parser.lemon"
 {
 	yygotominor.yy95 = yymsp[0].minor.yy95;
 }
-// 1298 "parser.c"
+// 1325 "parser.c"
         break;
       case 2:
       case 25:
       case 35:
       case 37:
       case 67:
-// 362 "parser.lemon"
+// 389 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_list(yymsp[-1].minor.yy95, yymsp[0].minor.yy95);
 }
-// 1309 "parser.c"
+// 1336 "parser.c"
         break;
       case 3:
       case 26:
@@ -1314,33 +1341,33 @@ static void yy_reduce(
       case 54:
       case 68:
       case 86:
-// 366 "parser.lemon"
+// 393 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_list(NULL, yymsp[0].minor.yy95);
 }
-// 1322 "parser.c"
+// 1349 "parser.c"
         break;
       case 7:
-// 382 "parser.lemon"
+// 409 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_namespace(yymsp[-1].minor.yy0);
   yy_destructor(3,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1331 "parser.c"
+// 1358 "parser.c"
         break;
       case 8:
-// 386 "parser.lemon"
+// 413 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, 0, NULL);
   yy_destructor(6,&yymsp[-4].minor);
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1341 "parser.c"
+// 1368 "parser.c"
         break;
       case 9:
-// 390 "parser.lemon"
+// 417 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-5].minor.yy0, yymsp[-1].minor.yy95, 0, yymsp[-3].minor.yy0);
   yy_destructor(6,&yymsp[-6].minor);
@@ -1348,10 +1375,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1352 "parser.c"
+// 1379 "parser.c"
         break;
       case 10:
-// 394 "parser.lemon"
+// 421 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, 1, NULL);
   yy_destructor(10,&yymsp[-5].minor);
@@ -1359,10 +1386,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1363 "parser.c"
+// 1390 "parser.c"
         break;
       case 11:
-// 398 "parser.lemon"
+// 425 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-5].minor.yy0, yymsp[-1].minor.yy95, 1, yymsp[-3].minor.yy0);
   yy_destructor(10,&yymsp[-7].minor);
@@ -1371,20 +1398,20 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1375 "parser.c"
+// 1402 "parser.c"
         break;
       case 12:
-// 402 "parser.lemon"
+// 429 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-2].minor.yy0, NULL, 0, NULL);
   yy_destructor(6,&yymsp[-3].minor);
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1385 "parser.c"
+// 1412 "parser.c"
         break;
       case 13:
-// 406 "parser.lemon"
+// 433 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-4].minor.yy0, NULL, 0, yymsp[-2].minor.yy0);
   yy_destructor(6,&yymsp[-5].minor);
@@ -1392,10 +1419,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1396 "parser.c"
+// 1423 "parser.c"
         break;
       case 14:
-// 410 "parser.lemon"
+// 437 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-2].minor.yy0, NULL, 1, NULL);
   yy_destructor(10,&yymsp[-4].minor);
@@ -1403,10 +1430,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1407 "parser.c"
+// 1434 "parser.c"
         break;
       case 15:
-// 414 "parser.lemon"
+// 441 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class(yymsp[-4].minor.yy0, NULL, 1, yymsp[-2].minor.yy0);
   yy_destructor(10,&yymsp[-6].minor);
@@ -1415,169 +1442,169 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1419 "parser.c"
+// 1446 "parser.c"
         break;
       case 16:
-// 418 "parser.lemon"
+// 445 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[0].minor.yy95, NULL, NULL);
 }
-// 1426 "parser.c"
+// 1453 "parser.c"
         break;
       case 17:
-// 422 "parser.lemon"
+// 449 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(NULL, NULL, yymsp[0].minor.yy95);
 }
-// 1433 "parser.c"
+// 1460 "parser.c"
         break;
       case 18:
-// 426 "parser.lemon"
+// 453 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(NULL, yymsp[0].minor.yy95, NULL);
 }
-// 1440 "parser.c"
+// 1467 "parser.c"
         break;
       case 19:
-// 430 "parser.lemon"
+// 457 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, yymsp[0].minor.yy95, NULL);
 }
-// 1447 "parser.c"
+// 1474 "parser.c"
         break;
       case 20:
-// 434 "parser.lemon"
+// 461 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, NULL, yymsp[0].minor.yy95);
 }
-// 1454 "parser.c"
+// 1481 "parser.c"
         break;
       case 21:
-// 438 "parser.lemon"
+// 465 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[0].minor.yy95, NULL, yymsp[-1].minor.yy95);
 }
-// 1461 "parser.c"
+// 1488 "parser.c"
         break;
       case 22:
-// 442 "parser.lemon"
+// 469 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(NULL, yymsp[0].minor.yy95, yymsp[-1].minor.yy95);
 }
-// 1468 "parser.c"
+// 1495 "parser.c"
         break;
       case 23:
-// 446 "parser.lemon"
+// 473 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[-2].minor.yy95, yymsp[0].minor.yy95, yymsp[-1].minor.yy95);
 }
-// 1475 "parser.c"
+// 1502 "parser.c"
         break;
       case 24:
-// 450 "parser.lemon"
+// 477 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_definition(yymsp[-1].minor.yy95, yymsp[0].minor.yy95, yymsp[-2].minor.yy95);
 }
-// 1482 "parser.c"
+// 1509 "parser.c"
         break;
       case 27:
-// 462 "parser.lemon"
+// 489 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
   yy_destructor(12,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1491 "parser.c"
+// 1518 "parser.c"
         break;
       case 28:
-// 466 "parser.lemon"
+// 493 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-1].minor.yy0, NULL, NULL);
   yy_destructor(12,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1500 "parser.c"
+// 1527 "parser.c"
         break;
       case 29:
-// 470 "parser.lemon"
+// 497 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
   yy_destructor(12,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1510 "parser.c"
+// 1537 "parser.c"
         break;
       case 30:
-// 474 "parser.lemon"
+// 501 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PUBLIC, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
   yy_destructor(12,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1520 "parser.c"
+// 1547 "parser.c"
         break;
       case 31:
-// 478 "parser.lemon"
+// 505 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, NULL);
   yy_destructor(14,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1529 "parser.c"
+// 1556 "parser.c"
         break;
       case 32:
-// 482 "parser.lemon"
+// 509 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-1].minor.yy0, NULL, yymsp[-3].minor.yy0);
   yy_destructor(14,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1538 "parser.c"
+// 1565 "parser.c"
         break;
       case 33:
-// 486 "parser.lemon"
+// 513 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
   yy_destructor(14,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1548 "parser.c"
+// 1575 "parser.c"
         break;
       case 34:
-// 490 "parser.lemon"
+// 517 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_property(XX_T_PROTECTED, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
   yy_destructor(14,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1558 "parser.c"
+// 1585 "parser.c"
         break;
       case 38:
-// 506 "parser.lemon"
+// 533 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, yymsp[-5].minor.yy0);
   yy_destructor(15,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1568 "parser.c"
+// 1595 "parser.c"
         break;
       case 39:
-// 510 "parser.lemon"
+// 537 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_const(yymsp[-3].minor.yy0, yymsp[-1].minor.yy95, NULL);
   yy_destructor(15,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1578 "parser.c"
+// 1605 "parser.c"
         break;
       case 41:
-// 518 "parser.lemon"
+// 545 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, NULL);
   yy_destructor(12,&yymsp[-6].minor);
@@ -1587,10 +1614,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1591 "parser.c"
+// 1618 "parser.c"
         break;
       case 42:
-// 522 "parser.lemon"
+// 549 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy95, NULL, NULL);
   yy_destructor(12,&yymsp[-7].minor);
@@ -1600,10 +1627,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1604 "parser.c"
+// 1631 "parser.c"
         break;
       case 43:
-// 526 "parser.lemon"
+// 553 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
   yy_destructor(12,&yymsp[-6].minor);
@@ -1613,10 +1640,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1617 "parser.c"
+// 1644 "parser.c"
         break;
       case 44:
-// 530 "parser.lemon"
+// 557 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, yymsp[-3].minor.yy95, NULL, yymsp[-8].minor.yy0);
   yy_destructor(12,&yymsp[-7].minor);
@@ -1626,10 +1653,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1630 "parser.c"
+// 1657 "parser.c"
         break;
       case 45:
-// 534 "parser.lemon"
+// 561 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, NULL);
   yy_destructor(12,&yymsp[-7].minor);
@@ -1639,10 +1666,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1643 "parser.c"
+// 1670 "parser.c"
         break;
       case 46:
-// 538 "parser.lemon"
+// 565 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-3].minor.yy95, yymsp[-1].minor.yy95, NULL);
   yy_destructor(12,&yymsp[-8].minor);
@@ -1652,10 +1679,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1656 "parser.c"
+// 1683 "parser.c"
         break;
       case 47:
-// 542 "parser.lemon"
+// 569 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, yymsp[-8].minor.yy0);
   yy_destructor(12,&yymsp[-7].minor);
@@ -1665,10 +1692,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1669 "parser.c"
+// 1696 "parser.c"
         break;
       case 48:
-// 546 "parser.lemon"
+// 573 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PUBLIC, yymsp[-6].minor.yy0, yymsp[-4].minor.yy95, yymsp[-1].minor.yy95, yymsp[-9].minor.yy0);
   yy_destructor(12,&yymsp[-8].minor);
@@ -1678,10 +1705,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1682 "parser.c"
+// 1709 "parser.c"
         break;
       case 49:
-// 550 "parser.lemon"
+// 577 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, NULL);
   yy_destructor(14,&yymsp[-6].minor);
@@ -1691,10 +1718,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1695 "parser.c"
+// 1722 "parser.c"
         break;
       case 50:
-// 554 "parser.lemon"
+// 581 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-4].minor.yy0, NULL, NULL, yymsp[-7].minor.yy0);
   yy_destructor(14,&yymsp[-6].minor);
@@ -1704,10 +1731,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1708 "parser.c"
+// 1735 "parser.c"
         break;
       case 51:
-// 558 "parser.lemon"
+// 585 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, NULL);
   yy_destructor(14,&yymsp[-7].minor);
@@ -1717,10 +1744,10 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1721 "parser.c"
+// 1748 "parser.c"
         break;
       case 52:
-// 562 "parser.lemon"
+// 589 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_class_method(XX_T_PROTECTED, yymsp[-5].minor.yy0, NULL, yymsp[-1].minor.yy95, yymsp[-8].minor.yy0);
   yy_destructor(14,&yymsp[-7].minor);
@@ -1730,143 +1757,143 @@ static void yy_reduce(
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1734 "parser.c"
+// 1761 "parser.c"
         break;
       case 53:
       case 85:
-// 566 "parser.lemon"
+// 593 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_list(yymsp[-2].minor.yy95, yymsp[0].minor.yy95);
   yy_destructor(1,&yymsp[-1].minor);
 }
-// 1743 "parser.c"
+// 1770 "parser.c"
         break;
       case 55:
-// 574 "parser.lemon"
+// 601 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(NULL, NULL, yymsp[0].minor.yy0, NULL);
 }
-// 1750 "parser.c"
+// 1777 "parser.c"
         break;
       case 56:
-// 578 "parser.lemon"
+// 605 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(yymsp[-1].minor.yy95, NULL, yymsp[0].minor.yy0, NULL);
 }
-// 1757 "parser.c"
+// 1784 "parser.c"
         break;
       case 57:
-// 582 "parser.lemon"
+// 609 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(NULL, yymsp[-1].minor.yy95, yymsp[0].minor.yy0, NULL);
 }
-// 1764 "parser.c"
+// 1791 "parser.c"
         break;
       case 58:
-// 586 "parser.lemon"
+// 613 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(NULL, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
   yy_destructor(13,&yymsp[-1].minor);
 }
-// 1772 "parser.c"
+// 1799 "parser.c"
         break;
       case 59:
-// 590 "parser.lemon"
+// 617 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(yymsp[-3].minor.yy95, NULL, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
   yy_destructor(13,&yymsp[-1].minor);
 }
-// 1780 "parser.c"
+// 1807 "parser.c"
         break;
       case 60:
-// 594 "parser.lemon"
+// 621 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_parameter(NULL, yymsp[-3].minor.yy95, yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
   yy_destructor(13,&yymsp[-1].minor);
 }
-// 1788 "parser.c"
+// 1815 "parser.c"
         break;
       case 61:
-// 598 "parser.lemon"
+// 625 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0);
   yy_destructor(19,&yymsp[-2].minor);
   yy_destructor(20,&yymsp[0].minor);
 }
-// 1797 "parser.c"
+// 1824 "parser.c"
         break;
       case 62:
-// 602 "parser.lemon"
+// 629 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_type(XX_TYPE_INTEGER);
   yy_destructor(21,&yymsp[0].minor);
 }
-// 1805 "parser.c"
+// 1832 "parser.c"
         break;
       case 63:
-// 606 "parser.lemon"
+// 633 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_type(XX_TYPE_DOUBLE);
   yy_destructor(22,&yymsp[0].minor);
 }
-// 1813 "parser.c"
+// 1840 "parser.c"
         break;
       case 64:
-// 610 "parser.lemon"
+// 637 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_type(XX_TYPE_BOOL);
   yy_destructor(23,&yymsp[0].minor);
 }
-// 1821 "parser.c"
+// 1848 "parser.c"
         break;
       case 65:
-// 614 "parser.lemon"
+// 641 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_type(XX_TYPE_STRING);
   yy_destructor(24,&yymsp[0].minor);
 }
-// 1829 "parser.c"
+// 1856 "parser.c"
         break;
       case 66:
-// 618 "parser.lemon"
+// 645 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_type(XX_TYPE_ARRAY);
   yy_destructor(25,&yymsp[0].minor);
 }
-// 1837 "parser.c"
+// 1864 "parser.c"
         break;
       case 74:
-// 650 "parser.lemon"
+// 677 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_if_statement(yymsp[-2].minor.yy95, NULL, NULL);
   yy_destructor(26,&yymsp[-3].minor);
   yy_destructor(7,&yymsp[-1].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1847 "parser.c"
+// 1874 "parser.c"
         break;
       case 75:
-// 654 "parser.lemon"
+// 681 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_if_statement(yymsp[-3].minor.yy95, yymsp[-1].minor.yy95, NULL);
   yy_destructor(26,&yymsp[-4].minor);
   yy_destructor(7,&yymsp[-2].minor);
   yy_destructor(8,&yymsp[0].minor);
 }
-// 1857 "parser.c"
+// 1884 "parser.c"
         break;
       case 76:
-// 658 "parser.lemon"
+// 685 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_let_statement(NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95);
   yy_destructor(27,&yymsp[-4].minor);
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1867 "parser.c"
+// 1894 "parser.c"
         break;
       case 77:
-// 662 "parser.lemon"
+// 689 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_let_statement(yymsp[-5].minor.yy0, yymsp[-3].minor.yy0, yymsp[-1].minor.yy95);
   yy_destructor(27,&yymsp[-6].minor);
@@ -1874,168 +1901,168 @@ static void yy_reduce(
   yy_destructor(13,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1878 "parser.c"
+// 1905 "parser.c"
         break;
       case 78:
-// 666 "parser.lemon"
+// 693 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_echo_statement(yymsp[-1].minor.yy95);
   yy_destructor(29,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1887 "parser.c"
+// 1914 "parser.c"
         break;
       case 79:
-// 670 "parser.lemon"
+// 697 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, yymsp[-1].minor.yy0));
   yy_destructor(29,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1896 "parser.c"
+// 1923 "parser.c"
         break;
       case 80:
-// 674 "parser.lemon"
+// 701 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_INTEGER, yymsp[-1].minor.yy95);
   yy_destructor(21,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1905 "parser.c"
+// 1932 "parser.c"
         break;
       case 81:
-// 678 "parser.lemon"
+// 705 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, yymsp[-1].minor.yy95);
   yy_destructor(22,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1914 "parser.c"
+// 1941 "parser.c"
         break;
       case 82:
-// 682 "parser.lemon"
+// 709 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_STRING, yymsp[-1].minor.yy95);
   yy_destructor(24,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1923 "parser.c"
+// 1950 "parser.c"
         break;
       case 83:
-// 686 "parser.lemon"
+// 713 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_BOOL, yymsp[-1].minor.yy95);
   yy_destructor(23,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1932 "parser.c"
+// 1959 "parser.c"
         break;
       case 84:
-// 690 "parser.lemon"
+// 717 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_statement(XX_T_TYPE_VAR, yymsp[-1].minor.yy95);
   yy_destructor(30,&yymsp[-2].minor);
   yy_destructor(5,&yymsp[0].minor);
 }
-// 1941 "parser.c"
+// 1968 "parser.c"
         break;
       case 87:
-// 702 "parser.lemon"
+// 729 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_variable(yymsp[0].minor.yy0, NULL);
 }
-// 1948 "parser.c"
+// 1975 "parser.c"
         break;
       case 88:
-// 706 "parser.lemon"
+// 733 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_declare_variable(yymsp[-2].minor.yy0, yymsp[0].minor.yy95);
   yy_destructor(13,&yymsp[-1].minor);
 }
-// 1956 "parser.c"
+// 1983 "parser.c"
         break;
       case 89:
       case 105:
-// 710 "parser.lemon"
+// 737 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_IDENTIFIER, yymsp[0].minor.yy0);
 }
-// 1964 "parser.c"
+// 1991 "parser.c"
         break;
       case 90:
       case 96:
-// 714 "parser.lemon"
+// 741 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_INTEGER, yymsp[0].minor.yy0);
 }
-// 1972 "parser.c"
+// 1999 "parser.c"
         break;
       case 91:
       case 97:
-// 718 "parser.lemon"
+// 745 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_STRING, yymsp[0].minor.yy0);
 }
-// 1980 "parser.c"
+// 2007 "parser.c"
         break;
       case 92:
       case 98:
-// 722 "parser.lemon"
+// 749 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_DOUBLE, yymsp[0].minor.yy0);
 }
-// 1988 "parser.c"
+// 2015 "parser.c"
         break;
       case 93:
       case 99:
-// 726 "parser.lemon"
+// 753 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_NULL, NULL);
   yy_destructor(34,&yymsp[0].minor);
 }
-// 1997 "parser.c"
+// 2024 "parser.c"
         break;
       case 94:
       case 100:
-// 730 "parser.lemon"
+// 757 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_FALSE, NULL);
   yy_destructor(35,&yymsp[0].minor);
 }
-// 2006 "parser.c"
+// 2033 "parser.c"
         break;
       case 95:
       case 101:
-// 734 "parser.lemon"
+// 761 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_literal(XX_T_TRUE, NULL);
   yy_destructor(36,&yymsp[0].minor);
 }
-// 2015 "parser.c"
+// 2042 "parser.c"
         break;
       case 103:
-// 766 "parser.lemon"
+// 793 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_expr("equals", yymsp[-2].minor.yy95, yymsp[0].minor.yy95, NULL);
   yy_destructor(2,&yymsp[-1].minor);
 }
-// 2023 "parser.c"
+// 2050 "parser.c"
         break;
       case 104:
-// 770 "parser.lemon"
+// 797 "parser.lemon"
 {
 	yygotominor.yy95 = yymsp[-1].minor.yy95;
   yy_destructor(17,&yymsp[-2].minor);
   yy_destructor(18,&yymsp[0].minor);
 }
-// 2032 "parser.c"
+// 2059 "parser.c"
         break;
       case 106:
-// 778 "parser.lemon"
+// 805 "parser.lemon"
 {
 	yygotominor.yy95 = xx_ret_comment(yymsp[0].minor.yy0);
 }
-// 2039 "parser.c"
+// 2066 "parser.c"
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;
@@ -2077,7 +2104,7 @@ static void yy_syntax_error(
 ){
   xx_ARG_FETCH;
 #define TOKEN (yyminor.yy0)
-// 327 "parser.lemon"
+// 354 "parser.lemon"
 
 
 	//fprintf(stderr, "error!\n");
@@ -2093,7 +2120,7 @@ static void yy_syntax_error(
 
 	status->status = XX_PARSING_FAILED;
 
-// 2097 "parser.c"
+// 2124 "parser.c"
   xx_ARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 

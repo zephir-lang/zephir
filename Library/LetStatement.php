@@ -22,6 +22,9 @@ class LetStatement
 
 		$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
 
+		/**
+		 * Variables assigned are marked as initialized
+		 */
 		$symbolVariable->setInitialized(true);
 
 		$resolvedExpr = $expr->resolve($compilationContext);
@@ -33,10 +36,12 @@ class LetStatement
 					case 'int':
 						$compilationContext->codePrinter->output($variable . ' = ' . $resolvedExpr['value'] . ';');
 						break;
+					default:
+						throw new Exception("Unknown type");
 				}
 				break;
-			case 'var':
-				$symbolVariable->initVariant($codePrinter);
+			case 'variable':
+				$symbolVariable->initVariant($compilationContext->codePrinter);
 				switch ($resolvedExpr['type']) {
 					case 'int':
 						$compilationContext->codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr['value'] . ');');
@@ -44,8 +49,12 @@ class LetStatement
 					case 'string':
 						$compilationContext->codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr['value'] . '", 1);');
 						break;
+					default:
+						throw new Exception("Unknown type");
 				}
 				break;
+			default:
+				throw new Exception("Unknown type");
 		}
 
 		//echo $resolvedExpr['type'];

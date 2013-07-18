@@ -100,17 +100,17 @@ abstract class Router
 		/*return $this->_dependencyInjector;*/
 	}
 
-	/*
-	 | Adds a route to the router without any HTTP constraint
-	 |
-	 |<code>
-	 | $router->add('/about', 'About::index');
-	 |</code>
-	 |
-	 | @param string pattern
-	 | @param string/array paths
-	 | @param string httpMethods
-	 | @return Phalcon\Mvc\Router\Route
+	/**
+	 * Adds a route to the router without any HTTP constraint
+	 *
+	 *<code>
+	 * $router->add('/about', 'About::index');
+	 *</code>
+	 *
+	 * @param string pattern
+	 * @param string/array paths
+	 * @param string httpMethods
+	 * @return Phalcon\Mvc\Router\Route
 	 */
 	public function add(int pattern, paths=null, httpMethods=null)
 	{
@@ -118,6 +118,12 @@ abstract class Router
 
 		let method = 'GET';
 		if (method == 1) {
+
+			/**
+			 * This is a comment yay!
+			 */
+			echo method;
+
 			echo method;
 		}
 

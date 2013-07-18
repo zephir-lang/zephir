@@ -31,7 +31,6 @@ class Expression
 			default:
 				throw new Exception("Unknown " . $type);
 		}
-		echo $type;
 	}
 
 	public function compileEquals($expression, CompilationContext $compilationContext)

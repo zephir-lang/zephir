@@ -89,7 +89,11 @@ PHP_METHOD(Test_Router, add) {
 test_fetch_params(&pattern, &paths, &httpMethods);
 
 	zval *method;
+
+	ZVAL_STRING(method, "GET", 1);
+
 	if (ZEPHIR_IS_LONG(method, 1)) {
+		zval_print(method);
 		zval_print(method);
 	}
 }

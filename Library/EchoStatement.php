@@ -18,10 +18,10 @@ class EchoStatement
 				$variable = $compilationContext->symbolTable->getVariableForRead($expr['value']);
 
 				switch ($variable->getType()) {
-					case 310:
+					case 'int':
 						$compilationContext->codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
 						break;
-					case 313:
+					case 'variable':
 						$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
 						break;
 					default:
