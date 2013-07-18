@@ -55,7 +55,7 @@ TEST_INIT_CLASS(Test_Router) {
 	zend_declare_property_null(test_router_ce, SL("_routes"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_matchedRoute"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_matches"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_bool(test_router_ce, SL("_wasMatched"), 0, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_ce, SL("_wasMatched"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultNamespace"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultModule"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultController"), ZEND_ACC_PROTECTED TSRMLS_CC);
@@ -89,8 +89,9 @@ PHP_METHOD(Test_Router, add) {
 	test_fetch_params(&pattern, &paths, &httpMethods);
 
 	zval *method;
-	ZVAL_STRING(method, "GET", 1);
-	if (method == 1) {
+
+	if (ZEPHIR_IS_LONG(method, 1)) {
+
 	}
 }
 

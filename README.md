@@ -1,7 +1,7 @@
-XX
-==
+Zephir Language
+===============
 
-This is the repo for the new language.
+This is the repo for Zephir language.
 
 xx is the parser for the language:
 
@@ -25,7 +25,7 @@ The code produced is placed in ext/, there you can perform the standard compilat
 
 ```bash
 cd ext/
-phpize 
+phpize
 ./configure --enable-test
 make && sudo make install
 ```

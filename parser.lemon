@@ -21,7 +21,36 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T)
 {
 	json_object *ret = json_object_new_object();
 
-	json_object_object_add(ret, "type", json_object_new_int(type));
+	switch (type) {
+		case XX_T_IDENTIFIER:
+			json_object_object_add(ret, "type", json_object_new_string("variable"));
+			break;
+		case XX_T_INTEGER:
+			json_object_object_add(ret, "type", json_object_new_string("int"));
+			break;
+		case XX_T_DOUBLE:
+			json_object_object_add(ret, "type", json_object_new_string("double"));
+			break;
+		case XX_T_NULL:
+			json_object_object_add(ret, "type", json_object_new_string("null"));
+			break;
+		case XX_T_STRING:
+			json_object_object_add(ret, "type", json_object_new_string("string"));
+			break;
+		default:
+			if (type == XX_T_TRUE) {
+				json_object_object_add(ret, "type", json_object_new_string("bool"));
+				json_object_object_add(ret, "value", json_object_new_string("true"));
+			} else {
+				if (type == XX_T_FALSE) {
+					json_object_object_add(ret, "type", json_object_new_string("bool"));
+					json_object_object_add(ret, "value", json_object_new_string("false"));
+				} else {
+					fprintf(stderr, "literal??\n");
+				}
+			}
+	}
+
 	if (T) {
 		json_object_object_add(ret, "value", json_object_new_string(T->token));
 	}
@@ -29,11 +58,11 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T)
 	return ret;
 }
 
-static json_object *xx_ret_expr(int type, json_object *left, json_object *right, json_object *extra)
+static json_object *xx_ret_expr(char *type, json_object *left, json_object *right, json_object *extra)
 {
 	json_object *ret = json_object_new_object();
 
-	json_object_object_add(ret, "type", json_object_new_int(type));
+	json_object_object_add(ret, "type", json_object_new_string(type));
 
 	if (left) {
 		json_object_object_add(ret, "left", left);
@@ -731,7 +760,7 @@ xx_eval_expr(R) ::= xx_literal_expr(L) . {
 }
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
-	R = xx_ret_expr(XX_T_EQUALS, O1, O2, NULL);
+	R = xx_ret_expr("equals", O1, O2, NULL);
 }
 
 xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {

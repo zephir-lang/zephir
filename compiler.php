@@ -19,10 +19,13 @@ require 'Library/StatementsBlock.php';
 require 'Library/EchoStatement.php';
 require 'Library/LetStatement.php';
 require 'Library/DeclareStatement.php';
+require 'Library/IfStatement.php';
 require 'Library/Variable.php';
 require 'Library/Expression.php';
+require 'Library/CompiledExpression.php';
 require 'Library/CodePrinter.php';
 require 'Library/ClassMethodParameters.php';
+
 
 $c = new Compiler();
 $ir = $c->genIR();

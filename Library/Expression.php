@@ -18,16 +18,59 @@ class Expression
 	{
 		$type = $this->_expression['type'];
 		switch ($type) {
-			case 301:
+			case 'int':
 				return $this->_expression;
-				break;
-			case 303:
+			case 'string':
 				return $this->_expression;
-				break;
 			default:
 				throw new Exception("Unknown " . $type);
 		}
 		echo $type;
+	}
+
+	public function compileEquals($expression, SymbolTable $symbolTable, ClassDefinition $classDefinition=null)
+	{
+		if (!isset($expression['left'])) {
+			throw new Exception("Missing left part of the expression");
+		}
+
+		if (!isset($expression['right'])) {
+			throw new Exception("Missing right part of the expression");
+		}
+
+		//echo '[', $expression['left']['type'], ']', PHP_EOL;
+
+		$leftExpr = new Expression($expression['left']);
+		$left = $leftExpr->compile($symbolTable, $classDefinition);
+
+		$rightExpr = new Expression($expression['right']);
+		$right = $rightExpr->compile($symbolTable, $classDefinition);
+
+		switch ($left->getType()) {
+			case 'variable':
+
+				$variable = $symbolTable->getVariableForRead($expression['left']['value']);
+
+				switch ($right->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
+					default:
+						throw new Exception("Error Processing Request");
+				}
+				break;
+			case 'int':
+				switch ($right->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode());
+					case 'double':
+						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode());
+					default:
+						throw new Exception("Error Processing Request");
+				}
+				break;
+		}
+
+
 	}
 
 	/**
@@ -39,26 +82,16 @@ class Expression
 
 		$expression = $this->_expression;
 
-		if (isset($expression['left'])) {
-			$leftExpr = new Expression($expression['left']);
-			$left = $leftExpr->compile($symbolTable, $classDefinition);
-		}
-
-		if (isset($expression['right'])) {
-			$rightExpr = new Expression($expression['right']);
-			$right = $rightExpr->compile($symbolTable, $classDefinition);
-		}
-
 		$type = $expression['type'];
 		switch ($type) {
-			case 301:
-				return $this->_expression['value'];
-			case 303:
-				return $this->_expression['value'];
-			case 307:
-				return $this->_expression['value'];
-			case 400:
-				return $left . ' == ' . $right;
+			case 'int':
+				return new CompiledExpression('int', $this->_expression['value']);
+			case 'string':
+				return new CompiledExpression('string', $this->_expression['value']);
+			case 'variable':
+				return new CompiledExpression('variable', $this->_expression['value']);
+			case 'equals':
+				return $this->compileEquals($expression, $symbolTable, $classDefinition);
 			default:
 				throw new Exception("Unknown " . $type . " " . print_r($expression, true));
 		}
