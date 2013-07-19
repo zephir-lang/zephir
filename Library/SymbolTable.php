@@ -8,6 +8,8 @@
  */
 class SymbolTable
 {
+	protected $_mustGrownStack = false;
+
 	protected $_variables = array();
 
 	/**
@@ -15,7 +17,7 @@ class SymbolTable
 	 *
 	 * @param string $name
 	 * @return boolean
-	 */	
+	 */
 	public function hasVariable($name)
 	{
 		return isset($this->_variables[$name]);
@@ -39,7 +41,7 @@ class SymbolTable
 	 * Returns a variable in the symbol table
 	 *
 	 * @return \Variable
-	 */ 
+	 */
 	public function getVariable($name)
 	{
 		return $this->_variables[$name];
@@ -54,7 +56,7 @@ class SymbolTable
 	{
 		return $this->_variables;
 	}
-	
+
 	/**
 	 * Return a variable in the symbol table, it will be used for a read operation
 	 *
@@ -64,12 +66,12 @@ class SymbolTable
 	{
 
 		if (!$this->hasVariable($name)) {
-			throw new Exception("Cannot read variable '" . $name. "' because it wasn't defined");					
+			throw new Exception("Cannot read variable '" . $name. "' because it wasn't defined");
 		}
 
 		$variable = $this->getVariable($name);
 		if (!$variable->isInitialized()) {
-			throw new Exception("Variable '" . $expr['value'] . "' can't be used because is not initialized");					
+			throw new Exception("Variable '" . $name . "' can't be used because is not initialized");
 		}
 
 		$variable->increaseUses();
@@ -85,13 +87,23 @@ class SymbolTable
 	{
 
 		if (!$this->hasVariable($name)) {
-			throw new Exception("Cannot write variable '" . $name. "' because it wasn't defined");					
+			throw new Exception("Cannot write variable '" . $name. "' because it wasn't defined");
 		}
 
-		$variable = $this->getVariable($name);		
+		$variable = $this->getVariable($name);
 		$variable->increaseUses();
 
 		return $variable;
+	}
+
+	/**
+	 * Return a variable in the symbol table, it will be used for a write operation
+	 *
+	 * @return \Variable
+	 */
+	public function mustGrownStack($mustGrownStack)
+	{
+		$this->_mustGrownStack = $mustGrownStack;
 	}
 
 }

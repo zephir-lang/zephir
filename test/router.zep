@@ -73,17 +73,39 @@ abstract class Router
 	/**
 	 * Phalcon\Mvc\Router constructor
 	 *
-	 * @param boolean $defaultRoutes
+	 * @param boolean defaultRoutes
 	 */
-	public function __construct(defaultRoutes)
+	public function __construct(defaultRoutes=true)
 	{
+		var routes, paths, actionPattern, route, paramsPattern;
 
+		let routes = [];
+		if (defaultRoutes === true) {
+
+			/**
+			 * Two routes are added by default to match /:controller/:action and /:controller/:action/:params
+			 */
+			let paths = ['controller': 1];
+			let actionPattern = '#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#';
+			let route = new Phalcon\Mvc\Router\Route(actionPattern, paths);
+			let routes[] = route;
+
+			let paths = ['controller': 1, 'action': 2, 'params': 3];
+			let paramsPattern = '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#';
+			let route = new Phalcon\Mvc\Router\Route(paramsPattern, paths);
+			let routes[] = route;
+		}
+
+		let params = [];
+
+		let this->_params = params;
+		let this->_routes = routes;
 	}
 
-	/*
-	 | Sets the dependency injector
-	 |
-	 | @param Phalcon\DiInterface $dependencyInjector
+	/**
+	 * Sets the dependency injector
+	 *
+	 * @param Phalcon\DiInterface dependencyInjector
 	 */
 	public function setDI(dependencyInjector)
 	{
@@ -91,9 +113,9 @@ abstract class Router
 	}
 
 	/*
-	 | Returns the internal dependency injector
-	 |
-	 | @return Phalcon\DiInterface
+	 * Returns the internal dependency injector
+	 *
+	 * @return Phalcon\DiInterface
 	 */
 	public function getDI()
 	{

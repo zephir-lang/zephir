@@ -205,6 +205,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			/*case XX_T_ELSE:
 				xx_(xx_parser, XX_ELSE, NULL, parser_status);
 				break;*/
+			case XX_T_NEW:
+				xx_(xx_parser, XX_NEW, NULL, parser_status);
+				break;
 			case XX_T_CONST:
 				xx_(xx_parser, XX_CONST, NULL, parser_status);
 				break;
@@ -220,15 +223,21 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_EQUALS:
 				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
 				break;
+			case XX_T_IDENTICAL:
+				xx_(xx_parser, XX_IDENTICAL, NULL, parser_status);
+				break;
 			case XX_T_LESS:
 				xx_(xx_parser, XX_LESS, NULL, parser_status);
 				break;
 			case XX_T_GREATER:
 				xx_(xx_parser, XX_GREATER, NULL, parser_status);
 				break;
-			/*case XX_T_COLON:
+			case XX_T_COLON:
 				xx_(xx_parser, XX_COLON, NULL, parser_status);
-				break;*/
+				break;
+			case XX_T_ARROW:
+				xx_(xx_parser, XX_ARROW, NULL, parser_status);
+				break;
 
 			case XX_T_PARENTHESES_OPEN:
 				xx_(xx_parser, XX_PARENTHESES_OPEN, NULL, parser_status);
@@ -244,12 +253,12 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				xx_(xx_parser, XX_BRACKET_CLOSE, NULL, parser_status);
 				break;
 
-			/*case XX_T_SBRACKET_OPEN:
+			case XX_T_SBRACKET_OPEN:
 				xx_(xx_parser, XX_SBRACKET_OPEN, NULL, parser_status);
 				break;
 			case XX_T_SBRACKET_CLOSE:
 				xx_(xx_parser, XX_SBRACKET_CLOSE, NULL, parser_status);
-				break;*/
+				break;
 
 			case XX_T_NULL:
 				xx_(xx_parser, XX_NULL, NULL, parser_status);

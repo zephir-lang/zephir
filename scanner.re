@@ -147,6 +147,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'new' {
+			token->opcode = XX_T_NEW;
+			return 0;
+		}
+
 		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		STRING {
 			token->opcode = XX_T_STRING;
@@ -219,6 +224,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"===" {
+			token->opcode = XX_T_IDENTICAL;
+			return 0;
+		}
+
 		"<" {
 			token->opcode = XX_T_LESS;
 			return 0;
@@ -226,6 +236,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		">" {
 			token->opcode = XX_T_GREATER;
+			return 0;
+		}
+
+		"->" {
+			token->opcode = XX_T_ARROW;
 			return 0;
 		}
 

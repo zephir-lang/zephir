@@ -14,6 +14,9 @@ class IfStatement
 		$this->_statement = $statement;
 	}
 
+	/**
+	 *
+	 */
 	public function compile(CompilationContext $compilationContext)
 	{
 		$expr = new Expression($this->_statement['expr']);

@@ -43,7 +43,7 @@ class Variable
 		return $this->_numberUses;
 	}
 
-	public function setInitialized($initialized)
+	public function setIsInitialized($initialized)
 	{
 		$this->_initialized = $initialized;
 	}
@@ -58,8 +58,30 @@ class Variable
 		return $this->_initialized;
 	}
 
-	public function initVariant(CodePrinter $codePrinter)
+	/**
+	 * Set if the symbol is a parameter of the method or not
+	 *
+	 * @param boolean $isExternal
+	 */
+	public function setIsExternal($isExternal)
 	{
+		$this->_isExternal = $isExternal;
+		$this->_variantInits = 1;
+	}
+
+	/**
+	 * Initializes a variant variable
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
+	public function initVariant(CompilationContext $compilationContext)
+	{
+		$compilationContext->symbolTable->mustGrownStack(true);
+		if ($this->_variantInits > 0) {
+			$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+		} else {
+			$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+		}
 		$this->_variantInits++;
 	}
 

@@ -68,20 +68,22 @@ class ClassDefinition
 	{
 		$compilationContext->classDefinition = $this;
 
-		$compilationContext->codePrinter->outputBlankLine();
+		$codePrinter = $compilationContext->codePrinter;
 
-		$compilationContext->codePrinter->output('TEST_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
-		$compilationContext->codePrinter->outputBlankLine();
+		$codePrinter->outputBlankLine();
 
-		$compilationContext->codePrinter->increaseLevel();
+		$codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
+		$codePrinter->outputBlankLine();
+
+		$codePrinter->increaseLevel();
 
 		/**
 		 * Register the class
 		 */
-		$compilationContext->codePrinter->output('TEST_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
+		$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
 			strtolower($this->getName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
 			strtolower($this->getName()) . '_method_entry, 0);');
-		$compilationContext->codePrinter->outputBlankLine();
+		$codePrinter->outputBlankLine();
 
 		/**
 		 * Compile properties
@@ -90,27 +92,29 @@ class ClassDefinition
 			$property->compile($compilationContext);
 		}
 
-		$compilationContext->codePrinter->outputBlankLine();
-		$compilationContext->codePrinter->output('return SUCCESS;');
+		$codePrinter->outputBlankLine();
+		$codePrinter->output('return SUCCESS;');
 
-		$compilationContext->codePrinter->outputBlankLine();
-		$compilationContext->codePrinter->decreaseLevel();
+		$codePrinter->outputBlankLine();
+		$codePrinter->decreaseLevel();
 
-		$compilationContext->codePrinter->output('}');
-		$compilationContext->codePrinter->outputBlankLine();
+		$codePrinter->output('}');
+		$codePrinter->outputBlankLine();
 
 		/**
 		 * Compile methods
 		 */
 		foreach ($this->getMethods() as $method) {
 
-			$compilationContext->codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
-			$compilationContext->codePrinter->outputBlankLine();
+			$codePrinter->outputDocBlock($method->getDocBlock());
+
+			$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+			$codePrinter->outputBlankLine();
 
 			$method->compile($compilationContext);
 
-			$compilationContext->codePrinter->output('}');
-			$compilationContext->codePrinter->outputBlankLine();
+			$codePrinter->output('}');
+			$codePrinter->outputBlankLine();
 		}
 
 	}

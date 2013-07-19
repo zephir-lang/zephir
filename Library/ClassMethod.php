@@ -16,22 +16,31 @@ class ClassMethod
 
 	protected $_statements;
 
+	protected $_docblock;
+
 	/**
 	 * ClassMethod constructor
 	 *
 	 * @param string $visibility
+	 * @param string $name
 	 */
-	public function __construct($visibility, $name, $parameters, StatementsBlock $statements=null)
+	public function __construct($visibility, $name, $parameters, StatementsBlock $statements=null, $docblock=null)
 	{
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_parameters = $parameters;
 		$this->_statements = $statements;
+		$this->_docblock = $docblock;
 	}
 
 	public function getName()
 	{
 		return $this->_name;
+	}
+
+	public function getDocBlock()
+	{
+		return $this->_docblock;
 	}
 
 	public function getVisibilityAccesor()
@@ -53,10 +62,24 @@ class ClassMethod
 		if (is_object($this->_parameters)) {
 			$params = array();
 			foreach ($this->_parameters->getParameters() as $parameter) {
-				$params[] = '&' . $parameter['name'];
+
+				if (isset($parameter['default_value'])) {
+					//memory_grow, required_params, optional_params
+				}
+
+				//$params[] = '&' . $parameter['name'];
+
+				if (isset($parameter['data-type'])) {
+					$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
+				} else {
+					$symbol = $symbolTable->addVariable('variable', $parameter['name']);
+				}
+
+				$symbol->setIsExternal(true);
+				$symbol->setIsInitialized(true);
 			}
-			$compilationContext->codePrinter->output('test_fetch_params(' . join(', ', $params) . ');');
-			$compilationContext->codePrinter->outputBlankLine();
+			//$compilationContext->codePrinter->output('zephir_fetch_params(' . join(', ', $params) . ');');
+			//$compilationContext->codePrinter->outputBlankLine();
 		}
 
 		/**

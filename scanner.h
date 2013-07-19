@@ -38,6 +38,7 @@
 #define XX_T_IF 363
 #define XX_T_ELSE 364
 #define XX_T_WHILE 365
+#define XX_T_NEW 366
 
 /* Operators */
 #define XX_T_AT '@'
@@ -47,14 +48,16 @@
 #define XX_T_LESS '<'
 #define XX_T_GREATER '>'
 #define XX_T_COLON ':'
-#define XX_T_DOTCOMMA ':'
+#define XX_T_DOTCOMMA ';'
 #define XX_T_BRACKET_OPEN '{'
 #define XX_T_BRACKET_CLOSE '}'
 #define XX_T_SBRACKET_OPEN '['
 #define XX_T_SBRACKET_CLOSE ']'
 #define XX_T_PARENTHESES_OPEN '('
 #define XX_T_PARENTHESES_CLOSE ')'
-#define XX_T_EQUALS 400
+#define XX_T_ARROW 400
+#define XX_T_EQUALS 401
+#define XX_T_IDENTICAL 402
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

@@ -1,37 +1,37 @@
 
-#ifndef PHP_TEST_H
-#define PHP_TEST_H 1
+#ifndef PHP_ZEPHIR_H
+#define PHP_ZEPHIR_H 1
 
-#define PHP_TEST_VERSION "0.0.1"
-#define PHP_TEST_EXTNAME "test"
+#define PHP_ZEPHIR_VERSION "0.0.1"
+#define PHP_ZEPHIR_EXTNAME "test"
 
-#define PHALCON_MAX_MEMORY_STACK 48
+//#define PHALCON_MAX_MEMORY_STACK 48
 
 /** Memory frame */
-typedef struct _test_memory_entry {
+typedef struct _zephir_memory_entry {
 	int pointer;
 	zval ***addresses;
 	int hash_pointer;
 	zval ***hash_addresses;
-	struct _test_memory_entry *prev;
-	struct _test_memory_entry *next;
-} test_memory_entry;
+	struct _zephir_memory_entry *prev;
+	struct _zephir_memory_entry *next;
+} zephir_memory_entry;
 
 /** Virtual Symbol Table */
-typedef struct _test_symbol_table {
-	struct _test_memory_entry *scope;
+typedef struct _zephir_symbol_table {
+	struct _zephir_memory_entry *scope;
 	HashTable *symbol_table;
-	struct _test_symbol_table *prev;
-} test_symbol_table;
+	struct _zephir_symbol_table *prev;
+} zephir_symbol_table;
 
 ZEND_BEGIN_MODULE_GLOBALS(test)
 
 	/** Memory */
-	test_memory_entry *start_memory;
-	test_memory_entry *active_memory;
+	zephir_memory_entry *start_memory;
+	zephir_memory_entry *active_memory;
 
 	/** Virtual Symbol Tables */
-	test_symbol_table *active_symbol_table;
+	zephir_symbol_table *active_symbol_table;
 
 	/** Function cache */
 	HashTable *function_cache;
@@ -48,9 +48,9 @@ ZEND_END_MODULE_GLOBALS(test)
 ZEND_EXTERN_MODULE_GLOBALS(test)
 
 //#ifdef ZTS
-//	#define PHALCON_GLOBAL(v) TSRMG(test_globals_id, zend_phalcon_globals *, v)
+//	#define PHALCON_GLOBAL(v) TSRMG(zephir_globals_id, zend_phalcon_globals *, v)
 //#else
-//	#define PHALCON_GLOBAL(v) (test_globals.v)
+//	#define PHALCON_GLOBAL(v) (zephir_globals.v)
 //#endif
 
 //#ifdef ZTS
@@ -59,15 +59,15 @@ ZEND_EXTERN_MODULE_GLOBALS(test)
 //	#define PHALCON_VGLOBAL &(phalcon_globals)
 //#endif
 
-extern zend_module_entry test_module_entry;
-#define phpext_test_ptr &test_module_entry
+extern zend_module_entry zephir_module_entry;
+#define phpext_zephir_ptr &zephir_module_entry
 
 #endif
 
 #if PHP_VERSION_ID >= 50400
-	#define TEST_INIT_FUNCS(class_functions) static const zend_function_entry class_functions[] =
+	#define ZEPHIR_INIT_FUNCS(class_functions) static const zend_function_entry class_functions[] =
 #else
-	#define TEST_INIT_FUNCS(class_functions) static const function_entry class_functions[] =
+	#define ZEPHIR_INIT_FUNCS(class_functions) static const function_entry class_functions[] =
 #endif
 
 #ifndef PHP_FE_END
@@ -76,18 +76,18 @@ extern zend_module_entry test_module_entry;
 
 /** Define FASTCALL */
 #if defined(__GNUC__) && ZEND_GCC_VERSION >= 3004 && defined(__i386__)
-# define TEST_FASTCALL __attribute__((fastcall))
+# define ZEPHIR_FASTCALL __attribute__((fastcall))
 #elif defined(_MSC_VER) && defined(_M_IX86)
-# define TEST_FASTCALL __fastcall
+# define ZEPHIR_FASTCALL __fastcall
 #else
-# define TEST_FASTCALL
+# define ZEPHIR_FASTCALL
 #endif
 
-#define TEST_INIT_CLASS(name) \
-	int test_ ##name## _init(INIT_FUNC_ARGS)
+#define ZEPHIR_INIT_CLASS(name) \
+	int zephir_ ##name## _init(INIT_FUNC_ARGS)
 
-#define TEST_INIT(name) \
-	if (test_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) { \
+#define ZEPHIR_INIT(name) \
+	if (zephir_ ##name## _init(INIT_FUNC_ARGS_PASSTHRU) == FAILURE) { \
 		return FAILURE; \
 	}
 

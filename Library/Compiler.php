@@ -15,8 +15,8 @@ class Compiler
 	 */
 	public function genIR()
 	{
-		system("./xx test/router.xx 2> .temp/router.xx.js");
-		return json_decode(file_get_contents(".temp/router.xx.js"), true);
+		system("./xx test/router.zep 2> .temp/router.zep.js");
+		return json_decode(file_get_contents(".temp/router.zep.js"), true);
 	}
 
 	public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
@@ -42,7 +42,8 @@ class Compiler
 					$method['visibility'],
 					$method['name'],
 					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
-					isset($method['statements']) ? new StatementsBlock($method['statements']) : null
+					isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
+					isset($method['docblock']) ? $method['docblock'] : null
 				));
 			}
 		}
@@ -98,6 +99,9 @@ class Compiler
 
 			switch ($topStatement['type']) {
 				case 'namespace':
+					if ($namespace !== null) {
+						throw new Exception("The namespace must be defined just one time");
+					}
 					$namespace = $topStatement['name'];
 					break;
 			}
@@ -115,10 +119,15 @@ class Compiler
 
 		$codePrinter->outputBlankLine();
 
+		$class = false;
 		foreach ($ir as $topStatement) {
 
 			switch ($topStatement['type']) {
 				case 'class':
+					if ($class) {
+						throw new Exception("More than one class defined in the same file");
+					}
+					$class = true;
 					$this->compileClass($compilationContext, $namespace, $topStatement);
 					break;
 				case 'comment':

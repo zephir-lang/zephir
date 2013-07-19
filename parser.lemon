@@ -6,7 +6,8 @@
 %name xx_
 
 %left COMMA .
-%left EQUALS .
+%left EQUALS IDENTICAL .
+%right NEW .
 
 %include {
 
@@ -73,6 +74,18 @@ static json_object *xx_ret_expr(char *type, json_object *left, json_object *righ
 	if (extra) {
 		json_object_object_add(ret, "extra", extra);
 	}
+
+	return ret;
+}
+
+static json_object *xx_ret_array_item(json_object *key, json_object *value)
+{
+	json_object *ret = json_object_new_object();
+
+	if (key) {
+		json_object_object_add(ret, "key", key);
+	}
+	json_object_object_add(ret, "value", value);
 
 	return ret;
 }
@@ -255,15 +268,16 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 	return ret;
 }
 
-static json_object *xx_ret_let_statement(xx_parser_token *D, xx_parser_token *T, json_object *expr)
+static json_object *xx_ret_let_statement(char *type, xx_parser_token *V, xx_parser_token *P, json_object *expr)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("let"));
-	if (D) {
-		json_object_object_add(ret, "domain", json_object_new_string(D->token));
+	json_object_object_add(ret, "assign-type", json_object_new_string(type));
+	json_object_object_add(ret, "variable", json_object_new_string(V->token));
+	if (P) {
+		json_object_object_add(ret, "property", json_object_new_string(P->token));
 	}
-	json_object_object_add(ret, "variable", json_object_new_string(T->token));
 	json_object_object_add(ret, "expr", expr);
 
 	return ret;
@@ -334,6 +348,20 @@ static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *exp
 	json_object_object_add(ret, "variable", json_object_new_string(T->token));
 	if (expr) {
 		json_object_object_add(ret, "expr", expr);
+	}
+
+	return ret;
+}
+
+static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *parameters)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("new"));
+	json_object_object_add(ret, "class", json_object_new_string(T->token));
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
 	}
 
 	return ret;
@@ -682,12 +710,16 @@ xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRAC
 	R = xx_ret_if_statement(E, L, NULL);
 }
 
-xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
-	R = xx_ret_let_statement(NULL, I, E);
+xx_let_statement(R) ::= LET IDENTIFIER(I) ASSIGN xx_assign_expr(E) DOTCOMMA . {
+	R = xx_ret_let_statement("variable", I, NULL, E);
 }
 
-xx_let_statement(R) ::= LET IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_expr(E) DOTCOMMA . {
-	R = xx_ret_let_statement(D, I, E);
+xx_let_statement(R) ::= LET IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_assign_expr(E) DOTCOMMA . {
+	R = xx_ret_let_statement("object-property", D, I, E);
+}
+
+xx_let_statement(R) ::= LET IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) DOTCOMMA . {
+	R = xx_ret_let_statement("variable-append", I, NULL, E);
 }
 
 xx_echo_statement(R) ::= ECHO xx_literal_expr(E) DOTCOMMA . {
@@ -734,31 +766,95 @@ xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
 	R = xx_ret_declare_variable(I, E);
 }
 
-xx_expr(R) ::= IDENTIFIER(I) . {
+xx_assign_expr(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I);
 }
 
-xx_expr(R) ::= INTEGER(I) . {
+xx_assign_expr(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I);
 }
 
-xx_expr(R) ::= STRING(S) . {
+xx_assign_expr(R) ::= STRING(S) . {
 	R = xx_ret_literal(XX_T_STRING, S);
 }
 
-xx_expr(R) ::= DOUBLE(D) . {
+xx_assign_expr(R) ::= DOUBLE(D) . {
 	R = xx_ret_literal(XX_T_DOUBLE, D);
 }
 
-xx_expr(R) ::= NULL . {
+xx_assign_expr(R) ::= NULL . {
 	R = xx_ret_literal(XX_T_NULL, NULL);
 }
 
-xx_expr(R) ::= FALSE . {
+xx_assign_expr(R) ::= FALSE . {
 	R = xx_ret_literal(XX_T_FALSE, NULL);
 }
 
-xx_expr(R) ::= TRUE . {
+xx_assign_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
+	R = xx_ret_expr("empty-array", NULL, NULL, NULL);
+}
+
+xx_assign_expr(R) ::= SBRACKET_OPEN xx_array_list(L) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array", L, NULL, NULL);
+}
+
+xx_assign_expr(R) ::= NEW IDENTIFIER(I) . {
+	R = xx_ret_new_instance(I, NULL);
+}
+
+xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_new_instance(I, NULL);
+}
+
+xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_new_instance(I, P);
+}
+
+xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_call_parameters(R) ::= xx_call_parameter(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
+xx_call_parameter(R) ::= xx_literal_expr(E) . {
+	R = E;
+}
+
+xx_call_parameter(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+}
+
+xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {
+	R = xx_ret_list(L, I);
+}
+
+xx_array_list(R) ::= xx_array_item(I) . {
+	R = xx_ret_list(NULL, I);
+}
+
+xx_array_item(R) ::= xx_array_key(K) COLON xx_array_value(V) . {
+	R = xx_ret_array_item(K, V);
+}
+
+xx_array_item(R) ::= xx_array_value(V) . {
+	R = xx_ret_array_item(NULL, V);
+}
+
+xx_array_key(R) ::= STRING(S) . {
+	R = xx_ret_literal(XX_T_STRING, S);
+}
+
+xx_array_key(R) ::= INTEGER(I) . {
+	R = xx_ret_literal(XX_T_INTEGER, I);
+}
+
+xx_array_value(R) ::= xx_literal_expr(L) . {
+	R = L;
+}
+
+xx_assign_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL);
 }
 
@@ -792,6 +888,10 @@ xx_eval_expr(R) ::= xx_literal_expr(L) . {
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
 	R = xx_ret_expr("equals", O1, O2, NULL);
+}
+
+xx_eval_expr(R) ::= xx_eval_expr(O1) IDENTICAL xx_eval_expr(O2) . {
+	R = xx_ret_expr("identical", O1, O2, NULL);
 }
 
 xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {
