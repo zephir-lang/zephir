@@ -43,6 +43,11 @@ class ClassMethod
 		return $this->_docblock;
 	}
 
+	public function getParameters()
+	{
+		return $this->_parameters;
+	}
+
 	public function getVisibilityAccesor()
 	{
 		return 'ZEND_ACC_PROTECTED';

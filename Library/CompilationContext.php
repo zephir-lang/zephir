@@ -14,6 +14,11 @@ class CompilationContext
 	public $codePrinter;
 
 	/**
+	 * Code printer for the header
+	 */
+	public $headerPrinter;
+
+	/**
 	 * Current symbol table
 	 */
 	public $symbolTable;

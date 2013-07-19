@@ -126,6 +126,57 @@ class ClassDefinition
 			$codePrinter->outputBlankLine(true);
 		}
 
+		/**
+		 * Create a code printer for the header file
+		 */
+		$codePrinter = new CodePrinter();
+
+		$codePrinter->outputBlankLine();
+		$codePrinter->output('extern zend_class_entry *' . $this->getClassEntry() . ';');
+		$codePrinter->outputBlankLine();
+
+		$codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ');');
+		$codePrinter->outputBlankLine();
+
+		$methods = $this->getMethods();
+
+		if (count($methods)) {
+			foreach ($methods as $method) {
+				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+			}
+			$codePrinter->outputBlankLine();
+		}
+
+		foreach ($methods as $method) {
+
+			$parameters = $method->getParameters();
+
+			if (count($parameters)) {
+				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', 0, 0, 0)');
+				foreach ($parameters as $parameters) {
+					foreach ($parameters as $parameter) {
+						$codePrinter->output('	ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+					}
+				}
+				$codePrinter->output('ZEND_END_ARG_INFO()');
+				$codePrinter->outputBlankLine();
+			}
+		}
+
+		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_entry) {');
+		foreach ($methods as $method) {
+
+			$parameters = $method->getParameters();
+			if (count($parameters)) {
+				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ZEND_ACC_PUBLIC)');
+			} else {
+				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ZEND_ACC_PUBLIC)');
+			}
+		}
+		$codePrinter->output('	PHP_FE_END');
+		$codePrinter->output('};');
+
+		$compilationContext->headerPrinter = $codePrinter;
 	}
 
 }

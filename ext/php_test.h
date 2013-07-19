@@ -2,10 +2,10 @@
 #ifndef PHP_ZEPHIR_H
 #define PHP_ZEPHIR_H 1
 
-#define PHP_ZEPHIR_VERSION "0.0.1"
-#define PHP_ZEPHIR_EXTNAME "test"
+#define PHP_TEST_VERSION "0.0.1"
+#define PHP_TEST_EXTNAME "test"
 
-//#define PHALCON_MAX_MEMORY_STACK 48
+#define ZEPHIR_MAX_MEMORY_STACK 48
 
 /** Memory frame */
 typedef struct _zephir_memory_entry {

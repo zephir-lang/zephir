@@ -159,6 +159,8 @@ class Compiler
 		}
 
 		file_put_contents('ext/router.c', $codePrinter->getOutput());
+
+		file_put_contents('ext/router.h', $compilationContext->headerPrinter->getOutput());
 	}
 
 }
