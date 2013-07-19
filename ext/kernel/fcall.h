@@ -1,4 +1,7 @@
 
+#ifndef ZEPHIR_FCALL_H
+#define ZEPHIR_FCALL_H 1
+
 /* Macros to call functions in the PHP userland */
 #define zephir_call_func(return_value, func_name) if(zephir_call_func_ex(return_value, func_name, sizeof(func_name)-1, 1 TSRMLS_CC)==FAILURE) return;
 #define zephir_call_func_noret(func_name) if(zephir_call_func_ex(NULL, func_name, sizeof(func_name)-1, 0 TSRMLS_CC)==FAILURE) return;
@@ -189,4 +192,6 @@ int zephir_lookup_class(const char *name, int name_length, zend_class_entry ***c
 
 #ifndef zend_error_noreturn
 #define zend_error_noreturn zend_error
+#endif
+
 #endif

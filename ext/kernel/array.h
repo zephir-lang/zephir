@@ -1,4 +1,7 @@
 
+#ifndef ZEPHIR_ARRAY_H
+#define ZEPHIR_ARRAY_H 1
+
 /** Check for index existence */
 extern int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index);
 extern int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index);
@@ -66,3 +69,5 @@ extern void zephir_fast_array_merge(zval *return_value, zval **array1, zval **ar
 
 /** Recursive merge */
 extern void zephir_array_merge_recursive_n(zval **a1, zval *a2);
+
+#endif

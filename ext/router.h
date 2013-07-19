@@ -22,7 +22,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_add, 0, 0, 0)
 	ZEND_ARG_INFO(0, httpMethods)
 ZEND_END_ARG_INFO()
 
-ZEPHIR_INIT_FUNCS(test_router_entry) {
+ZEPHIR_INIT_FUNCS(test_router_method_entry) {
 	PHP_ME(Test_Router, __construct, arginfo_test_router___construct, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, setDI, arginfo_test_router_setDI, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, getDI, NULL, ZEND_ACC_PUBLIC)

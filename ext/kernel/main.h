@@ -1,4 +1,7 @@
 
+#ifndef ZEPHIR_MAIN_H
+#define ZEPHIR_MAIN_H 1
+
 /** Main macros */
 #define PH_DEBUG 0
 
@@ -29,7 +32,7 @@ extern PHPAPI zend_class_entry *spl_ce_BadMethodCallException;
 #endif
 
 /* Startup functions */
-extern void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC);
+extern void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC);
 extern zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_class_entry, char *parent_name TSRMLS_DC);
 
 /* Globals functions */
@@ -256,8 +259,8 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		zephir_ ##name## _ce = zend_register_internal_class(&ce TSRMLS_CC); \
-		zephir_ ##name## _ce->ce_flags |= flags;  \
+		test_ ##name## _ce = zend_register_internal_class(&ce TSRMLS_CC); \
+		test_ ##name## _ce->ce_flags |= flags;  \
 	}
 
 #define ZEPHIR_REGISTER_CLASS_EX(ns, class_name, name, parent, methods, flags) \
@@ -265,12 +268,12 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		zephir_ ##name## _ce = zend_register_internal_class_ex(&ce, NULL, parent TSRMLS_CC); \
-		if (!zephir_ ##name## _ce) { \
+		test_ ##name## _ce = zend_register_internal_class_ex(&ce, NULL, parent TSRMLS_CC); \
+		if (!test_ ##name## _ce) { \
 			zephir_inherit_not_found(parent, ZEND_NS_NAME(#ns, #class_name)); \
 			return FAILURE;	\
 		}  \
-		zephir_ ##name## _ce->ce_flags |= flags;  \
+		test_ ##name## _ce->ce_flags |= flags;  \
 	}
 
 #define ZEPHIR_REGISTER_INTERFACE(ns, classname, name, methods) \
@@ -278,7 +281,7 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		zephir_ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
+		test_ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
 	}
 
 #define ZEPHIR_REGISTER_INTERFACE_EX(ns, classname, name, parent, methods) \
@@ -286,8 +289,8 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		zephir_ ##name## _ce = zephir_register_internal_interface_ex(&ce, parent TSRMLS_CC); \
-		if (!zephir_ ##name## _ce) { \
+		test_ ##name## _ce = zephir_register_internal_interface_ex(&ce, parent TSRMLS_CC); \
+		if (!test_ ##name## _ce) { \
 			fprintf(stderr, "Can't register interface with parent: %s", parent); \
 			return FAILURE;	\
 		}  \
@@ -306,3 +309,4 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		} \
 	}
 
+#endif

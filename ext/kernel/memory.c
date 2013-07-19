@@ -89,7 +89,7 @@ inline void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC) {
 int ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D) {
 
 	zephir_memory_entry *entry, *start;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	if (!zephir_globals_ptr->start_memory) {
 		start = (zephir_memory_entry *) emalloc(sizeof(zephir_memory_entry));
@@ -119,7 +119,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D) {
 	register int i;
 	zephir_memory_entry *prev, *active_memory;
 	zephir_symbol_table *active_symbol_table;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	active_memory = zephir_globals_ptr->active_memory;
 	if (active_memory == NULL) {
@@ -212,7 +212,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D) {
  */
 int ZEPHIR_FASTCALL zephir_clean_shutdown_stack(TSRMLS_D) {
 
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	#if !ZEND_DEBUG && PHP_VERSION_ID <= 50400
 
@@ -415,7 +415,7 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin) {
 void zephir_create_symbol_table(TSRMLS_D) {
 
 	zephir_symbol_table *entry;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	HashTable *symbol_table;
 
 	#ifndef ZEPHIR_RELEASE

@@ -1208,7 +1208,7 @@ int zephir_create_instance(zval *return_value, const zval *class_name TSRMLS_DC)
 	zend_class_entry *ce;
 
 	if (Z_TYPE_P(class_name) != IS_STRING) {
-		zephir_throw_exception_string(zephir_exception_ce, SL("Invalid class name"), 1 TSRMLS_CC);
+		//zephir_throw_exception_string(zephir_exception_ce, SL("Invalid class name"), 1 TSRMLS_CC);
 		return FAILURE;
 	}
 
@@ -1240,12 +1240,12 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 	HashTable *params_hash;
 
 	if (Z_TYPE_P(class_name) != IS_STRING) {
-		zephir_throw_exception_string(zephir_exception_ce, SL("Invalid class name"), 1 TSRMLS_CC);
+		//zephir_throw_exception_string(zephir_exception_ce, SL("Invalid class name"), 1 TSRMLS_CC);
 		return FAILURE;
 	}
 
 	if (Z_TYPE_P(params) != IS_ARRAY) {
-		zephir_throw_exception_string(zephir_exception_ce, SL("Instantiation parameters must be an array"), 1 TSRMLS_CC);
+		//zephir_throw_exception_string(zephir_exception_ce, SL("Instantiation parameters must be an array"), 1 TSRMLS_CC);
 		return FAILURE;
 	}
 

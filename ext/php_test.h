@@ -47,17 +47,17 @@ ZEND_END_MODULE_GLOBALS(test)
 
 ZEND_EXTERN_MODULE_GLOBALS(test)
 
-//#ifdef ZTS
-//	#define PHALCON_GLOBAL(v) TSRMG(zephir_globals_id, zend_phalcon_globals *, v)
-//#else
-//	#define PHALCON_GLOBAL(v) (zephir_globals.v)
-//#endif
+#ifdef ZTS
+	#define ZEPHIR_GLOBAL(v) TSRMG(test_globals_id, zend_test_globals *, v)
+#else
+	#define ZEPHIR_GLOBAL(v) (test_globals.v)
+#endif
 
-//#ifdef ZTS
-//	#define PHALCON_VGLOBAL ((zend_phalcon_globals *) (*((void ***) tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(phalcon_globals_id)])
-//#else
-//	#define PHALCON_VGLOBAL &(phalcon_globals)
-//#endif
+#ifdef ZTS
+	#define ZEPHIR_VGLOBAL ((zend_test_globals *) (*((void ***) tsrm_ls))[TSRM_UNSHUFFLE_RSRC_ID(test_globals_id)])
+#else
+	#define ZEPHIR_VGLOBAL &(test_globals)
+#endif
 
 extern zend_module_entry zephir_module_entry;
 #define phpext_zephir_ptr &zephir_module_entry

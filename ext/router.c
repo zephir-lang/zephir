@@ -93,7 +93,8 @@ PHP_METHOD(Test_Router, __construct) {
 		ZVAL_STRING(actionPattern, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
 
 		ZEPHIR_INIT_VAR(route);
-		object_init_ex(route, test_router_route_ce);
+		//object_init_ex(route, test_router_route_ce);
+		object_init(route);
 		zephir_call_method_p2_noret(route, "__construct", actionPattern, paths);
 
 		ZEPHIR_INIT_NVAR(routes);
@@ -109,7 +110,8 @@ PHP_METHOD(Test_Router, __construct) {
 		ZVAL_STRING(paramsPattern, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
 
 		ZEPHIR_INIT_NVAR(route);
-		object_init_ex(route, test_router_route_ce);
+		//object_init_ex(route, test_router_route_ce);
+		object_init(route);
 		zephir_call_method_p2_noret(route, "__construct", paramsPattern, paths);
 
 		ZEPHIR_INIT_NVAR(routes);

@@ -1,4 +1,7 @@
 
+#ifndef ZEPHIR_MEMORY_H
+#define ZEPHIR_MEMORY_H 1
+
 #define ZEPHIR_MEMORY_FRAME_CHUNK 16
 
 /* Variable Tracking */
@@ -187,3 +190,5 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 	} else { \
 		zval_ptr_dtor(&var); \
 	}
+
+#endif

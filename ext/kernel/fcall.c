@@ -1319,7 +1319,7 @@ int zephir_call_user_function(HashTable *function_table, zval **object_pp, zval 
 	zend_uint i;
 	int ex_retval;
 	zval *local_retval_ptr = NULL;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	zephir_globals_ptr->recursive_lock++;
 

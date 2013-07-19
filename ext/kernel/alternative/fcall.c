@@ -172,7 +172,7 @@ static inline zend_bool zephir_alt_is_callable_method_ex(zend_class_entry *ce, c
  */
 int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name, unsigned int method_len, unsigned long method_key TSRMLS_DC)
 {
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_uint i, exists = 0, is_zephir_function = 0;
 	zend_class_entry *current_scope;
 	zend_class_entry *current_called_scope;
@@ -516,7 +516,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 {
 	zend_uint i;
 	zend_executor_globals *executor_globals_ptr = ZEPHIR_VEG;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval **original_return_value;
 	HashTable *calling_symbol_table;
 	zend_op_array *original_op_array;
@@ -867,7 +867,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
  */
 int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name, unsigned int method_len, zval *retval_ptr, zend_uint param_count, zval *params[], unsigned long method_key TSRMLS_DC)
 {
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval ***params_array = NULL;
 	zval **static_params_array[5];
 	zend_uint i;
