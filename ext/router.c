@@ -75,41 +75,54 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *routes, *paths, *actionPattern, *route, *paramsPattern;
-	
+	zval *defaultRoutes, *routes, *paths, *actionPattern, *route, *paramsPattern, *params;
 	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
-	
+
 	if (ZEPHIR_IS_TRUE(defaultRoutes)) {
-		
+
 		ZEPHIR_INIT_VAR(paths);
 		array_init(paths);
 		add_assoc_long_ex(paths, SS("controller"), 1);
-		
-		
+
 		ZEPHIR_INIT_VAR(actionPattern);
 		ZVAL_STRING(actionPattern, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
-		
-		
+
+		ZEPHIR_INIT_VAR(route);
+		object_init_ex(route, test_router_route_ce);
+		zephir_call_method_p2_noret(route, "__construct", actionPattern, paths);
+
 		ZEPHIR_INIT_NVAR(routes);
 		zephir_array_append(&routes, route, PH_SEPARATE);
-		
-		
+
 		ZEPHIR_INIT_NVAR(paths);
 		array_init(paths);
 		add_assoc_long_ex(paths, SS("controller"), 1);
 		add_assoc_long_ex(paths, SS("action"), 1);
 		add_assoc_long_ex(paths, SS("params"), 1);
-		
-		
+
 		ZEPHIR_INIT_VAR(paramsPattern);
 		ZVAL_STRING(paramsPattern, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
-		
-		
+
+		ZEPHIR_INIT_NVAR(route);
+		object_init_ex(route, test_router_route_ce);
+		zephir_call_method_p2_noret(route, "__construct", paramsPattern, paths);
+
 		ZEPHIR_INIT_NVAR(routes);
 		zephir_array_append(&routes, route, PH_SEPARATE);
-		
+
 	}
+
+	ZEPHIR_INIT_VAR(params);
+	array_init(params);
+
+	ZEPHIR_INIT_VAR(this);
+	phalcon_update_property_this(this_ptr, SL("_params"), params TSRMLS_CC);
+
+	ZEPHIR_INIT_NVAR(this);
+	phalcon_update_property_this(this_ptr, SL("_routes"), routes TSRMLS_CC);
+
+
 }
 
 /**
@@ -119,6 +132,11 @@ PHP_METHOD(Test_Router, __construct) {
  */
 PHP_METHOD(Test_Router, setDI) {
 
+	zval *dependencyInjector;
+	ZEPHIR_INIT_VAR(this);
+	phalcon_update_property_this(this_ptr, SL("_dependencyInjector"), dependencyInjector TSRMLS_CC);
+
+
 }
 
 /*
@@ -127,6 +145,7 @@ PHP_METHOD(Test_Router, setDI) {
  * @return Phalcon\DiInterface
  */
 PHP_METHOD(Test_Router, getDI) {
+
 
 }
 
@@ -144,14 +163,6 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, add) {
 
-	zval *method;
-	
-	ZEPHIR_INIT_VAR(method);
-	ZVAL_STRING(method, "GET", 1);
-	
-	if (ZEPHIR_IS_LONG(method, 1)) {
-		zval_print(method);
-		zval_print(method);
-	}
+
 }
 

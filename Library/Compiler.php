@@ -111,10 +111,21 @@ class Compiler
 			throw new Exception("Every file need a namespace");
 		}
 
+		/**
+		 * Compilation context stores common objects required by compilation entities
+		 */
 		$compilationContext = new CompilationContext;
 
-		$codePrinter = new codePrinter();
+		/**
+		 * Headers manager
+		 */
+		$headersManager = new HeadersManager();
+		$compilationContext->headersManager = $headersManager;
 
+		/**
+		 * Main code-printer for the file
+		 */
+		$codePrinter = new codePrinter();
 		$compilationContext->codePrinter = $codePrinter;
 
 		$codePrinter->outputBlankLine();

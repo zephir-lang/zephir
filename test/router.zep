@@ -77,7 +77,7 @@ abstract class Router
 	 */
 	public function __construct(defaultRoutes=true)
 	{
-		var routes, paths, actionPattern, route, paramsPattern;
+		var routes, paths, actionPattern, route, paramsPattern, params;
 
 		let routes = [];
 		if (defaultRoutes === true) {
@@ -87,12 +87,12 @@ abstract class Router
 			 */
 			let paths = ['controller': 1];
 			let actionPattern = '#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#';
-			let route = new Phalcon\Mvc\Router\Route(actionPattern, paths);
+			let route = new Test\Router\Route(actionPattern, paths);
 			let routes[] = route;
 
 			let paths = ['controller': 1, 'action': 2, 'params': 3];
 			let paramsPattern = '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#';
-			let route = new Phalcon\Mvc\Router\Route(paramsPattern, paths);
+			let route = new Test\Router\Route(paramsPattern, paths);
 			let routes[] = route;
 		}
 
@@ -109,7 +109,7 @@ abstract class Router
 	 */
 	public function setDI(dependencyInjector)
 	{
-		/*$this->_dependencyInjector = $dependencyInjector;*/
+		let this->_dependencyInjector = dependencyInjector;
 	}
 
 	/*
@@ -119,7 +119,7 @@ abstract class Router
 	 */
 	public function getDI()
 	{
-		/*return $this->_dependencyInjector;*/
+		/*return this->_dependencyInjector;*/
 	}
 
 	/**
@@ -136,18 +136,6 @@ abstract class Router
 	 */
 	public function add(int pattern, paths=null, httpMethods=null)
 	{
-		var method;
-
-		let method = 'GET';
-		if (method == 1) {
-
-			/**
-			 * This is a comment yay!
-			 */
-			echo method;
-
-			echo method;
-		}
 
 	}
 

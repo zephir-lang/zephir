@@ -17,7 +17,7 @@ class LetStatement
 	/**
 	 * Compiles foo = expr
 	 */
-	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
+	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -61,6 +61,24 @@ class LetStatement
 							}
 						}
 						break;
+					case 'new-instance':
+
+						$newExpr = $resolvedExpr->getCode();
+
+						$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
+
+						$codePrinter->output('object_init_ex(' . $variable . ', ' . $classCe . ');');
+
+						$params = array();
+						foreach ($newExpr['parameters'] as $parameter) {
+							$expr = new Expression($parameter);
+							$compiledExpression = $expr->compile($compilationContext);
+							$params[] = $compiledExpression->getCode();
+						}
+
+						$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
+						break;
+
 					default:
 						throw new Exception("Unknown type " . $resolvedExpr->getType());
 				}
@@ -97,11 +115,57 @@ class LetStatement
 		}
 	}
 
+	/**
+	 * Compiles foo[] = expr
+	 */
+	public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$type = $symbolVariable->getType();
+		switch ($type) {
+			case 'int':
+				throw new Exception("Variable 'int' cannot be used as object");
+			case 'bool':
+				throw new Exception("Variable 'bool' cannot be used as object");
+			case 'variable':
+				$symbolVariable->initVariant($compilationContext);
+				switch ($resolvedExpr->getType()) {
+					case 'variable':
+
+						$compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
+						$propertyName = $statement['property'];
+
+						if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
+							throw new Exception("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'");
+						}
+
+						$compilationContext->headersManager->add('kernel/object');
+
+						if ($variable == 'this') {
+							$codePrinter->output('phalcon_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						}
+
+						break;
+					default:
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
+				}
+				break;
+			default:
+				throw new Exception("Unknown type");
+		}
+	}
+
 	public function compile(CompilationContext $compilationContext)
 	{
-		$expr = new Expression($this->_statement['expr']);
+		$statement = $this->_statement;
 
-		$variable = $this->_statement['variable'];
+		$expr = new Expression($statement['expr']);
+
+		$variable = $statement['variable'];
+
+		//print_r($this->_statement);
 
 		$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
 
@@ -114,27 +178,25 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$codePrinter->output('');
+		$codePrinter->outputBlankLine(true);
 
 		/**
 		 * There are four types of assignments
 		 */
 		switch ($this->_statement['assign-type']) {
 			case 'variable':
-				$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $compilationContext);
+				$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 				break;
 			case 'variable-append':
-				$this->assignVariableAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext);
+				$this->assignVariableAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+				break;
+			case 'object-property':
+				$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 				break;
 			default:
 				throw new Exception("Unknown assignment: " . $this->_statement['assign-type']);
-
 		}
 
-		$codePrinter->output('');
-
-		//echo $resolvedExpr['type'];
-
-		//echo $type;
+		$codePrinter->outputBlankLine(true);
 	}
 }

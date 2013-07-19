@@ -31,6 +31,11 @@ class Expression
 		return new CompiledExpression('array', $expression['left']);
 	}
 
+	public function compileNewInstance($expression, CompilationContext $compilationContext)
+	{
+		return new CompiledExpression('new-instance', $expression);
+	}
+
 	public function compileEquals($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
@@ -128,7 +133,6 @@ class Expression
 				throw new Exception("Error Processing Request");
 		}
 
-
 	}
 
 	/**
@@ -154,6 +158,8 @@ class Expression
 				return new CompiledExpression('empty-array', null);
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
+			case 'new':
+				return $this->compileNewInstance($expression, $compilationContext);
 			case 'equals':
 				return $this->compileEquals($expression, $compilationContext);
 			case 'identical':

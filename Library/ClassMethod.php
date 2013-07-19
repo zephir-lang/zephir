@@ -59,6 +59,14 @@ class ClassMethod
 
 		$compilationContext->symbolTable = $symbolTable;
 
+		$oldCodePrinter = $compilationContext->codePrinter;
+
+		/**
+		 * Change the code printer to a single method instance
+		 */
+		$codePrinter = new CodePrinter();
+		$compilationContext->codePrinter = $codePrinter;
+
 		if (is_object($this->_parameters)) {
 			$params = array();
 			foreach ($this->_parameters->getParameters() as $parameter) {
@@ -92,12 +100,53 @@ class ClassMethod
 		/**
 		 * Check if there are unused variables
 		 */
+		$usedVariables = array();
 		foreach ($symbolTable->getVariables() as $variable) {
 			if ($variable->getNumberUses() <= 0) {
 				echo 'Warning: Variable "' . $variable->getName() . '" declared but not used in ' .
 					$compilationContext->classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
+			} else {
+				if ($variable->getName() != 'this') {
+					if (!isset($usedVariables[$variable->getType()])) {
+						$usedVariables[$variable->getType()] = array();
+					}
+					$usedVariables[$variable->getType()][] = $variable;
+				}
 			}
 		}
+
+		foreach ($usedVariables as $type => $variables) {
+
+			$pointer = null;
+			switch ($type) {
+				case 'int':
+					$code = 'int ';
+					break;
+				case 'double':
+					$code = 'double ';
+					break;
+				case 'variable':
+					$pointer = '*';
+					$code = 'zval ';
+					break;
+				default:
+					throw new Exception("Unsupported type in declare " . $type);
+			}
+
+			$groupVariables = array();
+			foreach ($variables as $variable) {
+				//var_dump($variable);
+				$groupVariables[] = $pointer . $variable->getName();
+			}
+
+			$codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');
+		}
+
+		/**
+		 * Restore the compilation context
+		 */
+		$oldCodePrinter->output($codePrinter->getOutput());
+		$compilationContext->codePrinter = $oldCodePrinter;
 
 		return null;
 	}

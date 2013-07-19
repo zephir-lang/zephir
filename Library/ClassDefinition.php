@@ -29,7 +29,15 @@ class ClassDefinition
 
 	public function addProperty(ClassProperty $property)
 	{
-		$this->_properties[] = $property;
+		if (isset($this->_properties[$property->getName()])) {
+			throw new Exception("Property '" . $property->getName() . "' was defined more than one time");
+		}
+		$this->_properties[$property->getName()] = $property;
+	}
+
+	public function hasProperty($name)
+	{
+		return isset($this->_properties[$name]);
 	}
 
 	public function addMethod(ClassMethod $method)
@@ -114,7 +122,7 @@ class ClassDefinition
 			$method->compile($compilationContext);
 
 			$codePrinter->output('}');
-			$codePrinter->outputBlankLine();
+			$codePrinter->outputBlankLine(true);
 		}
 
 	}

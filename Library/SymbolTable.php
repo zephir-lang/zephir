@@ -12,6 +12,14 @@ class SymbolTable
 
 	protected $_variables = array();
 
+	public function __construct()
+	{
+		$thisVar = new Variable('variable', 'this');
+		$thisVar->setIsInitialized(true);
+		$thisVar->increaseUses();
+		$this->_variables['this'] = $thisVar;
+	}
+
 	/**
 	 * Check if a variable is declared in the current symbol table
 	 *
@@ -28,11 +36,12 @@ class SymbolTable
 	 *
 	 * @param int $type
 	 * @param string $name
+	 * @param array
 	 * @return \Variable
 	 */
-	public function addVariable($type, $name)
+	public function addVariable($type, $name, $defaultValue=null)
 	{
-		$variable = new Variable($type, $name);
+		$variable = new Variable($type, $name, $defaultValue);
 		$this->_variables[$name] = $variable;
 		return $variable;
 	}
