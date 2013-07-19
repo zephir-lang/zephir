@@ -48,26 +48,37 @@ class Compiler
 			}
 		}
 
-		$compilationContext->codePrinter->outputBlankLine();
-		$compilationContext->codePrinter->output('#ifdef HAVE_CONFIG_H');
-		$compilationContext->codePrinter->output('#include "config.h"');
-		$compilationContext->codePrinter->output('#endif');
-		$compilationContext->codePrinter->outputBlankLine();
-
-		$compilationContext->codePrinter->output('#include "php.h"');
-		$compilationContext->codePrinter->output('#include "php_test.h"');
-		$compilationContext->codePrinter->output('#include "test.h"');
-		$compilationContext->codePrinter->outputBlankLine();
-
-		$compilationContext->codePrinter->output('#include "Zend/zend_operators.h"');
-		$compilationContext->codePrinter->output('#include "Zend/zend_exceptions.h"');
-		$compilationContext->codePrinter->output('#include "Zend/zend_interfaces.h"');
-		$compilationContext->codePrinter->outputBlankLine();
-
-		$compilationContext->codePrinter->output('#include "kernel/main.h"');
-		$compilationContext->codePrinter->outputBlankLine();
-
+		/**
+		 * Do the compilation
+		 */
 		$classDefinition->compile($compilationContext);
+
+		$code  = '' . PHP_EOL;
+		$code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
+		$code .= '#include "config.h"' . PHP_EOL;
+		$code .= '#endif' . PHP_EOL;
+		$code .= '' . PHP_EOL;
+
+		$code .= '#include "php.h"' . PHP_EOL;
+		$code .= '#include "php_test.h"' . PHP_EOL;
+		$code .= '#include "test.h"' . PHP_EOL;
+		$code .= '' . PHP_EOL;
+
+		$code .= '#include "Zend/zend_operators.h"' . PHP_EOL;
+		$code .= '#include "Zend/zend_exceptions.h"' . PHP_EOL;
+		$code .= '#include "Zend/zend_interfaces.h"' . PHP_EOL;
+		$code .= '' . PHP_EOL;
+
+		$code .= '#include "kernel/main.h"' . PHP_EOL;
+
+		foreach ($compilationContext->headersManager->get() as $header => $one) {
+			$code .= '#include "' . $header . '.h"' . PHP_EOL;
+		}
+
+		/**
+		 * Prepend the required files to the header
+		 */
+		$compilationContext->codePrinter->preOutput($code);
 	}
 
 	/**

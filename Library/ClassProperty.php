@@ -40,11 +40,18 @@ class ClassProperty
 				$this->getVisibilityAccesor() . " TSRMLS_CC);");
 		} else {
 			switch ($this->_defaultValue['type']) {
-				case 305:
-					$compilationContext->codePrinter->output("zend_declare_property_bool(" .
-						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), 0, " .
-						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				case 'bool':
+					if ($this->_defaultValue['value'] == 'false') {
+						$compilationContext->codePrinter->output("zend_declare_property_bool(" .
+							$compilationContext->classDefinition->getClassEntry() .
+							", SL(\"" . $this->getName() . "\"), 0, " .
+							$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					} else {
+						$compilationContext->codePrinter->output("zend_declare_property_bool(" .
+							$compilationContext->classDefinition->getClassEntry() .
+							", SL(\"" . $this->getName() . "\"), 1, " .
+							$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					}
 					break;
 				default:
 					$compilationContext->codePrinter->output("zend_declare_property_null(" .

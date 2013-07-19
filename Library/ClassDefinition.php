@@ -78,8 +78,9 @@ class ClassDefinition
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$codePrinter->outputBlankLine();
-
+		/**
+		 * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class
+		 */
 		$codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
 		$codePrinter->outputBlankLine();
 

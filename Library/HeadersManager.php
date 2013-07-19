@@ -18,4 +18,9 @@ class HeadersManager
 		$this->_headers[$path] = $path;
 	}
 
+	public function get()
+	{
+		return $this->_headers;
+	}
+
 }

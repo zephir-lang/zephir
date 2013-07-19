@@ -102,6 +102,26 @@ class CodePrinter
 	 *
 	 * @param boolean $ifPrevNotBlank
 	 */
+	public function preOutputBlankLine($ifPrevNotBlank=false)
+	{
+		if (!$ifPrevNotBlank) {
+			$this->_code = PHP_EOL . $this->_code;
+			$this->_lastLine = PHP_EOL;
+		} else {
+			if (trim($this->_lastLine)) {
+				$this->_code = PHP_EOL . $this->_code;
+				$this->_lastLine = PHP_EOL;
+			}
+		}
+	}
+
+	/**
+	 * Adds a blank line to the output
+	 * Optionally controlling if the blank link must be added if the
+	 * previous line added isn't one blank line too
+	 *
+	 * @param boolean $ifPrevNotBlank
+	 */
 	public function outputBlankLine($ifPrevNotBlank=false)
 	{
 		if (!$ifPrevNotBlank) {

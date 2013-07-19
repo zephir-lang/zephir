@@ -28,7 +28,7 @@
 
 namespace Test;
 
-abstract class Router
+class Router
 {
 	protected _dependencyInjector;
 
@@ -107,7 +107,7 @@ abstract class Router
 	 *
 	 * @param Phalcon\DiInterface dependencyInjector
 	 */
-	public function setDI(dependencyInjector)
+	public function setDI(<Phalcon\DiInterface> dependencyInjector)
 	{
 		let this->_dependencyInjector = dependencyInjector;
 	}
@@ -134,7 +134,7 @@ abstract class Router
 	 * @param string httpMethods
 	 * @return Phalcon\Mvc\Router\Route
 	 */
-	public function add(int pattern, paths=null, httpMethods=null)
+	public function add(pattern, paths=null, httpMethods=null)
 	{
 
 	}

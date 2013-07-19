@@ -68,14 +68,11 @@ class ClassMethod
 		$compilationContext->codePrinter = $codePrinter;
 
 		if (is_object($this->_parameters)) {
-			$params = array();
+
+			/**
+			 * Round 1. Create variables in parameters in the symbol table
+			 */
 			foreach ($this->_parameters->getParameters() as $parameter) {
-
-				if (isset($parameter['default_value'])) {
-					//memory_grow, required_params, optional_params
-				}
-
-				//$params[] = '&' . $parameter['name'];
 
 				if (isset($parameter['data-type'])) {
 					$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
@@ -83,11 +80,16 @@ class ClassMethod
 					$symbol = $symbolTable->addVariable('variable', $parameter['name']);
 				}
 
+				/**
+				 * Parameters are marked as 'external'
+				 */
 				$symbol->setIsExternal(true);
+
+				/**
+				 * Assuming they're initialized
+				 */
 				$symbol->setIsInitialized(true);
 			}
-			//$compilationContext->codePrinter->output('zephir_fetch_params(' . join(', ', $params) . ');');
-			//$compilationContext->codePrinter->outputBlankLine();
 		}
 
 		/**
@@ -98,29 +100,72 @@ class ClassMethod
 		}
 
 		/**
+		 * Grow the stack if needed
+		 */
+		if (!is_object($this->_parameters)) {
+			if ($symbolTable->getMustGrownStack()) {
+				$codePrinter->preOutput('ZEPHIR_MM_GROW();');
+			}
+		} else {
+
+			/**
+			 * Round 2. Fetch the parameters in the method
+			 */
+			$params = array();
+			$numberRequiredParams = 0;
+			$numberOptionalParams = 0;
+			foreach ($this->_parameters->getParameters() as $parameter) {
+
+				$params[] = '&' . $parameter['name'];
+
+				if (isset($parameter['default_value'])) {
+					$numberOptionalParams++;
+				} else {
+					$numberRequiredParams++;
+				}
+
+			}
+
+			$codePrinter->preOutputBlankLine();
+			if ($symbolTable->getMustGrownStack()) {
+				$codePrinter->preOutput("\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');');
+			} else {
+				$codePrinter->preOutput("\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');');
+			}
+			$codePrinter->preOutputBlankLine();
+		}
+
+		/**
 		 * Check if there are unused variables
 		 */
 		$usedVariables = array();
 		foreach ($symbolTable->getVariables() as $variable) {
+
 			if ($variable->getNumberUses() <= 0) {
 				echo 'Warning: Variable "' . $variable->getName() . '" declared but not used in ' .
 					$compilationContext->classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
-			} else {
-				if ($variable->getName() != 'this') {
-					if (!isset($usedVariables[$variable->getType()])) {
-						$usedVariables[$variable->getType()] = array();
-					}
-					$usedVariables[$variable->getType()][] = $variable;
+				if ($variable->isExternal() == false) {
+					continue;
 				}
+			}
+
+			if ($variable->getName() != 'this') {
+				if (!isset($usedVariables[$variable->getType()])) {
+					$usedVariables[$variable->getType()] = array();
+				}
+				$usedVariables[$variable->getType()][] = $variable;
 			}
 		}
 
+		/**
+		 * Generate the variable definition for variables used
+		 */
 		foreach ($usedVariables as $type => $variables) {
 
 			$pointer = null;
 			switch ($type) {
 				case 'int':
-					$code = 'int ';
+					$code = 'long ';
 					break;
 				case 'double':
 					$code = 'double ';
@@ -140,6 +185,15 @@ class ClassMethod
 			}
 
 			$codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');
+		}
+
+		/**
+		 * <comment>Compile the block of statements if any</comment>
+		 */
+		if (is_object($this->_statements)) {
+			if ($symbolTable->getMustGrownStack()) {
+				$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+			}
 		}
 
 		/**

@@ -1,4 +1,21 @@
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "php.h"
+#include "php_test.h"
+#include "test.h"
+
+#include "Zend/zend_operators.h"
+#include "Zend/zend_exceptions.h"
+#include "Zend/zend_interfaces.h"
+
+#include "kernel/main.h"
+#include "kernel/memory.h"
+#include "kernel/object.h"
+
+
 /**
  * Phalcon\Mvc\Router
  *
@@ -25,22 +42,6 @@
  *</code>
  *
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
-
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
-
-#include "kernel/main.h"
-
-
 ZEPHIR_INIT_CLASS(Test_Router) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Router, router, test_router_method_entry, 0);
@@ -55,7 +56,7 @@ ZEPHIR_INIT_CLASS(Test_Router) {
 	zend_declare_property_null(test_router_ce, SL("_routes"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_matchedRoute"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_matches"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_ce, SL("_wasMatched"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_bool(test_router_ce, SL("_wasMatched"), 0, ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultNamespace"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultModule"), ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_defaultController"), ZEND_ACC_PROTECTED TSRMLS_CC);
@@ -76,6 +77,9 @@ ZEPHIR_INIT_CLASS(Test_Router) {
 PHP_METHOD(Test_Router, __construct) {
 
 	zval *defaultRoutes, *routes, *paths, *actionPattern, *route, *paramsPattern, *params;
+
+	zephir_fetch_params(1, 1, 0, &defaultRoutes);
+
 	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
 
@@ -116,12 +120,11 @@ PHP_METHOD(Test_Router, __construct) {
 	ZEPHIR_INIT_VAR(params);
 	array_init(params);
 
-	ZEPHIR_INIT_VAR(this);
 	phalcon_update_property_this(this_ptr, SL("_params"), params TSRMLS_CC);
 
-	ZEPHIR_INIT_NVAR(this);
 	phalcon_update_property_this(this_ptr, SL("_routes"), routes TSRMLS_CC);
 
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -133,7 +136,9 @@ PHP_METHOD(Test_Router, __construct) {
 PHP_METHOD(Test_Router, setDI) {
 
 	zval *dependencyInjector;
-	ZEPHIR_INIT_VAR(this);
+
+	zephir_fetch_params(0, 1, 0, &dependencyInjector);
+
 	phalcon_update_property_this(this_ptr, SL("_dependencyInjector"), dependencyInjector TSRMLS_CC);
 
 
@@ -162,6 +167,10 @@ PHP_METHOD(Test_Router, getDI) {
  * @return Phalcon\Mvc\Router\Route
  */
 PHP_METHOD(Test_Router, add) {
+
+	zval *pattern, *paths, *httpMethods;
+
+	zephir_fetch_params(0, 3, 0, &pattern, &paths, &httpMethods);
 
 
 }

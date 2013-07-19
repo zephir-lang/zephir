@@ -10,6 +10,8 @@ class StatementsBlock
 {
 	protected $_statements;
 
+	protected $_lastStatement;
+
 	public function __construct(array $statements)
 	{
 		$this->_statements = $statements;
@@ -21,6 +23,7 @@ class StatementsBlock
 		$compilationContext->codePrinter->increaseLevel();
 
 		foreach ($this->_statements as $statement) {
+
 			switch ($statement['type']) {
 				case 'let':
 					$letStatement = new LetStatement($statement);
@@ -39,8 +42,21 @@ class StatementsBlock
 					$ifStatement->compile($compilationContext);
 					break;
 			}
+
+			if ($statement['type'] != 'comment') {
+				$this->_lastStatement = $statement;
+			}
 		}
 
 		$compilationContext->codePrinter->decreaseLevel();
 	}
+
+	/**
+	 *
+	 */
+	public function getLastStatementType()
+	{
+		return $this->_lastStatement['type'];
+	}
+
 }

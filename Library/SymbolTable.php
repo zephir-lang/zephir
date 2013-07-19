@@ -115,4 +115,14 @@ class SymbolTable
 		$this->_mustGrownStack = $mustGrownStack;
 	}
 
+	/**
+	 * Returns if the current symbol label must add a memory frame
+	 *
+	 * @return boolean
+	 */
+	public function getMustGrownStack()
+	{
+		return $this->_mustGrownStack;
+	}
+
 }

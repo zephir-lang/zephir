@@ -70,17 +70,30 @@ class Variable
 	}
 
 	/**
+	 * Check if the variable is a parameter
+	 *
+	 * @return boolean
+	 */
+	public function isExternal()
+	{
+		return $this->_isExternal;
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext
 	 */
 	public function initVariant(CompilationContext $compilationContext)
 	{
-		$compilationContext->symbolTable->mustGrownStack(true);
-		if ($this->_variantInits > 0) {
-			$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
-		} else {
-			$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+		if ($this->getName() != 'this') {
+			$compilationContext->headersManager->add('kernel/memory');
+			$compilationContext->symbolTable->mustGrownStack(true);
+			if ($this->_variantInits > 0) {
+				$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+			} else {
+				$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+			}
 		}
 		$this->_variantInits++;
 	}
