@@ -107,11 +107,14 @@ class ClassMethod
 		/**
 		 * Grow the stack if needed
 		 */
-		if (!is_object($this->_parameters)) {
-			if ($symbolTable->getMustGrownStack()) {
-				$codePrinter->preOutput('ZEPHIR_MM_GROW();');
-			}
-		} else {
+		if ($symbolTable->getMustGrownStack()) {
+			$codePrinter->preOutput('ZEPHIR_MM_GROW();');
+		}
+
+		/**
+		 * Fetch parameters from vm-top
+		 */
+		if (is_object($this->_parameters)) {
 
 			/**
 			 * Round 2. Fetch the parameters in the method

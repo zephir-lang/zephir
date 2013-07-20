@@ -18,7 +18,7 @@ ZEND_DECLARE_MODULE_GLOBALS(test)
 PHP_MINIT_FUNCTION(test){
 
 	/** Init globals */
-	//ZEND_INIT_MODULE_GLOBALS(phalcon, php_phalcon_init_globals, NULL);
+	ZEND_INIT_MODULE_GLOBALS(test, php_test_init_globals, NULL);
 
 	ZEPHIR_INIT(Test_Router);
 	return SUCCESS;

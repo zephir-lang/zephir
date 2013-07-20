@@ -4,7 +4,7 @@
 #endif
 
 #include "php.h"
-#include "php_phalcon.h"
+#include "php_test.h"
 #include "php_main.h"
 #include "ext/spl/spl_exceptions.h"
 
@@ -37,8 +37,8 @@ void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC) {
 	/* Stats options */
 	#ifndef PHALCON_RELEASE
 
-	zephir_globals->zephir_stack_stats = 0;
-	zephir_globals->zephir_number_grows = 0;
+	//zephir_globals->zephir_stack_stats = 0;
+	//zephir_globals->zephir_number_grows = 0;
 
 	//int i;
 	//for (i = 0; i < PHALCON_MAX_MEMORY_STACK; i++) {

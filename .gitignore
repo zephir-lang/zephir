@@ -33,3 +33,17 @@ ext/modules/
 ext/router.lo
 ext/test.la
 ext/test.lo
+ext/kernel/.libs/
+ext/kernel/alternative/.libs/
+ext/kernel/alternative/fcall.lo
+ext/kernel/array.lo
+ext/kernel/debug.lo
+ext/kernel/fcall.lo
+ext/kernel/hash.lo
+ext/kernel/memory.lo
+ext/kernel/object.lo
+ext/kernel/operators.lo
+ext/kernel/string.lo
+ext/kernel/backtrace.lo
+ext/kernel/exception.lo
+ext/kernel/main.lo

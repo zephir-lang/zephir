@@ -61,6 +61,7 @@ class Expression
 
 				switch ($right->getType()) {
 					case 'int':
+						$compilationContext->headersManager->add('kernel/operators');
 						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
 					default:
 						throw new Exception("Error Processing Request");
@@ -108,8 +109,10 @@ class Expression
 
 				switch ($right->getType()) {
 					case 'int':
+						$compilationContext->headersManager->add('kernel/operators');
 						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
 					case 'bool':
+						$compilationContext->headersManager->add('kernel/operators');
 						if ($right->getCode() == 'true') {
 							return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')');
 						} else {
