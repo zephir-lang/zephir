@@ -1,11 +1,11 @@
 <?php
 
 /**
- * IfStatement
+ * WhileStatement
  *
- * If statement, the same as in PHP/C
+ * While statement, the same as in PHP/C
  */
-class IfStatement
+class WhileStatement
 {
 	protected $_statement;
 
@@ -29,29 +29,29 @@ class IfStatement
 		switch ($compiledExpression->getType()) {
 			case 'int':
 			case 'double':
-				$compilationContext->codePrinter->output('if (' . $compiledExpression->getCode() . ') {');
+				$compilationContext->codePrinter->output('while (' . $compiledExpression->getCode() . ') {');
 				break;
 			case 'bool':
-				$compilationContext->codePrinter->output('if (' . $compiledExpression->getBooleanCode() . ') {');
+				$compilationContext->codePrinter->output('while (' . $compiledExpression->getBooleanCode() . ') {');
 				break;
 			case 'variable':
 
 				$variableRight = $compilationContext->symbolTable->getVariableForRead($this->_statement['expr']['value']);
 				switch ($variableRight->getType()) {
 					case 'int':
-						$compilationContext->codePrinter->output('if (' . $variableRight->getName() . ') {');
+						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
 						break;
 					case 'bool':
-						$compilationContext->codePrinter->output('if (' . $variableRight->getName() . ') {');
+						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
 						break;
 					case 'double':
-						$compilationContext->codePrinter->output('if (' . $variableRight->getName() . ') {');
+						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
 						break;
 					case 'variable':
-						$compilationContext->codePrinter->output('if (zend_is_true(' . $variableRight->getName() . ')) {');
+						$compilationContext->codePrinter->output('while (zend_is_true(' . $variableRight->getName() . ')) {');
 						break;
 					default:
-						throw new Exception("Variable can't be evaluated " . $variableRight->getType());
+						throw new Exception("Variable " . $variableRight->getType() . " can't be evaluated");
 				}
 				break;
 			default:
@@ -63,15 +63,6 @@ class IfStatement
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext);
-		}
-
-		/**
-		 * Compile statements in the 'else' block
-		 */
-		if (isset($this->_statement['else_statements'])) {
-			$compilationContext->codePrinter->output('} else {');
-			$st = new StatementsBlock($this->_statement['else_statements']);
 			$st->compile($compilationContext);
 		}
 

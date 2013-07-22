@@ -59,8 +59,8 @@ ZEND_EXTERN_MODULE_GLOBALS(test)
 	#define ZEPHIR_VGLOBAL &(test_globals)
 #endif
 
-extern zend_module_entry zephir_module_entry;
-#define phpext_zephir_ptr &zephir_module_entry
+extern zend_module_entry test_module_entry;
+#define phpext_test_ptr &test_module_entry
 
 #endif
 
@@ -92,6 +92,7 @@ extern zend_module_entry zephir_module_entry;
 	}
 
 /** Macros for branch prediction */
+#ifndef likely
 #if defined(__GNUC__) && ZEND_GCC_VERSION >= 3004 && defined(__i386__)
 #define likely(x)       __builtin_expect((x), 1)
 #define unlikely(x)     __builtin_expect((x), 0)
@@ -106,4 +107,5 @@ extern zend_module_entry zephir_module_entry;
 #else
 #define UNREACHABLE() assert(0)
 #define ASSUME(x)     assert(!!(x));
+#endif
 #endif

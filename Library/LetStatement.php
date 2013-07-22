@@ -17,7 +17,8 @@ class LetStatement
 	/**
 	 * Compiles foo = expr
 	 */
-	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+			ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -25,12 +26,67 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
-				switch ($resolvedExpr['type']) {
+				switch ($resolvedExpr->getType()) {
 					case 'int':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr['value'] . ';');
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						break;
+					case 'double':
+						$codePrinter->output($variable . ' = (int) (' . $resolvedExpr->getCode() . ');');
+						break;
+					case 'bool':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						break;
+					case 'variable':
+						$codePrinter->output($variable . ' = zephir_get_intval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type");
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
+				}
+				break;
+			case 'double':
+				switch ($resolvedExpr->getType()) {
+					case 'int':
+						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+						break;
+					case 'double':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						break;
+					case 'variable':
+						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;
+					default:
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
+				}
+				break;
+			case 'bool':
+				switch ($resolvedExpr->getType()) {
+					case 'int':
+					case 'double':
+						$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
+						break;
+					case 'bool':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						break;
+					case 'variable':
+						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;
+					default:
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
+				}
+				break;
+			case 'double':
+				switch ($resolvedExpr->getType()) {
+					case 'int':
+						$codePrinterrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+						break;
+					case 'double':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						break;
+					case 'variable':
+						$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;
+					default:
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
 				}
 				break;
 			case 'variable':
@@ -39,8 +95,30 @@ class LetStatement
 					case 'int':
 						$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						break;
+					case 'double':
+						$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						break;
+					case 'bool':
+						if ($resolvedExpr->getCode() == 'true') {
+							$codePrinter->output('ZVAL_BOOL(' . $variable . ', 1);');
+						} else {
+							if ($resolvedExpr->getCode() == 'false') {
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', 0);');
+							} else {
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+							}
+						}
+						break;
 					case 'string':
 						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						break;
+					case 'variable':
+						if ($readDetector->detect($resolvedExpr)) {
+							$code = $resolvedExpr->resolve(null, $compilationContext);
+							$codePrinter->output($code);
+						} else {
+							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+						}
 						break;
 					case 'empty-array':
 						$codePrinter->output('array_init(' . $variable . ');');
@@ -84,7 +162,7 @@ class LetStatement
 				}
 				break;
 			default:
-				throw new Exception("Unknown type");
+				throw new Exception("Unknown type $type");
 		}
 	}
 
@@ -161,42 +239,45 @@ class LetStatement
 	{
 		$statement = $this->_statement;
 
-		$expr = new Expression($statement['expr']);
+		foreach ($statement['assignments'] as $assignment) {
 
-		$variable = $statement['variable'];
+			$readDetector = new ReadDetector($assignment['expr']);
 
-		//print_r($this->_statement);
+			$expr = new Expression($assignment['expr']);
 
-		$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
+			$variable = $assignment['variable'];
 
-		/**
-		 * Variables assigned are marked as initialized
-		 */
-		$symbolVariable->setIsInitialized(true);
+			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
 
-		$resolvedExpr = $expr->compile($compilationContext);
+			/**
+			 * Variables assigned are marked as initialized
+			 */
+			$symbolVariable->setIsInitialized(true);
 
-		$codePrinter = $compilationContext->codePrinter;
+			$resolvedExpr = $expr->compile($compilationContext);
 
-		$codePrinter->outputBlankLine(true);
+			$codePrinter = $compilationContext->codePrinter;
 
-		/**
-		 * There are four types of assignments
-		 */
-		switch ($this->_statement['assign-type']) {
-			case 'variable':
-				$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-				break;
-			case 'variable-append':
-				$this->assignVariableAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-				break;
-			case 'object-property':
-				$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-				break;
-			default:
-				throw new Exception("Unknown assignment: " . $this->_statement['assign-type']);
+			$codePrinter->outputBlankLine(true);
+
+			/**
+			 * There are four types of assignments
+			 */
+			switch ($assignment['assign-type']) {
+				case 'variable':
+					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
+					break;
+				case 'variable-append':
+					$this->assignVariableAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					break;
+				case 'object-property':
+					$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					break;
+				default:
+					throw new Exception("Unknown assignment: " . $assignment['assign-type']);
+			}
+
+			$codePrinter->outputBlankLine(true);
 		}
-
-		$codePrinter->outputBlankLine(true);
 	}
 }

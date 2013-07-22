@@ -202,6 +202,10 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 #define RETURN_MM_STRING(str, copy) ZEPHIR_MM_RESTORE(); RETURN_STRING(str, copy);
 #define RETURN_MM_EMPTY_STRING() ZEPHIR_MM_RESTORE(); RETURN_EMPTY_STRING();
 
+#define RETURN_MM_LONG(value) ZEPHIR_MM_RESTORE(); RETURN_LONG(value);
+#define RETURN_MM_DOUBLE(value) ZEPHIR_MM_RESTORE(); RETURN_DOUBLE(value);
+#define RETURN_MM_BOOL(value) ZEPHIR_MM_RESTORE(); RETURN_BOOL(value);
+
 /** Return empty array */
 #define RETURN_EMPTY_ARRAY() array_init(return_value); return;
 #define RETURN_MM_EMPTY_ARRAY() ZEPHIR_MM_RESTORE(); RETURN_EMPTY_ARRAY();

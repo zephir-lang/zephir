@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/object.h"
 
 
@@ -28,7 +29,7 @@
  *
  *	$router = new Phalcon\Mvc\Router();
  *
- *  $router->add(
+ *	$router->add(
  *		"/documentation/{chapter}/{name}.{type:[a-z]+}",
  *		array(
  *			"controller" => "documentation",
@@ -78,6 +79,8 @@ PHP_METHOD(Test_Router, __construct) {
 
 	zval *defaultRoutes, *routes, *paths, *actionPattern, *route, *paramsPattern, *params;
 
+	ZEPHIR_MM_GROW();
+
 	zephir_fetch_params(1, 1, 0, &defaultRoutes);
 
 	ZEPHIR_INIT_VAR(routes);
@@ -93,8 +96,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZVAL_STRING(actionPattern, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
 
 		ZEPHIR_INIT_VAR(route);
-		//object_init_ex(route, test_router_route_ce);
-		object_init(route);
+		object_init_ex(route, test_router_route_ce);
 		zephir_call_method_p2_noret(route, "__construct", actionPattern, paths);
 
 		ZEPHIR_INIT_NVAR(routes);
@@ -110,8 +112,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZVAL_STRING(paramsPattern, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
 
 		ZEPHIR_INIT_NVAR(route);
-		//object_init_ex(route, test_router_route_ce);
-		object_init(route);
+		object_init_ex(route, test_router_route_ce);
 		zephir_call_method_p2_noret(route, "__construct", paramsPattern, paths);
 
 		ZEPHIR_INIT_NVAR(routes);
@@ -138,6 +139,7 @@ PHP_METHOD(Test_Router, __construct) {
 PHP_METHOD(Test_Router, setDI) {
 
 	zval *dependencyInjector;
+
 
 	zephir_fetch_params(0, 1, 0, &dependencyInjector);
 
@@ -171,6 +173,7 @@ PHP_METHOD(Test_Router, getDI) {
 PHP_METHOD(Test_Router, add) {
 
 	zval *pattern, *paths, *httpMethods;
+
 
 	zephir_fetch_params(0, 3, 0, &pattern, &paths, &httpMethods);
 

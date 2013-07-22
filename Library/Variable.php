@@ -15,6 +15,8 @@ class Variable
 
 	protected $_initialized = false;
 
+	protected $_isExternal = false;
+
 	protected $_variantInits = 0;
 
 	public function __construct($type, $name)

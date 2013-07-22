@@ -11,7 +11,7 @@
  *
  *	$router = new Phalcon\Mvc\Router();
  *
- *  $router->add(
+ *	$router->add(
  *		"/documentation/{chapter}/{name}.{type:[a-z]+}",
  *		array(
  *			"controller" => "documentation",

@@ -39,6 +39,10 @@
 #define XX_T_ELSE 364
 #define XX_T_WHILE 365
 #define XX_T_NEW 366
+#define XX_T_RETURN 367
+#define XX_T_LOOP 368
+#define XX_T_BREAK 369
+#define XX_T_CONTINUE 370
 
 /* Operators */
 #define XX_T_AT '@'
@@ -58,6 +62,8 @@
 #define XX_T_ARROW 400
 #define XX_T_EQUALS 401
 #define XX_T_IDENTICAL 402
+#define XX_T_ADD '+'
+#define XX_T_SUB '-'
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

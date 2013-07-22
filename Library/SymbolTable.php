@@ -12,6 +12,8 @@ class SymbolTable
 
 	protected $_variables = array();
 
+	protected $_tempVariable = 0;
+
 	public function __construct()
 	{
 		$thisVar = new Variable('variable', 'this');
@@ -123,6 +125,26 @@ class SymbolTable
 	public function getMustGrownStack()
 	{
 		return $this->_mustGrownStack;
+	}
+
+	/**
+	 * Returns a temporal variable
+	 *
+	 * @return Variable
+	 */
+	public function getTempVariable($type)
+	{
+		$tempVar = $this->_tempVariable++;
+		return $this->addVariable($type, '_' . $tempVar);
+	}
+
+	public function getTempVariableForWrite($type, CompilationContext $context)
+	{
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->increaseUses();
+		$variable->initVariant($context);
+		return $variable;
 	}
 
 }

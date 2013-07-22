@@ -1,0 +1,3 @@
+#!/bin/bash
+
+php compiler.php && cd ext && sudo make install

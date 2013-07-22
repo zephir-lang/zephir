@@ -1,1 +1,0 @@
-{ "type": "class", "name": "X", "definition": { "properties": [ { "type": "property", "name": "a" }, { "type": "property", "name": "b" } ], "methods": [ { "type": "method", "name": "xx" }, { "type": "method", "name": "yy", "statements": { "type": "let", "variable": "a", "expr": { "type": 301, "value": "100" } } } ] } }

@@ -53,6 +53,30 @@ class ClassMethod
 		return 'ZEND_ACC_PROTECTED';
 	}
 
+	public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)
+	{
+		if (!$symbolTable->getMustGrownStack()) {
+			$containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_STR', 'ZEPHIR_THROW_EXCEPTION_STRW', $containerCode);
+			$containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_ZVAL', 'ZEPHIR_THROW_EXCEPTION_ZVALW', $containerCode);
+			$containerCode = str_replace('RETURN_THIS', 'RETURN_THISW', $containerCode);
+			$containerCode = str_replace('RETURN_CTOR', 'RETURN_CTORW', $containerCode);
+			$containerCode = str_replace('RETURN_NCTOR', 'RETURN_NCTORW', $containerCode);
+			$containerCode = str_replace('RETURN_CCTOR', 'RETURN_CCTORW', $containerCode);
+			$containerCode = str_replace('RETURN_MM_NULL', 'RETURN_NULL', $containerCode);
+			$containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
+			$containerCode = str_replace('RETURN_MM_TRUE', 'RETURN_TRUE', $containerCode);
+			$containerCode = str_replace('RETURN_MM_STRING', 'RETURN_STRING', $containerCode);
+			$containerCode = str_replace('RETURN_MM_LONG', 'RETURN_LONG', $containerCode);
+			$containerCode = str_replace('RETURN_MM_DOUBLE', 'RETURN_DOUBLE', $containerCode);
+			$containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
+			$containerCode = str_replace('RETURN_MM_EMPTY_STRING', 'RETURN_MM_EMPTY_STRING', $containerCode);
+			$containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
+			$containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
+			$containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);' . PHP_EOL . '/s', '', $containerCode);
+		}
+		return $containerCode;
+	}
+
 	/**
 	 * Compiles the method
 	 *
@@ -105,13 +129,6 @@ class ClassMethod
 		}
 
 		/**
-		 * Grow the stack if needed
-		 */
-		if ($symbolTable->getMustGrownStack()) {
-			$codePrinter->preOutput('ZEPHIR_MM_GROW();');
-		}
-
-		/**
 		 * Fetch parameters from vm-top
 		 */
 		if (is_object($this->_parameters)) {
@@ -131,7 +148,6 @@ class ClassMethod
 				} else {
 					$numberRequiredParams++;
 				}
-
 			}
 
 			$codePrinter->preOutputBlankLine();
@@ -140,7 +156,14 @@ class ClassMethod
 			} else {
 				$codePrinter->preOutput("\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');');
 			}
-			$codePrinter->preOutputBlankLine();
+			$codePrinter->preOutputBlankLine(true);
+		}
+
+		/**
+		 * Grow the stack if needed
+		 */
+		if ($symbolTable->getMustGrownStack()) {
+			$codePrinter->preOutput("\t" . 'ZEPHIR_MM_GROW();');
 		}
 
 		/**
@@ -165,6 +188,10 @@ class ClassMethod
 			}
 		}
 
+		if (count($usedVariables)) {
+			$codePrinter->preOutputBlankLine();
+		}
+
 		/**
 		 * Generate the variable definition for variables used
 		 */
@@ -174,6 +201,9 @@ class ClassMethod
 			switch ($type) {
 				case 'int':
 					$code = 'long ';
+					break;
+				case 'bool':
+					$code = 'zend_bool ';
 					break;
 				case 'double':
 					$code = 'double ';
@@ -188,7 +218,6 @@ class ClassMethod
 
 			$groupVariables = array();
 			foreach ($variables as $variable) {
-				//var_dump($variable);
 				$groupVariables[] = $pointer . $variable->getName();
 			}
 
@@ -200,14 +229,21 @@ class ClassMethod
 		 */
 		if (is_object($this->_statements)) {
 			if ($symbolTable->getMustGrownStack()) {
-				$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+				if ($this->_statements->getLastStatementType() != 'return') {
+					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+				}
 			}
 		}
 
 		/**
+		 * Remove macros that restore the memory stack if it wasn't used
+		 */
+		$code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
+
+		/**
 		 * Restore the compilation context
 		 */
-		$oldCodePrinter->output($codePrinter->getOutput());
+		$oldCodePrinter->output($code);
 		$compilationContext->codePrinter = $oldCodePrinter;
 
 		return null;

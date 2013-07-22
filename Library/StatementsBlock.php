@@ -41,6 +41,26 @@ class StatementsBlock
 					$ifStatement = new IfStatement($statement);
 					$ifStatement->compile($compilationContext);
 					break;
+				case 'while':
+					$whileStatement = new WhileStatement($statement);
+					$whileStatement->compile($compilationContext);
+					break;
+				case 'return':
+					$returnStatement = new ReturnStatement($statement);
+					$returnStatement->compile($compilationContext);
+					break;
+				case 'loop':
+					$loopStatement = new LoopStatement($statement);
+					$loopStatement->compile($compilationContext);
+					break;
+				case 'break':
+					$breakStatement = new BreakStatement($statement);
+					$breakStatement->compile($compilationContext);
+					break;
+				case 'continue':
+					$continueStatement = new ContinueStatement($statement);
+					$continueStatement->compile($compilationContext);
+					break;
 			}
 
 			if ($statement['type'] != 'comment') {

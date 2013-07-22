@@ -199,12 +199,27 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			case XX_T_ECHO:
 				xx_(xx_parser, XX_ECHO, NULL, parser_status);
 				break;
+			case XX_T_RETURN:
+				xx_(xx_parser, XX_RETURN, NULL, parser_status);
+				break;
 			case XX_T_IF:
 				xx_(xx_parser, XX_IF, NULL, parser_status);
 				break;
-			/*case XX_T_ELSE:
+			case XX_T_ELSE:
 				xx_(xx_parser, XX_ELSE, NULL, parser_status);
-				break;*/
+				break;
+			case XX_T_LOOP:
+				xx_(xx_parser, XX_LOOP, NULL, parser_status);
+				break;
+			case XX_T_CONTINUE:
+				xx_(xx_parser, XX_CONTINUE, NULL, parser_status);
+				break;
+			case XX_T_BREAK:
+				xx_(xx_parser, XX_BREAK, NULL, parser_status);
+				break;
+			case XX_T_WHILE:
+				xx_(xx_parser, XX_WHILE, NULL, parser_status);
+				break;
 			case XX_T_NEW:
 				xx_(xx_parser, XX_NEW, NULL, parser_status);
 				break;
@@ -287,6 +302,13 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				break;
 			case XX_T_TYPE_VAR:
 				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
+				break;
+
+			case XX_T_ADD:
+				xx_(xx_parser, XX_ADD, NULL, parser_status);
+				break;
+			case XX_T_SUB:
+				xx_(xx_parser, XX_SUB, NULL, parser_status);
 				break;
 
 			case XX_T_INTEGER:
@@ -387,7 +409,7 @@ int main(int argc, char **argv) {
 	char *program;
 	int i;
 
-	program = malloc(sizeof(char) * 2048);
+	program = malloc(sizeof(char) * 10240);
 
 	if (argc > 0) {
 

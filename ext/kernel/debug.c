@@ -12,8 +12,8 @@
 
 FILE *zephir_log = NULL;
 int zephir_debug_trace = 0;
-zephir_debug_entry *start = NULL;
-zephir_debug_entry *active = NULL;
+zephir_debug_entry *start_x = NULL;
+zephir_debug_entry *active_x = NULL;
 
 /**
  * Stars debug on file pipe
@@ -34,7 +34,7 @@ int zephir_start_debug(){
  * Stops debug process
  */
 int zephir_stop_debug() {
-	zephir_debug_entry *ptr = active;
+	zephir_debug_entry *ptr = active_x;
 	zephir_debug_entry *this_entry = NULL;
 	while (ptr) {
 		this_entry = ptr;
@@ -228,7 +228,7 @@ int zephir_step_out(char *message){
 int zephir_debug_backtrace_internal(){
 	int step = 0;
 	char *message;
-	zephir_debug_entry *ptr = active;
+	zephir_debug_entry *ptr = active_x;
 	while(ptr){
 		zephir_spprintf(&message, 0, "#%d %s::%s", step, ptr->class_name, ptr->method_name);
 		zephir_debug_screen(message);
@@ -247,14 +247,14 @@ int zephir_step_into_entry(char *class_name, char *method_name, int lineno){
 	char *message;
 	zephir_debug_entry *entry;
 
-	if (!start) {
-		start = (zephir_debug_entry *) emalloc(sizeof(zephir_debug_entry));
-		start->class_name = "__main__";
-		start->method_name = "__init__";
-		start->lineno = 0;
-		start->prev = NULL;
-		start->next = NULL;
-		active = start;
+	if (!start_x) {
+		start_x = (zephir_debug_entry *) emalloc(sizeof(zephir_debug_entry));
+		start_x->class_name = "__main__";
+		start_x->method_name = "__init__";
+		start_x->lineno = 0;
+		start_x->prev = NULL;
+		start_x->next = NULL;
+		active_x = start_x;
 	}
 
 	zephir_spprintf(&message, 0, "Step Into %s::%s", class_name, method_name);
@@ -265,9 +265,9 @@ int zephir_step_into_entry(char *class_name, char *method_name, int lineno){
 	entry->class_name = class_name;
 	entry->method_name = method_name;
 	entry->lineno = lineno;
-	entry->prev = active;
-	active->next = entry;
-	active = entry;
+	entry->prev = active_x;
+	active_x->next = entry;
+	active_x = entry;
 	zephir_debug_trace++;
 
 	return SUCCESS;
@@ -280,17 +280,17 @@ int zephir_step_out_entry(){
 
 	char *message;
 	zephir_debug_entry *prev;
-	if(active){
+	if (active_x) {
 
 		zephir_debug_trace--;
 
-		zephir_spprintf(&message, 0, "Step out %s::%s", active->class_name, active->method_name);
+		zephir_spprintf(&message, 0, "Step out %s::%s", active_x->class_name, active_x->method_name);
 		zephir_debug_screen(message);
 		efree(message);
 
-		prev = active->prev;
-		efree(active);
-		active = prev;
+		prev = active_x->prev;
+		efree(active_x);
+		active_x = prev;
 
 	} else {
 		fprintf(zephir_log, "Problem, stack?");

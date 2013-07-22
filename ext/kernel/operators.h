@@ -56,7 +56,11 @@ extern int zephir_compare_strict_string(zval *op1, const char *op2, int op2_leng
 extern int zephir_compare_strict_long(zval *op1, long op2 TSRMLS_DC);
 
 extern void zephir_cast(zval *result, zval *var, zend_uint type);
+
 extern long zephir_get_intval(const zval *op);
+extern double zephir_get_doubleval(const zval *op);
+extern zend_bool zephir_get_boolval(const zval *op);
+
 extern int zephir_is_numeric(const zval *op);
 
 extern int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC);

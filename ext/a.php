@@ -1,6 +1,6 @@
 <?php
 
-$c = new Test\Router();
+$t = new Test\Arithmetic();
 
-$c->setDI();
-
+print_r($t->complex19Sum());
+print_r($t->complex20Sum());

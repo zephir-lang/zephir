@@ -1063,7 +1063,7 @@ zval *zephir_eol(int eol TSRMLS_DC) {
 	/**
 	 * Initialize local var
 	 */
-    PHALCON_INIT_VAR(local_eol);
+    ZEPHIR_INIT_VAR(local_eol);
 
     /**
      * Check if the eol is true and return PHP_EOL or empty string

@@ -42,7 +42,10 @@ class ClassDefinition
 
 	public function addMethod(ClassMethod $method)
 	{
-		$this->_methods[] = $method;
+		if (isset($this->_methods[$method->getName()])) {
+			throw new Exception("Method '" . $method->getName() . "' was defined more than one time");
+		}
+		$this->_methods[$method->getName()] = $method;
 	}
 
 	public function getProperties()
@@ -115,7 +118,9 @@ class ClassDefinition
 		 */
 		foreach ($this->getMethods() as $method) {
 
-			$codePrinter->outputDocBlock($method->getDocBlock());
+			if ($method->getDocBlock()) {
+				$codePrinter->outputDocBlock($method->getDocBlock());
+			}
 
 			$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
 			$codePrinter->outputBlankLine();
@@ -163,7 +168,7 @@ class ClassDefinition
 			}
 		}
 
-		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_entry) {');
+		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
 		foreach ($methods as $method) {
 
 			$parameters = $method->getParameters();

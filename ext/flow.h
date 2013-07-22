@@ -1,0 +1,39 @@
+
+extern zend_class_entry *test_flow_ce;
+
+ZEPHIR_INIT_CLASS(Test_Flow);
+
+PHP_METHOD(Test_Flow, testIf1);
+PHP_METHOD(Test_Flow, testIf2);
+PHP_METHOD(Test_Flow, testIf3);
+PHP_METHOD(Test_Flow, testIf4);
+PHP_METHOD(Test_Flow, testIf5);
+PHP_METHOD(Test_Flow, testIf6);
+PHP_METHOD(Test_Flow, testIf7);
+PHP_METHOD(Test_Flow, testIf8);
+PHP_METHOD(Test_Flow, testIf9);
+PHP_METHOD(Test_Flow, testIf10);
+PHP_METHOD(Test_Flow, testLoop1);
+PHP_METHOD(Test_Flow, testLoop2);
+PHP_METHOD(Test_Flow, testLoop3);
+PHP_METHOD(Test_Flow, testWhile1);
+PHP_METHOD(Test_Flow, testWhile2);
+
+ZEPHIR_INIT_FUNCS(test_flow_method_entry) {
+	PHP_ME(Test_Flow, testIf1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf3, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf4, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf5, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf6, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf7, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf8, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf9, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testIf10, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testLoop1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testLoop2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testLoop3, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile2, NULL, ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};

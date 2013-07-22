@@ -105,7 +105,7 @@ void zephir_get_current_key(zval **key, const HashTable *hash_table, HashPositio
 {
 	Bucket *p;
 
-	PHALCON_INIT_NVAR_PNULL(*key);
+	ZEPHIR_INIT_NVAR_PNULL(*key);
 
 	p = hash_position ? (*hash_position) : hash_table->pInternalPointer;
 

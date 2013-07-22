@@ -47,3 +47,5 @@ ext/kernel/string.lo
 ext/kernel/backtrace.lo
 ext/kernel/exception.lo
 ext/kernel/main.lo
+ext/flow.lo
+ext/arithmetic.lo

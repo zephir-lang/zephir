@@ -1,5 +1,9 @@
 <?php
 
+require 'Library/Operators/Arithmetical/BaseOperator.php';
+require 'Library/Operators/Arithmetical/AddOperator.php';
+require 'Library/Operators/Arithmetical/SubOperator.php';
+
 /**
  * Expressions
  *
@@ -107,20 +111,30 @@ class Expression
 
 				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
 
-				switch ($right->getType()) {
+				switch ($variable->getType()) {
 					case 'int':
-						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
-					case 'bool':
-						$compilationContext->headersManager->add('kernel/operators');
-						if ($right->getCode() == 'true') {
-							return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')');
-						} else {
-							return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')');
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')');
+					case 'variable':
+						switch ($right->getType()) {
+							case 'int':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
+							case 'bool':
+								$compilationContext->headersManager->add('kernel/operators');
+								if ($right->getCode() == 'true') {
+									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')');
+								} else {
+									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')');
+								}
+							default:
+								throw new Exception("Error Processing Request");
 						}
+						break;
 					default:
 						throw new Exception("Error Processing Request");
 				}
+
+
 				break;
 			case 'int':
 				switch ($right->getType()) {
@@ -151,6 +165,8 @@ class Expression
 		switch ($type) {
 			case 'int':
 				return new CompiledExpression('int', $expression['value']);
+			case 'double':
+				return new CompiledExpression('double', $expression['value']);
 			case 'bool':
 				return new CompiledExpression('bool', $expression['value']);
 			case 'string':
@@ -167,6 +183,12 @@ class Expression
 				return $this->compileEquals($expression, $compilationContext);
 			case 'identical':
 				return $this->compileIdentical($expression, $compilationContext);
+			case 'add':
+				$expr = new AddOperator();
+				return $expr->compile($expression, $compilationContext);
+			case 'sub':
+				$expr = new SubOperator();
+				return $expr->compile($expression, $compilationContext);
 			default:
 				throw new Exception("Unknown " . $type . " " . print_r($expression, true));
 		}

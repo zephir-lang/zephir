@@ -35,13 +35,13 @@ void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC) {
 	zephir_globals->recursive_lock = 0;
 
 	/* Stats options */
-	#ifndef PHALCON_RELEASE
+	#ifndef ZEPHIR_RELEASE
 
 	//zephir_globals->zephir_stack_stats = 0;
 	//zephir_globals->zephir_number_grows = 0;
 
 	//int i;
-	//for (i = 0; i < PHALCON_MAX_MEMORY_STACK; i++) {
+	//for (i = 0; i < ZEPHIR_MAX_MEMORY_STACK; i++) {
 	//	zephir_globals->zephir_stack_derivate[i] = 0;
 	//}
 
@@ -104,18 +104,18 @@ int zephir_get_global(zval **arr, const char *global, unsigned int global_length
 			if (Z_TYPE_PP(gv) == IS_ARRAY) {
 				*arr = *gv;
 				if (!*arr) {
-					PHALCON_INIT_VAR(*arr);
+					ZEPHIR_INIT_VAR(*arr);
 					array_init(*arr);
 				}
 			} else {
-				PHALCON_INIT_VAR(*arr);
+				ZEPHIR_INIT_VAR(*arr);
 				array_init(*arr);
 			}
 			return SUCCESS;
 		}
 	}
 
-	PHALCON_INIT_VAR(*arr);
+	ZEPHIR_INIT_VAR(*arr);
 	array_init(*arr);
 
 	return SUCCESS;

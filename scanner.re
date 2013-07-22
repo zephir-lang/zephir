@@ -122,6 +122,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'boolean' {
+			token->opcode = XX_T_TYPE_BOOL;
+			return 0;
+		}
+
 		'string' {
 			token->opcode = XX_T_TYPE_STRING;
 			return 0;
@@ -149,6 +154,31 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		'new' {
 			token->opcode = XX_T_NEW;
+			return 0;
+		}
+
+		'return' {
+			token->opcode = XX_T_RETURN;
+			return 0;
+		}
+
+		'loop' {
+			token->opcode = XX_T_LOOP;
+			return 0;
+		}
+
+		'break' {
+			token->opcode = XX_T_BREAK;
+			return 0;
+		}
+
+		'continue' {
+			token->opcode = XX_T_CONTINUE;
+			return 0;
+		}
+
+		'while' {
+			token->opcode = XX_T_WHILE;
 			return 0;
 		}
 
@@ -241,6 +271,16 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		"->" {
 			token->opcode = XX_T_ARROW;
+			return 0;
+		}
+
+		"+" {
+			token->opcode = XX_T_ADD;
+			return 0;
+		}
+
+		"-" {
+			token->opcode = XX_T_SUB;
 			return 0;
 		}
 
