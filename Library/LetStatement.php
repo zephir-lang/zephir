@@ -27,6 +27,9 @@ class LetStatement
 		switch ($type) {
 			case 'int':
 				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$codePrinter->output($variable . ' = 0;');
+						break;
 					case 'int':
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
 						break;
@@ -45,11 +48,17 @@ class LetStatement
 				break;
 			case 'double':
 				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$codePrinter->output($variable . ' = 0.0;');
+						break;
 					case 'int':
 						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
 						break;
 					case 'double':
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						break;
+					case 'bool':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
 						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
@@ -60,6 +69,9 @@ class LetStatement
 				break;
 			case 'bool':
 				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$codePrinter->output($variable . ' = 0;');
+						break;
 					case 'int':
 					case 'double':
 						$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
@@ -90,15 +102,25 @@ class LetStatement
 				}
 				break;
 			case 'variable':
-				$symbolVariable->initVariant($compilationContext);
+
 				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						break;
 					case 'int':
 						$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						break;
 					case 'double':
-						$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						//print_r($resolvedExpr->getOriginal());
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						}
 						break;
 					case 'bool':
+						$symbolVariable->initVariant($compilationContext);
 						if ($resolvedExpr->getCode() == 'true') {
 							$codePrinter->output('ZVAL_BOOL(' . $variable . ', 1);');
 						} else {
@@ -110,20 +132,23 @@ class LetStatement
 						}
 						break;
 					case 'string':
+						$symbolVariable->initVariant($compilationContext);
 						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
 						break;
 					case 'variable':
-						if ($readDetector->detect($resolvedExpr)) {
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 							$code = $resolvedExpr->resolve(null, $compilationContext);
-							$codePrinter->output($code);
+							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
 						} else {
 							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
 						}
 						break;
 					case 'empty-array':
+						$symbolVariable->initVariant($compilationContext);
 						$codePrinter->output('array_init(' . $variable . ');');
 						break;
 					case 'array':
+						$symbolVariable->initVariant($compilationContext);
 						$codePrinter->output('array_init(' . $variable . ');');
 						foreach ($resolvedExpr->getCode() as $item) {
 							if (isset($item['key'])) {
@@ -133,8 +158,34 @@ class LetStatement
 										$codePrinter->output('add_assoc_long_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), 1);');
 										break;
 									case 'int':
-
 										break;
+								}
+							} else {
+								switch ($item['value']['type']) {
+									case 'int':
+										$compilationContext->headersManager->add('kernel/array');
+										$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+										$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+										$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $tempVar->getName() . ', 0);');
+										break;
+									case 'double':
+										$compilationContext->headersManager->add('kernel/array');
+										$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+										$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+										$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $tempVar->getName() . ', 0);');
+										break;
+									case 'bool':
+										$compilationContext->headersManager->add('kernel/array');
+										$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+										if ($item['value']['value'] == 'true') {
+											$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 1);');
+										} else {
+											$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
+										}
+										$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $tempVar->getName() . ', 0);');
+										break;
+									default:
+										throw new Exception("Unknown");
 								}
 							}
 						}

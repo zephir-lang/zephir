@@ -33,4 +33,9 @@ class CompilationContext
 	 */
 	public $headersManager;
 
+	/**
+	 * Tells if the the compilation is being made inside a cycle
+	 */
+	public $insideCycle = 0;
+
 }

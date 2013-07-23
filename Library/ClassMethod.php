@@ -218,7 +218,11 @@ class ClassMethod
 
 			$groupVariables = array();
 			foreach ($variables as $variable) {
-				$groupVariables[] = $pointer . $variable->getName();
+				if ($type == 'variable' && $variable->mustInitNull()) {
+					$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+				} else {
+					$groupVariables[] = $pointer . $variable->getName();
+				}
 			}
 
 			$codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');

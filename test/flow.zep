@@ -131,6 +131,29 @@ class Flow
 		}
 	}
 
+	public function testIf12()
+	{
+		int a;
+		double b;
+		boolean c;
+		let a = 1;
+		if a {
+			let b = 1;
+			if b {
+				let c = 1;
+				if c {
+					return 1;
+				} else {
+					return 0;
+				}
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
 	public function testLoop1()
 	{
 		var a;
@@ -173,6 +196,23 @@ class Flow
 		return a;
 	}
 
+	public function testLoop4()
+	{
+		int a;
+		let a = 1;
+		loop {
+			let a = a + 1;
+			if a === 3 {
+				let a = a + 1;
+				continue;
+			}
+			if a === 5 {
+				break;
+			}
+		}
+		return a;
+	}
+
 	public function testWhile1()
 	{
 		int a;
@@ -185,6 +225,16 @@ class Flow
 
 	public function testWhile2()
 	{
+		int a;
+		let a = 5;
+		while a {
+			let a = a - 1;
+		}
+		return a;
+	}
+
+	public function testWhile3()
+	{
 		int a; var b; double c;
 		let a = 5;
 		while (a) {
@@ -192,6 +242,22 @@ class Flow
 			while (b) {
 				let b = b - 1;
 			}
+			let a = a - 1;
+		}
+		let c = a + b;
+		return c;
+	}
+
+	public function testWhile4()
+	{
+		int a; var b; double c;
+		let a = 5;
+		while a {
+			let b = 5;
+			while b {
+				let b = b - 1;
+			}
+			let a = a - 1;
 		}
 		let c = a + b;
 		return c;

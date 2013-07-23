@@ -19,6 +19,8 @@ class Variable
 
 	protected $_variantInits = 0;
 
+	protected $_mustInitNull = false;
+
 	public function __construct($type, $name)
 	{
 		$this->_type = $type;
@@ -40,11 +42,22 @@ class Variable
 		$this->_numberUses++;
 	}
 
+	/**
+	 * Return the number of uses
+	 *
+	 * @return long
+	 */
 	public function getNumberUses()
 	{
 		return $this->_numberUses;
 	}
 
+	/**
+	 * Sets if the variable is initialized
+	 * This allow to throw an exception if the variable is read without initialization
+	 *
+	 * @param boolean $initialized
+	 */
 	public function setIsInitialized($initialized)
 	{
 		$this->_initialized = $initialized;
@@ -82,6 +95,16 @@ class Variable
 	}
 
 	/**
+	 * Set if the variable must be initialized to null
+	 *
+	 * @return boolean
+	 */
+	public function mustInitNull()
+	{
+		return $this->_mustInitNull;
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext
@@ -91,7 +114,8 @@ class Variable
 		if ($this->getName() != 'this') {
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);
-			if ($this->_variantInits > 0) {
+			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+				$this->_mustInitNull = true;
 				$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
 			} else {
 				$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');

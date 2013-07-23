@@ -32,12 +32,12 @@ class Expression
 
 	public function compileArray($expression, CompilationContext $compilationContext)
 	{
-		return new CompiledExpression('array', $expression['left']);
+		return new CompiledExpression('array', $expression['left'], $expression);
 	}
 
 	public function compileNewInstance($expression, CompilationContext $compilationContext)
 	{
-		return new CompiledExpression('new-instance', $expression);
+		return new CompiledExpression('new-instance', $expression, $expression);
 	}
 
 	public function compileEquals($expression, CompilationContext $compilationContext)
@@ -66,7 +66,7 @@ class Expression
 				switch ($right->getType()) {
 					case 'int':
 						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
+						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 					default:
 						throw new Exception("Error Processing Request");
 				}
@@ -74,9 +74,9 @@ class Expression
 			case 'int':
 				switch ($right->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode());
+						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
 					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode());
+						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
 					default:
 						throw new Exception("Error Processing Request");
 				}
@@ -113,18 +113,18 @@ class Expression
 
 				switch ($variable->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')');
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression);
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 							case 'bool':
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($right->getCode() == 'true') {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')');
+									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression);
 								} else {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')');
+									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
 								}
 							default:
 								throw new Exception("Error Processing Request");
@@ -139,9 +139,9 @@ class Expression
 			case 'int':
 				switch ($right->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode());
+						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
 					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode());
+						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
 					default:
 						throw new Exception("Error Processing Request");
 				}
@@ -163,18 +163,20 @@ class Expression
 
 		$type = $expression['type'];
 		switch ($type) {
+			case 'null':
+				return new CompiledExpression('null', null, $expression);
 			case 'int':
-				return new CompiledExpression('int', $expression['value']);
+				return new CompiledExpression('int', $expression['value'], $expression);
 			case 'double':
-				return new CompiledExpression('double', $expression['value']);
+				return new CompiledExpression('double', $expression['value'], $expression);
 			case 'bool':
-				return new CompiledExpression('bool', $expression['value']);
+				return new CompiledExpression('bool', $expression['value'], $expression);
 			case 'string':
-				return new CompiledExpression('string', $this->_addSlaches($expression['value']));
+				return new CompiledExpression('string', $this->_addSlaches($expression['value']), $expression);
 			case 'variable':
-				return new CompiledExpression('variable', $expression['value']);
+				return new CompiledExpression('variable', $expression['value'], $expression);
 			case 'empty-array':
-				return new CompiledExpression('empty-array', null);
+				return new CompiledExpression('empty-array', null, $expression);
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
 			case 'new':

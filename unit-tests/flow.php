@@ -18,4 +18,4 @@ assert($t->testLoop2() === 5);
 assert($t->testLoop3() === 5);
 
 assert($t->testWhile1() === 0);
-
+assert($t->testWhile2() === 0.0);

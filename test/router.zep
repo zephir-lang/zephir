@@ -77,7 +77,8 @@ class Router
 	 */
 	public function __construct(defaultRoutes=true)
 	{
-		var routes, paths, actionPattern, route, paramsPattern, params;
+		var routes, paths, actionPattern, route,
+			paramsPattern, params;
 
 		let routes = [];
 		if (defaultRoutes === true) {
@@ -85,21 +86,20 @@ class Router
 			/**
 			 * Two routes are added by default to match /:controller/:action and /:controller/:action/:params
 			 */
-			let paths = ['controller': 1];
-			let actionPattern = '#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#';
-			let route = new Test\Router\Route(actionPattern, paths);
-			let routes[] = route;
+			let paths = ['controller': 1],
+				actionPattern = '#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#',
+				route = new Test\Router\Route(actionPattern, paths),
+				routes[] = route;
 
-			let paths = ['controller': 1, 'action': 2, 'params': 3];
-			let paramsPattern = '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#';
-			let route = new Test\Router\Route(paramsPattern, paths);
-			let routes[] = route;
+			let paths = ['controller': 1, 'action': 2, 'params': 3],
+				paramsPattern = '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#',
+				route = new Test\Router\Route(paramsPattern, paths),
+				routes[] = route;
 		}
 
-		let params = [];
-
-		let this->_params = params;
-		let this->_routes = routes;
+		let params = [],
+			this->_params = params,
+			this->_routes = routes;
 	}
 
 	/**

@@ -135,11 +135,17 @@ class CodePrinter
 		}
 	}
 
+	/**
+	 * Increase the indentation level
+	 */
 	public function increaseLevel()
 	{
 		$this->_level++;
 	}
 
+	/**
+	 * Decrease the indentation level
+	 */
 	public function decreaseLevel()
 	{
 		$this->_level--;

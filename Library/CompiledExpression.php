@@ -12,10 +12,17 @@ class CompiledExpression
 
 	protected $_code;
 
-	public function __construct($type, $code)
+	protected $_originalExpr;
+
+	/**
+	 *
+	 * @param string $type
+	 */
+	public function __construct($type, $code, $originalExpr)
 	{
 		$this->_type = $type;
 		$this->_code = $code;
+		$this->_originalExpr = $originalExpr;
 	}
 
 	public function getType()
@@ -26,6 +33,11 @@ class CompiledExpression
 	public function getCode()
 	{
 		return $this->_code;
+	}
+
+	public function getOriginal()
+	{
+		return $this->_originalExpr;
 	}
 
 	public function getBooleanCode()

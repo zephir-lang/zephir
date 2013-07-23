@@ -15,7 +15,7 @@ class WhileStatement
 	}
 
 	/**
-	 *
+	 * Perform the compilation of code
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
@@ -59,12 +59,22 @@ class WhileStatement
 		}
 
 		/**
+		 * Variables are initialized in a different way inside cycle
+		 */
+		$compilationContext->insideCycle++;
+
+		/**
 		 * Compile statements in the 'if' block
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
 			$st->compile($compilationContext);
 		}
+
+		/**
+		 * Restore the cycle counter
+		 */
+		$compilationContext->insideCycle--;
 
 		$compilationContext->codePrinter->output('}');
 
