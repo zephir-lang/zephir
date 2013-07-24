@@ -107,3 +107,76 @@ PHP_METHOD(Test_NativeArray, testArray4) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testArray5) {
+
+	zval *a, *_0, *_1, *_2;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_NULL(_0);
+	zephir_array_append(&a, _0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_NULL(_1);
+	zephir_array_append(&a, _1, 0);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_NULL(_2);
+	zephir_array_append(&a, _2, 0);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_NativeArray, testArray6) {
+
+	zval *a, *_0, *_1, *_2;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "x", 1);
+	zephir_array_append(&a, _0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "y", 1);
+	zephir_array_append(&a, _1, 0);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_STRING(_2, "z", 1);
+	zephir_array_append(&a, _2, 0);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_NativeArray, testArray7) {
+
+	long a, b, c;
+	zval *d, *_0, *_1, *_2;
+
+	ZEPHIR_MM_GROW();
+	a = 1;
+
+	b = 2;
+
+	c = 3;
+
+	ZEPHIR_INIT_VAR(d);
+	array_init(d);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, a);
+	zephir_array_append(&d, _0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, b);
+	zephir_array_append(&d, _1, 0);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_LONG(_2, c);
+	zephir_array_append(&d, _2, 0);
+
+	RETURN_CCTOR(d);
+
+
+}
+

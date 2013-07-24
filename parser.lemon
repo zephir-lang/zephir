@@ -1011,6 +1011,10 @@ xx_array_value(R) ::= xx_literal_expr(L) . {
 	R = L;
 }
 
+xx_array_value(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+}
+
 xx_assign_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL);
 }

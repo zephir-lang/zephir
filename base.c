@@ -409,7 +409,7 @@ int main(int argc, char **argv) {
 	char *program;
 	int i;
 
-	program = malloc(sizeof(char) * 10240);
+	program = malloc(sizeof(char) * 20480);
 
 	if (argc > 0) {
 
@@ -431,4 +431,6 @@ int main(int argc, char **argv) {
 
 		xx_parse_program(program, i - 1);
 	}
+
+	free(program);
 }

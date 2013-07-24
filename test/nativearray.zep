@@ -34,4 +34,34 @@ class NativeArray
 		let a = [false, true, false];
 		return a;
 	}
+
+	public function testArray5()
+	{
+		var a;
+		let a = [null, null, null];
+		return a;
+	}
+
+	public function testArray6()
+	{
+		var a;
+		let a = ["x", "y", "z"];
+		return a;
+	}
+
+	public function testArray7()
+	{
+		var d; int a, b, c;
+		let a = 1, b = 2, c = 3;
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray8()
+	{
+		var d; double a, b, c;
+		let a = 1, b = 2, c = 3;
+		let d = [a, b, c];
+		return d;
+	}
 }
