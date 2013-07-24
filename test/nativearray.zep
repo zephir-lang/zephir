@@ -64,4 +64,21 @@ class NativeArray
 		let d = [a, b, c];
 		return d;
 	}
+
+	public function testArray9()
+	{
+		var d; boolean a, b, c;
+		let a = true, b = false, c = true;
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray10()
+	{
+		var d; string a, b, c;
+		let a = "hello1", b = "hello2", c = "hello3";
+		let d = [a, b, c];
+		return d;
+	}
+
 }

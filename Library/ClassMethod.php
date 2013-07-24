@@ -208,6 +208,10 @@ class ClassMethod
 				case 'double':
 					$code = 'double ';
 					break;
+				case 'string':
+					$compilationContext->headersManager->add('kernel/string_type');
+					$code = 'zephir_str ';
+					break;
 				case 'variable':
 					$pointer = '*';
 					$code = 'zval ';

@@ -67,6 +67,32 @@ class LetStatement
 						throw new Exception("Unknown type " . $resolvedExpr->getType());
 				}
 				break;
+			case 'string':
+				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$compilationContext->headersManager->add('kernel/string_type');
+						$codePrinter->output('zephir_str_assign(' . $variable . ', SL(""));');
+						break;
+					case 'int':
+						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+						break;
+					case 'string':
+						$compilationContext->headersManager->add('kernel/string_type');
+						$codePrinter->output('zephir_str_assign(' . $variable . ', SL("' . $resolvedExpr->getCode() . '"));');
+						break;
+					case 'double':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						break;
+					case 'bool':
+						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						break;
+					case 'variable':
+						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;
+					default:
+						throw new Exception("Unknown type " . $resolvedExpr->getType());
+				}
+				break;
 			case 'bool':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
@@ -179,6 +205,69 @@ class LetStatement
 	}
 
 	/**
+	 * Resolves an item to be added in an array
+	 */
+	public function getArrayValue($item, CompilationContext $compilationContext)
+	{
+		$codePrinter = $compilationContext->codePrinter;
+
+		$expression = new Expression($item['value']);
+		$exprCompiled = $expression->compile($compilationContext);
+		switch ($exprCompiled->getType()) {
+			case 'int':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				return $tempVar->getName();
+			case 'double':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				return $tempVar->getName();
+			case 'bool':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				if ($item['value']['value'] == 'true') {
+					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 1);');
+				} else {
+					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
+				}
+				return $tempVar->getName();
+			case 'null':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
+				return $tempVar->getName();
+			case 'string':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
+				return $tempVar->getName();
+			case 'variable':
+				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode());
+				switch ($itemVariable->getType()) {
+					case 'int':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					case 'double':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					case 'string':
+
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '.str, 1);');
+						return $tempVar->getName();
+					case 'bool':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					default:
+						throw new Exception("Unknown " . $itemVariable->getType());
+				}
+				break;
+			default:
+				throw new Exception("Unknown");
+		}
+	}
+
+	/**
 	 * Compiles an array initialization
 	 */
 	public function assignArray($variable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
@@ -198,59 +287,8 @@ class LetStatement
 						break;
 				}
 			} else {
-				$expression = new Expression($item['value']);
-				$exprCompiled = $expression->compile($compilationContext);
-				switch ($exprCompiled->getType()) {
-					case 'int':
-						$compilationContext->headersManager->add('kernel/array');
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
-						$item = $tempVar->getName();
-						break;
-					case 'double':
-						$compilationContext->headersManager->add('kernel/array');
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
-						$item = $tempVar->getName();
-						break;
-					case 'bool':
-						$compilationContext->headersManager->add('kernel/array');
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						if ($item['value']['value'] == 'true') {
-							$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 1);');
-						} else {
-							$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
-						}
-						$item = $tempVar->getName();
-						break;
-					case 'null':
-						$compilationContext->headersManager->add('kernel/array');
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
-						$item = $tempVar->getName();
-						break;
-					case 'string':
-						$compilationContext->headersManager->add('kernel/array');
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
-						$item = $tempVar->getName();
-						break;
-					case 'variable':
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode());
-						switch ($itemVariable->getType()) {
-							case 'int':
-								$compilationContext->headersManager->add('kernel/array');
-								$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-								$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
-								$item = $tempVar->getName();
-								break;
-							default:
-								throw new Exception("Unknown " . $variable->getType());
-						}
-						break;
-					default:
-						throw new Exception("Unknown");
-				}
+				$item = $this->getArrayValue($item, $compilationContext);
+				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $item . ', 0);');
 			}
 		}
