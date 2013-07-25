@@ -1,4 +1,11 @@
 
+/**
+ * Zephir parser
+ *
+ * This parser is intended to produce a better code generation
+ * rather than full expresiveness
+ */
+
 %token_prefix XX_
 %token_type {xx_parser_token*}
 %default_type {json_object*}
@@ -6,8 +13,9 @@
 %name xx_
 
 %left COMMA .
-%left EQUALS IDENTICAL .
+%left EQUALS IDENTICAL LESS GREATER .
 %left ADD SUB .
+%right TYPEOF INSTANCEOF .
 %right NEW .
 
 %include {
@@ -332,7 +340,9 @@ static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_par
 	if (P) {
 		json_object_object_add(ret, "property", json_object_new_string(P->token));
 	}
-	json_object_object_add(ret, "expr", expr);
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
+	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -424,12 +434,12 @@ static json_object *xx_ret_continue_statement(xx_scanner_state *state)
 	return ret;
 }
 
-static json_object *xx_ret_echo_statement(json_object *expr, xx_scanner_state *state)
+static json_object *xx_ret_echo_statement(json_object *expressions, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("echo"));
-	json_object_object_add(ret, "expr", expr);
+	json_object_object_add(ret, "expressions", expressions);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -973,12 +983,36 @@ xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_as
 	R = xx_ret_let_assignment("variable-append", I, NULL, E, status->scanner_state);
 }
 
-xx_echo_statement(R) ::= ECHO xx_literal_expr(E) DOTCOMMA . {
+xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("array-index", D, I, E, status->scanner_state);
+}
+
+xx_let_assignment(R) ::= IDENTIFIER(I) INCR . {
+	R = xx_ret_let_assignment("incr", I, NULL, NULL, status->scanner_state);
+}
+
+xx_let_assignment(R) ::= IDENTIFIER(I) DECR . {
+	R = xx_ret_let_assignment("decr", I, NULL, NULL, status->scanner_state);
+}
+
+xx_echo_statement(R) ::= ECHO xx_echo_expressions(E) DOTCOMMA . {
 	R = xx_ret_echo_statement(E, status->scanner_state);
 }
 
-xx_echo_statement(R) ::= ECHO IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
+xx_echo_expressions(R) ::= xx_echo_expressions(L) COMMA xx_echo_expression(A) . {
+	R = xx_ret_list(L, A);
+}
+
+xx_echo_expressions(R) ::= xx_echo_expression(A) . {
+	R = xx_ret_list(NULL, A);
+}
+
+xx_echo_expression(R) ::= xx_literal_expr(E) . {
+	R = E;;
+}
+
+xx_echo_expression(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_return_statement(R) ::= RETURN xx_literal_expr(E) DOTCOMMA . {
@@ -1025,54 +1059,82 @@ xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
 	R = xx_ret_declare_variable(I, E, status->scanner_state);
 }
 
+/* y = v[x] */
+xx_assign_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+/* y = a + b */
 xx_assign_expr(R) ::= xx_assign_expr(O1) ADD xx_assign_expr(O2) . {
 	R = xx_ret_expr("add", O1, O2, NULL, status->scanner_state);
 }
 
+/* y = a - b */
 xx_assign_expr(R) ::= xx_assign_expr(O1) SUB xx_assign_expr(O2) . {
 	R = xx_ret_expr("sub", O1, O2, NULL, status->scanner_state);
 }
 
+/* y = instanceof b */
+xx_assign_expr(R) ::= INSTANCEOF xx_assign_expr(O1) . {
+	R = xx_ret_expr("instanceof", O1, NULL, NULL, status->scanner_state);
+}
+
+/* y = typeof b */
+xx_assign_expr(R) ::= TYPEOF xx_assign_expr(O1) . {
+	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
+}
+
+/* y = x */
 xx_assign_expr(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
+/* y = 100 */
 xx_assign_expr(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
+/* y = "hello" */
 xx_assign_expr(R) ::= STRING(S) . {
 	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
 }
 
+/* y = 12.5 */
 xx_assign_expr(R) ::= DOUBLE(D) . {
 	R = xx_ret_literal(XX_T_DOUBLE, D, status->scanner_state);
 }
 
+/* y = null */
 xx_assign_expr(R) ::= NULL . {
 	R = xx_ret_literal(XX_T_NULL, NULL, status->scanner_state);
 }
 
+/* y = false */
 xx_assign_expr(R) ::= FALSE . {
 	R = xx_ret_literal(XX_T_FALSE, NULL, status->scanner_state);
 }
 
+/* y = [] */
 xx_assign_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
 	R = xx_ret_expr("empty-array", NULL, NULL, NULL, status->scanner_state);
 }
 
+/* y = [1, 2, 3] */
 xx_assign_expr(R) ::= SBRACKET_OPEN xx_array_list(L) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array", L, NULL, NULL, status->scanner_state);
 }
 
+/* y = new MyClass */
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) . {
 	R = xx_ret_new_instance(I, NULL, status->scanner_state);
 }
 
+/* y = new MyClass() */
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_new_instance(I, NULL, status->scanner_state);
 }
 
+/* y = new MyClass(false, x) */
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_new_instance(I, P, status->scanner_state);
 }
@@ -1163,6 +1225,14 @@ xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) IDENTICAL xx_eval_expr(O2) . {
 	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= xx_eval_expr(O1) LESS xx_eval_expr(O2) . {
+	R = xx_ret_expr("less", O1, O2, NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= xx_eval_expr(O1) GREATER xx_eval_expr(O2) . {
+	R = xx_ret_expr("greater", O1, O2, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {

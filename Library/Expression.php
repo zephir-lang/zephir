@@ -98,8 +98,6 @@ class Expression
 			throw new Exception("Missing right part of the expression");
 		}
 
-		//echo '[', $expression['left']['type'], ']', PHP_EOL;
-
 		$leftExpr = new Expression($expression['left']);
 		$left = $leftExpr->compile($compilationContext);
 
@@ -133,8 +131,6 @@ class Expression
 					default:
 						throw new Exception("Error Processing Request");
 				}
-
-
 				break;
 			case 'int':
 				switch ($right->getType()) {
@@ -142,6 +138,66 @@ class Expression
 						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
+					default:
+						throw new Exception("Error Processing Request");
+				}
+				break;
+			default:
+				throw new Exception("Error Processing Request");
+		}
+
+	}
+
+	public function compileLess($expression, CompilationContext $compilationContext)
+	{
+		if (!isset($expression['left'])) {
+			throw new Exception("Missing left part of the expression");
+		}
+
+		if (!isset($expression['right'])) {
+			throw new Exception("Missing right part of the expression");
+		}
+
+		$leftExpr = new Expression($expression['left']);
+		$left = $leftExpr->compile($compilationContext);
+
+		$rightExpr = new Expression($expression['right']);
+		$right = $rightExpr->compile($compilationContext);
+
+		switch ($left->getType()) {
+			case 'variable':
+
+				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+
+				switch ($variable->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
+					case 'variable':
+						switch ($right->getType()) {
+							case 'int':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+							case 'bool':
+								$compilationContext->headersManager->add('kernel/operators');
+								if ($right->getCode() == 'true') {
+									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression);
+								} else {
+									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
+								}
+							default:
+								throw new Exception("Error Processing Request");
+						}
+						break;
+					default:
+						throw new Exception("Error Processing Request");
+				}
+				break;
+			case 'int':
+				switch ($right->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
+					case 'double':
+						return new CompiledExpression('bool', $left->getCode() . ' < (int) ' . $right->getCode(), $expression);
 					default:
 						throw new Exception("Error Processing Request");
 				}
@@ -177,6 +233,8 @@ class Expression
 				return new CompiledExpression('variable', $expression['value'], $expression);
 			case 'empty-array':
 				return new CompiledExpression('empty-array', null, $expression);
+			case 'array-access':
+				return new CompiledExpression('array-access', null, $expression);
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
 			case 'new':
@@ -185,6 +243,8 @@ class Expression
 				return $this->compileEquals($expression, $compilationContext);
 			case 'identical':
 				return $this->compileIdentical($expression, $compilationContext);
+			case 'less':
+				return $this->compileLess($expression, $compilationContext);
 			case 'add':
 				$expr = new AddOperator();
 				return $expr->compile($expression, $compilationContext);
@@ -192,7 +252,7 @@ class Expression
 				$expr = new SubOperator();
 				return $expr->compile($expression, $compilationContext);
 			default:
-				throw new Exception("Unknown " . $type . " " . print_r($expression, true));
+				throw new CompilerException("Unknown expression: " . $type, $expression);
 		}
 		//echo $type;
 	}

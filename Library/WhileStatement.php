@@ -19,7 +19,8 @@ class WhileStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$expr = new Expression($this->_statement['expr']);
+		$exprStatement = $this->_statement['expr'];
+		$expr = new Expression($exprStatement);
 
 		$compiledExpression = $expr->compile($compilationContext);
 

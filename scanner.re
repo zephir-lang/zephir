@@ -207,6 +207,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'typeof' {
+			token->opcode = XX_T_TYPEOF;
+			s->active_char += sizeof("typeof")-1;
+			return 0;
+		}
+
+		'instanceof' {
+			token->opcode = XX_T_INSTANCEOF;
+			s->active_char += sizeof("instanceof")-1;
+			return 0;
+		}
+
 		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		STRING {
 			token->opcode = XX_T_STRING;
@@ -335,6 +347,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		"-" {
 			s->active_char++;
 			token->opcode = XX_T_SUB;
+			return 0;
+		}
+
+		"++" {
+			s->active_char += 2;
+			token->opcode = XX_T_INCR;
+			return 0;
+		}
+
+		"--" {
+			s->active_char += 2;
+			token->opcode = XX_T_DECR;
 			return 0;
 		}
 

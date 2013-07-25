@@ -43,6 +43,8 @@
 #define XX_T_LOOP 368
 #define XX_T_BREAK 369
 #define XX_T_CONTINUE 370
+#define XX_T_INSTANCEOF 371
+#define XX_T_TYPEOF 372
 
 /* Operators */
 #define XX_T_AT '@'
@@ -64,6 +66,8 @@
 #define XX_T_IDENTICAL 402
 #define XX_T_ADD '+'
 #define XX_T_SUB '-'
+#define XX_T_INCR 403
+#define XX_T_DECR 404
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

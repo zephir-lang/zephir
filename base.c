@@ -193,6 +193,13 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_CONST:
 				xx_(xx_parser, XX_CONST, NULL, parser_status);
 				break;
+			case XX_T_TYPEOF:
+				xx_(xx_parser, XX_TYPEOF, NULL, parser_status);
+				break;
+			case XX_T_INSTANCEOF:
+				xx_(xx_parser, XX_INSTANCEOF, NULL, parser_status);
+				break;
+
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
 				break;
@@ -276,6 +283,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_SUB:
 				xx_(xx_parser, XX_SUB, NULL, parser_status);
+				break;
+			case XX_T_INCR:
+				xx_(xx_parser, XX_INCR, NULL, parser_status);
+				break;
+			case XX_T_DECR:
+				xx_(xx_parser, XX_DECR, NULL, parser_status);
 				break;
 
 			case XX_T_INTEGER:

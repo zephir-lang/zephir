@@ -135,4 +135,24 @@ class Variable
 		$this->_variantInits++;
 	}
 
+	/**
+	 * Observes a variable in the memory frame without initialization
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
+	public function observeVariant(CompilationContext $compilationContext)
+	{
+		if ($this->getName() != 'this') {
+			$compilationContext->headersManager->add('kernel/memory');
+			$compilationContext->symbolTable->mustGrownStack(true);
+			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+				$this->_mustInitNull = true;
+				$compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
+			} else {
+				$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
+			}
+		}
+		$this->_variantInits++;
+	}
+
 }
