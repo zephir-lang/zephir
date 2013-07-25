@@ -132,10 +132,20 @@ class LetStatement
 
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						}
 						break;
 					case 'int':
-						$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						}
 						break;
 					case 'double':
 						//print_r($resolvedExpr->getOriginal());
