@@ -177,6 +177,7 @@ class LetStatement
 							$code = $resolvedExpr->resolve(null, $compilationContext);
 							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
 						} else {
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
 						}
 						break;
