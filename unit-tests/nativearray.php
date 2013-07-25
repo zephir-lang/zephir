@@ -11,3 +11,6 @@ assert($t->testArray6() == array("x", "y", "z"));
 assert($t->testArray7() == array(1, 2, 3));
 assert($t->testArray8() == array(1.0, 2.0, 3.0));
 assert($t->testArray9() == array(true, false, true));
+assert($t->testArray10() == array("hello1",  "hello2",  "hello3"));
+assert($t->testArray11() == array(array(1, 2, 3), array(4, 5, 6)));
+

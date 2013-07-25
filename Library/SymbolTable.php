@@ -73,16 +73,16 @@ class SymbolTable
 	 *
 	 * @return \Variable
 	 */
-	public function getVariableForRead($name)
+	public function getVariableForRead($name, $statement=null)
 	{
 
 		if (!$this->hasVariable($name)) {
-			throw new Exception("Cannot read variable '" . $name. "' because it wasn't defined");
+			throw new CompilerException("Cannot read variable '" . $name . "' because it wasn't defined", $statement);
 		}
 
 		$variable = $this->getVariable($name);
 		if (!$variable->isInitialized()) {
-			throw new Exception("Variable '" . $name . "' can't be used because is not initialized");
+			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized", $statement);
 		}
 
 		$variable->increaseUses();
@@ -94,11 +94,11 @@ class SymbolTable
 	 *
 	 * @return \Variable
 	 */
-	public function getVariableForWrite($name)
+	public function getVariableForWrite($name, $statement=null)
 	{
 
 		if (!$this->hasVariable($name)) {
-			throw new Exception("Cannot write variable '" . $name. "' because it wasn't defined");
+			throw new CompilerException("Cannot write variable '" . $name. "' because it wasn't defined", $statement);
 		}
 
 		$variable = $this->getVariable($name);

@@ -79,7 +79,8 @@ typedef struct _xx_scanner_state {
 	unsigned int start_length;
 	int mode;
 	unsigned int active_line;
-	/*zval *active_file;*/
+	unsigned int active_char;
+	char *active_file;
 } xx_scanner_state;
 
 /* Extra information tokens */

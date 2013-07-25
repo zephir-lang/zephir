@@ -23,14 +23,14 @@ class DeclareStatement
 		$statement = $this->_statement;
 
 		if (!isset($statement['data-type'])) {
-			throw new Exception("Data type is required");
+			throw new CompilerException("Data type is required", $this->_statement);
 		}
 
 		$variables = array();
 		foreach ($statement['variables'] as $variable) {
 
 			if ($compilationContext->symbolTable->hasVariable($variable['variable'])) {
-				throw new Exception("Variable '" . $variable['variable'] . "' is already defined");
+				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
 			}
 
 			/**

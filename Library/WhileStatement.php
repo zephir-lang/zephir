@@ -51,11 +51,11 @@ class WhileStatement
 						$compilationContext->codePrinter->output('while (zend_is_true(' . $variableRight->getName() . ')) {');
 						break;
 					default:
-						throw new Exception("Variable " . $variableRight->getType() . " can't be evaluated");
+						throw new CompilerException("Variable " . $variableRight->getType() . " can't be evaluated", $this->_statement);
 				}
 				break;
 			default:
-				throw new Exception("Expression can't be evaluated");
+				throw new CompilerException("Expression can't be evaluated", $this->_statement);
 		}
 
 		/**

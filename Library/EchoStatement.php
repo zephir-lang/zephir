@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * EchoStatement
+ *
+ * Produce output according to the type
+ */
 class EchoStatement
 {
 	protected $_statement;
@@ -25,8 +30,10 @@ class EchoStatement
 						$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
 						break;
 					default:
-						throw new Exception("Unknown type: " . $variable->getType());
+						throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
 				}
+			default:
+				throw new CompilerException("Unknown type: " . $expr['type'], $expr);
 		}
 	}
 

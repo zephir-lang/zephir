@@ -30,6 +30,9 @@ class ReturnStatement
 			case 'int':
 				$codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
 				break;
+			case 'bool':
+				$codePrinter->output('RETURN_MM_BOOL(' . $resolvedExpr->getBooleanCode() . ');');
+				break;
 			case 'double':
 				$codePrinter->output('RETURN_MM_DOUBLE(' . $resolvedExpr->getCode() . ');');
 				break;
@@ -49,14 +52,12 @@ class ReturnStatement
 						$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
 						break;
 					default:
-						throw new Exception("Cannot return variable '" . $symbolVariable->getType() . "'");
+						throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 				}
 				break;
 			default:
-				throw new Exception("Cannot return variable '" . $resolvedExpr->getType() . "'");
+				throw new CompilerException("Cannot return variable '" . $resolvedExpr->getType() . "'", $statement['expr']);
 		}
-
-		//print_r($variable);
 
 		$codePrinter->outputBlankLine(true);
 	}

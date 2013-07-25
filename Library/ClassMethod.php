@@ -210,6 +210,7 @@ class ClassMethod
 					break;
 				case 'string':
 					$compilationContext->headersManager->add('kernel/string_type');
+					$pointer = '*';
 					$code = 'zephir_str ';
 					break;
 				case 'variable':
@@ -222,7 +223,7 @@ class ClassMethod
 
 			$groupVariables = array();
 			foreach ($variables as $variable) {
-				if ($type == 'variable' && $variable->mustInitNull()) {
+				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
 					$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
 				} else {
 					$groupVariables[] = $pointer . $variable->getName();

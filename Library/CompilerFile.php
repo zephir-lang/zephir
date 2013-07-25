@@ -36,8 +36,8 @@ class CompilerFile
 	 */
 	public function genIR()
 	{
-		$compilePath = str_replace(DIRECTORY_SEPARATOR, '.', $this->_filePath) . ".js";
-		system("./xx " . $this->_filePath . " 2> .temp/" . $compilePath);
+		$compilePath = str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
+		system("./xx " . realpath($this->_filePath) . " > .temp/" . $compilePath);
 		return json_decode(file_get_contents(".temp/" . $compilePath), true);
 	}
 
@@ -110,7 +110,7 @@ class CompilerFile
 					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
 					isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
 					isset($method['docblock']) ? $method['docblock'] : null
-				));
+				), $method);
 			}
 		}
 
@@ -128,6 +128,10 @@ class CompilerFile
 			throw new Exception("Cannot parse file");
 		}
 
+		if (isset($ir['type']) && $ir['type'] == 'error') {
+			throw new ParseException($ir['message'], $ir);
+		}
+
 		/**
 		 * Traverse the top level statements looking for the namespace
 		 */
@@ -136,7 +140,7 @@ class CompilerFile
 			switch ($topStatement['type']) {
 				case 'namespace':
 					if ($namespace !== null) {
-						throw new Exception("The namespace must be defined just one time");
+						throw new CompilerException("The namespace must be defined just one time", $topStatement);
 					}
 					$namespace = $topStatement['name'];
 					$this->_namespace = $namespace;
@@ -145,7 +149,7 @@ class CompilerFile
 		}
 
 		if (!$namespace) {
-			throw new Exception("Every file need a namespace");
+			throw new CompilerException("Every file need a namespace", $topStatement);
 		}
 
 		$class = false;
@@ -153,7 +157,7 @@ class CompilerFile
 			switch ($topStatement['type']) {
 				case 'class':
 					if ($class) {
-						throw new Exception("More than one class defined in the same file");
+						throw new CompilerException("More than one class defined in the same file", $topStatement);
 					}
 					$class = true;
 					$this->preCompileClass($namespace, $topStatement);

@@ -40,10 +40,10 @@ class ClassDefinition
 		return isset($this->_properties[$name]);
 	}
 
-	public function addMethod(ClassMethod $method)
+	public function addMethod(ClassMethod $method, $statement=null)
 	{
 		if (isset($this->_methods[$method->getName()])) {
-			throw new Exception("Method '" . $method->getName() . "' was defined more than one time");
+			throw new CompilerException("Method '" . $method->getName() . "' was defined more than one time", $statement);
 		}
 		$this->_methods[$method->getName()] = $method;
 	}

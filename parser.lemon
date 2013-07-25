@@ -19,7 +19,7 @@
 #include "scanner.h"
 #include "xx.h"
 
-static json_object *xx_ret_literal(int type, xx_parser_token *T)
+static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -57,10 +57,14 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T)
 		json_object_object_add(ret, "value", json_object_new_string(T->token));
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_expr(char *type, json_object *left, json_object *right, json_object *extra)
+static json_object *xx_ret_expr(char *type, json_object *left, json_object *right, json_object *extra, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -76,10 +80,14 @@ static json_object *xx_ret_expr(char *type, json_object *left, json_object *righ
 		json_object_object_add(ret, "extra", extra);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_array_item(json_object *key, json_object *value)
+static json_object *xx_ret_array_item(json_object *key, json_object *value, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -88,20 +96,28 @@ static json_object *xx_ret_array_item(json_object *key, json_object *value)
 	}
 	json_object_object_add(ret, "value", value);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_namespace(xx_parser_token *T)
+static json_object *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("namespace"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, xx_parser_token *E)
+static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, xx_parser_token *E, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -117,10 +133,14 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 		json_object_object_add(ret, "definition", class_definition);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants)
+static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -134,10 +154,14 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 		json_object_object_add(ret, "constants", constants);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_class_property(int visibility, xx_parser_token *T, json_object *default_value, xx_parser_token *D)
+static json_object *xx_ret_class_property(int visibility, xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -157,10 +181,14 @@ static json_object *xx_ret_class_property(int visibility, xx_parser_token *T, js
 		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_value, xx_parser_token *D)
+static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -172,10 +200,14 @@ static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_
 		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_class_method(int visibility, xx_parser_token *T, json_object *parameters, json_object *statements, xx_parser_token *D)
+static json_object *xx_ret_class_method(int visibility, xx_parser_token *T, json_object *parameters, json_object *statements, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -199,10 +231,14 @@ static json_object *xx_ret_class_method(int visibility, xx_parser_token *T, json
 		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value)
+static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -218,6 +254,10 @@ static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_pa
 	if (default_value) {
 		json_object_object_add(ret, "default", default_value);
 	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
 	return ret;
 }
@@ -269,17 +309,21 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 	return ret;
 }
 
-static json_object *xx_ret_let_statement(json_object *assignments)
+static json_object *xx_ret_let_statement(json_object *assignments, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("let"));
 	json_object_object_add(ret, "assignments", assignments);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_parser_token *P, json_object *expr)
+static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_parser_token *P, json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -290,10 +334,14 @@ static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_par
 	}
 	json_object_object_add(ret, "expr", expr);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *else_statements)
+static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *else_statements, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -308,10 +356,14 @@ static json_object *xx_ret_if_statement(json_object *expr, json_object *statemen
 		json_object_object_add(ret, "else_statements", else_statements);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_while_statement(json_object *expr, json_object *statements)
+static json_object *xx_ret_while_statement(json_object *expr, json_object *statements, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -322,10 +374,14 @@ static json_object *xx_ret_while_statement(json_object *expr, json_object *state
 		json_object_object_add(ret, "statements", statements);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_loop_statement(json_object *statements)
+static json_object *xx_ret_loop_statement(json_object *statements, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -335,48 +391,68 @@ static json_object *xx_ret_loop_statement(json_object *statements)
 		json_object_object_add(ret, "statements", statements);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_break_statement()
+static json_object *xx_ret_break_statement(xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("break"));
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_continue_statement()
+static json_object *xx_ret_continue_statement(xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("continue"));
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_echo_statement(json_object *expr)
+static json_object *xx_ret_echo_statement(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("echo"));
 	json_object_object_add(ret, "expr", expr);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_return_statement(json_object *expr)
+static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("return"));
 	json_object_object_add(ret, "expr", expr);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_declare_statement(int type, json_object *variables)
+static json_object *xx_ret_declare_statement(int type, json_object *variables, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -407,10 +483,14 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables)
 
 	json_object_object_add(ret, "variables", variables);
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *expr)
+static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -419,10 +499,14 @@ static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *exp
 		json_object_object_add(ret, "expr", expr);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *parameters)
+static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -433,15 +517,23 @@ static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *paramet
 		json_object_object_add(ret, "parameters", parameters);
 	}
 
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
 	return ret;
 }
 
-static json_object *xx_ret_comment(xx_parser_token *T)
+static json_object *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("comment"));
 	json_object_object_add(ret, "value", json_object_new_string(T->token));
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
 	return ret;
 }
@@ -452,16 +544,34 @@ static json_object *xx_ret_comment(xx_parser_token *T)
 
 	//fprintf(stderr, "error!\n");
 
-	if (status->scanner_state->start_length) {
+	json_object *syntax_error = json_object_new_object();
+
+	json_object_object_add(syntax_error, "type", json_object_new_string("error"));
+
+	/*if (status->scanner_state->start_length) {
 		fprintf(stderr, "Syntax error, %s", status->scanner_state->start);
 	} else {
 		fprintf(stderr, "EOF");
-	}
+	}*/
 
 	//status->syntax_error_len = 48 + Z_STRLEN_P(status->scanner_state->active_file);
 	//status->syntax_error = emalloc(sizeof(char) * status->syntax_error_len);
 
+	if (status->scanner_state->start_length) {
+		json_object_object_add(syntax_error, "message", json_object_new_string("Syntax error"));
+	} else {
+		json_object_object_add(syntax_error, "message", json_object_new_string("Unexpected EOF"));
+	}
+
+	json_object_object_add(syntax_error, "file", json_object_new_string(status->scanner_state->active_file));
+	json_object_object_add(syntax_error, "line", json_object_new_int(status->scanner_state->active_line));
+	json_object_object_add(syntax_error, "char", json_object_new_int(status->scanner_state->active_char));
+
 	status->status = XX_PARSING_FAILED;
+
+	status->ret = syntax_error;
+
+	//status->scanner_state->active_file
 }
 
 %token_destructor {
@@ -504,75 +614,75 @@ xx_top_statement(R) ::= xx_comment(T) . {
 }
 
 xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_namespace(I);
+	R = xx_ret_namespace(I, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 0, NULL);
+	R = xx_ret_class(I, C, 0, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 0, E);
+	R = xx_ret_class(I, C, 0, E, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 1, NULL);
+	R = xx_ret_class(I, C, 1, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 1, E);
+	R = xx_ret_class(I, C, 1, E, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 0, NULL);
+	R = xx_ret_class(I, NULL, 0, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 0, E);
+	R = xx_ret_class(I, NULL, 0, E, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 1, NULL);
+	R = xx_ret_class(I, NULL, 1, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 1, E);
+	R = xx_ret_class(I, NULL, 1, E, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) . {
-	R = xx_ret_class_definition(C, NULL, NULL);
+	R = xx_ret_class_definition(C, NULL, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(C) . {
-	R = xx_ret_class_definition(NULL, NULL, C);
+	R = xx_ret_class_definition(NULL, NULL, C, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(NULL, M, NULL);
+	R = xx_ret_class_definition(NULL, M, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, NULL);
+	R = xx_ret_class_definition(C, M, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) . {
-	R = xx_ret_class_definition(C, NULL, K);
+	R = xx_ret_class_definition(C, NULL, K, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) . {
-	R = xx_ret_class_definition(C, NULL, K);
+	R = xx_ret_class_definition(C, NULL, K, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(NULL, M, K);
+	R = xx_ret_class_definition(NULL, M, K, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, K);
+	R = xx_ret_class_definition(C, M, K, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, K);
+	R = xx_ret_class_definition(C, M, K, status->scanner_state);
 }
 
 xx_class_properties_definition(R) ::= xx_class_properties_definition(L) xx_class_property_definition(P) . {
@@ -584,35 +694,35 @@ xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
 }
 
 xx_class_property_definition(R) ::= COMMENT(C) PUBLIC IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, C);
+	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, C, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, NULL);
+	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, NULL, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, E, NULL);
+	R = xx_ret_class_property(XX_T_PUBLIC, I, E, NULL, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= COMMENT(C) PUBLIC IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, E, C);
+	R = xx_ret_class_property(XX_T_PUBLIC, I, E, C, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, NULL);
+	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, NULL, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= COMMENT(C) PROTECTED IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, C);
+	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, C, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, E, NULL);
+	R = xx_ret_class_property(XX_T_PROTECTED, I, E, NULL, status->scanner_state);
 }
 
 xx_class_property_definition(R) ::= COMMENT(C) PROTECTED IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, E, C);
+	R = xx_ret_class_property(XX_T_PROTECTED, I, E, C, status->scanner_state);
 }
 
 xx_class_consts_definition(R) ::= xx_class_consts_definition(L) xx_class_const_definition(K) . {
@@ -628,11 +738,11 @@ xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_metho
 }
 
 xx_class_const_definition(R) ::= COMMENT(C) CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_const(I, E, C);
+	R = xx_ret_class_const(I, E, C, status->scanner_state);
 }
 
 xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_const(I, E, NULL);
+	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
 }
 
 xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
@@ -640,51 +750,51 @@ xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
 }
 
 xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, NULL);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, NULL);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, C);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, C, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, C);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, C, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, NULL);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list(L) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, NULL);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, C);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, C, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, C);
+	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, C, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, NULL);
+	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, C);
+	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, C, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, NULL);
+	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= COMMENT(C) PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, C);
+	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, C, status->scanner_state);
 }
 
 xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {
@@ -696,31 +806,31 @@ xx_parameter_list(R) ::= xx_parameter(P) . {
 }
 
 xx_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_parameter(NULL, NULL, I, NULL);
+	R = xx_ret_parameter(NULL, NULL, I, NULL, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(T, NULL, I, NULL);
+	R = xx_ret_parameter(T, NULL, I, NULL, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) . {
-	R = xx_ret_parameter(NULL, C, I, NULL);
+	R = xx_ret_parameter(NULL, C, I, NULL, status->scanner_state);
 }
 
 xx_parameter(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(NULL, NULL, I, E);
+	R = xx_ret_parameter(NULL, NULL, I, E, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(T, NULL, I, E);
+	R = xx_ret_parameter(T, NULL, I, E, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(NULL, C, I, E);
+	R = xx_ret_parameter(NULL, C, I, E, status->scanner_state);
 }
 
 xx_parameter_cast(R) ::= LESS IDENTIFIER(I) GREATER . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_parameter_type(R) ::= TYPE_INTEGER . {
@@ -792,55 +902,55 @@ xx_statement(R) ::= xx_comment(S) . {
 }
 
 xx_break_statement(R) ::= BREAK DOTCOMMA . {
-	R = xx_ret_break_statement();
+	R = xx_ret_break_statement(status->scanner_state);
 }
 
 xx_continue_statement(R) ::= CONTINUE DOTCOMMA . {
-	R = xx_ret_continue_statement();
+	R = xx_ret_continue_statement(status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, NULL);
+	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, NULL);
+	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, NULL);
+	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, S);
+	R = xx_ret_if_statement(E, L, S, status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, NULL);
+	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
 }
 
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, L);
+	R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
 }
 
 xx_loop_statement(R) ::= LOOP BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_loop_statement(NULL);
+	R = xx_ret_loop_statement(NULL, status->scanner_state);
 }
 
 xx_loop_statement(R) ::= LOOP BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_loop_statement(L);
+	R = xx_ret_loop_statement(L, status->scanner_state);
 }
 
 xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_while_statement(E, NULL);
+	R = xx_ret_while_statement(E, NULL, status->scanner_state);
 }
 
 xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_while_statement(E, L);
+	R = xx_ret_while_statement(E, L, status->scanner_state);
 }
 
 xx_let_statement(R) ::= LET xx_let_assignments(A) DOTCOMMA . {
-	R = xx_ret_let_statement(A);
+	R = xx_ret_let_statement(A, status->scanner_state);
 }
 
 xx_let_assignments(R) ::= xx_let_assignments(L) COMMA xx_let_assignment(A) . {
@@ -852,51 +962,51 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 }
 
 xx_let_assignment(R) ::= IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable", I, NULL, E);
+	R = xx_ret_let_assignment("variable", I, NULL, E, status->scanner_state);
 }
 
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property", D, I, E);
+	R = xx_ret_let_assignment("object-property", D, I, E, status->scanner_state);
 }
 
 xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable-append", I, NULL, E);
+	R = xx_ret_let_assignment("variable-append", I, NULL, E, status->scanner_state);
 }
 
 xx_echo_statement(R) ::= ECHO xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_echo_statement(E);
+	R = xx_ret_echo_statement(E, status->scanner_state);
 }
 
 xx_echo_statement(R) ::= ECHO IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, I));
+	R = xx_ret_echo_statement(xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
 }
 
 xx_return_statement(R) ::= RETURN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_return_statement(E);
+	R = xx_ret_return_statement(E, status->scanner_state);
 }
 
 xx_return_statement(R) ::= RETURN IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_return_statement(xx_ret_literal(XX_T_IDENTIFIER, I));
+	R = xx_ret_return_statement(xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_INTEGER, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_INTEGER, L, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_DOUBLE xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_DOUBLE, L, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_STRING xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_STRING, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_STRING, L, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_BOOL xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_BOOL, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_BOOL, L, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_VAR xx_declare_variable_list(L) DOTCOMMA . {
-	R = xx_ret_declare_statement(XX_T_TYPE_VAR, L);
+	R = xx_ret_declare_statement(XX_T_TYPE_VAR, L, status->scanner_state);
 }
 
 xx_declare_variable_list(R) ::= xx_declare_variable_list(L) COMMA xx_declare_variable(V) . {
@@ -908,63 +1018,63 @@ xx_declare_variable_list(R) ::= xx_declare_variable(V) . {
 }
 
 xx_declare_variable(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_declare_variable(I, NULL);
+	R = xx_ret_declare_variable(I, NULL, status->scanner_state);
 }
 
 xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_declare_variable(I, E);
+	R = xx_ret_declare_variable(I, E, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= xx_assign_expr(O1) ADD xx_assign_expr(O2) . {
-	R = xx_ret_expr("add", O1, O2, NULL);
+	R = xx_ret_expr("add", O1, O2, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= xx_assign_expr(O1) SUB xx_assign_expr(O2) . {
-	R = xx_ret_expr("sub", O1, O2, NULL);
+	R = xx_ret_expr("sub", O1, O2, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= INTEGER(I) . {
-	R = xx_ret_literal(XX_T_INTEGER, I);
+	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= STRING(S) . {
-	R = xx_ret_literal(XX_T_STRING, S);
+	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= DOUBLE(D) . {
-	R = xx_ret_literal(XX_T_DOUBLE, D);
+	R = xx_ret_literal(XX_T_DOUBLE, D, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= NULL . {
-	R = xx_ret_literal(XX_T_NULL, NULL);
+	R = xx_ret_literal(XX_T_NULL, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= FALSE . {
-	R = xx_ret_literal(XX_T_FALSE, NULL);
+	R = xx_ret_literal(XX_T_FALSE, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
-	R = xx_ret_expr("empty-array", NULL, NULL, NULL);
+	R = xx_ret_expr("empty-array", NULL, NULL, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= SBRACKET_OPEN xx_array_list(L) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array", L, NULL, NULL);
+	R = xx_ret_expr("array", L, NULL, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) . {
-	R = xx_ret_new_instance(I, NULL);
+	R = xx_ret_new_instance(I, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_new_instance(I, NULL);
+	R = xx_ret_new_instance(I, NULL, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_new_instance(I, P);
+	R = xx_ret_new_instance(I, P, status->scanner_state);
 }
 
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
@@ -980,7 +1090,7 @@ xx_call_parameter(R) ::= xx_literal_expr(E) . {
 }
 
 xx_call_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {
@@ -992,19 +1102,19 @@ xx_array_list(R) ::= xx_array_item(I) . {
 }
 
 xx_array_item(R) ::= xx_array_key(K) COLON xx_array_value(V) . {
-	R = xx_ret_array_item(K, V);
+	R = xx_ret_array_item(K, V, status->scanner_state);
 }
 
 xx_array_item(R) ::= xx_array_value(V) . {
-	R = xx_ret_array_item(NULL, V);
+	R = xx_ret_array_item(NULL, V, status->scanner_state);
 }
 
 xx_array_key(R) ::= STRING(S) . {
-	R = xx_ret_literal(XX_T_STRING, S);
+	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
 }
 
 xx_array_key(R) ::= INTEGER(I) . {
-	R = xx_ret_literal(XX_T_INTEGER, I);
+	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
 xx_array_value(R) ::= xx_literal_expr(L) . {
@@ -1012,35 +1122,35 @@ xx_array_value(R) ::= xx_literal_expr(L) . {
 }
 
 xx_array_value(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_assign_expr(R) ::= TRUE . {
-	R = xx_ret_literal(XX_T_TRUE, NULL);
+	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= INTEGER(I) . {
-	R = xx_ret_literal(XX_T_INTEGER, I);
+	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= STRING(S) . {
-	R = xx_ret_literal(XX_T_STRING, S);
+	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= DOUBLE(D) . {
-	R = xx_ret_literal(XX_T_DOUBLE, D);
+	R = xx_ret_literal(XX_T_DOUBLE, D, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= NULL . {
-	R = xx_ret_literal(XX_T_NULL, NULL);
+	R = xx_ret_literal(XX_T_NULL, NULL, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= FALSE . {
-	R = xx_ret_literal(XX_T_FALSE, NULL);
+	R = xx_ret_literal(XX_T_FALSE, NULL, status->scanner_state);
 }
 
 xx_literal_expr(R) ::= TRUE . {
-	R = xx_ret_literal(XX_T_TRUE, NULL);
+	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_literal_expr(L) . {
@@ -1048,11 +1158,11 @@ xx_eval_expr(R) ::= xx_literal_expr(L) . {
 }
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
-	R = xx_ret_expr("equals", O1, O2, NULL);
+	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) IDENTICAL xx_eval_expr(O2) . {
-	R = xx_ret_expr("identical", O1, O2, NULL);
+	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {
@@ -1060,9 +1170,9 @@ xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {
 }
 
 xx_eval_expr(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I);
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_comment(R) ::= COMMENT(C) . {
-	R = xx_ret_comment(C);
+	R = xx_ret_comment(C, status->scanner_state);
 }

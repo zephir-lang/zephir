@@ -5,16 +5,15 @@ typedef struct {
 	size_t size;
 } zephir_str;
 
-#define zephir_string_assign(str_p, str, length) { \
+#define zephir_str_assign(str_p, d_str, d_length) { \
 	if (!str_p) { \
-		str_p = emalloc(48); \
-		str_p->length = length; \
+		str_p = emalloc(sizeof(zephir_str)); \
+		str_p->str = emalloc(48); \
+		str_p->length = d_length; \
 		str_p->size = 48; \
 	} else  { \
-		if (str_p->size < length) { \
-			efree(str_p); \
-		} \
-	}
-	memcpy(str_p->str, str, length);
-	str_p->str[length] = '\0'; \
+		efree(str_p->str); \
+	} \
+	memcpy(str_p->str, d_str, d_length); \
+	str_p->str[d_length] = '\0'; \
 }

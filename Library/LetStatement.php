@@ -43,7 +43,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_intval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'double':
@@ -64,21 +64,22 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'string':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						$compilationContext->headersManager->add('kernel/string_type');
-						$codePrinter->output('zephir_str_assign(' . $variable . ', SL(""));');
+						$codePrinter->output('zephir_str_assign(' . $variable . ', "", sizeof("")-1));');
 						break;
 					case 'int':
 						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
 						break;
 					case 'string':
+						$symbolVariable->setMustInitNull(true);
 						$compilationContext->headersManager->add('kernel/string_type');
-						$codePrinter->output('zephir_str_assign(' . $variable . ', SL("' . $resolvedExpr->getCode() . '"));');
+						$codePrinter->output('zephir_str_assign(' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1);');
 						break;
 					case 'double':
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
@@ -90,7 +91,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'bool':
@@ -109,7 +110,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'double':
@@ -124,7 +125,7 @@ class LetStatement
 						$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'variable':
@@ -196,11 +197,11 @@ class LetStatement
 						break;
 
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			default:
-				throw new Exception("Unknown type $type");
+				throw new CompilerException("Unknown type $type", $statement);
 		}
 	}
 
@@ -239,7 +240,7 @@ class LetStatement
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
 				return $tempVar->getName();
 			case 'variable':
-				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode());
+				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $item);
 				switch ($itemVariable->getType()) {
 					case 'int':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -252,18 +253,20 @@ class LetStatement
 					case 'string':
 
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '.str, 1);');
+						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '->str, 1);');
 						return $tempVar->getName();
 					case 'bool':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
 						return $tempVar->getName();
+					case 'variable':
+						return $itemVariable->getName();
 					default:
-						throw new Exception("Unknown " . $itemVariable->getType());
+						throw new CompilerException("Unknown " . $itemVariable->getType(), $item);
 				}
 				break;
 			default:
-				throw new Exception("Unknown");
+				throw new CompilerException("Unknown", $item);
 		}
 	}
 
@@ -297,7 +300,7 @@ class LetStatement
 	/**
 	 * Compiles foo[] = expr
 	 */
-	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
+	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -305,7 +308,7 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
-				throw new Exception("Cannot append to 'int' variables");
+				throw new CompilerException("Cannot append to 'int' variables", $statement);
 			case 'variable':
 				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
@@ -313,11 +316,11 @@ class LetStatement
 						 $codePrinter->output('zephir_array_append(&' . $variable . ', ' . $resolvedExpr->getCode() . ', PH_SEPARATE);');
 						 break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			default:
-				throw new Exception("Unknown type");
+				throw new CompilerException("Unknown type", $statement);
 		}
 	}
 
@@ -332,9 +335,9 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
-				throw new Exception("Variable 'int' cannot be used as object");
+				throw new CompilerException("Variable 'int' cannot be used as object", $statement);
 			case 'bool':
-				throw new Exception("Variable 'bool' cannot be used as object");
+				throw new CompilerException("Variable 'bool' cannot be used as object", $statement);
 			case 'variable':
 				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
@@ -344,7 +347,7 @@ class LetStatement
 						$propertyName = $statement['property'];
 
 						if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
-							throw new Exception("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'");
+							throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'", $statement);
 						}
 
 						$compilationContext->headersManager->add('kernel/object');
@@ -355,11 +358,11 @@ class LetStatement
 
 						break;
 					default:
-						throw new Exception("Unknown type " . $resolvedExpr->getType());
+						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			default:
-				throw new Exception("Unknown type");
+				throw new CompilerException("Unknown type", $statement);
 		}
 	}
 
@@ -375,7 +378,7 @@ class LetStatement
 
 			$variable = $assignment['variable'];
 
-			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable);
+			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
 
 			/**
 			 * Variables assigned are marked as initialized
@@ -402,7 +405,7 @@ class LetStatement
 					$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				default:
-					throw new Exception("Unknown assignment: " . $assignment['assign-type']);
+					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
 			}
 
 			$codePrinter->outputBlankLine(true);

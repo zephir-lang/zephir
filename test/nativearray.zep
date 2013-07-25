@@ -81,4 +81,22 @@ class NativeArray
 		return d;
 	}
 
+	public function testArray11()
+	{
+		var a, b, c;
+		let a = [1, 2, 3];
+		let b = [4, 5, 6];
+		let c = [a, b];
+		return c;
+	}
+
+	public function testArray12()
+	{
+		var a, b, c;
+		let a = [1, 2, 3];
+		let b = [a];
+		let c = [b];
+		return c;
+	}
+
 }

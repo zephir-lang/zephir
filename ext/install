@@ -1,0 +1,5 @@
+export CC="gcc"
+export CFLAGS="-O0 -g"
+phpize
+./configure --enable-test
+make && sudo make install

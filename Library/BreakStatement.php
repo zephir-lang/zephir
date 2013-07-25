@@ -19,7 +19,11 @@ class BreakStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$compilationContext->codePrinter->output('break;');
+		if ($compilationContext->insideCycle) {
+			$compilationContext->codePrinter->output('break;');
+		} else {
+			throw new CompilerException("Cannot use 'break' outside a cycle", $this->_statement);
+		}
 	}
 
 }

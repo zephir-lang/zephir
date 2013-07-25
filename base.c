@@ -83,31 +83,9 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 }
 
 /**
- * Receives the comment tokenizes and parses it
- */
-int xx_parse_annotations(){
-
-	/*zval *error_msg = NULL;
-
-	ZVAL_NULL(result);
-
-	if (Z_TYPE_P(comment) != IS_STRING) {
-		//phalcon_throw_exception_string(phalcon_annotations_exception_ce, SL("Comment must be a string") TSRMLS_CC);
-		return FAILURE;
-	}
-
-	if(XX_internal_parse_annotations(&result, comment, file_path, line, &error_msg TSRMLS_CC) == FAILURE){
-		//phalcon_throw_exception_string(phalcon_annotations_exception_ce, Z_STRVAL_P(error_msg), Z_STRLEN_P(error_msg) TSRMLS_CC);
-		return FAILURE;
-	}*/
-
-	return SUCCESS;
-}
-
-/**
  * Parses a comment returning an intermediate array representation
  */
-int xx_parse_program(char *program, unsigned int program_length) {
+int xx_parse_program(char *program, unsigned int program_length, char *file_path) {
 
 	char *error;
 	xx_scanner_state *state;
@@ -115,20 +93,17 @@ int xx_parse_program(char *program, unsigned int program_length) {
 	int scanner_status, status = SUCCESS, start_lines;
 	xx_parser_status *parser_status = NULL;
 	void* xx_parser;
-	/*zval processed_comment;*/
 
 	/**
-	 * Check if the comment has content
+	 * Check if the program has any length
 	 */
-	/*if (!Z_STRVAL_P(comment)) {
-		ZVAL_BOOL(*result, 0);
+	if (!program_length) {
 		return FAILURE;
 	}
 
-	if (Z_STRLEN_P(comment) < 2) {
-		ZVAL_BOOL(*result, 0);
+	if (program_length < 2) {
 		return SUCCESS;
-	}*/
+	}
 
 	/**
 	 * Start the reentrant parser
@@ -150,17 +125,9 @@ int xx_parse_program(char *program, unsigned int program_length) {
 	state->active_token = 0;
 	state->start = program;
 	state->start_length = 0;
-	//state->mode = XX_MODE_RAW;
-	//state->active_file = file_path;
-
-	/**
-	 * Possible start line
-	 */
-	/*if (Z_TYPE_P(line) == IS_LONG) {
-		state->active_line = Z_LVAL_P(line) - start_lines;
-	} else {
-		state->active_line = 1;
-	}*/
+	state->active_file = file_path;
+	state->active_line = 1;
+	state->active_char = 1;
 
 	state->end = state->start;
 
@@ -350,11 +317,13 @@ int xx_parse_program(char *program, unsigned int program_length) {
 		switch (scanner_status) {
 			case XX_SCANNER_RETCODE_ERR:
 			case XX_SCANNER_RETCODE_IMPOSSIBLE:
-				//if (!*error_msg) {
-					//XX_scanner_error_msg(parser_status, error_msg TSRMLS_CC);
-				//}
-				fprintf(stderr, "scanner error\n");
-				status = FAILURE;
+				{
+					json_object *syntax_error = json_object_new_object();
+					json_object_object_add(syntax_error, "type", json_object_new_string("error"));
+					json_object_object_add(syntax_error, "message", json_object_new_string("Scanner error"));
+					parser_status->ret = syntax_error;
+					status = FAILURE;
+				}
 				break;
 			default:
 				xx_(xx_parser, 0, NULL, parser_status);
@@ -374,16 +343,14 @@ int xx_parse_program(char *program, unsigned int program_length) {
 			}
 			efree(parser_status->syntax_error);
 		}*/
-		fprintf(stderr, "error!\n");
+		//fprintf(stderr, "error!\n");
 	}
-
-
 
 	xx_Free(xx_parser, xx_wrapper_free);
 
 	if (status != FAILURE) {
 		if (parser_status->status == XX_PARSING_OK) {
-			fprintf(stderr, "%s\n", json_object_to_json_string(parser_status->ret));
+			//printf("%s\n", json_object_to_json_string(parser_status->ret));
 			/*if (parser_status->ret) {
 				ZVAL_ZVAL(*result, parser_status->ret, 0, 0);
 				ZVAL_NULL(parser_status->ret);
@@ -392,6 +359,10 @@ int xx_parse_program(char *program, unsigned int program_length) {
 				array_init(*result);
 			}*/
 		}
+	}
+
+	if (parser_status->ret) {
+		printf("%s\n", json_object_to_json_string(parser_status->ret));
 	}
 
 	//efree(Z_STRVAL(processed_comment));*/
@@ -407,9 +378,7 @@ int main(int argc, char **argv) {
 	FILE *fp;
 	char ch;
 	char *program;
-	int i;
-
-	program = malloc(sizeof(char) * 20480);
+	int i, length;
 
 	if (argc > 0) {
 
@@ -419,18 +388,24 @@ int main(int argc, char **argv) {
 			exit(1);
 		}
 
+		length = 1024;
+		program = malloc(sizeof(char) * length);
+
 		i = 0;
 		while (!feof(fp)) {
 			ch = fgetc(fp);
+			if (i == length) {
+				length += 1024;
+				program = realloc(program, sizeof(char) * length);
+			}
 			program[i++] = ch;
 		}
 		program[i - 1] = '\0';
 		fclose(fp);
 
-		//fprintf(stderr, "%s\n", program);
+		xx_parse_program(program, i - 1, argv[1]);
 
-		xx_parse_program(program, i - 1);
+		free(program);
 	}
 
-	free(program);
 }

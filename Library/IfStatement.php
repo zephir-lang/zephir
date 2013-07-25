@@ -36,7 +36,7 @@ class IfStatement
 				break;
 			case 'variable':
 
-				$variableRight = $compilationContext->symbolTable->getVariableForRead($this->_statement['expr']['value']);
+				$variableRight = $compilationContext->symbolTable->getVariableForRead($this->_statement['expr']['value'], $this->_statement['expr']);
 				switch ($variableRight->getType()) {
 					case 'int':
 						$compilationContext->codePrinter->output('if (' . $variableRight->getName() . ') {');
@@ -51,11 +51,11 @@ class IfStatement
 						$compilationContext->codePrinter->output('if (zend_is_true(' . $variableRight->getName() . ')) {');
 						break;
 					default:
-						throw new Exception("Variable can't be evaluated " . $variableRight->getType());
+						throw new CompiledException("Variable can't be evaluated " . $variableRight->getType(), $this->_statement['expr']);
 				}
 				break;
 			default:
-				throw new Exception("Expression can't be evaluated");
+				throw new CompiledException("Expression can't be evaluated", $this->_statement['expr']);
 		}
 
 		/**

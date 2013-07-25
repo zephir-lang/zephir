@@ -105,6 +105,17 @@ class Variable
 	}
 
 	/**
+	 * Set if the variable must be initialized to null
+	 *
+	 * @param boolean $mustInitNull
+	 * @return boolean
+	 */
+	public function setMustInitNull($mustInitNull)
+	{
+		$this->_mustInitNull = $mustInitNull;
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext
