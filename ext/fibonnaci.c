@@ -29,17 +29,14 @@ ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	long i, n, k, j;
-	zval *fib, *a = NULL, *b = NULL, *c, *_0, *_1;
+	zval *fib, *a = NULL, *b = NULL, *c = NULL, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
-
 	ZEPHIR_INIT_VAR(fib);
 	array_init(fib);
-
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
 	zephir_array_append(&fib, _0, 0);
-
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_append(&fib, _1, 0);
@@ -60,6 +57,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		ZEPHIR_OBS_NVAR(b);
 		zephir_array_fetch_long(&b, fib, j, PH_NOISY);
 
+		ZEPHIR_INIT_NVAR(c);
 		zephir_add_function(c, a, b);
 
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE);

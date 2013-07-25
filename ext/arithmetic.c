@@ -182,6 +182,7 @@ PHP_METHOD(Test_Arithmetic, varSum) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 2);
 
+	ZEPHIR_INIT_VAR(c);
 	zephir_add_function(c, a, b);
 
 	RETURN_CCTOR(c);
