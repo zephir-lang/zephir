@@ -30,8 +30,8 @@ ext/config.status
 ext/libtool
 ext/.libs/
 ext/modules/
-ext/router.lo
-ext/test.la
+ext/*.lo
+ext/*.la
 ext/test.lo
 ext/kernel/.libs/
 ext/kernel/alternative/.libs/
@@ -47,5 +47,6 @@ ext/kernel/string.lo
 ext/kernel/backtrace.lo
 ext/kernel/exception.lo
 ext/kernel/main.lo
+ext/kernel/*.lo
 ext/flow.lo
 ext/arithmetic.lo
