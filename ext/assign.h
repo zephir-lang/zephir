@@ -23,6 +23,10 @@ PHP_METHOD(Test_Assign, testAssign17);
 PHP_METHOD(Test_Assign, testAssign18);
 PHP_METHOD(Test_Assign, testAssign19);
 PHP_METHOD(Test_Assign, testAssign20);
+PHP_METHOD(Test_Assign, testAssign21);
+PHP_METHOD(Test_Assign, testAssign22);
+PHP_METHOD(Test_Assign, testAssign23);
+PHP_METHOD(Test_Assign, testAssign24);
 
 ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testAssign1, NULL, ZEND_ACC_PUBLIC)
@@ -45,5 +49,9 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testAssign18, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign19, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign20, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssign21, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssign22, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssign23, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssign24, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

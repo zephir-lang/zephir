@@ -3,7 +3,8 @@
 /**
  * BaseOperator
  *
- * This is the base operator
+ * This is the base operator for commutative, associative anddistributive
+ * operators
  */
 class BaseOperator
 {
@@ -72,13 +73,13 @@ class BaseOperator
 					case 'bool':
 						return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
 					default:
-						throw new Exception("Cannot add 'double' with '" . $right->getType() . "'");
+						throw new CompilerException("Cannot add 'double' with '" . $right->getType() . "'", $expression);
 				}
 				break;
 			case 'string':
 				switch ($right->getType()) {
 					default:
-						throw new Exception("Add is not supported with strings");
+						throw new CompilerException("Add is not supported between strings", $expression);
 				}
 				break;
 			case 'variable':
@@ -154,10 +155,10 @@ class BaseOperator
 										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
 								}
 							default:
-								throw new Exception("Cannot add variable('int') with '" . $right->getType() . "'");
+								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
 						}
 					case 'string':
-						throw new Exception("Cannot add string variables'");
+						throw new CompilerException("Cannot add string variables'", $expression);
 					case 'variable':
 
 						switch ($right->getType()) {
@@ -194,24 +195,26 @@ class BaseOperator
 												$compilationContext->headersManager->add('kernel/operators');
 												$op1 = $variableLeft->getName();
 												$op2 = $variableRight->getName();
-												return new CompiledExpression('variable', function($result) use ($op1, $op2) {
+												return new CompiledExpression('expr-variable', function($result) use ($op1, $op2) {
 													return 'zephir_add_function(' . $result . ', ' . $op1 . ', ' . $op2 . ');';
 												}, $expression);
 											default:
-												throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
+												throw new CompilerException("Cannot add variable('double') with variable('" . $variableRight->getType() . "')", $expression);
 										}
 									default:
-										throw new Exception("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')");
+										throw new CompilerException("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new Exception("Cannot add 'variable' with '" . $right->getType() . "'");
+								throw new CompilerException("Cannot add 'variable' with '" . $right->getType() . "'", $expression);
 						}
 					default:
-						throw new Exception("Cannot add 'variable' with variable('" . $variableLeft->getType() . "')");
+						throw new CompilerException("Cannot add 'variable' with variable('" . $variableLeft->getType() . "')", $expression);
 				}
 				break;
+			case 'expr-variable':
+				return new CompiledExpression('variable', $left->resolve(null, $compilationContext), $expression);
 			default:
-				throw new Exception("Unsupported type " . $left->getType());
+				throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
 		}
 	}
 }

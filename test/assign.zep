@@ -148,4 +148,37 @@ class Assign
 		return a;
 	}
 
+	public function testAssign21()
+	{
+		int a, b;
+		let a = 1,
+			b = a;
+		return b;
+	}
+
+	public function testAssign22()
+	{
+		double a, b;
+		let a = 1.0,
+			b = a;
+		return b;
+	}
+
+	public function testAssign23()
+	{
+		boolean a, b;
+		let a = true,
+			b = a;
+		return b;
+	}
+
+	public function testAssign24()
+	{
+		int a;
+		double b;
+		let a = 1,
+			b = a;
+		return b;
+	}
+
 }

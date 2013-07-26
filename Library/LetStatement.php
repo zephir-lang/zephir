@@ -34,12 +34,25 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
 						break;
 					case 'double':
-						$codePrinter->output($variable . ' = (int) (' . $resolvedExpr->getCode() . ');');
+						$codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
 						break;
 					case 'bool':
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								break;
+							case 'double':
+								$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+						}
+						break;
+					case 'expr-variable':
 						$codePrinter->output($variable . ' = zephir_get_intval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
@@ -61,6 +74,22 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
+								break;
+							case 'double':
+								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								break;
+							case 'variable':
+								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $itemVariable->getName() . ');');
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+						}
+						break;
+					case 'expr-variable':
 						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
@@ -109,8 +138,11 @@ class LetStatement
 					case 'variable':
 						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
+					case 'expr-variable':
+						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;
 					default:
-						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'double':
@@ -173,6 +205,15 @@ class LetStatement
 						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
 						break;
 					case 'variable':
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$code = $resolvedExpr->resolve(null, $compilationContext);
+							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+						}
+						break;
+					case 'expr-variable':
 						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 							$code = $resolvedExpr->resolve(null, $compilationContext);
 							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
@@ -265,7 +306,6 @@ class LetStatement
 						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
 						return $tempVar->getName();
 					case 'string':
-
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '->str, 1);');
 						return $tempVar->getName();

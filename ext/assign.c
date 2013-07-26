@@ -75,7 +75,7 @@ PHP_METHOD(Test_Assign, testAssign5) {
 
 	long a;
 
-	a = (int) (2.0);
+	a = (long) (2.0);
 
 	RETURN_LONG(a);
 
@@ -253,6 +253,59 @@ PHP_METHOD(Test_Assign, testAssign20) {
 	ZVAL_NULL(a);
 
 	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign21) {
+
+	long a, b;
+
+	a = 1;
+
+	b = a;
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign22) {
+
+	double a, b;
+
+	a = 1.0;
+
+	b = a;
+
+	RETURN_DOUBLE(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign23) {
+
+	zend_bool a, b;
+
+	a = 1;
+
+	b = zephir_get_boolval(a);
+
+	RETURN_MM_BOOL(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign24) {
+
+	double b;
+	long a;
+
+	a = 1;
+
+	b = (double) a;
+
+	RETURN_DOUBLE(b);
 
 
 }

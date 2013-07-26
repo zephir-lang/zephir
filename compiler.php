@@ -46,8 +46,9 @@ try {
 			}
 		}
 	}
-	//echo PHP_EOL;
-	//$pwd = getcwd();
-	//echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
+	echo PHP_EOL;
+	$pwd = getcwd();
+	echo $e->getFile(), ' ', $e->getLine(), PHP_EOL;
+	echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
 	exit(1);
 }

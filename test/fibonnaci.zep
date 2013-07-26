@@ -4,6 +4,22 @@ namespace Test;
 class Fibonnaci
 {
 
+	public function fibInt()
+	{
+		int x, y, n, z;
+
+		let z = 0,
+			x = 1,
+			y = 2,
+			n = 10;
+		while (z < n) {
+    		let z = x + y,
+    			x = y,
+    			y = z;
+    	}
+    	return z;
+	}
+
 	public function fibArray()
 	{
 		var fib, a, b, c;

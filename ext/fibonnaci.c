@@ -26,6 +26,33 @@ ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
 
 }
 
+PHP_METHOD(Test_Fibonnaci, fibInt) {
+
+	long x, y, n, z;
+
+	z = 0;
+
+	x = 1;
+
+	y = 2;
+
+	n = 10;
+
+	while ((z < n)) {
+
+		z = x + y;
+
+		x = y;
+
+		y = z;
+
+	}
+
+	RETURN_LONG(z);
+
+
+}
+
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	long i, n, k, j;
