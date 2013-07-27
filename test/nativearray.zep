@@ -189,4 +189,44 @@ class NativeArray
 		return a;
 	}
 
+	public function testArray25()
+	{
+		var a;
+		boolean b;
+
+		let b = false,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArray26()
+	{
+		var a;
+		var b;
+
+		let b = null,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArray27()
+	{
+		var a;
+		string b;
+
+		let b = "hello",
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArray28()
+	{
+		var a;
+		string b;
+
+		let b = "hello",
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
 }

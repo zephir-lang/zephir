@@ -413,7 +413,11 @@ class LetStatement
 								$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
 								break;
 							case 'bool':
-								$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								if ($item['value']['value'] == 'true') {
+									$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', 1);');
+								} else {
+									$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', 0);');
+								}
 								break;
 							case 'double':
 								$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
@@ -426,7 +430,6 @@ class LetStatement
 								break;
 							case 'variable':
 								$value = $this->getArrayValue($item, $compilationContext);
-								//$codePrinter->output('add_index_zval(' . $variable . ', ' . $item['key']['value'] . ', ' . $value . ');');
 								$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
 								break;
 							default:
@@ -473,8 +476,6 @@ class LetStatement
 
 	public function arrayAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
-		//PHALCON_OBS_VAR(url);
-		//
 
 		$codePrinter = $compilationContext->codePrinter;
 
