@@ -71,6 +71,11 @@ class ClassDefinition
 		return str_replace('\\', '_', $this->_namespace);
 	}
 
+	public function getSCName()
+	{
+		return str_replace("test_", "", strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name));
+	}
+
 	/**
 	 * Compiles a class
 	 *
@@ -93,7 +98,7 @@ class ClassDefinition
 		 * Register the class
 		 */
 		$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
-			strtolower($this->getName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
+			strtolower($this->getSCName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
 			strtolower($this->getName()) . '_method_entry, 0);');
 		$codePrinter->outputBlankLine();
 

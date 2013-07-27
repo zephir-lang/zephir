@@ -50,3 +50,5 @@ ext/kernel/main.lo
 ext/kernel/*.lo
 ext/flow.lo
 ext/arithmetic.lo
+ext/router/.libs/
+ext/router/route.lo
