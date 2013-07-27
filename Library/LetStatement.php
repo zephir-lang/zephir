@@ -280,6 +280,8 @@ class LetStatement
 						break;
 					case 'new-instance':
 
+						$compilationContext->headersManager->add('kernel/fcall');
+
 						$newExpr = $resolvedExpr->getCode();
 
 						$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
