@@ -13,11 +13,27 @@ class Fibonnaci
 			y = 2,
 			n = 10;
 		while (z < n) {
-    		let z = x + y,
-    			x = y,
-    			y = z;
-    	}
-    	return z;
+			let z = x + y,
+				x = y,
+				y = z;
+		}
+		return z;
+	}
+
+	public function fibDouble()
+	{
+		double x, y, n, z;
+
+		let z = 0.0,
+			x = 1.0,
+			y = 2.0,
+			n = 10.0;
+		while (z < n) {
+			let z = x + y,
+				x = y,
+				y = z;
+		}
+		return z;
 	}
 
 	public function fibArray()

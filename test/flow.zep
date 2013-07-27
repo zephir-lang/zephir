@@ -303,4 +303,19 @@ class Flow
 		return a;
 	}
 
+	public function testWhile9()
+	{
+		int a; var b; double c;
+		let a = 5;
+		while (a) {
+			let b = 5;
+			while (b) {
+				let b--;
+			}
+			let a--;
+		}
+		let c = a + b;
+		return c;
+	}
+
 }

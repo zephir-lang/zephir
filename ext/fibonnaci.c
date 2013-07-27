@@ -53,6 +53,33 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 
 }
 
+PHP_METHOD(Test_Fibonnaci, fibDouble) {
+
+	double x, y, n, z;
+
+	z = 0.0;
+
+	x = 1.0;
+
+	y = 2.0;
+
+	n = 10.0;
+
+	while ((z < n)) {
+
+		z = x +  y;
+
+		x = y;
+
+		y = z;
+
+	}
+
+	RETURN_DOUBLE(z);
+
+
+}
+
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	long i, n, k, j;

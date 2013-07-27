@@ -218,7 +218,7 @@ class ClassMethod
 					$code = 'zval ';
 					break;
 				default:
-					throw new Exception("Unsupported type in declare " . $type);
+					throw new CompilerException("Unsupported type in declare " . $type);
 			}
 
 			$groupVariables = array();

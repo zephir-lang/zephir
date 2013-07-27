@@ -383,10 +383,58 @@ class LetStatement
 				$key = null;
 				switch ($item['key']['type']) {
 					case 'string':
-						$codePrinter->output('add_assoc_long_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), 1);');
+						switch ($item['value']['type']) {
+							case 'int':
+								$codePrinter->output('add_assoc_long_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								break;
+							case 'double':
+								$codePrinter->output('add_assoc_double_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								break;
+							case 'bool':
+								if ($item['value']['value'] == 'true') {
+									$codePrinter->output('add_assoc_bool_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), 1);');
+								} else {
+									$codePrinter->output('add_assoc_bool_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), 0);');
+								}
+								break;
+							case 'string':
+								$codePrinter->output('add_assoc_stringl_ex(' . $variable . ', SS("' . $item['key']['value'] . '"), SL("' . $item['value']['value'] . '"), 1);');
+								break;
+							case 'null':
+								$codePrinter->output('add_assoc_null_ex(' . $variable . ', SS("' . $item['key']['value'] . '"));');
+								break;
+							default:
+								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+						}
 						break;
 					case 'int':
+						switch ($item['value']['type']) {
+							case 'int':
+								$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								break;
+							case 'bool':
+								$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								break;
+							case 'double':
+								$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								break;
+							case 'null':
+								$codePrinter->output('add_index_null(' . $variable . ', ' . $item['key']['value'] . ');');
+								break;
+							case 'string':
+								$codePrinter->output('add_index_stringl(' . $variable . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+								break;
+							case 'variable':
+								$value = $this->getArrayValue($item, $compilationContext);
+								//$codePrinter->output('add_index_zval(' . $variable . ', ' . $item['key']['value'] . ', ' . $value . ');');
+								$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+								break;
+							default:
+								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+						}
 						break;
+					default:
+						throw new CompilerException("Invalid key type: " . $item['key']['type'], $item['key']);
 				}
 			} else {
 				$item = $this->getArrayValue($item, $compilationContext);
@@ -548,7 +596,7 @@ class LetStatement
 
 	}
 
-	public function assignIncr($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -561,7 +609,29 @@ class LetStatement
 				$codePrinter->output($variable . '++;');
 				break;
 			default:
-				throw new CompiledException("Cannot increment: " . $symbolVariable->getType(), $statement);
+				throw new CompilerException("Cannot increment: " . $symbolVariable->getType(), $statement);
+		}
+	}
+
+	public function assignDecr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		switch ($symbolVariable->getType()) {
+			case 'int':
+				$codePrinter->output($variable . '--;');
+				break;
+			case 'double':
+				$codePrinter->output($variable . '--;');
+				break;
+			case 'variable':
+				$compilationContext->headersManager->add('kernel/operators');
+				$symbolVariable->initVariant($compilationContext);
+				$codePrinter->output('zephir_decrement(' . $variable . ');');
+				break;
+			default:
+				throw new CompilerException("Cannot decrement: " . $symbolVariable->getType(), $statement);
 		}
 	}
 
@@ -622,6 +692,7 @@ class LetStatement
 			if (isset($assignment['expr'])) {
 				$readDetector = new ReadDetector($assignment['expr']);
 				$expr = new Expression($assignment['expr']);
+				$resolvedExpr = $expr->compile($compilationContext);
 			}
 
 			$variable = $assignment['variable'];
@@ -635,8 +706,6 @@ class LetStatement
 			 * Variables assigned are marked as initialized
 			 */
 			$symbolVariable->setIsInitialized(true);
-
-			$resolvedExpr = $expr->compile($compilationContext);
 
 			$codePrinter = $compilationContext->codePrinter;
 
@@ -659,7 +728,10 @@ class LetStatement
 					$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'incr':
-					$this->assignIncr($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);
+					break;
+				case 'decr':
+					$this->assignDecr($variable, $symbolVariable, $compilationContext, $assignment);
 					break;
 				default:
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);

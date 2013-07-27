@@ -99,4 +99,94 @@ class NativeArray
 		return c;
 	}
 
+	public function testArray13()
+	{
+		var a;
+		let a = [1: "hello1", 2: "hello2", 3: "hello3"];
+		return a;
+	}
+
+	public function testArray14()
+	{
+		var a;
+		let a = ["hello1": 1, "hello2": 2, "hello3": 3];
+		return a;
+	}
+
+	public function testArray15()
+	{
+		var a;
+		let a = ["hello1": true, "hello2": false, "hello3": true];
+		return a;
+	}
+
+	public function testArray16()
+	{
+		var a;
+		let a = ["hello1": 1.0, "hello2": 2.0, "hello3": 3.0];
+		return a;
+	}
+
+	public function testArray17()
+	{
+		var a;
+		let a = ["hello1": null, "hello2": null, "hello3": null];
+		return a;
+	}
+
+	public function testArray18()
+	{
+		var a;
+		let a = ["hello1": "a", "hello2": "b", "hello3": "c"];
+		return a;
+	}
+
+	public function testArray19()
+	{
+		var a;
+		let a = [0: true, 1: false, 2: true];
+		return a;
+	}
+
+	public function testArray20()
+	{
+		var a;
+		let a = [0: 1.0, 1: 2.0, 2: 3.0];
+		return a;
+	}
+
+	public function testArray21()
+	{
+		var a;
+		let a = [0: null, 1: null, 2: null];
+		return a;
+	}
+
+	public function testArray22()
+	{
+		var a;
+		let a = [0: 4, 1: 5, 2: 6];
+		return a;
+	}
+
+	public function testArray23()
+	{
+		var a;
+		int b;
+
+		let b = 0,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArray24()
+	{
+		var a;
+		double b;
+
+		let b = 0.0,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
 }

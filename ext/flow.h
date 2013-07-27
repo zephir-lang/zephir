@@ -22,6 +22,11 @@ PHP_METHOD(Test_Flow, testWhile1);
 PHP_METHOD(Test_Flow, testWhile2);
 PHP_METHOD(Test_Flow, testWhile3);
 PHP_METHOD(Test_Flow, testWhile4);
+PHP_METHOD(Test_Flow, testWhile5);
+PHP_METHOD(Test_Flow, testWhile6);
+PHP_METHOD(Test_Flow, testWhile7);
+PHP_METHOD(Test_Flow, testWhile8);
+PHP_METHOD(Test_Flow, testWhile9);
 
 ZEPHIR_INIT_FUNCS(test_flow_method_entry) {
 	PHP_ME(Test_Flow, testIf1, NULL, ZEND_ACC_PUBLIC)
@@ -43,5 +48,10 @@ ZEPHIR_INIT_FUNCS(test_flow_method_entry) {
 	PHP_ME(Test_Flow, testWhile2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow, testWhile3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow, testWhile4, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile5, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile6, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile7, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile8, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Flow, testWhile9, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

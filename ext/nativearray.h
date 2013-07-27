@@ -15,6 +15,18 @@ PHP_METHOD(Test_NativeArray, testArray9);
 PHP_METHOD(Test_NativeArray, testArray10);
 PHP_METHOD(Test_NativeArray, testArray11);
 PHP_METHOD(Test_NativeArray, testArray12);
+PHP_METHOD(Test_NativeArray, testArray13);
+PHP_METHOD(Test_NativeArray, testArray14);
+PHP_METHOD(Test_NativeArray, testArray15);
+PHP_METHOD(Test_NativeArray, testArray16);
+PHP_METHOD(Test_NativeArray, testArray17);
+PHP_METHOD(Test_NativeArray, testArray18);
+PHP_METHOD(Test_NativeArray, testArray19);
+PHP_METHOD(Test_NativeArray, testArray20);
+PHP_METHOD(Test_NativeArray, testArray21);
+PHP_METHOD(Test_NativeArray, testArray22);
+PHP_METHOD(Test_NativeArray, testArray23);
+PHP_METHOD(Test_NativeArray, testArray24);
 
 ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testArray1, NULL, ZEND_ACC_PUBLIC)
@@ -29,5 +41,17 @@ ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testArray10, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testArray11, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testArray12, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray13, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray14, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray15, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray16, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray17, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray18, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray19, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray20, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray21, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray22, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray23, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testArray24, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

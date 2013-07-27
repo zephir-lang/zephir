@@ -104,8 +104,8 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_INIT_NVAR(paths);
 		array_init(paths);
 		add_assoc_long_ex(paths, SS("controller"), 1);
-		add_assoc_long_ex(paths, SS("action"), 1);
-		add_assoc_long_ex(paths, SS("params"), 1);
+		add_assoc_long_ex(paths, SS("action"), 2);
+		add_assoc_long_ex(paths, SS("params"), 3);
 
 		ZEPHIR_INIT_VAR(paramsPattern);
 		ZVAL_STRING(paramsPattern, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);

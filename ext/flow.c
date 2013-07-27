@@ -462,3 +462,103 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 }
 
+PHP_METHOD(Test_Flow, testWhile5) {
+
+	long a;
+
+	a = 5;
+
+	while (a) {
+
+		a--;
+
+	}
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Flow, testWhile6) {
+
+	long a;
+
+	a = 5;
+
+	while (a) {
+
+		a--;
+
+	}
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Flow, testWhile7) {
+
+	double a;
+
+	a = (double) (5);
+
+	while (a) {
+
+		a--;
+
+	}
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Flow, testWhile8) {
+
+	double a;
+
+	a = (double) (5);
+
+	while (a) {
+
+		a--;
+
+	}
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Flow, testWhile9) {
+
+	double c;
+	zval *b = NULL;
+	long a;
+
+	ZEPHIR_MM_GROW();
+	a = 5;
+
+	while (a) {
+
+		ZEPHIR_INIT_NVAR(b);
+		ZVAL_LONG(b, 5);
+
+		while (zend_is_true(b)) {
+
+			ZEPHIR_INIT_NVAR(b);
+			zephir_decrement(b);
+
+		}
+
+		a--;
+
+	}
+
+	c = (double) (a + zephir_get_intval(b));
+
+	RETURN_MM_DOUBLE(c);
+
+
+}
+

@@ -125,11 +125,11 @@ class Expression
 									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
 								}
 							default:
-								throw new Exception("Error Processing Request");
+								throw new CompilerException("Error Processing Request", $expression);
 						}
 						break;
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			case 'int':
@@ -139,11 +139,11 @@ class Expression
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			default:
-				throw new Exception("Error Processing Request");
+				throw new CompilerException("Error Processing Request", $expression);
 		}
 
 	}
@@ -172,6 +172,8 @@ class Expression
 				switch ($variable->getType()) {
 					case 'int':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
+					case 'double':
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
@@ -185,11 +187,11 @@ class Expression
 									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
 								}
 							default:
-								throw new Exception("Error Processing Request");
+								throw new CompilerException("Error Processing Request", $expression);
 						}
 						break;
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			case 'int':
@@ -197,13 +199,23 @@ class Expression
 					case 'int':
 						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
 					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' < (int) ' . $right->getCode(), $expression);
+						return new CompiledExpression('bool', $left->getCode() . ' < (long) ' . $right->getCode(), $expression);
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
+				}
+				break;
+			case 'double':
+				switch ($right->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', '(double)' . $left->getCode() . ' < ' . $right->getCode(), $expression);
+					case 'double':
+						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
+					default:
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			default:
-				throw new Exception("Error Processing Request");
+				throw new CompilerException("Error Processing Request", $expression);
 		}
 
 	}
