@@ -280,4 +280,13 @@ class Assign
 		return a;
 	}
 
+	public function testAssign36()
+	{
+		var b;
+		var a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
 }

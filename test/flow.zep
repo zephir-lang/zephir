@@ -263,4 +263,44 @@ class Flow
 		return c;
 	}
 
+	public function testWhile5()
+	{
+		int a;
+		let a = 5;
+		while (a) {
+			let a--;
+		}
+		return a;
+	}
+
+	public function testWhile6()
+	{
+		int a;
+		let a = 5;
+		while a {
+			let a--;
+		}
+		return a;
+	}
+
+	public function testWhile7()
+	{
+		double a;
+		let a = 5;
+		while (a) {
+			let a--;
+		}
+		return a;
+	}
+
+	public function testWhile8()
+	{
+		double a;
+		let a = 5;
+		while a {
+			let a--;
+		}
+		return a;
+	}
+
 }

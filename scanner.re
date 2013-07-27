@@ -129,8 +129,20 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'long' {
+			s->active_char += sizeof("long")-1;
+			token->opcode = XX_T_TYPE_INTEGER;
+			return 0;
+		}
+
 		'double' {
 			s->active_char += sizeof("double")-1;
+			token->opcode = XX_T_TYPE_DOUBLE;
+			return 0;
+		}
+
+		'float' {
+			s->active_char += sizeof("float")-1;
 			token->opcode = XX_T_TYPE_DOUBLE;
 			return 0;
 		}

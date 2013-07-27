@@ -472,3 +472,18 @@ PHP_METHOD(Test_Assign, testAssign35) {
 
 }
 
+PHP_METHOD(Test_Assign, testAssign36) {
+
+	zval *b, *a;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_BOOL(b, 0);
+
+	ZEPHIR_CPY_WRT(a, b);
+
+	RETURN_CCTOR(a);
+
+
+}
+

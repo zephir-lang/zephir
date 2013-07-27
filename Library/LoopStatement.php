@@ -28,7 +28,7 @@ class LoopStatement
 		$compilationContext->insideCycle++;
 
 		/**
-		 * Compile statements in the 'if' block
+		 * Compile statements in the 'loop' block
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
