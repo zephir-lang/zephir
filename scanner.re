@@ -241,7 +241,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/"|"--"[^\r\n]*);
+		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/"|"//"[^\r\n]*);
 		COMMENT {
 			token->opcode = XX_T_COMMENT;
 			token->value = strndup(q, YYCURSOR - q - 1);
