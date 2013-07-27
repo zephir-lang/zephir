@@ -4,8 +4,8 @@
 #endif
 
 #include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include "php_%PROJECT_LOWER%.h"
+#include "%PROJECT_LOWER%.h"
 
 #include "Zend/zend_operators.h"
 #include "Zend/zend_exceptions.h"
@@ -13,33 +13,21 @@
 
 #include "kernel/main.h"
 
-zend_class_entry *test_arithmetic_ce;
-zend_class_entry *test_fibonnaci_ce;
-zend_class_entry *test_nativearray_ce;
-zend_class_entry *test_router_ce;
-zend_class_entry *test_router_route_ce;
-zend_class_entry *test_flow_ce;
-zend_class_entry *test_assign_ce;
+%CLASS_ENTRIES%
 
-ZEND_DECLARE_MODULE_GLOBALS(test)
+ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
 
-PHP_MINIT_FUNCTION(test){
+PHP_MINIT_FUNCTION(%PROJECT_LOWER%){
 
 	/** Init globals */
-	ZEND_INIT_MODULE_GLOBALS(test, php_test_init_globals, NULL);
+	ZEND_INIT_MODULE_GLOBALS(%PROJECT_LOWER%, php_%PROJECT_LOWER%_init_globals, NULL);
 
-	ZEPHIR_INIT(Test_Arithmetic);
-	ZEPHIR_INIT(Test_Fibonnaci);
-	ZEPHIR_INIT(Test_NativeArray);
-	ZEPHIR_INIT(Test_Router);
-	ZEPHIR_INIT(Test_Router_Route);
-	ZEPHIR_INIT(Test_Flow);
-	ZEPHIR_INIT(Test_Assign);
+	%CLASS_INITS%
 	return SUCCESS;
 }
 
 
-PHP_MSHUTDOWN_FUNCTION(test){
+PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 
 	/*if (PHALCON_GLOBAL(active_memory) != NULL) {
 		phalcon_clean_shutdown_stack(TSRMLS_C);
@@ -54,14 +42,14 @@ PHP_MSHUTDOWN_FUNCTION(test){
 	return SUCCESS;
 }
 
-PHP_RINIT_FUNCTION(test){
+PHP_RINIT_FUNCTION(%PROJECT_LOWER%){
 
 	//php_phalcon_init_globals(PHALCON_VGLOBAL TSRMLS_CC);
 
 	return SUCCESS;
 }
 
-PHP_RSHUTDOWN_FUNCTION(test){
+PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 
 	/*if (PHALCON_GLOBAL(active_memory) != NULL) {
 		phalcon_clean_shutdown_stack(TSRMLS_C);
@@ -78,24 +66,24 @@ PHP_RSHUTDOWN_FUNCTION(test){
 	return SUCCESS;
 }
 
-zend_module_entry test_module_entry = {
+zend_module_entry %PROJECT_LOWER%_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
 #endif
-	PHP_TEST_EXTNAME,
+	PHP_%PROJECT_UPPER%_EXTNAME,
 	NULL,
-	PHP_MINIT(test),
-	PHP_MSHUTDOWN(test),
-	PHP_RINIT(test),
-	PHP_RSHUTDOWN(test),
+	PHP_MINIT(%PROJECT_LOWER%),
+	PHP_MSHUTDOWN(%PROJECT_LOWER%),
+	PHP_RINIT(%PROJECT_LOWER%),
+	PHP_RSHUTDOWN(%PROJECT_LOWER%),
 	NULL,
 #if ZEND_MODULE_API_NO >= 20010901
-	PHP_TEST_VERSION,
+	PHP_%PROJECT_UPPER%_VERSION,
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
 
-#ifdef COMPILE_DL_TEST
-ZEND_GET_MODULE(test)
+#ifdef COMPILE_DL_%PROJECT_UPPER%
+ZEND_GET_MODULE(%PROJECT_LOWER%)
 #endif
 

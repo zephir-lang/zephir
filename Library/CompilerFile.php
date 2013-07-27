@@ -15,6 +15,8 @@ class CompilerFile
 	protected $_filePath;
 
 	protected $_ir;
+	
+	protected $_compiledFile;
 
 	/**
 	 *
@@ -24,6 +26,7 @@ class CompilerFile
 		$this->_className = $className;
 		$this->_filePath = $filePath;
 		$this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
+		$this->_filesCompiled = array();
 	}
 
 	public function getClassDefinition()
@@ -118,11 +121,12 @@ class CompilerFile
 	}
 
 	/**
-	 *
+	 * 
 	 */
 	public function preCompile()
 	{
 
+	
 		$ir = $this->genIR();
 		if (!is_array($ir)) {
 			throw new Exception("Cannot parse file");
@@ -168,6 +172,11 @@ class CompilerFile
 		$this->_ir = $ir;
 	}
 
+	public function  getCompiledFile() 
+	{
+		return $this->_compiledFile;
+	}
+	 
 	public function compile()
 	{
 
@@ -191,7 +200,8 @@ class CompilerFile
 		$codePrinter->outputBlankLine();
 
 		$class = false;
-		foreach ($this->_ir as $topStatement) {
+		foreach ($this->_ir as $topStatement) 
+		{
 
 			switch ($topStatement['type']) {
 				case 'class':
@@ -215,6 +225,9 @@ class CompilerFile
 
 		file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
 		file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
+		
+		//add to file compiled
+		$this->_compiledFile = $path . '.c';
 	}
-
+	
 }

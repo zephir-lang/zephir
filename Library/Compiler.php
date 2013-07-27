@@ -6,6 +6,8 @@ class Compiler
 	protected $_files;
 
 	protected $_definitions;
+	
+	protected $_compiledFiles;
 
 	protected function _preCompile($filePath)
 	{
@@ -50,10 +52,119 @@ class Compiler
 		/**
 		 * Round 2. compile all files to C sources
 		 */
-		foreach ($this->_files as $compileFile) {
+		$files = array(); 
+		foreach ($this->_files as $compileFile) 
+		{
 			$compileFile->compile();
+			$files[] = $compileFile->getCompiledFile();
 		}
+		
+		$this->_compiledFiles = $files;
+		
+		/**
+		 * Round 3. create config.m4 and config.w32 files
+		 */
+		$this->createConfigFiles();
+		
+		/**
+		 * Round 4. create project.c and project.h files
+		 */
+		$this->createProjectFiles();
 
+	}
+	
+	/**
+	 * Create config.m4 and config.w32 by compiled files to test extension
+	 * 
+	 */
+	public function createConfigFiles($project='test')
+	{
+
+		$content = file_get_contents('templates/config.m4');
+		
+		if (empty($content)) {
+			throw new Exception("Template config.m4 doesn't exists");
+		}
+		
+		$toReplace = array (
+			'%PROJECT_LOWER%' 		=> strtolower($project),
+			'%PROJECT_UPPER%' 		=> strtoupper($project),
+			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
+			'%FILES_COMPILED%' 		=> implode(' ', $this->_compiledFiles),
+		);
+		
+		foreach ($toReplace as $mark => $replace)
+		{
+				$content = str_replace($mark,$replace,$content);
+		}
+		
+		file_put_contents('ext/config.m4', $content);
+	}
+	
+	/**
+	 * Create project.c and project.h by compiled files to test extension
+	 * 
+	 */
+	public function createProjectFiles($project='test')
+	{
+
+		/////project.c////
+		$content = file_get_contents('templates/project.c');
+		
+		if (empty($content)) {
+			throw new Exception("Template project.c doesn't exists");
+		}
+		
+		$classEntries = array();
+		$classInits = array();
+		foreach ($this->_files as $file)
+		{
+			$classEntries[] = 'zend_class_entry *'.$file->getClassDefinition()->getClassEntry().';';
+			$classInits[] = 'ZEPHIR_INIT('.$file->getClassDefinition()->getCNamespace().'_'.$file->getClassDefinition()->getName().');';
+		}
+		
+		$toReplace = array (
+			'%PROJECT_LOWER%' 		=> strtolower($project),
+			'%PROJECT_UPPER%' 		=> strtoupper($project),
+			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
+			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, $classEntries),
+			'%CLASS_INITS%'			=> implode(PHP_EOL.'	', $classInits),
+		);
+		
+		foreach ($toReplace as $mark => $replace)
+		{
+				$content = str_replace($mark,$replace,$content);
+		}
+		
+		file_put_contents('ext/'.strtolower($project).'.c', $content);
+		
+		unset($content);
+		
+		/////project.h////
+		$content = file_get_contents('templates/project.h');
+		
+		if (empty($content)) {
+			throw new Exception("Template project.h doesn't exists");
+		}
+		
+		$includeHeaders = array();
+		foreach ($this->_compiledFiles as $file)
+		{
+			$fileH = str_replace(".c",".h",$file);
+			$include = '#include "'.$fileH.'"';
+			$includeHeaders[]= $include;
+		}
+		
+		$toReplace = array (
+			'%INCLUDE_HEADERS%' => implode(PHP_EOL,$includeHeaders)
+		);
+		
+		foreach ($toReplace as $mark => $replace)
+		{
+				$content = str_replace($mark,$replace,$content);
+		}
+		
+		file_put_contents('ext/'.strtolower($project).'.h', $content);
 	}
 
 }
