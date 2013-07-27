@@ -417,4 +417,22 @@ class Arithmetic
 		return c;
 	}
 
+	public function complex23Sum()
+	{
+		var a; boolean b; double d;
+		let a = 1,
+			b = 2.0,
+			d = a + b;
+		return d;
+	}
+
+	public function complex24Sum()
+	{
+		var a; var d; boolean b;
+		let a = 1,
+			b = 2.0,
+			d = 1 + a + false + b;
+		return d;
+	}
+
 }

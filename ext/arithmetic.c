@@ -720,3 +720,41 @@ PHP_METHOD(Test_Arithmetic, complex22Sum) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, complex23Sum) {
+
+	double d;
+	zend_bool b;
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_LONG(a, 1);
+
+	b = (2.0) ? 1 : 0;
+
+	d = (double) (zephir_get_intval(a) + b);
+
+	RETURN_MM_DOUBLE(d);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, complex24Sum) {
+
+	zend_bool b;
+	zval *a, *d;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_LONG(a, 1);
+
+	b = (2.0) ? 1 : 0;
+
+	ZEPHIR_INIT_VAR(d);
+	ZVAL_LONG(d, 1 + zephir_get_intval(a) + 0 + b);
+
+	RETURN_CCTOR(d);
+
+
+}
+

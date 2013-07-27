@@ -181,4 +181,103 @@ class Assign
 		return b;
 	}
 
+	public function testAssign25()
+	{
+		int a;
+		double b;
+		let a = 1,
+			b = a;
+		return b;
+	}
+
+	public function testAssign26()
+	{
+		int b;
+		double a;
+		let a = 1,
+			b = a;
+		return b;
+	}
+
+	public function testAssign27()
+	{
+		int b;
+		double a;
+		let b = 1,
+			a = b;
+		return a;
+	}
+
+	public function testAssign28()
+	{
+		int b;
+		boolean a;
+		let b = 1,
+			a = b;
+		return a;
+	}
+
+	public function testAssign29()
+	{
+		double b;
+		boolean a;
+		let b = 1.0,
+			a = b;
+		return a;
+	}
+
+	public function testAssign30()
+	{
+		boolean b;
+		int a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
+	public function testAssign31()
+	{
+		boolean b;
+		double a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
+	public function testAssign32()
+	{
+		boolean b;
+		var a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
+	public function testAssign33()
+	{
+		boolean b;
+		var a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
+	public function testAssign34()
+	{
+		int b;
+		var a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
+	public function testAssign35()
+	{
+		double b;
+		var a;
+		let b = false,
+			a = b;
+		return a;
+	}
+
 }

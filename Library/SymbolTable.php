@@ -103,6 +103,7 @@ class SymbolTable
 
 		$variable = $this->getVariable($name);
 		$variable->increaseUses();
+		$variable->increaseMutates();
 
 		return $variable;
 	}
@@ -138,11 +139,15 @@ class SymbolTable
 		return $this->addVariable($type, '_' . $tempVar);
 	}
 
+	/**
+	 * Creates a temporary variable to be used in a write operation
+	 */
 	public function getTempVariableForWrite($type, CompilationContext $context)
 	{
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar);
 		$variable->increaseUses();
+		$variable->increaseMutates();
 		$variable->initVariant($context);
 		return $variable;
 	}

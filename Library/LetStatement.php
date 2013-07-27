@@ -43,6 +43,7 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'bool':
 								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
 								break;
 							case 'double':
@@ -77,6 +78,7 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'bool':
 								$codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
 								break;
 							case 'double':
@@ -117,7 +119,20 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
-						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						switch ($itemVariable->getType()) {
+							/*case 'int':
+								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								break;
+							case 'double':
+								$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+								break;
+							case 'variable':
+								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+								break;*/
+							default:
+								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+						}
 						break;
 					default:
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
@@ -135,8 +150,25 @@ class LetStatement
 					case 'bool':
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
-					case 'variable':
+					/*case 'variable':
 						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+						break;*/
+					case 'variable':
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+							case 'double':
+								$codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
+								break;
+							case 'bool':
+								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								break;
+							case 'variable':
+								$codePrinter->output($variable . ' = zephir_get_boolval(' . $itemVariable->getName() . ');');
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+						}
 						break;
 					case 'expr-variable':
 						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
@@ -180,7 +212,6 @@ class LetStatement
 						}
 						break;
 					case 'double':
-						//print_r($resolvedExpr->getOriginal());
 						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						} else {
@@ -196,7 +227,7 @@ class LetStatement
 							if ($resolvedExpr->getCode() == 'false') {
 								$codePrinter->output('ZVAL_BOOL(' . $variable . ', 0);');
 							} else {
-								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');');
 							}
 						}
 						break;
@@ -205,12 +236,26 @@ class LetStatement
 						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
 						break;
 					case 'variable':
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$code = $resolvedExpr->resolve(null, $compilationContext);
-							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
-						} else {
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'double':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'bool':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'variable':
+								$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
 						break;
 					case 'expr-variable':
@@ -562,6 +607,9 @@ class LetStatement
 		}
 	}
 
+	/**
+	 * Compiles the let statement
+	 */
 	public function compile(CompilationContext $compilationContext)
 	{
 		$statement = $this->_statement;
@@ -578,6 +626,9 @@ class LetStatement
 
 			$variable = $assignment['variable'];
 
+			/**
+			 * Get the symbol from the symbol table
+			 */
 			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
 
 			/**

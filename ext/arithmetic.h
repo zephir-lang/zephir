@@ -45,6 +45,8 @@ PHP_METHOD(Test_Arithmetic, complex19Sum);
 PHP_METHOD(Test_Arithmetic, complex20Sum);
 PHP_METHOD(Test_Arithmetic, complex21Sum);
 PHP_METHOD(Test_Arithmetic, complex22Sum);
+PHP_METHOD(Test_Arithmetic, complex23Sum);
+PHP_METHOD(Test_Arithmetic, complex24Sum);
 
 ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, intSum, NULL, ZEND_ACC_PUBLIC)
@@ -89,5 +91,7 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, complex20Sum, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, complex21Sum, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, complex22Sum, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, complex23Sum, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, complex24Sum, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

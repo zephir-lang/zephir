@@ -7,11 +7,25 @@
  */
 class Variable
 {
+	/**
+	 * Variable's type
+	 */
 	protected $_type;
 
+	/**
+	 * Variable's name
+	 */
 	protected $_name;
 
+	/**
+	 * Number of times the variable has been read
+	 */
 	protected $_numberUses = 0;
+
+	/**
+	 * Number of mutations to the variable
+	 */
+	protected $_numberMutates = 0;
 
 	protected $_initialized = false;
 
@@ -37,9 +51,20 @@ class Variable
 		return $this->_name;
 	}
 
+	/**
+	 * Increase the number of uses a variable may have
+	 */
 	public function increaseUses()
 	{
 		$this->_numberUses++;
+	}
+
+	/**
+	 * Increase the number of mutations a variable may have
+	 */
+	public function increaseMutates()
+	{
+		$this->_numberMutates++;
 	}
 
 	/**
@@ -50,6 +75,16 @@ class Variable
 	public function getNumberUses()
 	{
 		return $this->_numberUses;
+	}
+
+	/**
+	 * Returns the number of mutations performed over the variable
+	 *
+	 * @return long
+	 */
+	public function getNumberMutations()
+	{
+		return $this->_numberMutates;
 	}
 
 	/**

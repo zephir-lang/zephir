@@ -289,7 +289,7 @@ PHP_METHOD(Test_Assign, testAssign23) {
 
 	a = 1;
 
-	b = zephir_get_boolval(a);
+	b = a;
 
 	RETURN_MM_BOOL(b);
 
@@ -306,6 +306,168 @@ PHP_METHOD(Test_Assign, testAssign24) {
 	b = (double) a;
 
 	RETURN_DOUBLE(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign25) {
+
+	double b;
+	long a;
+
+	a = 1;
+
+	b = (double) a;
+
+	RETURN_DOUBLE(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign26) {
+
+	double a;
+	long b;
+
+	a = (double) (1);
+
+	b = (long) a;
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign27) {
+
+	double a;
+	long b;
+
+	b = 1;
+
+	a = (double) b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign28) {
+
+	zend_bool a;
+	long b;
+
+	b = 1;
+
+	a = (b) ? 1 : 0;
+
+	RETURN_MM_BOOL(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign29) {
+
+	zend_bool a;
+	double b;
+
+	b = 1.0;
+
+	a = (b) ? 1 : 0;
+
+	RETURN_MM_BOOL(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign30) {
+
+	long a;
+	zend_bool b;
+
+	b = 0;
+
+	a = b;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign31) {
+
+	double a;
+	zend_bool b;
+
+	b = 0;
+
+	a = (double) b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign32) {
+
+	zval *a;
+	zend_bool b;
+
+	ZEPHIR_MM_GROW();
+	b = 0;
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_BOOL(a, b);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign33) {
+
+	zval *a;
+	zend_bool b;
+
+	ZEPHIR_MM_GROW();
+	b = 0;
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_BOOL(a, b);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign34) {
+
+	zval *a;
+	long b;
+
+	ZEPHIR_MM_GROW();
+	b = 0;
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_LONG(a, b);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Assign, testAssign35) {
+
+	zval *a;
+	double b;
+
+	ZEPHIR_MM_GROW();
+	b = 0;
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_DOUBLE(a, b);
+
+	RETURN_CCTOR(a);
 
 
 }

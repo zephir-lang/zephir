@@ -104,10 +104,10 @@ class BaseOperator
 										$compilationContext->headersManager->add('kernel/operators');
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 									default:
-										throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new Exception("Cannot add variable('int') with '" . $right->getType() . "'");
+								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					case 'bool':
@@ -126,10 +126,10 @@ class BaseOperator
 									case 'variable':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 									default:
-										throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new Exception("Cannot add variable('int') with '" . $right->getType() . "'");
+								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
 						}
 					case 'double':
 						switch ($right->getType()) {
@@ -163,12 +163,13 @@ class BaseOperator
 
 						switch ($right->getType()) {
 							case 'int':
+							case 'double':
 								$compilationContext->headersManager->add('kernel/operators');
 								$op = $this->_operator;
 								$op1 = $variableLeft->getName();
 								$op2 = $right->getCode();
-								return new CompiledExpression('variable', function($result) use ($op1, $op, $op2) {
-									return 'ZVAL_DOUBLE(' . $result . ', zephir_get_intval(' . $op1 . ') ' . $op . ' ' . $op2 . ');';
+								return new CompiledExpression('expr-variable', function($result) use ($op1, $op, $op2) {
+									return 'ZVAL_DOUBLE(' . $result . ', zephir_get_doubleval(' . $op1 . ') ' . $op . ' ' . $op2 . ');';
 								}, $expression);
 								break;
 							case 'variable':
