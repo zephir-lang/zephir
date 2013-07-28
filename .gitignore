@@ -52,3 +52,6 @@ ext/flow.lo
 ext/arithmetic.lo
 ext/router/.libs/
 ext/router/route.lo
+ext/oo/oonoconstruct.lo
+ext/oo/ooconstruct.lo
+ext/oo/.libs/

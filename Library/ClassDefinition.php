@@ -71,6 +71,14 @@ class ClassDefinition
 		return str_replace('\\', '_', $this->_namespace);
 	}
 
+	/**
+	 * Returns a valid namespace to be used in C-sources
+	 */
+	public function getNCNamespace()
+	{
+		return str_replace('\\', '\\\\', $this->_namespace);
+	}
+
 	public function getSCName()
 	{
 		return str_replace("test_", "", strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name));
@@ -97,7 +105,7 @@ class ClassDefinition
 		/**
 		 * Register the class
 		 */
-		$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getCNamespace() . ', ' . $this->getName() . ', ' .
+		$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
 			strtolower($this->getSCName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
 			strtolower($this->getName()) . '_method_entry, 0);');
 		$codePrinter->outputBlankLine();

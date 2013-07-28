@@ -1233,6 +1233,18 @@ xx_eval_expr(R) ::= xx_literal_expr(L) . {
 	R = L;
 }
 
+xx_eval_expr(R) ::= TYPEOF xx_eval_expr(O1) . {
+	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= ISSET xx_eval_expr(O1) . {
+	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= xx_eval_expr(O1) TYPEOF xx_eval_expr(O2) . {
+	R = xx_ret_expr("instanceof", O1, O2, NULL, status->scanner_state);
+}
+
 xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
 	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
 }

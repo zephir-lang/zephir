@@ -284,18 +284,29 @@ class LetStatement
 
 						$newExpr = $resolvedExpr->getCode();
 
-						$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
-
-						$codePrinter->output('object_init_ex(' . $variable . ', ' . $classCe . ');');
-
-						$params = array();
-						foreach ($newExpr['parameters'] as $parameter) {
-							$expr = new Expression($parameter);
-							$compiledExpression = $expr->compile($compilationContext);
-							$params[] = $compiledExpression->getCode();
+						if (strtolower($newExpr['class']) == 'stdclass') {
+							$codePrinter->output('object_init(' . $variable . ');');
+						} else {
+							$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
+							$codePrinter->output('object_init_ex(' . $variable . ', ' . $classCe . ');');
 						}
 
-						$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
+						$params = array();
+						if (isset($newExpr['parameters'])) {
+							foreach ($newExpr['parameters'] as $parameter) {
+								$expr = new Expression($parameter);
+								$compiledExpression = $expr->compile($compilationContext);
+								$params[] = $compiledExpression->getCode();
+							}
+						}
+
+						if (strtolower($newExpr['class']) != 'stdclass') {
+							if (count($params)) {
+								$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
+							} else {
+								$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
+							}
+						}
 						break;
 
 					default:

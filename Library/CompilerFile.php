@@ -15,7 +15,7 @@ class CompilerFile
 	protected $_filePath;
 
 	protected $_ir;
-	
+
 	protected $_compiledFile;
 
 	/**
@@ -89,31 +89,37 @@ class CompilerFile
 		$compilationContext->codePrinter->output('/' . $topStatement['value'] . '/');
 	}
 
+	/**
+	 * Creates the definition
+	 */
 	public function preCompileClass($namespace, $topStatement)
 	{
 		$classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
-		$definition = $topStatement['definition'];
+		if (isset($topStatement['definition'])) {
 
-		if (isset($definition['properties'])) {
-			foreach ($definition['properties'] as $property) {
-				$classDefinition->addProperty(new ClassProperty(
-					$property['visibility'],
-					$property['name'],
-					isset($property['default']) ? $property['default'] : null
-				));
+			$definition = $topStatement['definition'];
+
+			if (isset($definition['properties'])) {
+				foreach ($definition['properties'] as $property) {
+					$classDefinition->addProperty(new ClassProperty(
+						$property['visibility'],
+						$property['name'],
+						isset($property['default']) ? $property['default'] : null
+					));
+				}
 			}
-		}
 
-		if (isset($definition['methods'])) {
-			foreach ($definition['methods'] as $method) {
-				$classDefinition->addMethod(new ClassMethod(
-					$method['visibility'],
-					$method['name'],
-					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
-					isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
-					isset($method['docblock']) ? $method['docblock'] : null
-				), $method);
+			if (isset($definition['methods'])) {
+				foreach ($definition['methods'] as $method) {
+					$classDefinition->addMethod(new ClassMethod(
+						$method['visibility'],
+						$method['name'],
+						isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+						isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
+						isset($method['docblock']) ? $method['docblock'] : null
+					), $method);
+				}
 			}
 		}
 
@@ -121,12 +127,12 @@ class CompilerFile
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function preCompile()
 	{
 
-	
+
 		$ir = $this->genIR();
 		if (!is_array($ir)) {
 			throw new Exception("Cannot parse file");
@@ -172,11 +178,11 @@ class CompilerFile
 		$this->_ir = $ir;
 	}
 
-	public function  getCompiledFile() 
+	public function  getCompiledFile()
 	{
 		return $this->_compiledFile;
 	}
-	 
+
 	public function compile()
 	{
 
@@ -200,7 +206,7 @@ class CompilerFile
 		$codePrinter->outputBlankLine();
 
 		$class = false;
-		foreach ($this->_ir as $topStatement) 
+		foreach ($this->_ir as $topStatement)
 		{
 
 			switch ($topStatement['type']) {
@@ -225,9 +231,9 @@ class CompilerFile
 
 		file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
 		file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
-		
+
 		//add to file compiled
 		$this->_compiledFile = $path . '.c';
 	}
-	
+
 }
