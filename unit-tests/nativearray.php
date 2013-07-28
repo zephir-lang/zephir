@@ -27,4 +27,7 @@ assert($t->testArray22() == array(0 => 4, 1 => 5, 2 => 6));
 assert($t->testArray23() == array(0 => 0, 1 => 0, 2 => 0));
 assert($t->testArray24() == array(0 => 0.0, 1 => 0.0, 2 => 0.0));
 
-//assert($t->);
+assert($t->testArrayAccess1() == 1);
+assert($t->testArrayAccess2() == 1);
+assert($t->testArrayAccess3() == 1);
+assert($t->testArrayAccess4() == 1);
