@@ -19,12 +19,12 @@
 
                      NAMESPACE shift  7
                          CLASS shift  10
-                      ABSTRACT shift  311
-                       COMMENT shift  168
+                      ABSTRACT shift  316
+                       COMMENT shift  173
                        program accept
                    xx_language shift  1
          xx_top_statement_list shift  2
-              xx_top_statement shift  324
+              xx_top_statement shift  329
               xx_namespace_def shift  4
                   xx_class_def shift  5
                     xx_comment shift  6
@@ -54,8 +54,8 @@ State 2:
                              $ reduce 1
                      NAMESPACE shift  7
                          CLASS shift  10
-                      ABSTRACT shift  311
-                       COMMENT shift  168
+                      ABSTRACT shift  316
+                       COMMENT shift  173
               xx_top_statement shift  3
               xx_namespace_def shift  4
                   xx_class_def shift  5
@@ -111,7 +111,7 @@ State 11:
           xx_class_def ::= CLASS IDENTIFIER * EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
                   BRACKET_OPEN shift  12
-                       EXTENDS shift  305
+                       EXTENDS shift  310
 
 State 12:
           xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN * xx_class_definition BRACKET_CLOSE
@@ -155,17 +155,17 @@ State 12:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE shift  15
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
            xx_class_definition shift  13
 xx_class_properties_definition shift  16
-    xx_class_consts_definition shift  298
-   xx_class_methods_definition shift  304
-  xx_class_property_definition shift  303
-     xx_class_const_definition shift  297
-    xx_class_method_definition shift  270
+    xx_class_consts_definition shift  303
+   xx_class_methods_definition shift  309
+  xx_class_property_definition shift  308
+     xx_class_const_definition shift  302
+    xx_class_method_definition shift  275
 
 State 13:
           xx_class_def ::= CLASS IDENTIFIER BRACKET_OPEN xx_class_definition * BRACKET_CLOSE
@@ -216,15 +216,15 @@ State 16:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 16
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
-    xx_class_consts_definition shift  256
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
+    xx_class_consts_definition shift  261
    xx_class_methods_definition shift  17
-  xx_class_property_definition shift  271
-     xx_class_const_definition shift  297
-    xx_class_method_definition shift  270
+  xx_class_property_definition shift  276
+     xx_class_const_definition shift  302
+    xx_class_method_definition shift  275
 
 State 17:
      (19) xx_class_definition ::= xx_class_properties_definition xx_class_methods_definition *
@@ -243,9 +243,9 @@ State 17:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 19
-                       COMMENT shift  222
+                       COMMENT shift  227
                         PUBLIC shift  19
-                     PROTECTED shift  247
+                     PROTECTED shift  252
     xx_class_method_definition shift  18
 
 State 18:
@@ -297,18 +297,18 @@ State 22:
           xx_parameter_type ::= * TYPE_STRING
           xx_parameter_type ::= * TYPE_ARRAY
 
-                          LESS shift  209
-                    IDENTIFIER shift  198
+                          LESS shift  214
+                    IDENTIFIER shift  203
              PARENTHESES_CLOSE shift  23
-                  TYPE_INTEGER shift  212
-                   TYPE_DOUBLE shift  213
-                     TYPE_BOOL shift  214
-                   TYPE_STRING shift  215
-                    TYPE_ARRAY shift  216
-             xx_parameter_list shift  218
-                  xx_parameter shift  217
-             xx_parameter_type shift  201
-             xx_parameter_cast shift  205
+                  TYPE_INTEGER shift  217
+                   TYPE_DOUBLE shift  218
+                     TYPE_BOOL shift  219
+                   TYPE_STRING shift  220
+                    TYPE_ARRAY shift  221
+             xx_parameter_list shift  223
+                  xx_parameter shift  222
+             xx_parameter_type shift  206
+             xx_parameter_cast shift  210
 
 State 23:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
@@ -329,18 +329,18 @@ State 23:
           xx_parameter_type ::= * TYPE_STRING
           xx_parameter_type ::= * TYPE_ARRAY
 
-                          LESS shift  209
-                    IDENTIFIER shift  198
+                          LESS shift  214
+                    IDENTIFIER shift  203
                   BRACKET_OPEN shift  24
-                  TYPE_INTEGER shift  212
-                   TYPE_DOUBLE shift  213
-                     TYPE_BOOL shift  214
-                   TYPE_STRING shift  215
-                    TYPE_ARRAY shift  216
-             xx_parameter_list shift  192
-                  xx_parameter shift  217
-             xx_parameter_type shift  201
-             xx_parameter_cast shift  205
+                  TYPE_INTEGER shift  217
+                   TYPE_DOUBLE shift  218
+                     TYPE_BOOL shift  219
+                   TYPE_STRING shift  220
+                    TYPE_ARRAY shift  221
+             xx_parameter_list shift  197
+                  xx_parameter shift  222
+             xx_parameter_type shift  206
+             xx_parameter_cast shift  210
 
 State 24:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
@@ -381,23 +381,23 @@ State 24:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  25
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
              xx_statement_list shift  26
-                  xx_statement shift  169
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -450,20 +450,20 @@ State 26:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  27
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -577,15 +577,15 @@ State 43:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
                   xx_eval_expr shift  44
 
 State 44:
@@ -600,10 +600,10 @@ State 44:
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
 
-                        EQUALS shift  171
-                     IDENTICAL shift  174
-                          LESS shift  176
-                       GREATER shift  178
+                        EQUALS shift  176
+                     IDENTICAL shift  179
+                          LESS shift  181
+                       GREATER shift  183
                   BRACKET_OPEN shift  45
 
 State 45:
@@ -648,24 +648,24 @@ State 45:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  186
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  191
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
              xx_statement_list shift  46
-                  xx_statement shift  169
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -715,20 +715,20 @@ State 46:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  47
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -793,24 +793,24 @@ State 49:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  185
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  190
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
              xx_statement_list shift  50
-                  xx_statement shift  169
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -858,20 +858,20 @@ State 50:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  51
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -933,24 +933,24 @@ State 53:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  184
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  189
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
              xx_statement_list shift  54
-                  xx_statement shift  169
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -998,20 +998,20 @@ State 54:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  55
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -1046,15 +1046,15 @@ State 56:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
                   xx_eval_expr shift  57
 
 State 57:
@@ -1065,10 +1065,10 @@ State 57:
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
 
-                        EQUALS shift  171
-                     IDENTICAL shift  174
-                          LESS shift  176
-                       GREATER shift  178
+                        EQUALS shift  176
+                     IDENTICAL shift  179
+                          LESS shift  181
+                       GREATER shift  183
                   BRACKET_OPEN shift  58
 
 State 58:
@@ -1109,24 +1109,24 @@ State 58:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  170
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  175
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
              xx_statement_list shift  59
-                  xx_statement shift  169
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -1174,20 +1174,20 @@ State 59:
           xx_comment ::= * COMMENT
 
                  BRACKET_CLOSE shift  60
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -1218,7 +1218,7 @@ State 61:
 
                     IDENTIFIER shift  66
             xx_let_assignments shift  62
-             xx_let_assignment shift  133
+             xx_let_assignment shift  138
 
 State 62:
           xx_let_statement ::= LET xx_let_assignments * DOTCOMMA
@@ -1258,14 +1258,16 @@ State 66:
           xx_let_assignment ::= IDENTIFIER * DECR
 
                         ASSIGN shift  67
-                         ARROW shift  119
-                 SBRACKET_OPEN shift  123
-                          INCR shift  131
-                          DECR shift  132
+                         ARROW shift  124
+                 SBRACKET_OPEN shift  128
+                          INCR shift  136
+                          DECR shift  137
 
 State 67:
           xx_let_assignment ::= IDENTIFIER ASSIGN * xx_assign_expr
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1283,17 +1285,17 @@ State 67:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
                 xx_assign_expr shift  68
 
 State 68:
@@ -1302,11 +1304,13 @@ State 68:
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
 
                            ADD shift  69
-                           SUB shift  75
+                           SUB shift  79
                      {default} reduce 94
 
 State 69:
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr ADD * xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
@@ -1325,30 +1329,36 @@ State 69:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  74
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  78
 
 State 70:
           xx_assign_expr ::= IDENTIFIER * SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
-    (121) xx_assign_expr ::= IDENTIFIER *
+          xx_assign_expr ::= IDENTIFIER * SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= IDENTIFIER * SBRACKET_OPEN STRING SBRACKET_CLOSE
+    (123) xx_assign_expr ::= IDENTIFIER *
 
                  SBRACKET_OPEN shift  71
-                     {default} reduce 121
+                     {default} reduce 123
 
 State 71:
           xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN * IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN * INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN * STRING SBRACKET_CLOSE
 
                     IDENTIFIER shift  72
+                       INTEGER shift  74
+                        STRING shift  76
 
 State 72:
           xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN IDENTIFIER * SBRACKET_CLOSE
@@ -1361,14 +1371,36 @@ State 73:
                      {default} reduce 116
 
 State 74:
-          xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
-    (117) xx_assign_expr ::= xx_assign_expr ADD xx_assign_expr *
-          xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
+          xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN INTEGER * SBRACKET_CLOSE
+
+                SBRACKET_CLOSE shift  75
+
+State 75:
+    (117) xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE *
 
                      {default} reduce 117
 
-State 75:
+State 76:
+          xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN STRING * SBRACKET_CLOSE
+
+                SBRACKET_CLOSE shift  77
+
+State 77:
+    (118) xx_assign_expr ::= IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE *
+
+                     {default} reduce 118
+
+State 78:
+          xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
+    (119) xx_assign_expr ::= xx_assign_expr ADD xx_assign_expr *
+          xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
+
+                     {default} reduce 119
+
+State 79:
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= xx_assign_expr SUB * xx_assign_expr
@@ -1387,28 +1419,30 @@ State 75:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  76
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  80
 
-State 76:
+State 80:
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
-    (118) xx_assign_expr ::= xx_assign_expr SUB xx_assign_expr *
+    (120) xx_assign_expr ::= xx_assign_expr SUB xx_assign_expr *
 
-                     {default} reduce 118
+                     {default} reduce 120
 
-State 77:
+State 81:
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1427,28 +1461,30 @@ State 77:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  78
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  82
 
-State 78:
+State 82:
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
-    (119) xx_assign_expr ::= INSTANCEOF xx_assign_expr *
+    (121) xx_assign_expr ::= INSTANCEOF xx_assign_expr *
 
-                     {default} reduce 119
+                     {default} reduce 121
 
-State 79:
+State 83:
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1467,58 +1503,59 @@ State 79:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  80
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  84
 
-State 80:
+State 84:
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
-    (120) xx_assign_expr ::= TYPEOF xx_assign_expr *
-
-                     {default} reduce 120
-
-State 81:
-    (122) xx_assign_expr ::= INTEGER *
+    (122) xx_assign_expr ::= TYPEOF xx_assign_expr *
 
                      {default} reduce 122
 
-State 82:
-    (123) xx_assign_expr ::= STRING *
-
-                     {default} reduce 123
-
-State 83:
-    (124) xx_assign_expr ::= DOUBLE *
+State 85:
+    (124) xx_assign_expr ::= INTEGER *
 
                      {default} reduce 124
 
-State 84:
-    (125) xx_assign_expr ::= NULL *
+State 86:
+    (125) xx_assign_expr ::= STRING *
 
                      {default} reduce 125
 
-State 85:
-    (126) xx_assign_expr ::= FALSE *
+State 87:
+    (126) xx_assign_expr ::= DOUBLE *
 
                      {default} reduce 126
 
-State 86:
+State 88:
+    (127) xx_assign_expr ::= NULL *
+
+                     {default} reduce 127
+
+State 89:
+    (128) xx_assign_expr ::= FALSE *
+
+                     {default} reduce 128
+
+State 90:
           xx_assign_expr ::= SBRACKET_OPEN * SBRACKET_CLOSE
           xx_assign_expr ::= SBRACKET_OPEN * xx_array_list SBRACKET_CLOSE
           xx_array_list ::= * xx_array_list COMMA xx_array_item
           xx_array_list ::= * xx_array_item
           xx_array_item ::= * xx_array_key COLON xx_array_value
           xx_array_item ::= * xx_array_value
+          xx_array_key ::= * IDENTIFIER
           xx_array_key ::= * STRING
           xx_array_key ::= * INTEGER
           xx_array_value ::= * xx_literal_expr
@@ -1530,41 +1567,42 @@ State 86:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  96
-                SBRACKET_CLOSE shift  87
-                       INTEGER shift  105
-                        STRING shift  104
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  95
-                 xx_array_list shift  88
-                 xx_array_item shift  106
-                  xx_array_key shift  92
-                xx_array_value shift  103
+                    IDENTIFIER shift  108
+                SBRACKET_CLOSE shift  91
+                       INTEGER shift  110
+                        STRING shift  109
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  99
+                 xx_array_list shift  92
+                 xx_array_item shift  111
+                  xx_array_key shift  96
+                xx_array_value shift  107
 
-State 87:
-    (127) xx_assign_expr ::= SBRACKET_OPEN SBRACKET_CLOSE *
+State 91:
+    (129) xx_assign_expr ::= SBRACKET_OPEN SBRACKET_CLOSE *
 
-                     {default} reduce 127
+                     {default} reduce 129
 
-State 88:
+State 92:
           xx_assign_expr ::= SBRACKET_OPEN xx_array_list * SBRACKET_CLOSE
           xx_array_list ::= xx_array_list * COMMA xx_array_item
 
-                         COMMA shift  90
-                SBRACKET_CLOSE shift  89
+                         COMMA shift  94
+                SBRACKET_CLOSE shift  93
 
-State 89:
-    (128) xx_assign_expr ::= SBRACKET_OPEN xx_array_list SBRACKET_CLOSE *
+State 93:
+    (130) xx_assign_expr ::= SBRACKET_OPEN xx_array_list SBRACKET_CLOSE *
 
-                     {default} reduce 128
+                     {default} reduce 130
 
-State 90:
+State 94:
           xx_array_list ::= xx_array_list COMMA * xx_array_item
           xx_array_item ::= * xx_array_key COLON xx_array_value
           xx_array_item ::= * xx_array_value
+          xx_array_key ::= * IDENTIFIER
           xx_array_key ::= * STRING
           xx_array_key ::= * INTEGER
           xx_array_value ::= * xx_literal_expr
@@ -1576,29 +1614,29 @@ State 90:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  96
-                       INTEGER shift  105
-                        STRING shift  104
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  95
-                 xx_array_item shift  91
-                  xx_array_key shift  92
-                xx_array_value shift  103
+                    IDENTIFIER shift  108
+                       INTEGER shift  110
+                        STRING shift  109
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  99
+                 xx_array_item shift  95
+                  xx_array_key shift  96
+                xx_array_value shift  107
 
-State 91:
-    (136) xx_array_list ::= xx_array_list COMMA xx_array_item *
+State 95:
+    (138) xx_array_list ::= xx_array_list COMMA xx_array_item *
 
-                     {default} reduce 136
+                     {default} reduce 138
 
-State 92:
+State 96:
           xx_array_item ::= xx_array_key * COLON xx_array_value
 
-                         COLON shift  93
+                         COLON shift  97
 
-State 93:
+State 97:
           xx_array_item ::= xx_array_key COLON * xx_array_value
           xx_array_value ::= * xx_literal_expr
           xx_array_value ::= * IDENTIFIER
@@ -1609,101 +1647,108 @@ State 93:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  96
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  95
-                xx_array_value shift  94
+                    IDENTIFIER shift  100
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  99
+                xx_array_value shift  98
 
-State 94:
-    (138) xx_array_item ::= xx_array_key COLON xx_array_value *
+State 98:
+    (140) xx_array_item ::= xx_array_key COLON xx_array_value *
 
-                     {default} reduce 138
+                     {default} reduce 140
 
-State 95:
-    (142) xx_array_value ::= xx_literal_expr *
-
-                     {default} reduce 142
-
-State 96:
-    (143) xx_array_value ::= IDENTIFIER *
-
-                     {default} reduce 143
-
-State 97:
-    (145) xx_literal_expr ::= INTEGER *
+State 99:
+    (145) xx_array_value ::= xx_literal_expr *
 
                      {default} reduce 145
 
-State 98:
-    (146) xx_literal_expr ::= STRING *
+State 100:
+    (146) xx_array_value ::= IDENTIFIER *
 
                      {default} reduce 146
 
-State 99:
-    (147) xx_literal_expr ::= DOUBLE *
-
-                     {default} reduce 147
-
-State 100:
-    (148) xx_literal_expr ::= NULL *
+State 101:
+    (148) xx_literal_expr ::= INTEGER *
 
                      {default} reduce 148
 
-State 101:
-    (149) xx_literal_expr ::= FALSE *
+State 102:
+    (149) xx_literal_expr ::= STRING *
 
                      {default} reduce 149
 
-State 102:
-    (150) xx_literal_expr ::= TRUE *
+State 103:
+    (150) xx_literal_expr ::= DOUBLE *
 
                      {default} reduce 150
 
-State 103:
-    (139) xx_array_item ::= xx_array_value *
+State 104:
+    (151) xx_literal_expr ::= NULL *
+
+                     {default} reduce 151
+
+State 105:
+    (152) xx_literal_expr ::= FALSE *
+
+                     {default} reduce 152
+
+State 106:
+    (153) xx_literal_expr ::= TRUE *
+
+                     {default} reduce 153
+
+State 107:
+    (141) xx_array_item ::= xx_array_value *
+
+                     {default} reduce 141
+
+State 108:
+    (142) xx_array_key ::= IDENTIFIER *
+    (146) xx_array_value ::= IDENTIFIER *
+
+                         COLON reduce 142
+                     {default} reduce 146
+
+State 109:
+    (143) xx_array_key ::= STRING *
+    (149) xx_literal_expr ::= STRING *
+
+                         COLON reduce 143
+                     {default} reduce 149
+
+State 110:
+    (144) xx_array_key ::= INTEGER *
+    (148) xx_literal_expr ::= INTEGER *
+
+                         COLON reduce 144
+                     {default} reduce 148
+
+State 111:
+    (139) xx_array_list ::= xx_array_item *
 
                      {default} reduce 139
 
-State 104:
-    (140) xx_array_key ::= STRING *
-    (146) xx_literal_expr ::= STRING *
-
-                         COLON reduce 140
-                     {default} reduce 146
-
-State 105:
-    (141) xx_array_key ::= INTEGER *
-    (145) xx_literal_expr ::= INTEGER *
-
-                         COLON reduce 141
-                     {default} reduce 145
-
-State 106:
-    (137) xx_array_list ::= xx_array_item *
-
-                     {default} reduce 137
-
-State 107:
+State 112:
           xx_assign_expr ::= NEW * IDENTIFIER
           xx_assign_expr ::= NEW * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE
           xx_assign_expr ::= NEW * IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
 
-                    IDENTIFIER shift  108
+                    IDENTIFIER shift  113
 
-State 108:
-    (129) xx_assign_expr ::= NEW IDENTIFIER *
+State 113:
+    (131) xx_assign_expr ::= NEW IDENTIFIER *
           xx_assign_expr ::= NEW IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE
           xx_assign_expr ::= NEW IDENTIFIER * PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
 
-              PARENTHESES_OPEN shift  109
-                     {default} reduce 129
+              PARENTHESES_OPEN shift  114
+                     {default} reduce 131
 
-State 109:
+State 114:
           xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE
           xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN * xx_call_parameters PARENTHESES_CLOSE
           xx_call_parameters ::= * xx_call_parameters COMMA xx_call_parameter
@@ -1717,36 +1762,36 @@ State 109:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  116
-             PARENTHESES_CLOSE shift  110
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  115
-            xx_call_parameters shift  111
-             xx_call_parameter shift  117
+                    IDENTIFIER shift  121
+             PARENTHESES_CLOSE shift  115
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  120
+            xx_call_parameters shift  116
+             xx_call_parameter shift  122
 
-State 110:
-    (130) xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE *
+State 115:
+    (132) xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE *
 
-                     {default} reduce 130
+                     {default} reduce 132
 
-State 111:
+State 116:
           xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters * PARENTHESES_CLOSE
           xx_call_parameters ::= xx_call_parameters * COMMA xx_call_parameter
 
-                         COMMA shift  113
-             PARENTHESES_CLOSE shift  112
+                         COMMA shift  118
+             PARENTHESES_CLOSE shift  117
 
-State 112:
-    (131) xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE *
+State 117:
+    (133) xx_assign_expr ::= NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE *
 
-                     {default} reduce 131
+                     {default} reduce 133
 
-State 113:
+State 118:
           xx_call_parameters ::= xx_call_parameters COMMA * xx_call_parameter
           xx_call_parameter ::= * xx_literal_expr
           xx_call_parameter ::= * IDENTIFIER
@@ -1757,54 +1802,56 @@ State 113:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  116
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  115
-             xx_call_parameter shift  114
+                    IDENTIFIER shift  121
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  120
+             xx_call_parameter shift  119
 
-State 114:
-    (132) xx_call_parameters ::= xx_call_parameters COMMA xx_call_parameter *
-
-                     {default} reduce 132
-
-State 115:
-    (134) xx_call_parameter ::= xx_literal_expr *
+State 119:
+    (134) xx_call_parameters ::= xx_call_parameters COMMA xx_call_parameter *
 
                      {default} reduce 134
 
-State 116:
-    (135) xx_call_parameter ::= IDENTIFIER *
+State 120:
+    (136) xx_call_parameter ::= xx_literal_expr *
+
+                     {default} reduce 136
+
+State 121:
+    (137) xx_call_parameter ::= IDENTIFIER *
+
+                     {default} reduce 137
+
+State 122:
+    (135) xx_call_parameters ::= xx_call_parameter *
 
                      {default} reduce 135
 
-State 117:
-    (133) xx_call_parameters ::= xx_call_parameter *
+State 123:
+    (147) xx_assign_expr ::= TRUE *
 
-                     {default} reduce 133
+                     {default} reduce 147
 
-State 118:
-    (144) xx_assign_expr ::= TRUE *
-
-                     {default} reduce 144
-
-State 119:
+State 124:
           xx_let_assignment ::= IDENTIFIER ARROW * IDENTIFIER ASSIGN xx_assign_expr
 
-                    IDENTIFIER shift  120
+                    IDENTIFIER shift  125
 
-State 120:
+State 125:
           xx_let_assignment ::= IDENTIFIER ARROW IDENTIFIER * ASSIGN xx_assign_expr
 
-                        ASSIGN shift  121
+                        ASSIGN shift  126
 
-State 121:
+State 126:
           xx_let_assignment ::= IDENTIFIER ARROW IDENTIFIER ASSIGN * xx_assign_expr
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1822,43 +1869,45 @@ State 121:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  122
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  127
 
-State 122:
+State 127:
      (95) xx_let_assignment ::= IDENTIFIER ARROW IDENTIFIER ASSIGN xx_assign_expr *
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
 
                            ADD shift  69
-                           SUB shift  75
+                           SUB shift  79
                      {default} reduce 95
 
-State 123:
+State 128:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN * SBRACKET_CLOSE ASSIGN xx_assign_expr
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN * IDENTIFIER SBRACKET_CLOSE ASSIGN xx_assign_expr
 
-                    IDENTIFIER shift  127
-                SBRACKET_CLOSE shift  124
+                    IDENTIFIER shift  132
+                SBRACKET_CLOSE shift  129
 
-State 124:
+State 129:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN SBRACKET_CLOSE * ASSIGN xx_assign_expr
 
-                        ASSIGN shift  125
+                        ASSIGN shift  130
 
-State 125:
+State 130:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN SBRACKET_CLOSE ASSIGN * xx_assign_expr
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1876,41 +1925,43 @@ State 125:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  126
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  131
 
-State 126:
+State 131:
      (96) xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr *
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
 
                            ADD shift  69
-                           SUB shift  75
+                           SUB shift  79
                      {default} reduce 96
 
-State 127:
+State 132:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN IDENTIFIER * SBRACKET_CLOSE ASSIGN xx_assign_expr
 
-                SBRACKET_CLOSE shift  128
+                SBRACKET_CLOSE shift  133
 
-State 128:
+State 133:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE * ASSIGN xx_assign_expr
 
-                        ASSIGN shift  129
+                        ASSIGN shift  134
 
-State 129:
+State 134:
           xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE ASSIGN * xx_assign_expr
           xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN INTEGER SBRACKET_CLOSE
+          xx_assign_expr ::= * IDENTIFIER SBRACKET_OPEN STRING SBRACKET_CLOSE
           xx_assign_expr ::= * xx_assign_expr ADD xx_assign_expr
           xx_assign_expr ::= * xx_assign_expr SUB xx_assign_expr
           xx_assign_expr ::= * INSTANCEOF xx_assign_expr
@@ -1928,44 +1979,44 @@ State 129:
           xx_assign_expr ::= * NEW IDENTIFIER PARENTHESES_OPEN xx_call_parameters PARENTHESES_CLOSE
           xx_assign_expr ::= * TRUE
 
-                        TYPEOF shift  79
-                    INSTANCEOF shift  77
-                           NEW shift  107
+                        TYPEOF shift  83
+                    INSTANCEOF shift  81
+                           NEW shift  112
                     IDENTIFIER shift  70
-                 SBRACKET_OPEN shift  86
-                       INTEGER shift  81
-                        STRING shift  82
-                        DOUBLE shift  83
-                          NULL shift  84
-                         FALSE shift  85
-                          TRUE shift  118
-                xx_assign_expr shift  130
+                 SBRACKET_OPEN shift  90
+                       INTEGER shift  85
+                        STRING shift  86
+                        DOUBLE shift  87
+                          NULL shift  88
+                         FALSE shift  89
+                          TRUE shift  123
+                xx_assign_expr shift  135
 
-State 130:
+State 135:
      (97) xx_let_assignment ::= IDENTIFIER SBRACKET_OPEN IDENTIFIER SBRACKET_CLOSE ASSIGN xx_assign_expr *
           xx_assign_expr ::= xx_assign_expr * ADD xx_assign_expr
           xx_assign_expr ::= xx_assign_expr * SUB xx_assign_expr
 
                            ADD shift  69
-                           SUB shift  75
+                           SUB shift  79
                      {default} reduce 97
 
-State 131:
+State 136:
      (98) xx_let_assignment ::= IDENTIFIER INCR *
 
                      {default} reduce 98
 
-State 132:
+State 137:
      (99) xx_let_assignment ::= IDENTIFIER DECR *
 
                      {default} reduce 99
 
-State 133:
+State 138:
      (93) xx_let_assignments ::= xx_let_assignment *
 
                      {default} reduce 93
 
-State 134:
+State 139:
           xx_echo_statement ::= ECHO * xx_echo_expressions DOTCOMMA
           xx_echo_expressions ::= * xx_echo_expressions COMMA xx_echo_expression
           xx_echo_expressions ::= * xx_echo_expression
@@ -1978,30 +2029,30 @@ State 134:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  140
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  139
-           xx_echo_expressions shift  135
-            xx_echo_expression shift  141
+                    IDENTIFIER shift  145
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  144
+           xx_echo_expressions shift  140
+            xx_echo_expression shift  146
 
-State 135:
+State 140:
           xx_echo_statement ::= ECHO xx_echo_expressions * DOTCOMMA
           xx_echo_expressions ::= xx_echo_expressions * COMMA xx_echo_expression
 
-                         COMMA shift  137
-                      DOTCOMMA shift  136
+                         COMMA shift  142
+                      DOTCOMMA shift  141
 
-State 136:
+State 141:
     (100) xx_echo_statement ::= ECHO xx_echo_expressions DOTCOMMA *
 
                      {default} reduce 100
 
-State 137:
+State 142:
           xx_echo_expressions ::= xx_echo_expressions COMMA * xx_echo_expression
           xx_echo_expression ::= * xx_literal_expr
           xx_echo_expression ::= * IDENTIFIER
@@ -2012,37 +2063,37 @@ State 137:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  140
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  139
-            xx_echo_expression shift  138
+                    IDENTIFIER shift  145
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  144
+            xx_echo_expression shift  143
 
-State 138:
+State 143:
     (101) xx_echo_expressions ::= xx_echo_expressions COMMA xx_echo_expression *
 
                      {default} reduce 101
 
-State 139:
+State 144:
     (103) xx_echo_expression ::= xx_literal_expr *
 
                      {default} reduce 103
 
-State 140:
+State 145:
     (104) xx_echo_expression ::= IDENTIFIER *
 
                      {default} reduce 104
 
-State 141:
+State 146:
     (102) xx_echo_expressions ::= xx_echo_expression *
 
                      {default} reduce 102
 
-State 142:
+State 147:
           xx_return_statement ::= RETURN * xx_literal_expr DOTCOMMA
           xx_return_statement ::= RETURN * IDENTIFIER DOTCOMMA
           xx_literal_expr ::= * INTEGER
@@ -2052,79 +2103,79 @@ State 142:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                    IDENTIFIER shift  145
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  143
+                    IDENTIFIER shift  150
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  148
 
-State 143:
+State 148:
           xx_return_statement ::= RETURN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  144
+                      DOTCOMMA shift  149
 
-State 144:
+State 149:
     (105) xx_return_statement ::= RETURN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 105
 
-State 145:
+State 150:
           xx_return_statement ::= RETURN IDENTIFIER * DOTCOMMA
 
-                      DOTCOMMA shift  146
+                      DOTCOMMA shift  151
 
-State 146:
+State 151:
     (106) xx_return_statement ::= RETURN IDENTIFIER DOTCOMMA *
 
                      {default} reduce 106
 
-State 147:
+State 152:
           xx_declare_statement ::= TYPE_INTEGER * xx_declare_variable_list DOTCOMMA
           xx_declare_variable_list ::= * xx_declare_variable_list COMMA xx_declare_variable
           xx_declare_variable_list ::= * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-      xx_declare_variable_list shift  148
-           xx_declare_variable shift  155
+                    IDENTIFIER shift  157
+      xx_declare_variable_list shift  153
+           xx_declare_variable shift  160
 
-State 148:
+State 153:
           xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list * DOTCOMMA
           xx_declare_variable_list ::= xx_declare_variable_list * COMMA xx_declare_variable
 
-                         COMMA shift  150
-                      DOTCOMMA shift  149
+                         COMMA shift  155
+                      DOTCOMMA shift  154
 
-State 149:
+State 154:
     (107) xx_declare_statement ::= TYPE_INTEGER xx_declare_variable_list DOTCOMMA *
 
                      {default} reduce 107
 
-State 150:
+State 155:
           xx_declare_variable_list ::= xx_declare_variable_list COMMA * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-           xx_declare_variable shift  151
+                    IDENTIFIER shift  157
+           xx_declare_variable shift  156
 
-State 151:
+State 156:
     (112) xx_declare_variable_list ::= xx_declare_variable_list COMMA xx_declare_variable *
 
                      {default} reduce 112
 
-State 152:
+State 157:
     (114) xx_declare_variable ::= IDENTIFIER *
           xx_declare_variable ::= IDENTIFIER * ASSIGN xx_literal_expr
 
-                        ASSIGN shift  153
+                        ASSIGN shift  158
                      {default} reduce 114
 
-State 153:
+State 158:
           xx_declare_variable ::= IDENTIFIER ASSIGN * xx_literal_expr
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -2133,132 +2184,132 @@ State 153:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  154
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  159
 
-State 154:
+State 159:
     (115) xx_declare_variable ::= IDENTIFIER ASSIGN xx_literal_expr *
 
                      {default} reduce 115
 
-State 155:
+State 160:
     (113) xx_declare_variable_list ::= xx_declare_variable *
 
                      {default} reduce 113
 
-State 156:
+State 161:
           xx_declare_statement ::= TYPE_DOUBLE * xx_declare_variable_list DOTCOMMA
           xx_declare_variable_list ::= * xx_declare_variable_list COMMA xx_declare_variable
           xx_declare_variable_list ::= * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-      xx_declare_variable_list shift  157
-           xx_declare_variable shift  155
+                    IDENTIFIER shift  157
+      xx_declare_variable_list shift  162
+           xx_declare_variable shift  160
 
-State 157:
+State 162:
           xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list * DOTCOMMA
           xx_declare_variable_list ::= xx_declare_variable_list * COMMA xx_declare_variable
 
-                         COMMA shift  150
-                      DOTCOMMA shift  158
+                         COMMA shift  155
+                      DOTCOMMA shift  163
 
-State 158:
+State 163:
     (108) xx_declare_statement ::= TYPE_DOUBLE xx_declare_variable_list DOTCOMMA *
 
                      {default} reduce 108
 
-State 159:
+State 164:
           xx_declare_statement ::= TYPE_STRING * xx_declare_variable_list DOTCOMMA
           xx_declare_variable_list ::= * xx_declare_variable_list COMMA xx_declare_variable
           xx_declare_variable_list ::= * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-      xx_declare_variable_list shift  160
-           xx_declare_variable shift  155
+                    IDENTIFIER shift  157
+      xx_declare_variable_list shift  165
+           xx_declare_variable shift  160
 
-State 160:
+State 165:
           xx_declare_statement ::= TYPE_STRING xx_declare_variable_list * DOTCOMMA
           xx_declare_variable_list ::= xx_declare_variable_list * COMMA xx_declare_variable
 
-                         COMMA shift  150
-                      DOTCOMMA shift  161
+                         COMMA shift  155
+                      DOTCOMMA shift  166
 
-State 161:
+State 166:
     (109) xx_declare_statement ::= TYPE_STRING xx_declare_variable_list DOTCOMMA *
 
                      {default} reduce 109
 
-State 162:
+State 167:
           xx_declare_statement ::= TYPE_BOOL * xx_declare_variable_list DOTCOMMA
           xx_declare_variable_list ::= * xx_declare_variable_list COMMA xx_declare_variable
           xx_declare_variable_list ::= * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-      xx_declare_variable_list shift  163
-           xx_declare_variable shift  155
+                    IDENTIFIER shift  157
+      xx_declare_variable_list shift  168
+           xx_declare_variable shift  160
 
-State 163:
+State 168:
           xx_declare_statement ::= TYPE_BOOL xx_declare_variable_list * DOTCOMMA
           xx_declare_variable_list ::= xx_declare_variable_list * COMMA xx_declare_variable
 
-                         COMMA shift  150
-                      DOTCOMMA shift  164
+                         COMMA shift  155
+                      DOTCOMMA shift  169
 
-State 164:
+State 169:
     (110) xx_declare_statement ::= TYPE_BOOL xx_declare_variable_list DOTCOMMA *
 
                      {default} reduce 110
 
-State 165:
+State 170:
           xx_declare_statement ::= TYPE_VAR * xx_declare_variable_list DOTCOMMA
           xx_declare_variable_list ::= * xx_declare_variable_list COMMA xx_declare_variable
           xx_declare_variable_list ::= * xx_declare_variable
           xx_declare_variable ::= * IDENTIFIER
           xx_declare_variable ::= * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  152
-      xx_declare_variable_list shift  166
-           xx_declare_variable shift  155
+                    IDENTIFIER shift  157
+      xx_declare_variable_list shift  171
+           xx_declare_variable shift  160
 
-State 166:
+State 171:
           xx_declare_statement ::= TYPE_VAR xx_declare_variable_list * DOTCOMMA
           xx_declare_variable_list ::= xx_declare_variable_list * COMMA xx_declare_variable
 
-                         COMMA shift  150
-                      DOTCOMMA shift  167
+                         COMMA shift  155
+                      DOTCOMMA shift  172
 
-State 167:
+State 172:
     (111) xx_declare_statement ::= TYPE_VAR xx_declare_variable_list DOTCOMMA *
 
                      {default} reduce 111
 
-State 168:
-    (158) xx_comment ::= COMMENT *
+State 173:
+    (161) xx_comment ::= COMMENT *
 
-                     {default} reduce 158
+                     {default} reduce 161
 
-State 169:
+State 174:
      (68) xx_statement_list ::= xx_statement *
 
                      {default} reduce 68
 
-State 170:
+State 175:
      (89) xx_while_statement ::= WHILE xx_eval_expr BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 89
 
-State 171:
+State 176:
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
           xx_literal_expr ::= * DOUBLE
@@ -2274,32 +2325,32 @@ State 171:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
-                  xx_eval_expr shift  173
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
+                  xx_eval_expr shift  178
 
-State 172:
-    (151) xx_eval_expr ::= xx_literal_expr *
+State 177:
+    (154) xx_eval_expr ::= xx_literal_expr *
 
-                     {default} reduce 151
+                     {default} reduce 154
 
-State 173:
+State 178:
           xx_eval_expr ::= xx_eval_expr * EQUALS xx_eval_expr
-    (152) xx_eval_expr ::= xx_eval_expr EQUALS xx_eval_expr *
+    (155) xx_eval_expr ::= xx_eval_expr EQUALS xx_eval_expr *
           xx_eval_expr ::= xx_eval_expr * IDENTICAL xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
 
-                     {default} reduce 152
+                     {default} reduce 155
 
-State 174:
+State 179:
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
           xx_literal_expr ::= * DOUBLE
@@ -2315,27 +2366,27 @@ State 174:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
-                  xx_eval_expr shift  175
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
+                  xx_eval_expr shift  180
 
-State 175:
+State 180:
           xx_eval_expr ::= xx_eval_expr * EQUALS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * IDENTICAL xx_eval_expr
-    (153) xx_eval_expr ::= xx_eval_expr IDENTICAL xx_eval_expr *
+    (156) xx_eval_expr ::= xx_eval_expr IDENTICAL xx_eval_expr *
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
 
-                     {default} reduce 153
+                     {default} reduce 156
 
-State 176:
+State 181:
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
           xx_literal_expr ::= * DOUBLE
@@ -2351,27 +2402,27 @@ State 176:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
-                  xx_eval_expr shift  177
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
+                  xx_eval_expr shift  182
 
-State 177:
+State 182:
           xx_eval_expr ::= xx_eval_expr * EQUALS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * IDENTICAL xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
-    (154) xx_eval_expr ::= xx_eval_expr LESS xx_eval_expr *
+    (157) xx_eval_expr ::= xx_eval_expr LESS xx_eval_expr *
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
 
-                     {default} reduce 154
+                     {default} reduce 157
 
-State 178:
+State 183:
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
           xx_literal_expr ::= * DOUBLE
@@ -2387,27 +2438,27 @@ State 178:
           xx_eval_expr ::= * PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
-                  xx_eval_expr shift  179
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
+                  xx_eval_expr shift  184
 
-State 179:
+State 184:
           xx_eval_expr ::= xx_eval_expr * EQUALS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * IDENTICAL xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
-    (155) xx_eval_expr ::= xx_eval_expr GREATER xx_eval_expr *
+    (158) xx_eval_expr ::= xx_eval_expr GREATER xx_eval_expr *
 
-                     {default} reduce 155
+                     {default} reduce 158
 
-State 180:
+State 185:
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
           xx_literal_expr ::= * DOUBLE
@@ -2423,65 +2474,65 @@ State 180:
           xx_eval_expr ::= PARENTHESES_OPEN * xx_eval_expr PARENTHESES_CLOSE
           xx_eval_expr ::= * IDENTIFIER
 
-                    IDENTIFIER shift  183
-              PARENTHESES_OPEN shift  180
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  172
-                  xx_eval_expr shift  181
+                    IDENTIFIER shift  188
+              PARENTHESES_OPEN shift  185
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  177
+                  xx_eval_expr shift  186
 
-State 181:
+State 186:
           xx_eval_expr ::= xx_eval_expr * EQUALS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * IDENTICAL xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * LESS xx_eval_expr
           xx_eval_expr ::= xx_eval_expr * GREATER xx_eval_expr
           xx_eval_expr ::= PARENTHESES_OPEN xx_eval_expr * PARENTHESES_CLOSE
 
-                        EQUALS shift  171
-                     IDENTICAL shift  174
-                          LESS shift  176
-                       GREATER shift  178
-             PARENTHESES_CLOSE shift  182
+                        EQUALS shift  176
+                     IDENTICAL shift  179
+                          LESS shift  181
+                       GREATER shift  183
+             PARENTHESES_CLOSE shift  187
 
-State 182:
-    (156) xx_eval_expr ::= PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE *
+State 187:
+    (159) xx_eval_expr ::= PARENTHESES_OPEN xx_eval_expr PARENTHESES_CLOSE *
 
-                     {default} reduce 156
+                     {default} reduce 159
 
-State 183:
-    (157) xx_eval_expr ::= IDENTIFIER *
+State 188:
+    (160) xx_eval_expr ::= IDENTIFIER *
 
-                     {default} reduce 157
+                     {default} reduce 160
 
-State 184:
+State 189:
      (87) xx_loop_statement ::= LOOP BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 87
 
-State 185:
+State 190:
      (85) xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN xx_statement_list BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 85
 
-State 186:
+State 191:
      (81) xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE *
           xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE * ELSE BRACKET_OPEN BRACKET_CLOSE
           xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE * ELSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                          ELSE shift  187
+                          ELSE shift  192
                      {default} reduce 81
 
-State 187:
+State 192:
           xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE ELSE * BRACKET_OPEN BRACKET_CLOSE
           xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE ELSE * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  188
+                  BRACKET_OPEN shift  193
 
-State 188:
+State 193:
           xx_statement_list ::= * xx_statement_list xx_statement
           xx_statement_list ::= * xx_statement
           xx_statement ::= * xx_let_statement
@@ -2519,24 +2570,24 @@ State 188:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  191
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  196
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  189
-                  xx_statement shift  169
+             xx_statement_list shift  194
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -2547,7 +2598,7 @@ State 188:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 189:
+State 194:
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
           xx_statement ::= * xx_if_statement
@@ -2583,21 +2634,21 @@ State 189:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  190
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  195
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -2610,24 +2661,24 @@ State 189:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 190:
+State 195:
      (86) xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 86
 
-State 191:
+State 196:
      (82) xx_if_statement ::= IF xx_eval_expr BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 82
 
-State 192:
+State 197:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_parameter_list ::= xx_parameter_list * COMMA xx_parameter
 
-                         COMMA shift  196
-                  BRACKET_OPEN shift  193
+                         COMMA shift  201
+                  BRACKET_OPEN shift  198
 
-State 193:
+State 198:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN * xx_statement_list BRACKET_CLOSE
           xx_statement_list ::= * xx_statement_list xx_statement
           xx_statement_list ::= * xx_statement
@@ -2664,23 +2715,23 @@ State 193:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  194
-                  xx_statement shift  169
+             xx_statement_list shift  199
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -2691,7 +2742,7 @@ State 193:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 194:
+State 199:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
@@ -2727,21 +2778,21 @@ State 194:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  195
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  200
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -2754,12 +2805,12 @@ State 194:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 195:
+State 200:
      (46) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 46
 
-State 196:
+State 201:
           xx_parameter_list ::= xx_parameter_list COMMA * xx_parameter
           xx_parameter ::= * IDENTIFIER
           xx_parameter ::= * xx_parameter_type IDENTIFIER
@@ -2774,30 +2825,30 @@ State 196:
           xx_parameter_type ::= * TYPE_STRING
           xx_parameter_type ::= * TYPE_ARRAY
 
-                          LESS shift  209
-                    IDENTIFIER shift  198
-                  TYPE_INTEGER shift  212
-                   TYPE_DOUBLE shift  213
-                     TYPE_BOOL shift  214
-                   TYPE_STRING shift  215
-                    TYPE_ARRAY shift  216
-                  xx_parameter shift  197
-             xx_parameter_type shift  201
-             xx_parameter_cast shift  205
+                          LESS shift  214
+                    IDENTIFIER shift  203
+                  TYPE_INTEGER shift  217
+                   TYPE_DOUBLE shift  218
+                     TYPE_BOOL shift  219
+                   TYPE_STRING shift  220
+                    TYPE_ARRAY shift  221
+                  xx_parameter shift  202
+             xx_parameter_type shift  206
+             xx_parameter_cast shift  210
 
-State 197:
+State 202:
      (53) xx_parameter_list ::= xx_parameter_list COMMA xx_parameter *
 
                      {default} reduce 53
 
-State 198:
+State 203:
      (55) xx_parameter ::= IDENTIFIER *
           xx_parameter ::= IDENTIFIER * ASSIGN xx_literal_expr
 
-                        ASSIGN shift  199
+                        ASSIGN shift  204
                      {default} reduce 55
 
-State 199:
+State 204:
           xx_parameter ::= IDENTIFIER ASSIGN * xx_literal_expr
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -2806,33 +2857,33 @@ State 199:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  200
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  205
 
-State 200:
+State 205:
      (58) xx_parameter ::= IDENTIFIER ASSIGN xx_literal_expr *
 
                      {default} reduce 58
 
-State 201:
+State 206:
           xx_parameter ::= xx_parameter_type * IDENTIFIER
           xx_parameter ::= xx_parameter_type * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  202
+                    IDENTIFIER shift  207
 
-State 202:
+State 207:
      (56) xx_parameter ::= xx_parameter_type IDENTIFIER *
           xx_parameter ::= xx_parameter_type IDENTIFIER * ASSIGN xx_literal_expr
 
-                        ASSIGN shift  203
+                        ASSIGN shift  208
                      {default} reduce 56
 
-State 203:
+State 208:
           xx_parameter ::= xx_parameter_type IDENTIFIER ASSIGN * xx_literal_expr
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -2841,33 +2892,33 @@ State 203:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  204
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  209
 
-State 204:
+State 209:
      (59) xx_parameter ::= xx_parameter_type IDENTIFIER ASSIGN xx_literal_expr *
 
                      {default} reduce 59
 
-State 205:
+State 210:
           xx_parameter ::= xx_parameter_cast * IDENTIFIER
           xx_parameter ::= xx_parameter_cast * IDENTIFIER ASSIGN xx_literal_expr
 
-                    IDENTIFIER shift  206
+                    IDENTIFIER shift  211
 
-State 206:
+State 211:
      (57) xx_parameter ::= xx_parameter_cast IDENTIFIER *
           xx_parameter ::= xx_parameter_cast IDENTIFIER * ASSIGN xx_literal_expr
 
-                        ASSIGN shift  207
+                        ASSIGN shift  212
                      {default} reduce 57
 
-State 207:
+State 212:
           xx_parameter ::= xx_parameter_cast IDENTIFIER ASSIGN * xx_literal_expr
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -2876,87 +2927,87 @@ State 207:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  208
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  213
 
-State 208:
+State 213:
      (60) xx_parameter ::= xx_parameter_cast IDENTIFIER ASSIGN xx_literal_expr *
 
                      {default} reduce 60
 
-State 209:
+State 214:
           xx_parameter_cast ::= LESS * IDENTIFIER GREATER
 
-                    IDENTIFIER shift  210
+                    IDENTIFIER shift  215
 
-State 210:
+State 215:
           xx_parameter_cast ::= LESS IDENTIFIER * GREATER
 
-                       GREATER shift  211
+                       GREATER shift  216
 
-State 211:
+State 216:
      (61) xx_parameter_cast ::= LESS IDENTIFIER GREATER *
 
                     IDENTIFIER reduce 61
 
-State 212:
+State 217:
      (62) xx_parameter_type ::= TYPE_INTEGER *
 
                     IDENTIFIER reduce 62
 
-State 213:
+State 218:
      (63) xx_parameter_type ::= TYPE_DOUBLE *
 
                     IDENTIFIER reduce 63
 
-State 214:
+State 219:
      (64) xx_parameter_type ::= TYPE_BOOL *
 
                     IDENTIFIER reduce 64
 
-State 215:
+State 220:
      (65) xx_parameter_type ::= TYPE_STRING *
 
                     IDENTIFIER reduce 65
 
-State 216:
+State 221:
      (66) xx_parameter_type ::= TYPE_ARRAY *
 
                     IDENTIFIER reduce 66
 
-State 217:
+State 222:
      (54) xx_parameter_list ::= xx_parameter *
 
                      {default} reduce 54
 
-State 218:
+State 223:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list * PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_parameter_list ::= xx_parameter_list * COMMA xx_parameter
 
-                         COMMA shift  196
-             PARENTHESES_CLOSE shift  219
+                         COMMA shift  201
+             PARENTHESES_CLOSE shift  224
 
-State 219:
+State 224:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  220
+                  BRACKET_OPEN shift  225
 
-State 220:
+State 225:
           xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  221
+                 BRACKET_CLOSE shift  226
 
-State 221:
+State 226:
      (42) xx_class_method_definition ::= PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 42
 
-State 222:
+State 227:
           xx_class_method_definition ::= COMMENT * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
@@ -2964,34 +3015,34 @@ State 222:
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                        PUBLIC shift  223
-                     PROTECTED shift  238
+                        PUBLIC shift  228
+                     PROTECTED shift  243
 
-State 223:
+State 228:
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                      FUNCTION shift  224
+                      FUNCTION shift  229
 
-State 224:
+State 229:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION * IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION * IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  225
+                    IDENTIFIER shift  230
 
-State 225:
+State 230:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER * PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER * PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-              PARENTHESES_OPEN shift  226
+              PARENTHESES_OPEN shift  231
 
-State 226:
+State 231:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN * xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
@@ -3011,26 +3062,26 @@ State 226:
           xx_parameter_type ::= * TYPE_STRING
           xx_parameter_type ::= * TYPE_ARRAY
 
-                          LESS shift  209
-                    IDENTIFIER shift  198
-             PARENTHESES_CLOSE shift  227
-                  TYPE_INTEGER shift  212
-                   TYPE_DOUBLE shift  213
-                     TYPE_BOOL shift  214
-                   TYPE_STRING shift  215
-                    TYPE_ARRAY shift  216
-             xx_parameter_list shift  232
-                  xx_parameter shift  217
-             xx_parameter_type shift  201
-             xx_parameter_cast shift  205
+                          LESS shift  214
+                    IDENTIFIER shift  203
+             PARENTHESES_CLOSE shift  232
+                  TYPE_INTEGER shift  217
+                   TYPE_DOUBLE shift  218
+                     TYPE_BOOL shift  219
+                   TYPE_STRING shift  220
+                    TYPE_ARRAY shift  221
+             xx_parameter_list shift  237
+                  xx_parameter shift  222
+             xx_parameter_type shift  206
+             xx_parameter_cast shift  210
 
-State 227:
+State 232:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  228
+                  BRACKET_OPEN shift  233
 
-State 228:
+State 233:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * xx_statement_list BRACKET_CLOSE
           xx_statement_list ::= * xx_statement_list xx_statement
@@ -3068,24 +3119,24 @@ State 228:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  229
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  234
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  230
-                  xx_statement shift  169
+             xx_statement_list shift  235
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -3096,12 +3147,12 @@ State 228:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 229:
+State 234:
      (43) xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 43
 
-State 230:
+State 235:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
@@ -3137,21 +3188,21 @@ State 230:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  231
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  236
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -3164,26 +3215,26 @@ State 230:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 231:
+State 236:
      (47) xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 47
 
-State 232:
+State 237:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list * PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list * PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_parameter_list ::= xx_parameter_list * COMMA xx_parameter
 
-                         COMMA shift  196
-             PARENTHESES_CLOSE shift  233
+                         COMMA shift  201
+             PARENTHESES_CLOSE shift  238
 
-State 233:
+State 238:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  234
+                  BRACKET_OPEN shift  239
 
-State 234:
+State 239:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN * xx_statement_list BRACKET_CLOSE
           xx_statement_list ::= * xx_statement_list xx_statement
@@ -3221,24 +3272,24 @@ State 234:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  235
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  240
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  236
-                  xx_statement shift  169
+             xx_statement_list shift  241
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -3249,12 +3300,12 @@ State 234:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 235:
+State 240:
      (44) xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 44
 
-State 236:
+State 241:
           xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
@@ -3290,21 +3341,21 @@ State 236:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  237
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  242
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -3317,42 +3368,42 @@ State 236:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 237:
+State 242:
      (48) xx_class_method_definition ::= COMMENT PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 48
 
-State 238:
+State 243:
           xx_class_method_definition ::= COMMENT PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                      FUNCTION shift  239
+                      FUNCTION shift  244
 
-State 239:
+State 244:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  240
+                    IDENTIFIER shift  245
 
-State 240:
+State 245:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-              PARENTHESES_OPEN shift  241
+              PARENTHESES_OPEN shift  246
 
-State 241:
+State 246:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-             PARENTHESES_CLOSE shift  242
+             PARENTHESES_CLOSE shift  247
 
-State 242:
+State 247:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  243
+                  BRACKET_OPEN shift  248
 
-State 243:
+State 248:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * xx_statement_list BRACKET_CLOSE
           xx_statement_list ::= * xx_statement_list xx_statement
@@ -3390,24 +3441,24 @@ State 243:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  244
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  249
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  245
-                  xx_statement shift  169
+             xx_statement_list shift  250
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -3418,12 +3469,12 @@ State 243:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 244:
+State 249:
      (50) xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 50
 
-State 245:
+State 250:
           xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
@@ -3459,21 +3510,21 @@ State 245:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  246
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  251
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -3486,42 +3537,42 @@ State 245:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 246:
+State 251:
      (52) xx_class_method_definition ::= COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 52
 
-State 247:
+State 252:
           xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                      FUNCTION shift  248
+                      FUNCTION shift  253
 
-State 248:
+State 253:
           xx_class_method_definition ::= PROTECTED FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED FUNCTION * IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  249
+                    IDENTIFIER shift  254
 
-State 249:
+State 254:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER * PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-              PARENTHESES_OPEN shift  250
+              PARENTHESES_OPEN shift  255
 
-State 250:
+State 255:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN * PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-             PARENTHESES_CLOSE shift  251
+             PARENTHESES_CLOSE shift  256
 
-State 251:
+State 256:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  252
+                  BRACKET_OPEN shift  257
 
-State 252:
+State 257:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN * xx_statement_list BRACKET_CLOSE
           xx_statement_list ::= * xx_statement_list xx_statement
@@ -3559,24 +3610,24 @@ State 252:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  253
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  258
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
-             xx_statement_list shift  254
-                  xx_statement shift  169
+             xx_statement_list shift  259
+                  xx_statement shift  174
               xx_let_statement shift  29
                xx_if_statement shift  30
              xx_loop_statement shift  31
@@ -3587,12 +3638,12 @@ State 252:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 253:
+State 258:
      (49) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 49
 
-State 254:
+State 259:
           xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list * BRACKET_CLOSE
           xx_statement_list ::= xx_statement_list * xx_statement
           xx_statement ::= * xx_let_statement
@@ -3628,21 +3679,21 @@ State 254:
           xx_declare_statement ::= * TYPE_VAR xx_declare_variable_list DOTCOMMA
           xx_comment ::= * COMMENT
 
-                 BRACKET_CLOSE shift  255
-                       COMMENT shift  168
-                  TYPE_INTEGER shift  147
-                   TYPE_DOUBLE shift  156
-                     TYPE_BOOL shift  162
-                   TYPE_STRING shift  159
+                 BRACKET_CLOSE shift  260
+                       COMMENT shift  173
+                  TYPE_INTEGER shift  152
+                   TYPE_DOUBLE shift  161
+                     TYPE_BOOL shift  167
+                   TYPE_STRING shift  164
                          BREAK shift  39
                       CONTINUE shift  41
                             IF shift  43
                           LOOP shift  52
                          WHILE shift  56
                            LET shift  61
-                          ECHO shift  134
-                        RETURN shift  142
-                      TYPE_VAR shift  165
+                          ECHO shift  139
+                        RETURN shift  147
+                      TYPE_VAR shift  170
                     xx_comment shift  38
                   xx_statement shift  28
               xx_let_statement shift  29
@@ -3655,12 +3706,12 @@ State 254:
          xx_continue_statement shift  36
             xx_while_statement shift  37
 
-State 255:
+State 260:
      (51) xx_class_method_definition ::= PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE *
 
                      {default} reduce 51
 
-State 256:
+State 261:
      (20) xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition *
           xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition * xx_class_methods_definition
           xx_class_consts_definition ::= xx_class_consts_definition * xx_class_const_definition
@@ -3682,15 +3733,15 @@ State 256:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 20
-                       COMMENT shift  259
+                       COMMENT shift  264
                         PUBLIC shift  19
-                     PROTECTED shift  247
-                         CONST shift  265
-   xx_class_methods_definition shift  257
-     xx_class_const_definition shift  258
-    xx_class_method_definition shift  270
+                     PROTECTED shift  252
+                         CONST shift  270
+   xx_class_methods_definition shift  262
+     xx_class_const_definition shift  263
+    xx_class_method_definition shift  275
 
-State 257:
+State 262:
      (23) xx_class_definition ::= xx_class_properties_definition xx_class_consts_definition xx_class_methods_definition *
           xx_class_methods_definition ::= xx_class_methods_definition * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -3707,17 +3758,17 @@ State 257:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 23
-                       COMMENT shift  222
+                       COMMENT shift  227
                         PUBLIC shift  19
-                     PROTECTED shift  247
+                     PROTECTED shift  252
     xx_class_method_definition shift  18
 
-State 258:
+State 263:
      (35) xx_class_consts_definition ::= xx_class_consts_definition xx_class_const_definition *
 
                      {default} reduce 35
 
-State 259:
+State 264:
           xx_class_const_definition ::= COMMENT * CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= COMMENT * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -3726,21 +3777,21 @@ State 259:
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                        PUBLIC shift  223
-                     PROTECTED shift  238
-                         CONST shift  260
+                        PUBLIC shift  228
+                     PROTECTED shift  243
+                         CONST shift  265
 
-State 260:
+State 265:
           xx_class_const_definition ::= COMMENT CONST * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
 
-                    IDENTIFIER shift  261
+                    IDENTIFIER shift  266
 
-State 261:
+State 266:
           xx_class_const_definition ::= COMMENT CONST IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                        ASSIGN shift  262
+                        ASSIGN shift  267
 
-State 262:
+State 267:
           xx_class_const_definition ::= COMMENT CONST IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -3749,35 +3800,35 @@ State 262:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  263
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  268
 
-State 263:
+State 268:
           xx_class_const_definition ::= COMMENT CONST IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  264
+                      DOTCOMMA shift  269
 
-State 264:
+State 269:
      (38) xx_class_const_definition ::= COMMENT CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 38
 
-State 265:
+State 270:
           xx_class_const_definition ::= CONST * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
 
-                    IDENTIFIER shift  266
+                    IDENTIFIER shift  271
 
-State 266:
+State 271:
           xx_class_const_definition ::= CONST IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                        ASSIGN shift  267
+                        ASSIGN shift  272
 
-State 267:
+State 272:
           xx_class_const_definition ::= CONST IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -3786,35 +3837,35 @@ State 267:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  268
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  273
 
-State 268:
+State 273:
           xx_class_const_definition ::= CONST IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  269
+                      DOTCOMMA shift  274
 
-State 269:
+State 274:
      (39) xx_class_const_definition ::= CONST IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 39
 
-State 270:
+State 275:
      (40) xx_class_methods_definition ::= xx_class_method_definition *
 
                      {default} reduce 40
 
-State 271:
+State 276:
      (25) xx_class_properties_definition ::= xx_class_properties_definition xx_class_property_definition *
 
                      {default} reduce 25
 
-State 272:
+State 277:
           xx_class_property_definition ::= COMMENT * PUBLIC IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= COMMENT * PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_property_definition ::= COMMENT * PROTECTED IDENTIFIER DOTCOMMA
@@ -3827,11 +3878,11 @@ State 272:
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                        PUBLIC shift  273
-                     PROTECTED shift  279
-                         CONST shift  260
+                        PUBLIC shift  278
+                     PROTECTED shift  284
+                         CONST shift  265
 
-State 273:
+State 278:
           xx_class_property_definition ::= COMMENT PUBLIC * IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= COMMENT PUBLIC * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -3839,22 +3890,22 @@ State 273:
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN xx_parameter_list PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  274
-                      FUNCTION shift  224
+                    IDENTIFIER shift  279
+                      FUNCTION shift  229
 
-State 274:
+State 279:
           xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER * DOTCOMMA
           xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                      DOTCOMMA shift  275
-                        ASSIGN shift  276
+                      DOTCOMMA shift  280
+                        ASSIGN shift  281
 
-State 275:
+State 280:
      (27) xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER DOTCOMMA *
 
                      {default} reduce 27
 
-State 276:
+State 281:
           xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -3863,46 +3914,46 @@ State 276:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  277
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  282
 
-State 277:
+State 282:
           xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  278
+                      DOTCOMMA shift  283
 
-State 278:
+State 283:
      (30) xx_class_property_definition ::= COMMENT PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 30
 
-State 279:
+State 284:
           xx_class_property_definition ::= COMMENT PROTECTED * IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= COMMENT PROTECTED * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= COMMENT PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  280
-                      FUNCTION shift  239
+                    IDENTIFIER shift  285
+                      FUNCTION shift  244
 
-State 280:
+State 285:
           xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER * DOTCOMMA
           xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                      DOTCOMMA shift  281
-                        ASSIGN shift  282
+                      DOTCOMMA shift  286
+                        ASSIGN shift  287
 
-State 281:
+State 286:
      (32) xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER DOTCOMMA *
 
                      {default} reduce 32
 
-State 282:
+State 287:
           xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -3911,25 +3962,25 @@ State 282:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  283
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  288
 
-State 283:
+State 288:
           xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  284
+                      DOTCOMMA shift  289
 
-State 284:
+State 289:
      (34) xx_class_property_definition ::= COMMENT PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 34
 
-State 285:
+State 290:
           xx_class_property_definition ::= PUBLIC * IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= PUBLIC * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -3937,22 +3988,22 @@ State 285:
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= PUBLIC * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  286
+                    IDENTIFIER shift  291
                       FUNCTION shift  20
 
-State 286:
+State 291:
           xx_class_property_definition ::= PUBLIC IDENTIFIER * DOTCOMMA
           xx_class_property_definition ::= PUBLIC IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                      DOTCOMMA shift  287
-                        ASSIGN shift  288
+                      DOTCOMMA shift  292
+                        ASSIGN shift  293
 
-State 287:
+State 292:
      (28) xx_class_property_definition ::= PUBLIC IDENTIFIER DOTCOMMA *
 
                      {default} reduce 28
 
-State 288:
+State 293:
           xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -3961,46 +4012,46 @@ State 288:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  289
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  294
 
-State 289:
+State 294:
           xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  290
+                      DOTCOMMA shift  295
 
-State 290:
+State 295:
      (29) xx_class_property_definition ::= PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 29
 
-State 291:
+State 296:
           xx_class_property_definition ::= PROTECTED * IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= PROTECTED * IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= PROTECTED * FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                    IDENTIFIER shift  292
-                      FUNCTION shift  248
+                    IDENTIFIER shift  297
+                      FUNCTION shift  253
 
-State 292:
+State 297:
           xx_class_property_definition ::= PROTECTED IDENTIFIER * DOTCOMMA
           xx_class_property_definition ::= PROTECTED IDENTIFIER * ASSIGN xx_literal_expr DOTCOMMA
 
-                      DOTCOMMA shift  293
-                        ASSIGN shift  294
+                      DOTCOMMA shift  298
+                        ASSIGN shift  299
 
-State 293:
+State 298:
      (31) xx_class_property_definition ::= PROTECTED IDENTIFIER DOTCOMMA *
 
                      {default} reduce 31
 
-State 294:
+State 299:
           xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN * xx_literal_expr DOTCOMMA
           xx_literal_expr ::= * INTEGER
           xx_literal_expr ::= * STRING
@@ -4009,30 +4060,30 @@ State 294:
           xx_literal_expr ::= * FALSE
           xx_literal_expr ::= * TRUE
 
-                       INTEGER shift  97
-                        STRING shift  98
-                        DOUBLE shift  99
-                          NULL shift  100
-                         FALSE shift  101
-                          TRUE shift  102
-               xx_literal_expr shift  295
+                       INTEGER shift  101
+                        STRING shift  102
+                        DOUBLE shift  103
+                          NULL shift  104
+                         FALSE shift  105
+                          TRUE shift  106
+               xx_literal_expr shift  300
 
-State 295:
+State 300:
           xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr * DOTCOMMA
 
-                      DOTCOMMA shift  296
+                      DOTCOMMA shift  301
 
-State 296:
+State 301:
      (33) xx_class_property_definition ::= PROTECTED IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA *
 
                      {default} reduce 33
 
-State 297:
+State 302:
      (36) xx_class_consts_definition ::= xx_class_const_definition *
 
                      {default} reduce 36
 
-State 298:
+State 303:
      (17) xx_class_definition ::= xx_class_consts_definition *
           xx_class_definition ::= xx_class_consts_definition * xx_class_properties_definition
           xx_class_definition ::= xx_class_consts_definition * xx_class_methods_definition
@@ -4066,17 +4117,17 @@ State 298:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 17
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
-xx_class_properties_definition shift  299
-   xx_class_methods_definition shift  302
-  xx_class_property_definition shift  303
-     xx_class_const_definition shift  258
-    xx_class_method_definition shift  270
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
+xx_class_properties_definition shift  304
+   xx_class_methods_definition shift  307
+  xx_class_property_definition shift  308
+     xx_class_const_definition shift  263
+    xx_class_method_definition shift  275
 
-State 299:
+State 304:
      (21) xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition *
           xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition * xx_class_methods_definition
           xx_class_properties_definition ::= xx_class_properties_definition * xx_class_property_definition
@@ -4104,14 +4155,14 @@ State 299:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 21
-                       COMMENT shift  301
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-   xx_class_methods_definition shift  300
-  xx_class_property_definition shift  271
-    xx_class_method_definition shift  270
+                       COMMENT shift  306
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+   xx_class_methods_definition shift  305
+  xx_class_property_definition shift  276
+    xx_class_method_definition shift  275
 
-State 300:
+State 305:
      (24) xx_class_definition ::= xx_class_consts_definition xx_class_properties_definition xx_class_methods_definition *
           xx_class_methods_definition ::= xx_class_methods_definition * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -4128,12 +4179,12 @@ State 300:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 24
-                       COMMENT shift  222
+                       COMMENT shift  227
                         PUBLIC shift  19
-                     PROTECTED shift  247
+                     PROTECTED shift  252
     xx_class_method_definition shift  18
 
-State 301:
+State 306:
           xx_class_property_definition ::= COMMENT * PUBLIC IDENTIFIER DOTCOMMA
           xx_class_property_definition ::= COMMENT * PUBLIC IDENTIFIER ASSIGN xx_literal_expr DOTCOMMA
           xx_class_property_definition ::= COMMENT * PROTECTED IDENTIFIER DOTCOMMA
@@ -4145,10 +4196,10 @@ State 301:
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
           xx_class_method_definition ::= COMMENT * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                        PUBLIC shift  273
-                     PROTECTED shift  279
+                        PUBLIC shift  278
+                     PROTECTED shift  284
 
-State 302:
+State 307:
      (22) xx_class_definition ::= xx_class_consts_definition xx_class_methods_definition *
           xx_class_methods_definition ::= xx_class_methods_definition * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -4165,17 +4216,17 @@ State 302:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 22
-                       COMMENT shift  222
+                       COMMENT shift  227
                         PUBLIC shift  19
-                     PROTECTED shift  247
+                     PROTECTED shift  252
     xx_class_method_definition shift  18
 
-State 303:
+State 308:
      (26) xx_class_properties_definition ::= xx_class_property_definition *
 
                      {default} reduce 26
 
-State 304:
+State 309:
      (18) xx_class_definition ::= xx_class_methods_definition *
           xx_class_methods_definition ::= xx_class_methods_definition * xx_class_method_definition
           xx_class_method_definition ::= * PUBLIC FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE
@@ -4192,24 +4243,24 @@ State 304:
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
                  BRACKET_CLOSE reduce 18
-                       COMMENT shift  222
+                       COMMENT shift  227
                         PUBLIC shift  19
-                     PROTECTED shift  247
+                     PROTECTED shift  252
     xx_class_method_definition shift  18
 
-State 305:
+State 310:
           xx_class_def ::= CLASS IDENTIFIER EXTENDS * IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= CLASS IDENTIFIER EXTENDS * IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
-                    IDENTIFIER shift  306
+                    IDENTIFIER shift  311
 
-State 306:
+State 311:
           xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER * BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER * BRACKET_OPEN BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  307
+                  BRACKET_OPEN shift  312
 
-State 307:
+State 312:
           xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN * xx_class_definition BRACKET_CLOSE
           xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN * BRACKET_CLOSE
           xx_class_definition ::= * xx_class_properties_definition
@@ -4250,60 +4301,60 @@ State 307:
           xx_class_method_definition ::= * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  310
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
-           xx_class_definition shift  308
+                 BRACKET_CLOSE shift  315
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
+           xx_class_definition shift  313
 xx_class_properties_definition shift  16
-    xx_class_consts_definition shift  298
-   xx_class_methods_definition shift  304
-  xx_class_property_definition shift  303
-     xx_class_const_definition shift  297
-    xx_class_method_definition shift  270
+    xx_class_consts_definition shift  303
+   xx_class_methods_definition shift  309
+  xx_class_property_definition shift  308
+     xx_class_const_definition shift  302
+    xx_class_method_definition shift  275
 
-State 308:
+State 313:
           xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition * BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  309
+                 BRACKET_CLOSE shift  314
 
-State 309:
+State 314:
       (9) xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE *
 
                      {default} reduce 9
 
-State 310:
+State 315:
      (13) xx_class_def ::= CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 13
 
-State 311:
+State 316:
           xx_class_def ::= ABSTRACT * CLASS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT * CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT * CLASS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
           xx_class_def ::= ABSTRACT * CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
-                         CLASS shift  312
+                         CLASS shift  317
 
-State 312:
+State 317:
           xx_class_def ::= ABSTRACT CLASS * IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS * IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS * IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS * IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
-                    IDENTIFIER shift  313
+                    IDENTIFIER shift  318
 
-State 313:
+State 318:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER * BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER * EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER * BRACKET_OPEN BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER * EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  314
-                       EXTENDS shift  318
+                  BRACKET_OPEN shift  319
+                       EXTENDS shift  323
 
-State 314:
+State 319:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN * xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN * BRACKET_CLOSE
           xx_class_definition ::= * xx_class_properties_definition
@@ -4344,47 +4395,47 @@ State 314:
           xx_class_method_definition ::= * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  317
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
-           xx_class_definition shift  315
+                 BRACKET_CLOSE shift  322
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
+           xx_class_definition shift  320
 xx_class_properties_definition shift  16
-    xx_class_consts_definition shift  298
-   xx_class_methods_definition shift  304
-  xx_class_property_definition shift  303
-     xx_class_const_definition shift  297
-    xx_class_method_definition shift  270
+    xx_class_consts_definition shift  303
+   xx_class_methods_definition shift  309
+  xx_class_property_definition shift  308
+     xx_class_const_definition shift  302
+    xx_class_method_definition shift  275
 
-State 315:
+State 320:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN xx_class_definition * BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  316
+                 BRACKET_CLOSE shift  321
 
-State 316:
+State 321:
      (10) xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE *
 
                      {default} reduce 10
 
-State 317:
+State 322:
      (14) xx_class_def ::= ABSTRACT CLASS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 14
 
-State 318:
+State 323:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS * IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS * IDENTIFIER BRACKET_OPEN BRACKET_CLOSE
 
-                    IDENTIFIER shift  319
+                    IDENTIFIER shift  324
 
-State 319:
+State 324:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER * BRACKET_OPEN xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER * BRACKET_OPEN BRACKET_CLOSE
 
-                  BRACKET_OPEN shift  320
+                  BRACKET_OPEN shift  325
 
-State 320:
+State 325:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN * xx_class_definition BRACKET_CLOSE
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN * BRACKET_CLOSE
           xx_class_definition ::= * xx_class_properties_definition
@@ -4425,35 +4476,35 @@ State 320:
           xx_class_method_definition ::= * PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
           xx_class_method_definition ::= * COMMENT PROTECTED FUNCTION IDENTIFIER PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  323
-                       COMMENT shift  272
-                        PUBLIC shift  285
-                     PROTECTED shift  291
-                         CONST shift  265
-           xx_class_definition shift  321
+                 BRACKET_CLOSE shift  328
+                       COMMENT shift  277
+                        PUBLIC shift  290
+                     PROTECTED shift  296
+                         CONST shift  270
+           xx_class_definition shift  326
 xx_class_properties_definition shift  16
-    xx_class_consts_definition shift  298
-   xx_class_methods_definition shift  304
-  xx_class_property_definition shift  303
-     xx_class_const_definition shift  297
-    xx_class_method_definition shift  270
+    xx_class_consts_definition shift  303
+   xx_class_methods_definition shift  309
+  xx_class_property_definition shift  308
+     xx_class_const_definition shift  302
+    xx_class_method_definition shift  275
 
-State 321:
+State 326:
           xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition * BRACKET_CLOSE
 
-                 BRACKET_CLOSE shift  322
+                 BRACKET_CLOSE shift  327
 
-State 322:
+State 327:
      (11) xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN xx_class_definition BRACKET_CLOSE *
 
                      {default} reduce 11
 
-State 323:
+State 328:
      (15) xx_class_def ::= ABSTRACT CLASS IDENTIFIER EXTENDS IDENTIFIER BRACKET_OPEN BRACKET_CLOSE *
 
                      {default} reduce 15
 
-State 324:
+State 329:
       (3) xx_top_statement_list ::= xx_top_statement *
 
                      {default} reduce 3

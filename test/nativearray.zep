@@ -229,4 +229,54 @@ class NativeArray
 		return a;
 	}
 
+	public function testArray29()
+	{
+		var a;
+		long b;
+
+		let b = 1,
+			a = [b : "hello"];
+		return a;
+	}
+
+	public function testArray30()
+	{
+		var a;
+		string b;
+
+		let b = "hello",
+			a = [b : "hello"];
+		return a;
+	}
+
+	public function testArrayAccess1()
+	{
+		var a, b;
+
+		let a = [1, 2, 3],
+			b = a[0];
+
+		return b;
+	}
+
+	public function testArrayAccess2()
+	{
+		var a, b;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			b = a["a"];
+
+		return b;
+	}
+
+	public function testArrayAccess3()
+	{
+		var a, b;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			b = a["a"];
+
+		return b;
+	}
+
 }

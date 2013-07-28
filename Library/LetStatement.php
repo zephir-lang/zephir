@@ -57,7 +57,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_intval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
-						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+						throw new CompilerException("Value type '" . $resolvedExpr->getType() . "' cannot be assigned to variable: int", $statement);
 				}
 				break;
 			case 'double':
@@ -438,6 +438,67 @@ class LetStatement
 								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
 						}
 						break;
+					case 'variable':
+						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value']);
+						switch ($variableVariable->getType()) {
+							case 'int':
+								switch ($item['value']['type']) {
+									case 'int':
+										$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										break;
+									case 'bool':
+										if ($item['value']['value'] == 'true') {
+											$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', 1);');
+										} else {
+											$codePrinter->output('add_index_bool(' . $variable . ', ' . $item['key']['value'] . ', 0);');
+										}
+										break;
+									case 'double':
+										$codePrinter->output('add_index_double(' . $variable . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										break;
+									case 'null':
+										$codePrinter->output('add_index_null(' . $variable . ', ' . $item['key']['value'] . ');');
+										break;
+									case 'string':
+										$codePrinter->output('add_index_stringl(' . $variable . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+										break;
+									case 'variable':
+										$value = $this->getArrayValue($item, $compilationContext);
+										$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+										break;
+									default:
+										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								}
+								break;
+							case 'string':
+								switch ($item['value']['type']) {
+									case 'int':
+										$codePrinter->output('add_assoc_long_ex(' . $variable . ', ' . $item['key']['value'] . '.str, ' . $item['value']['value'] . ');');
+										break;
+									case 'double':
+										$codePrinter->output('add_assoc_double_ex(' . $variable . ', SS("' . $item['key']['value'] . '.str, ' . $item['value']['value'] . ');');
+										break;
+									case 'bool':
+										if ($item['value']['value'] == 'true') {
+											$codePrinter->output('add_assoc_bool_ex(' . $variable . ', SS("' . $item['key']['value'] . '.str, 1);');
+										} else {
+											$codePrinter->output('add_assoc_bool_ex(' . $variable . ', SS("' . $item['key']['value'] . '.str, 0);');
+										}
+										break;
+									case 'string':
+										$codePrinter->output('add_assoc_stringl_ex(' . $variable . ', SS("' . $item['key']['value'] . '.str, SL("' . $item['value']['value'] . '"), 1);');
+										break;
+									case 'null':
+										$codePrinter->output('add_assoc_null_ex(' . $variable . ', SS("' . $item['key']['value'] . '.str);');
+										break;
+									default:
+										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								}
+								break;
+							default:
+								throw new CompilerException("Cannot use variable type: " . $variableVariable->getType(). " as array index", $item['key']);
+						}
+						break;
 					default:
 						throw new CompilerException("Invalid key type: " . $item['key']['type'], $item['key']);
 				}
@@ -506,6 +567,14 @@ class LetStatement
 		$exprIndex = $expr->compile($compilationContext);
 
 		switch ($exprIndex->getType()) {
+			case 'int':
+				$compilationContext->headersManager->add('kernel/array');
+				$codePrinter->output('zephir_array_fetch_long(&' . $variable . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
+				break;
+			case 'string':
+				$compilationContext->headersManager->add('kernel/array');
+				$codePrinter->output('zephir_array_fetch_string(&' . $variable . ', ' . $variableVariable->getName() . '.str, ' . $variableVariable->getName() . '.len, ' . $exprIndex->getCode() . ', PH_NOISY);');
+				break;
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode());
 				switch ($variableIndex->getType()) {
@@ -526,7 +595,7 @@ class LetStatement
 				}
 				break;
 			default:
-				throw new CompilerException("Cannot use expression: ". $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
+				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
 		}
 
 	}

@@ -1064,6 +1064,16 @@ xx_assign_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE .
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
+/* y = v[0] */
+xx_assign_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_INTEGER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+/* y = v["some-index"] */
+xx_assign_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+}
+
 /* y = a + b */
 xx_assign_expr(R) ::= xx_assign_expr(O1) ADD xx_assign_expr(O2) . {
 	R = xx_ret_expr("add", O1, O2, NULL, status->scanner_state);
@@ -1169,6 +1179,10 @@ xx_array_item(R) ::= xx_array_key(K) COLON xx_array_value(V) . {
 
 xx_array_item(R) ::= xx_array_value(V) . {
 	R = xx_ret_array_item(NULL, V, status->scanner_state);
+}
+
+xx_array_key(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_array_key(R) ::= STRING(S) . {

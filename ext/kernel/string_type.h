@@ -1,7 +1,7 @@
 
 typedef struct {
 	char *str;
-	size_t length;
+	size_t len;
 	size_t size;
 } zephir_str;
 
@@ -9,7 +9,7 @@ typedef struct {
 	if (!str_p) { \
 		str_p = emalloc(sizeof(zephir_str)); \
 		str_p->str = emalloc(48); \
-		str_p->length = d_length; \
+		str_p->len = d_length; \
 		str_p->size = 48; \
 	} else  { \
 		efree(str_p->str); \

@@ -46,6 +46,9 @@ class Variable
 		return $this->_type;
 	}
 
+	/**
+	 * Returns variable's name
+	 */
 	public function getName()
 	{
 		return $this->_name;
