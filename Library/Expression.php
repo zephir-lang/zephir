@@ -67,8 +67,11 @@ class Expression
 					case 'int':
 						$compilationContext->headersManager->add('kernel/operators');
 						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+					case 'null':
+						$compilationContext->headersManager->add('kernel/operators');
+						return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			case 'int':
@@ -78,11 +81,11 @@ class Expression
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
 					default:
-						throw new Exception("Error Processing Request");
+						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
 			default:
-				throw new Exception("Error Processing Request");
+				throw new CompilerException("Error Processing Request", $expression);
 		}
 
 
@@ -124,6 +127,9 @@ class Expression
 								} else {
 									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
 								}
+							case 'null':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
 							default:
 								throw new CompilerException("Error Processing Request", $expression);
 						}
@@ -220,6 +226,11 @@ class Expression
 
 	}
 
+	public function compileNot($expression, CompilationContext $compilationContext)
+	{
+		return new CompiledExpression('bool', '', $expression);
+	}
+
 	/**
 	 * Resolves an expression
 	 *
@@ -247,13 +258,27 @@ class Expression
 				return new CompiledExpression('empty-array', null, $expression);
 			case 'array-access':
 				return new CompiledExpression('array-access', null, $expression);
+			case 'property-access':
+				return new CompiledExpression('property-access', null, $expression);
+			case 'fcall':
+				return new CompiledExpression('fcall', null, $expression);
+			case 'mcall':
+				return new CompiledExpression('mcall', null, $expression);
+			case 'isset':
+				return new CompiledExpression('isset', null, $expression);
+			case 'typeof':
+				return new CompiledExpression('typeof', null, $expression);
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
 			case 'new':
 				return $this->compileNewInstance($expression, $compilationContext);
 			case 'equals':
 				return $this->compileEquals($expression, $compilationContext);
+			case 'not':
+				return $this->compileNot($expression, $compilationContext);
 			case 'identical':
+				return $this->compileIdentical($expression, $compilationContext);
+			case 'not-identical':
 				return $this->compileIdentical($expression, $compilationContext);
 			case 'less':
 				return $this->compileLess($expression, $compilationContext);

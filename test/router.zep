@@ -97,8 +97,7 @@ class Router
 				routes[] = route;
 		}
 
-		let params = [],
-			this->_params = params,
+		let this->_params = [],
 			this->_routes = routes;
 	}
 
@@ -129,6 +128,7 @@ class Router
 	 */
 	public function getRewriteUri()
 	{
+		var uriSource, url, urlParts, realUri;
 
 		/**
 		 * The developer can change the URI source
@@ -253,6 +253,8 @@ class Router
 	 */
 	public function setDefaults(defaults)
 	{
+		var namespaceName, moduleName, controllerName,
+			actionName, params;
 
 		if typeof defaults == "array" {
 			throw new Test\Router\Exception("Defaults must be an array");
@@ -316,6 +318,11 @@ class Router
 	 */
 	public function handle(uri=null)
 	{
+		var realUri, request, currentHostName, routeFound, parts,
+			params, matches, routes, reversedRoutes, notFoundPaths,
+			vnamespace, defaultNamespace, module, defaultModule,
+			controller, defaultController, action, defaultAction,
+			paramsStr, strParams, paramsMerge, defaultParams;
 
 		if !uri {
 			/**
@@ -448,7 +455,7 @@ class Router
 					/**
 					 * Check first if the callback is callable
 					 */
-					if is_callable(beforeMatch)) {
+					if is_callable(beforeMatch) {
 						throw new Test\Router\Exception("Before-Match callback is not callable in matched route");
 					}
 
@@ -460,7 +467,7 @@ class Router
 					/**
 					 * Call the function in the PHP userland
 					 */
-					let routeFound = {beforeMatch}(beforeMatchParams);
+					//let routeFound = {beforeMatch}(beforeMatchParams);
 				}
 			}
 
@@ -493,10 +500,10 @@ class Router
 							 */
 							if typeof converters == "array" {
 								if isset converters[part] {
-									let parameters = [matchPosition],
-										converter = converters[part],
-										convertedPart = {converter}(parameters),
-										parts[part] = convertedPart;
+									//let parameters = [matchPosition],
+									//	converter = converters[part],
+									//	convertedPart = {converter}(parameters),
+									//	parts[part] = convertedPart;
 									continue;
 								}
 							}
@@ -512,10 +519,10 @@ class Router
 							 */
 							if typeof converters == "array" {
 								if isset converters[part] {
-									let parameters = [matchPosition],
-										converter = converters[part],
-										convertedPart = {converter}(parameters),
-										parts[part] = convertedPart;
+									//let parameters = [matchPosition],
+									//	converter = converters[part],
+									//	convertedPart = {converter}(parameters),
+									//	parts[part] = convertedPart;
 								}
 							}
 						}
@@ -535,7 +542,7 @@ class Router
 		/**
 		 * Update the wasMatched property indicating if the route was matched
 		 */
-		if (routeFound) {
+		if routeFound {
 			let this->_wasMatched = true;
 		} else {
 			let this->_wasMatched = false;
@@ -558,9 +565,9 @@ class Router
 			 * Check for a namespace
 			 */
 			if isset parts['namespace'] {
-				let namespace = parts['namespace'];
-				if (!is_numeric(namespace)) {
-					let this->_namespace = namespace;
+				let vnamespace = parts['namespace'];
+				if !is_numeric(vnamespace) {
+					let this->_namespace = vnamespace;
 				}
 				unset parts['namespace'];
 			} else {
@@ -592,7 +599,7 @@ class Router
 				}
 				unset parts['controller'];
 			} else {
-				let defaultController = this->_defaultController;
+				let defaultController = this->_defaultController,
 					this->_controller = defaultController;
 			}
 
@@ -601,24 +608,23 @@ class Router
 			 */
 			if isset parts['action'] {
 				let action = parts['action'];
-				if !is_numeric(action)) {
+				if !is_numeric(action) {
 					let this->_action = action;
 				}
 				unset parts['action'];
 			} else {
-				let defaultAction = this->_defaultAction;
+				let defaultAction = this->_defaultAction,
 					this->_action = defaultAction;
 			}
 
 			/**
 			 * Check for parameters
 			 */
-			if isset(parts['params'] {
+			if isset parts['params'] {
 				let paramsStr = parts['params'],
 					strParams = substr(paramsStr, 1);
 				if (strParams) {
-					let slash = "/",
-						params = explode(slash, strParams);
+					let params = explode("/", strParams);
 				}
 				unset parts['params'];
 			}
@@ -665,7 +671,10 @@ class Router
 	 * @param string httpMethods
 	 * @return Test\Router\Route
 	 */
-	public function add(pattern, paths=null, httpMethods=null){
+	public function add(pattern, paths=null, httpMethods=null)
+	{
+
+		var route;
 
 		/**
 		 * Every route is internally stored as a Phalcon\Mvc\Router\Route
@@ -682,7 +691,9 @@ class Router
 	 * @param string/array paths
 	 * @return Test\Router\Route
 	 */
-	public function addGet(pattern, paths=null){
+	public function addGet(pattern, paths=null)
+	{
+		var method;
 		let method = 'GET';
 		return this->add(pattern, paths, method);
 	}
@@ -694,7 +705,9 @@ class Router
 	 * @param string/array paths
 	 * @return Test\Router\Route
 	 */
-	public function addPost(pattern, paths=null){
+	public function addPost(pattern, paths=null)
+	{
+		var method;
 		let method = 'POST';
 		return this->add(pattern, paths, method);
 	}
@@ -706,7 +719,9 @@ class Router
 	 * @param string/array paths
 	 * @return Test\Router\Route
 	 */
-	public function addPut(pattern, paths=null){
+	public function addPut(pattern, paths=null)
+	{
+		var method;
 		let method = 'PUT';
 		return this->add(pattern, paths, method);
 	}
@@ -720,6 +735,7 @@ class Router
 	 */
 	public function addPatch(pattern, paths=null)
 	{
+		var method;
 		let method = 'PATCH';
 		return this->add(pattern, paths, method);
 	}
@@ -733,6 +749,7 @@ class Router
 	 */
 	public function addDelete(pattern, paths=null)
 	{
+		var method;
 		let method = 'DELETE';
 		return this->add(pattern, paths, method);
 	}
@@ -745,6 +762,7 @@ class Router
 	 * @return Test\Router\Route
 	 */
 	public function addOptions(pattern, paths=null){
+		var method;
 		let method = 'OPTIONS';
 		return this->add(pattern, paths, method);
 	}
@@ -758,6 +776,7 @@ class Router
 	 */
 	public function addHead(pattern, paths=null)
 	{
+		var method;
 		let method = 'HEAD';
 		return this->add(pattern, paths, method);
 	}
@@ -769,6 +788,8 @@ class Router
 	 * @return Test\Router
 	 */
 	public function mount(group){
+
+		var groupRoutes, beforeMatch, hostname, routes, newRoutes;
 
 		if typeof group != "object" {
 			throw new Test\Router\Exception("The group of routes is not valid");
@@ -787,7 +808,7 @@ class Router
 
 		if beforeMatch !== null {
 			for route in groupRoutes {
-				route->beforeMatch(beforeMatch);
+				//route->beforeMatch(beforeMatch);
 			}
 		}
 
@@ -798,7 +819,7 @@ class Router
 
 		if hostname !== null {
 			for route in groupRoutes {
-				route->setHostName(hostname);
+				//route->setHostName(hostname);
 			}
 		}
 
@@ -836,8 +857,7 @@ class Router
 	 */
 	public function clear()
 	{
-		let emptyRoutes = [],
-			this->_routes = emptyRoutes;
+		let this->_routes = [];
 	}
 
 	/**
@@ -936,6 +956,7 @@ class Router
 	 */
 	public function getRouteById(id)
 	{
+		var routes, routeId;
 		let routes = this->_routes;
 		for route in routes {
 			let routeId = route->getRouteId();
@@ -954,6 +975,7 @@ class Router
 	 */
 	public function getRouteByName(name)
 	{
+		var routes, routeId;
 		let routes = this->_routes;
 		for route in routes {
 			let routeName = route->getName();

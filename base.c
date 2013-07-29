@@ -308,6 +308,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_SUB:
 				xx_(xx_parser, XX_SUB, NULL, parser_status);
 				break;
+			case XX_T_DOT:
+				xx_(xx_parser, XX_CONCAT, NULL, parser_status);
+				break;
 			case XX_T_INCR:
 				xx_(xx_parser, XX_INCR, NULL, parser_status);
 				break;

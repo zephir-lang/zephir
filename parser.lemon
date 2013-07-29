@@ -14,7 +14,7 @@
 
 %left COMMA .
 %left EQUALS IDENTICAL LESS GREATER NOTIDENTICAL NOTEQUALS .
-%left ADD SUB .
+%left ADD SUB CONCAT .
 %right TYPEOF INSTANCEOF .
 %right NEW .
 %right NOT .
@@ -1092,26 +1092,37 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 	R = xx_ret_list(NULL, A);
 }
 
+/* y = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("variable", I, NULL, E, status->scanner_state);
 }
 
+/* y->x = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("object-property", D, I, E, status->scanner_state);
 }
 
+/* y->x[] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property-append", D, I, E, status->scanner_state);
+}
+
+/* y[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("variable-append", I, NULL, E, status->scanner_state);
 }
 
+/* y[x] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("array-index", D, I, E, status->scanner_state);
 }
 
+/* y++ */
 xx_let_assignment(R) ::= IDENTIFIER(I) INCR . {
 	R = xx_ret_let_assignment("incr", I, NULL, NULL, status->scanner_state);
 }
 
+/* y-- */
 xx_let_assignment(R) ::= IDENTIFIER(I) DECR . {
 	R = xx_ret_let_assignment("decr", I, NULL, NULL, status->scanner_state);
 }
@@ -1144,6 +1155,16 @@ xx_return_statement(R) ::= RETURN xx_literal_expr(E) DOTCOMMA . {
 /* return x */
 xx_return_statement(R) ::= RETURN IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_return_statement(NULL, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
+}
+
+/* return o->m(false, x) */
+xx_return_statement(R) ::= RETURN IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE DOTCOMMA . {
+	R = xx_ret_mcall(O, M, P, status->scanner_state);
+}
+
+/* return o->m() */
+xx_return_statement(R) ::= RETURN IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE DOTCOMMA . {
+	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
 }
 
 /* return x->y */
@@ -1233,6 +1254,7 @@ xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
 	R = xx_ret_declare_variable(I, E, status->scanner_state);
 }
 
+/* y = v->x */
 xx_assign_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
@@ -1260,6 +1282,16 @@ xx_assign_expr(R) ::= xx_assign_expr(O1) ADD xx_assign_expr(O2) . {
 /* y = a - b */
 xx_assign_expr(R) ::= xx_assign_expr(O1) SUB xx_assign_expr(O2) . {
 	R = xx_ret_expr("sub", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a . b */
+xx_assign_expr(R) ::= xx_assign_expr(O1) CONCAT xx_assign_expr(O2) . {
+	R = xx_ret_expr("concat", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a == b */
+xx_assign_expr(R) ::= xx_assign_expr(O1) EQUALS xx_assign_expr(O2) . {
+	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = instanceof b */

@@ -339,8 +339,17 @@ class LetStatement
 					case 'array-access':
 						$this->arrayAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
+					case 'property-access':
+						//$this->arrayAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+						break;
 					case 'new-instance':
 						$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+						break;
+					case 'fcall':
+						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+						break;
+					case 'mcall':
+						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
@@ -595,7 +604,7 @@ class LetStatement
 
 		switch ($exprVariable->getType()) {
 			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode());
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
 				switch ($variableVariable->getType()) {
 					case 'variable':
 						break;
@@ -620,7 +629,7 @@ class LetStatement
 				$codePrinter->output('zephir_array_fetch_string(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
 				break;
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode());
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $statement);
 				switch ($variableIndex->getType()) {
 					case 'int':
 						$compilationContext->headersManager->add('kernel/array');
@@ -658,7 +667,7 @@ class LetStatement
 
 		//print_r($statement);
 
-		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property']);
+		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property'], $statement);
 		switch ($variableIndex->getType()) {
 			case 'int':
 			case 'string':
@@ -670,7 +679,7 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'variable':
-				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
+				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
 				switch ($variableExpr->getType()) {
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
@@ -712,6 +721,9 @@ class LetStatement
 
 	}
 
+	/**
+	 *
+	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
 
@@ -729,6 +741,9 @@ class LetStatement
 		}
 	}
 
+	/**
+	 *
+	 */
 	public function assignDecr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
 
@@ -768,6 +783,11 @@ class LetStatement
 			case 'variable':
 				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
+					case 'bool':
+					case 'null':
+					case 'empty-array':
+						$codePrinter->output('//missing');
+						break;
 					case 'variable':
 
 						$compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
@@ -781,6 +801,8 @@ class LetStatement
 
 						if ($variable == 'this') {
 							$codePrinter->output('phalcon_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						} else {
+							$codePrinter->output('//missing');
 						}
 
 						break;
@@ -842,6 +864,10 @@ class LetStatement
 					break;
 				case 'array-index':
 					$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					break;
+				case 'property-access':
+				case 'object-property-append':
+					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'incr':
 					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);

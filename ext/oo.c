@@ -67,7 +67,6 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	zval *o, *a, *b;
 
 	ZEPHIR_MM_GROW();
-
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "a", 1);
 

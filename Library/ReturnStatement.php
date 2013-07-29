@@ -26,6 +26,13 @@ class ReturnStatement
 		$codePrinter = $compilationContext->codePrinter;
 		$codePrinter->outputBlankLine(true);
 
+		if (isset($statement['domain'])) {
+			if ($statement['domain'] == 'this') {
+				$codePrinter->output('//missing');
+				return;
+			}
+		}
+
 		switch ($resolvedExpr->getType()) {
 			case 'int':
 				$codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
@@ -35,6 +42,9 @@ class ReturnStatement
 				break;
 			case 'double':
 				$codePrinter->output('RETURN_MM_DOUBLE(' . $resolvedExpr->getCode() . ');');
+				break;
+			case 'string':
+				$codePrinter->output('RETURN_MM_STRING("' . $resolvedExpr->getCode() . '", 1);');
 				break;
 			case 'variable':
 				$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());

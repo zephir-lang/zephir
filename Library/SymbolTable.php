@@ -68,6 +68,11 @@ class SymbolTable
 		return $this->_variables;
 	}
 
+	public function isSuperGlobal($name)
+	{
+		return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION';
+	}
+
 	/**
 	 * Return a variable in the symbol table, it will be used for a read operation
 	 *
@@ -76,13 +81,25 @@ class SymbolTable
 	public function getVariableForRead($name, $statement=null)
 	{
 
+		/**
+		 * Create superglobals just in time
+		 */
+		if ($this->isSuperGlobal($name)) {
+			if (!$this->hasVariable($name)) {
+				$superVar = new Variable('variable', $name);
+				$superVar->setIsInitialized(true);
+				$superVar->increaseUses();
+				$this->_variables[$name] = $superVar;
+			}
+		}
+
 		if (!$this->hasVariable($name)) {
 			throw new CompilerException("Cannot read variable '" . $name . "' because it wasn't defined", $statement);
 		}
 
 		$variable = $this->getVariable($name);
 		if (!$variable->isInitialized()) {
-			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized", $statement);
+			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized ", $statement);
 		}
 
 		$variable->increaseUses();
