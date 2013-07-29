@@ -40,6 +40,9 @@ class ClassDefinition
 		return isset($this->_properties[$name]);
 	}
 
+	/**
+	 * Adds a method to the class definition
+	 */
 	public function addMethod(ClassMethod $method, $statement=null)
 	{
 		if (isset($this->_methods[$method->getName()])) {
@@ -48,16 +51,45 @@ class ClassDefinition
 		$this->_methods[$method->getName()] = $method;
 	}
 
+	/**
+	 * Returns all properties defined in the class
+	 */
 	public function getProperties()
 	{
 		return $this->_properties;
 	}
 
+	/**
+	 * Returns all methods defined in the class
+	 *
+	 * @param string
+	 */
 	public function getMethods()
 	{
 		return $this->_methods;
 	}
 
+	/**
+	 * Checks if the class implements an specific name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function hasMethod($methodName)
+	{
+		foreach ($this->_methods as $name => $method) {
+			if (!strcasecmp($methodName, $name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the name of the zend_class_entry according to the class name
+	 *
+	 * @return string
+	 */
 	public function getClassEntry()
 	{
 		return strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name) . '_ce';

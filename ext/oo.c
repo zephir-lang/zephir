@@ -50,3 +50,14 @@ PHP_METHOD(Test_Oo, testInstance2) {
 
 }
 
+PHP_METHOD(Test_Oo, testInstance3) {
+
+	zval *o;
+
+	object_init_ex(o, test_oo_oonoconstruct_ce);
+
+	RETURN_CCTORW(o);
+
+
+}
+

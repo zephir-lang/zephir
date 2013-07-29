@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Compiler
+ *
+ * Main compiler
+ */
 class Compiler
 {
 
@@ -9,6 +14,11 @@ class Compiler
 
 	protected $_compiledFiles;
 
+	/**
+	 * Pre-compiles classes creating a CompilerFile definition
+	 *
+	 * @param string $filePath
+	 */
 	protected function _preCompile($filePath)
 	{
 		if (preg_match('/\.zep$/', $filePath)) {
@@ -38,8 +48,45 @@ class Compiler
 		}
 	}
 
+	/**
+	 * Allows to check if a class is part of the compiled extension
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isClass($className)
+	{
+		$classes = array_keys($this->_definitions);
+		foreach ($classes as $value) {
+			if (!strcasecmp($value, $className)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns class the class definition from a given class name
+	 *
+	 * @param string $className
+	 * @return ClassDefinition
+	 */
+	public function getClassDefinition($className)
+	{
+		foreach ($this->_definitions as $key => $value) {
+			if (!strcasecmp($key, $className)) {
+				return $value;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 *
+	 */
 	public function compile()
 	{
+
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
@@ -53,9 +100,8 @@ class Compiler
 		 * Round 2. compile all files to C sources
 		 */
 		$files = array();
-		foreach ($this->_files as $compileFile)
-		{
-			$compileFile->compile();
+		foreach ($this->_files as $compileFile) {
+			$compileFile->compile($this);
 			$files[] = $compileFile->getCompiledFile();
 		}
 
@@ -94,7 +140,7 @@ class Compiler
 		);
 
 		foreach ($toReplace as $mark => $replace) {
-				$content = str_replace($mark,$replace,$content);
+			$content = str_replace($mark,$replace,$content);
 		}
 
 		file_put_contents('ext/config.m4', $content);
@@ -119,8 +165,9 @@ class Compiler
 		$classEntries = array();
 		$classInits = array();
 		foreach ($this->_files as $file) {
-			$classEntries[] = 'zend_class_entry *' . $file->getClassDefinition()->getClassEntry() . ';';
-			$classInits[] = 'ZEPHIR_INIT(' . $file->getClassDefinition()->getCNamespace() . '_' . $file->getClassDefinition()->getName() . ');';
+			$classDefinition = $file->getClassDefinition();
+			$classEntries[] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+			$classInits[] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
 		}
 
 		$toReplace = array(
@@ -156,7 +203,7 @@ class Compiler
 		}
 
 		$toReplace = array(
-			'%INCLUDE_HEADERS%' => implode(PHP_EOL,$includeHeaders)
+			'%INCLUDE_HEADERS%' => implode(PHP_EOL, $includeHeaders)
 		);
 
 		foreach ($toReplace as $mark => $replace) {

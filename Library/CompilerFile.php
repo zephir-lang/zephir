@@ -183,13 +183,18 @@ class CompilerFile
 		return $this->_compiledFile;
 	}
 
-	public function compile()
+	public function compile(Compiler $compiler)
 	{
 
 		/**
 		 * Compilation context stores common objects required by compilation entities
 		 */
 		$compilationContext = new CompilationContext;
+
+		/**
+		 * Set global compiler in the compilation context
+		 */
+		$compilationContext->compiler = $compiler;
 
 		/**
 		 * Headers manager

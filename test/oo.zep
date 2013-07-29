@@ -25,4 +25,13 @@ class Oo
 		return o;
 	}
 
+	public function testInstance3()
+	{
+		var o;
+
+		let o = new Test\Oo\OoNoConstruct;
+
+		return o;
+	}
+
 }
