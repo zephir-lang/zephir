@@ -34,4 +34,15 @@ class Oo
 		return o;
 	}
 
+	public function testInstance4()
+	{
+		var o, a, b;
+
+		let a = "a",
+			b = "b",
+			o = new Test\Oo\OoConstructParams(a, b);
+
+		return o;
+	}
+
 }

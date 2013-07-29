@@ -189,6 +189,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'for' {
+			s->active_char += sizeof("for")-1;
+			token->opcode = XX_T_FOR;
+			return 0;
+		}
+
+		'in' {
+			s->active_char += sizeof("in")-1;
+			token->opcode = XX_T_IN;
+			return 0;
+		}
+
 		'new' {
 			s->active_char += sizeof("new")-1;
 			token->opcode = XX_T_NEW;
@@ -228,6 +240,24 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		'instanceof' {
 			token->opcode = XX_T_INSTANCEOF;
 			s->active_char += sizeof("instanceof")-1;
+			return 0;
+		}
+
+		'isset' {
+			token->opcode = XX_T_ISSET;
+			s->active_char += sizeof("isset")-1;
+			return 0;
+		}
+
+		'unset' {
+			token->opcode = XX_T_UNSET;
+			s->active_char += sizeof("unset")-1;
+			return 0;
+		}
+
+		'throw' {
+			token->opcode = XX_T_THROW;
+			s->active_char += sizeof("throw")-1;
 			return 0;
 		}
 
@@ -314,6 +344,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"!" {
+			s->active_char++;
+			token->opcode = XX_T_NOT;
+			return 0;
+		}
+
 		"=" {
 			s->active_char++;
 			token->opcode = XX_T_ASSIGN;
@@ -326,9 +362,21 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"!=" {
+			s->active_char += 2;
+			token->opcode = XX_T_NOTEQUALS;
+			return 0;
+		}
+
 		"===" {
 			s->active_char += 3;
 			token->opcode = XX_T_IDENTICAL;
+			return 0;
+		}
+
+		"!==" {
+			s->active_char += 3;
+			token->opcode = XX_T_NOTIDENTICAL;
 			return 0;
 		}
 

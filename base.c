@@ -199,6 +199,21 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_INSTANCEOF:
 				xx_(xx_parser, XX_INSTANCEOF, NULL, parser_status);
 				break;
+			case XX_T_ISSET:
+				xx_(xx_parser, XX_ISSET, NULL, parser_status);
+				break;
+			case XX_T_UNSET:
+				xx_(xx_parser, XX_UNSET, NULL, parser_status);
+				break;
+			case XX_T_THROW:
+				xx_(xx_parser, XX_THROW, NULL, parser_status);
+				break;
+			case XX_T_FOR:
+				xx_(xx_parser, XX_FOR, NULL, parser_status);
+				break;
+			case XX_T_IN:
+				xx_(xx_parser, XX_IN, NULL, parser_status);
+				break;
 
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
@@ -212,8 +227,14 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_EQUALS:
 				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
 				break;
+			case XX_T_NOTEQUALS:
+				xx_(xx_parser, XX_NOTEQUALS, NULL, parser_status);
+				break;
 			case XX_T_IDENTICAL:
 				xx_(xx_parser, XX_IDENTICAL, NULL, parser_status);
+				break;
+			case XX_T_NOTIDENTICAL:
+				xx_(xx_parser, XX_NOTIDENTICAL, NULL, parser_status);
 				break;
 			case XX_T_LESS:
 				xx_(xx_parser, XX_LESS, NULL, parser_status);
@@ -226,6 +247,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_ARROW:
 				xx_(xx_parser, XX_ARROW, NULL, parser_status);
+				break;
+			case XX_T_NOT:
+				xx_(xx_parser, XX_NOT, NULL, parser_status);
 				break;
 
 			case XX_T_PARENTHESES_OPEN:
@@ -331,9 +355,16 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_SCANNER_RETCODE_ERR:
 			case XX_SCANNER_RETCODE_IMPOSSIBLE:
 				{
+					char *x = malloc(sizeof(char) * 10000);
+					if (state->start) {
+						sprintf(x, "Scanner error: %d %s", scanner_status, state->start);
+					} else {
+						sprintf(x, "Scanner error: %d", scanner_status);
+					}
 					json_object *syntax_error = json_object_new_object();
 					json_object_object_add(syntax_error, "type", json_object_new_string("error"));
-					json_object_object_add(syntax_error, "message", json_object_new_string("Scanner error"));
+					json_object_object_add(syntax_error, "message", json_object_new_string(x));
+					//free(x);
 					parser_status->ret = syntax_error;
 					status = FAILURE;
 				}

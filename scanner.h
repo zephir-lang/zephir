@@ -45,6 +45,11 @@
 #define XX_T_CONTINUE 370
 #define XX_T_INSTANCEOF 371
 #define XX_T_TYPEOF 372
+#define XX_T_ISSET 373
+#define XX_T_UNSET 374
+#define XX_T_THROW 375
+#define XX_T_FOR 376
+#define XX_T_IN 377
 
 /* Operators */
 #define XX_T_AT '@'
@@ -68,6 +73,9 @@
 #define XX_T_SUB '-'
 #define XX_T_INCR 403
 #define XX_T_DECR 404
+#define XX_T_NOTEQUALS 405
+#define XX_T_NOTIDENTICAL 406
+#define XX_T_NOT 407
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

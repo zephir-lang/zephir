@@ -19,6 +19,7 @@ zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
 zend_class_entry *test_nativearray_ce;
 zend_class_entry *test_oo_ooconstruct_ce;
+zend_class_entry *test_oo_ooconstructparams_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ce;
 zend_class_entry *test_router_route_ce;
@@ -37,6 +38,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Flow);
 	ZEPHIR_INIT(Test_NativeArray);
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
+	ZEPHIR_INIT(Test_Oo_OoConstructParams);
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
 	ZEPHIR_INIT(Test_Oo);
 	ZEPHIR_INIT(Test_Router_Route);

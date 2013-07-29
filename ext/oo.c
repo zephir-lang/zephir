@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -57,6 +58,26 @@ PHP_METHOD(Test_Oo, testInstance3) {
 	object_init_ex(o, test_oo_oonoconstruct_ce);
 
 	RETURN_CCTORW(o);
+
+
+}
+
+PHP_METHOD(Test_Oo, testInstance4) {
+
+	zval *o, *a, *b;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "a", 1);
+
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "b", 1);
+
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	zephir_call_method_p2_noret(o, "__construct", a, b);
+
+	RETURN_CCTOR(o);
 
 
 }

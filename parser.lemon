@@ -13,10 +13,11 @@
 %name xx_
 
 %left COMMA .
-%left EQUALS IDENTICAL LESS GREATER .
+%left EQUALS IDENTICAL LESS GREATER NOTIDENTICAL NOTEQUALS .
 %left ADD SUB .
 %right TYPEOF INSTANCEOF .
 %right NEW .
+%right NOT .
 
 %include {
 
@@ -391,6 +392,31 @@ static json_object *xx_ret_while_statement(json_object *expr, json_object *state
 	return ret;
 }
 
+static json_object *xx_ret_for_statement(json_object *expr, xx_parser_token *K, xx_parser_token *V, json_object *statements, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("for"));
+	json_object_object_add(ret, "expr", expr);
+
+	if (K) {
+		json_object_object_add(ret, "key", json_object_new_string(K->token));
+	}
+	if (V) {
+		json_object_object_add(ret, "value", json_object_new_string(V->token));
+	}
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_loop_statement(json_object *statements, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -448,12 +474,32 @@ static json_object *xx_ret_echo_statement(json_object *expressions, xx_scanner_s
 	return ret;
 }
 
-static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state *state)
+static json_object *xx_ret_return_statement(xx_parser_token *D, json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("return"));
 	json_object_object_add(ret, "expr", expr);
+
+	if (D) {
+		json_object_object_add(ret, "domain", json_object_new_string(D->token));
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_unset_statement(json_object *domain, json_object *index, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("unset"));
+
+	json_object_object_add(ret, "domain", domain);
+	json_object_object_add(ret, "index", index);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -522,6 +568,61 @@ static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *paramet
 
 	json_object_object_add(ret, "type", json_object_new_string("new"));
 	json_object_object_add(ret, "class", json_object_new_string(T->token));
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_throw_exception(xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("throw"));
+	json_object_object_add(ret, "domain", json_object_new_string(T->token));
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_fcall(xx_parser_token *F, json_object *parameters, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("fcall"));
+	json_object_object_add(ret, "name", json_object_new_string(F->token));
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_mcall(xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("mcall"));
+	json_object_object_add(ret, "variable", json_object_new_string(O->token));
+	json_object_object_add(ret, "name", json_object_new_string(M->token));
 
 	if (parameters) {
 		json_object_object_add(ret, "parameters", parameters);
@@ -891,6 +992,14 @@ xx_statement(R) ::= xx_return_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_unset_statement(S) . {
+	R = S;
+}
+
+xx_statement(R) ::= xx_throw_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_declare_statement(S) . {
 	R = S;
 }
@@ -904,6 +1013,10 @@ xx_statement(R) ::= xx_continue_statement(S) . {
 }
 
 xx_statement(R) ::= xx_while_statement(S) . {
+	R = S;
+}
+
+xx_statement(R) ::= xx_for_statement(S) . {
 	R = S;
 }
 
@@ -957,6 +1070,14 @@ xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
 
 xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_while_statement(E, L, status->scanner_state);
+}
+
+xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+	R = xx_ret_for_statement(E, NULL, V, L, status->scanner_state);
+}
+
+xx_for_statement(R) ::= FOR IDENTIFIER(K) COMMA IDENTIFIER(V) IN xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+	R = xx_ret_for_statement(E, K, V, L, status->scanner_state);
 }
 
 xx_let_statement(R) ::= LET xx_let_assignments(A) DOTCOMMA . {
@@ -1015,12 +1136,65 @@ xx_echo_expression(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
+/* return 1 */
 xx_return_statement(R) ::= RETURN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_return_statement(E, status->scanner_state);
+	R = xx_ret_return_statement(NULL, E, status->scanner_state);
 }
 
+/* return x */
 xx_return_statement(R) ::= RETURN IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_return_statement(xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
+	R = xx_ret_return_statement(NULL, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
+}
+
+/* return x->y */
+xx_return_statement(R) ::= RETURN IDENTIFIER(D) ARROW IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_return_statement(D, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), status->scanner_state);
+}
+
+/* unset v->x */
+xx_unset_statement(R) ::= UNSET IDENTIFIER(D) ARROW IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_unset_statement(
+		xx_ret_literal(XX_T_IDENTIFIER, D, status->scanner_state),
+		xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state),
+		status->scanner_state
+	);
+}
+
+/* unset v[x] */
+xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE DOTCOMMA . {
+	R = xx_ret_unset_statement(
+		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
+		xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state),
+		status->scanner_state
+	);
+}
+
+/* unset v[0] */
+xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE DOTCOMMA . {
+	R = xx_ret_unset_statement(
+		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
+		xx_ret_literal(XX_T_INTEGER, I, status->scanner_state),
+		status->scanner_state
+	);
+}
+
+/* unset v["some-index"] */
+xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE DOTCOMMA . {
+	R = xx_ret_unset_statement(
+		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
+		xx_ret_literal(XX_T_STRING, S, status->scanner_state),
+		status->scanner_state
+	);
+}
+
+/* throw new MyException("xx") */
+xx_throw_statement(R) ::= THROW IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_throw_exception(I, NULL, status->scanner_state);
+}
+
+/* throw new MyException("xx") */
+xx_throw_statement(R) ::= THROW NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE DOTCOMMA . {
+	R = xx_ret_throw_exception(I, P, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . {
@@ -1057,6 +1231,10 @@ xx_declare_variable(R) ::= IDENTIFIER(I) . {
 
 xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
 	R = xx_ret_declare_variable(I, E, status->scanner_state);
+}
+
+xx_assign_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
+	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
 /* y = v[x] */
@@ -1149,6 +1327,26 @@ xx_assign_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) P
 	R = xx_ret_new_instance(I, P, status->scanner_state);
 }
 
+/* y = f(false, x) */
+xx_assign_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(I, P, status->scanner_state);
+}
+
+/* y = f() */
+xx_assign_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(I, NULL, status->scanner_state);
+}
+
+/* y = o->m(false, x) */
+xx_assign_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, M, P, status->scanner_state);
+}
+
+/* y = o->m() */
+xx_assign_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
+}
+
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
 	R = xx_ret_list(L, P);
 }
@@ -1233,11 +1431,15 @@ xx_eval_expr(R) ::= xx_literal_expr(L) . {
 	R = L;
 }
 
+xx_eval_expr(R) ::= NOT xx_eval_expr(O1) . {
+	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
+}
+
 xx_eval_expr(R) ::= TYPEOF xx_eval_expr(O1) . {
 	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
 }
 
-xx_eval_expr(R) ::= ISSET xx_eval_expr(O1) . {
+xx_eval_expr(R) ::= ISSET xx_isset_expr(O1) . {
 	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
 }
 
@@ -1249,8 +1451,16 @@ xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
 	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
 }
 
+xx_eval_expr(R) ::= xx_eval_expr(O1) NOTEQUALS xx_eval_expr(O2) . {
+	R = xx_ret_expr("not-equals", O1, O2, NULL, status->scanner_state);
+}
+
 xx_eval_expr(R) ::= xx_eval_expr(O1) IDENTICAL xx_eval_expr(O2) . {
 	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= xx_eval_expr(O1) NOTIDENTICAL xx_eval_expr(O2) . {
+	R = xx_ret_expr("not-identical", O1, O2, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_eval_expr(O1) LESS xx_eval_expr(O2) . {
@@ -1267,6 +1477,30 @@ xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {
 
 xx_eval_expr(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(I, P, status->scanner_state);
+}
+
+/* y = f() */
+xx_eval_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(I, NULL, status->scanner_state);
+}
+
+/* isset v[x] */
+xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+/* isset v[0] */
+xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_INTEGER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+/* isset v["some-index"] */
+xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
 }
 
 xx_comment(R) ::= COMMENT(C) . {

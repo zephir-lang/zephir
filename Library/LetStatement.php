@@ -51,6 +51,11 @@ class LetStatement
 			return;
 		}
 
+		/**
+		 * Call the constructor
+		 * For classes in the same extension we check if the class does implement a constructor
+		 * For external classes we always check if the class does implement a constructor
+		 */
 		if ($compilationContext->compiler->isClass($newExpr['class'])) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
 			if ($classDefinition->hasMethod("__construct")) {
@@ -59,8 +64,6 @@ class LetStatement
 				} else {
 					$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
 				}
-			} else {
-				echo 'x', $newExpr['class'], PHP_EOL;
 			}
 		} else {
 			if (count($params)) {
@@ -73,7 +76,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo = expr
+	 * Compiles foo = {expr}
 	 */
 	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 			ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
