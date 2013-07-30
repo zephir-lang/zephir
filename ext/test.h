@@ -9,5 +9,6 @@
 #include "oo/ooconstructparams.h"
 #include "oo/oonoconstruct.h"
 #include "oo.h"
+#include "router/exception.h"
 #include "router/route.h"
 #include "router.h"

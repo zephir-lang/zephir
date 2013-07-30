@@ -34,6 +34,14 @@ class ThrowStatement
 	public function compile(CompilationContext $compilationContext)
 	{
 
+		$codePrinter = $compilationContext->codePrinter;
+
+		$statement = $this->_statement;
+		if ($compilationContext->compiler->isClass($statement['domain'])) {
+			$codePrinter->output('PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")');
+		}
+
+		//print_R();
 	}
 
 }

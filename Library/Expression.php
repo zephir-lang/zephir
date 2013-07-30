@@ -253,8 +253,12 @@ class Expression
 				switch ($expression['left']['right']['type'])	{
 					case 'string':
 						return new CompiledExpression('int', 'phalcon_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '")', $expression);
+					default:
+						echo '[', $expression['left']['right']['type'], ']';
 				}
 				break;
+			default:
+				echo '[', $expression['left']['type'], ']';
 		}
 
 		return new CompiledExpression('int', '', $expression);

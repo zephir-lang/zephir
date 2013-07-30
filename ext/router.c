@@ -359,6 +359,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 	zephir_fetch_params(1, 1, 0, &defaults);
 
 	if (Z_TYPE_P(defaults) == IS_ARRAY) {
+		PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")
 	}
 	//missing comment
 	if (phalcon_array_isset_string(defaults, SS("namespace")) {
@@ -487,7 +488,6 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_update_property_zval(this, SL("_wasMatched"), _3 TSRMLS_CC);
 
 	}
-
 	//missing comment
 	if (!(zend_is_true(routeFound))) {
 
@@ -503,7 +503,6 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 	}
-
 	if (zend_is_true(routeFound)) {
 		//missing comment
 		if (phalcon_array_isset_string(parts, SS("namespace")) {
@@ -857,12 +856,14 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_fetch_params(1, 1, 0, &group);
 
 	if (Z_TYPE_P(group) != IS_OBJECT) {
+		PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")
 	}
 
 	//missing
 
 	//missing
 	if (!()) {
+		PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")
 	}
 	//missing comment
 
@@ -914,6 +915,7 @@ PHP_METHOD(Test_Router, notFound) {
 
 	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
+			PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")
 		}
 	}
 
