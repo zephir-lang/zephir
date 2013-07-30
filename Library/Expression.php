@@ -1,5 +1,21 @@
 <?php
 
+/*
+ +----------------------------------------------------------------------+
+ | Zephir Language                                                      |
+ +----------------------------------------------------------------------+
+ | Copyright (c) 2013 Zephir Team                                       |
+ +----------------------------------------------------------------------+
+ | This source file is subject to version 1.0 of the Zephir license,    |
+ | that is bundled with this package in the file LICENSE, and is        |
+ | available through the world-wide-web at the following url:           |
+ | http://www.zephir-lang.com/license                                   |
+ | If you did not receive a copy of the Zephir license and are unable   |
+ | to obtain it through the world-wide-web, please send a note to       |
+ | license@zephir-lang.com so we can mail you a copy immediately.       |
+ +----------------------------------------------------------------------+
+*/
+
 require 'Library/Operators/Arithmetical/BaseOperator.php';
 require 'Library/Operators/Arithmetical/AddOperator.php';
 require 'Library/Operators/Arithmetical/SubOperator.php';
@@ -231,6 +247,15 @@ class Expression
 		return new CompiledExpression('bool', '', $expression);
 	}
 
+	public function compileIsset($expression, CompilationContext $compilationContext)
+	{
+		//var_dump($expression['left']);
+
+		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+
+		return new CompiledExpression('int', '', $expression);
+	}
+
 	/**
 	 * Resolves an expression
 	 *
@@ -265,7 +290,7 @@ class Expression
 			case 'mcall':
 				return new CompiledExpression('mcall', null, $expression);
 			case 'isset':
-				return new CompiledExpression('isset', null, $expression);
+				return $this->compileIsset($expression, $compilationContext);
 			case 'typeof':
 				return new CompiledExpression('typeof', null, $expression);
 			case 'array':
