@@ -79,6 +79,10 @@ class StatementsBlock
 					$continueStatement = new ContinueStatement($statement);
 					$continueStatement->compile($compilationContext);
 					break;
+				case 'throw':
+					$throwStatement = new ThrowStatement($statement);
+					$throwStatement->compile($compilationContext);
+					break;
 				default:
 					$compilationContext->codePrinter->output('//missing ' . $statement['type']);
 			}

@@ -412,8 +412,7 @@ class LetStatement
 						$this->arrayAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					case 'property-access':
-						//$this->arrayAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-						$codePrinter->output('//missing');
+						$this->propertyAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					case 'new-instance':
 						$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
@@ -663,6 +662,35 @@ class LetStatement
 			default:
 				throw new CompilerException("Unknown type", $statement);
 		}
+	}
+
+	public function propertyAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	{
+		$codePrinter = $compilationContext->codePrinter;
+
+		$propertyAccess = $resolvedExpr->getOriginal();
+
+		$expr = new Expression($propertyAccess['left']);
+		$exprVariable = $expr->compile($compilationContext);
+
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
+				switch ($variableVariable->getType()) {
+					case 'variable':
+						break;
+					default:
+						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+				}
+				break;
+			default:
+				throw new CompiledException("Cannot use expression: ". $exprVariable->getType() . " as an object", $propertyAccess['left']);
+		}
+
+		$compilationContext->headersManager->add('kernel/object');
+		$symbolVariable->observeVariant($compilationContext);
+		$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("x"), PH_NOISY_CC);');
+
 	}
 
 	public function arrayAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

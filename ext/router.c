@@ -155,7 +155,7 @@ PHP_METHOD(Test_Router, setDI) {
  */
 PHP_METHOD(Test_Router, getDI) {
 
-	RETURN_MEMBER("_dependencyInjector");
+	RETURN_MEMBER(this_ptr, "_dependencyInjector");
 
 }
 
@@ -171,7 +171,8 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	ZEPHIR_MM_GROW();
 	//missing comment
 
-	//missing
+	ZEPHIR_OBS_VAR(uriSource);
+	zephir_read_property(&uriSource, this, SL("x"), PH_NOISY_CC);
 
 	//missing comment
 	if (!(zend_is_true(uriSource))) {
@@ -358,7 +359,6 @@ PHP_METHOD(Test_Router, setDefaults) {
 	zephir_fetch_params(1, 1, 0, &defaults);
 
 	if (Z_TYPE_P(defaults) == IS_ARRAY) {
-		//missing throw
 	}
 	//missing comment
 	if (phalcon_array_isset_string(defaults, SS("namespace")) {
@@ -426,7 +426,7 @@ PHP_METHOD(Test_Router, setDefaults) {
  */
 PHP_METHOD(Test_Router, handle) {
 
-	zval *uri, *realUri, *request, *currentHostName, *routeFound = NULL, *parts, *params, *matches, *routes, *reversedRoutes, *notFoundPaths, *vnamespace, *defaultNamespace, *module, *defaultModule, *controller, *defaultController, *action, *defaultAction, *paramsStr, *strParams, *paramsMerge, *defaultParams, *_0, *_1, *_2, *_3;
+	zval *uri, *realUri, *request, *currentHostName, *routeFound = NULL, *parts, *params, *matches, *routes, *reversedRoutes, *notFoundPaths, *vnamespace, *defaultNamespace = NULL, *module, *defaultModule = NULL, *controller, *defaultController = NULL, *action, *defaultAction = NULL, *paramsStr, *strParams, *paramsMerge, *defaultParams, *_0, *_1, *_2, *_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -469,7 +469,8 @@ PHP_METHOD(Test_Router, handle) {
 
 	//missing comment
 
-	//missing
+	ZEPHIR_OBS_VAR(routes);
+	zephir_read_property(&routes, this, SL("x"), PH_NOISY_CC);
 
 	//missing
 
@@ -486,10 +487,12 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_update_property_zval(this, SL("_wasMatched"), _3 TSRMLS_CC);
 
 	}
+
 	//missing comment
 	if (!(zend_is_true(routeFound))) {
 
-		//missing
+		ZEPHIR_OBS_VAR(notFoundPaths);
+		zephir_read_property(&notFoundPaths, this, SL("x"), PH_NOISY_CC);
 
 		if (Z_TYPE_P(notFoundPaths) == IS_NULL) {
 
@@ -500,6 +503,7 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 	}
+
 	if (zend_is_true(routeFound)) {
 		//missing comment
 		if (phalcon_array_isset_string(parts, SS("namespace")) {
@@ -516,7 +520,8 @@ PHP_METHOD(Test_Router, handle) {
 			//missing unset
 		} else {
 
-			//missing
+			ZEPHIR_OBS_VAR(defaultNamespace);
+			zephir_read_property(&defaultNamespace, this, SL("x"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_namespace"), defaultNamespace TSRMLS_CC);
 
@@ -536,7 +541,8 @@ PHP_METHOD(Test_Router, handle) {
 			//missing unset
 		} else {
 
-			//missing
+			ZEPHIR_OBS_VAR(defaultModule);
+			zephir_read_property(&defaultModule, this, SL("x"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_module"), defaultModule TSRMLS_CC);
 
@@ -556,7 +562,8 @@ PHP_METHOD(Test_Router, handle) {
 			//missing unset
 		} else {
 
-			//missing
+			ZEPHIR_OBS_VAR(defaultController);
+			zephir_read_property(&defaultController, this, SL("x"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_controller"), defaultController TSRMLS_CC);
 
@@ -576,7 +583,8 @@ PHP_METHOD(Test_Router, handle) {
 			//missing unset
 		} else {
 
-			//missing
+			ZEPHIR_OBS_VAR(defaultAction);
+			zephir_read_property(&defaultAction, this, SL("x"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_action"), defaultAction TSRMLS_CC);
 
@@ -612,23 +620,28 @@ PHP_METHOD(Test_Router, handle) {
 	} else {
 		//missing comment
 
-		//missing
+		ZEPHIR_OBS_NVAR(defaultNamespace);
+		zephir_read_property(&defaultNamespace, this, SL("x"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_namespace"), defaultNamespace TSRMLS_CC);
 
-		//missing
+		ZEPHIR_OBS_NVAR(defaultModule);
+		zephir_read_property(&defaultModule, this, SL("x"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_module"), defaultModule TSRMLS_CC);
 
-		//missing
+		ZEPHIR_OBS_NVAR(defaultController);
+		zephir_read_property(&defaultController, this, SL("x"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_controller"), defaultController TSRMLS_CC);
 
-		//missing
+		ZEPHIR_OBS_NVAR(defaultAction);
+		zephir_read_property(&defaultAction, this, SL("x"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_action"), defaultAction TSRMLS_CC);
 
-		//missing
+		ZEPHIR_OBS_VAR(defaultParams);
+		zephir_read_property(&defaultParams, this, SL("x"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_params"), defaultParams TSRMLS_CC);
 
@@ -839,18 +852,17 @@ PHP_METHOD(Test_Router, mount) {
 
 	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *newRoutes;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &group);
+	zephir_fetch_params(1, 1, 0, &group);
 
 	if (Z_TYPE_P(group) != IS_OBJECT) {
-		//missing throw
 	}
 
 	//missing
 
 	//missing
 	if (!()) {
-		//missing throw
 	}
 	//missing comment
 
@@ -867,7 +879,8 @@ PHP_METHOD(Test_Router, mount) {
 		//missing for
 	}
 
-	//missing
+	ZEPHIR_OBS_VAR(routes);
+	zephir_read_property(&routes, this, SL("x"), PH_NOISY_CC);
 
 	if (Z_TYPE_P(routes) == IS_ARRAY) {
 
@@ -881,7 +894,7 @@ PHP_METHOD(Test_Router, mount) {
 
 	}
 
-	RETURN_THISW(this);
+	RETURN_THIS(this);
 
 
 }
@@ -901,7 +914,6 @@ PHP_METHOD(Test_Router, notFound) {
 
 	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
-			//missing throw
 		}
 	}
 
@@ -935,7 +947,7 @@ PHP_METHOD(Test_Router, clear) {
  */
 PHP_METHOD(Test_Router, getNamespaceName) {
 
-	RETURN_MEMBER("_namespace");
+	RETURN_MEMBER(this_ptr, "_namespace");
 
 }
 
@@ -946,7 +958,7 @@ PHP_METHOD(Test_Router, getNamespaceName) {
  */
 PHP_METHOD(Test_Router, getModuleName) {
 
-	RETURN_MEMBER("_module");
+	RETURN_MEMBER(this_ptr, "_module");
 
 }
 
@@ -957,7 +969,7 @@ PHP_METHOD(Test_Router, getModuleName) {
  */
 PHP_METHOD(Test_Router, getControllerName) {
 
-	RETURN_MEMBER("_controller");
+	RETURN_MEMBER(this_ptr, "_controller");
 
 }
 
@@ -968,7 +980,7 @@ PHP_METHOD(Test_Router, getControllerName) {
  */
 PHP_METHOD(Test_Router, getActionName) {
 
-	RETURN_MEMBER("_action");
+	RETURN_MEMBER(this_ptr, "_action");
 
 }
 
@@ -979,7 +991,7 @@ PHP_METHOD(Test_Router, getActionName) {
  */
 PHP_METHOD(Test_Router, getParams) {
 
-	RETURN_MEMBER("_params");
+	RETURN_MEMBER(this_ptr, "_params");
 
 }
 
@@ -990,7 +1002,7 @@ PHP_METHOD(Test_Router, getParams) {
  */
 PHP_METHOD(Test_Router, getMatchedRoute) {
 
-	RETURN_MEMBER("_matchedRoute");
+	RETURN_MEMBER(this_ptr, "_matchedRoute");
 
 }
 
@@ -1001,7 +1013,7 @@ PHP_METHOD(Test_Router, getMatchedRoute) {
  */
 PHP_METHOD(Test_Router, getMatches) {
 
-	RETURN_MEMBER("_matches");
+	RETURN_MEMBER(this_ptr, "_matches");
 
 }
 
@@ -1012,7 +1024,7 @@ PHP_METHOD(Test_Router, getMatches) {
  */
 PHP_METHOD(Test_Router, wasMatched) {
 
-	RETURN_MEMBER("_wasMatched");
+	RETURN_MEMBER(this_ptr, "_wasMatched");
 
 }
 
@@ -1023,7 +1035,7 @@ PHP_METHOD(Test_Router, wasMatched) {
  */
 PHP_METHOD(Test_Router, getRoutes) {
 
-	RETURN_MEMBER("_routes");
+	RETURN_MEMBER(this_ptr, "_routes");
 
 }
 
@@ -1037,14 +1049,16 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 	zval *id, *routes;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &id);
+	zephir_fetch_params(1, 1, 0, &id);
 
-	//missing
+	ZEPHIR_OBS_VAR(routes);
+	zephir_read_property(&routes, this, SL("x"), PH_NOISY_CC);
 
 	//missing for
 
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 
 }
@@ -1059,14 +1073,16 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 	zval *name, *routes;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 1, 0, &name);
+	zephir_fetch_params(1, 1, 0, &name);
 
-	//missing
+	ZEPHIR_OBS_VAR(routes);
+	zephir_read_property(&routes, this, SL("x"), PH_NOISY_CC);
 
 	//missing for
 
-	RETURN_BOOL(0);
+	RETURN_MM_BOOL(0);
 
 
 }
