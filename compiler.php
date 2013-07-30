@@ -24,6 +24,7 @@ require 'Library/BreakStatement.php';
 require 'Library/ContinueStatement.php';
 require 'Library/Variable.php';
 require 'Library/ReadDetector.php';
+require 'Library/Optimizers/EvalExpression.php';
 require 'Library/Expression.php';
 require 'Library/CompiledExpression.php';
 require 'Library/CodePrinter.php';

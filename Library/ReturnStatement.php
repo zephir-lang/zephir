@@ -19,19 +19,19 @@ class ReturnStatement
 
 		$statement = $this->_statement;
 
-		$expr = new Expression($statement['expr']);
-
-		$resolvedExpr = $expr->compile($compilationContext);
-
 		$codePrinter = $compilationContext->codePrinter;
 		$codePrinter->outputBlankLine(true);
 
 		if (isset($statement['domain'])) {
 			if ($statement['domain'] == 'this') {
-				$codePrinter->output('//missing');
+				$codePrinter->output('RETURN_MEMBER("' . $statement['expr']['value'] . '");');
 				return;
 			}
 		}
+
+		$expr = new Expression($statement['expr']);
+
+		$resolvedExpr = $expr->compile($compilationContext);
 
 		switch ($resolvedExpr->getType()) {
 			case 'int':
@@ -59,7 +59,11 @@ class ReturnStatement
 						$codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');
 						break;
 					case 'variable':
-						$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+						if ($symbolVariable->getName() == 'this') {
+							$codePrinter->output('RETURN_THIS(' . $symbolVariable->getName() . ');');
+						} else {
+							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+						}
 						break;
 					default:
 						throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);

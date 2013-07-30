@@ -19,45 +19,12 @@ class WhileStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$exprStatement = $this->_statement['expr'];
-		$expr = new Expression($exprStatement);
+		$exprRaw = $this->_statement['expr'];
 
-		$compiledExpression = $expr->compile($compilationContext);
+		$expr = new EvalExpression();
+		$condition = $expr->optimize($exprRaw, $compilationContext);
 
-		/**
-		 * Generate the condition according to the value returned by the evaluted expression
-		 */
-		switch ($compiledExpression->getType()) {
-			case 'int':
-			case 'double':
-				$compilationContext->codePrinter->output('while (' . $compiledExpression->getCode() . ') {');
-				break;
-			case 'bool':
-				$compilationContext->codePrinter->output('while (' . $compiledExpression->getBooleanCode() . ') {');
-				break;
-			case 'variable':
-
-				$variableRight = $compilationContext->symbolTable->getVariableForRead($this->_statement['expr']['value']);
-				switch ($variableRight->getType()) {
-					case 'int':
-						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
-						break;
-					case 'bool':
-						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
-						break;
-					case 'double':
-						$compilationContext->codePrinter->output('while (' . $variableRight->getName() . ') {');
-						break;
-					case 'variable':
-						$compilationContext->codePrinter->output('while (zend_is_true(' . $variableRight->getName() . ')) {');
-						break;
-					default:
-						throw new CompilerException("Variable " . $variableRight->getType() . " can't be evaluated", $this->_statement);
-				}
-				break;
-			default:
-				throw new CompilerException("Expression can't be evaluated", $this->_statement);
-		}
+		$compilationContext->codePrinter->output('while (' . $condition . ') {');
 
 		/**
 		 * Variables are initialized in a different way inside cycle
