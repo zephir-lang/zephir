@@ -80,6 +80,7 @@ class ClassMethod
 			$containerCode = str_replace('RETURN_NCTOR', 'RETURN_NCTORW', $containerCode);
 			$containerCode = str_replace('RETURN_CCTOR', 'RETURN_CCTORW', $containerCode);
 			$containerCode = str_replace('RETURN_MM_NULL', 'RETURN_NULL', $containerCode);
+			$containerCode = str_replace('RETURN_MM_BOOL', 'RETURN_BOOL', $containerCode);
 			$containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
 			$containerCode = str_replace('RETURN_MM_TRUE', 'RETURN_TRUE', $containerCode);
 			$containerCode = str_replace('RETURN_MM_STRING', 'RETURN_STRING', $containerCode);

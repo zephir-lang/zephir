@@ -77,7 +77,7 @@ PHP_METHOD(Test_Arithmetic, boolSum) {
 
 	c = a |b;
 
-	RETURN_MM_BOOL(c);
+	RETURN_BOOL(c);
 
 
 }
@@ -90,7 +90,7 @@ PHP_METHOD(Test_Arithmetic, bool2Sum) {
 
 	c = a + 2;
 
-	RETURN_MM_BOOL(c);
+	RETURN_BOOL(c);
 
 
 }
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Arithmetic, bool3Sum) {
 
 	c = a |0;
 
-	RETURN_MM_BOOL(c);
+	RETURN_BOOL(c);
 
 
 }
@@ -114,7 +114,7 @@ PHP_METHOD(Test_Arithmetic, boolSumSimple) {
 
 	c = (1 + 2) ? 1 : 0;
 
-	RETURN_MM_BOOL(c);
+	RETURN_BOOL(c);
 
 
 }

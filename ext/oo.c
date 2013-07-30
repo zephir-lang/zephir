@@ -17,7 +17,7 @@
 
 
 /**
- * Arithmetic operations
+ * OO operations
  */
 ZEPHIR_INIT_CLASS(Test_Oo) {
 

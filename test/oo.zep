@@ -1,6 +1,6 @@
 
 /**
- * Arithmetic operations
+ * OO operations
  */
 
 namespace Test;

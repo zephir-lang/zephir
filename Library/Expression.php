@@ -10,6 +10,7 @@
  | that is bundled with this package in the file LICENSE, and is        |
  | available through the world-wide-web at the following url:           |
  | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
  | If you did not receive a copy of the Zephir license and are unable   |
  | to obtain it through the world-wide-web, please send a note to       |
  | license@zephir-lang.com so we can mail you a copy immediately.       |
@@ -66,8 +67,6 @@ class Expression
 			throw new Exception("Missing right part of the expression");
 		}
 
-		//echo '[', $expression['left']['type'], ']', PHP_EOL;
-
 		$leftExpr = new Expression($expression['left']);
 		$left = $leftExpr->compile($compilationContext);
 
@@ -103,8 +102,6 @@ class Expression
 			default:
 				throw new CompilerException("Error Processing Request", $expression);
 		}
-
-
 	}
 
 	public function compileIdentical($expression, CompilationContext $compilationContext)
@@ -249,9 +246,16 @@ class Expression
 
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
-		//var_dump($expression['left']);
+		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value']);
 
-		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+		switch ($expression['left']['type']) {
+			case 'array-access':
+				switch ($expression['left']['right']['type'])	{
+					case 'string':
+						return new CompiledExpression('int', 'phalcon_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '")', $expression);
+				}
+				break;
+		}
 
 		return new CompiledExpression('int', '', $expression);
 	}

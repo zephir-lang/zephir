@@ -88,7 +88,7 @@ PHP_METHOD(Test_Assign, testAssign6) {
 
 	a = (1) ? 1 : 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Assign, testAssign7) {
 
 	a = (1.0) ? 1 : 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -110,7 +110,7 @@ PHP_METHOD(Test_Assign, testAssign8) {
 
 	a = 1;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -121,7 +121,7 @@ PHP_METHOD(Test_Assign, testAssign9) {
 
 	a = 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -132,7 +132,7 @@ PHP_METHOD(Test_Assign, testAssign10) {
 
 	a = 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -291,7 +291,7 @@ PHP_METHOD(Test_Assign, testAssign23) {
 
 	b = a;
 
-	RETURN_MM_BOOL(b);
+	RETURN_BOOL(b);
 
 
 }
@@ -361,7 +361,7 @@ PHP_METHOD(Test_Assign, testAssign28) {
 
 	a = (b) ? 1 : 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }
@@ -375,7 +375,7 @@ PHP_METHOD(Test_Assign, testAssign29) {
 
 	a = (b) ? 1 : 0;
 
-	RETURN_MM_BOOL(a);
+	RETURN_BOOL(a);
 
 
 }

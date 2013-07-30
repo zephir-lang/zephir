@@ -49,14 +49,14 @@ PHP_MINIT_FUNCTION(test){
 
 PHP_MSHUTDOWN_FUNCTION(test){
 
-	/*if (PHALCON_GLOBAL(active_memory) != NULL) {
-		phalcon_clean_shutdown_stack(TSRMLS_C);
+	/*if (TEST_GLOBAL(zephir_memory) != NULL) {
+		zephir_clean_shutdown_stack(TSRMLS_C);
 	}
 
-	if (PHALCON_GLOBAL(function_cache) != NULL) {
-		zend_hash_destroy(PHALCON_GLOBAL(function_cache));
-		FREE_HASHTABLE(PHALCON_GLOBAL(function_cache));
-		PHALCON_GLOBAL(function_cache) = NULL;
+	if (TEST_GLOBAL(zephir_cache) != NULL) {
+		zend_hash_destroy(TEST_GLOBAL(function_cache));
+		FREE_HASHTABLE(TEST_GLOBAL(function_cache));
+		TEST_GLOBAL(function_cache) = NULL;
 	}*/
 
 	return SUCCESS;
@@ -71,17 +71,15 @@ PHP_RINIT_FUNCTION(test){
 
 PHP_RSHUTDOWN_FUNCTION(test){
 
-	/*if (PHALCON_GLOBAL(active_memory) != NULL) {
-		phalcon_clean_shutdown_stack(TSRMLS_C);
+	/*if (TEST_GLOBAL(zephir_memory) != NULL) {
+		zephir_clean_shutdown_stack(TSRMLS_C);
 	}
 
-	if (PHALCON_GLOBAL(function_cache) != NULL) {
-		zend_hash_destroy(PHALCON_GLOBAL(function_cache));
-		FREE_HASHTABLE(PHALCON_GLOBAL(function_cache));
-		PHALCON_GLOBAL(function_cache) = NULL;
-	}
-
-	phalcon_orm_destroy_cache(TSRMLS_C);*/
+	if (TEST_GLOBAL(zephir_cache) != NULL) {
+		zend_hash_destroy(TEST_GLOBAL(function_cache));
+		FREE_HASHTABLE(TEST_GLOBAL(function_cache));
+		TEST_GLOBAL(function_cache) = NULL;
+	}*/
 
 	return SUCCESS;
 }

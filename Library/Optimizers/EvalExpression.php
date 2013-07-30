@@ -59,13 +59,21 @@ class EvalExpression
 				}
 			}
 
-			switch ($expr['right']['type']) {
+			switch ($expr['right']['value']) {
 				case 'array':
-					$condition = 'Z_TYPE_P(' . $expr['left']['value'] . ') ' . $operator . ' IS_ARRAY';
+					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_ARRAY';
+					break;
+				case 'object':
+					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_OBJECT';
+					break;
+				case 'null':
+					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_NULL';
 					break;
 				case 'string':
 					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_STRING';
 					break;
+				default:
+					echo $expr['right']['value'];
 			}
 
 			return $condition;

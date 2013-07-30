@@ -175,7 +175,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 
 	//missing comment
 	if (!(zend_is_true(uriSource))) {
-		if () {
+		if (phalcon_array_isset_string(_GET, SS("_url")) {
 
 			ZEPHIR_OBS_VAR(url);
 			zephir_array_fetch_string(&url, _GET, SL("_url"), PH_NOISY);
@@ -188,7 +188,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 		}
 	} else {
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(_SERVER, SS("REQUEST_URI")) {
 
 			ZEPHIR_OBS_NVAR(url);
 			zephir_array_fetch_string(&url, _SERVER, SL("REQUEST_URI"), PH_NOISY);
@@ -357,11 +357,11 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 	zephir_fetch_params(1, 1, 0, &defaults);
 
-	if (Z_TYPE_P(defaults) == IS_STRING) {
+	if (Z_TYPE_P(defaults) == IS_ARRAY) {
 		//missing throw
 	}
 	//missing comment
-	if () {
+	if (phalcon_array_isset_string(defaults, SS("namespace")) {
 
 		ZEPHIR_OBS_VAR(namespaceName);
 		zephir_array_fetch_string(&namespaceName, defaults, SL("namespace"), PH_NOISY);
@@ -370,7 +370,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 	}
 	//missing comment
-	if () {
+	if (phalcon_array_isset_string(defaults, SS("module")) {
 
 		ZEPHIR_OBS_VAR(moduleName);
 		zephir_array_fetch_string(&moduleName, defaults, SL("module"), PH_NOISY);
@@ -379,7 +379,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 	}
 	//missing comment
-	if () {
+	if (phalcon_array_isset_string(defaults, SS("controller")) {
 
 		ZEPHIR_OBS_VAR(controllerName);
 		zephir_array_fetch_string(&controllerName, defaults, SL("controller"), PH_NOISY);
@@ -388,7 +388,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 	}
 	//missing comment
-	if () {
+	if (phalcon_array_isset_string(defaults, SS("action")) {
 
 		ZEPHIR_OBS_VAR(actionName);
 		zephir_array_fetch_string(&actionName, defaults, SL("action"), PH_NOISY);
@@ -397,7 +397,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 	}
 	//missing comment
-	if () {
+	if (phalcon_array_isset_string(defaults, SS("params")) {
 
 		ZEPHIR_OBS_VAR(params);
 		zephir_array_fetch_string(&params, defaults, SL("params"), PH_NOISY);
@@ -502,7 +502,7 @@ PHP_METHOD(Test_Router, handle) {
 	}
 	if (zend_is_true(routeFound)) {
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(parts, SS("namespace")) {
 
 			ZEPHIR_OBS_VAR(vnamespace);
 			zephir_array_fetch_string(&vnamespace, parts, SL("namespace"), PH_NOISY);
@@ -522,7 +522,7 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(parts, SS("module")) {
 
 			ZEPHIR_OBS_VAR(module);
 			zephir_array_fetch_string(&module, parts, SL("module"), PH_NOISY);
@@ -542,7 +542,7 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(parts, SS("controller")) {
 
 			ZEPHIR_OBS_VAR(controller);
 			zephir_array_fetch_string(&controller, parts, SL("controller"), PH_NOISY);
@@ -562,7 +562,7 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(parts, SS("action")) {
 
 			ZEPHIR_OBS_VAR(action);
 			zephir_array_fetch_string(&action, parts, SL("action"), PH_NOISY);
@@ -582,7 +582,7 @@ PHP_METHOD(Test_Router, handle) {
 
 		}
 		//missing comment
-		if () {
+		if (phalcon_array_isset_string(parts, SS("params")) {
 
 			ZEPHIR_OBS_VAR(paramsStr);
 			zephir_array_fetch_string(&paramsStr, parts, SL("params"), PH_NOISY);
@@ -842,7 +842,7 @@ PHP_METHOD(Test_Router, mount) {
 
 	zephir_fetch_params(0, 1, 0, &group);
 
-	if (Z_TYPE_P(group) != IS_STRING) {
+	if (Z_TYPE_P(group) != IS_OBJECT) {
 		//missing throw
 	}
 
@@ -869,7 +869,7 @@ PHP_METHOD(Test_Router, mount) {
 
 	//missing
 
-	if (Z_TYPE_P(routes) == IS_STRING) {
+	if (Z_TYPE_P(routes) == IS_ARRAY) {
 
 		//missing
 
@@ -899,7 +899,7 @@ PHP_METHOD(Test_Router, notFound) {
 
 	zephir_fetch_params(0, 1, 0, &paths);
 
-	if (Z_TYPE_P(paths) != IS_STRING) {
+	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
 			//missing throw
 		}
@@ -1044,7 +1044,7 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 	//missing for
 
-	RETURN_MM_BOOL(0);
+	RETURN_BOOL(0);
 
 
 }
@@ -1066,7 +1066,7 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 	//missing for
 
-	RETURN_MM_BOOL(0);
+	RETURN_BOOL(0);
 
 
 }

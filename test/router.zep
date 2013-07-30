@@ -761,7 +761,8 @@ class Router
 	 * @param string/array paths
 	 * @return Test\Router\Route
 	 */
-	public function addOptions(pattern, paths=null){
+	public function addOptions(pattern, paths=null)
+	{
 		var method;
 		let method = 'OPTIONS';
 		return this->add(pattern, paths, method);
@@ -787,7 +788,8 @@ class Router
 	 * @param Test\Router\Group route
 	 * @return Test\Router
 	 */
-	public function mount(group){
+	public function mount(group)
+	{
 
 		var groupRoutes, beforeMatch, hostname, routes, newRoutes;
 
@@ -885,7 +887,8 @@ class Router
 	 *
 	 * @return string
 	 */
-	public function getControllerName(){
+	public function getControllerName()
+	{
 		return this->_controller;
 	}
 
@@ -894,7 +897,8 @@ class Router
 	 *
 	 * @return string
 	 */
-	public function getActionName(){
+	public function getActionName()
+	{
 		return this->_action;
 	}
 
