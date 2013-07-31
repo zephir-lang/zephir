@@ -1,20 +1,19 @@
 <?php
 /*
-  +------------------------------------------------------------------------+
-  | Phalcon Framework                                                      |
-  +------------------------------------------------------------------------+
-  | Copyright (c) 2011-2013 Phalcon Team (http://www.phalconphp.com)       |
-  +------------------------------------------------------------------------+
-  | This source file is subject to the New BSD License that is bundled     |
-  | with this package in the file docs/LICENSE.txt.                        |
-  |                                                                        |
-  | If you did not receive a copy of the license and are unable to         |
-  | obtain it through the world-wide-web, please send an email             |
-  | to license@phalconphp.com so we can send you a copy immediately.       |
-  +------------------------------------------------------------------------+
-  | Authors: Andres Gutierrez <andres@phalconphp.com>                      |
-  |          Eduar Carvajal <eduar@phalconphp.com>                         |
-  +------------------------------------------------------------------------+
+ +----------------------------------------------------------------------+
+ | Zephir Language                                                      |
+ +----------------------------------------------------------------------+
+ | Copyright (c) 2013 Zephir Team                                       |
+ +----------------------------------------------------------------------+
+ | This source file is subject to version 1.0 of the Zephir license,    |
+ | that is bundled with this package in the file LICENSE, and is        |
+ | available through the world-wide-web at the following url:           |
+ | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
+ | If you did not receive a copy of the Zephir license and are unable   |
+ | to obtain it through the world-wide-web, please send a note to       |
+ | license@zephir-lang.com so we can mail you a copy immediately.       |
+ +----------------------------------------------------------------------+
 */
 
 class ZephirTraslator
@@ -45,9 +44,7 @@ class ZephirTraslator
 	public function __construct()
 	{
 		//Scan Files to copy to zephir format
-		$this->_scanFiles($this->_folderInit);
-		$this->_readFileC('ext/version.c');
-		
+		$this->_scanFiles($this->_folderInit);		
 	}
 	
 	/**
@@ -61,7 +58,7 @@ class ZephirTraslator
 	}
 	
 	/**
-	 * Make a ZEP file from C file
+	 * create a ZEP file from C file
 	 * 
 	 */
 	private function _readFileC($path)
@@ -96,7 +93,6 @@ class ZephirTraslator
 						$flagWrite = true;
 					}
 					
-					echo PHP_EOL."IF".PHP_EOL."if ({$this->_comment} || $flagWrite) {";
 					if ($this->_comment==true || $flagWrite==true) {
 						fwrite($fileZep, $line.PHP_EOL);
 					}
@@ -109,8 +105,6 @@ class ZephirTraslator
 				}
 				
 				fclose($fileZep);
-			} else {
-				echo "No se pudo crear el archivo";
 			}
 		}
 	}
@@ -145,8 +139,8 @@ class ZephirTraslator
 				$this->_scanFiles($path . $result);
 			} else {
 				
-				//make content to zep files from *.c files into ext/ folder
-				//$this->_readFileC($path . $result);
+				//create content to zep files from *.c files into ext/ folder
+				$this->_readFileC($path . $result);
 				
 			}
 		}
