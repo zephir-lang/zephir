@@ -90,7 +90,7 @@ class LetStatement
 	 * Creates a new instance
 	 *
 	 */
-	public function newInstance($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
+	public function newInstance($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -128,6 +128,21 @@ class LetStatement
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
 			if ($classDefinition->hasMethod("__construct")) {
 
+				if (isset($newExpr['parameters'])) {
+					$callExpr = new CompiledExpression('mcall', null, array(
+						'variable' => $variable,
+						'name' => '__construct',
+						'parameters' => $newExpr['parameters']
+					));
+				} else {
+					$callExpr = new CompiledExpression('mcall', null, array(
+						'variable' => $variable,
+						'name' => '__construct'
+					));
+				}
+
+				$m = new MethodCall();
+				$m->compile(null, null, $callExpr, $compilationContext, $statement);
 			}
 		} else {
 			/**
@@ -645,7 +660,6 @@ class LetStatement
 			case 'int':
 				throw new CompilerException("Cannot append to 'int' variables", $statement);
 			case 'variable':
-				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
 					case 'variable':
 						 $codePrinter->output('zephir_array_append(&' . $variable . ', ' . $resolvedExpr->getCode() . ', PH_SEPARATE);');
