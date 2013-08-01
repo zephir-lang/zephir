@@ -38,7 +38,7 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
 }
 
 /**
- * Phalcon\Mvc\Router\Route constructor
+ * Test\Router\Route constructor
  *
  * @param string pattern
  * @param array paths

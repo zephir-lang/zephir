@@ -422,8 +422,8 @@ class LetStatement
 						$codePrinter->output('//missing fcall');
 						break;
 					case 'mcall':
-						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-						$codePrinter->output('//missing mcall');
+						$methodCall = new MethodCall();
+						$methodCall->compile($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
@@ -694,7 +694,13 @@ class LetStatement
 
 		$compilationContext->headersManager->add('kernel/object');
 		$symbolVariable->observeVariant($compilationContext);
-		$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+
+		if ($variableVariable->getName() == 'this') {
+			//zephir_read_property_this?
+			$codePrinter->output('zephir_read_property(&' . $variable . ', this_ptr, SL("' . $property . '"), PH_NOISY_CC);');
+		} else {
+			$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+		}
 
 	}
 
@@ -882,6 +888,13 @@ class LetStatement
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
+
+		/**
+		 * @TODO use zephir_update_property_this
+		 */
+		if ($variable == 'this') {
+			$variable = 'this_ptr';
+		}
 
 		$type = $symbolVariable->getType();
 		switch ($type) {

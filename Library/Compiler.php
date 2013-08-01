@@ -224,10 +224,40 @@ class Compiler
 		);
 
 		foreach ($toReplace as $mark => $replace) {
-			$content = str_replace($mark,$replace,$content);
+			$content = str_replace($mark, $replace, $content);
 		}
 
 		file_put_contents('ext/' . strtolower($project) . '.h', $content);
+	}
+
+	/**
+	 * Boots the compiler showing exceptions
+	 */
+	public static function boot()
+	{
+		try {
+			$c = new Compiler();
+			echo $c->compile();
+		} catch (Exception $e) {
+			echo 'Exception: ', $e->getMessage(), PHP_EOL;
+			if (method_exists($e, 'getExtra')) {
+				$extra = $e->getExtra();
+				if (is_array($extra)) {
+					if (isset($extra['file'])) {
+						echo PHP_EOL;
+						$lines = file($extra['file']);
+						$line = $lines[$extra['line'] - 1];
+						echo "\t", str_replace("\t", " ", $line);
+						echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
+					}
+				}
+			}
+			echo PHP_EOL;
+			$pwd = getcwd();
+			echo $e->getFile(), ' ', $e->getLine(), PHP_EOL;
+			echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
+			exit(1);
+		}
 	}
 
 }

@@ -77,7 +77,7 @@ class ReturnStatement
 						break;
 					case 'variable':
 						if ($symbolVariable->getName() == 'this') {
-							$codePrinter->output('RETURN_THIS(' . $symbolVariable->getName() . ');');
+							$codePrinter->output('RETURN_THIS();');
 						} else {
 							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
 						}

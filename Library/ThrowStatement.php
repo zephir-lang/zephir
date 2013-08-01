@@ -18,7 +18,7 @@
 */
 
 /**
- * ThrowsStatement
+ * ThrowStatement
  *
  * Throws exceptions
  */

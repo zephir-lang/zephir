@@ -254,11 +254,11 @@ class Expression
 					case 'string':
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
 					default:
-						echo '[', $expression['left']['right']['type'], ']';
+						throw new CompilerException('['.$expression['left']['right']['type'].']', $expression);
 				}
 				break;
 			default:
-				echo '[', $expression['left']['type'], ']';
+				throw new CompilerException('[' . $expression['left']['type'] . ']', $expression);
 		}
 
 		return new CompiledExpression('int', '', $expression);

@@ -20,4 +20,27 @@
 class MethodCall
 {
 
+	public function compile($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	{
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $statement);
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$expr = $resolvedExpr->getOriginal();
+
+		/**
+		 * @TODO get variable from symbol table
+		 */
+		if ($expr['variable'] == 'this') {
+			$expr['variable'] = 'this_ptr';
+		}
+
+		if (!isset($expr['parameters'])) {
+			$codePrinter->output('zephir_call_method(' . $variable . ', ' . $expr['variable'] . ', "' . strtolower($expr['name']) . '");');
+		}
+	}
+
 }

@@ -29,7 +29,7 @@ class Route
 	protected _beforeMatch;
 
 	/**
-	 * Phalcon\Mvc\Router\Route constructor
+	 * Test\Router\Route constructor
 	 *
 	 * @param string pattern
 	 * @param array paths

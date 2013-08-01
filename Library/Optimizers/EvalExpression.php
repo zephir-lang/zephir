@@ -26,6 +26,9 @@ class EvalExpression
 {
 	public function optimizeNot($expr, $compilationContext)
 	{
+		/**
+		 * Compile the expression negating the evaluted expression
+		 */
 		if ($expr['type'] == 'not') {
 			$conditions = $this->optimize($expr['left'], $compilationContext);
 			if ($conditions !== false) {
@@ -82,14 +85,40 @@ class EvalExpression
 		return false;
 	}
 
+	/**
+	 * Replaces function calls in the PHP userland by optimized versions
+	 */
+	public function optimizeFunctionCall($expr, $compilationContext)
+	{
+		if ($expr['type'] == 'fcall') {
+			switch ($expr['name']) {
+				case 'count':
+					/**
+					 * @TODO Count the number of parameters and check types!
+					 */
+					return 'zephir_fast_count_ev(' . $expr['parameters'][0]['value'] . ' TSRMLS_CC)';
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Optimizes expressions
+	 */
 	public function optimize($exprRaw, CompilationContext $compilationContext)
 	{
+
 		$conditions = $this->optimizeNot($exprRaw, $compilationContext);
 		if ($conditions !== false) {
 			return $conditions;
 		}
 
 		$conditions = $this->optimizeTypeOf($exprRaw, $compilationContext);
+		if ($conditions !== false) {
+			return $conditions;
+		}
+
+		$conditions = $this->optimizeFunctionCall($exprRaw, $compilationContext);
 		if ($conditions !== false) {
 			return $conditions;
 		}
@@ -121,9 +150,6 @@ class EvalExpression
 						throw new CompiledException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
 				}
 				break;
-			case 'isset':
-				$compilationContext->codePrinter->output('//missing');
-				return '';
 			case 'fcall':
 				$compilationContext->codePrinter->output('//missing');
 				return '';

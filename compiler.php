@@ -47,27 +47,7 @@ require 'Library/Expression.php';
 require 'Library/CompiledExpression.php';
 require 'Library/CodePrinter.php';
 require 'Library/ClassMethodParameters.php';
+require 'Library/FunctionCall.php';
+require 'Library/MethodCall.php';
 
-try {
-	$c = new Compiler();
-	echo $c->compile();
-} catch (Exception $e) {
-	echo 'Exception: ', $e->getMessage(), PHP_EOL;
-	if (method_exists($e, 'getExtra')) {
-		$extra = $e->getExtra();
-		if (is_array($extra)) {
-			if (isset($extra['file'])) {
-				echo PHP_EOL;
-				$lines = file($extra['file']);
-				$line = $lines[$extra['line'] - 1];
-				echo "\t", str_replace("\t", " ", $line);
-				echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
-			}
-		}
-	}
-	echo PHP_EOL;
-	$pwd = getcwd();
-	echo $e->getFile(), ' ', $e->getLine(), PHP_EOL;
-	echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
-	exit(1);
-}
+Compiler::boot();
