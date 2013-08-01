@@ -24,23 +24,39 @@ class MethodCall
 	{
 
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $statement);
+			//throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $statement);
 		}
-
-		$codePrinter = $compilationContext->codePrinter;
 
 		$expr = $resolvedExpr->getOriginal();
 
-		/**
-		 * @TODO get variable from symbol table
-		 */
-		if ($expr['variable'] == 'this') {
-			$expr['variable'] = 'this_ptr';
-		}
+		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expr['variable'], $statement);
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$methodName = strtolower($expr['name']);
 
 		if (!isset($expr['parameters'])) {
-			$codePrinter->output('zephir_call_method(' . $variable . ', ' . $expr['variable'] . ', "' . strtolower($expr['name']) . '");');
+			if ($variable) {
+				$codePrinter->output('zephir_call_method(' . $variable . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
+			}
+			return;
 		}
+
+		$params = array();
+		if (isset($expr['parameters'])) {
+			foreach ($expr['parameters'] as $parameter) {
+				$expr = new Expression($parameter);
+				$compiledExpression = $expr->compile($compilationContext);
+				$params[] = $compiledExpression->getCode();
+			}
+		}
+
+		if (count($params)) {
+			$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+		} else {
+			$codePrinter->output('zephir_call_method_noret(' . $variable . ', "' . $methodName . '");');
+		}
+
 	}
 
 }

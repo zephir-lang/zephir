@@ -96,7 +96,6 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("controller"), 1);
 
 		object_init_ex(route, test_router_route_ce);
-		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#, paths);
 
 		ZEPHIR_INIT_NVAR(routes);
 		zephir_array_append(&routes, route, PH_SEPARATE);
@@ -108,7 +107,6 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("params"), 3);
 
 		object_init_ex(route, test_router_route_ce);
-		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#, paths);
 
 		ZEPHIR_INIT_NVAR(routes);
 		zephir_array_append(&routes, route, PH_SEPARATE);
@@ -430,7 +428,7 @@ PHP_METHOD(Test_Router, handle) {
 	if (!(zend_is_true(uri))) {
 		//missing comment
 
-		zephir_call_method(realUri, this_ptr, "getrewriteuri");
+		zephir_call_method(realUri, this, "getrewriteuri");
 
 	} else {
 
@@ -664,7 +662,6 @@ PHP_METHOD(Test_Router, add) {
 	//missing comment
 
 	object_init_ex(route, test_router_route_ce);
-	zephir_call_method_p3_noret(route, "__construct", pattern, paths, httpMethods);
 
 	//missing object-property-append
 

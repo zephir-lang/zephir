@@ -110,16 +110,12 @@ class LetStatement
 			}
 		}
 
-		$params = array();
-		if (isset($newExpr['parameters'])) {
-			foreach ($newExpr['parameters'] as $parameter) {
-				$expr = new Expression($parameter);
-				$compiledExpression = $expr->compile($compilationContext);
-				$params[] = $compiledExpression->getCode();
-			}
-		}
-
 		if (strtolower($newExpr['class']) == 'stdclass') {
+			if (isset($newExpr['parameters'])) {
+				if (count($newExpr['parameters'])) {
+					throw new CompilerException("Stdclasses don't receive parameters in its constructor", $statement);
+				}
+			}
 			return;
 		}
 
@@ -131,13 +127,12 @@ class LetStatement
 		if ($compilationContext->compiler->isClass($newExpr['class'])) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
 			if ($classDefinition->hasMethod("__construct")) {
-				if (count($params)) {
-					$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
-				} else {
-					$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
-				}
+
 			}
 		} else {
+			/**
+			 * @TODO Check if the class has a constructor
+			 */
 			if (count($params)) {
 				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
 			} else {
@@ -921,7 +916,7 @@ class LetStatement
 						$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
-						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
+						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
 						switch ($variableVariable->getType()) {
 							case 'variable':
 								if ($variable == 'this') {

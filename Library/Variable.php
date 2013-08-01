@@ -10,11 +10,13 @@
  | that is bundled with this package in the file LICENSE, and is        |
  | available through the world-wide-web at the following url:           |
  | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
  | If you did not receive a copy of the Zephir license and are unable   |
  | to obtain it through the world-wide-web, please send a note to       |
  | license@zephir-lang.com so we can mail you a copy immediately.       |
  +----------------------------------------------------------------------+
 */
+
 
 /**
  * Variable
@@ -34,6 +36,11 @@ class Variable
 	protected $_name;
 
 	/**
+	 * Compiled variable's name
+	 */
+	protected $_lowName;
+
+	/**
 	 * Number of times the variable has been read
 	 */
 	protected $_numberUses = 0;
@@ -51,6 +58,9 @@ class Variable
 
 	protected $_mustInitNull = false;
 
+	/**
+	 * \Variable
+	 */
 	public function __construct($type, $name)
 	{
 		$this->_type = $type;
@@ -67,6 +77,9 @@ class Variable
 	 */
 	public function getName()
 	{
+		if ($this->_lowName) {
+			return $this->_lowName;
+		}
 		return $this->_name;
 	}
 
@@ -176,7 +189,7 @@ class Variable
 	 */
 	public function initVariant(CompilationContext $compilationContext)
 	{
-		if ($this->getName() != 'this') {
+		if ($this->getName() != 'this_ptr') {
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);
 			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
@@ -196,7 +209,7 @@ class Variable
 	 */
 	public function observeVariant(CompilationContext $compilationContext)
 	{
-		if ($this->getName() != 'this') {
+		if ($this->getName() != 'this_ptr') {
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);
 			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
