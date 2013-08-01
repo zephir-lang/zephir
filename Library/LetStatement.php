@@ -126,7 +126,7 @@ class LetStatement
 		/**
 		 * Call the constructor
 		 * For classes in the same extension we check if the class does implement a constructor
-		 * For external classes we always check if the class does implement a constructor
+		 * For external classes we always assume the class does implement a constructor
 		 */
 		if ($compilationContext->compiler->isClass($newExpr['class'])) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
@@ -419,11 +419,11 @@ class LetStatement
 						break;
 					case 'fcall':
 						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-						$codePrinter->output('//missing');
+						$codePrinter->output('//missing fcall');
 						break;
 					case 'mcall':
 						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-						$codePrinter->output('//missing');
+						$codePrinter->output('//missing mcall');
 						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
@@ -638,7 +638,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo[] = expr
+	 * Compiles foo[] = {expr}
 	 */
 	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
@@ -664,6 +664,9 @@ class LetStatement
 		}
 	}
 
+	/**
+	 * Compiles foo->x = {expr}
+	 */
 	public function propertyAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 		$codePrinter = $compilationContext->codePrinter;
@@ -687,12 +690,17 @@ class LetStatement
 				throw new CompiledException("Cannot use expression: ". $exprVariable->getType() . " as an object", $propertyAccess['left']);
 		}
 
+		$property = $propertyAccess['right']['value'];
+
 		$compilationContext->headersManager->add('kernel/object');
 		$symbolVariable->observeVariant($compilationContext);
-		$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("x"), PH_NOISY_CC);');
+		$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
 
 	}
 
+	/**
+	 * Compiles foo[x] = {expr}
+	 */
 	public function arrayAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
@@ -768,8 +776,6 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		//print_r($statement);
-
 		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property'], $statement);
 		switch ($variableIndex->getType()) {
 			case 'int':
@@ -825,7 +831,7 @@ class LetStatement
 	}
 
 	/**
-	 *
+	 * Compiles x++
 	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
@@ -845,7 +851,7 @@ class LetStatement
 	}
 
 	/**
-	 *
+	 * Compiles x--
 	 */
 	public function assignDecr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
@@ -870,7 +876,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo[] = expr
+	 * Compiles foo[] = {expr}
 	 */
 	public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
@@ -982,7 +988,7 @@ class LetStatement
 					break;
 				case 'object-property-append':
 					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
-					$codePrinter->output('//missing');
+					$codePrinter->output('//missing object-property-append');
 					break;
 				case 'incr':
 					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);

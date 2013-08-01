@@ -17,7 +17,12 @@
  +----------------------------------------------------------------------+
 */
 
-class MethodCall
+class FunctionCall
 {
+
+	public function compile()
+	{
+
+	}
 
 }

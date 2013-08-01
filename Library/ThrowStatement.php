@@ -37,8 +37,16 @@ class ThrowStatement
 		$codePrinter = $compilationContext->codePrinter;
 
 		$statement = $this->_statement;
+
 		if ($compilationContext->compiler->isClass($statement['domain'])) {
-			$codePrinter->output('PHALCON_THROW_EXCEPTION_STRW(phalcon_exception_ce, "xxx")');
+
+			$classCe = strtolower(str_replace('\\', '_', $statement['domain']));
+
+			if ($statement['parameters'][0]['type'] == 'string') {
+				$codePrinter->output('PHALCON_THROW_EXCEPTION_STR(' . $classCe . ', "' . $statement['parameters'][0]['value'] . '");');
+			}
+
+
 		}
 
 		//print_R();

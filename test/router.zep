@@ -77,7 +77,7 @@ class Router
 	 */
 	public function __construct(defaultRoutes=true)
 	{
-		var routes, paths, actionPattern, route,
+		var routes, paths, route,
 			paramsPattern, params;
 
 		let routes = [];
@@ -87,13 +87,11 @@ class Router
 			 * Two routes are added by default to match /:controller/:action and /:controller/:action/:params
 			 */
 			let paths = ['controller': 1],
-				actionPattern = '#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#',
-				route = new Test\Router\Route(actionPattern, paths),
+				route = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', paths),
 				routes[] = route;
 
 			let paths = ['controller': 1, 'action': 2, 'params': 3],
-				paramsPattern = '#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#',
-				route = new Test\Router\Route(paramsPattern, paths),
+				route = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#', paths),
 				routes[] = route;
 		}
 
@@ -673,11 +671,10 @@ class Router
 	 */
 	public function add(pattern, paths=null, httpMethods=null)
 	{
-
 		var route;
 
 		/**
-		 * Every route is internally stored as a Phalcon\Mvc\Router\Route
+		 * Every route is internally stored as a Test\Router\Route
 		 */
 		let route = new Test\Router\Route(pattern, paths, httpMethods),
 			this->_routes[] = route;
