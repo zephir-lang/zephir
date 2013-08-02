@@ -1074,18 +1074,14 @@ PHP_METHOD(Test_Router, getRoutes) {
  */
 PHP_METHOD(Test_Router, getRouteById) {
 
-	zval *id, *routes;
+	zval *id;
 
-	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(1, 1, 0, &id);
-
-	ZEPHIR_OBS_VAR(routes);
-	zephir_read_property(&routes, this_ptr, SL("_routes"), PH_NOISY_CC);
+	zephir_fetch_params(0, 1, 0, &id);
 
 	//missing for
 
-	RETURN_MM_BOOL(0);
+	RETURN_BOOL(0);
 
 
 }
@@ -1098,18 +1094,14 @@ PHP_METHOD(Test_Router, getRouteById) {
  */
 PHP_METHOD(Test_Router, getRouteByName) {
 
-	zval *name, *routes;
+	zval *name;
 
-	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(1, 1, 0, &name);
-
-	ZEPHIR_OBS_VAR(routes);
-	zephir_read_property(&routes, this_ptr, SL("_routes"), PH_NOISY_CC);
+	zephir_fetch_params(0, 1, 0, &name);
 
 	//missing for
 
-	RETURN_MM_BOOL(0);
+	RETURN_BOOL(0);
 
 
 }

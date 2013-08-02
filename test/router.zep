@@ -82,9 +82,8 @@ class Router
 		let routes = [];
 		if defaultRoutes === true {
 
-			/**
-			 * Two routes are added by default to match /:controller/:action and /:controller/:action/:params
-			 */
+			// Two routes are added by default to match /:controller/:action and /:controller/:action/:params
+
 			let paths = ['controller': 1],
 				routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', paths);
 
@@ -125,14 +124,10 @@ class Router
 	{
 		var uriSource, url, urlParts, realUri;
 
-		/**
-		 * The developer can change the URI source
-		 */
+		// The developer can change the URI source
 		let uriSource = this->_uriSource;
 
-		/**
-		 * By default we use $_GET['url'] to obtain the rewrite information
-		 */
+		// By default we use $_GET['url'] to obtain the rewrite information
 		if !uriSource {
 			if fetch url, _GET['_url'] {
 				if !url {
@@ -140,9 +135,7 @@ class Router
 				}
 			}
 		} else {
-			/**
-			 * Otherwise use the standard $_SERVER['REQUEST_URI']
-		 	 */
+			// Otherwise use the standard $_SERVER['REQUEST_URI']
 		 	if fetch url, _SERVER['REQUEST_URI'] {
 				let urlParts = explode('?', url),
 					realUri = urlParts[0];
@@ -545,9 +538,7 @@ class Router
 
 		} else {
 
-			/**
-			 * Use default values if the route hasn't matched
-			 */
+			// Use default values if the route hasn't matched
 			let this->_namespace = this->_defaultNamespace,
 				this->_module = this->_defaultModule,
 				this->_controller = this->_defaultController,
@@ -685,9 +676,7 @@ class Router
 			throw new Test\Router\Exception("The group of routes does not contain any routes");
 		}
 
-		/**
-		 * Get the before-match condition
-		 */
+		// Get the before-match condition
 		let beforeMatch = group->getBeforeMatch();
 
 		if beforeMatch !== null {
@@ -696,9 +685,7 @@ class Router
 			}
 		}
 
-		/**
-		 * Get the hostname restriction
-		 */
+		// Get the hostname restriction
 		let hostname = group->getHostName();
 
 		if hostname !== null {
@@ -839,11 +826,9 @@ class Router
 	 * @param string id
 	 * @return Test\Router\Route
 	 */
-	public function getRouteById(id)
+	public function getRouteById(var id)
 	{
-		var routes;
-		let routes = this->_routes;
-		for route in routes {
+		for route in this->_routes {
 			if route->getRouteId() == id {
 				return route;
 			}
@@ -857,11 +842,9 @@ class Router
 	 * @param string name
 	 * @return Test\Router\Route
 	 */
-	public function getRouteByName(name)
+	public function getRouteByName(var name)
 	{
-		var routes;
-		let routes = this->_routes;
-		for route in routes {
+		for route in this->_routes {
 			if route->getName() == name {
 				return route;
 			}
