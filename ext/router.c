@@ -79,7 +79,7 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *defaultRoutes, *routes, *paths = NULL, *route, *_0;
+	zval *defaultRoutes, *routes, *paths = NULL, *route, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
 
@@ -96,7 +96,9 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("controller"), 1);
 
 		object_init_ex(route, test_router_route_ce);
-		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#, paths);
+		ZEPHIR_INIT_VAR(_0);
+		ZVAL_STRING(_0, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
+		zephir_call_method_p2_noret(route, "__construct", _0, route);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
@@ -107,15 +109,17 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("params"), 3);
 
 		object_init_ex(route, test_router_route_ce);
-		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#, paths);
+		ZEPHIR_INIT_VAR(_1);
+		ZVAL_STRING(_1, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
+		zephir_call_method_p2_noret(route, "__construct", _1, route);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
 	}
 
-	ZEPHIR_INIT_VAR(_0);
-	array_init(_0);
-	zephir_update_property_zval(this_ptr, SL("_params"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	array_init(_2);
+	zephir_update_property_zval(this_ptr, SL("_params"), _2 TSRMLS_CC);
 
 	zephir_update_property_zval(this_ptr, SL("_routes"), routes TSRMLS_CC);
 
@@ -643,7 +647,7 @@ PHP_METHOD(Test_Router, add) {
 	//missing comment
 
 	object_init_ex(route, test_router_route_ce);
-	zephir_call_method_p3_noret(route, "__construct", pattern, paths, httpMethods);
+	zephir_call_method_p3_noret(route, "__construct", route, route, route);
 
 	//missing object-property-append
 

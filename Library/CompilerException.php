@@ -24,7 +24,9 @@ class CompilerException extends Exception
 	public function __construct($message, $extra=null)
 	{
 		if (is_array($extra)) {
-			$message .= " in " . $extra['file'] . " on line " . $extra['line'];
+			if (isset($extra['file'])) {
+				$message .= " in " . $extra['file'] . " on line " . $extra['line'];
+			}
 		}
 		$this->_extra = $extra;
 		parent::__construct($message);

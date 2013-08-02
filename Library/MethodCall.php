@@ -63,7 +63,25 @@ class MethodCall
 				foreach ($expression['parameters'] as $parameter) {
 					$paramExpr = new Expression($parameter);
 					$compiledExpression = $paramExpr->compile($compilationContext);
-					$params[] = $compiledExpression->getCode();
+					switch ($compiledExpression->getType()) {
+						case 'string':
+							$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 1);');
+							$params[] = $parameterVariable->getName();
+							break;
+						case 'variable':
+							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $expression);
+							switch ($parameterVariable->getType()) {
+								case 'variable':
+									$params[] = $parameterVariable->getName();
+									break;
+								default:
+									throw new CompilerException("Cannot use variable type: " . $compiledExpression->getType() . " as parameter", $parameter);
+							}
+							break;
+						default:
+							throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $parameter);
+					}
 				}
 			}
 
