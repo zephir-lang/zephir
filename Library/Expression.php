@@ -356,7 +356,7 @@ class Expression
 
 		switch ($exprVariable->getType()) {
 			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $expression);
 				switch ($variableVariable->getType()) {
 					case 'variable':
 						break;
@@ -398,7 +398,7 @@ class Expression
 				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
 				break;
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $statement);
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $expression);
 				switch ($variableIndex->getType()) {
 					case 'int':
 						$compilationContext->headersManager->add('kernel/array');
@@ -458,7 +458,7 @@ class Expression
 				return new CompiledExpression('empty-array', null, $expression);
 
 			case 'array-access':
-				return $this->propertyAccess($expression, $compilationContext);
+				return $this->arrayAccess($expression, $compilationContext);
 
 			case 'property-access':
 				return $this->propertyAccess($expression, $compilationContext);
