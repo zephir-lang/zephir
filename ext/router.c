@@ -96,6 +96,7 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("controller"), 1);
 
 		object_init_ex(route, test_router_route_ce);
+		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#, paths);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
@@ -106,6 +107,7 @@ PHP_METHOD(Test_Router, __construct) {
 		add_assoc_long_ex(paths, SS("params"), 3);
 
 		object_init_ex(route, test_router_route_ce);
+		zephir_call_method_p2_noret(route, "__construct", #^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#, paths);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
@@ -418,9 +420,8 @@ PHP_METHOD(Test_Router, handle) {
 
 	if (!(zend_is_true(uri))) {
 		//missing comment
-
 		ZEPHIR_INIT_VAR(realUri);
-		ZVAL_NULL(realUri);
+		zephir_call_method(realUri, this_ptr, "getrewriteuri");
 
 	} else {
 
@@ -642,6 +643,7 @@ PHP_METHOD(Test_Router, add) {
 	//missing comment
 
 	object_init_ex(route, test_router_route_ce);
+	zephir_call_method_p3_noret(route, "__construct", pattern, paths, httpMethods);
 
 	//missing object-property-append
 
@@ -793,25 +795,22 @@ PHP_METHOD(Test_Router, mount) {
 	if (Z_TYPE_P(group) != IS_OBJECT) {
 		PHALCON_THROW_EXCEPTION_STR(test_router_exception, "The group of routes is not valid");
 	}
-
 	ZEPHIR_INIT_VAR(groupRoutes);
-	ZVAL_NULL(groupRoutes);
+	zephir_call_method(groupRoutes, group, "getroutes");
 
 	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
 		PHALCON_THROW_EXCEPTION_STR(test_router_exception, "The group of routes does not contain any routes");
 	}
 	//missing comment
-
 	ZEPHIR_INIT_VAR(beforeMatch);
-	ZVAL_NULL(beforeMatch);
+	zephir_call_method(beforeMatch, group, "getbeforematch");
 
 	if (Z_TYPE_P(beforeMatch) == IS_NULL) {
 		//missing for
 	}
 	//missing comment
-
 	ZEPHIR_INIT_VAR(hostname);
-	ZVAL_NULL(hostname);
+	zephir_call_method(hostname, group, "gethostname");
 
 	if (Z_TYPE_P(hostname) == IS_NULL) {
 		//missing for

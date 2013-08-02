@@ -6,17 +6,19 @@ of C-extensions for PHP. Zephir extensions are exported to C code that can be co
 such as gcc/clang/vc++. Functionality is exposed to the PHP language. Zephir aims for near full
 interoperability with existing PHP code.
 
+Main features:
+
 * Both dynamic/static typing
 * Reduced execution overhead compared with full interpretation
 * Restricted procedural programming, promoting OOP
 * Memory safety
 * Ahead-of-time compiler
 
-Compiler goals:
+Compiler design goals:
 
 * Multi-pass compilation
 * Type speculation/inference
-* Allow runtime profile-guided optimizations, pseudo-constant propagation or indirect/virtual function inlining
+* Allow runtime profile-guided optimizations, pseudo-constant propagation and indirect/virtual function inlining
 
 Installation
 ------------

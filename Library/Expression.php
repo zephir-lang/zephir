@@ -52,6 +52,16 @@ class Expression
 	}
 
 	/**
+	 * Returns the original expression
+	 *
+	 * @return array
+	 */
+	public function getExpression()
+	{
+		return $this->_expression;
+	}
+
+	/**
 	 * Sets if the variable must be resolved into a direct variable symbol
 	 * create a temporary value or ignore the return value
 	 *
@@ -73,6 +83,11 @@ class Expression
 	public function isExpectingReturn()
 	{
 		return $this->_expecting;
+	}
+
+	public function getExpectingVariable()
+	{
+		return $this->_expectingVariable;
 	}
 
 	public function compileArray($expression, CompilationContext $compilationContext)
@@ -335,6 +350,13 @@ class Expression
 			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 		}
 
+		/**
+		 * Variable that receives the method call must be polimorphic
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+		}
+
 		$compilationContext->headersManager->add('kernel/object');
 		$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
 
@@ -380,6 +402,13 @@ class Expression
 			}
 		} else {
 			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+		}
+
+		/**
+		 * Variable that receives the method call must be polimorphic
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
 		}
 
 		/**
@@ -468,8 +497,7 @@ class Expression
 
 			case 'mcall':
 				$methodCall = new MethodCall();
-				$methodCall->compile($this, $compilationContext);
-				return new CompiledExpression('null', null, $expression);
+				return $methodCall->compile($this, $compilationContext);
 
 			case 'isset':
 				return $this->compileIsset($expression, $compilationContext);

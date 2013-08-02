@@ -23,58 +23,65 @@ class MethodCall
 	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 
-		return;
+		$expression = $expr->getExpression();
 
-		if ($symbolVariable) {
-			if ($symbolVariable->getType() != 'variable') {
-				/**
-				 * @TODO variable that receives the method call is not
-				 */
-			}
-		}
-
-		$expr = $resolvedExpr->getOriginal();
-
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expr['variable'], $statement);
+		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $expression);
 		if ($variableVariable->getType() != 'variable') {
-			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $statement);
+			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $expression);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$methodName = strtolower($expr['name']);
+		$methodName = strtolower($expression['name']);
+
+		$isExpecting = $expr->isExpectingReturn();
+		if ($isExpecting) {
+			$symbolVariable = $expr->getExpectingVariable();
+			if (is_object($symbolVariable)) {
+				$symbolVariable->initVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+			}
+		}
 
 		/**
 		 *
 		 */
-		if (!isset($expr['parameters'])) {
-			if ($variable) {
+		if (!isset($expression['parameters'])) {
+			if ($isExpecting) {
 				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 			} else {
 				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 			}
-			return;
-		}
-
-		$params = array();
-		if (isset($expr['parameters'])) {
-			foreach ($expr['parameters'] as $parameter) {
-				$expr = new Expression($parameter);
-				$compiledExpression = $expr->compile($compilationContext);
-				$params[] = $compiledExpression->getCode();
-			}
-		}
-
-		if (count($params)) {
-			if ($variable) {
-				$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-			} else {
-				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-			}
 		} else {
-			$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+
+			/**
+			 * @TODO: Resolve parameters properly
+			 */
+			$params = array();
+			if (isset($expression['parameters'])) {
+				foreach ($expression['parameters'] as $parameter) {
+					$paramExpr = new Expression($parameter);
+					$compiledExpression = $paramExpr->compile($compilationContext);
+					$params[] = $compiledExpression->getCode();
+				}
+			}
+
+			if (count($params)) {
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+				}
+			} else {
+				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+			}
 		}
 
+		if ($isExpecting) {
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+		return new CompiledExpression('null', null, $expression);
 	}
 
 }

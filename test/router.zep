@@ -378,7 +378,7 @@ class Router
 				/**
 				 * Retrieve the request service from the container
 				 */
-				if request===null {
+				if request === null {
 
 					let dependencyInjector = this->_dependencyInjector;
 					if typeof dependencyInjector != "object" {

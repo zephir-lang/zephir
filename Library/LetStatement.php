@@ -141,8 +141,9 @@ class LetStatement
 					));
 				}
 
-				$m = new MethodCall();
-				$m->compile($callExpr, $compilationContext);
+				$methodCall = new MethodCall();
+				$callExpr->setExpectReturn(false);
+				$methodCall->compile($callExpr, $compilationContext);
 			}
 		} else {
 			/**
