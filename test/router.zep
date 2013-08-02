@@ -75,10 +75,9 @@ class Router
 	 *
 	 * @param boolean defaultRoutes
 	 */
-	public function __construct(defaultRoutes=true)
+	public function __construct(var defaultRoutes=true)
 	{
-		var routes, paths,
-			paramsPattern, params;
+		var routes, paths, paramsPattern, params;
 
 		let routes = [];
 		if defaultRoutes === true {
@@ -135,8 +134,7 @@ class Router
 		 * By default we use $_GET['url'] to obtain the rewrite information
 		 */
 		if !uriSource {
-			if isset _GET['_url'] {
-				let url = _GET['_url'];
+			if fetch url, _GET['_url'] {
 				if !url {
 					return url;
 				}
@@ -145,9 +143,8 @@ class Router
 			/**
 			 * Otherwise use the standard $_SERVER['REQUEST_URI']
 		 	 */
-		 	if isset _SERVER['REQUEST_URI'] {
-				let url = _SERVER['REQUEST_URI'],
-					urlParts = explode('?', url),
+		 	if fetch url, _SERVER['REQUEST_URI'] {
+				let urlParts = explode('?', url),
 					realUri = urlParts[0];
 				if !realUri {
 					return realUri;
@@ -167,7 +164,7 @@ class Router
 	 * @param string uriSource
 	 * @return Test\Router
 	 */
-	public function setUriSource(uriSource)
+	public function setUriSource(var uriSource)
 	{
 		let this->_uriSource = uriSource;
 		return this;
@@ -179,7 +176,7 @@ class Router
 	 * @param boolean remove
 	 * @return Test\Router
 	 */
-	public function removeExtraSlashes(remove)
+	public function removeExtraSlashes(var remove)
 	{
 		let this->_removeExtraSlashes = remove;
 		return this;
@@ -191,7 +188,7 @@ class Router
 	 * @param string namespaceName
 	 * @return Test\Router
 	 */
-	public function setDefaultNamespace(namespaceName)
+	public function setDefaultNamespace(var namespaceName)
 	{
 		let this->_defaultNamespace = namespaceName;
 		return this;
@@ -203,7 +200,7 @@ class Router
 	 * @param string moduleName
 	 * @return Test\Router
 	 */
-	public function setDefaultModule(moduleName)
+	public function setDefaultModule(var moduleName)
 	{
 		let this->_defaultModule = moduleName;
 		return this;
@@ -249,44 +246,35 @@ class Router
 	 */
 	public function setDefaults(defaults)
 	{
+		var namespaceName, module, controller, action, params;
 
 		if typeof defaults == "array" {
 			throw new Test\Router\Exception("Defaults must be an array");
 		}
 
-		/**
-		 * Set a default namespace
-		 */
-		if isset defaults['namespace'] {
-			let this->_defaultNamespace = defaults['namespace'];
+		// Set a default namespace
+		if fetch namespaceName, defaults['namespace'] {
+			let this->_defaultNamespace = namespaceName;
 		}
 
-		/**
-		 * Set a default module
-		 */
-		if isset defaults['module'] {
-			let this->_defaultModule = defaults['module'];
+		// Set a default module
+		if fetch module, defaults['module'] {
+			let this->_defaultModule = module;
 		}
 
-		/**
-		 * Set a default controller
-		 */
-		if isset defaults['controller'] {
-			let this->_defaultController = defaults['controller'];
+		// Set a default controller
+		if fetch controller, defaults['controller'] {
+			let this->_defaultController = controller;
 		}
 
-		/**
-		 * Set a default action
-		 */
-		if isset defaults['action'] {
-			let this->_defaultAction = defaults['action'];
+		// Set a default action
+		if fetch action, defaults['action'] {
+			let this->_defaultAction = action;
 		}
 
-		/**
-		 * Set default parameters
-		 */
-		if isset defaults['params'] {
-			let this->_defaultParams = defaults['params'];
+		// Set default parameters
+		if fetch params, defaults['params'] {
+			let this->_defaultParams = params;
 		}
 
 		return this;
@@ -313,9 +301,7 @@ class Router
 			paramsMerge;
 
 		if !uri {
-			/**
-		 	 * If 'uri' isn't passed as parameter it reads _GET['_url']
-		 	 */
+			// If 'uri' isn't passed as parameter it reads _GET['_url']
 			let realUri = this->getRewriteUri();
 		} else {
 			let realUri = uri;
@@ -330,23 +316,17 @@ class Router
 			this->_wasMatched = false,
 			this->_matchedRoute = null;
 
-		/**
-		 * Routes are traversed in reversed order
-		 */
+		// Routes are traversed in reversed order
 		let routes = this->_routes;
 		let reversedRoutes = array_reverse(routes);
 
 		for route in reversedRoutes {
 
-			/**
-			 * Look for HTTP method constraints
-			 */
+			// Look for HTTP method constraints
 			let methods = route->getHttpMethods();
 			if methods !== null {
 
-				/**
-				 * Retrieve the request service from the container
-				 */
+				// Retrieve the request service from the container
 				if request === null {
 
 					let dependencyInjector = this->_dependencyInjector;
@@ -357,24 +337,20 @@ class Router
 					let request = dependencyInjector->getShared('request');
 				}
 
-				/**
-				 * Check if the current method is allowed by the route
-				 */
+				// Check if the current method is allowed by the route
 				let matchMethod = request->isMethod(methods);
+
 				if matchMethod === false {
 					continue;
 				}
 			}
 
-			/**
-			 * Look for hostname constraints
-			 */
+			// Look for hostname constraints
 			let hostname = route->getHostName();
+
 			if hostname !== null {
 
-				/**
-				 * Retrieve the request service from the container
-				 */
+				// Retrieve the request service from the container
 				if request === null {
 
 					let dependencyInjector = this->_dependencyInjector;
@@ -385,23 +361,17 @@ class Router
 					let request = dependencyInjector->getShared('request');
 				}
 
-				/**
-				 * Check if the current hostname is the same as the route
-				 */
+				// Check if the current hostname is the same as the route
 				if typeof currentHostName != "object" {
 					let currentHostName = request->getHttpHost();
 				}
 
-				/**
-				 * No HTTP_HOST, maybe in CLI mode?
-				 */
+				// No HTTP_HOST, maybe in CLI mode?
 				if typeof currentHostName != "null" {
 					continue;
 				}
 
-				/**
-				 * Check if the hostname restriction is the same as the current in the route
-				 */
+				// Check if the hostname restriction is the same as the current in the route
 				if memchr(hostname, '(') {
 					if memchr(hostname, '#') {
 						let regexHostName = '#^' . hostname . '$#';
@@ -419,9 +389,7 @@ class Router
 
 			}
 
-			/**
-			 * If the route has parentheses use preg_match
-			 */
+			// If the route has parentheses use preg_match
 			let pattern = route->getCompiledPattern();
 			if memchr(pattern, '^') {
 				let routeFound = preg_match(pattern, handledUri, matches);
@@ -429,56 +397,40 @@ class Router
 				let routeFound = pattern == handledUri;
 			}
 
-			/**
-			 * Check for beforeMatch conditions
-			 */
+			// Check for beforeMatch conditions
 			if routeFound {
 
 				let beforeMatch = route->getBeforeMatch();
 
 				if beforeMatch !== null {
 
-					/**
-					 * Check first if the callback is callable
-					 */
+					// Check first if the callback is callable
 					if is_callable(beforeMatch) {
 						throw new Test\Router\Exception("Before-Match callback is not callable in matched route");
 					}
 
-					/**
-					 * Call the function in the PHP userland
-					 */
+					// Call the function in the PHP userland
 					//let routeFound = {beforeMatch}([handledUri, route, this]);
 				}
 			}
 
 			if routeFound {
 
-				/**
-				 * Start from the default paths
-				 */
+				// Start from the default paths
 				let paths = route->getPaths(),
 					parts = paths;
 
-				/**
-				 * Check if the matches has variables
-				 */
+				// Check if the matches has variables
 				if typeof matches != "array" {
 
-					/**
-					 * Get the route converters if any
-					 */
+					// Get the route converters if any
 					let converters = route->getConverters();
 
 					for part, position in paths {
 
-						if isset matches[position] {
+						if fetch matchPosition, matches[position] {
 
-							let matchPosition = matches[position];
-
-							/**
-							 * Check if the part has a converter
-							 */
+							// Check if the part has a converter
 							if typeof converters == "array" {
 								if isset converters[part] {
 									//let parameters = [matchPosition],
@@ -489,15 +441,11 @@ class Router
 								}
 							}
 
-							/**
-							 * Update the parts if there is no converter
-							 */
+							// Update the parts if there is no converter
 							let parts[part] = matchPosition;
 						} else {
 
-							/**
-							 * Apply the converters anyway
-							 */
+							// Apply the converters anyway
 							if typeof converters == "array" {
 								if isset converters[part] {
 									//let parameters = [matchPosition],
@@ -509,9 +457,7 @@ class Router
 						}
 					}
 
-					/**
-					 * Update the matches generated by preg_match
-					 */
+					// Update the matches generated by preg_match
 					let this->_matches = matches;
 				}
 
@@ -520,18 +466,14 @@ class Router
 			}
 		}
 
-		/**
-		 * Update the wasMatched property indicating if the route was matched
-		 */
+		// Update the wasMatched property indicating if the route was matched
 		if routeFound {
 			let this->_wasMatched = true;
 		} else {
 			let this->_wasMatched = false;
 		}
 
-		/**
-		 * The route wasn't found, try to use the not-found paths
-		 */
+		// The route wasn't found, try to use the not-found paths
 		if !routeFound {
 			let notFoundPaths = this->_notFoundPaths;
 			if notFoundPaths !== null {
@@ -542,11 +484,8 @@ class Router
 
 		if routeFound {
 
-			/**
-			 * Check for a namespace
-			 */
-			if isset parts['namespace'] {
-				let vnamespace = parts['namespace'];
+			// Check for a namespace
+			if fetch vnamespace, parts['namespace'] {
 				if !is_numeric(vnamespace) {
 					let this->_namespace = vnamespace;
 				}
@@ -555,11 +494,8 @@ class Router
 				let this->_namespace = this->_defaultNamespace;
 			}
 
-			/**
-			 * Check for a module
-			 */
-			if isset parts['module'] {
-				let module = parts['module'];
+			// Check for a module
+			if fetch module, parts['module'] {
 				if !is_numeric(module) {
 					let this->_module = module;
 				}
@@ -568,11 +504,8 @@ class Router
 				let this->_module = this->_defaultModule;
 			}
 
-			/**
-			 * Check for a controller
-			 */
-			if isset parts['controller'] {
-				let controller = parts['controller'];
+			// Check for a controller
+			if fetch controller, parts['controller'] {
 				if !is_numeric(controller) {
 					let this->_controller = controller;
 				}
@@ -581,11 +514,8 @@ class Router
 				let this->_controller = this->_defaultController;
 			}
 
-			/**
-			 * Check for an action
-			 */
-			if isset parts['action'] {
-				let action = parts['action'];
+			// Check for an action
+			if fetch action, parts['action'] {
 				if !is_numeric(action) {
 					let this->_action = action;
 				}
@@ -597,9 +527,8 @@ class Router
 			/**
 			 * Check for parameters
 			 */
-			if isset parts['params'] {
-				let paramsStr = parts['params'],
-					strParams = substr(paramsStr, 1);
+			if fetch paramsStr, parts['params'] {
+				let strParams = substr(paramsStr, 1);
 				if (strParams) {
 					let params = explode("/", strParams);
 				}

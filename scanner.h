@@ -67,6 +67,7 @@
 #define XX_T_THROW 375
 #define XX_T_FOR 376
 #define XX_T_IN 377
+#define XX_T_FETCH 378
 
 /* Operators */
 #define XX_T_AT '@'

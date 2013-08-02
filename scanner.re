@@ -9,6 +9,7 @@
  | that is bundled with this package in the file LICENSE, and is        |
  | available through the world-wide-web at the following url:           |
  | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
  | If you did not receive a copy of the Zephir license and are unable   |
  | to obtain it through the world-wide-web, please send a note to       |
  | license@zephir-lang.com so we can mail you a copy immediately.       |
@@ -273,6 +274,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		'throw' {
 			token->opcode = XX_T_THROW;
 			s->active_char += sizeof("throw")-1;
+			return 0;
+		}
+
+		'fetch' {
+			token->opcode = XX_T_FETCH;
+			s->active_char += sizeof("fetch")-1;
 			return 0;
 		}
 

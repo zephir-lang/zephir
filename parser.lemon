@@ -32,7 +32,7 @@
 %left COMMA .
 %left EQUALS IDENTICAL LESS GREATER NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
-%right ISSET .
+%right ISSET FETCH .
 %right TYPEOF INSTANCEOF .
 %right NEW .
 %right NOT .
@@ -321,7 +321,7 @@ static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
 
 		if (json_object_get_type(list_left) == json_type_array) {
 			array_length = json_object_array_length(list_left);
-			for (i = 0; i < array_length; i++){
+			for (i = 0; i < array_length; i++) {
 				json_object_array_add(ret, json_object_array_get_idx(list_left, i));
 			}
 			//json_object_put(list_left);
@@ -978,6 +978,10 @@ xx_parameter_type(R) ::= TYPE_ARRAY . {
 	R = xx_ret_type(XX_TYPE_ARRAY);
 }
 
+xx_parameter_type(R) ::= TYPE_VAR . {
+	R = xx_ret_type(XX_TYPE_VAR);
+}
+
 xx_statement_list(R) ::= xx_statement_list(L) xx_statement(S) . {
 	R = xx_ret_list(L, S);
 }
@@ -1320,6 +1324,11 @@ xx_common_expr(R) ::= xx_common_expr(O1) CONCAT xx_common_expr(O2) . {
 /* y = instanceof b */
 xx_common_expr(R) ::= INSTANCEOF xx_common_expr(O1) . {
 	R = xx_ret_expr("instanceof", O1, NULL, NULL, status->scanner_state);
+}
+
+/* y = fetch x, z[k] */
+xx_common_expr(R) ::= FETCH IDENTIFIER(O1) COMMA xx_isset_expr(O2) . {
+	R = xx_ret_expr("fetch", xx_ret_literal(XX_T_IDENTIFIER, O1, status->scanner_state), O2, NULL, status->scanner_state);
 }
 
 /* y = typeof b */

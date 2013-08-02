@@ -303,6 +303,41 @@ class Expression
 	}
 
 	/**
+	 * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
+	 * without calculating the hash key twice
+	 *
+	 * @param array $expression
+	 */
+	public function compileFetch($expression, CompilationContext $compilationContext)
+	{
+
+		/**
+		 * @TODO read variable, include new macros from 1.3.0
+		 */
+
+		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value']);
+		$variable->setIsInitialized(true);
+		$variable->observeVariant($compilationContext);
+
+		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value']);
+
+		switch ($expression['right']['type']) {
+			case 'array-access':
+				switch ($expression['right']['right']['type'])	{
+					case 'string':
+						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
+					default:
+						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
+				}
+				break;
+			default:
+				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
+		}
+
+		return new CompiledExpression('int', '', $expression);
+	}
+
+	/**
 	 *
 	 */
 	public function propertyAccess($expression, CompilationContext $compilationContext)
@@ -592,6 +627,9 @@ class Expression
 
 			case 'isset':
 				return $this->compileIsset($expression, $compilationContext);
+
+			case 'fetch':
+				return $this->compileFetch($expression, $compilationContext);
 
 			case 'typeof':
 				return new CompiledExpression('typeof', null, $expression);
