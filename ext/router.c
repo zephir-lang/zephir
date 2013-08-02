@@ -838,7 +838,7 @@ PHP_METHOD(Test_Router, addHead) {
  */
 PHP_METHOD(Test_Router, mount) {
 
-	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *newRoutes;
+	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -872,10 +872,8 @@ PHP_METHOD(Test_Router, mount) {
 
 	if (Z_TYPE_P(routes) == IS_ARRAY) {
 
-		ZEPHIR_INIT_VAR(newRoutes);
-		ZVAL_NULL(newRoutes);
-
-		zephir_update_property_zval(this_ptr, SL("_routes"), newRoutes TSRMLS_CC);
+		ZEPHIR_INIT_VAR(_0);
+		zephir_update_property_zval(this_ptr, SL("_routes"), _0 TSRMLS_CC);
 
 	} else {
 

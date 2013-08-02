@@ -356,8 +356,7 @@ class Router
 						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
-					let service = 'request',
-						request = dependencyInjector->getShared(service);
+					let request = dependencyInjector->getShared('request');
 				}
 
 				/**
@@ -385,8 +384,7 @@ class Router
 						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
-					let service = 'request',
-						request = dependencyInjector->getShared(service);
+					let request = dependencyInjector->getShared('request');
 				}
 
 				/**
@@ -450,14 +448,9 @@ class Router
 					}
 
 					/**
-					 * Before-Match parameters
-					 */
-					let beforeMatchParams = [handledUri, route, this];
-
-					/**
 					 * Call the function in the PHP userland
 					 */
-					//let routeFound = {beforeMatch}(beforeMatchParams);
+					//let routeFound = {beforeMatch}([handledUri, route, this]);
 				}
 			}
 
@@ -790,8 +783,7 @@ class Router
 		let routes = this->_routes;
 
 		if typeof routes == "array" {
-			let newRoutes = array_merge(routes, groupRoutes),
-				this->_routes = newRoutes;
+			let this->_routes = array_merge(routes, groupRoutes);
 		} else {
 			let this->_routes = groupRoutes;
 		}
@@ -922,11 +914,10 @@ class Router
 	 */
 	public function getRouteById(id)
 	{
-		var routes, routeId;
+		var routes;
 		let routes = this->_routes;
 		for route in routes {
-			let routeId = route->getRouteId();
-			if routeId == id {
+			if route->getRouteId() == id {
 				return route;
 			}
 		}
@@ -941,11 +932,10 @@ class Router
 	 */
 	public function getRouteByName(name)
 	{
-		var routes, routeId;
+		var routes;
 		let routes = this->_routes;
 		for route in routes {
-			let routeName = route->getName();
-			if routeName == name {
+			if route->getName() == name {
 				return route;
 			}
 		}

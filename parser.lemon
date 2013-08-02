@@ -32,6 +32,7 @@
 %left COMMA .
 %left EQUALS IDENTICAL LESS GREATER NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
+%right ISSET .
 %right TYPEOF INSTANCEOF .
 %right NEW .
 %right NOT .
@@ -1085,11 +1086,11 @@ xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L
 	R = xx_ret_while_statement(E, L, status->scanner_state);
 }
 
-xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_for_statement(E, NULL, V, L, status->scanner_state);
 }
 
-xx_for_statement(R) ::= FOR IDENTIFIER(K) COMMA IDENTIFIER(V) IN xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+xx_for_statement(R) ::= FOR IDENTIFIER(K) COMMA IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_for_statement(E, K, V, L, status->scanner_state);
 }
 
@@ -1247,12 +1248,46 @@ xx_assign_expr(R) ::= xx_common_expr(E) . {
 	R = E;
 }
 
-/* y = v->x */
+xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
+	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= ISSET xx_isset_expr(O1) . {
+	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) EQUALS xx_common_expr(O2) . {
+	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) NOTEQUALS xx_common_expr(O2) . {
+	R = xx_ret_expr("not-equals", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) IDENTICAL xx_common_expr(O2) . {
+	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) NOTIDENTICAL xx_common_expr(O2) . {
+	R = xx_ret_expr("not-identical", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) LESS xx_common_expr(O2) . {
+	R = xx_ret_expr("less", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) GREATER xx_common_expr(O2) . {
+	R = xx_ret_expr("greater", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= PARENTHESES_OPEN xx_common_expr(L) PARENTHESES_CLOSE . {
+	R = L;
+}
+
 xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
-/* y = v[x] */
 xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
@@ -1268,32 +1303,27 @@ xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
 }
 
 /* y = a + b */
-xx_common_expr(R) ::= xx_assign_expr(O1) ADD xx_assign_expr(O2) . {
+xx_common_expr(R) ::= xx_common_expr(O1) ADD xx_common_expr(O2) . {
 	R = xx_ret_expr("add", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a - b */
-xx_common_expr(R) ::= xx_assign_expr(O1) SUB xx_assign_expr(O2) . {
+xx_common_expr(R) ::= xx_common_expr(O1) SUB xx_common_expr(O2) . {
 	R = xx_ret_expr("sub", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a . b */
-xx_common_expr(R) ::= xx_assign_expr(O1) CONCAT xx_assign_expr(O2) . {
+xx_common_expr(R) ::= xx_common_expr(O1) CONCAT xx_common_expr(O2) . {
 	R = xx_ret_expr("concat", O1, O2, NULL, status->scanner_state);
 }
 
-/* y = a == b */
-xx_common_expr(R) ::= xx_assign_expr(O1) EQUALS xx_assign_expr(O2) . {
-	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
-}
-
 /* y = instanceof b */
-xx_common_expr(R) ::= INSTANCEOF xx_assign_expr(O1) . {
+xx_common_expr(R) ::= INSTANCEOF xx_common_expr(O1) . {
 	R = xx_ret_expr("instanceof", O1, NULL, NULL, status->scanner_state);
 }
 
 /* y = typeof b */
-xx_common_expr(R) ::= TYPEOF xx_assign_expr(O1) . {
+xx_common_expr(R) ::= TYPEOF xx_common_expr(O1) . {
 	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
 }
 
@@ -1320,6 +1350,11 @@ xx_common_expr(R) ::= DOUBLE(D) . {
 /* y = null */
 xx_common_expr(R) ::= NULL . {
 	R = xx_ret_literal(XX_T_NULL, NULL, status->scanner_state);
+}
+
+/* y = false */
+xx_common_expr(R) ::= TRUE . {
+	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
 }
 
 /* y = false */
@@ -1429,10 +1464,6 @@ xx_array_value(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
-xx_assign_expr(R) ::= TRUE . {
-	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
-}
-
 xx_literal_expr(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
@@ -1457,67 +1488,6 @@ xx_literal_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
 }
 
-xx_eval_expr(R) ::= xx_literal_expr(L) . {
-	R = L;
-}
-
-xx_eval_expr(R) ::= NOT xx_eval_expr(O1) . {
-	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= TYPEOF xx_eval_expr(O1) . {
-	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= ISSET xx_isset_expr(O1) . {
-	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) TYPEOF xx_eval_expr(O2) . {
-	R = xx_ret_expr("instanceof", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) EQUALS xx_eval_expr(O2) . {
-	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) NOTEQUALS xx_eval_expr(O2) . {
-	R = xx_ret_expr("not-equals", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) IDENTICAL xx_eval_expr(O2) . {
-	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) NOTIDENTICAL xx_eval_expr(O2) . {
-	R = xx_ret_expr("not-identical", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) LESS xx_eval_expr(O2) . {
-	R = xx_ret_expr("less", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= xx_eval_expr(O1) GREATER xx_eval_expr(O2) . {
-	R = xx_ret_expr("greater", O1, O2, NULL, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= PARENTHESES_OPEN xx_eval_expr(L) PARENTHESES_CLOSE . {
-	R = L;
-}
-
-xx_eval_expr(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
-}
-
-xx_eval_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_fcall(I, P, status->scanner_state);
-}
-
-/* y = f() */
-xx_eval_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_fcall(I, NULL, status->scanner_state);
-}
-
 /* isset v[x] */
 xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
@@ -1531,6 +1501,10 @@ xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE . {
 /* isset v["some-index"] */
 xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+}
+
+xx_eval_expr(R) ::= xx_common_expr(E) . {
+	R = E;
 }
 
 xx_comment(R) ::= COMMENT(C) . {
