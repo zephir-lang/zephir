@@ -95,11 +95,6 @@ class Expression
 		return new CompiledExpression('array', $expression['left'], $expression);
 	}
 
-	public function compileNewInstance($expression, CompilationContext $compilationContext)
-	{
-		return new CompiledExpression('new-instance', $expression, $expression);
-	}
-
 	public function compileEquals($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
@@ -453,6 +448,102 @@ class Expression
 	}
 
 	/**
+	 * Creates a new instance
+	 *
+	 */
+	public function newInstance($expression, CompilationContext $compilationContext)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$newExpr = $expression;
+
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->initVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+		}
+
+		if (strtolower($newExpr['class']) == 'stdclass') {
+			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
+		} else {
+			if ($compilationContext->compiler->isClass($newExpr['class'])) {
+				$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
+				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
+			} else {
+				throw new CompilerException("Class " . $newExpr['class'] . " does not exist", $statement);
+			}
+		}
+
+		if (strtolower($newExpr['class']) == 'stdclass') {
+			if (isset($newExpr['parameters'])) {
+				if (count($newExpr['parameters'])) {
+					throw new CompilerException("Stdclasses don't receive parameters in its constructor", $statement);
+				}
+			}
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		/**
+		 * Mark variable initialized
+		 */
+		$symbolVariable->setIsInitialized(true);
+
+		/**
+		 * Call the constructor
+		 * For classes in the same extension we check if the class does implement a constructor
+		 * For external classes we always assume the class does implement a constructor
+		 */
+		if ($compilationContext->compiler->isClass($newExpr['class'])) {
+			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
+			if ($classDefinition->hasMethod("__construct")) {
+
+				if (isset($newExpr['parameters'])) {
+					$callExpr = new Expression(array(
+						'variable' => $symbolVariable->getRealName(),
+						'name' => '__construct',
+						'parameters' => $newExpr['parameters'],
+						'file' => $newExpr['file'],
+						'line' => $newExpr['line'],
+						'char' => $newExpr['char'],
+					));
+				} else {
+					$callExpr = new Expression(array(
+						'variable' => $symbolVariable->getRealName(),
+						'name' => '__construct',
+						'file' => $newExpr['file'],
+						'line' => $newExpr['line'],
+						'char' => $newExpr['char'],
+					));
+				}
+
+				$methodCall = new MethodCall();
+				$callExpr->setExpectReturn(false);
+				$methodCall->compile($callExpr, $compilationContext);
+			}
+		} else {
+			/**
+			 * @TODO Check if the class has a constructor
+			 */
+			if (count($params)) {
+				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
+			} else {
+				$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
+			}
+		}
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
 	 * Resolves an expression
 	 *
 	 * @param CompilationContext $compilationContext
@@ -509,7 +600,7 @@ class Expression
 				return $this->compileArray($expression, $compilationContext);
 
 			case 'new':
-				return $this->compileNewInstance($expression, $compilationContext);
+				return $this->newInstance($expression, $compilationContext);
 
 			case 'equals':
 				return $this->compileEquals($expression, $compilationContext);

@@ -12,7 +12,6 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
-#include "kernel/fcall.h"
 #include "kernel/memory.h"
 
 
@@ -32,9 +31,11 @@ PHP_METHOD(Test_Oo, testInstance1) {
 
 	zval *o;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
 	object_init(o);
 
-	RETURN_CCTORW(o);
+	RETURN_CCTOR(o);
 
 
 }
@@ -43,10 +44,12 @@ PHP_METHOD(Test_Oo, testInstance2) {
 
 	zval *o;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstruct_ce);
 	zephir_call_method_noret(o, "__construct");
 
-	RETURN_CCTORW(o);
+	RETURN_CCTOR(o);
 
 
 }
@@ -55,9 +58,11 @@ PHP_METHOD(Test_Oo, testInstance3) {
 
 	zval *o;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_oonoconstruct_ce);
 
-	RETURN_CCTORW(o);
+	RETURN_CCTOR(o);
 
 
 }
@@ -73,6 +78,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_STRING(b, "b", 1);
 
+	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	zephir_call_method_p2_noret(o, "__construct", a, b);
 

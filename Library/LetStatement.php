@@ -87,78 +87,6 @@ class LetStatement
 	}
 
 	/**
-	 * Creates a new instance
-	 *
-	 */
-	public function newInstance($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$compilationContext->headersManager->add('kernel/fcall');
-
-		$newExpr = $resolvedExpr->getCode();
-
-		if (strtolower($newExpr['class']) == 'stdclass') {
-			$codePrinter->output('object_init(' . $variable . ');');
-		} else {
-			if ($compilationContext->compiler->isClass($newExpr['class'])) {
-				$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
-				$codePrinter->output('object_init_ex(' . $variable . ', ' . $classCe . ');');
-			} else {
-				throw new CompilerException("Class " . $newExpr['class'] . " does not exist", $statement);
-			}
-		}
-
-		if (strtolower($newExpr['class']) == 'stdclass') {
-			if (isset($newExpr['parameters'])) {
-				if (count($newExpr['parameters'])) {
-					throw new CompilerException("Stdclasses don't receive parameters in its constructor", $statement);
-				}
-			}
-			return;
-		}
-
-		/**
-		 * Call the constructor
-		 * For classes in the same extension we check if the class does implement a constructor
-		 * For external classes we always assume the class does implement a constructor
-		 */
-		if ($compilationContext->compiler->isClass($newExpr['class'])) {
-			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
-			if ($classDefinition->hasMethod("__construct")) {
-
-				if (isset($newExpr['parameters'])) {
-					$callExpr = new Expression(array(
-						'variable' => $variable,
-						'name' => '__construct',
-						'parameters' => $newExpr['parameters']
-					));
-				} else {
-					$callExpr = new Expression(array(
-						'variable' => $variable,
-						'name' => '__construct'
-					));
-				}
-
-				$methodCall = new MethodCall();
-				$callExpr->setExpectReturn(false);
-				$methodCall->compile($callExpr, $compilationContext);
-			}
-		} else {
-			/**
-			 * @TODO Check if the class has a constructor
-			 */
-			if (count($params)) {
-				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
-			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
-			}
-		}
-
-	}
-
-	/**
 	 * Compiles foo = {expr}
 	 */
 	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
@@ -424,9 +352,6 @@ class LetStatement
 					case 'array':
 						$symbolVariable->initVariant($compilationContext);
 						$this->assignArray($variable, $resolvedExpr, $compilationContext, $statement);
-						break;
-					case 'new-instance':
-						$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					case 'fcall':
 						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
@@ -889,7 +814,6 @@ class LetStatement
 				$expr = new Expression($assignment['expr']);
 				switch ($assignment['assign-type']) {
 					case 'variable':
-					case 'variable-append':
 						$expr->setExpectReturn(true, $symbolVariable);
 						break;
 				}
