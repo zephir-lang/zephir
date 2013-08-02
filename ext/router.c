@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/object.h"
 #include "kernel/array.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -78,7 +78,8 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *defaultRoutes, *routes, *paths = NULL, *_0, *_1, *_2, *_3, *_4;
+	zval *routes, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
+	zend_bool defaultRoutes;
 
 	ZEPHIR_MM_GROW();
 
@@ -87,40 +88,37 @@ PHP_METHOD(Test_Router, __construct) {
 	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
 
-	if (ZEPHIR_IS_TRUE(defaultRoutes)) {
+	if ((defaultRoutes == true)) {
 		//missing comment
-
-		ZEPHIR_INIT_VAR(paths);
-		array_init(paths);
-		add_assoc_long_ex(paths, SS("controller"), 1);
-
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_1);
 		ZVAL_STRING(_1, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
-		zephir_call_method_p2_noret(_0, "__construct", _1, paths);
+		ZEPHIR_INIT_VAR(_2);
+		array_init(_2);
+		add_assoc_long_ex(_2, SS("controller"), 1);
+		zephir_call_method_p2_noret(_0, "__construct", _1, _2);
 
 		zephir_array_append(&routes, _0, PH_SEPARATE);
 
-		ZEPHIR_INIT_NVAR(paths);
-		array_init(paths);
-		add_assoc_long_ex(paths, SS("controller"), 1);
-		add_assoc_long_ex(paths, SS("action"), 2);
-		add_assoc_long_ex(paths, SS("params"), 3);
-
-		ZEPHIR_INIT_VAR(_2);
-		object_init_ex(_2, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_3);
-		ZVAL_STRING(_3, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
-		zephir_call_method_p2_noret(_2, "__construct", _3, paths);
+		object_init_ex(_3, test_router_route_ce);
+		ZEPHIR_INIT_VAR(_4);
+		ZVAL_STRING(_4, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
+		ZEPHIR_INIT_VAR(_5);
+		array_init(_5);
+		add_assoc_long_ex(_5, SS("controller"), 1);
+		add_assoc_long_ex(_5, SS("action"), 2);
+		add_assoc_long_ex(_5, SS("params"), 3);
+		zephir_call_method_p2_noret(_3, "__construct", _4, _5);
 
-		zephir_array_append(&routes, _2, PH_SEPARATE);
+		zephir_array_append(&routes, _3, PH_SEPARATE);
 
 	}
 
-	ZEPHIR_INIT_VAR(_4);
-	array_init(_4);
-	zephir_update_property_zval(this_ptr, SL("_params"), _4 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_6);
+	array_init(_6);
+	zephir_update_property_zval(this_ptr, SL("_params"), _6 TSRMLS_CC);
 
 	zephir_update_property_zval(this_ptr, SL("_routes"), routes TSRMLS_CC);
 

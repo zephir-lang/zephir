@@ -75,7 +75,7 @@ class Router
 	 *
 	 * @param boolean defaultRoutes
 	 */
-	public function __construct(var defaultRoutes=true)
+	public function __construct(boolean defaultRoutes=true)
 	{
 		var routes, paths, paramsPattern, params;
 
@@ -84,11 +84,15 @@ class Router
 
 			// Two routes are added by default to match /:controller/:action and /:controller/:action/:params
 
-			let paths = ['controller': 1],
-				routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', paths);
+			let routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', [
+				'controller': 1
+			]);
 
-			let paths = ['controller': 1, 'action': 2, 'params': 3],
-				routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#', paths);
+			let routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#', [
+				'controller': 1,
+				'action': 2,
+				'params': 3
+			]);
 		}
 
 		let this->_params = [],

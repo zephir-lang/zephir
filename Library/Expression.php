@@ -90,11 +90,6 @@ class Expression
 		return $this->_expectingVariable;
 	}
 
-	public function compileArray($expression, CompilationContext $compilationContext)
-	{
-		return new CompiledExpression('array', $expression['left'], $expression);
-	}
-
 	public function compileEquals($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
@@ -165,6 +160,8 @@ class Expression
 
 				switch ($variable->getType()) {
 					case 'int':
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression);
+					case 'bool':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression);
 					case 'variable':
 						switch ($right->getType()) {
@@ -572,6 +569,225 @@ class Expression
 				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
 			} else {
 				$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
+			}
+		}
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
+	 * Resolves an item to be added in an array
+	 */
+	public function getArrayValue($item, CompilationContext $compilationContext)
+	{
+		$codePrinter = $compilationContext->codePrinter;
+
+		$expression = new Expression($item['value']);
+		$exprCompiled = $expression->compile($compilationContext);
+		switch ($exprCompiled->getType()) {
+			case 'int':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				return $tempVar->getName();
+			case 'double':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				return $tempVar->getName();
+			case 'bool':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				if ($item['value']['value'] == 'true') {
+					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 1);');
+				} else {
+					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
+				}
+				return $tempVar->getName();
+			case 'null':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
+				return $tempVar->getName();
+			case 'string':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
+				return $tempVar->getName();
+			case 'variable':
+				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $item);
+				switch ($itemVariable->getType()) {
+					case 'int':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					case 'double':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					case 'string':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '->str, 1);');
+						return $tempVar->getName();
+					case 'bool':
+						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+						return $tempVar->getName();
+					case 'variable':
+						return $itemVariable->getName();
+					default:
+						throw new CompilerException("Unknown " . $itemVariable->getType(), $item);
+				}
+				break;
+			default:
+				throw new CompilerException("Unknown", $item);
+		}
+	}
+
+	/**
+	 * Compiles an array initialization
+	 */
+	public function compileArray($expression, CompilationContext $compilationContext)
+	{
+
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->initVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
+		foreach ($expression['left'] as $item) {
+			if (isset($item['key'])) {
+				$key = null;
+				switch ($item['key']['type']) {
+					case 'string':
+						switch ($item['value']['type']) {
+							case 'int':
+								$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								break;
+							case 'double':
+								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								break;
+							case 'bool':
+								if ($item['value']['value'] == 'true') {
+									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), 1);');
+								} else {
+									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), 0);');
+								}
+								break;
+							case 'string':
+								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $item['value']['value'] . '"), 1);');
+								break;
+							case 'null':
+								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"));');
+								break;
+							default:
+								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+						}
+						break;
+					case 'int':
+						switch ($item['value']['type']) {
+							case 'int':
+								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								break;
+							case 'bool':
+								if ($item['value']['value'] == 'true') {
+									$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 1);');
+								} else {
+									$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 0);');
+								}
+								break;
+							case 'double':
+								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								break;
+							case 'null':
+								$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
+								break;
+							case 'string':
+								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+								break;
+							case 'variable':
+								$value = $this->getArrayValue($item, $compilationContext);
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+								break;
+							default:
+								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+						}
+						break;
+					case 'variable':
+						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value']);
+						switch ($variableVariable->getType()) {
+							case 'int':
+								switch ($item['value']['type']) {
+									case 'int':
+										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										break;
+									case 'bool':
+										if ($item['value']['value'] == 'true') {
+											$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 1);');
+										} else {
+											$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 0);');
+										}
+										break;
+									case 'double':
+										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										break;
+									case 'null':
+										$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
+										break;
+									case 'string':
+										$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+										break;
+									case 'variable':
+										$value = $this->getArrayValue($item, $compilationContext);
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+										break;
+									default:
+										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								}
+								break;
+							case 'string':
+								switch ($item['value']['type']) {
+									case 'int':
+										$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $item['value']['value'] . ');');
+										break;
+									case 'double':
+										$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $item['value']['value'] . ');');
+										break;
+									case 'bool':
+										if ($item['value']['value'] == 'true') {
+											$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, 1);');
+										} else {
+											$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, 0);');
+										}
+										break;
+									case 'string':
+										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1, SL("' . $item['value']['value'] . '"), 1);');
+										break;
+									case 'null':
+										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1);');
+										break;
+									default:
+										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								}
+								break;
+							default:
+								throw new CompilerException("Cannot use variable type: " . $variableVariable->getType(). " as array index", $item['key']);
+						}
+						break;
+					default:
+						throw new CompilerException("Invalid key type: " . $item['key']['type'], $item['key']);
+				}
+			} else {
+				$item = $this->getArrayValue($item, $compilationContext);
+				$compilationContext->headersManager->add('kernel/array');
+				$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $item . ', 0);');
 			}
 		}
 

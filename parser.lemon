@@ -1429,12 +1429,8 @@ xx_call_parameters(R) ::= xx_call_parameter(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
-xx_call_parameter(R) ::= xx_literal_expr(E) . {
+xx_call_parameter(R) ::= xx_common_expr(E) . {
 	R = E;
-}
-
-xx_call_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {
