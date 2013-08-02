@@ -37,6 +37,7 @@ class ReturnStatement
 		$statement = $this->_statement;
 
 		$codePrinter = $compilationContext->codePrinter;
+
 		$codePrinter->outputBlankLine(true);
 
 		if (isset($statement['domain'])) {
@@ -47,7 +48,7 @@ class ReturnStatement
 		}
 
 		$expr = new Expression($statement['expr']);
-
+		$expr->setExpectReturn(true);
 		$resolvedExpr = $expr->compile($compilationContext);
 
 		switch ($resolvedExpr->getType()) {
@@ -76,7 +77,7 @@ class ReturnStatement
 						$codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');
 						break;
 					case 'variable':
-						if ($symbolVariable->getName() == 'this') {
+						if ($symbolVariable->getName() == 'this_ptr') {
 							$codePrinter->output('RETURN_THIS();');
 						} else {
 							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');

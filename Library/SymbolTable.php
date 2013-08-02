@@ -17,7 +17,6 @@
  +----------------------------------------------------------------------+
 */
 
-
 /**
  * SymbolTable
  *
@@ -37,6 +36,8 @@ class SymbolTable
 		$thisVar = new Variable('variable', 'this');
 		$thisVar->setIsInitialized(true);
 		$thisVar->increaseUses();
+		$thisVar->setReadOnly(true);
+		$thisVar->setLowName('this_ptr');
 		$this->_variables['this'] = $thisVar;
 	}
 
@@ -126,7 +127,10 @@ class SymbolTable
 
 	/**
 	 * Return a variable in the symbol table, it will be used for a write operation
+	 * Some variables aren't writables themselves but their members do
 	 *
+	 * @param string $name
+	 * @param array $statement
 	 * @return \Variable
 	 */
 	public function getVariableForWrite($name, $statement=null)
@@ -176,14 +180,37 @@ class SymbolTable
 
 	/**
 	 * Creates a temporary variable to be used in a write operation
+	 *
+	 * @param string $type
+	 *
 	 */
 	public function getTempVariableForWrite($type, CompilationContext $context)
 	{
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->initVariant($context);
+		return $variable;
+	}
+
+	/**
+	 * Creates a temporary variable to be used as intermediate variable of a read operation
+	 * Variables are automatically tracked by the memory manager
+	 *
+	 * @param string $type
+	 *
+	 * @return \Variable
+	 */
+	public function getTempVariableForObserve($type, CompilationContext $context)
+	{
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->setIsInitialized(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
+		$variable->observeVariant($context);
 		return $variable;
 	}
 

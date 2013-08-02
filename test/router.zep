@@ -251,8 +251,6 @@ class Router
 	 */
 	public function setDefaults(defaults)
 	{
-		var namespaceName, moduleName, controllerName,
-			actionName, params;
 
 		if typeof defaults == "array" {
 			throw new Test\Router\Exception("Defaults must be an array");
@@ -262,40 +260,35 @@ class Router
 		 * Set a default namespace
 		 */
 		if isset defaults['namespace'] {
-			let namespaceName = defaults['namespace'],
-				this->_defaultNamespace = namespaceName;
+			let this->_defaultNamespace = defaults['namespace'];
 		}
 
 		/**
 		 * Set a default module
 		 */
 		if isset defaults['module'] {
-			let moduleName = defaults['module'],
-				this->_defaultModule = moduleName;
+			let this->_defaultModule = defaults['module'];
 		}
 
 		/**
 		 * Set a default controller
 		 */
 		if isset defaults['controller'] {
-			let controllerName = defaults['controller'],
-				this->_defaultController = controllerName;
+			let this->_defaultController = defaults['controller'];
 		}
 
 		/**
 		 * Set a default action
 		 */
 		if isset defaults['action'] {
-			let actionName = defaults['action'],
-				this->_defaultAction = actionName;
+			let this->_defaultAction = defaults['action'];
 		}
 
 		/**
 		 * Set default parameters
 		 */
 		if isset defaults['params'] {
-			let params = defaults['params'],
-				this->_defaultParams = params;
+			let this->_defaultParams = defaults['params'];
 		}
 
 		return this;
@@ -318,9 +311,8 @@ class Router
 	{
 		var realUri, request, currentHostName, routeFound, parts,
 			params, matches, routes, reversedRoutes, notFoundPaths,
-			vnamespace, defaultNamespace, module, defaultModule,
-			controller, defaultController, action, defaultAction,
-			paramsStr, strParams, paramsMerge, defaultParams;
+			vnamespace, module,  controller, action, paramsStr, strParams,
+			paramsMerge;
 
 		if !uri {
 			/**
@@ -569,8 +561,7 @@ class Router
 				}
 				unset parts['namespace'];
 			} else {
-				let defaultNamespace = this->_defaultNamespace,
-					this->_namespace = defaultNamespace;
+				let this->_namespace = this->_defaultNamespace;
 			}
 
 			/**
@@ -583,8 +574,7 @@ class Router
 				}
 				unset parts['module'];
 			} else {
-				let defaultModule = this->_defaultModule,
-					this->_module = defaultModule;
+				let this->_module = this->_defaultModule;
 			}
 
 			/**
@@ -597,8 +587,7 @@ class Router
 				}
 				unset parts['controller'];
 			} else {
-				let defaultController = this->_defaultController,
-					this->_controller = defaultController;
+				let this->_controller = this->_defaultController;
 			}
 
 			/**
@@ -611,8 +600,7 @@ class Router
 				}
 				unset parts['action'];
 			} else {
-				let defaultAction = this->_defaultAction,
-					this->_action = defaultAction;
+				let this->_action = this->_defaultAction;
 			}
 
 			/**
@@ -640,20 +628,11 @@ class Router
 			/**
 			 * Use default values if the route hasn't matched
 			 */
-			let defaultNamespace = this->_defaultNamespace,
-				this->_namespace = defaultNamespace,
-
-				defaultModule = this->_defaultModule,
-				this->_module = defaultModule,
-
-				defaultController = this->_defaultController,
-				this->_controller = defaultController,
-
-				defaultAction = this->_defaultAction,
-				this->_action = defaultAction,
-
-				defaultParams = this->_defaultParams,
-				this->_params = defaultParams;
+			let this->_namespace = this->_defaultNamespace,
+				this->_module = this->_defaultModule,
+				this->_controller = this->_defaultController,
+				this->_action = this->_defaultAction,
+				this->_params = this->_defaultParams;
 		}
 	}
 
@@ -690,9 +669,7 @@ class Router
 	 */
 	public function addGet(pattern, paths=null)
 	{
-		var method;
-		let method = 'GET';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'GET');
 	}
 
 	/**
@@ -704,9 +681,7 @@ class Router
 	 */
 	public function addPost(pattern, paths=null)
 	{
-		var method;
-		let method = 'POST';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'POST');
 	}
 
 	/**
@@ -718,9 +693,7 @@ class Router
 	 */
 	public function addPut(pattern, paths=null)
 	{
-		var method;
-		let method = 'PUT';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'PUT');
 	}
 
 	/**
@@ -732,9 +705,7 @@ class Router
 	 */
 	public function addPatch(pattern, paths=null)
 	{
-		var method;
-		let method = 'PATCH';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'PATCH');
 	}
 
 	/**
@@ -746,9 +717,7 @@ class Router
 	 */
 	public function addDelete(pattern, paths=null)
 	{
-		var method;
-		let method = 'DELETE';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'DELETE');
 	}
 
 	/**
@@ -760,9 +729,7 @@ class Router
 	 */
 	public function addOptions(pattern, paths=null)
 	{
-		var method;
-		let method = 'OPTIONS';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'OPTIONS');
 	}
 
 	/**
@@ -774,9 +741,7 @@ class Router
 	 */
 	public function addHead(pattern, paths=null)
 	{
-		var method;
-		let method = 'HEAD';
-		return this->add(pattern, paths, method);
+		return this->add(pattern, paths, 'HEAD');
 	}
 
 	/**

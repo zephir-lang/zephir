@@ -130,10 +130,18 @@ class EvalExpression
 		 * Generate the condition according to the value returned by the evaluted expression
 		 */
 		switch ($compiledExpression->getType()) {
+			case 'null':
+				/**
+				 * @TODO This potentially would create unrecheable code
+				 */
+				return '0';
 			case 'int':
 			case 'double':
 				return $compiledExpression->getCode();
 			case 'bool':
+				/**
+				 * @TODO This potentially would create unrecheable code if is evaluated to false
+				 */
 				return $compiledExpression->getBooleanCode();
 			case 'variable':
 				$variableRight = $compilationContext->symbolTable->getVariableForRead($exprRaw['value'], $exprRaw);
@@ -150,9 +158,6 @@ class EvalExpression
 						throw new CompiledException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
 				}
 				break;
-			case 'fcall':
-				$compilationContext->codePrinter->output('//missing');
-				return '';
 			default:
 				throw new CompilerException("Expression can't be evaluated", $exprRaw);
 		}

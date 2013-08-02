@@ -58,6 +58,8 @@ class Variable
 
 	protected $_mustInitNull = false;
 
+	protected $_readOnly = false;
+
 	/**
 	 * \Variable
 	 */
@@ -73,7 +75,19 @@ class Variable
 	}
 
 	/**
+	 * Returns variable's real name
+	 *
+	 * @return string
+	 */
+	public function getRealName()
+	{
+		return $this->_name;
+	}
+
+	/**
 	 * Returns variable's name
+	 *
+	 * @return string
 	 */
 	public function getName()
 	{
@@ -81,6 +95,36 @@ class Variable
 			return $this->_lowName;
 		}
 		return $this->_name;
+	}
+
+	/**
+	 * Sets the compiled variable's name
+	 *
+	 * @param string $lowName
+	 */
+	public function setLowName($lowName)
+	{
+		$this->_lowName = $lowName;
+	}
+
+	/**
+	 * Sets if the variable is read only
+	 *
+	 * @param boolean $readOnly
+	 */
+	public function setReadOnly($readOnly)
+	{
+		$this->_readOnly = $readOnly;
+	}
+
+	/**
+	 * Returns if the variable is read only
+	 *
+	 * @return boolean
+	 */
+	public function isReadOnly()
+	{
+		return $this->_readOnly;
 	}
 
 	/**

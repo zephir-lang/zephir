@@ -129,20 +129,20 @@ class LetStatement
 			if ($classDefinition->hasMethod("__construct")) {
 
 				if (isset($newExpr['parameters'])) {
-					$callExpr = new CompiledExpression('mcall', null, array(
+					$callExpr = new Expression(array(
 						'variable' => $variable,
 						'name' => '__construct',
 						'parameters' => $newExpr['parameters']
 					));
 				} else {
-					$callExpr = new CompiledExpression('mcall', null, array(
+					$callExpr = new Expression(array(
 						'variable' => $variable,
 						'name' => '__construct'
 					));
 				}
 
 				$m = new MethodCall();
-				$m->compile(null, null, $callExpr, $compilationContext, $statement);
+				$m->compile($callExpr, $compilationContext);
 			}
 		} else {
 			/**
@@ -163,6 +163,10 @@ class LetStatement
 	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 			ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
 	{
+
+		if ($symbolVariable->isReadOnly())  {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -395,7 +399,9 @@ class LetStatement
 								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
 								break;
 							case 'variable':
-								$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								if ($itemVariable->getName() != $variable) {
+									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
@@ -417,12 +423,6 @@ class LetStatement
 					case 'array':
 						$symbolVariable->initVariant($compilationContext);
 						$this->assignArray($variable, $resolvedExpr, $compilationContext, $statement);
-						break;
-					case 'array-access':
-						$this->arrayAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
-						break;
-					case 'property-access':
-						$this->propertyAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 						break;
 					case 'new-instance':
 						$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
@@ -650,8 +650,12 @@ class LetStatement
 	/**
 	 * Compiles foo[] = {expr}
 	 */
-	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
 	{
+		if ($symbolVariable->isReadOnly())  {
+			throw new CompilerException("Cannot write variable '" . $name. "' because it is read only", $statement);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -674,115 +678,10 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo->x = {expr}
-	 */
-	public function propertyAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-	{
-		$codePrinter = $compilationContext->codePrinter;
-
-		$propertyAccess = $resolvedExpr->getOriginal();
-
-		$expr = new Expression($propertyAccess['left']);
-		$exprVariable = $expr->compile($compilationContext);
-
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
-				}
-				break;
-			default:
-				throw new CompiledException("Cannot use expression: ". $exprVariable->getType() . " as an object", $propertyAccess['left']);
-		}
-
-		$property = $propertyAccess['right']['value'];
-
-		$compilationContext->headersManager->add('kernel/object');
-		$symbolVariable->observeVariant($compilationContext);
-
-		if ($variableVariable->getName() == 'this') {
-			//zephir_read_property_this?
-			$codePrinter->output('zephir_read_property(&' . $variable . ', this_ptr, SL("' . $property . '"), PH_NOISY_CC);');
-		} else {
-			$codePrinter->output('zephir_read_property(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-		}
-
-	}
-
-	/**
-	 * Compiles foo[x] = {expr}
-	 */
-	public function arrayAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$symbolVariable->observeVariant($compilationContext);
-
-		$arrayAccess = $resolvedExpr->getOriginal();
-
-		$expr = new Expression($arrayAccess['left']);
-		$exprVariable = $expr->compile($compilationContext);
-
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
-				}
-				break;
-			default:
-				throw new CompiledException("Cannot use expression: ". $exprVariable->getType() . " as an array", $arrayAccess['left']);
-		}
-
-		$expr = new Expression($arrayAccess['right']);
-		$exprIndex = $expr->compile($compilationContext);
-
-		switch ($exprIndex->getType()) {
-			case 'int':
-				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_long(&' . $variable . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
-				break;
-			case 'string':
-				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_string(&' . $variable . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
-				break;
-			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $statement);
-				switch ($variableIndex->getType()) {
-					case 'int':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_long(&' . $variable . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
-						break;
-					case 'string':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_string(&' . $variable . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . '->str, ' . $exprIndex->getCode() . '->len, PH_NOISY);');
-						break;
-					case 'variable':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch(&' . $variable . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $exprIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
-				}
-				break;
-			default:
-				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
-		}
-
-	}
-
-	/**
 	 * Compiles foo[] = expr
 	 */
-	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
 	{
 		//PHALCON_OBS_VAR(url);
 		//phalcon_array_fetch_string(&url, _GET, SL("_url"), PH_NOISY);
@@ -850,6 +749,9 @@ class LetStatement
 	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
+		if ($symbolVariable->isReadOnly()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -871,6 +773,10 @@ class LetStatement
 	public function assignDecr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
 
+		if ($symbolVariable->isReadOnly()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+		}
+
 		$codePrinter = $compilationContext->codePrinter;
 
 		switch ($symbolVariable->getType()) {
@@ -886,7 +792,7 @@ class LetStatement
 				$codePrinter->output('zephir_decrement(' . $variable . ');');
 				break;
 			default:
-				throw new CompilerException("Cannot decrement: " . $symbolVariable->getType(), $statement);
+				throw new CompilerException("Cannot decrement variable: " . $symbolVariable->getType(), $statement);
 		}
 	}
 
@@ -917,6 +823,9 @@ class LetStatement
 				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
 					case 'bool':
+						/**
+						 * @TODO Assign the real value : true or false
+						 */
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
@@ -964,15 +873,6 @@ class LetStatement
 
 		foreach ($statement['assignments'] as $assignment) {
 
-			/**
-			 * Incr/Decr assigments don't require an expression
-			 */
-			if (isset($assignment['expr'])) {
-				$readDetector = new ReadDetector($assignment['expr']);
-				$expr = new Expression($assignment['expr']);
-				$resolvedExpr = $expr->compile($compilationContext);
-			}
-
 			$variable = $assignment['variable'];
 
 			/**
@@ -981,7 +881,22 @@ class LetStatement
 			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
 
 			/**
-			 * Variables assigned are marked as initialized
+			 * Incr/Decr assignments don't require an expression
+			 */
+			if (isset($assignment['expr'])) {
+				$readDetector = new ReadDetector($assignment['expr']);
+				$expr = new Expression($assignment['expr']);
+				switch ($assignment['assign-type']) {
+					case 'variable':
+					case 'variable-append':
+						$expr->setExpectReturn(true, $symbolVariable);
+						break;
+				}
+				$resolvedExpr = $expr->compile($compilationContext);
+			}
+
+			/**
+			 * Variables assigned are marked as initialized (after expression)
 			 */
 			$symbolVariable->setIsInitialized(true);
 

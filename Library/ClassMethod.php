@@ -198,7 +198,7 @@ class ClassMethod
 				}
 			}
 
-			if ($variable->getName() != 'this') {
+			if ($variable->getName() != 'this_ptr') {
 				if (!isset($usedVariables[$variable->getType()])) {
 					$usedVariables[$variable->getType()] = array();
 				}

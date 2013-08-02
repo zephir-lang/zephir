@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
+#include "kernel/object.h"
 #include "kernel/operators.h"
 
 
@@ -106,10 +107,10 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		j = i - 2;
 
 		ZEPHIR_OBS_NVAR(a);
-		zephir_array_fetch_long(&a, fib, k, PH_NOISY);
+		zephir_read_property(&a, fib, SL("k"), PH_NOISY_CC);
 
 		ZEPHIR_OBS_NVAR(b);
-		zephir_array_fetch_long(&b, fib, j, PH_NOISY);
+		zephir_read_property(&b, fib, SL("j"), PH_NOISY_CC);
 
 		ZEPHIR_INIT_NVAR(c);
 		zephir_add_function(c, a, b);

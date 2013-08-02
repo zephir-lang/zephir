@@ -20,8 +20,10 @@
 class MethodCall
 {
 
-	public function compile($variable, $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
+
+		return;
 
 		if ($symbolVariable) {
 			if ($symbolVariable->getType() != 'variable') {
@@ -47,7 +49,7 @@ class MethodCall
 		 */
 		if (!isset($expr['parameters'])) {
 			if ($variable) {
-				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
+				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 			} else {
 				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 			}

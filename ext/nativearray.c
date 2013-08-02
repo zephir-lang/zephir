@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/string_type.h"
+#include "kernel/object.h"
 
 
 /**
@@ -693,7 +694,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 	zephir_array_append(&a, _2, 0);
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch_long(&b, a, 0, PH_NOISY);
+	zephir_read_property(&b, a, SL("0"), PH_NOISY_CC);
 
 	RETURN_CCTOR(b);
 
@@ -712,7 +713,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess2) {
 	add_assoc_long_ex(a, SS("c"), 3);
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch_string(&b, a, SL("a"), PH_NOISY);
+	zephir_read_property(&b, a, SL("a"), PH_NOISY_CC);
 
 	RETURN_CCTOR(b);
 
@@ -740,7 +741,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess3) {
 	c = 0;
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch_long(&b, a, c, PH_NOISY);
+	zephir_read_property(&b, a, SL("c"), PH_NOISY_CC);
 
 	RETURN_CCTOR(b);
 
@@ -762,7 +763,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 	zephir_str_assign(c, "a", sizeof("a")-1);
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch_string(&b, a, c->str, c->len, PH_NOISY);
+	zephir_read_property(&b, a, SL("c"), PH_NOISY_CC);
 
 	RETURN_CCTOR(b);
 
@@ -784,7 +785,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 	ZVAL_STRING(c, "a", 1);
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch(&b, a, c, PH_NOISY);
+	zephir_read_property(&b, a, SL("c"), PH_NOISY_CC);
 
 	RETURN_CCTOR(b);
 

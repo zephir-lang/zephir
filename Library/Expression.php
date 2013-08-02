@@ -25,12 +25,16 @@ require 'Library/Operators/Arithmetical/SubOperator.php';
  * Expressions
  *
  * Represents an expression
- * Most in a language is an expression
+ * Most language constructions in a language are expressions
  */
 class Expression
 {
 
 	protected $_expression;
+
+	protected $_expecting = true;
+
+	protected $_expectingVariable;
 
 	public function __construct(array $expression)
 	{
@@ -45,6 +49,30 @@ class Expression
 		$str = str_replace("\r", "\\r", $str);
 		$str = str_replace("\t", "\\t", $str);
 		return $str;
+	}
+
+	/**
+	 * Sets if the variable must be resolved into a direct variable symbol
+	 * create a temporary value or ignore the return value
+	 *
+	 * @param boolean $expecting
+	 * @param Variable $expectingVariable
+	 */
+	public function setExpectReturn($expecting, Variable $expectingVariable=null)
+	{
+		$this->_expecting = $expecting;
+		$this->_expectingVariable = $expectingVariable;
+	}
+
+	/**
+	 * Checks if the returned value by the expression
+	 * is expected to be assigned to an external symbol
+	 *
+	 * @return boolean
+	 */
+	public function isExpectingReturn()
+	{
+		return $this->_expecting;
 	}
 
 	public function compileArray($expression, CompilationContext $compilationContext)
@@ -254,7 +282,7 @@ class Expression
 					case 'string':
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
 					default:
-						throw new CompilerException('['.$expression['left']['right']['type'].']', $expression);
+						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
 				}
 				break;
 			default:
@@ -265,8 +293,140 @@ class Expression
 	}
 
 	/**
+	 *
+	 */
+	public function propertyAccess($expression, CompilationContext $compilationContext)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$propertyAccess = $expression;
+
+		$expr = new Expression($propertyAccess['left']);
+		$exprVariable = $expr->compile($compilationContext);
+
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $expression);
+				switch ($variableVariable->getType()) {
+					case 'variable':
+						break;
+					default:
+						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+				}
+				break;
+			default:
+				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+		}
+
+		$property = $propertyAccess['right']['value'];
+
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->observeVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+		}
+
+		$compilationContext->headersManager->add('kernel/object');
+		$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
+	 * Compiles foo[x] = {expr}
+	 */
+	public function arrayAccess($expression, CompilationContext $compilationContext)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$arrayAccess = $expression;
+
+		$expr = new Expression($arrayAccess['left']);
+		$exprVariable = $expr->compile($compilationContext);
+
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $statement);
+				switch ($variableVariable->getType()) {
+					case 'variable':
+						break;
+					default:
+						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
+				}
+				break;
+			default:
+				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
+		}
+
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->observeVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+		}
+
+		/**
+		 * Right part of expression is the index
+		 */
+		$expr = new Expression($arrayAccess['right']);
+		$exprIndex = $expr->compile($compilationContext);
+
+		switch ($exprIndex->getType()) {
+			case 'int':
+				$compilationContext->headersManager->add('kernel/array');
+				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
+				break;
+			case 'string':
+				$compilationContext->headersManager->add('kernel/array');
+				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
+				break;
+			case 'variable':
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $statement);
+				switch ($variableIndex->getType()) {
+					case 'int':
+						$compilationContext->headersManager->add('kernel/array');
+						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
+						break;
+					case 'string':
+						$compilationContext->headersManager->add('kernel/array');
+						$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . '->str, ' . $exprIndex->getCode() . '->len, PH_NOISY);');
+						break;
+					case 'variable':
+						$compilationContext->headersManager->add('kernel/array');
+						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
+						break;
+					default:
+						throw new CompiledException("Variable type: " . $exprIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
+				}
+				break;
+			default:
+				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
+		}
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
 	 * Resolves an expression
 	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
@@ -275,52 +435,77 @@ class Expression
 
 		$type = $expression['type'];
 		switch ($type) {
+
 			case 'null':
 				return new CompiledExpression('null', null, $expression);
+
 			case 'int':
 				return new CompiledExpression('int', $expression['value'], $expression);
+
 			case 'double':
 				return new CompiledExpression('double', $expression['value'], $expression);
+
 			case 'bool':
 				return new CompiledExpression('bool', $expression['value'], $expression);
+
 			case 'string':
 				return new CompiledExpression('string', $this->_addSlaches($expression['value']), $expression);
+
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
+
 			case 'empty-array':
 				return new CompiledExpression('empty-array', null, $expression);
+
 			case 'array-access':
-				return new CompiledExpression('array-access', null, $expression);
+				return $this->propertyAccess($expression, $compilationContext);
+
 			case 'property-access':
-				return new CompiledExpression('property-access', null, $expression);
+				return $this->propertyAccess($expression, $compilationContext);
+
 			case 'fcall':
-				return new CompiledExpression('fcall', null, $expression);
+				return new CompiledExpression('null', null, $expression);
+
 			case 'mcall':
-				return new CompiledExpression('mcall', null, $expression);
+				$methodCall = new MethodCall();
+				$methodCall->compile($this, $compilationContext);
+				return new CompiledExpression('null', null, $expression);
+
 			case 'isset':
 				return $this->compileIsset($expression, $compilationContext);
+
 			case 'typeof':
 				return new CompiledExpression('typeof', null, $expression);
+
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
+
 			case 'new':
 				return $this->compileNewInstance($expression, $compilationContext);
+
 			case 'equals':
 				return $this->compileEquals($expression, $compilationContext);
+
 			case 'not':
 				return $this->compileNot($expression, $compilationContext);
+
 			case 'identical':
 				return $this->compileIdentical($expression, $compilationContext);
+
 			case 'not-identical':
 				return $this->compileIdentical($expression, $compilationContext);
+
 			case 'less':
 				return $this->compileLess($expression, $compilationContext);
+
 			case 'add':
 				$expr = new AddOperator();
 				return $expr->compile($expression, $compilationContext);
+
 			case 'sub':
 				$expr = new SubOperator();
 				return $expr->compile($expression, $compilationContext);
+
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);
 		}

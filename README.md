@@ -1,8 +1,8 @@
 Zephir Language
 ===============
 
-Zephir is a high level language that eases the creation and maintainability of C-extensions for PHP.
-Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
+Zephir - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
+of C-extensions for PHP. Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
 such as gcc/clang/vc++. Functionality is exposed to the PHP language. Zephir aims for near full
 interoperability with existing PHP code.
 
@@ -14,6 +14,7 @@ interoperability with existing PHP code.
 
 Compiler goals:
 
+* Multi-pass compilation
 * Type speculation/inference
 * Allow runtime profile-guided optimizations, pseudo-constant propagation or indirect/virtual function inlining
 
