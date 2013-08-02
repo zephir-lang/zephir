@@ -43,7 +43,7 @@ class ThrowStatement
 			$classCe = strtolower(str_replace('\\', '_', $statement['domain']));
 
 			if ($statement['parameters'][0]['type'] == 'string') {
-				$codePrinter->output('PHALCON_THROW_EXCEPTION_STR(' . $classCe . ', "' . $statement['parameters'][0]['value'] . '");');
+				$codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classCe . ', "' . $statement['parameters'][0]['value'] . '");');
 			}
 
 

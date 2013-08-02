@@ -40,12 +40,14 @@ class ReturnStatement
 
 		$codePrinter->outputBlankLine(true);
 
-		if (isset($statement['domain'])) {
+		/*if (isset($statement['domain'])) {
 			if ($statement['domain'] == 'this') {
-				$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $statement['expr']['value'] . '");');
-				return;
+				if ($statement['expr']['type'] == 'variable') {
+					$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $statement['expr']['value'] . '");');
+					return;
+				}
 			}
-		}
+		}*/
 
 		$expr = new Expression($statement['expr']);
 		$expr->setExpectReturn(true);

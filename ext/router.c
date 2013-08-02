@@ -98,7 +98,7 @@ PHP_METHOD(Test_Router, __construct) {
 		object_init_ex(route, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_0);
 		ZVAL_STRING(_0, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
-		zephir_call_method_p2_noret(route, "__construct", _0, route);
+		zephir_call_method_p2_noret(route, "__construct", _0, paths);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
@@ -111,7 +111,7 @@ PHP_METHOD(Test_Router, __construct) {
 		object_init_ex(route, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_1);
 		ZVAL_STRING(_1, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
-		zephir_call_method_p2_noret(route, "__construct", _1, route);
+		zephir_call_method_p2_noret(route, "__construct", _1, paths);
 
 		zephir_array_append(&routes, route, PH_SEPARATE);
 
@@ -151,7 +151,13 @@ PHP_METHOD(Test_Router, setDI) {
  */
 PHP_METHOD(Test_Router, getDI) {
 
-	RETURN_MEMBER(this_ptr, "_dependencyInjector");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -353,7 +359,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 	zephir_fetch_params(1, 1, 0, &defaults);
 
 	if (Z_TYPE_P(defaults) == IS_ARRAY) {
-		PHALCON_THROW_EXCEPTION_STR(test_router_exception, "Defaults must be an array");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "Defaults must be an array");
 	}
 	//missing comment
 	if (zephir_array_isset_string(defaults, SS("namespace"))) {
@@ -647,7 +653,7 @@ PHP_METHOD(Test_Router, add) {
 	//missing comment
 
 	object_init_ex(route, test_router_route_ce);
-	zephir_call_method_p3_noret(route, "__construct", route, route, route);
+	zephir_call_method_p3_noret(route, "__construct", pattern, paths, httpMethods);
 
 	//missing object-property-append
 
@@ -665,12 +671,18 @@ PHP_METHOD(Test_Router, add) {
  */
 PHP_METHOD(Test_Router, addGet) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "GET", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -683,12 +695,18 @@ PHP_METHOD(Test_Router, addGet) {
  */
 PHP_METHOD(Test_Router, addPost) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "POST", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -701,12 +719,18 @@ PHP_METHOD(Test_Router, addPost) {
  */
 PHP_METHOD(Test_Router, addPut) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "PUT", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -719,12 +743,18 @@ PHP_METHOD(Test_Router, addPut) {
  */
 PHP_METHOD(Test_Router, addPatch) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "PATCH", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -737,12 +767,18 @@ PHP_METHOD(Test_Router, addPatch) {
  */
 PHP_METHOD(Test_Router, addDelete) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "DELETE", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -755,12 +791,18 @@ PHP_METHOD(Test_Router, addDelete) {
  */
 PHP_METHOD(Test_Router, addOptions) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "OPTIONS", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -773,12 +815,18 @@ PHP_METHOD(Test_Router, addOptions) {
  */
 PHP_METHOD(Test_Router, addHead) {
 
-	zval *pattern, *paths;
+	zval *pattern, *paths, *_0, *_1;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(0, 2, 0, &pattern, &paths);
+	zephir_fetch_params(1, 2, 0, &pattern, &paths);
 
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "HEAD", 1);
+	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -797,13 +845,13 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_fetch_params(1, 1, 0, &group);
 
 	if (Z_TYPE_P(group) != IS_OBJECT) {
-		PHALCON_THROW_EXCEPTION_STR(test_router_exception, "The group of routes is not valid");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "The group of routes is not valid");
 	}
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 
 	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
-		PHALCON_THROW_EXCEPTION_STR(test_router_exception, "The group of routes does not contain any routes");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "The group of routes does not contain any routes");
 	}
 	//missing comment
 	ZEPHIR_INIT_VAR(beforeMatch);
@@ -855,7 +903,7 @@ PHP_METHOD(Test_Router, notFound) {
 
 	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
-			PHALCON_THROW_EXCEPTION_STR(test_router_exception, "The not-found paths must be an array or string");
+			ZEPHIR_THROW_EXCEPTION_STRW(test_router_exception, "The not-found paths must be an array or string");
 		}
 	}
 
@@ -889,7 +937,13 @@ PHP_METHOD(Test_Router, clear) {
  */
 PHP_METHOD(Test_Router, getNamespaceName) {
 
-	RETURN_MEMBER(this_ptr, "_namespace");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_namespace"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -900,7 +954,13 @@ PHP_METHOD(Test_Router, getNamespaceName) {
  */
 PHP_METHOD(Test_Router, getModuleName) {
 
-	RETURN_MEMBER(this_ptr, "_module");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_module"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -911,7 +971,13 @@ PHP_METHOD(Test_Router, getModuleName) {
  */
 PHP_METHOD(Test_Router, getControllerName) {
 
-	RETURN_MEMBER(this_ptr, "_controller");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_controller"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -922,7 +988,13 @@ PHP_METHOD(Test_Router, getControllerName) {
  */
 PHP_METHOD(Test_Router, getActionName) {
 
-	RETURN_MEMBER(this_ptr, "_action");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_action"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -933,7 +1005,13 @@ PHP_METHOD(Test_Router, getActionName) {
  */
 PHP_METHOD(Test_Router, getParams) {
 
-	RETURN_MEMBER(this_ptr, "_params");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_params"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -944,7 +1022,13 @@ PHP_METHOD(Test_Router, getParams) {
  */
 PHP_METHOD(Test_Router, getMatchedRoute) {
 
-	RETURN_MEMBER(this_ptr, "_matchedRoute");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_matchedRoute"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -955,7 +1039,13 @@ PHP_METHOD(Test_Router, getMatchedRoute) {
  */
 PHP_METHOD(Test_Router, getMatches) {
 
-	RETURN_MEMBER(this_ptr, "_matches");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_matches"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -966,7 +1056,13 @@ PHP_METHOD(Test_Router, getMatches) {
  */
 PHP_METHOD(Test_Router, wasMatched) {
 
-	RETURN_MEMBER(this_ptr, "_wasMatched");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_wasMatched"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 
@@ -977,7 +1073,13 @@ PHP_METHOD(Test_Router, wasMatched) {
  */
 PHP_METHOD(Test_Router, getRoutes) {
 
-	RETURN_MEMBER(this_ptr, "_routes");
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_OBS_VAR(_0);
+	zephir_read_property(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
+	RETURN_CCTOR(_0);
+
 
 }
 

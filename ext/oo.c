@@ -74,7 +74,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	ZVAL_STRING(b, "b", 1);
 
 	object_init_ex(o, test_oo_ooconstructparams_ce);
-	zephir_call_method_p2_noret(o, "__construct", o, o);
+	zephir_call_method_p2_noret(o, "__construct", a, b);
 
 	RETURN_CCTOR(o);
 

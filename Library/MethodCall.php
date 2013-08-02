@@ -34,13 +34,16 @@ class MethodCall
 
 		$methodName = strtolower($expression['name']);
 
+		/**
+		 * Create temporary variable if needed
+		 */
 		$isExpecting = $expr->isExpectingReturn();
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();
 			if (is_object($symbolVariable)) {
 				$symbolVariable->initVariant($compilationContext);
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}
 		}
 
@@ -70,7 +73,7 @@ class MethodCall
 							$params[] = $parameterVariable->getName();
 							break;
 						case 'variable':
-							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $expression);
+							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $expression);
 							switch ($parameterVariable->getType()) {
 								case 'variable':
 									$params[] = $parameterVariable->getName();
