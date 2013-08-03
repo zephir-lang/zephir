@@ -150,13 +150,7 @@ PHP_METHOD(Test_Router, setDI) {
  */
 PHP_METHOD(Test_Router, getDI) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_dependencyInjector");
 
 }
 
@@ -918,13 +912,7 @@ PHP_METHOD(Test_Router, clear) {
  */
 PHP_METHOD(Test_Router, getNamespaceName) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_namespace"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_namespace");
 
 }
 
@@ -935,13 +923,7 @@ PHP_METHOD(Test_Router, getNamespaceName) {
  */
 PHP_METHOD(Test_Router, getModuleName) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_module"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_module");
 
 }
 
@@ -952,13 +934,7 @@ PHP_METHOD(Test_Router, getModuleName) {
  */
 PHP_METHOD(Test_Router, getControllerName) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_controller"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_controller");
 
 }
 
@@ -969,13 +945,7 @@ PHP_METHOD(Test_Router, getControllerName) {
  */
 PHP_METHOD(Test_Router, getActionName) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_action"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_action");
 
 }
 
@@ -986,13 +956,7 @@ PHP_METHOD(Test_Router, getActionName) {
  */
 PHP_METHOD(Test_Router, getParams) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_params"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_params");
 
 }
 
@@ -1003,13 +967,7 @@ PHP_METHOD(Test_Router, getParams) {
  */
 PHP_METHOD(Test_Router, getMatchedRoute) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_matchedRoute"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_matchedRoute");
 
 }
 
@@ -1020,13 +978,7 @@ PHP_METHOD(Test_Router, getMatchedRoute) {
  */
 PHP_METHOD(Test_Router, getMatches) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_matches"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_matches");
 
 }
 
@@ -1037,13 +989,7 @@ PHP_METHOD(Test_Router, getMatches) {
  */
 PHP_METHOD(Test_Router, wasMatched) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_wasMatched"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_wasMatched");
 
 }
 
@@ -1054,13 +1000,7 @@ PHP_METHOD(Test_Router, wasMatched) {
  */
 PHP_METHOD(Test_Router, getRoutes) {
 
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
-	RETURN_CCTOR(_0);
-
+	RETURN_MEMBER(this_ptr, "_routes");
 
 }
 

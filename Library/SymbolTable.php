@@ -104,7 +104,11 @@ class SymbolTable
 		 * Create superglobals just in time
 		 */
 		if ($this->isSuperGlobal($name)) {
+
 			if (!$this->hasVariable($name)) {
+
+				//phalcon_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
+
 				$superVar = new Variable('variable', $name);
 				$superVar->setIsInitialized(true);
 				$superVar->increaseUses();
@@ -137,7 +141,7 @@ class SymbolTable
 	{
 
 		if (!$this->hasVariable($name)) {
-			throw new CompilerException("Cannot write variable '" . $name. "' because it wasn't defined", $statement);
+			throw new CompilerException("Cannot write variable '" . $name . "' because it wasn't defined", $statement);
 		}
 
 		$variable = $this->getVariable($name);
