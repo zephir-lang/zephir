@@ -25,7 +25,7 @@ class MethodCall
 
 		$expression = $expr->getExpression();
 
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $expression);
+		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $compilationContext, $expression);
 		if ($variableVariable->getType() != 'variable') {
 			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $expression);
 		}
@@ -73,7 +73,7 @@ class MethodCall
 							$params[] = $parameterVariable->getName();
 							break;
 						case 'variable':
-							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $expression);
+							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 							switch ($parameterVariable->getType()) {
 								case 'variable':
 									$params[] = $parameterVariable->getName();

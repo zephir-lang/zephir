@@ -97,7 +97,7 @@ class SymbolTable
 	 *
 	 * @return \Variable
 	 */
-	public function getVariableForRead($name, $statement=null)
+	public function getVariableForRead($name, $compilationContext=null, $statement=null)
 	{
 
 		/**
@@ -107,7 +107,10 @@ class SymbolTable
 
 			if (!$this->hasVariable($name)) {
 
-				//phalcon_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
+				/**
+				 * @TODO, injecting globals, initialize to null and check first?
+				 */
+				$compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
 
 				$superVar = new Variable('variable', $name);
 				$superVar->setIsInitialized(true);

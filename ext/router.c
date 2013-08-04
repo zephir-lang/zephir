@@ -171,6 +171,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	//missing comment
 	if (!(zend_is_true(uriSource))) {
 		ZEPHIR_OBS_VAR(url);
+		zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 		if (zephir_array_isset_string(_GET, SS("_url"))) {
 			if (!(zend_is_true(url))) {
 
@@ -181,6 +182,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	} else {
 		//missing comment
 		ZEPHIR_OBS_NVAR(url);
+		zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 		if (zephir_array_isset_string(_SERVER, SS("REQUEST_URI"))) {
 
 			ZEPHIR_INIT_VAR(urlParts);
@@ -196,10 +198,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 			}
 		}
 	}
-
 	RETURN_MM_STRING("/", 1);
-
-
 }
 
 /**

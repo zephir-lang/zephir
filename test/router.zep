@@ -532,7 +532,7 @@ class Router
 				unset parts['params'];
 			}
 
-			if (count(params)) {
+			if count(params) {
 				let paramsMerge = array_merge(params, parts);
 			} else {
 				let paramsMerge = parts;

@@ -51,3 +51,4 @@ require 'Library/FunctionCall.php';
 require 'Library/MethodCall.php';
 
 Compiler::boot();
+

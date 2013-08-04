@@ -109,7 +109,7 @@ class Expression
 		switch ($left->getType()) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value'], $compilationContext, $expression['left']);
 
 				switch ($right->getType()) {
 					case 'int':
@@ -156,30 +156,30 @@ class Expression
 		switch ($left->getType()) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value'], $compilationContext, $expression['left']);
 
 				switch ($variable->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression);
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
 					case 'bool':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression);
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
 							case 'bool':
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($right->getCode() == 'true') {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression);
+									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression['left']);
 								} else {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
+									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression['left']);
 								}
 							case 'null':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
+								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression['left']);
 							default:
-								throw new CompilerException("Error Processing Request", $expression);
+								throw new CompilerException("Error Processing Request", $expression['left']);
 						}
 						break;
 					default:
@@ -221,7 +221,7 @@ class Expression
 		switch ($left->getType()) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value'], $compilationContext, $expression['left']);
 
 				switch ($variable->getType()) {
 					case 'int':
@@ -281,7 +281,7 @@ class Expression
 
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
-		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value']);
+		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value'], $compilationContext, $expression['left']['left']);
 
 		switch ($expression['left']['type']) {
 			case 'array-access':
@@ -316,7 +316,7 @@ class Expression
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
 
-		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value']);
+		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
@@ -335,7 +335,7 @@ class Expression
 	}
 
 	/**
-	 *
+	 * @
 	 */
 	public function propertyAccess($expression, CompilationContext $compilationContext)
 	{
@@ -349,7 +349,7 @@ class Expression
 
 		switch ($exprVariable->getType()) {
 			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $expression);
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
 					case 'variable':
 						break;
@@ -405,7 +405,7 @@ class Expression
 
 		switch ($exprVariable->getType()) {
 			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $expression);
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
 					case 'variable':
 						break;
@@ -454,7 +454,7 @@ class Expression
 				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
 				break;
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $expression);
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
 				switch ($variableIndex->getType()) {
 					case 'int':
 						$compilationContext->headersManager->add('kernel/array');
@@ -610,7 +610,7 @@ class Expression
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
 				return $tempVar->getName();
 			case 'variable':
-				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $item);
+				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $item);
 				switch ($itemVariable->getType()) {
 					case 'int':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -721,7 +721,7 @@ class Expression
 						}
 						break;
 					case 'variable':
-						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value']);
+						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value'], $compilationContext, $item['key']);
 						switch ($variableVariable->getType()) {
 							case 'int':
 								switch ($item['value']['type']) {

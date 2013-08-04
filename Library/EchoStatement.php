@@ -37,7 +37,7 @@ class EchoStatement
 		switch ($expr['type']) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expr['value']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext);
 
 				switch ($variable->getType()) {
 					case 'int':

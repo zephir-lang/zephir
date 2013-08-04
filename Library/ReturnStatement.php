@@ -40,6 +40,9 @@ class ReturnStatement
 
 		$codePrinter->outputBlankLine(true);
 
+		/**
+		 * Use return member for properties on this
+		 */
 		if ($statement['expr']['type'] == 'property-access') {
 			if ($statement['expr']['left']['type'] == 'variable') {
 				if ($statement['expr']['left']['value'] == 'this') {

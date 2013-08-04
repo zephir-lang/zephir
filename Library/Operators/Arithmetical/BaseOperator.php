@@ -52,7 +52,7 @@ class BaseOperator
 					case 'bool':
 						return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
 					case 'variable':
-						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value']);
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
 						switch ($variableRight->getType()) {
 							case 'int':
 								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -101,7 +101,7 @@ class BaseOperator
 				break;
 			case 'variable':
 
-				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext));
+				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
 
 				switch ($variableLeft->getType()) {
 					case 'int':
@@ -109,7 +109,7 @@ class BaseOperator
 							case 'int':
 								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -134,7 +134,7 @@ class BaseOperator
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -157,7 +157,7 @@ class BaseOperator
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
@@ -191,7 +191,7 @@ class BaseOperator
 								break;
 							case 'variable':
 
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext));
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
 
 								switch ($variableRight->getType()) {
 									case 'int':
@@ -201,7 +201,7 @@ class BaseOperator
 										$compilationContext->headersManager->add('kernel/operators');
 										return new CompiledExpression('int', 'zephir_get_intval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'variable':
-										$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value']);
+										$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
 										switch ($variableRight->getType()) {
 											case 'int':
 												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);

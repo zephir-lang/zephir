@@ -43,7 +43,7 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'variable':
-				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
 					case 'variable':
 						/*$compilationContext->headersManager->add('kernel/array');
@@ -116,7 +116,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'bool':
@@ -151,7 +151,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'bool':
@@ -195,7 +195,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 						break;
 					case 'variable':
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							/*case 'int':
 								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
@@ -230,7 +230,7 @@ class LetStatement
 						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;*/
 					case 'variable':
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'double':
@@ -313,7 +313,7 @@ class LetStatement
 						break;
 					case 'variable':
 
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 								$symbolVariable->initVariant($compilationContext);
@@ -409,7 +409,7 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property'], $statement);
+		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property'], $compilationContext, $statement);
 		switch ($variableIndex->getType()) {
 			case 'int':
 			case 'string':
@@ -421,7 +421,7 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'variable':
-				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
@@ -558,7 +558,7 @@ class LetStatement
 						$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
-						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $statement);
+						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($variableVariable->getType()) {
 							case 'variable':
 								if ($variable == 'this') {
