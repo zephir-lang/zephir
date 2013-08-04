@@ -57,7 +57,7 @@ class CompilerFile
 	public function genIR()
 	{
 		$compilePath = str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
-		system("./xx " . realpath($this->_filePath) . " > .temp/" . $compilePath);
+		system('./xx ' . realpath($this->_filePath) . ' > .temp/' . $compilePath);
 		return json_decode(file_get_contents(".temp/" . $compilePath), true);
 	}
 
@@ -153,7 +153,6 @@ class CompilerFile
 	 */
 	public function preCompile()
 	{
-
 
 		$ir = $this->genIR();
 		if (!is_array($ir)) {
@@ -259,7 +258,9 @@ class CompilerFile
 		file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
 		file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
 
-		//add to file compiled
+		/**
+		 * Add to file compiled
+		 */
 		$this->_compiledFile = $path . '.c';
 	}
 

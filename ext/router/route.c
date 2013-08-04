@@ -46,10 +46,17 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
-	zval *pattern, *paths, *httpMethods;
+	zval *pattern, *paths = NULL, *httpMethods = NULL;
 
+	zephir_fetch_params(0, 1, 2, &pattern, &paths, &httpMethods);
 
-	zephir_fetch_params(0, 3, 0, &pattern, &paths, &httpMethods);
+	if (!paths) {
+PHALCON_INIT_VAR(paths);
+	}
+	if (!httpMethods) {
+PHALCON_INIT_VAR(httpMethods);
+	}
+
 
 
 }

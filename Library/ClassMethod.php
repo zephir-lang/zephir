@@ -96,8 +96,72 @@ class ClassMethod
 	}
 
 	/**
+	 * Assigns a default value
+	 *
+	 * @param array $parameter
+	 */
+	public function assignDefaultValue($parameter, $compilationContext)
+	{
+		if (isset($parameter['data-type'])) {
+			$dataType = $parameter['data-type'];
+		} else {
+			$dataType = 'variable';
+		}
+
+		$code = '';
+
+		switch ($dataType) {
+			case 'int':
+				switch ($parameter['default']['type']) {
+					case 'int':
+						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';';
+						break;
+					case 'double':
+						$code .= "\t\t" . $parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';';
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+				}
+				break;
+			case 'bool':
+				switch ($parameter['default']['type']) {
+					case 'bool':
+						if ($parameter['default']['value'] == 'true') {
+							$code .= "\t\t" . $parameter['name'] . ' = 1;' . PHP_EOL;
+						} else {
+							$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
+						}
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+				}
+				break;
+			case 'variable':
+				$code .= 'PHALCON_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+				switch ($parameter['default']['type']) {
+					case 'int':
+						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
+						break;
+					case 'double':
+						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
+						break;
+					case 'null':
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
+				}
+				break;
+			default:
+				throw new CompilerException("Default parameter type: " . $dataType);
+		}
+
+		return $code;
+	}
+
+	/**
 	 * Compiles the method
 	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
@@ -145,6 +209,22 @@ class ClassMethod
 					 * Assuming they're initialized
 					 */
 					$symbolParam->setIsInitialized(true);
+
+					/**
+					 * Initialize auxiliar parameter zvals to null
+					 */
+					$symbolParam->setMustInitNull(true);
+
+				} else {
+					if (isset($parameter['default'])) {
+						if (isset($parameter['data-type'])) {
+							if ($parameter['data-type'] == 'variable') {
+								$symbol->setMustInitNull(true);
+							}
+						} else {
+							$symbol->setMustInitNull(true);
+						}
+					}
 				}
 
 				/**
@@ -171,10 +251,13 @@ class ClassMethod
 		 */
 		if (is_object($this->_parameters)) {
 
+			$code = '';
+
 			/**
 			 * Round 2. Fetch the parameters in the method
 			 */
 			$params = array();
+			$optionalParams = array();
 			$numberRequiredParams = 0;
 			$numberOptionalParams = 0;
 			foreach ($this->_parameters->getParameters() as $parameter) {
@@ -191,7 +274,8 @@ class ClassMethod
 					$params[] = '&' . $parameter['name'] . '_param';
 				}
 
-				if (isset($parameter['default_value'])) {
+				if (isset($parameter['default'])) {
+					$optionalParams[] = $parameter;
 					$numberOptionalParams++;
 				} else {
 					$numberRequiredParams++;
@@ -200,11 +284,38 @@ class ClassMethod
 
 			$codePrinter->preOutputBlankLine();
 			if ($symbolTable->getMustGrownStack()) {
-				$codePrinter->preOutput("\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');');
+				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			} else {
-				$codePrinter->preOutput("\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');');
+				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			}
-			$codePrinter->preOutputBlankLine(true);
+			$code .= PHP_EOL;
+
+			/**
+			 * Initialize optional parameters
+			 */
+			foreach ($optionalParams as $parameter) {
+
+				if (isset($parameter['data-type'])) {
+					$dataType = $parameter['data-type'];
+				} else {
+					$dataType = 'variable';
+				}
+
+				if ($dataType == 'variable') {
+					$name = $parameter['name'];
+				} else {
+					$name = $parameter['name'] . '_param';
+				}
+
+				/**
+				 * Assign the default value according to the variable's type
+				 */
+				$code .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
+				$code .= $this->assignDefaultValue($parameter, $compilationContext);
+				$code .= "\t" . '}' . PHP_EOL;
+			}
+
+			$codePrinter->preOutput($code);
 		}
 
 		/**
@@ -267,7 +378,7 @@ class ClassMethod
 					$code = 'zval ';
 					break;
 				default:
-					throw new CompilerException("Unsupported type in declare " . $type);
+					throw new CompilerException("Unsupported type in declare: " . $type);
 			}
 
 			$groupVariables = array();
@@ -283,7 +394,7 @@ class ClassMethod
 		}
 
 		/**
-		 * <comment>Compile the block of statements if any</comment>
+		 * Compile the block of statements if any
 		 */
 		if (is_object($this->_statements)) {
 			if ($symbolTable->getMustGrownStack()) {

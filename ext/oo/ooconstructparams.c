@@ -30,8 +30,9 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 	zval *a, *b;
 
-
 	zephir_fetch_params(0, 2, 0, &a, &b);
+
+
 
 
 }

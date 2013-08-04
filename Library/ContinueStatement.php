@@ -32,7 +32,7 @@ class ContinueStatement
 	}
 
 	/**
-	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
