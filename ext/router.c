@@ -78,12 +78,12 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *routes, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
+	zval *defaultRoutes_param, *routes, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
 	zend_bool defaultRoutes;
 
 	ZEPHIR_MM_GROW();
 
-	zephir_fetch_params(1, 1, 0, &defaultRoutes);
+	zephir_fetch_params(1, 1, 0, &defaultRoutes_param);
 
 	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
@@ -198,7 +198,10 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 			}
 		}
 	}
+
 	RETURN_MM_STRING("/", 1);
+
+
 }
 
 /**

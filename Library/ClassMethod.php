@@ -121,10 +121,30 @@ class ClassMethod
 			 */
 			foreach ($this->_parameters->getParameters() as $parameter) {
 
+				$symbolParam = null;
+
 				if (isset($parameter['data-type'])) {
-					$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
+					if ($parameter['data-type'] == 'variable') {
+						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
+					} else {
+						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
+						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param');
+					}
 				} else {
 					$symbol = $symbolTable->addVariable('variable', $parameter['name']);
+				}
+
+				if (is_object($symbolParam)) {
+
+					/**
+					 * Parameters are marked as 'external'
+					 */
+					$symbolParam->setIsExternal(true);
+
+					/**
+					 * Assuming they're initialized
+					 */
+					$symbolParam->setIsInitialized(true);
 				}
 
 				/**
@@ -140,7 +160,7 @@ class ClassMethod
 		}
 
 		/**
-		 * <comment>Compile the block of statements if any</comment>
+		 * Compile the block of statements if any
 		 */
 		if (is_object($this->_statements)) {
 			$this->_statements->compile($compilationContext);
@@ -159,7 +179,17 @@ class ClassMethod
 			$numberOptionalParams = 0;
 			foreach ($this->_parameters->getParameters() as $parameter) {
 
-				$params[] = '&' . $parameter['name'];
+				if (isset($parameter['data-type'])) {
+					$dataType = $parameter['data-type'];
+				} else {
+					$dataType = 'variable';
+				}
+
+				if ($dataType == 'variable') {
+					$params[] = '&' . $parameter['name'];
+				} else {
+					$params[] = '&' . $parameter['name'] . '_param';
+				}
 
 				if (isset($parameter['default_value'])) {
 					$numberOptionalParams++;
@@ -199,10 +229,11 @@ class ClassMethod
 			}
 
 			if ($variable->getName() != 'this_ptr') {
-				if (!isset($usedVariables[$variable->getType()])) {
-					$usedVariables[$variable->getType()] = array();
+				$type = $variable->getType();
+				if (!isset($usedVariables[$type])) {
+					$usedVariables[$type] = array();
 				}
-				$usedVariables[$variable->getType()][] = $variable;
+				$usedVariables[$type][] = $variable;
 			}
 		}
 

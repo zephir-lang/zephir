@@ -111,7 +111,12 @@ class CompilerFile
 	 */
 	public function preCompileClass($namespace, $topStatement)
 	{
+
 		$classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+
+		if (isset($topStatement['extends'])) {
+			$classDefinition->setExtendsClass($topStatement['extends']);
+		}
 
 		if (isset($topStatement['definition'])) {
 

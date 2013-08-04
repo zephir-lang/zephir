@@ -29,6 +29,8 @@ class ClassDefinition
 
 	protected $_name;
 
+	protected $_extendsClass;
+
 	protected $_properties = array();
 
 	protected $_methods = array();
@@ -44,6 +46,21 @@ class ClassDefinition
 		return $this->_name;
 	}
 
+	/**
+	 * Sets the extended class
+	 *
+	 * @param string $extendsClass
+	 */
+	public function setExtendsClass($extendsClass)
+	{
+		$this->_extendsClass = $extendsClass;
+	}
+
+	/**
+	 * Adds a property to the definition
+	 *
+	 * @param ClassProperty $property
+	 */
 	public function addProperty(ClassProperty $property)
 	{
 		if (isset($this->_properties[$property->getName()])) {
@@ -52,6 +69,11 @@ class ClassDefinition
 		$this->_properties[$property->getName()] = $property;
 	}
 
+	/**
+	 * Checks if class definition has a property
+	 *
+	 * @param string $name
+	 */
 	public function hasProperty($name)
 	{
 		return isset($this->_properties[$name]);
@@ -152,12 +174,24 @@ class ClassDefinition
 		$codePrinter->increaseLevel();
 
 		/**
-		 * Register the class
+		 * Register the class with extends + interfaces
 		 */
-		$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-			strtolower($this->getSCName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
-			strtolower($this->getName()) . '_method_entry, 0);');
-		$codePrinter->outputBlankLine();
+		if ($this->_extendsClass) {
+			if (substr($this->_extendsClass, 0, 1) == '\\') {
+				$extendsClass = substr($this->_extendsClass, 1);
+			} else {
+				$extendsClass = $this->_extendsClass;
+			}
+			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
+				strtolower($this->getSCName()) . ', ' . '"' . strtolower($extendsClass) . '", ' .
+				strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry, 0);');
+			$codePrinter->outputBlankLine();
+		} else {
+			$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
+				strtolower($this->getSCName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
+				strtolower($this->getName()) . '_method_entry, 0);');
+			$codePrinter->outputBlankLine();
+		}
 
 		/**
 		 * Compile properties
@@ -214,10 +248,12 @@ class ClassDefinition
 			$codePrinter->outputBlankLine();
 		}
 
+		/**
+		 * Create arg. info
+		 */
 		foreach ($methods as $method) {
 
 			$parameters = $method->getParameters();
-
 			if (count($parameters)) {
 				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', 0, 0, 0)');
 				foreach ($parameters as $parameters) {
@@ -228,6 +264,7 @@ class ClassDefinition
 				$codePrinter->output('ZEND_END_ARG_INFO()');
 				$codePrinter->outputBlankLine();
 			}
+
 		}
 
 		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
