@@ -350,7 +350,7 @@ static json_object *xx_ret_let_statement(json_object *assignments, xx_scanner_st
 	return ret;
 }
 
-static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_parser_token *P, json_object *expr, xx_scanner_state *state)
+static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_parser_token *P, json_object *index_expr, json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -358,6 +358,9 @@ static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_par
 	json_object_object_add(ret, "variable", json_object_new_string(V->token));
 	if (P) {
 		json_object_object_add(ret, "property", json_object_new_string(P->token));
+	}
+	if (index_expr) {
+		json_object_object_add(ret, "index-expr", index_expr);
 	}
 	if (expr) {
 		json_object_object_add(ret, "expr", expr);
@@ -383,6 +386,45 @@ static json_object *xx_ret_if_statement(json_object *expr, json_object *statemen
 
 	if (else_statements) {
 		json_object_object_add(ret, "else_statements", else_statements);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_switch_statement(json_object *expr, json_object *clauses, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("switch"));
+	json_object_object_add(ret, "expr", expr);
+
+	if (clauses) {
+		json_object_object_add(ret, "clauses", clauses);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_case_clause(json_object *expr, json_object *statements, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("case"));
+
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
+	}
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -497,6 +539,20 @@ static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state 
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("return"));
+	json_object_object_add(ret, "expr", expr);
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_mcall_statement(json_object *expr, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("mcall"));
 	json_object_object_add(ret, "expr", expr);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -1010,6 +1066,10 @@ xx_statement(R) ::= xx_return_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_mcall_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_unset_statement(S) . {
 	R = S;
 }
@@ -1031,6 +1091,10 @@ xx_statement(R) ::= xx_continue_statement(S) . {
 }
 
 xx_statement(R) ::= xx_while_statement(S) . {
+	R = S;
+}
+
+xx_statement(R) ::= xx_switch_statement(S) . {
 	R = S;
 }
 
@@ -1074,6 +1138,30 @@ xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKE
 	R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
 }
 
+xx_switch_statement(R) ::= SWITCH xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_switch_statement(E, NULL, status->scanner_state);
+}
+
+xx_switch_statement(R) ::= SWITCH xx_eval_expr(E) BRACKET_OPEN xx_case_clauses(C) BRACKET_CLOSE . {
+	R = xx_ret_switch_statement(E, C, status->scanner_state);
+}
+
+xx_case_clauses(R) ::= xx_case_clauses(C) xx_case_clause(K) . {
+	R = xx_ret_list(C, K);
+}
+
+xx_case_clauses(R) ::= xx_case_clause(K) . {
+	R = xx_ret_list(NULL, K);
+}
+
+xx_case_clause(R) ::= CASE xx_literal_expr(E) COLON xx_statement_list(L) . {
+	R = xx_ret_case_clause(E, L, status->scanner_state);
+}
+
+xx_case_clause(R) ::= DEFAULT COLON xx_statement_list(L) . {
+	R = xx_ret_case_clause(NULL, L, status->scanner_state);
+}
+
 xx_loop_statement(R) ::= LOOP BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_loop_statement(NULL, status->scanner_state);
 }
@@ -1112,37 +1200,46 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 
 /* y = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable", I, NULL, E, status->scanner_state);
+	R = xx_ret_let_assignment("variable", I, NULL, NULL, E, status->scanner_state);
 }
 
 /* y->x = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property", D, I, E, status->scanner_state);
+	R = xx_ret_let_assignment("object-property", D, I, NULL, E, status->scanner_state);
 }
 
 /* y->x[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property-append", D, I, E, status->scanner_state);
+	R = xx_ret_let_assignment("object-property-append", D, I, NULL, E, status->scanner_state);
+}
+
+/* y->x[z] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN xx_index_expr(X) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property-array-index", D, I, X, E, status->scanner_state);
 }
 
 /* y[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable-append", I, NULL, E, status->scanner_state);
+	R = xx_ret_let_assignment("variable-append", I, NULL, NULL, E, status->scanner_state);
 }
 
 /* y[x] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("array-index", D, I, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("array-index", D, NULL, I, E, status->scanner_state);
 }
 
 /* y++ */
 xx_let_assignment(R) ::= IDENTIFIER(I) INCR . {
-	R = xx_ret_let_assignment("incr", I, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("incr", I, NULL, NULL, NULL, status->scanner_state);
 }
 
 /* y-- */
 xx_let_assignment(R) ::= IDENTIFIER(I) DECR . {
-	R = xx_ret_let_assignment("decr", I, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("decr", I, NULL, NULL, NULL, status->scanner_state);
+}
+
+xx_index_expr(R) ::= xx_common_expr(E) . {
+	R = E;
 }
 
 xx_echo_statement(R) ::= ECHO xx_echo_expressions(E) DOTCOMMA . {
@@ -1159,6 +1256,11 @@ xx_echo_expressions(R) ::= xx_echo_expression(A) . {
 
 xx_echo_expression(R) ::= xx_common_expr(E) . {
 	R = E;;
+}
+
+/* mcall statement */
+xx_mcall_statement(R) ::= xx_mcall_expr(E) DOTCOMMA . {
+	R = xx_ret_mcall_statement(E, status->scanner_state);
 }
 
 /* return statement */

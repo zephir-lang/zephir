@@ -567,9 +567,7 @@ class Router
 	{
 		var route;
 
-		/**
-		 * Every route is internally stored as a Test\Router\Route
-		 */
+		// Every route is internally stored as a Test\Router\Route
 		let route = new Test\Router\Route(pattern, paths, httpMethods),
 			this->_routes[] = route;
 		return route;
@@ -685,7 +683,7 @@ class Router
 
 		if beforeMatch !== null {
 			for route in groupRoutes {
-				//route->beforeMatch(beforeMatch);
+				route->beforeMatch(beforeMatch);
 			}
 		}
 
@@ -694,7 +692,7 @@ class Router
 
 		if hostname !== null {
 			for route in groupRoutes {
-				//route->setHostName(hostname);
+				route->setHostName(hostname);
 			}
 		}
 

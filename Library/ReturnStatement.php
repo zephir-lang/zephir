@@ -94,8 +94,11 @@ class ReturnStatement
 						throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 				}
 				break;
+			case 'null':
+				$codePrinter->output('RETURN_MM_RESTORE();');
+				break;
 			default:
-				throw new CompilerException("Cannot return variable '" . $resolvedExpr->getType() . "'", $statement['expr']);
+				throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);
 		}
 
 		$codePrinter->outputBlankLine(true);

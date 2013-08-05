@@ -68,6 +68,9 @@
 #define XX_T_FOR 376
 #define XX_T_IN 377
 #define XX_T_FETCH 378
+#define XX_T_SWITCH 379
+#define XX_T_CASE 380
+#define XX_T_DEFAULT 381
 
 /* Operators */
 #define XX_T_AT '@'

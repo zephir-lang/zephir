@@ -283,6 +283,24 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'switch' {
+			token->opcode = XX_T_SWITCH;
+			s->active_char += sizeof("switch")-1;
+			return 0;
+		}
+
+		'case' {
+			token->opcode = XX_T_CASE;
+			s->active_char += sizeof("case")-1;
+			return 0;
+		}
+
+		'default' {
+			token->opcode = XX_T_DEFAULT;
+			s->active_char += sizeof("default")-1;
+			return 0;
+		}
+
 		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		STRING {
 			token->opcode = XX_T_STRING;

@@ -890,6 +890,9 @@ class Expression
 				$expr = new SubOperator();
 				return $expr->compile($expression, $compilationContext);
 
+			case 'concat':
+				return new CompiledExpression('null', null, $expression);
+
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);
 		}

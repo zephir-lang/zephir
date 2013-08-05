@@ -58,7 +58,6 @@ class LetStatement
 								$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
 								break;
 						}*/
-
 						break;
 					default:
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
@@ -397,7 +396,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo[] = expr
+	 * Compiles foo[y] = {expr}
 	 */
 	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
@@ -405,14 +404,18 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$variableIndex = $compilationContext->symbolTable->getVariableForRead($statement['property'], $compilationContext, $statement);
-		switch ($variableIndex->getType()) {
+		//print_r($statement);
+
+		$expression = new Expression($statement['index-expr']);
+		$exprIndex = $expression->compile($compilationContext);
+
+		switch ($exprIndex->getType()) {
 			case 'int':
 			case 'string':
 			case 'variable':
 				break;
 			default:
-				throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index in assigment without cast", $statement);
+				throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assigment without cast", $statement);
 		}
 
 		switch ($resolvedExpr->getType()) {
@@ -421,41 +424,31 @@ class LetStatement
 				switch ($variableExpr->getType()) {
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
-						switch ($variableIndex->getType()) {
-							case 'int':
-								$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
-							case 'string':
-								$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
+						switch ($exprIndex->getType()) {
 							case 'variable':
-								$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
+								$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
+								switch ($variableIndex->getType()) {
+									case 'int':
+										$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
+										break;
+									case 'string':
+										$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
+										break;
+									case 'variable':
+										$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
+										break;
+									default:
+										throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array index", $statement);
+								}
 						}
 						break;
 					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array index", $statement);
+						throw new CompilerException("Variable: " . $exprIndex->getType() . " cannot be assigned to array index", $statement);
 				}
 				break;
 			default:
 				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array index", $statement);
 		}
-
-		/*$expr = new Expression($statement['expr']);
-		$exprIndex = $expr->compile($compilationContext);
-
-		switch ($exprIndex->getType()) {
-			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode());
-				switch ($variableIndex->getType()) {
-					case 'int':
-						break;
-				}
-		}
-
-		print_r($statement);
-
-		$codePrinter = $compilationContext->codePrinter;*/
 
 	}
 
@@ -623,6 +616,9 @@ class LetStatement
 			 */
 			switch ($assignment['assign-type']) {
 				case 'variable':
+					if (!isset($readDetector)) {
+						print_r($assignment);
+					}
 					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
 					break;
 				case 'variable-append':
@@ -640,6 +636,10 @@ class LetStatement
 				case 'object-property-append':
 					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					$codePrinter->output('//missing object-property-append');
+					break;
+				case 'object-property-array-index':
+					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					$codePrinter->output('//missing object-property-array-index');
 					break;
 				case 'incr':
 					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);
