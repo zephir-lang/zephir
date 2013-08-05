@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
@@ -94,7 +95,7 @@ PHP_METHOD(Test_Router, __construct) {
 	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
 
-	if ((defaultRoutes == true)) {
+	if ((defaultRoutes == 1)) {
 		//missing comment
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
@@ -366,7 +367,8 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 
 	if (Z_TYPE_P(defaults) == IS_ARRAY) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "Defaults must be an array");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "Defaults must be an array");
+		return;
 	}
 	//missing comment
 	ZEPHIR_OBS_VAR(namespaceName);
@@ -430,7 +432,7 @@ PHP_METHOD(Test_Router, handle) {
 	zephir_fetch_params(1, 0, 1, &uri);
 
 	if (!uri) {
-		PHALCON_INIT_VAR(uri);
+		ZEPHIR_INIT_VAR(uri);
 	}
 
 
@@ -657,10 +659,10 @@ PHP_METHOD(Test_Router, add) {
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 	if (!httpMethods) {
-		PHALCON_INIT_VAR(httpMethods);
+		ZEPHIR_INIT_VAR(httpMethods);
 	}
 
 
@@ -691,7 +693,7 @@ PHP_METHOD(Test_Router, addGet) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -719,7 +721,7 @@ PHP_METHOD(Test_Router, addPost) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -747,7 +749,7 @@ PHP_METHOD(Test_Router, addPut) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -775,7 +777,7 @@ PHP_METHOD(Test_Router, addPatch) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -803,7 +805,7 @@ PHP_METHOD(Test_Router, addDelete) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -831,7 +833,7 @@ PHP_METHOD(Test_Router, addOptions) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -859,7 +861,7 @@ PHP_METHOD(Test_Router, addHead) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 
 
@@ -888,13 +890,15 @@ PHP_METHOD(Test_Router, mount) {
 
 
 	if (Z_TYPE_P(group) != IS_OBJECT) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "The group of routes is not valid");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes is not valid");
+		return;
 	}
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 
 	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception, "The group of routes does not contain any routes");
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
+		return;
 	}
 	//missing comment
 	ZEPHIR_INIT_VAR(beforeMatch);
@@ -946,7 +950,8 @@ PHP_METHOD(Test_Router, notFound) {
 
 	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
-			ZEPHIR_THROW_EXCEPTION_STRW(test_router_exception, "The not-found paths must be an array or string");
+			ZEPHIR_THROW_EXCEPTION_STRW(test_router_exception_ce, "The not-found paths must be an array or string");
+			return;
 		}
 	}
 

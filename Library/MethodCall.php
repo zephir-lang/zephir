@@ -48,6 +48,11 @@ class MethodCall extends Call
 		}
 
 		/**
+		 * Include fcall header
+		 */
+		$compilationContext->headersManager->add('kernel/fcall');
+
+		/**
 		 *
 		 */
 		if (!isset($expression['parameters'])) {

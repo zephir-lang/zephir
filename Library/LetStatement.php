@@ -402,10 +402,6 @@ class LetStatement
 	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
-		//PHALCON_OBS_VAR(url);
-		//phalcon_array_fetch_string(&url, _GET, SL("_url"), PH_NOISY);
-
-		//phalcon_array_update_zval(&parts, part, &converted_part, PH_COPY | PH_SEPARATE);
 
 		$codePrinter = $compilationContext->codePrinter;
 

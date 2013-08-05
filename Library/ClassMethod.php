@@ -137,7 +137,8 @@ class ClassMethod
 				}
 				break;
 			case 'variable':
-				$code .= "\t\t" . 'PHALCON_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/memory');
+				$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 				switch ($parameter['default']['type']) {
 					case 'int':
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;

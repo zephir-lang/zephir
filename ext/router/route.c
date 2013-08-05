@@ -12,6 +12,7 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -51,10 +52,10 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	zephir_fetch_params(0, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
-		PHALCON_INIT_VAR(paths);
+		ZEPHIR_INIT_VAR(paths);
 	}
 	if (!httpMethods) {
-		PHALCON_INIT_VAR(httpMethods);
+		ZEPHIR_INIT_VAR(httpMethods);
 	}
 
 

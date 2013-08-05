@@ -40,10 +40,11 @@ class ThrowStatement
 
 		if ($compilationContext->compiler->isClass($statement['domain'])) {
 
-			$classCe = strtolower(str_replace('\\', '_', $statement['domain']));
+			$classCe = strtolower(str_replace('\\', '_', $statement['domain'])) . '_ce';
 
 			if ($statement['parameters'][0]['type'] == 'string') {
 				$codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classCe . ', "' . $statement['parameters'][0]['value'] . '");');
+				$codePrinter->output('return;');
 			}
 
 

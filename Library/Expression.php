@@ -162,7 +162,17 @@ class Expression
 					case 'int':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
 					case 'bool':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
+						switch ($right->getType()) {
+							case 'int':
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
+							case 'bool':
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getBooleanCode() . ')', $expression['left']);
+							case 'null':
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' == 0)', $expression['left']);
+							default:
+								throw new CompilerException("Error Processing Request", $expression['left']);
+						}
+						break;
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':

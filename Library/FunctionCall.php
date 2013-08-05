@@ -47,6 +47,11 @@ class FunctionCall extends Call
 			}
 		}
 
+		/**
+		 * Include fcall header
+		 */
+		$compilationContext->headersManager->add('kernel/fcall');
+
 		if (!isset($expression['parameters'])) {
 			if ($isExpecting) {
 				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
