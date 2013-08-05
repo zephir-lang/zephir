@@ -12,9 +12,9 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
-#include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
 
@@ -51,9 +51,10 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
-	zval *pattern, *paths = NULL, *httpMethods = NULL;
+	zval *pattern, *paths = NULL, *httpMethods = NULL, *_0;
 
-	zephir_fetch_params(0, 1, 2, &pattern, &paths, &httpMethods);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
 		ZEPHIR_INIT_VAR(paths);
@@ -64,11 +65,13 @@ PHP_METHOD(Test_Router_Route, __construct) {
 
 
 	//missing comment
-	//missing mcall
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_method_p2(_0, this_ptr, "reconfigure", pattern, paths);
 	//missing comment
 
 	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 
+	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -134,7 +137,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		ZEPHIR_INIT_VAR(_8);
 		ZEPHIR_INIT_VAR(_9);
 		ZVAL_STRING(_9, "/:namespace", 1);
-		zephir_call_func_p2(_8, "strpos", pattern, _9);
+		zephir_call_func_p2(_8, "memchr", pattern, _9);
 		if (zend_is_true(_8)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);

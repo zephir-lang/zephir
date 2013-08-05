@@ -404,8 +404,6 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		//print_r($statement);
-
 		$expression = new Expression($statement['index-expr']);
 		$exprIndex = $expression->compile($compilationContext);
 
@@ -616,9 +614,6 @@ class LetStatement
 			 */
 			switch ($assignment['assign-type']) {
 				case 'variable':
-					if (!isset($readDetector)) {
-						print_r($assignment);
-					}
 					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
 					break;
 				case 'variable-append':

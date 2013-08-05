@@ -114,7 +114,6 @@ class SymbolTable
 
 				$superVar = new Variable('variable', $name);
 				$superVar->setIsInitialized(true);
-				$superVar->increaseUses();
 				$this->_variables[$name] = $superVar;
 			}
 		}

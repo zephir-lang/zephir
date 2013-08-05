@@ -21,6 +21,9 @@
  * ReadDetector
  *
  * Detects if a variable is used in a given expression
+ * Since zvals are collected between calls to the same section of code
+ * We need to ensure that a variable is not contained in the right expression
+ * used to assign the variable
  */
 class ReadDetector
 {
@@ -30,6 +33,18 @@ class ReadDetector
 			if ($variable == $expression['value']) {
 				return true;
 			}
+		}
+
+		if ($expression['type'] == 'mcall' || $expression['type'] == 'mcall') {
+
+			if (isset($expression['parameters'])) {
+				foreach ($expression['parameters'] as $parameter) {
+					if ($parameter['type'] == 'variable') {
+						echo $parameter['value'];
+					}
+				}
+			}
+
 		}
 
 		if (isset($expression['left'])) {

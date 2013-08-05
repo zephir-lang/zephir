@@ -20,11 +20,18 @@
 /**
  * FunctionCall
  *
- * Call functions
+ * Call functions. By default functions are called in the PHP userland if an optimizer
+ * is not found or there is not a user handler for it
  */
 class FunctionCall extends Call
 {
 
+	/**
+	 * Compiles a function
+	 *
+	 * @param Expression $expr
+	 * @param CompilationContext $expr
+	 */
 	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 

@@ -75,7 +75,7 @@ class Route
 			}
 
 			// Replace the namespace placeholder
-			if (strpos(pattern, "/:namespace")){
+			if memchr(pattern, "/:namespace") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:namespace", idPattern, patternCopy);
 			}
@@ -192,7 +192,7 @@ class Route
 						let namespaceName = get_ns_class(controllerName);
 
 						// Update the namespace
-						if (namespaceName) {
+						if namespaceName {
 							let routePaths['namespace'] = namespaceName;
 						}
 					} else {
@@ -222,7 +222,7 @@ class Route
 		}
 
 		// If the route starts with '#' we assume that it is a regular expression
-		if (!starts_with(pattern, '#')) {
+		if !starts_with(pattern, '#') {
 
 			if memchr(pattern, '{') {
 				// The route has named parameters so we need to extract them
