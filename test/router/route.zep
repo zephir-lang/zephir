@@ -346,7 +346,8 @@ class Route
 	 */
 	public function getReversedPaths()
 	{
-		var reversed;
+		var reversed, path, position;
+
 		let reversed = [];
 		for path, position in this->_paths {
 			let reversed[position] = path;

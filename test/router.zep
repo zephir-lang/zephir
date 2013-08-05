@@ -295,13 +295,22 @@ class Router
 		var realUri, request, currentHostName, routeFound, parts,
 			params, matches, routes, reversedRoutes, notFoundPaths,
 			vnamespace, module,  controller, action, paramsStr, strParams,
-			paramsMerge;
+			paramsMerge, route, methods, dependencyInjector, matchMethod,
+			hostname, regexHostName, matched, pattern, handledUri, beforeMatch,
+			paths, converters, part, position, matchPosition;
 
 		if !uri {
 			// If 'uri' isn't passed as parameter it reads _GET['_url']
 			let realUri = this->getRewriteUri();
 		} else {
 			let realUri = uri;
+		}
+
+		// Remove extra slashes in the route
+		if (this->_removeExtraSlashes) {
+			let handledUri = removeExtraSlashes(realUri);
+		} else {
+			let handledUri = realUri;
 		}
 
 		let request = null,
@@ -666,7 +675,7 @@ class Router
 	public function mount(group)
 	{
 
-		var groupRoutes, beforeMatch, hostname, routes, newRoutes;
+		var groupRoutes, beforeMatch, hostname, routes, newRoutes, route;
 
 		if typeof group != "object" {
 			throw new Test\Router\Exception("The group of routes is not valid");
@@ -830,6 +839,8 @@ class Router
 	 */
 	public function getRouteById(var id)
 	{
+		var route;
+
 		for route in this->_routes {
 			if route->getRouteId() == id {
 				return route;
@@ -846,6 +857,8 @@ class Router
 	 */
 	public function getRouteByName(var name)
 	{
+		var route;
+
 		for route in this->_routes {
 			if route->getName() == name {
 				return route;

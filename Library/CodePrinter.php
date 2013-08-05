@@ -30,6 +30,8 @@ class CodePrinter
 
 	protected $_level = 0;
 
+	protected $_currentPrints = 0;
+
 	/**
 	 * Adds a line to the output without the automatic line feed
 	 *
@@ -50,6 +52,7 @@ class CodePrinter
 	{
 		$this->_lastLine = $code;
 		$this->_code = str_repeat("\t", $this->_level) . $code . PHP_EOL . $this->_code;
+		$this->_currentPrints++;
 	}
 
 	/**
@@ -72,6 +75,7 @@ class CodePrinter
 	{
 		$this->_lastLine = $code;
 		$this->_code = $code . PHP_EOL . $this->_code;
+		$this->_currentPrints++;
 	}
 
 	/**
@@ -83,6 +87,7 @@ class CodePrinter
 	{
 		$this->_lastLine = $code;
 		$this->_code .= str_repeat("\t", $this->_level) . $code . PHP_EOL;
+		$this->_currentPrints++;
 	}
 
 	/**
@@ -99,6 +104,7 @@ class CodePrinter
 		}
 		$this->_lastLine = $code;
 		$this->_code .= $code;
+		$this->_currentPrints++;
 	}
 
 	/**
@@ -110,6 +116,7 @@ class CodePrinter
 	{
 		$this->_lastLine = $code;
 		$this->_code .= $code . PHP_EOL;
+		$this->_currentPrints++;
 	}
 
 	/**
@@ -124,10 +131,12 @@ class CodePrinter
 		if (!$ifPrevNotBlank) {
 			$this->_code = PHP_EOL . $this->_code;
 			$this->_lastLine = PHP_EOL;
+			$this->_currentPrints++;
 		} else {
 			if (trim($this->_lastLine)) {
 				$this->_code = PHP_EOL . $this->_code;
 				$this->_lastLine = PHP_EOL;
+				$this->_currentPrints++;
 			}
 		}
 	}
@@ -144,10 +153,12 @@ class CodePrinter
 		if (!$ifPrevNotBlank) {
 			$this->_code .= PHP_EOL;
 			$this->_lastLine = PHP_EOL;
+			$this->_currentPrints++;
 		} else {
 			if (trim($this->_lastLine)) {
 				$this->_code .= PHP_EOL;
 				$this->_lastLine = PHP_EOL;
+				$this->_currentPrints++;
 			}
 		}
 	}
@@ -168,9 +179,24 @@ class CodePrinter
 		$this->_level--;
 	}
 
+	/**
+	 * Returns the output in the buffer
+	 *
+	 * @return string
+	 */
 	public function getOutput()
 	{
 		return $this->_code;
+	}
+
+	/**
+	 * Returns an approximate number of lines printed by the CodePrinter
+	 *
+	 * @return int
+	 */
+	public function getNumberPrints()
+	{
+		return $this->_currentPrints;
 	}
 
 }

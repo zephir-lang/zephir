@@ -63,6 +63,10 @@ class StatementsBlock
 					$whileStatement = new WhileStatement($statement);
 					$whileStatement->compile($compilationContext);
 					break;
+				case 'for':
+					$forStatement = new ForStatement($statement);
+					$forStatement->compile($compilationContext);
+					break;
 				case 'return':
 					$returnStatement = new ReturnStatement($statement);
 					$returnStatement->compile($compilationContext);

@@ -52,6 +52,11 @@ class ClassProperty
 		}
 	}
 
+	/**
+	 * Produce the code to register a property
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compile(CompilationContext $compilationContext)
 	{
 		if (!is_array($this->_defaultValue)) {

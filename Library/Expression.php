@@ -109,7 +109,7 @@ class Expression
 		switch ($left->getType()) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value'], $compilationContext, $expression['left']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
 
 				switch ($right->getType()) {
 					case 'int':
@@ -118,6 +118,9 @@ class Expression
 					case 'null':
 						$compilationContext->headersManager->add('kernel/operators');
 						return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
+					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
+						return new CompiledExpression('bool', 'ZEPHIR_IS_EQUALS(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 					default:
 						throw new CompilerException("Error Processing Request", $expression);
 				}
@@ -298,6 +301,9 @@ class Expression
 				switch ($expression['left']['right']['type'])	{
 					case 'string':
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
+					case 'variable':
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['left']['right']['value'], $compilationContext, $expression['left']['right']);
+						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', ' . $indexVariable->getName() . '))', $expression);
 					default:
 						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
 				}
@@ -333,6 +339,9 @@ class Expression
 				switch ($expression['right']['right']['type'])	{
 					case 'string':
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
+					case 'variable':
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['right']['value'], $compilationContext, $expression['right']['left']);
+						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', ' . $indexVariable->getName() . '))', $expression);
 					default:
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}

@@ -161,6 +161,8 @@ class ClassMethod
 
 	/**
 	 * Assigns zval value to static type
+	 *
+	 * @param array $parameter
 	 */
 	public function assignZvalValue($parameter, $compilationContext)
 	{

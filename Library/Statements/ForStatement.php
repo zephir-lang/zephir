@@ -17,11 +17,11 @@
 */
 
 /**
- * WhileStatement
+ * ForStatement
  *
- * While statement, the same as in PHP/C
+ * For statement, the same as in PHP/C
  */
-class WhileStatement
+class ForStatement
 {
 	protected $_statement;
 
@@ -39,19 +39,27 @@ class WhileStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$numberPrints = $codePrinter->getNumberPrints();
+		$expr = new Expression($exprRaw);
+		$expression = $expr->compile($compilationContext);
 
-		$expr = new EvalExpression();
-		$condition = $expr->optimize($exprRaw, $compilationContext);
+		if ($expression->getType() != 'variable') {
+			throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
+		}
 
 		/**
-		 * Compound conditions can be evaluated in a single line of the C-code
+		 * Initialize 'key' variable
 		 */
-		if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
-			$codePrinter->output('while (' . $condition . ') {');
-		} else {
-			$codePrinter->output('while (true) {');
-			$codePrinter->outputLineBreak();
+		if (isset($this->_statement['key'])) {
+			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			$keyVariable->setIsInitialized(true);
+		}
+
+		/**
+		 * Initialize 'value' variable
+		 */
+		if (isset($this->_statement['value'])) {
+			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			$variable->setIsInitialized(true);
 		}
 
 		/**
@@ -59,8 +67,11 @@ class WhileStatement
 		 */
 		$compilationContext->insideCycle++;
 
+		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &ah0, &hp0, 0, 1);');
+        $codePrinter->output('while (zend_hash_get_current_data_ex(ah0, (void**) &hd, &hp0) == SUCCESS) {');
+
 		/**
-		 * Compile statements in the 'while' block
+		 * Compile statements in the 'for' block
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
