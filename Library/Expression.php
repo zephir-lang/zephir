@@ -835,7 +835,8 @@ class Expression
 				return $this->propertyAccess($expression, $compilationContext);
 
 			case 'fcall':
-				return new CompiledExpression('null', null, $expression);
+				$functionCall = new FunctionCall();
+				return $functionCall->compile($this, $compilationContext);
 
 			case 'mcall':
 				$methodCall = new MethodCall();

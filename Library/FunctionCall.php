@@ -17,12 +17,64 @@
  +----------------------------------------------------------------------+
 */
 
-class FunctionCall
+/**
+ * FunctionCall
+ *
+ * Call functions
+ */
+class FunctionCall extends Call
 {
 
-	public function compile()
+	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 
+		$expression = $expr->getExpression();
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$funcName = strtolower($expression['name']);
+
+		/**
+		 * Create temporary variable if needed
+		 */
+		$isExpecting = $expr->isExpectingReturn();
+		if ($isExpecting) {
+			$symbolVariable = $expr->getExpectingVariable();
+			if (is_object($symbolVariable)) {
+				$symbolVariable->initVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+			}
+		}
+
+		if (!isset($expression['parameters'])) {
+			if ($isExpecting) {
+				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
+			} else {
+				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+			}
+		} else {
+
+			/**
+			 * @TODO: Resolve parameters properly
+			 */
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+			if (count($params)) {
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+				}
+			} else {
+				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+			}
+		}
+
+		if ($isExpecting) {
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		return new CompiledExpression('null', null, $expression);
 	}
 
 }

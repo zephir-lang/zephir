@@ -17,7 +17,7 @@
  +----------------------------------------------------------------------+
 */
 
-class MethodCall
+class MethodCall extends Call
 {
 
 	public function compile(Expression $expr, CompilationContext $compilationContext)
@@ -58,36 +58,7 @@ class MethodCall
 			}
 		} else {
 
-			/**
-			 * @TODO: Resolve parameters properly
-			 */
-			$params = array();
-			if (isset($expression['parameters'])) {
-				foreach ($expression['parameters'] as $parameter) {
-					$paramExpr = new Expression($parameter);
-					$compiledExpression = $paramExpr->compile($compilationContext);
-					switch ($compiledExpression->getType()) {
-						case 'string':
-							$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 1);');
-							$params[] = $parameterVariable->getName();
-							break;
-						case 'variable':
-							$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
-							switch ($parameterVariable->getType()) {
-								case 'variable':
-									$params[] = $parameterVariable->getName();
-									break;
-								default:
-									throw new CompilerException("Cannot use variable type: " . $compiledExpression->getType() . " as parameter", $parameter);
-							}
-							break;
-						default:
-							throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $parameter);
-					}
-				}
-			}
-
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
 			if (count($params)) {
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');

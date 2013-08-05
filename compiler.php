@@ -47,6 +47,7 @@ require 'Library/Expression.php';
 require 'Library/CompiledExpression.php';
 require 'Library/CodePrinter.php';
 require 'Library/ClassMethodParameters.php';
+require 'Library/Call.php';
 require 'Library/FunctionCall.php';
 require 'Library/MethodCall.php';
 

@@ -144,7 +144,7 @@ class EvalExpression
 				 */
 				return $compiledExpression->getBooleanCode();
 			case 'variable':
-				$variableRight = $compilationContext->symbolTable->getVariableForRead($exprRaw['value'], $exprRaw);
+				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $exprRaw);
 				switch ($variableRight->getType()) {
 					case 'int':
 						return $variableRight->getName();

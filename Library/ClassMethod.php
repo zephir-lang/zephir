@@ -137,7 +137,7 @@ class ClassMethod
 				}
 				break;
 			case 'variable':
-				$code .= 'PHALCON_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+				$code .= "\t\t" . 'PHALCON_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 				switch ($parameter['default']['type']) {
 					case 'int':
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
@@ -152,10 +152,33 @@ class ClassMethod
 				}
 				break;
 			default:
-				throw new CompilerException("Default parameter type: " . $dataType);
+				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
 		}
 
 		return $code;
+	}
+
+	/**
+	 * Assigns zval value to static type
+	 */
+	public function assignZvalValue($parameter, $compilationContext)
+	{
+		if (isset($parameter['data-type'])) {
+			$dataType = $parameter['data-type'];
+		} else {
+			$dataType = 'variable';
+		}
+
+		switch ($dataType) {
+			case 'int':
+				return "\t\t" . $parameter['name'] . ' = phalcon_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+			case 'bool':
+				return "\t\t" . $parameter['name'] . ' = phalcon_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
+			case 'double':
+				return "\t\t" . $parameter['name'] . ' = phalcon_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+			default:
+				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
+		}
 	}
 
 	/**
@@ -312,7 +335,13 @@ class ClassMethod
 				 */
 				$code .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
 				$code .= $this->assignDefaultValue($parameter, $compilationContext);
-				$code .= "\t" . '}' . PHP_EOL;
+				if ($dataType == 'variable') {
+					$code .= "\t" . '}' . PHP_EOL;
+				} else {
+					$code .= "\t" . '} else {' . PHP_EOL;
+					$code .= $this->assignZvalValue($parameter, $compilationContext);
+					$code .= "\t" . '}' . PHP_EOL;
+				}
 			}
 
 			$codePrinter->preOutput($code);
