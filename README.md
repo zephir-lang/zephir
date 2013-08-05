@@ -29,7 +29,7 @@ You will need json-c installed on your machine:
 
 * [json-c](https://github.com/json-c/json-c)
 
-Compilation:
+Once you have json-c installed, you can generate the parser as follows:
 
 ```bash
 ./generate
@@ -48,7 +48,14 @@ The code produced is placed in ext/, there you can perform the standard compilat
 
 ```bash
 cd ext/
-phpize
-./configure --enable-test
-make && sudo make install
+sudo ./install
 ```
+
+Donate & Sponsor
+----------------
+
+Zephir is driven by the voluntary and altruist efforts of the core developers and contributors.
+We invite you to sponsor our work, by [donating](https://www.gittip.com/phalcon/) or contacting us regarding sponsorship, allowing us to invest more time and resources to the project, ensuring it will be ready sooner and with loads of features. 
+
+Hopefully, you can take advantage of the features provided by Zephir too!
+

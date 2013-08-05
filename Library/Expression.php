@@ -896,7 +896,6 @@ class Expression
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);
 		}
-		//echo $type;
 	}
 
 }

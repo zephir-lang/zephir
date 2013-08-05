@@ -45,7 +45,11 @@ class ClassProperty
 
 	public function getVisibilityAccesor()
 	{
-		return 'ZEND_ACC_PROTECTED';
+		if ($this->_visibility == 'protected') {
+			return 'ZEND_ACC_PROTECTED';
+		} else {
+			return 'ZEND_ACC_PUBLIC';
+		}
 	}
 
 	public function compile(CompilationContext $compilationContext)

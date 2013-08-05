@@ -74,4 +74,11 @@ class CompilationContext
 	 */
 	public $insideCycle = 0;
 
+	/**
+	 * Tells if the the compilation is being made inside a switch
+	 *
+	 * @var int
+	 */
+	public $insideSwitch = 0;
+
 }
