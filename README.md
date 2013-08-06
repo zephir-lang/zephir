@@ -25,11 +25,19 @@ Installation
 
 xx is the parser for the language:
 
-You will need json-c installed on your machine:
+Requirements:
 
 * [json-c](https://github.com/json-c/json-c)
+* [re2c](http://re2c.org/)
+ 
+Installation on Ubuntu
+-----------------------
 
-Once you have json-c installed, you can generate the parser as follows:
+apt-get install libjson0 libjson0-dev libjson0-dbg
+apt-get install re2c
+
+
+Once you have the required packages installed, you can generate the parser as follows:
 
 ```bash
 ./generate
