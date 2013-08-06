@@ -74,17 +74,17 @@ class SymbolTable
 	 */
 	public function addVariable($type, $name, $defaultValue=null)
 	{
+		$variable = new Variable($type, $name, $defaultValue);
 		if ($type == 'variable') {
 			if ($this->_localContext) {
 				/**
 				 * Checks whether a variable can be optimized to be static or not
 				 */
 				if ($this->_localContext->shouldBeLocal($name)) {
-					$type = 'static-variable';
+					$variable->setLocalOnly(true);
 				}
 			}
 		}
-		$variable = new Variable($type, $name, $defaultValue);
 		$this->_variables[$name] = $variable;
 		return $variable;
 	}

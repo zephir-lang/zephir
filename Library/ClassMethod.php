@@ -427,9 +427,6 @@ class ClassMethod
 					$pointer = '*';
 					$code = 'zval ';
 					break;
-				case 'static-variable':
-					$code = 'zval ';
-					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
 			}

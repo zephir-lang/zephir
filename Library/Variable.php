@@ -77,6 +77,26 @@ class Variable
 	}
 
 	/**
+	 * Sets if the variable is local-only scoped
+	 *
+	 * @param boolean $localOnly
+	 */
+	public function setLocalOnly($localOnly)
+	{
+		$this->_localOnly = $localOnly;
+	}
+
+	/**
+	 * Checks if the variable is local-only scoped
+	 *
+	 * @return boolean
+	 */
+	public function isLocalOnly()
+	{
+		return $this->_localOnly;
+	}
+
+	/**
 	 * Returns variable's real name
 	 *
 	 * @return string

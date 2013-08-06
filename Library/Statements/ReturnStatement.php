@@ -90,10 +90,6 @@ class ReturnStatement
 							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
 						}
 						break;
-					case 'static-variable':
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
-						$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
-						break;
 					default:
 						throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 				}

@@ -487,10 +487,6 @@ class Expression
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
 						break;
-					case 'static-variable':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $variableIndex->getName() . ', PH_NOISY);');
-						break;
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
 				}

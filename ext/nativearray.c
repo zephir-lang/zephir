@@ -31,13 +31,13 @@ ZEPHIR_INIT_CLASS(Test_NativeArray) {
 
 PHP_METHOD(Test_NativeArray, testArray1) {
 
-	zval a;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	RETURN_CCTOR(&a);
+	RETURN_CCTOR(a);
 
 
 }
@@ -771,8 +771,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 
 PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 
-	zval c;
-	zval *a, *b;
+	zval *a, *b, *c;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
@@ -782,10 +781,10 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 	add_assoc_long_ex(a, SS("c"), 3);
 
 	ZEPHIR_INIT_VAR(c);
-	ZVAL_STRING(&c, "a", 1);
+	ZVAL_STRING(c, "a", 1);
 
 	ZEPHIR_OBS_VAR(b);
-	zephir_array_fetch(&b, a, &c, PH_NOISY);
+	zephir_array_fetch(&b, a, c, PH_NOISY);
 
 	RETURN_CCTOR(b);
 
