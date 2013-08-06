@@ -234,6 +234,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_IN:
 				xx_(xx_parser, XX_IN, NULL, parser_status);
 				break;
+			case XX_T_REVERSE:
+				xx_(xx_parser, XX_REVERSE, NULL, parser_status);
+				break;
 
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);

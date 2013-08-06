@@ -71,6 +71,7 @@
 #define XX_T_SWITCH 379
 #define XX_T_CASE 380
 #define XX_T_DEFAULT 381
+#define XX_T_REVERSE 382
 
 /* Operators */
 #define XX_T_AT '@'

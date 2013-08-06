@@ -295,7 +295,7 @@ class Router
 		var realUri, request, currentHostName, routeFound, parts,
 			params, matches, routes, reversedRoutes, notFoundPaths,
 			vnamespace, module,  controller, action, paramsStr, strParams,
-			paramsMerge, route, methods, dependencyInjector, matchMethod,
+			paramsMerge, route, methods, dependencyInjector,
 			hostname, regexHostName, matched, pattern, handledUri, beforeMatch,
 			paths, converters, part, position, matchPosition;
 
@@ -323,10 +323,7 @@ class Router
 			this->_matchedRoute = null;
 
 		// Routes are traversed in reversed order
-		let routes = this->_routes;
-		let reversedRoutes = array_reverse(routes);
-
-		for route in reversedRoutes {
+		for route in reverse this->_routes {
 
 			// Look for HTTP method constraints
 			let methods = route->getHttpMethods();
@@ -344,16 +341,13 @@ class Router
 				}
 
 				// Check if the current method is allowed by the route
-				let matchMethod = request->isMethod(methods);
-
-				if matchMethod === false {
+				if request->isMethod(methods) === false {
 					continue;
 				}
 			}
 
 			// Look for hostname constraints
 			let hostname = route->getHostName();
-
 			if hostname !== null {
 
 				// Retrieve the request service from the container
@@ -682,7 +676,6 @@ class Router
 		}
 
 		let groupRoutes = group->getRoutes();
-
 		if !count(groupRoutes) {
 			throw new Test\Router\Exception("The group of routes does not contain any routes");
 		}
