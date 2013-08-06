@@ -520,7 +520,8 @@ PHP_METHOD(Test_Router_Route, getPaths) {
  */
 PHP_METHOD(Test_Router_Route, getReversedPaths) {
 
-	zval *reversed, *path, *position, *_0;
+	zval *path, *position, *_0;
+	zval reversed;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(reversed);
@@ -535,7 +536,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 
 	}
 
-	RETURN_CCTOR(reversed);
+	RETURN_CCTOR(&reversed);
 
 
 }

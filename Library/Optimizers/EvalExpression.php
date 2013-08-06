@@ -154,8 +154,10 @@ class EvalExpression
 						return $variableRight->getName();
 					case 'variable':
 						return 'zend_is_true(' . $variableRight->getName() . ')';
+					case 'static-variable':
+						return 'zend_is_true(&' . $variableRight->getName() . ')';
 					default:
-						throw new CompiledException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
+						throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
 				}
 				break;
 			default:

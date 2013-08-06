@@ -192,7 +192,25 @@ class ClassMethod
 	public function compile(CompilationContext $compilationContext)
 	{
 
+		/**
+		 * This pass checks for zval variables than can be potentally
+		 * used without allocate memory and memory tracking
+		 * these variables are stored in the heap
+		 */
+		if (is_object($this->_statements)) {
+			$localContext = new LocalContextPass();
+			$localContext->pass($this->_statements);
+		} else {
+			$localContext = null;
+		}
+
+		/**
+		 * Every method has its own symbol table
+		 */
 		$symbolTable = new SymbolTable();
+		if ($localContext) {
+			$symbolTable->setLocalContext($localContext);
+		}
 
 		$compilationContext->symbolTable = $symbolTable;
 
@@ -407,6 +425,9 @@ class ClassMethod
 					break;
 				case 'variable':
 					$pointer = '*';
+					$code = 'zval ';
+					break;
+				case 'static-variable':
 					$code = 'zval ';
 					break;
 				default:

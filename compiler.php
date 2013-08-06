@@ -51,6 +51,7 @@ require 'Library/Optimizers/EvalExpression.php';
 require 'Library/Call.php';
 require 'Library/FunctionCall.php';
 require 'Library/MethodCall.php';
+require 'Library/Passes/LocalContextPass.php';
 
 Compiler::boot();
 

@@ -267,6 +267,122 @@ class LetStatement
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
+			case 'static-variable':
+				switch ($resolvedExpr->getType()) {
+					case 'null':
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
+						}
+						break;
+					case 'int':
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						}
+						break;
+					case 'double':
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						}
+						break;
+					case 'bool':
+						$symbolVariable->initVariant($compilationContext);
+						if ($resolvedExpr->getCode() == 'true') {
+							$codePrinter->output('ZVAL_BOOL(&' . $variable . ', 1);');
+						} else {
+							if ($resolvedExpr->getCode() == 'false') {
+								$codePrinter->output('ZVAL_BOOL(&' . $variable . ', 0);');
+							} else {
+								$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');');
+							}
+						}
+						break;
+					case 'string':
+						$symbolVariable->initVariant($compilationContext);
+						$codePrinter->output('ZVAL_STRING(&' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						break;
+					case 'variable':
+
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'double':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'bool':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'variable':
+								if ($itemVariable->getName() != $variable) {
+									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+						}
+						break;
+					case 'static-variable':
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'double':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'bool':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'variable':
+								if ($itemVariable->getName() != $variable) {
+									throw new CompilerException("Trying to assign variable to heap variable ", $statement);
+								}
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+						}
+						break;
+					case 'expr-variable':
+						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+							$code = $resolvedExpr->resolve(null, $compilationContext);
+							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
+						} else {
+							$symbolVariable->initVariant($compilationContext);
+							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+						}
+						break;
+					case 'empty-array':
+						$symbolVariable->initVariant($compilationContext);
+						$codePrinter->output('array_init(' . $variable . ');');
+						break;
+					case 'fcall':
+						//$this->newInstance($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+						$codePrinter->output('//missing fcall');
+						break;
+					case 'mcall':
+						$methodCall = new MethodCall();
+						$methodCall->compile($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+						break;
+					default:
+						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+				}
+				break;
 			case 'variable':
 
 				switch ($resolvedExpr->getType()) {
@@ -329,6 +445,30 @@ class LetStatement
 							case 'variable':
 								if ($itemVariable->getName() != $variable) {
 									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
+								break;
+							default:
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+						}
+						break;
+					case 'static-variable':
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+						switch ($itemVariable->getType()) {
+							case 'int':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'double':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'bool':
+								$symbolVariable->initVariant($compilationContext);
+								$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								break;
+							case 'variable':
+								if ($itemVariable->getName() != $variable) {
+									throw new CompilerException("Trying to assign variable to heap variable ", $statement);
 								}
 								break;
 							default:
@@ -496,6 +636,11 @@ class LetStatement
 				$compilationContext->headersManager->add('kernel/operators');
 				$symbolVariable->initVariant($compilationContext);
 				$codePrinter->output('zephir_decrement(' . $variable . ');');
+				break;
+			case 'static-variable':
+				$compilationContext->headersManager->add('kernel/operators');
+				$symbolVariable->initVariant($compilationContext);
+				$codePrinter->output('zephir_decrement(&' . $variable . ');');
 				break;
 			default:
 				throw new CompilerException("Cannot decrement variable: " . $symbolVariable->getType(), $statement);

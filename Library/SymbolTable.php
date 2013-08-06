@@ -31,6 +31,8 @@ class SymbolTable
 
 	protected $_tempVariable = 0;
 
+	protected $_localContext;
+
 	public function __construct()
 	{
 		$thisVar = new Variable('variable', 'this');
@@ -39,6 +41,16 @@ class SymbolTable
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
 		$this->_variables['this'] = $thisVar;
+	}
+
+	/**
+	 * Sets the local context information
+	 *
+	 * @param LocalContextPass $localContext
+	 */
+	public function setLocalContext(LocalContextPass $localContext)
+	{
+		$this->_localContext = $localContext;
 	}
 
 	/**
@@ -62,6 +74,16 @@ class SymbolTable
 	 */
 	public function addVariable($type, $name, $defaultValue=null)
 	{
+		if ($type == 'variable') {
+			if ($this->_localContext) {
+				/**
+				 * Checks whether a variable can be optimized to be static or not
+				 */
+				if ($this->_localContext->shouldBeLocal($name)) {
+					$type = 'static-variable';
+				}
+			}
+		}
 		$variable = new Variable($type, $name, $defaultValue);
 		$this->_variables[$name] = $variable;
 		return $variable;

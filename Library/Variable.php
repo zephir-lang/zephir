@@ -60,6 +60,8 @@ class Variable
 
 	protected $_readOnly = false;
 
+	protected $_localOnly = false;
+
 	/**
 	 * \Variable
 	 */
