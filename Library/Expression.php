@@ -341,7 +341,10 @@ class Expression
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['right']['value'], $compilationContext, $expression['right']['left']);
-						return new CompiledExpression('int', 'zephir_array_isset(' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+						switch ($indexVariable->getType()) {
+							case 'variable':
+								return new CompiledExpression('int', 'zephir_array_isset(' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+						}
 					default:
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}
@@ -893,10 +896,12 @@ class Expression
 
 			case 'add':
 				$expr = new AddOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'sub':
 				$expr = new SubOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'concat':

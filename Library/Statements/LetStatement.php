@@ -124,12 +124,12 @@ class LetStatement
 							case 'double':
 								$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
 								break;
+							case 'variable':
+								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+								break;
 							default:
 								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
 						}
-						break;
-					case 'expr-variable':
-						$codePrinter->output($variable . ' = zephir_get_intval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
 						throw new CompilerException("Value type '" . $resolvedExpr->getType() . "' cannot be assigned to variable: int", $statement);
@@ -165,9 +165,6 @@ class LetStatement
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
-						break;
-					case 'expr-variable':
-						$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 						break;
 					default:
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);

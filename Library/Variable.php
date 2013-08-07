@@ -108,6 +108,9 @@ class Variable
 		$this->_doublePointer = $doublePointer;
 	}
 
+	/**
+	 * Returns the variable
+	 */
 	public function isDoublePointer()
 	{
 		return $this->_doublePointer;
