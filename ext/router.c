@@ -496,7 +496,7 @@ PHP_METHOD(Test_Router, handle) {
 		ZEPHIR_INIT_NVAR(methods);
 		zephir_call_method(methods, route, "gethttpmethods");
 
-		if (Z_TYPE_P(methods) == IS_NULL) {
+		if (Z_TYPE_P(methods) != IS_NULL) {
 			//missing comment
 			if (Z_TYPE_P(request) == IS_NULL) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
@@ -523,7 +523,7 @@ PHP_METHOD(Test_Router, handle) {
 		ZEPHIR_INIT_NVAR(hostname);
 		zephir_call_method(hostname, route, "gethostname");
 
-		if (Z_TYPE_P(hostname) == IS_NULL) {
+		if (Z_TYPE_P(hostname) != IS_NULL) {
 			//missing comment
 			if (Z_TYPE_P(request) == IS_NULL) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
@@ -605,7 +605,7 @@ PHP_METHOD(Test_Router, handle) {
 			ZEPHIR_INIT_NVAR(beforeMatch);
 			zephir_call_method(beforeMatch, route, "getbeforematch");
 
-			if (Z_TYPE_P(beforeMatch) == IS_NULL) {
+			if (Z_TYPE_P(beforeMatch) != IS_NULL) {
 				//missing comment
 				ZEPHIR_INIT_NVAR(_16);
 				zephir_call_func_p1(_16, "is_callable", beforeMatch);
@@ -690,7 +690,7 @@ PHP_METHOD(Test_Router, handle) {
 		ZEPHIR_OBS_VAR(notFoundPaths);
 		zephir_read_property(&notFoundPaths, this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
 
-		if (Z_TYPE_P(notFoundPaths) == IS_NULL) {
+		if (Z_TYPE_P(notFoundPaths) != IS_NULL) {
 
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
 
@@ -1100,7 +1100,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_INIT_VAR(beforeMatch);
 	zephir_call_method(beforeMatch, group, "getbeforematch");
 
-	if (Z_TYPE_P(beforeMatch) == IS_NULL) {
+	if (Z_TYPE_P(beforeMatch) != IS_NULL) {
 		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 1);
 		while (zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS) {
 			ZEPHIR_GET_HVALUE(route, _2);
@@ -1112,7 +1112,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_INIT_VAR(hostname);
 	zephir_call_method(hostname, group, "gethostname");
 
-	if (Z_TYPE_P(hostname) == IS_NULL) {
+	if (Z_TYPE_P(hostname) != IS_NULL) {
 		zephir_is_iterable(groupRoutes, &_5, &_4, 0, 1);
 		while (zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS) {
 			ZEPHIR_GET_HVALUE(route, _6);

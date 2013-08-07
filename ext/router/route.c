@@ -259,7 +259,7 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName, *controllerName, *actionName, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -273,7 +273,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The pattern must be string");
 		return;
 	}
-	if (Z_TYPE_P(paths) == IS_NULL) {
+	if (Z_TYPE_P(paths) != IS_NULL) {
 		if (Z_TYPE_P(paths) == IS_STRING) {
 
 			ZEPHIR_INIT_VAR(moduleName);
@@ -295,17 +295,45 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			zephir_call_func_p1(numberParts, "count", parts);
 
 			//missing comment
-			//missing switch
+			do {
+			if (ZEPHIR_IS_LONG(numberParts, 3)) {
+				ZEPHIR_OBS_NVAR(moduleName);
+				zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
+
+				ZEPHIR_OBS_NVAR(controllerName);
+				zephir_array_fetch_long(&controllerName, parts, 1, PH_NOISY);
+
+				ZEPHIR_OBS_NVAR(actionName);
+				zephir_array_fetch_long(&actionName, parts, 2, PH_NOISY);
+
+				break;
+			}
+			if (ZEPHIR_IS_LONG(numberParts, 2)) {
+				ZEPHIR_OBS_NVAR(controllerName);
+				zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
+
+				ZEPHIR_OBS_NVAR(actionName);
+				zephir_array_fetch_long(&actionName, parts, 1, PH_NOISY);
+
+				break;
+			}
+			if (ZEPHIR_IS_LONG(numberParts, 1)) {
+				ZEPHIR_OBS_NVAR(controllerName);
+				zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
+
+				break;
+			}
+			} while(0); 
 
 			ZEPHIR_INIT_VAR(routePaths);
 			array_init(routePaths);
 
 			//missing comment
-			if (Z_TYPE_P(moduleName) == IS_NULL) {
+			if (Z_TYPE_P(moduleName) != IS_NULL) {
 
 			}
 			//missing comment
-			if (Z_TYPE_P(controllerName) == IS_NULL) {
+			if (Z_TYPE_P(controllerName) != IS_NULL) {
 				//missing comment
 				ZEPHIR_INIT_VAR(_1);
 				ZEPHIR_INIT_VAR(_2);
@@ -337,7 +365,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 			}
 			//missing comment
-			if (Z_TYPE_P(actionName) == IS_NULL) {
+			if (Z_TYPE_P(actionName) != IS_NULL) {
 
 			}
 		} else {
@@ -368,6 +396,9 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		if (zend_is_true(_5)) {
 			//missing comment
 			//missing comment
+
+			ZEPHIR_CPY_WRT(pcrePattern, pattern);
+
 		} else {
 
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);

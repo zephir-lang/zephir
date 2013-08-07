@@ -10,7 +10,6 @@
  | that is bundled with this package in the file LICENSE, and is        |
  | available through the world-wide-web at the following url:           |
  | http://www.zephir-lang.com/license                                   |
- |                                                                      |
  | If you did not receive a copy of the Zephir license and are unable   |
  | to obtain it through the world-wide-web, please send a note to       |
  | license@zephir-lang.com so we can mail you a copy immediately.       |
@@ -18,11 +17,11 @@
 */
 
 /**
- * BreakStatement
+ * SwitchStatement
  *
- * Break statement
+ * Switch statement, the same as in PHP/C
  */
-class BreakStatement
+class SwitchStatement
 {
 	protected $_statement;
 
@@ -32,15 +31,52 @@ class BreakStatement
 	}
 
 	/**
+	 * Perform the compilation of code
 	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
-			$compilationContext->codePrinter->output('break;');
-		} else {
-			throw new CompilerException("Cannot use 'break' outside a cycle", $this->_statement);
+		$exprRaw = $this->_statement['expr'];
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$numberPrints = $codePrinter->getNumberPrints();
+
+		$compilationContext->insideSwitch++;
+
+		$codePrinter->output('do {');
+
+		$evalExpr = new EvalExpression();
+		foreach ($this->_statement['clauses'] as $clause) {
+			if ($clause['type'] == 'case') {
+
+				$expr = array(
+					'type' => 'equals',
+					'left' => $exprRaw,
+					'right' => $clause['expr']
+				);
+
+				$condition = $evalExpr->optimize($expr, $compilationContext);
+				$codePrinter->output('if (' . $condition . ') {');
+
+				if (isset($clause['statements'])) {
+					$st = new StatementsBlock($clause['statements']);
+					$st->compile($compilationContext);
+				}
+
+				$codePrinter->output('}');
+			}
 		}
+
+		$compilationContext->insideSwitch--;
+
+		/**
+		 * Compile statements in the 'while' block
+		 */
+
+		$codePrinter->output('} while(0); ');
+
 	}
 
 }

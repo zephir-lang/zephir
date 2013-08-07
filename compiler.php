@@ -45,6 +45,7 @@ require 'Library/Statements/ReturnStatement.php';
 require 'Library/Statements/IfStatement.php';
 require 'Library/Statements/LoopStatement.php';
 require 'Library/Statements/WhileStatement.php';
+require 'Library/Statements/SwitchStatement.php';
 require 'Library/Statements/ForStatement.php';
 require 'Library/Statements/BreakStatement.php';
 require 'Library/Statements/ContinueStatement.php';

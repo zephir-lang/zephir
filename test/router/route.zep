@@ -1,12 +1,11 @@
 
+namespace Test\Router;
+
 /**
  * Test\Router\Route
  *
  * This class represents every route added to the router
  */
-
-namespace Test\Router;
-
 class Route
 {
 
@@ -227,6 +226,7 @@ class Route
 			if memchr(pattern, '{') {
 				// The route has named parameters so we need to extract them
 				//let pcrePattern = extractNamedParams(pattern, routePaths);
+				let pcrePattern = pattern;
 			} else {
 				let pcrePattern = pattern;
 			}

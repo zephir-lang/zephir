@@ -30,7 +30,6 @@ class WriteDetector
 	public function passLetStatement($variable, array $statement)
 	{
 		foreach ($statement['assignments'] as $assigment) {
-			echo $assigment['variable'], PHP_EOL;
 			if ($assigment['variable'] == $variable) {
 				return true;
 			}

@@ -140,7 +140,7 @@ class Expression
 		}
 	}
 
-	public function compileIdentical($expression, CompilationContext $compilationContext)
+	public function compileIdentical($operator, $expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
 			throw new Exception("Missing left part of the expression");
@@ -163,15 +163,15 @@ class Expression
 
 				switch ($variable->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getCode() . ')', $expression['left']);
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
 							case 'bool':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' == ' . $right->getBooleanCode() . ')', $expression['left']);
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getBooleanCode() . ')', $expression['left']);
 							case 'null':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' == 0)', $expression['left']);
+								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' 0)', $expression['left']);
 							default:
 								throw new CompilerException("Error Processing Request", $expression['left']);
 						}
@@ -190,7 +190,7 @@ class Expression
 								}
 							case 'null':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression['left']);
+								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') ' . $operator . ' IS_NULL', $expression['left']);
 							default:
 								throw new CompilerException("Error Processing Request", $expression['left']);
 						}
@@ -202,9 +202,9 @@ class Expression
 			case 'int':
 				switch ($right->getType()) {
 					case 'int':
-						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
+						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' ' . $right->getCode(), $expression);
 					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
+						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' (int) ' . $right->getCode(), $expression);
 					default:
 						throw new CompilerException("Error Processing Request", $expression);
 				}
@@ -886,10 +886,10 @@ class Expression
 				return $this->compileNot($expression, $compilationContext);
 
 			case 'identical':
-				return $this->compileIdentical($expression, $compilationContext);
+				return $this->compileIdentical('==', $expression, $compilationContext);
 
 			case 'not-identical':
-				return $this->compileIdentical($expression, $compilationContext);
+				return $this->compileIdentical('!=', $expression, $compilationContext);
 
 			case 'less':
 				return $this->compileLess($expression, $compilationContext);
