@@ -531,7 +531,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_property(&_0, this_ptr, SL("_paths"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 1);
-	while (zend_hash_get_current_data_ex(&_2, (void**) &_3, &_1) == SUCCESS) {
+	while (zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS) {
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 

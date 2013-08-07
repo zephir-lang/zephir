@@ -303,7 +303,7 @@ class Expression
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['left']['right']['value'], $compilationContext, $expression['left']['right']);
-						return new CompiledExpression('int', 'zephir_array_isset_string(' . $variable->getName() . ', ' . $indexVariable->getName() . '))', $expression);
+						return new CompiledExpression('int', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
 				}
@@ -341,7 +341,7 @@ class Expression
 						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['right']['value'], $compilationContext, $expression['right']['left']);
-						return new CompiledExpression('int', 'zephir_array_isset_string(' . $evalVariable->getName() . ', ' . $indexVariable->getName() . '))', $expression);
+						return new CompiledExpression('int', 'zephir_array_isset(' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}

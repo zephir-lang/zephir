@@ -80,7 +80,7 @@ class ForStatement
 		$tempVariable->setIsDoublePointer(true);
 
 		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 1);');
-        $codePrinter->output('while (zend_hash_get_current_data_ex(&' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS) {');
+        $codePrinter->output('while (zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS) {');
 
 		/**
 		 * Compile statements in the 'for' block
