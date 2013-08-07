@@ -153,9 +153,11 @@ class EvalExpression
 					case 'double':
 						return $variableRight->getName();
 					case 'variable':
-						return 'zend_is_true(' . $variableRight->getName() . ')';
-					case 'static-variable':
-						return 'zend_is_true(&' . $variableRight->getName() . ')';
+						if ($variableRight->isLocalOnly()) {
+							return 'zend_is_true(&' . $variableRight->getName() . ')';
+						} else {
+							return 'zend_is_true(' . $variableRight->getName() . ')';
+						}
 					default:
 						throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
 				}

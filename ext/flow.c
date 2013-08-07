@@ -273,19 +273,18 @@ PHP_METHOD(Test_Flow, testIf12) {
 
 PHP_METHOD(Test_Flow, testLoop1) {
 
-	zval *a;
+	zval a;
 
-	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_BOOL(a, 1);
+	ZEPHIR_SINIT_VAR(a);
+	ZVAL_BOOL(&a, 1);
 
 	while (1) {
-		if (zend_is_true(a)) {
+		if (zend_is_true(&a)) {
 			break;
 		}
 	}
 
-	RETURN_CCTOR(a);
+	RETURN_CCTORW(&a);
 
 
 }
@@ -399,22 +398,20 @@ PHP_METHOD(Test_Flow, testWhile2) {
 PHP_METHOD(Test_Flow, testWhile3) {
 
 	double c;
-	zval *b = NULL, *_0 = NULL;
+	zval b;
 	long a;
 
-	ZEPHIR_MM_GROW();
 	a = 5;
 
 	while (a) {
 
-		ZEPHIR_INIT_NVAR(b);
-		ZVAL_LONG(b, 5);
+		ZEPHIR_SINIT_NVAR(b);
+		ZVAL_LONG(&b, 5);
 
-		while (zend_is_true(b)) {
+		while (zend_is_true(&b)) {
 
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_DOUBLE(_0, zephir_get_doubleval(b) - 1);
-			ZEPHIR_CPY_WRT(b, _0);
+			ZEPHIR_SINIT_NVAR(b);
+			ZVAL_DOUBLE(&b, zephir_get_doubleval(&b) - 1);
 
 		}
 
@@ -422,9 +419,9 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 	}
 
-	c = (double) (a + zephir_get_intval(b));
+	c = (double) (a + zephir_get_intval(&b));
 
-	RETURN_MM_DOUBLE(c);
+	RETURN_DOUBLE(c);
 
 
 }
@@ -432,22 +429,20 @@ PHP_METHOD(Test_Flow, testWhile3) {
 PHP_METHOD(Test_Flow, testWhile4) {
 
 	double c;
-	zval *b = NULL, *_0 = NULL;
+	zval b;
 	long a;
 
-	ZEPHIR_MM_GROW();
 	a = 5;
 
 	while (a) {
 
-		ZEPHIR_INIT_NVAR(b);
-		ZVAL_LONG(b, 5);
+		ZEPHIR_SINIT_NVAR(b);
+		ZVAL_LONG(&b, 5);
 
-		while (zend_is_true(b)) {
+		while (zend_is_true(&b)) {
 
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_DOUBLE(_0, zephir_get_doubleval(b) - 1);
-			ZEPHIR_CPY_WRT(b, _0);
+			ZEPHIR_SINIT_NVAR(b);
+			ZVAL_DOUBLE(&b, zephir_get_doubleval(&b) - 1);
 
 		}
 
@@ -455,9 +450,9 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 	}
 
-	c = (double) (a + zephir_get_intval(b));
+	c = (double) (a + zephir_get_intval(&b));
 
-	RETURN_MM_DOUBLE(c);
+	RETURN_DOUBLE(c);
 
 
 }
@@ -533,21 +528,20 @@ PHP_METHOD(Test_Flow, testWhile8) {
 PHP_METHOD(Test_Flow, testWhile9) {
 
 	double c;
-	zval *b = NULL;
+	zval b;
 	long a;
 
-	ZEPHIR_MM_GROW();
 	a = 5;
 
 	while (a) {
 
-		ZEPHIR_INIT_NVAR(b);
-		ZVAL_LONG(b, 5);
+		ZEPHIR_SINIT_NVAR(b);
+		ZVAL_LONG(&b, 5);
 
-		while (zend_is_true(b)) {
+		while (zend_is_true(&b)) {
 
-			ZEPHIR_INIT_NVAR(b);
-			zephir_decrement(b);
+			ZEPHIR_SINIT_NVAR(b);
+			zephir_decrement(&b);
 
 		}
 
@@ -555,9 +549,9 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 	}
 
-	c = (double) (a + zephir_get_intval(b));
+	c = (double) (a + zephir_get_intval(&b));
 
-	RETURN_MM_DOUBLE(c);
+	RETURN_DOUBLE(c);
 
 
 }

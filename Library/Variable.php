@@ -257,12 +257,21 @@ class Variable
 	{
 		if ($this->getName() != 'this_ptr') {
 			$compilationContext->headersManager->add('kernel/memory');
-			$compilationContext->symbolTable->mustGrownStack(true);
-			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-				$this->_mustInitNull = true;
-				$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+			if (!$this->isLocalOnly()) {
+				$compilationContext->symbolTable->mustGrownStack(true);
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+				}
 			} else {
-				$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_NVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
+				}
 			}
 		}
 		$this->_variantInits++;

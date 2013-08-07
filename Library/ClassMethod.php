@@ -434,9 +434,17 @@ class ClassMethod
 			$groupVariables = array();
 			foreach ($variables as $variable) {
 				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
-					$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+					if ($variable->isLocalOnly()) {
+						$groupVariables[] = $variable->getName();
+					} else {
+						$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+					}
 				} else {
-					$groupVariables[] = $pointer . $variable->getName();
+					if ($variable->isLocalOnly()) {
+						$groupVariables[] = $variable->getName();
+					} else {
+						$groupVariables[] = $pointer . $variable->getName();
+					}
 				}
 			}
 

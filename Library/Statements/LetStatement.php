@@ -271,44 +271,60 @@ class LetStatement
 
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						$symbolVariable->initVariant($compilationContext);
+						if ($symbolVariable->isLocalOnly()) {
+							$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
 						} else {
-							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_NULL(' . $variable . ');');
 						}
 						break;
 					case 'int':
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						$symbolVariable->initVariant($compilationContext);
+						if ($symbolVariable->isLocalOnly()) {
+							$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						} else {
-							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						}
 						break;
 					case 'double':
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+						$symbolVariable->initVariant($compilationContext);
+						if ($symbolVariable->isLocalOnly()) {
+							$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						} else {
-							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						}
 						break;
 					case 'bool':
 						$symbolVariable->initVariant($compilationContext);
 						if ($resolvedExpr->getCode() == 'true') {
-							$codePrinter->output('ZVAL_BOOL(' . $variable . ', 1);');
+							if ($symbolVariable->isLocalOnly()) {
+								$codePrinter->output('ZVAL_BOOL(&' . $variable . ', 1);');
+							} else {
+								$codePrinter->output('ZVAL_BOOL(' . $variable . ', 1);');
+							}
 						} else {
 							if ($resolvedExpr->getCode() == 'false') {
-								$codePrinter->output('ZVAL_BOOL(' . $variable . ', 0);');
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_BOOL(&' . $variable . ', 0);');
+								} else {
+									$codePrinter->output('ZVAL_BOOL(' . $variable . ', 0);');
+								}
 							} else {
-								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');');
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');');
+								} else {
+									$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $resolvedExpr->getBooleanCode() . ');');
+								}
 							}
 						}
 						break;
 					case 'string':
 						$symbolVariable->initVariant($compilationContext);
-						$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						if ($symbolVariable->isLocalOnly()) {
+							$codePrinter->output('ZVAL_STRING(&' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						} else {
+							$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						}
 						break;
 					case 'variable':
 
@@ -316,15 +332,27 @@ class LetStatement
 						switch ($itemVariable->getType()) {
 							case 'int':
 								$symbolVariable->initVariant($compilationContext);
-								$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								} else {
+									$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
 								break;
 							case 'double':
 								$symbolVariable->initVariant($compilationContext);
-								$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								} else {
+									$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
 								break;
 							case 'bool':
 								$symbolVariable->initVariant($compilationContext);
-								$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
+								} else {
+									$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+								}
 								break;
 							case 'variable':
 								if ($itemVariable->getName() != $variable) {
@@ -341,7 +369,11 @@ class LetStatement
 							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
 						} else {
 							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+							if ($symbolVariable->isLocalOnly()) {
+								$codePrinter->output($resolvedExpr->resolve('&' . $variable, $compilationContext));
+							} else {
+								$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
+							}
 						}
 						break;
 					case 'empty-array':
@@ -364,7 +396,11 @@ class LetStatement
 		CompilationContext $compilationContext, $statement)
 	{
 		if ($symbolVariable->isReadOnly())  {
-			throw new CompilerException("Cannot write variable '" . $name. "' because it is read only", $statement);
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+		}
+
+		if ($symbolVariable->isLocalOnly()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -393,6 +429,10 @@ class LetStatement
 	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
+
+		if ($symbolVariable->isLocalOnly()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -487,12 +527,11 @@ class LetStatement
 			case 'variable':
 				$compilationContext->headersManager->add('kernel/operators');
 				$symbolVariable->initVariant($compilationContext);
-				$codePrinter->output('zephir_decrement(' . $variable . ');');
-				break;
-			case 'static-variable':
-				$compilationContext->headersManager->add('kernel/operators');
-				$symbolVariable->initVariant($compilationContext);
-				$codePrinter->output('zephir_decrement(&' . $variable . ');');
+				if ($symbolVariable->isLocalOnly()) {
+					$codePrinter->output('zephir_decrement(&' . $variable . ');');
+				} else {
+					$codePrinter->output('zephir_decrement(' . $variable . ');');
+				}
 				break;
 			default:
 				throw new CompilerException("Cannot decrement variable: " . $symbolVariable->getType(), $statement);

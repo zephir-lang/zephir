@@ -42,6 +42,21 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 #define ZEPHIR_INIT_VAR(z) \
 	zephir_memory_alloc(&z TSRMLS_CC);
 
+#define ZEPHIR_SINIT_VAR(z) \
+	INIT_PZVAL(&z); \
+	ZVAL_NULL(&z);
+
+#define ZEPHIR_SINIT_NVAR(z)\
+	if (Z_REFCOUNT(z) > 1) { \
+		Z_DELREF(z); \
+		Z_SET_REFCOUNT(z, 1); \
+		Z_UNSET_ISREF(z); \
+		ZVAL_NULL(&z); \
+	} else {\
+		INIT_PZVAL(&z); \
+		ZVAL_NULL(&z); \
+	}
+
 #define ZEPHIR_INIT_NVAR(z)\
 	if (z) { \
 		if (Z_REFCOUNT_P(z) > 1) { \

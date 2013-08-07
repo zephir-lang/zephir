@@ -68,7 +68,9 @@ class LocalContextPass
 					switch ($assigment['expr']['type']) {
 						case 'property-access':
 						case 'array-access':
+						case 'string':
 						case 'array':
+						case 'empty-array':
 						case 'new':
 						case 'fcall':
 						case 'mcall':
@@ -86,6 +88,13 @@ class LocalContextPass
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
+					switch ($assigment['expr']['type']) {
+						case 'variable':
+							$this->markVariableNoLocal($assigment['expr']['value']);
+							break;
+					}
+					$this->markVariableNoLocal($assigment['variable']);
+					break;
 				case 'variable-append':
 					switch ($assigment['expr']['type']) {
 						case 'variable':

@@ -87,7 +87,11 @@ class ReturnStatement
 						if ($symbolVariable->getName() == 'this_ptr') {
 							$codePrinter->output('RETURN_THIS();');
 						} else {
-							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+							if ($symbolVariable->isLocalOnly()) {
+								$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
+							} else {
+								$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+							}
 						}
 						break;
 					default:
