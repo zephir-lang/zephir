@@ -62,6 +62,8 @@ class Variable
 
 	protected $_localOnly = false;
 
+	protected $_doublePointer = false;
+
 	/**
 	 * \Variable
 	 */
@@ -94,6 +96,21 @@ class Variable
 	public function isLocalOnly()
 	{
 		return $this->_localOnly;
+	}
+
+	/**
+	 * Marks the variable to be defined as a double pointer
+	 *
+	 * @param boolean $doublePointer
+	 */
+	public function setIsDoublePointer($doublePointer)
+	{
+		$this->_doublePointer = $doublePointer;
+	}
+
+	public function isDoublePointer()
+	{
+		return $this->_doublePointer;
 	}
 
 	/**

@@ -57,3 +57,4 @@ ext/oo/ooconstruct.lo
 ext/oo/.libs/
 ext/oo/ooconstructparams.lo
 ext/router/exception.lo
+ext/router/route.loT

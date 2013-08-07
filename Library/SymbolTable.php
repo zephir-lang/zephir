@@ -224,6 +224,22 @@ class SymbolTable
 	}
 
 	/**
+	 * Creates a temporary hash
+	 *
+	 * @param string $type
+	 *
+	 */
+	public function addTemp($type, CompilationContext $context)
+	{
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->setIsInitialized(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
+		return $variable;
+	}
+
+	/**
 	 * Creates a temporary variable to be used as intermediate variable of a read operation
 	 * Variables are automatically tracked by the memory manager
 	 *

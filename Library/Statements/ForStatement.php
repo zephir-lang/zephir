@@ -19,7 +19,7 @@
 /**
  * ForStatement
  *
- * For statement, the same as in PHP/C
+ * For statement
  */
 class ForStatement
 {
@@ -67,8 +67,20 @@ class ForStatement
 		 */
 		$compilationContext->insideCycle++;
 
-		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &ah0, &hp0, 0, 1);');
-        $codePrinter->output('while (zend_hash_get_current_data_ex(ah0, (void**) &hd, &hp0) == SUCCESS) {');
+		/**
+		 * Create a hash table and hash pointer temporary variables
+		 */
+		$arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
+		$arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
+
+		/**
+		 * Create a temporary zval to fetch the items from the hash
+		 */
+		$tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+		$tempVariable->setIsDoublePointer(true);
+
+		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 1);');
+        $codePrinter->output('while (zend_hash_get_current_data_ex(&' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS) {');
 
 		/**
 		 * Compile statements in the 'for' block

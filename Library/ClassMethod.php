@@ -427,6 +427,13 @@ class ClassMethod
 					$pointer = '*';
 					$code = 'zval ';
 					break;
+				case 'HashTable':
+					$pointer = '*';
+					$code = 'HashTable ';
+					break;
+				case 'HashPosition':
+					$code = 'HashPosition ';
+					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
 			}
@@ -437,13 +444,21 @@ class ClassMethod
 					if ($variable->isLocalOnly()) {
 						$groupVariables[] = $variable->getName();
 					} else {
-						$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+						if ($variable->isDoublePointer()) {
+							$groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
+						} else {
+							$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+						}
 					}
 				} else {
 					if ($variable->isLocalOnly()) {
 						$groupVariables[] = $variable->getName();
 					} else {
-						$groupVariables[] = $pointer . $variable->getName();
+						if ($variable->isDoublePointer()) {
+							$groupVariables[] = $pointer . $pointer . $variable->getName();
+						} else {
+							$groupVariables[] = $pointer . $variable->getName();
+						}
 					}
 				}
 			}
