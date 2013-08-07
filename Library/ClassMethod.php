@@ -372,6 +372,29 @@ class ClassMethod
 				}
 			}
 
+			/**
+			 * Pass the write detector to the statement block to check if the parameter
+			 * variable is modified so as do the proper separation
+			 */
+			if (is_object($this->_statements)) {
+				$writeDetector = new WriteDetector();
+				foreach ($this->_parameters->getParameters() as $parameter) {
+
+					if (isset($parameter['data-type'])) {
+						$dataType = $parameter['data-type'];
+					} else {
+						$dataType = 'variable';
+					}
+
+					if ($dataType == 'variable') {
+						if ($writeDetector->detect($parameter['name'], $this->_statements->getStatements())) {
+							echo $parameter['name'];
+						}
+					}
+
+				}
+			}
+
 			$codePrinter->preOutput($code);
 		}
 

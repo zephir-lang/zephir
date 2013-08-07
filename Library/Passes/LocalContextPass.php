@@ -242,6 +242,8 @@ class LocalContextPass
 				case 'throw':
 					break;
 				case 'mcall':
+				case 'fcall':
+					$this->passCall($statement['expr']);
 					break;
 				default:
 
