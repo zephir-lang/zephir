@@ -33,8 +33,8 @@ Requirements:
 Installation on Ubuntu
 -----------------------
 
-apt-get install libjson0 libjson0-dev libjson0-dbg
-apt-get install re2c
+* apt-get install libjson0 libjson0-dev libjson0-dbg
+* apt-get install re2c
 
 
 Once you have the required packages installed, you can generate the parser as follows:
