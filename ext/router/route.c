@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/exception.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
 
@@ -205,7 +206,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	zephir_call_func_p2(_22, "memchr", compiledPattern, _23);
 	if (zend_is_true(_22)) {
 
-		RETURN_MM_RESTORE();
+		RETURN_MM_NULL();
 
 	}
 	//missing comment
@@ -215,7 +216,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	zephir_call_func_p2(_24, "memchr", compiledPattern, _25);
 	if (zend_is_true(_24)) {
 
-		RETURN_MM_RESTORE();
+		RETURN_MM_NULL();
 
 	}
 
@@ -532,6 +533,8 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	zephir_read_property(&_0, this_ptr, SL("_paths"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 1);
 	while (zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS) {
+		ZEPHIR_GET_HKEY(path, _2, _1);
+		ZEPHIR_GET_HVALUE(position, _3);
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 

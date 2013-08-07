@@ -120,7 +120,7 @@ class Expression
 						return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'ZEPHIR_IS_EQUALS(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+						return new CompiledExpression('bool', 'ZEPHIR_IS_EQUAL(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 					default:
 						throw new CompilerException("Error Processing Request", $expression);
 				}

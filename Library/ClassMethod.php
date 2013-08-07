@@ -174,11 +174,14 @@ class ClassMethod
 
 		switch ($dataType) {
 			case 'int':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'bool':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'double':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			default:
 				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
 		}
@@ -326,7 +329,11 @@ class ClassMethod
 				}
 			}
 
+			/**
+			 * Fetch the parameters to zval pointers
+			 */
 			$codePrinter->preOutputBlankLine();
+			$compilationContext->headersManager->add('kernel/memory');
 			if ($symbolTable->getMustGrownStack()) {
 				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			} else {
@@ -372,6 +379,7 @@ class ClassMethod
 		 * Grow the stack if needed
 		 */
 		if ($symbolTable->getMustGrownStack()) {
+			$compilationContext->headersManager->add('kernel/memory');
 			$codePrinter->preOutput("\t" . 'ZEPHIR_MM_GROW();');
 		}
 
@@ -472,6 +480,7 @@ class ClassMethod
 		if (is_object($this->_statements)) {
 			if ($symbolTable->getMustGrownStack()) {
 				if ($this->_statements->getLastStatementType() != 'return') {
+					$compilationContext->headersManager->add('kernel/memory');
 					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
 				}
 			}

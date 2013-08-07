@@ -99,7 +99,7 @@ class ReturnStatement
 				}
 				break;
 			case 'null':
-				$codePrinter->output('RETURN_MM_RESTORE();');
+				$codePrinter->output('RETURN_MM_NULL();');
 				break;
 			default:
 				throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);
