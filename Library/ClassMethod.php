@@ -174,11 +174,14 @@ class ClassMethod
 
 		switch ($dataType) {
 			case 'int':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'bool':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'double':
-				return "\t\t" . $parameter['name'] . ' = phalcon_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			default:
 				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
 		}
@@ -192,7 +195,25 @@ class ClassMethod
 	public function compile(CompilationContext $compilationContext)
 	{
 
+		/**
+		 * This pass checks for zval variables than can be potentally
+		 * used without allocate memory and memory tracking
+		 * these variables are stored in the heap
+		 */
+		if (is_object($this->_statements)) {
+			$localContext = new LocalContextPass();
+			$localContext->pass($this->_statements);
+		} else {
+			$localContext = null;
+		}
+
+		/**
+		 * Every method has its own symbol table
+		 */
 		$symbolTable = new SymbolTable();
+		if ($localContext) {
+			$symbolTable->setLocalContext($localContext);
+		}
 
 		$compilationContext->symbolTable = $symbolTable;
 
@@ -308,7 +329,11 @@ class ClassMethod
 				}
 			}
 
+			/**
+			 * Fetch the parameters to zval pointers
+			 */
 			$codePrinter->preOutputBlankLine();
+			$compilationContext->headersManager->add('kernel/memory');
 			if ($symbolTable->getMustGrownStack()) {
 				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			} else {
@@ -347,6 +372,29 @@ class ClassMethod
 				}
 			}
 
+			/**
+			 * Pass the write detector to the statement block to check if the parameter
+			 * variable is modified so as do the proper separation
+			 */
+			if (is_object($this->_statements)) {
+				$writeDetector = new WriteDetector();
+				foreach ($this->_parameters->getParameters() as $parameter) {
+
+					if (isset($parameter['data-type'])) {
+						$dataType = $parameter['data-type'];
+					} else {
+						$dataType = 'variable';
+					}
+
+					if ($dataType == 'variable') {
+						if ($writeDetector->detect($parameter['name'], $this->_statements->getStatements())) {
+							echo $parameter['name'];
+						}
+					}
+
+				}
+			}
+
 			$codePrinter->preOutput($code);
 		}
 
@@ -354,6 +402,7 @@ class ClassMethod
 		 * Grow the stack if needed
 		 */
 		if ($symbolTable->getMustGrownStack()) {
+			$compilationContext->headersManager->add('kernel/memory');
 			$codePrinter->preOutput("\t" . 'ZEPHIR_MM_GROW();');
 		}
 
@@ -409,6 +458,13 @@ class ClassMethod
 					$pointer = '*';
 					$code = 'zval ';
 					break;
+				case 'HashTable':
+					$pointer = '*';
+					$code = 'HashTable ';
+					break;
+				case 'HashPosition':
+					$code = 'HashPosition ';
+					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
 			}
@@ -416,9 +472,25 @@ class ClassMethod
 			$groupVariables = array();
 			foreach ($variables as $variable) {
 				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
-					$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+					if ($variable->isLocalOnly()) {
+						$groupVariables[] = $variable->getName();
+					} else {
+						if ($variable->isDoublePointer()) {
+							$groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
+						} else {
+							$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+						}
+					}
 				} else {
-					$groupVariables[] = $pointer . $variable->getName();
+					if ($variable->isLocalOnly()) {
+						$groupVariables[] = $variable->getName();
+					} else {
+						if ($variable->isDoublePointer()) {
+							$groupVariables[] = $pointer . $pointer . $variable->getName();
+						} else {
+							$groupVariables[] = $pointer . $variable->getName();
+						}
+					}
 				}
 			}
 
@@ -431,6 +503,7 @@ class ClassMethod
 		if (is_object($this->_statements)) {
 			if ($symbolTable->getMustGrownStack()) {
 				if ($this->_statements->getLastStatementType() != 'return') {
+					$compilationContext->headersManager->add('kernel/memory');
 					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
 				}
 			}

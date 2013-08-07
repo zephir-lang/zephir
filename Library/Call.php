@@ -55,7 +55,7 @@ class Call
 							$params[] = $parameterVariable->getName();
 							break;
 						default:
-							throw new CompilerException("Cannot use variable type: " . $compiledExpression->getType() . " as parameter", $parameter);
+							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $parameter);
 					}
 					break;
 				default:

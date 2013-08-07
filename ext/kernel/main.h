@@ -247,12 +247,12 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 /** Check if an array is iterable or not */
 #define zephir_is_iterable(var, array_hash, hash_pointer, duplicate, reverse) if (!zephir_is_iterable_ex(var, array_hash, hash_pointer, duplicate, reverse)) { return; }
 
-#define ZEPHIR_GET_FOREACH_VALUE(var) \
+#define ZEPHIR_GET_FOREACH_VALUE(var, hd) \
 	ZEPHIR_OBSERVE_VAR(var); \
 	var = *hd; \
 	Z_ADDREF_P(var);
 
-#define ZEPHIR_GET_HVALUE(var) \
+#define ZEPHIR_GET_HVALUE(var, hd) \
 	ZEPHIR_OBSERVE_VAR(var); \
 	var = *hd; \
 	Z_ADDREF_P(var);

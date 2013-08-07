@@ -269,7 +269,6 @@ class ClassDefinition
 
 		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
 		foreach ($methods as $method) {
-
 			$parameters = $method->getParameters();
 			if (count($parameters)) {
 				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ZEND_ACC_PUBLIC)');

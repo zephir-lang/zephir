@@ -30,12 +30,13 @@ require 'Library/Compiler.php';
 require 'Library/CompilerFile.php';
 require 'Library/SymbolTable.php';
 require 'Library/Variable.php';
-require 'Library/ReadDetector.php';
 require 'Library/Expression.php';
 require 'Library/CompiledExpression.php';
 require 'Library/CodePrinter.php';
 require 'Library/ClassMethodParameters.php';
 require 'Library/StatementsBlock.php';
+require 'Library/Detectors/ReadDetector.php';
+require 'Library/Detectors/WriteDetector.php';
 require 'Library/Statements/ThrowStatement.php';
 require 'Library/Statements/EchoStatement.php';
 require 'Library/Statements/LetStatement.php';
@@ -51,6 +52,7 @@ require 'Library/Optimizers/EvalExpression.php';
 require 'Library/Call.php';
 require 'Library/FunctionCall.php';
 require 'Library/MethodCall.php';
+require 'Library/Passes/LocalContextPass.php';
 
 Compiler::boot();
 

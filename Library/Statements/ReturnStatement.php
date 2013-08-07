@@ -87,7 +87,11 @@ class ReturnStatement
 						if ($symbolVariable->getName() == 'this_ptr') {
 							$codePrinter->output('RETURN_THIS();');
 						} else {
-							$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+							if ($symbolVariable->isLocalOnly()) {
+								$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
+							} else {
+								$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+							}
 						}
 						break;
 					default:
@@ -95,7 +99,7 @@ class ReturnStatement
 				}
 				break;
 			case 'null':
-				$codePrinter->output('RETURN_MM_RESTORE();');
+				$codePrinter->output('RETURN_MM_NULL();');
 				break;
 			default:
 				throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);

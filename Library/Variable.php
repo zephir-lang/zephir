@@ -60,6 +60,10 @@ class Variable
 
 	protected $_readOnly = false;
 
+	protected $_localOnly = false;
+
+	protected $_doublePointer = false;
+
 	/**
 	 * \Variable
 	 */
@@ -72,6 +76,44 @@ class Variable
 	public function getType()
 	{
 		return $this->_type;
+	}
+
+	/**
+	 * Sets if the variable is local-only scoped
+	 *
+	 * @param boolean $localOnly
+	 */
+	public function setLocalOnly($localOnly)
+	{
+		$this->_localOnly = $localOnly;
+	}
+
+	/**
+	 * Checks if the variable is local-only scoped
+	 *
+	 * @return boolean
+	 */
+	public function isLocalOnly()
+	{
+		return $this->_localOnly;
+	}
+
+	/**
+	 * Marks the variable to be defined as a double pointer
+	 *
+	 * @param boolean $doublePointer
+	 */
+	public function setIsDoublePointer($doublePointer)
+	{
+		$this->_doublePointer = $doublePointer;
+	}
+
+	/**
+	 * Returns the variable
+	 */
+	public function isDoublePointer()
+	{
+		return $this->_doublePointer;
 	}
 
 	/**
@@ -235,12 +277,21 @@ class Variable
 	{
 		if ($this->getName() != 'this_ptr') {
 			$compilationContext->headersManager->add('kernel/memory');
-			$compilationContext->symbolTable->mustGrownStack(true);
-			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-				$this->_mustInitNull = true;
-				$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+			if (!$this->isLocalOnly()) {
+				$compilationContext->symbolTable->mustGrownStack(true);
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+				}
 			} else {
-				$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_NVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
+				}
 			}
 		}
 		$this->_variantInits++;

@@ -31,6 +31,8 @@ class SymbolTable
 
 	protected $_tempVariable = 0;
 
+	protected $_localContext;
+
 	public function __construct()
 	{
 		$thisVar = new Variable('variable', 'this');
@@ -39,6 +41,16 @@ class SymbolTable
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
 		$this->_variables['this'] = $thisVar;
+	}
+
+	/**
+	 * Sets the local context information
+	 *
+	 * @param LocalContextPass $localContext
+	 */
+	public function setLocalContext(LocalContextPass $localContext)
+	{
+		$this->_localContext = $localContext;
 	}
 
 	/**
@@ -63,6 +75,16 @@ class SymbolTable
 	public function addVariable($type, $name, $defaultValue=null)
 	{
 		$variable = new Variable($type, $name, $defaultValue);
+		if ($type == 'variable') {
+			if ($this->_localContext) {
+				/**
+				 * Checks whether a variable can be optimized to be static or not
+				 */
+				if ($this->_localContext->shouldBeLocal($name)) {
+					$variable->setLocalOnly(true);
+				}
+			}
+		}
 		$this->_variables[$name] = $variable;
 		return $variable;
 	}
@@ -198,6 +220,22 @@ class SymbolTable
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->initVariant($context);
+		return $variable;
+	}
+
+	/**
+	 * Creates a temporary hash
+	 *
+	 * @param string $type
+	 *
+	 */
+	public function addTemp($type, CompilationContext $context)
+	{
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->setIsInitialized(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
 		return $variable;
 	}
 

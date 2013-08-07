@@ -38,6 +38,8 @@ class ThrowStatement
 
 		$statement = $this->_statement;
 
+		$compilationContext->headersManager->add('kernel/exception');
+
 		if ($compilationContext->compiler->isClass($statement['domain'])) {
 
 			$classCe = strtolower(str_replace('\\', '_', $statement['domain'])) . '_ce';

@@ -293,7 +293,7 @@ class Router
 	public function handle(uri=null)
 	{
 		var realUri, request, currentHostName, routeFound, parts,
-			params, matches, routes, reversedRoutes, notFoundPaths,
+			params, matches, routes, notFoundPaths,
 			vnamespace, module,  controller, action, paramsStr, strParams,
 			paramsMerge, route, methods, dependencyInjector,
 			hostname, regexHostName, matched, pattern, handledUri, beforeMatch,
@@ -669,7 +669,7 @@ class Router
 	public function mount(group)
 	{
 
-		var groupRoutes, beforeMatch, hostname, routes, newRoutes, route;
+		var groupRoutes, beforeMatch, hostname, routes, route;
 
 		if typeof group != "object" {
 			throw new Test\Router\Exception("The group of routes is not valid");

@@ -50,7 +50,7 @@ class WhileStatement
 		if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
 			$codePrinter->output('while (' . $condition . ') {');
 		} else {
-			$codePrinter->output('while (true) {');
+			$codePrinter->output('while (1) {');
 			$codePrinter->outputLineBreak();
 		}
 

@@ -40,7 +40,9 @@ class StatementsBlock
 
 		$compilationContext->codePrinter->increaseLevel();
 
-		foreach ($this->_statements as $statement) {
+		$statements = $this->_statements;
+
+		foreach ($statements as $statement) {
 
 			switch ($statement['type']) {
 				case 'let':
@@ -101,6 +103,11 @@ class StatementsBlock
 		}
 
 		$compilationContext->codePrinter->decreaseLevel();
+	}
+
+	public function getStatements()
+	{
+		return $this->_statements;
 	}
 
 	/**
