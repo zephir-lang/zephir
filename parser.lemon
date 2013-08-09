@@ -920,16 +920,16 @@ xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_metho
 	R = xx_ret_list(L, P);
 }
 
+xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
 xx_class_const_definition(R) ::= COMMENT(C) CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, C, status->scanner_state);
 }
 
 xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
-}
-
-xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
-	R = xx_ret_list(NULL, P);
 }
 
 xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
@@ -962,6 +962,10 @@ xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PAREN
 
 xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, C, status->scanner_state);
+}
+
+xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, NULL, status->scanner_state);
 }
 
 xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {

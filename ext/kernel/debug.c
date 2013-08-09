@@ -18,7 +18,7 @@ zephir_debug_entry *active_x = NULL;
 /**
  * Stars debug on file pipe
  */
-int zephir_start_debug(){
+int zephir_start_debug() {
 	if (!zephir_log){
 		/*//zephir_log = fopen("/home/gutierrezandresfelipe/phalcon-debug.a", "w");
 		zephir_log = fopen("/tmp/phalcon-debug.a", "w");
@@ -94,12 +94,12 @@ int zephir_vdump(zval *uservar TSRMLS_DC) {
     return SUCCESS;
 }
 
-int zephir_dump_ce(zend_class_entry *ce TSRMLS_DC){
+int zephir_dump_ce(zend_class_entry *ce TSRMLS_DC) {
 	char *message = emalloc(sizeof(char *)*120);
-	if(ce){
+	if (ce) {
 		sprintf(message, "- ClassType => %d", ce->type);
 		zephir_step_over(message);
-		if(ce->name){
+		if (ce->name) {
 			sprintf(message, "- ClassName => %s", ce->name);
 			zephir_step_over(message);
 		} else {
@@ -111,12 +111,12 @@ int zephir_dump_ce(zend_class_entry *ce TSRMLS_DC){
 	return SUCCESS;
 }
 
-int zephir_class_debug(zval *val TSRMLS_DC){
-	char *message = emalloc(sizeof(char *)*120);
+int zephir_class_debug(zval *val TSRMLS_DC) {
+	char *message = emalloc(sizeof(char *) * 120);
 	zend_class_entry *ce;
-	if(val){
+	if (val) {
 		ce = Z_OBJCE_P(val);
-		if(ce){
+		if (ce) {
 			sprintf(message, "- MemoryAddress => %p", val);
 			zephir_step_over(message);
 			zephir_dump_ce(ce TSRMLS_CC);
@@ -132,33 +132,33 @@ int zephir_class_debug(zval *val TSRMLS_DC){
 /**
  * Append debug information to file
  */
-int zephir_debug_str(char *what, char *message){
+int zephir_debug_str(char *what, char *message) {
 	fprintf(zephir_log, "%s", what);
 	fprintf(zephir_log, "%s", message);
 	fprintf(zephir_log, "\n");
 	return SUCCESS;
 }
 
-int zephir_debug_long(char *what, uint vlong){
+int zephir_debug_long(char *what, uint vlong) {
 	fprintf(zephir_log, "%s", what);
 	fprintf(zephir_log, "%u", vlong);
 	fprintf(zephir_log, "\n");
 	return SUCCESS;
 }
 
-int zephir_debug_screen(char *message){
+int zephir_debug_screen(char *message) {
 	zephir_debug_space();
 	fprintf(zephir_log, "%s\n", message);
 	return SUCCESS;
 }
 
-int zephir_debug_method_call(zval *obj, char *method_name TSRMLS_DC){
-	if(Z_TYPE_P(obj)==IS_OBJECT){
+int zephir_debug_method_call(zval *obj, char *method_name TSRMLS_DC) {
+	if (Z_TYPE_P(obj) == IS_OBJECT) {
 		zephir_debug_space();
 	} else {
 		zephir_error_space();
 	}
-	if(Z_TYPE_P(obj)==IS_OBJECT){
+	if (Z_TYPE_P(obj) == IS_OBJECT) {
 		fprintf(zephir_log, "Calling method %s::%s on Object at %p\n", Z_OBJCE_P(obj)->name, method_name, obj);
 	} else {
 		fprintf(zephir_log, "Calling method %s on non object :(\n", method_name);
@@ -166,57 +166,57 @@ int zephir_debug_method_call(zval *obj, char *method_name TSRMLS_DC){
 	return SUCCESS;
 }
 
-int zephir_error_space(){
+int zephir_error_space() {
 	int i;
 	fprintf(zephir_log, "[ERROR] ");
-	for(i=0;i<zephir_debug_trace;i++){
+	for (i = 0; i < zephir_debug_trace; i++) {
 		fprintf(zephir_log, " ");
 	}
 	return SUCCESS;
 }
 
-int zephir_debug_space(){
+int zephir_debug_space() {
 	int i;
 	fprintf(zephir_log, "[DEBUG] ");
-	for(i=0;i<zephir_debug_trace;i++){
+	for (i = 0; i < zephir_debug_trace; i++) {
 		fprintf(zephir_log, " ");
 	}
 	return SUCCESS;
 }
 
-int zephir_debug_param(zval *param TSRMLS_DC){
+int zephir_debug_param(zval *param TSRMLS_DC) {
 	zephir_debug_space();
 	fprintf(zephir_log, "Push method Param > ");
 	zephir_vdump(param TSRMLS_CC);
 	return SUCCESS;
 }
 
-int zephir_debug_vdump(char *preffix, zval *value TSRMLS_DC){
+int zephir_debug_vdump(char *preffix, zval *value TSRMLS_DC) {
 	zephir_debug_space();
 	fprintf(zephir_log, "%s", preffix);
 	zephir_vdump(value TSRMLS_CC);
 	return SUCCESS;
 }
 
-int zephir_debug_assign(char *name, zval *value TSRMLS_DC){
+int zephir_debug_assign(char *name, zval *value TSRMLS_DC) {
 	zephir_debug_space();
 	fprintf(zephir_log, "Assign on %s with ", name);
 	zephir_vdump(value TSRMLS_CC);
 	return SUCCESS;
 }
 
-int zephir_step_over(char *message){
+int zephir_step_over(char *message) {
 	zephir_debug_screen(message);
 	return SUCCESS;
 }
 
-int zephir_step_into(char *message){
+int zephir_step_into(char *message) {
 	zephir_debug_trace++;
 	zephir_debug_screen(message);
 	return SUCCESS;
 }
 
-int zephir_step_out(char *message){
+int zephir_step_out(char *message) {
 	zephir_debug_screen(message);
 	zephir_debug_trace--;
 	return SUCCESS;
@@ -225,11 +225,11 @@ int zephir_step_out(char *message){
 /**
  * Prints internal debug backtrace
  */
-int zephir_debug_backtrace_internal(){
+int zephir_debug_backtrace_internal() {
 	int step = 0;
 	char *message;
 	zephir_debug_entry *ptr = active_x;
-	while(ptr){
+	while (ptr) {
 		zephir_spprintf(&message, 0, "#%d %s::%s", step, ptr->class_name, ptr->method_name);
 		zephir_debug_screen(message);
 		efree(message);
@@ -242,7 +242,7 @@ int zephir_debug_backtrace_internal(){
 /**
  * Appends a debug entry to internal execution scope
  */
-int zephir_step_into_entry(char *class_name, char *method_name, int lineno){
+int zephir_step_into_entry(char *class_name, char *method_name, int lineno) {
 
 	char *message;
 	zephir_debug_entry *entry;
@@ -276,7 +276,7 @@ int zephir_step_into_entry(char *class_name, char *method_name, int lineno){
 /**
  * Steps out current stack
  */
-int zephir_step_out_entry(){
+int zephir_step_out_entry() {
 
 	char *message;
 	zephir_debug_entry *prev;

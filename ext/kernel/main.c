@@ -303,8 +303,7 @@ void zephir_inherit_not_found(const char *class_name, const char *inherit_name) 
 /**
  * Parses method parameters with minimum overhead
  */
-int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int required_args, int optional_args, ...)
-{
+int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int required_args, int optional_args, ...) {
 	va_list va;
 	int arg_count = (int) (zend_uintptr_t) *(zend_vm_stack_top(TSRMLS_C) - 1);
 	zval **arg, **p;

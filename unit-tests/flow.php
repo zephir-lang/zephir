@@ -17,8 +17,8 @@ assert($t->testLoop1() === true);
 assert($t->testLoop2() === 5);
 assert($t->testLoop3() === 5);
 
-assert($t->testWhile1() === 0);
-assert($t->testWhile2() === 0);
+///assert($t->testWhile1() === 0);
+//assert($t->testWhile2() === 0);
 assert($t->testWhile3() == 0.0);
 //assert($t->testWhile4() == 0.0);
 //assert($t->testWhile5() == 0.0);
