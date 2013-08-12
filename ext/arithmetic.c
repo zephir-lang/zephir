@@ -351,6 +351,7 @@ PHP_METHOD(Test_Arithmetic, complex2Sum) {
 	zval c;
 
 	ZEPHIR_SINIT_VAR(c);
+	ZEPHIR_SINIT_NVAR(c);
 	ZVAL_BOOL(&c, 1 |1);
 
 	RETURN_CCTORW(&c);
@@ -363,6 +364,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 	zval c;
 
 	ZEPHIR_SINIT_VAR(c);
+	ZEPHIR_SINIT_NVAR(c);
 	ZVAL_BOOL(&c, 1 |((1.0) ? 1 : 0));
 
 	RETURN_CCTORW(&c);
@@ -399,6 +401,7 @@ PHP_METHOD(Test_Arithmetic, complex6Sum) {
 	zval c;
 
 	ZEPHIR_SINIT_VAR(c);
+	ZEPHIR_SINIT_NVAR(c);
 	ZVAL_BOOL(&c, 1 |((1) ? 1 : 0));
 
 	RETURN_CCTORW(&c);

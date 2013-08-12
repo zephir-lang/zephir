@@ -221,6 +221,7 @@ PHP_METHOD(Test_Assign, testAssign18) {
 	zval a;
 
 	ZEPHIR_SINIT_VAR(a);
+	ZEPHIR_SINIT_NVAR(a);
 	ZVAL_BOOL(&a, 0);
 
 	RETURN_CCTORW(&a);
@@ -233,6 +234,7 @@ PHP_METHOD(Test_Assign, testAssign19) {
 	zval a;
 
 	ZEPHIR_SINIT_VAR(a);
+	ZEPHIR_SINIT_NVAR(a);
 	ZVAL_BOOL(&a, 1);
 
 	RETURN_CCTORW(&a);
@@ -469,10 +471,11 @@ PHP_METHOD(Test_Assign, testAssign35) {
 
 PHP_METHOD(Test_Assign, testAssign36) {
 
-	zval *b, *a;
+	zval *b = NULL, *a;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);
+	ZEPHIR_INIT_NVAR(b);
 	ZVAL_BOOL(b, 0);
 
 	ZEPHIR_CPY_WRT(a, b);

@@ -276,6 +276,7 @@ PHP_METHOD(Test_Flow, testLoop1) {
 	zval a;
 
 	ZEPHIR_SINIT_VAR(a);
+	ZEPHIR_SINIT_NVAR(a);
 	ZVAL_BOOL(&a, 1);
 
 	while (1) {
