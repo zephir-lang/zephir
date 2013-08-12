@@ -276,7 +276,6 @@ PHP_METHOD(Test_Flow, testLoop1) {
 	zval a;
 
 	ZEPHIR_SINIT_VAR(a);
-	ZEPHIR_SINIT_NVAR(a);
 	ZVAL_BOOL(&a, 1);
 
 	while (1) {
@@ -411,8 +410,8 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 		while (zend_is_true(&b)) {
 
-			ZEPHIR_SINIT_NVAR(b);
 			_0 = zephir_get_doubleval(&b) - 1;
+			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_DOUBLE(&b, _0);
 
 		}
@@ -443,8 +442,8 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 		while (zend_is_true(&b)) {
 
-			ZEPHIR_SINIT_NVAR(b);
 			_0 = zephir_get_doubleval(&b) - 1;
+			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_DOUBLE(&b, _0);
 
 		}

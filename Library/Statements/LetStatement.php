@@ -276,7 +276,6 @@ class LetStatement
 						}
 						break;
 					case 'int':
-						$symbolVariable->initVariant($compilationContext);
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
@@ -285,13 +284,14 @@ class LetStatement
 						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 							$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
 							$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
 						} else {
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
 						}
 						break;
 					case 'double':
-						$symbolVariable->initVariant($compilationContext);
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
@@ -300,30 +300,34 @@ class LetStatement
 						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 							$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
 							$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
 						} else {
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
 						}
 						break;
 					case 'bool':
-						$symbolVariable->initVariant($compilationContext);
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
 							$symbol = $variable;
 						}
-						$symbolVariable->initVariant($compilationContext);
 						if ($resolvedExpr->getCode() == 'true') {
+							$symbolVariable->initVariant($compilationContext);
 							$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 1);');
 						} else {
 							if ($resolvedExpr->getCode() == 'false') {
+								$symbolVariable->initVariant($compilationContext);
 								$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 0);');
 							} else {
 								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
 									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+									$symbolVariable->initVariant($compilationContext);
 									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $tempVariable->getName() . ');');
 								} else {
+									$symbolVariable->initVariant($compilationContext);
 									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $resolvedExpr->getBooleanCode() . ');');
 								}
 							}

@@ -469,7 +469,6 @@ PHP_METHOD(Test_Router, handle) {
 	ZVAL_NULL(currentHostName);
 
 	ZEPHIR_INIT_VAR(routeFound);
-	ZEPHIR_INIT_NVAR(routeFound);
 	ZVAL_BOOL(routeFound, 0);
 
 	ZEPHIR_INIT_VAR(parts);
@@ -576,7 +575,6 @@ PHP_METHOD(Test_Router, handle) {
 			} else {
 
 				ZEPHIR_INIT_NVAR(matched);
-				ZEPHIR_INIT_NVAR(matched);
 				ZVAL_BOOL(matched, ZEPHIR_IS_EQUAL(currentHostName, hostname));
 
 			}
@@ -598,7 +596,6 @@ PHP_METHOD(Test_Router, handle) {
 
 		} else {
 
-			ZEPHIR_INIT_NVAR(routeFound);
 			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, ZEPHIR_IS_EQUAL(pattern, handledUri));
 
@@ -697,7 +694,6 @@ PHP_METHOD(Test_Router, handle) {
 
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
 
-			ZEPHIR_INIT_NVAR(routeFound);
 			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, 1);
 
