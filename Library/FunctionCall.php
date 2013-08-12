@@ -44,11 +44,12 @@ class FunctionCall extends Call
 		/**
 		 * Create temporary variable if needed
 		 */
+		$mustInit = false;
 		$isExpecting = $expr->isExpectingReturn();
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();
 			if (is_object($symbolVariable)) {
-				$symbolVariable->initVariant($compilationContext);
+				$mustInit = true;
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}

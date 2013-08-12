@@ -318,4 +318,9 @@ class Flow
 		return c;
 	}
 
+	public function testFor()
+	{
+
+	}
+
 }

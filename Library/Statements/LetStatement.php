@@ -242,9 +242,6 @@ class LetStatement
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
 						break;
-					case 'expr-variable':
-						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
-						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
 				}
@@ -378,19 +375,6 @@ class LetStatement
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
 						break;
-					case 'expr-variable':
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$code = $resolvedExpr->resolve(null, $compilationContext);
-							$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $code . ');');
-						} else {
-							$symbolVariable->initVariant($compilationContext);
-							if ($symbolVariable->isLocalOnly()) {
-								$codePrinter->output($resolvedExpr->resolve('&' . $variable, $compilationContext));
-							} else {
-								$codePrinter->output($resolvedExpr->resolve($variable, $compilationContext));
-							}
-						}
-						break;
 					case 'empty-array':
 						$symbolVariable->initVariant($compilationContext);
 						$codePrinter->output('array_init(' . $variable . ');');
@@ -464,28 +448,15 @@ class LetStatement
 		}
 
 		switch ($resolvedExpr->getType()) {
+			case 'int':
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
 					case 'variable':
-						$compilationContext->headersManager->add('kernel/array');
-						switch ($exprIndex->getType()) {
-							case 'variable':
-								$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
-								switch ($variableIndex->getType()) {
-									case 'int':
-										$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-										break;
-									case 'string':
-										$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-										break;
-									case 'variable':
-										$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-										break;
-									default:
-										throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array index", $statement);
-								}
-						}
+						$symbolVariable = $variableExpr;
 						break;
 					default:
 						throw new CompilerException("Variable: " . $exprIndex->getType() . " cannot be assigned to array index", $statement);
@@ -493,6 +464,34 @@ class LetStatement
 				break;
 			default:
 				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array index", $statement);
+		}
+
+		$compilationContext->headersManager->add('kernel/array');
+		switch ($exprIndex->getType()) {
+			case 'int':
+				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+				break;
+			case 'string':
+				$codePrinter->output('zephir_array_update_string(&' . $variable . ', "' . $exprIndex->getCode() . '", &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+				break;
+			case 'variable':
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
+				switch ($variableIndex->getType()) {
+					case 'int':
+						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						break;
+					case 'string':
+						$codePrinter->output('zephir_array_update_string(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						break;
+					case 'variable':
+						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						break;
+					default:
+						throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+				}
+				break;
+			default:
+				throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
 		}
 
 	}

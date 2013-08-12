@@ -84,7 +84,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern = NULL, *idPattern, *patternCopy, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7, *_8, *_9, *_10, *_11, *_12, *_13, *_14, *_15, *_16, *_17, *_18, *_19, *_20, *_21, *_22, *_23, *_24, *_25;
+	zval *pattern, *compiledPattern, *idPattern, *patternCopy, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7, *_8, *_9, *_10, *_11, *_12, *_13, *_14, *_15, *_16, *_17, *_18, *_19, *_20, *_21, *_22, *_23, *_24, *_25;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -113,7 +113,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_VAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_4);
 			ZVAL_STRING(_4, "/:module", 1);
 			zephir_call_func_p3(compiledPattern, "str_replace", _4, idPattern, patternCopy);
@@ -128,7 +127,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_NVAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_7);
 			ZVAL_STRING(_7, "/:controller", 1);
 			zephir_call_func_p3(compiledPattern, "str_replace", _7, idPattern, patternCopy);
@@ -143,7 +141,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_NVAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_10);
 			ZVAL_STRING(_10, "/:namespace", 1);
 			zephir_call_func_p3(compiledPattern, "str_replace", _10, idPattern, patternCopy);
@@ -158,7 +155,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_NVAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_13);
 			ZVAL_STRING(_13, "/:action", 1);
 			zephir_call_func_p3(compiledPattern, "str_replace", _13, idPattern, patternCopy);
@@ -173,7 +169,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_NVAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_16);
 			ZVAL_STRING(_16, "/:params", 1);
 			ZEPHIR_INIT_VAR(_17);
@@ -190,7 +185,6 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
-			ZEPHIR_INIT_NVAR(compiledPattern);
 			ZEPHIR_INIT_VAR(_20);
 			ZVAL_STRING(_20, "/:int", 1);
 			ZEPHIR_INIT_VAR(_21);
@@ -286,12 +280,10 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZVAL_NULL(actionName);
 
 			//missing comment
-			ZEPHIR_INIT_VAR(parts);
 			ZEPHIR_INIT_VAR(_0);
 			ZVAL_STRING(_0, "::", 1);
 			zephir_call_func_p2(parts, "explode", _0, paths);
 
-			ZEPHIR_INIT_VAR(numberParts);
 			zephir_call_func_p1(numberParts, "count", parts);
 
 			//missing comment
@@ -331,6 +323,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			//missing comment
 			if (Z_TYPE_P(moduleName) != IS_NULL) {
 
+				zephir_array_update_string(&routePaths, "module", &moduleName, PH_COPY | PH_SEPARATE);
+
 			}
 			//missing comment
 			if (Z_TYPE_P(controllerName) != IS_NULL) {
@@ -341,15 +335,15 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				zephir_call_func_p2(_1, "memchr", controllerName, _2);
 				if (zend_is_true(_1)) {
 					//missing comment
-					ZEPHIR_INIT_VAR(realClassName);
 					zephir_call_func_p1(realClassName, "get_class_ns", controllerName);
 
 					//missing comment
-					ZEPHIR_INIT_VAR(namespaceName);
 					zephir_call_func_p1(namespaceName, "get_ns_class", controllerName);
 
 					//missing comment
 					if (zend_is_true(namespaceName)) {
+
+						zephir_array_update_string(&routePaths, "namespace", &namespaceName, PH_COPY | PH_SEPARATE);
 
 					}
 				} else {
@@ -358,14 +352,17 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 				}
 				//missing comment
-				ZEPHIR_INIT_VAR(lowerName);
 				zephir_call_func_p1(lowerName, "uncamelize", realClassName);
 
 				//missing comment
 
+				zephir_array_update_string(&routePaths, "controller", &lowerName, PH_COPY | PH_SEPARATE);
+
 			}
 			//missing comment
 			if (Z_TYPE_P(actionName) != IS_NULL) {
+
+				zephir_array_update_string(&routePaths, "action", &actionName, PH_COPY | PH_SEPARATE);
 
 			}
 		} else {
@@ -569,6 +566,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 
+		zend_hash_move_forward_ex(_2, &_10);
 	}
 
 	RETURN_CCTOR(reversed);

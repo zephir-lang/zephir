@@ -37,11 +37,12 @@ class MethodCall extends Call
 		/**
 		 * Create temporary variable if needed
 		 */
+		$mustInit = false;
 		$isExpecting = $expr->isExpectingReturn();
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();
 			if (is_object($symbolVariable)) {
-				$symbolVariable->initVariant($compilationContext);
+				$mustInit = true;
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}
@@ -56,6 +57,9 @@ class MethodCall extends Call
 		 *
 		 */
 		if (!isset($expression['parameters'])) {
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
 			if ($isExpecting) {
 				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 			} else {
@@ -64,6 +68,11 @@ class MethodCall extends Call
 		} else {
 
 			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
+
 			if (count($params)) {
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');

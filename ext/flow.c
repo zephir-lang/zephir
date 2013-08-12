@@ -558,3 +558,8 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor) {
+
+
+}
+

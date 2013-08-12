@@ -791,3 +791,29 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
+
+	zval *a, *_0, *_1, *_2, *_3;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_array_append(&a, _0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_array_append(&a, _1, 0);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_LONG(_2, 3);
+	zephir_array_append(&a, _2, 0);
+
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_LONG(_3, 1);
+	zephir_array_update_long(&a, 0, &_3, PH_COPY | PH_SEPARATE);
+
+	RETURN_CCTOR(a);
+
+
+}
+
