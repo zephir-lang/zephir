@@ -397,7 +397,7 @@ PHP_METHOD(Test_Flow, testWhile2) {
 
 PHP_METHOD(Test_Flow, testWhile3) {
 
-	double c;
+	double c, _0;
 	zval b;
 	long a;
 
@@ -411,7 +411,8 @@ PHP_METHOD(Test_Flow, testWhile3) {
 		while (zend_is_true(&b)) {
 
 			ZEPHIR_SINIT_NVAR(b);
-			ZVAL_DOUBLE(&b, zephir_get_doubleval(&b) - 1);
+			_0 = zephir_get_doubleval(&b) - 1;
+			ZVAL_DOUBLE(&b, _0);
 
 		}
 
@@ -428,7 +429,7 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 PHP_METHOD(Test_Flow, testWhile4) {
 
-	double c;
+	double c, _0;
 	zval b;
 	long a;
 
@@ -442,7 +443,8 @@ PHP_METHOD(Test_Flow, testWhile4) {
 		while (zend_is_true(&b)) {
 
 			ZEPHIR_SINIT_NVAR(b);
-			ZVAL_DOUBLE(&b, zephir_get_doubleval(&b) - 1);
+			_0 = zephir_get_doubleval(&b) - 1;
+			ZVAL_DOUBLE(&b, _0);
 
 		}
 

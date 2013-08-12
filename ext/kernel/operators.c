@@ -270,11 +270,8 @@ double zephir_get_doubleval(const zval *op) {
 	long long_value;
 	double double_value;
 
-	//fprintf(stderr, "%d\n", Z_TYPE_P(op));
-
 	switch (Z_TYPE_P(op)) {
 		case IS_LONG:
-			fprintf(stderr, "%d\n", Z_TYPE_P(op));
 			return (double) Z_LVAL_P(op);
 		case IS_BOOL:
 			return (double) Z_BVAL_P(op);

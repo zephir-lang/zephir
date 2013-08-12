@@ -1,3 +1,4 @@
 #!/bin/bash
-
+export CC="gcc"
+export CFLAGS="-O0 -g"
 php compiler.php && cd ext && sudo make install

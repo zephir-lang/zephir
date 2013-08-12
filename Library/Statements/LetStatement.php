@@ -286,7 +286,13 @@ class LetStatement
 					case 'double':
 						$symbolVariable->initVariant($compilationContext);
 						if ($symbolVariable->isLocalOnly()) {
-							$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+							if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+								$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
+								$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+								$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $tempVariable->getName() . ');');
+							} else {
+								$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+							}
 						} else {
 							$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
 						}

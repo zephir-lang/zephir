@@ -219,7 +219,9 @@ class SymbolTable
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
-		$variable->initVariant($context);
+		if ($type == 'variable') {
+			$variable->initVariant($context);
+		}
 		return $variable;
 	}
 
