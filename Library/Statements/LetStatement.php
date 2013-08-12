@@ -472,7 +472,7 @@ class LetStatement
 				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 				break;
 			case 'string':
-				$codePrinter->output('zephir_array_update_string(&' . $variable . ', "' . $exprIndex->getCode() . '", &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+				$codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 				break;
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);

@@ -308,7 +308,7 @@ class NativeArray
 	{
 		var a;
 		let a = [1, 2, 3],
-			a[0] = 1;
+			a[0] = 4;
 		return a;
 	}
 

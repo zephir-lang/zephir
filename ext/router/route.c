@@ -323,7 +323,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			//missing comment
 			if (Z_TYPE_P(moduleName) != IS_NULL) {
 
-				zephir_array_update_string(&routePaths, "module", &moduleName, PH_COPY | PH_SEPARATE);
+				zephir_array_update_string(&routePaths, SL("module"), &moduleName, PH_COPY | PH_SEPARATE);
 
 			}
 			//missing comment
@@ -343,7 +343,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					//missing comment
 					if (zend_is_true(namespaceName)) {
 
-						zephir_array_update_string(&routePaths, "namespace", &namespaceName, PH_COPY | PH_SEPARATE);
+						zephir_array_update_string(&routePaths, SL("namespace"), &namespaceName, PH_COPY | PH_SEPARATE);
 
 					}
 				} else {
@@ -356,13 +356,13 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 				//missing comment
 
-				zephir_array_update_string(&routePaths, "controller", &lowerName, PH_COPY | PH_SEPARATE);
+				zephir_array_update_string(&routePaths, SL("controller"), &lowerName, PH_COPY | PH_SEPARATE);
 
 			}
 			//missing comment
 			if (Z_TYPE_P(actionName) != IS_NULL) {
 
-				zephir_array_update_string(&routePaths, "action", &actionName, PH_COPY | PH_SEPARATE);
+				zephir_array_update_string(&routePaths, SL("action"), &actionName, PH_COPY | PH_SEPARATE);
 
 			}
 		} else {
@@ -566,7 +566,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 
-		zend_hash_move_forward_ex(_2, &_10);
+		zend_hash_move_forward_ex(_2, &_1);
 	}
 
 	RETURN_CCTOR(reversed);

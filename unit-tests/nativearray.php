@@ -31,3 +31,6 @@ assert($t->testArrayAccess1() == 1);
 assert($t->testArrayAccess2() == 1);
 assert($t->testArrayAccess3() == 1);
 assert($t->testArrayAccess4() == 1);
+assert($t->testArrayAccess5() == 1);
+
+assert($t->testArrayUpdate1() == array(4, 2, 3));

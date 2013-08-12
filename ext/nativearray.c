@@ -809,7 +809,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 	zephir_array_append(&a, _2, 0);
 
 	ZEPHIR_INIT_VAR(_3);
-	ZVAL_LONG(_3, 1);
+	ZVAL_LONG(_3, 4);
 	zephir_array_update_long(&a, 0, &_3, PH_COPY | PH_SEPARATE);
 
 	RETURN_CCTOR(a);

@@ -101,7 +101,7 @@ class ForStatement
 			$st->compile($compilationContext);
 		}
 
-		$codePrinter->output("\t" . 'zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . '0);');
+		$codePrinter->output("\t" . 'zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ');');
 
 		/**
 		 * Restore the cycle counter
