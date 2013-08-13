@@ -318,9 +318,14 @@ class Flow
 		return c;
 	}
 
-	public function testFor()
+	public function testFor1()
 	{
-
+		var v, b, c;
+		let c = 0,
+			b = [1, 2, 3, 4];
+		for v in b {
+			echo v;
+		}
 	}
 
 }

@@ -312,4 +312,32 @@ class NativeArray
 		return a;
 	}
 
+	public function testArrayUpdate2()
+	{
+		var a; int b;
+		let a = [1, 2, 3],
+			b = 0,
+			a[b] = 4;
+		return a;
+	}
+
+	public function testArrayUpdate3()
+	{
+		var a; int b;
+		let a = [1, 2, 3],
+			b = 0,
+			a[b] = 4,
+			b = 1,
+			a[b] = 5;
+		return a;
+	}
+
+	public function testArrayUpdate4()
+	{
+		var a;
+		let a = ["a": 1, "b": 2, "c": 3],
+			a["a"] = 4;
+		return a;
+	}
+
 }

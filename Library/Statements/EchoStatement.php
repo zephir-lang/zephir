@@ -33,24 +33,24 @@ class EchoStatement
 
 	public function compile(CompilationContext $compilationContext)
 	{
-		$expr = $this->_statement['expr'];
-		switch ($expr['type']) {
-			case 'variable':
-
-				$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext);
-
-				switch ($variable->getType()) {
-					case 'int':
-						$compilationContext->codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
-						break;
-					case 'variable':
-						$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
-						break;
-					default:
-						throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
-				}
-			default:
-				throw new CompilerException("Unknown type: " . $expr['type'], $expr);
+		foreach ($this->_statement['expressions'] as $expr) {
+			switch ($expr['type']) {
+				case 'variable':
+					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext);
+					switch ($variable->getType()) {
+						case 'int':
+							$compilationContext->codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
+							break;
+						case 'variable':
+							$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
+							break;
+						default:
+							throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
+					}
+					break;
+				default:
+					throw new CompilerException("Unknown type: " . $expr['type'], $expr);
+			}
 		}
 	}
 
