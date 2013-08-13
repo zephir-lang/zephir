@@ -98,6 +98,7 @@ PHP_METHOD(Test_Router, __construct) {
 
 	if ((defaultRoutes == 1)) {
 		//missing comment
+		//missing comment
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_1);
@@ -428,7 +429,7 @@ PHP_METHOD(Test_Router, handle) {
 
 	HashTable *_5, *_18;
 	HashPosition _4, _17;
-	zval *uri = NULL, *realUri, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge, *route, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part, *position, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, *_7 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, **_19, *_20, *_21, *_22, *_23, *_24, *_25, *_26, *_27, *_28, *_29, *_30, *_31, *_32, *_33, *_34, *_35, *_36;
+	zval *uri = NULL, *realUri, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, *_7 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, **_19, *_20, *_21, *_22, *_23, *_24, *_25, *_26, *_27, *_28, *_29, *_30, *_31, *_32, *_33, *_34, *_35, *_36;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
@@ -487,7 +488,7 @@ PHP_METHOD(Test_Router, handle) {
 	//missing comment
 	ZEPHIR_OBS_VAR(_3);
 	zephir_read_property(&_3, this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_3, &_5, &_4, 0, 1);
+	zephir_is_iterable(_3, &_5, &_4, 0, 0);
 	while (zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS) {
 		ZEPHIR_GET_HVALUE(route, _6);
 		//missing comment
@@ -626,7 +627,7 @@ PHP_METHOD(Test_Router, handle) {
 				ZEPHIR_INIT_NVAR(converters);
 				zephir_call_method(converters, route, "getconverters");
 
-				zephir_is_iterable(paths, &_18, &_17, 0, 1);
+				zephir_is_iterable(paths, &_18, &_17, 0, 0);
 				while (zend_hash_get_current_data_ex(_18, (void**) &_19, &_17) == SUCCESS) {
 					ZEPHIR_GET_HKEY(part, _18, _17);
 					ZEPHIR_GET_HVALUE(position, _19);
@@ -1073,7 +1074,7 @@ PHP_METHOD(Test_Router, mount) {
 
 	HashTable *_1, *_5;
 	HashPosition _0, _4;
-	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *route, **_2, *_3 = NULL, **_6, *_7 = NULL, *_8;
+	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *route = NULL, **_2, *_3 = NULL, **_6, *_7 = NULL, *_8;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &group);
@@ -1096,7 +1097,7 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_call_method(beforeMatch, group, "getbeforematch");
 
 	if (Z_TYPE_P(beforeMatch) != IS_NULL) {
-		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 1);
+		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 0);
 		while (zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS) {
 			ZEPHIR_GET_HVALUE(route, _2);
 			ZEPHIR_INIT_NVAR(_3);
@@ -1109,7 +1110,7 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_call_method(hostname, group, "gethostname");
 
 	if (Z_TYPE_P(hostname) != IS_NULL) {
-		zephir_is_iterable(groupRoutes, &_5, &_4, 0, 1);
+		zephir_is_iterable(groupRoutes, &_5, &_4, 0, 0);
 		while (zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS) {
 			ZEPHIR_GET_HVALUE(route, _6);
 			ZEPHIR_INIT_NVAR(_7);
@@ -1290,7 +1291,7 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 	HashTable *_2;
 	HashPosition _1;
-	zval *id, *route, *_0, **_3, *_4 = NULL;
+	zval *id, *route = NULL, *_0, **_3, *_4 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &id);
@@ -1299,7 +1300,7 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_property(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_0, &_2, &_1, 0, 1);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	while (zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS) {
 		ZEPHIR_GET_HVALUE(route, _3);
 		ZEPHIR_INIT_NVAR(_4);
@@ -1327,7 +1328,7 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 	HashTable *_2;
 	HashPosition _1;
-	zval *name, *route, *_0, **_3, *_4 = NULL;
+	zval *name, *route = NULL, *_0, **_3, *_4 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name);
@@ -1336,7 +1337,7 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_property(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_0, &_2, &_1, 0, 1);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	while (zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS) {
 		ZEPHIR_GET_HVALUE(route, _3);
 		ZEPHIR_INIT_NVAR(_4);

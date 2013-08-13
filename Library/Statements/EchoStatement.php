@@ -42,7 +42,7 @@ class EchoStatement
 							$compilationContext->codePrinter->output('fprintf(stdout, "%d", ' . $expr['value'] . ');');
 							break;
 						case 'variable':
-							$compilationContext->codePrinter->output('zval_print(' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('zend_print_zval(' . $expr['value'] . ', 0);');
 							break;
 						default:
 							throw new CompilerException("Unknown type: " . $variable->getType(), $expr);

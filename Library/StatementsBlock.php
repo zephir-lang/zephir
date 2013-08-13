@@ -44,6 +44,10 @@ class StatementsBlock
 
 		foreach ($statements as $statement) {
 
+			/*if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
+				$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
+			}*/
+
 			switch ($statement['type']) {
 				case 'let':
 					$letStatement = new LetStatement($statement);

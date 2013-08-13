@@ -82,7 +82,8 @@ class Router
 		let routes = [];
 		if defaultRoutes === true {
 
-			// Two routes are added by default to match /:controller/:action and /:controller/:action/:params
+			// Two routes are added by default to match /:controller/:action and
+			// /:controller/:action/:params
 
 			let routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', [
 				'controller': 1

@@ -54,6 +54,7 @@ class ForStatement
 		 */
 		if (isset($this->_statement['key'])) {
 			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			$keyVariable->setMustInitNull(true);
 			$keyVariable->setIsInitialized(true);
 		}
 
@@ -62,6 +63,7 @@ class ForStatement
 		 */
 		if (isset($this->_statement['value'])) {
 			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			$variable->setMustInitNull(true);
 			$variable->setIsInitialized(true);
 		}
 
@@ -82,7 +84,7 @@ class ForStatement
 		$tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
 		$tempVariable->setIsDoublePointer(true);
 
-		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 1);');
+		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
         $codePrinter->output('while (zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS) {');
 
         if (isset($this->_statement['key'])) {

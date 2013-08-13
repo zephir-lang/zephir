@@ -79,6 +79,18 @@ class CodePrinter
 	}
 
 	/**
+	 * Add code to the output without indentation
+	 *
+	 * @param string $code
+	 */
+	public function outputNoIndent($code)
+	{
+		$this->_lastLine = $code;
+		$this->_code .= $code . PHP_EOL;
+		$this->_currentPrints++;
+	}
+
+	/**
 	 * Add code to the output
 	 *
 	 * @param string $code

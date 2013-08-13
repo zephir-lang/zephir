@@ -27,4 +27,4 @@ assert($t->testWhile7() == 0.0);
 assert($t->testWhile8() == 0.0);
 assert($t->testWhile9() == 0.0);
 
-assert($t->testFor() === null);
+assert($t->testFor1() === null);
