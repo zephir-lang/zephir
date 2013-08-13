@@ -594,3 +594,38 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor2) {
+
+	HashTable *_5;
+	HashPosition _4;
+	zval *v = NULL, *b, c, *_0, *_1, *_2, *_3, **_6;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_SINIT_VAR(c);
+	ZVAL_LONG(&c, 0);
+
+	ZEPHIR_INIT_VAR(b);
+	array_init(b);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_array_append(&b, _1, 0);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_LONG(_2, 3);
+	zephir_array_append(&b, _2, 0);
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_LONG(_3, 4);
+	zephir_array_append(&b, _3, 0);
+
+	zephir_is_iterable(b, &_5, &_4, 0, 0);
+	while (zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS) {
+		ZEPHIR_GET_HVALUE(v, _6);
+		zend_print_zval(v, 0);
+		zend_hash_move_forward_ex(_5, &_4);
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+

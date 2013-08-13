@@ -80,6 +80,9 @@ class ReturnStatement
 					case 'double':
 						$codePrinter->output('RETURN_MM_DOUBLE(' . $symbolVariable->getName() . ');');
 						break;
+					case 'string':
+						$codePrinter->output('RETURN_MM_STRING(' . $resolvedExpr->getCode() . '->str, 1);');
+						break;
 					case 'bool':
 						$codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');
 						break;

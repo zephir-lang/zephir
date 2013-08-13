@@ -402,6 +402,36 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"+=" {
+			s->active_char++;
+			token->opcode = XX_T_ADDASSIGN;
+			return 0;
+		}
+
+		"-=" {
+			s->active_char++;
+			token->opcode = XX_T_SUBASSIGN;
+			return 0;
+		}
+
+		"*=" {
+			s->active_char++;
+			token->opcode = XX_T_MULASSIGN;
+			return 0;
+		}
+
+		"/=" {
+			s->active_char++;
+			token->opcode = XX_T_DIVASSIGN;
+			return 0;
+		}
+
+		".=" {
+			s->active_char++;
+			token->opcode = XX_T_CONCATASSIGN;
+			return 0;
+		}
+
 		"==" {
 			s->active_char += 2;
 			token->opcode = XX_T_EQUALS;
@@ -423,6 +453,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		"!==" {
 			s->active_char += 3;
 			token->opcode = XX_T_NOTIDENTICAL;
+			return 0;
+		}
+
+		"<=" {
+			s->active_char++;
+			token->opcode = XX_T_LESSEQUAL;
+			return 0;
+		}
+
+		">=" {
+			s->active_char++;
+			token->opcode = XX_T_GREATEREQUAL;
 			return 0;
 		}
 

@@ -129,6 +129,150 @@ class Route
 	}
 
 	/**
+	 * Extracts parameters from a string
+	 */
+	public function extractNamedParams(string pattern)
+	{
+
+		int cursor, marker, bracketCount = 0, parenthesesCount = 0, ch;
+		int intermediate = 0, length, numberMatches = 0, foundPattern;
+		int variableLength, regexpLength;
+		boolean notValid;
+		string route;
+
+		if strlen(pattern) <= 0 {
+			return false;
+		}
+
+		for cursor, ch in pattern {
+
+			if parenthesesCount == 0 {
+				if ch == '{' {
+					if bracketCount == 0 {
+						let marker = cursor,
+							intermediate = 0,
+							notValid = false;
+					}
+					let bracketCount++;
+				} else {
+					if ch == '}' {
+						let bracketCount--;
+						if intermediate > 0 {
+							if bracketCount == 0 {
+
+								let numberMatches++;
+
+								/*variable = NULL;
+								length = cursor - marker - 1;
+								item = estrndup(marker + 1, length);
+								cursor_var = item;
+								marker = item;
+								for (j = 0; j < length; j++) {
+									ch = *cursor_var;
+									if (ch == '\0') {
+										break;
+									}
+									if (j == 0 && !((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z'))){
+										not_valid = 1;
+										break;
+									}
+									if ((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':') {
+										if (ch == ':') {
+											regexp_length = length - j - 1;
+											variable_length = cursor_var - marker;
+											variable = estrndup(marker, variable_length);
+											regexp = estrndup(cursor_var + 1, regexp_length);
+											break;
+										}
+									} else {
+										not_valid = 1;
+										break;
+									}
+									cursor_var++;
+								}
+
+								if (!not_valid) {
+									{
+										zval *tmp;
+										ALLOC_INIT_ZVAL(tmp);
+										ZVAL_LONG(tmp, number_matches);
+
+										if (variable) {
+											if (regexp_length > 0) {
+
+												found_pattern = 0;
+												for (k = 0; k < regexp_length; k++) {
+													if (regexp[k] == '\0') {
+														break;
+													}
+													if (!found_pattern) {
+														if (regexp[k] == '(') {
+															found_pattern = 1;
+														}
+													} else {
+														if (regexp[k] == ')') {
+															found_pattern = 2;
+															break;
+														}
+													}
+												}
+
+												if (found_pattern != 2) {
+													smart_str_appendc(&route_str, '(');
+													smart_str_appendl(&route_str, regexp, regexp_length);
+													smart_str_appendc(&route_str, ')');
+												} else {
+													smart_str_appendl(&route_str, regexp, regexp_length);
+												}
+												zend_hash_update(Z_ARRVAL_P(matches), variable, variable_length + 1, &tmp, sizeof(zval *), NULL);
+											}
+											efree(regexp);
+											efree(variable);
+										} else {
+											smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
+											zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
+										}
+									}
+								} else {
+									smart_str_appendc(&route_str, '{');
+									smart_str_appendl(&route_str, item, length);
+									smart_str_appendc(&route_str, '}');
+								}
+
+								efree(item);
+
+								cursor++;*/
+								continue;
+							}
+						}
+					}
+				}
+			}
+
+			if bracketCount == 0 {
+				if ch == '(' {
+					let parenthesesCount++;
+				} else {
+					if ch == ')' {
+						let parenthesesCount--;
+						if parenthesesCount == 0 {
+							let numberMatches++;
+						}
+					}
+				}
+			}
+
+			if bracketCount > 0 {
+				let intermediate++;
+			} else {
+				let route .= ch;
+			}
+		}
+
+		return route;
+	}
+
+	/**
 	 * Reconfigure the route adding a new pattern and a set of paths
 	 *
 	 * @param string pattern
@@ -138,7 +282,7 @@ class Route
 	{
 		var moduleName, controllerName, actionName,
 			parts, numberParts, routePaths, realClassName, namespaceName,
-			lowerName, pcrePattern, compiledPattern, reversed;
+			lowerName, pcrePattern, compiledPattern, reversed, extracted;
 
 		if typeof pattern != "string" {
 			throw new Test\Router\Exception("The pattern must be string");
@@ -225,8 +369,9 @@ class Route
 
 			if memchr(pattern, '{') {
 				// The route has named parameters so we need to extract them
-				//let pcrePattern = extractNamedParams(pattern, routePaths);
-				let pcrePattern = pattern;
+				let extracted = this->extractNamedParams(pattern),
+					pcrePattern = extracted[0],
+					routePaths = extracted[1];
 			} else {
 				let pcrePattern = pattern;
 			}

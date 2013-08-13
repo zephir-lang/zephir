@@ -98,6 +98,13 @@
 #define XX_T_NOTEQUALS 405
 #define XX_T_NOTIDENTICAL 406
 #define XX_T_NOT 407
+#define XX_T_GREATEREQUAL 408
+#define XX_T_LESSEQUAL 409
+#define XX_T_ADDASSIGN 410
+#define XX_T_SUBASSIGN 411
+#define XX_T_MULASSIGN 412
+#define XX_T_DIVASSIGN 413
+#define XX_T_CONCATASSIGN 414
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

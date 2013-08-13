@@ -47,6 +47,22 @@ PHP_METHOD(Test_Arithmetic, complex21Sum);
 PHP_METHOD(Test_Arithmetic, complex22Sum);
 PHP_METHOD(Test_Arithmetic, complex23Sum);
 PHP_METHOD(Test_Arithmetic, complex24Sum);
+PHP_METHOD(Test_Arithmetic, addSum1);
+PHP_METHOD(Test_Arithmetic, addSum2);
+PHP_METHOD(Test_Arithmetic, addSum3);
+PHP_METHOD(Test_Arithmetic, addSum4);
+PHP_METHOD(Test_Arithmetic, addSum5);
+PHP_METHOD(Test_Arithmetic, addSum6);
+PHP_METHOD(Test_Arithmetic, addSum7);
+PHP_METHOD(Test_Arithmetic, addSum8);
+PHP_METHOD(Test_Arithmetic, addSum9);
+PHP_METHOD(Test_Arithmetic, addSum10);
+PHP_METHOD(Test_Arithmetic, addSum11);
+PHP_METHOD(Test_Arithmetic, addSum12);
+PHP_METHOD(Test_Arithmetic, addSum13);
+PHP_METHOD(Test_Arithmetic, addSum14);
+PHP_METHOD(Test_Arithmetic, addSum15);
+PHP_METHOD(Test_Arithmetic, addSum16);
 
 ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, intSum, NULL, ZEND_ACC_PUBLIC)
@@ -93,5 +109,21 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, complex22Sum, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, complex23Sum, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, complex24Sum, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum3, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum4, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum5, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum6, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum7, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum8, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum9, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum10, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum11, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum12, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum13, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum14, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum15, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum16, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

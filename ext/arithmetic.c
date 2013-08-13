@@ -743,3 +743,222 @@ PHP_METHOD(Test_Arithmetic, complex24Sum) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, addSum1) {
+
+	long a;
+
+	a = 0;
+
+	a += 10;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum2) {
+
+	long a;
+
+	a = 0;
+
+	a += 0;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum3) {
+
+	long a;
+
+	a = 0;
+
+	a += 1;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum4) {
+
+	long a;
+
+	a = 0;
+
+	a += 0;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum5) {
+
+	long a;
+
+	a = 0;
+
+	a += (long) (1.0);
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum6) {
+
+	long a;
+
+	a = 0;
+
+	a += (long) (1.0);
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum7) {
+
+	double a;
+
+	a = 0.0;
+
+	a += (double) (10);
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum8) {
+
+	double a;
+
+	a = 0.0;
+
+	a += 0.0;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum9) {
+
+	double a;
+
+	a = 0.0;
+
+	a += 1;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum10) {
+
+	double a;
+
+	a = 0.0;
+
+	a += 0;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum11) {
+
+	double a;
+
+	a = 0.0;
+
+	a += 1.0;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum12) {
+
+	double a;
+
+	a = 0.0;
+
+	a += 1.0;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum13) {
+
+	long a, b;
+
+	a = 0;
+
+	b = 10;
+
+	a += b;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum14) {
+
+	zend_bool b;
+	long a;
+
+	a = 0;
+
+	b = 1;
+
+	a += b;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum15) {
+
+	zend_bool b;
+	long a;
+
+	a = 0;
+
+	b = 0;
+
+	a += b;
+
+	RETURN_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum16) {
+
+	double b;
+	long a;
+
+	a = 0;
+
+	b = 1.0;
+
+	a += (long) b;
+
+	RETURN_LONG(a);
+
+
+}
+

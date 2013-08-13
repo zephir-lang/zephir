@@ -15,8 +15,9 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
-#include "kernel/exception.h"
 #include "kernel/operators.h"
+#include "kernel/string_type.h"
+#include "kernel/exception.h"
 #include "kernel/array.h"
 
 
@@ -246,6 +247,102 @@ PHP_METHOD(Test_Router_Route, via) {
 }
 
 /**
+ * Extracts parameters from a string
+ */
+PHP_METHOD(Test_Router_Route, extractNamedParams) {
+
+	HashTable *_3;
+	HashPosition _2;
+	zend_bool notValid;
+	long cursor, marker, bracketCount, parenthesesCount, ch, intermediate, numberMatches;
+	zval *pattern_param = NULL, *_0, *_1, **_4;
+	zephir_str *pattern, *route = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &pattern_param);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, pattern.str, 1);
+	zephir_call_func_p1(_0, "strlen", _1);
+	if (ZEPHIR_IS_LONG(_0, 0)) {
+
+		RETURN_MM_BOOL(0);
+
+	}
+	zephir_is_iterable(pattern, &_3, &_2, 0, 0);
+	while (zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS) {
+		ZEPHIR_GET_HKEY(cursor, _3, _2);
+		ZEPHIR_GET_HVALUE(ch, _4);
+		if (parenthesesCount == 0) {
+			if (ch == '{') {
+				if (bracketCount == 0) {
+
+					marker = cursor;
+
+					intermediate = 0;
+
+					notValid = 0;
+
+				}
+
+				bracketCount++;
+
+			} else {
+				if (ch == '}') {
+
+					bracketCount--;
+
+					if ((intermediate < 0)) {
+						if (bracketCount == 0) {
+
+							numberMatches++;
+
+							//missing comment
+							continue;
+						}
+					}
+				}
+			}
+		}
+		if (bracketCount == 0) {
+			if (ch == '(') {
+
+				parenthesesCount++;
+
+			} else {
+				if (ch == ')') {
+
+					parenthesesCount--;
+
+					if (parenthesesCount == 0) {
+
+						numberMatches++;
+
+					}
+				}
+			}
+		}
+		if ((bracketCount < 0)) {
+
+			intermediate++;
+
+		} else {
+
+			zephir_str_assign_long(route, ch->str, ch->len);
+
+		}
+		zend_hash_move_forward_ex(_3, &_2);
+	}
+
+	RETURN_MM_STRING(route->str, 1);
+
+
+}
+
+/**
  * Reconfigure the route adding a new pattern and a set of paths
  *
  * @param string pattern
@@ -253,7 +350,7 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *extracted, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -392,9 +489,14 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		zephir_call_func_p2(_5, "memchr", pattern, _6);
 		if (zend_is_true(_5)) {
 			//missing comment
-			//missing comment
+			ZEPHIR_INIT_VAR(extracted);
+			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
 
-			ZEPHIR_CPY_WRT(pcrePattern, pattern);
+			ZEPHIR_OBS_VAR(pcrePattern);
+			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY);
+
+			ZEPHIR_OBS_NVAR(routePaths);
+			zephir_array_fetch_long(&routePaths, extracted, 1, PH_NOISY);
 
 		} else {
 

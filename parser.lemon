@@ -30,7 +30,7 @@
 %name xx_
 
 %left COMMA .
-%left EQUALS IDENTICAL LESS GREATER NOTIDENTICAL NOTEQUALS .
+%left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %right ISSET FETCH .
 %right TYPEOF INSTANCEOF .
@@ -350,11 +350,14 @@ static json_object *xx_ret_let_statement(json_object *assignments, xx_scanner_st
 	return ret;
 }
 
-static json_object *xx_ret_let_assignment(char *type, xx_parser_token *V, xx_parser_token *P, json_object *index_expr, json_object *expr, xx_scanner_state *state)
+static json_object *xx_ret_let_assignment(char *type, json_object *operator, xx_parser_token *V, xx_parser_token *P, json_object *index_expr, json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "assign-type", json_object_new_string(type));
+	if (operator) {
+		json_object_object_add(ret, "operator", operator);
+	}
 	json_object_object_add(ret, "variable", json_object_new_string(V->token));
 	if (P) {
 		json_object_object_add(ret, "property", json_object_new_string(P->token));
@@ -1212,44 +1215,71 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 	R = xx_ret_list(NULL, A);
 }
 
+/* */
+xx_assignment_operator(R) ::= ASSIGN . {
+	R = json_object_new_string("assign");
+}
+
+/* */
+xx_assignment_operator(R) ::= ADDASSIGN . {
+	R = json_object_new_string("add-assign");
+}
+
+/* */
+xx_assignment_operator(R) ::= SUBASSIGN . {
+	R = json_object_new_string("sub-assign");
+}
+
+xx_assignment_operator(R) ::= MULASSIGN . {
+	R = json_object_new_string("mult-assign");
+}
+
+xx_assignment_operator(R) ::= DIVASSIGN . {
+	R = json_object_new_string("div-assign");
+}
+
+xx_assignment_operator(R) ::= CONCATASSIGN . {
+	R = json_object_new_string("concat-assign");
+}
+
 /* y = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable", I, NULL, NULL, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(I) xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("variable", O, I, NULL, NULL, E, status->scanner_state);
 }
 
 /* y->x = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property", D, I, NULL, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property", O, D, I, NULL, E, status->scanner_state);
 }
 
 /* y->x[] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property-append", D, I, NULL, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property-append", O, D, I, NULL, E, status->scanner_state);
 }
 
 /* y->x[z] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN xx_index_expr(X) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("object-property-array-index", D, I, X, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN xx_index_expr(X) SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property-array-index", O, D, I, X, E, status->scanner_state);
 }
 
 /* y[] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("variable-append", I, NULL, NULL, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("variable-append", O, I, NULL, NULL, E, status->scanner_state);
 }
 
 /* y[x] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE ASSIGN xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("array-index", D, NULL, I, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("array-index", O, D, NULL, I, E, status->scanner_state);
 }
 
 /* y++ */
 xx_let_assignment(R) ::= IDENTIFIER(I) INCR . {
-	R = xx_ret_let_assignment("incr", I, NULL, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("incr", NULL, I, NULL, NULL, NULL, status->scanner_state);
 }
 
 /* y-- */
 xx_let_assignment(R) ::= IDENTIFIER(I) DECR . {
-	R = xx_ret_let_assignment("decr", I, NULL, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("decr", NULL, I, NULL, NULL, NULL, status->scanner_state);
 }
 
 xx_index_expr(R) ::= xx_common_expr(E) . {
@@ -1398,6 +1428,14 @@ xx_common_expr(R) ::= xx_common_expr(O1) LESS xx_common_expr(O2) . {
 
 xx_common_expr(R) ::= xx_common_expr(O1) GREATER xx_common_expr(O2) . {
 	R = xx_ret_expr("greater", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) LESSEQUAL xx_common_expr(O2) . {
+	R = xx_ret_expr("less-equal", O1, O2, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= xx_common_expr(O1) GREATEREQUAL xx_common_expr(O2) . {
+	R = xx_ret_expr("greater-equal", O1, O2, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= PARENTHESES_OPEN xx_common_expr(L) PARENTHESES_CLOSE . {

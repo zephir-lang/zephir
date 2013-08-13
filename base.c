@@ -247,6 +247,18 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
 				break;
+			case XX_T_ADDASSIGN:
+				xx_(xx_parser, XX_ADDASSIGN, NULL, parser_status);
+				break;
+			case XX_T_SUBASSIGN:
+				xx_(xx_parser, XX_SUBASSIGN, NULL, parser_status);
+				break;
+			case XX_T_MULASSIGN:
+				xx_(xx_parser, XX_MULASSIGN, NULL, parser_status);
+				break;
+			case XX_T_CONCATASSIGN:
+				xx_(xx_parser, XX_CONCATASSIGN, NULL, parser_status);
+				break;
 			case XX_T_EQUALS:
 				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
 				break;
@@ -264,6 +276,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_GREATER:
 				xx_(xx_parser, XX_GREATER, NULL, parser_status);
+				break;
+			case XX_T_LESSEQUAL:
+				xx_(xx_parser, XX_LESSEQUAL, NULL, parser_status);
+				break;
+			case XX_T_GREATEREQUAL:
+				xx_(xx_parser, XX_GREATEREQUAL, NULL, parser_status);
 				break;
 			case XX_T_COLON:
 				xx_(xx_parser, XX_COLON, NULL, parser_status);

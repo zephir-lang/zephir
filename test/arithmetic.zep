@@ -435,4 +435,137 @@ class Arithmetic
 		return d;
 	}
 
+	public function addSum1()
+	{
+		int a;
+		let a = 0,
+			a += 10;
+		return a;
+	}
+
+	public function addSum2()
+	{
+		int a;
+		let a = 0,
+			a += null;
+		return a;
+	}
+
+	public function addSum3()
+	{
+		int a;
+		let a = 0,
+			a += true;
+		return a;
+	}
+
+	public function addSum4()
+	{
+		int a;
+		let a = 0,
+			a += false;
+		return a;
+	}
+
+	public function addSum5()
+	{
+		int a;
+		let a = 0,
+			a += 1.0;
+		return a;
+	}
+
+	public function addSum6()
+	{
+		int a;
+		let a = 0,
+			a += 1.0;
+		return a;
+	}
+
+	public function addSum7()
+	{
+		double a;
+		let a = 0.0,
+			a += 10;
+		return a;
+	}
+
+	public function addSum8()
+	{
+		double a;
+		let a = 0.0,
+			a += null;
+		return a;
+	}
+
+	public function addSum9()
+	{
+		double a;
+		let a = 0.0,
+			a += true;
+		return a;
+	}
+
+	public function addSum10()
+	{
+		double a;
+		let a = 0.0,
+			a += false;
+		return a;
+	}
+
+	public function addSum11()
+	{
+		double a;
+		let a = 0.0,
+			a += 1.0;
+		return a;
+	}
+
+	public function addSum12()
+	{
+		double a;
+		let a = 0.0,
+			a += 1.0;
+		return a;
+	}
+
+	public function addSum13()
+	{
+		int a, b;
+		let a = 0,
+			b = 10,
+			a += b;
+		return a;
+	}
+
+	public function addSum14()
+	{
+		int a; boolean b;
+		let a = 0,
+			b = true,
+			a += b;
+		return a;
+	}
+
+	public function addSum15()
+	{
+		int a; boolean b;
+		let a = 0,
+			b = false,
+			a += b;
+		return a;
+	}
+
+	public function addSum16()
+	{
+		int a; double b;
+		let a = 0,
+			b = 1.0,
+			a += b;
+		return a;
+	}
+
+
 }

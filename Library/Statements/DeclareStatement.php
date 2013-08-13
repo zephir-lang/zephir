@@ -63,7 +63,7 @@ class DeclareStatement
 			 * Variables with a default value are initialized by default
 			 */
 			if (isset($variable['expr'])) {
-				$symbolVariable->setInitialized(true);
+				$symbolVariable->setIsInitialized(true);
 			}
 
 			/*if (isset($variable['expr'])) {

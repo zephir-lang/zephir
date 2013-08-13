@@ -87,6 +87,11 @@ class LetStatement
 
 	/**
 	 * Compiles foo = {expr}
+	 * Changes the value of a mutable variable
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
 	 */
 	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 			ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
@@ -103,29 +108,122 @@ class LetStatement
 			case 'int':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$codePrinter->output($variable . ' = 0;');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = 0;');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += 0;');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= 0;');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= 0;');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+						}
 						break;
 					case 'int':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+						}
 						break;
 					case 'double':
-						$codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += (long) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= (long) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= (long) (' . $resolvedExpr->getCode() . ');');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+						}
 						break;
 					case 'bool':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+						}
 						break;
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'bool':
-								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
+										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+								}
 								break;
 							case 'double':
-								$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += (long) ' . $itemVariable->getName() . ';');
+										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= (long) ' . $itemVariable->getName() . ';');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= (long) ' . $itemVariable->getName() . ';');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+								}
 								break;
 							case 'variable':
-								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+								}
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
@@ -138,23 +236,89 @@ class LetStatement
 			case 'double':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$codePrinter->output($variable . ' = 0.0;');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = 0.0;');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += 0.0;');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= 0.0;');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= 0.0;');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+						}
 						break;
 					case 'int':
-						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += (double) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= (double) (' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= (double) (' . $resolvedExpr->getCode() . ');');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+						}
 						break;
 					case 'double':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+						}
 						break;
 					case 'bool':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+						}
 						break;
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'bool':
-								$codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+								}
 								break;
 							case 'double':
 								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
@@ -193,17 +357,18 @@ class LetStatement
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
-							/*case 'int':
-								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+							case 'string':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
 								break;
-							case 'double':
-								$codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
+							case 'int':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
 								break;
-							case 'variable':
-								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
-								break;*/
 							default:
-								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
 						break;
 					default:

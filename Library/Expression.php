@@ -108,21 +108,38 @@ class Expression
 
 		switch ($left->getType()) {
 			case 'variable':
-
 				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-
-				switch ($right->getType()) {
-					case 'int':
-						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
-					case 'null':
-						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
+				switch ($variable->getType()) {
 					case 'variable':
-						$compilationContext->headersManager->add('kernel/operators');
-						return new CompiledExpression('bool', 'ZEPHIR_IS_EQUAL(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+						switch ($right->getType()) {
+							case 'int':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+							case 'null':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
+							case 'variable':
+								// @todo: variables aren't always 'zvals'
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_EQUAL(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
+							default:
+								throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
+						}
+						break;
+					case 'int':
+						switch ($right->getType()) {
+							case 'int':
+								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
+							case 'string':
+								if (strlen($right->getCode()) == 1) {
+									return new CompiledExpression('bool', $left->getCode() . ' == \'' . $right->getCode() . '\'', $expression);
+								}
+							default:
+								throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
+						}
+						break;
 					default:
-						throw new CompilerException("Error Processing Request", $expression);
+						throw new CompilerException("Cannot compare variable: " . $variable->getType(), $expression);
 				}
 				break;
 			case 'int':
@@ -226,15 +243,17 @@ class Expression
 		}
 
 		$leftExpr = new Expression($expression['left']);
+		$leftExpr->isExpectingReturn(true);
 		$left = $leftExpr->compile($compilationContext);
 
 		$rightExpr = new Expression($expression['right']);
+		$rightExpr->isExpectingReturn(true);
 		$right = $rightExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
 			case 'variable':
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['value'], $compilationContext, $expression['left']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
 
 				switch ($variable->getType()) {
 					case 'int':
@@ -891,7 +910,13 @@ class Expression
 			case 'not-identical':
 				return $this->compileIdentical('!=', $expression, $compilationContext);
 
+			case 'greater':
+				return $this->compileLess($expression, $compilationContext);
+
 			case 'less':
+				return $this->compileLess($expression, $compilationContext);
+
+			case 'less-equal':
 				return $this->compileLess($expression, $compilationContext);
 
 			case 'add':

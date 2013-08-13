@@ -46,7 +46,16 @@ class ForStatement
 		$expression = $expr->compile($compilationContext);
 
 		if ($expression->getType() != 'variable') {
-			throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
+			throw new CompilerException("Unknown type: " . $variable->getType(), $exprRaw);
+		}
+
+		$exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $this->_statement['expr']);
+		switch ($exprVariable->getType()) {
+			case 'variable':
+			case 'string':
+				break;
+			default:
+				throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
 		}
 
 		/**

@@ -51,6 +51,11 @@ class Call
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {
+						case 'string':
+							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_STRING(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '.str, 1);');
+							$params[] = $parameterTempVariable->getName();
+							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							break;

@@ -6,6 +6,7 @@ ZEPHIR_INIT_CLASS(Test_Router_Route);
 PHP_METHOD(Test_Router_Route, __construct);
 PHP_METHOD(Test_Router_Route, compilePattern);
 PHP_METHOD(Test_Router_Route, via);
+PHP_METHOD(Test_Router_Route, extractNamedParams);
 PHP_METHOD(Test_Router_Route, reConfigure);
 PHP_METHOD(Test_Router_Route, getName);
 PHP_METHOD(Test_Router_Route, setName);
@@ -35,6 +36,10 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_via, 0, 0, 0)
 	ZEND_ARG_INFO(0, httpMethods)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_extractNamedParams, 0, 0, 0)
+	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_reConfigure, 0, 0, 0)
@@ -67,6 +72,7 @@ ZEPHIR_INIT_FUNCS(test_router_route_method_entry) {
 	PHP_ME(Test_Router_Route, __construct, arginfo_test_router_route___construct, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, compilePattern, arginfo_test_router_route_compilePattern, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, via, arginfo_test_router_route_via, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Router_Route, extractNamedParams, arginfo_test_router_route_extractNamedParams, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, reConfigure, arginfo_test_router_route_reConfigure, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, getName, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, setName, arginfo_test_router_route_setName, ZEND_ACC_PUBLIC)
