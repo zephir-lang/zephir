@@ -31,38 +31,25 @@ class ForStatement
 		$this->_statement = $statement;
 	}
 
-	/**
-	 * Perform the compilation of code
-	 *
-	 * @param CompilationContext $compilationContext
-	 */
-	public function compile(CompilationContext $compilationContext)
+	public function compileStringTraverse($expression, $compilationContext)
 	{
-		$exprRaw = $this->_statement['expr'];
 
 		$codePrinter = $compilationContext->codePrinter;
+	}
 
-		$expr = new Expression($exprRaw);
-		$expression = $expr->compile($compilationContext);
+	public function compileHashTraverse($expression, $compilationContext)
+	{
 
-		if ($expression->getType() != 'variable') {
-			throw new CompilerException("Unknown type: " . $variable->getType(), $exprRaw);
-		}
-
-		$exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $this->_statement['expr']);
-		switch ($exprVariable->getType()) {
-			case 'variable':
-			case 'string':
-				break;
-			default:
-				throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
-		}
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * Initialize 'key' variable
 		 */
 		if (isset($this->_statement['key'])) {
 			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			if ($keyVariable->getType() != 'variable') {
+				throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
+			}
 			$keyVariable->setMustInitNull(true);
 			$keyVariable->setIsInitialized(true);
 		}
@@ -72,6 +59,9 @@ class ForStatement
 		 */
 		if (isset($this->_statement['value'])) {
 			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			if ($variable->getType() != 'variable') {
+				throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
+			}
 			$variable->setMustInitNull(true);
 			$variable->setIsInitialized(true);
 		}
@@ -120,6 +110,36 @@ class ForStatement
 		$compilationContext->insideCycle--;
 
 		$codePrinter->output('}');
+	}
+
+	/**
+	 * Perform the compilation of code
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
+	public function compile(CompilationContext $compilationContext)
+	{
+		$exprRaw = $this->_statement['expr'];
+
+		$expr = new Expression($exprRaw);
+		$expression = $expr->compile($compilationContext);
+
+		if ($expression->getType() != 'variable') {
+			throw new CompilerException("Unknown type: " . $variable->getType(), $exprRaw);
+		}
+
+		$exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $this->_statement['expr']);
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$this->compileHashTraverse($expression, $compilationContext);
+				break;
+			case 'string':
+				$this->compileStringTraverse($expression, $compilationContext);
+				break;
+			default:
+				throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
+		}
+
 	}
 
 }

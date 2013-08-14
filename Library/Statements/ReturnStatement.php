@@ -72,7 +72,7 @@ class ReturnStatement
 				$codePrinter->output('RETURN_MM_STRING("' . $resolvedExpr->getCode() . '", 1);');
 				break;
 			case 'variable':
-				$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode());
+				$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
 				switch ($symbolVariable->getType()) {
 					case 'int':
 						$codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');

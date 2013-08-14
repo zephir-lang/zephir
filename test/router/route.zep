@@ -263,7 +263,7 @@ class Route
 			}
 		}
 
-		return route;
+		//return route;
 	}
 
 	/**
