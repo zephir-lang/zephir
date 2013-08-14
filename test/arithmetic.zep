@@ -567,5 +567,58 @@ class Arithmetic
 		return a;
 	}
 
+	public function addSum17()
+	{
+		double a, b;
+		let a = 0.0,
+			b = 10.0,
+			a += b;
+		return a;
+	}
+
+	public function addSum18()
+	{
+		double a; boolean b;
+		let a = 0.0,
+			b = true,
+			a += b;
+		return a;
+	}
+
+	public function addSum19()
+	{
+		double a; boolean b;
+		let a = 0.0,
+			b = false,
+			a += b;
+		return a;
+	}
+
+	public function addSum20()
+	{
+		double a; int b;
+		let a = 0.0,
+			b = 1,
+			a += b;
+		return a;
+	}
+
+	public function addSum21()
+	{
+		int a; var b;
+		let a = 0.0,
+			b = 1,
+			a += b;
+		return a;
+	}
+
+	public function addSum22()
+	{
+		double a; var b;
+		let a = 0.0,
+			b = 1,
+			a += b;
+		return a;
+	}
 
 }

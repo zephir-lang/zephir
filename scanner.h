@@ -105,6 +105,8 @@
 #define XX_T_MULASSIGN 412
 #define XX_T_DIVASSIGN 413
 #define XX_T_CONCATASSIGN 414
+#define XX_T_AND 415
+#define XX_T_OR 416
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

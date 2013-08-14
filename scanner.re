@@ -396,6 +396,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"&&" {
+			s->active_char += 2;
+			token->opcode = XX_T_AND;
+			return 0;
+		}
+
+		"||" {
+			s->active_char += 2;
+			token->opcode = XX_T_OR;
+			return 0;
+		}
+
 		"=" {
 			s->active_char++;
 			token->opcode = XX_T_ASSIGN;

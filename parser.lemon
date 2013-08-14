@@ -30,6 +30,7 @@
 %name xx_
 
 %left COMMA .
+%left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %right ISSET FETCH .
@@ -1473,6 +1474,16 @@ xx_common_expr(R) ::= xx_common_expr(O1) SUB xx_common_expr(O2) . {
 /* y = a . b */
 xx_common_expr(R) ::= xx_common_expr(O1) CONCAT xx_common_expr(O2) . {
 	R = xx_ret_expr("concat", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a && b */
+xx_common_expr(R) ::= xx_common_expr(O1) AND xx_common_expr(O2) . {
+	R = xx_ret_expr("and", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a || b */
+xx_common_expr(R) ::= xx_common_expr(O1) OR xx_common_expr(O2) . {
+	R = xx_ret_expr("or", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = instanceof b */

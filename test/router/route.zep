@@ -134,11 +134,12 @@ class Route
 	public function extractNamedParams(string pattern)
 	{
 
+		var variable;
 		int cursor, marker, bracketCount = 0, parenthesesCount = 0, ch;
 		int intermediate = 0, length, numberMatches = 0, foundPattern;
-		int variableLength, regexpLength;
+		int variableLength, regexpLength, cursorVar;
 		boolean notValid;
-		string route;
+		string route, item;
 
 		if strlen(pattern) <= 0 {
 			return false;
@@ -160,39 +161,36 @@ class Route
 						if intermediate > 0 {
 							if bracketCount == 0 {
 
-								let numberMatches++;
+								let numberMatches++,
+									variable = null,
+									length = cursor - marker - 1,
+									item = substr(pattern, marker, length);
 
-								/*variable = NULL;
-								length = cursor - marker - 1;
-								item = estrndup(marker + 1, length);
-								cursor_var = item;
-								marker = item;
-								for (j = 0; j < length; j++) {
-									ch = *cursor_var;
-									if (ch == '\0') {
+								for cursorVar, ch in item {
+									if ch == '\0' {
 										break;
 									}
-									if (j == 0 && !((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z'))){
-										not_valid = 1;
+									if cursorVar == 0 && !((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z')) {
+										let notValid = 1;
 										break;
 									}
-									if ((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':') {
-										if (ch == ':') {
-											regexp_length = length - j - 1;
+									if (ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':' {
+										if ch == ':' {
+											/*regexp_length = length - j - 1;
 											variable_length = cursor_var - marker;
 											variable = estrndup(marker, variable_length);
-											regexp = estrndup(cursor_var + 1, regexp_length);
+											regexp = estrndup(cursor_var + 1, regexp_length);*/
 											break;
 										}
 									} else {
-										not_valid = 1;
+										let notValid = true;
 										break;
 									}
-									cursor_var++;
+
 								}
 
-								if (!not_valid) {
-									{
+								if !notValid {
+									/*{
 										zval *tmp;
 										ALLOC_INIT_ZVAL(tmp);
 										ZVAL_LONG(tmp, number_matches);
@@ -232,16 +230,12 @@ class Route
 											smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
 											zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
 										}
-									}
+									}*/
 								} else {
-									smart_str_appendc(&route_str, '{');
+									/*smart_str_appendc(&route_str, '{');
 									smart_str_appendl(&route_str, item, length);
-									smart_str_appendc(&route_str, '}');
+									smart_str_appendc(&route_str, '}');*/
 								}
-
-								efree(item);
-
-								cursor++;*/
 								continue;
 							}
 						}

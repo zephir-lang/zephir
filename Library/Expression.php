@@ -130,8 +130,10 @@ class Expression
 						switch ($right->getType()) {
 							case 'int':
 								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
+							case 'bool':
+								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getBooleanCode(), $expression);
 							case 'string':
-								if (strlen($right->getCode()) == 1) {
+								if (strlen($right->getCode()) <= 3) {
 									return new CompiledExpression('bool', $left->getCode() . ' == \'' . $right->getCode() . '\'', $expression);
 								}
 							default:
@@ -152,8 +154,21 @@ class Expression
 						throw new CompilerException("Error Processing Request", $expression);
 				}
 				break;
+			case 'bool':
+				switch ($right->getType()) {
+					case 'int':
+						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
+					case 'double':
+						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
+					case 'bool':
+						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getBooleanCode(), $expression);
+					default:
+						echo $right->getCode();
+						throw new CompilerException("Unknown type: " . $right->getType(), $expression);
+				}
+				break;
 			default:
-				throw new CompilerException("Error Processing Request", $expression);
+				throw new CompilerException("Unknown type: " . $left->getType(), $expression);
 		}
 	}
 
@@ -928,6 +943,12 @@ class Expression
 				$expr = new SubOperator();
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
+
+			case 'and':
+				return new CompiledExpression('bool', '1', $expression);
+
+			case 'or':
+				return new CompiledExpression('bool', '1', $expression);
 
 			case 'concat':
 				return new CompiledExpression('null', null, $expression);

@@ -316,15 +316,54 @@ class LetStatement
 									case 'assign':
 										$codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
 										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += (double) ' . $itemVariable->getName() . ';');
+										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= (double) ' . $itemVariable->getName() . ';');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= (double) ' . $itemVariable->getName() . ';');
+										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 								}
 								break;
 							case 'double':
-								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
+										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+								}
 								break;
 							case 'variable':
-								$codePrinter->output($variable . ' = zephir_get_doubleval(' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										break;
+									case 'add-assign':
+										$codePrinter->output($variable . ' += zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
+								}
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
@@ -365,7 +404,7 @@ class LetStatement
 							case 'int':
 								$symbolVariable->setMustInitNull(true);
 								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
+								$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . ');');
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);

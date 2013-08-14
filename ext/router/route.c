@@ -251,12 +251,12 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	HashTable *_3;
-	HashPosition _2;
+	HashTable *_3, *_9;
+	HashPosition _2, _8;
 	zend_bool notValid;
-	long cursor, marker, bracketCount, parenthesesCount, ch, intermediate, numberMatches;
-	zval *pattern_param = NULL, *_0, *_1, **_4;
-	zephir_str *pattern, *route = NULL;
+	long cursor, marker, bracketCount, parenthesesCount, ch, intermediate, length, numberMatches, cursorVar;
+	zval *pattern_param = NULL, variable, *_0, *_1, **_4, *_5 = NULL, *_6 = NULL, *_7 = NULL, **_10;
+	zephir_str *pattern, *route = NULL, *item = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -300,7 +300,52 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 							numberMatches++;
 
-							//missing comment
+							ZEPHIR_SINIT_NVAR(variable);
+							ZVAL_NULL(&variable);
+
+							length = cursor - marker - 1;
+
+							ZEPHIR_INIT_NVAR(_5);
+							ZVAL_STRING(_5, pattern.str, 1);
+							ZEPHIR_INIT_NVAR(_6);
+							ZVAL_LONG(_6, marker);
+							ZEPHIR_INIT_NVAR(_7);
+							ZVAL_LONG(_7, length);
+							zephir_call_func_p3(item, "substr", _5, _6, _7);
+
+							zephir_str_assign(item, item->str, item->len);
+
+							zephir_is_iterable(item, &_9, &_8, 0, 0);
+							while (zend_hash_get_current_data_ex(_9, (void**) &_10, &_8) == SUCCESS) {
+								ZEPHIR_GET_HKEY(cursorVar, _9, _8);
+								ZEPHIR_GET_HVALUE(ch, _10);
+								if (ch == '\\0') {
+									break;
+								}
+								if (1) {
+
+									notValid = (1) ? 1 : 0;
+
+									break;
+								}
+								if (1) {
+									if (ch == ':') {
+										//missing comment
+										break;
+									}
+								} else {
+
+									notValid = 1;
+
+									break;
+								}
+								zend_hash_move_forward_ex(_9, &_8);
+							}
+							if (!(notValid)) {
+								//missing comment
+							} else {
+								//missing comment
+							}
 							continue;
 						}
 					}
@@ -331,7 +376,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 		} else {
 
-			zephir_str_assign_long(route, ch->str, ch->len);
+			zephir_str_assign_long(route, ch);
 
 		}
 		zend_hash_move_forward_ex(_3, &_2);

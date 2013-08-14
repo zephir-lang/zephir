@@ -962,3 +962,102 @@ PHP_METHOD(Test_Arithmetic, addSum16) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, addSum17) {
+
+	double a, b;
+
+	a = 0.0;
+
+	b = 10.0;
+
+	a += b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum18) {
+
+	zend_bool b;
+	double a;
+
+	a = 0.0;
+
+	b = 1;
+
+	a += (double) b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum19) {
+
+	zend_bool b;
+	double a;
+
+	a = 0.0;
+
+	b = 0;
+
+	a += (double) b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum20) {
+
+	long b;
+	double a;
+
+	a = 0.0;
+
+	b = 1;
+
+	a += (double) b;
+
+	RETURN_DOUBLE(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum21) {
+
+	zval *b;
+	long a;
+
+	ZEPHIR_MM_GROW();
+	a = (long) (0.0);
+
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 1);
+
+	a += zephir_get_doubleval(b);
+
+	RETURN_MM_LONG(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum22) {
+
+	zval *b;
+	double a;
+
+	ZEPHIR_MM_GROW();
+	a = 0.0;
+
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 1);
+
+	a += zephir_get_doubleval(b);
+
+	RETURN_MM_DOUBLE(a);
+
+
+}
+
