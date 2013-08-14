@@ -84,7 +84,11 @@ class ForStatement
 		$tempVariable->setIsDoublePointer(true);
 
 		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
-        $codePrinter->output('while (zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS) {');
+
+        $codePrinter->output('for (');
+		$codePrinter->output('	; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
+		$codePrinter->output('	; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+		$codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {
         	$codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
@@ -101,8 +105,6 @@ class ForStatement
 			$st = new StatementsBlock($this->_statement['statements']);
 			$st->compile($compilationContext);
 		}
-
-		$codePrinter->output("\t" . 'zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ');');
 
 		/**
 		 * Restore the cycle counter

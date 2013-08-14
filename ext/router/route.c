@@ -15,9 +15,9 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/string_type.h"
 #include "kernel/exception.h"
+#include "kernel/operators.h"
 #include "kernel/array.h"
 
 
@@ -251,25 +251,15 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	zval *pattern_param = NULL, *_0, *_1;
+	zval *pattern_param = NULL;
 	zephir_str *pattern;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &pattern_param);
+	zephir_fetch_params(0, 1, 0, &pattern_param);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, pattern.str, 1);
-	zephir_call_func_p1(_0, "strlen", _1);
-	if (ZEPHIR_IS_LONG(_0, 0)) {
-
-		RETURN_MM_BOOL(0);
-
-	}
 	//missing comment
-	ZEPHIR_MM_RESTORE();
+	//missing comment
 
 }
 
@@ -316,33 +306,33 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 			//missing comment
 			do {
-			if (ZEPHIR_IS_LONG(numberParts, 3)) {
-				ZEPHIR_OBS_NVAR(moduleName);
-				zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
+				if (ZEPHIR_IS_LONG(numberParts, 3)) {
+					ZEPHIR_OBS_NVAR(moduleName);
+					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
 
-				ZEPHIR_OBS_NVAR(controllerName);
-				zephir_array_fetch_long(&controllerName, parts, 1, PH_NOISY);
+					ZEPHIR_OBS_NVAR(controllerName);
+					zephir_array_fetch_long(&controllerName, parts, 1, PH_NOISY);
 
-				ZEPHIR_OBS_NVAR(actionName);
-				zephir_array_fetch_long(&actionName, parts, 2, PH_NOISY);
+					ZEPHIR_OBS_NVAR(actionName);
+					zephir_array_fetch_long(&actionName, parts, 2, PH_NOISY);
 
-				break;
-			}
-			if (ZEPHIR_IS_LONG(numberParts, 2)) {
-				ZEPHIR_OBS_NVAR(controllerName);
-				zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
+					break;
+				}
+				if (ZEPHIR_IS_LONG(numberParts, 2)) {
+					ZEPHIR_OBS_NVAR(controllerName);
+					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
-				ZEPHIR_OBS_NVAR(actionName);
-				zephir_array_fetch_long(&actionName, parts, 1, PH_NOISY);
+					ZEPHIR_OBS_NVAR(actionName);
+					zephir_array_fetch_long(&actionName, parts, 1, PH_NOISY);
 
-				break;
-			}
-			if (ZEPHIR_IS_LONG(numberParts, 1)) {
-				ZEPHIR_OBS_NVAR(controllerName);
-				zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
+					break;
+				}
+				if (ZEPHIR_IS_LONG(numberParts, 1)) {
+					ZEPHIR_OBS_NVAR(controllerName);
+					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
-				break;
-			}
+					break;
+				}
 			} while(0); 
 
 			ZEPHIR_INIT_VAR(routePaths);
@@ -593,13 +583,15 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_property(&_0, this_ptr, SL("_paths"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 0);
-	while (zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS) {
+	for (
+		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+		; zend_hash_move_forward_ex(_2, &_1)
+	) {
 		ZEPHIR_GET_HKEY(path, _2, _1);
 		ZEPHIR_GET_HVALUE(position, _3);
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 
-		zend_hash_move_forward_ex(_2, &_1);
 	}
 
 	RETURN_CCTOR(reversed);

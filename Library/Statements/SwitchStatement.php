@@ -47,6 +47,8 @@ class SwitchStatement
 
 		$codePrinter->output('do {');
 
+		$compilationContext->codePrinter->increaseLevel();
+
 		$evalExpr = new EvalExpression();
 		foreach ($this->_statement['clauses'] as $clause) {
 			if ($clause['type'] == 'case') {
@@ -71,9 +73,7 @@ class SwitchStatement
 
 		$compilationContext->insideSwitch--;
 
-		/**
-		 * Compile statements in the 'while' block
-		 */
+		$compilationContext->codePrinter->decreaseLevel();
 
 		$codePrinter->output('} while(0); ');
 
