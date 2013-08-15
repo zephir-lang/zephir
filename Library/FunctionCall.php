@@ -26,24 +26,19 @@
 class FunctionCall extends Call
 {
 
-	static protected $_optimizers;
+	static protected $_optimizers = array();
 
 	/**
-	 * Compiles a function
+	 * Tries to find specific an specialized optimizer for function calls
 	 *
-	 * @param Expression $expr
-	 * @param CompilationContext $expr
+	 * @param string $funcName
+	 * @param array $expression
 	 */
-	public function compile(Expression $expr, CompilationContext $compilationContext)
+	protected function optimize($funcName, array $expression, array $params, CompilationContext $compilationContext)
 	{
+		if (!isset(self::$_optimizers[$funcName])) {
 
-		$expression = $expr->getExpression();
-
-		$funcName = strtolower($expression['name']);
-
-		if (isset(self::$_optimizers[$funcName])) {
-
-			$path = 'Library/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
+			$path = 'Library/Optimizers/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
 			if (file_exists($path)) {
 
 				require $path;
@@ -61,7 +56,40 @@ class FunctionCall extends Call
 		}
 
 		if ($optimizer) {
-			var_dump($optimizer);
+			return $optimizer->optimize($expression, $params, $compilationContext);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Compiles a function
+	 *
+	 * @param Expression $expr
+	 * @param CompilationContext $expr
+	 */
+	public function compile(Expression $expr, CompilationContext $compilationContext)
+	{
+
+		$expression = $expr->getExpression();
+
+		$funcName = strtolower($expression['name']);
+
+		/**
+		 * Resolve parameters
+		 */
+		if (isset($expression['parameters'])) {
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+		} else {
+			$params = array();
+		}
+
+		/**
+		 * Try to optimize function calls
+		 */
+		$compiledExpr = $this->optimize($funcName, $expression, $params, $compilationContext);
+		if (is_object($compiledExpr)) {
+			return $compiledExpr;
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -92,11 +120,6 @@ class FunctionCall extends Call
 				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
 			}
 		} else {
-
-			/**
-			 * @TODO: Resolve parameters properly
-			 */
-			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
 			if (count($params)) {
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');

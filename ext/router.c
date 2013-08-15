@@ -553,15 +553,15 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing comment
 			ZEPHIR_INIT_NVAR(_10);
+			ZVAL_STRING(_10, "(", 1);
 			ZEPHIR_INIT_NVAR(_11);
-			ZVAL_STRING(_11, "(", 1);
-			zephir_call_func_p2(_10, "memchr", hostname, _11);
-			if (zend_is_true(_10)) {
+			zephir_call_func_p2(_11, "memchr", hostname, _10);
+			if (zend_is_true(_11)) {
 				ZEPHIR_INIT_NVAR(_12);
+				ZVAL_STRING(_12, "#", 1);
 				ZEPHIR_INIT_NVAR(_13);
-				ZVAL_STRING(_13, "#", 1);
-				zephir_call_func_p2(_12, "memchr", hostname, _13);
-				if (zend_is_true(_12)) {
+				zephir_call_func_p2(_13, "memchr", hostname, _12);
+				if (zend_is_true(_13)) {
 
 					ZEPHIR_INIT_NVAR(regexHostName);
 					ZVAL_NULL(regexHostName);
@@ -588,10 +588,10 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_call_method(pattern, route, "getcompiledpattern");
 
 		ZEPHIR_INIT_NVAR(_14);
+		ZVAL_STRING(_14, "^", 1);
 		ZEPHIR_INIT_NVAR(_15);
-		ZVAL_STRING(_15, "^", 1);
-		zephir_call_func_p2(_14, "memchr", pattern, _15);
-		if (zend_is_true(_14)) {
+		zephir_call_func_p2(_15, "memchr", pattern, _14);
+		if (zend_is_true(_15)) {
 			zephir_call_func_p3(routeFound, "preg_match", pattern, handledUri, matches);
 
 		} else {
@@ -790,7 +790,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		}
-		if (zephir_fast_count_ev(params TSRMLS_CC)) {
+		if (zephir_fast_count_ev(params)) {
 			zephir_call_func_p2(paramsMerge, "array_merge", params, parts);
 
 		} else {
@@ -1092,7 +1092,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 
-	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
+	if (!(zephir_fast_count_ev(groupRoutes))) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
 		return;
 	}

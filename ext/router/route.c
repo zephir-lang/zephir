@@ -96,10 +96,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 	//missing comment
 	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, ":", 1);
 	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, ":", 1);
-	zephir_call_func_p2(_0, "memchr", pattern, _1);
-	if (zend_is_true(_0)) {
+	zephir_call_func_p2(_1, "memchr", pattern, _0);
+	if (zend_is_true(_1)) {
 		//missing comment
 
 		ZEPHIR_INIT_VAR(idPattern);
@@ -107,10 +107,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 		//missing comment
 		ZEPHIR_INIT_VAR(_2);
+		ZVAL_STRING(_2, "/:module", 1);
 		ZEPHIR_INIT_VAR(_3);
-		ZVAL_STRING(_3, "/:module", 1);
-		zephir_call_func_p2(_2, "memchr", pattern, _3);
-		if (zend_is_true(_2)) {
+		zephir_call_func_p2(_3, "memchr", pattern, _2);
+		if (zend_is_true(_3)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -121,10 +121,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		ZEPHIR_INIT_VAR(_5);
+		ZVAL_STRING(_5, "/:controller", 1);
 		ZEPHIR_INIT_VAR(_6);
-		ZVAL_STRING(_6, "/:controller", 1);
-		zephir_call_func_p2(_5, "memchr", pattern, _6);
-		if (zend_is_true(_5)) {
+		zephir_call_func_p2(_6, "memchr", pattern, _5);
+		if (zend_is_true(_6)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -135,10 +135,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		ZEPHIR_INIT_VAR(_8);
+		ZVAL_STRING(_8, "/:namespace", 1);
 		ZEPHIR_INIT_VAR(_9);
-		ZVAL_STRING(_9, "/:namespace", 1);
-		zephir_call_func_p2(_8, "memchr", pattern, _9);
-		if (zend_is_true(_8)) {
+		zephir_call_func_p2(_9, "memchr", pattern, _8);
+		if (zend_is_true(_9)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -149,10 +149,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		ZEPHIR_INIT_VAR(_11);
+		ZVAL_STRING(_11, "/:action", 1);
 		ZEPHIR_INIT_VAR(_12);
-		ZVAL_STRING(_12, "/:action", 1);
-		zephir_call_func_p2(_11, "memchr", pattern, _12);
-		if (zend_is_true(_11)) {
+		zephir_call_func_p2(_12, "memchr", pattern, _11);
+		if (zend_is_true(_12)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -163,10 +163,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		ZEPHIR_INIT_VAR(_14);
+		ZVAL_STRING(_14, "/:params", 1);
 		ZEPHIR_INIT_VAR(_15);
-		ZVAL_STRING(_15, "/:params", 1);
-		zephir_call_func_p2(_14, "memchr", pattern, _15);
-		if (zend_is_true(_14)) {
+		zephir_call_func_p2(_15, "memchr", pattern, _14);
+		if (zend_is_true(_15)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -179,10 +179,10 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		ZEPHIR_INIT_VAR(_18);
+		ZVAL_STRING(_18, "/:int", 1);
 		ZEPHIR_INIT_VAR(_19);
-		ZVAL_STRING(_19, "/:int", 1);
-		zephir_call_func_p2(_18, "memchr", pattern, _19);
-		if (zend_is_true(_18)) {
+		zephir_call_func_p2(_19, "memchr", pattern, _18);
+		if (zend_is_true(_19)) {
 
 			ZEPHIR_CPY_WRT(patternCopy, compiledPattern);
 
@@ -196,20 +196,20 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	}
 	//missing comment
 	ZEPHIR_INIT_VAR(_22);
+	ZVAL_STRING(_22, "(", 1);
 	ZEPHIR_INIT_VAR(_23);
-	ZVAL_STRING(_23, "(", 1);
-	zephir_call_func_p2(_22, "memchr", compiledPattern, _23);
-	if (zend_is_true(_22)) {
+	zephir_call_func_p2(_23, "memchr", compiledPattern, _22);
+	if (zend_is_true(_23)) {
 
 		RETURN_MM_NULL();
 
 	}
 	//missing comment
 	ZEPHIR_INIT_VAR(_24);
+	ZVAL_STRING(_24, "[", 1);
 	ZEPHIR_INIT_VAR(_25);
-	ZVAL_STRING(_25, "[", 1);
-	zephir_call_func_p2(_24, "memchr", compiledPattern, _25);
-	if (zend_is_true(_24)) {
+	zephir_call_func_p2(_25, "memchr", compiledPattern, _24);
+	if (zend_is_true(_25)) {
 
 		RETURN_MM_NULL();
 
@@ -302,7 +302,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZVAL_STRING(_0, "::", 1);
 			zephir_call_func_p2(parts, "explode", _0, paths);
 
-			zephir_call_func_p1(numberParts, "count", parts);
+			ZEPHIR_INIT_VAR(numberParts);
+			ZVAL_LONG(numberParts, zephir_fast_count_ev(parts));
 
 			//missing comment
 			do {
@@ -348,10 +349,10 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			if (Z_TYPE_P(controllerName) != IS_NULL) {
 				//missing comment
 				ZEPHIR_INIT_VAR(_1);
+				ZVAL_STRING(_1, "\\\\", 1);
 				ZEPHIR_INIT_VAR(_2);
-				ZVAL_STRING(_2, "\\\\", 1);
-				zephir_call_func_p2(_1, "memchr", controllerName, _2);
-				if (zend_is_true(_1)) {
+				zephir_call_func_p2(_2, "memchr", controllerName, _1);
+				if (zend_is_true(_2)) {
 					//missing comment
 					zephir_call_func_p1(realClassName, "get_class_ns", controllerName);
 
@@ -400,15 +401,15 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	}
 	//missing comment
 	ZEPHIR_INIT_VAR(_3);
+	ZVAL_STRING(_3, "#", 1);
 	ZEPHIR_INIT_VAR(_4);
-	ZVAL_STRING(_4, "#", 1);
-	zephir_call_func_p2(_3, "starts_with", pattern, _4);
-	if (!(zend_is_true(_3))) {
+	zephir_call_func_p2(_4, "starts_with", pattern, _3);
+	if (!(zend_is_true(_4))) {
 		ZEPHIR_INIT_VAR(_5);
+		ZVAL_STRING(_5, "{", 1);
 		ZEPHIR_INIT_VAR(_6);
-		ZVAL_STRING(_6, "{", 1);
-		zephir_call_func_p2(_5, "memchr", pattern, _6);
-		if (zend_is_true(_5)) {
+		zephir_call_func_p2(_6, "memchr", pattern, _5);
+		if (zend_is_true(_6)) {
 			//missing comment
 			ZEPHIR_INIT_VAR(extracted);
 			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
