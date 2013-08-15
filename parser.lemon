@@ -189,15 +189,11 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	return ret;
 }
 
-static json_object *xx_ret_class_property(int visibility, xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
+static json_object *xx_ret_class_property(json_object *visibility, xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
-	if (visibility == XX_T_PUBLIC) {
-		json_object_object_add(ret, "visibility", json_object_new_string("public"));
-	} else {
-		json_object_object_add(ret, "visibility", json_object_new_string("protected"));
-	}
+	json_object_object_add(ret, "visibility", visibility);
 	json_object_object_add(ret, "type", json_object_new_string("property"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
 
@@ -880,36 +876,44 @@ xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) PUBLIC IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, C, status->scanner_state);
+xx_class_property_definition(R) ::= COMMENT(C) xx_property_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_class_property(V, I, NULL, C, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, NULL, NULL, status->scanner_state);
+xx_class_property_definition(R) ::= xx_property_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
+	R = xx_ret_class_property(V, I, NULL, NULL, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= PUBLIC IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, E, NULL, status->scanner_state);
+xx_class_property_definition(R) ::= COMMENT(C) xx_property_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_property(V, I, E, C, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) PUBLIC IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PUBLIC, I, E, C, status->scanner_state);
+xx_class_property_definition(R) ::=  xx_property_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_property(V, I, E, NULL, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, NULL, status->scanner_state);
+xx_property_visibility_list(R) ::= xx_property_visibility_list(L) xx_property_visibility(K) . {
+	R = xx_ret_list(L, K);
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) PROTECTED IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, NULL, C, status->scanner_state);
+xx_property_visibility_list(R) ::= xx_property_visibility(K) . {
+	R = xx_ret_list(NULL, K);
 }
 
-xx_class_property_definition(R) ::= PROTECTED IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, E, NULL, status->scanner_state);
+xx_property_visibility(R) ::= PUBLIC . {
+	R = json_object_new_string("public");
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) PROTECTED IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
-	R = xx_ret_class_property(XX_T_PROTECTED, I, E, C, status->scanner_state);
+xx_property_visibility(R) ::= PROTECTED . {
+	R = json_object_new_string("protected");
+}
+
+xx_property_visibility(R) ::= STATIC . {
+	R = json_object_new_string("static");
+}
+
+xx_property_visibility(R) ::= PRIVATE . {
+	R = json_object_new_string("private");
 }
 
 xx_class_consts_definition(R) ::= xx_class_consts_definition(L) xx_class_const_definition(K) . {

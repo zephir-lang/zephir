@@ -72,6 +72,9 @@
 #define XX_T_CASE 380
 #define XX_T_DEFAULT 381
 #define XX_T_REVERSE 382
+#define XX_T_PRIVATE 383
+#define XX_T_STATIC 384
+#define XX_T_INLINE 385
 
 /* Operators */
 #define XX_T_AT '@'

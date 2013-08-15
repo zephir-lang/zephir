@@ -221,6 +221,12 @@ class LetStatement
 									case 'add-assign':
 										$codePrinter->output($variable . ' += zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
+									case 'sub-assign':
+										$codePrinter->output($variable . ' -= zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										break;
+									case 'mul-assign':
+										$codePrinter->output($variable . ' *= zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 								}
@@ -376,35 +382,50 @@ class LetStatement
 			case 'string':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$compilationContext->headersManager->add('kernel/string_type');
-						$codePrinter->output('zephir_str_assign(' . $variable . ', "", sizeof("")-1));');
-						break;
-					case 'int':
-						$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign(' . $variable . ', "", sizeof("")-1));');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+						}
 						break;
 					case 'string':
-						$symbolVariable->setMustInitNull(true);
-						$compilationContext->headersManager->add('kernel/string_type');
-						$codePrinter->output('zephir_str_assign(' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1);');
-						break;
-					case 'double':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
-						break;
-					case 'bool':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign(' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1);');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+						}
 						break;
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'string':
-								$symbolVariable->setMustInitNull(true);
-								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_assign(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_assign(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+								}
 								break;
 							case 'int':
-								$symbolVariable->setMustInitNull(true);
-								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+								}
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
@@ -417,7 +438,13 @@ class LetStatement
 			case 'bool':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$codePrinter->output($variable . ' = 0;');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = 0;');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: bool", $statement);
+						}
 						break;
 					case 'int':
 					case 'double':
@@ -448,21 +475,6 @@ class LetStatement
 						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
-				}
-				break;
-			case 'double':
-				switch ($resolvedExpr->getType()) {
-					case 'int':
-						$codePrinterrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
-						break;
-					case 'double':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
-						break;
-					case 'variable':
-						$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->resolve(null, $compilationContext) . ');');
-						break;
-					default:
-						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
 			case 'variable':

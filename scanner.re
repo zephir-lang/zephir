@@ -109,6 +109,24 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'private' {
+			s->active_char += sizeof("private")-1;
+			token->opcode = XX_T_PRIVATE;
+			return 0;
+		}
+
+		'static' {
+			s->active_char += sizeof("static")-1;
+			token->opcode = XX_T_STATIC;
+			return 0;
+		}
+
+		'inline' {
+			s->active_char += sizeof("inline")-1;
+			token->opcode = XX_T_INLINE;
+			return 0;
+		}
+
 		'function' {
 			s->active_char += sizeof("function")-1;
 			token->opcode = XX_T_FUNCTION;

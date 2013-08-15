@@ -46,13 +46,7 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 	INIT_PZVAL(&z); \
 	ZVAL_NULL(&z);
 
-#define ZEPHIR_SINIT_NVAR(z) //\
-	//if (Z_REFCOUNT(z) > 1) { \
-	//	Z_DELREF(z); \
-	//	Z_SET_REFCOUNT(z, 1); \
-	//	Z_UNSET_ISREF(z); \
-	//	ZVAL_NULL(&z); \
-	//}
+#define ZEPHIR_SINIT_NVAR(z)
 
 #define ZEPHIR_INIT_NVAR(z)\
 	if (z) { \

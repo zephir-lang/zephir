@@ -3,7 +3,7 @@
 /**
  * Is_numericOptimizer
  *
- * Optimizes calls to 'count' using internal function
+ * Optimizes calls to 'is_numeric' using internal function
  */
 class Is_numericOptimizer
 {
