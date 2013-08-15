@@ -26,6 +26,8 @@
 class FunctionCall extends Call
 {
 
+	static protected $_optimizers;
+
 	/**
 	 * Compiles a function
 	 *
@@ -37,9 +39,32 @@ class FunctionCall extends Call
 
 		$expression = $expr->getExpression();
 
-		$codePrinter = $compilationContext->codePrinter;
-
 		$funcName = strtolower($expression['name']);
+
+		if (isset(self::$_optimizers[$funcName])) {
+
+			$path = 'Library/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
+			if (file_exists($path)) {
+
+				require $path;
+
+				$className = ucfirst($funcName) . 'Optimizer';
+				$optimizer = new $className();
+			} else {
+				$optimizer = null;
+			}
+
+			self::$_optimizers[$funcName] = $optimizer;
+
+		} else {
+			$optimizer = self::$_optimizers[$funcName];
+		}
+
+		if ($optimizer) {
+			var_dump($optimizer);
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * Create temporary variable if needed

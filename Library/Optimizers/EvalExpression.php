@@ -86,23 +86,6 @@ class EvalExpression
 	}
 
 	/**
-	 * Replaces function calls in the PHP userland by optimized versions
-	 */
-	public function optimizeFunctionCall($expr, $compilationContext)
-	{
-		if ($expr['type'] == 'fcall') {
-			switch ($expr['name']) {
-				case 'count':
-					/**
-					 * @TODO Count the number of parameters and check types!
-					 */
-					return 'zephir_fast_count_ev(' . $expr['parameters'][0]['value'] . ' TSRMLS_CC)';
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Optimizes expressions
 	 */
 	public function optimize($exprRaw, CompilationContext $compilationContext)
@@ -114,11 +97,6 @@ class EvalExpression
 		}
 
 		$conditions = $this->optimizeTypeOf($exprRaw, $compilationContext);
-		if ($conditions !== false) {
-			return $conditions;
-		}
-
-		$conditions = $this->optimizeFunctionCall($exprRaw, $compilationContext);
 		if ($conditions !== false) {
 			return $conditions;
 		}
