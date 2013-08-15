@@ -56,55 +56,55 @@ class Route
 		let compiledPattern = pattern;
 
 		// If a pattern contains ':', maybe there are placeholders to replace
-		if memchr(pattern, ":") {
+		if memstr(pattern, ":") {
 
 			// This is a pattern for valid identifiers
 			let idPattern = "/([a-zA-Z0-9\_\-]+)";
 
 			// Replace the module part
-			if memchr(pattern, "/:module") {
+			if memstr(pattern, "/:module") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:module", idPattern, patternCopy);
 			}
 
 			// Replace the controller placeholder
-			if memchr(pattern, "/:controller") {
+			if memstr(pattern, "/:controller") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:controller", idPattern, patternCopy);
 			}
 
 			// Replace the namespace placeholder
-			if memchr(pattern, "/:namespace") {
+			if memstr(pattern, "/:namespace") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:namespace", idPattern, patternCopy);
 			}
 
 			// Replace the action placeholder
-			if memchr(pattern, "/:action") {
+			if memstr(pattern, "/:action") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:action", idPattern, patternCopy);
 			}
 
 			// Replace the params placeholder
-			if memchr(pattern, "/:params") {
+			if memstr(pattern, "/:params") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:params", "(/.*)*", patternCopy);
 			}
 
 			// Replace the int placeholder
-			if memchr(pattern, "/:int") {
+			if memstr(pattern, "/:int") {
 				let patternCopy = compiledPattern,
 					compiledPattern = str_replace("/:int", "/([0-9]+)", patternCopy);
 			}
 		}
 
 		// Check if the pattern has parantheses in order to add the regex delimiters
-		if memchr(compiledPattern, '(') {
+		if memstr(compiledPattern, '(') {
 			return '#^' . compiledPattern . '$#';
 		}
 
 		// Square brackets are also checked
-		if memchr(compiledPattern, '[') {
+		if memstr(compiledPattern, '[') {
 			return '#^' . compiledPattern . '$#';
 		}
 
@@ -319,7 +319,7 @@ class Route
 				if controllerName !== null {
 
 					// Check if we need to obtain the namespace
-					if memchr(controllerName, "\\") {
+					if memstr(controllerName, "\\") {
 
 						// Extract the real class name from the namespaced class
 						let realClassName = get_class_ns(controllerName);
@@ -360,7 +360,7 @@ class Route
 		// If the route starts with '#' we assume that it is a regular expression
 		if !starts_with(pattern, '#') {
 
-			if memchr(pattern, '{') {
+			if memstr(pattern, '{') {
 				// The route has named parameters so we need to extract them
 				let extracted = this->extractNamedParams(pattern),
 					pcrePattern = extracted[0],

@@ -373,8 +373,8 @@ class Router
 				}
 
 				// Check if the hostname restriction is the same as the current in the route
-				if memchr(hostname, '(') {
-					if memchr(hostname, '#') {
+				if memstr(hostname, '(') {
+					if memstr(hostname, '#') {
 						let regexHostName = '#^' . hostname . '$#';
 					} else {
 						let regexHostName = hostname;
@@ -392,7 +392,7 @@ class Router
 
 			// If the route has parentheses use preg_match
 			let pattern = route->getCompiledPattern();
-			if memchr(pattern, '^') {
+			if memstr(pattern, '^') {
 				let routeFound = preg_match(pattern, handledUri, matches);
 			} else {
 				let routeFound = pattern == handledUri;
