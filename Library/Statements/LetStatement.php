@@ -584,6 +584,7 @@ class LetStatement
 								break;
 							case 'variable':
 								if ($itemVariable->getName() != $variable) {
+									$symbolVariable->setMustInitNull(true);
 									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 								}
 								break;
@@ -810,15 +811,13 @@ class LetStatement
 				$compilationContext->headersManager->add('kernel/object');
 				$symbolVariable->initVariant($compilationContext);
 				switch ($resolvedExpr->getType()) {
-					case 'bool':
-						/**
-						 * @TODO Assign the real value : true or false
-						 */
+					case 'null':
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
-					case 'null':
+					case 'bool':
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 						$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'empty-array':

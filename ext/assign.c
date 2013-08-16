@@ -469,7 +469,7 @@ PHP_METHOD(Test_Assign, testAssign35) {
 
 PHP_METHOD(Test_Assign, testAssign36) {
 
-	zval *b, *a;
+	zval *b, *a = NULL;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);
