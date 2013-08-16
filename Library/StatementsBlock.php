@@ -99,7 +99,9 @@ class StatementsBlock
 					break;
 				case 'mcall':
 					$methodCall = new MethodCall();
-					$methodCall->compile(new Expression($statement['expr']), $compilationContext);
+					$expr = new Expression($statement['expr']);
+					$expr->setExpectReturn(false);
+					$methodCall->compile($expr, $compilationContext);
 					break;
 				default:
 					$compilationContext->codePrinter->output('//missing ' . $statement['type']);

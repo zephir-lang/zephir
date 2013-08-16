@@ -12,9 +12,9 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/string_type.h"
 #include "kernel/exception.h"
 #include "kernel/operators.h"
@@ -53,10 +53,9 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
-	zval *pattern, *paths = NULL, *httpMethods = NULL, *_0;
+	zval *pattern, *paths = NULL, *httpMethods = NULL;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
+	zephir_fetch_params(0, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
 		ZEPHIR_INIT_VAR(paths);
@@ -67,13 +66,11 @@ PHP_METHOD(Test_Router_Route, __construct) {
 
 
 	//missing comment
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "reconfigure", pattern, paths);
+	zephir_call_method_p2_noret(this_ptr, "reconfigure", pattern, paths);
 	//missing comment
 
 	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 
-	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -235,7 +232,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *extracted, *_0, *_1, *_2;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName, *namespaceName, *lowerName, *pcrePattern, *compiledPattern, *extracted, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -360,11 +357,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		return;
 	}
 	//missing comment
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "#", 1);
-	ZEPHIR_INIT_VAR(_2);
-	zephir_call_func_p2(_2, "starts_with", pattern, _1);
-	if (!(zend_is_true(_2))) {
+	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"))) {
 			//missing comment
 			ZEPHIR_INIT_VAR(extracted);

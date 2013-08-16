@@ -1054,9 +1054,9 @@ PHP_METHOD(Test_Router, addHead) {
  */
 PHP_METHOD(Test_Router, mount) {
 
-	HashTable *_1, *_5;
-	HashPosition _0, _4;
-	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *route = NULL, **_2, *_3 = NULL, **_6, *_7 = NULL, *_8;
+	HashTable *_1, *_4;
+	HashPosition _0, _3;
+	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *route = NULL, **_2, **_5, *_6;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &group);
@@ -1085,8 +1085,7 @@ PHP_METHOD(Test_Router, mount) {
 			; zend_hash_move_forward_ex(_1, &_0)
 		) {
 			ZEPHIR_GET_HVALUE(route, _2);
-			ZEPHIR_INIT_NVAR(_3);
-			zephir_call_method_p1(_3, route, "beforematch", beforeMatch);
+			zephir_call_method_p1_noret(route, "beforematch", beforeMatch);
 		}
 	}
 	//missing comment
@@ -1094,24 +1093,23 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_call_method(hostname, group, "gethostname");
 
 	if (Z_TYPE_P(hostname) != IS_NULL) {
-		zephir_is_iterable(groupRoutes, &_5, &_4, 0, 0);
+		zephir_is_iterable(groupRoutes, &_4, &_3, 0, 0);
 		for (
-			; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
-			; zend_hash_move_forward_ex(_5, &_4)
+			; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
+			; zend_hash_move_forward_ex(_4, &_3)
 		) {
-			ZEPHIR_GET_HVALUE(route, _6);
-			ZEPHIR_INIT_NVAR(_7);
-			zephir_call_method_p1(_7, route, "sethostname", hostname);
+			ZEPHIR_GET_HVALUE(route, _5);
+			zephir_call_method_p1_noret(route, "sethostname", hostname);
 		}
 	}
 	ZEPHIR_OBS_VAR(routes);
 	zephir_read_property(&routes, this_ptr, SL("_routes"), PH_NOISY_CC);
 
 	if (Z_TYPE_P(routes) == IS_ARRAY) {
-		ZEPHIR_INIT_VAR(_8);
-		zephir_call_func_p2(_8, "array_merge", routes, groupRoutes);
+		ZEPHIR_INIT_VAR(_6);
+		zephir_call_func_p2(_6, "array_merge", routes, groupRoutes);
 
-		zephir_update_property_zval(this_ptr, SL("_routes"), _8 TSRMLS_CC);
+		zephir_update_property_zval(this_ptr, SL("_routes"), _6 TSRMLS_CC);
 
 	} else {
 
