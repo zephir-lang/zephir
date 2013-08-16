@@ -29,6 +29,8 @@
 %extra_argument {xx_parser_status *status}
 %name xx_
 
+%left PUBLIC PROTECTED STATIC PRIVATE .
+
 %left COMMA .
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
@@ -231,15 +233,11 @@ static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_
 	return ret;
 }
 
-static json_object *xx_ret_class_method(int visibility, xx_parser_token *T, json_object *parameters, json_object *statements, xx_parser_token *D, xx_scanner_state *state)
+static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token *T, json_object *parameters, json_object *statements, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
-	if (visibility == XX_T_PUBLIC) {
-		json_object_object_add(ret, "visibility", json_object_new_string("public"));
-	} else {
-		json_object_object_add(ret, "visibility", json_object_new_string("protected"));
-	}
+	json_object_object_add(ret, "visibility", visibility);
 	json_object_object_add(ret, "type", json_object_new_string("method"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
 
@@ -940,56 +938,100 @@ xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) D
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, NULL, status->scanner_state);
+xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, NULL, NULL, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, NULL, status->scanner_state);
+xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, L, NULL, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, NULL, C, status->scanner_state);
+xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, NULL, S, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, NULL, C, status->scanner_state);
+xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, L, S, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, NULL, status->scanner_state);
+xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, NULL, NULL, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE xx_parameter_list(L) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, NULL, status->scanner_state);
+xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, L, NULL, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, NULL, S, C, status->scanner_state);
+xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, NULL, S, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, C, status->scanner_state);
+xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_class_method(V, I, L, S, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= PUBLIC FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PUBLIC, I, L, S, NULL, status->scanner_state);
+/*xx_method_visibility_list(R) ::= xx_method_visibility_list(L) xx_method_visibility(K) . {
+	R = xx_ret_list(L, K);
+}*/
+
+xx_method_visibility_list(R) ::= xx_method_visibility(K) . {
+	R = xx_ret_list(NULL, K);
 }
 
-xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, NULL, status->scanner_state);
+xx_method_visibility(R) ::= PUBLIC . {
+	R = xx_ret_list(NULL, json_object_new_string("public"));
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, NULL, C, status->scanner_state);
+xx_method_visibility(R) ::= PROTECTED . {
+	R = xx_ret_list(NULL, json_object_new_string("protected"));
 }
 
-xx_class_method_definition(R) ::= PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, NULL, status->scanner_state);
+xx_method_visibility(R) ::= STATIC . {
+	R = xx_ret_list(NULL, json_object_new_string("static"));
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) PROTECTED FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_class_method(XX_T_PROTECTED, I, NULL, S, C, status->scanner_state);
+xx_method_visibility(R) ::= PRIVATE . {
+	R = xx_ret_list(NULL, json_object_new_string("private"));
+}
+
+xx_method_visibility(R) ::= STATIC PUBLIC . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
+}
+
+xx_method_visibility(R) ::= PUBLIC STATIC . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
+}
+
+xx_method_visibility(R) ::=  STATIC PROTECTED . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
+}
+
+xx_method_visibility(R) ::=  PROTECTED STATIC . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
+}
+
+xx_method_visibility(R) ::= STATIC PRIVATE . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
+}
+
+xx_method_visibility(R) ::= PRIVATE STATIC . {
+	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
+}
+
+xx_method_visibility(R) ::=  INLINE PROTECTED . {
+	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
+}
+
+xx_method_visibility(R) ::=  PROTECTED INLINE . {
+	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
+}
+
+xx_method_visibility(R) ::= INLINE PRIVATE . {
+	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
+}
+
+xx_method_visibility(R) ::= PRIVATE INLINE . {
+	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
 }
 
 xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {

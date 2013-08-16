@@ -177,6 +177,15 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_PROTECTED:
 				xx_(xx_parser, XX_PROTECTED, NULL, parser_status);
 				break;
+			case XX_T_PRIVATE:
+				xx_(xx_parser, XX_PRIVATE, NULL, parser_status);
+				break;
+			case XX_T_STATIC:
+				xx_(xx_parser, XX_STATIC, NULL, parser_status);
+				break;
+			case XX_T_INLINE:
+				xx_(xx_parser, XX_INLINE, NULL, parser_status);
+				break;
 			case XX_T_FUNCTION:
 				xx_(xx_parser, XX_FUNCTION, NULL, parser_status);
 				break;
