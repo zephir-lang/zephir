@@ -525,9 +525,7 @@ class Router
 				let this->_action = this->_defaultAction;
 			}
 
-			/**
-			 * Check for parameters
-			 */
+			// Check for parameters
 			if fetch paramsStr, parts['params'] {
 				let strParams = substr(paramsStr, 1);
 				if (strParams) {

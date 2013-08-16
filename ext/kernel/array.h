@@ -2,6 +2,12 @@
 #ifndef ZEPHIR_ARRAY_H
 #define ZEPHIR_ARRAY_H 1
 
+/** Combined isset/fetch */
+int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index);
+int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index, uint index_length, unsigned long key);
+int zephir_array_isset_string_fetch(zval **fetched, zval *arr, char *index, uint index_length);
+int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index);
+
 /** Check for index existence */
 extern int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index);
 extern int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index);

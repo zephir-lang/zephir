@@ -159,7 +159,7 @@ class ForStatement
 
         if (isset($this->_statement['key'])) {
         	$compilationContext->headersManager->add('kernel/hash');
-        	$codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+        	$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
         }
 
         if (isset($this->_statement['value'])) {

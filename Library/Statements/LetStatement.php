@@ -32,60 +32,6 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo = x->y
-	 */
-	public function assignPropertyAccess($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$property = $statement['property'];
-
-		switch ($resolvedExpr->getType()) {
-			case 'variable':
-				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-				switch ($variableExpr->getType()) {
-					case 'variable':
-						/*$compilationContext->headersManager->add('kernel/array');
-						switch ($variableIndex->getType()) {
-							case 'int':
-								$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
-							case 'string':
-								$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
-							case 'variable':
-								$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $statement['property'] . ', &' . $resolvedExpr->getCode() . ', PH_COPY | PH_SEPARATE);');
-								break;
-						}*/
-						break;
-					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
-				}
-				break;
-			default:
-				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array index", $statement);
-		}
-
-		/*$expr = new Expression($statement['expr']);
-		$exprIndex = $expr->compile($compilationContext);
-
-		switch ($exprIndex->getType()) {
-			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode());
-				switch ($variableIndex->getType()) {
-					case 'int':
-						break;
-				}
-		}
-
-		print_r($statement);
-
-		$codePrinter = $compilationContext->codePrinter;*/
-
-	}
-
-	/**
 	 * Compiles foo = {expr}
 	 * Changes the value of a mutable variable
 	 *
@@ -829,7 +775,7 @@ class LetStatement
 						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($variableVariable->getType()) {
 							case 'variable':
-								if ($variable == 'this') {
+								if ($variable == 'this_ptr') {
 									if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
 										throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'", $statement);
 									}
@@ -848,6 +794,33 @@ class LetStatement
 				break;
 			default:
 				throw new CompilerException("Unknown type", $statement);
+		}
+	}
+
+	/**
+	 * Compiles foo = x->y
+	 */
+	public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$property = $statement['property'];
+		$compilationContext->headersManager->add('kernel/object');
+
+		switch ($resolvedExpr->getType()) {
+			case 'variable':
+				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+				switch ($variableExpr->getType()) {
+					case 'variable':
+						$codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						break;
+					default:
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
+				}
+				break;
+			default:
+				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to property", $statement);
 		}
 	}
 
@@ -910,12 +883,8 @@ class LetStatement
 				case 'array-index':
 					$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
-				case 'property-access':
-					$this->assignPropertyAccess($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
-					break;
 				case 'object-property-append':
-					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
-					$codePrinter->output('//missing object-property-append');
+					$this->assignPropertyAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'object-property-array-index':
 					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);

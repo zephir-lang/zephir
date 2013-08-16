@@ -71,7 +71,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	zephir_call_method_p2_noret(this_ptr, "reconfigure", pattern, paths);
 	//missing comment
 
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 
 
 }
@@ -208,7 +208,7 @@ PHP_METHOD(Test_Router_Route, via) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 
 	RETURN_THISW();
 
@@ -397,15 +397,15 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	}
 	//missing comment
 
-	zephir_update_property_zval(this_ptr, SL("_pattern"), pattern TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_pattern"), pattern TSRMLS_CC);
 
 	//missing comment
 
-	zephir_update_property_zval(this_ptr, SL("_compiledPattern"), compiledPattern TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_compiledPattern"), compiledPattern TSRMLS_CC);
 
 	//missing comment
 
-	zephir_update_property_zval(this_ptr, SL("_paths"), routePaths TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_paths"), routePaths TSRMLS_CC);
 
 	ZEPHIR_MM_RESTORE();
 
@@ -442,7 +442,7 @@ PHP_METHOD(Test_Router_Route, setName) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_name"), name TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_name"), name TSRMLS_CC);
 
 	RETURN_THISW();
 
@@ -465,7 +465,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_beforeMatch"), callback TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_beforeMatch"), callback TSRMLS_CC);
 
 	RETURN_THISW();
 
@@ -549,7 +549,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 		; zend_hash_move_forward_ex(_2, &_1)
 	) {
-		ZEPHIR_GET_HKEY(path, _2, _1);
+		ZEPHIR_GET_HMKEY(path, _2, _1);
 		ZEPHIR_GET_HVALUE(position, _3);
 
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
@@ -580,7 +580,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 
 	RETURN_THISW();
 
@@ -616,7 +616,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
 
 
 
-	zephir_update_property_zval(this_ptr, SL("_hostname"), hostname TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_hostname"), hostname TSRMLS_CC);
 
 	RETURN_THISW();
 

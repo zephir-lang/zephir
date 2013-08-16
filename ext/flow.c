@@ -632,7 +632,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 		; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
 		; zend_hash_move_forward_ex(_5, &_4)
 	) {
-		ZEPHIR_GET_HKEY(k, _5, _4);
+		ZEPHIR_GET_HMKEY(k, _5, _4);
 		ZEPHIR_GET_HVALUE(v, _6);
 
 		c += zephir_get_doubleval(k);

@@ -16,6 +16,102 @@
 #include "kernel/backtrace.h"
 
 /**
+ * @brief Fetches @a index if it exists from the array @a arr
+ * @param[out] fetched <code>&$arr[$index]</code>; @a fetched is modified only when the function returns 1
+ * @param arr Array
+ * @param index Index
+ * @return isset($arr[$index])
+ * @retval 0 Not exists, @a arr is not an array or @a index is of not supported type
+ * @retval 1 Exists
+ * @note @c index will be handled as follows: @c NULL is treated as an empty string, @c double values are cast to @c integer, @c bool or @c resource are treated as @c integer
+ * @note $arr[$index] is returned as is: no copying occurs, reference copunt is not updated
+ * @throw E_WARNING if @a offset is not a scalar
+ */
+int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
+
+	HashTable *h;
+	zval **val;
+	int result;
+
+	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		*fetched = NULL;
+		return 0;
+	}
+
+	h = Z_ARRVAL_P(arr);
+	switch (Z_TYPE_P(index)) {
+		case IS_NULL:
+			result = zephir_hash_find(h, ZEND_STRS(""), (void**)&val);
+			break;
+
+		case IS_DOUBLE:
+			result = zend_hash_index_find(h, (ulong)Z_DVAL_P(index), (void**)&val);
+			break;
+
+		case IS_LONG:
+		case IS_BOOL:
+		case IS_RESOURCE:
+			result = zend_hash_index_find(h, Z_LVAL_P(index), (void**)&val);
+			break;
+
+		case IS_STRING:
+			result = zend_symtable_find(h, (Z_STRLEN_P(index) ? Z_STRVAL_P(index) : ""), Z_STRLEN_P(index)+1, (void**)&val);
+			break;
+
+		default:
+			zend_error(E_WARNING, "Illegal offset type");
+			*fetched = NULL;
+			return 0;
+	}
+
+	if (result == SUCCESS) {
+		*fetched = *val;
+		Z_ADDREF_PP(fetched);
+		return 1;
+	}
+
+	*fetched = NULL;
+	return 0;
+}
+
+int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index, uint index_length, unsigned long key) {
+
+	zval **zv;
+
+	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
+		if (zephir_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
+			*fetched = *zv;
+			Z_ADDREF_PP(fetched);
+			return 1;
+		}
+	}
+
+	*fetched = NULL;
+	return 0;
+}
+
+int zephir_array_isset_string_fetch(zval **fetched, zval *arr, char *index, uint index_length) {
+
+	return zephir_array_isset_quick_string_fetch(fetched, arr, index, index_length, zend_inline_hash_func(index, index_length));
+}
+
+int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index) {
+
+	zval **zv;
+
+	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
+		if (zend_hash_index_find(Z_ARRVAL_P(arr), index, (void**)&zv) == SUCCESS) {
+			*fetched = *zv;
+			Z_ADDREF_PP(fetched);
+			return 1;
+		}
+	}
+
+	*fetched = NULL;
+	return 0;
+}
+
+/**
  * @brief Checks whether @a index exists in array @a arr
  * @param arr Array
  * @param index Index
