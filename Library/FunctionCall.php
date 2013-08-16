@@ -118,6 +118,9 @@ class FunctionCall extends Call
 
 		if (!isset($expression['parameters'])) {
 			if ($isExpecting) {
+				if ($mustInit) {
+					$symbolVariable->initVariant($compilationContext);
+				}
 				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
 			} else {
 				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
@@ -125,6 +128,9 @@ class FunctionCall extends Call
 		} else {
 			if (count($params)) {
 				if ($isExpecting) {
+					if ($mustInit) {
+						$symbolVariable->initVariant($compilationContext);
+					}
 					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
 				} else {
 					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');

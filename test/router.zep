@@ -64,7 +64,7 @@ class Router
 
 	protected _removeExtraSlashes;
 
-	protected _notFoundPaths;
+	static protected _notFoundPaths;
 
 	const URI_SOURCE_GET_URL = 0;
 

@@ -158,6 +158,7 @@ class ForStatement
 		$codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {
+        	$compilationContext->headersManager->add('kernel/hash');
         	$codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
         }
 

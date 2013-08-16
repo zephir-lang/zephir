@@ -27,6 +27,8 @@ class Starts_withOptimizer
 
 		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
 
+		$context->headersManager->add('kernel/string');
+
 		if (isset($str)) {
 			return new CompiledExpression('bool', 'zephir_start_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
 		}

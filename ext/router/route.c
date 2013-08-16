@@ -15,10 +15,12 @@
 #include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 #include "kernel/string_type.h"
 #include "kernel/exception.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
+#include "kernel/hash.h"
 
 
 /**
@@ -30,15 +32,15 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Router, Route, router_route, test_router_route_method_entry, 0);
 
-	zend_declare_property_null(test_router_route_ce, SL("_pattern"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_compiledPattern"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_paths"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_methods"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_hostname"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_converters"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_id"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_name"), ZEND_ACC_PROTECTED TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_beforeMatch"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_pattern"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_compiledPattern"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_paths"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_methods"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_hostname"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_converters"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_id"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_name"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_beforeMatch"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -82,7 +84,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern, *idPattern, *patternCopy, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
+	zval *pattern, *compiledPattern = NULL, *idPattern, *patternCopy, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -105,6 +107,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_INIT_VAR(_0);
 			ZVAL_STRING(_0, "/:module", 1);
+			ZEPHIR_INIT_VAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _0, idPattern, patternCopy);
 
 		}
@@ -115,6 +118,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_INIT_VAR(_1);
 			ZVAL_STRING(_1, "/:controller", 1);
+			ZEPHIR_INIT_NVAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _1, idPattern, patternCopy);
 
 		}
@@ -125,6 +129,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_INIT_VAR(_2);
 			ZVAL_STRING(_2, "/:namespace", 1);
+			ZEPHIR_INIT_NVAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _2, idPattern, patternCopy);
 
 		}
@@ -135,6 +140,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 			ZEPHIR_INIT_VAR(_3);
 			ZVAL_STRING(_3, "/:action", 1);
+			ZEPHIR_INIT_NVAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _3, idPattern, patternCopy);
 
 		}
@@ -147,6 +153,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 			ZVAL_STRING(_4, "/:params", 1);
 			ZEPHIR_INIT_VAR(_5);
 			ZVAL_STRING(_5, "(/.*)*", 1);
+			ZEPHIR_INIT_NVAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _4, _5, patternCopy);
 
 		}
@@ -159,6 +166,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 			ZVAL_STRING(_6, "/:int", 1);
 			ZEPHIR_INIT_VAR(_7);
 			ZVAL_STRING(_7, "/([0-9]+)", 1);
+			ZEPHIR_INIT_NVAR(compiledPattern);
 			zephir_call_func_p3(compiledPattern, "str_replace", _6, _7, patternCopy);
 
 		}
@@ -261,6 +269,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			//missing comment
 			ZEPHIR_INIT_VAR(_0);
 			ZVAL_STRING(_0, "::", 1);
+			ZEPHIR_INIT_VAR(parts);
 			zephir_call_func_p2(parts, "explode", _0, paths);
 
 			ZEPHIR_INIT_VAR(numberParts);
@@ -311,9 +320,11 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				//missing comment
 				if (zephir_memnstr_str(controllerName, SL("\\"))) {
 					//missing comment
+					ZEPHIR_INIT_VAR(realClassName);
 					zephir_call_func_p1(realClassName, "get_class_ns", controllerName);
 
 					//missing comment
+					ZEPHIR_INIT_VAR(namespaceName);
 					zephir_call_func_p1(namespaceName, "get_ns_class", controllerName);
 
 					//missing comment
@@ -328,6 +339,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 				}
 				//missing comment
+				ZEPHIR_INIT_VAR(lowerName);
 				zephir_call_func_p1(lowerName, "uncamelize", realClassName);
 
 				//missing comment
