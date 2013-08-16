@@ -33,10 +33,69 @@ class ForStatement
 
 	public function compileStringTraverse($expression, $compilationContext)
 	{
-
 		$codePrinter = $compilationContext->codePrinter;
+
+		/**
+		 * Initialize 'key' variable
+		 */
+		if (isset($this->_statement['key'])) {
+			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			if ($keyVariable->getType() != 'int') {
+				throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->_statement['expr']);
+			}
+			$keyVariable->setMustInitNull(true);
+			$keyVariable->setIsInitialized(true);
+		}
+
+		/**
+		 * Initialize 'value' variable
+		 */
+		if (isset($this->_statement['value'])) {
+			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			if ($variable->getType() != 'int') {
+				throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->_statement['expr']);
+			}
+			$variable->setMustInitNull(true);
+			$variable->setIsInitialized(true);
+		}
+
+		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
+
+		$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
+			$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
+			$tempVariable->getName() . '++) {');
+
+		if (isset($this->_statement['key'])) {
+			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
+		}
+
+		$codePrinter->output("\t" . $variable->getName() . ' = ' . $expression->getCode() . '->str[' . $tempVariable->getName() . ']; ');
+
+		/**
+		 * Variables are initialized in a different way inside cycle
+		 */
+		$compilationContext->insideCycle++;
+
+		/**
+		 * Compile statements in the 'for' block
+		 */
+		if (isset($this->_statement['statements'])) {
+			$st = new StatementsBlock($this->_statement['statements']);
+			$st->compile($compilationContext);
+		}
+
+		$compilationContext->insideCycle--;
+
+		$codePrinter->output('}');
+
 	}
 
+	/**
+	 * Compiles the traversal of a hash key
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compileHashTraverse($expression, $compilationContext)
 	{
 

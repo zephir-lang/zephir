@@ -20,7 +20,7 @@
 /**
  * WriteDetector
  *
- * Detects if a variable is writen in a given context
+ * Detects if a variable is written in a given context
  * If a variable is not modified in a local context we could avoid allocate memory for its body
  * Separate parameters to avoid them to be touched modifying its reference count
  */

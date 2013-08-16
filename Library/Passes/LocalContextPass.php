@@ -81,7 +81,7 @@ class LocalContextPass
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
 						default:
-							//echo '[', $assigment['expr']['type'], ']';
+							//echo '[', $assigment['assign-type'], ']';
 					}
 					break;
 				case 'object-property':
@@ -98,8 +98,11 @@ class LocalContextPass
 				case 'variable-append':
 					switch ($assigment['expr']['type']) {
 						case 'variable':
+							$this->markVariableNoLocal($assigment['variable']);
 							$this->markVariableNoLocal($assigment['expr']['value']);
 							break;
+						default:
+							//echo '[', $assigment['assign-type'], ']';
 					}
 					break;
 				default:

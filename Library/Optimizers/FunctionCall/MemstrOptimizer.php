@@ -10,7 +10,7 @@ class MemstrOptimizer
 	/**
 	 *
 	 */
-	public function optimize(array $expression, array $resolvedParams, CompilationContext $context)
+	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
 		if (!isset($expression['parameters'])) {
 			return false;
@@ -18,6 +18,17 @@ class MemstrOptimizer
 
 		if (count($expression['parameters']) != 2) {
 			return false;
+		}
+
+		if ($expression['parameters'][1]['type'] == 'string') {
+			$str = $expression['parameters'][1]['value'];
+			unset($expression['parameters'][1]);
+		}
+
+		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+
+		if (isset($str)) {
+			return new CompiledExpression('bool', 'zephir_memnstr_str(' . $resolvedParams[0] . ', "' . $str . '")', $expression);
 		}
 
 		return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);

@@ -34,11 +34,14 @@ class FunctionCall extends Call
 	 * @param string $funcName
 	 * @param array $expression
 	 */
-	protected function optimize($funcName, array $expression, array $params, CompilationContext $compilationContext)
+	protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
 	{
+		/**
+		 * Check if the optimizer is already cached
+		 */
 		if (!isset(self::$_optimizers[$funcName])) {
 
-			echo $path = 'Library/Optimizers/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
+			$path = 'Library/Optimizers/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
 			if (file_exists($path)) {
 
 				require $path;
@@ -56,7 +59,7 @@ class FunctionCall extends Call
 		}
 
 		if ($optimizer) {
-			return $optimizer->optimize($expression, $params, $compilationContext);
+			return $optimizer->optimize($expression, $call, $compilationContext);
 		}
 
 		return false;
@@ -76,20 +79,20 @@ class FunctionCall extends Call
 		$funcName = strtolower($expression['name']);
 
 		/**
+		 * Try to optimize function calls
+		 */
+		$compiledExpr = $this->optimize($funcName, $expression, $this, $compilationContext);
+		if (is_object($compiledExpr)) {
+			return $compiledExpr;
+		}
+
+		/**
 		 * Resolve parameters
 		 */
 		if (isset($expression['parameters'])) {
 			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
 		} else {
 			$params = array();
-		}
-
-		/**
-		 * Try to optimize function calls
-		 */
-		$compiledExpr = $this->optimize($funcName, $expression, $params, $compilationContext);
-		if (is_object($compiledExpr)) {
-			return $compiledExpr;
 		}
 
 		$codePrinter = $compilationContext->codePrinter;

@@ -627,8 +627,20 @@ class LetStatement
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
 					case 'variable':
-						 $codePrinter->output('zephir_array_append(&' . $variable . ', ' . $resolvedExpr->getCode() . ', PH_SEPARATE);');
-						 break;
+						$exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+						switch ($exprVariable->getType()) {
+							case 'int':
+								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+								$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
+								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+								break;
+							case 'variable':
+								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $resolvedExpr->getCode() . ', PH_SEPARATE);');
+								break;
+							default:
+								throw new CompilerException("Unknown type " . $exprVariable->getType(), $statement);
+						}
+						break;
 					default:
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
@@ -671,6 +683,10 @@ class LetStatement
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
+					case 'int':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+						break;
 					case 'variable':
 						$symbolVariable = $variableExpr;
 						break;
@@ -846,6 +862,10 @@ class LetStatement
 		foreach ($statement['assignments'] as $assignment) {
 
 			$variable = $assignment['variable'];
+
+			/**
+			 * @todo: variabl-append we must check that variable is initialized
+			 */
 
 			/**
 			 * Get the symbol from the symbol table

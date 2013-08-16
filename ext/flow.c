@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
+#include "kernel/string_type.h"
 
 
 /**
@@ -563,11 +564,11 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	HashTable *_5;
 	HashPosition _4;
-	zval *v = NULL, *b, c, *_0, *_1, *_2, *_3, **_6;
+	long c;
+	zval *v = NULL, *b, *_0, *_1, *_2, *_3, **_6;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, 0);
+	c = 0;
 
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
@@ -590,9 +591,13 @@ PHP_METHOD(Test_Flow, testFor1) {
 		; zend_hash_move_forward_ex(_5, &_4)
 	) {
 		ZEPHIR_GET_HVALUE(v, _6);
-		zend_print_zval(v, 0);
+
+		c += zephir_get_doubleval(v);
+
 	}
-	ZEPHIR_MM_RESTORE();
+
+	RETURN_MM_LONG(c);
+
 
 }
 
@@ -600,11 +605,11 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	HashTable *_5;
 	HashPosition _4;
-	zval *v = NULL, *b, c, *_0, *_1, *_2, *_3, **_6;
+	double c;
+	zval *v = NULL, *k = NULL, *b, *_0, *_1, *_2, *_3, **_6;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, 0);
+	c = (double) (0);
 
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
@@ -626,10 +631,68 @@ PHP_METHOD(Test_Flow, testFor2) {
 		; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
 		; zend_hash_move_forward_ex(_5, &_4)
 	) {
+		ZEPHIR_GET_HKEY(k, _5, _4);
 		ZEPHIR_GET_HVALUE(v, _6);
-		zend_print_zval(v, 0);
+
+		c += zephir_get_doubleval(k);
+
 	}
-	ZEPHIR_MM_RESTORE();
+
+	RETURN_MM_DOUBLE(c);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor10) {
+
+	long v, _0;
+	zephir_str *b = NULL;
+	zval *a, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+
+	zephir_str_assign(b, "hello", sizeof("hello")-1);
+
+	for (_0 = 0; _0 < b->len; _0++) {
+		v = b->str[_0]; 
+
+		ZEPHIR_INIT_NVAR(_1);
+		ZVAL_LONG(_1, v);
+		zephir_array_append(&a, _1, PH_SEPARATE);
+
+	}
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor11) {
+
+	long k, v, _0;
+	zephir_str *b = NULL;
+	zval *a, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+
+	zephir_str_assign(b, "hello", sizeof("hello")-1);
+
+	for (_0 = 0; _0 < b->len; _0++) {
+		k = _0; 
+		v = b->str[_0]; 
+
+		ZEPHIR_INIT_NVAR(_1);
+		ZVAL_LONG(_1, v);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE);
+
+	}
+
+	RETURN_CCTOR(a);
+
 
 }
 
