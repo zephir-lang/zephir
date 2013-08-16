@@ -142,11 +142,19 @@ class ForStatement
 		$tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
 		$tempVariable->setIsDoublePointer(true);
 
-		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
+		if ($this->_statement['reverse']) {
+			$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 1);');
+		} else {
+			$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
+		}
 
         $codePrinter->output('for (');
 		$codePrinter->output('	; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
-		$codePrinter->output('	; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+		if ($this->_statement['reverse']) {
+			$codePrinter->output('	; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+		} else {
+			$codePrinter->output('	; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+		}
 		$codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {

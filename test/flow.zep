@@ -320,22 +320,57 @@ class Flow
 
 	public function testFor1()
 	{
-		var v, b, c;
+		var v, b; int c;
 		let c = 0,
 			b = [1, 2, 3, 4];
 		for v in b {
-			echo v;
+			let c += v;
 		}
+		return c;
 	}
 
 	public function testFor2()
 	{
-		var v, b, c;
+		var v, k, b; double c;
 		let c = 0,
 			b = [1, 2, 3, 4];
-		for v in b {
-			echo v;
+		for k, v in b {
+			let c += k;
 		}
+		return c;
+	}
+
+	public function testFor3()
+	{
+		var v, b; int c;
+		let c = 0,
+			b = [1, 2, 3, 4];
+		for v in reverse b {
+			let c += v;
+		}
+		return c;
+	}
+
+	public function testFor10()
+	{
+		var a; string b; int v;
+		let a = [],
+			b = "hello";
+		for v in b {
+			let a[] = v;
+		}
+		return a;
+	}
+
+	public function testFor11()
+	{
+		var a; string b; int k, v;
+		let a = [],
+			b = "hello";
+		for k, v in b {
+			let a[k] = v;
+		}
+		return a;
 	}
 
 }
