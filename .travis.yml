@@ -16,8 +16,7 @@ before_script:
  - ulimit -c unlimited || true
 
 script:
- - $(phpenv which php) ./unit-tests/arithmetic.php
- - $(phpenv which php) ./unit-tests/flow.php
+ - ./unit-tests/run_tests
 
 after_failure:
  - sudo apt-get -qq install gdb
