@@ -27,7 +27,6 @@ assert($t->testWhile7() == 0.0);
 assert($t->testWhile8() == 0.0);
 assert($t->testWhile9() == 0.0);
 
-var_dump($t->testFor11());
-
 assert($t->testFor1() === 10);
 assert($t->testFor2() === 6.0);
+assert($t->testFor3() === array(4, 3, 2, 1));
