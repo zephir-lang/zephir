@@ -22,14 +22,13 @@ Compiler design goals:
 
 Installation
 ------------
-
 xx is the parser for the language:
 
 Requirements:
 
 * [json-c](https://github.com/json-c/json-c)
 * [re2c](http://re2c.org/)
- 
+
 Installation on Ubuntu
 -----------------------
 
@@ -45,7 +44,6 @@ Once you have the required packages installed, you can generate the parser as fo
 
 Usage
 -----
-
 Compile the extension:
 
 ```bash
@@ -59,11 +57,18 @@ cd ext/
 sudo ./install
 ```
 
+Current Build Status
+--------------------
+Zephir is built under Travis CI service. Every commit pushed to this repository will queue a build into the continuous
+integration service and will run all PHPUnit tests to ensure that everything is going well and the project is stable.
+The current build status is:
+
+[![Build Status](https://secure.travis-ci.org/phalcon/zephir.png?branch=master)](http://travis-ci.org/phalcon/zephir)
+
 Donate & Sponsor
 ----------------
-
 Zephir is driven by the voluntary and altruist efforts of the core developers and contributors.
-We invite you to sponsor our work, by [donating](https://www.gittip.com/phalcon/) or contacting us regarding sponsorship, allowing us to invest more time and resources to the project, ensuring it will be ready sooner and with loads of features. 
+We invite you to sponsor our work, by [donating](https://www.gittip.com/phalcon/) or contacting us regarding sponsorship, allowing us to invest more time and resources to the project, ensuring it will be ready sooner and with loads of features.
 
 Hopefully, you can take advantage of the features provided by Zephir too!
 
