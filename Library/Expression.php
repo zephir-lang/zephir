@@ -17,9 +17,26 @@
  +----------------------------------------------------------------------+
 */
 
+/* Base Operator */
+require 'Library/Operators/BaseOperator.php';
+
+/* Arithmetical operators */
 require 'Library/Operators/Arithmetical/BaseOperator.php';
 require 'Library/Operators/Arithmetical/AddOperator.php';
 require 'Library/Operators/Arithmetical/SubOperator.php';
+
+/* Logical operators */
+require 'Library/Operators/Logical/BaseOperator.php';
+require 'Library/Operators/Logical/AndOperator.php';
+require 'Library/Operators/Logical/OrOperator.php';
+
+/** Unary Operator */
+require 'Library/Operators/Unary/NotOperator.php';
+
+/* Comparison operators */
+require 'Library/Operators/Comparison/BaseOperator.php';
+require 'Library/Operators/Comparison/IdenticalOperator.php';
+require 'Library/Operators/Comparison/EqualsOperator.php';
 
 /**
  * Expressions
@@ -321,11 +338,6 @@ class Expression
 
 	}
 
-	public function compileNot($expression, CompilationContext $compilationContext)
-	{
-		return new CompiledExpression('bool', '', $expression);
-	}
-
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value'], $compilationContext, $expression['left']['left']);
@@ -558,6 +570,9 @@ class Expression
 			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 		}
 
+		/**
+		 * stdclass don't have constructors
+		 */
 		if (strtolower($newExpr['class']) == 'stdclass') {
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
 		} else {
@@ -572,7 +587,7 @@ class Expression
 		if (strtolower($newExpr['class']) == 'stdclass') {
 			if (isset($newExpr['parameters'])) {
 				if (count($newExpr['parameters'])) {
-					throw new CompilerException("Stdclasses don't receive parameters in its constructor", $statement);
+					throw new CompilerException("stdclass don't receive parameters in its constructor", $statement);
 				}
 			}
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -874,7 +889,7 @@ class Expression
 				return new CompiledExpression('bool', $expression['value'], $expression);
 
 			case 'string':
-				return new CompiledExpression('string', $this->_addSlaches($expression['value']), $expression);
+				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
 
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
@@ -912,13 +927,19 @@ class Expression
 				return $this->newInstance($expression, $compilationContext);
 
 			case 'equals':
-				return $this->compileEquals($expression, $compilationContext);
+				$expr = new EqualsOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'not':
-				return $this->compileNot($expression, $compilationContext);
+				$expr = new NotOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'identical':
-				return $this->compileIdentical('==', $expression, $compilationContext);
+				$expr = new IdenticalOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'not-identical':
 				return $this->compileIdentical('!=', $expression, $compilationContext);
@@ -932,6 +953,9 @@ class Expression
 			case 'less-equal':
 				return $this->compileLess($expression, $compilationContext);
 
+			case 'greater-equal':
+				return $this->compileLess($expression, $compilationContext);
+
 			case 'add':
 				$expr = new AddOperator();
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
@@ -943,10 +967,14 @@ class Expression
 				return $expr->compile($expression, $compilationContext);
 
 			case 'and':
-				return new CompiledExpression('bool', '1', $expression);
+				$expr = new AndOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'or':
-				return new CompiledExpression('bool', '1', $expression);
+				$expr = new OrOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'concat':
 				return new CompiledExpression('null', null, $expression);

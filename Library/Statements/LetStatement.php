@@ -26,6 +26,11 @@ class LetStatement
 {
 	protected $_statement;
 
+	/**
+	 * LetStatement constructor
+	 *
+	 * @param array $statement
+	 */
 	public function __construct($statement)
 	{
 		$this->_statement = $statement;
@@ -368,6 +373,11 @@ class LetStatement
 										$symbolVariable->setMustInitNull(true);
 										$compilationContext->headersManager->add('kernel/string_type');
 										$codePrinter->output('zephir_str_assign_long(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									case 'concat-assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_append_long(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);

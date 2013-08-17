@@ -18,12 +18,11 @@
 */
 
 /**
- * BaseOperator
+ * LogicalBaseOperator
  *
- * This is the base operator for commutative, associative and distributive
- * arithmetic operators
+ * This is the base operator for logical operators
  */
-class ArithmeticalBaseOperator extends BaseOperator
+class LogicalBaseOperator extends BaseOperator
 {
 
 	public function compile($expression, CompilationContext $compilationContext)

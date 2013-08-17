@@ -17,7 +17,7 @@
  +----------------------------------------------------------------------+
 */
 
-class SubOperator extends BaseOperator
+class SubOperator extends ArithmeticalBaseOperator
 {
 
 	protected $_operator = '-';
