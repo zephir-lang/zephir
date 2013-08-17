@@ -139,6 +139,7 @@ class Compiler
 	/**
 	 * Create config.m4 and config.w32 by compiled files to test extension
 	 *
+	 * @param string $project
 	 */
 	public function createConfigFiles($project='test')
 	{
@@ -166,6 +167,7 @@ class Compiler
 	/**
 	 * Create project.c and project.h by compiled files to test extension
 	 *
+	 * @param string $project
 	 */
 	public function createProjectFiles($project='test')
 	{
@@ -248,7 +250,9 @@ class Compiler
 						$lines = file($extra['file']);
 						$line = $lines[$extra['line'] - 1];
 						echo "\t", str_replace("\t", " ", $line);
-						echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
+						if (($extra['char'] - 1) > 0) {
+							echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
+						}
 					}
 				}
 			}

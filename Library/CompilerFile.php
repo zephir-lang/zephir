@@ -46,13 +46,20 @@ class CompilerFile
 		$this->_filesCompiled = array();
 	}
 
+	/**
+	 * Returns the class definition related to the compiled file
+	 *
+	 * @return \ClassDefinition
+	 */
 	public function getClassDefinition()
 	{
 		return $this->_classDefinition;
 	}
 
 	/**
-	 * Compiles the file generating a JSON
+	 * Compiles the file generating a JSON intermediate representation
+	 *
+	 * @return array
 	 */
 	public function genIR()
 	{
@@ -180,20 +187,38 @@ class CompilerFile
 		}
 
 		if (!$namespace) {
-			throw new CompilerException("Every file need a namespace", $topStatement);
+			throw new CompilerException("A namespace is required", $topStatement);
 		}
 
 		$class = false;
+		$interface = false;
 		foreach ($ir as $topStatement) {
 			switch ($topStatement['type']) {
 				case 'class':
-					if ($class) {
-						throw new CompilerException("More than one class defined in the same file", $topStatement);
+					if ($class || $interface) {
+						throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
 					}
 					$class = true;
+					$name = $topStatement['name'];
 					$this->preCompileClass($namespace, $topStatement);
 					break;
+				case 'interface':
+					if ($class || $interface) {
+						throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
+					}
+					$interface = true;
+					$name = $topStatement['name'];
+					$this->preCompileInterface($namespace, $topStatement);
+					break;
 			}
+		}
+
+		if (!$class && !$interface) {
+			throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
+		}
+
+		if ($this->_filePath != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
+			throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
 		}
 
 		$this->_ir = $ir;
@@ -204,6 +229,11 @@ class CompilerFile
 		return $this->_compiledFile;
 	}
 
+	/**
+	 * Compiles the file
+	 *
+	 * @param \Compiler $compiler
+	 */
 	public function compile(Compiler $compiler)
 	{
 
