@@ -8,5 +8,4 @@ namespace Test\Oo;
 class OoNoConstruct
 {
 
-
 }

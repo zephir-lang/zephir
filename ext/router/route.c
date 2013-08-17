@@ -274,7 +274,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 			//missing comment
 			do {
-				if (zephir_fast_count_ev(parts) == 3) {
+				if (zephir_fast_count_ev(parts TSRMLS_CC) == 3) {
 					ZEPHIR_OBS_NVAR(moduleName);
 					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
 
@@ -286,7 +286,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (zephir_fast_count_ev(parts) == 2) {
+				if (zephir_fast_count_ev(parts TSRMLS_CC) == 2) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
@@ -295,7 +295,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (zephir_fast_count_ev(parts) == 1) {
+				if (zephir_fast_count_ev(parts TSRMLS_CC) == 1) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 

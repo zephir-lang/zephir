@@ -88,3 +88,75 @@ PHP_METHOD(Test_Oo, testInstance4) {
 
 }
 
+PHP_METHOD(Test_Oo, testInstance5) {
+
+	zval *o, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "a", 1);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "b", 1);
+	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+
+	RETURN_CCTOR(o);
+
+
+}
+
+PHP_METHOD(Test_Oo, testInstance6) {
+
+	zval *o, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+
+	RETURN_CCTOR(o);
+
+
+}
+
+PHP_METHOD(Test_Oo, testInstance7) {
+
+	zval *o, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_BOOL(_0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_BOOL(_1, 1);
+	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+
+	RETURN_CCTOR(o);
+
+
+}
+
+PHP_METHOD(Test_Oo, testInstance8) {
+
+	zval *o, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(o);
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_DOUBLE(_0, 1.2);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_DOUBLE(_1, 7.30);
+	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+
+	RETURN_CCTOR(o);
+
+
+}
+

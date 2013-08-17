@@ -45,4 +45,32 @@ class Oo
 		return o;
 	}
 
+	public function testInstance5()
+	{
+		var o;
+		let o = new Test\Oo\OoConstructParams("a", "b");
+		return o;
+	}
+
+	public function testInstance6()
+	{
+		var o;
+		let o = new Test\Oo\OoConstructParams(1, 2);
+		return o;
+	}
+
+	public function testInstance7()
+	{
+		var o;
+		let o = new Test\Oo\OoConstructParams(false, true);
+		return o;
+	}
+
+	public function testInstance8()
+	{
+		var o;
+		let o = new Test\Oo\OoConstructParams(1.2, 7.30);
+		return o;
+	}
+
 }

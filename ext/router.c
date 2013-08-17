@@ -602,7 +602,7 @@ PHP_METHOD(Test_Router, handle) {
 
 			if (Z_TYPE_P(beforeMatch) != IS_NULL) {
 				//missing comment
-				if (zephir_is_callable(beforeMatch)) {
+				if (zephir_is_callable(beforeMatch TSRMLS_CC)) {
 					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "Before-Match callback is not callable in matched route");
 					return;
 				}
@@ -779,7 +779,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		}
-		if (zephir_fast_count_ev(params)) {
+		if (zephir_fast_count_ev(params TSRMLS_CC)) {
 			ZEPHIR_INIT_VAR(paramsMerge);
 			zephir_call_func_p2(paramsMerge, "array_merge", params, parts);
 
@@ -1082,7 +1082,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 
-	if (!(zephir_fast_count_ev(groupRoutes))) {
+	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
 		return;
 	}

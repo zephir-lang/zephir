@@ -26,3 +26,16 @@ assert($t->testAssign21() === 1);
 assert($t->testAssign22() === 1.0);
 assert($t->testAssign23() === true);
 assert($t->testAssign24() === 1.0);
+assert($t->testAssign25() === 1.0);
+assert($t->testAssign26() === 1);
+assert($t->testAssign27() === 1.0);
+assert($t->testAssign28() === true);
+assert($t->testAssign29() === true);
+assert($t->testAssign30() === 0);
+assert($t->testAssign31() === 0.0);
+assert($t->testAssign32() === false);
+assert($t->testAssign33() === false);
+assert($t->testAssign34() === 0);
+assert($t->testAssign35() === 0.0);
+assert($t->testAssign36() === false);
+
