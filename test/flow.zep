@@ -342,11 +342,11 @@ class Flow
 
 	public function testFor3()
 	{
-		var v, b; int c;
-		let c = 0,
+		var v, b, c;
+		let c = [],
 			b = [1, 2, 3, 4];
 		for v in reverse b {
-			let c += v;
+			let c[] = v;
 		}
 		return c;
 	}

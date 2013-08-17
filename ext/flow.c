@@ -648,11 +648,11 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 	HashTable *_5;
 	HashPosition _4;
-	long c;
-	zval *v = NULL, *b, *_0, *_1, *_2, *_3, **_6;
+	zval *v = NULL, *b, *c, *_0, *_1, *_2, *_3, **_6;
 
 	ZEPHIR_MM_GROW();
-	c = 0;
+	ZEPHIR_INIT_VAR(c);
+	array_init(c);
 
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
@@ -676,11 +676,11 @@ PHP_METHOD(Test_Flow, testFor3) {
 	) {
 		ZEPHIR_GET_HVALUE(v, _6);
 
-		c += zephir_get_doubleval(v);
+		zephir_array_append(&c, v, PH_SEPARATE);
 
 	}
 
-	RETURN_MM_LONG(c);
+	RETURN_CCTOR(c);
 
 
 }

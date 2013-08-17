@@ -274,8 +274,8 @@ class Route
 	public function reConfigure(pattern, paths=null)
 	{
 		var moduleName, controllerName, actionName,
-			parts, numberParts, routePaths, realClassName, namespaceName,
-			lowerName, pcrePattern, compiledPattern, reversed, extracted;
+			parts, routePaths, realClassName, namespaceName,
+			pcrePattern, compiledPattern, reversed, extracted;
 
 		if typeof pattern != "string" {
 			throw new Test\Router\Exception("The pattern must be string");
@@ -289,11 +289,10 @@ class Route
 					actionName = null;
 
 				// Explode the short paths using the :: separator
-				let parts = explode('::', paths),
-					numberParts = count(parts);
+				let parts = explode('::', paths);
 
 				// Create the array paths dynamically
-				switch numberParts {
+				switch count(parts) {
 					case 3:
 						let moduleName = parts[0],
 							controllerName = parts[1],
@@ -336,10 +335,7 @@ class Route
 					}
 
 					// Always pass the controller to lowercase
-					let lowerName = uncamelize(realClassName);
-
-					// Update the controller path
-					let routePaths['controller'] = lowerName;
+					let routePaths['controller'] = uncamelize(realClassName);
 				}
 
 				// Process action name

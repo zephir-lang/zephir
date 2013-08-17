@@ -240,7 +240,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *numberParts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *lowerName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_0;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -272,12 +272,9 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_INIT_VAR(parts);
 			zephir_call_func_p2(parts, "explode", _0, paths);
 
-			ZEPHIR_INIT_VAR(numberParts);
-			ZVAL_LONG(numberParts, zephir_fast_count_ev(parts));
-
 			//missing comment
 			do {
-				if (ZEPHIR_IS_LONG(numberParts, 3)) {
+				if (zephir_fast_count_ev(parts) == 3) {
 					ZEPHIR_OBS_NVAR(moduleName);
 					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
 
@@ -289,7 +286,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (ZEPHIR_IS_LONG(numberParts, 2)) {
+				if (zephir_fast_count_ev(parts) == 2) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
@@ -298,7 +295,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (ZEPHIR_IS_LONG(numberParts, 1)) {
+				if (zephir_fast_count_ev(parts) == 1) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
@@ -339,12 +336,10 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 				}
 				//missing comment
-				ZEPHIR_INIT_VAR(lowerName);
-				zephir_call_func_p1(lowerName, "uncamelize", realClassName);
+				ZEPHIR_INIT_VAR(_1);
+				zephir_call_func_p1(_1, "uncamelize", realClassName);
 
-				//missing comment
-
-				zephir_array_update_string(&routePaths, SL("controller"), &lowerName, PH_COPY | PH_SEPARATE);
+				zephir_array_update_string(&routePaths, SL("controller"), &_1, PH_COPY | PH_SEPARATE);
 
 			}
 			//missing comment
