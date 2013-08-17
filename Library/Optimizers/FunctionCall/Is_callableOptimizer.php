@@ -21,6 +21,6 @@ class Is_callableOptimizer
 		}
 
 		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ')', $expression);
+		return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
 	}
 }
