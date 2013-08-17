@@ -112,8 +112,14 @@ class ClassMethod
 
 		switch ($dataType) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($parameter['default']['type']) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';';
 						break;
 					case 'double':
@@ -141,6 +147,9 @@ class ClassMethod
 				$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 				switch ($parameter['default']['type']) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
 					case 'double':
@@ -174,6 +183,9 @@ class ClassMethod
 
 		switch ($dataType) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				$compilationContext->headersManager->add('kernel/operators');
 				return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'bool':
@@ -441,7 +453,22 @@ class ClassMethod
 			$pointer = null;
 			switch ($type) {
 				case 'int':
+					$code = 'int ';
+					break;
+				case 'uint':
+					$code = 'unsigned int ';
+					break;
+				case 'char':
+					$code = 'char ';
+					break;
+				case 'uchar':
+					$code = 'unsigned char ';
+					break;
+				case 'long':
 					$code = 'long ';
+					break;
+				case 'ulong':
+					$code = 'unsigned long ';
 					break;
 				case 'bool':
 					$code = 'zend_bool ';

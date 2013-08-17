@@ -351,6 +351,21 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_TYPE_INTEGER:
 				xx_(xx_parser, XX_TYPE_INTEGER, NULL, parser_status);
 				break;
+			case XX_T_TYPE_UINTEGER:
+				xx_(xx_parser, XX_TYPE_UINTEGER, NULL, parser_status);
+				break;
+			case XX_T_TYPE_CHAR:
+				xx_(xx_parser, XX_TYPE_CHAR, NULL, parser_status);
+				break;
+			case XX_T_TYPE_UCHAR:
+				xx_(xx_parser, XX_TYPE_UCHAR, NULL, parser_status);
+				break;
+			case XX_T_TYPE_LONG:
+				xx_(xx_parser, XX_TYPE_LONG, NULL, parser_status);
+				break;
+			case XX_T_TYPE_ULONG:
+				xx_(xx_parser, XX_TYPE_ULONG, NULL, parser_status);
+				break;
 			case XX_T_TYPE_DOUBLE:
 				xx_(xx_parser, XX_TYPE_DOUBLE, NULL, parser_status);
 				break;

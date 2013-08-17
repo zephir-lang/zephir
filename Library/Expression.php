@@ -122,6 +122,9 @@ class Expression
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$compilationContext->headersManager->add('kernel/operators');
 								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 							case 'null':
@@ -136,8 +139,14 @@ class Expression
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getBooleanCode(), $expression);
@@ -154,8 +163,14 @@ class Expression
 				}
 				break;
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
@@ -166,6 +181,9 @@ class Expression
 			case 'bool':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
@@ -204,10 +222,16 @@ class Expression
 
 				switch ($variable->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
 							case 'bool':
 								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getBooleanCode() . ')', $expression['left']);
@@ -220,6 +244,9 @@ class Expression
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$compilationContext->headersManager->add('kernel/operators');
 								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
 							case 'bool':
@@ -241,8 +268,14 @@ class Expression
 				}
 				break;
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' (int) ' . $right->getCode(), $expression);
@@ -281,12 +314,18 @@ class Expression
 
 				switch ($variable->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
 					case 'double':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$compilationContext->headersManager->add('kernel/operators');
 								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
 							case 'bool':
@@ -305,8 +344,14 @@ class Expression
 				}
 				break;
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' < (long) ' . $right->getCode(), $expression);
@@ -317,6 +362,9 @@ class Expression
 			case 'double':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('bool', '(double)' . $left->getCode() . ' < ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
@@ -504,6 +552,9 @@ class Expression
 
 		switch ($exprIndex->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
 				break;
@@ -515,6 +566,9 @@ class Expression
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
 				switch ($variableIndex->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
 						break;
@@ -647,6 +701,9 @@ class Expression
 		$exprCompiled = $expression->compile($compilationContext);
 		switch ($exprCompiled->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
 				return $tempVar->getName();
@@ -674,6 +731,9 @@ class Expression
 				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $item);
 				switch ($itemVariable->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
 						return $tempVar->getName();
@@ -730,6 +790,9 @@ class Expression
 					case 'string':
 						switch ($item['value']['type']) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
 								break;
 							case 'double':
@@ -753,8 +816,14 @@ class Expression
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						switch ($item['value']['type']) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
 								break;
 							case 'bool':
@@ -785,8 +854,14 @@ class Expression
 						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value'], $compilationContext, $item['key']);
 						switch ($variableVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								switch ($item['value']['type']) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
 										break;
 									case 'bool':
@@ -816,6 +891,9 @@ class Expression
 							case 'string':
 								switch ($item['value']['type']) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $item['value']['value'] . ');');
 										break;
 									case 'double':

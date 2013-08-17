@@ -73,7 +73,12 @@
 #define XX_INTEGER                        73
 #define XX_STRING                         74
 #define XX_THROW                          75
-#define XX_DOUBLE                         76
-#define XX_NULL                           77
-#define XX_TRUE                           78
-#define XX_FALSE                          79
+#define XX_TYPE_UINTEGER                  76
+#define XX_TYPE_CHAR                      77
+#define XX_TYPE_UCHAR                     78
+#define XX_TYPE_LONG                      79
+#define XX_TYPE_ULONG                     80
+#define XX_DOUBLE                         81
+#define XX_NULL                           82
+#define XX_TRUE                           83
+#define XX_FALSE                          84

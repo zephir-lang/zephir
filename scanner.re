@@ -163,9 +163,33 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'uint' {
+			s->active_char += sizeof("uint")-1;
+			token->opcode = XX_T_TYPE_UINTEGER;
+			return 0;
+		}
+
 		'long' {
 			s->active_char += sizeof("long")-1;
-			token->opcode = XX_T_TYPE_INTEGER;
+			token->opcode = XX_T_TYPE_LONG;
+			return 0;
+		}
+
+		'ulong' {
+			s->active_char += sizeof("ulong")-1;
+			token->opcode = XX_T_TYPE_ULONG;
+			return 0;
+		}
+
+		'char' {
+			s->active_char += sizeof("char")-1;
+			token->opcode = XX_T_TYPE_CHAR;
+			return 0;
+		}
+
+		'uchar' {
+			s->active_char += sizeof("uchar")-1;
+			token->opcode = XX_T_TYPE_UCHAR;
 			return 0;
 		}
 

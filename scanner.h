@@ -38,6 +38,11 @@
 #define XX_T_TYPE_BOOL 311
 #define XX_T_TYPE_STRING 312
 #define XX_T_TYPE_VAR 313
+#define XX_T_TYPE_LONG 314
+#define XX_T_TYPE_ULONG 315
+#define XX_T_TYPE_CHAR 316
+#define XX_T_TYPE_UCHAR 317
+#define XX_T_TYPE_UINTEGER 318
 
 #define XX_T_NAMESPACE 350
 #define XX_T_CLASS 351

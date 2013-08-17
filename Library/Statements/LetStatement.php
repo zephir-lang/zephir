@@ -57,6 +57,9 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						switch ($statement['operator']) {
@@ -77,6 +80,9 @@ class LetStatement
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
@@ -128,6 +134,9 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 							case 'bool':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -211,6 +220,9 @@ class LetStatement
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
@@ -268,6 +280,9 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 							case 'bool':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -368,6 +383,9 @@ class LetStatement
 								}
 								break;
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->setMustInitNull(true);
@@ -403,6 +421,9 @@ class LetStatement
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 					case 'double':
 						$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
 						break;
@@ -416,6 +437,9 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 							case 'double':
 								$codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
 								break;
@@ -445,6 +469,9 @@ class LetStatement
 						}
 						break;
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
@@ -515,6 +542,9 @@ class LetStatement
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$symbolVariable->initVariant($compilationContext);
 								if ($symbolVariable->isLocalOnly()) {
 									$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
@@ -580,13 +610,19 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
-				throw new CompilerException("Cannot append to 'int' variables", $statement);
+			case 'uint':
+			case 'long':
+			case 'ulong':
+				throw new CompilerException("Cannot append to '" . $type . "' variables", $statement);
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
 					case 'variable':
 						$exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($exprVariable->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 								$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
@@ -625,6 +661,9 @@ class LetStatement
 
 		switch ($exprIndex->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 			case 'string':
 			case 'variable':
 				break;
@@ -634,6 +673,9 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
@@ -641,6 +683,9 @@ class LetStatement
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
@@ -658,6 +703,9 @@ class LetStatement
 		$compilationContext->headersManager->add('kernel/array');
 		switch ($exprIndex->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 				break;
 			case 'string':
@@ -667,6 +715,9 @@ class LetStatement
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
 				switch ($variableIndex->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 						break;
 					case 'string':
@@ -698,8 +749,9 @@ class LetStatement
 
 		switch ($symbolVariable->getType()) {
 			case 'int':
-				$codePrinter->output($variable . '++;');
-				break;
+			case 'uint':
+			case 'long':
+			case 'ulong':
 			case 'double':
 				$codePrinter->output($variable . '++;');
 				break;
@@ -722,8 +774,9 @@ class LetStatement
 
 		switch ($symbolVariable->getType()) {
 			case 'int':
-				$codePrinter->output($variable . '--;');
-				break;
+			case 'uint':
+			case 'long':
+			case 'ulong':
 			case 'double':
 				$codePrinter->output($variable . '--;');
 				break;
@@ -759,6 +812,10 @@ class LetStatement
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
+			case 'double':
 				throw new CompilerException("Variable 'int' cannot be used as object", $statement);
 			case 'bool':
 				throw new CompilerException("Variable 'bool' cannot be used as object", $statement);

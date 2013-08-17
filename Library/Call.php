@@ -39,6 +39,9 @@ class Call
 			$compiledExpression = $paramExpr->compile($compilationContext);
 			switch ($compiledExpression->getType()) {
 				case 'int':
+				case 'uint':
+				case 'long':
+				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$params[] = $parameterVariable->getName();
