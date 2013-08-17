@@ -866,6 +866,13 @@ class LetStatement
 						break;
 				}
 				$resolvedExpr = $expr->compile($compilationContext);
+
+				/**
+				 * Bad implemented operators could return values different than objects
+				 */
+				if (!is_object($resolvedExpr)) {
+					throw new CompilerException("Resolved expression is not valid", $assignment['expr']);
+				}
 			}
 
 			/**

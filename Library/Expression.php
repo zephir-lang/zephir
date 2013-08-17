@@ -37,6 +37,8 @@ require 'Library/Operators/Unary/NotOperator.php';
 require 'Library/Operators/Comparison/BaseOperator.php';
 require 'Library/Operators/Comparison/IdenticalOperator.php';
 require 'Library/Operators/Comparison/EqualsOperator.php';
+require 'Library/Operators/Comparison/LessOperator.php';
+require 'Library/Operators/Comparison/GreaterOperator.php';
 
 /**
  * Expressions
@@ -56,16 +58,6 @@ class Expression
 	public function __construct(array $expression)
 	{
 		$this->_expression = $expression;
-	}
-
-	private function _addSlaches($str)
-	{
-		$str = str_replace('\\', "\\\\", $str);
-		$str = str_replace('"', "\\\"", $str);
-		$str = str_replace("\n", "\\n", $str);
-		$str = str_replace("\r", "\\r", $str);
-		$str = str_replace("\t", "\\t", $str);
-		return $str;
 	}
 
 	/**
@@ -945,10 +937,14 @@ class Expression
 				return $this->compileIdentical('!=', $expression, $compilationContext);
 
 			case 'greater':
-				return $this->compileLess($expression, $compilationContext);
+				$expr = new GreaterOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'less':
-				return $this->compileLess($expression, $compilationContext);
+				$expr = new LessOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'less-equal':
 				return $this->compileLess($expression, $compilationContext);
