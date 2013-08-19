@@ -33,7 +33,7 @@ ZEPHIR_INIT_CLASS(Test_Flow) {
 
 PHP_METHOD(Test_Flow, testIf1) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -50,7 +50,7 @@ PHP_METHOD(Test_Flow, testIf1) {
 
 PHP_METHOD(Test_Flow, testIf2) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -135,7 +135,7 @@ PHP_METHOD(Test_Flow, testIf6) {
 
 PHP_METHOD(Test_Flow, testIf7) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -153,7 +153,7 @@ PHP_METHOD(Test_Flow, testIf7) {
 
 PHP_METHOD(Test_Flow, testIf8) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -173,7 +173,7 @@ PHP_METHOD(Test_Flow, testIf9) {
 
 	zend_bool c;
 	double b;
-	long a;
+	int a;
 
 	a = 1;
 
@@ -202,7 +202,7 @@ PHP_METHOD(Test_Flow, testIf10) {
 
 	zend_bool c;
 	double b;
-	long a;
+	int a;
 
 	a = 1;
 
@@ -240,7 +240,7 @@ PHP_METHOD(Test_Flow, testIf12) {
 
 	zend_bool c;
 	double b;
-	long a;
+	int a;
 
 	a = 1;
 
@@ -294,7 +294,7 @@ PHP_METHOD(Test_Flow, testLoop1) {
 
 PHP_METHOD(Test_Flow, testLoop2) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -302,7 +302,7 @@ PHP_METHOD(Test_Flow, testLoop2) {
 
 		a = a + 1;
 
-		if ((a == 5)) {
+		if (a == 5) {
 			break;
 		}
 	}
@@ -314,7 +314,7 @@ PHP_METHOD(Test_Flow, testLoop2) {
 
 PHP_METHOD(Test_Flow, testLoop3) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -322,13 +322,13 @@ PHP_METHOD(Test_Flow, testLoop3) {
 
 		a = a + 1;
 
-		if ((a == 3)) {
+		if (a == 3) {
 
 			a = a + 1;
 
 			continue;
 		}
-		if ((a == 5)) {
+		if (a == 5) {
 			break;
 		}
 	}
@@ -340,7 +340,7 @@ PHP_METHOD(Test_Flow, testLoop3) {
 
 PHP_METHOD(Test_Flow, testLoop4) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -348,13 +348,13 @@ PHP_METHOD(Test_Flow, testLoop4) {
 
 		a = a + 1;
 
-		if ((a == 3)) {
+		if (a == 3) {
 
 			a = a + 1;
 
 			continue;
 		}
-		if ((a == 5)) {
+		if (a == 5) {
 			break;
 		}
 	}
@@ -366,7 +366,7 @@ PHP_METHOD(Test_Flow, testLoop4) {
 
 PHP_METHOD(Test_Flow, testWhile1) {
 
-	long a;
+	int a;
 
 	a = 5;
 
@@ -383,7 +383,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 
 PHP_METHOD(Test_Flow, testWhile2) {
 
-	long a;
+	int a;
 
 	a = 5;
 
@@ -402,7 +402,7 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 	double c, _0;
 	zval b;
-	long a;
+	int a;
 
 	a = 5;
 
@@ -434,7 +434,7 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 	double c, _0;
 	zval b;
-	long a;
+	int a;
 
 	a = 5;
 
@@ -464,7 +464,7 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 PHP_METHOD(Test_Flow, testWhile5) {
 
-	long a;
+	int a;
 
 	a = 5;
 
@@ -481,7 +481,7 @@ PHP_METHOD(Test_Flow, testWhile5) {
 
 PHP_METHOD(Test_Flow, testWhile6) {
 
-	long a;
+	int a;
 
 	a = 5;
 
@@ -534,7 +534,7 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 	double c;
 	zval b;
-	long a;
+	int a;
 
 	a = 5;
 
@@ -565,7 +565,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	HashTable *_5;
 	HashPosition _4;
-	long c;
+	int c;
 	zval *v = NULL, *b, *_0, *_1, *_2, *_3, **_6;
 
 	ZEPHIR_MM_GROW();
@@ -687,7 +687,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 PHP_METHOD(Test_Flow, testFor10) {
 
-	long v, _0;
+	int v, _0;
 	zephir_str *b = NULL;
 	zval *a, *_1 = NULL;
 
@@ -713,7 +713,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 
 PHP_METHOD(Test_Flow, testFor11) {
 
-	long k, v, _0;
+	int k, v, _0;
 	zephir_str *b = NULL;
 	zval *a, *_1 = NULL;
 

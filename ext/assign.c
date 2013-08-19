@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Assign) {
 
 PHP_METHOD(Test_Assign, testAssign1) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -40,7 +40,7 @@ PHP_METHOD(Test_Assign, testAssign1) {
 
 PHP_METHOD(Test_Assign, testAssign2) {
 
-	long a;
+	int a;
 
 	a = 1;
 
@@ -51,7 +51,7 @@ PHP_METHOD(Test_Assign, testAssign2) {
 
 PHP_METHOD(Test_Assign, testAssign3) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -62,7 +62,7 @@ PHP_METHOD(Test_Assign, testAssign3) {
 
 PHP_METHOD(Test_Assign, testAssign4) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -73,7 +73,7 @@ PHP_METHOD(Test_Assign, testAssign4) {
 
 PHP_METHOD(Test_Assign, testAssign5) {
 
-	long a;
+	int a;
 
 	a = (long) (2.0);
 
@@ -254,7 +254,7 @@ PHP_METHOD(Test_Assign, testAssign20) {
 
 PHP_METHOD(Test_Assign, testAssign21) {
 
-	long a, b;
+	int a, b;
 
 	a = 1;
 
@@ -294,7 +294,7 @@ PHP_METHOD(Test_Assign, testAssign23) {
 PHP_METHOD(Test_Assign, testAssign24) {
 
 	double b;
-	long a;
+	int a;
 
 	a = 1;
 
@@ -308,7 +308,7 @@ PHP_METHOD(Test_Assign, testAssign24) {
 PHP_METHOD(Test_Assign, testAssign25) {
 
 	double b;
-	long a;
+	int a;
 
 	a = 1;
 
@@ -322,7 +322,7 @@ PHP_METHOD(Test_Assign, testAssign25) {
 PHP_METHOD(Test_Assign, testAssign26) {
 
 	double a;
-	long b;
+	int b;
 
 	a = (double) (1);
 
@@ -336,7 +336,7 @@ PHP_METHOD(Test_Assign, testAssign26) {
 PHP_METHOD(Test_Assign, testAssign27) {
 
 	double a;
-	long b;
+	int b;
 
 	b = 1;
 
@@ -350,7 +350,7 @@ PHP_METHOD(Test_Assign, testAssign27) {
 PHP_METHOD(Test_Assign, testAssign28) {
 
 	zend_bool a;
-	long b;
+	int b;
 
 	b = 1;
 
@@ -377,7 +377,7 @@ PHP_METHOD(Test_Assign, testAssign29) {
 
 PHP_METHOD(Test_Assign, testAssign30) {
 
-	long a;
+	int a;
 	zend_bool b;
 
 	b = 0;
@@ -438,7 +438,7 @@ PHP_METHOD(Test_Assign, testAssign33) {
 PHP_METHOD(Test_Assign, testAssign34) {
 
 	zval *a;
-	long b;
+	int b;
 
 	ZEPHIR_MM_GROW();
 	b = 0;

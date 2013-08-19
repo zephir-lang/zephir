@@ -2,6 +2,7 @@
 
 #include "arithmetic.h"
 #include "assign.h"
+#include "fcall.h"
 #include "fibonnaci.h"
 #include "flow.h"
 #include "nativearray.h"

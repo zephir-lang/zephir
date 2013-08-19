@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Arithmetic) {
 
 PHP_METHOD(Test_Arithmetic, intSum) {
 
-	long a, b, c;
+	int a, b, c;
 
 	a = 1;
 
@@ -45,7 +45,7 @@ PHP_METHOD(Test_Arithmetic, intSum) {
 
 PHP_METHOD(Test_Arithmetic, int2Sum) {
 
-	long a, c;
+	int a, c;
 
 	a = 1;
 
@@ -58,7 +58,7 @@ PHP_METHOD(Test_Arithmetic, int2Sum) {
 
 PHP_METHOD(Test_Arithmetic, intSumSimple) {
 
-	long c;
+	int c;
 
 	c = 1 + 2;
 
@@ -204,7 +204,7 @@ PHP_METHOD(Test_Arithmetic, varSumSimple) {
 PHP_METHOD(Test_Arithmetic, intDoubleSum) {
 
 	double a;
-	long b, c;
+	int b, c;
 
 	a = (double) (1);
 
@@ -219,7 +219,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSum) {
 
 PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 
-	long c;
+	int c;
 
 	c = (long) ((double) 1 + 2.0);
 
@@ -231,7 +231,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 PHP_METHOD(Test_Arithmetic, doubleIntSum) {
 
 	double a, c;
-	long b;
+	int b;
 
 	a = (double) (1);
 
@@ -257,7 +257,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSumSimple) {
 
 PHP_METHOD(Test_Arithmetic, varIntSum) {
 
-	long a;
+	int a;
 	zval b, c;
 
 	a = 1;
@@ -275,7 +275,7 @@ PHP_METHOD(Test_Arithmetic, varIntSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarSum) {
 
-	long c, a;
+	int c, a;
 	zval b;
 
 	a = 1;
@@ -292,7 +292,7 @@ PHP_METHOD(Test_Arithmetic, intVarSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
-	long c;
+	int c;
 	zval *a, *b, *_0;
 
 	ZEPHIR_MM_GROW();
@@ -314,7 +314,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
-	long c;
+	int c;
 	zval *a, b, *_0;
 
 	ZEPHIR_MM_GROW();
@@ -409,7 +409,7 @@ PHP_METHOD(Test_Arithmetic, complex6Sum) {
 PHP_METHOD(Test_Arithmetic, complex7Sum) {
 
 	zval c;
-	long b;
+	int b;
 	zend_bool a;
 
 	a = (1) ? 1 : 0;
@@ -427,7 +427,7 @@ PHP_METHOD(Test_Arithmetic, complex7Sum) {
 PHP_METHOD(Test_Arithmetic, complex9Sum) {
 
 	zval c;
-	long b;
+	int b;
 	zend_bool a;
 
 	a = (1) ? 1 : 0;
@@ -445,7 +445,7 @@ PHP_METHOD(Test_Arithmetic, complex9Sum) {
 PHP_METHOD(Test_Arithmetic, complex10Sum) {
 
 	zval c;
-	long b;
+	int b;
 	zend_bool a;
 
 	a = (1.0) ? 1 : 0;
@@ -463,7 +463,7 @@ PHP_METHOD(Test_Arithmetic, complex10Sum) {
 PHP_METHOD(Test_Arithmetic, complex11Sum) {
 
 	zval c;
-	long b;
+	int b;
 	zend_bool a;
 
 	a = (1) ? 1 : 0;
@@ -480,7 +480,7 @@ PHP_METHOD(Test_Arithmetic, complex11Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex12Sum) {
 
-	long b, c;
+	int b, c;
 	zend_bool a;
 
 	a = (1) ? 1 : 0;
@@ -496,7 +496,7 @@ PHP_METHOD(Test_Arithmetic, complex12Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex13Sum) {
 
-	long c;
+	int c;
 	zend_bool a, b;
 
 	a = (1) ? 1 : 0;
@@ -512,7 +512,7 @@ PHP_METHOD(Test_Arithmetic, complex13Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex14Sum) {
 
-	long c;
+	int c;
 	zend_bool b;
 	zval a;
 
@@ -689,7 +689,7 @@ PHP_METHOD(Test_Arithmetic, complex21Sum) {
 PHP_METHOD(Test_Arithmetic, complex22Sum) {
 
 	double c;
-	long b;
+	int b;
 	zval a, d;
 
 	ZEPHIR_SINIT_VAR(a);
@@ -745,7 +745,7 @@ PHP_METHOD(Test_Arithmetic, complex24Sum) {
 
 PHP_METHOD(Test_Arithmetic, addSum1) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -758,7 +758,7 @@ PHP_METHOD(Test_Arithmetic, addSum1) {
 
 PHP_METHOD(Test_Arithmetic, addSum2) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -771,7 +771,7 @@ PHP_METHOD(Test_Arithmetic, addSum2) {
 
 PHP_METHOD(Test_Arithmetic, addSum3) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -784,7 +784,7 @@ PHP_METHOD(Test_Arithmetic, addSum3) {
 
 PHP_METHOD(Test_Arithmetic, addSum4) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -797,7 +797,7 @@ PHP_METHOD(Test_Arithmetic, addSum4) {
 
 PHP_METHOD(Test_Arithmetic, addSum5) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -810,7 +810,7 @@ PHP_METHOD(Test_Arithmetic, addSum5) {
 
 PHP_METHOD(Test_Arithmetic, addSum6) {
 
-	long a;
+	int a;
 
 	a = 0;
 
@@ -901,7 +901,7 @@ PHP_METHOD(Test_Arithmetic, addSum12) {
 
 PHP_METHOD(Test_Arithmetic, addSum13) {
 
-	long a, b;
+	int a, b;
 
 	a = 0;
 
@@ -917,7 +917,7 @@ PHP_METHOD(Test_Arithmetic, addSum13) {
 PHP_METHOD(Test_Arithmetic, addSum14) {
 
 	zend_bool b;
-	long a;
+	int a;
 
 	a = 0;
 
@@ -933,7 +933,7 @@ PHP_METHOD(Test_Arithmetic, addSum14) {
 PHP_METHOD(Test_Arithmetic, addSum15) {
 
 	zend_bool b;
-	long a;
+	int a;
 
 	a = 0;
 
@@ -949,7 +949,7 @@ PHP_METHOD(Test_Arithmetic, addSum15) {
 PHP_METHOD(Test_Arithmetic, addSum16) {
 
 	double b;
-	long a;
+	int a;
 
 	a = 0;
 
@@ -1011,7 +1011,7 @@ PHP_METHOD(Test_Arithmetic, addSum19) {
 
 PHP_METHOD(Test_Arithmetic, addSum20) {
 
-	long b;
+	int b;
 	double a;
 
 	a = 0.0;
@@ -1028,7 +1028,7 @@ PHP_METHOD(Test_Arithmetic, addSum20) {
 PHP_METHOD(Test_Arithmetic, addSum21) {
 
 	zval *b;
-	long a;
+	int a;
 
 	ZEPHIR_MM_GROW();
 	a = (long) (0.0);

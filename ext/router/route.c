@@ -16,9 +16,9 @@
 #include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/string.h"
+#include "kernel/operators.h"
 #include "kernel/string_type.h"
 #include "kernel/exception.h"
-#include "kernel/operators.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
 
@@ -220,15 +220,124 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	zval *pattern_param = NULL;
-	zephir_str *pattern;
+	zend_bool notValid;
+	int cursor, marker, bracketCount, parenthesesCount, ch, intermediate, length, numberMatches, cursorVar, _2, _3;
+	zval *pattern_param = NULL, variable, *_0, *_1;
+	zephir_str *pattern, *route = NULL, *item = NULL;
 
-	zephir_fetch_params(0, 1, 0, &pattern_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &pattern_param);
 
 
 
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRINGL(_0, pattern->str, pattern->len, 1);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "strlen", _0);
+	if (ZEPHIR_IS_LONG(_1, 0)) {
+
+		RETURN_MM_BOOL(0);
+
+	}
+	for (_2 = 0; _2 < pattern->len; _2++) {
+		cursor = _2; 
+		ch = pattern->str[_2]; 
+		if (parenthesesCount == 0) {
+			if (ch == '{') {
+				if (bracketCount == 0) {
+
+					marker = cursor;
+
+					intermediate = 0;
+
+					notValid = 0;
+
+				}
+
+				bracketCount++;
+
+			} else {
+				if (ch == '}') {
+
+					bracketCount--;
+
+					if (intermediate > 0) {
+						if (bracketCount == 0) {
+							//missing comment
+
+							numberMatches++;
+
+							ZEPHIR_SINIT_NVAR(variable);
+							ZVAL_NULL(&variable);
+
+							length = cursor - marker - 1;
+
+							zephir_str_assign(item, "", sizeof("")-1);
+
+							for (_3 = 0; _3 < item->len; _3++) {
+								cursorVar = _3; 
+								ch = item->str[_3]; 
+								if (ch == '\0') {
+									break;
+								}
+								if (cursorVar == 0 &&!ch <= 'a' &&ch <= 'z' ||ch <= 'A' &&ch <= 'Z') {
+
+									notValid = (1) ? 1 : 0;
+
+									break;
+								}
+								if (ch <= 'a' &&ch <= 'z' ||ch <= 'A' &&ch <= 'Z' ||ch <= '0' &&ch <= '9' ||ch == '-' ||ch == '_' ||ch == ':') {
+									if (ch == ':') {
+										break;
+									}
+								} else {
+
+									notValid = 1;
+
+									break;
+								}
+							}
+							if (!(notValid)) {
+								//missing comment
+							} else {
+								//missing comment
+							}
+							continue;
+						}
+					}
+				}
+			}
+		}
+		if (bracketCount == 0) {
+			if (ch == '(') {
+
+				parenthesesCount++;
+
+			} else {
+				if (ch == ')') {
+
+					parenthesesCount--;
+
+					if (parenthesesCount == 0) {
+
+						numberMatches++;
+
+					}
+				}
+			}
+		}
+		if (bracketCount > 0) {
+
+			intermediate++;
+
+		} else {
+
+			zephir_str_append_long(route, ch);
+
+		}
+	}
 	//missing comment
-	//missing comment
+	ZEPHIR_MM_RESTORE();
 
 }
 

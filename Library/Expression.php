@@ -39,6 +39,8 @@ require 'Library/Operators/Comparison/IdenticalOperator.php';
 require 'Library/Operators/Comparison/EqualsOperator.php';
 require 'Library/Operators/Comparison/LessOperator.php';
 require 'Library/Operators/Comparison/GreaterOperator.php';
+require 'Library/Operators/Comparison/LessEqualOperator.php';
+require 'Library/Operators/Comparison/GreaterEqualOperator.php';
 
 /**
  * Expressions
@@ -97,106 +99,6 @@ class Expression
 	public function getExpectingVariable()
 	{
 		return $this->_expectingVariable;
-	}
-
-	public function compileEquals($expression, CompilationContext $compilationContext)
-	{
-		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
-		}
-
-		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
-		}
-
-		$leftExpr = new Expression($expression['left']);
-		$left = $leftExpr->compile($compilationContext);
-
-		$rightExpr = new Expression($expression['right']);
-		$right = $rightExpr->compile($compilationContext);
-
-		switch ($left->getType()) {
-			case 'variable':
-				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-				switch ($variable->getType()) {
-					case 'variable':
-						switch ($right->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
-							case 'null':
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') == IS_NULL', $expression);
-							case 'variable':
-								// @todo: variables aren't always 'zvals'
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_EQUAL(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
-							default:
-								throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
-						}
-						break;
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						switch ($right->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
-							case 'bool':
-								return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getBooleanCode(), $expression);
-							case 'string':
-								if (strlen($right->getCode()) <= 3) {
-									return new CompiledExpression('bool', $left->getCode() . ' == \'' . $right->getCode() . '\'', $expression);
-								}
-							default:
-								throw new CompilerException("Cannot compare variable: " . $variable->getType() . " with: " . $right->getType(), $expression);
-						}
-						break;
-					default:
-						throw new CompilerException("Cannot compare variable: " . $variable->getType(), $expression);
-				}
-				break;
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-				switch ($right->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getCode(), $expression);
-					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' == (int) ' . $right->getCode(), $expression);
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			case 'bool':
-				switch ($right->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
-					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' == ((' . $right->getCode() . ') ? 1 : 0)', $expression);
-					case 'bool':
-						return new CompiledExpression('bool', $left->getCode() . ' == ' . $right->getBooleanCode(), $expression);
-					default:
-						echo $right->getCode();
-						throw new CompilerException("Unknown type: " . $right->getType(), $expression);
-				}
-				break;
-			default:
-				throw new CompilerException("Unknown type: " . $left->getType(), $expression);
-		}
 	}
 
 	public function compileIdentical($operator, $expression, CompilationContext $compilationContext)
@@ -279,95 +181,6 @@ class Expression
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' (int) ' . $right->getCode(), $expression);
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			default:
-				throw new CompilerException("Error Processing Request", $expression);
-		}
-
-	}
-
-	public function compileLess($expression, CompilationContext $compilationContext)
-	{
-		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
-		}
-
-		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
-		}
-
-		$leftExpr = new Expression($expression['left']);
-		$leftExpr->isExpectingReturn(true);
-		$left = $leftExpr->compile($compilationContext);
-
-		$rightExpr = new Expression($expression['right']);
-		$rightExpr->isExpectingReturn(true);
-		$right = $rightExpr->compile($compilationContext);
-
-		switch ($left->getType()) {
-			case 'variable':
-
-				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-
-				switch ($variable->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
-					case 'double':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' < ' . $right->getCode() . ')', $expression);
-					case 'variable':
-						switch ($right->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression);
-							case 'bool':
-								$compilationContext->headersManager->add('kernel/operators');
-								if ($right->getCode() == 'true') {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression);
-								} else {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression);
-								}
-							default:
-								throw new CompilerException("Error Processing Request", $expression);
-						}
-						break;
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-				switch ($right->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
-					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' < (long) ' . $right->getCode(), $expression);
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			case 'double':
-				switch ($right->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', '(double)' . $left->getCode() . ' < ' . $right->getCode(), $expression);
-					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' < ' . $right->getCode(), $expression);
 					default:
 						throw new CompilerException("Error Processing Request", $expression);
 				}
@@ -962,7 +775,7 @@ class Expression
 				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
 
 			case 'schar':
-				return new CompiledExpression('schar', Utils::addSlaches($expression['value']), $expression);
+				return new CompiledExpression('schar', $expression['value'], $expression);
 
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
@@ -1028,10 +841,14 @@ class Expression
 				return $expr->compile($expression, $compilationContext);
 
 			case 'less-equal':
-				return $this->compileLess($expression, $compilationContext);
+				$expr = new LessEqualOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'greater-equal':
-				return $this->compileLess($expression, $compilationContext);
+				$expr = new GreaterEqualOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'add':
 				$expr = new AddOperator();

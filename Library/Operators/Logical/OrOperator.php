@@ -22,6 +22,6 @@ class OrOperator extends LogicalBaseOperator
 
 	protected $_operator = '||';
 
-	protected $_bitOperator = '|';
+	protected $_bitOperator = '||';
 
 }

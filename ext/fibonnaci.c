@@ -12,9 +12,9 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
 
 PHP_METHOD(Test_Fibonnaci, fibInt) {
 
-	long x, y, n, z;
+	int x, y, n, z;
 
 	z = 0;
 
@@ -38,7 +38,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 
 	n = 10;
 
-	while ((z < n)) {
+	while (z < n) {
 
 		z = x + y;
 
@@ -65,7 +65,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 
 	n = 10.0;
 
-	while ((z < n)) {
+	while (z < n) {
 
 		z = x +  y;
 
@@ -82,7 +82,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
-	long i, n, k, j;
+	int i, n, k, j;
 	zval *fib, *a = NULL, *b = NULL, *c = NULL, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	n = 10;
 
-	while ((i < n)) {
+	while (i < n) {
 
 		k = i - 1;
 

@@ -154,7 +154,7 @@ PHP_METHOD(Test_NativeArray, testArray6) {
 
 PHP_METHOD(Test_NativeArray, testArray7) {
 
-	long a, b, c;
+	int a, b, c;
 	zval *d, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
@@ -499,7 +499,7 @@ PHP_METHOD(Test_NativeArray, testArray22) {
 
 PHP_METHOD(Test_NativeArray, testArray23) {
 
-	long b;
+	int b;
 	zval *a, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
@@ -819,7 +819,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 
 PHP_METHOD(Test_NativeArray, testArrayUpdate2) {
 
-	long b;
+	int b;
 	zval *a, *_0, *_1, *_2, *_3;
 
 	ZEPHIR_MM_GROW();
@@ -848,7 +848,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate2) {
 
 PHP_METHOD(Test_NativeArray, testArrayUpdate3) {
 
-	long b;
+	int b;
 	zval *a, *_0, *_1, *_2, *_3, *_4;
 
 	ZEPHIR_MM_GROW();

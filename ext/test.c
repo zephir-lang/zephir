@@ -15,6 +15,7 @@
 
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_assign_ce;
+zend_class_entry *test_fcall_ce;
 zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
 zend_class_entry *test_nativearray_ce;
@@ -35,6 +36,7 @@ PHP_MINIT_FUNCTION(test){
 
 	ZEPHIR_INIT(Test_Arithmetic);
 	ZEPHIR_INIT(Test_Assign);
+	ZEPHIR_INIT(Test_Fcall);
 	ZEPHIR_INIT(Test_Fibonnaci);
 	ZEPHIR_INIT(Test_Flow);
 	ZEPHIR_INIT(Test_NativeArray);

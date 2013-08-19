@@ -17,11 +17,11 @@
  +----------------------------------------------------------------------+
 */
 
-class AddOperator extends ArithmeticalBaseOperator
+class LessEqualOperator extends ComparisonBaseOperator
 {
 
-	protected $_operator = '+';
+	protected $_operator = '<=';
 
-	protected $_bitOperator = '|';
+	protected $_bitOperator = '<=';
 
 }
