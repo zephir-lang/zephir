@@ -228,6 +228,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
 
+		zephir_get_strval(pattern_param, pattern);
 
 
 	ZEPHIR_INIT_VAR(_0);

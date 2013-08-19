@@ -194,8 +194,11 @@ class ClassMethod
 			case 'double':
 				$compilationContext->headersManager->add('kernel/operators');
 				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+			case 'string':
+				$compilationContext->headersManager->add('kernel/operators');
+				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . '_param, ' . $parameter['name'] . ');' . PHP_EOL;
 			default:
-				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
+				throw new CompilerException("Parameter type: " . $dataType, $parameter);
 		}
 	}
 
@@ -316,6 +319,7 @@ class ClassMethod
 			 * Round 2. Fetch the parameters in the method
 			 */
 			$params = array();
+			$requiredParams = array();
 			$optionalParams = array();
 			$numberRequiredParams = 0;
 			$numberOptionalParams = 0;
@@ -337,6 +341,7 @@ class ClassMethod
 					$optionalParams[] = $parameter;
 					$numberOptionalParams++;
 				} else {
+					$requiredParams[] = $parameter;
 					$numberRequiredParams++;
 				}
 			}
@@ -352,6 +357,27 @@ class ClassMethod
 				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			}
 			$code .= PHP_EOL;
+
+			/**
+			 * Initialize required parameters
+			 */
+			foreach ($requiredParams as $parameter) {
+
+				if (isset($parameter['data-type'])) {
+					$dataType = $parameter['data-type'];
+				} else {
+					$dataType = 'variable';
+				}
+
+				if ($dataType != 'variable') {
+
+					/**
+					 * Assign value from zval to low level type
+					 */
+					$code .= $this->assignZvalValue($parameter, $compilationContext);
+				}
+
+			}
 
 			/**
 			 * Initialize optional parameters
