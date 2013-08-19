@@ -17,3 +17,7 @@ typedef struct {
 	memcpy(str_p->str, d_str, d_length); \
 	str_p->str[d_length] = '\0'; \
 }
+
+#define zephir_str_assign_long(str_p, lvalue)
+
+#define zephir_str_append_long(str_p, lvalue)

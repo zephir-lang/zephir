@@ -8,6 +8,7 @@
 #include "php_test.h"
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/string_type.h"
 
 #include "Zend/zend_operators.h"
 
@@ -322,6 +323,22 @@ zend_bool zephir_get_boolval(const zval *op) {
 					}
 				}
 			}
+	}
+
+	return 0;
+}
+
+/**
+ * Returns the long value of a zval
+ */
+void zephir_get_strval(zval *op, zephir_str *str) {
+
+	zval op_copy;
+	int use_copy_op;
+
+	zephir_make_printable_zval(op, &op_copy, &use_copy_op);
+	if (use_copy_op) {
+		zval_dtor(&op_copy);
 	}
 
 	return 0;
