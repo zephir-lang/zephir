@@ -144,6 +144,7 @@ class ClassMethod
 				break;
 			case 'variable':
 				$compilationContext->headersManager->add('kernel/memory');
+				$compilationContext->symbolTable->mustGrownStack(true);
 				$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 				switch ($parameter['default']['type']) {
 					case 'int':

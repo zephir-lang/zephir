@@ -360,9 +360,10 @@ class Route
 
 			if memstr(pattern, "{") {
 				// The route has named parameters so we need to extract them
-				let extracted = this->extractNamedParams(pattern),
-					pcrePattern = extracted[0],
-					routePaths = extracted[1];
+				//let extracted = this->extractNamedParams(pattern),
+				//	pcrePattern = extracted[0],
+				//	routePaths = extracted[1];
+				let pcrePattern = pattern;
 			} else {
 				let pcrePattern = pattern;
 			}
