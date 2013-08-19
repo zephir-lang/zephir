@@ -134,7 +134,7 @@ class Route
 	public function extractNamedParams(string pattern)
 	{
 
-		/*var variable;
+		var variable;
 		int cursor, marker, bracketCount = 0, parenthesesCount = 0, ch;
 		int intermediate = 0, length, numberMatches = 0, foundPattern;
 		int variableLength, regexpLength, cursorVar;
@@ -229,11 +229,11 @@ class Route
 											smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
 											zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
 										}
-									}
+									}*/
 								} else {
-									smart_str_appendc(&route_str, '{');
+									/*smart_str_appendc(&route_str, '{');
 									smart_str_appendl(&route_str, item, length);
-									smart_str_appendc(&route_str, '}');
+									smart_str_appendc(&route_str, '}');*/
 								}
 								continue;
 							}
@@ -260,7 +260,7 @@ class Route
 			} else {
 				let route .= ch;
 			}
-		}*/
+		}
 
 		//return route;
 	}

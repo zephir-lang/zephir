@@ -44,8 +44,14 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 		switch ($left->getType()) {
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('double', '(double) ' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
@@ -55,6 +61,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
 						switch ($variableRight->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 							case 'bool':
 								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -77,6 +86,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 			case 'bool':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 					case 'double':
 						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . '((' . $right->getCode() . ') ? 1 : 0)', $expression);
 					case 'bool':
@@ -88,6 +100,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 			case 'double':
 				switch ($right->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' (double) (' . $right->getCode() . ')', $expression);
 					case 'double':
 						return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
@@ -109,13 +124,22 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 				switch ($variableLeft->getType()) {
 					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'bool':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -138,6 +162,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
@@ -145,6 +172,11 @@ class ArithmeticalBaseOperator extends BaseOperator
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
+										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+									case 'double':
 										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'bool':
 										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $variableRight->getName(), $expression);
@@ -163,6 +195,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'double':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 								return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' (double) ' . $right->getCode(), $expression);
 							case 'double':
 								return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
@@ -172,6 +207,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
 									case 'double':
 										return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
@@ -196,6 +234,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 						switch ($right->getType()) {
 							/* a + 1 */
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 							case 'double':
 								$compilationContext->headersManager->add('kernel/operators');
 								$op = $this->_operator;
@@ -212,6 +253,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 								switch ($variableRight->getType()) {
 									/* a(var) + a(int) */
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableLeft->isLocalOnly()) {
 											return new CompiledExpression('int', 'zephir_get_intval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -262,6 +306,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
 							case 'double':
 								$compilationContext->headersManager->add('kernel/operators');
 								$op = $this->_operator;
@@ -278,6 +325,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 								switch ($variableRight->getType()) {
 									case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableLeft->isLocalOnly()) {
 											return new CompiledExpression('int', 'zephir_get_intval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
