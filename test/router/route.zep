@@ -130,6 +130,8 @@ class Route
 
 	/**
 	 * Extracts parameters from a string
+	 *
+	 * @param string pattern
 	 */
 	public function extractNamedParams(string pattern)
 	{

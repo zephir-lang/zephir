@@ -197,7 +197,7 @@ class ClassMethod
 				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'string':
 				$compilationContext->headersManager->add('kernel/operators');
-				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . '_param, ' . $parameter['name'] . ');' . PHP_EOL;
+				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . '_param, &' . $parameter['name'] . ');' . PHP_EOL;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
 		}

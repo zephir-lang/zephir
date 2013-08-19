@@ -331,17 +331,22 @@ zend_bool zephir_get_boolval(const zval *op) {
 /**
  * Returns the long value of a zval
  */
-void zephir_get_strval(zval *op, zephir_str *str) {
+void zephir_get_strval(zval *op, zephir_str **str_p) {
 
 	zval op_copy;
 	int use_copy_op;
 
 	zephir_make_printable_zval(op, &op_copy, &use_copy_op);
+
+	if (use_copy_op) {
+		zephir_str_assign(*str_p, Z_STRVAL(op_copy), Z_STRLEN(op_copy));
+	} else {
+		zephir_str_assign(*str_p, Z_STRVAL_P(op), Z_STRLEN_P(op));
+	}
+
 	if (use_copy_op) {
 		zval_dtor(&op_copy);
 	}
-
-	return 0;
 }
 
 /**

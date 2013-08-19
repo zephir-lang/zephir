@@ -60,6 +60,7 @@ extern void zephir_cast(zval *result, zval *var, zend_uint type);
 extern long zephir_get_intval(const zval *op);
 extern double zephir_get_doubleval(const zval *op);
 extern zend_bool zephir_get_boolval(const zval *op);
+//extern void zephir_get_strval(zval *op, zephir_str **str_p);
 
 extern int zephir_is_numeric(const zval *op);
 
