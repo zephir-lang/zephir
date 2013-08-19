@@ -961,6 +961,9 @@ class Expression
 			case 'string':
 				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
 
+			case 'schar':
+				return new CompiledExpression('schar', Utils::addSlaches($expression['value']), $expression);
+
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
 

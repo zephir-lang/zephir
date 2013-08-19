@@ -69,6 +69,9 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 		case XX_T_STRING:
 			json_object_object_add(ret, "type", json_object_new_string("string"));
 			break;
+		case XX_T_SCHAR:
+			json_object_object_add(ret, "type", json_object_new_string("schar"));
+			break;
 		default:
 			if (type == XX_T_TRUE) {
 				json_object_object_add(ret, "type", json_object_new_string("bool"));
@@ -289,12 +292,16 @@ static json_object *xx_ret_type(int type)
 	switch (type) {
 		case XX_TYPE_INTEGER:
 			return json_object_new_string("int");
+		case XX_TYPE_UINTEGER:
+			return json_object_new_string("uint");
 		case XX_TYPE_DOUBLE:
 			return json_object_new_string("double");
 		case XX_TYPE_BOOL:
 			return json_object_new_string("bool");
 		case XX_TYPE_STRING:
 			return json_object_new_string("string");
+		case XX_TYPE_CHAR:
+			return json_object_new_string("char");
 		case XX_TYPE_ARRAY:
 			return json_object_new_string("array");
 		case XX_TYPE_VAR:
@@ -1595,6 +1602,11 @@ xx_common_expr(R) ::= INTEGER(I) . {
 /* y = "hello" */
 xx_common_expr(R) ::= STRING(S) . {
 	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
+}
+
+/* y = 'h' */
+xx_common_expr(R) ::= SCHAR(S) . {
+	R = xx_ret_literal(XX_T_SCHAR, S, status->scanner_state);
 }
 
 /* y = 12.5 */

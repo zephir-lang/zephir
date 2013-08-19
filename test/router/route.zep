@@ -99,13 +99,13 @@ class Route
 		}
 
 		// Check if the pattern has parantheses in order to add the regex delimiters
-		if memstr(compiledPattern, '(') {
-			return '#^' . compiledPattern . '$#';
+		if memstr(compiledPattern, "(") {
+			return "#^" . compiledPattern . "$#";
 		}
 
 		// Square brackets are also checked
-		if memstr(compiledPattern, '[') {
-			return '#^' . compiledPattern . '$#';
+		if memstr(compiledPattern, "[") {
+			return "#^" . compiledPattern . "$#";
 		}
 
 		return compiledPattern;
@@ -113,7 +113,7 @@ class Route
 
 	/**
 	 * Set one or more HTTP methods that constraint the matching of the route
-     *
+	 *
 	 *<code>
 	 * $route->via('GET');
 	 * $route->via(array('GET', 'POST'));
@@ -161,10 +161,12 @@ class Route
 						if intermediate > 0 {
 							if bracketCount == 0 {
 
+									//item = substr(pattern, marker, length)
 								let numberMatches++,
 									variable = null,
 									length = cursor - marker - 1,
-									item = substr(pattern, marker, length);
+									item = ""
+									;
 
 								for cursorVar, ch in item {
 
@@ -172,7 +174,7 @@ class Route
 										break;
 									}
 
-									if cursorVar == 0 && !((ch >= 'a' && ch <='z') || (ch >= 'A' && ch <='Z')) {
+									if cursorVar == 0 && !((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
 										let notValid = 1;
 										break;
 									}
@@ -289,7 +291,7 @@ class Route
 					actionName = null;
 
 				// Explode the short paths using the :: separator
-				let parts = explode('::', paths);
+				let parts = explode("::", paths);
 
 				// Create the array paths dynamically
 				switch count(parts) {
@@ -311,7 +313,7 @@ class Route
 
 				// Process module name
 				if moduleName !== null {
-					let routePaths['module'] = moduleName;
+					let routePaths["module"] = moduleName;
 				}
 
 				// Process controller name
@@ -328,19 +330,19 @@ class Route
 
 						// Update the namespace
 						if namespaceName {
-							let routePaths['namespace'] = namespaceName;
+							let routePaths["namespace"] = namespaceName;
 						}
 					} else {
 						let realClassName = controllerName;
 					}
 
 					// Always pass the controller to lowercase
-					let routePaths['controller'] = uncamelize(realClassName);
+					let routePaths["controller"] = uncamelize(realClassName);
 				}
 
 				// Process action name
 				if actionName !== null {
-					let routePaths['action'] = actionName;
+					let routePaths["action"] = actionName;
 				}
 			} else {
 				let routePaths = paths;
@@ -354,9 +356,9 @@ class Route
 		}
 
 		// If the route starts with '#' we assume that it is a regular expression
-		if !starts_with(pattern, '#') {
+		if !starts_with(pattern, "#") {
 
-			if memstr(pattern, '{') {
+			if memstr(pattern, "{") {
 				// The route has named parameters so we need to extract them
 				let extracted = this->extractNamedParams(pattern),
 					pcrePattern = extracted[0],
@@ -393,7 +395,7 @@ class Route
 
 	/**
 	 * Sets the route's name
-     *
+	 *
 	 *<code>
 	 * $router->add('/about', array(
 	 *     'controller' => 'about'

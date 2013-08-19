@@ -349,7 +349,17 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["])|(['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
+		SCHAR = (['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
+		SCHAR {
+			token->opcode = XX_T_SCHAR;
+			token->value = strndup(q, YYCURSOR - q - 1);
+			token->len = YYCURSOR - q - 1;
+			s->active_char += (YYCURSOR - start);
+			q = YYCURSOR;
+			return 0;
+		}
+
+		STRING = (["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["]);
 		STRING {
 			token->opcode = XX_T_STRING;
 			token->value = strndup(q, YYCURSOR - q - 1);

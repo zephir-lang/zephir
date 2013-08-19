@@ -78,7 +78,8 @@
 #define XX_TYPE_UCHAR                     78
 #define XX_TYPE_LONG                      79
 #define XX_TYPE_ULONG                     80
-#define XX_DOUBLE                         81
-#define XX_NULL                           82
-#define XX_TRUE                           83
-#define XX_FALSE                          84
+#define XX_SCHAR                          81
+#define XX_DOUBLE                         82
+#define XX_NULL                           83
+#define XX_TRUE                           84
+#define XX_FALSE                          85

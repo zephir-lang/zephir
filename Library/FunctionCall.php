@@ -111,6 +111,10 @@ class FunctionCall extends Call
 			}
 		}
 
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+		}
+
 		/**
 		 * Include fcall header
 		 */

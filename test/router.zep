@@ -85,14 +85,14 @@ class Router
 			// Two routes are added by default to match /:controller/:action and
 			// /:controller/:action/:params
 
-			let routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#', [
-				'controller': 1
+			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#", [
+				"controller": 1
 			]);
 
-			let routes[] = new Test\Router\Route('#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#', [
-				'controller': 1,
-				'action': 2,
-				'params': 3
+			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#", [
+				"controller": 1,
+				"action": 2,
+				"params": 3
 			]);
 		}
 
@@ -134,22 +134,22 @@ class Router
 
 		// By default we use $_GET['url'] to obtain the rewrite information
 		if !uriSource {
-			if fetch url, _GET['_url'] {
+			if fetch url, _GET["_url"] {
 				if !url {
 					return url;
 				}
 			}
 		} else {
 			// Otherwise use the standard $_SERVER['REQUEST_URI']
-		 	if fetch url, _SERVER['REQUEST_URI'] {
-				let urlParts = explode('?', url),
+		 	if fetch url, _SERVER["REQUEST_URI"] {
+				let urlParts = explode("?", url),
 					realUri = urlParts[0];
 				if !realUri {
 					return realUri;
 				}
 			}
 		}
-		return '/';
+		return "/";
 	}
 
 	/**
@@ -251,27 +251,27 @@ class Router
 		}
 
 		// Set a default namespace
-		if fetch namespaceName, defaults['namespace'] {
+		if fetch namespaceName, defaults["namespace"] {
 			let this->_defaultNamespace = namespaceName;
 		}
 
 		// Set a default module
-		if fetch module, defaults['module'] {
+		if fetch module, defaults["module"] {
 			let this->_defaultModule = module;
 		}
 
 		// Set a default controller
-		if fetch controller, defaults['controller'] {
+		if fetch controller, defaults["controller"] {
 			let this->_defaultController = controller;
 		}
 
 		// Set a default action
-		if fetch action, defaults['action'] {
+		if fetch action, defaults["action"] {
 			let this->_defaultAction = action;
 		}
 
 		// Set default parameters
-		if fetch params, defaults['params'] {
+		if fetch params, defaults["params"] {
 			let this->_defaultParams = params;
 		}
 
@@ -338,7 +338,7 @@ class Router
 						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
-					let request = dependencyInjector->getShared('request');
+					let request = dependencyInjector->getShared("request");
 				}
 
 				// Check if the current method is allowed by the route
@@ -359,7 +359,7 @@ class Router
 						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
-					let request = dependencyInjector->getShared('request');
+					let request = dependencyInjector->getShared("request");
 				}
 
 				// Check if the current hostname is the same as the route
@@ -373,9 +373,9 @@ class Router
 				}
 
 				// Check if the hostname restriction is the same as the current in the route
-				if memstr(hostname, '(') {
-					if memstr(hostname, '#') {
-						let regexHostName = '#^' . hostname . '$#';
+				if memstr(hostname, "(") {
+					if memstr(hostname, "#") {
+						let regexHostName = "#^" . hostname . "$#";
 					} else {
 						let regexHostName = hostname;
 					}
@@ -392,7 +392,7 @@ class Router
 
 			// If the route has parentheses use preg_match
 			let pattern = route->getCompiledPattern();
-			if memstr(pattern, '^') {
+			if memstr(pattern, "^") {
 				let routeFound = preg_match(pattern, handledUri, matches);
 			} else {
 				let routeFound = pattern == handledUri;
@@ -486,52 +486,52 @@ class Router
 		if routeFound {
 
 			// Check for a namespace
-			if fetch vnamespace, parts['namespace'] {
+			if fetch vnamespace, parts["namespace"] {
 				if !is_numeric(vnamespace) {
 					let this->_namespace = vnamespace;
 				}
-				unset parts['namespace'];
+				unset parts["namespace"];
 			} else {
 				let this->_namespace = this->_defaultNamespace;
 			}
 
 			// Check for a module
-			if fetch module, parts['module'] {
+			if fetch module, parts["module"] {
 				if !is_numeric(module) {
 					let this->_module = module;
 				}
-				unset parts['module'];
+				unset parts["module"];
 			} else {
 				let this->_module = this->_defaultModule;
 			}
 
 			// Check for a controller
-			if fetch controller, parts['controller'] {
+			if fetch controller, parts["controller"] {
 				if !is_numeric(controller) {
 					let this->_controller = controller;
 				}
-				unset parts['controller'];
+				unset parts["controller"];
 			} else {
 				let this->_controller = this->_defaultController;
 			}
 
 			// Check for an action
-			if fetch action, parts['action'] {
+			if fetch action, parts["action"] {
 				if !is_numeric(action) {
 					let this->_action = action;
 				}
-				unset parts['action'];
+				unset parts["action"];
 			} else {
 				let this->_action = this->_defaultAction;
 			}
 
 			// Check for parameters
-			if fetch paramsStr, parts['params'] {
+			if fetch paramsStr, parts["params"] {
 				let strParams = substr(paramsStr, 1);
 				if (strParams) {
 					let params = explode("/", strParams);
 				}
-				unset parts['params'];
+				unset parts["params"];
 			}
 
 			if count(params) {
@@ -584,7 +584,7 @@ class Router
 	 */
 	public function addGet(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'GET');
+		return this->add(pattern, paths, "GET");
 	}
 
 	/**
@@ -596,7 +596,7 @@ class Router
 	 */
 	public function addPost(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'POST');
+		return this->add(pattern, paths, "POST");
 	}
 
 	/**
@@ -608,7 +608,7 @@ class Router
 	 */
 	public function addPut(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'PUT');
+		return this->add(pattern, paths, "PUT");
 	}
 
 	/**
@@ -620,7 +620,7 @@ class Router
 	 */
 	public function addPatch(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'PATCH');
+		return this->add(pattern, paths, "PATCH");
 	}
 
 	/**
@@ -632,7 +632,7 @@ class Router
 	 */
 	public function addDelete(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'DELETE');
+		return this->add(pattern, paths, "DELETE");
 	}
 
 	/**
@@ -644,7 +644,7 @@ class Router
 	 */
 	public function addOptions(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'OPTIONS');
+		return this->add(pattern, paths, "OPTIONS");
 	}
 
 	/**
@@ -656,7 +656,7 @@ class Router
 	 */
 	public function addHead(pattern, paths=null)
 	{
-		return this->add(pattern, paths, 'HEAD');
+		return this->add(pattern, paths, "HEAD");
 	}
 
 	/**
