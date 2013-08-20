@@ -25,6 +25,11 @@
 class Utils
 {
 
+	/**
+	 * Prepares a string to be used as a C-string
+	 * @param       string $str
+	 * @return      string
+	 */
 	public static function addSlaches($str)
 	{
 		$str = str_replace('\\', "\\\\", $str);
@@ -33,6 +38,16 @@ class Utils
 		$str = str_replace("\r", "\\r", $str);
 		$str = str_replace("\t", "\\t", $str);
 		return $str;
+	}
+
+	/**
+	 * Camelizes a string
+	 *
+	 * @param       string $str
+	 * @return      string
+	 */
+	static public function camelize($str) {
+		return str_replace(' ', '', ucwords(str_replace('_', ' ', $str)));
 	}
 
 }

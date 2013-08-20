@@ -41,12 +41,14 @@ class FunctionCall extends Call
 		 */
 		if (!isset(self::$_optimizers[$funcName])) {
 
-			$path = 'Library/Optimizers/FunctionCall/' . ucfirst($funcName) . 'Optimizer.php';
+			$camelizeFunctionName = Utils::camelize($funcName);
+
+			$path = 'Library/Optimizers/FunctionCall/' . $camelizeFunctionName . 'Optimizer.php';
 			if (file_exists($path)) {
 
 				require $path;
 
-				$className = ucfirst($funcName) . 'Optimizer';
+				$className = $camelizeFunctionName . 'Optimizer';
 				$optimizer = new $className();
 			} else {
 				$optimizer = null;

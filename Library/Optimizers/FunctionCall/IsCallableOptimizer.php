@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Is_callableOptimizer
+ * IsCallableOptimizer
  *
  * Optimizes calls to 'is_callable' using internal function
  */
-class Is_callableOptimizer
+class IsCallableOptimizer
 {
 	/**
 	 *

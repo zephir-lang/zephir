@@ -218,11 +218,11 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
+	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _2, _8, _18;
 	zend_bool notValid;
-	int cursor, marker, bracketCount = 0, parenthesesCount = 0, intermediate = 0, length, numberMatches = 0, foundPattern, variableLength, regexpLength, cursorVar, _2, _8;
 	char ch;
-	zval *pattern_param = NULL, *variable = NULL, *regexp = NULL, *tmp = NULL, *matches = NULL, *_0, *_1, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL;
-	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *_7 = NULL;
+	zval *pattern_param = NULL, *tmp = NULL, *matches = NULL, *_0, *_1, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, *_19, *_20;
+	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_7 = NULL, *_13 = NULL, *_17 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -269,17 +269,16 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 							numberMatches++;
 
-							ZEPHIR_INIT_NVAR(variable);
-							ZVAL_NULL(variable);
+							zephir_str_assign(variable, "", sizeof("")-1);
 
-							length = cursor - marker;
+							zephir_str_assign(regexp, "", sizeof("")-1);
 
 							ZEPHIR_INIT_NVAR(_3);
 							ZVAL_STRINGL(_3, pattern->str, pattern->len, 1);
 							ZEPHIR_INIT_NVAR(_4);
 							ZVAL_LONG(_4, marker);
 							ZEPHIR_INIT_NVAR(_5);
-							ZVAL_LONG(_5, length);
+							ZVAL_LONG(_5, cursor - marker);
 							ZEPHIR_INIT_NVAR(_6);
 							zephir_call_func_p3(_6, "substr", _3, _4, _5);
 							zephir_get_strval(_6, &_7);
@@ -300,24 +299,27 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								}
 								if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '-' || ch == '_' || ch == ':') {
 									if (ch == ':') {
-
-										regexpLength = length - cursorVar - 1;
-
-										variableLength = cursorVar - marker;
-
 										ZEPHIR_INIT_NVAR(_9);
-										ZVAL_LONG(_9, marker);
+										ZVAL_STRINGL(_9, item->str, item->len, 1);
 										ZEPHIR_INIT_NVAR(_10);
-										ZVAL_LONG(_10, variableLength);
-										ZEPHIR_INIT_NVAR(variable);
-										zephir_call_func_p2(variable, "estrndup", _9, _10);
-
+										ZVAL_LONG(_10, 0);
 										ZEPHIR_INIT_NVAR(_11);
-										ZVAL_LONG(_11, cursorVar + 1);
+										ZVAL_LONG(_11, cursorVar);
 										ZEPHIR_INIT_NVAR(_12);
-										ZVAL_LONG(_12, regexpLength);
-										ZEPHIR_INIT_NVAR(regexp);
-										zephir_call_func_p2(regexp, "estrndup", _11, _12);
+										zephir_call_func_p3(_12, "substr", _9, _10, _11);
+										zephir_get_strval(_12, &_13);
+
+										zephir_str_assign(variable, _13->str, _13->len);
+
+										ZEPHIR_INIT_NVAR(_14);
+										ZVAL_STRINGL(_14, item->str, item->len, 1);
+										ZEPHIR_INIT_NVAR(_15);
+										ZVAL_LONG(_15, cursorVar + 1);
+										ZEPHIR_INIT_NVAR(_16);
+										zephir_call_func_p2(_16, "substr", _14, _15);
+										zephir_get_strval(_16, &_17);
+
+										zephir_str_assign(regexp, _17->str, _17->len);
 
 										break;
 									}
@@ -333,13 +335,46 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								ZEPHIR_INIT_NVAR(tmp);
 								ZVAL_LONG(tmp, numberMatches);
 
-								if (zend_is_true(variable)) {
-									if (regexpLength > 0) {
+								if ((variable && variable->len) && (regexp && regexp->len)) {
 
-										foundPattern = 0;
+									foundPattern = 0;
 
-										//missing comment
+									for (_18 = 0; _18 < regexp->len; _18++) {
+										ch = regexp->str[_18]; 
+										if (ch == '\0') {
+											break;
+										}
+										if (!(foundPattern)) {
+											if (ch == '(') {
+
+												foundPattern = 1;
+
+											}
+										} else {
+											if (ch == ')') {
+
+												foundPattern = 2;
+
+												break;
+											}
+										}
 									}
+									if (foundPattern != 2) {
+
+										zephir_str_append_char(route, '{');
+
+										zephir_str_append(route, regexp->str, regexp->len);
+
+										zephir_str_append_char(route, '}');
+
+									} else {
+
+										zephir_str_append(route, regexp->str, regexp->len);
+
+									}
+
+									zephir_array_update_string(&matches, variable->str, variable->len, &tmp, PH_COPY | PH_SEPARATE);
+
 								} else {
 
 									zephir_str_append(route, "([^/]*)", sizeof("([^/]*)")-1);
@@ -391,7 +426,13 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		}
 	}
 
-	RETURN_MM_STRING(route->str, 1);
+	ZEPHIR_INIT_VAR(_19);
+	array_init(_19);
+	ZEPHIR_INIT_VAR(_20);
+	ZVAL_STRINGL(_20, route->str, route->len, 1);
+	zephir_array_append(&_19, _20, 0);
+	zephir_array_append(&_19, matches, 0);
+	RETURN_CCTOR(_19);
 
 
 }
@@ -404,7 +445,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -531,11 +572,14 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"))) {
 			//missing comment
-			//missing comment
-			//missing comment
-			//missing comment
+			ZEPHIR_INIT_VAR(extracted);
+			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
 
-			ZEPHIR_CPY_WRT(pcrePattern, pattern);
+			ZEPHIR_OBS_VAR(pcrePattern);
+			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY);
+
+			ZEPHIR_OBS_NVAR(routePaths);
+			zephir_array_fetch_long(&routePaths, extracted, 1, PH_NOISY);
 
 		} else {
 

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Is_numericOptimizer
+ * IsNumericOptimizer
  *
  * Optimizes calls to 'is_numeric' using internal function
  */
-class Is_numericOptimizer
+class IsNumericOptimizer
 {
 	/**
 	 *

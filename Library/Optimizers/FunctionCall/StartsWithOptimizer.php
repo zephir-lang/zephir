@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Starts_withOptimizer
+ * StartsWithOptimizer
  *
  * Like 'strpos' but it returns a boolean value
  */
-class Starts_withOptimizer
+class StartsWithOptimizer
 {
 	/**
 	 *

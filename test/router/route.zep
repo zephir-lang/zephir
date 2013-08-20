@@ -132,10 +132,9 @@ class Route
 
 		char ch;
 		var tmp, matches;
-		int cursor, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0;
-		int intermediate = 0, length, numberMatches = 0;
-		int variableLength, regexpLength, cursorVar;
 		boolean notValid;
+		int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0;
+		int intermediate = 0, numberMatches = 0;
 		string route, item, variable, regexp;
 
 		if strlen(pattern) <= 0 {
@@ -351,10 +350,9 @@ class Route
 
 			if memstr(pattern, "{") {
 				// The route has named parameters so we need to extract them
-				//let extracted = this->extractNamedParams(pattern),
-				//	pcrePattern = extracted[0],
-				//	routePaths = extracted[1];
-				let pcrePattern = pattern;
+				let extracted = this->extractNamedParams(pattern),
+					pcrePattern = extracted[0],
+					routePaths = extracted[1];
 			} else {
 				let pcrePattern = pattern;
 			}
