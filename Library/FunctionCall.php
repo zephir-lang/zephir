@@ -106,6 +106,10 @@ class FunctionCall extends Call
 			$symbolVariable = $expr->getExpectingVariable();
 			if (is_object($symbolVariable)) {
 				$mustInit = true;
+				$readDetector = new ReadDetector($expression);
+				if ($readDetector->detect($symbolVariable->getName(), $expression)) {
+					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				}
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}

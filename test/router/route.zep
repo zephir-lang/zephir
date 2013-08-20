@@ -63,38 +63,32 @@ class Route
 
 			// Replace the module part
 			if memstr(pattern, "/:module") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:module", idPattern, patternCopy);
+				let compiledPattern = str_replace("/:module", idPattern, compiledPattern);
 			}
 
 			// Replace the controller placeholder
 			if memstr(pattern, "/:controller") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:controller", idPattern, patternCopy);
+				let compiledPattern = str_replace("/:controller", idPattern, compiledPattern);
 			}
 
 			// Replace the namespace placeholder
 			if memstr(pattern, "/:namespace") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:namespace", idPattern, patternCopy);
+				let compiledPattern = str_replace("/:namespace", idPattern, compiledPattern);
 			}
 
 			// Replace the action placeholder
 			if memstr(pattern, "/:action") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:action", idPattern, patternCopy);
+				let compiledPattern = str_replace("/:action", idPattern, compiledPattern);
 			}
 
 			// Replace the params placeholder
 			if memstr(pattern, "/:params") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:params", "(/.*)*", patternCopy);
+				let compiledPattern = str_replace("/:params", "(/.*)*", compiledPattern);
 			}
 
 			// Replace the int placeholder
 			if memstr(pattern, "/:int") {
-				let patternCopy = compiledPattern,
-					compiledPattern = str_replace("/:int", "/([0-9]+)", patternCopy);
+				let compiledPattern = str_replace("/:int", "/([0-9]+)", compiledPattern);
 			}
 		}
 

@@ -495,8 +495,8 @@ class LetStatement
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
 				}
 				break;
-			case 'variable':
 
+			case 'variable':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						$symbolVariable->initVariant($compilationContext);
