@@ -1,11 +1,11 @@
 <?php
 
 /**
- * IsNumericOptimizer
+ * StrlenOptimizer
  *
- * Optimizes calls to 'is_numeric' using internal function
+ * Optimizes calls to 'strlen' using internal function
  */
-class IsNumericOptimizer
+class StrlenOptimizer
 {
 	/**
 	 *
@@ -21,6 +21,6 @@ class IsNumericOptimizer
 		}
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('bool', 'zephir_is_numeric(' . $resolvedParams[0] . ')', $expression);
+		return new CompiledExpression('int', 'zephir_fast_strlen_ev(' . $resolvedParams[0] . ')', $expression);
 	}
 }

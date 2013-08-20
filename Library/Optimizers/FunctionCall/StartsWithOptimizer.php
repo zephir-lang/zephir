@@ -25,7 +25,7 @@ class StartsWithOptimizer
 			unset($expression['parameters'][1]);
 		}
 
-		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
 		$context->headersManager->add('kernel/string');
 

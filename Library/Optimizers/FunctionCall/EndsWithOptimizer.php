@@ -1,11 +1,11 @@
 <?php
 
 /**
- * MemnstrOptimizer
+ * EndsWithOptimizer
  *
  * Like 'strpos' but it returns a boolean value
  */
-class MemstrOptimizer
+class EndsWithOptimizer
 {
 	/**
 	 *
@@ -30,9 +30,9 @@ class MemstrOptimizer
 		$context->headersManager->add('kernel/string');
 
 		if (isset($str)) {
-			return new CompiledExpression('bool', 'zephir_memnstr_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
+			return new CompiledExpression('bool', 'zephir_end_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+		return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
 	}
 }

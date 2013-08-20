@@ -20,7 +20,7 @@ class IsCallableOptimizer
 			return false;
 		}
 
-		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
 	}
 }

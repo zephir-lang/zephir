@@ -9,6 +9,7 @@ extern int zephir_memnstr_str(const zval *haystack, char *needle, unsigned int n
 
 /** Function replacement */
 extern void zephir_fast_strlen(zval *return_value, zval *str);
+extern int zephir_fast_strlen_ev(zval *str);
 extern void zephir_fast_strtolower(zval *return_value, zval *str);
 extern void zephir_fast_join(zval *result, zval *glue, zval *pieces TSRMLS_DC);
 extern void zephir_fast_join_str(zval *result, char *glue, unsigned int glue_length, zval *pieces TSRMLS_DC);

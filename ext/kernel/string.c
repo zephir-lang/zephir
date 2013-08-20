@@ -48,6 +48,29 @@ void zephir_fast_strlen(zval *return_value, zval *str){
 /**
  * Fast call to php strlen
  */
+int zephir_fast_strlen_ev(zval *str){
+
+	zval copy;
+	int use_copy = 0, length;
+
+	if (Z_TYPE_P(str) != IS_STRING) {
+		zend_make_printable_zval(str, &copy, &use_copy);
+		if (use_copy) {
+			str = &copy;
+		}
+	}
+
+	length = Z_STRLEN_P(str);
+	if (use_copy) {
+		zval_dtor(str);
+	}
+
+	return length;
+}
+
+/**
+ * Fast call to php strlen
+ */
 void zephir_fast_strtolower(zval *return_value, zval *str){
 
 	zval copy;
