@@ -42,7 +42,12 @@ class MethodCall extends Call
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();
 			if (is_object($symbolVariable)) {
-				$mustInit = true;
+				$readDetector = new ReadDetector($expression);
+				if ($readDetector->detect($symbolVariable->getName(), $expression)) {
+					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				} else {
+					$mustInit = true;
+				}
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}
