@@ -746,6 +746,39 @@ class Expression
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
+	public function compileCast($expression, $compilationContext)
+	{
+
+		$expr = new Expression($expression['right']);
+		$resolved = $expr->compile($compilationContext);
+
+		switch ($expression['left']) {
+			case 'int':
+				switch ($resolved->getType()) {
+					case 'double':
+						return new CompiledExpression('int', '(int) ' . $resolved->getCode(), $expression);
+					case 'bool':
+						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
+					default:
+						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+				}
+				break;
+			case 'string':
+				switch ($resolved->getType()) {
+					case 'variable':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext, $expression);
+						$compilationContext->codePrinter->output('zephir_get_strval(' . $resolved->getCode() . ', &' . $symbolVariable->getName() . ');');
+						return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+					default:
+						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+				}
+				break;
+			default:
+				throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+		}
+
+	}
+
 	/**
 	 * Resolves an expression
 	 *
@@ -881,6 +914,9 @@ class Expression
 					}
 				}
 				return $resolved;
+
+			case 'cast':
+				return $this->compileCast($expression, $compilationContext);
 
 			case 'concat':
 				return new CompiledExpression('null', null, $expression);

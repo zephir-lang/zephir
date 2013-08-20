@@ -166,11 +166,10 @@ class Route
 						if intermediate > 0 {
 							if bracketCount == 0 {
 
-									//item = substr(pattern, marker, length)
 								let numberMatches++,
 									variable = null,
 									length = cursor - marker - 1,
-									item = ""
+									item = (string) substr(pattern, marker, length)
 									;
 
 								for cursorVar, ch in item {

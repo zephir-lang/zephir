@@ -1,6 +1,6 @@
 
 /**
- * OO operations
+ * Function calls
  */
 
 namespace Test;

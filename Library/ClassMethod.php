@@ -281,6 +281,11 @@ class ClassMethod
 					 */
 					$symbolParam->setMustInitNull(true);
 
+					/**
+					 * Increase uses
+					 */
+					$symbolParam->increaseUses();
+
 				} else {
 					if (isset($parameter['default'])) {
 						if (isset($parameter['data-type'])) {
