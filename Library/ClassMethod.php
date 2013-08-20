@@ -256,6 +256,9 @@ class ClassMethod
 					} else {
 						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
 						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param');
+						if ($parameter['data-type'] == 'string') {
+							$symbol->setMustInitNull(true);
+						}
 					}
 				} else {
 					$symbol = $symbolTable->addVariable('variable', $parameter['name']);

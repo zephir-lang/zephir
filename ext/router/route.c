@@ -228,7 +228,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	int cursor, marker, bracketCount, parenthesesCount, intermediate, length, numberMatches, cursorVar, _2, _3;
 	char ch;
 	zval *pattern_param = NULL, variable, *_0, *_1;
-	zephir_str *pattern, *route = NULL, *item = NULL;
+	zephir_str *pattern = NULL, *route = NULL, *item = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -248,6 +248,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	for (_2 = 0; _2 < pattern->len; _2++) {
 		cursor = _2; 
 		ch = pattern->str[_2]; 
+		fprintf(stdout, "%c\n", ch);
 		if (parenthesesCount == 0) {
 			if (ch == '{') {
 				if (bracketCount == 0) {

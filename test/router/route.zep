@@ -150,6 +150,8 @@ class Route
 
 		for cursor, ch in pattern {
 
+			echo ch;
+
 			if parenthesesCount == 0 {
 				if ch == '{' {
 					if bracketCount == 0 {

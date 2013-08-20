@@ -38,8 +38,14 @@ class EchoStatement
 				case 'variable':
 					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext);
 					switch ($variable->getType()) {
-						case 'int':
+						case 'long':
 							$compilationContext->codePrinter->output('fprintf(stdout, "%ld\\n", ' . $expr['value'] . ');');
+							break;
+						case 'int':
+							$compilationContext->codePrinter->output('fprintf(stdout, "%d\\n", ' . $expr['value'] . ');');
+							break;
+						case 'char':
+							$compilationContext->codePrinter->output('fprintf(stdout, "%c\\n", ' . $expr['value'] . ');');
 							break;
 						case 'variable':
 							$compilationContext->codePrinter->output('zend_print_zval(' . $expr['value'] . ', 0);');
