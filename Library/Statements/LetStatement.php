@@ -399,6 +399,11 @@ class LetStatement
 										$compilationContext->headersManager->add('kernel/string_type');
 										$codePrinter->output('zephir_str_assign(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
 										break;
+									case 'concat-assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_append(' . $variable . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len);');
+										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}

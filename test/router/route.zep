@@ -51,7 +51,7 @@ class Route
 	 */
 	public function compilePattern(pattern)
 	{
-		var compiledPattern, idPattern, patternCopy;
+		var compiledPattern, idPattern;
 
 		let compiledPattern = pattern;
 
@@ -131,7 +131,7 @@ class Route
 	{
 
 		char ch;
-		var variable, regexp;
+		var variable, regexp, tmp, matches;
 		int cursor, marker, bracketCount = 0, parenthesesCount = 0;
 		int intermediate = 0, length, numberMatches = 0, foundPattern;
 		int variableLength, regexpLength, cursorVar;
@@ -144,14 +144,13 @@ class Route
 
 		for cursor, ch in pattern {
 
-			echo ch;
-
 			if parenthesesCount == 0 {
 				if ch == '{' {
 					if bracketCount == 0 {
 						let marker = cursor + 1,
 							intermediate = 0,
-							notValid = false;
+							notValid = false,
+							matches = [];
 					}
 					let bracketCount++;
 				} else {
@@ -192,10 +191,8 @@ class Route
 								}
 
 								if !notValid {
-									/*{
-										zval *tmp;
-										ALLOC_INIT_ZVAL(tmp);
-										ZVAL_LONG(tmp, number_matches);*/
+
+									let tmp = numberMatches;
 
 									if variable {
 										if regexpLength > 0 {
@@ -227,14 +224,13 @@ class Route
 											zend_hash_update(Z_ARRVAL_P(matches), variable, variable_length + 1, &tmp, sizeof(zval *), NULL);*/
 										}
 									} else {
-										//smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
-										let route .= "([^/]*)";
-										//zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
+										let route .= "([^/]*)",
+											matches[item] = tmp;
 									}
 								} else {
-									let route .= '{';
-									/*smart_str_appendl(&route_str, item, length);*/
-									let route .= '}';
+									let route .= '{',
+										route .= item,
+										route .= '}';
 								}
 								continue;
 							}
