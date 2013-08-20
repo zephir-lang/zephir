@@ -351,7 +351,7 @@ class LetStatement
 						switch ($statement['operator']) {
 							case 'assign':
 								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_assign(' . $variable . ', "", sizeof("")-1));');
+								$codePrinter->output('zephir_str_assign(' . $variable . ', "", sizeof("")-1);');
 								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);

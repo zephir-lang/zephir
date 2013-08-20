@@ -37,6 +37,7 @@ require 'Library/Operators/Unary/NotOperator.php';
 require 'Library/Operators/Comparison/BaseOperator.php';
 require 'Library/Operators/Comparison/IdenticalOperator.php';
 require 'Library/Operators/Comparison/EqualsOperator.php';
+require 'Library/Operators/Comparison/NotEqualsOperator.php';
 require 'Library/Operators/Comparison/LessOperator.php';
 require 'Library/Operators/Comparison/GreaterOperator.php';
 require 'Library/Operators/Comparison/LessEqualOperator.php';
@@ -848,6 +849,11 @@ class Expression
 
 			case 'equals':
 				$expr = new EqualsOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'not-equals':
+				$expr = new NotEqualsOperator();
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 

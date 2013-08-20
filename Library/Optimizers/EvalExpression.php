@@ -126,6 +126,8 @@ class EvalExpression
 				switch ($variableRight->getType()) {
 					case 'int':
 						return $variableRight->getName();
+					case 'string':
+						return $variableRight->getName() . ' && ' . $variableRight->getName() . '->len';
 					case 'bool':
 						return $variableRight->getName();
 					case 'double':

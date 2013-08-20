@@ -131,12 +131,12 @@ class Route
 	{
 
 		char ch;
-		var variable, regexp, tmp, matches;
-		int cursor, marker, bracketCount = 0, parenthesesCount = 0;
-		int intermediate = 0, length, numberMatches = 0, foundPattern;
+		var tmp, matches;
+		int cursor, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0;
+		int intermediate = 0, length, numberMatches = 0;
 		int variableLength, regexpLength, cursorVar;
 		boolean notValid;
-		string route, item;
+		string route, item, variable, regexp;
 
 		if strlen(pattern) <= 0 {
 			return false;
@@ -161,8 +161,8 @@ class Route
 
 								let numberMatches++,
 									variable = null,
-									length = cursor - marker,
-									item = (string) substr(pattern, marker, length);
+									regexp = null,
+									item = (string) substr(pattern, marker, cursor - marker);
 
 								for cursorVar, ch in item {
 
@@ -177,10 +177,8 @@ class Route
 
 									if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':' {
 										if ch == ':' {
-											let regexpLength = length - cursorVar - 1,
-												variableLength = cursorVar - marker,
-												variable = estrndup(marker, variableLength),
-												regexp = estrndup(cursorVar + 1, regexpLength);
+											let variable = (string) substr(item, 0, cursorVar),
+												regexp = (string) substr(item, cursorVar + 1);
 											break;
 										}
 									} else {
@@ -194,35 +192,33 @@ class Route
 
 									let tmp = numberMatches;
 
-									if variable {
-										if regexpLength > 0 {
+									if variable && regexp {
 
-											let foundPattern = 0;
-											/*for (k = 0; k < regexp_length; k++) {
-												if (regexp[k] == '\0') {
+										let foundPattern = 0;
+										for ch in regexp {
+											if ch == '\0' {
+												break;
+											}
+											if !foundPattern {
+												if ch == '(' {
+													let foundPattern = 1;
+												}
+											} else {
+												if ch == ')' {
+													let foundPattern = 2;
 													break;
 												}
-												if (!found_pattern) {
-													if (regexp[k] == '(') {
-													found_pattern = 1;
-													}
-												} else {
-													if (regexp[k] == ')') {
-														found_pattern = 2;
-														break;
-													}
-												}
 											}
+ 										}
 
-											if (found_pattern != 2) {
-												smart_str_appendc(&route_str, '(');
-												smart_str_appendl(&route_str, regexp, regexp_length);
-												smart_str_appendc(&route_str, ')');
-											} else {
-												smart_str_appendl(&route_str, regexp, regexp_length);
-											}
-											zend_hash_update(Z_ARRVAL_P(matches), variable, variable_length + 1, &tmp, sizeof(zval *), NULL);*/
+										if foundPattern != 2 {
+											let route .= '{',
+												route .= regexp,
+												route .= '}';
+										} else {
+											let route .= regexp;
 										}
+										let matches[variable] = tmp;
 									} else {
 										let route .= "([^/]*)",
 											matches[item] = tmp;
@@ -259,7 +255,7 @@ class Route
 			}
 		}
 
-		return route;
+		return [route, matches];
 	}
 
 	/**

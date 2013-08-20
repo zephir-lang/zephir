@@ -105,21 +105,20 @@ class LogicalBaseOperator extends BaseOperator
 			case 'variable':
 
 				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
-
 				switch ($variableLeft->getType()) {
 					case 'int':
 						switch ($right->getType()) {
 							case 'int':
-								return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
-										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'bool':
-										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'double':
-										return new CompiledExpression('double', ' (double) ' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
@@ -137,21 +136,21 @@ class LogicalBaseOperator extends BaseOperator
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
-								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
-								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
-										return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'bool':
 										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $variableRight->getName(), $expression);
 									case 'variable':
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . ')', $expression);
 										} else {
-											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
 										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -162,26 +161,26 @@ class LogicalBaseOperator extends BaseOperator
 					case 'double':
 						switch ($right->getType()) {
 							case 'int':
-								return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' (double) ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'double':
-								return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
-								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
-										return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
 									case 'double':
-										return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
 									case 'bool':
 										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $variableRight->getName(), $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . ')', $expression);
 										} else {
-											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
 										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
@@ -189,8 +188,40 @@ class LogicalBaseOperator extends BaseOperator
 							default:
 								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
 						}
+						break;
 					case 'string':
-						throw new CompilerException("Cannot add string variables'", $expression);
+						switch ($right->getType()) {
+							case 'int':
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+							case 'double':
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+							case 'bool':
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+							case 'variable':
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+								switch ($variableRight->getType()) {
+									case 'int':
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+									case 'double':
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
+									case 'string':
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' (' . $variableRight->getName() . ' && ' . $variableRight->getName() . '->len)', $expression);
+									case 'bool':
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
+									case 'variable':
+										$compilationContext->headersManager->add('kernel/operators');
+										if ($variableRight->isLocalOnly()) {
+											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . ')', $expression);
+										} else {
+											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
+										}
+									default:
+										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
+								}
+							default:
+								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+						}
+						break;
 					case 'variable':
 						switch ($right->getType()) {
 							/* a + 1 */
@@ -204,7 +235,7 @@ class LogicalBaseOperator extends BaseOperator
 									$op1 = $variableLeft->getName();
 								}
 								$op2 = $right->getCode();
-								return new CompiledExpression('double', 'zephir_get_doubleval(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
+								return new CompiledExpression('bool', 'zend_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
 							/* a(var) + a(x) */
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -213,9 +244,9 @@ class LogicalBaseOperator extends BaseOperator
 									case 'int':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableLeft->isLocalOnly()) {
-											return new CompiledExpression('int', 'zephir_get_intval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+											return new CompiledExpression('bool', 'zend_is_true(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 										} else {
-											return new CompiledExpression('int', 'zephir_get_intval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+											return new CompiledExpression('bool', 'zend_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 										}
 										break;
 									/* a(var) + a(bool) */
