@@ -38,7 +38,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 
 	n = 10;
 
-	while (z < n) {
+	while ((z < n)) {
 
 		z = x + y;
 
@@ -65,7 +65,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 
 	n = 10.0;
 
-	while (z < n) {
+	while ((z < n)) {
 
 		z = x +  y;
 
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	n = 10;
 
-	while (i < n) {
+	while ((i < n)) {
 
 		k = i - 1;
 

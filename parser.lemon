@@ -1527,8 +1527,8 @@ xx_common_expr(R) ::= xx_common_expr(O1) GREATEREQUAL xx_common_expr(O2) . {
 	R = xx_ret_expr("greater-equal", O1, O2, NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= PARENTHESES_OPEN xx_common_expr(L) PARENTHESES_CLOSE . {
-	R = L;
+xx_common_expr(R) ::= PARENTHESES_OPEN xx_common_expr(O1) PARENTHESES_CLOSE . {
+	R = xx_ret_expr("list", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {

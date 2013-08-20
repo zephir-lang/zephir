@@ -40,8 +40,16 @@ class ForStatement
 		 */
 		if (isset($this->_statement['key'])) {
 			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
-			if ($keyVariable->getType() != 'int') {
-				throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->_statement['expr']);
+			switch ($keyVariable->getType()) {
+				case 'int':
+				case 'uint':
+				case 'long':
+				case 'ulong':
+				case 'char':
+				case 'uchar':
+					break;
+				default:
+					throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->_statement['expr']);
 			}
 			$keyVariable->setMustInitNull(true);
 			$keyVariable->setIsInitialized(true);
@@ -52,8 +60,16 @@ class ForStatement
 		 */
 		if (isset($this->_statement['value'])) {
 			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
-			if ($variable->getType() != 'int') {
-				throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->_statement['expr']);
+			switch ($variable->getType()) {
+				case 'int':
+				case 'uint':
+				case 'long':
+				case 'ulong':
+				case 'char':
+				case 'uchar':
+					break;
+				default:
+					throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->_statement['expr']);
 			}
 			$variable->setMustInitNull(true);
 			$variable->setIsInitialized(true);
@@ -61,9 +77,15 @@ class ForStatement
 
 		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
 
-		$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
-			$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
-			$tempVariable->getName() . '++) {');
+		if ($this->_statement['reverse']) {
+			$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
+				$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
+				$tempVariable->getName() . '++) {');
+		} else {
+			$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
+				$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
+				$tempVariable->getName() . '++) {');
+		}
 
 		if (isset($this->_statement['key'])) {
 			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');

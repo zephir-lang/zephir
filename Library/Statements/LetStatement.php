@@ -401,6 +401,23 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}
 								break;
+							case 'char':
+							case 'uchar':
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_assign_char(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									case 'concat-assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_append_char(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+								}
+								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}

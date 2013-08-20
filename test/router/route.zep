@@ -136,8 +136,9 @@ class Route
 	public function extractNamedParams(string pattern)
 	{
 
+		char ch;
 		var variable;
-		int cursor, marker, bracketCount = 0, parenthesesCount = 0, ch;
+		int cursor, marker, bracketCount = 0, parenthesesCount = 0;
 		int intermediate = 0, length, numberMatches = 0, foundPattern;
 		int variableLength, regexpLength, cursorVar;
 		boolean notValid;

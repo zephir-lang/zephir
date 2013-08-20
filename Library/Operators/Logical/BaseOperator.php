@@ -77,9 +77,9 @@ class LogicalBaseOperator extends BaseOperator
 				switch ($right->getType()) {
 					case 'int':
 					case 'double':
-						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . '((' . $right->getCode() . ') ? 1 : 0)', $expression);
+						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ((' . $right->getCode() . ') ? 1 : 0)', $expression);
 					case 'bool':
-						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode(), $expression);
 					default:
 						throw new Exception("Cannot add 'bool' with '" . $right->getType() . "'");
 				}

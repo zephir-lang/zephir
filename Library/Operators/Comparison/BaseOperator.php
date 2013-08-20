@@ -47,11 +47,15 @@ class ComparisonBaseOperator extends BaseOperator
 			case 'long':
 			case 'ulong':
 			case 'int':
+			case 'char':
+			case 'uchar':
 				switch ($right->getType()) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' (int) ' . $right->getCode(), $expression);
@@ -66,11 +70,15 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						switch ($right->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
+							case 'char':
+							case 'uchar':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);

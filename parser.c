@@ -3711,7 +3711,7 @@ static void yy_reduce(
       case 175:
 // 1530 "parser.lemon"
 {
-	yygotominor.yy133 = yymsp[-1].minor.yy133;
+	yygotominor.yy133 = xx_ret_expr("list", yymsp[-1].minor.yy133, NULL, NULL, status->scanner_state);
   yy_destructor(37,&yymsp[-2].minor);
   yy_destructor(38,&yymsp[0].minor);
 }

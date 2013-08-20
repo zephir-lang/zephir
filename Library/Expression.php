@@ -870,6 +870,18 @@ class Expression
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
+			case 'list':
+				$numberPrints = $compilationContext->codePrinter->getNumberPrints();
+				$expr = new Expression($expression['left']);
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				$resolved = $expr->compile($compilationContext);
+				if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
+					if (strpos($resolved->getCode(), ' ') !== false) {
+						return new CompiledExpression($resolved->getType(), '(' . $resolved->getCode() . ')', $expression);
+					}
+				}
+				return $resolved;
+
 			case 'concat':
 				return new CompiledExpression('null', null, $expression);
 
