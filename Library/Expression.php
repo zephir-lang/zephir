@@ -767,6 +767,7 @@ class Expression
 				switch ($resolved->getType()) {
 					case 'variable':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext, $expression);
+						$symbolVariable->setMustInitNull(true);
 						$compilationContext->codePrinter->output('zephir_get_strval(' . $resolved->getCode() . ', &' . $symbolVariable->getName() . ');');
 						return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 					default:

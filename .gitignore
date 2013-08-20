@@ -84,3 +84,6 @@ ext/router.o
 ext/router/exception.o
 ext/router/route.o
 ext/test.o
+ext/declare.o
+ext/fcall.o
+ext/cast.o
