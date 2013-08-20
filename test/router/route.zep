@@ -137,7 +137,7 @@ class Route
 	{
 
 		char ch;
-		var variable;
+		var variable, regexp;
 		int cursor, marker, bracketCount = 0, parenthesesCount = 0;
 		int intermediate = 0, length, numberMatches = 0, foundPattern;
 		int variableLength, regexpLength, cursorVar;
@@ -180,12 +180,16 @@ class Route
 									}
 
 									if cursorVar == 0 && !((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-										let notValid = 1;
+										let notValid = true;
 										break;
 									}
 
-									if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <='Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':' {
+									if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':' {
 										if ch == ':' {
+											let regexpLength = length - cursorVar - 1,
+												variableLength = cursorVar - marker,
+												variable = estrndup(marker, variableLength),
+												regexp = estrndup(cursorVar + 1, regexpLength);
 											break;
 										}
 									} else {
@@ -199,48 +203,46 @@ class Route
 									/*{
 										zval *tmp;
 										ALLOC_INIT_ZVAL(tmp);
-										ZVAL_LONG(tmp, number_matches);
+										ZVAL_LONG(tmp, number_matches);*/
 
-										if (variable) {
-											if (regexp_length > 0) {
+									if variable {
+										if regexpLength > 0 {
 
-												found_pattern = 0;
-												for (k = 0; k < regexp_length; k++) {
-													if (regexp[k] == '\0') {
+											let foundPattern = 0;
+											/*for (k = 0; k < regexp_length; k++) {
+												if (regexp[k] == '\0') {
+													break;
+												}
+												if (!found_pattern) {
+													if (regexp[k] == '(') {
+													found_pattern = 1;
+													}
+												} else {
+													if (regexp[k] == ')') {
+														found_pattern = 2;
 														break;
 													}
-													if (!found_pattern) {
-														if (regexp[k] == '(') {
-															found_pattern = 1;
-														}
-													} else {
-														if (regexp[k] == ')') {
-															found_pattern = 2;
-															break;
-														}
-													}
 												}
-
-												if (found_pattern != 2) {
-													smart_str_appendc(&route_str, '(');
-													smart_str_appendl(&route_str, regexp, regexp_length);
-													smart_str_appendc(&route_str, ')');
-												} else {
-													smart_str_appendl(&route_str, regexp, regexp_length);
-												}
-												zend_hash_update(Z_ARRVAL_P(matches), variable, variable_length + 1, &tmp, sizeof(zval *), NULL);
 											}
-											efree(regexp);
-											efree(variable);
-										} else {
-											smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
-											zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
+
+											if (found_pattern != 2) {
+												smart_str_appendc(&route_str, '(');
+												smart_str_appendl(&route_str, regexp, regexp_length);
+												smart_str_appendc(&route_str, ')');
+											} else {
+												smart_str_appendl(&route_str, regexp, regexp_length);
+											}
+											zend_hash_update(Z_ARRVAL_P(matches), variable, variable_length + 1, &tmp, sizeof(zval *), NULL);*/
 										}
-									}*/
+									} else {
+										//smart_str_appendl(&route_str, "([^/]*)", strlen("([^/]*)"));
+										let route .= "([^/]*)";
+										//zend_hash_update(Z_ARRVAL_P(matches), item, length + 1, &tmp, sizeof(zval *), NULL);
+									}
 								} else {
-									/*smart_str_appendc(&route_str, '{');
-									smart_str_appendl(&route_str, item, length);
-									smart_str_appendc(&route_str, '}');*/
+									let route .= '{';
+									/*smart_str_appendl(&route_str, item, length);*/
+									let route .= '}';
 								}
 								continue;
 							}
@@ -269,7 +271,7 @@ class Route
 			}
 		}
 
-		//return route;
+		return route;
 	}
 
 	/**

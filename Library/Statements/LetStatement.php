@@ -364,6 +364,27 @@ class LetStatement
 								$compilationContext->headersManager->add('kernel/string_type');
 								$codePrinter->output('zephir_str_assign(' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1);');
 								break;
+							case 'concat-assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_append(' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1);');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+						}
+						break;
+					case 'schar':
+						switch ($statement['operator']) {
+							case 'assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign_char(' . $variable . ', \'' . $resolvedExpr->getCode() . '\');');
+								break;
+							case 'concat-assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_append_char(' . $variable . ', \'' . $resolvedExpr->getCode() . '\');');
+								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 						}
