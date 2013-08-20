@@ -764,7 +764,7 @@ class LetStatement
 						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 						break;
 					case 'string':
-						$codePrinter->output('zephir_array_update_string(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						$codePrinter->output('zephir_array_update_string(&' . $variable . ', ' . $variableIndex->getName() . '->str, ' . $variableIndex->getName() . '->len, &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 						break;
 					case 'variable':
 						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
