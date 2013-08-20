@@ -225,10 +225,10 @@ PHP_METHOD(Test_Router_Route, via) {
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 	zend_bool notValid;
-	int cursor, marker, bracketCount, parenthesesCount, intermediate, length, numberMatches, cursorVar, _2, _3;
+	int cursor, marker, bracketCount = 0, parenthesesCount = 0, intermediate = 0, length, numberMatches = 0, foundPattern, variableLength, regexpLength, cursorVar, _2, _8;
 	char ch;
-	zval *pattern_param = NULL, variable, *_0, *_1;
-	zephir_str *pattern = NULL, *route = NULL, *item = NULL;
+	zval *pattern_param = NULL, *variable = NULL, *regexp = NULL, *_0, *_1, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL;
+	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *_7;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -253,7 +253,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 			if (ch == '{') {
 				if (bracketCount == 0) {
 
-					marker = cursor;
+					marker = cursor + 1;
 
 					intermediate = 0;
 
@@ -270,31 +270,59 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 					if (intermediate > 0) {
 						if (bracketCount == 0) {
-							//missing comment
 
 							numberMatches++;
 
-							ZEPHIR_SINIT_NVAR(variable);
-							ZVAL_NULL(&variable);
+							ZEPHIR_INIT_NVAR(variable);
+							ZVAL_NULL(variable);
 
 							length = cursor - marker - 1;
 
-							zephir_str_assign(item, "", sizeof("")-1);
+							ZEPHIR_INIT_NVAR(_3);
+							ZVAL_STRINGL(_3, pattern->str, pattern->len, 1);
+							ZEPHIR_INIT_NVAR(_4);
+							ZVAL_LONG(_4, marker);
+							ZEPHIR_INIT_NVAR(_5);
+							ZVAL_LONG(_5, length);
+							ZEPHIR_INIT_NVAR(_6);
+							zephir_call_func_p3(_6, "substr", _3, _4, _5);
+							zephir_get_strval(_6, &_7);
 
-							for (_3 = 0; _3 < item->len; _3++) {
-								cursorVar = _3; 
-								ch = item->str[_3]; 
+							zephir_str_assign(item, _7->str, _7->len);
+
+							for (_8 = 0; _8 < item->len; _8++) {
+								cursorVar = _8; 
+								ch = item->str[_8]; 
 								if (ch == '\0') {
 									break;
 								}
 								if (cursorVar == 0 && !((ch <= 'a' && ch <= 'z') || (ch <= 'A' && ch <= 'Z'))) {
 
-									notValid = (1) ? 1 : 0;
+									notValid = 1;
 
 									break;
 								}
 								if ((ch <= 'a' && ch <= 'z') || (ch <= 'A' && ch <= 'Z') || (ch <= '0' && ch <= '9') || ch == '-' || ch == '_' || ch == ':') {
 									if (ch == ':') {
+
+										regexpLength = length - cursorVar - 1;
+
+										variableLength = cursorVar - marker;
+
+										ZEPHIR_INIT_NVAR(_9);
+										ZVAL_LONG(_9, marker);
+										ZEPHIR_INIT_NVAR(_10);
+										ZVAL_LONG(_10, variableLength);
+										ZEPHIR_INIT_NVAR(variable);
+										zephir_call_func_p2(variable, "estrndup", _9, _10);
+
+										ZEPHIR_INIT_NVAR(_11);
+										ZVAL_LONG(_11, cursorVar + 1);
+										ZEPHIR_INIT_NVAR(_12);
+										ZVAL_LONG(_12, regexpLength);
+										ZEPHIR_INIT_NVAR(regexp);
+										zephir_call_func_p2(regexp, "estrndup", _11, _12);
+
 										break;
 									}
 								} else {
@@ -306,8 +334,28 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 							}
 							if (!(notValid)) {
 								//missing comment
+								if (zend_is_true(variable)) {
+									if (regexpLength > 0) {
+
+										foundPattern = 0;
+
+										//missing comment
+									}
+								} else {
+									//missing comment
+
+									zephir_str_append(route, "([^/]*)", sizeof("([^/]*)")-1);
+
+									//missing comment
+								}
 							} else {
+
+								zephir_str_append_char(route, '{');
+
 								//missing comment
+
+								zephir_str_append_char(route, '}');
+
 							}
 							continue;
 						}
@@ -343,8 +391,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 		}
 	}
-	//missing comment
-	ZEPHIR_MM_RESTORE();
+
+	RETURN_MM_STRING(route->str, 1);
+
 
 }
 

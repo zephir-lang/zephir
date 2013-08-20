@@ -550,7 +550,12 @@ class ClassMethod
 						if ($variable->isDoublePointer()) {
 							$groupVariables[] = $pointer . $pointer . $variable->getName();
 						} else {
-							$groupVariables[] = $pointer . $variable->getName();
+							$defaultValue = $variable->getDefaultInitValue();
+							if ($defaultValue !== null) {
+								$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;
+							} else {
+								$groupVariables[] = $pointer . $variable->getName();
+							}
 						}
 					}
 				}

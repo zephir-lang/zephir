@@ -155,7 +155,7 @@ class Route
 			if parenthesesCount == 0 {
 				if ch == '{' {
 					if bracketCount == 0 {
-						let marker = cursor,
+						let marker = cursor + 1,
 							intermediate = 0,
 							notValid = false;
 					}
@@ -168,9 +168,8 @@ class Route
 
 								let numberMatches++,
 									variable = null,
-									length = cursor - marker - 1,
-									item = (string) substr(pattern, marker, length)
-									;
+									length = cursor - marker,
+									item = (string) substr(pattern, marker, length);
 
 								for cursorVar, ch in item {
 

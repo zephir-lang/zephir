@@ -38,6 +38,8 @@ typedef struct {
 	(str_p)->str[d_length] = '\0'; \
 }
 
+#define zephir_str_append(str_p, d_str, d_length)
+
 #define zephir_str_assign_long(str_p, lvalue)
 
 #define zephir_str_append_long(str_p, lvalue)
@@ -48,5 +50,6 @@ typedef struct {
 	(str_p)->str[(str_p)->len + 1] = '\0'; \
 	(str_p)->len++; \
 }
+
 
 #endif

@@ -34,6 +34,8 @@ class DeclareStatement
 
 	/**
 	 * Compiles the statement
+	 *
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
@@ -66,20 +68,31 @@ class DeclareStatement
 				$symbolVariable->setIsInitialized(true);
 			}
 
-			/*if (isset($variable['expr'])) {
+			if (isset($variable['expr'])) {
 				$defaultValue = $variable['expr']['value'];
 			} else {
 				$defaultValue = null;
 			}
 
 			if ($defaultValue !== null) {
-				$variables[] = $pointer . $variable['variable']. ' = ' . $defaultValue;
-				$symbolVariable->setInitialized(true);
-			} else {
-				$variables[] = $pointer . $variable['variable'];
-			}*/
+
+				switch ($statement['data-type']) {
+					case 'int':
+						switch ($variable['expr']['type']) {
+							case 'int':
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
+					default:
+						throw new CompilerException('Invalid data type: ' . $statement['data-type'], $variable);
+				}
+
+				$symbolVariable->setDefaultInitValue($defaultValue);
+				$symbolVariable->setIsInitialized(true);
+			}
 		}
 
-		//
 	}
 }

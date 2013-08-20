@@ -17,12 +17,21 @@
 /**
  * Function calls
  */
-ZEPHIR_INIT_CLASS(Test_Fcall) {
+ZEPHIR_INIT_CLASS(Test_Declare) {
 
-	ZEPHIR_REGISTER_CLASS(Test, Fcall, fcall, test_fcall_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Declare, declare, test_declare_method_entry, 0);
 
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare1) {
+
+	int a = 0;
+
+	RETURN_LONG(a);
+
 
 }
 

@@ -64,6 +64,8 @@ class Variable
 
 	protected $_doublePointer = false;
 
+	protected $_defaultInitValue;
+
 	/**
 	 * \Variable
 	 */
@@ -266,6 +268,26 @@ class Variable
 	public function setMustInitNull($mustInitNull)
 	{
 		$this->_mustInitNull = $mustInitNull;
+	}
+
+	/**
+	 * Sets the default init value
+	 *
+	 * @param mixed $value
+	 */
+	public function setDefaultInitValue($value)
+	{
+		$this->_defaultInitValue = $value;
+	}
+
+	/**
+	 * Returns the default init value
+	 *
+	 * @return mixed
+	 */
+	public function getDefaultInitValue()
+	{
+		return $this->_defaultInitValue;
 	}
 
 	/**
