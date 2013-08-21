@@ -141,6 +141,8 @@ class Route
 			return false;
 		}
 
+		let matches = [];
+
 		for cursor, ch in pattern {
 
 			if parenthesesCount == 0 {
@@ -148,8 +150,7 @@ class Route
 					if bracketCount == 0 {
 						let marker = cursor + 1,
 							intermediate = 0,
-							notValid = false,
-							matches = [];
+							notValid = false;
 					}
 					let bracketCount++;
 				} else {

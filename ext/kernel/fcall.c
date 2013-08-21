@@ -326,7 +326,7 @@ static inline int zephir_call_method_internal(zval *return_value, zval *object, 
 	EG(scope) = active_scope;
 
 	if (!noreturn) {
-			zval_ptr_dtor(&return_value);
+		zval_ptr_dtor(&return_value);
 	}
 
 	if (EG(exception)) {
