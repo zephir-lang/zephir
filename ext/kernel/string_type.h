@@ -11,11 +11,12 @@ typedef struct {
 #define zephir_str_init_assign(str_p, d_length) { \
 	if (str_p) { \
 		efree((str_p)->str); \
+	} else { \
+		(str_p) = emalloc(sizeof(zephir_str)); \
 	} \
-	(str_p) = emalloc(sizeof(zephir_str)); \
-	(str_p)->str = emalloc(d_length); \
+	(str_p)->str = emalloc(sizeof(char) * (d_length + 1)); \
 	(str_p)->len = d_length; \
-	(str_p)->size = d_length; \
+	(str_p)->size = d_length + 1; \
 }
 
 #define zephir_str_init_append(str_p, d_length) { \
@@ -35,6 +36,7 @@ typedef struct {
 #define zephir_str_assign(str_p, d_str, d_length) { \
 	zephir_str_init_assign(str_p, d_length); \
 	memcpy((str_p)->str, d_str, d_length); \
+	(str_p)->len = d_length; \
 	(str_p)->str[d_length] = '\0'; \
 }
 

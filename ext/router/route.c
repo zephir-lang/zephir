@@ -221,7 +221,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _17;
 	zend_bool notValid;
 	char ch;
-	zval *pattern_param = NULL, *tmp = NULL, *matches, *_0, *_2 = NULL, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL, *_18, *_19;
+	zval *pattern_param = NULL, *tmp = NULL, *matches, _0, *_2 = NULL, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL, *_18, *_19;
 	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_12 = NULL, *_16 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -230,9 +230,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		zephir_get_strval(pattern_param, &pattern);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_STRINGL(_0, pattern->str, pattern->len, 0);
-	if (zephir_fast_strlen_ev(_0) <= 0) {
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRINGL(&_0, pattern->str, pattern->len, 0);
+	if (zephir_fast_strlen_ev(&_0) <= 0) {
 
 		RETURN_MM_BOOL(0);
 

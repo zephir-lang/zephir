@@ -124,8 +124,8 @@ class Call
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'string':
-					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
+					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					$codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'variable':
@@ -140,9 +140,9 @@ class Call
 							$params[] = $parameterTempVariable->getName();
 							break;
 						case 'string':
-							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_STRINGL(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 0);');
-							$params[] = $parameterTempVariable->getName();
+							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_STRINGL(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 0);');
+							$params[] = '&'. $parameterTempVariable->getName();
 							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();

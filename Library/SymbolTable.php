@@ -226,7 +226,27 @@ class SymbolTable
 	}
 
 	/**
-	 * Creates a temporary hash
+	 * Creates a temporary variable to be used in a write operation
+	 *
+	 * @param string $type
+	 *
+	 */
+	public function getTempLocalVariableForWrite($type, CompilationContext $context)
+	{
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable->setIsInitialized(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
+		$variable->setLocalOnly(true);
+		if ($type == 'variable') {
+			$variable->initVariant($context);
+		}
+		return $variable;
+	}
+
+	/**
+	 * Creates a temporary variable
 	 *
 	 * @param string $type
 	 *
