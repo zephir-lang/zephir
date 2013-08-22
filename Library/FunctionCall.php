@@ -130,15 +130,12 @@ class FunctionCall extends Call
 
 	public function functionExists($functionName)
 	{
-
 		if (function_exists($functionName)) {
 			return true;
 		}
-
 		if ($this->isBuiltInFunction($functionName)) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -151,6 +148,7 @@ class FunctionCall extends Call
 	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 
+		$this->_expression = $expr;
 		$expression = $expr->getExpression();
 
 		$funcName = strtolower($expression['name']);
@@ -191,24 +189,15 @@ class FunctionCall extends Call
 		$codePrinter = $compilationContext->codePrinter;
 
 		/**
-		 * Create temporary variable if needed
+		 * Process the expected symbol to be returned
 		 */
-		$mustInit = false;
-		$isExpecting = $expr->isExpectingReturn();
-		if ($isExpecting) {
-			$symbolVariable = $expr->getExpectingVariable();
-			if (is_object($symbolVariable)) {
-				$readDetector = new ReadDetector($expression);
-				if ($readDetector->detect($symbolVariable->getName(), $expression)) {
-					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-				} else {
-					$mustInit = true;
-				}
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-			}
-		}
+		$this->processExpectedReturn($compilationContext);
 
+		/**
+		 * At this point the function will be done in the PHP userland.
+		 * PHP functions only return zvals so we need to validate the target variable is also a zval
+		 */
+		$symbolVariable = $this->getSymbolVariable();
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
@@ -219,8 +208,8 @@ class FunctionCall extends Call
 		$compilationContext->headersManager->add('kernel/fcall');
 
 		if (!isset($expression['parameters'])) {
-			if ($isExpecting) {
-				if ($mustInit) {
+			if ($this->isExpectingReturn()) {
+				if ($this->mustInitSymbolVariable()) {
 					$symbolVariable->initVariant($compilationContext);
 				}
 				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
@@ -229,8 +218,8 @@ class FunctionCall extends Call
 			}
 		} else {
 			if (count($params)) {
-				if ($isExpecting) {
-					if ($mustInit) {
+				if ($this->isExpectingReturn()) {
+					if ($this->mustInitSymbolVariable()) {
 						$symbolVariable->initVariant($compilationContext);
 					}
 					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
@@ -242,7 +231,7 @@ class FunctionCall extends Call
 			}
 		}
 
-		if ($isExpecting) {
+		if ($this->isExpectingReturn()) {
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
 

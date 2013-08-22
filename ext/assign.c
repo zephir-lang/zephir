@@ -194,7 +194,7 @@ PHP_METHOD(Test_Assign, testAssign15) {
 
 PHP_METHOD(Test_Assign, testAssign16) {
 
-	zval a;
+	zval a = zval_used_for_init;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_LONG(&a, 1);
@@ -206,7 +206,7 @@ PHP_METHOD(Test_Assign, testAssign16) {
 
 PHP_METHOD(Test_Assign, testAssign17) {
 
-	zval a;
+	zval a = zval_used_for_init;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_DOUBLE(&a, 1.0);
@@ -218,7 +218,7 @@ PHP_METHOD(Test_Assign, testAssign17) {
 
 PHP_METHOD(Test_Assign, testAssign18) {
 
-	zval a;
+	zval a = zval_used_for_init;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_BOOL(&a, 0);
@@ -230,7 +230,7 @@ PHP_METHOD(Test_Assign, testAssign18) {
 
 PHP_METHOD(Test_Assign, testAssign19) {
 
-	zval a;
+	zval a = zval_used_for_init;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_BOOL(&a, 1);
@@ -242,7 +242,7 @@ PHP_METHOD(Test_Assign, testAssign19) {
 
 PHP_METHOD(Test_Assign, testAssign20) {
 
-	zval a;
+	zval a = zval_used_for_init;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_NULL(&a);

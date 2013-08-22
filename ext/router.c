@@ -173,7 +173,7 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, getRewriteUri) {
 
-	zval *uriSource, *url = NULL, *urlParts, *realUri, *_GET, *_SERVER, _0;
+	zval *uriSource, *url = NULL, *urlParts, *realUri, *_GET, *_SERVER, _0 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 	//missing comment
@@ -199,7 +199,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 			ZEPHIR_SINIT_VAR(_0);
 			ZVAL_STRING(&_0, "?", 0);
 			ZEPHIR_INIT_VAR(urlParts);
-			zephir_call_func_p2(urlParts, "explode", _0, url);
+			zephir_call_func_p2(urlParts, "explode", &_0, url);
 
 			ZEPHIR_OBS_VAR(realUri);
 			zephir_array_fetch_long(&realUri, urlParts, 0, PH_NOISY);
@@ -432,7 +432,7 @@ PHP_METHOD(Test_Router, handle) {
 
 	HashTable *_5, *_11;
 	HashPosition _4, _10;
-	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params = NULL, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, *_7 = NULL, *_8 = NULL, *_9 = NULL, **_12, *_13, *_14, *_15, *_16, *_17, *_18, _19, _20, *_21, *_22, *_23, *_24, *_25;
+	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params = NULL, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, *_7 = NULL, *_8 = NULL, *_9 = NULL, **_12, *_13, *_14, *_15, *_16, *_17, *_18, _19 = zval_used_for_init, _20 = zval_used_for_init, *_21, *_22, *_23, *_24, *_25;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
@@ -768,13 +768,13 @@ PHP_METHOD(Test_Router, handle) {
 			ZEPHIR_SINIT_VAR(_19);
 			ZVAL_LONG(&_19, 1);
 			ZEPHIR_INIT_VAR(strParams);
-			zephir_call_func_p2(strParams, "substr", paramsStr, _19);
+			zephir_call_func_p2(strParams, "substr", paramsStr, &_19);
 
 			if (zend_is_true(strParams)) {
 				ZEPHIR_SINIT_VAR(_20);
 				ZVAL_STRING(&_20, "/", 0);
 				ZEPHIR_INIT_NVAR(params);
-				zephir_call_func_p2(params, "explode", _20, strParams);
+				zephir_call_func_p2(params, "explode", &_20, strParams);
 
 			}
 			//missing unset

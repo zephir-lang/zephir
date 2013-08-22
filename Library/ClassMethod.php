@@ -535,7 +535,7 @@ class ClassMethod
 			foreach ($variables as $variable) {
 				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
 					if ($variable->isLocalOnly()) {
-						$groupVariables[] = $variable->getName();
+						$groupVariables[] = $variable->getName() . ' = zval_used_for_init';
 					} else {
 						if ($variable->isDoublePointer()) {
 							$groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
@@ -545,7 +545,7 @@ class ClassMethod
 					}
 				} else {
 					if ($variable->isLocalOnly()) {
-						$groupVariables[] = $variable->getName();
+						$groupVariables[] = $variable->getName() . ' = zval_used_for_init';
 					} else {
 						if ($variable->isDoublePointer()) {
 							$groupVariables[] = $pointer . $pointer . $variable->getName();

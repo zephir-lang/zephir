@@ -42,6 +42,11 @@ class CompiledExpression
 		$this->_originalExpr = $originalExpr;
 	}
 
+	/**
+	 * Returns the type of the compiled expression
+	 *
+	 * @return string
+	 */
 	public function getType()
 	{
 		return $this->_type;
