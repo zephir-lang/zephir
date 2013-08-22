@@ -28,6 +28,47 @@ class FunctionCall extends Call
 
 	static protected $_optimizers = array();
 
+	static protected $_functionReflection = array();
+
+	protected function getReflector($funcName)
+	{
+		/**
+		 * Check if the optimizer is already cached
+		 */
+		if (!isset(self::$_functionReflection[$funcName])) {
+			$reflectionFunction = new ReflectionFunction($funcName);
+			self::$_functionReflection[$funcName] = $reflectionFunction;
+			return $reflectionFunction;
+		}
+		return self::$_functionReflection[$funcName];
+	}
+
+	/**
+	 * This method gets the reflection of a function
+	 * to check if any of their parameters are passed by reference
+	 * Built-in functions rarely change the parameters if they aren't passed by reference
+	 *
+	 * @param string $funcName
+	 * @return boolean
+	 */
+	protected function isReadOnly($funcName)
+	{
+		if ($this->isBuiltInFunction($funcName)) {
+			return false;
+		}
+
+		$reflector = $this->getReflector($funcName);
+		if ($reflector) {
+			foreach ($reflector->getParameters() as $parameter) {
+				if ($parameter->isPassedByReference()) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Tries to find specific an specialized optimizer for function calls
 	 *
@@ -68,6 +109,40 @@ class FunctionCall extends Call
 	}
 
 	/**
+	 * Checks if the function is a built-in provided by Zephir
+	 *
+	 * @param string $functionName
+	 */
+	public function isBuiltInFunction($functionName)
+	{
+		switch ($functionName) {
+			case 'memstr':
+			case 'get_class_ns':
+			case 'get_ns_class':
+			case 'camelize':
+			case 'uncamelize':
+			case 'starts_with':
+			case 'ends_with':
+				return true;
+		}
+		return false;
+	}
+
+	public function functionExists($functionName)
+	{
+
+		if (function_exists($functionName)) {
+			return true;
+		}
+
+		if ($this->isBuiltInFunction($functionName)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Compiles a function
 	 *
 	 * @param Expression $expr
@@ -80,6 +155,12 @@ class FunctionCall extends Call
 
 		$funcName = strtolower($expression['name']);
 
+		$exists = true;
+		if (!$this->functionExists($funcName)) {
+			echo "Warning: Function \"$funcName\" does not exist at compile time\n";
+			$exists = false;
+		}
+
 		/**
 		 * Try to optimize function calls
 		 */
@@ -88,11 +169,21 @@ class FunctionCall extends Call
 			return $compiledExpr;
 		}
 
+		if ($exists) {
+			$readOnly = $this->isReadOnly($funcName);
+		} else {
+			$readOnly = false;
+		}
+
 		/**
 		 * Resolve parameters
 		 */
 		if (isset($expression['parameters'])) {
-			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+			if ($readOnly) {
+				$params = $this->getReadOnlyResolvedParams($expression['parameters'], $compilationContext, $expression);
+			} else {
+				$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+			}
 		} else {
 			$params = array();
 		}

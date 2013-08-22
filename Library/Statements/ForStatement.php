@@ -78,9 +78,9 @@ class ForStatement
 		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
 
 		if ($this->_statement['reverse']) {
-			$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
-				$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
-				$tempVariable->getName() . '++) {');
+			$codePrinter->output('for (' . $tempVariable->getName() . ' = ' . $expression->getCode() . '->len; ' .
+				$tempVariable->getName() . ' >= 0; ' .
+				$tempVariable->getName() . '--) {');
 		} else {
 			$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
 				$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
