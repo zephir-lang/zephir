@@ -541,7 +541,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				}
 				//missing comment
 				ZEPHIR_INIT_VAR(_1);
-				zephir_call_func_p1(_1, "uncamelize", realClassName);
+				zephir_uncamelize(_1, realClassName);
 
 				zephir_array_update_string(&routePaths, SL("controller"), &_1, PH_COPY | PH_SEPARATE);
 

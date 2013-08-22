@@ -194,7 +194,7 @@ class FunctionCall extends Call
 		$this->processExpectedReturn($compilationContext);
 
 		/**
-		 * At this point the function will be done in the PHP userland.
+		 * At this point the function will be called in the PHP userland.
 		 * PHP functions only return zvals so we need to validate the target variable is also a zval
 		 */
 		$symbolVariable = $this->getSymbolVariable();
