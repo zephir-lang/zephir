@@ -1,8 +1,4 @@
 .DS_Store
-lemon.dSYM/
-xx.dSYM/
-xx
-lemon
 .temp/
 ext/Makefile.global
 ext/acinclude.m4
@@ -87,3 +83,6 @@ ext/test.o
 ext/declare.o
 ext/fcall.o
 ext/cast.o
+bin/zephir-parser
+parser/lemon
+parser/lemon.dSYM/

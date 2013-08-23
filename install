@@ -1,3 +1,4 @@
+cd parser
 rm -f *.o
 rm -f *.lo
 if [ ! -f lemon ]; then
@@ -11,4 +12,4 @@ sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c
 #sed s/"TOKEN"/"JTOKEN"/g parser.c > xx && mv -f xx parser.c
 #sed s/"YY"/"JJ"/g scanner.c > xx && mv -f xx scanner.c
 #sed s/"yy"/"jj"/g scanner.c > xx && mv -f xx scanner.c
-gcc -Wl,-rpath /usr/local/lib -I/usr/local/lib -L/usr/local/lib -L/opt/local/lib -g3 parser.c scanner.c -ljson -ljson-c -o xx
+gcc -Wl,-rpath /usr/local/lib -I/usr/local/lib -L/usr/local/lib -L/opt/local/lib -g3 parser.c scanner.c -ljson -ljson-c -o ../bin/zephir-parser

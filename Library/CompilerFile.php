@@ -64,7 +64,7 @@ class CompilerFile
 	public function genIR()
 	{
 		$compilePath = str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
-		system('./xx ' . realpath($this->_filePath) . ' > .temp/' . $compilePath);
+		system('./bin/zephir-parser ' . realpath($this->_filePath) . ' > .temp/' . $compilePath);
 		return json_decode(file_get_contents(".temp/" . $compilePath), true);
 	}
 
