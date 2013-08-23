@@ -18,30 +18,30 @@
 */
 
 /* Base Operator */
-require 'Library/Operators/BaseOperator.php';
+require ZEPHIRPATH . 'Library/Operators/BaseOperator.php';
 
 /* Arithmetical operators */
-require 'Library/Operators/Arithmetical/BaseOperator.php';
-require 'Library/Operators/Arithmetical/AddOperator.php';
-require 'Library/Operators/Arithmetical/SubOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/BaseOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/AddOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/SubOperator.php';
 
 /* Logical operators */
-require 'Library/Operators/Logical/BaseOperator.php';
-require 'Library/Operators/Logical/AndOperator.php';
-require 'Library/Operators/Logical/OrOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Logical/BaseOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Logical/AndOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Logical/OrOperator.php';
 
 /** Unary Operator */
-require 'Library/Operators/Unary/NotOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Unary/NotOperator.php';
 
 /* Comparison operators */
-require 'Library/Operators/Comparison/BaseOperator.php';
-require 'Library/Operators/Comparison/IdenticalOperator.php';
-require 'Library/Operators/Comparison/EqualsOperator.php';
-require 'Library/Operators/Comparison/NotEqualsOperator.php';
-require 'Library/Operators/Comparison/LessOperator.php';
-require 'Library/Operators/Comparison/GreaterOperator.php';
-require 'Library/Operators/Comparison/LessEqualOperator.php';
-require 'Library/Operators/Comparison/GreaterEqualOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/BaseOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/IdenticalOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/EqualsOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/NotEqualsOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/LessOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/LessEqualOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 
 /**
  * Expressions

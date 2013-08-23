@@ -98,15 +98,85 @@ class Compiler
 		return false;
 	}
 
+	protected function _copyBaseKernel($path)
+	{
+		/**
+		 * Pre compile all files
+		 */
+		$iterator = new DirectoryIterator($path);
+		foreach ($iterator as $item) {
+			if ($item->isDir()) {
+				if ($item->getFileName() != '.' && $item->getFileName() != '..') {
+					$this->_copyBaseKernel($item->getPathname());
+				}
+			} else {
+				if (preg_match('/\.[hc]$/', $item->getPathname())) {
+					if (strpos($item->getPathName(), 'alternative') !== false) {
+						copy($item->getPathname(), 'ext/kernel/alternative/' . $item->getBaseName());
+					} else {
+						copy($item->getPathname(), 'ext/kernel/' . $item->getBaseName());
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Initializes a zephir extension
+	 */
+	public function init()
+	{
+		//if (file_exists('config.json')) {
+		//	throw new Exception("A Zephir extension is already initialized in this directory");
+		//}
+
+		if (!is_dir('.temp')) {
+			mkdir('.temp');
+		}
+
+		$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
+		if (!$namespace) {
+			throw new Exception("Cannot obtain a valid initial namespace for the project");
+		}
+
+		file_put_contents('config.json', '{"namespace": "' . $namespace . '"}');
+
+		/**
+		 * Create 'kernel'
+		 */
+		if (!is_dir('ext')) {
+			mkdir('ext');
+			mkdir('ext/kernel');
+			mkdir('ext/kernel/alternative');
+			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
+			copy(__DIR__ . '/../ext/install', 'ext/install');
+			chmod('ext/install', 0755);
+			copy(__DIR__ . '/../ext/php_test.h', 'ext/php_test.h');
+		}
+
+		if (!is_dir($namespace)) {
+			mkdir($namespace);
+		}
+	}
+
 	/**
 	 *
 	 */
 	public function compile()
 	{
 
+		if (!file_exists('config.json')) {
+			throw new Exception("Zephir extension is not initialized in this directory");
+		}
+
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
+
+		/**
+		 * Global config
+		 */
+		$config = new Config();
 
 		/**
 		 * Global logger
@@ -114,9 +184,17 @@ class Compiler
 		$logger = new Logger();
 
 		/**
+		 * Get global namespace
+		 */
+		$namespace = $config->get('namespace');
+
+		/**
 		 * Round 1. pre-compile all files in memory
 		 */
-		$this->_recursivePreCompile('test');
+		$this->_recursivePreCompile($namespace);
+		if (!count($this->_files)) {
+			throw new Exception("Zephir files to compile weren't found");
+		}
 
 		/**
 		 * Round 2. compile all files to C sources
@@ -132,12 +210,24 @@ class Compiler
 		/**
 		 * Round 3. create config.m4 and config.w32 files
 		 */
-		$this->createConfigFiles();
+		$this->createConfigFiles($namespace);
 
 		/**
 		 * Round 4. create project.c and project.h files
 		 */
-		$this->createProjectFiles();
+		$this->createProjectFiles($namespace);
+	}
+
+	/**
+	 * Compiles an installs the extension
+	 */
+	public function install()
+	{
+		if (!file_exists('ext/Makefile')) {
+			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize && ./configure --enable-test && sudo make install 1> /dev/null');
+		} else {
+			system('cd ext && sudo make install 1> /dev/null');
+		}
 	}
 
 	/**
@@ -145,11 +235,10 @@ class Compiler
 	 *
 	 * @param string $project
 	 */
-	public function createConfigFiles($project='test')
+	public function createConfigFiles($project)
 	{
 
-		$content = file_get_contents('templates/config.m4');
-
+		$content = file_get_contents(__DIR__ . '/../templates/config.m4');
 		if (empty($content)) {
 			throw new Exception("Template config.m4 doesn't exists");
 		}
@@ -162,7 +251,7 @@ class Compiler
 		);
 
 		foreach ($toReplace as $mark => $replace) {
-			$content = str_replace($mark,$replace,$content);
+			$content = str_replace($mark, $replace, $content);
 		}
 
 		file_put_contents('ext/config.m4', $content);
@@ -173,16 +262,15 @@ class Compiler
 	 *
 	 * @param string $project
 	 */
-	public function createProjectFiles($project='test')
+	public function createProjectFiles($project)
 	{
 
 		/**
 		 * project.c
 		 */
-		$content = file_get_contents('templates/project.c');
-
+		$content = file_get_contents(__DIR__ . '/../templates/project.c');
 		if (empty($content)) {
-			throw new Exception("Template project.c doesn't exists");
+			throw new Exception("Template project.c doesn't exist");
 		}
 
 		$classEntries = array();
@@ -205,15 +293,13 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/' . strtolower($project) . '.c', $content);
-
+		file_put_contents('ext/' . $project . '.c', $content);
 		unset($content);
 
 		/**
 		 * project.h
 		 */
-		$content = file_get_contents('templates/project.h');
-
+		$content = file_get_contents(__DIR__ . '/../templates/project.h');
 		if (empty($content)) {
 			throw new Exception("Template project.h doesn't exists");
 		}
@@ -233,38 +319,62 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/' . strtolower($project) . '.h', $content);
+		file_put_contents('ext/' . $project . '.h', $content);
+	}
+
+	protected function showException($e)
+	{
+		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
+		if (method_exists($e, 'getExtra')) {
+			$extra = $e->getExtra();
+			if (is_array($extra)) {
+				if (isset($extra['file'])) {
+					echo PHP_EOL;
+					$lines = file($extra['file']);
+					$line = $lines[$extra['line'] - 1];
+					echo "\t", str_replace("\t", " ", $line);
+					if (($extra['char'] - 1) > 0) {
+						echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
+					}
+				}
+			}
+		}
+		//echo PHP_EOL;
+		//$pwd = getcwd();
+		//echo 'at ', str_replace($pwd, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
+		//echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
+		exit(1);
 	}
 
 	/**
-	 * Boots the compiler showing exceptions
+	 * Boots the compiler executing the specified action
 	 */
 	public static function boot()
 	{
 		try {
+
 			$c = new Compiler();
-			echo $c->compile();
-		} catch (Exception $e) {
-			echo 'Exception: ', $e->getMessage(), PHP_EOL;
-			if (method_exists($e, 'getExtra')) {
-				$extra = $e->getExtra();
-				if (is_array($extra)) {
-					if (isset($extra['file'])) {
-						echo PHP_EOL;
-						$lines = file($extra['file']);
-						$line = $lines[$extra['line'] - 1];
-						echo "\t", str_replace("\t", " ", $line);
-						if (($extra['char'] - 1) > 0) {
-							echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
-						}
-					}
-				}
+
+			if (isset($_SERVER['argv'][1])) {
+				$action = $_SERVER['argv'][1];
+			} else {
+				$action = 'compile';
 			}
-			echo PHP_EOL;
-			$pwd = getcwd();
-			echo $e->getFile(), ' ', $e->getLine(), PHP_EOL;
-			echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
-			exit(1);
+
+			switch ($action) {
+				case 'init':
+					$c->init();
+					break;
+				case 'compile':
+					$c->compile();
+					$c->install();
+					break;
+				default:
+					throw new Exception('Unrecognized action "' . $action . '"');
+			}
+
+		} catch (Exception $e) {
+			self::showException($e);
 		}
 	}
 

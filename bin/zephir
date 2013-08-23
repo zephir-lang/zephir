@@ -1,4 +1,6 @@
 #!/bin/bash
-export CC="gcc"
-export CFLAGS="-O0 -g"
-php compiler.php && cd ext && sudo make install
+if [ -z "$ZEPHIRDIR" ]; then
+	echo "Environment variable ZEPHIRDIR is not set"
+	exit 1
+fi
+php $ZEPHIRDIR/compiler.php $*

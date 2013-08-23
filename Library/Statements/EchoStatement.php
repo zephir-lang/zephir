@@ -35,17 +35,23 @@ class EchoStatement
 	{
 		foreach ($this->_statement['expressions'] as $expr) {
 			switch ($expr['type']) {
+				case 'string':
+					$compilationContext->codePrinter->output('php_printf("' . $expr['value'] . '");');
+					break;
 				case 'variable':
-					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext);
+					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext, $expr);
 					switch ($variable->getType()) {
 						case 'long':
-							$compilationContext->codePrinter->output('fprintf(stdout, "%ld\\n", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%ld", ' . $expr['value'] . ');');
 							break;
 						case 'int':
-							$compilationContext->codePrinter->output('fprintf(stdout, "%d\\n", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
 							break;
 						case 'char':
-							$compilationContext->codePrinter->output('fprintf(stdout, "%c\\n", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%c", ' . $expr['value'] . ');');
+							break;
+						case 'string':
+							$compilationContext->codePrinter->output('php_printf("%s", ' . $expr['value'] . '->str);');
 							break;
 						case 'variable':
 							$compilationContext->codePrinter->output('zend_print_zval(' . $expr['value'] . ', 0);');
