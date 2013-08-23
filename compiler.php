@@ -54,6 +54,7 @@ require 'Library/Call.php';
 require 'Library/FunctionCall.php';
 require 'Library/MethodCall.php';
 require 'Library/Passes/LocalContextPass.php';
+require 'Library/Logger.php';
 require 'Library/Utils.php';
 
 Compiler::boot();

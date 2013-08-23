@@ -233,8 +233,9 @@ class CompilerFile
 	 * Compiles the file
 	 *
 	 * @param \Compiler $compiler
+	 * @param \Logger $logger
 	 */
-	public function compile(Compiler $compiler)
+	public function compile(Compiler $compiler, Logger $logger)
 	{
 
 		/**
@@ -246,6 +247,11 @@ class CompilerFile
 		 * Set global compiler in the compilation context
 		 */
 		$compilationContext->compiler = $compiler;
+
+		/**
+		 * Set global logger in the compilation context
+		 */
+		$compilationContext->logger = $logger;
 
 		/**
 		 * Headers manager
@@ -262,13 +268,12 @@ class CompilerFile
 		$codePrinter->outputBlankLine();
 
 		$class = false;
-		foreach ($this->_ir as $topStatement)
-		{
+		foreach ($this->_ir as $topStatement) {
 
 			switch ($topStatement['type']) {
 				case 'class':
 					if ($class) {
-						throw new Exception("More than one class defined in the same file");
+						throw new CompilerException("More than one class defined in the same file", $topStatement);
 					}
 					$class = true;
 					$this->compileClass($compilationContext, $this->_namespace, $topStatement);

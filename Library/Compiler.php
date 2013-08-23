@@ -109,6 +109,11 @@ class Compiler
 		}
 
 		/**
+		 * Global logger
+		 */
+		$logger = new Logger();
+
+		/**
 		 * Round 1. pre-compile all files in memory
 		 */
 		$this->_recursivePreCompile('test');
@@ -118,7 +123,7 @@ class Compiler
 		 */
 		$files = array();
 		foreach ($this->_files as $compileFile) {
-			$compileFile->compile($this);
+			$compileFile->compile($this, $logger);
 			$files[] = $compileFile->getCompiledFile();
 		}
 
@@ -133,7 +138,6 @@ class Compiler
 		 * Round 4. create project.c and project.h files
 		 */
 		$this->createProjectFiles();
-
 	}
 
 	/**

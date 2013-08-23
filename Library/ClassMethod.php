@@ -460,8 +460,7 @@ class ClassMethod
 		foreach ($symbolTable->getVariables() as $variable) {
 
 			if ($variable->getNumberUses() <= 0) {
-				echo 'Warning: Variable "' . $variable->getName() . '" declared but not used in ' .
-					$compilationContext->classDefinition->getName() . '::' . $this->getName(), PHP_EOL;
+				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $compilationContext->classDefinition->getName() . '::' . $this->getName(), "unused-variable");
 				if ($variable->isExternal() == false) {
 					continue;
 				}

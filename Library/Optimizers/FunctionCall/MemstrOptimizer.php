@@ -9,6 +9,7 @@ class MemstrOptimizer
 {
 	/**
 	 *
+	 * @param array $expression
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
@@ -35,4 +36,5 @@ class MemstrOptimizer
 
 		return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
 	}
+
 }
