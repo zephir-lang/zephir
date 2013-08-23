@@ -214,8 +214,9 @@ class ClassDefinition
 		 */
 		foreach ($this->getMethods() as $method) {
 
-			if ($method->getDocBlock()) {
-				$codePrinter->outputDocBlock($method->getDocBlock());
+			$docBlock = $method->getDocBlock();
+			if ($docBlock) {
+				$codePrinter->outputDocBlock($docBlock);
 			}
 
 			$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');

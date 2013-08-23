@@ -102,6 +102,7 @@ class EvalExpression
 		}
 
 		$expr = new Expression($exprRaw);
+		$expr->setReadOnly(true);
 		$compiledExpression = $expr->compile($compilationContext);
 
 		/**

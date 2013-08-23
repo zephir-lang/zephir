@@ -56,6 +56,8 @@ class Expression
 
 	protected $_expecting = true;
 
+	protected $_readOnly = false;
+
 	protected $_expectingVariable;
 
 	public function __construct(array $expression)
@@ -87,6 +89,26 @@ class Expression
 	}
 
 	/**
+	 * Sets if the result of the evaluated expression is read only
+	 *
+	 * @param boolean $readOnly
+	 */
+	public function setReadOnly($readOnly)
+	{
+		$this->_readOnly = $readOnly;
+	}
+
+	/**
+	 * Checks if the result of the evaluated expression is read only
+	 *
+	 * @return boolean
+	 */
+	public function isReadOnly()
+	{
+		return $this->_readOnly;
+	}
+
+	/**
 	 * Checks if the returned value by the expression
 	 * is expected to be assigned to an external symbol
 	 *
@@ -97,6 +119,12 @@ class Expression
 		return $this->_expecting;
 	}
 
+	/**
+	 * Returns the variable which is expected to return the
+	 * result of the expression evaluation
+	 *
+	 * @return \Variable
+	 */
 	public function getExpectingVariable()
 	{
 		return $this->_expectingVariable;
@@ -892,11 +920,13 @@ class Expression
 
 			case 'add':
 				$expr = new AddOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'sub':
 				$expr = new SubOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 

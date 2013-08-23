@@ -274,6 +274,48 @@ PHP_METHOD(Test_Flow, testIf12) {
 
 }
 
+PHP_METHOD(Test_Flow, testIf13) {
+
+	int a, b;
+
+	a = 1;
+
+	b = 2;
+
+	if (a + b) {
+
+		RETURN_LONG(1);
+
+	}
+
+	RETURN_LONG(0);
+
+
+}
+
+PHP_METHOD(Test_Flow, testIf14) {
+
+	zval a = zval_used_for_init, b = zval_used_for_init, _0 = zval_used_for_init;
+
+	ZEPHIR_SINIT_VAR(a);
+	ZVAL_LONG(&a, 1);
+
+	ZEPHIR_SINIT_VAR(b);
+	ZVAL_LONG(&b, 2);
+
+	ZEPHIR_SINIT_VAR(_0);
+	zephir_add_function(&_0, &a, &b TSRMLS_CC);
+	if (zend_is_true(&_0)) {
+
+		RETURN_LONG(1);
+
+	}
+
+	RETURN_LONG(0);
+
+
+}
+
 PHP_METHOD(Test_Flow, testLoop1) {
 
 	zval a = zval_used_for_init;

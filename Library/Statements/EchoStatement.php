@@ -35,12 +35,27 @@ class EchoStatement
 	{
 		foreach ($this->_statement['expressions'] as $expr) {
 			switch ($expr['type']) {
+				case 'int':
+					$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+					break;
+				case 'long':
+					$compilationContext->codePrinter->output('php_printf("%ld", ' . $expr['value'] . ');');
+					break;
+				case 'int':
+					$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+					break;
+				case 'char':
+					$compilationContext->codePrinter->output('php_printf("%c", ' . $expr['value'] . ');');
+					break;
 				case 'string':
 					$compilationContext->codePrinter->output('php_printf("' . $expr['value'] . '");');
 					break;
 				case 'variable':
 					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext, $expr);
 					switch ($variable->getType()) {
+						case 'int':
+							$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+							break;
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $expr['value'] . ');');
 							break;

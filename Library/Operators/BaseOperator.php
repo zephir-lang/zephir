@@ -22,6 +22,8 @@ class BaseOperator
 
 	protected $_expecting = true;
 
+	protected $_readOnly = false;
+
 	protected $_expectingVariable;
 
 	/**
@@ -53,13 +55,41 @@ class BaseOperator
 				if ($symbolVariable->getType() == 'variable') {
 					$symbolVariable->initVariant($compilationContext);
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					if (!$this->_readOnly) {
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					} else {
+						$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					}
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				if (!$this->_readOnly) {
+					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				} else {
+					$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+				}
 			}
 		}
 		return $symbolVariable;
+	}
+
+	/**
+	 * Sets if the result of the evaluated expression is read only
+	 *
+	 * @param boolean $readOnly
+	 */
+	public function setReadOnly($readOnly)
+	{
+		$this->_readOnly = $readOnly;
+	}
+
+	/**
+	 * Checks if the result of the evaluated expression is read only
+	 *
+	 * @return boolean
+	 */
+	public function isReadOnly()
+	{
+		return $this->_readOnly;
 	}
 
 }
