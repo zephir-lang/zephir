@@ -31,11 +31,18 @@ class SymbolTable
 
 	protected $_tempVariable = 0;
 
+	protected $_tempVariables = array();
+
 	protected $_localContext;
 
-	public function __construct()
+	/**
+	 *
+	 *
+	 * @param \CompilationContext $compilationContext
+	 */
+	public function __construct($compilationContext)
 	{
-		$thisVar = new Variable('variable', 'this');
+		$thisVar = new Variable('variable', 'this', $compilationContext->currentBranch);
 		$thisVar->setIsInitialized(true);
 		$thisVar->increaseUses();
 		$thisVar->setReadOnly(true);
@@ -72,9 +79,9 @@ class SymbolTable
 	 * @param array
 	 * @return \Variable
 	 */
-	public function addVariable($type, $name, $defaultValue=null)
+	public function addVariable($type, $name, CompilationContext $compilationContext, $defaultValue=null)
 	{
-		$variable = new Variable($type, $name, $defaultValue);
+		$variable = new Variable($type, $name, $compilationContext->currentBranch, $defaultValue);
 		if ($type == 'variable') {
 			if ($this->_localContext) {
 				/**
@@ -117,6 +124,8 @@ class SymbolTable
 	/**
 	 * Return a variable in the symbol table, it will be used for a read operation
 	 *
+	 * @param string $name
+	 * @param \CompilationContext $compilationContext
 	 * @return \Variable
 	 */
 	public function getVariableForRead($name, $compilationContext=null, $statement=null)
@@ -134,14 +143,14 @@ class SymbolTable
 				 */
 				$compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
 
-				$superVar = new Variable('variable', $name);
+				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
 				$superVar->setIsInitialized(true);
 				$this->_variables[$name] = $superVar;
 			}
 		}
 
 		if (!$this->hasVariable($name)) {
-			throw new CompilerException("Cannot read variable '" . $name . "' because it wasn't defined", $statement);
+			throw new CompilerException("Cannot read variable '" . $name . "' because it wasn't declared", $statement);
 		}
 
 		$variable = $this->getVariable($name);
@@ -196,8 +205,37 @@ class SymbolTable
 	}
 
 	/**
+	 * Register a variable as temporal
+	 *
+	 * @param string $type
+	 * @param string $location
+	 * @param \Variable $variable
+	 */
+	protected function _registerTempVariable($type, $location, Variable $variable)
+	{
+		if (!isset($this->_tempVariables[$location][$type])) {
+			$this->_tempVariables[$location][$type] = array();
+		}
+		$this->_tempVariables[$location][$type][] = $variable;
+	}
+
+	protected function _reuseTempVariable($type, $location)
+	{
+		if (isset($this->_tempVariables[$location][$type])) {
+			foreach ($this->_tempVariables[$location][$type] as $variable) {
+				if ($variable->isIdle()) {
+					$variable->setIdle(false);
+					return $variable;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Returns a temporal variable
 	 *
+	 * @param string $type
 	 * @return Variable
 	 */
 	public function getTempVariable($type)
@@ -210,18 +248,25 @@ class SymbolTable
 	 * Creates a temporary variable to be used in a write operation
 	 *
 	 * @param string $type
-	 *
+	 * @param \CompilationContext $context
 	 */
 	public function getTempVariableForWrite($type, CompilationContext $context)
 	{
+		$variable = $this->_reuseTempVariable($type, 'heap');
+		if (is_object($variable)) {
+			return $variable;
+		}
+
 		$tempVar = $this->_tempVariable++;
-		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		if ($type == 'variable') {
 			$variable->initVariant($context);
 		}
+
+		$this->_registerTempVariable($type, 'heap', $variable);
 		return $variable;
 	}
 
@@ -229,12 +274,19 @@ class SymbolTable
 	 * Creates a temporary variable to be used in a write operation
 	 *
 	 * @param string $type
-	 *
+	 * @param \CompilationContext $context
+	 * @return \Variable
 	 */
 	public function getTempLocalVariableForWrite($type, CompilationContext $context)
 	{
+
+		$variable = $this->_reuseTempVariable($type, 'stack');
+		if (is_object($variable)) {
+			return $variable;
+		}
+
 		$tempVar = $this->_tempVariable++;
-		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
@@ -242,6 +294,8 @@ class SymbolTable
 		if ($type == 'variable') {
 			$variable->initVariant($context);
 		}
+
+		$this->_registerTempVariable($type, 'stack', $variable);
 		return $variable;
 	}
 
@@ -249,15 +303,21 @@ class SymbolTable
 	 * Creates a temporary variable
 	 *
 	 * @param string $type
-	 *
+	 * @param \CompilationContext $context
 	 */
 	public function addTemp($type, CompilationContext $context)
 	{
+		$variable = $this->_reuseTempVariable($type, 'heap');
+		if (is_object($variable)) {
+			return $variable;
+		}
+
 		$tempVar = $this->_tempVariable++;
-		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
+		$this->_registerTempVariable($type, 'heap', $variable);
 		return $variable;
 	}
 
@@ -266,18 +326,55 @@ class SymbolTable
 	 * Variables are automatically tracked by the memory manager
 	 *
 	 * @param string $type
-	 *
+	 * @param \CompilationContext $context
 	 * @return \Variable
 	 */
 	public function getTempVariableForObserve($type, CompilationContext $context)
 	{
+
+		$variable = $this->_reuseTempVariable($type, 'observe');
+		if (is_object($variable)) {
+			return $variable;
+		}
+
 		$tempVar = $this->_tempVariable++;
-		$variable = $this->addVariable($type, '_' . $tempVar);
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->observeVariant($context);
+		$this->_registerTempVariable($type, 'observe', $variable);
 		return $variable;
+	}
+
+	/**
+	 * Returns the temporal variables declared in a given context
+	 *
+	 * @return array
+	 */
+	public function getTemporalVariables()
+	{
+		return $this->_tempVariables;
+	}
+
+	/**
+	 * Traverses temporal variables created in a specific branch
+	 * marking them as idle
+	 *
+	 * @param \CompilationContext $context
+	 */
+	public function markTemporalVariablesIdle(CompilationContext $compilationContext)
+	{
+		$branch = $compilationContext->currentBranch;
+		foreach ($this->_tempVariables as $location => $typeVariables) {
+			foreach ($typeVariables as $type => $variables) {
+				foreach ($variables as $variable) {
+					if ($branch == $variable->getBranch()) {
+						$variable->setIdle(true);
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -36,6 +36,7 @@ require ZEPHIRPATH . 'Library/Operators/Unary/NotOperator.php';
 /* Comparison operators */
 require ZEPHIRPATH . 'Library/Operators/Comparison/BaseOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/IdenticalOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Comparison/NotIdenticalOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/EqualsOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/NotEqualsOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/LessOperator.php';
@@ -128,96 +129,6 @@ class Expression
 	public function getExpectingVariable()
 	{
 		return $this->_expectingVariable;
-	}
-
-	public function compileIdentical($operator, $expression, CompilationContext $compilationContext)
-	{
-		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
-		}
-
-		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
-		}
-
-		$leftExpr = new Expression($expression['left']);
-		$left = $leftExpr->compile($compilationContext);
-
-		$rightExpr = new Expression($expression['right']);
-		$right = $rightExpr->compile($compilationContext);
-
-		switch ($left->getType()) {
-			case 'variable':
-
-				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-
-				switch ($variable->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
-					case 'bool':
-						switch ($right->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getCode() . ')', $expression['left']);
-							case 'bool':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' ' . $right->getBooleanCode() . ')', $expression['left']);
-							case 'null':
-								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $operator . ' 0)', $expression['left']);
-							default:
-								throw new CompilerException("Error Processing Request", $expression['left']);
-						}
-						break;
-					case 'variable':
-						switch ($right->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
-							case 'bool':
-								$compilationContext->headersManager->add('kernel/operators');
-								if ($right->getCode() == 'true') {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression['left']);
-								} else {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression['left']);
-								}
-							case 'null':
-								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'Z_TYPE_P(' . $left->getCode() . ') ' . $operator . ' IS_NULL', $expression['left']);
-							default:
-								throw new CompilerException("Error Processing Request", $expression['left']);
-						}
-						break;
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-				switch ($right->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' ' . $right->getCode(), $expression);
-					case 'double':
-						return new CompiledExpression('bool', $left->getCode() . ' ' . $operator . ' (int) ' . $right->getCode(), $expression);
-					default:
-						throw new CompilerException("Error Processing Request", $expression);
-				}
-				break;
-			default:
-				throw new CompilerException("Error Processing Request", $expression);
-		}
-
 	}
 
 	public function compileIsset($expression, CompilationContext $compilationContext)
@@ -396,7 +307,6 @@ class Expression
 			case 'int':
 			case 'uint':
 			case 'long':
-			case 'ulong':
 				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
 				break;
@@ -410,7 +320,6 @@ class Expression
 					case 'int':
 					case 'uint':
 					case 'long':
-					case 'ulong':
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
 						break;
@@ -436,6 +345,8 @@ class Expression
 	/**
 	 * Creates a new instance
 	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
 	 */
 	public function newInstance($expression, CompilationContext $compilationContext)
 	{
@@ -456,6 +367,10 @@ class Expression
 			}
 		} else {
 			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+		}
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Objects can only be instantiated in dynamical variables", $expression);
 		}
 
 		/**
@@ -875,46 +790,57 @@ class Expression
 			case 'new':
 				return $this->newInstance($expression, $compilationContext);
 
+			case 'not':
+				$expr = new NotOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			case 'equals':
 				$expr = new EqualsOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'not-equals':
 				$expr = new NotEqualsOperator();
-				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
-				return $expr->compile($expression, $compilationContext);
-
-			case 'not':
-				$expr = new NotOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'identical':
 				$expr = new IdenticalOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'not-identical':
-				return $this->compileIdentical('!=', $expression, $compilationContext);
+				$expr = new NotIdenticalOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'greater':
 				$expr = new GreaterOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'less':
 				$expr = new LessOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'less-equal':
 				$expr = new LessEqualOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'greater-equal':
 				$expr = new GreaterEqualOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
@@ -932,11 +858,13 @@ class Expression
 
 			case 'and':
 				$expr = new AndOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
 			case 'or':
 				$expr = new OrOperator();
+				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 

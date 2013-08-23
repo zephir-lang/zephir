@@ -86,7 +86,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern = NULL, *idPattern, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7, *_8, *_9, *_10, *_11, *_12, *_13;
+	zval *pattern, *compiledPattern = NULL, *idPattern, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -114,56 +114,45 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:controller"))) {
-			ZEPHIR_INIT_VAR(_2);
-			ZVAL_STRING(_2, "/:controller", 1);
-			ZEPHIR_INIT_VAR(_3);
-			zephir_call_func_p3(_3, "str_replace", _2, idPattern, compiledPattern);
+			ZVAL_STRING(_0, "/:controller", 1);
+			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _3);
+			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:namespace"))) {
-			ZEPHIR_INIT_VAR(_4);
-			ZVAL_STRING(_4, "/:namespace", 1);
-			ZEPHIR_INIT_VAR(_5);
-			zephir_call_func_p3(_5, "str_replace", _4, idPattern, compiledPattern);
+			ZVAL_STRING(_0, "/:namespace", 1);
+			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _5);
+			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:action"))) {
-			ZEPHIR_INIT_VAR(_6);
-			ZVAL_STRING(_6, "/:action", 1);
-			ZEPHIR_INIT_VAR(_7);
-			zephir_call_func_p3(_7, "str_replace", _6, idPattern, compiledPattern);
+			ZVAL_STRING(_0, "/:action", 1);
+			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _7);
+			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:params"))) {
-			ZEPHIR_INIT_VAR(_8);
-			ZVAL_STRING(_8, "/:params", 1);
-			ZEPHIR_INIT_VAR(_9);
-			ZVAL_STRING(_9, "(/.*)*", 1);
-			ZEPHIR_INIT_VAR(_10);
-			zephir_call_func_p3(_10, "str_replace", _8, _9, compiledPattern);
+			ZVAL_STRING(_0, "/:params", 1);
+			ZVAL_STRING(_1, "(/.*)*", 1);
+			ZEPHIR_INIT_VAR(_2);
+			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _10);
+			ZEPHIR_CPY_WRT(compiledPattern, _2);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:int"))) {
-			ZEPHIR_INIT_VAR(_11);
-			ZVAL_STRING(_11, "/:int", 1);
-			ZEPHIR_INIT_VAR(_12);
-			ZVAL_STRING(_12, "/([0-9]+)", 1);
-			ZEPHIR_INIT_VAR(_13);
-			zephir_call_func_p3(_13, "str_replace", _11, _12, compiledPattern);
+			ZVAL_STRING(_0, "/:int", 1);
+			ZVAL_STRING(_1, "/([0-9]+)", 1);
+			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _13);
+			ZEPHIR_CPY_WRT(compiledPattern, _2);
 
 		}
 	}
@@ -221,7 +210,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _17;
 	zend_bool notValid;
 	char ch;
-	zval *pattern_param = NULL, *tmp = NULL, *matches, _0 = zval_used_for_init, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, _8 = zval_used_for_init, _9 = zval_used_for_init, _10 = zval_used_for_init, *_11 = NULL, _13 = zval_used_for_init, _14 = zval_used_for_init, *_15 = NULL, *_18, *_19;
+	zval *pattern_param = NULL, *tmp = NULL, *matches, _0 = zval_used_for_init, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, _8 = zval_used_for_init, _9 = zval_used_for_init, _10 = zval_used_for_init, *_11 = NULL, _13 = zval_used_for_init, _14 = zval_used_for_init, *_15 = NULL;
 	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_12 = NULL, *_16 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -425,13 +414,11 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		}
 	}
 
-	ZEPHIR_INIT_VAR(_18);
-	array_init(_18);
-	ZEPHIR_INIT_VAR(_19);
-	ZVAL_STRINGL(_19, route->str, route->len, 1);
-	zephir_array_append(&_18, _19, 0);
-	zephir_array_append(&_18, matches, 0);
-	RETURN_CCTOR(_18);
+	array_init(_5);
+	ZVAL_STRINGL(_11, route->str, route->len, 1);
+	zephir_array_append(&_5, _11, 0);
+	zephir_array_append(&_5, matches, 0);
+	RETURN_CCTOR(_5);
 
 
 }

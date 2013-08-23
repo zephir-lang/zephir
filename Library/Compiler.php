@@ -367,7 +367,7 @@ class Compiler
 					break;
 				case 'compile':
 					$c->compile();
-					$c->install();
+					//$c->install();
 					break;
 				default:
 					throw new Exception('Unrecognized action "' . $action . '"');

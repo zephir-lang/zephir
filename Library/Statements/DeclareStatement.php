@@ -56,9 +56,9 @@ class DeclareStatement
 			 * Variables are added to the symbol table
 			 */
 			if (isset($variable['expr'])) {
-				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable'], $variable['expr']);
+				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext, $variable['expr']);
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable']);
+				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext);
 			}
 
 			/**

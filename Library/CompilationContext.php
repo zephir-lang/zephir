@@ -82,6 +82,12 @@ class CompilationContext
 	public $insideSwitch = 0;
 
 	/**
+	 * The current branch, variables declared in conditional branches
+	 * must be market if they're used out of those branches
+	 */
+	public $currentBranch = 0;
+
+	/**
 	 * Compiler
 	 *
 	 * @var \Logger

@@ -226,7 +226,7 @@ class ClassMethod
 		/**
 		 * Every method has its own symbol table
 		 */
-		$symbolTable = new SymbolTable();
+		$symbolTable = new SymbolTable($compilationContext);
 		if ($localContext) {
 			$symbolTable->setLocalContext($localContext);
 		}
@@ -252,16 +252,16 @@ class ClassMethod
 
 				if (isset($parameter['data-type'])) {
 					if ($parameter['data-type'] == 'variable') {
-						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
+						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
 					} else {
-						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name']);
-						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param');
+						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
+						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
 						if ($parameter['data-type'] == 'string') {
 							$symbol->setMustInitNull(true);
 						}
 					}
 				} else {
-					$symbol = $symbolTable->addVariable('variable', $parameter['name']);
+					$symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
 				}
 
 				if (is_object($symbolParam)) {
@@ -585,6 +585,15 @@ class ClassMethod
 		 */
 		$oldCodePrinter->output($code);
 		$compilationContext->codePrinter = $oldCodePrinter;
+
+		/*foreach ($symbolTable->getTemporalVariables() as $location => $typeVariables) {
+			echo $location, PHP_EOL;
+			foreach ($typeVariables as $type => $variables) {
+				foreach ($variables as $variable) {
+					echo $variable->getName(), PHP_EOL;
+				}
+			}
+		}*/
 
 		return null;
 	}

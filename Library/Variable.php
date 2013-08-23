@@ -36,6 +36,11 @@ class Variable
 	protected $_name;
 
 	/**
+	 * Branch where the variable was declared
+	 */
+	protected $_branch;
+
+	/**
 	 * Compiled variable's name
 	 */
 	protected $_lowName;
@@ -44,6 +49,11 @@ class Variable
 	 * Number of times the variable has been read
 	 */
 	protected $_numberUses = 0;
+
+	/**
+	 * Temporal variables are marked as idle
+	 */
+	protected $_idle = false;
 
 	/**
 	 * Number of mutations to the variable
@@ -67,14 +77,20 @@ class Variable
 	protected $_defaultInitValue;
 
 	/**
-	 * \Variable
+	 * @param string $type
+	 * @param string $name
+	 * @param int $branch
 	 */
-	public function __construct($type, $name)
+	public function __construct($type, $name, $branch, $defaultInitValue=null)
 	{
 		$this->_type = $type;
 		$this->_name = $name;
+		$this->_branch = $branch;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getType()
 	{
 		return $this->_type;
@@ -169,6 +185,37 @@ class Variable
 	public function isReadOnly()
 	{
 		return $this->_readOnly;
+	}
+
+	/**
+	 * Once a temporal variable is unused in a specific branch
+	 * it is marked as idle
+	 *
+	 * @param boolean $idle
+	 */
+	public function setIdle($idle)
+	{
+		$this->_idle = $idle;
+	}
+
+	/**
+	 * Checks if the variable is idle
+	 *
+	 * @return boolean
+	 */
+	public function isIdle()
+	{
+		return $this->_idle;
+	}
+
+	/**
+	 * Get the branch where the variable was declared
+	 *
+	 * @return int
+	 */
+	public function getBranch()
+	{
+		return $this->_branch;
 	}
 
 	/**

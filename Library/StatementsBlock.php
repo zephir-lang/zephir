@@ -17,7 +17,6 @@
  +----------------------------------------------------------------------+
 */
 
-
 /**
  * StatementsBlock
  *
@@ -39,6 +38,7 @@ class StatementsBlock
 	{
 
 		$compilationContext->codePrinter->increaseLevel();
+		$compilationContext->currentBranch++;
 
 		$statements = $this->_statements;
 
@@ -112,6 +112,13 @@ class StatementsBlock
 			}
 		}
 
+		/**
+		 * Traverses temporal variables created in a specific branch
+		 * marking them as idle
+		 */
+		$compilationContext->symbolTable->markTemporalVariablesIdle($compilationContext);
+
+		$compilationContext->currentBranch--;
 		$compilationContext->codePrinter->decreaseLevel();
 	}
 
