@@ -49,9 +49,10 @@ class FunctionCall extends Call
 	 * Built-in functions rarely change the parameters if they aren't passed by reference
 	 *
 	 * @param string $funcName
+	 * @param array $expression
 	 * @return boolean
 	 */
-	protected function isReadOnly($funcName)
+	protected function isReadOnly($funcName, $expression)
 	{
 		if ($this->isBuiltInFunction($funcName)) {
 			return false;
@@ -59,9 +60,31 @@ class FunctionCall extends Call
 
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
-			foreach ($reflector->getParameters() as $parameter) {
-				if ($parameter->isPassedByReference()) {
-					return false;
+
+			if (isset($expression['parameters'])) {
+				/**
+				 * Check if the number of parameters
+				 */
+				$numberParameters = count($expression['parameters']);
+				if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
+					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
+				}
+			} else {
+				if ($reflector->getNumberOfRequiredParameters() > 0) {
+					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
+				}
+			}
+
+			if ($numberParameters > 0) {
+				$n = 1;
+				$parameters = $reflector->getParameters();
+				foreach ($parameters as $parameter) {
+					if ($numberParameters >= $n) {
+						if ($parameter->isPassedByReference()) {
+							return false;
+						}
+					}
+					$n++;
 				}
 			}
 			return true;
@@ -167,8 +190,12 @@ class FunctionCall extends Call
 			return $compiledExpr;
 		}
 
+		/**
+		 * Static variables can be passed using local variables saving memory if
+		 * the function is read only
+		 */
 		if ($exists) {
-			$readOnly = $this->isReadOnly($funcName);
+			$readOnly = $this->isReadOnly($funcName, $expression);
 		} else {
 			$readOnly = false;
 		}

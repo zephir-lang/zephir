@@ -86,7 +86,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern = NULL, *idPattern, *_0 = NULL, *_1 = NULL, *_2 = NULL;
+	zval *pattern, *compiledPattern = NULL, *idPattern, _0 = zval_used_for_init, *_1 = NULL, _2 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -104,66 +104,66 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:module"))) {
-			ZEPHIR_INIT_VAR(_0);
-			ZVAL_STRING(_0, "/:module", 1);
+			ZEPHIR_SINIT_VAR(_0);
+			ZVAL_STRING(&_0, "/:module", 0);
 			ZEPHIR_INIT_VAR(_1);
-			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:controller"))) {
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_STRING(_0, "/:controller", 1);
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_STRING(&_0, "/:controller", 0);
 			ZEPHIR_INIT_NVAR(_1);
-			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:namespace"))) {
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_STRING(_0, "/:namespace", 1);
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_STRING(&_0, "/:namespace", 0);
 			ZEPHIR_INIT_NVAR(_1);
-			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:action"))) {
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_STRING(_0, "/:action", 1);
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_STRING(&_0, "/:action", 0);
 			ZEPHIR_INIT_NVAR(_1);
-			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:params"))) {
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_STRING(_0, "/:params", 1);
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_STRING(&_0, "/:params", 0);
+			ZEPHIR_SINIT_VAR(_2);
+			ZVAL_STRING(&_2, "(/.*)*", 0);
 			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_STRING(_1, "(/.*)*", 1);
-			ZEPHIR_INIT_VAR(_2);
-			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, &_2, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _2);
+			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:int"))) {
-			ZEPHIR_INIT_NVAR(_0);
-			ZVAL_STRING(_0, "/:int", 1);
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_STRING(&_0, "/:int", 0);
+			ZEPHIR_SINIT_NVAR(_2);
+			ZVAL_STRING(&_2, "/([0-9]+)", 0);
 			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_STRING(_1, "/([0-9]+)", 1);
-			ZEPHIR_INIT_NVAR(_2);
-			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
+			zephir_call_func_p3(_1, "str_replace", &_0, &_2, compiledPattern);
 
-			ZEPHIR_CPY_WRT(compiledPattern, _2);
+			ZEPHIR_CPY_WRT(compiledPattern, _1);
 
 		}
 	}
