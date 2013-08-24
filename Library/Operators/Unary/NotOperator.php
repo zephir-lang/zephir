@@ -33,6 +33,7 @@ class NotOperator extends BaseOperator
 		}
 
 		$leftExpr = new Expression($expression['left']);
+		$leftExpr->setReadOnly($this->_readOnly);
 		$left = $leftExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
