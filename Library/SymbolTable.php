@@ -219,13 +219,22 @@ class SymbolTable
 		$this->_tempVariables[$location][$type][] = $variable;
 	}
 
+	/**
+	 * Reuse variables marked as idle after leave a branch
+	 *
+	 * @param string $type
+	 * @param string $location
+	 * @return
+	 */
 	protected function _reuseTempVariable($type, $location)
 	{
 		if (isset($this->_tempVariables[$location][$type])) {
 			foreach ($this->_tempVariables[$location][$type] as $variable) {
-				if ($variable->isIdle()) {
-					$variable->setIdle(false);
-					return $variable;
+				if (!$variable->isDoublePointer()) {
+					if ($variable->isIdle()) {
+						$variable->setIdle(false);
+						return $variable;
+					}
 				}
 			}
 		}
@@ -318,19 +327,20 @@ class SymbolTable
 	 */
 	public function addTemp($type, CompilationContext $context)
 	{
-		$variable = $this->_reuseTempVariable($type, 'heap');
+		/*$variable = $this->_reuseTempVariable($type, 'heap');
 		if (is_object($variable)) {
 			$variable->increaseUses();
 			$variable->increaseMutates();
 			return $variable;
-		}
+		}*/
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
-		$this->_registerTempVariable($type, 'heap', $variable);
+
+		//$this->_registerTempVariable($type, 'heap', $variable);
 		return $variable;
 	}
 
