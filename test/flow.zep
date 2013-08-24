@@ -170,6 +170,14 @@ class Flow
 		return 0;
 	}
 
+	public function testIf15()
+	{
+		var a, b, c;
+		let a = 1, b = 2, c = 3;
+		if a + b + c { return 1; }
+		return 0;
+	}
+
 	public function testLoop1()
 	{
 		var a;
