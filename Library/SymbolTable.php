@@ -254,6 +254,11 @@ class SymbolTable
 	{
 		$variable = $this->_reuseTempVariable($type, 'heap');
 		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
+			if ($type == 'variable') {
+				$variable->initVariant($context);
+			}
 			return $variable;
 		}
 
@@ -282,6 +287,12 @@ class SymbolTable
 
 		$variable = $this->_reuseTempVariable($type, 'stack');
 		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
+			$variable->setLocalOnly(true);
+			if ($type == 'variable') {
+				$variable->initVariant($context);
+			}
 			return $variable;
 		}
 
@@ -309,6 +320,8 @@ class SymbolTable
 	{
 		$variable = $this->_reuseTempVariable($type, 'heap');
 		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
 			return $variable;
 		}
 
@@ -334,6 +347,9 @@ class SymbolTable
 
 		$variable = $this->_reuseTempVariable($type, 'observe');
 		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
+			$variable->observeVariant($context);
 			return $variable;
 		}
 
@@ -343,6 +359,7 @@ class SymbolTable
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->observeVariant($context);
+
 		$this->_registerTempVariable($type, 'observe', $variable);
 		return $variable;
 	}

@@ -82,7 +82,7 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *defaultRoutes_param = NULL, *routes, *_0, *_1, *_2, *_3, *_4, *_5;
+	zval *defaultRoutes_param = NULL, *routes, *_0 = NULL, *_1, *_2, *_3, *_4, *_5;
 	zend_bool defaultRoutes;
 
 	ZEPHIR_MM_GROW();
@@ -127,6 +127,7 @@ PHP_METHOD(Test_Router, __construct) {
 
 	}
 
+	ZEPHIR_INIT_NVAR(_0);
 	array_init(_0);
 	zephir_update_property_zval(this_ptr, SL("_params"), _0 TSRMLS_CC);
 
@@ -431,7 +432,7 @@ PHP_METHOD(Test_Router, handle) {
 
 	HashTable *_5, *_9;
 	HashPosition _4, _8;
-	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params = NULL, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, **_7 = NULL, *_10, *_11, _12 = zval_used_for_init, _13 = zval_used_for_init, *_14, *_15, *_16, *_17;
+	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params = NULL, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, *_1, *_2, *_3, **_6, **_7 = NULL, *_10, *_11 = NULL, _12 = zval_used_for_init, _13 = zval_used_for_init, *_14, *_15, *_16, *_17;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
@@ -519,6 +520,7 @@ PHP_METHOD(Test_Router, handle) {
 
 			}
 			//missing comment
+			ZEPHIR_INIT_NVAR(_7);
 			zephir_call_method_p1(_7, request, "ismethod", methods);
 			if (ZEPHIR_IS_FALSE(_7)) {
 				continue;
@@ -538,6 +540,7 @@ PHP_METHOD(Test_Router, handle) {
 					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "A dependency injection container is required to access the 'request' service");
 					return;
 				}
+				ZEPHIR_INIT_NVAR(_7);
 				ZVAL_STRING(_7, "request", 1);
 				ZEPHIR_INIT_NVAR(request);
 				zephir_call_method_p1(request, dependencyInjector, "getshared", _7);
@@ -669,6 +672,7 @@ PHP_METHOD(Test_Router, handle) {
 	//missing comment
 	if (zend_is_true(routeFound)) {
 
+		ZEPHIR_INIT_NVAR(_7);
 		ZVAL_BOOL(_7, 1);
 		zephir_update_property_zval(this_ptr, SL("_wasMatched"), _7 TSRMLS_CC);
 
@@ -720,6 +724,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		} else {
+			ZEPHIR_OBS_NVAR(_11);
 			zephir_read_property(&_11, this_ptr, SL("_defaultModule"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_module"), _11 TSRMLS_CC);
@@ -735,6 +740,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		} else {
+			ZEPHIR_OBS_NVAR(_11);
 			zephir_read_property(&_11, this_ptr, SL("_defaultController"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_controller"), _11 TSRMLS_CC);
@@ -750,6 +756,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		} else {
+			ZEPHIR_OBS_NVAR(_11);
 			zephir_read_property(&_11, this_ptr, SL("_defaultAction"), PH_NOISY_CC);
 
 			zephir_update_property_this(this_ptr, SL("_action"), _11 TSRMLS_CC);
@@ -786,6 +793,7 @@ PHP_METHOD(Test_Router, handle) {
 
 	} else {
 		//missing comment
+		ZEPHIR_OBS_NVAR(_11);
 		zephir_read_property(&_11, this_ptr, SL("_defaultNamespace"), PH_NOISY_CC);
 
 		zephir_update_property_this(this_ptr, SL("_namespace"), _11 TSRMLS_CC);
@@ -1110,6 +1118,7 @@ PHP_METHOD(Test_Router, mount) {
 	zephir_read_property(&routes, this_ptr, SL("_routes"), PH_NOISY_CC);
 
 	if (Z_TYPE_P(routes) == IS_ARRAY) {
+		ZEPHIR_INIT_VAR(_2);
 		zephir_call_func_p2(_2, "array_merge", routes, groupRoutes);
 
 		zephir_update_property_this(this_ptr, SL("_routes"), _2 TSRMLS_CC);

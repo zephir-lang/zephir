@@ -86,7 +86,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern = NULL, *idPattern, *_0, *_1, *_2;
+	zval *pattern, *compiledPattern = NULL, *idPattern, *_0 = NULL, *_1 = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
@@ -114,7 +114,9 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:controller"))) {
+			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "/:controller", 1);
+			ZEPHIR_INIT_NVAR(_1);
 			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
@@ -122,7 +124,9 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:namespace"))) {
+			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "/:namespace", 1);
+			ZEPHIR_INIT_NVAR(_1);
 			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
@@ -130,7 +134,9 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:action"))) {
+			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "/:action", 1);
+			ZEPHIR_INIT_NVAR(_1);
 			zephir_call_func_p3(_1, "str_replace", _0, idPattern, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _1);
@@ -138,7 +144,9 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:params"))) {
+			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "/:params", 1);
+			ZEPHIR_INIT_NVAR(_1);
 			ZVAL_STRING(_1, "(/.*)*", 1);
 			ZEPHIR_INIT_VAR(_2);
 			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
@@ -148,8 +156,11 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 		//missing comment
 		if (zephir_memnstr_str(pattern, SL("/:int"))) {
+			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "/:int", 1);
+			ZEPHIR_INIT_NVAR(_1);
 			ZVAL_STRING(_1, "/([0-9]+)", 1);
+			ZEPHIR_INIT_NVAR(_2);
 			zephir_call_func_p3(_2, "str_replace", _0, _1, compiledPattern);
 
 			ZEPHIR_CPY_WRT(compiledPattern, _2);
@@ -414,7 +425,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		}
 	}
 
+	ZEPHIR_INIT_NVAR(_5);
 	array_init(_5);
+	ZEPHIR_INIT_NVAR(_11);
 	ZVAL_STRINGL(_11, route->str, route->len, 1);
 	zephir_array_append(&_5, _11, 0);
 	zephir_array_append(&_5, matches, 0);
