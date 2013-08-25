@@ -18,6 +18,26 @@ class Scall
 		return "hello protected";
 	}
 
+	static + private function testMethod3()
+	{
+		return "hello private";
+	}
+
+	static + public function testMethod4(var a, var b)
+	{
+		return a + b;
+	}
+
+	static + protected function testMethod5(var a, var b)
+	{
+		return a + b;
+	}
+
+	static + private function testMethod6(var a, var b)
+	{
+		return a + b;
+	}
+
 	public function testCall1()
 	{
 		return Test\Scall::testMethod1();
@@ -26,6 +46,26 @@ class Scall
 	public function testCall2()
 	{
 		return Test\Scall::testMethod2();
+	}
+
+	public function testCall3()
+	{
+		return Test\Scall::testMethod3();
+	}
+
+	public function testCall4(var a, var b)
+	{
+		return Test\Scall::testMethod4(a, b);
+	}
+
+	public function testCall5(var a, var b)
+	{
+		return Test\Scall::testMethod5(a, b);
+	}
+
+	public function testCall6(var a, var b)
+	{
+		return Test\Scall::testMethod6(a, b);
 	}
 
 }

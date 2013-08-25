@@ -5,4 +5,5 @@ php ./unit-tests/nativearray.php
 php ./unit-tests/flow.php
 php ./unit-tests/fibonacci.php
 php ./unit-tests/oo.php
+php ./unit-tests/mcall.php
 php ./unit-tests/scall.php

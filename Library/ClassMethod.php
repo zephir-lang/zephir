@@ -82,6 +82,8 @@ class ClassMethod
 				case 'static':
 					$modifiers['ZEND_ACC_STATIC'] = $visibility;
 					break;
+				default:
+					throw new Exception('Unknown modifier "' . $visibility . '"');
 			}
 		}
 		return join('|', array_keys($modifiers));
