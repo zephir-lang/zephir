@@ -31,11 +31,14 @@ class ClassProperty
 
 	protected $defaultValue;
 
-	public function __construct($visibility, $name, $defaultValue=null)
+	protected $_docblock;
+
+	public function __construct($visibility, $name, $defaultValue=null, $docBlock)
 	{
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_defaultValue = $defaultValue;
+		$this->_docblock = $docBlock;
 	}
 
 	public function getName()
@@ -52,6 +55,11 @@ class ClassProperty
 		}
 	}
 
+	public function getDocBlock()
+	{
+		return $this->_docblock;
+	}
+
 	/**
 	 * Produce the code to register a property
 	 *
@@ -59,6 +67,7 @@ class ClassProperty
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
+
 		if (!is_array($this->_defaultValue)) {
 			$compilationContext->codePrinter->output("zend_declare_property_null(" .
 				$compilationContext->classDefinition->getClassEntry() .
@@ -66,6 +75,19 @@ class ClassProperty
 				$this->getVisibilityAccesor() . " TSRMLS_CC);");
 		} else {
 			switch ($this->_defaultValue['type']) {
+				case 'long':
+				case 'int':
+					$compilationContext->codePrinter->output("zend_declare_property_long(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), " . $this->_defaultValue['value'] . ", " .
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					break;
+				case 'double':
+					$compilationContext->codePrinter->output("zend_declare_property_double(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), " . $this->_defaultValue['value'] . ", " .
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					break;
 				case 'bool':
 					if ($this->_defaultValue['value'] == 'false') {
 						$compilationContext->codePrinter->output("zend_declare_property_bool(" .
@@ -78,6 +100,12 @@ class ClassProperty
 							", SL(\"" . $this->getName() . "\"), 1, " .
 							$this->getVisibilityAccesor() . " TSRMLS_CC);");
 					}
+					break;
+				case 'string':
+					$compilationContext->codePrinter->output("zend_declare_property_string(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlaches($this->_defaultValue['value']) . "\", " .
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 					break;
 				default:
 					$compilationContext->codePrinter->output("zend_declare_property_null(" .

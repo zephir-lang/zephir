@@ -197,6 +197,12 @@ class ClassDefinition
 		 * Compile properties
 		 */
 		foreach ($this->getProperties() as $property) {
+
+			$docBlock = $property->getDocBlock();
+			if ($docBlock) {
+				$codePrinter->outputDocBlock($docBlock);
+			}
+
 			$property->compile($compilationContext);
 		}
 

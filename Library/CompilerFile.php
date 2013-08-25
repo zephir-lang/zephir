@@ -134,7 +134,8 @@ class CompilerFile
 					$classDefinition->addProperty(new ClassProperty(
 						$property['visibility'],
 						$property['name'],
-						isset($property['default']) ? $property['default'] : null
+						isset($property['default']) ? $property['default'] : null,
+						isset($property['docblock']) ? $property['docblock'] : null
 					));
 				}
 			}
@@ -286,7 +287,7 @@ class CompilerFile
 
 		$path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower(preg_replace('#^test\\\\#i', '', $this->_compiledFilePath)));
 		if (!is_dir('ext/' . $path)) {
-			mkdir('ext/' . $path);
+			mkdir('ext/' . $path, 0777, true);
 		}
 
 		file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());

@@ -13,6 +13,7 @@
 #include "oo/ooconstructparams.h"
 #include "oo/oonoconstruct.h"
 #include "oo.h"
+#include "properties/publicproperties.h"
 #include "router/exception.h"
 #include "router/route.h"
 #include "router.h"

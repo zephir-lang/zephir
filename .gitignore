@@ -86,3 +86,6 @@ ext/cast.o
 bin/zephir-parser
 parser/lemon
 parser/lemon.dSYM/
+ext/properties/.libs/publicproperties.o
+ext/properties/publicproperties.lo
+ext/properties/publicproperties.o
