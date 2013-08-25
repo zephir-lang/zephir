@@ -65,9 +65,20 @@ class ClassMethod
 		return $this->_parameters;
 	}
 
-	public function getVisibilityAccesor()
+	public function getModifiers()
 	{
-		return 'ZEND_ACC_PROTECTED';
+		$modifiers = array();
+		foreach ($this->_visibility as $visibility) {
+			switch ($visibility) {
+				case 'public':
+					$modifiers['ZEND_ACC_PUBLIC'] = $visibility;
+					break;
+				case 'static':
+					$modifiers['ZEND_ACC_STATIC'] = $visibility;
+					break;
+			}
+		}
+		return join('|', array_keys($modifiers));
 	}
 
 	public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)

@@ -81,6 +81,7 @@
 #define XX_T_PRIVATE 383
 #define XX_T_STATIC 384
 #define XX_T_INLINE 385
+#define XX_T_FINAL 386
 
 /* Operators */
 #define XX_T_AT '@'

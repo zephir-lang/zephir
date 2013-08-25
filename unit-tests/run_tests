@@ -1,6 +1,8 @@
+#!/bin/bash
 php ./unit-tests/assign.php
 php ./unit-tests/arithmetic.php
 php ./unit-tests/nativearray.php
 php ./unit-tests/flow.php
 php ./unit-tests/fibonacci.php
 php ./unit-tests/oo.php
+php ./unit-tests/scall.php

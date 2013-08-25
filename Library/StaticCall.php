@@ -24,12 +24,7 @@ class StaticCall extends Call
 	{
 
 		$expression = $expr->getExpression();
-		return new CompiledExpression('null', null, $expression);
-
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $compilationContext, $expression);
-		if ($variableVariable->getType() != 'variable') {
-			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $expression);
-		}
+		//return new CompiledExpression('null', null, $expression);
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -55,9 +50,23 @@ class StaticCall extends Call
 		}
 
 		/**
+		 * Method calls only return zvals so we need to validate the target variable is also a zval
+		 */
+		if ($isExpecting) {
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+		}
+
+		/**
 		 * Include fcall header
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
+
+
+		//PHALCON_CALL_STATIC_PARAMS_2(html, "phalcon\\tag\\select", "selectfield", parameters, data);
+
+		$className = strtolower(str_replace('\\', '\\\\', $expression['class']));
 
 		/**
 		 *
@@ -67,9 +76,9 @@ class StaticCall extends Call
 				$symbolVariable->initVariant($compilationContext);
 			}
 			if ($isExpecting) {
-				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
+				$codePrinter->output('ZEPHIR_CALL_STATIC(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
 			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+				$codePrinter->output('ZEPHIR_CALL_STATIC_NORETURN("' . $className . '", "' . $methodName . '");');
 			}
 		} else {
 

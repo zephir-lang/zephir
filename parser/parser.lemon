@@ -747,7 +747,7 @@ static json_object *xx_ret_scall(xx_parser_token *O, xx_parser_token *M, json_ob
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("scall"));
-	json_object_object_add(ret, "variable", json_object_new_string(O->token));
+	json_object_object_add(ret, "class", json_object_new_string(O->token));
 	json_object_object_add(ret, "name", json_object_new_string(M->token));
 
 	if (parameters) {
@@ -1026,15 +1026,43 @@ xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTI
 	R = xx_ret_class_method(V, I, L, S, C, status->scanner_state);
 }
 
-/*xx_method_visibility_list(R) ::= xx_method_visibility_list(L) xx_method_visibility(K) . {
+xx_method_visibility_list(R) ::= xx_method_visibility_list(L) ADD xx_method_visibility(K) . {
 	R = xx_ret_list(L, K);
 }
 
 xx_method_visibility_list(R) ::= xx_method_visibility(K) . {
 	R = xx_ret_list(NULL, K);
-}*/
+}
 
-xx_method_visibility_list(R) ::= STATIC PUBLIC . {
+xx_method_visibility(R) ::= PUBLIC . {
+	R = json_object_new_string("public");
+}
+
+xx_method_visibility(R) ::= PROTECTED . {
+	R = json_object_new_string("protected");
+}
+
+xx_method_visibility(R) ::= STATIC . {
+	R = json_object_new_string("static");
+}
+
+xx_method_visibility(R) ::= PRIVATE . {
+	R = json_object_new_string("private");
+}
+
+xx_method_visibility(R) ::= INLINE . {
+	R = json_object_new_string("private");
+}
+
+xx_method_visibility(R) ::= ABSTRACT . {
+	R = json_object_new_string("abstract");
+}
+
+xx_method_visibility(R) ::= FINAL . {
+	R = json_object_new_string("final");
+}
+
+/*xx_method_visibility_list(R) ::= STATIC PUBLIC . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
 }
 
@@ -1042,53 +1070,37 @@ xx_method_visibility_list(R) ::= PUBLIC STATIC . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
 }
 
-xx_method_visibility_list(R) ::=  STATIC PROTECTED . {
+xx_method_visibility(R) ::=  STATIC PROTECTED . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
 }
 
-xx_method_visibility_list(R) ::=  PROTECTED STATIC . {
+xx_method_visibility(R) ::=  PROTECTED STATIC . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
 }
 
-xx_method_visibility_list(R) ::= STATIC PRIVATE . {
+xx_method_visibility(R) ::= STATIC PRIVATE . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
 }
 
-xx_method_visibility_list(R) ::= PRIVATE STATIC . {
+xx_method_visibility(R) ::= PRIVATE STATIC . {
 	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
 }
 
-xx_method_visibility_list(R) ::=  INLINE PROTECTED . {
+xx_method_visibility(R) ::=  INLINE PROTECTED . {
 	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
 }
 
-xx_method_visibility_list(R) ::=  PROTECTED INLINE . {
+xx_method_visibility(R) ::=  PROTECTED INLINE . {
 	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
 }
 
-xx_method_visibility_list(R) ::= INLINE PRIVATE . {
+xx_method_visibility(R) ::= INLINE PRIVATE . {
 	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
 }
 
-xx_method_visibility_list(R) ::= PRIVATE INLINE . {
+xx_method_visibility(R) ::= PRIVATE INLINE . {
 	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
-}
-
-xx_method_visibility_list(R) ::= PUBLIC . {
-	R = xx_ret_list(NULL, json_object_new_string("public"));
-}
-
-xx_method_visibility_list(R) ::= PROTECTED . {
-	R = xx_ret_list(NULL, json_object_new_string("protected"));
-}
-
-xx_method_visibility_list(R) ::= STATIC . {
-	R = xx_ret_list(NULL, json_object_new_string("static"));
-}
-
-xx_method_visibility_list(R) ::= PRIVATE . {
-	R = xx_ret_list(NULL, json_object_new_string("private"));
-}
+}*/
 
 xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {
 	R = xx_ret_list(L, P);

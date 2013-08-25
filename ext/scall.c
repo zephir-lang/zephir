@@ -12,10 +12,12 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 /**
- * Function calls
+ * Static Function calls
  */
 ZEPHIR_INIT_CLASS(Test_Scall) {
 
@@ -35,7 +37,12 @@ PHP_METHOD(Test_Scall, testMethod1) {
 
 PHP_METHOD(Test_Scall, testCall1) {
 
-	RETURN_NULL();
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CALL_STATIC(_0, "test\\scall", "testmethod1");
+	RETURN_CCTOR(_0);
 
 
 }

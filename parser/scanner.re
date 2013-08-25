@@ -127,6 +127,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'final' {
+			s->active_char += sizeof("final")-1;
+			token->opcode = XX_T_FINAL;
+			return 0;
+		}
+
+		'abstract' {
+			s->active_char += sizeof("abstract")-1;
+			token->opcode = XX_T_ABSTRACT;
+			return 0;
+		}
+
 		'function' {
 			s->active_char += sizeof("function")-1;
 			token->opcode = XX_T_FUNCTION;

@@ -1,13 +1,13 @@
 
 /**
- * Function calls
+ * Static Function calls
  */
 
 namespace Test;
 
 class Scall
 {
-	static function testMethod1()
+	static + public function testMethod1()
 	{
 		return "hello";
 	}

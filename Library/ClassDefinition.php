@@ -272,9 +272,9 @@ class ClassDefinition
 		foreach ($methods as $method) {
 			$parameters = $method->getParameters();
 			if (count($parameters)) {
-				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ZEND_ACC_PUBLIC)');
+				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ' . $method->getModifiers() . ')');
 			} else {
-				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ZEND_ACC_PUBLIC)');
+				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
 			}
 		}
 		$codePrinter->output('	PHP_FE_END');
