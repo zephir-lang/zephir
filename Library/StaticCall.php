@@ -63,8 +63,6 @@ class StaticCall extends Call
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
 
-		//PHALCON_CALL_STATIC_PARAMS_2(html, "phalcon\\tag\\select", "selectfield", parameters, data);
-
 		$className = strtolower(str_replace('\\', '\\\\', $expression['class']));
 		$classCe = strtolower(str_replace('\\', '_', $expression['class'])) . '_ce';
 

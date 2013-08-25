@@ -743,6 +743,8 @@ int zephir_call_self_func(zval *return_value, zval *object, zend_class_entry *cu
 		ce = Z_OBJCE_P(object);
 		if (ce->parent) {
 			zephir_find_scope(ce, method_name, method_len, 0, 0 TSRMLS_CC);
+		} else {
+			EG(scope) = ce;
 		}
 	} else {
 		active_scope = EG(scope);
@@ -772,6 +774,8 @@ inline int zephir_call_self_func_params(zval *return_value, zval *object, char *
 		ce = Z_OBJCE_P(object);
 		if (ce->parent) {
 			zephir_find_scope(ce, method_name, method_len, 0, 0 TSRMLS_CC);
+		} else {
+			EG(scope) = ce;
 		}
 	}
 
