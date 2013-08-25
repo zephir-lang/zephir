@@ -55,6 +55,7 @@ require ZEPHIRPATH . 'Library/Optimizers/EvalExpression.php';
 require ZEPHIRPATH . 'Library/Call.php';
 require ZEPHIRPATH . 'Library/FunctionCall.php';
 require ZEPHIRPATH . 'Library/MethodCall.php';
+require ZEPHIRPATH . 'Library/StaticCall.php';
 require ZEPHIRPATH . 'Library/Passes/LocalContextPass.php';
 require ZEPHIRPATH . 'Library/Passes/LoopBreakPass.php';
 require ZEPHIRPATH . 'Library/Config.php';

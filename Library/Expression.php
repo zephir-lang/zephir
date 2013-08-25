@@ -775,6 +775,10 @@ class Expression
 				$methodCall = new MethodCall();
 				return $methodCall->compile($this, $compilationContext);
 
+			case 'scall':
+				$staticCall = new StaticCall();
+				return $staticCall->compile($this, $compilationContext);
+
 			case 'isset':
 				return $this->compileIsset($expression, $compilationContext);
 

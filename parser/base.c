@@ -298,6 +298,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_ARROW:
 				xx_(xx_parser, XX_ARROW, NULL, parser_status);
 				break;
+			case XX_T_DOUBLECOLON:
+				xx_(xx_parser, XX_DOUBLECOLON, NULL, parser_status);
+				break;
 			case XX_T_NOT:
 				xx_(xx_parser, XX_NOT, NULL, parser_status);
 				break;

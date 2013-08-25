@@ -38,6 +38,11 @@ class EvalExpression
 		return false;
 	}
 
+	/**
+	 *
+	 * @param array $expr
+	 * @param array $compilationContext
+	 */
 	public function optimizeTypeOf($expr, $compilationContext)
 	{
 
@@ -87,6 +92,9 @@ class EvalExpression
 
 	/**
 	 * Optimizes expressions
+	 *
+	 * @param array $exprRaw
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function optimize($exprRaw, CompilationContext $compilationContext)
 	{
@@ -100,6 +108,8 @@ class EvalExpression
 		if ($conditions !== false) {
 			return $conditions;
 		}
+
+		//echo $exprRaw['type'], PHP_EOL;
 
 		$expr = new Expression($exprRaw);
 		$expr->setReadOnly(true);

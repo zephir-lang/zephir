@@ -20,6 +20,7 @@ zend_class_entry *test_declare_ce;
 zend_class_entry *test_fcall_ce;
 zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
+zend_class_entry *test_mcall_ce;
 zend_class_entry *test_nativearray_ce;
 zend_class_entry *test_oo_ooconstruct_ce;
 zend_class_entry *test_oo_ooconstructparams_ce;
@@ -28,6 +29,7 @@ zend_class_entry *test_oo_ce;
 zend_class_entry *test_router_exception_ce;
 zend_class_entry *test_router_route_ce;
 zend_class_entry *test_router_ce;
+zend_class_entry *test_scall_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
@@ -43,6 +45,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Fcall);
 	ZEPHIR_INIT(Test_Fibonnaci);
 	ZEPHIR_INIT(Test_Flow);
+	ZEPHIR_INIT(Test_Mcall);
 	ZEPHIR_INIT(Test_NativeArray);
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoConstructParams);
@@ -51,6 +54,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Router_Exception);
 	ZEPHIR_INIT(Test_Router_Route);
 	ZEPHIR_INIT(Test_Router);
+	ZEPHIR_INIT(Test_Scall);
 	return SUCCESS;
 }
 

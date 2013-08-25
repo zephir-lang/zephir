@@ -372,7 +372,7 @@ PHP_METHOD(Test_Flow, testLoop2) {
 
 		a = a + 1;
 
-		if ((a == 5)) {
+		if (a == 5) {
 			break;
 		}
 	}
@@ -392,13 +392,13 @@ PHP_METHOD(Test_Flow, testLoop3) {
 
 		a = a + 1;
 
-		if ((a == 3)) {
+		if (a == 3) {
 
 			a = a + 1;
 
 			continue;
 		}
-		if ((a == 5)) {
+		if (a == 5) {
 			break;
 		}
 	}

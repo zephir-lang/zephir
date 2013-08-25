@@ -12,7 +12,7 @@ class Flow
 	{
 		int a;
 		let a = 1;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -22,7 +22,7 @@ class Flow
 	{
 		int a;
 		let a = 0;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -32,7 +32,7 @@ class Flow
 	{
 		double a;
 		let a = 1;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -42,7 +42,7 @@ class Flow
 	{
 		double a;
 		let a = 0;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -52,7 +52,7 @@ class Flow
 	{
 		boolean a;
 		let a = 1;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -62,7 +62,7 @@ class Flow
 	{
 		boolean a;
 		let a = 0;
-		if (a) {
+		if a {
 			return 1;
 		}
 		return 0;
@@ -72,7 +72,7 @@ class Flow
 	{
 		int a;
 		let a = 1;
-		if (a) {
+		if a {
 			return 1;
 		} else {
 			return 0;
@@ -96,11 +96,11 @@ class Flow
 		double b;
 		boolean c;
 		let a = 1;
-		if (a) {
+		if a {
 			let b = 1;
-			if (b) {
+			if b {
 				let c = 1;
-				if (c) {
+				if c {
 					return 1;
 				}
 			}
@@ -114,11 +114,11 @@ class Flow
 		double b;
 		boolean c;
 		let a = 1;
-		if (a) {
+		if a {
 			let b = 1;
-			if (b) {
+			if b {
 				let c = 1;
-				if (c) {
+				if c {
 					return 1;
 				} else {
 					return 0;
@@ -183,7 +183,7 @@ class Flow
 		var a;
 		let a = true;
 		loop {
-			if (a) {
+			if a {
 				break;
 			}
 		}
@@ -196,7 +196,7 @@ class Flow
 		let a = 1;
 		loop {
 			let a = a + 1;
-			if (a === 5) {
+			if a === 5 {
 				break;
 			}
 		}
@@ -209,11 +209,11 @@ class Flow
 		let a = 1;
 		loop {
 			let a = a + 1;
-			if (a === 3) {
+			if a === 3 {
 				let a = a + 1;
 				continue;
 			}
-			if (a === 5) {
+			if a === 5 {
 				break;
 			}
 		}
@@ -241,7 +241,7 @@ class Flow
 	{
 		int a;
 		let a = 5;
-		while (a) {
+		while a {
 			let a = a - 1;
 		}
 		return a;
@@ -261,9 +261,9 @@ class Flow
 	{
 		int a; var b; double c;
 		let a = 5;
-		while (a) {
+		while a {
 			let b = 5;
-			while (b) {
+			while b {
 				let b = b - 1;
 			}
 			let a = a - 1;
@@ -291,7 +291,7 @@ class Flow
 	{
 		int a;
 		let a = 5;
-		while (a) {
+		while a {
 			let a--;
 		}
 		return a;
@@ -311,7 +311,7 @@ class Flow
 	{
 		double a;
 		let a = 5;
-		while (a) {
+		while a {
 			let a--;
 		}
 		return a;
@@ -331,9 +331,9 @@ class Flow
 	{
 		int a; var b; double c;
 		let a = 5;
-		while (a) {
+		while a {
 			let b = 5;
-			while (b) {
+			while b {
 				let b--;
 			}
 			let a--;

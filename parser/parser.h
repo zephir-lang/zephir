@@ -83,3 +83,4 @@
 #define XX_NULL                           83
 #define XX_TRUE                           84
 #define XX_FALSE                          85
+#define XX_DOUBLECOLON                    86

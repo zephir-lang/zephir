@@ -103,6 +103,12 @@ class StatementsBlock
 					$expr->setExpectReturn(false);
 					$methodCall->compile($expr, $compilationContext);
 					break;
+				case 'scall':
+					$methodCall = new StaticCall();
+					$expr = new Expression($statement['expr']);
+					$expr->setExpectReturn(false);
+					$methodCall->compile($expr, $compilationContext);
+					break;
 				default:
 					$compilationContext->codePrinter->output('//missing ' . $statement['type']);
 			}

@@ -7,6 +7,7 @@
 #include "fcall.h"
 #include "fibonnaci.h"
 #include "flow.h"
+#include "mcall.h"
 #include "nativearray.h"
 #include "oo/ooconstruct.h"
 #include "oo/ooconstructparams.h"
@@ -15,3 +16,4 @@
 #include "router/exception.h"
 #include "router/route.h"
 #include "router.h"
+#include "scall.h"

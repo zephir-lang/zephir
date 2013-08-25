@@ -66,6 +66,13 @@ class WriteDetector
 						}
 					}
 					break;
+				case 'switch':
+					foreach ($statement['clauses'] as $clause) {
+						if ($this->detect($variable, $clause['statements']) === true) {
+							return true;
+						}
+					}
+					break;
 				case 'for':
 					if (isset($statement['key'])) {
 						if ($statement['key'] == $variable) {

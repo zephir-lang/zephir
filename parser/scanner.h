@@ -116,6 +116,7 @@
 #define XX_T_CONCATASSIGN 414
 #define XX_T_AND 415
 #define XX_T_OR 416
+#define XX_T_DOUBLECOLON 417
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {
