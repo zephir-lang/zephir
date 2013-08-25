@@ -63,7 +63,6 @@ class StaticCall extends Call
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
 
-
 		//PHALCON_CALL_STATIC_PARAMS_2(html, "phalcon\\tag\\select", "selectfield", parameters, data);
 
 		$className = strtolower(str_replace('\\', '\\\\', $expression['class']));
@@ -76,7 +75,8 @@ class StaticCall extends Call
 				$symbolVariable->initVariant($compilationContext);
 			}
 			if ($isExpecting) {
-				$codePrinter->output('ZEPHIR_CALL_STATIC(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
+				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '");');
 			} else {
 				$codePrinter->output('ZEPHIR_CALL_STATIC_NORETURN("' . $className . '", "' . $methodName . '");');
 			}

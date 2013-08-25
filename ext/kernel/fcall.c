@@ -747,7 +747,6 @@ int zephir_call_self_func(zval *return_value, zval *object, char *method_name, i
 	}
 
 	success = zephir_call_static_func(return_value, SL("self"), method_name, method_len, noreturn TSRMLS_CC);
-
 	if (object) {
 		EG(scope) = active_scope;
 	}

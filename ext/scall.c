@@ -48,7 +48,7 @@ PHP_METHOD(Test_Scall, testCall1) {
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_CALL_STATIC(_0, "test\\scall", "testmethod1");
+	ZEPHIR_CALL_SELF(_0, this_ptr, "testmethod1");
 	RETURN_CCTOR(_0);
 
 
@@ -60,7 +60,7 @@ PHP_METHOD(Test_Scall, testCall2) {
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_CALL_STATIC(_0, "test\\scall", "testmethod2");
+	ZEPHIR_CALL_SELF(_0, this_ptr, "testmethod2");
 	RETURN_CCTOR(_0);
 
 
