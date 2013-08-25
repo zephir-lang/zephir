@@ -733,7 +733,7 @@ int zephir_call_parent_func_five_params(zval *return_value, zval *object, char *
 /**
  * Call self-class static function which not requires parameters
  */
-int zephir_call_self_func(zval *return_value, zval *object, char *method_name, int method_len, int noreturn TSRMLS_DC){
+int zephir_call_self_func(zval *return_value, zval *object, zend_class_entry *current_ce, char *method_name, int method_len, int noreturn TSRMLS_DC) {
 
 	int success;
 	zend_class_entry *ce, *active_scope = NULL;
@@ -744,10 +744,15 @@ int zephir_call_self_func(zval *return_value, zval *object, char *method_name, i
 		if (ce->parent) {
 			zephir_find_scope(ce, method_name, method_len, 0, 0 TSRMLS_CC);
 		}
+	} else {
+		active_scope = EG(scope);
+		EG(scope) = current_ce;
 	}
 
 	success = zephir_call_static_func(return_value, SL("self"), method_name, method_len, noreturn TSRMLS_CC);
 	if (object) {
+		EG(scope) = active_scope;
+	} else {
 		EG(scope) = active_scope;
 	}
 

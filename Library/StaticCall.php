@@ -66,6 +66,7 @@ class StaticCall extends Call
 		//PHALCON_CALL_STATIC_PARAMS_2(html, "phalcon\\tag\\select", "selectfield", parameters, data);
 
 		$className = strtolower(str_replace('\\', '\\\\', $expression['class']));
+		$classCe = strtolower(str_replace('\\', '_', $expression['class'])) . '_ce';
 
 		/**
 		 *
@@ -76,7 +77,7 @@ class StaticCall extends Call
 			}
 			if ($isExpecting) {
 				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
-				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '");');
+				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '");');
 			} else {
 				$codePrinter->output('ZEPHIR_CALL_STATIC_NORETURN("' . $className . '", "' . $methodName . '");');
 			}

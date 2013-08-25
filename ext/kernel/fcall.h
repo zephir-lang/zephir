@@ -79,8 +79,8 @@
 #define ZEPHIR_CALL_SELF_PARAMS_3_NORETURN(object, method_name, param1, param2, param3) if(zephir_call_self_func_three_params(NULL, object, method_name, sizeof(method_name)-1, param1, param2, param3, 0 TSRMLS_CC)==FAILURE) return;
 #define ZEPHIR_CALL_SELF_PARAMS_4(return_value, object, method_name, param1, param2, param3, param4) if(zephir_call_self_func_four_params(return_value, object, method_name, sizeof(method_name)-1, param1, param2, param3, param4, 1 TSRMLS_CC)==FAILURE) return;
 #define ZEPHIR_CALL_SELF_PARAMS_4_NORETURN(object, method_name, param1, param2, param3, param4) if(zephir_call_self_func_four_params(NULL, object, method_name, sizeof(method_name)-1, param1, param2, param3, param4, 0 TSRMLS_CC)==FAILURE) return;
-#define ZEPHIR_CALL_SELF(return_value, object, method_name) if(zephir_call_self_func(return_value, object, method_name, sizeof(method_name)-1, 1 TSRMLS_CC)==FAILURE) return;
-#define ZEPHIR_CALL_SELF_NORETURN(object, method_name) if(zephir_call_self_func(NULL, object, method_name, sizeof(method_name)-1, 0 TSRMLS_CC)==FAILURE) return;
+#define ZEPHIR_CALL_SELF(return_value, object, ce, method_name) if(zephir_call_self_func(return_value, object, ce, method_name, sizeof(method_name)-1, 1 TSRMLS_CC)==FAILURE) return;
+#define ZEPHIR_CALL_SELF_NORETURN(object, ce, method_name) if(zephir_call_self_func(NULL, object, ce, method_name, sizeof(method_name)-1, 0 TSRMLS_CC)==FAILURE) return;
 
 /** Use these macros to call functions statically  */
 #define ZEPHIR_CALL_STATIC_PARAMS(return_value, class_name, method_name, param_count, params) if(zephir_call_static_func_params(return_value, class_name, sizeof(class_name)-1, method_name, sizeof(method_name)-1, param_count, params, 1 TSRMLS_CC)==FAILURE) return;
@@ -145,7 +145,7 @@ extern int zephir_call_parent_func_two_params(zval *return_value, zval *object, 
 extern int zephir_call_parent_func_three_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC);
 
 /** Call methods on self class */
-extern int zephir_call_self_func(zval *return_value, zval *object, char *method_name, int method_len, int noreturn TSRMLS_DC);
+extern int zephir_call_self_func(zval *return_value, zval *object, zend_class_entry *current_ce, char *method_name, int method_len, int noreturn TSRMLS_DC);
 extern int zephir_call_self_func_params(zval *return_value, zval *object, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC);
 extern int zephir_call_self_func_one_param(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, int noreturn TSRMLS_DC);
 extern int zephir_call_self_func_two_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, int noreturn TSRMLS_DC);
