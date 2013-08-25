@@ -43,7 +43,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
  */
 	zend_declare_property_double(test_properties_publicproperties_ce, SL("someDouble"), 10.25, ZEND_ACC_PUBLIC TSRMLS_CC);
 /**
- * This is a public property with an initial double value
+ * This is a public property with an initial string value
  */
 	zend_declare_property_string(test_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC TSRMLS_CC);
 

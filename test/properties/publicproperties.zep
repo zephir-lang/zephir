@@ -35,7 +35,7 @@ class PublicProperties
 	public someDouble = 10.25;
 
 	/**
-	 * This is a public property with an initial double value
+	 * This is a public property with an initial string value
 	 */
 	public someString = "test";
 
