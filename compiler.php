@@ -56,6 +56,7 @@ require ZEPHIRPATH . 'Library/Call.php';
 require ZEPHIRPATH . 'Library/FunctionCall.php';
 require ZEPHIRPATH . 'Library/MethodCall.php';
 require ZEPHIRPATH . 'Library/Passes/LocalContextPass.php';
+require ZEPHIRPATH . 'Library/Passes/LoopBreakPass.php';
 require ZEPHIRPATH . 'Library/Config.php';
 require ZEPHIRPATH . 'Library/Logger.php';
 require ZEPHIRPATH . 'Library/Utils.php';

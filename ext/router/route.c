@@ -169,8 +169,9 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	}
 	//missing comment
 	if (zephir_memnstr_str(compiledPattern, SL("("))) {
+		//missing comment
 
-		RETURN_MM_NULL();
+		RETURN_CCTOR(compiledPattern);
 
 	}
 	//missing comment
