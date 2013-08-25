@@ -73,6 +73,12 @@ class ClassMethod
 				case 'public':
 					$modifiers['ZEND_ACC_PUBLIC'] = $visibility;
 					break;
+				case 'protected':
+					$modifiers['ZEND_ACC_PROTECTED'] = $visibility;
+					break;
+				case 'private':
+					$modifiers['ZEND_ACC_PRIVATE'] = $visibility;
+					break;
 				case 'static':
 					$modifiers['ZEND_ACC_STATIC'] = $visibility;
 					break;
