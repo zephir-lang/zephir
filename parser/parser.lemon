@@ -55,6 +55,9 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 	json_object *ret = json_object_new_object();
 
 	switch (type) {
+		case XX_T_CONSTANT:
+			json_object_object_add(ret, "type", json_object_new_string("constant"));
+			break;
 		case XX_T_IDENTIFIER:
 			json_object_object_add(ret, "type", json_object_new_string("variable"));
 			break;
@@ -986,11 +989,11 @@ xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
-xx_class_const_definition(R) ::= COMMENT(C) CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+xx_class_const_definition(R) ::= COMMENT(C) CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, C, status->scanner_state);
 }
 
-xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+xx_class_const_definition(R) ::= CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
 }
 
@@ -1646,6 +1649,11 @@ xx_common_expr(R) ::= FETCH IDENTIFIER(O1) COMMA xx_isset_expr(O2) . {
 /* y = typeof b */
 xx_common_expr(R) ::= TYPEOF xx_common_expr(O1) . {
 	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
+}
+
+/* y = X */
+xx_common_expr(R) ::= CONSTANT(I) . {
+	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
 }
 
 /* y = x */

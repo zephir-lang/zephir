@@ -724,10 +724,31 @@ class Expression
 
 	}
 
+	public function compileConstant($expression, CompilationContext $compilationContext)
+	{
+
+		$exists = true;
+		if (!defined($expression['value'])) {
+			$compilationContext->logger->warning("Constant \"" . $expression['value'] . "\" does not exist at compile time", "nonexistant-constant");
+			$exists = false;
+		}
+
+		if ($exists) {
+			$value = constant($expression['value']);
+			switch (gettype($value)) {
+				case 'integer':
+					return new CompiledExpression('int', $value, $expression);
+			}
+			return new CompiledExpression(gettype($value), $value, $expression);
+		}
+
+		return new CompiledExpression('null', null, $expression);
+	}
+
 	/**
 	 * Resolves an expression
 	 *
-	 * @param CompilationContext $compilationContext
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
@@ -757,6 +778,9 @@ class Expression
 
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
+
+			case 'constant':
+				return $this->compileConstant($expression, $compilationContext);
 
 			case 'empty-array':
 				return new CompiledExpression('empty-array', null, $expression);

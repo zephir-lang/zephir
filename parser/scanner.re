@@ -28,6 +28,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 	char next, *q = YYCURSOR, *start = YYCURSOR;
 	int status = XX_SCANNER_RETCODE_IMPOSSIBLE;
+	int is_constant = 0, j;
 
 	while (XX_SCANNER_RETCODE_IMPOSSIBLE == status) {
 
@@ -404,11 +405,39 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		IDENTIFIER = [\\\_]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
-			token->opcode = XX_T_IDENTIFIER;
+
 			token->value = strndup(start, YYCURSOR - start);
 			token->len = YYCURSOR - start;
 			s->active_char += (YYCURSOR - start);
 			q = YYCURSOR;
+
+			if (!memcmp(token->value, "_GET", sizeof("_GET")-1)) {
+				token->opcode = XX_T_IDENTIFIER;
+				return 0;
+			}
+
+			if (!memcmp(token->value, "_POST", sizeof("_POST")-1)) {
+				token->opcode = XX_T_IDENTIFIER;
+				return 0;
+			}
+
+			if (!memcmp(token->value, "_SERVER", sizeof("_SERVER")-1)) {
+				token->opcode = XX_T_IDENTIFIER;
+				return 0;
+			}
+
+			is_constant = 1;
+			for (j = 0; j < token->len; j++) {
+				if (!((token->value[j] >= 'A' && token->value[j] <= 'Z') || (token->value[j] >= '0' && token->value[j] <= '9') || token->value[j] == '_')) {
+					is_constant = 0;
+					break;
+				}
+			};
+			if (is_constant) {
+				token->opcode = XX_T_CONSTANT;
+			} else {
+				token->opcode = XX_T_IDENTIFIER;
+			}
 			return 0;
 		}
 
