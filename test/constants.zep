@@ -23,6 +23,6 @@ class Constants
 
 	public function testReadClassConstant()
 	{
-		return Test\Constants::C1;
+		return Test\Constants::C4;
 	}
 }
