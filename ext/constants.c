@@ -36,3 +36,11 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 
 }
 
+PHP_METHOD(Test_Constants, testReadClassConstant) {
+
+	phalcon_get_class_constant(return_value, test_constants_ce, SS("C1") TSRMLS_CC);
+	return;
+
+
+}
+

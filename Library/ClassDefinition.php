@@ -105,6 +105,16 @@ class ClassDefinition
 	}
 
 	/**
+	 * Checks if class definition has a property
+	 *
+	 * @param string $name
+	 */
+	public function hasConstant($name)
+	{
+		return isset($this->_constants[$name]);
+	}
+
+	/**
 	 * Adds a method to the class definition
 	 */
 	public function addMethod(ClassMethod $method, $statement=null)

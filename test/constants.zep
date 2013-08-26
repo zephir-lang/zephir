@@ -20,4 +20,9 @@ class Constants
 	{
 		return ENT_QUOTES;
 	}
+
+	public function testReadClassConstant()
+	{
+		return Test\Constants::C1;
+	}
 }

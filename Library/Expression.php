@@ -263,6 +263,48 @@ class Expression
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
+	public function staticConstantAccess($expression, CompilationContext $compilationContext)
+	{
+		$compiler = $compilationContext->compiler;
+
+		$className = $expression['left']['value'];
+		if (!$compiler->isClass($className)) {
+			throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+		}
+
+		$classDefinition = $compiler->getClassDefinition($className);
+
+		$constant = $expression['right']['value'];
+		if (!$classDefinition->hasConstant($constant)) {
+			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
+		}
+
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->initVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+		}
+
+		/**
+		 * Variable that receives property accesses must be polimorphic
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+		}
+
+		$compilationContext->codePrinter->output('phalcon_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
 	/**
 	 * Compiles foo[x] = {expr}
 	 */
@@ -305,7 +347,7 @@ class Expression
 		}
 
 		/**
-		 * Variable that receives the method call must be polimorphic
+		 * Variable that receives property accesses must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
@@ -804,6 +846,9 @@ class Expression
 
 			case 'property-access':
 				return $this->propertyAccess($expression, $compilationContext);
+
+			case 'static-constant-access':
+				return $this->staticConstantAccess($expression, $compilationContext);
 
 			case 'fcall':
 				$functionCall = new FunctionCall();
