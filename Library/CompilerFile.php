@@ -140,6 +140,16 @@ class CompilerFile
 				}
 			}
 
+			if (isset($definition['constants'])) {
+				foreach ($definition['constants'] as $constant) {
+					$classDefinition->addConstant(new ClassConstant(
+						$constant['name'],
+						isset($constant['default']) ? $constant['default'] : null,
+						isset($constant['docblock']) ? $constant['docblock'] : null
+					));
+				}
+			}
+
 			if (isset($definition['methods'])) {
 				foreach ($definition['methods'] as $method) {
 					$classDefinition->addMethod(new ClassMethod(

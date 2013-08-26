@@ -1384,6 +1384,21 @@ xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN xx_inde
 	R = xx_ret_let_assignment("object-property-array-index", O, D, I, X, E, status->scanner_state);
 }
 
+/* y::x = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) DOUBLECOLON IDENTIFIER(I) xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("static-property", O, D, I, NULL, E, status->scanner_state);
+}
+
+/* y::x[] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) DOUBLECOLON IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("static-property-append", O, D, I, NULL, E, status->scanner_state);
+}
+
+/* y::x[z] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) DOUBLECOLON IDENTIFIER(I) SBRACKET_OPEN xx_index_expr(X) SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("static-property-array-index", O, D, I, X, E, status->scanner_state);
+}
+
 /* y[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("variable-append", O, I, NULL, NULL, E, status->scanner_state);
@@ -1595,6 +1610,14 @@ xx_common_expr(R) ::= PARENTHESES_OPEN xx_parameter_type(O1) PARENTHESES_CLOSE x
 
 xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON IDENTIFIER(I) . {
+	R = xx_ret_expr("static-property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
+	R = xx_ret_expr("static-constant-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {

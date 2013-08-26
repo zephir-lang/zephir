@@ -19,41 +19,33 @@ Compiler design goals:
 * Type speculation/inference
 * Allow runtime profile-guided optimizations, pseudo-constant propagation and indirect/virtual function inlining
 
-Installation
+Requirements
 ------------
-xx is the parser for the language:
-
-Requirements:
 
 * [json-c](https://github.com/json-c/json-c)
 * [re2c](http://re2c.org/)
 
-Installation on Ubuntu
------------------------
-
-* apt-get install libjson0 libjson0-dev libjson0-dbg
-* apt-get install re2c
-
-
+Installation
+------------
 Once you have the required packages installed, you can generate the parser as follows:
 
 ```bash
-./generate
+./install
 ```
+
+Additional notes on Ubuntu
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following packages are needed in Ubuntu:
+
+* apt-get install libjson0 libjson0-dev libjson0-dbg
+* apt-get install re2c
 
 Usage
 -----
 Compile the extension:
 
 ```bash
-./zephir
-```
-
-The code produced is placed in ext/, there you can perform the standard compilation:
-
-```bash
-cd ext/
-sudo ./install
+./bin/zephir compile
 ```
 
 Current Build Status

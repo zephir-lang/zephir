@@ -8,3 +8,4 @@ php ./unit-tests/oo.php
 php ./unit-tests/mcall.php
 php ./unit-tests/scall.php
 php ./unit-tests/properties.php
+php ./unit-tests/constants.php

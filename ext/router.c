@@ -70,6 +70,8 @@ ZEPHIR_INIT_CLASS(Test_Router) {
 	zend_declare_property_null(test_router_ce, SL("_defaultParams"), ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_removeExtraSlashes"), ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_notFoundPaths"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_class_constant_long(test_router_ce, SL("URI_SOURCE_GET_URL"), 0 TSRMLS_CC);
+	zend_declare_class_constant_long(test_router_ce, SL("URI_SOURCE_SERVER_REQUEST_URI"), 1 TSRMLS_CC);
 
 	return SUCCESS;
 

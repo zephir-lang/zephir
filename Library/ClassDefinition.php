@@ -33,6 +33,8 @@ class ClassDefinition
 
 	protected $_properties = array();
 
+	protected $_constants = array();
+
 	protected $_methods = array();
 
 	public function __construct($namespace, $name)
@@ -70,6 +72,19 @@ class ClassDefinition
 	}
 
 	/**
+	 * Adds a property to the definition
+	 *
+	 * @param ClassConstant $constant
+	 */
+	public function addConstant(ClassConstant $constant)
+	{
+		if (isset($this->_constants[$constant->getName()])) {
+			throw new Exception("Constant '" . $constant->getName() . "' was defined more than one time");
+		}
+		$this->_constants[$constant->getName()] = $constant;
+	}
+
+	/**
 	 * Checks if class definition has a property
 	 *
 	 * @param string $name
@@ -96,6 +111,14 @@ class ClassDefinition
 	public function getProperties()
 	{
 		return $this->_properties;
+	}
+
+	/**
+	 * Returns all constants defined in the class
+	 */
+	public function getConstants()
+	{
+		return $this->_constants;
 	}
 
 	/**
@@ -197,13 +220,22 @@ class ClassDefinition
 		 * Compile properties
 		 */
 		foreach ($this->getProperties() as $property) {
-
 			$docBlock = $property->getDocBlock();
 			if ($docBlock) {
 				$codePrinter->outputDocBlock($docBlock);
 			}
-
 			$property->compile($compilationContext);
+		}
+
+		/**
+		 * Compile constants
+		 */
+		foreach ($this->getConstants() as $constant) {
+			$docBlock = $constant->getDocBlock();
+			if ($docBlock) {
+				$codePrinter->outputDocBlock($docBlock);
+			}
+			$constant->compile($compilationContext);
 		}
 
 		$codePrinter->outputBlankLine();

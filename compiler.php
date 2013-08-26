@@ -27,6 +27,7 @@ require ZEPHIRPATH . 'Library/CompilationContext.php';
 require ZEPHIRPATH . 'Library/HeadersManager.php';
 require ZEPHIRPATH . 'Library/ClassDefinition.php';
 require ZEPHIRPATH . 'Library/ClassProperty.php';
+require ZEPHIRPATH . 'Library/ClassConstant.php';
 require ZEPHIRPATH . 'Library/ClassMethod.php';
 require ZEPHIRPATH . 'Library/Compiler.php';
 require ZEPHIRPATH . 'Library/CompilerFile.php';
