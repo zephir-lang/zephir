@@ -897,6 +897,9 @@ class Expression
 				return $expr->compile($expression, $compilationContext);
 
 			case 'list':
+				if ($expression['left']['type'] == 'list') {
+					$compilationContext->logger->warning("Unnecessary extra parentheses", "extra-parentheses");
+				}
 				$numberPrints = $compilationContext->codePrinter->getNumberPrints();
 				$expr = new Expression($expression['left']);
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);

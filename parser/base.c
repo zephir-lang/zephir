@@ -135,6 +135,7 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 	parser_status->ret = NULL;
 	parser_status->token = &token;
 	parser_status->syntax_error = NULL;
+	parser_status->number_brackets = 0;
 
 	/**
 	 * Initialize the scanner state
@@ -328,9 +329,11 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 
 			case XX_T_BRACKET_OPEN:
+				parser_status->number_brackets++;
 				xx_(xx_parser, XX_BRACKET_OPEN, NULL, parser_status);
 				break;
 			case XX_T_BRACKET_CLOSE:
+				parser_status->number_brackets--;
 				xx_(xx_parser, XX_BRACKET_CLOSE, NULL, parser_status);
 				break;
 
@@ -351,7 +354,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				xx_(xx_parser, XX_FALSE, NULL, parser_status);
 				break;
 			case XX_T_COMMENT:
-				xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
+				if (parser_status->number_brackets <= 1) {
+					xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
+				}
 				break;
 
 			case XX_T_TYPE_INTEGER:

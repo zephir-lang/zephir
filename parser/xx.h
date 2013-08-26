@@ -30,6 +30,7 @@ typedef struct _xx_parser_status {
 	xx_scanner_token *token;
 	char *syntax_error;
 	unsigned int syntax_error_len;
+	unsigned int number_brackets;
 } xx_parser_status;
 
 #define XX_PARSING_OK 1
