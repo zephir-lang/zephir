@@ -305,6 +305,37 @@ class Expression
 	}
 
 	/**
+	 * Compiles foo[x] = []
+	 */
+	public function emptyArray($expression, CompilationContext $compilationContext)
+	{
+		/**
+		 * Resolves the symbol that expects the value
+		 */
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable->observeVariant($compilationContext);
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+			}
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+		}
+
+		/**
+		 * Variable that receives property accesses must be polimorphic
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
+		}
+
+		$compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
 	 * Compiles foo[x] = {expr}
 	 */
 	public function arrayAccess($expression, CompilationContext $compilationContext)
@@ -838,7 +869,7 @@ class Expression
 				return $this->compileConstant($expression, $compilationContext);
 
 			case 'empty-array':
-				return new CompiledExpression('empty-array', null, $expression);
+				return $this->emptyArray($expression, $compilationContext);
 
 			case 'array-access':
 				return $this->arrayAccess($expression, $compilationContext);

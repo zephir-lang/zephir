@@ -460,7 +460,7 @@ class LetStatement
 								$codePrinter->output($variable . ' = 0;');
 								break;
 							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: bool", $statement);
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: null", $statement);
 						}
 						break;
 					case 'int':
@@ -468,14 +468,23 @@ class LetStatement
 					case 'long':
 					case 'ulong':
 					case 'double':
-						$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+						}
 						break;
 					case 'bool':
-						$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+						}
 						break;
-					/*case 'variable':
-						$codePrinter->output($variable . ' = zephir_get_boolval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
-						break;*/
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
@@ -484,13 +493,31 @@ class LetStatement
 							case 'long':
 							case 'ulong':
 							case 'double':
-								$codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = (' . $itemVariable->getName() . ') ? 1 : 0;');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+								}
 								break;
 							case 'bool':
-								$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+								}
 								break;
 							case 'variable':
-								$codePrinter->output($variable . ' = zephir_get_boolval(' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$codePrinter->output($variable . ' = zephir_get_boolval(' . $itemVariable->getName() . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+								}
 								break;
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
@@ -504,11 +531,15 @@ class LetStatement
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
-						$symbolVariable->initVariant($compilationContext);
-						if ($symbolVariable->isLocalOnly()) {
-							$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
-						} else {
-							$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								$symbolVariable->initVariant($compilationContext);
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
+								} else {
+									$codePrinter->output('ZVAL_NULL(' . $variable . ');');
+								}
+								break;
 						}
 						break;
 					case 'int':
@@ -520,14 +551,20 @@ class LetStatement
 						} else {
 							$symbol = $variable;
 						}
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
-							$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
-						} else {
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
+									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
+								} else {
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+								}
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
 					case 'double':
@@ -536,14 +573,20 @@ class LetStatement
 						} else {
 							$symbol = $variable;
 						}
-						if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-							$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
-							$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
-						} else {
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+						switch ($statement['operator']) {
+							case 'assign':
+								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
+									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
+								} else {
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+								}
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
 					case 'bool':
@@ -552,32 +595,44 @@ class LetStatement
 						} else {
 							$symbol = $variable;
 						}
-						if ($resolvedExpr->getCode() == 'true') {
-							$symbolVariable->initVariant($compilationContext);
-							$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 1);');
-						} else {
-							if ($resolvedExpr->getCode() == 'false') {
-								$symbolVariable->initVariant($compilationContext);
-								$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 0);');
-							} else {
-								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
-									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+						switch ($statement['operator']) {
+							case 'assign':
+								if ($resolvedExpr->getCode() == 'true') {
 									$symbolVariable->initVariant($compilationContext);
-									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $tempVariable->getName() . ');');
+									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 1);');
 								} else {
-									$symbolVariable->initVariant($compilationContext);
-									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $resolvedExpr->getBooleanCode() . ');');
+									if ($resolvedExpr->getCode() == 'false') {
+										$symbolVariable->initVariant($compilationContext);
+										$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 0);');
+									} else {
+										if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+											$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
+											$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getBooleanCode() . ';');
+											$symbolVariable->initVariant($compilationContext);
+											$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $tempVariable->getName() . ');');
+										} else {
+											$symbolVariable->initVariant($compilationContext);
+											$codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $resolvedExpr->getBooleanCode() . ');');
+										}
+									}
 								}
-							}
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
 					case 'string':
-						$symbolVariable->initVariant($compilationContext);
-						if ($symbolVariable->isLocalOnly()) {
-							$codePrinter->output('ZVAL_STRING(&' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
-						} else {
-							$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+						switch ($statement['operator']) {
+							case 'assign':
+								$symbolVariable->initVariant($compilationContext);
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('ZVAL_STRING(&' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+								} else {
+									$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+								}
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
 					case 'variable':
@@ -588,27 +643,45 @@ class LetStatement
 							case 'uint':
 							case 'long':
 							case 'ulong':
-								$symbolVariable->initVariant($compilationContext);
-								if ($symbolVariable->isLocalOnly()) {
-									$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
-								} else {
-									$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->initVariant($compilationContext);
+										if ($symbolVariable->isLocalOnly()) {
+											$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
+										} else {
+											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
+										}
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
 							case 'double':
-								$symbolVariable->initVariant($compilationContext);
-								if ($symbolVariable->isLocalOnly()) {
-									$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
-								} else {
-									$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->initVariant($compilationContext);
+										if ($symbolVariable->isLocalOnly()) {
+											$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
+										} else {
+											$codePrinter->output('ZVAL_DOUBLE(' . $variable . ', ' . $itemVariable->getName() . ');');
+										}
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
 							case 'bool':
-								$symbolVariable->initVariant($compilationContext);
-								if ($symbolVariable->isLocalOnly()) {
-									$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
-								} else {
-									$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->initVariant($compilationContext);
+										if ($symbolVariable->isLocalOnly()) {
+											$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
+										} else {
+											$codePrinter->output('ZVAL_BOOL(' . $variable . ', ' . $itemVariable->getName() . ');');
+										}
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
 							case 'variable':
@@ -620,10 +693,6 @@ class LetStatement
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
-						break;
-					case 'empty-array':
-						$symbolVariable->initVariant($compilationContext);
-						$codePrinter->output('array_init(' . $variable . ');');
 						break;
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);

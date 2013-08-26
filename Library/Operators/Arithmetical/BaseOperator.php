@@ -79,10 +79,10 @@ class ArithmeticalBaseOperator extends BaseOperator
 									return new CompiledExpression('int', $left->getCode() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 								}
 							default:
-								throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+								throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
 						}
 					default:
-						throw new Exception("Cannot add 'int' with '" . $right->getType() . "'");
+						throw new Exception("Cannot operate 'int' with '" . $right->getType() . "'");
 				}
 				break;
 			case 'bool':
@@ -96,7 +96,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'bool':
 						return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 					default:
-						throw new Exception("Cannot add 'bool' with '" . $right->getType() . "'");
+						throw new Exception("Cannot operate 'bool' with '" . $right->getType() . "'");
 				}
 				break;
 			case 'double':
@@ -111,13 +111,13 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'bool':
 						return new CompiledExpression('double', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
 					default:
-						throw new CompilerException("Cannot add 'double' with '" . $right->getType() . "'", $expression);
+						throw new CompilerException("Cannot operate 'double' with '" . $right->getType() . "'", $expression);
 				}
 				break;
 			case 'string':
 				switch ($right->getType()) {
 					default:
-						throw new CompilerException("Add is not supported between strings", $expression);
+						throw new CompilerException("Operation is not supported between strings", $expression);
 				}
 				break;
 			case 'variable':
@@ -155,10 +155,10 @@ class ArithmeticalBaseOperator extends BaseOperator
 											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
-										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					case 'bool':
@@ -189,10 +189,10 @@ class ArithmeticalBaseOperator extends BaseOperator
 											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
-										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
 					case 'double':
 						switch ($right->getType()) {
@@ -225,13 +225,13 @@ class ArithmeticalBaseOperator extends BaseOperator
 											return new CompiledExpression('int', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
-										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
+										throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
 					case 'string':
-						throw new CompilerException("Cannot add string variables'", $expression);
+						throw new CompilerException("Cannot operate string variables'", $expression);
 					case 'variable':
 						switch ($right->getType()) {
 							/* a + 1 */
@@ -293,17 +293,17 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 										$expected = $this->getExpected($compilationContext, $expression);
 										if ($expected->isLocalOnly()) {
-											$compilationContext->codePrinter->output('zephir_add_function(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+											$compilationContext->codePrinter->output($this->_zvalOperator . '(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
 										} else {
-											$compilationContext->codePrinter->output('zephir_add_function(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+											$compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
 										}
 										return new CompiledExpression('variable', $expected->getName(), $expression);
 
 									default:
-										throw new CompilerException("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add 'variable' with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
 						}
 					case 'variable':
 						switch ($right->getType()) {
@@ -367,17 +367,17 @@ class ArithmeticalBaseOperator extends BaseOperator
 												}
 
 												$expected = $this->getExpected($compilationContext, $expression);
-												$compilationContext->codePrinter->output('zephir_add_function(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ');');
+												$compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ');');
 												return new CompiledExpression('variable', $expected->getName(), $expression);
 											default:
-												throw new CompilerException("Cannot add variable('double') with variable('" . $variableRight->getType() . "')", $expression);
+												throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
 										}
 										break;
 									default:
-										throw new CompilerException("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add 'variable' with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					default:

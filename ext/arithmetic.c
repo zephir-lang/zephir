@@ -1061,3 +1061,33 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, addSum23) {
+
+	zval *a = NULL, *b;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_DOUBLE(a, 0.0);
+
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 1);
+
+	ZEPHIR_CPY_WRT(a, b);
+
+	RETURN_CCTOR(a);
+
+
+}
+
+PHP_METHOD(Test_Arithmetic, complexSub) {
+
+	zval c = zval_used_for_init;
+
+	ZEPHIR_SINIT_VAR(c);
+	ZVAL_DOUBLE(&c, (double) 2 - 1.0);
+
+	RETURN_CCTORW(&c);
+
+
+}
+

@@ -225,8 +225,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		RETURN_MM_BOOL(0);
 
 	}
-
-	ZEPHIR_INIT_VAR(matches);
+	ZEPHIR_OBS_VAR(matches);
 	array_init(matches);
 
 	for (_1 = 0; _1 < pattern->len; _1++) {
@@ -491,8 +490,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					break;
 				}
 			} while(0); 
-
-			ZEPHIR_INIT_VAR(routePaths);
+			ZEPHIR_OBS_VAR(routePaths);
 			array_init(routePaths);
 
 			if (Z_TYPE_P(moduleName) != IS_NULL) {
@@ -535,8 +533,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 		}
 	} else {
-
-		ZEPHIR_INIT_NVAR(routePaths);
+		ZEPHIR_OBS_NVAR(routePaths);
 		array_init(routePaths);
 
 	}
@@ -707,7 +704,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	zval *reversed, *path = NULL, *position = NULL, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(reversed);
+	ZEPHIR_OBS_VAR(reversed);
 	array_init(reversed);
 
 	ZEPHIR_OBS_VAR(_0);

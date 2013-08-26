@@ -621,4 +621,20 @@ class Arithmetic
 		return a;
 	}
 
+	public function addSum23()
+	{
+		var a; var b;
+		let a = 0.0,
+			b = 1,
+			a += b;
+		return a;
+	}
+
+	public function complexSub()
+	{
+		var c;
+		let c = 2 - 1.0;
+		return c;
+	}
+
 }
