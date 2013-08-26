@@ -127,13 +127,10 @@ class Router
 	 */
 	public function getRewriteUri()
 	{
-		var uriSource, url, urlParts, realUri;
-
-		// The developer can change the URI source
-		let uriSource = this->_uriSource;
+		var url, urlParts, realUri;
 
 		// By default we use $_GET['url'] to obtain the rewrite information
-		if !uriSource {
+		if !this->_uriSource {
 			if fetch url, _GET["_url"] {
 				if !url {
 					return url;

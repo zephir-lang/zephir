@@ -158,3 +158,60 @@ PHP_METHOD(Test_Mcall, testCall6) {
 
 }
 
+PHP_METHOD(Test_Mcall, testCall7) {
+
+	zval *a, *b, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_method_p2(_0, this_ptr, "testmethod4", a, b);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_method_p2(_1, this_ptr, "testmethod4", a, b);
+	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	return;
+
+
+}
+
+PHP_METHOD(Test_Mcall, testCall8) {
+
+	zval *a, *b, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_method_p2(_0, this_ptr, "testmethod5", a, b);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
+	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	return;
+
+
+}
+
+PHP_METHOD(Test_Mcall, testCall9) {
+
+	zval *a, *b, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_method_p2(_0, this_ptr, "testmethod6", a, b);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
+	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	return;
+
+
+}
+

@@ -63,6 +63,16 @@ class MethodCall extends Call
 		}
 
 		/**
+		 * If the method is called on this, we check if the method does exist
+		 */
+		if ($variableVariable->getRealName() == 'this') {
+			$classDefinition = $compilationContext->classDefinition;
+			if (!$classDefinition->hasMethod($methodName)) {
+				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
+			}
+		}
+
+		/**
 		 * Include fcall header
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');

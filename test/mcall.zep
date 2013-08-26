@@ -67,4 +67,19 @@ class Mcall
 		return this->testMethod6(a, b);
 	}
 
+	public function testCall7(var a, var b)
+	{
+		return this->testMethod4(a, b) + this->testMethod4(a, b);
+	}
+
+	public function testCall8(var a, var b)
+	{
+		return this->testMethod5(a, b) + this->testMethod5(a, b);
+	}
+
+	public function testCall9(var a, var b)
+	{
+		return this->testMethod6(a, b) + this->testMethod5(a, b);
+	}
+
 }

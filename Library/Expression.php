@@ -237,6 +237,16 @@ class Expression
 		}
 
 		/**
+		 * If the property is accessed on 'this', we check if the method does exist
+		 */
+		if ($variableVariable->getRealName() == 'this') {
+			$classDefinition = $compilationContext->classDefinition;
+			if (!$classDefinition->hasProperty($property)) {
+				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
+			}
+		}
+
+		/**
 		 * Variable that receives the method call must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
@@ -244,7 +254,11 @@ class Expression
 		}
 
 		$compilationContext->headersManager->add('kernel/object');
-		$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+		if ($variableVariable->getRealName() == 'this') {
+			$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+		} else {
+			$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}

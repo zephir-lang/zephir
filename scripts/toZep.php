@@ -53,8 +53,8 @@ class ZephirTraslator
 	 */
 	private function _checkFolder($path='')
 	{
-		if (!is_dir($this->_folderTarget.$path)){
-			mkdir($this->_folderTarget.$path);
+		if (!is_dir($this->_folderTarget . $path)){
+			mkdir($this->_folderTarget . $path);
 		}
 	}
 
@@ -67,23 +67,21 @@ class ZephirTraslator
 		//Check if file have *.c extension
 		if (is_file($path) && preg_match('/.c$/',$path)) {
 
-			echo PHP_EOL."--ZEP--".PHP_EOL.$path;
+			echo PHP_EOL . "--ZEP--" . PHP_EOL . $path;
 
 			$newPath = str_replace($this->_folderInit,$this->_folderTarget,$path);
 			$newPath = substr($newPath,0,count($newPath)-3).".zep";
 
-			echo PHP_EOL."New File:".$newPath;
+			echo PHP_EOL . "New File:" . $newPath;
 
-			$fileZep = fopen($newPath,"a");
-
+			$fileZep = fopen($newPath, "a");
 			if ($fileZep) {
 
 				//get Content of File
 				$file = file($path);
 
 				$flagWrite = false;
-				foreach ($file as $line)
-				{
+				foreach ($file as $line) {
 					$line = trim($line);
 
 					//check if is active commnet
@@ -94,8 +92,8 @@ class ZephirTraslator
 						$flagWrite = true;
 					}
 
-					if ($this->_comment==true || $flagWrite==true) {
-						fwrite($fileZep, $line.PHP_EOL);
+					if ($this->_comment == true || $flagWrite==true) {
+						fwrite($fileZep, $line . PHP_EOL);
 					}
 
 					if ($this->_comment == true && $line == '*/') {
@@ -151,5 +149,3 @@ class ZephirTraslator
 }
 
 $zephirTraslator = new ZephirTraslator();
-
-?>

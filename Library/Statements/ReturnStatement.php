@@ -47,7 +47,17 @@ class ReturnStatement
 			if ($statement['expr']['left']['type'] == 'variable') {
 				if ($statement['expr']['left']['value'] == 'this') {
 					if ($statement['expr']['right']['type'] == 'variable') {
-						$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $statement['expr']['right']['value'] . '");');
+
+						/**
+						 * If the property is accessed on 'this', we check if the property does exist
+						 */
+						$property = $statement['expr']['right']['value'];
+						$classDefinition = $compilationContext->classDefinition;
+						if (!$classDefinition->hasProperty($property)) {
+							throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement['expr']['right']);
+						}
+
+						$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $property . '");');
 						return;
 					}
 				}

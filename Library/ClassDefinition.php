@@ -49,6 +49,16 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns the class name including its namespace
+	 *
+	 * @return string
+	 */
+	public function getCompleteName()
+	{
+		return $this->_namespace . '\\' . $this->_name;
+	}
+
+	/**
 	 * Sets the extended class
 	 *
 	 * @param string $extendsClass
