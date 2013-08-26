@@ -54,8 +54,10 @@ class ReturnStatement
 			}
 		}
 
+		$variable = $compilationContext->symbolTable->getVariable('return_value');
+
 		$expr = new Expression($statement['expr']);
-		$expr->setExpectReturn(true);
+		$expr->setExpectReturn(true, $variable);
 		$resolvedExpr = $expr->compile($compilationContext);
 
 		switch ($resolvedExpr->getType()) {
@@ -90,10 +92,14 @@ class ReturnStatement
 						if ($symbolVariable->getName() == 'this_ptr') {
 							$codePrinter->output('RETURN_THIS();');
 						} else {
-							if ($symbolVariable->isLocalOnly()) {
-								$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
+							if ($symbolVariable->getName() != 'return_value') {
+								if ($symbolVariable->isLocalOnly()) {
+									$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
+								} else {
+									$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+								}
 							} else {
-								$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+								$codePrinter->output('return;');
 							}
 						}
 						break;

@@ -413,13 +413,12 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		}
 	}
 
+	array_init(return_value);
 	ZEPHIR_INIT_NVAR(_5);
-	array_init(_5);
-	ZEPHIR_INIT_NVAR(_11);
-	ZVAL_STRINGL(_11, route->str, route->len, 1);
-	zephir_array_append(&_5, _11, 0);
-	zephir_array_append(&_5, matches, 0);
-	RETURN_CCTOR(_5);
+	ZVAL_STRINGL(_5, route->str, route->len, 1);
+	zephir_array_append(&return_value, _5, 0);
+	zephir_array_append(&return_value, matches, 0);
+	return;
 
 
 }

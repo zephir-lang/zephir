@@ -42,12 +42,18 @@ class SymbolTable
 	 */
 	public function __construct($compilationContext)
 	{
+		/* this_ptr */
 		$thisVar = new Variable('variable', 'this', $compilationContext->currentBranch);
 		$thisVar->setIsInitialized(true);
 		$thisVar->increaseUses();
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
 		$this->_variables['this'] = $thisVar;
+
+		$returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
+		$returnValue->setIsInitialized(true);
+		$returnValue->increaseUses();
+		$this->_variables['return_value'] = $returnValue;
 	}
 
 	/**

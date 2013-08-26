@@ -821,7 +821,7 @@ PHP_METHOD(Test_Router, add) {
  */
 PHP_METHOD(Test_Router, addGet) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -832,10 +832,9 @@ PHP_METHOD(Test_Router, addGet) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "GET", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "GET", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -849,7 +848,7 @@ PHP_METHOD(Test_Router, addGet) {
  */
 PHP_METHOD(Test_Router, addPost) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -860,10 +859,9 @@ PHP_METHOD(Test_Router, addPost) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "POST", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "POST", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -877,7 +875,7 @@ PHP_METHOD(Test_Router, addPost) {
  */
 PHP_METHOD(Test_Router, addPut) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -888,10 +886,9 @@ PHP_METHOD(Test_Router, addPut) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "PUT", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "PUT", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -905,7 +902,7 @@ PHP_METHOD(Test_Router, addPut) {
  */
 PHP_METHOD(Test_Router, addPatch) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -916,10 +913,9 @@ PHP_METHOD(Test_Router, addPatch) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "PATCH", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "PATCH", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -933,7 +929,7 @@ PHP_METHOD(Test_Router, addPatch) {
  */
 PHP_METHOD(Test_Router, addDelete) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -944,10 +940,9 @@ PHP_METHOD(Test_Router, addDelete) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "DELETE", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "DELETE", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -961,7 +956,7 @@ PHP_METHOD(Test_Router, addDelete) {
  */
 PHP_METHOD(Test_Router, addOptions) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -972,10 +967,9 @@ PHP_METHOD(Test_Router, addOptions) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "OPTIONS", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "OPTIONS", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }
@@ -989,7 +983,7 @@ PHP_METHOD(Test_Router, addOptions) {
  */
 PHP_METHOD(Test_Router, addHead) {
 
-	zval *pattern, *paths = NULL, *_0, *_1;
+	zval *pattern, *paths = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -1000,10 +994,9 @@ PHP_METHOD(Test_Router, addHead) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "HEAD", 1);
-	zephir_call_method_p3(_0, this_ptr, "add", pattern, paths, _1);
-	RETURN_CCTOR(_0);
+	ZVAL_STRING(_0, "HEAD", 1);
+	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
+	return;
 
 
 }

@@ -344,7 +344,7 @@ class Variable
 	 */
 	public function initVariant(CompilationContext $compilationContext)
 	{
-		if ($this->getName() != 'this_ptr') {
+		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 			$compilationContext->headersManager->add('kernel/memory');
 			if (!$this->isLocalOnly()) {
 				$compilationContext->symbolTable->mustGrownStack(true);
@@ -362,8 +362,8 @@ class Variable
 					$compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
 				}
 			}
+			$this->_variantInits++;
 		}
-		$this->_variantInits++;
 	}
 
 	/**
@@ -373,7 +373,7 @@ class Variable
 	 */
 	public function observeVariant(CompilationContext $compilationContext)
 	{
-		if ($this->getName() != 'this_ptr') {
+		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);
 			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
@@ -382,8 +382,8 @@ class Variable
 			} else {
 				$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
 			}
+			$this->_variantInits++;
 		}
-		$this->_variantInits++;
 	}
 
 }

@@ -12,6 +12,8 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -23,6 +25,20 @@ ZEPHIR_INIT_CLASS(Test_Fcall) {
 
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Fcall, testCall1) {
+
+	zval _0 = zval_used_for_init, _1 = zval_used_for_init;
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "hello", 0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_STRING(&_1, "h", 0);
+	zephir_call_func_p2(return_value, "strpos", &_0, &_1);
+	return;
+
 
 }
 

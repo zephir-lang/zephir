@@ -255,8 +255,7 @@ class Assign
 
 	public function testAssign33()
 	{
-		boolean b;
-		var a;
+		boolean b; var a;
 		let b = false,
 			a = b;
 		return a;
@@ -264,8 +263,7 @@ class Assign
 
 	public function testAssign34()
 	{
-		int b;
-		var a;
+		int b; var a;
 		let b = false,
 			a = b;
 		return a;
@@ -273,8 +271,7 @@ class Assign
 
 	public function testAssign35()
 	{
-		double b;
-		var a;
+		double b; var a;
 		let b = false,
 			a = b;
 		return a;
@@ -282,8 +279,7 @@ class Assign
 
 	public function testAssign36()
 	{
-		var b;
-		var a;
+		var b; var a;
 		let b = false,
 			a = b;
 		return a;
