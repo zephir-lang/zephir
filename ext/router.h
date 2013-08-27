@@ -14,6 +14,7 @@ PHP_METHOD(Test_Router, setDefaultModule);
 PHP_METHOD(Test_Router, setDefaultController);
 PHP_METHOD(Test_Router, setDefaultAction);
 PHP_METHOD(Test_Router, setDefaults);
+PHP_METHOD(Test_Router, doRemoveExtraSlashes);
 PHP_METHOD(Test_Router, handle);
 PHP_METHOD(Test_Router, add);
 PHP_METHOD(Test_Router, addGet);
@@ -72,6 +73,10 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_setDefaults, 0, 0, 0)
 	ZEND_ARG_INFO(0, defaults)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_doRemoveExtraSlashes, 0, 0, 0)
+	ZEND_ARG_INFO(0, route)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_handle, 0, 0, 0)
@@ -147,6 +152,7 @@ ZEPHIR_INIT_FUNCS(test_router_method_entry) {
 	PHP_ME(Test_Router, setDefaultController, arginfo_test_router_setDefaultController, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, setDefaultAction, arginfo_test_router_setDefaultAction, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, setDefaults, arginfo_test_router_setDefaults, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Router, doRemoveExtraSlashes, arginfo_test_router_doRemoveExtraSlashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, handle, arginfo_test_router_handle, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, add, arginfo_test_router_add, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router, addGet, arginfo_test_router_addGet, ZEND_ACC_PUBLIC)

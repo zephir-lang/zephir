@@ -408,6 +408,22 @@ PHP_METHOD(Test_Router, setDefaults) {
 }
 
 /**
+ * x
+ */
+PHP_METHOD(Test_Router, doRemoveExtraSlashes) {
+
+	zval *route;
+
+	zephir_fetch_params(0, 1, 0, &route);
+
+
+
+	RETURN_CCTORW(route);
+
+
+}
+
+/**
  * Handles routing information received from the rewrite engine
  *
  *<code>
@@ -447,7 +463,7 @@ PHP_METHOD(Test_Router, handle) {
 	zephir_read_property_this(&_0, this_ptr, SL("_removeExtraSlashes"), PH_NOISY_CC);
 	if (zend_is_true(_0)) {
 		ZEPHIR_INIT_VAR(handledUri);
-		zephir_call_func_p1(handledUri, "removeextraslashes", realUri);
+		zephir_call_method_p1(handledUri, this_ptr, "doremoveextraslashes", realUri);
 
 	} else {
 
@@ -567,6 +583,7 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_call_method(pattern, route, "getcompiledpattern");
 
 		if (zephir_memnstr_str(pattern, SL("^"))) {
+			Z_SET_ISREF_P(matches);
 			ZEPHIR_INIT_NVAR(routeFound);
 			zephir_call_func_p3(routeFound, "preg_match", pattern, handledUri, matches);
 

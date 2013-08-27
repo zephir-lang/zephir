@@ -93,6 +93,41 @@ class FunctionCall extends Call
 	}
 
 	/**
+	 * Once the function processes the parameters we should mark
+	 * specific parameters to be passed by reference
+	 *
+	 * @param string $funcName
+	 * @param array $expression
+	 * @param array $references
+	 * @return boolean
+	 */
+	protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references)
+	{
+		if ($this->isBuiltInFunction($funcName)) {
+			return false;
+		}
+
+		$reflector = $this->getReflector($funcName);
+		if ($reflector) {
+			$numberParameters = count($parameters);
+			if ($numberParameters > 0) {
+				$n = 1;
+				$funcParameters = $reflector->getParameters();
+				foreach ($funcParameters as $parameter) {
+					if ($numberParameters >= $n) {
+						if ($parameter->isPassedByReference()) {
+							$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
+							$references[] = $parameters[$n - 1] ;
+							return false;
+						}
+					}
+					$n++;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Tries to find specific an specialized optimizer for function calls
 	 *
 	 * @param string $funcName
@@ -212,6 +247,12 @@ class FunctionCall extends Call
 		} else {
 			$params = array();
 		}
+
+		/**
+		 * Some functions receive parameters as references
+		 * We mark those parameters temporary as references
+		 */
+		$this->markReferences($funcName, $params, $compilationContext, $references, $expression);
 
 		$codePrinter = $compilationContext->codePrinter;
 
