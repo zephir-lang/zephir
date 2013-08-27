@@ -172,7 +172,7 @@ PHP_METHOD(Test_Mcall, testCall7) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod4", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 
 }
@@ -191,7 +191,7 @@ PHP_METHOD(Test_Mcall, testCall8) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 
 }
@@ -210,7 +210,7 @@ PHP_METHOD(Test_Mcall, testCall9) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	return;
+	RETURN_MM();
 
 
 }

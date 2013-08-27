@@ -163,7 +163,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		ZEPHIR_INIT_NVAR(_1);
 		ZEPHIR_CONCAT_SV(_1, "#^", compiledPattern);
 		ZEPHIR_CONCAT_VS(return_value, _1, "$#");
-		return;
+		RETURN_MM();
 
 	}
 	if (zephir_memnstr_str(compiledPattern, SL("["))) {
@@ -171,7 +171,7 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		ZEPHIR_INIT_VAR(_3);
 		ZEPHIR_CONCAT_SV(_3, "#^", compiledPattern);
 		ZEPHIR_CONCAT_VS(return_value, _3, "$#");
-		return;
+		RETURN_MM();
 
 	}
 
@@ -424,7 +424,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	ZVAL_STRINGL(_5, route->str, route->len, 1);
 	zephir_array_append(&return_value, _5, 0);
 	zephir_array_append(&return_value, matches, 0);
-	return;
+	RETURN_MM();
 
 
 }

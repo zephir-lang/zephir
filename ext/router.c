@@ -837,7 +837,7 @@ PHP_METHOD(Test_Router, addGet) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "GET", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -864,7 +864,7 @@ PHP_METHOD(Test_Router, addPost) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "POST", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -891,7 +891,7 @@ PHP_METHOD(Test_Router, addPut) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "PUT", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -918,7 +918,7 @@ PHP_METHOD(Test_Router, addPatch) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "PATCH", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -945,7 +945,7 @@ PHP_METHOD(Test_Router, addDelete) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "DELETE", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -972,7 +972,7 @@ PHP_METHOD(Test_Router, addOptions) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "OPTIONS", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }
@@ -999,7 +999,7 @@ PHP_METHOD(Test_Router, addHead) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "HEAD", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
-	return;
+	RETURN_MM();
 
 
 }

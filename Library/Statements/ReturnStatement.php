@@ -110,7 +110,7 @@ class ReturnStatement
 									$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
 								}
 							} else {
-								$codePrinter->output('return;');
+								$codePrinter->output('RETURN_MM();');
 							}
 						}
 						break;

@@ -56,8 +56,6 @@ class ConcatOperator extends BaseOperator
 		}
 
 		return new CompiledExpression('variable', $expected->getName(), $expression);
-
-		return new CompiledExpression('null', null, $expression);
 	}
 
 }
