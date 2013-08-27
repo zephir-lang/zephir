@@ -62,7 +62,6 @@ class LogicalBaseOperator extends BaseOperator
 							case 'double':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 							case 'variable':
-								$compilationContext->headersManager->add('kernel/operators');
 								if ($variableRight->isLocalOnly()) {
 									return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . ')', $expression);
 								} else {
@@ -178,7 +177,6 @@ class LogicalBaseOperator extends BaseOperator
 									case 'bool':
 										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $variableRight->getName(), $expression);
 									case 'variable':
-										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
 											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . ')', $expression);
 										} else {

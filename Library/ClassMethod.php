@@ -375,20 +375,9 @@ class ClassMethod
 			}
 
 			/**
-			 * Fetch the parameters to zval pointers
-			 */
-			$codePrinter->preOutputBlankLine();
-			$compilationContext->headersManager->add('kernel/memory');
-			if ($symbolTable->getMustGrownStack()) {
-				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-			} else {
-				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-			}
-			$code .= PHP_EOL;
-
-			/**
 			 * Initialize required parameters
 			 */
+			$initCode = '';
 			foreach ($requiredParams as $parameter) {
 
 				if (isset($parameter['data-type'])) {
@@ -402,7 +391,7 @@ class ClassMethod
 					/**
 					 * Assign value from zval to low level type
 					 */
-					$code .= $this->assignZvalValue($parameter, $compilationContext);
+					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
 				}
 
 			}
@@ -427,14 +416,14 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				$code .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
-				$code .= $this->assignDefaultValue($parameter, $compilationContext);
+				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
+				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 				if ($dataType == 'variable') {
-					$code .= "\t" . '}' . PHP_EOL;
+					$initCode .= "\t" . '}' . PHP_EOL;
 				} else {
-					$code .= "\t" . '} else {' . PHP_EOL;
-					$code .= $this->assignZvalValue($parameter, $compilationContext);
-					$code .= "\t" . '}' . PHP_EOL;
+					$initCode .= "\t" . '} else {' . PHP_EOL;
+					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+					$initCode .= "\t" . '}' . PHP_EOL;
 				}
 			}
 
@@ -460,6 +449,19 @@ class ClassMethod
 
 				}
 			}
+
+			/**
+			 * Fetch the parameters to zval pointers
+			 */
+			$codePrinter->preOutputBlankLine();
+			$compilationContext->headersManager->add('kernel/memory');
+			if ($symbolTable->getMustGrownStack()) {
+				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+			} else {
+				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+			}
+			$code .= PHP_EOL;
+			$code .= $initCode;
 
 			$codePrinter->preOutput($code);
 		}

@@ -94,8 +94,7 @@ class Route
 
 		// Check if the pattern has parantheses in order to add the regex delimiters
 		if memstr(compiledPattern, "(") {
-			//return "#^" . compiledPattern . "$#";
-			return compiledPattern;
+			return "#^" . compiledPattern . "$#";
 		}
 
 		// Square brackets are also checked

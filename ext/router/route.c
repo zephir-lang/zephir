@@ -16,6 +16,7 @@
 #include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/string.h"
+#include "kernel/concat.h"
 #include "kernel/string_type.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
@@ -58,7 +59,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	zval *pattern, *paths = NULL, *httpMethods = NULL;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(0, 1, 2, &pattern, &paths, &httpMethods);
+	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
 		ZEPHIR_INIT_VAR(paths);
@@ -84,12 +85,10 @@ PHP_METHOD(Test_Router_Route, __construct) {
  */
 PHP_METHOD(Test_Router_Route, compilePattern) {
 
-	zval *pattern, *compiledPattern = NULL, *idPattern, _0 = zval_used_for_init, *_1 = NULL, _2 = zval_used_for_init;
+	zval *pattern, *compiledPattern = NULL, *idPattern, _0 = zval_used_for_init, *_1 = NULL, _2 = zval_used_for_init, *_3;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
-
-
 
 	ZEPHIR_CPY_WRT(compiledPattern, pattern);
 
@@ -159,12 +158,18 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	}
 	if (zephir_memnstr_str(compiledPattern, SL("("))) {
 
-		RETURN_CCTOR(compiledPattern);
+		ZEPHIR_INIT_NVAR(_1);
+		ZEPHIR_CONCAT_SV(_1, "#^", compiledPattern);
+		ZEPHIR_CONCAT_VS(return_value, _1, "$#");
+		return;
 
 	}
 	if (zephir_memnstr_str(compiledPattern, SL("["))) {
 
-		RETURN_MM_NULL();
+		ZEPHIR_INIT_VAR(_3);
+		ZEPHIR_CONCAT_SV(_3, "#^", compiledPattern);
+		ZEPHIR_CONCAT_VS(return_value, _3, "$#");
+		return;
 
 	}
 
@@ -215,7 +220,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
 
-		zephir_get_strval(pattern_param, &pattern);
+	zephir_get_strval(pattern_param, &pattern);
 
 
 	ZEPHIR_SINIT_VAR(_0);
@@ -814,7 +819,7 @@ PHP_METHOD(Test_Router_Route, convert) {
 
 
 
-	//missing object-property-array-index
+	zephir_update_property_array_append(this_ptr, SL("_converters"), converter TSRMLS_CC);
 
 	RETURN_THISW();
 

@@ -19,6 +19,7 @@
 #include "kernel/array.h"
 #include "kernel/exception.h"
 #include "kernel/string.h"
+#include "kernel/concat.h"
 #include "kernel/hash.h"
 
 
@@ -539,9 +540,10 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			if (zephir_memnstr_str(hostname, SL("("))) {
 				if (zephir_memnstr_str(hostname, SL("#"))) {
-
+					ZEPHIR_INIT_NVAR(_7);
+					ZEPHIR_CONCAT_SV(_7, "#^", hostname);
 					ZEPHIR_INIT_NVAR(regexHostName);
-					ZVAL_NULL(regexHostName);
+					ZEPHIR_CONCAT_VS(regexHostName, _7, "$#");
 
 				} else {
 

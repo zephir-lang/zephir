@@ -1016,9 +1016,36 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles foo = x->y
+	 * Compiles x->y[] = foo
 	 */
 	public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$property = $statement['property'];
+		$compilationContext->headersManager->add('kernel/object');
+
+		switch ($resolvedExpr->getType()) {
+			case 'variable':
+				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+				switch ($variableExpr->getType()) {
+					case 'variable':
+						$codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						break;
+					default:
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
+				}
+				break;
+			default:
+				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to property", $statement);
+		}
+	}
+
+	/**
+	 * Compiles x->y[z] = foo
+	 */
+	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1054,7 +1081,7 @@ class LetStatement
 			$variable = $assignment['variable'];
 
 			/**
-			 * @todo: variabl-append we must check that variable is initialized
+			 * @todo: variable-append we must check that variable is initialized
 			 */
 
 			/**
@@ -1112,8 +1139,7 @@ class LetStatement
 					$this->assignPropertyAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'object-property-array-index':
-					//$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
-					$codePrinter->output('//missing object-property-array-index');
+					$this->assignPropertyArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'incr':
 					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);

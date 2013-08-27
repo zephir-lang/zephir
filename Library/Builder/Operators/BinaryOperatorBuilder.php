@@ -17,6 +17,11 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * BinaryOperatorBuilder
+ *
+ * Allows to manually build a binary operator AST node
+ */
 class BinaryOperatorBuilder
 {
 

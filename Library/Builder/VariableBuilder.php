@@ -17,6 +17,11 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * VariableBuilder
+ *
+ * Allows to manually build a variable AST node
+ */
 class VariableBuilder
 {
 

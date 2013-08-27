@@ -399,7 +399,6 @@ class Router
 			if routeFound {
 
 				let beforeMatch = route->getBeforeMatch();
-
 				if beforeMatch !== null {
 
 					// Check first if the callback is callable

@@ -44,6 +44,9 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/LessEqualOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 
+/* Other operators */
+require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
+
 /**
  * Expressions
  *
@@ -985,6 +988,11 @@ class Expression
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
+			case 'concat':
+				$expr = new ConcatOperator();
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			case 'list':
 				if ($expression['left']['type'] == 'list') {
 					$compilationContext->logger->warning("Unnecessary extra parentheses", "extra-parentheses");
@@ -1002,9 +1010,6 @@ class Expression
 
 			case 'cast':
 				return $this->compileCast($expression, $compilationContext);
-
-			case 'concat':
-				return new CompiledExpression('null', null, $expression);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);
