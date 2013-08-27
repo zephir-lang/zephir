@@ -701,9 +701,30 @@ class LetStatement
 										);
 
 										$expr = new AddOperator();
-										$expr->setReadOnly(true);
-										$expr->compile($operator->get(), $compilationContext);
+										$expr->setReadOnly(false);
+										$compiledExpr = $expr->compile($operator->get(), $compilationContext);
+
+										$symbolVariable->setMustInitNull(true);
+										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $compiledExpr->getCode() . ');');
+
 										break;
+									case 'sub-assign':
+
+										$operator = new BinaryOperatorBuilder(
+											'sub',
+											new VariableBuilder($variable),
+											new VariableBuilder($itemVariable->getName())
+										);
+
+										$expr = new SubOperator();
+										$expr->setReadOnly(false);
+										$compiledExpr = $expr->compile($operator->get(), $compilationContext);
+
+										$symbolVariable->setMustInitNull(true);
+										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $compiledExpr->getCode() . ');');
+
+										break;
+
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
