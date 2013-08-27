@@ -170,7 +170,7 @@ class ForStatement
 			$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
 		}
 
-        $codePrinter->output('for (');
+		$codePrinter->output('for (');
 		$codePrinter->output('	; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
 		if ($this->_statement['reverse']) {
 			$codePrinter->output('	; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
@@ -179,14 +179,14 @@ class ForStatement
 		}
 		$codePrinter->output(') {');
 
-        if (isset($this->_statement['key'])) {
-        	$compilationContext->headersManager->add('kernel/hash');
-        	$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
-        }
+		if (isset($this->_statement['key'])) {
+			$compilationContext->headersManager->add('kernel/hash');
+			$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+		}
 
-        if (isset($this->_statement['value'])) {
-        	$codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $this->_statement['value'] . ', ' . $tempVariable->getName() . ');');
-        }
+		if (isset($this->_statement['value'])) {
+			$codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $this->_statement['value'] . ', ' . $tempVariable->getName() . ');');
+		}
 
 		/**
 		 * Compile statements in the 'for' block

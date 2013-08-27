@@ -57,6 +57,7 @@ class ReturnStatement
 							throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement['expr']['right']);
 						}
 
+						$compilationContext->headersManager->add('kernel/object');
 						$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $property . '");');
 						return;
 					}

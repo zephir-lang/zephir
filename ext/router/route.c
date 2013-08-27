@@ -90,6 +90,8 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern);
 
+
+
 	ZEPHIR_CPY_WRT(compiledPattern, pattern);
 
 	if (zephir_memnstr_str(pattern, SL(":"))) {
@@ -220,7 +222,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
 
-	zephir_get_strval(pattern_param, &pattern);
+		zephir_get_strval(pattern_param, &pattern);
 
 
 	ZEPHIR_SINIT_VAR(_0);

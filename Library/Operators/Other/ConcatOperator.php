@@ -17,7 +17,7 @@
  +----------------------------------------------------------------------+
 */
 
-class ConcatOperator extends LogicalBaseOperator
+class ConcatOperator extends BaseOperator
 {
 
 	public function compile($expression, CompilationContext $compilationContext)

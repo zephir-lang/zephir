@@ -93,3 +93,7 @@ ext/properties/publicproperties.lo
 ext/properties/publicproperties.o
 ext/properties/protectedproperties.lo
 ext/properties/protectedproperties.o
+ext/constants.o
+ext/kernel/concat.o
+ext/mcall.o
+ext/scall.o

@@ -322,7 +322,7 @@ class Compiler
 		file_put_contents('ext/' . $project . '.h', $content);
 	}
 
-	protected function showException($e)
+	protected static function showException($e)
 	{
 		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
 		if (method_exists($e, 'getExtra')) {
