@@ -20,7 +20,7 @@
 class ConcatOperator extends LogicalBaseOperator
 {
 
-	public function compile($expression, $compilationContext)
+	public function compile($expression, CompilationContext $compilationContext)
 	{
 
 		if (!isset($expression['left'])) {
