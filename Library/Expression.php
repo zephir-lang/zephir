@@ -315,12 +315,12 @@ class Expression
 		if ($this->_expecting) {
 			if ($this->_expectingVariable) {
 				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->observeVariant($compilationContext);
+				$symbolVariable->initVariant($compilationContext);
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 			}
 		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 		}
 
 		/**

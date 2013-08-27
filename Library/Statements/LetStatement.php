@@ -685,9 +685,27 @@ class LetStatement
 								}
 								break;
 							case 'variable':
-								if ($itemVariable->getName() != $variable) {
-									$symbolVariable->setMustInitNull(true);
-									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+								switch ($statement['operator']) {
+									case 'assign':
+										if ($itemVariable->getName() != $variable) {
+											$symbolVariable->setMustInitNull(true);
+											$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+										}
+										break;
+									case 'add-assign':
+
+										$operator = new BinaryOperatorBuilder(
+											'add',
+											new VariableBuilder($variable),
+											new VariableBuilder($itemVariable->getName())
+										);
+
+										$expr = new AddOperator();
+										$expr->setReadOnly(true);
+										$expr->compile($operator->get(), $compilationContext);
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
 							default:
@@ -699,7 +717,7 @@ class LetStatement
 				}
 				break;
 			default:
-				throw new CompilerException("Unknown type: $type", $statement);
+				throw new CompilerException("Unknown type: " . $type, $statement);
 		}
 	}
 

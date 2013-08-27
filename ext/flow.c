@@ -721,7 +721,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	zval *v = NULL, *b, *c, *_0, *_1, *_2, *_3, **_6;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(c);
+	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 
 	ZEPHIR_INIT_VAR(b);
@@ -762,7 +762,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 	zval *a, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(a);
+	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
@@ -788,7 +788,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 	zval *a, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(a);
+	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
 	zephir_str_assign(b, "hello", sizeof("hello")-1);

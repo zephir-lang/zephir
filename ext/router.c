@@ -84,7 +84,7 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *defaultRoutes_param = NULL, *routes, *_0, *_1, *_2, *_3, *_4, *_5, *_6;
+	zval *defaultRoutes_param = NULL, *routes, *_0 = NULL, *_1, *_2, *_3, *_4, *_5;
 	zend_bool defaultRoutes;
 
 	ZEPHIR_MM_GROW();
@@ -97,7 +97,7 @@ PHP_METHOD(Test_Router, __construct) {
 	}
 
 
-	ZEPHIR_OBS_VAR(routes);
+	ZEPHIR_INIT_VAR(routes);
 	array_init(routes);
 
 	if ((defaultRoutes == 1)) {
@@ -126,10 +126,10 @@ PHP_METHOD(Test_Router, __construct) {
 		zephir_array_append(&routes, _3, PH_SEPARATE);
 
 	}
-	ZEPHIR_OBS_VAR(_6);
-	array_init(_6);
+	ZEPHIR_INIT_NVAR(_0);
+	array_init(_0);
 
-	zephir_update_property_this(this_ptr, SL("_params"), _6 TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_params"), _0 TSRMLS_CC);
 
 	zephir_update_property_this(this_ptr, SL("_routes"), routes TSRMLS_CC);
 
@@ -463,10 +463,10 @@ PHP_METHOD(Test_Router, handle) {
 	ZEPHIR_INIT_VAR(routeFound);
 	ZVAL_BOOL(routeFound, 0);
 
-	ZEPHIR_OBS_VAR(parts);
+	ZEPHIR_INIT_VAR(parts);
 	array_init(parts);
 
-	ZEPHIR_OBS_VAR(params);
+	ZEPHIR_INIT_VAR(params);
 	array_init(params);
 
 	ZEPHIR_INIT_VAR(matches);
@@ -1112,7 +1112,7 @@ PHP_METHOD(Test_Router, clear) {
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(_0);
+	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
 
 	zephir_update_property_this(this_ptr, SL("_routes"), _0 TSRMLS_CC);

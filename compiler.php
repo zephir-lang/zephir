@@ -53,6 +53,8 @@ require ZEPHIRPATH . 'Library/Statements/ForStatement.php';
 require ZEPHIRPATH . 'Library/Statements/BreakStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ContinueStatement.php';
 require ZEPHIRPATH . 'Library/Optimizers/EvalExpression.php';
+require ZEPHIRPATH . 'Library/Builder/Operators/BinaryOperatorBuilder.php';
+require ZEPHIRPATH . 'Library/Builder/VariableBuilder.php';
 require ZEPHIRPATH . 'Library/Call.php';
 require ZEPHIRPATH . 'Library/FunctionCall.php';
 require ZEPHIRPATH . 'Library/MethodCall.php';

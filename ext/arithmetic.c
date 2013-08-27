@@ -1063,7 +1063,7 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 
 PHP_METHOD(Test_Arithmetic, addSum23) {
 
-	zval *a = NULL, *b;
+	zval *a, *b, _0 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
@@ -1072,7 +1072,8 @@ PHP_METHOD(Test_Arithmetic, addSum23) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 1);
 
-	ZEPHIR_CPY_WRT(a, b);
+	ZEPHIR_SINIT_VAR(_0);
+	zephir_add_function(&_0, a, b TSRMLS_CC);
 
 	RETURN_CCTOR(a);
 

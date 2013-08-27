@@ -34,7 +34,7 @@ PHP_METHOD(Test_NativeArray, testArray1) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_OBS_VAR(a);
+	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
 	RETURN_CCTOR(a);
