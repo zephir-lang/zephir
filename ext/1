@@ -1,4 +1,0 @@
-/Users/gutierrezandresfelipe/xx/ext/regexdna.c: In function ‘zim_Test_RegexDNA_process’:
-/Users/gutierrezandresfelipe/xx/ext/regexdna.c:199: error: incompatible type for argument 1 of ‘_zval_internal_dtor’
-/Users/gutierrezandresfelipe/xx/ext/regexdna.c:201: error: incompatible type for argument 1 of ‘_zval_internal_dtor’
-make: *** [regexdna.lo] Error 1

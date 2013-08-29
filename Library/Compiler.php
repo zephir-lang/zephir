@@ -224,9 +224,9 @@ class Compiler
 	public function install()
 	{
 		if (!file_exists('ext/Makefile')) {
-			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize && ./configure --enable-test && sudo make install 1> /dev/null');
+			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize --silent && ./configure --silent --enable-test && sudo make --silent install 1> /dev/null');
 		} else {
-			system('cd ext && sudo make install 1> /dev/null');
+			system('cd ext && sudo make --silent install 1> /dev/null');
 		}
 	}
 

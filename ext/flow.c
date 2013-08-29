@@ -470,9 +470,9 @@ PHP_METHOD(Test_Flow, testWhile2) {
 
 PHP_METHOD(Test_Flow, testWhile3) {
 
-	double c, _0;
+	double c;
 	zval b = zval_used_for_init;
-	int a;
+	int a, _0;
 
 	a = 5;
 
@@ -483,9 +483,9 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 		while (zend_is_true(&b)) {
 
-			_0 = zephir_get_doubleval(&b) - 1;
+			_0 = zephir_get_numberval(&b) - 1;
 			ZEPHIR_SINIT_NVAR(b);
-			ZVAL_DOUBLE(&b, _0);
+			ZVAL_LONG(&b, _0);
 
 		}
 
@@ -502,9 +502,9 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 PHP_METHOD(Test_Flow, testWhile4) {
 
-	double c, _0;
+	double c;
 	zval b = zval_used_for_init;
-	int a;
+	int a, _0;
 
 	a = 5;
 
@@ -515,9 +515,9 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 		while (zend_is_true(&b)) {
 
-			_0 = zephir_get_doubleval(&b) - 1;
+			_0 = zephir_get_numberval(&b) - 1;
 			ZEPHIR_SINIT_NVAR(b);
-			ZVAL_DOUBLE(&b, _0);
+			ZVAL_LONG(&b, _0);
 
 		}
 
@@ -663,7 +663,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	) {
 		ZEPHIR_GET_HVALUE(v, _6);
 
-		c += zephir_get_doubleval(v);
+		c += zephir_get_numberval(v);
 
 	}
 
@@ -705,7 +705,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 		ZEPHIR_GET_HMKEY(k, _5, _4);
 		ZEPHIR_GET_HVALUE(v, _6);
 
-		c += zephir_get_doubleval(k);
+		c += zephir_get_numberval(k);
 
 	}
 

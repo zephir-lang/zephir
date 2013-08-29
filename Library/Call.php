@@ -72,6 +72,43 @@ class Call
 		$this->_isExpecting = $isExpecting;
 	}
 
+	/**
+	 * Processes the symbol variable that will be used to return
+	 * the result of the symbol call. If a temporal variable is used
+	 * as returned value only the body is freed between calls
+	 *
+	 * @param \CompilationContext $compilationContext
+	 */
+	public function processExpectedComplexLiteralReturn($compilationContext)
+	{
+
+		$expr = $this->_expression;
+		$expression = $expr->getExpression();
+
+		/**
+		 * Create temporary variable if needed
+		 */
+		$mustInit = false;
+		$isExpecting = $expr->isExpectingReturn();
+		if ($isExpecting) {
+			$symbolVariable = $expr->getExpectingVariable();
+			if (is_object($symbolVariable)) {
+				$readDetector = new ReadDetector($expression);
+				if ($readDetector->detect($symbolVariable->getName(), $expression)) {
+					$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+				} else {
+					$mustInit = true;
+				}
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+			}
+		}
+
+		$this->_mustInit = $mustInit;
+		$this->_symbolVariable = $symbolVariable;
+		$this->_isExpecting = $isExpecting;
+	}
+
 	public function isExpectingReturn()
 	{
 		return $this->_isExpecting;

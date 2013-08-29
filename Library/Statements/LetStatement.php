@@ -176,16 +176,16 @@ class LetStatement
 							case 'variable':
 								switch ($statement['operator']) {
 									case 'assign':
-										$codePrinter->output($variable . ' = zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										$codePrinter->output($variable . ' = zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
 									case 'add-assign':
-										$codePrinter->output($variable . ' += zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										$codePrinter->output($variable . ' += zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
 									case 'sub-assign':
-										$codePrinter->output($variable . ' -= zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										$codePrinter->output($variable . ' -= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
 									case 'mul-assign':
-										$codePrinter->output($variable . ' *= zephir_get_doubleval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+										$codePrinter->output($variable . ' *= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
@@ -322,16 +322,16 @@ class LetStatement
 							case 'variable':
 								switch ($statement['operator']) {
 									case 'assign':
-										$codePrinter->output($variable . ' = zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										$codePrinter->output($variable . ' = zephir_get_numberval(' . $itemVariable->getName() . ');');
 										break;
 									case 'add-assign':
-										$codePrinter->output($variable . ' += zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										$codePrinter->output($variable . ' += zephir_get_numberval(' . $itemVariable->getName() . ');');
 										break;
 									case 'sub-assign':
-										$codePrinter->output($variable . ' -= zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										$codePrinter->output($variable . ' -= zephir_get_numberval(' . $itemVariable->getName() . ');');
 										break;
 									case 'mul-assign':
-										$codePrinter->output($variable . ' *= zephir_get_doubleval(' . $itemVariable->getName() . ');');
+										$codePrinter->output($variable . ' *= zephir_get_numberval(' . $itemVariable->getName() . ');');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);

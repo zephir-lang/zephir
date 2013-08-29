@@ -78,3 +78,6 @@ extern int zephir_less_equal_long(zval *op1, long op2 TSRMLS_DC);
 
 extern int zephir_greater_equal(zval *op1, zval *op2 TSRMLS_DC);
 extern int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
+
+
+#define zephir_get_numberval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_doubleval(z))
