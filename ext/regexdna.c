@@ -196,9 +196,9 @@ PHP_METHOD(Test_RegexDNA, process) {
 		ZEPHIR_GET_HVALUE(regex, _37);
 		zend_print_zval(regex, 0);
 		php_printf(" ");
-		ZEPHIR_INIT_NVAR(_38);
+		ZEPHIR_INIT_LNVAR(_38);
 		ZEPHIR_CONCAT_SV(_38, "/", regex);
-		ZEPHIR_INIT_NVAR(_39);
+		ZEPHIR_INIT_LNVAR(_39);
 		ZEPHIR_CONCAT_VS(_39, _38, "/iS");
 		Z_SET_ISREF_P(discard);
 		ZEPHIR_INIT_NVAR(_40);
@@ -206,10 +206,10 @@ PHP_METHOD(Test_RegexDNA, process) {
 		zend_print_zval(_40, 0);
 		php_printf("%c", '\n');
 	}
-	ZEPHIR_INIT_NVAR(_38);
-	zephir_call_func_p3(_38, "preg_replace", vIUB, vIUBnew, contents);
+	ZEPHIR_INIT_NVAR(_40);
+	zephir_call_func_p3(_40, "preg_replace", vIUB, vIUBnew, contents);
 
-	ZEPHIR_CPY_WRT(contents, _38);
+	ZEPHIR_CPY_WRT(contents, _40);
 
 	php_printf("%c", '\n');
 	zend_print_zval(initialLength, 0);

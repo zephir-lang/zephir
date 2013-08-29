@@ -292,6 +292,39 @@ class SymbolTable
 
 	/**
 	 * Creates a temporary variable to be used in a write operation
+	 * the body of the variable is freed between iterations instead of
+	 * request a new full zval variable
+	 *
+	 * @param string $type
+	 * @param \CompilationContext $context
+	 */
+	public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
+	{
+		$variable = $this->_reuseTempVariable($type, 'heap-literal');
+		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
+			if ($type == 'variable') {
+				$variable->initComplexLiteralVariant($context);
+			}
+			return $variable;
+		}
+
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
+		$variable->setIsInitialized(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
+		if ($type == 'variable') {
+			$variable->initComplexLiteralVariant($context);
+		}
+
+		$this->_registerTempVariable($type, 'heap-literal', $variable);
+		return $variable;
+	}
+
+	/**
+	 * Creates a temporary variable to be used in a write operation
 	 *
 	 * @param string $type
 	 * @param \CompilationContext $context

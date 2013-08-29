@@ -41,7 +41,7 @@ class ConcatOperator extends BaseOperator
 		$rightExpr->setReadOnly($this->_readOnly);
 		$right = $rightExpr->compile($compilationContext);
 
-		$expected = $this->getExpected($compilationContext, $expression);
+		$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
 
 		if ($left->getType() == 'string' && $right->getType() == 'variable') {
 			$compilationContext->codePrinter->output('ZEPHIR_CONCAT_SV(' . $expected->getName() . ', "' . $left->getCode() . '", ' . $right->getCode() . ');');

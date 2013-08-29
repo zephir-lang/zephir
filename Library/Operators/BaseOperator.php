@@ -73,6 +73,40 @@ class BaseOperator
 	}
 
 	/**
+	 * Returns the expected variable for assignment or creates a temporary variable to
+	 * store the result, if a temporary variable is created it use whose body is only freed
+	 * on every iteration
+	 *
+	 * @param CompilationContext $compilationContext
+	 * @param array $expression
+	 */
+	public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression)
+	{
+		$isExpecting = $this->_expecting;
+		if ($isExpecting) {
+			$symbolVariable = $this->_expectingVariable;
+			if (is_object($symbolVariable)) {
+				if ($symbolVariable->getType() == 'variable') {
+					$symbolVariable->initVariant($compilationContext);
+				} else {
+					if (!$this->_readOnly) {
+						$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+					} else {
+						$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					}
+				}
+			} else {
+				if (!$this->_readOnly) {
+					$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+				} else {
+					$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+				}
+			}
+		}
+		return $symbolVariable;
+	}
+
+	/**
 	 * Sets if the result of the evaluated expression is read only
 	 *
 	 * @param boolean $readOnly

@@ -367,6 +367,36 @@ class Variable
 	}
 
 	/**
+	 * Initializes a variant variable that is intended to have the special
+	 * behavior of only freed its body value instead of the full variable
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
+	public function initComplexLiteralVariant(CompilationContext $compilationContext)
+	{
+		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+			$compilationContext->headersManager->add('kernel/memory');
+			if (!$this->isLocalOnly()) {
+				$compilationContext->symbolTable->mustGrownStack(true);
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_LNVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+				}
+			} else {
+				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_LNVAR(' . $this->getName() . ');');
+				} else {
+					$compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
+				}
+			}
+			$this->_variantInits++;
+		}
+	}
+
+	/**
 	 * Observes a variable in the memory frame without initialization
 	 *
 	 * @param CompilationContext $compilationContext
