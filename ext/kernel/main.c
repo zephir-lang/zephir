@@ -214,6 +214,51 @@ int zephir_fast_count_ev(zval *value TSRMLS_DC) {
 }
 
 /**
+ * Makes fast count on implicit array types without creating a return zval value
+ */
+int zephir_fast_count_int(zval *value TSRMLS_DC) {
+
+	long count = 0;
+
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		return (int) zend_hash_num_elements(Z_ARRVAL_P(value));
+	}
+
+	if (Z_TYPE_P(value) == IS_OBJECT) {
+
+		#ifdef HAVE_SPL
+		zval *retval = NULL;
+		#endif
+
+		if (Z_OBJ_HT_P(value)->count_elements) {
+			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			return (int) count;
+		}
+
+		#ifdef HAVE_SPL
+		if (Z_OBJ_HT_P(value)->get_class_entry && instanceof_function(Z_OBJCE_P(value), spl_ce_Countable TSRMLS_CC)) {
+			zend_call_method_with_0_params(&value, NULL, NULL, "count", &retval);
+			if (retval) {
+				convert_to_long_ex(&retval);
+				count = Z_LVAL_P(retval);
+				zval_ptr_dtor(&retval);
+				return (int) count;
+			}
+			return 0;
+		}
+		#endif
+
+		return 0;
+	}
+
+	if (Z_TYPE_P(value) == IS_NULL) {
+		return 0;
+	}
+
+	return 1;
+}
+
+/**
  * Check if a function exists
  */
 int zephir_function_exists(const zval *function_name TSRMLS_DC) {
