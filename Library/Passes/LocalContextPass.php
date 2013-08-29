@@ -175,6 +175,7 @@ class LocalContextPass
 				break;
 			case 'mcall':
 			case 'fcall':
+			case 'scall':
 				$this->passCall($expression);
 				break;
 			case 'array':
@@ -198,6 +199,11 @@ class LocalContextPass
 					$this->passLetStatement($statement);
 					break;
 				case 'echo':
+					if (isset($statement['expressions'])) {
+						foreach ($statement['expressions'] as $expr) {
+							$this->passExpression($expr);
+						}
+					}
 					break;
 				case 'declare':
 					$this->declareVariables($statement);
@@ -245,6 +251,7 @@ class LocalContextPass
 				case 'throw':
 					break;
 				case 'mcall':
+				case 'scall':
 				case 'fcall':
 					$this->passCall($statement['expr']);
 					break;

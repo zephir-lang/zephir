@@ -16,6 +16,7 @@
 #include "oo.h"
 #include "properties/protectedproperties.h"
 #include "properties/publicproperties.h"
+#include "regexdna.h"
 #include "router/exception.h"
 #include "router/route.h"
 #include "router.h"

@@ -34,49 +34,56 @@ class EchoStatement
 	public function compile(CompilationContext $compilationContext)
 	{
 		foreach ($this->_statement['expressions'] as $expr) {
-			switch ($expr['type']) {
+
+			$expr = new Expression($expr);
+			$resolvedExpr = $expr->compile($compilationContext);
+
+			switch ($resolvedExpr->getType()) {
 				case 'int':
-					$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+					$compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
+					break;
+				case 'schar':
+					$compilationContext->codePrinter->output('php_printf("%c", \'' . $resolvedExpr->getCode() . '\');');
 					break;
 				case 'long':
-					$compilationContext->codePrinter->output('php_printf("%ld", ' . $expr['value'] . ');');
+					$compilationContext->codePrinter->output('php_printf("%ld", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'int':
-					$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+					$compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'char':
-					$compilationContext->codePrinter->output('php_printf("%c", ' . $expr['value'] . ');');
+					$compilationContext->codePrinter->output('php_printf("%c", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'string':
-					$compilationContext->codePrinter->output('php_printf("' . $expr['value'] . '");');
+					$compilationContext->codePrinter->output('php_printf("' . Utils::addSlaches($resolvedExpr->getCode()) . '");');
 					break;
 				case 'variable':
-					$variable = $compilationContext->symbolTable->getVariableForRead($expr['value'], $compilationContext, $expr);
+					$variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
 					switch ($variable->getType()) {
 						case 'int':
-							$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
 							break;
 						case 'long':
-							$compilationContext->codePrinter->output('php_printf("%ld", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
 							break;
 						case 'int':
-							$compilationContext->codePrinter->output('php_printf("%d", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
 							break;
 						case 'char':
-							$compilationContext->codePrinter->output('php_printf("%c", ' . $expr['value'] . ');');
+							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');
 							break;
 						case 'string':
-							$compilationContext->codePrinter->output('php_printf("%s", ' . $expr['value'] . '->str);');
+							$compilationContext->codePrinter->output('php_printf("%s", ' . $variable->getName() . '->str);');
 							break;
 						case 'variable':
-							$compilationContext->codePrinter->output('zend_print_zval(' . $expr['value'] . ', 0);');
+							$compilationContext->codePrinter->output('zend_print_zval(' . $variable->getName() . ', 0);');
 							break;
 						default:
 							throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
 					}
 					break;
 				default:
-					throw new CompilerException("Unknown type: " . $expr['type'], $expr);
+					throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $expr);
 			}
 		}
 	}

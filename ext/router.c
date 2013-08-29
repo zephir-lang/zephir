@@ -610,7 +610,7 @@ PHP_METHOD(Test_Router, handle) {
 
 			ZEPHIR_CPY_WRT(parts, paths);
 
-			if (Z_TYPE_P(matches) != IS_ARRAY) {
+			if (Z_TYPE_P(matches) == IS_ARRAY) {
 				ZEPHIR_INIT_NVAR(converters);
 				zephir_call_method(converters, route, "getconverters");
 

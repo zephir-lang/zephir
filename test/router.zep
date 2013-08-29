@@ -426,7 +426,7 @@ class Router
 					parts = paths;
 
 				// Check if the matches has variables
-				if typeof matches != "array" {
+				if typeof matches == "array" {
 
 					// Get the route converters if any
 					let converters = route->getConverters();

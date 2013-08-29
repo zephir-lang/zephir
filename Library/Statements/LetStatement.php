@@ -764,9 +764,17 @@ class LetStatement
 			case 'uint':
 			case 'long':
 			case 'ulong':
-				throw new CompilerException("Cannot append to '" . $type . "' variables", $statement);
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
+				$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+				break;
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
+					case 'string':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+						$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . Utils::addSlaches($resolvedExpr->getCode()) . '", 1);');
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+						break;
 					case 'variable':
 						$exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($exprVariable->getType()) {

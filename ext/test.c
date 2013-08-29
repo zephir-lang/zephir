@@ -29,6 +29,7 @@ zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
 zend_class_entry *test_properties_publicproperties_ce;
+zend_class_entry *test_regexdna_ce;
 zend_class_entry *test_router_exception_ce;
 zend_class_entry *test_router_route_ce;
 zend_class_entry *test_router_ce;
@@ -57,6 +58,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Oo);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
+	ZEPHIR_INIT(Test_RegexDNA);
 	ZEPHIR_INIT(Test_Router_Exception);
 	ZEPHIR_INIT(Test_Router_Route);
 	ZEPHIR_INIT(Test_Router);
