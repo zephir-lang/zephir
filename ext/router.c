@@ -753,7 +753,7 @@ PHP_METHOD(Test_Router, handle) {
 		}
 		if (zephir_fast_count_ev(params TSRMLS_CC)) {
 			ZEPHIR_INIT_VAR(paramsMerge);
-			zephir_call_func_p2(paramsMerge, "array_merge", params, parts);
+			zephir_fast_array_merge(paramsMerge, &(params), &(parts));
 
 		} else {
 
@@ -1080,7 +1080,7 @@ PHP_METHOD(Test_Router, mount) {
 
 	if (Z_TYPE_P(routes) == IS_ARRAY) {
 		ZEPHIR_INIT_VAR(_6);
-		zephir_call_func_p2(_6, "array_merge", routes, groupRoutes);
+		zephir_fast_array_merge(_6, &(routes), &(groupRoutes));
 
 		zephir_update_property_this(this_ptr, SL("_routes"), _6 TSRMLS_CC);
 

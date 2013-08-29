@@ -12,7 +12,7 @@ function _runTest($router, $test)
 }
 
 $tests = array(
-	array(
+	/*array(
 		'uri' => '',
 		'controller' => 'index',
 		'action' => 'index',
@@ -66,7 +66,7 @@ $tests = array(
 		'action' => 'index',
 		'params' => array('language' => 'es')
 	),
-	/*array(
+	array(
 		'uri' => '/admin/posts/edit/100',
 		'controller' => 'posts',
 		'action' => 'edit',
@@ -83,14 +83,14 @@ $tests = array(
 		'controller' => 'manual',
 		'action' => 'show',
 		'params' => array('language' => 'en', 'file' => 'translate.adapter')
-	),
+	),*/
 	array(
 		'uri' => '/named-manual/en/translate.adapter.html',
 		'controller' => 'manual',
 		'action' => 'show',
 		'params' => array('language' => 'en', 'file' => 'translate.adapter')
 	),
-	array(
+	/*array(
 		'uri' => '/posts/1999/s/le-nice-title',
 		'controller' => 'posts',
 		'action' => 'show',

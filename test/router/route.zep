@@ -353,7 +353,7 @@ class Route
 				// The route has named parameters so we need to extract them
 				let extracted = this->extractNamedParams(pattern),
 					pcrePattern = extracted[0],
-					routePaths = extracted[1];
+					routePaths = array_merge(routePaths, extracted[1]);
 			} else {
 				let pcrePattern = pattern;
 			}

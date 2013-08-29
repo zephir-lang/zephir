@@ -437,7 +437,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, _0 = zval_used_for_init, *_1;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, _0 = zval_used_for_init, *_1 = NULL, *_2;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -556,8 +556,12 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY);
 
-			ZEPHIR_OBS_NVAR(routePaths);
-			zephir_array_fetch_long(&routePaths, extracted, 1, PH_NOISY);
+			ZEPHIR_INIT_NVAR(_1);
+			ZEPHIR_OBS_VAR(_2);
+			zephir_array_fetch_long(&_2, extracted, 1, PH_NOISY);
+			zephir_fast_array_merge(_1, &(routePaths), &(_2));
+
+			ZEPHIR_CPY_WRT(routePaths, _1);
 
 		} else {
 

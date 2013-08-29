@@ -1,11 +1,11 @@
 <?php
 
 /**
- * UncamelizeOptimizer
+ * ArrayMergeOptimizer
  *
- * Optimizes calls to 'uncamelize' using internal function
+ * Optimizes calls to 'array_merge' using internal function
  */
-class UncamelizeOptimizer
+class ArrayMergeOptimizer
 {
 	/**
 	 *
@@ -16,7 +16,7 @@ class UncamelizeOptimizer
 			return false;
 		}
 
-		if (count($expression['parameters']) != 1) {
+		if (count($expression['parameters']) != 2) {
 			return false;
 		}
 
@@ -35,7 +35,7 @@ class UncamelizeOptimizer
 		}
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_uncamelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+		$context->codePrinter->output('zephir_fast_array_merge(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . '), &(' . $resolvedParams[1] . '));');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }
