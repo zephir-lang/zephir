@@ -212,9 +212,9 @@ class Route
  										}
 
 										if foundPattern != 2 {
-											let route .= '{',
+											let route .= '(',
 												route .= regexp,
-												route .= '}';
+												route .= ')';
 										} else {
 											let route .= regexp;
 										}

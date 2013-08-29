@@ -354,11 +354,11 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									}
 									if (foundPattern != 2) {
 
-										zephir_str_append_char(route, '{');
+										zephir_str_append_char(route, '(');
 
 										zephir_str_append(route, regexp->str, regexp->len);
 
-										zephir_str_append_char(route, '}');
+										zephir_str_append_char(route, ')');
 
 									} else {
 
@@ -469,7 +469,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			zephir_call_func_p2(parts, "explode", &_0, paths);
 
 			do {
-				if (zephir_fast_count_ev(parts TSRMLS_CC) == 3) {
+				if (zephir_fast_count_int(parts TSRMLS_CC) == 3) {
 					ZEPHIR_OBS_NVAR(moduleName);
 					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
 
@@ -481,7 +481,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (zephir_fast_count_ev(parts TSRMLS_CC) == 2) {
+				if (zephir_fast_count_int(parts TSRMLS_CC) == 2) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 
@@ -490,7 +490,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 					break;
 				}
-				if (zephir_fast_count_ev(parts TSRMLS_CC) == 1) {
+				if (zephir_fast_count_int(parts TSRMLS_CC) == 1) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 

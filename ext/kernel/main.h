@@ -47,7 +47,7 @@ extern int zephir_function_quick_exists_ex(const char *func_name, unsigned int f
 /* Count */
 extern void zephir_fast_count(zval *result, zval *array TSRMLS_DC);
 extern int zephir_fast_count_ev(zval *array TSRMLS_DC);
-extern int zephir_fast_count_int(zval *value TSRMLS_DC)
+extern int zephir_fast_count_int(zval *value TSRMLS_DC);
 
 /* Utils functions */
 extern void zephir_inherit_not_found(const char *class_name, const char *inherit_name);

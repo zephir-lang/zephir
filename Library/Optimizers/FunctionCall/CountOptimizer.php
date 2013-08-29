@@ -21,6 +21,6 @@ class CountOptimizer
 		}
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('int', 'zephir_fast_count_ev(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+		return new CompiledExpression('int', 'zephir_fast_count_int(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
 	}
 }

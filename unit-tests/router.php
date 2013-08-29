@@ -3,16 +3,13 @@
 function _runTest($router, $test)
 {
 	$router->handle($test['uri']);
-	if (!$router->wasMatched()) {
-		echo $router->getControllerName(), ' ', $test['controller'], PHP_EOL;
-	}
 	assert($router->getControllerName() === $test['controller']);
 	assert($router->getActionName() === $test['action']);
 	//assert($router->getParams() === $test['params']);
 }
 
 $tests = array(
-	/*array(
+	array(
 		'uri' => '',
 		'controller' => 'index',
 		'action' => 'index',
@@ -83,14 +80,14 @@ $tests = array(
 		'controller' => 'manual',
 		'action' => 'show',
 		'params' => array('language' => 'en', 'file' => 'translate.adapter')
-	),*/
+	),
 	array(
 		'uri' => '/named-manual/en/translate.adapter.html',
 		'controller' => 'manual',
 		'action' => 'show',
 		'params' => array('language' => 'en', 'file' => 'translate.adapter')
 	),
-	/*array(
+	array(
 		'uri' => '/posts/1999/s/le-nice-title',
 		'controller' => 'posts',
 		'action' => 'show',
@@ -113,7 +110,7 @@ $tests = array(
 		'controller' => 'static',
 		'action' => 'route',
 		'params' => array()
-	)*/
+	)
 );
 
 $router = new Test\Router();

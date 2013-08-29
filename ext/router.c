@@ -751,7 +751,7 @@ PHP_METHOD(Test_Router, handle) {
 			}
 			//missing unset
 		}
-		if (zephir_fast_count_ev(params TSRMLS_CC)) {
+		if (zephir_fast_count_int(params TSRMLS_CC)) {
 			ZEPHIR_INIT_VAR(paramsMerge);
 			zephir_fast_array_merge(paramsMerge, &(params), &(parts));
 
@@ -1045,7 +1045,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 
-	if (!(zephir_fast_count_ev(groupRoutes TSRMLS_CC))) {
+	if (!(zephir_fast_count_int(groupRoutes TSRMLS_CC))) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
 		return;
 	}
