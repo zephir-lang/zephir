@@ -253,10 +253,10 @@ class SymbolTable
 	 * @param string $type
 	 * @return Variable
 	 */
-	public function getTempVariable($type)
+	public function getTempVariable($type, $compilationContext)
 	{
 		$tempVar = $this->_tempVariable++;
-		return $this->addVariable($type, '_' . $tempVar);
+		return $this->addVariable($type, '_' . $tempVar, $compilationContext);
 	}
 
 	/**

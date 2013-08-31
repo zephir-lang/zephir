@@ -50,12 +50,29 @@ class SwitchStatement
 		$compilationContext->codePrinter->increaseLevel();
 
 		$evalExpr = new EvalExpression();
+
+		$exprEval = new Expression($exprRaw);
+		$resolvedExpr = $exprEval->compile($compilationContext);
+
+		$tempVariable = $compilationContext->symbolTable->getTempVariable($resolvedExpr->getType(), $compilationContext);
+		$tempVariable->increaseMutates();
+		$tempVariable->setIsInitialized(true);
+		$tempVariable->setMustInitNull(true);
+
+		if ($resolvedExpr->getType() != 'string') {
+			if ($resolvedExpr->getType() == 'variable') {
+				$compilationContext->codePrinter->output('ZEND_CPY_WRT(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+			} else {
+				$compilationContext->codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+			}
+		}
+
 		foreach ($this->_statement['clauses'] as $clause) {
 			if ($clause['type'] == 'case') {
 
 				$expr = array(
 					'type' => 'equals',
-					'left' => $exprRaw,
+					'left' => array('type' => 'variable', 'value' => $tempVariable->getRealName()),
 					'right' => $clause['expr']
 				);
 
