@@ -105,24 +105,24 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_1);
-		ZVAL_STRING(_1, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
+		array_init(_1);
+		add_assoc_long_ex(_1, SS("controller"), 1);
 		ZEPHIR_INIT_VAR(_2);
-		array_init(_2);
-		add_assoc_long_ex(_2, SS("controller"), 1);
-		zephir_call_method_p2_noret(_0, "__construct", _1, _2);
+		ZVAL_STRING(_2, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", 1);
+		zephir_call_method_p2_noret(_0, "__construct", _2, _1);
 
 		zephir_array_append(&routes, _0, PH_SEPARATE);
 
 		ZEPHIR_INIT_VAR(_3);
 		object_init_ex(_3, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_4);
-		ZVAL_STRING(_4, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
+		array_init(_4);
+		add_assoc_long_ex(_4, SS("controller"), 1);
+		add_assoc_long_ex(_4, SS("action"), 2);
+		add_assoc_long_ex(_4, SS("params"), 3);
 		ZEPHIR_INIT_VAR(_5);
-		array_init(_5);
-		add_assoc_long_ex(_5, SS("controller"), 1);
-		add_assoc_long_ex(_5, SS("action"), 2);
-		add_assoc_long_ex(_5, SS("params"), 3);
-		zephir_call_method_p2_noret(_3, "__construct", _4, _5);
+		ZVAL_STRING(_5, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
+		zephir_call_method_p2_noret(_3, "__construct", _5, _4);
 
 		zephir_array_append(&routes, _3, PH_SEPARATE);
 

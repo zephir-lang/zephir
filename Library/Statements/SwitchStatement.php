@@ -51,6 +51,9 @@ class SwitchStatement
 
 		$evalExpr = new EvalExpression();
 
+		/**
+		 * @TODO Use let statement
+		 */
 		$exprEval = new Expression($exprRaw);
 		$resolvedExpr = $exprEval->compile($compilationContext);
 

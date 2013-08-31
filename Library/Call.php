@@ -36,6 +36,8 @@ class Call
 
 	protected $_isExpecting = false;
 
+	protected $_resolvedParams;
+
 	/**
 	 * Processes the symbol variable that will be used to return
 	 * the result of the symbol call
@@ -134,6 +136,19 @@ class Call
 		return $this->_symbolVariable;
 	}
 
+	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression)
+	{
+		if (!$this->_resolvedParams) {
+			$params = array();
+			foreach ($parameters as $parameter) {
+				$paramExpr = new Expression($parameter);
+				$params[] = $paramExpr->compile($compilationContext);
+			}
+			$this->_resolvedParams = $params;
+		}
+		return $this->_resolvedParams;
+	}
+
 	/**
 	 * Resolve parameters getting aware that the target function/method could retain or change
 	 * the parameters
@@ -143,13 +158,10 @@ class Call
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		/**
-		 * @TODO: Resolve parameters properly
-		 */
+		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
+
 		$params = array();
-		foreach ($parameters as $parameter) {
-			$paramExpr = new Expression($parameter);
-			$compiledExpression = $paramExpr->compile($compilationContext);
+		foreach ($exprParams as $compiledExpression) {
 			switch ($compiledExpression->getType()) {
 				case 'int':
 				case 'uint':
@@ -210,13 +222,10 @@ class Call
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		/**
-		 * @TODO: Resolve parameters properly
-		 */
+		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
+
 		$params = array();
-		foreach ($parameters as $parameter) {
-			$paramExpr = new Expression($parameter);
-			$compiledExpression = $paramExpr->compile($compilationContext);
+		foreach ($exprParams as $compiledExpression) {
 			switch ($compiledExpression->getType()) {
 				case 'int':
 				case 'uint':
