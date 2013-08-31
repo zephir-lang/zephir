@@ -29,7 +29,7 @@
 %extra_argument {xx_parser_status *status}
 %name xx_
 
-%left PUBLIC PROTECTED STATIC PRIVATE .
+%left PUBLIC PROTECTED STATIC PRIVATE SCOPED .
 
 %left COMMA .
 %left AND OR .
@@ -448,6 +448,24 @@ static json_object *xx_ret_while_statement(json_object *expr, json_object *state
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("while"));
+	json_object_object_add(ret, "expr", expr);
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_do_while_statement(json_object *expr, json_object *statements, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("do-while"));
 	json_object_object_add(ret, "expr", expr);
 
 	if (statements) {
@@ -933,44 +951,20 @@ xx_class_properties_definition(R) ::= xx_class_property_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) xx_property_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
+xx_class_property_definition(R) ::= COMMENT(C) xx_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_class_property(V, I, NULL, C, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= xx_property_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
+xx_class_property_definition(R) ::= xx_visibility_list(V) IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_class_property(V, I, NULL, NULL, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::= COMMENT(C) xx_property_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+xx_class_property_definition(R) ::= COMMENT(C) xx_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_property(V, I, E, C, status->scanner_state);
 }
 
-xx_class_property_definition(R) ::=  xx_property_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+xx_class_property_definition(R) ::=  xx_visibility_list(V) IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_property(V, I, E, NULL, status->scanner_state);
-}
-
-xx_property_visibility_list(R) ::= xx_property_visibility_list(L) xx_property_visibility(K) . {
-	R = xx_ret_list(L, K);
-}
-
-xx_property_visibility_list(R) ::= xx_property_visibility(K) . {
-	R = xx_ret_list(NULL, K);
-}
-
-xx_property_visibility(R) ::= PUBLIC . {
-	R = json_object_new_string("public");
-}
-
-xx_property_visibility(R) ::= PROTECTED . {
-	R = json_object_new_string("protected");
-}
-
-xx_property_visibility(R) ::= STATIC . {
-	R = json_object_new_string("static");
-}
-
-xx_property_visibility(R) ::= PRIVATE . {
-	R = json_object_new_string("private");
 }
 
 xx_class_consts_definition(R) ::= xx_class_consts_definition(L) xx_class_const_definition(K) . {
@@ -997,113 +991,77 @@ xx_class_const_definition(R) ::= CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOT
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, NULL, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, S, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, S, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, NULL, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, NULL, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, S, C, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_method_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, S, C, status->scanner_state);
 }
 
-xx_method_visibility_list(R) ::= xx_method_visibility_list(L) ADD xx_method_visibility(K) . {
+xx_visibility_list(R) ::= xx_visibility_list(L) xx_visibility(K) . {
 	R = xx_ret_list(L, K);
 }
 
-xx_method_visibility_list(R) ::= xx_method_visibility(K) . {
+xx_visibility_list(R) ::= xx_visibility(K) . {
 	R = xx_ret_list(NULL, K);
 }
 
-xx_method_visibility(R) ::= PUBLIC . {
+xx_visibility(R) ::= PUBLIC . {
 	R = json_object_new_string("public");
 }
 
-xx_method_visibility(R) ::= PROTECTED . {
+xx_visibility(R) ::= PROTECTED . {
 	R = json_object_new_string("protected");
 }
 
-xx_method_visibility(R) ::= STATIC . {
+xx_visibility(R) ::= PRIVATE. {
+	R = json_object_new_string("private");
+}
+
+xx_visibility(R) ::= STATIC . {
 	R = json_object_new_string("static");
 }
 
-xx_method_visibility(R) ::= PRIVATE . {
-	R = json_object_new_string("private");
+xx_visibility(R) ::= SCOPED . {
+	R = json_object_new_string("scoped");
 }
 
-xx_method_visibility(R) ::= INLINE . {
-	R = json_object_new_string("private");
+xx_visibility(R) ::= INLINE . {
+	R = json_object_new_string("inline");
 }
 
-xx_method_visibility(R) ::= ABSTRACT . {
+xx_visibility(R) ::= ABSTRACT . {
 	R = json_object_new_string("abstract");
 }
 
-xx_method_visibility(R) ::= FINAL . {
+xx_visibility(R) ::= FINAL . {
 	R = json_object_new_string("final");
 }
-
-/*xx_method_visibility_list(R) ::= STATIC PUBLIC . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
-}
-
-xx_method_visibility_list(R) ::= PUBLIC STATIC . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("public"));
-}
-
-xx_method_visibility(R) ::=  STATIC PROTECTED . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
-}
-
-xx_method_visibility(R) ::=  PROTECTED STATIC . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("protected"));
-}
-
-xx_method_visibility(R) ::= STATIC PRIVATE . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
-}
-
-xx_method_visibility(R) ::= PRIVATE STATIC . {
-	R = xx_ret_list(json_object_new_string("static"), json_object_new_string("private"));
-}
-
-xx_method_visibility(R) ::=  INLINE PROTECTED . {
-	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
-}
-
-xx_method_visibility(R) ::=  PROTECTED INLINE . {
-	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("protected"));
-}
-
-xx_method_visibility(R) ::= INLINE PRIVATE . {
-	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
-}
-
-xx_method_visibility(R) ::= PRIVATE INLINE . {
-	R = xx_ret_list(json_object_new_string("inline"), json_object_new_string("private"));
-}*/
 
 xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {
 	R = xx_ret_list(L, P);
@@ -1225,6 +1183,10 @@ xx_statement(R) ::= xx_while_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_do_while_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_switch_statement(S) . {
 	R = S;
 }
@@ -1307,6 +1269,14 @@ xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
 
 xx_while_statement(R) ::= WHILE xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_while_statement(E, L, status->scanner_state);
+}
+
+xx_do_while_statement(R) ::= DO BRACKET_OPEN BRACKET_CLOSE WHILE xx_eval_expr(E) DOTCOMMA . {
+	R = xx_ret_do_while_statement(E, NULL, status->scanner_state);
+}
+
+xx_do_while_statement(R) ::= DO BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE WHILE xx_eval_expr(E) DOTCOMMA . {
+	R = xx_ret_do_while_statement(E, L, status->scanner_state);
 }
 
 xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {

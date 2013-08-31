@@ -37,4 +37,3 @@ assert($t->testArrayUpdate1() == array(4, 2, 3));
 assert($t->testArrayUpdate2() == array(4, 2, 3));
 assert($t->testArrayUpdate3() == array(4, 5, 3));
 assert($t->testArrayUpdate4() == array("a" => 4, "b" => 2, "c" => 3));
-

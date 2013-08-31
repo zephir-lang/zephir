@@ -220,6 +220,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_WHILE:
 				xx_(xx_parser, XX_WHILE, NULL, parser_status);
 				break;
+			case XX_T_DO:
+				xx_(xx_parser, XX_DO, NULL, parser_status);
+				break;
 			case XX_T_NEW:
 				xx_(xx_parser, XX_NEW, NULL, parser_status);
 				break;

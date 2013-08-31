@@ -342,6 +342,13 @@ class Flow
 		return c;
 	}
 
+	public function testDoWhile1()
+	{
+		do {
+
+		} while(1);
+	}
+
 	public function testFor1()
 	{
 		var v, b; int c;
@@ -375,6 +382,16 @@ class Flow
 		return c;
 	}
 
+	public function testFor4()
+	{
+		var a, b;
+		let b = 0;
+		for a in range(1, 10) {
+			let b += a;
+		}
+		return b;
+	}
+
 	public function testFor10()
 	{
 		var a; string b; int v;
@@ -396,5 +413,7 @@ class Flow
 		}
 		return a;
 	}
+
+
 
 }
