@@ -152,6 +152,11 @@ class Call
 	/**
 	 * Resolve parameters getting aware that the target function/method could retain or change
 	 * the parameters
+	 *
+	 * @param array $parameters
+	 * @param CompilationContext $compilationContext
+	 * @param array $expression
+	 * @return array
 	 */
 	public function getResolvedParams($parameters, $compilationContext, $expression)
 	{
@@ -217,6 +222,14 @@ class Call
 		return $params;
 	}
 
+	/**
+	 * Resolve parameters using zvals in the stack and without allocating memory for constants
+	 *
+	 * @param array $parameters
+	 * @param CompilationContext $compilationContext
+	 * @param array $expression
+	 * @return array
+	 */
 	public function getReadOnlyResolvedParams($parameters, $compilationContext, $expression)
 	{
 
