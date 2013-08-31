@@ -227,7 +227,7 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		uint hash_index_len; \
 		ulong hash_num; \
 		 \
-		ZEPHIR_INIT_NVAR(var); \
+		ZEPHIR_INIT_LNVAR(var); \
 		hash_type = zend_hash_get_current_key_ex(hash, &hash_index, &hash_index_len, &hash_num, 0, &hash_pointer); \
 		if (hash_type == HASH_KEY_IS_STRING) { \
 			if (IS_INTERNED(hash_index)) { \
@@ -241,9 +241,6 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 			}\
 		}\
 	}
-
-/** Foreach */
-#define ZEPHIR_GET_FOREACH_KEY(var, hash, hash_pointer) ZEPHIR_GET_HMKEY(var, hash, hash_pointer)
 
 /** Check if an array is iterable or not */
 #define zephir_is_iterable(var, array_hash, hash_pointer, duplicate, reverse) if (!zephir_is_iterable_ex(var, array_hash, hash_pointer, duplicate, reverse)) { return; }

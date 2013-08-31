@@ -16,7 +16,6 @@
 #include "kernel/operators.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
-#include "kernel/fcall.h"
 #include "kernel/string_type.h"
 
 
@@ -764,30 +763,20 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 PHP_METHOD(Test_Flow, testFor4) {
 
-	HashTable *_4;
-	HashPosition _3;
-	zval *a = NULL, *b = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init, *_2, **_5, *_6 = NULL;
+	int _0;
+	zval *a = NULL, *b = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 0);
 
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, 1);
-	ZEPHIR_SINIT_VAR(_1);
-	ZVAL_LONG(&_1, 10);
-	ZEPHIR_INIT_VAR(_2);
-	zephir_call_func_p2(_2, "range", &_0, &_1);
-	zephir_is_iterable(_2, &_4, &_3, 0, 0);
-	for (
-		; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
-		; zend_hash_move_forward_ex(_4, &_3)
-	) {
-		ZEPHIR_GET_HVALUE(a, _5);
+	for (_0 = 1; _0 <= 10; _0++) {
+		ZEPHIR_INIT_LNVAR(a);
+		ZVAL_LONG(a, _0);
 
-		ZEPHIR_INIT_NVAR(_6);
-		zephir_add_function(_6, b, a TSRMLS_CC);
-		ZEPHIR_CPY_WRT(b, _6);
+		ZEPHIR_INIT_NVAR(_1);
+		zephir_add_function(_1, b, a TSRMLS_CC);
+		ZEPHIR_CPY_WRT(b, _1);
 
 	}
 

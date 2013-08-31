@@ -136,6 +136,14 @@ class Call
 		return $this->_symbolVariable;
 	}
 
+	/**
+	 * Resolves paramameters
+	 *
+	 * @param array $parameters
+	 * @param CompilationContext $compilationContext
+	 * @param array $expression
+	 * @return array
+	 */
 	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression)
 	{
 		if (!$this->_resolvedParams) {
