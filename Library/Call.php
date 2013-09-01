@@ -175,6 +175,7 @@ class Call
 
 		$params = array();
 		foreach ($exprParams as $compiledExpression) {
+			$expression = $compiledExpression->getOriginal();
 			switch ($compiledExpression->getType()) {
 				case 'int':
 				case 'uint':
@@ -219,11 +220,11 @@ class Call
 							$params[] = $parameterVariable->getName();
 							break;
 						default:
-							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $parameter);
+							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
 					break;
 				default:
-					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $parameter);
+					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
 			}
 		}
 
@@ -247,6 +248,7 @@ class Call
 
 		$params = array();
 		foreach ($exprParams as $compiledExpression) {
+			$expression = $compiledExpression->getOriginal();
 			switch ($compiledExpression->getType()) {
 				case 'int':
 				case 'uint':
@@ -291,11 +293,11 @@ class Call
 							$params[] = $parameterVariable->getName();
 							break;
 						default:
-							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $parameter);
+							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
 					break;
 				default:
-					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $parameter);
+					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
 			}
 		}
 

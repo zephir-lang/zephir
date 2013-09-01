@@ -514,6 +514,7 @@ class ClassMethod
 					$code = 'unsigned int ';
 					break;
 				case 'char':
+				case 'schar':
 					$code = 'char ';
 					break;
 				case 'uchar':

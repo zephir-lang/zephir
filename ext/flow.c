@@ -763,20 +763,37 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 PHP_METHOD(Test_Flow, testFor4) {
 
-	int _0;
-	zval *a = NULL, *b = NULL, *_1 = NULL;
+	int _1;
+	zend_bool _0;
+	zval *a = NULL, *b = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 0);
 
-	for (_0 = 1; _0 <= 10; _0++) {
-		ZEPHIR_INIT_LNVAR(a);
-		ZVAL_LONG(a, _0);
+	_1 = 1;
 
-		ZEPHIR_INIT_NVAR(_1);
-		zephir_add_function(_1, b, a TSRMLS_CC);
-		ZEPHIR_CPY_WRT(b, _1);
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= 10)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		ZEPHIR_INIT_NVAR(a);
+		ZVAL_LONG(a, _1);
+
+		ZEPHIR_INIT_NVAR(_2);
+		zephir_add_function(_2, b, a TSRMLS_CC);
+		ZEPHIR_CPY_WRT(b, _2);
 
 	}
 
@@ -785,14 +802,279 @@ PHP_METHOD(Test_Flow, testFor4) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor5) {
+
+	zend_bool _0;
+	int a, b, _1;
+
+	b = 0;
+
+	_1 = 1;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= 10)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		b += a;
+
+	}
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor6) {
+
+	int _1;
+	zend_bool _0;
+	zval *a = NULL, *b = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_NVAR(b);
+	ZVAL_LONG(b, 0);
+
+	_1 = 10;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1--;
+
+			if (!(_1 >= 1)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		ZEPHIR_INIT_NVAR(a);
+		ZVAL_LONG(a, _1);
+
+		ZEPHIR_INIT_NVAR(_2);
+		zephir_add_function(_2, b, a TSRMLS_CC);
+		ZEPHIR_CPY_WRT(b, _2);
+
+	}
+
+	RETURN_CCTOR(b);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor7) {
+
+	zend_bool _0;
+	int a, b, _1;
+
+	b = 0;
+
+	_1 = 10;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1--;
+
+			if (!(_1 >= 1)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		b += a;
+
+	}
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor8) {
+
+	zend_bool _0;
+	int a, b, c, d, _1;
+
+	b = 0;
+
+	c = 1;
+
+	d = 10;
+
+	_1 = c;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= d)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		b += a;
+
+	}
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor9) {
+
+	zend_bool _0;
+	int a, b, c, d, _1;
+
+	b = 0;
+
+	c = 1;
+
+	d = 10;
+
+	_1 = d;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1--;
+
+			if (!(_1 >= c)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		b += a;
+
+	}
+
+	RETURN_LONG(b);
+
+
+}
+
 PHP_METHOD(Test_Flow, testFor10) {
+
+	zend_bool _0;
+	int a, b, c, d, _1;
+
+	b = 0;
+
+	c = 1;
+
+	d = 10;
+
+	_1 = c;
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= d)) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		b += a;
+
+	}
+
+	RETURN_LONG(b);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor11) {
+
+	char _1;
+	zend_bool _0;
+	zephir_str *b = NULL;
+	char a;
+
+	zephir_str_assign(b, "", sizeof("")-1);
+
+	_1 = 'a';
+
+	_0 = 1;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= 'z')) {
+				break;
+			}
+
+		} else {
+			_0 = 0;
+		}
+
+		a = _1;
+
+		zephir_str_append_char(b, a);
+
+	}
+
+	RETURN_STRING(b->str, 1);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor20) {
 
 	int v, _0;
 	zephir_str *b = NULL;
-	zval *a, *_1 = NULL;
+	zval *a = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_NVAR(a);
 	array_init(a);
 
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
@@ -811,14 +1093,14 @@ PHP_METHOD(Test_Flow, testFor10) {
 
 }
 
-PHP_METHOD(Test_Flow, testFor11) {
+PHP_METHOD(Test_Flow, testFor21) {
 
 	int k, v, _0;
 	zephir_str *b = NULL;
-	zval *a, *_1 = NULL;
+	zval *a = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_NVAR(a);
 	array_init(a);
 
 	zephir_str_assign(b, "hello", sizeof("hello")-1);

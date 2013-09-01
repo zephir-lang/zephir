@@ -32,7 +32,11 @@ class ForStatement
 	}
 
 	/**
+	 * Compiles a for statement that use a 'range' as expression
 	 *
+	 * @param array $exprRaw
+	 * @param CompilationContext $compilationContext
+	 * @return boolan
 	 */
 	public function compileRange($exprRaw, $compilationContext)
 	{
@@ -61,32 +65,177 @@ class ForStatement
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
-		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
+
+		$flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
+
+		if ($parameters[0]->getType() != 'variable') {
+			$tempVariable = $compilationContext->symbolTable->addTemp($parameters[0]->getType(), $compilationContext);
+		} else {
+			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode());
+			$tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
+		}
 
 		if ($this->_statement['reverse']) {
-			$codePrinter->output('for (' . $tempVariable->getName() . ' = ' . $parameters[1]->getCode() . '; ' .
-				$tempVariable->getName() . ' >= 0; ' .
-				$tempVariable->getName() . '--) {');
+
+			/**
+			 * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
+			 */
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'variable',
+						'variable' => $tempVariable->getName(),
+						'operator' => 'assign',
+						'expr' => array(
+							'type' => $parameters[1]->getType(),
+							'value' => $parameters[1]->getCode(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
+
 		} else {
-			$codePrinter->output('for (' . $tempVariable->getName() . ' = ' . $parameters[0]->getCode() . '; ' .
-				$tempVariable->getName() . ' <= ' . $parameters[1]->getCode() . '; ' .
-				$tempVariable->getName() . '++) {');
+
+			/**
+			 * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
+			 */
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'variable',
+						'variable' => $tempVariable->getName(),
+						'operator' => 'assign',
+						'expr' => array(
+							'type' => $parameters[0]->getType(),
+							'value' => $parameters[0]->getCode(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
 		}
+
+		$statement->compile($compilationContext);
+
+
+		$codePrinter->output($flagVariable->getName() . ' = 1;');
+		$codePrinter->output('while (1) {');
+
+		/**
+		 * Inside a cycle
+		 */
+		$compilationContext->insideCycle++;
+
+		$codePrinter->increaseLevel();
+		$codePrinter->outputBlankLine();
+
+		if ($this->_statement['reverse']) {
+			$conditionExpr = array(
+				'type' => 'greater-equal',
+				'left' => array('type' => 'variable', 'value' => $tempVariable->getName()),
+				'right' => array('type' => $parameters[0]->getType(), 'value' => $parameters[0]->getCode())
+			);
+		} else {
+			$conditionExpr = array(
+				'type' => 'less-equal',
+				'left' => array('type' => 'variable', 'value' => $tempVariable->getName()),
+				'right' => array('type' => $parameters[1]->getType(), 'value' => $parameters[1]->getCode())
+			);
+		}
+
+		$expr = new EvalExpression();
+		$condition = $expr->optimize($conditionExpr, $compilationContext);
+
+		$codePrinter->output('if (' . $flagVariable->getName() . ') {');
+
+		$codePrinter->increaseLevel();
+
+		if ($this->_statement['reverse']) {
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'decr',
+						'variable' => $tempVariable->getName(),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
+		} else {
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'incr',
+						'variable' => $tempVariable->getName(),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
+		}
+		$statement->compile($compilationContext);
+
+		$codePrinter->output('if (!(' . $condition . ')) {');
+		$codePrinter->output("\t" . "break;");
+		$codePrinter->output('}');
+		$codePrinter->outputBlankLine();
+
+		$codePrinter->decreaseLevel();
+
+		$codePrinter->output('} else {');
+		$codePrinter->output("\t" . $flagVariable->getName() . ' = 0;');
+		$codePrinter->output('}');
 
 		/**
 		 * Initialize 'value' variable
 		 */
 		if (isset($this->_statement['value'])) {
-			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
-			if ($variable->getType() == 'variable') {
-				$codePrinter->output("\t" . 'ZEPHIR_INIT_LNVAR(' . $variable->getName() . ');');
-				$codePrinter->output("\t" . 'ZVAL_LONG(' . $variable->getName() . ', ' . $tempVariable->getName() . ');');
-				$variable->setMustInitNull(true);
-			} else {
-				$codePrinter->output("\t" . $variable->getName() . ' = ' . $tempVariable->getName() . ';');
-			}
-			$variable->setIsInitialized(true);
+
+			/**
+			 * Create an implicit 'let' operation, @TODO use a builder
+			 */
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'variable',
+						'variable' => $this->_statement['value'],
+						'operator' => 'assign',
+						'expr' => array(
+							'type' => 'variable',
+							'value' => $tempVariable->getName(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
+
+			$statement->compile($compilationContext);
 		}
+
+		$codePrinter->decreaseLevel();
 
 		/**
 		 * Variables are initialized in a different way inside cycle

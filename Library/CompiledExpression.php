@@ -94,6 +94,23 @@ class CompiledExpression
 			case 'ulong':
 			case 'char':
 			case 'uchar':
+			case 'schar':
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the compiled expression is a char or compatible type
+	 *
+	 * @return boolean
+	 */
+	public function isCharCompatibleType()
+	{
+		switch ($this->_type) {
+			case 'char':
+			case 'uchar':
+			case 'schar':
 				return true;
 		}
 		return false;

@@ -339,10 +339,10 @@ class Compiler
 				}
 			}
 		}
-		//echo PHP_EOL;
-		//$pwd = getcwd();
-		//echo 'at ', str_replace($pwd, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
-		//echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
+		echo PHP_EOL;
+		$pwd = getcwd();
+		echo 'at ', str_replace($pwd, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
+		echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
 		exit(1);
 	}
 

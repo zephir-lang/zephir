@@ -59,6 +59,8 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'char':
 					case 'uchar':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+					case 'schar':
+						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' (int) ' . $right->getCode(), $expression);
 					default:
@@ -74,6 +76,7 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'ulong':
 					case 'char':
 					case 'uchar':
+					case 'schar':
 						switch ($right->getType()) {
 							case 'int':
 							case 'uint':
@@ -82,6 +85,8 @@ class ComparisonBaseOperator extends BaseOperator
 							case 'char':
 							case 'uchar':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+							case 'schar':
+								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
 							case 'schar':

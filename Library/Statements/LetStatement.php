@@ -60,6 +60,9 @@ class LetStatement
 			case 'uint':
 			case 'long':
 			case 'ulong':
+			case 'char':
+			case 'uchar':
+			case 'schar':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						switch ($statement['operator']) {
@@ -83,6 +86,8 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
@@ -95,6 +100,24 @@ class LetStatement
 								break;
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+						}
+						break;
+					case 'schar':
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
+								break;
+							case 'add-assign':
+								$codePrinter->output($variable . ' += \'' . $resolvedExpr->getCode() . '\';');
+								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= \'' . $resolvedExpr->getCode() . '\';');
+								break;
+							case 'mul-assign':
+								$codePrinter->output($variable . ' *= \'' . $resolvedExpr->getCode() . '\';');
 								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
@@ -138,6 +161,8 @@ class LetStatement
 							case 'long':
 							case 'ulong':
 							case 'bool':
+							case 'char':
+							case 'schar':
 								switch ($statement['operator']) {
 									case 'assign':
 										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
@@ -192,7 +217,7 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
 						break;
 					default:
@@ -546,6 +571,9 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
+					case 'schar':
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
@@ -564,7 +592,7 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
 					case 'double':
@@ -586,7 +614,7 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
 					case 'bool':
@@ -618,7 +646,7 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
 					case 'string':
@@ -632,17 +660,19 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
 					case 'variable':
 
-						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
 						switch ($itemVariable->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
+							case 'char':
+							case 'uchar':
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
@@ -730,11 +760,11 @@ class LetStatement
 								}
 								break;
 							default:
-								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
 					default:
-						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
+						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 				}
 				break;
 			default:
@@ -912,7 +942,19 @@ class LetStatement
 			case 'long':
 			case 'ulong':
 			case 'double':
+			case 'char':
+			case 'uchar':
+			case 'schar':
 				$codePrinter->output($variable . '++;');
+				break;
+			case 'variable':
+				$compilationContext->headersManager->add('kernel/operators');
+				$symbolVariable->initVariant($compilationContext);
+				if ($symbolVariable->isLocalOnly()) {
+					$codePrinter->output('zephir_increment(&' . $variable . ');');
+				} else {
+					$codePrinter->output('zephir_increment(' . $variable . ');');
+				}
 				break;
 			default:
 				throw new CompilerException("Cannot increment: " . $symbolVariable->getType(), $statement);
@@ -1079,6 +1121,8 @@ class LetStatement
 
 	/**
 	 * Compiles the let statement
+	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
