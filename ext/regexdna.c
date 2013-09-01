@@ -18,6 +18,11 @@
 #include "kernel/concat.h"
 
 
+/**
+ * RegexDNA
+ *
+ * @see http://www.haskell.org/haskellwiki/Shootout/Regex_DNA
+ */
 ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 	ZEPHIR_REGISTER_CLASS(Test, RegexDNA, regexdna, test_regexdna_method_entry, 0);

@@ -1,5 +1,13 @@
+
 namespace Test;
 
+/**
+ * Test\Fannkuch
+ *
+ * Fannkuch Refux in Zephir
+ *
+ * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
+ */
 class Fannkuch
 {
 
@@ -58,8 +66,9 @@ class Fannkuch
 			loop {
 
 				if r == n {
-					echo printf("%d\n", checksum);
-					return printf("Pfannkuchen(%d) = %d\n", n, maxFlipsCount);
+					//echo checksum, '\n';
+					//echo "Pfannkuchen(", n, ") = ", maxFlipsCount, '\n';
+					return [checksum, n, maxFlipsCount];
 				}
 
 				let perm0 = perm1[0], i = 0;

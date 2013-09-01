@@ -49,6 +49,7 @@ assert($t->testFor18() === array(0 => 1, 1 => 2, 2 => 3, 3 => 4, 4 => 5, 5 => 6,
 
 assert($t->testFor19() === 25);
 assert($t->testFor20() === 25);
-assert($t->testFor21() === 10);
-assert($t->testFor22() === 1);
+assert($t->testFor21() === 0);
+assert($t->testFor22() === 0);
 assert($t->testFor23() === "zxvtrpnljhfdb");
+

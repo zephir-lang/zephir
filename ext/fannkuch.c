@@ -15,9 +15,15 @@
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
-#include "kernel/fcall.h"
 
 
+/**
+ * Test\Fannkuch
+ *
+ * Fannkuch Refux in Zephir
+ *
+ * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
+ */
 ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Fannkuch, fannkuch, test_fannkuch_method_entry, 0);
@@ -30,7 +36,7 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 PHP_METHOD(Test_Fannkuch, process) {
 
 	zend_bool _0, _3, _7;
-	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_2 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL, _10 = zval_used_for_init, _11 = zval_used_for_init, *_12 = NULL, _13 = zval_used_for_init, _14 = zval_used_for_init, _15 = zval_used_for_init;
+	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_2 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL;
 	int n, maxFlipsCount = 0, permCount = 0, checksum = 0, i, j, flipsCount, k, r, k2, _1, _4, _8;
 
 	ZEPHIR_MM_GROW();
@@ -134,20 +140,16 @@ PHP_METHOD(Test_Fannkuch, process) {
 		}
 		while (1) {
 			if (r == n) {
-				ZEPHIR_SINIT_NVAR(_10);
-				ZVAL_STRING(&_10, "%d\\n", 0);
-				ZEPHIR_SINIT_NVAR(_11);
-				ZVAL_LONG(&_11, checksum);
+				array_init(return_value);
+				ZEPHIR_INIT_NVAR(_10);
+				ZVAL_LONG(_10, checksum);
+				zephir_array_append(&return_value, _10, 0);
+				ZEPHIR_INIT_NVAR(_11);
+				ZVAL_LONG(_11, n);
+				zephir_array_append(&return_value, _11, 0);
 				ZEPHIR_INIT_NVAR(_12);
-				zephir_call_func_p2(_12, "printf", &_10, &_11);
-				zend_print_zval(_12, 0);
-				ZEPHIR_SINIT_NVAR(_13);
-				ZVAL_STRING(&_13, "Pfannkuchen(%d) = %d\\n", 0);
-				ZEPHIR_SINIT_NVAR(_14);
-				ZVAL_LONG(&_14, n);
-				ZEPHIR_SINIT_NVAR(_15);
-				ZVAL_LONG(&_15, maxFlipsCount);
-				zephir_call_func_p3(return_value, "printf", &_13, &_14, &_15);
+				ZVAL_LONG(_12, maxFlipsCount);
+				zephir_array_append(&return_value, _12, 0);
 				RETURN_MM();
 			}
 			ZEPHIR_OBS_NVAR(perm0);
@@ -166,9 +168,9 @@ PHP_METHOD(Test_Fannkuch, process) {
 			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE);
 			ZEPHIR_OBS_NVAR(_6);
 			zephir_array_fetch_long(&_6, count, r, PH_NOISY);
-			ZEPHIR_INIT_NVAR(_12);
-			ZVAL_LONG(_12, zephir_get_numberval(_6) - 1);
-			zephir_array_update_long(&count, r, &_12, PH_COPY | PH_SEPARATE);
+			ZEPHIR_INIT_NVAR(_10);
+			ZVAL_LONG(_10, zephir_get_numberval(_6) - 1);
+			zephir_array_update_long(&count, r, &_10, PH_COPY | PH_SEPARATE);
 			ZEPHIR_OBS_NVAR(_9);
 			zephir_array_fetch_long(&_9, count, r, PH_NOISY);
 			if (ZEPHIR_GT_LONG(_9, 0)) {
