@@ -324,7 +324,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a = a - 1;
@@ -339,7 +339,7 @@ PHP_METHOD(Test_Flow, testWhile2) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a = a - 1;
@@ -356,13 +356,13 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
 		while (1) {
-			if (!zend_is_true(&b)) {
+			if (!(zend_is_true(&b))) {
 				break;
 			}
 			_0 = zephir_get_numberval(&b) - 1;
@@ -384,13 +384,13 @@ PHP_METHOD(Test_Flow, testWhile4) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
 		while (1) {
-			if (!zend_is_true(&b)) {
+			if (!(zend_is_true(&b))) {
 				break;
 			}
 			_0 = zephir_get_numberval(&b) - 1;
@@ -410,7 +410,7 @@ PHP_METHOD(Test_Flow, testWhile5) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a--;
@@ -425,7 +425,7 @@ PHP_METHOD(Test_Flow, testWhile6) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a--;
@@ -440,7 +440,7 @@ PHP_METHOD(Test_Flow, testWhile7) {
 
 	a = (double) (5);
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a--;
@@ -455,7 +455,7 @@ PHP_METHOD(Test_Flow, testWhile8) {
 
 	a = (double) (5);
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		a--;
@@ -472,13 +472,13 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 	a = 5;
 	while (1) {
-		if (!a) {
+		if (!(a)) {
 			break;
 		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
 		while (1) {
-			if (!zend_is_true(&b)) {
+			if (!(zend_is_true(&b))) {
 				break;
 			}
 			zephir_decrement(&b);
