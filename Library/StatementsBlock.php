@@ -69,6 +69,10 @@ class StatementsBlock
 					$whileStatement = new WhileStatement($statement);
 					$whileStatement->compile($compilationContext);
 					break;
+				case 'do-while':
+					$whileStatement = new DoWhileStatement($statement);
+					$whileStatement->compile($compilationContext);
+					break;
 				case 'switch':
 					$switchStatement = new SwitchStatement($statement);
 					$switchStatement->compile($compilationContext);

@@ -35,6 +35,7 @@
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
+%left MUL DIV .
 %right ISSET FETCH .
 %right TYPEOF INSTANCEOF .
 %right NEW .
@@ -1632,6 +1633,16 @@ xx_common_expr(R) ::= xx_common_expr(O1) ADD xx_common_expr(O2) . {
 /* y = a - b */
 xx_common_expr(R) ::= xx_common_expr(O1) SUB xx_common_expr(O2) . {
 	R = xx_ret_expr("sub", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a * b */
+xx_common_expr(R) ::= xx_common_expr(O1) MUL xx_common_expr(O2) . {
+	R = xx_ret_expr("mul", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a / b */
+xx_common_expr(R) ::= xx_common_expr(O1) DIV xx_common_expr(O2) . {
+	R = xx_ret_expr("div", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a . b */

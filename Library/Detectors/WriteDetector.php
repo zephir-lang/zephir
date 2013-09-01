@@ -46,6 +46,7 @@ class WriteDetector
 						return true;
 					}
 					break;
+				case 'do-while':
 				case 'while':
 				case 'loop':
 					if (isset($statement['statements'])) {

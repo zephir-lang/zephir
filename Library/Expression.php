@@ -24,6 +24,7 @@ require ZEPHIRPATH . 'Library/Operators/BaseOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/BaseOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/AddOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/SubOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/MulOperator.php';
 
 /* Logical operators */
 require ZEPHIRPATH . 'Library/Operators/Logical/BaseOperator.php';
@@ -982,6 +983,12 @@ class Expression
 
 			case 'sub':
 				$expr = new SubOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'mul':
+				$expr = new MulOperator();
 				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);

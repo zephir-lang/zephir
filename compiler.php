@@ -47,6 +47,7 @@ require ZEPHIRPATH . 'Library/Statements/DeclareStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ReturnStatement.php';
 require ZEPHIRPATH . 'Library/Statements/IfStatement.php';
 require ZEPHIRPATH . 'Library/Statements/LoopStatement.php';
+require ZEPHIRPATH . 'Library/Statements/DoWhileStatement.php';
 require ZEPHIRPATH . 'Library/Statements/WhileStatement.php';
 require ZEPHIRPATH . 'Library/Statements/SwitchStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ForStatement.php';

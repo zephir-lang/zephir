@@ -546,7 +546,8 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 PHP_METHOD(Test_Flow, testDoWhile1) {
 
-	//missing do-while
+	while (1) {
+	}
 
 }
 

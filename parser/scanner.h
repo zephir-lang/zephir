@@ -105,6 +105,9 @@
 #define XX_T_IDENTICAL 402
 #define XX_T_ADD '+'
 #define XX_T_SUB '-'
+#define XX_T_MUL '*'
+#define XX_T_DIV '/'
+#define XX_T_MOD '%'
 #define XX_T_INCR 403
 #define XX_T_DECR 404
 #define XX_T_NOTEQUALS 405

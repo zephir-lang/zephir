@@ -5,6 +5,7 @@
 #include "cast.h"
 #include "constants.h"
 #include "declare.h"
+#include "fannkuch.h"
 #include "fcall.h"
 #include "fibonnaci.h"
 #include "flow.h"
