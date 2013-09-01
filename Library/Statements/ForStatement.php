@@ -131,7 +131,7 @@ class ForStatement
 		$statement->compile($compilationContext);
 
 
-		$codePrinter->output($flagVariable->getName() . ' = 1;');
+		$codePrinter->output($flagVariable->getName() . ' = 0;');
 		$codePrinter->output('while (1) {');
 
 		/**
@@ -200,7 +200,7 @@ class ForStatement
 		$codePrinter->decreaseLevel();
 
 		$codePrinter->output('} else {');
-		$codePrinter->output("\t" . $flagVariable->getName() . ' = 0;');
+		$codePrinter->output("\t" . $flagVariable->getName() . ' = 1;');
 		$codePrinter->output('}');
 
 		/**

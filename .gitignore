@@ -97,3 +97,4 @@ ext/constants.o
 ext/kernel/concat.o
 ext/mcall.o
 ext/scall.o
+ext/regexdna.o

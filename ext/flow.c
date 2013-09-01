@@ -773,7 +773,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 
 	_1 = 1;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -785,7 +785,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		ZEPHIR_INIT_NVAR(a);
@@ -811,7 +811,7 @@ PHP_METHOD(Test_Flow, testFor5) {
 
 	_1 = 1;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -823,7 +823,7 @@ PHP_METHOD(Test_Flow, testFor5) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
@@ -849,7 +849,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 
 	_1 = 10;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -861,7 +861,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		ZEPHIR_INIT_NVAR(a);
@@ -887,7 +887,7 @@ PHP_METHOD(Test_Flow, testFor7) {
 
 	_1 = 10;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -899,7 +899,7 @@ PHP_METHOD(Test_Flow, testFor7) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
@@ -926,7 +926,7 @@ PHP_METHOD(Test_Flow, testFor8) {
 
 	_1 = c;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -938,7 +938,7 @@ PHP_METHOD(Test_Flow, testFor8) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
@@ -965,7 +965,7 @@ PHP_METHOD(Test_Flow, testFor9) {
 
 	_1 = d;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -977,7 +977,7 @@ PHP_METHOD(Test_Flow, testFor9) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
@@ -1004,7 +1004,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 
 	_1 = c;
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -1016,7 +1016,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
@@ -1041,7 +1041,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 
 	_1 = 'a';
 
-	_0 = 1;
+	_0 = 0;
 	while (1) {
 
 		if (_0) {
@@ -1053,7 +1053,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 			}
 
 		} else {
-			_0 = 0;
+			_0 = 1;
 		}
 
 		a = _1;
