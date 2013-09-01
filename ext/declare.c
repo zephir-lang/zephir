@@ -32,6 +32,5 @@ PHP_METHOD(Test_Declare, testDeclare1) {
 
 	RETURN_LONG(a);
 
-
 }
 

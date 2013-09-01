@@ -35,9 +35,7 @@ PHP_METHOD(Test_Arithmetic, intSum) {
 	a = 1;
 	b = 2;
 	c = a + b;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -47,9 +45,7 @@ PHP_METHOD(Test_Arithmetic, int2Sum) {
 
 	a = 1;
 	c = a + 2;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -58,9 +54,7 @@ PHP_METHOD(Test_Arithmetic, intSumSimple) {
 	int c;
 
 	c = 1 + 2;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -71,9 +65,7 @@ PHP_METHOD(Test_Arithmetic, boolSum) {
 	a = (1) ? 1 : 0;
 	b = (2) ? 1 : 0;
 	c = a |b;
-
 	RETURN_BOOL(c);
-
 
 }
 
@@ -83,9 +75,7 @@ PHP_METHOD(Test_Arithmetic, bool2Sum) {
 
 	a = (1) ? 1 : 0;
 	c = a + 2;
-
 	RETURN_BOOL(c);
-
 
 }
 
@@ -95,9 +85,7 @@ PHP_METHOD(Test_Arithmetic, bool3Sum) {
 
 	a = 1;
 	c = a |0;
-
 	RETURN_BOOL(c);
-
 
 }
 
@@ -106,9 +94,7 @@ PHP_METHOD(Test_Arithmetic, boolSumSimple) {
 	zend_bool c;
 
 	c = (1 + 2) ? 1 : 0;
-
 	RETURN_BOOL(c);
-
 
 }
 
@@ -119,9 +105,7 @@ PHP_METHOD(Test_Arithmetic, doubleSum) {
 	a = (double) (1);
 	b = (double) (2);
 	c = a +  b;
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -132,9 +116,7 @@ PHP_METHOD(Test_Arithmetic, double2Sum) {
 	a = 1.0;
 	b = 2.0;
 	c = a +  b;
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -143,9 +125,7 @@ PHP_METHOD(Test_Arithmetic, doubleSumSimple) {
 	double c;
 
 	c = (double) (1 + 2);
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -154,9 +134,7 @@ PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 	double c;
 
 	c = 1.0 + 2.0;
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -170,9 +148,7 @@ PHP_METHOD(Test_Arithmetic, varSum) {
 	ZVAL_LONG(&b, 2);
 	ZEPHIR_SINIT_VAR(c);
 	zephir_add_function(&c, &a, &b TSRMLS_CC);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -182,9 +158,7 @@ PHP_METHOD(Test_Arithmetic, varSumSimple) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, 1 + 2);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -196,9 +170,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSum) {
 	a = (double) (1);
 	b = 2;
 	c = (long) (a +  (double) b);
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -207,9 +179,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 	int c;
 
 	c = (long) ((double) 1 + 2.0);
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -221,9 +191,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSum) {
 	a = (double) (1);
 	b = 2;
 	c = a +  (double) b;
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -232,9 +200,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSumSimple) {
 	double c;
 
 	c = (double) 1 + 2.0;
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -248,9 +214,7 @@ PHP_METHOD(Test_Arithmetic, varIntSum) {
 	ZVAL_LONG(&b, 2);
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, a + zephir_get_intval(&b));
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -263,9 +227,7 @@ PHP_METHOD(Test_Arithmetic, intVarSum) {
 	ZEPHIR_SINIT_VAR(b);
 	ZVAL_LONG(&b, 2);
 	c = zephir_get_numberval(&b) + a;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -282,9 +244,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, b, a TSRMLS_CC);
 	c = zephir_get_numberval(_0);
-
 	RETURN_MM_LONG(c);
-
 
 }
 
@@ -301,9 +261,7 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, &b, a TSRMLS_CC);
 	c = zephir_get_numberval(_0);
-
 	RETURN_MM_LONG(c);
-
 
 }
 
@@ -313,9 +271,7 @@ PHP_METHOD(Test_Arithmetic, complexSum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_DOUBLE(&c, (double) 2 + 1.0);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -325,9 +281,7 @@ PHP_METHOD(Test_Arithmetic, complex2Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_BOOL(&c, 1 |1);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -337,9 +291,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_BOOL(&c, 1 |((1.0) ? 1 : 0));
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -349,9 +301,7 @@ PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_DOUBLE(&c, 1.0 + 1);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -361,9 +311,7 @@ PHP_METHOD(Test_Arithmetic, complex5Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, 1 + 1);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -373,9 +321,7 @@ PHP_METHOD(Test_Arithmetic, complex6Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_BOOL(&c, 1 |((1) ? 1 : 0));
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -389,9 +335,7 @@ PHP_METHOD(Test_Arithmetic, complex7Sum) {
 	b = 2;
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, a + b);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -405,9 +349,7 @@ PHP_METHOD(Test_Arithmetic, complex9Sum) {
 	b = 2;
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, b + a);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -421,9 +363,7 @@ PHP_METHOD(Test_Arithmetic, complex10Sum) {
 	b = 2;
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, b + a);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -437,9 +377,7 @@ PHP_METHOD(Test_Arithmetic, complex11Sum) {
 	b = (long) (2.0);
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_LONG(&c, b + a);
-
 	RETURN_CCTORW(&c);
-
 
 }
 
@@ -451,9 +389,7 @@ PHP_METHOD(Test_Arithmetic, complex12Sum) {
 	a = (1) ? 1 : 0;
 	b = (long) (2.0);
 	c = b + a;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -465,9 +401,7 @@ PHP_METHOD(Test_Arithmetic, complex13Sum) {
 	a = (1) ? 1 : 0;
 	b = (2.0) ? 1 : 0;
 	c = b |a;
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -481,9 +415,7 @@ PHP_METHOD(Test_Arithmetic, complex14Sum) {
 	ZVAL_LONG(&a, 1);
 	b = (2.0) ? 1 : 0;
 	c = b + zephir_get_intval(&a);
-
 	RETURN_LONG(c);
-
 
 }
 
@@ -500,9 +432,7 @@ PHP_METHOD(Test_Arithmetic, complex15Sum) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, &b, &a TSRMLS_CC);
 	c = zephir_get_boolval(_0);
-
 	RETURN_MM_BOOL(c);
-
 
 }
 
@@ -519,9 +449,7 @@ PHP_METHOD(Test_Arithmetic, complex16Sum) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, &b, &a TSRMLS_CC);
 	c = zephir_get_numberval(_0);
-
 	RETURN_MM_DOUBLE(c);
-
 
 }
 
@@ -535,9 +463,7 @@ PHP_METHOD(Test_Arithmetic, complex17Sum) {
 	ZVAL_LONG(&a, 1);
 	b = (2.0) ? 1 : 0;
 	c = (double) (zephir_get_numberval(&a) + b);
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -553,9 +479,7 @@ PHP_METHOD(Test_Arithmetic, complex18Sum) {
 	ZEPHIR_SINIT_VAR(d);
 	ZVAL_LONG(&d, zephir_get_numberval(&a) + b);
 	c = (double) (zephir_get_numberval(&a) + b + zephir_get_intval(&d));
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -574,9 +498,7 @@ PHP_METHOD(Test_Arithmetic, complex19Sum) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, &a, &d TSRMLS_CC);
 	c = (double) (zephir_get_numberval(_0) + b);
-
 	RETURN_MM_DOUBLE(c);
-
 
 }
 
@@ -599,9 +521,7 @@ PHP_METHOD(Test_Arithmetic, complex20Sum) {
 	ZEPHIR_INIT_VAR(_2);
 	zephir_add_function(_2, _1, &d TSRMLS_CC);
 	c = zephir_get_numberval(_2);
-
 	RETURN_MM_DOUBLE(c);
-
 
 }
 
@@ -617,9 +537,7 @@ PHP_METHOD(Test_Arithmetic, complex21Sum) {
 	ZEPHIR_SINIT_VAR(d);
 	ZVAL_LONG(&d, zephir_get_numberval(&a) + b);
 	c = (double) (b + zephir_get_intval(&d) + b + zephir_get_intval(&d) + zephir_get_intval(&d) + b + zephir_get_intval(&d) + b);
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -635,9 +553,7 @@ PHP_METHOD(Test_Arithmetic, complex22Sum) {
 	ZEPHIR_SINIT_VAR(d);
 	ZVAL_LONG(&d, zephir_get_numberval(&a) + b);
 	c = (double) (b + zephir_get_intval(&d) + zephir_get_intval(&d) + zephir_get_intval(&d) + zephir_get_intval(&d) + b + zephir_get_intval(&d) + b);
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -651,9 +567,7 @@ PHP_METHOD(Test_Arithmetic, complex23Sum) {
 	ZVAL_LONG(&a, 1);
 	b = (2.0) ? 1 : 0;
 	d = (double) (zephir_get_numberval(&a) + b);
-
 	RETURN_DOUBLE(d);
-
 
 }
 
@@ -667,9 +581,7 @@ PHP_METHOD(Test_Arithmetic, complex24Sum) {
 	b = (2.0) ? 1 : 0;
 	ZEPHIR_SINIT_VAR(d);
 	ZVAL_LONG(&d, 1 + zephir_get_intval(&a) + 0 + b);
-
 	RETURN_CCTORW(&d);
-
 
 }
 
@@ -679,9 +591,7 @@ PHP_METHOD(Test_Arithmetic, addSum1) {
 
 	a = 0;
 	a += 10;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -691,9 +601,7 @@ PHP_METHOD(Test_Arithmetic, addSum2) {
 
 	a = 0;
 	a += 0;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -703,9 +611,7 @@ PHP_METHOD(Test_Arithmetic, addSum3) {
 
 	a = 0;
 	a += 1;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -715,9 +621,7 @@ PHP_METHOD(Test_Arithmetic, addSum4) {
 
 	a = 0;
 	a += 0;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -727,9 +631,7 @@ PHP_METHOD(Test_Arithmetic, addSum5) {
 
 	a = 0;
 	a += (long) (1.0);
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -739,9 +641,7 @@ PHP_METHOD(Test_Arithmetic, addSum6) {
 
 	a = 0;
 	a += (long) (1.0);
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -751,9 +651,7 @@ PHP_METHOD(Test_Arithmetic, addSum7) {
 
 	a = 0.0;
 	a += (double) (10);
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -763,9 +661,7 @@ PHP_METHOD(Test_Arithmetic, addSum8) {
 
 	a = 0.0;
 	a += 0.0;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -775,9 +671,7 @@ PHP_METHOD(Test_Arithmetic, addSum9) {
 
 	a = 0.0;
 	a += 1;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -787,9 +681,7 @@ PHP_METHOD(Test_Arithmetic, addSum10) {
 
 	a = 0.0;
 	a += 0;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -799,9 +691,7 @@ PHP_METHOD(Test_Arithmetic, addSum11) {
 
 	a = 0.0;
 	a += 1.0;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -811,9 +701,7 @@ PHP_METHOD(Test_Arithmetic, addSum12) {
 
 	a = 0.0;
 	a += 1.0;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -824,9 +712,7 @@ PHP_METHOD(Test_Arithmetic, addSum13) {
 	a = 0;
 	b = 10;
 	a += b;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -838,9 +724,7 @@ PHP_METHOD(Test_Arithmetic, addSum14) {
 	a = 0;
 	b = 1;
 	a += b;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -852,9 +736,7 @@ PHP_METHOD(Test_Arithmetic, addSum15) {
 	a = 0;
 	b = 0;
 	a += b;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -866,9 +748,7 @@ PHP_METHOD(Test_Arithmetic, addSum16) {
 	a = 0;
 	b = 1.0;
 	a += (long) b;
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -879,9 +759,7 @@ PHP_METHOD(Test_Arithmetic, addSum17) {
 	a = 0.0;
 	b = 10.0;
 	a += b;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -893,9 +771,7 @@ PHP_METHOD(Test_Arithmetic, addSum18) {
 	a = 0.0;
 	b = 1;
 	a += (double) b;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -907,9 +783,7 @@ PHP_METHOD(Test_Arithmetic, addSum19) {
 	a = 0.0;
 	b = 0;
 	a += (double) b;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -921,9 +795,7 @@ PHP_METHOD(Test_Arithmetic, addSum20) {
 	a = 0.0;
 	b = 1;
 	a += (double) b;
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -937,9 +809,7 @@ PHP_METHOD(Test_Arithmetic, addSum21) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 1);
 	a += zephir_get_numberval(b);
-
 	RETURN_MM_LONG(a);
-
 
 }
 
@@ -953,9 +823,7 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 1);
 	a += zephir_get_numberval(b);
-
 	RETURN_MM_DOUBLE(a);
-
 
 }
 
@@ -969,9 +837,7 @@ PHP_METHOD(Test_Arithmetic, addSum23) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_LONG(b, 1);
 	ZEPHIR_ADD_ASSIGN(a, b);
-
 	RETURN_CCTOR(a);
-
 
 }
 
@@ -981,9 +847,7 @@ PHP_METHOD(Test_Arithmetic, complexSub) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_DOUBLE(&c, (double) 2 - 1.0);
-
 	RETURN_CCTORW(&c);
-
 
 }
 

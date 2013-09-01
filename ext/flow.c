@@ -37,13 +37,9 @@ PHP_METHOD(Test_Flow, testIf1) {
 
 	a = 1;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -53,13 +49,9 @@ PHP_METHOD(Test_Flow, testIf2) {
 
 	a = 0;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -69,13 +61,9 @@ PHP_METHOD(Test_Flow, testIf3) {
 
 	a = (double) (1);
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -85,13 +73,9 @@ PHP_METHOD(Test_Flow, testIf4) {
 
 	a = (double) (0);
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -101,13 +85,9 @@ PHP_METHOD(Test_Flow, testIf5) {
 
 	a = (1) ? 1 : 0;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -117,13 +97,9 @@ PHP_METHOD(Test_Flow, testIf6) {
 
 	a = (0) ? 1 : 0;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -133,13 +109,9 @@ PHP_METHOD(Test_Flow, testIf7) {
 
 	a = 1;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	} else {
-
 		RETURN_LONG(0);
-
 	}
 
 }
@@ -150,13 +122,9 @@ PHP_METHOD(Test_Flow, testIf8) {
 
 	a = 0;
 	if (a) {
-
 		RETURN_LONG(1);
-
 	} else {
-
 		RETURN_LONG(0);
-
 	}
 
 }
@@ -173,15 +141,11 @@ PHP_METHOD(Test_Flow, testIf9) {
 		if (b) {
 			c = (1) ? 1 : 0;
 			if (c) {
-
 				RETURN_LONG(1);
-
 			}
 		}
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -197,23 +161,15 @@ PHP_METHOD(Test_Flow, testIf10) {
 		if (b) {
 			c = (1) ? 1 : 0;
 			if (c) {
-
 				RETURN_LONG(1);
-
 			} else {
-
 				RETURN_LONG(0);
-
 			}
 		} else {
-
 			RETURN_LONG(0);
-
 		}
 	} else {
-
 		RETURN_LONG(0);
-
 	}
 
 }
@@ -230,23 +186,15 @@ PHP_METHOD(Test_Flow, testIf12) {
 		if (b) {
 			c = (1) ? 1 : 0;
 			if (c) {
-
 				RETURN_LONG(1);
-
 			} else {
-
 				RETURN_LONG(0);
-
 			}
 		} else {
-
 			RETURN_LONG(0);
-
 		}
 	} else {
-
 		RETURN_LONG(0);
-
 	}
 
 }
@@ -258,13 +206,9 @@ PHP_METHOD(Test_Flow, testIf13) {
 	a = 1;
 	b = 2;
 	if (a + b) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -279,13 +223,9 @@ PHP_METHOD(Test_Flow, testIf14) {
 	ZEPHIR_SINIT_VAR(_0);
 	zephir_add_function(&_0, &a, &b TSRMLS_CC);
 	if (zend_is_true(&_0)) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -304,13 +244,9 @@ PHP_METHOD(Test_Flow, testIf15) {
 	ZEPHIR_SINIT_VAR(_1);
 	zephir_add_function(&_1, &_0, &c TSRMLS_CC);
 	if (zend_is_true(&_1)) {
-
 		RETURN_LONG(1);
-
 	}
-
 	RETURN_LONG(0);
-
 
 }
 
@@ -325,9 +261,7 @@ PHP_METHOD(Test_Flow, testLoop1) {
 			break;
 		}
 	}
-
 	RETURN_CCTORW(&a);
-
 
 }
 
@@ -342,9 +276,7 @@ PHP_METHOD(Test_Flow, testLoop2) {
 			break;
 		}
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -363,9 +295,7 @@ PHP_METHOD(Test_Flow, testLoop3) {
 			break;
 		}
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -384,9 +314,7 @@ PHP_METHOD(Test_Flow, testLoop4) {
 			break;
 		}
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -398,9 +326,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 	while (a) {
 		a = a - 1;
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -412,9 +338,7 @@ PHP_METHOD(Test_Flow, testWhile2) {
 	while (a) {
 		a = a - 1;
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -436,9 +360,7 @@ PHP_METHOD(Test_Flow, testWhile3) {
 		a = a - 1;
 	}
 	c = (double) (a + zephir_get_intval(&b));
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -460,9 +382,7 @@ PHP_METHOD(Test_Flow, testWhile4) {
 		a = a - 1;
 	}
 	c = (double) (a + zephir_get_intval(&b));
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -474,9 +394,7 @@ PHP_METHOD(Test_Flow, testWhile5) {
 	while (a) {
 		a--;
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -488,9 +406,7 @@ PHP_METHOD(Test_Flow, testWhile6) {
 	while (a) {
 		a--;
 	}
-
 	RETURN_LONG(a);
-
 
 }
 
@@ -502,9 +418,7 @@ PHP_METHOD(Test_Flow, testWhile7) {
 	while (a) {
 		a--;
 	}
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -516,9 +430,7 @@ PHP_METHOD(Test_Flow, testWhile8) {
 	while (a) {
 		a--;
 	}
-
 	RETURN_DOUBLE(a);
-
 
 }
 
@@ -538,9 +450,7 @@ PHP_METHOD(Test_Flow, testWhile9) {
 		a--;
 	}
 	c = (double) (a + zephir_get_intval(&b));
-
 	RETURN_DOUBLE(c);
-
 
 }
 
@@ -582,9 +492,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 		ZEPHIR_GET_HVALUE(v, _6);
 		c += zephir_get_numberval(v);
 	}
-
 	RETURN_MM_LONG(c);
-
 
 }
 
@@ -620,9 +528,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 		ZEPHIR_GET_HVALUE(v, _6);
 		c += zephir_get_numberval(k);
 	}
-
 	RETURN_MM_DOUBLE(c);
-
 
 }
 
@@ -657,9 +563,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 		ZEPHIR_GET_HVALUE(v, _6);
 		zephir_array_append(&c, v, PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(c);
-
 
 }
 
@@ -687,9 +591,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -713,9 +615,7 @@ PHP_METHOD(Test_Flow, testFor5) {
 		a = _1;
 		b += a;
 	}
-
 	RETURN_LONG(b);
-
 
 }
 
@@ -743,9 +643,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -769,9 +667,7 @@ PHP_METHOD(Test_Flow, testFor7) {
 		a = _1;
 		b += a;
 	}
-
 	RETURN_LONG(b);
-
 
 }
 
@@ -797,9 +693,7 @@ PHP_METHOD(Test_Flow, testFor8) {
 		a = _1;
 		b += a;
 	}
-
 	RETURN_LONG(b);
-
 
 }
 
@@ -825,9 +719,7 @@ PHP_METHOD(Test_Flow, testFor9) {
 		a = _1;
 		b += a;
 	}
-
 	RETURN_LONG(b);
-
 
 }
 
@@ -858,9 +750,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 		ZEPHIR_CPY_WRT(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -886,9 +776,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 		a = _1;
 		zephir_str_append_char(b, a);
 	}
-
 	RETURN_STRING(b->str, 1);
-
 
 }
 
@@ -914,9 +802,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 		a = _1;
 		zephir_str_append_char(b, a);
 	}
-
 	RETURN_STRING(b->str, 1);
-
 
 }
 
@@ -942,9 +828,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 		a = _1;
 		zephir_str_append_char(b, a);
 	}
-
 	RETURN_STRING(b->str, 1);
-
 
 }
 
@@ -970,9 +854,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 		a = _1;
 		zephir_str_append_char(b, a);
 	}
-
 	RETURN_STRING(b->str, 1);
-
 
 }
 
@@ -1003,9 +885,7 @@ PHP_METHOD(Test_Flow, testFor15) {
 		a = _1;
 		b += a;
 	}
-
 	RETURN_LONG(b);
-
 
 }
 
@@ -1037,9 +917,7 @@ PHP_METHOD(Test_Flow, testFor16) {
 		ZVAL_LONG(b, _2);
 		zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(c);
-
 
 }
 
@@ -1071,9 +949,7 @@ PHP_METHOD(Test_Flow, testFor17) {
 		ZVAL_LONG(b, _2);
 		zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(c);
-
 
 }
 
@@ -1105,9 +981,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 		ZVAL_LONG(_3, b);
 		zephir_array_update_long(&c, a, &_3, PH_COPY | PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(c);
-
 
 }
 
@@ -1135,9 +1009,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -1165,9 +1037,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -1195,9 +1065,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -1225,9 +1093,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 		ZVAL_LONG(a, _1);
 		ZEPHIR_ADD_ASSIGN(b, a);
 	}
-
 	RETURN_CCTOR(b);
-
 
 }
 
@@ -1255,9 +1121,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 		ZVAL_LONG(a, _1);
 		zephir_str_append_char(b, (char) zephir_get_intval(a));
 	}
-
 	RETURN_MM_STRING(b->str, 1);
-
 
 }
 
@@ -1277,9 +1141,7 @@ PHP_METHOD(Test_Flow, testFor30) {
 		ZVAL_LONG(_1, v);
 		zephir_array_append(&a, _1, PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(a);
-
 
 }
 
@@ -1300,9 +1162,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		ZVAL_LONG(_1, v);
 		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(a);
-
 
 }
 

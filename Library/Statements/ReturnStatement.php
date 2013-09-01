@@ -38,8 +38,6 @@ class ReturnStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$codePrinter->outputBlankLine(true);
-
 		/**
 		 * Use return member for properties on this
 		 */
@@ -125,7 +123,6 @@ class ReturnStatement
 				throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);
 		}
 
-		$codePrinter->outputBlankLine(true);
 	}
 
 }

@@ -39,9 +39,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 		x = y;
 		y = z;
 	}
-
 	RETURN_LONG(z);
-
 
 }
 
@@ -58,9 +56,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 		x = y;
 		y = z;
 	}
-
 	RETURN_DOUBLE(z);
-
 
 }
 
@@ -92,9 +88,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE);
 		i++;
 	}
-
 	RETURN_CCTOR(fib);
-
 
 }
 

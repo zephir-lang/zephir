@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 
 PHP_METHOD(Test_Fannkuch, process) {
 
-	zval *n_param = NULL, *s, *p = NULL, *q = NULL, t = zval_used_for_init, q0 = zval_used_for_init, qq = zval_used_for_init, sx = zval_used_for_init, _0 = zval_used_for_init, _1 = zval_used_for_init, *_2 = NULL, *_3 = NULL, _4 = zval_used_for_init, _5 = zval_used_for_init, _6 = zval_used_for_init, _7 = zval_used_for_init, *_8 = NULL, *_9 = NULL;
+	zval *n_param = NULL, *s, *p = NULL, *q = NULL, *t = NULL, *q0 = NULL, *qq = NULL, *sx = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init, *_2 = NULL, *_3 = NULL, _4 = zval_used_for_init, _5 = zval_used_for_init, _6 = zval_used_for_init, _7 = zval_used_for_init, *_8 = NULL, *_9 = NULL;
 	int n, i, j, m, maxflips, checksum, sign, flips;
 
 	ZEPHIR_MM_GROW();
@@ -70,7 +70,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 				zephir_array_update_zval(&q, q0, &q0, PH_COPY | PH_SEPARATE);
 				if (ZEPHIR_IS_LONG(q0, 3)) {
 					i = 1;
-					j = zephir_get_numberval(&q0) - 1;
+					j = zephir_get_numberval(q0) - 1;
 					while (i < j) {
 						ZEPHIR_OBS_NVAR(t);
 						zephir_array_fetch_long(&t, q, i, PH_NOISY);
@@ -107,12 +107,12 @@ PHP_METHOD(Test_Fannkuch, process) {
 				ZEPHIR_OBS_NVAR(sx);
 				zephir_array_fetch_long(&sx, s, i, PH_NOISY);
 				if (ZEPHIR_IS_LONG(sx, 0)) {
-					zephir_decrement(&sx);
+					ZEPHIR_SEPARATE(sx);
+					zephir_decrement(sx);
 					zephir_array_update_long(&s, i, &sx, PH_COPY | PH_SEPARATE);
 					break;
 				}
 				if (i == m) {
-
 					ZEPHIR_SINIT_NVAR(_4);
 					ZVAL_STRING(&_4, "%d\\nPfannkuchen(%d) = %d\\n", 0);
 					ZEPHIR_SINIT_NVAR(_5);
@@ -123,7 +123,6 @@ PHP_METHOD(Test_Fannkuch, process) {
 					ZVAL_LONG(&_7, maxflips);
 					zephir_call_func_p4(return_value, "printf", &_4, &_5, &_6, &_7);
 					RETURN_MM();
-
 				}
 				ZEPHIR_INIT_NVAR(_8);
 				ZVAL_LONG(_8, i);

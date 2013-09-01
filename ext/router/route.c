@@ -142,24 +142,18 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		}
 	}
 	if (zephir_memnstr_str(compiledPattern, SL("("))) {
-
 		ZEPHIR_INIT_VAR(_3);
 		ZEPHIR_CONCAT_SV(_3, "#^", compiledPattern);
 		ZEPHIR_CONCAT_VS(return_value, _3, "$#");
 		RETURN_MM();
-
 	}
 	if (zephir_memnstr_str(compiledPattern, SL("["))) {
-
 		ZEPHIR_INIT_LNVAR(_3);
 		ZEPHIR_CONCAT_SV(_3, "#^", compiledPattern);
 		ZEPHIR_CONCAT_VS(return_value, _3, "$#");
 		RETURN_MM();
-
 	}
-
 	RETURN_CCTOR(compiledPattern);
-
 
 }
 
@@ -183,9 +177,7 @@ PHP_METHOD(Test_Router_Route, via) {
 
 
 	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 
@@ -211,9 +203,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRINGL(&_0, pattern->str, pattern->len, 0);
 	if (zephir_fast_strlen_ev(&_0) <= 0) {
-
 		RETURN_MM_BOOL(0);
-
 	}
 	ZEPHIR_INIT_VAR(matches);
 	array_init(matches);
@@ -345,14 +335,12 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 			zephir_str_append_char(route, ch);
 		}
 	}
-
 	array_init(return_value);
 	ZEPHIR_INIT_NVAR(_5);
 	ZVAL_STRINGL(_5, route->str, route->len, 1);
 	zephir_array_append(&return_value, _5, 0);
 	zephir_array_append(&return_value, matches, 0);
 	RETURN_MM();
-
 
 }
 
@@ -508,9 +496,7 @@ PHP_METHOD(Test_Router_Route, setName) {
 
 
 	zephir_update_property_this(this_ptr, SL("_name"), name TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 
@@ -531,9 +517,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
 
 
 	zephir_update_property_this(this_ptr, SL("_beforeMatch"), callback TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 
@@ -617,9 +601,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 		ZEPHIR_GET_HVALUE(position, _3);
 		zephir_array_update_zval(&reversed, position, &path, PH_COPY | PH_SEPARATE);
 	}
-
 	RETURN_CCTOR(reversed);
-
 
 }
 
@@ -643,9 +625,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
 
 
 	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 
@@ -679,9 +659,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
 
 
 	zephir_update_property_this(this_ptr, SL("_hostname"), hostname TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 
@@ -712,9 +690,7 @@ PHP_METHOD(Test_Router_Route, convert) {
 
 
 	zephir_update_property_array_append(this_ptr, SL("_converters"), converter TSRMLS_CC);
-
 	RETURN_THISW();
-
 
 }
 

@@ -33,20 +33,17 @@ PHP_METHOD(Test_Scall, testMethod1) {
 
 	RETURN_STRING("hello public", 1);
 
-
 }
 
 PHP_METHOD(Test_Scall, testMethod2) {
 
 	RETURN_STRING("hello protected", 1);
 
-
 }
 
 PHP_METHOD(Test_Scall, testMethod3) {
 
 	RETURN_STRING("hello private", 1);
-
 
 }
 
@@ -61,7 +58,6 @@ PHP_METHOD(Test_Scall, testMethod4) {
 	zephir_add_function(return_value, a, b TSRMLS_CC);
 	return;
 
-
 }
 
 PHP_METHOD(Test_Scall, testMethod5) {
@@ -74,7 +70,6 @@ PHP_METHOD(Test_Scall, testMethod5) {
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
 	return;
-
 
 }
 
@@ -89,14 +84,12 @@ PHP_METHOD(Test_Scall, testMethod6) {
 	zephir_add_function(return_value, a, b TSRMLS_CC);
 	return;
 
-
 }
 
 PHP_METHOD(Test_Scall, testCall1) {
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
 	return;
-
 
 }
 
@@ -105,14 +98,12 @@ PHP_METHOD(Test_Scall, testCall2) {
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
 	return;
 
-
 }
 
 PHP_METHOD(Test_Scall, testCall3) {
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
 	return;
-
 
 }
 
@@ -127,7 +118,6 @@ PHP_METHOD(Test_Scall, testCall4) {
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod4", a, b);
 	return;
 
-
 }
 
 PHP_METHOD(Test_Scall, testCall5) {
@@ -141,7 +131,6 @@ PHP_METHOD(Test_Scall, testCall5) {
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod5", a, b);
 	return;
 
-
 }
 
 PHP_METHOD(Test_Scall, testCall6) {
@@ -154,7 +143,6 @@ PHP_METHOD(Test_Scall, testCall6) {
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod6", a, b);
 	return;
-
 
 }
 

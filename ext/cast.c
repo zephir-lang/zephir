@@ -30,13 +30,11 @@ PHP_METHOD(Test_Cast, testCast1) {
 
 	RETURN_LONG((int) 5.0);
 
-
 }
 
 PHP_METHOD(Test_Cast, testCast2) {
 
 	RETURN_LONG(1);
-
 
 }
 

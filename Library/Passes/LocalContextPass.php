@@ -81,7 +81,7 @@ class LocalContextPass
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
 						default:
-							//echo '[', $assigment['assign-type'], ']';
+							//echo '[', $assigment['expr']['type'], ']';
 					}
 					break;
 				case 'object-property':
@@ -219,7 +219,16 @@ class LocalContextPass
 						$this->passStatementBlock($statement['else_statements']);
 					}
 					break;
+				case 'switch':
+					foreach ($statement['clauses'] as $clause) {
+						if (isset($clause['expr'])) {
+							$this->passExpression($clause['expr']);
+						}
+						$this->passStatementBlock($clause['statements']);
+					}
+					break;
 				case 'while':
+				case 'do-while':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
 					}

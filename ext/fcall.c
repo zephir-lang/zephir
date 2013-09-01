@@ -39,6 +39,5 @@ PHP_METHOD(Test_Fcall, testCall1) {
 	zephir_call_func_p2(return_value, "strpos", &_0, &_1);
 	return;
 
-
 }
 
