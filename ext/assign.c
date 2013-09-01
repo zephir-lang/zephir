@@ -257,7 +257,6 @@ PHP_METHOD(Test_Assign, testAssign21) {
 	int a, b;
 
 	a = 1;
-
 	b = a;
 
 	RETURN_LONG(b);
@@ -270,7 +269,6 @@ PHP_METHOD(Test_Assign, testAssign22) {
 	double a, b;
 
 	a = 1.0;
-
 	b = a;
 
 	RETURN_DOUBLE(b);
@@ -283,7 +281,6 @@ PHP_METHOD(Test_Assign, testAssign23) {
 	zend_bool a, b;
 
 	a = 1;
-
 	b = a;
 
 	RETURN_BOOL(b);
@@ -297,7 +294,6 @@ PHP_METHOD(Test_Assign, testAssign24) {
 	int a;
 
 	a = 1;
-
 	b = (double) a;
 
 	RETURN_DOUBLE(b);
@@ -311,7 +307,6 @@ PHP_METHOD(Test_Assign, testAssign25) {
 	int a;
 
 	a = 1;
-
 	b = (double) a;
 
 	RETURN_DOUBLE(b);
@@ -325,7 +320,6 @@ PHP_METHOD(Test_Assign, testAssign26) {
 	int b;
 
 	a = (double) (1);
-
 	b = (long) a;
 
 	RETURN_LONG(b);
@@ -339,7 +333,6 @@ PHP_METHOD(Test_Assign, testAssign27) {
 	int b;
 
 	b = 1;
-
 	a = (double) b;
 
 	RETURN_DOUBLE(a);
@@ -353,7 +346,6 @@ PHP_METHOD(Test_Assign, testAssign28) {
 	int b;
 
 	b = 1;
-
 	a = (b) ? 1 : 0;
 
 	RETURN_BOOL(a);
@@ -367,7 +359,6 @@ PHP_METHOD(Test_Assign, testAssign29) {
 	double b;
 
 	b = 1.0;
-
 	a = (b) ? 1 : 0;
 
 	RETURN_BOOL(a);
@@ -381,7 +372,6 @@ PHP_METHOD(Test_Assign, testAssign30) {
 	zend_bool b;
 
 	b = 0;
-
 	a = b;
 
 	RETURN_LONG(a);
@@ -395,7 +385,6 @@ PHP_METHOD(Test_Assign, testAssign31) {
 	zend_bool b;
 
 	b = 0;
-
 	a = (double) b;
 
 	RETURN_DOUBLE(a);
@@ -410,7 +399,6 @@ PHP_METHOD(Test_Assign, testAssign32) {
 
 	ZEPHIR_MM_GROW();
 	b = 0;
-
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_BOOL(a, b);
 
@@ -426,7 +414,6 @@ PHP_METHOD(Test_Assign, testAssign33) {
 
 	ZEPHIR_MM_GROW();
 	b = 0;
-
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_BOOL(a, b);
 
@@ -442,7 +429,6 @@ PHP_METHOD(Test_Assign, testAssign34) {
 
 	ZEPHIR_MM_GROW();
 	b = 0;
-
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_LONG(a, b);
 
@@ -458,7 +444,6 @@ PHP_METHOD(Test_Assign, testAssign35) {
 
 	ZEPHIR_MM_GROW();
 	b = 0;
-
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_DOUBLE(a, b);
 
@@ -474,7 +459,6 @@ PHP_METHOD(Test_Assign, testAssign36) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_BOOL(b, 0);
-
 	ZEPHIR_CPY_WRT(a, b);
 
 	RETURN_CCTOR(a);

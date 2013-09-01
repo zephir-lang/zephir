@@ -41,5 +41,4 @@ assert($t->testFor11() === 'abcdefghijklmnopqrstuvwxyz');
 assert($t->testFor12() === 'zyxwvutsrqponmlkjihgfedcba');
 assert($t->testFor13() === '0123456789');
 assert($t->testFor14() === '9876543210');
-
-
+assert($t->testFor15(1, 10) === 55);

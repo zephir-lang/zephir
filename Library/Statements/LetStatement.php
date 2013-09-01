@@ -723,38 +723,13 @@ class LetStatement
 										}
 										break;
 									case 'add-assign':
-
-										$operator = new BinaryOperatorBuilder(
-											'add',
-											new VariableBuilder($variable),
-											new VariableBuilder($itemVariable->getName())
-										);
-
-										$expr = new AddOperator();
-										$expr->setReadOnly(false);
-										$compiledExpr = $expr->compile($operator->get(), $compilationContext);
-
-										$symbolVariable->setMustInitNull(true);
-										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $compiledExpr->getCode() . ');');
-
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'sub-assign':
-
-										$operator = new BinaryOperatorBuilder(
-											'sub',
-											new VariableBuilder($variable),
-											new VariableBuilder($itemVariable->getName())
-										);
-
-										$expr = new SubOperator();
-										$expr->setReadOnly(false);
-										$compiledExpr = $expr->compile($operator->get(), $compilationContext);
-
-										$symbolVariable->setMustInitNull(true);
-										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $compiledExpr->getCode() . ');');
-
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
-
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
@@ -1172,7 +1147,7 @@ class LetStatement
 
 			$codePrinter = $compilationContext->codePrinter;
 
-			$codePrinter->outputBlankLine(true);
+			//$codePrinter->outputBlankLine(true);
 
 			/**
 			 * There are four types of assignments
@@ -1206,7 +1181,7 @@ class LetStatement
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
 			}
 
-			$codePrinter->outputBlankLine(true);
+			//$codePrinter->outputBlankLine(true);
 		}
 	}
 

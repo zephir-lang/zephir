@@ -67,113 +67,84 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_VAR(_8);
 	ZVAL_STRING(_8, "agggtaa[cgt]|[acg]ttaccct", 1);
 	zephir_array_append(&variants, _8, 0);
-
 	ZEPHIR_INIT_VAR(vIUB);
 	array_init(vIUB);
-
 	ZEPHIR_INIT_VAR(vIUBnew);
 	array_init(vIUBnew);
-
 	ZEPHIR_INIT_VAR(_9);
 	ZVAL_STRING(_9, "/B/S", 1);
 	zephir_array_append(&vIUB, _9, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_10);
 	ZVAL_STRING(_10, "(c|g|t)", 1);
 	zephir_array_append(&vIUBnew, _10, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_11);
 	ZVAL_STRING(_11, "/D/S", 1);
 	zephir_array_append(&vIUB, _11, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_12);
 	ZVAL_STRING(_12, "(a|g|t)", 1);
 	zephir_array_append(&vIUBnew, _12, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_13);
 	ZVAL_STRING(_13, "/H/S", 1);
 	zephir_array_append(&vIUB, _13, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_14);
 	ZVAL_STRING(_14, "(a|c|t)", 1);
 	zephir_array_append(&vIUBnew, _14, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_15);
 	ZVAL_STRING(_15, "/K/S", 1);
 	zephir_array_append(&vIUB, _15, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_16);
 	ZVAL_STRING(_16, "(g|t)", 1);
 	zephir_array_append(&vIUBnew, _16, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_17);
 	ZVAL_STRING(_17, "/M/S", 1);
 	zephir_array_append(&vIUB, _17, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_18);
 	ZVAL_STRING(_18, "(a|c)", 1);
 	zephir_array_append(&vIUBnew, _18, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_19);
 	ZVAL_STRING(_19, "/N/S", 1);
 	zephir_array_append(&vIUB, _19, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_20);
 	ZVAL_STRING(_20, "(a|c|g|t)", 1);
 	zephir_array_append(&vIUBnew, _20, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_21);
 	ZVAL_STRING(_21, "/R/S", 1);
 	zephir_array_append(&vIUB, _21, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_22);
 	ZVAL_STRING(_22, "(a|g)", 1);
 	zephir_array_append(&vIUBnew, _22, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_23);
 	ZVAL_STRING(_23, "/S/S", 1);
 	zephir_array_append(&vIUB, _23, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_24);
 	ZVAL_STRING(_24, "(c|g)", 1);
 	zephir_array_append(&vIUBnew, _24, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_25);
 	ZVAL_STRING(_25, "/V/S", 1);
 	zephir_array_append(&vIUB, _25, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_26);
 	ZVAL_STRING(_26, "(a|c|g)", 1);
 	zephir_array_append(&vIUBnew, _26, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_27);
 	ZVAL_STRING(_27, "/W/S", 1);
 	zephir_array_append(&vIUB, _27, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_28);
 	ZVAL_STRING(_28, "(a|t)", 1);
 	zephir_array_append(&vIUBnew, _28, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_29);
 	ZVAL_STRING(_29, "/Y/S", 1);
 	zephir_array_append(&vIUB, _29, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(_30);
 	ZVAL_STRING(_30, "(c|t)", 1);
 	zephir_array_append(&vIUBnew, _30, PH_SEPARATE);
-
 	ZEPHIR_INIT_VAR(stuffToRemove);
 	ZVAL_STRING(stuffToRemove, "^>.*$|\\n", 1);
-
 	ZEPHIR_INIT_VAR(discard);
 	ZVAL_NULL(discard);
-
 	ZEPHIR_INIT_VAR(contents);
 	zephir_call_func_p1(contents, "file_get_contents", path);
-
 	ZEPHIR_INIT_VAR(initialLength);
 	ZVAL_LONG(initialLength, zephir_fast_strlen_ev(contents));
-
 	ZEPHIR_INIT_VAR(_31);
 	ZEPHIR_CONCAT_SV(_31, "/", stuffToRemove);
 	ZEPHIR_INIT_VAR(_32);
@@ -182,12 +153,9 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZVAL_STRING(&_33, "", 0);
 	ZEPHIR_INIT_VAR(_34);
 	zephir_call_func_p3(_34, "preg_replace", _32, &_33, contents);
-
 	ZEPHIR_CPY_WRT(contents, _34);
-
 	ZEPHIR_INIT_VAR(codeLength);
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
-
 	zephir_is_iterable(variants, &_36, &_35, 0, 0);
 	for (
 		; zend_hash_get_current_data_ex(_36, (void**) &_37, &_35) == SUCCESS
@@ -208,9 +176,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	}
 	ZEPHIR_INIT_NVAR(_40);
 	zephir_call_func_p3(_40, "preg_replace", vIUB, vIUBnew, contents);
-
 	ZEPHIR_CPY_WRT(contents, _40);
-
 	php_printf("%c", '\n');
 	zend_print_zval(initialLength, 0);
 	php_printf("%c", '\n');

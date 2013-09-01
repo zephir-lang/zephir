@@ -75,10 +75,8 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "a", 1);
-
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_STRING(b, "b", 1);
-
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	zephir_call_method_p2_noret(o, "__construct", a, b);

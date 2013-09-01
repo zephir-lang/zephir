@@ -39,9 +39,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct) {
 
 
 	zephir_update_property_this(this_ptr, SL("a"), a TSRMLS_CC);
-
 	zephir_update_property_this(this_ptr, SL("b"), b TSRMLS_CC);
-
 
 }
 
