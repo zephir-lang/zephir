@@ -151,14 +151,11 @@ class ForStatement
 			$codePrinter->output($keyVariable->getName() . ' = 0;');
 		}
 		$codePrinter->output($flagVariable->getName() . ' = 0;');
-		$codePrinter->output('while (1) {');
 
 		/**
 		 * Inside a cycle
 		 */
 		$compilationContext->insideCycle++;
-
-		$codePrinter->increaseLevel();
 
 		if ($this->_statement['reverse']) {
 			$conditionExpr = array(
@@ -176,6 +173,10 @@ class ForStatement
 
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($conditionExpr, $compilationContext);
+
+		$codePrinter->output('while (1 && (' . $condition . ')) {');
+
+		$codePrinter->increaseLevel();
 
 		$codePrinter->output('if (' . $flagVariable->getName() . ') {');
 

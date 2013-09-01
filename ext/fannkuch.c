@@ -47,7 +47,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 	array_init(count);
 	_1 = 0;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= n)) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= n)) {
@@ -77,7 +77,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 		}
 		_4 = 0;
 		_3 = 0;
-		while (1) {
+		while (1 && (_4 <= n)) {
 			if (_3) {
 				_4++;
 				if (!(_4 <= n)) {
@@ -96,7 +96,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 		while (1) {
 			ZEPHIR_OBS_NVAR(_5);
 			zephir_array_fetch_long(&_5, perm, 0, PH_NOISY);
-			if (!(ZEPHIR_IS_LONG(_5, 0))) {
+			if (!(!ZEPHIR_IS_LONG(_5, 0))) {
 				break;
 			}
 			ZEPHIR_OBS_NVAR(_6);
@@ -105,7 +105,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			k2 = ((k + 1) / 2) - 1;
 			_8 = 0;
 			_7 = 0;
-			while (1) {
+			while (1 && (_8 <= k2)) {
 				if (_7) {
 					_8++;
 					if (!(_8 <= k2)) {
@@ -171,7 +171,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			zephir_array_update_long(&count, r, &_12, PH_COPY | PH_SEPARATE);
 			ZEPHIR_OBS_NVAR(_9);
 			zephir_array_fetch_long(&_9, count, r, PH_NOISY);
-			if (ZEPHIR_IS_LONG(_9, 0)) {
+			if (ZEPHIR_GT_LONG(_9, 0)) {
 				break;
 			}
 			r++;

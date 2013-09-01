@@ -100,7 +100,7 @@ class ComparisonBaseOperator extends BaseOperator
 										return new CompiledExpression('bool', $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $variableRight->getName() . ', ' . $variableLeft->getName() . ')', $expression);
+										return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variableRight->getName() . ', ' . $variableLeft->getName() . ')', $expression);
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
 								}
@@ -162,7 +162,7 @@ class ComparisonBaseOperator extends BaseOperator
 							case 'long':
 							case 'ulong':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
+								return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
 							case 'bool':
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($right->getCode() == 'true') {
@@ -181,7 +181,7 @@ class ComparisonBaseOperator extends BaseOperator
 									case 'long':
 									case 'ulong':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);

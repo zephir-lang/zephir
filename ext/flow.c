@@ -614,7 +614,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 	ZVAL_LONG(b, 0);
 	_1 = 1;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 10)) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= 10)) {
@@ -639,7 +639,7 @@ PHP_METHOD(Test_Flow, testFor5) {
 	b = 0;
 	_1 = 1;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 10)) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= 10)) {
@@ -666,7 +666,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 	ZVAL_LONG(b, 0);
 	_1 = 10;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= 1)) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= 1)) {
@@ -691,7 +691,7 @@ PHP_METHOD(Test_Flow, testFor7) {
 	b = 0;
 	_1 = 10;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= 1)) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= 1)) {
@@ -717,7 +717,7 @@ PHP_METHOD(Test_Flow, testFor8) {
 	d = 10;
 	_1 = c;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= d)) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= d)) {
@@ -743,7 +743,7 @@ PHP_METHOD(Test_Flow, testFor9) {
 	d = 10;
 	_1 = d;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= c)) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= c)) {
@@ -773,7 +773,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 	ZVAL_LONG(d, 10);
 	ZEPHIR_CPY_WRT(_1, c);
 	_0 = 0;
-	while (1) {
+	while (1 && (ZEPHIR_LE(_1, d))) {
 		if (_0) {
 			ZEPHIR_SEPARATE(_1);
 			zephir_increment(_1);
@@ -800,7 +800,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 	zephir_str_assign(b, "", sizeof("")-1);
 	_1 = 'a';
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 'z')) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= 'z')) {
@@ -826,7 +826,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 	zephir_str_assign(b, "", sizeof("")-1);
 	_1 = 'z';
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= 'a')) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= 'a')) {
@@ -852,7 +852,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 	zephir_str_assign(b, "", sizeof("")-1);
 	_1 = '0';
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= '9')) {
 		if (_0) {
 			_1++;
 			if (!(_1 <= '9')) {
@@ -878,7 +878,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 	zephir_str_assign(b, "", sizeof("")-1);
 	_1 = '9';
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= '0')) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= '0')) {
@@ -909,7 +909,7 @@ PHP_METHOD(Test_Flow, testFor15) {
 	b = 0;
 	_1 = d;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= c)) {
 		if (_0) {
 			_1--;
 			if (!(_1 >= c)) {
@@ -937,7 +937,7 @@ PHP_METHOD(Test_Flow, testFor16) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	while (1) {
+	while (1 && (_2 <= 10)) {
 		if (_1) {
 			_0++;
 			_2++;
@@ -969,7 +969,7 @@ PHP_METHOD(Test_Flow, testFor17) {
 	_2 = 10;
 	_0 = 0;
 	_1 = 0;
-	while (1) {
+	while (1 && (_2 >= 1)) {
 		if (_1) {
 			_0++;
 			_2--;
@@ -1001,7 +1001,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	while (1) {
+	while (1 && (_2 <= 10)) {
 		if (_1) {
 			_0++;
 			_2++;
@@ -1032,7 +1032,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 	ZVAL_LONG(b, 0);
 	_1 = 1;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 10)) {
 		if (_0) {
 			_1 += 2;
 			if (!(_1 <= 10)) {
@@ -1060,7 +1060,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 	ZVAL_LONG(b, 0);
 	_1 = 1;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 10)) {
 		if (_0) {
 			_1 += 2;
 			if (!(_1 <= 10)) {
@@ -1088,7 +1088,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 	ZVAL_LONG(b, 0);
 	_1 = 10;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 <= 1)) {
 		if (_0) {
 			_1 += -2;
 			if (!(_1 <= 1)) {
@@ -1116,7 +1116,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 	ZVAL_LONG(b, 0);
 	_1 = 1;
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= 10)) {
 		if (_0) {
 			_1 -= 2;
 			if (!(_1 >= 10)) {
@@ -1144,7 +1144,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 	zephir_str_assign(b, "", sizeof("")-1);
 	_1 = 'z';
 	_0 = 0;
-	while (1) {
+	while (1 && (_1 >= 'a')) {
 		if (_0) {
 			_1 -= 2;
 			if (!(_1 >= 'a')) {
