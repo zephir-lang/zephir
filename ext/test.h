@@ -22,3 +22,4 @@
 #include "router/route.h"
 #include "router.h"
 #include "scall.h"
+#include "spectralnorm.h"

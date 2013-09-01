@@ -82,6 +82,10 @@ class ClassMethod
 				case 'static':
 					$modifiers['ZEND_ACC_STATIC'] = $visibility;
 					break;
+				case 'inline':
+					break;
+				case 'scoped':
+					break;
 				default:
 					throw new Exception('Unknown modifier "' . $visibility . '"');
 			}
@@ -514,7 +518,6 @@ class ClassMethod
 					$code = 'unsigned int ';
 					break;
 				case 'char':
-				case 'schar':
 					$code = 'char ';
 					break;
 				case 'uchar':
@@ -547,6 +550,10 @@ class ClassMethod
 					break;
 				case 'HashPosition':
 					$code = 'HashPosition ';
+					break;
+				case 'zend_class_entry':
+					$pointer = '*';
+					$code = 'zend_class_entry ';
 					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);

@@ -89,6 +89,35 @@ class ForStatement
 			$tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
 		}
 
+		/**
+		 * Create a copy of the current value in the end of the range
+		 */
+		if ($parameters[0]->getType() != 'variable') {
+			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
+		} else {
+			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode());
+			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($rangeVariable->getType(), $compilationContext);
+		}
+
+		/**
+		 * Create an implicit 'let' operation to set the current value in the upper bound of the range
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable' => $upperBoundVariable->getName(),
+					'operator' => 'assign',
+					'expr' => array(
+						'type' => $parameters[1]->getType(),
+						'value' => $parameters[1]->getCode(),
+					),
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
 		if ($this->_statement['reverse']) {
 
 			/**
@@ -102,8 +131,8 @@ class ForStatement
 						'variable' => $tempVariable->getName(),
 						'operator' => 'assign',
 						'expr' => array(
-							'type' => $parameters[1]->getType(),
-							'value' => $parameters[1]->getCode(),
+							'type' => 'variable',
+							'value' => $upperBoundVariable->getName(),
 							'file' => $this->_statement['file'],
 							'line' => $this->_statement['line'],
 							'char' => $this->_statement['char']
@@ -167,7 +196,7 @@ class ForStatement
 			$conditionExpr = array(
 				'type' => 'less-equal',
 				'left' => array('type' => 'variable', 'value' => $tempVariable->getName()),
-				'right' => array('type' => $parameters[1]->getType(), 'value' => $parameters[1]->getCode())
+				'right' => array('type' => 'variable', 'value' => $upperBoundVariable->getName())
 			);
 		}
 

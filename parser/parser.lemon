@@ -74,8 +74,8 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 		case XX_T_STRING:
 			json_object_object_add(ret, "type", json_object_new_string("string"));
 			break;
-		case XX_T_SCHAR:
-			json_object_object_add(ret, "type", json_object_new_string("schar"));
+		case XX_T_CHAR:
+			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
 		default:
 			if (type == XX_T_TRUE) {
@@ -1692,8 +1692,8 @@ xx_common_expr(R) ::= STRING(S) . {
 }
 
 /* y = 'h' */
-xx_common_expr(R) ::= SCHAR(S) . {
-	R = xx_ret_literal(XX_T_SCHAR, S, status->scanner_state);
+xx_common_expr(R) ::= CHAR(S) . {
+	R = xx_ret_literal(XX_T_CHAR, S, status->scanner_state);
 }
 
 /* y = 12.5 */

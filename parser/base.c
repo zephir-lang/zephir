@@ -433,8 +433,8 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_STRING:
 				xx_parse_with_token(xx_parser, XX_T_STRING, XX_STRING, &token, parser_status);
 				break;
-			case XX_T_SCHAR:
-				xx_parse_with_token(xx_parser, XX_T_SCHAR, XX_SCHAR, &token, parser_status);
+			case XX_T_CHAR:
+				xx_parse_with_token(xx_parser, XX_T_CHAR, XX_CHAR, &token, parser_status);
 				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);

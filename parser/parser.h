@@ -86,7 +86,7 @@
 #define XX_INTEGER                        86
 #define XX_STRING                         87
 #define XX_THROW                          88
-#define XX_SCHAR                          89
+#define XX_CHAR                           89
 #define XX_DOUBLE                         90
 #define XX_NULL                           91
 #define XX_TRUE                           92

@@ -57,10 +57,9 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'uint':
 					case 'long':
 					case 'ulong':
+						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 					case 'char':
 					case 'uchar':
-						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
-					case 'schar':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 					case 'double':
 						return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' (int) ' . $right->getCode(), $expression);
@@ -77,30 +76,30 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'ulong':
 					case 'char':
 					case 'uchar':
-					case 'schar':
 						switch ($right->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
+								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'char':
 							case 'uchar':
-								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
-							case 'schar':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
-							case 'schar':
-								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
 								switch ($variableRight->getType()) {
 									case 'int':
-										$compilationContext->headersManager->add('kernel/operators');
+									case 'uint':
+									case 'long':
+									case 'ulong':
+									case 'char':
+									case 'uchar':
 										return new CompiledExpression('bool', $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variableRight->getName() . ', ' . $variableLeft->getName() . ')', $expression);
+										return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
 								}
@@ -118,7 +117,8 @@ class ComparisonBaseOperator extends BaseOperator
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
-							case 'schar':
+							case 'char':
+							case 'uchar':
 								return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);

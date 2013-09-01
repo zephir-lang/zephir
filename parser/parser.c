@@ -37,8 +37,8 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 		case XX_T_STRING:
 			json_object_object_add(ret, "type", json_object_new_string("string"));
 			break;
-		case XX_T_SCHAR:
-			json_object_object_add(ret, "type", json_object_new_string("schar"));
+		case XX_T_CHAR:
+			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
 		default:
 			if (type == XX_T_TRUE) {
@@ -1693,7 +1693,7 @@ static const char *yyTokenName[] = {
   "CONCATASSIGN",  "ARROW",         "SBRACKET_OPEN",  "SBRACKET_CLOSE",
   "DOUBLECOLON",   "INCR",          "DECR",          "ECHO",        
   "RETURN",        "UNSET",         "INTEGER",       "STRING",      
-  "THROW",         "SCHAR",         "DOUBLE",        "NULL",        
+  "THROW",         "CHAR",          "DOUBLE",        "NULL",        
   "TRUE",          "FALSE",         "error",         "program",     
   "xx_language",   "xx_top_statement_list",  "xx_top_statement",  "xx_namespace_def",
   "xx_class_def",  "xx_comment",    "xx_class_definition",  "xx_class_properties_definition",
@@ -1915,7 +1915,7 @@ static const char *yyRuleName[] = {
  /* 195 */ "xx_common_expr ::= IDENTIFIER",
  /* 196 */ "xx_common_expr ::= INTEGER",
  /* 197 */ "xx_common_expr ::= STRING",
- /* 198 */ "xx_common_expr ::= SCHAR",
+ /* 198 */ "xx_common_expr ::= CHAR",
  /* 199 */ "xx_common_expr ::= DOUBLE",
  /* 200 */ "xx_common_expr ::= NULL",
  /* 201 */ "xx_common_expr ::= TRUE",
@@ -4050,7 +4050,7 @@ static void yy_reduce(
       case 198:
 // 1695 "parser.lemon"
 {
-	yygotominor.yy103 = xx_ret_literal(XX_T_SCHAR, yymsp[0].minor.yy0, status->scanner_state);
+	yygotominor.yy103 = xx_ret_literal(XX_T_CHAR, yymsp[0].minor.yy0, status->scanner_state);
 }
 // 4056 "parser.c"
         break;
@@ -4922,8 +4922,8 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_STRING:
 				xx_parse_with_token(xx_parser, XX_T_STRING, XX_STRING, &token, parser_status);
 				break;
-			case XX_T_SCHAR:
-				xx_parse_with_token(xx_parser, XX_T_SCHAR, XX_SCHAR, &token, parser_status);
+			case XX_T_CHAR:
+				xx_parse_with_token(xx_parser, XX_T_CHAR, XX_CHAR, &token, parser_status);
 				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);

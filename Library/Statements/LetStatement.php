@@ -62,7 +62,6 @@ class LetStatement
 			case 'ulong':
 			case 'char':
 			case 'uchar':
-			case 'schar':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						switch ($statement['operator']) {
@@ -86,8 +85,6 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
-					case 'char':
-					case 'uchar':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
@@ -105,7 +102,8 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
-					case 'schar':
+					case 'char':
+					case 'uchar':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
@@ -162,7 +160,7 @@ class LetStatement
 							case 'ulong':
 							case 'bool':
 							case 'char':
-							case 'schar':
+							case 'uchar':
 								switch ($statement['operator']) {
 									case 'assign':
 										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
@@ -404,22 +402,6 @@ class LetStatement
 							case 'assign':
 								$symbolVariable->setMustInitNull(true);
 								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_assign_char(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
-								break;
-							case 'concat-assign':
-								$symbolVariable->setMustInitNull(true);
-								$compilationContext->headersManager->add('kernel/string_type');
-								$codePrinter->output('zephir_str_append_char(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
-								break;
-							default:
-								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
-						}
-						break;
-					case 'schar':
-						switch ($statement['operator']) {
-							case 'assign':
-								$symbolVariable->setMustInitNull(true);
-								$compilationContext->headersManager->add('kernel/string_type');
 								$codePrinter->output('zephir_str_assign_char(' . $variable . ', \'' . $resolvedExpr->getCode() . '\');');
 								break;
 							case 'concat-assign':
@@ -604,9 +586,6 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
-					case 'char':
-					case 'uchar':
-					case 'schar':
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
 						} else {
@@ -622,6 +601,29 @@ class LetStatement
 								} else {
 									$symbolVariable->initVariant($compilationContext);
 									$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+								}
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+						}
+						break;
+					case 'char':
+					case 'uchar':
+						if ($symbolVariable->isLocalOnly()) {
+							$symbol = '&' . $variable;
+						} else {
+							$symbol = $variable;
+						}
+						switch ($statement['operator']) {
+							case 'assign':
+								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
+									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
+								} else {
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_LONG(' . $symbol . ', \'' . $resolvedExpr->getCode() . '\');');
 								}
 								break;
 							default:
@@ -706,7 +708,6 @@ class LetStatement
 							case 'ulong':
 							case 'char':
 							case 'uchar':
-							case 'schar':
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
@@ -956,7 +957,6 @@ class LetStatement
 			case 'double':
 			case 'char':
 			case 'uchar':
-			case 'schar':
 				$codePrinter->output($variable . '++;');
 				break;
 			case 'variable':
@@ -993,7 +993,6 @@ class LetStatement
 			case 'double':
 			case 'char':
 			case 'uchar':
-			case 'schar':
 				$codePrinter->output($variable . '--;');
 				break;
 			case 'variable':
@@ -1057,6 +1056,14 @@ class LetStatement
 					case 'variable':
 						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($variableVariable->getType()) {
+							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
+								$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+								$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+								$codePrinter->output('zephir_update_property_zval(' . $variable . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+								break;
 							case 'variable':
 								if ($variable == 'this_ptr') {
 									if (!$compilationContext->classDefinition->hasProperty($propertyName)) {

@@ -476,7 +476,15 @@ class Expression
 				$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
 			} else {
-				throw new CompilerException("Class " . $newExpr['class'] . " does not exist", $statement);
+				if (class_exists($newExpr['class'])) {
+
+					$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+
+					$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $newExpr['class'] . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+					$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
+				} else {
+					throw new CompilerException("Class " . $newExpr['class'] . " does not exist", $expression);
+				}
 			}
 		}
 
@@ -492,6 +500,7 @@ class Expression
 		/**
 		 * Mark variable initialized
 		 */
+		$params = array();
 		$symbolVariable->setIsInitialized(true);
 
 		/**
@@ -499,42 +508,36 @@ class Expression
 		 * For classes in the same extension we check if the class does implement a constructor
 		 * For external classes we always assume the class does implement a constructor
 		 */
+		$callConstructor = true;
 		if ($compilationContext->compiler->isClass($newExpr['class'])) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
 			if ($classDefinition->hasMethod("__construct")) {
-
-				if (isset($newExpr['parameters'])) {
-					$callExpr = new Expression(array(
-						'variable' => $symbolVariable->getRealName(),
-						'name' => '__construct',
-						'parameters' => $newExpr['parameters'],
-						'file' => $newExpr['file'],
-						'line' => $newExpr['line'],
-						'char' => $newExpr['char'],
-					));
-				} else {
-					$callExpr = new Expression(array(
-						'variable' => $symbolVariable->getRealName(),
-						'name' => '__construct',
-						'file' => $newExpr['file'],
-						'line' => $newExpr['line'],
-						'char' => $newExpr['char'],
-					));
-				}
-
-				$methodCall = new MethodCall();
-				$callExpr->setExpectReturn(false);
-				$methodCall->compile($callExpr, $compilationContext);
+				$callConstructor = true;
 			}
-		} else {
-			/**
-			 * @TODO Check if the class has a constructor
-			 */
-			if (count($params)) {
-				$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variable . ', "__construct", ' . join(', ', $params) . ');');
+		}
+
+		if ($callConstructor) {
+			if (isset($newExpr['parameters'])) {
+				$callExpr = new Expression(array(
+					'variable' => $symbolVariable->getRealName(),
+					'name' => '__construct',
+					'parameters' => $newExpr['parameters'],
+					'file' => $newExpr['file'],
+					'line' => $newExpr['line'],
+					'char' => $newExpr['char'],
+				));
 			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variable . ', "__construct");');
+				$callExpr = new Expression(array(
+					'variable' => $symbolVariable->getRealName(),
+					'name' => '__construct',
+					'file' => $newExpr['file'],
+					'line' => $newExpr['line'],
+					'char' => $newExpr['char'],
+				));
 			}
+			$methodCall = new MethodCall();
+			$callExpr->setExpectReturn(false);
+			$methodCall->compile($callExpr, $compilationContext);
 		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -817,8 +820,10 @@ class Expression
 			case 'char':
 				switch ($resolved->getType()) {
 					case 'variable':
+						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
-						return new CompiledExpression('char', '(char) zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+						$compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
+						return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
@@ -878,8 +883,8 @@ class Expression
 			case 'string':
 				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
 
-			case 'schar':
-				return new CompiledExpression('schar', $expression['value'], $expression);
+			case 'char':
+				return new CompiledExpression('char', $expression['value'], $expression);
 
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);

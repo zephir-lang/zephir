@@ -42,17 +42,11 @@ class EchoStatement
 				case 'int':
 					$compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
 					break;
-				case 'schar':
+				case 'char':
 					$compilationContext->codePrinter->output('php_printf("%c", \'' . $resolvedExpr->getCode() . '\');');
 					break;
 				case 'long':
 					$compilationContext->codePrinter->output('php_printf("%ld", ' . $resolvedExpr->getCode() . ');');
-					break;
-				case 'int':
-					$compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
-					break;
-				case 'char':
-					$compilationContext->codePrinter->output('php_printf("%c", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'string':
 					$compilationContext->codePrinter->output('php_printf("' . Utils::addSlaches($resolvedExpr->getCode()) . '");');
@@ -65,9 +59,6 @@ class EchoStatement
 							break;
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
-							break;
-						case 'int':
-							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
 							break;
 						case 'char':
 							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');

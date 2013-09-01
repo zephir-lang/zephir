@@ -370,7 +370,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		SCHAR = (['] ([\\][']|[\\].|[\001-\377]\[\\'])* [']);
 		SCHAR {
-			token->opcode = XX_T_SCHAR;
+			token->opcode = XX_T_CHAR;
 			token->value = strndup(q, YYCURSOR - q - 1);
 			token->len = YYCURSOR - q - 1;
 			s->active_char += (YYCURSOR - start);
@@ -409,7 +409,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		IDENTIFIER = [\\\_]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
+		IDENTIFIER = [\\_]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
 
 			token->value = strndup(start, YYCURSOR - start);

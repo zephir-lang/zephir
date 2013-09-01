@@ -32,7 +32,7 @@
 #define XX_T_TRUE 306
 #define XX_T_IDENTIFIER 307
 #define XX_T_ARRAY 308
-#define XX_T_SCHAR 309
+#define XX_T_CHAR 309
 
 #define XX_T_TYPE_INTEGER 310
 #define XX_T_TYPE_DOUBLE 311

@@ -94,7 +94,6 @@ class CompiledExpression
 			case 'ulong':
 			case 'char':
 			case 'uchar':
-			case 'schar':
 				return true;
 		}
 		return false;
@@ -110,7 +109,6 @@ class CompiledExpression
 		switch ($this->_type) {
 			case 'char':
 			case 'uchar':
-			case 'schar':
 				return true;
 		}
 		return false;
