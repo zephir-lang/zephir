@@ -5,72 +5,79 @@ class Fannkuch
 
 	public function process(int n)
 	{
-		var s, p, q, t, q0, qq, sx;
-		int i, j, m, maxflips, checksum, sign, flips;
+		var perm, perm0, perm1, count, temp;
+		int maxFlipsCount = 0;
+		int permCount = 0;
+		int checksum = 0;
+		int i, j, flipsCount, k, r, k2;
 
-		let s = range(0, n - 1),
-			i = 0,
-			maxflips = 0,
-			checksum = 0,
-			sign = 1,
-			m = n - 1,
-			q = s,
-			p = s;
+		let perm = [],
+			perm1 = [],
+			count = [];
 
-		do {
-			// Copy and flip.
-			let q0 = p[0];
-			if q0 != 0 {
-				let q = p, flips = 1;
-				do {
-					let qq = q[q0];
-					if qq == 0 {
-						let checksum += sign * flips;
-						if flips > maxflips {
-							let maxflips = flips;
-						}
-						break;
-					}
-					let q[q0] = q0;
-					if q0 >= 3 {
-						let i = 1, j = q0 - 1;
-						do {
-							let t = q[i],
-								q[i] = q[j],
-								q[j] = t,
-								i++,
-								j--;
-						} while i < j;
-					}
-					let q0 = qq, flips++;
-				} while true;
+		for i in range(0, n) {
+			let perm1[i] = i;
+		}
+
+		let r = n;
+		loop {
+
+			if false {
+				break;
 			}
 
-			// Permute.
-			if sign == 1 {
-				let t = p[1], p[1] = p[0], p[0] = t, sign = -1; // Rotate 0<-1.
-			} else {
-				let t = p[1], p[1] = p[2], p[2] = t, sign = 1;  // Rotate 1<-2.
-				let i = 2;
-				while i < n {
-					let sx = s[i];
-					if sx != 0 {
-						let sx--, s[i] = sx; // ?
-						break;
-					}
-					if i == m {
-						return printf("%d\nPfannkuchen(%d) = %d\n", checksum, n, maxflips); // Out of permutations.
-					}
-					let s[i] = i;
-					// Rotate 0<-...<-i+1.
-					let t = p[0], j = 0;
-					while j <= i {
-						let p[j] = p[j], j++;
-					}
-					let i++, p[i] = t;
+			while r != 1 {
+				let count[r - 1] = r, r--;
+			}
+
+			for i in range(0, n) {
+				let perm[i] = perm1[i];
+			}
+
+			let flipsCount = 0, k = 0;
+
+			while perm[0] != 0 {
+				let k = (int) perm[0], k2 = ((k + 1) / 2) - 1;
+				for i in range(0, k2) {
+					let temp = perm[i], perm[i] = perm[k - i], perm[k - i] = temp;
 				}
+				let flipsCount++;
 			}
-		} while true;
+
+			if maxFlipsCount < flipsCount {
+				let maxFlipsCount = flipsCount;
+			}
+
+			if permCount % 2 == 0 {
+				let checksum += flipsCount;
+			} else {
+				let checksum -= flipsCount;
+			}
+
+			/* Use incremental change to generate another permutation */
+			loop {
+
+				if r == n {
+					echo printf("%d\n", checksum);
+					return printf("Pfannkuchen(%d) = %d\n", n, maxFlipsCount);
+				}
+
+				let perm0 = perm1[0], i = 0;
+				while i < r {
+					let j = i + 1,
+						perm1[i] = perm1[j],
+						i = j;
+				}
+
+				let perm1[r] = perm0, count[r] = count[r] - 1;
+				if count[r] > 0 {
+					break;
+				}
+
+				let r++;
+			}
+			let permCount++;
+		}
 	}
 
 }

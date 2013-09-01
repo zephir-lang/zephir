@@ -35,7 +35,7 @@
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
-%left MUL DIV .
+%left MUL DIV MOD .
 %right ISSET FETCH .
 %right TYPEOF INSTANCEOF .
 %right NEW .
@@ -1611,18 +1611,9 @@ xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 	R = xx_ret_expr("static-constant-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* y = v[0] */
-xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_INTEGER, I, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* y = v["some-index"] */
-xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+/* y = v[expr] */
+xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), I, NULL, status->scanner_state);
 }
 
 /* y = a + b */
@@ -1643,6 +1634,11 @@ xx_common_expr(R) ::= xx_common_expr(O1) MUL xx_common_expr(O2) . {
 /* y = a / b */
 xx_common_expr(R) ::= xx_common_expr(O1) DIV xx_common_expr(O2) . {
 	R = xx_ret_expr("div", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a % b */
+xx_common_expr(R) ::= xx_common_expr(O1) MOD xx_common_expr(O2) . {
+	R = xx_ret_expr("mod", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a . b */

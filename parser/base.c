@@ -405,6 +405,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_DIV:
 				xx_(xx_parser, XX_DIV, NULL, parser_status);
 				break;
+			case XX_T_MOD:
+				xx_(xx_parser, XX_MOD, NULL, parser_status);
+				break;
 			case XX_T_DOT:
 				xx_(xx_parser, XX_CONCAT, NULL, parser_status);
 				break;

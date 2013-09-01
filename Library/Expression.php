@@ -25,6 +25,8 @@ require ZEPHIRPATH . 'Library/Operators/Arithmetical/BaseOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/AddOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/SubOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Arithmetical/MulOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/DivOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Arithmetical/ModOperator.php';
 
 /* Logical operators */
 require ZEPHIRPATH . 'Library/Operators/Logical/BaseOperator.php';
@@ -385,7 +387,7 @@ class Expression
 		 * Variable that receives property accesses must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
+			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
 		}
 
 		/**
@@ -794,6 +796,9 @@ class Expression
 						return new CompiledExpression('int', '(int) ' . $resolved->getCode(), $expression);
 					case 'bool':
 						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
+					case 'variable':
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
@@ -989,6 +994,18 @@ class Expression
 
 			case 'mul':
 				$expr = new MulOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'div':
+				$expr = new DivOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'mod':
+				$expr = new ModOperator();
 				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);

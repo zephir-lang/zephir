@@ -323,7 +323,10 @@ PHP_METHOD(Test_Flow, testWhile1) {
 	int a;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a = a - 1;
 	}
 	RETURN_LONG(a);
@@ -335,7 +338,10 @@ PHP_METHOD(Test_Flow, testWhile2) {
 	int a;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a = a - 1;
 	}
 	RETURN_LONG(a);
@@ -349,10 +355,16 @@ PHP_METHOD(Test_Flow, testWhile3) {
 	int a, _0;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
-		while (zend_is_true(&b)) {
+		while (1) {
+			if (!zend_is_true(&b)) {
+				break;
+			}
 			_0 = zephir_get_numberval(&b) - 1;
 			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_LONG(&b, _0);
@@ -371,10 +383,16 @@ PHP_METHOD(Test_Flow, testWhile4) {
 	int a, _0;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
-		while (zend_is_true(&b)) {
+		while (1) {
+			if (!zend_is_true(&b)) {
+				break;
+			}
 			_0 = zephir_get_numberval(&b) - 1;
 			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_LONG(&b, _0);
@@ -391,7 +409,10 @@ PHP_METHOD(Test_Flow, testWhile5) {
 	int a;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a--;
 	}
 	RETURN_LONG(a);
@@ -403,7 +424,10 @@ PHP_METHOD(Test_Flow, testWhile6) {
 	int a;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a--;
 	}
 	RETURN_LONG(a);
@@ -415,7 +439,10 @@ PHP_METHOD(Test_Flow, testWhile7) {
 	double a;
 
 	a = (double) (5);
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a--;
 	}
 	RETURN_DOUBLE(a);
@@ -427,7 +454,10 @@ PHP_METHOD(Test_Flow, testWhile8) {
 	double a;
 
 	a = (double) (5);
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		a--;
 	}
 	RETURN_DOUBLE(a);
@@ -441,10 +471,16 @@ PHP_METHOD(Test_Flow, testWhile9) {
 	int a;
 
 	a = 5;
-	while (a) {
+	while (1) {
+		if (!a) {
+			break;
+		}
 		ZEPHIR_SINIT_NVAR(b);
 		ZVAL_LONG(&b, 5);
-		while (zend_is_true(&b)) {
+		while (1) {
+			if (!zend_is_true(&b)) {
+				break;
+			}
 			zephir_decrement(&b);
 		}
 		a--;
