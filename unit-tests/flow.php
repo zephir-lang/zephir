@@ -34,4 +34,9 @@ assert($t->testFor4() === 55);
 assert($t->testFor5() === 55);
 assert($t->testFor6() === 55);
 assert($t->testFor7() === 55);
+assert($t->testFor8() === 55);
+assert($t->testFor9() === 55);
+assert($t->testFor10() === 55);
+assert($t->testFor11() === 'abcdefghijklmnopqrstuvwxyz');
+
 

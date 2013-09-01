@@ -337,6 +337,13 @@ class Variable
 		return $this->_defaultInitValue;
 	}
 
+	public function separate(CompilationContext $compilationContext)
+	{
+		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+			$compilationContext->codePrinter->output('ZEPHIR_SEPARATE(' . $this->getName() . ');');
+		}
+	}
+
 	/**
 	 * Initializes a variant variable
 	 *

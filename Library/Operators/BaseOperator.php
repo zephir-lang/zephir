@@ -24,6 +24,8 @@ class BaseOperator
 
 	protected $_readOnly = false;
 
+	protected $_literalOnly = true;
+
 	protected $_expectingVariable;
 
 	/**
@@ -56,14 +58,22 @@ class BaseOperator
 					$symbolVariable->initVariant($compilationContext);
 				} else {
 					if (!$this->_readOnly) {
-						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						if (!$this->_literalOnly) {
+							$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						} else {
+							$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+						}
 					} else {
 						$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					}
 				}
 			} else {
 				if (!$this->_readOnly) {
-					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					if (!$this->_literalOnly) {
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					} else {
+						$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+					}
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 				}

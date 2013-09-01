@@ -791,7 +791,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 		ZEPHIR_INIT_NVAR(a);
 		ZVAL_LONG(a, _1);
 
-		ZEPHIR_INIT_NVAR(_2);
+		ZEPHIR_INIT_LNVAR(_2);
 		zephir_add_function(_2, b, a TSRMLS_CC);
 		ZEPHIR_CPY_WRT(b, _2);
 
@@ -867,7 +867,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 		ZEPHIR_INIT_NVAR(a);
 		ZVAL_LONG(a, _1);
 
-		ZEPHIR_INIT_NVAR(_2);
+		ZEPHIR_INIT_LNVAR(_2);
 		zephir_add_function(_2, b, a TSRMLS_CC);
 		ZEPHIR_CPY_WRT(b, _2);
 
@@ -994,24 +994,29 @@ PHP_METHOD(Test_Flow, testFor9) {
 PHP_METHOD(Test_Flow, testFor10) {
 
 	zend_bool _0;
-	int a, b, c, d, _1;
+	zval *a = NULL, *b = NULL, *c = NULL, *d = NULL, *_1 = NULL, *_2 = NULL;
 
-	b = 0;
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_NVAR(b);
+	ZVAL_LONG(b, 0);
 
-	c = 1;
+	ZEPHIR_INIT_NVAR(c);
+	ZVAL_LONG(c, 1);
 
-	d = 10;
+	ZEPHIR_INIT_NVAR(d);
+	ZVAL_LONG(d, 10);
 
-	_1 = c;
+	ZEPHIR_CPY_WRT(_1, c);
 
 	_0 = 0;
 	while (1) {
 
 		if (_0) {
 
-			_1++;
+			ZEPHIR_SEPARATE(_1);
+			zephir_increment(_1);
 
-			if (!(_1 <= d)) {
+			if (!(ZEPHIR_LE(_1, d))) {
 				break;
 			}
 
@@ -1019,13 +1024,15 @@ PHP_METHOD(Test_Flow, testFor10) {
 			_0 = 1;
 		}
 
-		a = _1;
+		ZEPHIR_CPY_WRT(a, _1);
 
-		b += a;
+		ZEPHIR_INIT_LNVAR(_2);
+		zephir_add_function(_2, b, a TSRMLS_CC);
+		ZEPHIR_CPY_WRT(b, _2);
 
 	}
 
-	RETURN_LONG(b);
+	RETURN_CCTOR(b);
 
 
 }

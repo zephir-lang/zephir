@@ -26,6 +26,8 @@
 class ArithmeticalBaseOperator extends BaseOperator
 {
 
+	protected $_literalOnly = true;
+
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {

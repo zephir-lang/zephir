@@ -444,7 +444,7 @@ class Flow
 
 	public function testFor10()
 	{
-		int a, b, c, d;
+		var a, b, c, d;
 		let b = 0, c = 1, d = 10;
 		for a in range(c, d) {
 			let b += a;

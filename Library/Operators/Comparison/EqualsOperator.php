@@ -24,4 +24,6 @@ class EqualsOperator extends ComparisonBaseOperator
 
 	protected $_bitOperator = '==';
 
+	protected $_zvalOperator = 'ZEPHIR_IS_EQUAL';
+
 }

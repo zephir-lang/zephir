@@ -24,6 +24,7 @@
  */
 class ComparisonBaseOperator extends BaseOperator
 {
+	protected $_literalOnly = true;
 
 	public function compile($expression, CompilationContext $compilationContext)
 	{
@@ -183,7 +184,7 @@ class ComparisonBaseOperator extends BaseOperator
 										return new CompiledExpression('bool', 'ZEPHIR_IS_LONG(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', 'ZEPHIR_IS_EQUAL(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
 								}

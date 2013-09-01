@@ -949,10 +949,10 @@ class LetStatement
 				break;
 			case 'variable':
 				$compilationContext->headersManager->add('kernel/operators');
-				$symbolVariable->initVariant($compilationContext);
 				if ($symbolVariable->isLocalOnly()) {
 					$codePrinter->output('zephir_increment(&' . $variable . ');');
 				} else {
+					$symbolVariable->separate($compilationContext);
 					$codePrinter->output('zephir_increment(' . $variable . ');');
 				}
 				break;
