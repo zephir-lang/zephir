@@ -175,7 +175,6 @@ class ForStatement
 		$condition = $expr->optimize($conditionExpr, $compilationContext);
 
 		$codePrinter->output('while (1 && (' . $condition . ')) {');
-
 		$codePrinter->increaseLevel();
 
 		$codePrinter->output('if (' . $flagVariable->getName() . ') {');
