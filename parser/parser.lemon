@@ -1103,6 +1103,26 @@ xx_parameter_type(R) ::= TYPE_INTEGER . {
 	R = xx_ret_type(XX_TYPE_INTEGER);
 }
 
+xx_parameter_type(R) ::= TYPE_UINTEGER . {
+	R = xx_ret_type(XX_TYPE_UINTEGER);
+}
+
+xx_parameter_type(R) ::= TYPE_LONG . {
+	R = xx_ret_type(XX_TYPE_LONG);
+}
+
+xx_parameter_type(R) ::= TYPE_ULONG . {
+	R = xx_ret_type(XX_TYPE_ULONG);
+}
+
+xx_parameter_type(R) ::= TYPE_CHAR . {
+	R = xx_ret_type(XX_TYPE_CHAR);
+}
+
+xx_parameter_type(R) ::= TYPE_UCHAR . {
+	R = xx_ret_type(XX_TYPE_UCHAR);
+}
+
 xx_parameter_type(R) ::= TYPE_DOUBLE . {
 	R = xx_ret_type(XX_TYPE_DOUBLE);
 }

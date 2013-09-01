@@ -35,7 +35,7 @@ class ForStatement
 	 * Compiles a for statement that use a 'range' as expression
 	 *
 	 * @param array $exprRaw
-	 * @param CompilationContext $compilationContext
+	 * @param \CompilationContext $compilationContext
 	 * @return boolan
 	 */
 	public function compileRange($exprRaw, $compilationContext)
@@ -66,6 +66,20 @@ class ForStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
+		/**
+		 * Initialize 'key' variable
+		 */
+		if (isset($this->_statement['key'])) {
+
+			/**
+			 * This variable is used to check if the loop is in its first iteration
+			 */
+			$keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
+		}
+
+		/**
+		 * This variable is used to check if the loop is in its first iteration
+		 */
 		$flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
 
 		if ($parameters[0]->getType() != 'variable') {
@@ -130,7 +144,12 @@ class ForStatement
 
 		$statement->compile($compilationContext);
 
-
+		/**
+		 * Initialize 'key' variable
+		 */
+		if (isset($this->_statement['key'])) {
+			$codePrinter->output($keyVariable->getName() . ' = 0;');
+		}
 		$codePrinter->output($flagVariable->getName() . ' = 0;');
 		$codePrinter->output('while (1) {');
 
@@ -140,7 +159,6 @@ class ForStatement
 		$compilationContext->insideCycle++;
 
 		$codePrinter->increaseLevel();
-		$codePrinter->outputBlankLine();
 
 		if ($this->_statement['reverse']) {
 			$conditionExpr = array(
@@ -163,45 +181,126 @@ class ForStatement
 
 		$codePrinter->increaseLevel();
 
+		if (isset($this->_statement['key'])) {
+			$codePrinter->output($keyVariable->getName() . '++;');
+		}
+
 		if ($this->_statement['reverse']) {
-			$statement = new LetStatement(array(
-				'type' => 'let',
-				'assignments' => array(
-					array(
-						'assign-type' => 'decr',
-						'variable' => $tempVariable->getName(),
-						'file' => $this->_statement['file'],
-						'line' => $this->_statement['line'],
-						'char' => $this->_statement['char']
+			if (!isset($parameters[2])) {
+				$statement = new LetStatement(array(
+					'type' => 'let',
+					'assignments' => array(
+						array(
+							'assign-type' => 'decr',
+							'variable' => $tempVariable->getName(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						)
 					)
-				)
-			));
+				));
+			} else {
+				$statement = new LetStatement(array(
+					'type' => 'let',
+					'assignments' => array(
+						array(
+							'assign-type' => 'variable',
+							'operator' => 'sub-assign',
+							'variable' => $tempVariable->getName(),
+							'expr' => array(
+								'type' => $parameters[2]->getType(),
+								'value' => $parameters[2]->getCode(),
+								'file' => $this->_statement['file'],
+								'line' => $this->_statement['line'],
+								'char' => $this->_statement['char']
+							),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						)
+					)
+				));
+			}
 		} else {
-			$statement = new LetStatement(array(
-				'type' => 'let',
-				'assignments' => array(
-					array(
-						'assign-type' => 'incr',
-						'variable' => $tempVariable->getName(),
-						'file' => $this->_statement['file'],
-						'line' => $this->_statement['line'],
-						'char' => $this->_statement['char']
+			if (!isset($parameters[2])) {
+				$statement = new LetStatement(array(
+					'type' => 'let',
+					'assignments' => array(
+						array(
+							'assign-type' => 'incr',
+							'variable' => $tempVariable->getName(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						)
 					)
-				)
-			));
+				));
+			} else {
+				$statement = new LetStatement(array(
+					'type' => 'let',
+					'assignments' => array(
+						array(
+							'assign-type' => 'variable',
+							'operator' => 'add-assign',
+							'variable' => $tempVariable->getName(),
+							'expr' => array(
+								'type' => $parameters[2]->getType(),
+								'value' => $parameters[2]->getCode(),
+								'file' => $this->_statement['file'],
+								'line' => $this->_statement['line'],
+								'char' => $this->_statement['char']
+							),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						)
+					)
+				));
+			}
 		}
 		$statement->compile($compilationContext);
 
 		$codePrinter->output('if (!(' . $condition . ')) {');
 		$codePrinter->output("\t" . "break;");
 		$codePrinter->output('}');
-		$codePrinter->outputBlankLine();
 
 		$codePrinter->decreaseLevel();
 
 		$codePrinter->output('} else {');
 		$codePrinter->output("\t" . $flagVariable->getName() . ' = 1;');
 		$codePrinter->output('}');
+
+		/**
+		 * Initialize 'key' variable
+		 */
+		if (isset($this->_statement['key'])) {
+
+			/**
+			 * Create an implicit 'let' operation, @TODO use a builder
+			 */
+			$statement = new LetStatement(array(
+				'type' => 'let',
+				'assignments' => array(
+					array(
+						'assign-type' => 'variable',
+						'variable' => $this->_statement['key'],
+						'operator' => 'assign',
+						'expr' => array(
+							'type' => 'variable',
+							'value' => $keyVariable->getName(),
+							'file' => $this->_statement['file'],
+							'line' => $this->_statement['line'],
+							'char' => $this->_statement['char']
+						),
+						'file' => $this->_statement['file'],
+						'line' => $this->_statement['line'],
+						'char' => $this->_statement['char']
+					)
+				)
+			));
+
+			$statement->compile($compilationContext);
+		}
 
 		/**
 		 * Initialize 'value' variable

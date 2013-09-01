@@ -808,6 +808,15 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+			case 'char':
+				switch ($resolved->getType()) {
+					case 'variable':
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						return new CompiledExpression('char', '(char) zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+					default:
+						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+				}
+				break;
 			default:
 				throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 		}

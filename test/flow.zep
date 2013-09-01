@@ -492,7 +492,97 @@ class Flow
 		return b;
 	}
 
+	public function testFor15(int c, int d)
+	{
+		int a; int b;
+		let b = 0;
+		for a in reverse range(c, d) {
+			let b += a;
+		}
+		return b;
+	}
+
+	public function testFor16()
+	{
+		var a, b, c;
+		let c = [];
+		for a, b in range(1, 10) {
+			let c[a] = b;
+		}
+		return c;
+	}
+
+	public function testFor17()
+	{
+		var a, b, c;
+		let c = [];
+		for a, b in reverse range(1, 10) {
+			let c[a] = b;
+		}
+		return c;
+	}
+
+	public function testFor18()
+	{
+		int a, b; var c;
+		let c = [];
+		for a, b in range(1, 10) {
+			let c[a] = b;
+		}
+		return c;
+	}
+
+	public function testFor19()
+	{
+		var a, b;
+		let b = 0;
+		for a in range(1, 10, 2) {
+			let b += a;
+		}
+		return b;
+	}
+
 	public function testFor20()
+	{
+		var a, b;
+		let b = 0;
+		for a in range(1, 10, 2) {
+			let b += a;
+		}
+		return b;
+	}
+
+	public function testFor21()
+	{
+		var a, b;
+		let b = 0;
+		for a in range(10, 1, -2) {
+			let b += a;
+		}
+		return b;
+	}
+
+	public function testFor22()
+	{
+		var a, b;
+		let b = 0;
+		for a in reverse range(10, 1, 2) {
+			let b += a;
+		}
+		return b;
+	}
+
+	public function testFor23()
+	{
+		var a; string b;
+		let b = "";
+		for a in reverse range('a', 'z', 2) {
+			let b .= (char) a;
+		}
+		return b;
+	}
+
+	public function testFor30()
 	{
 		var a; string b; int v;
 		let a = [], b = "hello";
@@ -502,7 +592,7 @@ class Flow
 		return a;
 	}
 
-	public function testFor21()
+	public function testFor31()
 	{
 		var a; string b; int k, v;
 		let a = [], b = "hello";

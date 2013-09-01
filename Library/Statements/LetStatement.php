@@ -398,6 +398,23 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 						}
 						break;
+					case 'char':
+					case 'uchar':
+						switch ($statement['operator']) {
+							case 'assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_assign_char(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+								break;
+							case 'concat-assign':
+								$symbolVariable->setMustInitNull(true);
+								$compilationContext->headersManager->add('kernel/string_type');
+								$codePrinter->output('zephir_str_append_char(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+						}
+						break;
 					case 'schar':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -467,6 +484,22 @@ class LetStatement
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+								}
+								break;
+							case 'variable':
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_assign_long(' . $variable . ', zephir_get_intval(' . $itemVariable->getName() . '));');
+										break;
+									case 'concat-assign':
+										$symbolVariable->setMustInitNull(true);
+										$compilationContext->headersManager->add('kernel/string_type');
+										$codePrinter->output('zephir_str_append_long(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
 							default:
@@ -673,6 +706,7 @@ class LetStatement
 							case 'ulong':
 							case 'char':
 							case 'uchar':
+							case 'schar':
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
@@ -719,14 +753,17 @@ class LetStatement
 									case 'assign':
 										if ($itemVariable->getName() != $variable) {
 											$symbolVariable->setMustInitNull(true);
+											$compilationContext->symbolTable->mustGrownStack(true);
 											$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 										}
 										break;
 									case 'add-assign':
+										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'sub-assign':
+										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
