@@ -979,14 +979,17 @@ class LetStatement
 			case 'long':
 			case 'ulong':
 			case 'double':
+			case 'char':
+			case 'uchar':
+			case 'schar':
 				$codePrinter->output($variable . '--;');
 				break;
 			case 'variable':
 				$compilationContext->headersManager->add('kernel/operators');
-				$symbolVariable->initVariant($compilationContext);
 				if ($symbolVariable->isLocalOnly()) {
 					$codePrinter->output('zephir_decrement(&' . $variable . ');');
 				} else {
+					$symbolVariable->separate($compilationContext);
 					$codePrinter->output('zephir_decrement(' . $variable . ');');
 				}
 				break;

@@ -38,5 +38,8 @@ assert($t->testFor8() === 55);
 assert($t->testFor9() === 55);
 assert($t->testFor10() === 55);
 assert($t->testFor11() === 'abcdefghijklmnopqrstuvwxyz');
+assert($t->testFor12() === 'zyxwvutsrqponmlkjihgfedcba');
+assert($t->testFor13() === '0123456789');
+assert($t->testFor14() === '9876543210');
 
 

@@ -462,6 +462,36 @@ class Flow
 		return b;
 	}
 
+	public function testFor12()
+	{
+		char a; string b;
+		let b = "";
+		for a in reverse range('a', 'z') {
+			let b .= a;
+		}
+		return b;
+	}
+
+	public function testFor13()
+	{
+		char a; string b;
+		let b = "";
+		for a in range('0', '9') {
+			let b .= a;
+		}
+		return b;
+	}
+
+	public function testFor14()
+	{
+		char a; string b;
+		let b = "";
+		for a in reverse range('0', '9') {
+			let b .= a;
+		}
+		return b;
+	}
+
 	public function testFor20()
 	{
 		var a; string b; int v;

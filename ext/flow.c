@@ -615,7 +615,6 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 		while (zend_is_true(&b)) {
 
-			ZEPHIR_SINIT_NVAR(b);
 			zephir_decrement(&b);
 
 		}
@@ -1056,6 +1055,117 @@ PHP_METHOD(Test_Flow, testFor11) {
 			_1++;
 
 			if (!(_1 <= 'z')) {
+				break;
+			}
+
+		} else {
+			_0 = 1;
+		}
+
+		a = _1;
+
+		zephir_str_append_char(b, a);
+
+	}
+
+	RETURN_STRING(b->str, 1);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor12) {
+
+	char _1;
+	zend_bool _0;
+	zephir_str *b = NULL;
+	char a;
+
+	zephir_str_assign(b, "", sizeof("")-1);
+
+	_1 = 'z';
+
+	_0 = 0;
+	while (1) {
+
+		if (_0) {
+
+			_1--;
+
+			if (!(_1 >= 'a')) {
+				break;
+			}
+
+		} else {
+			_0 = 1;
+		}
+
+		a = _1;
+
+		zephir_str_append_char(b, a);
+
+	}
+
+	RETURN_STRING(b->str, 1);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor13) {
+
+	char _1;
+	zend_bool _0;
+	zephir_str *b = NULL;
+	char a;
+
+	zephir_str_assign(b, "", sizeof("")-1);
+
+	_1 = '0';
+
+	_0 = 0;
+	while (1) {
+
+		if (_0) {
+
+			_1++;
+
+			if (!(_1 <= '9')) {
+				break;
+			}
+
+		} else {
+			_0 = 1;
+		}
+
+		a = _1;
+
+		zephir_str_append_char(b, a);
+
+	}
+
+	RETURN_STRING(b->str, 1);
+
+
+}
+
+PHP_METHOD(Test_Flow, testFor14) {
+
+	char _1;
+	zend_bool _0;
+	zephir_str *b = NULL;
+	char a;
+
+	zephir_str_assign(b, "", sizeof("")-1);
+
+	_1 = '9';
+
+	_0 = 0;
+	while (1) {
+
+		if (_0) {
+
+			_1--;
+
+			if (!(_1 >= '0')) {
 				break;
 			}
 
