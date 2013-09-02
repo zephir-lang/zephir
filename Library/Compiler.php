@@ -83,6 +83,17 @@ class Compiler
 	}
 
 	/**
+	 * Allows to check if a class is part of PHP
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isInternalClass($className)
+	{
+		return class_exists($className, false);
+	}
+
+	/**
 	 * Returns class the class definition from a given class name
 	 *
 	 * @param string $className
@@ -98,6 +109,22 @@ class Compiler
 		return false;
 	}
 
+	/**
+	 * Returns class the class definition from a given class name
+	 *
+	 * @param string $className
+	 * @return ClassDefinition
+	 */
+	public function getInternalClassDefinition($className)
+	{
+		return new ReflectionClass($className);
+	}
+
+	/**
+	 * Copies the base kernel to the extension destination
+	 *
+	 * @param string $path
+	 */
 	protected function _copyBaseKernel($path)
 	{
 		/**

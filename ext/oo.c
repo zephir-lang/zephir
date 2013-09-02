@@ -58,7 +58,6 @@ PHP_METHOD(Test_Oo, testInstance3) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_oonoconstruct_ce);
-	zephir_call_method_noret(o, "__construct");
 	RETURN_CCTOR(o);
 
 }

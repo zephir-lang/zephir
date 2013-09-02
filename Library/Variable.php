@@ -17,7 +17,6 @@
  +----------------------------------------------------------------------+
 */
 
-
 /**
  * Variable
  *
@@ -29,6 +28,11 @@ class Variable
 	 * Variable's type
 	 */
 	protected $_type;
+
+	/**
+	 * Current dynamic type of the variable
+	 */
+	protected $_dynamicType = 'unknown';
 
 	/**
 	 * Variable's name
@@ -76,6 +80,8 @@ class Variable
 
 	protected $_defaultInitValue;
 
+	protected $_classType;
+
 	/**
 	 * @param string $type
 	 * @param string $name
@@ -89,6 +95,8 @@ class Variable
 	}
 
 	/**
+	 * Returns the type of variable
+	 *
 	 * @return string
 	 */
 	public function getType()
@@ -219,6 +227,46 @@ class Variable
 	}
 
 	/**
+	 * Sets the PHP class related to variable
+	 *
+	 * @param string $classType
+	 */
+	public function setClassType($classType)
+	{
+		$this->_classType = $classType;
+	}
+
+	/**
+	 * Returns the PHP class associated to the variable
+	 *
+	 * @return string
+	 */
+	public function getClassType()
+	{
+		return $this->_classType;
+	}
+
+	/**
+	 * Sets the current dynamic type in a polimorphic variable
+	 *
+	 * @param string $type
+	 */
+	public function setDynamicType($type)
+	{
+		$this->_dynamicType = $type;
+	}
+
+	/**
+	 * Returns the current dynamic type in a polimorphic variable
+	 *
+	 * @return string
+	 */
+	public function getDynamicType()
+	{
+		return $this->_dynamicType;
+	}
+
+	/**
 	 * Increase the number of uses a variable may have
 	 */
 	public function increaseUses()
@@ -337,6 +385,11 @@ class Variable
 		return $this->_defaultInitValue;
 	}
 
+	/**
+	 * Separates variables before being updated
+	 *
+	 * @param \CompilationContext $compilationContext
+	 */
 	public function separate(CompilationContext $compilationContext)
 	{
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {

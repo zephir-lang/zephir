@@ -70,6 +70,26 @@ class MethodCall extends Call
 			if (!$classDefinition->hasMethod($methodName)) {
 				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
 			}
+		} else {
+			if ($variableVariable->getDynamicType() == 'object') {
+				$classType = $variableVariable->getClassType();
+				$compiler = $compilationContext->compiler;
+				if ($compiler->isClass($classType)) {
+					$classDefinition = $compiler->getClassDefinition($classType);
+					if (!$classDefinition->hasMethod($methodName)) {
+						throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
+					}
+				} else {
+					if ($compiler->isInternalClass($classType)) {
+						$classDefinition = $compiler->getInternalClassDefinition($classType);
+						if (!$classDefinition->hasMethod($methodName)) {
+							throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
+						}
+					} else {
+						$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class");
+					}
+				}
+			}
 		}
 
 		/**

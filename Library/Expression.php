@@ -471,20 +471,26 @@ class Expression
 		 */
 		if (strtolower($newExpr['class']) == 'stdclass') {
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
+			$symbolVariable->setClassType('stdclass');
 		} else {
+			/**
+			 * Classes inside the same extension
+			 */
 			if ($compilationContext->compiler->isClass($newExpr['class'])) {
 				$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
+				$symbolVariable->setClassType($newExpr['class']);
 			} else {
-				if (class_exists($newExpr['class'])) {
-
-					$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-
-					$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $newExpr['class'] . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
-					$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
-				} else {
-					throw new CompilerException("Class " . $newExpr['class'] . " does not exist", $expression);
+				/**
+				 * Classes inside the same extension
+				 */
+				if (!class_exists($newExpr['class'], false)) {
+					$compilationContext->logger->warning('Class "' . $newExpr['class'] . '" does not exist at compile time ', "nonexistant-class");
 				}
+				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $newExpr['class'] . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
+				$symbolVariable->setClassType($newExpr['class']);
 			}
 		}
 
@@ -497,6 +503,8 @@ class Expression
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
 
+		$symbolVariable->setDynamicType('object');
+
 		/**
 		 * Mark variable initialized
 		 */
@@ -508,15 +516,23 @@ class Expression
 		 * For classes in the same extension we check if the class does implement a constructor
 		 * For external classes we always assume the class does implement a constructor
 		 */
-		$callConstructor = true;
+		$callConstructor = false;
 		if ($compilationContext->compiler->isClass($newExpr['class'])) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
 			if ($classDefinition->hasMethod("__construct")) {
 				$callConstructor = true;
 			}
+		} else {
+			if ($compilationContext->compiler->isInternalClass($newExpr['class'])) {
+				$classDefinition = $compilationContext->compiler->getInternalClassDefinition($newExpr['class']);
+				if ($classDefinition->hasMethod("__construct")) {
+					$callConstructor = true;
+				}
+			}
 		}
 
 		if ($callConstructor) {
+
 			if (isset($newExpr['parameters'])) {
 				$callExpr = new Expression(array(
 					'variable' => $symbolVariable->getRealName(),

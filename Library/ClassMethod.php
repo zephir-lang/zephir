@@ -272,7 +272,6 @@ class ClassMethod
 			foreach ($this->_parameters->getParameters() as $parameter) {
 
 				$symbolParam = null;
-
 				if (isset($parameter['data-type'])) {
 					if ($parameter['data-type'] == 'variable') {
 						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
@@ -330,6 +329,14 @@ class ClassMethod
 				 * Assuming they're initialized
 				 */
 				$symbol->setIsInitialized(true);
+
+				/**
+				 * Variables witth class/type must be objects across the execution
+				 */
+				if (isset($parameter['cast'])) {
+					$symbol->setDynamicType('object');
+					$symbol->setClassType($parameter['cast']['value']);
+				}
 			}
 		}
 
