@@ -302,6 +302,13 @@ class FunctionCall extends Call
 			}
 		}
 
+		/**
+		 * We can mark temporary variables generated as idle
+		 */
+		foreach ($this->getTemporalVariables() as $tempVariable) {
+			$tempVariable->setIdle(true);
+		}
+
 		if ($this->isExpectingReturn()) {
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}

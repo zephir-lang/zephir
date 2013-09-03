@@ -38,6 +38,8 @@ class Call
 
 	protected $_resolvedParams;
 
+	protected $_temporalVariables = array();
+
 	/**
 	 * Processes the symbol variable that will be used to return
 	 * the result of the symbol call
@@ -183,21 +185,25 @@ class Call
 				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'double':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_DOUBLE(' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'bool':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 1);');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'variable':
@@ -210,11 +216,13 @@ class Call
 							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'string':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_STRINGL(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 1);');
 							$params[] = $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
@@ -256,21 +264,25 @@ class Call
 				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'double':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'bool':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
+					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'variable':
@@ -283,11 +295,13 @@ class Call
 							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'string':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_STRINGL(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 0);');
 							$params[] = '&' . $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
@@ -302,6 +316,16 @@ class Call
 		}
 
 		return $params;
+	}
+
+	/**
+	 * Returns the temporal variables generated during the parameter resolving
+	 *
+	 * @return \Variable[]
+	 */
+	public function getTemporalVariables()
+	{
+		return $this->_temporalVariables;
 	}
 
 }

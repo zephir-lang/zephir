@@ -188,11 +188,11 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _17;
+	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _12;
 	zend_bool notValid;
 	char ch;
-	zval *pattern_param = NULL, *tmp = NULL, *matches, _0 = zval_used_for_init, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, _8 = zval_used_for_init, _9 = zval_used_for_init, _10 = zval_used_for_init, *_11 = NULL, _13 = zval_used_for_init, _14 = zval_used_for_init, *_15 = NULL;
-	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_12 = NULL, *_16 = NULL;
+	zval *pattern_param = NULL, *tmp = NULL, *matches, _0 = zval_used_for_init, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, *_8 = NULL, *_10 = NULL;
+	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_9 = NULL, *_11 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -248,24 +248,24 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								}
 								if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '-' || ch == '_' || ch == ':') {
 									if (ch == ':') {
-										ZEPHIR_SINIT_NVAR(_8);
-										ZVAL_STRINGL(&_8, item->str, item->len, 0);
-										ZEPHIR_SINIT_NVAR(_9);
-										ZVAL_LONG(&_9, 0);
-										ZEPHIR_SINIT_NVAR(_10);
-										ZVAL_LONG(&_10, cursorVar);
-										ZEPHIR_INIT_NVAR(_11);
-										zephir_call_func_p3(_11, "substr", &_8, &_9, &_10);
-										zephir_get_strval(_11, &_12);
-										zephir_str_assign(variable, _12->str, _12->len);
-										ZEPHIR_SINIT_NVAR(_13);
-										ZVAL_STRINGL(&_13, item->str, item->len, 0);
-										ZEPHIR_SINIT_NVAR(_14);
-										ZVAL_LONG(&_14, cursorVar + 1);
-										ZEPHIR_INIT_NVAR(_15);
-										zephir_call_func_p2(_15, "substr", &_13, &_14);
-										zephir_get_strval(_15, &_16);
-										zephir_str_assign(regexp, _16->str, _16->len);
+										ZEPHIR_SINIT_NVAR(_2);
+										ZVAL_STRINGL(&_2, item->str, item->len, 0);
+										ZEPHIR_SINIT_NVAR(_3);
+										ZVAL_LONG(&_3, 0);
+										ZEPHIR_SINIT_NVAR(_4);
+										ZVAL_LONG(&_4, cursorVar);
+										ZEPHIR_INIT_NVAR(_8);
+										zephir_call_func_p3(_8, "substr", &_2, &_3, &_4);
+										zephir_get_strval(_8, &_9);
+										zephir_str_assign(variable, _9->str, _9->len);
+										ZEPHIR_SINIT_NVAR(_2);
+										ZVAL_STRINGL(&_2, item->str, item->len, 0);
+										ZEPHIR_SINIT_NVAR(_3);
+										ZVAL_LONG(&_3, cursorVar + 1);
+										ZEPHIR_INIT_NVAR(_10);
+										zephir_call_func_p2(_10, "substr", &_2, &_3);
+										zephir_get_strval(_10, &_11);
+										zephir_str_assign(regexp, _11->str, _11->len);
 										break;
 									}
 								} else {
@@ -278,8 +278,8 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								ZVAL_LONG(tmp, numberMatches);
 								if ((variable && variable->len) && (regexp && regexp->len)) {
 									foundPattern = 0;
-									for (_17 = 0; _17 < regexp->len; _17++) {
-										ch = regexp->str[_17]; 
+									for (_12 = 0; _12 < regexp->len; _12++) {
+										ch = regexp->str[_12]; 
 										if (ch == '\0') {
 											break;
 										}
