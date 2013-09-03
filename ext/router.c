@@ -436,9 +436,9 @@ PHP_METHOD(Test_Router, handle) {
 	ZVAL_NULL(matches);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_BOOL(_1, 0);
-	zephir_update_property_zval(this_ptr, SL("_wasMatched"), _1 TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_wasMatched"), _1 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_2);
-	zephir_update_property_zval(this_ptr, SL("_matchedRoute"), _2 TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("_matchedRoute"), _2 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(_3);
 	zephir_read_property_this(&_3, this_ptr, SL("_routes"), PH_NOISY_CC);
 	zephir_is_iterable(_3, &_5, &_4, 0, 1);
@@ -567,11 +567,11 @@ PHP_METHOD(Test_Router, handle) {
 	if (zend_is_true(routeFound)) {
 		ZEPHIR_INIT_NVAR(_7);
 		ZVAL_BOOL(_7, 1);
-		zephir_update_property_zval(this_ptr, SL("_wasMatched"), _7 TSRMLS_CC);
+		zephir_update_property_this(this_ptr, SL("_wasMatched"), _7 TSRMLS_CC);
 	} else {
 		ZEPHIR_INIT_VAR(_12);
 		ZVAL_BOOL(_12, 0);
-		zephir_update_property_zval(this_ptr, SL("_wasMatched"), _12 TSRMLS_CC);
+		zephir_update_property_this(this_ptr, SL("_wasMatched"), _12 TSRMLS_CC);
 	}
 	if (!(zend_is_true(routeFound))) {
 		ZEPHIR_OBS_VAR(notFoundPaths);

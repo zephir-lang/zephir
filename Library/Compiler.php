@@ -392,9 +392,12 @@ class Compiler
 				case 'init':
 					$c->init();
 					break;
+				case 'compile-only':
+					$c->compile();
+					break;
 				case 'compile':
 					$c->compile();
-					//$c->install();
+					$c->install();
 					break;
 				default:
 					throw new Exception('Unrecognized action "' . $action . '"');

@@ -689,7 +689,7 @@ PHP_METHOD(Test_Router_Route, convert) {
 
 
 
-	zephir_update_property_array_append(this_ptr, SL("_converters"), converter TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("_converters"), name, converter TSRMLS_CC);
 	RETURN_THISW();
 
 }

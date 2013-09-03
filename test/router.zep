@@ -77,7 +77,7 @@ class Router
 	 */
 	public function __construct(boolean defaultRoutes=true)
 	{
-		var routes, paths, paramsPattern, params;
+		var routes;
 
 		let routes = [];
 		if defaultRoutes === true {
@@ -299,7 +299,7 @@ class Router
 	public function handle(uri=null)
 	{
 		var realUri, request, currentHostName, routeFound, parts,
-			params, matches, routes, notFoundPaths,
+			params, matches, notFoundPaths,
 			vnamespace, module,  controller, action, paramsStr, strParams,
 			paramsMerge, route, methods, dependencyInjector,
 			hostname, regexHostName, matched, pattern, handledUri, beforeMatch,

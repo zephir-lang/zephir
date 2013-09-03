@@ -268,7 +268,7 @@ class Route
 	{
 		var moduleName, controllerName, actionName,
 			parts, routePaths, realClassName, namespaceName,
-			pcrePattern, compiledPattern, reversed, extracted;
+			pcrePattern, compiledPattern, extracted;
 
 		if typeof pattern != "string" {
 			throw new Test\Router\Exception("The pattern must be string");
