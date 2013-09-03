@@ -201,7 +201,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 
 	zend_bool _4, _9, _12;
 	zend_class_entry *_0, *_2, *_3;
-	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_7 = NULL, *_8 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL, *_19 = NULL, _20 = zval_used_for_init;
+	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_7 = NULL, *_8 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL, _18 = zval_used_for_init;
 	int n, i, vv = 0, vBv = 0, _5, _6, _10, _11, _13, _14;
 
 	ZEPHIR_MM_GROW();
@@ -309,22 +309,22 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZEPHIR_INIT_LNVAR(_16);
 			mul_function(_16, _7, _8 TSRMLS_CC);
 			vBv += zephir_get_numberval(_16);
+			ZEPHIR_INIT_NVAR(_7);
+			ZEPHIR_INIT_NVAR(_8);
+			ZVAL_LONG(_8, i);
+			zephir_call_method_p1(_7, v, "offsetget", _8);
+			ZEPHIR_INIT_NVAR(_8);
 			ZEPHIR_INIT_NVAR(_15);
-			ZEPHIR_INIT_NVAR(_17);
-			ZVAL_LONG(_17, i);
-			zephir_call_method_p1(_15, v, "offsetget", _17);
-			ZEPHIR_INIT_NVAR(_17);
-			ZEPHIR_INIT_NVAR(_18);
-			ZVAL_LONG(_18, i);
-			zephir_call_method_p1(_17, v, "offsetget", _18);
-			ZEPHIR_INIT_LNVAR(_19);
-			mul_function(_19, _15, _17 TSRMLS_CC);
-			vv += zephir_get_numberval(_19);
+			ZVAL_LONG(_15, i);
+			zephir_call_method_p1(_8, v, "offsetget", _15);
+			ZEPHIR_INIT_LNVAR(_17);
+			mul_function(_17, _7, _8 TSRMLS_CC);
+			vv += zephir_get_numberval(_17);
 		}
 	}
-	ZEPHIR_SINIT_NVAR(_20);
-	ZVAL_LONG(&_20, vBv / vv);
-	zephir_call_func_p1(return_value, "sqrt", &_20);
+	ZEPHIR_SINIT_NVAR(_18);
+	ZVAL_LONG(&_18, vBv / vv);
+	zephir_call_func_p1(return_value, "sqrt", &_18);
 	RETURN_MM();
 
 }

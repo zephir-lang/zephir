@@ -506,7 +506,7 @@ PHP_METHOD(Test_Arithmetic, complex20Sum) {
 
 	double c;
 	zend_bool b;
-	zval a = zval_used_for_init, d = zval_used_for_init, *_0, *_1, *_2;
+	zval a = zval_used_for_init, d = zval_used_for_init, *_0 = NULL, *_1;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_SINIT_VAR(a);
@@ -518,9 +518,9 @@ PHP_METHOD(Test_Arithmetic, complex20Sum) {
 	zephir_add_function(_0, &d, &d TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);
 	zephir_add_function(_1, _0, &d TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_2);
-	zephir_add_function(_2, _1, &d TSRMLS_CC);
-	c = zephir_get_numberval(_2);
+	ZEPHIR_INIT_LNVAR(_0);
+	zephir_add_function(_0, _1, &d TSRMLS_CC);
+	c = zephir_get_numberval(_0);
 	RETURN_MM_DOUBLE(c);
 
 }

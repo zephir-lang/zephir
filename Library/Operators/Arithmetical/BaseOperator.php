@@ -303,6 +303,14 @@ class ArithmeticalBaseOperator extends BaseOperator
 										} else {
 											$compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
 										}
+
+										if ($variableLeft->isTemporal()) {
+											$variableLeft->setIdle(true);
+										}
+										if ($variableRight->isTemporal()) {
+											$variableRight->setIdle(true);
+										}
+
 										return new CompiledExpression('variable', $expected->getName(), $expression);
 
 									default:
