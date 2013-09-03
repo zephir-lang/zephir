@@ -20,6 +20,12 @@
 class MethodCall extends Call
 {
 
+	/**
+	 *
+	 *
+	 * @param array $expr
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 
