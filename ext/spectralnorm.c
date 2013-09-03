@@ -53,7 +53,7 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 PHP_METHOD(Test_SpectralNorm, Au) {
 
 	zend_bool _0, _3;
-	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL;
+	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_9 = NULL;
 	int n, t, i, j, _1, _2, _4, _5;
 
 	ZEPHIR_MM_GROW();
@@ -97,13 +97,13 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, j);
 					zephir_call_method_p2(_6, this_ptr, "ax", _7, _8);
-					ZEPHIR_INIT_NVAR(_9);
-					ZEPHIR_INIT_NVAR(_10);
-					ZVAL_LONG(_10, j);
-					zephir_call_method_p1(_9, u, "offsetge", _10);
-					ZEPHIR_INIT_LNVAR(_11);
-					mul_function(_11, _6, _9 TSRMLS_CC);
-					t += zephir_get_numberval(_11);
+					ZEPHIR_INIT_NVAR(_7);
+					ZEPHIR_INIT_NVAR(_8);
+					ZVAL_LONG(_8, j);
+					zephir_call_method_p1(_7, u, "offsetge", _8);
+					ZEPHIR_INIT_LNVAR(_9);
+					mul_function(_9, _6, _7 TSRMLS_CC);
+					t += zephir_get_numberval(_9);
 				}
 			}
 			ZEPHIR_INIT_NVAR(_6);
@@ -120,7 +120,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 PHP_METHOD(Test_SpectralNorm, Atu) {
 
 	zend_bool _0, _3;
-	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL;
+	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_9 = NULL;
 	int n, t, i, j, _1, _2, _4, _5;
 
 	ZEPHIR_MM_GROW();
@@ -164,13 +164,13 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, i);
 					zephir_call_method_p2(_6, this_ptr, "ax", _7, _8);
-					ZEPHIR_INIT_NVAR(_9);
-					ZEPHIR_INIT_NVAR(_10);
-					ZVAL_LONG(_10, j);
-					zephir_call_method_p1(_9, u, "offsetget", _10);
-					ZEPHIR_INIT_LNVAR(_11);
-					mul_function(_11, _6, _9 TSRMLS_CC);
-					t += zephir_get_numberval(_11);
+					ZEPHIR_INIT_NVAR(_7);
+					ZEPHIR_INIT_NVAR(_8);
+					ZVAL_LONG(_8, j);
+					zephir_call_method_p1(_7, u, "offsetget", _8);
+					ZEPHIR_INIT_LNVAR(_9);
+					mul_function(_9, _6, _7 TSRMLS_CC);
+					t += zephir_get_numberval(_9);
 				}
 			}
 			ZEPHIR_INIT_NVAR(_6);
@@ -199,10 +199,10 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 PHP_METHOD(Test_SpectralNorm, process) {
 
-	zend_bool _7, _16, _19;
-	zend_class_entry *_0, *_2, *_4;
-	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_3 = NULL, *_5 = NULL, *_6 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL, *_22 = NULL, *_23 = NULL, *_24 = NULL, *_25 = NULL, _26 = zval_used_for_init;
-	int n, i, vv = 0, vBv = 0, _8, _9, _17, _18, _20, _21;
+	zend_bool _4, _9, _12;
+	zend_class_entry *_0, *_2, *_3;
+	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_7 = NULL, *_8 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL, *_19 = NULL, _20 = zval_used_for_init;
+	int n, i, vv = 0, vBv = 0, _5, _6, _10, _11, _13, _14;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
@@ -219,112 +219,112 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	ZEPHIR_INIT_NVAR(v);
 	_2 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(v, _2);
-	ZEPHIR_INIT_NVAR(_3);
-	ZVAL_LONG(_3, n);
-	zephir_call_method_p1_noret(v, "__construct", _3);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_LONG(_1, n);
+	zephir_call_method_p1_noret(v, "__construct", _1);
 	ZEPHIR_INIT_NVAR(w);
-	_4 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
-	object_init_ex(w, _4);
-	ZEPHIR_INIT_NVAR(_5);
-	ZVAL_LONG(_5, n);
-	zephir_call_method_p1_noret(w, "__construct", _5);
-	ZEPHIR_INIT_NVAR(_6);
-	ZVAL_LONG(_6, n);
-	zephir_update_property_zval(this_ptr, SL("n"), _6 TSRMLS_CC);
-	_9 = n - 1;
-	_8 = 0;
-	_7 = 0;
-	if (_8 <= _9) {
+	_3 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+	object_init_ex(w, _3);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_LONG(_1, n);
+	zephir_call_method_p1_noret(w, "__construct", _1);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_LONG(_1, n);
+	zephir_update_property_zval(this_ptr, SL("n"), _1 TSRMLS_CC);
+	_6 = n - 1;
+	_5 = 0;
+	_4 = 0;
+	if (_5 <= _6) {
 		while (1) {
-			if (_7) {
-				_8++;
-				if (!(_8 <= _9)) {
+			if (_4) {
+				_5++;
+				if (!(_5 <= _6)) {
 					break;
 				}
 			} else {
-				_7 = 1;
+				_4 = 1;
 			}
-			i = _8;
-			ZEPHIR_INIT_NVAR(_10);
-			ZVAL_LONG(_10, i);
-			ZEPHIR_INIT_NVAR(_11);
-			ZVAL_LONG(_11, 1);
-			zephir_call_method_p2_noret(u, "offsetset", _10, _11);
-			ZEPHIR_INIT_NVAR(_12);
-			ZVAL_LONG(_12, i);
-			ZEPHIR_INIT_NVAR(_13);
-			ZVAL_LONG(_13, 1);
-			zephir_call_method_p2_noret(v, "offsetset", _12, _13);
-			ZEPHIR_INIT_NVAR(_14);
-			ZVAL_LONG(_14, i);
-			ZEPHIR_INIT_NVAR(_15);
-			ZVAL_LONG(_15, 1);
-			zephir_call_method_p2_noret(w, "offsetset", _14, _15);
+			i = _5;
+			ZEPHIR_INIT_NVAR(_7);
+			ZVAL_LONG(_7, i);
+			ZEPHIR_INIT_NVAR(_8);
+			ZVAL_LONG(_8, 1);
+			zephir_call_method_p2_noret(u, "offsetset", _7, _8);
+			ZEPHIR_INIT_NVAR(_7);
+			ZVAL_LONG(_7, i);
+			ZEPHIR_INIT_NVAR(_8);
+			ZVAL_LONG(_8, 1);
+			zephir_call_method_p2_noret(v, "offsetset", _7, _8);
+			ZEPHIR_INIT_NVAR(_7);
+			ZVAL_LONG(_7, i);
+			ZEPHIR_INIT_NVAR(_8);
+			ZVAL_LONG(_8, 1);
+			zephir_call_method_p2_noret(w, "offsetset", _7, _8);
 		}
 	}
-	_18 = 9;
-	_17 = 0;
-	_16 = 0;
-	if (_17 <= _18) {
+	_11 = 9;
+	_10 = 0;
+	_9 = 0;
+	if (_10 <= _11) {
 		while (1) {
-			if (_16) {
-				_17++;
-				if (!(_17 <= _18)) {
+			if (_9) {
+				_10++;
+				if (!(_10 <= _11)) {
 					break;
 				}
 			} else {
-				_16 = 1;
+				_9 = 1;
 			}
-			i = _17;
-			ZEPHIR_INIT_NVAR(_10);
-			ZVAL_LONG(_10, n);
-			zephir_call_method_p4_noret(this_ptr, "atau", _10, u, v, w);
-			ZEPHIR_INIT_NVAR(_11);
-			ZVAL_LONG(_11, n);
-			zephir_call_method_p4_noret(this_ptr, "atau", _11, v, u, w);
+			i = _10;
+			ZEPHIR_INIT_NVAR(_7);
+			ZVAL_LONG(_7, n);
+			zephir_call_method_p4_noret(this_ptr, "atau", _7, u, v, w);
+			ZEPHIR_INIT_NVAR(_7);
+			ZVAL_LONG(_7, n);
+			zephir_call_method_p4_noret(this_ptr, "atau", _7, v, u, w);
 		}
 	}
-	_21 = n - 1;
-	_20 = 0;
-	_19 = 0;
-	if (_20 <= _21) {
+	_14 = n - 1;
+	_13 = 0;
+	_12 = 0;
+	if (_13 <= _14) {
 		while (1) {
-			if (_19) {
-				_20++;
-				if (!(_20 <= _21)) {
+			if (_12) {
+				_13++;
+				if (!(_13 <= _14)) {
 					break;
 				}
 			} else {
-				_19 = 1;
+				_12 = 1;
 			}
-			i = _20;
-			ZEPHIR_INIT_NVAR(_10);
-			ZEPHIR_INIT_NVAR(_11);
-			ZVAL_LONG(_11, i);
-			zephir_call_method_p1(_10, u, "offsetget", _11);
-			ZEPHIR_INIT_NVAR(_12);
-			ZEPHIR_INIT_NVAR(_13);
-			ZVAL_LONG(_13, i);
-			zephir_call_method_p1(_12, v, "offsetget", _13);
-			ZEPHIR_INIT_LNVAR(_22);
-			mul_function(_22, _10, _12 TSRMLS_CC);
-			vBv += zephir_get_numberval(_22);
-			ZEPHIR_INIT_NVAR(_14);
+			i = _13;
+			ZEPHIR_INIT_NVAR(_7);
+			ZEPHIR_INIT_NVAR(_8);
+			ZVAL_LONG(_8, i);
+			zephir_call_method_p1(_7, u, "offsetget", _8);
+			ZEPHIR_INIT_NVAR(_8);
 			ZEPHIR_INIT_NVAR(_15);
 			ZVAL_LONG(_15, i);
-			zephir_call_method_p1(_14, v, "offsetget", _15);
-			ZEPHIR_INIT_NVAR(_23);
-			ZEPHIR_INIT_NVAR(_24);
-			ZVAL_LONG(_24, i);
-			zephir_call_method_p1(_23, v, "offsetget", _24);
-			ZEPHIR_INIT_LNVAR(_25);
-			mul_function(_25, _14, _23 TSRMLS_CC);
-			vv += zephir_get_numberval(_25);
+			zephir_call_method_p1(_8, v, "offsetget", _15);
+			ZEPHIR_INIT_LNVAR(_16);
+			mul_function(_16, _7, _8 TSRMLS_CC);
+			vBv += zephir_get_numberval(_16);
+			ZEPHIR_INIT_NVAR(_15);
+			ZEPHIR_INIT_NVAR(_17);
+			ZVAL_LONG(_17, i);
+			zephir_call_method_p1(_15, v, "offsetget", _17);
+			ZEPHIR_INIT_NVAR(_17);
+			ZEPHIR_INIT_NVAR(_18);
+			ZVAL_LONG(_18, i);
+			zephir_call_method_p1(_17, v, "offsetget", _18);
+			ZEPHIR_INIT_LNVAR(_19);
+			mul_function(_19, _15, _17 TSRMLS_CC);
+			vv += zephir_get_numberval(_19);
 		}
 	}
-	ZEPHIR_SINIT_NVAR(_26);
-	ZVAL_LONG(&_26, vBv / vv);
-	zephir_call_func_p1(return_value, "sqrt", &_26);
+	ZEPHIR_SINIT_NVAR(_20);
+	ZVAL_LONG(&_20, vBv / vv);
+	zephir_call_func_p1(return_value, "sqrt", &_20);
 	RETURN_MM();
 
 }

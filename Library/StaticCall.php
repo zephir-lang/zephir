@@ -97,6 +97,13 @@ class StaticCall extends Call
 			}
 		}
 
+		/**
+		 * We can mark temporary variables generated as idle
+		 */
+		foreach ($this->getTemporalVariables() as $tempVariable) {
+			$tempVariable->setIdle(true);
+		}
+
 		if ($isExpecting) {
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
