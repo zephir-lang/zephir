@@ -13,4 +13,5 @@ sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c
 #sed s/"TOKEN"/"JTOKEN"/g parser.c > xx && mv -f xx parser.c
 #sed s/"YY"/"JJ"/g scanner.c > xx && mv -f xx scanner.c
 #sed s/"yy"/"jj"/g scanner.c > xx && mv -f xx scanner.c
+export CFLAGS="-O2"
 gcc -Wl,-rpath /usr/local/lib -I/usr/local/lib -L/usr/local/lib -L/opt/local/lib -g3 parser.c scanner.c -ljson -ljson-c -o ../bin/zephir-parser

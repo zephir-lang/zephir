@@ -339,6 +339,8 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 
 	if (Z_TYPE_P(defaults) == IS_ARRAY) {
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "Defaults must be an array");
+		return;
 	}
 	ZEPHIR_OBS_VAR(namespaceName);
 	if (zephir_array_isset_string_fetch(&namespaceName, defaults, SS("namespace"))) {
@@ -452,6 +454,8 @@ PHP_METHOD(Test_Router, handle) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if (Z_TYPE_P(dependencyInjector) != IS_OBJECT) {
+					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "A dependency injection container is required to access the 'request' service");
+					return;
 				}
 				ZEPHIR_INIT_NVAR(_7);
 				ZVAL_STRING(_7, "request", 1);
@@ -471,6 +475,8 @@ PHP_METHOD(Test_Router, handle) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if (Z_TYPE_P(dependencyInjector) != IS_OBJECT) {
+					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "A dependency injection container is required to access the 'request' service");
+					return;
 				}
 				ZEPHIR_INIT_NVAR(_7);
 				ZVAL_STRING(_7, "request", 1);
@@ -518,6 +524,8 @@ PHP_METHOD(Test_Router, handle) {
 			zephir_call_method(beforeMatch, route, "getbeforematch");
 			if (Z_TYPE_P(beforeMatch) != IS_NULL) {
 				if (zephir_is_callable(beforeMatch TSRMLS_CC)) {
+					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "Before-Match callback is not callable in matched route");
+					return;
 				}
 			}
 		}
@@ -896,10 +904,14 @@ PHP_METHOD(Test_Router, mount) {
 
 
 	if (Z_TYPE_P(group) != IS_OBJECT) {
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes is not valid");
+		return;
 	}
 	ZEPHIR_INIT_VAR(groupRoutes);
 	zephir_call_method(groupRoutes, group, "getroutes");
 	if (!(zephir_fast_count_int(groupRoutes TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
+		return;
 	}
 	ZEPHIR_INIT_VAR(beforeMatch);
 	zephir_call_method(beforeMatch, group, "getbeforematch");
@@ -954,6 +966,8 @@ PHP_METHOD(Test_Router, notFound) {
 
 	if (Z_TYPE_P(paths) != IS_ARRAY) {
 		if (Z_TYPE_P(paths) != IS_STRING) {
+			ZEPHIR_THROW_EXCEPTION_STRW(test_router_exception_ce, "The not-found paths must be an array or string");
+			return;
 		}
 	}
 	zephir_update_property_this(this_ptr, SL("_notFoundPaths"), paths TSRMLS_CC);
