@@ -9,5 +9,6 @@ php ./unit-tests/mcall.php
 php ./unit-tests/scall.php
 php ./unit-tests/properties.php
 php ./unit-tests/constants.php
+php ./unit-tests/exceptions.php
 #php ./unit-tests/regexdna.php
 php ./unit-tests/fannkuch.php

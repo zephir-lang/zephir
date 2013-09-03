@@ -71,7 +71,7 @@ class ThrowStatement
 			throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
 		}
 
-		$codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ');');
+		$codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
 		$codePrinter->output('return;');
 
 		if ($variableVariable->isTemporal()) {
