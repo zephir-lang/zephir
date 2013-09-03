@@ -615,18 +615,20 @@ PHP_METHOD(Test_Flow, testFor4) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1++;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -641,17 +643,19 @@ PHP_METHOD(Test_Flow, testFor5) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1++;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			b += a;
 		}
-		a = _1;
-		b += a;
 	}
 	RETURN_LONG(b);
 
@@ -669,18 +673,20 @@ PHP_METHOD(Test_Flow, testFor6) {
 	_2 = 10;
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= 1)) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= 1)) {
-				break;
+	if (_1 >= 1) {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= 1)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -695,17 +701,19 @@ PHP_METHOD(Test_Flow, testFor7) {
 	_2 = 10;
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= 1)) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= 1)) {
-				break;
+	if (_1 >= 1) {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= 1)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			b += a;
 		}
-		a = _1;
-		b += a;
 	}
 	RETURN_LONG(b);
 
@@ -722,17 +730,19 @@ PHP_METHOD(Test_Flow, testFor8) {
 	_2 = d;
 	_1 = c;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1++;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			b += a;
 		}
-		a = _1;
-		b += a;
 	}
 	RETURN_LONG(b);
 
@@ -749,17 +759,19 @@ PHP_METHOD(Test_Flow, testFor9) {
 	_2 = d;
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= c)) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= c)) {
-				break;
+	if (_1 >= c) {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= c)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			b += a;
 		}
-		a = _1;
-		b += a;
 	}
 	RETURN_LONG(b);
 
@@ -780,18 +792,20 @@ PHP_METHOD(Test_Flow, testFor10) {
 	ZEPHIR_CPY_WRT(_2, d);
 	ZEPHIR_CPY_WRT(_1, c);
 	_0 = 0;
-	while (1 && (ZEPHIR_LE(_1, _2))) {
-		if (_0) {
-			ZEPHIR_SEPARATE(_1);
-			zephir_increment(_1);
-			if (!(ZEPHIR_LE(_1, _2))) {
-				break;
+	if (ZEPHIR_LE(_1, _2)) {
+		while (1) {
+			if (_0) {
+				ZEPHIR_SEPARATE(_1);
+				zephir_increment(_1);
+				if (!(ZEPHIR_LE(_1, _2))) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_CPY_WRT(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_CPY_WRT(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -807,17 +821,19 @@ PHP_METHOD(Test_Flow, testFor11) {
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1++;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			zephir_str_append_char(b, a);
 		}
-		a = _1;
-		zephir_str_append_char(b, a);
 	}
 	RETURN_STRING(b->str, 1);
 
@@ -833,17 +849,19 @@ PHP_METHOD(Test_Flow, testFor12) {
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= 'a')) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= 'a')) {
-				break;
+	if (_1 >= 'a') {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= 'a')) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			zephir_str_append_char(b, a);
 		}
-		a = _1;
-		zephir_str_append_char(b, a);
 	}
 	RETURN_STRING(b->str, 1);
 
@@ -859,17 +877,19 @@ PHP_METHOD(Test_Flow, testFor13) {
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1++;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			zephir_str_append_char(b, a);
 		}
-		a = _1;
-		zephir_str_append_char(b, a);
 	}
 	RETURN_STRING(b->str, 1);
 
@@ -885,17 +905,19 @@ PHP_METHOD(Test_Flow, testFor14) {
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= '0')) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= '0')) {
-				break;
+	if (_1 >= '0') {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= '0')) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			zephir_str_append_char(b, a);
 		}
-		a = _1;
-		zephir_str_append_char(b, a);
 	}
 	RETURN_STRING(b->str, 1);
 
@@ -917,17 +939,19 @@ PHP_METHOD(Test_Flow, testFor15) {
 	_2 = d;
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= c)) {
-		if (_0) {
-			_1--;
-			if (!(_1 >= c)) {
-				break;
+	if (_1 >= c) {
+		while (1) {
+			if (_0) {
+				_1--;
+				if (!(_1 >= c)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			a = _1;
+			b += a;
 		}
-		a = _1;
-		b += a;
 	}
 	RETURN_LONG(b);
 
@@ -946,21 +970,23 @@ PHP_METHOD(Test_Flow, testFor16) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	while (1 && (_2 <= _3)) {
-		if (_1) {
-			_0++;
-			_2++;
-			if (!(_2 <= _3)) {
-				break;
+	if (_2 <= _3) {
+		while (1) {
+			if (_1) {
+				_0++;
+				_2++;
+				if (!(_2 <= _3)) {
+					break;
+				}
+			} else {
+				_1 = 1;
 			}
-		} else {
-			_1 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _0);
+			ZEPHIR_INIT_NVAR(b);
+			ZVAL_LONG(b, _2);
+			zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _0);
-		ZEPHIR_INIT_NVAR(b);
-		ZVAL_LONG(b, _2);
-		zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 	}
 	RETURN_CCTOR(c);
 
@@ -979,21 +1005,23 @@ PHP_METHOD(Test_Flow, testFor17) {
 	_2 = _3;
 	_0 = 0;
 	_1 = 0;
-	while (1 && (_2 >= 1)) {
-		if (_1) {
-			_0++;
-			_2--;
-			if (!(_2 >= 1)) {
-				break;
+	if (_2 >= 1) {
+		while (1) {
+			if (_1) {
+				_0++;
+				_2--;
+				if (!(_2 >= 1)) {
+					break;
+				}
+			} else {
+				_1 = 1;
 			}
-		} else {
-			_1 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _0);
+			ZEPHIR_INIT_NVAR(b);
+			ZVAL_LONG(b, _2);
+			zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _0);
-		ZEPHIR_INIT_NVAR(b);
-		ZVAL_LONG(b, _2);
-		zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 	}
 	RETURN_CCTOR(c);
 
@@ -1012,21 +1040,23 @@ PHP_METHOD(Test_Flow, testFor18) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	while (1 && (_2 <= _3)) {
-		if (_1) {
-			_0++;
-			_2++;
-			if (!(_2 <= _3)) {
-				break;
+	if (_2 <= _3) {
+		while (1) {
+			if (_1) {
+				_0++;
+				_2++;
+				if (!(_2 <= _3)) {
+					break;
+				}
+			} else {
+				_1 = 1;
 			}
-		} else {
-			_1 = 1;
+			a = _0;
+			b = _2;
+			ZEPHIR_INIT_NVAR(_4);
+			ZVAL_LONG(_4, b);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE);
 		}
-		a = _0;
-		b = _2;
-		ZEPHIR_INIT_NVAR(_4);
-		ZVAL_LONG(_4, b);
-		zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE);
 	}
 	RETURN_CCTOR(c);
 
@@ -1044,18 +1074,20 @@ PHP_METHOD(Test_Flow, testFor19) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1 += 2;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1 += 2;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -1073,18 +1105,20 @@ PHP_METHOD(Test_Flow, testFor20) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1 += 2;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1 += 2;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -1102,18 +1136,20 @@ PHP_METHOD(Test_Flow, testFor21) {
 	_2 = 1;
 	_1 = 10;
 	_0 = 0;
-	while (1 && (_1 <= _2)) {
-		if (_0) {
-			_1 += -2;
-			if (!(_1 <= _2)) {
-				break;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1 += -2;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -1131,18 +1167,20 @@ PHP_METHOD(Test_Flow, testFor22) {
 	_2 = 1;
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= 10)) {
-		if (_0) {
-			_1 -= 2;
-			if (!(_1 >= 10)) {
-				break;
+	if (_1 >= 10) {
+		while (1) {
+			if (_0) {
+				_1 -= 2;
+				if (!(_1 >= 10)) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		ZEPHIR_ADD_ASSIGN(b, a);
 	}
 	RETURN_CCTOR(b);
 
@@ -1160,19 +1198,21 @@ PHP_METHOD(Test_Flow, testFor23) {
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
-	while (1 && (_1 >= 'a')) {
-		if (_0) {
-			_1 -= 2;
-			if (!(_1 >= 'a')) {
-				break;
+	if (_1 >= 'a') {
+		while (1) {
+			if (_0) {
+				_1 -= 2;
+				if (!(_1 >= 'a')) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			_3 = (char) zephir_get_intval(a);
+			zephir_str_append_char(b, _3);
 		}
-		ZEPHIR_INIT_NVAR(a);
-		ZVAL_LONG(a, _1);
-		_3 = (char) zephir_get_intval(a);
-		zephir_str_append_char(b, _3);
 	}
 	RETURN_MM_STRING(b->str, 1);
 

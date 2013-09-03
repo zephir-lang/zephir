@@ -20,7 +20,7 @@
 /**
  * CompilerFile
  *
- * This class represents every file compiled in a project compilation
+ * This class represents every file compiled in a project
  */
 class CompilerFile
 {
@@ -36,7 +36,10 @@ class CompilerFile
 	protected $_compiledFile;
 
 	/**
+	 * CompilerFile constructor
 	 *
+	 * @param string $className
+	 * @param string $filePath
 	 */
 	public function __construct($className, $filePath)
 	{
@@ -115,6 +118,9 @@ class CompilerFile
 
 	/**
 	 * Creates the definition
+	 *
+	 * @param string $namespace
+	 * @param array $topStatement
 	 */
 	public function preCompileClass($namespace, $topStatement)
 	{
@@ -167,6 +173,7 @@ class CompilerFile
 	}
 
 	/**
+	 *
 	 *
 	 */
 	public function preCompile()
@@ -279,11 +286,19 @@ class CompilerFile
 		$codePrinter->outputBlankLine();
 
 		$class = false;
+		$interface = false;
 		foreach ($this->_ir as $topStatement) {
 
 			switch ($topStatement['type']) {
 				case 'class':
-					if ($class) {
+					if ($interface || $class) {
+						throw new CompilerException("More than one class defined in the same file", $topStatement);
+					}
+					$class = true;
+					$this->compileClass($compilationContext, $this->_namespace, $topStatement);
+					break;
+				case 'interface':
+					if ($interface || $class) {
 						throw new CompilerException("More than one class defined in the same file", $topStatement);
 					}
 					$class = true;

@@ -203,7 +203,10 @@ class ForStatement
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($conditionExpr, $compilationContext);
 
-		$codePrinter->output('while (1 && (' . $condition . ')) {');
+		$codePrinter->output('if (' . $condition . ') {');
+		$codePrinter->increaseLevel();
+
+		$codePrinter->output('while (1) {');
 		$codePrinter->increaseLevel();
 
 		$codePrinter->output('if (' . $flagVariable->getName() . ') {');
@@ -289,6 +292,10 @@ class ForStatement
 		}
 		$statement->compile($compilationContext);
 
+		/**
+		 * Multi-line conditions would need to be regenerated here
+		 */
+		$condition = $expr->optimize($conditionExpr, $compilationContext);
 		$codePrinter->output('if (!(' . $condition . ')) {');
 		$codePrinter->output("\t" . "break;");
 		$codePrinter->output('}');
@@ -382,6 +389,10 @@ class ForStatement
 		 * Restore the cycle counter
 		 */
 		$compilationContext->insideCycle--;
+
+		$codePrinter->output('}');
+
+		$codePrinter->decreaseLevel();
 
 		$codePrinter->output('}');
 

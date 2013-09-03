@@ -155,13 +155,15 @@ static json_object *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state
 	return ret;
 }
 
-static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, xx_parser_token *E, xx_scanner_state *state)
+static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, int is_final, xx_parser_token *E, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("class"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
 	json_object_object_add(ret, "abtract", json_object_new_int(is_abstract));
+	json_object_object_add(ret, "final", json_object_new_int(is_final));
 
 	if (E) {
 		json_object_object_add(ret, "extends", json_object_new_string(E->token));
@@ -169,6 +171,28 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 
 	if (class_definition) {
 		json_object_object_add(ret, "definition", class_definition);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_definition, xx_parser_token *E, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("interface"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	if (E) {
+		json_object_object_add(ret, "extends", json_object_new_string(E->token));
+	}
+
+	if (interface_definition) {
+		json_object_object_add(ret, "definition", interface_definition);
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -868,6 +892,10 @@ xx_top_statement(R) ::= xx_class_def(T) . {
 	R = T;
 }
 
+xx_top_statement(R) ::= xx_interface_def(T) . {
+	R = T;
+}
+
 xx_top_statement(R) ::= xx_comment(T) . {
 	R = T;
 }
@@ -876,20 +904,36 @@ xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_namespace(I, status->scanner_state);
 }
 
+xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) xx_class_body(B) . {
+	R = xx_ret_interface(I, B, NULL, status->scanner_state);
+}
+
+xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_interface_body(B) . {
+	R = xx_ret_interface(I, B, E, status->scanner_state);
+}
+
 xx_class_def(R) ::= CLASS IDENTIFIER(I) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, NULL, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 0, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, E, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 0, E, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 1, NULL, status->scanner_state);
+	R = xx_ret_class(I, B, 1, 0, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 1, E, status->scanner_state);
+	R = xx_ret_class(I, B, 1, 0, E, status->scanner_state);
+}
+
+xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, 1, NULL, status->scanner_state);
+}
+
+xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, 1, E, status->scanner_state);
 }
 
 xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
@@ -897,6 +941,10 @@ xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
 }
 
 xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
+	R = NULL;
+}
+
+xx_interface_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
 	R = NULL;
 }
 

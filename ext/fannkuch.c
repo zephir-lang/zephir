@@ -55,19 +55,21 @@ PHP_METHOD(Test_Fannkuch, process) {
 	ZVAL_LONG(_2, n);
 	_1 = 0;
 	_0 = 0;
-	while (1 && (ZEPHIR_LE_LONG(_2, _1))) {
-		if (_0) {
-			_1++;
-			if (!(ZEPHIR_LE_LONG(_2, _1))) {
-				break;
+	if (ZEPHIR_LE_LONG(_2, _1)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(ZEPHIR_LE_LONG(_2, _1))) {
+					break;
+				}
+			} else {
+				_0 = 1;
 			}
-		} else {
-			_0 = 1;
+			i = _1;
+			ZEPHIR_INIT_NVAR(_3);
+			ZVAL_LONG(_3, i);
+			zephir_array_update_long(&perm1, i, &_3, PH_COPY | PH_SEPARATE);
 		}
-		i = _1;
-		ZEPHIR_INIT_NVAR(_3);
-		ZVAL_LONG(_3, i);
-		zephir_array_update_long(&perm1, i, &_3, PH_COPY | PH_SEPARATE);
 	}
 	r = n;
 	while (1) {
@@ -87,19 +89,21 @@ PHP_METHOD(Test_Fannkuch, process) {
 		ZVAL_LONG(_6, n);
 		_5 = 0;
 		_4 = 0;
-		while (1 && (ZEPHIR_LE_LONG(_6, _5))) {
-			if (_4) {
-				_5++;
-				if (!(ZEPHIR_LE_LONG(_6, _5))) {
-					break;
+		if (ZEPHIR_LE_LONG(_6, _5)) {
+			while (1) {
+				if (_4) {
+					_5++;
+					if (!(ZEPHIR_LE_LONG(_6, _5))) {
+						break;
+					}
+				} else {
+					_4 = 1;
 				}
-			} else {
-				_4 = 1;
+				i = _5;
+				ZEPHIR_OBS_NVAR(_7);
+				zephir_array_fetch_long(&_7, perm1, i, PH_NOISY);
+				zephir_array_update_long(&perm, i, &_7, PH_COPY | PH_SEPARATE);
 			}
-			i = _5;
-			ZEPHIR_OBS_NVAR(_7);
-			zephir_array_fetch_long(&_7, perm1, i, PH_NOISY);
-			zephir_array_update_long(&perm, i, &_7, PH_COPY | PH_SEPARATE);
 		}
 		flipsCount = 0;
 		k = 0;
@@ -117,22 +121,24 @@ PHP_METHOD(Test_Fannkuch, process) {
 			ZVAL_LONG(_11, k2);
 			_10 = 0;
 			_9 = 0;
-			while (1 && (ZEPHIR_LE_LONG(_11, _10))) {
-				if (_9) {
-					_10++;
-					if (!(ZEPHIR_LE_LONG(_11, _10))) {
-						break;
+			if (ZEPHIR_LE_LONG(_11, _10)) {
+				while (1) {
+					if (_9) {
+						_10++;
+						if (!(ZEPHIR_LE_LONG(_11, _10))) {
+							break;
+						}
+					} else {
+						_9 = 1;
 					}
-				} else {
-					_9 = 1;
+					i = _10;
+					ZEPHIR_OBS_NVAR(temp);
+					zephir_array_fetch_long(&temp, perm, i, PH_NOISY);
+					ZEPHIR_OBS_NVAR(_12);
+					zephir_array_fetch_long(&_12, perm, k - i, PH_NOISY);
+					zephir_array_update_long(&perm, i, &_12, PH_COPY | PH_SEPARATE);
+					zephir_array_update_long(&perm, k - i, &temp, PH_COPY | PH_SEPARATE);
 				}
-				i = _10;
-				ZEPHIR_OBS_NVAR(temp);
-				zephir_array_fetch_long(&temp, perm, i, PH_NOISY);
-				ZEPHIR_OBS_NVAR(_12);
-				zephir_array_fetch_long(&_12, perm, k - i, PH_NOISY);
-				zephir_array_update_long(&perm, i, &_12, PH_COPY | PH_SEPARATE);
-				zephir_array_update_long(&perm, k - i, &temp, PH_COPY | PH_SEPARATE);
 			}
 			flipsCount++;
 		}
