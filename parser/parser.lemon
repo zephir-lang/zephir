@@ -223,6 +223,21 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	return ret;
 }
 
+static json_object *xx_ret_interface_definition(json_object *methods, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	if (methods) {
+		json_object_object_add(ret, "methods", methods);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_class_property(json_object *visibility, xx_parser_token *T, json_object *default_value, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -904,7 +919,7 @@ xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_namespace(I, status->scanner_state);
 }
 
-xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) xx_class_body(B) . {
+xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) xx_interface_body(B) . {
 	R = xx_ret_interface(I, B, NULL, status->scanner_state);
 }
 
@@ -936,16 +951,20 @@ xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_bod
 	R = xx_ret_class(I, B, 0, 1, E, status->scanner_state);
 }
 
-xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = C;
-}
-
 xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
 	R = NULL;
 }
 
+xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
+	R = C;
+}
+
 xx_interface_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
 	R = NULL;
+}
+
+xx_interface_body(R) ::= BRACKET_OPEN xx_interface_methods_definition(D) BRACKET_CLOSE . {
+	R = D;
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) . {
@@ -983,6 +1002,10 @@ xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_def
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
 	R = xx_ret_class_definition(C, M, K, status->scanner_state);
 }
+
+/*xx_interface_definition(R) ::= xx_interface_methods_definition(M) . {
+	R = xx_ret_interface_definition(M, status->scanner_state);
+}*/
 
 xx_class_properties_definition(R) ::= xx_class_properties_definition(L) xx_class_property_definition(P) . {
 	R = xx_ret_list(L, P);
@@ -1024,6 +1047,14 @@ xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
+xx_interface_methods_definition(R) ::= xx_interface_methods_definition(L) DOTCOMMA xx_interface_method_definition(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_interface_methods_definition(R) ::= xx_interface_method_definition(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
 xx_class_const_definition(R) ::= COMMENT(C) CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, C, status->scanner_state);
 }
@@ -1062,6 +1093,22 @@ xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDEN
 
 xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, S, C, status->scanner_state);
+}
+
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_class_method(V, I, NULL, NULL, NULL, status->scanner_state);
+}
+
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE . {
+	R = xx_ret_class_method(V, I, L, NULL, NULL, status->scanner_state);
+}
+
+xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE DOTCOMMA . {
+	R = xx_ret_class_method(V, I, NULL, NULL, C, status->scanner_state);
+}
+
+xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE DOTCOMMA . {
+	R = xx_ret_class_method(V, I, L, NULL, C, status->scanner_state);
 }
 
 xx_visibility_list(R) ::= xx_visibility_list(L) xx_visibility(K) . {

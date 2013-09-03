@@ -43,7 +43,7 @@ PHP_METHOD(Test_Exceptions, testException2) {
 	ZEPHIR_INIT_VAR(_0);
 	object_init_ex(_0, test_exception_ce);
 	zephir_call_method_p1_noret(_0, "__construct", msg);
-	zephir_throw_exception(_0);
+	zephir_throw_exception(_0 TSRMLS_CC);
 	return;
 
 }
@@ -58,7 +58,7 @@ PHP_METHOD(Test_Exceptions, testException3) {
 	ZEPHIR_INIT_VAR(ex);
 	object_init_ex(ex, test_exception_ce);
 	zephir_call_method_p1_noret(ex, "__construct", msg);
-	zephir_throw_exception(ex);
+	zephir_throw_exception(ex TSRMLS_CC);
 	return;
 
 }
@@ -83,7 +83,7 @@ PHP_METHOD(Test_Exceptions, testException4) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_method(_0, this_ptr, "getexception");
-	zephir_throw_exception(_0);
+	zephir_throw_exception(_0 TSRMLS_CC);
 	return;
 
 }

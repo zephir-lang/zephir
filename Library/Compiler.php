@@ -214,6 +214,9 @@ class Compiler
 		 * Get global namespace
 		 */
 		$namespace = $config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
+		}
 
 		/**
 		 * Round 1. pre-compile all files in memory

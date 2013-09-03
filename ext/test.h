@@ -25,3 +25,4 @@
 #include "router.h"
 #include "scall.h"
 #include "spectralnorm.h"
+#include "testinterface.h"

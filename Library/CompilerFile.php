@@ -74,7 +74,11 @@ class CompilerFile
 	{
 		$compilePath = '.temp/' . str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
 		$zepRealPath = realpath($this->_filePath);
-		if (filemtime($compilePath) < filemtime($zepRealPath)) {
+		if (file_exists($compilePath)) {
+			if (filemtime($compilePath) < filemtime($zepRealPath)) {
+				system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+			}
+		} else {
 			system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 		}
 		return json_decode(file_get_contents($compilePath), true);
