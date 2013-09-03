@@ -86,6 +86,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'interface' {
+			s->active_char += sizeof("interface")-1;
+			token->opcode = XX_T_CLASS;
+			return 0;
+		}
+
 		'class' {
 			s->active_char += sizeof("class")-1;
 			token->opcode = XX_T_CLASS;
@@ -95,6 +101,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		'extends' {
 			s->active_char += sizeof("extends")-1;
 			token->opcode = XX_T_EXTENDS;
+			return 0;
+		}
+
+		'implements' {
+			s->active_char += sizeof("implements")-1;
+			token->opcode = XX_T_IMPLEMENTS;
 			return 0;
 		}
 

@@ -876,36 +876,28 @@ xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_namespace(I, status->scanner_state);
 }
 
-xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 0, NULL, status->scanner_state);
+xx_class_def(R) ::= CLASS IDENTIFIER(I) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, NULL, status->scanner_state);
 }
 
-xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 0, E, status->scanner_state);
+xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, E, status->scanner_state);
 }
 
-xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 1, NULL, status->scanner_state);
+xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 1, NULL, status->scanner_state);
 }
 
-xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
-	R = xx_ret_class(I, C, 1, E, status->scanner_state);
+xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 1, E, status->scanner_state);
 }
 
-xx_class_def(R) ::= CLASS IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 0, NULL, status->scanner_state);
+xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
+	R = C;
 }
 
-xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 0, E, status->scanner_state);
-}
-
-xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 1, NULL, status->scanner_state);
-}
-
-xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_class(I, NULL, 1, E, status->scanner_state);
+xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
+	R = NULL;
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) . {

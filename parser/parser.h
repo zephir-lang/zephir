@@ -31,10 +31,10 @@
 #define XX_IDENTIFIER                     31
 #define XX_DOTCOMMA                       32
 #define XX_CLASS                          33
-#define XX_BRACKET_OPEN                   34
-#define XX_BRACKET_CLOSE                  35
-#define XX_EXTENDS                        36
-#define XX_ABSTRACT                       37
+#define XX_EXTENDS                        34
+#define XX_ABSTRACT                       35
+#define XX_BRACKET_OPEN                   36
+#define XX_BRACKET_CLOSE                  37
 #define XX_COMMENT                        38
 #define XX_ASSIGN                         39
 #define XX_CONST                          40
