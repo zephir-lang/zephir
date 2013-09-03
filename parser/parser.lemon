@@ -569,7 +569,9 @@ static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state 
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("return"));
-	json_object_object_add(ret, "expr", expr);
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
+	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1441,8 +1443,13 @@ xx_scall_statement(R) ::= xx_scall_expr(E) DOTCOMMA . {
 }
 
 /* return statement */
-xx_return_statement(R) ::= RETURN xx_common_expr(E)  DOTCOMMA . {
+xx_return_statement(R) ::= RETURN xx_common_expr(E) DOTCOMMA . {
 	R = xx_ret_return_statement(E, status->scanner_state);
+}
+
+/* return statement */
+xx_return_statement(R) ::= RETURN DOTCOMMA . {
+	R = xx_ret_return_statement(NULL, status->scanner_state);
 }
 
 /* unset v->x */
