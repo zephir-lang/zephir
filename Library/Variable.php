@@ -55,6 +55,11 @@ class Variable
 	protected $_numberUses = 0;
 
 	/**
+	 * Whether the variable is temporal or not
+	 */
+	protected $_temporal = false;
+
+	/**
 	 * Temporal variables are marked as idle
 	 */
 	protected $_idle = false;
@@ -193,6 +198,26 @@ class Variable
 	public function isReadOnly()
 	{
 		return $this->_readOnly;
+	}
+
+	/**
+	 * Sets whether the variable is temporal or not
+	 *
+	 * @param boolean $temporal
+	 */
+	public function setTemporal($temporal)
+	{
+		$this->_temporal = $temporal;
+	}
+
+	/**
+	 * Returns whether the variable is temporal or not
+	 *
+	 * @return boolean
+	 */
+	public function isTemporal()
+	{
+		return $this->_temporal;
 	}
 
 	/**

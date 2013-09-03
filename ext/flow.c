@@ -499,10 +499,10 @@ PHP_METHOD(Test_Flow, testDoWhile1) {
 
 PHP_METHOD(Test_Flow, testFor1) {
 
-	HashTable *_5;
-	HashPosition _4;
+	HashTable *_2;
+	HashPosition _1;
 	int c;
-	zval *v = NULL, *b, *_0, *_1, *_2, *_3, **_6;
+	zval *v = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 	c = 0;
@@ -511,21 +511,21 @@ PHP_METHOD(Test_Flow, testFor1) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_LONG(_1, 2);
-	zephir_array_append(&b, _1, 0);
-	ZEPHIR_INIT_VAR(_2);
-	ZVAL_LONG(_2, 3);
-	zephir_array_append(&b, _2, 0);
-	ZEPHIR_INIT_VAR(_3);
-	ZVAL_LONG(_3, 4);
-	zephir_array_append(&b, _3, 0);
-	zephir_is_iterable(b, &_5, &_4, 0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 2);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 3);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 4);
+	zephir_array_append(&b, _0, 0);
+	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-		; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
-		; zend_hash_move_forward_ex(_5, &_4)
+		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+		; zend_hash_move_forward_ex(_2, &_1)
 	) {
-		ZEPHIR_GET_HVALUE(v, _6);
+		ZEPHIR_GET_HVALUE(v, _3);
 		c += zephir_get_numberval(v);
 	}
 	RETURN_MM_LONG(c);
@@ -534,10 +534,10 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 PHP_METHOD(Test_Flow, testFor2) {
 
-	HashTable *_5;
-	HashPosition _4;
+	HashTable *_2;
+	HashPosition _1;
 	double c;
-	zval *v = NULL, *k = NULL, *b, *_0, *_1, *_2, *_3, **_6;
+	zval *v = NULL, *k = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 	c = (double) (0);
@@ -546,22 +546,22 @@ PHP_METHOD(Test_Flow, testFor2) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_LONG(_1, 2);
-	zephir_array_append(&b, _1, 0);
-	ZEPHIR_INIT_VAR(_2);
-	ZVAL_LONG(_2, 3);
-	zephir_array_append(&b, _2, 0);
-	ZEPHIR_INIT_VAR(_3);
-	ZVAL_LONG(_3, 4);
-	zephir_array_append(&b, _3, 0);
-	zephir_is_iterable(b, &_5, &_4, 0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 2);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 3);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 4);
+	zephir_array_append(&b, _0, 0);
+	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-		; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
-		; zend_hash_move_forward_ex(_5, &_4)
+		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+		; zend_hash_move_forward_ex(_2, &_1)
 	) {
-		ZEPHIR_GET_HMKEY(k, _5, _4);
-		ZEPHIR_GET_HVALUE(v, _6);
+		ZEPHIR_GET_HMKEY(k, _2, _1);
+		ZEPHIR_GET_HVALUE(v, _3);
 		c += zephir_get_numberval(k);
 	}
 	RETURN_MM_DOUBLE(c);
@@ -570,9 +570,9 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 PHP_METHOD(Test_Flow, testFor3) {
 
-	HashTable *_5;
-	HashPosition _4;
-	zval *v = NULL, *b, *c, *_0, *_1, *_2, *_3, **_6;
+	HashTable *_2;
+	HashPosition _1;
+	zval *v = NULL, *b, *c, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(c);
@@ -582,21 +582,21 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_LONG(_1, 2);
-	zephir_array_append(&b, _1, 0);
-	ZEPHIR_INIT_VAR(_2);
-	ZVAL_LONG(_2, 3);
-	zephir_array_append(&b, _2, 0);
-	ZEPHIR_INIT_VAR(_3);
-	ZVAL_LONG(_3, 4);
-	zephir_array_append(&b, _3, 0);
-	zephir_is_iterable(b, &_5, &_4, 0, 1);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 2);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 3);
+	zephir_array_append(&b, _0, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 4);
+	zephir_array_append(&b, _0, 0);
+	zephir_is_iterable(b, &_2, &_1, 0, 1);
 	for (
-		; zend_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
-		; zend_hash_move_backwards_ex(_5, &_4)
+		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+		; zend_hash_move_backwards_ex(_2, &_1)
 	) {
-		ZEPHIR_GET_HVALUE(v, _6);
+		ZEPHIR_GET_HVALUE(v, _3);
 		zephir_array_append(&c, v, PH_SEPARATE);
 	}
 	RETURN_CCTOR(c);

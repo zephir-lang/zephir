@@ -280,6 +280,7 @@ class SymbolTable
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
+		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		if ($type == 'variable') {
@@ -315,6 +316,7 @@ class SymbolTable
 		$variable->setIsInitialized(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
+		$variable->setTemporal(true);
 		if ($type == 'variable') {
 			$variable->initComplexLiteralVariant($context);
 		}
@@ -350,6 +352,7 @@ class SymbolTable
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->setLocalOnly(true);
+		$variable->setTemporal(true);
 		if ($type == 'variable') {
 			$variable->initVariant($context);
 		}
@@ -376,6 +379,7 @@ class SymbolTable
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
+		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 
@@ -405,6 +409,7 @@ class SymbolTable
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
+		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->observeVariant($context);

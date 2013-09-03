@@ -36,7 +36,7 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 PHP_METHOD(Test_Fannkuch, process) {
 
 	zend_bool _0, _4, _9;
-	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_2, *_3 = NULL, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL, *_14 = NULL, *_15 = NULL;
+	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_2, *_3 = NULL, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL;
 	int n, maxFlipsCount = 0, permCount = 0, checksum = 0, i, j, flipsCount, k, r, k2, _1, _5, _10;
 
 	ZEPHIR_MM_GROW();
@@ -156,12 +156,12 @@ PHP_METHOD(Test_Fannkuch, process) {
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, checksum);
 				zephir_array_append(&return_value, _13, 0);
-				ZEPHIR_INIT_NVAR(_14);
-				ZVAL_LONG(_14, n);
-				zephir_array_append(&return_value, _14, 0);
-				ZEPHIR_INIT_NVAR(_15);
-				ZVAL_LONG(_15, maxFlipsCount);
-				zephir_array_append(&return_value, _15, 0);
+				ZEPHIR_INIT_NVAR(_13);
+				ZVAL_LONG(_13, n);
+				zephir_array_append(&return_value, _13, 0);
+				ZEPHIR_INIT_NVAR(_13);
+				ZVAL_LONG(_13, maxFlipsCount);
+				zephir_array_append(&return_value, _13, 0);
 				RETURN_MM();
 			}
 			ZEPHIR_OBS_NVAR(perm0);

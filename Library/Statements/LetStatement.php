@@ -756,6 +756,9 @@ class LetStatement
 											$symbolVariable->setMustInitNull(true);
 											$compilationContext->symbolTable->mustGrownStack(true);
 											$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+											if ($itemVariable->isTemporal()) {
+												$itemVariable->setIdle(true);
+											}
 										}
 										break;
 									case 'add-assign':

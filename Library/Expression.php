@@ -137,6 +137,12 @@ class Expression
 		return $this->_expectingVariable;
 	}
 
+	/**
+	 * Compiles an 'isset' operator
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 */
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value'], $compilationContext, $expression['left']['left']);
@@ -166,6 +172,7 @@ class Expression
 	 * without calculating the hash key twice
 	 *
 	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function compileFetch($expression, CompilationContext $compilationContext)
 	{
@@ -561,6 +568,10 @@ class Expression
 
 	/**
 	 * Resolves an item to be added in an array
+	 *
+	 * @param array $item
+	 * @param \CompilationContext $compilationContext
+	 * @return \Variable
 	 */
 	public function getArrayValue($item, CompilationContext $compilationContext)
 	{
@@ -575,11 +586,11 @@ class Expression
 			case 'ulong':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
-				return $tempVar->getName();
+				return $tempVar;
 			case 'double':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
-				return $tempVar->getName();
+				return $tempVar;
 			case 'bool':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				if ($item['value']['value'] == 'true') {
@@ -587,15 +598,15 @@ class Expression
 				} else {
 					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
 				}
-				return $tempVar->getName();
+				return $tempVar;
 			case 'null':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
-				return $tempVar->getName();
+				return $tempVar;
 			case 'string':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
-				return $tempVar->getName();
+				return $tempVar;
 			case 'variable':
 				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $item);
 				switch ($itemVariable->getType()) {
@@ -605,21 +616,21 @@ class Expression
 					case 'ulong':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
-						return $tempVar->getName();
+						return $tempVar;
 					case 'double':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
-						return $tempVar->getName();
+						return $tempVar;
 					case 'string':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_STRINGL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len, 1);');
-						return $tempVar->getName();
+						return $tempVar;
 					case 'bool':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
-						return $tempVar->getName();
+						return $tempVar;
 					case 'variable':
-						return $itemVariable->getName();
+						return $itemVariable;
 					default:
 						throw new CompilerException("Unknown " . $itemVariable->getType(), $item);
 				}
@@ -712,8 +723,11 @@ class Expression
 								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
 								break;
 							case 'variable':
-								$value = $this->getArrayValue($item, $compilationContext);
-								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+								$valueVariable = $this->getArrayValue($item, $compilationContext);
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								if ($valueVariable->isTemporal()) {
+									$valueVariable->setIdle(true);
+								}
 								break;
 							default:
 								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
@@ -750,8 +764,11 @@ class Expression
 										$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
 										break;
 									case 'variable':
-										$value = $this->getArrayValue($item, $compilationContext);
-										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value . ', PH_COPY | PH_SEPARATE);');
+										$valueVariable = $this->getArrayValue($item, $compilationContext);
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value->getName() . ', PH_COPY | PH_SEPARATE);');
+										if ($valueVariable->isTemporal()) {
+											$valueVariable->setIdle(true);
+										}
 										break;
 									default:
 										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
@@ -793,9 +810,12 @@ class Expression
 						throw new CompilerException("Invalid key type: " . $item['key']['type'], $item['key']);
 				}
 			} else {
-				$item = $this->getArrayValue($item, $compilationContext);
+				$itemVariable = $this->getArrayValue($item, $compilationContext);
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $item . ', 0);');
+				$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ', 0);');
+				if ($itemVariable->isTemporal()) {
+					$itemVariable->setIdle(true);
+				}
 			}
 		}
 
