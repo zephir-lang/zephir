@@ -711,15 +711,13 @@ static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *paramet
 	return ret;
 }
 
-static json_object *xx_ret_throw_exception(xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_throw_exception(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("throw"));
-	json_object_object_add(ret, "domain", json_object_new_string(T->token));
-
-	if (parameters) {
-		json_object_object_add(ret, "parameters", parameters);
+	if (expr) {
+		json_object_object_add(ret, "expr", expr);
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -1488,14 +1486,9 @@ xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_C
 	);
 }
 
-/* throw new MyException("xx") */
-xx_throw_statement(R) ::= THROW IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_throw_exception(I, NULL, status->scanner_state);
-}
-
-/* throw new MyException("xx") */
-xx_throw_statement(R) ::= THROW NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE DOTCOMMA . {
-	R = xx_ret_throw_exception(I, P, status->scanner_state);
+/* throw {expr} */
+xx_throw_statement(R) ::= THROW xx_common_expr(E) DOTCOMMA . {
+	R = xx_ret_throw_exception(E, status->scanner_state);
 }
 
 xx_declare_statement(R) ::= TYPE_INTEGER xx_declare_variable_list(L) DOTCOMMA . {
