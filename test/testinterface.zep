@@ -6,7 +6,5 @@ namespace Test;
  */
 interface TestInterface
 {
-	/* */ public function x()
-
-	;
+	/**/ public function x();
 }

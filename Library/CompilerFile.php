@@ -94,6 +94,9 @@ class CompilerFile
 	public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
 	{
 		$classDefinition = $this->_classDefinition;
+		if (!$classDefinition) {
+			return;
+		}
 
 		/**
 		 * Do the compilation
@@ -137,7 +140,17 @@ class CompilerFile
 	}
 
 	/**
-	 * Creates the definition
+	 * Creates a definition for an interface
+	 *
+	 * @param string $namespace
+	 * @param array $topStatement
+	 */
+	public function preCompileInterface($namespace, $topStatement)
+	{
+	}
+
+	/**
+	 * Creates a definition for a class
 	 *
 	 * @param string $namespace
 	 * @param array $topStatement
@@ -281,6 +294,9 @@ class CompilerFile
 	public function checkDependencies(Compiler $compiler, Logger $logger)
 	{
 		$classDefinition = $this->_classDefinition;
+		if (!$classDefinition) {
+			return;
+		}
 		$extendedClass = $classDefinition->getExtendsClass();
 		if ($extendedClass) {
 			if ($compiler->isClass($extendedClass)) {
@@ -365,8 +381,12 @@ class CompilerFile
 			mkdir('ext/' . $path, 0777, true);
 		}
 
-		file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
-		file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
+		if ($codePrinter) {
+			file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
+			if ($compilationContext->headerPrinter) {
+				file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
+			}
+		}
 
 		/**
 		 * Add to file compiled

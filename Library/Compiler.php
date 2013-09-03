@@ -314,8 +314,10 @@ class Compiler
 		$classInits = array();
 		foreach ($this->_files as $file) {
 			$classDefinition = $file->getClassDefinition();
-			$classEntries[] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
-			$classInits[] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+			if ($classDefinition) {
+				$classEntries[] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+				$classInits[] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+			}
 		}
 
 		$toReplace = array(
