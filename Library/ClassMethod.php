@@ -604,7 +604,8 @@ class ClassMethod
 		 */
 		if (is_object($this->_statements)) {
 			if ($symbolTable->getMustGrownStack()) {
-				if ($this->_statements->getLastStatementType() != 'return') {
+				$lastType = $this->_statements->getLastStatementType();
+				if ($lastType != 'return' && $lastType != 'throw') {
 					$compilationContext->headersManager->add('kernel/memory');
 					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
 				}

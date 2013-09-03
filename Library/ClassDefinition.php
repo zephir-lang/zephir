@@ -20,7 +20,7 @@
 /**
  * ClassDefinition
  *
- * Represents a class and their properties and methods
+ * Represents a class/interface and their properties and methods
  */
 class ClassDefinition
 {
@@ -30,6 +30,8 @@ class ClassDefinition
 	protected $_name;
 
 	protected $_extendsClass;
+
+	protected $_extendsClassDefinition;
 
 	protected $_properties = array();
 
@@ -43,6 +45,11 @@ class ClassDefinition
 		$this->_name = $name;
 	}
 
+	/**
+	 * Returns the class name without namespace
+	 *
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->_name;
@@ -65,7 +72,30 @@ class ClassDefinition
 	 */
 	public function setExtendsClass($extendsClass)
 	{
+		if (substr($extendsClass, 0, 1) == '\\') {
+			$extendsClass = substr($extendsClass, 1);
+		}
 		$this->_extendsClass = $extendsClass;
+	}
+
+	/**
+	 * Returns the extended class
+	 *
+	 * @return string
+	 */
+	public function getExtendsClass()
+	{
+		return $this->_extendsClass;
+	}
+
+	/**
+	 * Sets the class definition for the extended class
+	 *
+	 * @param \ClassDefinition $classDefinition
+	 */
+	public function setExtendsClassDefinition($classDefinition)
+	{
+		$this->_extendsClassDefinition = $classDefinition;
 	}
 
 	/**
@@ -116,6 +146,9 @@ class ClassDefinition
 
 	/**
 	 * Adds a method to the class definition
+	 *
+	 * @param \ClassMethod $method
+	 * @param array $statement
 	 */
 	public function addMethod(ClassMethod $method, $statement=null)
 	{
@@ -127,6 +160,8 @@ class ClassDefinition
 
 	/**
 	 * Returns all properties defined in the class
+	 *
+	 * @return \ClassProperties[]
 	 */
 	public function getProperties()
 	{
@@ -135,6 +170,8 @@ class ClassDefinition
 
 	/**
 	 * Returns all constants defined in the class
+	 *
+	 * @return \ClassConstant[]
 	 */
 	public function getConstants()
 	{
@@ -164,6 +201,12 @@ class ClassDefinition
 				return true;
 			}
 		}
+		$extendsClassDefinition = $this->_extendsClassDefinition;
+		if ($extendsClassDefinition) {
+			if ($extendsClassDefinition->hasMethod($methodName)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -179,6 +222,8 @@ class ClassDefinition
 
 	/**
 	 * Returns a valid namespace to be used in C-sources
+	 *
+	 * @return string
 	 */
 	public function getCNamespace()
 	{
@@ -187,6 +232,8 @@ class ClassDefinition
 
 	/**
 	 * Returns a valid namespace to be used in C-sources
+	 *
+	 * @return string
 	 */
 	public function getNCNamespace()
 	{
@@ -199,8 +246,9 @@ class ClassDefinition
 	}
 
 	/**
-	 * Compiles a class
+	 * Compiles a class/interface
 	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

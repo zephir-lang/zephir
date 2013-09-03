@@ -224,7 +224,14 @@ class Compiler
 		}
 
 		/**
-		 * Round 2. compile all files to C sources
+		 * Round 2. Check 'extends' and 'implements' dependencies
+		 */
+		foreach ($this->_files as $compileFile) {
+			$compileFile->checkDependencies($this, $logger);
+		}
+
+		/**
+		 * Round 3. compile all files to C sources
 		 */
 		$files = array();
 		foreach ($this->_files as $compileFile) {
@@ -235,12 +242,12 @@ class Compiler
 		$this->_compiledFiles = $files;
 
 		/**
-		 * Round 3. create config.m4 and config.w32 files
+		 * Round 4. create config.m4 and config.w32 files
 		 */
 		$this->createConfigFiles($namespace);
 
 		/**
-		 * Round 4. create project.c and project.h files
+		 * Round 5. create project.c and project.h files
 		 */
 		$this->createProjectFiles($namespace);
 	}

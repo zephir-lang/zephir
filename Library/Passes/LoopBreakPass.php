@@ -34,6 +34,8 @@ class LoopBreakPass
 					}
 					break;
 				case 'break':
+				case 'return':
+				case 'throw':
 					$this->_hasBreak = true;
 					break;
 			}

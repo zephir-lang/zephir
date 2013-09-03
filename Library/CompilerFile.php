@@ -21,6 +21,7 @@
  * CompilerFile
  *
  * This class represents every file compiled in a project
+ * Every file may contain a class or an interface
  */
 class CompilerFile
 {
@@ -34,6 +35,11 @@ class CompilerFile
 	protected $_ir;
 
 	protected $_compiledFile;
+
+	/**
+	 * @var \ClassDefinition
+	 */
+	protected $_classDefinition;
 
 	/**
 	 * CompilerFile constructor
@@ -66,11 +72,21 @@ class CompilerFile
 	 */
 	public function genIR()
 	{
-		$compilePath = str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
-		system(ZEPHIRPATH . '/bin/zephir-parser ' . realpath($this->_filePath) . ' > .temp/' . $compilePath);
-		return json_decode(file_get_contents(".temp/" . $compilePath), true);
+		$compilePath = '.temp/' . str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
+		$zepRealPath = realpath($this->_filePath);
+		if (filemtime($compilePath) < filemtime($zepRealPath)) {
+			system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+		}
+		return json_decode(file_get_contents($compilePath), true);
 	}
 
+	/**
+	 * Compiles the class/interface contained in the file
+	 *
+	 * @param \CompilationContext $compilationContext
+	 * @param string $namespace
+	 * @param string $topStatement
+	 */
 	public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
 	{
 		$classDefinition = $this->_classDefinition;
@@ -181,7 +197,7 @@ class CompilerFile
 
 		$ir = $this->genIR();
 		if (!is_array($ir)) {
-			throw new Exception("Cannot parse file");
+			throw new Exception("Cannot parse file: " . realpath($this->_filePath));
 		}
 
 		if (isset($ir['type']) && $ir['type'] == 'error') {
@@ -242,9 +258,39 @@ class CompilerFile
 		$this->_ir = $ir;
 	}
 
-	public function  getCompiledFile()
+	/**
+	 * Returns the path to the compiled file
+	 *
+	 * @return string
+	 */
+	public function getCompiledFile()
 	{
 		return $this->_compiledFile;
+	}
+
+	/**
+	 * Check dependencies
+	 *
+	 * @param \Compiler $compiler
+	 * @param \Logger $logger
+	 */
+	public function checkDependencies(Compiler $compiler, Logger $logger)
+	{
+		$classDefinition = $this->_classDefinition;
+		$extendedClass = $classDefinition->getExtendsClass();
+		if ($extendedClass) {
+			if ($compiler->isClass($extendedClass)) {
+				$extendedDefinition = $compiler->getClassDefinition($extendedClass);
+				$classDefinition->setExtendsClassDefinition($extendedDefinition);
+			} else {
+				if ($compiler->isInternalClass($extendedClass)) {
+					$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+					$classDefinition->setExtendsClassDefinition($extendedDefinition);
+				} else {
+					throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+				}
+			}
+		}
 	}
 
 	/**

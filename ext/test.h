@@ -5,6 +5,8 @@
 #include "cast.h"
 #include "constants.h"
 #include "declare.h"
+#include "exception.h"
+#include "exceptions.h"
 #include "fannkuch.h"
 #include "fcall.h"
 #include "fibonnaci.h"

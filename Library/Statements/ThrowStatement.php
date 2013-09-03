@@ -66,13 +66,17 @@ class ThrowStatement
 			throw new CompilerException("Expression '" . $resolvedExpr->getType . '" cannot be used as exception');
 		}
 
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $compilationContext, $expression);
+		$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
 		if ($variableVariable->getType() != 'variable') {
-			throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expression);
+			throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
 		}
 
-		$codePrinter->output('ZEPHIR_THROW_EXCEPTION(' . $variableVariable->getName() . ');');
+		$codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ');');
 		$codePrinter->output('return;');
+
+		if ($variableVariable->isTemporal()) {
+			$variableVariable->setIdle(true);
+		}
 	}
 
 }
