@@ -31,6 +31,8 @@ class Compiler
 
 	protected $_compiledFiles;
 
+	const VERSION = '0.2.0a';
+
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -412,6 +414,9 @@ class Compiler
 				case 'compile':
 					$c->compile();
 					$c->install();
+					break;
+				case 'version':
+					echo self::VERSION, PHP_EOL;
 					break;
 				default:
 					throw new Exception('Unrecognized action "' . $action . '"');

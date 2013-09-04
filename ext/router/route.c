@@ -402,7 +402,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 					break;
 				}
-			} while(0); 
+			} while(0);
+
 			ZEPHIR_INIT_VAR(routePaths);
 			array_init(routePaths);
 			if ((Z_TYPE_P(moduleName) != IS_NULL)) {

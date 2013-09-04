@@ -1259,3 +1259,45 @@ PHP_METHOD(Test_Flow, testFor31) {
 
 }
 
+PHP_METHOD(Test_Flow, testSwitch1) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	RETURN_CCTORW(&a);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch2) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 10)) {
+			RETURN_BOOL(1);
+		}
+	} while(0);
+
+	RETURN_BOOL(0);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch3) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 5)) {
+			RETURN_BOOL(1);
+		}
+	} while(0);
+
+	RETURN_BOOL(0);
+
+}
+

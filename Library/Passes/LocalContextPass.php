@@ -220,11 +220,13 @@ class LocalContextPass
 					}
 					break;
 				case 'switch':
-					foreach ($statement['clauses'] as $clause) {
-						if (isset($clause['expr'])) {
-							$this->passExpression($clause['expr']);
+					if (isset($statement['clauses'])) {
+						foreach ($statement['clauses'] as $clause) {
+							if (isset($clause['expr'])) {
+								$this->passExpression($clause['expr']);
+							}
+							$this->passStatementBlock($clause['statements']);
 						}
-						$this->passStatementBlock($clause['statements']);
 					}
 					break;
 				case 'while':

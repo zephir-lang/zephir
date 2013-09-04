@@ -10,6 +10,7 @@
  | that is bundled with this package in the file LICENSE, and is        |
  | available through the world-wide-web at the following url:           |
  | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
  | If you did not receive a copy of the Zephir license and are unable   |
  | to obtain it through the world-wide-web, please send a note to       |
  | license@zephir-lang.com so we can mail you a copy immediately.       |
@@ -45,57 +46,80 @@ class SwitchStatement
 
 		$compilationContext->insideSwitch++;
 
-		$codePrinter->output('do {');
-
-		$compilationContext->codePrinter->increaseLevel();
-
-		$evalExpr = new EvalExpression();
-
-		/**
-		 * @TODO Use let statement
-		 */
 		$exprEval = new Expression($exprRaw);
 		$resolvedExpr = $exprEval->compile($compilationContext);
 
-		$tempVariable = $compilationContext->symbolTable->getTempVariable($resolvedExpr->getType(), $compilationContext);
-		$tempVariable->increaseMutates();
-		$tempVariable->setIsInitialized(true);
-		$tempVariable->setMustInitNull(true);
+		if (isset($this->_statement['clauses'])) {
 
-		if ($resolvedExpr->getType() != 'string') {
-			if ($resolvedExpr->getType() == 'variable') {
-				$compilationContext->codePrinter->output('ZEND_CPY_WRT(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+			$evalExpr = new EvalExpression();
+
+			$codePrinter->output('do {');
+			$compilationContext->codePrinter->increaseLevel();
+
+			if ($resolvedExpr->getType() != 'variable') {
+
+				/**
+				 * Create a temporary variable
+				 */
+				$tempVariable = $compilationContext->symbolTable->getTempVariable($resolvedExpr->getType(), $compilationContext);
+
+				/**
+				 * Simulate an assignment to the temporary variable
+				 */
+				$statement = new LetStatement(array(
+					'type' => 'let',
+					'assignments' => array(
+						array(
+							'assign-type' => 'variable',
+							'operator' => 'assign',
+							'variable' => $tempVariable->getName(),
+							'expr' => array(
+								'type' => $resolvedExpr->getType(),
+								'value' => $resolvedExpr->getCode(),
+								'file' => $exprRaw['file'],
+								'line' => $exprRaw['line'],
+								'char' => $exprRaw['char']
+							),
+							'file' => $exprRaw['file'],
+							'line' => $exprRaw['line'],
+							'char' => $exprRaw['char']
+						)
+					)
+				));
+				$statement->compile($compilationContext);
+
 			} else {
-				$compilationContext->codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+				$tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
 			}
-		}
 
-		foreach ($this->_statement['clauses'] as $clause) {
-			if ($clause['type'] == 'case') {
+			foreach ($this->_statement['clauses'] as $clause) {
+				if ($clause['type'] == 'case') {
 
-				$expr = array(
-					'type' => 'equals',
-					'left' => array('type' => 'variable', 'value' => $tempVariable->getRealName()),
-					'right' => $clause['expr']
-				);
+					$expr = array(
+						'type' => 'equals',
+						'left' => array('type' => 'variable', 'value' => $tempVariable->getRealName()),
+						'right' => $clause['expr']
+					);
 
-				$condition = $evalExpr->optimize($expr, $compilationContext);
-				$codePrinter->output('if (' . $condition . ') {');
+					$condition = $evalExpr->optimize($expr, $compilationContext);
+					$codePrinter->output('if (' . $condition . ') {');
 
-				if (isset($clause['statements'])) {
-					$st = new StatementsBlock($clause['statements']);
-					$st->compile($compilationContext);
+					if (isset($clause['statements'])) {
+						$st = new StatementsBlock($clause['statements']);
+						$st->compile($compilationContext);
+					}
+
+					$codePrinter->output('}');
 				}
-
-				$codePrinter->output('}');
 			}
+
+			$compilationContext->insideSwitch--;
+
+			$compilationContext->codePrinter->decreaseLevel();
+
+			$codePrinter->output('} while(0);');
+			$codePrinter->outputBlankLine();
 		}
-
-		$compilationContext->insideSwitch--;
-
-		$compilationContext->codePrinter->decreaseLevel();
-
-		$codePrinter->output('} while(0); ');
 
 	}
 

@@ -162,17 +162,29 @@ class ComparisonBaseOperator extends BaseOperator
 							case 'long':
 							case 'ulong':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $left->getCode() . ', ' . $right->getCode() . ')', $expression['left']);
+								if ($variable->isLocalOnly()) {
+									return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', ' . $right->getCode() . ')', $expression['left']);
+								} else {
+									return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $right->getCode() . ')', $expression['left']);
+								}
 							case 'bool':
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($right->getCode() == 'true') {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $left->getCode() . ')', $expression['left']);
+									if ($variable->isLocalOnly()) {
+										return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(&' . $variable->getName() . ')', $expression['left']);
+									} else {
+										return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $variable->getName() . ')', $expression['left']);
+									}
 								} else {
 									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression['left']);
 								}
 							case 'null':
 								$compilationContext->headersManager->add('kernel/operators');
-								return new CompiledExpression('bool', '(Z_TYPE_P(' . $left->getCode() . ') ' . $this->_operator . ' IS_NULL)', $expression['left']);
+								if ($variable->isLocalOnly()) {
+									return new CompiledExpression('bool', '(Z_TYPE_P(&' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL)', $expression['left']);
+								} else {
+									return new CompiledExpression('bool', '(Z_TYPE_P(' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL)', $expression['left']);
+								}
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
 								switch ($variableRight->getType()) {
@@ -181,10 +193,18 @@ class ComparisonBaseOperator extends BaseOperator
 									case 'long':
 									case 'ulong':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										if ($variable->isLocalOnly()) {
+											return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										} else {
+											return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										}
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										if ($variable->isLocalOnly()) {
+											return new CompiledExpression('bool', $this->_zvalOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										} else {
+											return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										}
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
 								}
