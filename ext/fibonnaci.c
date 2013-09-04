@@ -35,10 +35,10 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 	y = 2;
 	n = 10;
 	while (1) {
-		if (!((z < n))) {
+		if (!(((z < n)))) {
 			break;
 		}
-		z = x + y;
+		z = (x + y);
 		x = y;
 		y = z;
 	}
@@ -55,10 +55,10 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 	y = 2.0;
 	n = 10.0;
 	while (1) {
-		if (!((z < n))) {
+		if (!(((z < n)))) {
 			break;
 		}
-		z = x +  y;
+		z = (x + y);
 		x = y;
 		y = z;
 	}
@@ -83,11 +83,11 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	i = 2;
 	n = 10;
 	while (1) {
-		if (!((i < n))) {
+		if (!(((i < n)))) {
 			break;
 		}
-		k = i - 1;
-		j = i - 2;
+		k = (i - 1);
+		j = (i - 2);
 		ZEPHIR_OBS_NVAR(a);
 		zephir_array_fetch_long(&a, fib, k, PH_NOISY);
 		ZEPHIR_OBS_NVAR(b);

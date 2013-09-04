@@ -6,5 +6,12 @@ namespace Test;
  */
 interface TestInterface
 {
-	/**/ public function x();
+
+	/**
+         * Sets a default action
+         *
+         * @param int defaultAccess
+         */
+        public function setAction(action)
+
 }

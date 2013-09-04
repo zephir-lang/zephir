@@ -449,8 +449,8 @@ PHP_METHOD(Test_Router, handle) {
 		ZEPHIR_GET_HVALUE(route, _6);
 		ZEPHIR_INIT_NVAR(methods);
 		zephir_call_method(methods, route, "gethttpmethods");
-		if (Z_TYPE_P(methods) != IS_NULL) {
-			if (Z_TYPE_P(request) == IS_NULL) {
+		if ((Z_TYPE_P(methods) != IS_NULL)) {
+			if ((Z_TYPE_P(request) == IS_NULL)) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if (Z_TYPE_P(dependencyInjector) != IS_OBJECT) {
@@ -470,8 +470,8 @@ PHP_METHOD(Test_Router, handle) {
 		}
 		ZEPHIR_INIT_NVAR(hostname);
 		zephir_call_method(hostname, route, "gethostname");
-		if (Z_TYPE_P(hostname) != IS_NULL) {
-			if (Z_TYPE_P(request) == IS_NULL) {
+		if ((Z_TYPE_P(hostname) != IS_NULL)) {
+			if ((Z_TYPE_P(request) == IS_NULL)) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if (Z_TYPE_P(dependencyInjector) != IS_OBJECT) {
@@ -522,7 +522,7 @@ PHP_METHOD(Test_Router, handle) {
 		if (zend_is_true(routeFound)) {
 			ZEPHIR_INIT_NVAR(beforeMatch);
 			zephir_call_method(beforeMatch, route, "getbeforematch");
-			if (Z_TYPE_P(beforeMatch) != IS_NULL) {
+			if ((Z_TYPE_P(beforeMatch) != IS_NULL)) {
 				if (zephir_is_callable(beforeMatch TSRMLS_CC)) {
 					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "Before-Match callback is not callable in matched route");
 					return;
@@ -576,7 +576,7 @@ PHP_METHOD(Test_Router, handle) {
 	if (!(zend_is_true(routeFound))) {
 		ZEPHIR_OBS_VAR(notFoundPaths);
 		zephir_read_property_this(&notFoundPaths, this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
-		if (Z_TYPE_P(notFoundPaths) != IS_NULL) {
+		if ((Z_TYPE_P(notFoundPaths) != IS_NULL)) {
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
 			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, 1);
@@ -915,7 +915,7 @@ PHP_METHOD(Test_Router, mount) {
 	}
 	ZEPHIR_INIT_VAR(beforeMatch);
 	zephir_call_method(beforeMatch, group, "getbeforematch");
-	if (Z_TYPE_P(beforeMatch) != IS_NULL) {
+	if ((Z_TYPE_P(beforeMatch) != IS_NULL)) {
 		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 0);
 		for (
 			; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
@@ -927,7 +927,7 @@ PHP_METHOD(Test_Router, mount) {
 	}
 	ZEPHIR_INIT_VAR(hostname);
 	zephir_call_method(hostname, group, "gethostname");
-	if (Z_TYPE_P(hostname) != IS_NULL) {
+	if ((Z_TYPE_P(hostname) != IS_NULL)) {
 		zephir_is_iterable(groupRoutes, &_4, &_3, 0, 0);
 		for (
 			; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS

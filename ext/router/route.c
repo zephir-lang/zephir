@@ -202,7 +202,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRINGL(&_0, pattern->str, pattern->len, 0);
-	if (zephir_fast_strlen_ev(&_0) <= 0) {
+	if ((zephir_fast_strlen_ev(&_0) <= 0)) {
 		RETURN_MM_BOOL(0);
 	}
 	ZEPHIR_INIT_VAR(matches);
@@ -210,19 +210,19 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	for (_1 = 0; _1 < pattern->len; _1++) {
 		cursor = _1; 
 		ch = pattern->str[_1]; 
-		if (parenthesesCount == 0) {
-			if (ch == '{') {
-				if (bracketCount == 0) {
-					marker = cursor + 1;
+		if ((parenthesesCount == 0)) {
+			if ((ch == '{')) {
+				if ((bracketCount == 0)) {
+					marker = (cursor + 1);
 					intermediate = 0;
 					notValid = 0;
 				}
 				bracketCount++;
 			} else {
-				if (ch == '}') {
+				if ((ch == '}')) {
 					bracketCount--;
-					if (intermediate > 0) {
-						if (bracketCount == 0) {
+					if ((intermediate > 0)) {
+						if ((bracketCount == 0)) {
 							numberMatches++;
 							zephir_str_assign(variable, "", sizeof("")-1);
 							zephir_str_assign(regexp, "", sizeof("")-1);
@@ -231,7 +231,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 							ZEPHIR_SINIT_NVAR(_3);
 							ZVAL_LONG(&_3, marker);
 							ZEPHIR_SINIT_NVAR(_4);
-							ZVAL_LONG(&_4, cursor - marker);
+							ZVAL_LONG(&_4, (cursor - marker));
 							ZEPHIR_INIT_NVAR(_5);
 							zephir_call_func_p3(_5, "substr", &_2, &_3, &_4);
 							zephir_get_strval(_5, &_6);
@@ -239,15 +239,15 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 							for (_7 = 0; _7 < item->len; _7++) {
 								cursorVar = _7; 
 								ch = item->str[_7]; 
-								if (ch == '\0') {
+								if ((ch == '\0')) {
 									break;
 								}
-								if (cursorVar == 0 && !((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {
+								if (((cursorVar == 0) && !(((((ch >= 'a') && (ch <= 'z'))) || (((ch >= 'A') && (ch <= 'Z'))))))) {
 									notValid = 1;
 									break;
 								}
-								if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9') || ch == '-' || ch == '_' || ch == ':') {
-									if (ch == ':') {
+								if (((((((((ch >= 'a') && (ch <= 'z'))) || (((ch >= 'A') && (ch <= 'Z')))) || (((ch >= '0') && (ch <= '9')))) || (ch == '-')) || (ch == '_')) || (ch == ':'))) {
+									if ((ch == ':')) {
 										ZEPHIR_SINIT_NVAR(_2);
 										ZVAL_STRINGL(&_2, item->str, item->len, 0);
 										ZEPHIR_SINIT_NVAR(_3);
@@ -261,7 +261,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 										ZEPHIR_SINIT_NVAR(_2);
 										ZVAL_STRINGL(&_2, item->str, item->len, 0);
 										ZEPHIR_SINIT_NVAR(_3);
-										ZVAL_LONG(&_3, cursorVar + 1);
+										ZVAL_LONG(&_3, (cursorVar + 1));
 										ZEPHIR_INIT_NVAR(_10);
 										zephir_call_func_p2(_10, "substr", &_2, &_3);
 										zephir_get_strval(_10, &_11);
@@ -280,21 +280,21 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									foundPattern = 0;
 									for (_12 = 0; _12 < regexp->len; _12++) {
 										ch = regexp->str[_12]; 
-										if (ch == '\0') {
+										if ((ch == '\0')) {
 											break;
 										}
 										if (!(foundPattern)) {
-											if (ch == '(') {
+											if ((ch == '(')) {
 												foundPattern = 1;
 											}
 										} else {
-											if (ch == ')') {
+											if ((ch == ')')) {
 												foundPattern = 2;
 												break;
 											}
 										}
 									}
-									if (foundPattern != 2) {
+									if ((foundPattern != 2)) {
 										zephir_str_append_char(route, '(');
 										zephir_str_append(route, regexp->str, regexp->len);
 										zephir_str_append_char(route, ')');
@@ -317,19 +317,19 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 				}
 			}
 		}
-		if (bracketCount == 0) {
-			if (ch == '(') {
+		if ((bracketCount == 0)) {
+			if ((ch == '(')) {
 				parenthesesCount++;
 			} else {
-				if (ch == ')') {
+				if ((ch == ')')) {
 					parenthesesCount--;
-					if (parenthesesCount == 0) {
+					if ((parenthesesCount == 0)) {
 						numberMatches++;
 					}
 				}
 			}
 		}
-		if (bracketCount > 0) {
+		if ((bracketCount > 0)) {
 			intermediate++;
 		} else {
 			zephir_str_append_char(route, ch);
@@ -367,7 +367,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The pattern must be string");
 		return;
 	}
-	if (Z_TYPE_P(paths) != IS_NULL) {
+	if ((Z_TYPE_P(paths) != IS_NULL)) {
 		if (Z_TYPE_P(paths) == IS_STRING) {
 			ZEPHIR_INIT_VAR(moduleName);
 			ZVAL_NULL(moduleName);
@@ -381,7 +381,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			zephir_call_func_p2(parts, "explode", &_0, paths);
 			do {
 				_1 = zephir_fast_count_int(parts TSRMLS_CC);
-				if (_1 == 3) {
+				if ((_1 == 3)) {
 					ZEPHIR_OBS_NVAR(moduleName);
 					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY);
 					ZEPHIR_OBS_NVAR(controllerName);
@@ -390,14 +390,14 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					zephir_array_fetch_long(&actionName, parts, 2, PH_NOISY);
 					break;
 				}
-				if (_1 == 2) {
+				if ((_1 == 2)) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 					ZEPHIR_OBS_NVAR(actionName);
 					zephir_array_fetch_long(&actionName, parts, 1, PH_NOISY);
 					break;
 				}
-				if (_1 == 1) {
+				if ((_1 == 1)) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY);
 					break;
@@ -405,10 +405,10 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			} while(0); 
 			ZEPHIR_INIT_VAR(routePaths);
 			array_init(routePaths);
-			if (Z_TYPE_P(moduleName) != IS_NULL) {
+			if ((Z_TYPE_P(moduleName) != IS_NULL)) {
 				zephir_array_update_string(&routePaths, SL("module"), &moduleName, PH_COPY | PH_SEPARATE);
 			}
-			if (Z_TYPE_P(controllerName) != IS_NULL) {
+			if ((Z_TYPE_P(controllerName) != IS_NULL)) {
 				if (zephir_memnstr_str(controllerName, SL("\\"))) {
 					ZEPHIR_INIT_VAR(realClassName);
 					zephir_call_func_p1(realClassName, "get_class_ns", controllerName);
@@ -424,7 +424,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				zephir_uncamelize(_2, realClassName);
 				zephir_array_update_string(&routePaths, SL("controller"), &_2, PH_COPY | PH_SEPARATE);
 			}
-			if (Z_TYPE_P(actionName) != IS_NULL) {
+			if ((Z_TYPE_P(actionName) != IS_NULL)) {
 				zephir_array_update_string(&routePaths, SL("action"), &actionName, PH_COPY | PH_SEPARATE);
 			}
 		} else {

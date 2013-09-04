@@ -46,7 +46,7 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 	zephir_add_function(_0, i, j TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);
 	zephir_add_function(_1, i, j TSRMLS_CC);
-	RETURN_MM_LONG(1 / zephir_get_numberval(_0) * zephir_get_numberval(_1) + 1 / 2 + zephir_get_intval(i) + 1);
+	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(_1) + 1)) / 2) + zephir_get_intval(i)) + 1)));
 
 }
 
@@ -62,14 +62,14 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 		n = zephir_get_intval(n_param);
 
 
-	_2 = n - 1;
+	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -77,14 +77,14 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 			}
 			i = _1;
 			t = 0;
-			_5 = n - 1;
+			_5 = (n - 1);
 			_4 = 0;
 			_3 = 0;
-			if (_4 <= _5) {
+			if ((_4 <= _5)) {
 				while (1) {
 					if (_3) {
 						_4++;
-						if (!(_4 <= _5)) {
+						if (!((_4 <= _5))) {
 							break;
 						}
 					} else {
@@ -129,14 +129,14 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 		n = zephir_get_intval(n_param);
 
 
-	_2 = n - 1;
+	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -144,14 +144,14 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 			}
 			i = _1;
 			t = 0;
-			_5 = n - 1;
+			_5 = (n - 1);
 			_4 = 0;
 			_3 = 0;
-			if (_4 <= _5) {
+			if ((_4 <= _5)) {
 				while (1) {
 					if (_3) {
 						_4++;
-						if (!(_4 <= _5)) {
+						if (!((_4 <= _5))) {
 							break;
 						}
 					} else {
@@ -231,14 +231,14 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_update_property_zval(this_ptr, SL("n"), _1 TSRMLS_CC);
-	_6 = n - 1;
+	_6 = (n - 1);
 	_5 = 0;
 	_4 = 0;
-	if (_5 <= _6) {
+	if ((_5 <= _6)) {
 		while (1) {
 			if (_4) {
 				_5++;
-				if (!(_5 <= _6)) {
+				if (!((_5 <= _6))) {
 					break;
 				}
 			} else {
@@ -265,11 +265,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	_11 = 9;
 	_10 = 0;
 	_9 = 0;
-	if (_10 <= _11) {
+	if ((_10 <= _11)) {
 		while (1) {
 			if (_9) {
 				_10++;
-				if (!(_10 <= _11)) {
+				if (!((_10 <= _11))) {
 					break;
 				}
 			} else {
@@ -284,14 +284,14 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			zephir_call_method_p4_noret(this_ptr, "atau", _7, v, u, w);
 		}
 	}
-	_14 = n - 1;
+	_14 = (n - 1);
 	_13 = 0;
 	_12 = 0;
-	if (_13 <= _14) {
+	if ((_13 <= _14)) {
 		while (1) {
 			if (_12) {
 				_13++;
-				if (!(_13 <= _14)) {
+				if (!((_13 <= _14))) {
 					break;
 				}
 			} else {
@@ -323,7 +323,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 		}
 	}
 	ZEPHIR_SINIT_NVAR(_18);
-	ZVAL_LONG(&_18, vBv / vv);
+	ZVAL_LONG(&_18, (vBv / vv));
 	zephir_call_func_p1(return_value, "sqrt", &_18);
 	RETURN_MM();
 

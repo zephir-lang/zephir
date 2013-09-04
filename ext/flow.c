@@ -205,7 +205,7 @@ PHP_METHOD(Test_Flow, testIf13) {
 
 	a = 1;
 	b = 2;
-	if (a + b) {
+	if ((a + b)) {
 		RETURN_LONG(1);
 	}
 	RETURN_LONG(0);
@@ -271,8 +271,8 @@ PHP_METHOD(Test_Flow, testLoop2) {
 
 	a = 1;
 	while (1) {
-		a = a + 1;
-		if (a == 5) {
+		a = (a + 1);
+		if ((a == 5)) {
 			break;
 		}
 	}
@@ -286,12 +286,12 @@ PHP_METHOD(Test_Flow, testLoop3) {
 
 	a = 1;
 	while (1) {
-		a = a + 1;
-		if (a == 3) {
-			a = a + 1;
+		a = (a + 1);
+		if ((a == 3)) {
+			a = (a + 1);
 			continue;
 		}
-		if (a == 5) {
+		if ((a == 5)) {
 			break;
 		}
 	}
@@ -305,12 +305,12 @@ PHP_METHOD(Test_Flow, testLoop4) {
 
 	a = 1;
 	while (1) {
-		a = a + 1;
-		if (a == 3) {
-			a = a + 1;
+		a = (a + 1);
+		if ((a == 3)) {
+			a = (a + 1);
 			continue;
 		}
-		if (a == 5) {
+		if ((a == 5)) {
 			break;
 		}
 	}
@@ -327,7 +327,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 		if (!(a)) {
 			break;
 		}
-		a = a - 1;
+		a = (a - 1);
 	}
 	RETURN_LONG(a);
 
@@ -342,7 +342,7 @@ PHP_METHOD(Test_Flow, testWhile2) {
 		if (!(a)) {
 			break;
 		}
-		a = a - 1;
+		a = (a - 1);
 	}
 	RETURN_LONG(a);
 
@@ -365,13 +365,13 @@ PHP_METHOD(Test_Flow, testWhile3) {
 			if (!(zend_is_true(&b))) {
 				break;
 			}
-			_0 = zephir_get_numberval(&b) - 1;
+			_0 = (zephir_get_numberval(&b) - 1);
 			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_LONG(&b, _0);
 		}
-		a = a - 1;
+		a = (a - 1);
 	}
-	c = (double) (a + zephir_get_intval(&b));
+	c = (double) ((a + zephir_get_intval(&b)));
 	RETURN_DOUBLE(c);
 
 }
@@ -393,13 +393,13 @@ PHP_METHOD(Test_Flow, testWhile4) {
 			if (!(zend_is_true(&b))) {
 				break;
 			}
-			_0 = zephir_get_numberval(&b) - 1;
+			_0 = (zephir_get_numberval(&b) - 1);
 			ZEPHIR_SINIT_NVAR(b);
 			ZVAL_LONG(&b, _0);
 		}
-		a = a - 1;
+		a = (a - 1);
 	}
-	c = (double) (a + zephir_get_intval(&b));
+	c = (double) ((a + zephir_get_intval(&b)));
 	RETURN_DOUBLE(c);
 
 }
@@ -485,7 +485,7 @@ PHP_METHOD(Test_Flow, testWhile9) {
 		}
 		a--;
 	}
-	c = (double) (a + zephir_get_intval(&b));
+	c = (double) ((a + zephir_get_intval(&b)));
 	RETURN_DOUBLE(c);
 
 }
@@ -615,11 +615,11 @@ PHP_METHOD(Test_Flow, testFor4) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -643,11 +643,11 @@ PHP_METHOD(Test_Flow, testFor5) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -673,11 +673,11 @@ PHP_METHOD(Test_Flow, testFor6) {
 	_2 = 10;
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= 1) {
+	if ((_1 >= 1)) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= 1)) {
+				if (!((_1 >= 1))) {
 					break;
 				}
 			} else {
@@ -701,11 +701,11 @@ PHP_METHOD(Test_Flow, testFor7) {
 	_2 = 10;
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= 1) {
+	if ((_1 >= 1)) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= 1)) {
+				if (!((_1 >= 1))) {
 					break;
 				}
 			} else {
@@ -730,11 +730,11 @@ PHP_METHOD(Test_Flow, testFor8) {
 	_2 = d;
 	_1 = c;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -759,11 +759,11 @@ PHP_METHOD(Test_Flow, testFor9) {
 	_2 = d;
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= c) {
+	if ((_1 >= c)) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= c)) {
+				if (!((_1 >= c))) {
 					break;
 				}
 			} else {
@@ -821,11 +821,11 @@ PHP_METHOD(Test_Flow, testFor11) {
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -849,11 +849,11 @@ PHP_METHOD(Test_Flow, testFor12) {
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= 'a') {
+	if ((_1 >= 'a')) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= 'a')) {
+				if (!((_1 >= 'a'))) {
 					break;
 				}
 			} else {
@@ -877,11 +877,11 @@ PHP_METHOD(Test_Flow, testFor13) {
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -905,11 +905,11 @@ PHP_METHOD(Test_Flow, testFor14) {
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= '0') {
+	if ((_1 >= '0')) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= '0')) {
+				if (!((_1 >= '0'))) {
 					break;
 				}
 			} else {
@@ -939,11 +939,11 @@ PHP_METHOD(Test_Flow, testFor15) {
 	_2 = d;
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= c) {
+	if ((_1 >= c)) {
 		while (1) {
 			if (_0) {
 				_1--;
-				if (!(_1 >= c)) {
+				if (!((_1 >= c))) {
 					break;
 				}
 			} else {
@@ -970,12 +970,12 @@ PHP_METHOD(Test_Flow, testFor16) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	if (_2 <= _3) {
+	if ((_2 <= _3)) {
 		while (1) {
 			if (_1) {
 				_0++;
 				_2++;
-				if (!(_2 <= _3)) {
+				if (!((_2 <= _3))) {
 					break;
 				}
 			} else {
@@ -1005,12 +1005,12 @@ PHP_METHOD(Test_Flow, testFor17) {
 	_2 = _3;
 	_0 = 0;
 	_1 = 0;
-	if (_2 >= 1) {
+	if ((_2 >= 1)) {
 		while (1) {
 			if (_1) {
 				_0++;
 				_2--;
-				if (!(_2 >= 1)) {
+				if (!((_2 >= 1))) {
 					break;
 				}
 			} else {
@@ -1040,12 +1040,12 @@ PHP_METHOD(Test_Flow, testFor18) {
 	_2 = 1;
 	_0 = 0;
 	_1 = 0;
-	if (_2 <= _3) {
+	if ((_2 <= _3)) {
 		while (1) {
 			if (_1) {
 				_0++;
 				_2++;
-				if (!(_2 <= _3)) {
+				if (!((_2 <= _3))) {
 					break;
 				}
 			} else {
@@ -1074,11 +1074,11 @@ PHP_METHOD(Test_Flow, testFor19) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1 += 2;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -1105,11 +1105,11 @@ PHP_METHOD(Test_Flow, testFor20) {
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1 += 2;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -1136,11 +1136,11 @@ PHP_METHOD(Test_Flow, testFor21) {
 	_2 = 1;
 	_1 = 10;
 	_0 = 0;
-	if (_1 <= _2) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1 += -2;
-				if (!(_1 <= _2)) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -1167,11 +1167,11 @@ PHP_METHOD(Test_Flow, testFor22) {
 	_2 = 1;
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= 10) {
+	if ((_1 >= 10)) {
 		while (1) {
 			if (_0) {
 				_1 -= 2;
-				if (!(_1 >= 10)) {
+				if (!((_1 >= 10))) {
 					break;
 				}
 			} else {
@@ -1198,11 +1198,11 @@ PHP_METHOD(Test_Flow, testFor23) {
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
-	if (_1 >= 'a') {
+	if ((_1 >= 'a')) {
 		while (1) {
 			if (_0) {
 				_1 -= 2;
-				if (!(_1 >= 'a')) {
+				if (!((_1 >= 'a'))) {
 					break;
 				}
 			} else {
