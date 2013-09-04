@@ -193,7 +193,7 @@ class ClassMethod
 	}
 
 	/**
-	 * Assigns zval value to static type
+	 * Assigns a zval value to a static type
 	 *
 	 * @param array $parameter
 	 */
@@ -386,9 +386,31 @@ class ClassMethod
 			}
 
 			/**
+			 * Pass the write detector to the method statement block to check if the parameter
+			 * variable is modified so as do the proper separation
+			 */
+			$parametersToSeparate = array();
+			if (is_object($this->_statements)) {
+				$writeDetector = new WriteDetector();
+				foreach ($this->_parameters->getParameters() as $parameter) {
+					if (isset($parameter['data-type'])) {
+						$dataType = $parameter['data-type'];
+					} else {
+						$dataType = 'variable';
+					}
+					if ($dataType == 'variable') {
+						$name = $parameter['name'];
+						if ($writeDetector->detect($name, $this->_statements->getStatements())) {
+							$parametersToSeparate[$name] = true;
+						}
+					}
+				}
+			}
+
+			/**
 			 * Initialize required parameters
 			 */
-			$initCode = '';
+			$initCode = "";
 			foreach ($requiredParams as $parameter) {
 
 				if (isset($parameter['data-type'])) {
@@ -403,6 +425,12 @@ class ClassMethod
 					 * Assign value from zval to low level type
 					 */
 					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+				}
+
+				if ($dataType == 'variable') {
+					if (isset($parametersToSeparate[$name])) {
+						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+					}
 				}
 
 			}
@@ -436,28 +464,11 @@ class ClassMethod
 					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
 					$initCode .= "\t" . '}' . PHP_EOL;
 				}
-			}
 
-			/**
-			 * Pass the write detector to the statement block to check if the parameter
-			 * variable is modified so as do the proper separation
-			 */
-			if (is_object($this->_statements)) {
-				$writeDetector = new WriteDetector();
-				foreach ($this->_parameters->getParameters() as $parameter) {
-
-					if (isset($parameter['data-type'])) {
-						$dataType = $parameter['data-type'];
-					} else {
-						$dataType = 'variable';
+				if ($dataType == 'variable') {
+					if (isset($parametersToSeparate[$name])) {
+						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
 					}
-
-					if ($dataType == 'variable') {
-						if ($writeDetector->detect($parameter['name'], $this->_statements->getStatements())) {
-							echo $parameter['name'];
-						}
-					}
-
 				}
 			}
 

@@ -51,9 +51,7 @@ class Route
 	 */
 	public function compilePattern(pattern)
 	{
-		var compiledPattern, idPattern;
-
-		let compiledPattern = pattern;
+		var idPattern;
 
 		// If a pattern contains ':', maybe there are placeholders to replace
 		if memstr(pattern, ":") {
@@ -63,46 +61,46 @@ class Route
 
 			// Replace the module part
 			if memstr(pattern, "/:module") {
-				let compiledPattern = str_replace("/:module", idPattern, compiledPattern);
+				let pattern = str_replace("/:module", idPattern, pattern);
 			}
 
 			// Replace the controller placeholder
 			if memstr(pattern, "/:controller") {
-				let compiledPattern = str_replace("/:controller", idPattern, compiledPattern);
+				let pattern = str_replace("/:controller", idPattern, pattern);
 			}
 
 			// Replace the namespace placeholder
 			if memstr(pattern, "/:namespace") {
-				let compiledPattern = str_replace("/:namespace", idPattern, compiledPattern);
+				let pattern = str_replace("/:namespace", idPattern, pattern);
 			}
 
 			// Replace the action placeholder
 			if memstr(pattern, "/:action") {
-				let compiledPattern = str_replace("/:action", idPattern, compiledPattern);
+				let pattern = str_replace("/:action", idPattern, pattern);
 			}
 
 			// Replace the params placeholder
 			if memstr(pattern, "/:params") {
-				let compiledPattern = str_replace("/:params", "(/.*)*", compiledPattern);
+				let pattern = str_replace("/:params", "(/.*)*", pattern);
 			}
 
 			// Replace the int placeholder
 			if memstr(pattern, "/:int") {
-				let compiledPattern = str_replace("/:int", "/([0-9]+)", compiledPattern);
+				let pattern = str_replace("/:int", "/([0-9]+)", pattern);
 			}
 		}
 
 		// Check if the pattern has parantheses in order to add the regex delimiters
-		if memstr(compiledPattern, "(") {
-			return "#^" . compiledPattern . "$#";
+		if memstr(pattern, "(") {
+			return "#^" . pattern . "$#";
 		}
 
 		// Square brackets are also checked
-		if memstr(compiledPattern, "[") {
-			return "#^" . compiledPattern . "$#";
+		if memstr(pattern, "[") {
+			return "#^" . pattern . "$#";
 		}
 
-		return compiledPattern;
+		return pattern;
 	}
 
 	/**

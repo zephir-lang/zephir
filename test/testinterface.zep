@@ -12,6 +12,6 @@ interface TestInterface
          *
          * @param int defaultAccess
          */
-        public function setAction(action)
+        public function setAction(action);
 
 }
