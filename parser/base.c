@@ -175,9 +175,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_EXTENDS:
 				xx_(xx_parser, XX_EXTENDS, NULL, parser_status);
 				break;
-			/*case XX_T_IMPLEMENTS:
+			case XX_T_IMPLEMENTS:
 				xx_(xx_parser, XX_IMPLEMENTS, NULL, parser_status);
-				break;*/
+				break;
 			case XX_T_PUBLIC:
 				xx_(xx_parser, XX_PUBLIC, NULL, parser_status);
 				break;
@@ -207,6 +207,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_RETURN:
 				xx_(xx_parser, XX_RETURN, NULL, parser_status);
+				break;
+			case XX_T_REQUIRE:
+				xx_(xx_parser, XX_REQUIRE, NULL, parser_status);
 				break;
 			case XX_T_IF:
 				xx_(xx_parser, XX_IF, NULL, parser_status);

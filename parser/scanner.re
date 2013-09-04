@@ -302,6 +302,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'require' {
+			s->active_char += sizeof("require")-1;
+			token->opcode = XX_T_REQUIRE;
+			return 0;
+		}
+
 		'loop' {
 			token->opcode = XX_T_LOOP;
 			s->active_char += sizeof("loop")-1;

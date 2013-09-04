@@ -32,6 +32,7 @@
 %left PUBLIC PROTECTED STATIC PRIVATE SCOPED .
 
 %left COMMA .
+%right REQUIRE .
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
@@ -155,7 +156,8 @@ static json_object *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state
 	return ret;
 }
 
-static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, int is_final, xx_parser_token *E, xx_scanner_state *state)
+static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, int is_final,
+	xx_parser_token *E, json_object *I, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -167,6 +169,10 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 
 	if (E) {
 		json_object_object_add(ret, "extends", json_object_new_string(E->token));
+	}
+
+	if (I) {
+		json_object_object_add(ret, "implements", I);
 	}
 
 	if (class_definition) {
@@ -280,7 +286,8 @@ static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_
 	return ret;
 }
 
-static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token *T, json_object *parameters, json_object *statements, xx_parser_token *D, xx_scanner_state *state)
+static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token *T, json_object *parameters,
+	json_object *statements, xx_parser_token *D, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -619,6 +626,20 @@ static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state 
 	return ret;
 }
 
+static json_object *xx_ret_fcall_statement(json_object *expr, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("fcall"));
+	json_object_object_add(ret, "expr", expr);
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_mcall_statement(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -928,27 +949,31 @@ xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_interfa
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, 0, NULL, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 0, NULL, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, 0, E, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 0, E, NULL, status->scanner_state);
+}
+
+xx_class_def(R) ::= CLASS IDENTIFIER(I) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, 0, NULL, L, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 1, 0, NULL, status->scanner_state);
+	R = xx_ret_class(I, B, 1, 0, NULL, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 1, 0, E, status->scanner_state);
+	R = xx_ret_class(I, B, 1, 0, E, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, 1, NULL, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 1, NULL, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
-	R = xx_ret_class(I, B, 0, 1, E, status->scanner_state);
+	R = xx_ret_class(I, B, 0, 1, E, NULL, status->scanner_state);
 }
 
 xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
@@ -957,6 +982,18 @@ xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
 
 xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
 	R = C;
+}
+
+xx_implements_list(R) ::= xx_implements_list(L) COMMA xx_implements(I) . {
+	R = xx_ret_list(L, I);
+}
+
+xx_implements_list(R) ::= xx_implements(I) . {
+	R = xx_ret_list(NULL, I);
+}
+
+xx_implements(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 
 xx_interface_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
@@ -1047,7 +1084,7 @@ xx_class_methods_definition(R) ::= xx_class_method_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
-xx_interface_methods_definition(R) ::= xx_interface_methods_definition(L) DOTCOMMA xx_interface_method_definition(P) . {
+xx_interface_methods_definition(R) ::= xx_interface_methods_definition(L) xx_interface_method_definition(P) . {
 	R = xx_ret_list(L, P);
 }
 
@@ -1095,11 +1132,11 @@ xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDEN
 	R = xx_ret_class_method(V, I, L, S, C, status->scanner_state);
 }
 
-xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, status->scanner_state);
 }
 
-xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE . {
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE DOTCOMMA . {
 	R = xx_ret_class_method(V, I, L, NULL, NULL, status->scanner_state);
 }
 
@@ -1259,6 +1296,10 @@ xx_statement(R) ::= xx_return_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_fcall_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_mcall_statement(S) . {
 	R = S;
 }
@@ -1353,6 +1394,10 @@ xx_case_clauses(R) ::= xx_case_clauses(C) xx_case_clause(K) . {
 
 xx_case_clauses(R) ::= xx_case_clause(K) . {
 	R = xx_ret_list(NULL, K);
+}
+
+xx_case_clause(R) ::= CASE xx_literal_expr(E) COLON . {
+	R = xx_ret_case_clause(E, NULL, status->scanner_state);
 }
 
 xx_case_clause(R) ::= CASE xx_literal_expr(E) COLON xx_statement_list(L) . {
@@ -1487,6 +1532,16 @@ xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN xx_index_expr(I) SBRACKET_C
 	R = xx_ret_let_assignment("array-index", O, D, NULL, I, E, status->scanner_state);
 }
 
+/* t->y++ */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) INCR . {
+	R = xx_ret_let_assignment("incr", NULL, D, I, NULL, NULL, status->scanner_state);
+}
+
+/* t->y-- */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) DECR . {
+	R = xx_ret_let_assignment("decr", NULL, D, I, NULL, NULL, status->scanner_state);
+}
+
 /* y++ */
 xx_let_assignment(R) ::= IDENTIFIER(I) INCR . {
 	R = xx_ret_let_assignment("incr", NULL, I, NULL, NULL, NULL, status->scanner_state);
@@ -1520,6 +1575,11 @@ xx_echo_expression(R) ::= xx_common_expr(E) . {
 /* mcall statement */
 xx_mcall_statement(R) ::= xx_mcall_expr(E) DOTCOMMA . {
 	R = xx_ret_mcall_statement(E, status->scanner_state);
+}
+
+/* fcall statement */
+xx_fcall_statement(R) ::= xx_fcall_expr(E) DOTCOMMA . {
+	R = xx_ret_fcall_statement(E, status->scanner_state);
 }
 
 /* scall statement */
@@ -1644,6 +1704,10 @@ xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 
 xx_common_expr(R) ::= ISSET xx_isset_expr(O1) . {
 	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= REQUIRE xx_common_expr(O1) . {
+	R = xx_ret_expr("require", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= xx_common_expr(O1) EQUALS xx_common_expr(O2) . {
@@ -1829,23 +1893,13 @@ xx_common_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) P
 }
 
 /* y = f(false, x) */
-xx_common_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+xx_fcall_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_fcall(I, P, status->scanner_state);
 }
 
 /* y = f() */
-xx_common_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+xx_fcall_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_fcall(I, NULL, status->scanner_state);
-}
-
-/* y = o->m(false, x) or y = o->m() */
-xx_common_expr(R) ::= xx_mcall_expr(E) . {
-	R = E;
-}
-
-/* y = o::m(false, x) or y = o::m() */
-xx_common_expr(R) ::= xx_scall_expr(E) . {
-	R = E;
 }
 
 /* o::m(false, x) */
@@ -1866,6 +1920,21 @@ xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_
 /* o->m() */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
+}
+
+/* y = o->m(false, x) or y = o->m() */
+xx_common_expr(R) ::= xx_mcall_expr(E) . {
+	R = E;
+}
+
+/* y = o::m(false, x) or y = o::m() */
+xx_common_expr(R) ::= xx_scall_expr(E) . {
+	R = E;
+}
+
+/* f() or f(1, 2, 3) */
+xx_common_expr(R) ::= xx_fcall_expr(E) . {
+	R = E;
 }
 
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
@@ -1941,18 +2010,8 @@ xx_literal_expr(R) ::= TRUE . {
 }
 
 /* isset v[x] */
-xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* isset v[0] */
-xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_INTEGER, I, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* isset v["some-index"] */
-xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), E, NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_common_expr(E) . {

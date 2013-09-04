@@ -370,10 +370,12 @@ class Compiler
 				if (isset($extra['file'])) {
 					echo PHP_EOL;
 					$lines = file($extra['file']);
+					if (isset($lines[$extra['line'] - 1])) {
 					$line = $lines[$extra['line'] - 1];
 					echo "\t", str_replace("\t", " ", $line);
 					if (($extra['char'] - 1) > 0) {
 						echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
+					}
 					}
 				}
 			}
