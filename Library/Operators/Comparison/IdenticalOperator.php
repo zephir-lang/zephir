@@ -19,6 +19,7 @@
 
 class IdenticalOperator extends ComparisonBaseOperator
 {
+	protected $_commutative = true;
 
 	protected $_operator = '==';
 

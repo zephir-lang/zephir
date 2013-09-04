@@ -39,11 +39,33 @@ class IfStatement
 
 		$condition = false;
 
+		/**
+		 * This pass tries to move dynamic variable initialization out
+		 * of the if/else branch
+		 */
+		if (isset($this->_statement['statements']) && isset($this->_statement['else_statements'])) {
+
+			$skipVariantInit = new SkipVariantInit();
+
+			$skipVariantInit->pass(0, new StatementsBlock($this->_statement['statements']));
+			$skipVariantInit->pass(1, new StatementsBlock($this->_statement['else_statements']));
+
+			$symbolTable = $compilationContext->symbolTable;
+			foreach ($skipVariantInit->getVariables() as $variable) {
+				if ($symbolTable->hasVariable($variable)) {
+					$symbolVariable = $symbolTable->getVariable($variable);
+					if ($symbolVariable->getType() == 'variable') {
+						$symbolVariable->initVariant($compilationContext);
+						$symbolVariable->skipInitVariant(2);
+					}
+				}
+			}
+		}
+
 		$exprRaw = $this->_statement['expr'];
 
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($exprRaw, $compilationContext);
-
 		$compilationContext->codePrinter->output('if (' . $condition . ') {');
 
 		/**

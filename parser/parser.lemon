@@ -473,10 +473,11 @@ static json_object *xx_ret_case_clause(json_object *expr, json_object *statement
 {
 	json_object *ret = json_object_new_object();
 
-	json_object_object_add(ret, "type", json_object_new_string("case"));
-
 	if (expr) {
+		json_object_object_add(ret, "type", json_object_new_string("case"));
 		json_object_object_add(ret, "expr", expr);
+	} else {
+		json_object_object_add(ret, "type", json_object_new_string("default"));
 	}
 
 	if (statements) {

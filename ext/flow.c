@@ -1301,3 +1301,123 @@ PHP_METHOD(Test_Flow, testSwitch3) {
 
 }
 
+PHP_METHOD(Test_Flow, testSwitch4) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 5)) {
+			RETURN_LONG(1);
+		}
+		RETURN_LONG(2);
+	} while(0);
+
+	RETURN_LONG(3);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch5) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 10)) {
+			RETURN_LONG(1);
+		}
+		RETURN_LONG(2);
+	} while(0);
+
+	RETURN_LONG(3);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch6) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 10);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 10) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch7) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 4);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 10) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch8) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 5);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 10) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch9) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 5);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 3) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(0);
+		}
+		if (ZEPHIR_IS_LONG(&a, 10) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch10) {
+
+	zval a = zval_used_for_init;
+
+	ZEPHIR_SINIT_NVAR(a);
+	ZVAL_LONG(&a, 5);
+	do {
+		if (ZEPHIR_IS_LONG(&a, 3) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(0);
+		}
+		if (ZEPHIR_IS_LONG(&a, 10) || ZEPHIR_IS_LONG(&a, 4)) {
+			RETURN_LONG(1);
+		}
+	} while(0);
+
+	RETURN_LONG(2);
+
+}
+

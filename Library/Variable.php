@@ -87,6 +87,8 @@ class Variable
 
 	protected $_classType;
 
+	protected $_numberSkips = 0;
+
 	/**
 	 * @param string $type
 	 * @param string $name
@@ -423,12 +425,28 @@ class Variable
 	}
 
 	/**
+	 * Skips variable initialization
+	 *
+	 * @param int $numberSkips
+	 */
+	public function skipInitVariant($numberSkips)
+	{
+		$this->_numberSkips += $numberSkips;
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext
 	 */
 	public function initVariant(CompilationContext $compilationContext)
 	{
+
+		if ($this->_numberSkips) {
+			$this->_numberSkips--;
+			return;
+		}
+
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 			$compilationContext->headersManager->add('kernel/memory');
 			if (!$this->isLocalOnly()) {
@@ -459,6 +477,12 @@ class Variable
 	 */
 	public function initComplexLiteralVariant(CompilationContext $compilationContext)
 	{
+
+		if ($this->_numberSkips) {
+			$this->_numberSkips--;
+			return;
+		}
+
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 			$compilationContext->headersManager->add('kernel/memory');
 			if (!$this->isLocalOnly()) {
@@ -488,6 +512,12 @@ class Variable
 	 */
 	public function observeVariant(CompilationContext $compilationContext)
 	{
+
+		if ($this->_numberSkips) {
+			$this->_numberSkips--;
+			return;
+		}
+
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);

@@ -1,5 +1,22 @@
 <?php
 
+/*
+ +----------------------------------------------------------------------+
+ | Zephir Language                                                      |
+ +----------------------------------------------------------------------+
+ | Copyright (c) 2013 Zephir Team                                       |
+ +----------------------------------------------------------------------+
+ | This source file is subject to version 1.0 of the Zephir license,    |
+ | that is bundled with this package in the file LICENSE, and is        |
+ | available through the world-wide-web at the following url:           |
+ | http://www.zephir-lang.com/license                                   |
+ |                                                                      |
+ | If you did not receive a copy of the Zephir license and are unable   |
+ | to obtain it through the world-wide-web, please send a note to       |
+ | license@zephir-lang.com so we can mail you a copy immediately.       |
+ +----------------------------------------------------------------------+
+*/
+
 /**
  * LocalContextPass
  *
@@ -34,6 +51,11 @@ class LocalContextPass
 		}
 	}
 
+	/**
+	 * Marks a variable to mandatory be stored in the heap
+	 *
+	 * @param string $variable
+	 */
 	public function markVariableNoLocal($variable)
 	{
 		if (isset($this->_variables[$variable])) {
@@ -42,7 +64,7 @@ class LocalContextPass
 	}
 
 	/**
-	 * Asks the local context information if a variable can be static instead of allocated
+	 * Asks the local context information whether a variable can be stored in the stack instead of the heap
 	 *
 	 * @param string $variable
 	 * @return boolean
@@ -220,12 +242,17 @@ class LocalContextPass
 					}
 					break;
 				case 'switch':
+					if (isset($statement['expr'])) {
+						$this->passExpression($statement['expr']);
+					}
 					if (isset($statement['clauses'])) {
 						foreach ($statement['clauses'] as $clause) {
 							if (isset($clause['expr'])) {
 								$this->passExpression($clause['expr']);
 							}
-							$this->passStatementBlock($clause['statements']);
+							if (isset($clause['statements'])) {
+								$this->passStatementBlock($clause['statements']);
+							}
 						}
 					}
 					break;
@@ -253,6 +280,9 @@ class LocalContextPass
 					}
 					break;
 				case 'return':
+					if (isset($statement['expr'])) {
+						$this->passExpression($statement['expr']);
+					}
 					break;
 				case 'loop':
 					if (isset($statement['statements'])) {
@@ -260,6 +290,9 @@ class LocalContextPass
 					}
 					break;
 				case 'throw':
+					if (isset($statement['expr'])) {
+						$this->passExpression($statement['expr']);
+					}
 					break;
 				case 'mcall':
 				case 'scall':

@@ -490,6 +490,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (Z_TYPE_P(currentHostName) != IS_NULL) {
 				continue;
 			}
+			ZEPHIR_INIT_NVAR(matched);
 			if (zephir_memnstr_str(hostname, SL("("))) {
 				if (zephir_memnstr_str(hostname, SL("#"))) {
 					ZEPHIR_INIT_LNVAR(_8);
@@ -499,26 +500,26 @@ PHP_METHOD(Test_Router, handle) {
 				} else {
 					ZEPHIR_CPY_WRT(regexHostName, hostname);
 				}
-				ZEPHIR_INIT_NVAR(matched);
 				zephir_call_func_p2(matched, "preg_match", regexHostName, currentHostName);
 			} else {
-				ZEPHIR_INIT_NVAR(matched);
 				ZVAL_BOOL(matched, ZEPHIR_IS_EQUAL(currentHostName, hostname));
 			}
 			if (!(zend_is_true(matched))) {
 				continue;
 			}
 		}
+
 		ZEPHIR_INIT_NVAR(pattern);
 		zephir_call_method(pattern, route, "getcompiledpattern");
+
+		ZEPHIR_INIT_NVAR(routeFound);
 		if (zephir_memnstr_str(pattern, SL("^"))) {
 			Z_SET_ISREF_P(matches);
-			ZEPHIR_INIT_NVAR(routeFound);
 			zephir_call_func_p3(routeFound, "preg_match", pattern, handledUri, matches);
 		} else {
-			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, ZEPHIR_IS_EQUAL(pattern, handledUri));
 		}
+
 		if (zend_is_true(routeFound)) {
 			ZEPHIR_INIT_NVAR(beforeMatch);
 			zephir_call_method(beforeMatch, route, "getbeforematch");
@@ -529,6 +530,7 @@ PHP_METHOD(Test_Router, handle) {
 				}
 			}
 		}
+
 		if (zend_is_true(routeFound)) {
 			ZEPHIR_INIT_NVAR(paths);
 			zephir_call_method(paths, route, "getpaths");
@@ -564,6 +566,7 @@ PHP_METHOD(Test_Router, handle) {
 			break;
 		}
 	}
+
 	if (zend_is_true(routeFound)) {
 		ZEPHIR_INIT_NVAR(_7);
 		ZVAL_BOOL(_7, 1);

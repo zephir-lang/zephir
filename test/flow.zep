@@ -602,4 +602,126 @@ class Flow
 		return a;
 	}
 
+	public function testSwitch1()
+	{
+		var a;
+		let a = 10;
+		switch a { }
+		return a;
+	}
+
+	public function testSwitch2()
+	{
+		var a;
+		let a = 10;
+		switch a {
+			case 10:
+				return true;
+		}
+		return false;
+	}
+
+	public function testSwitch3()
+	{
+		var a;
+		let a = 10;
+		switch a {
+			case 5:
+				return true;
+		}
+		return false;
+	}
+
+	public function testSwitch4()
+	{
+		var a;
+		let a = 10;
+		switch a {
+			case 5:
+				return 1;
+			default:
+				return 2;
+		}
+		return 3;
+	}
+
+	public function testSwitch5()
+	{
+		var a;
+		let a = 10;
+		switch a {
+			case 10:
+				return 1;
+			default:
+				return 2;
+		}
+		return 3;
+	}
+
+	public function testSwitch6()
+	{
+		var a;
+		let a = 10;
+		switch a {
+			case 10:
+			case 4:
+				return 1;
+		}
+		return 2;
+	}
+
+	public function testSwitch7()
+	{
+		var a;
+		let a = 4;
+		switch a {
+			case 10:
+			case 4:
+				return 1;
+		}
+		return 2;
+	}
+
+	public function testSwitch8()
+	{
+		var a;
+		let a = 5;
+		switch a {
+			case 10:
+			case 4:
+				return 1;
+		}
+		return 2;
+	}
+
+	public function testSwitch9()
+	{
+		var a;
+		let a = 5;
+		switch a {
+			case 3:
+			case 4:
+				return 0;
+			case 10:
+			case 4:
+				return 1;
+		}
+		return 2;
+	}
+
+	public function testSwitch10()
+	{
+		var a;
+		let a = 5;
+		switch a {
+			case 3:
+			case 4:
+				return 0;
+			case 10:
+			case 4:
+				return 1;
+		}
+		return 2;
+	}
+
 }

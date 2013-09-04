@@ -92,30 +92,81 @@ class SwitchStatement
 				$tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
 			}
 
-			foreach ($this->_statement['clauses'] as $clause) {
-				if ($clause['type'] == 'case') {
+			$clauses = $this->_statement['clauses'];
+			$tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
 
+			/**
+			 * In the first round we group case clauses that have block statements
+			 * with the ones that does not have one
+			 */
+			$blocks = array();
+			$exprStack = array();
+			$defaultBlock = null;
+			foreach ($clauses as $clause) {
+
+				if ($clause['type'] == 'case') {
 					$expr = array(
 						'type' => 'equals',
-						'left' => array('type' => 'variable', 'value' => $tempVariable->getRealName()),
+						'left' => $tempLeft,
 						'right' => $clause['expr']
 					);
-
-					$condition = $evalExpr->optimize($expr, $compilationContext);
-					$codePrinter->output('if (' . $condition . ') {');
-
-					if (isset($clause['statements'])) {
-						$st = new StatementsBlock($clause['statements']);
-						$st->compile($compilationContext);
+					if (!isset($clause['statements'])) {
+						$exprStack[] = $expr;
+					} else {
+						$exprStack[] = $expr;
+						$blocks[] = array(
+							'expr' => $exprStack,
+							'block' => $clause['statements']
+						);
+						$exprStack = array();
 					}
-
-					$codePrinter->output('}');
+				} else {
+					if ($clause['type'] == 'default') {
+						$defaultBlock = $clause['statements'];
+					}
 				}
+
+			}
+
+			/**
+			 * In the second round we generate the conditions with their blocks
+			 * grouping 'cases' without a statement block using an 'or'
+			 */
+			foreach ($blocks as $block) {
+
+				$expressions = $block['expr'];
+
+				if (count($expressions) == 1) {
+					$condition = $evalExpr->optimize($expressions[0], $compilationContext);
+					$codePrinter->output('if (' . $condition . ') {');
+				} else {
+					$orConditions = array();
+					foreach ($expressions as $expression) {
+						$orConditions[] = $evalExpr->optimize($expression, $compilationContext);
+					}
+					$codePrinter->output('if (' . join(' || ', $orConditions) . ') {');
+				}
+
+				if (isset($block['block'])) {
+					$st = new StatementsBlock($block['block']);
+					$st->compile($compilationContext);
+				}
+
+				$codePrinter->output('}');
+
 			}
 
 			$compilationContext->insideSwitch--;
 
 			$compilationContext->codePrinter->decreaseLevel();
+
+			/**
+			 * The default block is resolved at the end of the 'switch'
+			 */
+			if ($defaultBlock) {
+				$st = new StatementsBlock($defaultBlock);
+				$st->compile($compilationContext);
+			}
 
 			$codePrinter->output('} while(0);');
 			$codePrinter->outputBlankLine();

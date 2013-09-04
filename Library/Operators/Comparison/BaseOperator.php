@@ -26,6 +26,8 @@ class ComparisonBaseOperator extends BaseOperator
 {
 	protected $_literalOnly = true;
 
+	protected $_commutative = false;
+
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
