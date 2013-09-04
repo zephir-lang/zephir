@@ -69,13 +69,28 @@ class MethodCall extends Call
 		}
 
 		/**
-		 * If the method is called on this, we check if the method does exist
+		 * Try to check if the method exist in the callee
 		 */
 		if ($variableVariable->getRealName() == 'this') {
+
 			$classDefinition = $compilationContext->classDefinition;
 			if (!$classDefinition->hasMethod($methodName)) {
 				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
 			}
+
+			/**
+			 * Try to produce an exception if method is called with a wrong number
+			 * of parameters
+			 */
+			if (isset($expression['parameters'])) {
+				$callNumberParameters = count($expression['parameters']);
+				$classMethod = $classDefinition->getMethod($methodName);
+				$expectedNumberParameters = $classMethod->getNumberOfParameters();
+				if ($callNumberParameters != $expectedNumberParameters) {
+					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", expected: " . $callNumberParameters, $expression);
+				}
+			}
+
 		} else {
 			if ($variableVariable->getDynamicType() == 'object') {
 				$classType = $variableVariable->getClassType();

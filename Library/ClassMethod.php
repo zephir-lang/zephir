@@ -65,6 +65,19 @@ class ClassMethod
 		return $this->_parameters;
 	}
 
+	/**
+	 * Returns the number of parameters the method has
+	 *
+	 * @return int
+	 */
+	public function getNumberOfParameters()
+	{
+		if (is_object($this->_parameters)) {
+			return count($this->_parameters->getParameters());
+		}
+		return 0;
+	}
+
 	public function getModifiers()
 	{
 		$modifiers = array();

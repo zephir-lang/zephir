@@ -332,9 +332,9 @@ PHP_METHOD(Test_NativeArray, testArray15) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	add_assoc_bool_ex(a, SS("true"), 1);
-	add_assoc_bool_ex(a, SS("false"), 0);
-	add_assoc_bool_ex(a, SS("true"), 1);
+	add_assoc_bool_ex(a, SS("hello1"), true);
+	add_assoc_bool_ex(a, SS("hello2"), false);
+	add_assoc_bool_ex(a, SS("hello3"), true);
 	RETURN_CCTOR(a);
 
 }

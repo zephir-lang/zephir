@@ -211,6 +211,29 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns a method by its name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function getMethod($methodName)
+	{
+		foreach ($this->_methods as $name => $method) {
+			if (!strcasecmp($methodName, $name)) {
+				return $method;
+			}
+		}
+
+		$extendsClassDefinition = $this->_extendsClassDefinition;
+		if ($extendsClassDefinition) {
+			if ($extendsClassDefinition->hasMethod($methodName)) {
+				return $extendsClassDefinition->getMethod($methodName);
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Returns the name of the zend_class_entry according to the class name
 	 *
 	 * @return string

@@ -636,6 +636,9 @@ class Expression
 
 	/**
 	 * Compiles an array initialization
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function compileArray($expression, CompilationContext $compilationContext)
 	{
@@ -786,7 +789,7 @@ class Expression
 										$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $resolvedExpr->getBooleanCode() . ');');
 										break;
 									case 'string':
-										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1, SL("' . $$resolvedExpr->getCode() . '"), 1);');
+										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
 										break;
 									case 'null':
 										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1);');
