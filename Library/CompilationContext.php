@@ -40,6 +40,13 @@ class CompilationContext
 	public $codePrinter;
 
 	/**
+	 * Whether the current method is static or not
+	 *
+	 * @var boolean
+	 */
+	public $staticContext;
+
+	/**
 	 * Code printer for the header
 	 *
 	 * @var \CodePrinter

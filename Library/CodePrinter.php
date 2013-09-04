@@ -20,7 +20,7 @@
 /**
  * CodePrinter
  *
- * Buffers code, making it look prettier
+ * Buffers code, making it look pretty
  */
 class CodePrinter
 {

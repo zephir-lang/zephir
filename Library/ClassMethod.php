@@ -100,6 +100,26 @@ class ClassMethod
 		return 0;
 	}
 
+	/**
+	 * Checks whether the method has a specific modifier
+	 *
+	 * @param string $modifier
+	 */
+	public function hasModifier($modifier)
+	{
+		foreach ($this->_visibility as $visibility) {
+			if ($visibility == 'static') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the C-modifier flags
+	 *
+	 * @return string
+	 */
 	public function getModifiers()
 	{
 		$modifiers = array();
@@ -366,7 +386,7 @@ class ClassMethod
 				$symbol->setIsInitialized(true);
 
 				/**
-				 * Variables witth class/type must be objects across the execution
+				 * Variables with class/type must be objects across the execution
 				 */
 				if (isset($parameter['cast'])) {
 					$symbol->setDynamicType('object');
@@ -379,6 +399,11 @@ class ClassMethod
 		 * Compile the block of statements if any
 		 */
 		if (is_object($this->_statements)) {
+			if ($this->hasModifier('static')) {
+				$compilationContext->staticContext = true;
+			} else {
+				$compilationContext->staticContext = false;
+			}
 			$this->_statements->compile($compilationContext);
 		}
 

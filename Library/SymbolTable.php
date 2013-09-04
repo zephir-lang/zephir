@@ -138,6 +138,15 @@ class SymbolTable
 	{
 
 		/**
+		 * Validate that 'this' cannot be used in a static function
+		 */
+		if ($name == 'this' || $name == 'this_ptr') {
+			if ($compilationContext->staticContext) {
+				throw new CompilerException("Cannot use variable 'this' in static context", $statement);
+			}
+		}
+
+		/**
 		 * Create superglobals just in time
 		 */
 		if ($this->isSuperGlobal($name)) {

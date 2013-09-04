@@ -17,6 +17,11 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * MethodCall
+ *
+ * Call methods in a non-static context
+ */
 class MethodCall extends Call
 {
 

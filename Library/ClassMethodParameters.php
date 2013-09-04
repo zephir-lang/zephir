@@ -17,9 +17,18 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * ClassMethodParameters
+ *
+ * Represents the parameters defined in a method
+ */
 class ClassMethodParameters
 {
 
+	/**
+	 *
+	 * @param array $parameters
+	 */
 	public function __construct(array $parameters)
 	{
 		$this->_parameters = $parameters;

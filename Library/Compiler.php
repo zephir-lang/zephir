@@ -31,6 +31,8 @@ class Compiler
 
 	protected $_compiledFiles;
 
+	protected static $_reflections = array();
+
 	const VERSION = '0.2.0a';
 
 	/**
@@ -50,6 +52,10 @@ class Compiler
 		}
 	}
 
+	/**
+	 *
+	 * @param string $path
+	 */
 	protected function _recursivePreCompile($path)
 	{
 		/**
@@ -119,7 +125,10 @@ class Compiler
 	 */
 	public function getInternalClassDefinition($className)
 	{
-		return new ReflectionClass($className);
+		if (!isset(self::$_reflections[$className])) {
+			self::$_reflections[$className] = new ReflectionClass($className);
+		}
+		return self::$_reflections[$className];
 	}
 
 	/**

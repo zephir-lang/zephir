@@ -68,4 +68,19 @@ class Scall
 		return Test\Scall::testMethod6(a, b);
 	}
 
+	public function testCall7()
+	{
+		return self::testMethod1();
+	}
+
+	public function testCall8()
+	{
+		return self::testMethod2();
+	}
+
+	public function testCall9()
+	{
+		return self::testMethod3();
+	}
+
 }

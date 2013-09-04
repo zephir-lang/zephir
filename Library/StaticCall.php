@@ -17,15 +17,63 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * MethodCall
+ *
+ * Call methods in a static context
+ */
 class StaticCall extends Call
 {
 
+	protected function callSelf($methodName, array $expression, Variable $symbolVariable, $mustInit, $isExpecting,
+		ClassDefinition $classDefinition, CompilationContext $compilationContext)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+		$classCe = $classDefinition->getClassEntry();
+
+		if (!isset($expression['parameters'])) {
+
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
+
+			if ($isExpecting) {
+				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '");');
+			} else {
+				$codePrinter->output('ZEPHIR_CALL_SELF_NORETURN("' . $className . '", "' . $methodName . '");');
+			}
+		} else {
+
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
+
+			if (count($params)) {
+				if ($isExpecting) {
+					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '_NORETURN(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+				}
+			} else {
+				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+			}
+		}
+	}
+
+	/**
+	 * Compiles a static method call
+	 *
+	 * @param array $expr
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compile(Expression $expr, CompilationContext $compilationContext)
 	{
 
 		$expression = $expr->getExpression();
-
-		$codePrinter = $compilationContext->codePrinter;
 
 		$methodName = strtolower($expression['name']);
 
@@ -62,39 +110,33 @@ class StaticCall extends Call
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
 
-		$className = strtolower(str_replace('\\', '\\\\', $expression['class']));
-		$classCe = strtolower(str_replace('\\', '_', $expression['class'])) . '_ce';
+		$compiler = $compilationContext->compiler;
 
-		/**
-		 *
-		 */
-		if (!isset($expression['parameters'])) {
-			if ($mustInit) {
-				$symbolVariable->initVariant($compilationContext);
-			}
-			if ($isExpecting) {
-				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
-				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '");');
-			} else {
-				$codePrinter->output('ZEPHIR_CALL_SELF_NORETURN("' . $className . '", "' . $methodName . '");');
+		$className = $expression['class'];
+
+		if ($className != 'self' && $className != 'parent') {
+			if ($compiler->isClass($className)) {
+				$classDefinition = $compiler->getClassDefinition($className);
 			}
 		} else {
-
-			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-			if ($mustInit) {
-				$symbolVariable->initVariant($compilationContext);
+			if ($className == 'self') {
+				$classDefinition = $compilationContext->classDefinition;
 			}
+		}
 
-			if (count($params)) {
-				if ($isExpecting) {
-					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
-				} else {
-					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '_NORETURN(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
-				}
-			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
-			}
+		/**
+		 * Call static methods in the same class, use the special context 'self'
+		 */
+		if ($className == 'self' || $classDefinition == $compilationContext->classDefinition) {
+			$type = 'self';
+		}
+
+		/**
+		 * Call static methods in the 'self' context
+		 */
+		if ($type == 'self') {
+			$this->callSelf($methodName, $expression, $symbolVariable, $mustInit,
+				$isExpecting, $classDefinition, $compilationContext);
 		}
 
 		/**

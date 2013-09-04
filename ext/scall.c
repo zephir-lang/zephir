@@ -146,3 +146,24 @@ PHP_METHOD(Test_Scall, testCall6) {
 
 }
 
+PHP_METHOD(Test_Scall, testCall7) {
+
+	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
+	return;
+
+}
+
+PHP_METHOD(Test_Scall, testCall8) {
+
+	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
+	return;
+
+}
+
+PHP_METHOD(Test_Scall, testCall9) {
+
+	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
+	return;
+
+}
+
