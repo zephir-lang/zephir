@@ -60,7 +60,7 @@ PHP_METHOD(Test_Declare, testDeclare4) {
 
 PHP_METHOD(Test_Declare, testDeclare5) {
 
-	char a = A;
+	char a = 'A';
 
 	RETURN_LONG(a);
 
@@ -68,9 +68,33 @@ PHP_METHOD(Test_Declare, testDeclare5) {
 
 PHP_METHOD(Test_Declare, testDeclare6) {
 
-	unsigned char a = A;
+	unsigned char a = 'A';
 
 	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare7) {
+
+	long a = 1;
+
+	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare8) {
+
+	zend_bool a = 1;
+
+	RETURN_BOOL(a);
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare9) {
+
+	zend_bool a = 0;
+
+	RETURN_BOOL(a);
 
 }
 

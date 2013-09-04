@@ -42,4 +42,23 @@ class Declare
 		uchar a = 'A';
 		return a;
 	}
+
+	public function testDeclare7()
+	{
+		long a = 1;
+		return a;
+	}
+
+	public function testDeclare8()
+	{
+		boolean a = true;
+		return a;
+	}
+
+	public function testDeclare9()
+	{
+		boolean a = false;
+		return a;
+	}
+
 }

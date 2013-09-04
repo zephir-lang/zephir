@@ -99,11 +99,26 @@ class DeclareStatement
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
+					case 'bool':
+						switch ($variable['expr']['type']) {
+							case 'bool':
+								if ($variable['expr']['value'] == 'true') {
+									$defaultValue = 1;
+								} else {
+									$defaultValue = 0;
+								}
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
 					case 'char':
 					case 'uchar':
 						switch ($variable['expr']['type']) {
 							case 'char':
 							case 'uchar':
+								$defaultValue = '\'' . $defaultValue . '\'';
+								break;
 							case 'int':
 								break;
 							default:
