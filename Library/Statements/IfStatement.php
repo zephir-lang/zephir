@@ -33,6 +33,7 @@ class IfStatement
 
 	/**
 	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

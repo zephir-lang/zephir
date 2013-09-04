@@ -57,7 +57,7 @@ class Route
 		if memstr(pattern, ":") {
 
 			// This is a pattern for valid identifiers
-			let idPattern = "/([a-zA-Z0-9\_\-]+)";
+			let idPattern = "/([a-zA-Z0-9\\_\\-]+)";
 
 			// Replace the module part
 			if memstr(pattern, "/:module") {

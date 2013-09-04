@@ -332,9 +332,9 @@ PHP_METHOD(Test_NativeArray, testArray15) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	add_assoc_bool_ex(a, SS("hello1"), 1);
-	add_assoc_bool_ex(a, SS("hello2"), 0);
-	add_assoc_bool_ex(a, SS("hello3"), 1);
+	add_assoc_bool_ex(a, SS("true"), 1);
+	add_assoc_bool_ex(a, SS("false"), 0);
+	add_assoc_bool_ex(a, SS("true"), 1);
 	RETURN_CCTOR(a);
 
 }
@@ -360,9 +360,9 @@ PHP_METHOD(Test_NativeArray, testArray17) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	add_assoc_null_ex(a, SS("hello1"));
-	add_assoc_null_ex(a, SS("hello2"));
-	add_assoc_null_ex(a, SS("hello3"));
+	add_assoc_null_ex(a, SS(""));
+	add_assoc_null_ex(a, SS(""));
+	add_assoc_null_ex(a, SS(""));
 	RETURN_CCTOR(a);
 
 }
@@ -430,9 +430,9 @@ PHP_METHOD(Test_NativeArray, testArray22) {
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	add_index_double(a, 0, 4);
-	add_index_double(a, 1, 5);
-	add_index_double(a, 2, 6);
+	add_index_long(a, 0, 4);
+	add_index_long(a, 1, 5);
+	add_index_long(a, 2, 6);
 	RETURN_CCTOR(a);
 
 }

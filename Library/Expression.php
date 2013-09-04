@@ -569,35 +569,29 @@ class Expression
 	/**
 	 * Resolves an item to be added in an array
 	 *
-	 * @param array $item
+	 * @param \CompiledExpression $exprCompiled
 	 * @param \CompilationContext $compilationContext
 	 * @return \Variable
 	 */
-	public function getArrayValue($item, CompilationContext $compilationContext)
+	public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
 	{
 		$codePrinter = $compilationContext->codePrinter;
 
-		$expression = new Expression($item['value']);
-		$exprCompiled = $expression->compile($compilationContext);
 		switch ($exprCompiled->getType()) {
 			case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
 			case 'double':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $item['value']['value'] . ');');
+				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
 			case 'bool':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				if ($item['value']['value'] == 'true') {
-					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 1);');
-				} else {
-					$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', 0);');
-				}
+				$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $exprCompiled->getBooleanCode() . ');');
 				return $tempVar;
 			case 'null':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
@@ -605,10 +599,10 @@ class Expression
 				return $tempVar;
 			case 'string':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $item['value']['value'] . '", 1);');
+				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
 				return $tempVar;
 			case 'variable':
-				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $item);
+				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $exprCompiled->getOriginal());
 				switch ($itemVariable->getType()) {
 					case 'int':
 					case 'uint':
@@ -668,62 +662,69 @@ class Expression
 				$key = null;
 				switch ($item['key']['type']) {
 					case 'string':
-						switch ($item['value']['type']) {
+						$expr = new Expression($item['value']);
+						$resolvedExpr = $expr->compile($compilationContext);
+						switch ($resolvedExpr->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
-								$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'double':
-								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $item['value']['value'] . ');');
+								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'bool':
 								if ($item['value']['value'] == 'true') {
-									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), 1);');
+									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"), 1);');
 								} else {
-									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), 0);');
+									$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"), 0);');
 								}
 								break;
 							case 'string':
-								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $item['value']['value'] . '"), 1);');
+								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'null':
-								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"));');
+								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"));');
+								break;
+							case 'variable':
+								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								if ($valueVariable->isTemporal()) {
+									$valueVariable->setIdle(true);
+								}
 								break;
 							default:
-								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								throw new CompilerException("Invalid value type: " . $resolvedExpr->getType(), $item['value']);
 						}
 						break;
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
-						switch ($item['value']['type']) {
+						$expr = new Expression($item['value']);
+						$resolvedExpr = $expr->compile($compilationContext);
+						switch ($resolvedExpr->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
-								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								$codePrinter->output('add_index_long(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'bool':
-								if ($item['value']['value'] == 'true') {
-									$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 1);');
-								} else {
-									$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 0);');
-								}
+								$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
 								break;
 							case 'double':
-								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'null':
 								$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
 								break;
 							case 'string':
-								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'variable':
-								$valueVariable = $this->getArrayValue($item, $compilationContext);
+								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
@@ -740,31 +741,29 @@ class Expression
 							case 'uint':
 							case 'long':
 							case 'ulong':
-								switch ($item['value']['type']) {
+								$expr = new Expression($item['value']);
+								$resolvedExpr = $expr->compile($compilationContext);
+								switch ($resolvedExpr->getType()) {
 									case 'int':
 									case 'uint':
 									case 'long':
 									case 'ulong':
-										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'bool':
-										if ($item['value']['value'] == 'true') {
-											$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 1);');
-										} else {
-											$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', 0);');
-										}
+										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ';');
 										break;
 									case 'double':
-										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $item['value']['value'] . ');');
+										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'null':
 										$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
 										break;
 									case 'string':
-										$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $item['value']['value'] . '"), 1);');
+										$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
 										break;
 									case 'variable':
-										$valueVariable = $this->getArrayValue($item, $compilationContext);
+										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value->getName() . ', PH_COPY | PH_SEPARATE);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
@@ -775,7 +774,9 @@ class Expression
 								}
 								break;
 							case 'string':
-								switch ($item['value']['type']) {
+								$expr = new Expression($item['value']);
+								$resolvedExpr = $expr->compile($compilationContext);
+								switch ($resolvedExpr->getType()) {
 									case 'int':
 									case 'uint':
 									case 'long':
@@ -798,6 +799,13 @@ class Expression
 									case 'null':
 										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1);');
 										break;
+									case 'variable':
+										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										if ($valueVariable->isTemporal()) {
+											$valueVariable->setIdle(true);
+										}
+										break;
 									default:
 										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
 								}
@@ -810,7 +818,9 @@ class Expression
 						throw new CompilerException("Invalid key type: " . $item['key']['type'], $item['key']);
 				}
 			} else {
-				$itemVariable = $this->getArrayValue($item, $compilationContext);
+				$expr = new Expression($item['value']);
+				$resolvedExpr = $expr->compile($compilationContext);
+				$itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ', 0);');
 				if ($itemVariable->isTemporal()) {

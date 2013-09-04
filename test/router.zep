@@ -85,11 +85,11 @@ class Router
 			// Two routes are added by default to match /:controller/:action and
 			// /:controller/:action/:params
 
-			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\_\-]+)[/]{0,1}$#", [
+			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", [
 				"controller": 1
 			]);
 
-			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\_\-]+)/([a-zA-Z0-9\.\_]+)(/.*)*$#", [
+			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", [
 				"controller": 1,
 				"action": 2,
 				"params": 3

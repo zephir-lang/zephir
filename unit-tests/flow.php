@@ -2,7 +2,7 @@
 
 $t = new Test\Flow();
 
-/*assert($t->testIf1() === 1);
+assert($t->testIf1() === 1);
 assert($t->testIf2() === 0);
 assert($t->testIf3() === 1);
 assert($t->testIf4() === 0);
@@ -51,7 +51,7 @@ assert($t->testFor19() === 25);
 assert($t->testFor20() === 25);
 assert($t->testFor21() === 0);
 assert($t->testFor22() === 0);
-assert($t->testFor23() === "zxvtrpnljhfdb");*/
+assert($t->testFor23() === "zxvtrpnljhfdb");
 
 assert($t->testSwitch1() === 10);
 assert($t->testSwitch2() === true);
@@ -62,6 +62,3 @@ assert($t->testSwitch6() === 1);
 assert($t->testSwitch7() === 1);
 assert($t->testSwitch8() === 2);
 assert($t->testSwitch9() === 2);
-
-var_dump($t->testSwitch3());
-

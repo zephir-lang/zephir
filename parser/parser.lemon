@@ -1978,12 +1978,8 @@ xx_array_key(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
-xx_array_value(R) ::= xx_literal_expr(L) . {
-	R = L;
-}
-
-xx_array_value(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
+xx_array_value(R) ::= xx_common_expr(E) . {
+	R = E;
 }
 
 xx_literal_expr(R) ::= INTEGER(I) . {

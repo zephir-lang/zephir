@@ -143,7 +143,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZVAL_STRING(_21, "(c|t)", 1);
 	zephir_array_append(&vIUBnew, _21, PH_SEPARATE);
 	ZEPHIR_INIT_VAR(stuffToRemove);
-	ZVAL_STRING(stuffToRemove, "^>.*$|\\n", 1);
+	ZVAL_STRING(stuffToRemove, "^>.*$|\n", 1);
 	ZEPHIR_INIT_VAR(discard);
 	ZVAL_NULL(discard);
 	ZEPHIR_INIT_VAR(contents);

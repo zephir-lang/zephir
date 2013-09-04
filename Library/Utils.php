@@ -27,12 +27,13 @@ class Utils
 
 	/**
 	 * Prepares a string to be used as a C-string
+	 *
 	 * @param       string $str
 	 * @return      string
 	 */
 	public static function addSlaches($str)
 	{
-		$str = str_replace('\\', "\\\\", $str);
+		//$str = str_replace('\\', "\\\\", $str);
 		$str = str_replace('"', "\\\"", $str);
 		$str = str_replace("\n", "\\n", $str);
 		$str = str_replace("\r", "\\r", $str);

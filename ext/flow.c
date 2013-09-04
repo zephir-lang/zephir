@@ -17,6 +17,7 @@
 #include "kernel/array.h"
 #include "kernel/hash.h"
 #include "kernel/string_type.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -1418,6 +1419,187 @@ PHP_METHOD(Test_Flow, testSwitch10) {
 	} while(0);
 
 	RETURN_LONG(2);
+
+}
+
+PHP_METHOD(Test_Flow, a) {
+
+	zval *r = NULL, *shared = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_NVAR(shared);
+	ZVAL_BOOL(shared, 1);
+	ZEPHIR_INIT_NVAR(r);
+	array_init(r);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "router", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Router", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("router"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "dispatcher", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Dispatcher", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("dispatcher"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "url", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Url", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("url"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "modelsManager", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Model\\Manager", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("modelsManager"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "modelsMetadata", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Model\\MetaData\\Memory", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("modelsMetadata"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "response", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Http\\Response", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("response"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "cookies", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Http\\Response\\Cookies", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("cookies"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "request", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Http\\Request", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("request"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "filter", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Filter", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("filter"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "escaper", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Escaper", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("escaper"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "security", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Security", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("security"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "crypt", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Crypt", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("crypt"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "annotations", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Annotations\\Adapter\\Memory", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("annotations"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "flash", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Flash\\Direct", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("flash"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "flashSession", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Flash\\Session", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("flashSession"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "tag", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Tag", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("tag"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "session", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Session\\Adapter\\Files", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("session"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "sessionBag", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Session\\Bag", 1);
+	zephir_call_method_p2_noret(_0, "__construct", _1, _2);
+	zephir_array_update_string(&r, SS("sessionBag"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "eventsManager", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Events\\Manager", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("eventsManager"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "transactions", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Mvc\\Model\\Transaction\\Manager", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("transactionManager"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_INIT_NVAR(_0);
+	object_init_ex(_0, test_router_route_ce);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_STRING(_1, "assets", 1);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "Phalcon\\Assets\\Manager", 1);
+	zephir_call_method_p3_noret(_0, "__construct", _1, _2, shared);
+	zephir_array_update_string(&r, SS("assets"), &_0, PH_COPY | PH_SEPARATE);
+	ZEPHIR_MM_RESTORE();
 
 }
 
