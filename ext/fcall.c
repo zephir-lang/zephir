@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Fcall) {
 
 PHP_METHOD(Test_Fcall, testCall1) {
 
-	zval _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zval _0, _1;
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "hello", 0);

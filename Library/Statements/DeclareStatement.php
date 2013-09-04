@@ -78,7 +78,32 @@ class DeclareStatement
 
 				switch ($statement['data-type']) {
 					case 'int':
+					case 'uint':
+					case 'ulong':
+					case 'long':
 						switch ($variable['expr']['type']) {
+							case 'int':
+							case 'uint':
+							case 'ulong':
+							case 'int':
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
+					case 'double':
+						switch ($variable['expr']['type']) {
+							case 'double':
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
+					case 'char':
+					case 'uchar':
+						switch ($variable['expr']['type']) {
+							case 'char':
+							case 'uchar':
 							case 'int':
 								break;
 							default:

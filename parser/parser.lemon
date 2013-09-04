@@ -1989,6 +1989,10 @@ xx_literal_expr(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
 
+xx_literal_expr(R) ::= CHAR(C) . {
+	R = xx_ret_literal(XX_T_CHAR, C, status->scanner_state);
+}
+
 xx_literal_expr(R) ::= STRING(S) . {
 	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
 }

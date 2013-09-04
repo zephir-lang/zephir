@@ -191,7 +191,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _12;
 	zend_bool notValid;
 	char ch;
-	zval *pattern_param = NULL, *tmp = NULL, *matches, _0 = zval_used_for_init, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, *_8 = NULL, *_10 = NULL;
+	zval *pattern_param = NULL, *tmp = NULL, *matches, _0, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, *_8 = NULL, *_10 = NULL;
 	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_9 = NULL, *_11 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -353,7 +353,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
 	int _1;
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, _0 = zval_used_for_init, *_2 = NULL, *_3;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, _0, *_2 = NULL, *_3;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);

@@ -591,7 +591,7 @@ class ClassMethod
 					}
 				} else {
 					if ($variable->isLocalOnly()) {
-						$groupVariables[] = $variable->getName() . ' = zval_used_for_init';
+						$groupVariables[] = $variable->getName();
 					} else {
 						if ($variable->isDoublePointer()) {
 							$groupVariables[] = $pointer . $pointer . $variable->getName();
@@ -633,15 +633,6 @@ class ClassMethod
 		 */
 		$oldCodePrinter->output($code);
 		$compilationContext->codePrinter = $oldCodePrinter;
-
-		/*foreach ($symbolTable->getTemporalVariables() as $location => $typeVariables) {
-			echo $location, PHP_EOL;
-			foreach ($typeVariables as $type => $variables) {
-				foreach ($variables as $variable) {
-					echo $variable->getName(), PHP_EOL;
-				}
-			}
-		}*/
 
 		return null;
 	}

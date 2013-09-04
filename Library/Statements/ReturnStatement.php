@@ -78,6 +78,10 @@ class ReturnStatement
 
 			switch ($resolvedExpr->getType()) {
 				case 'int':
+				case 'uint':
+				case 'long':
+				case 'char':
+				case 'uchar':
 					$codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'bool':
@@ -93,6 +97,10 @@ class ReturnStatement
 					$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
 					switch ($symbolVariable->getType()) {
 						case 'int':
+						case 'uint':
+						case 'long':
+						case 'char':
+						case 'uchar':
 							$codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');
 							break;
 						case 'double':

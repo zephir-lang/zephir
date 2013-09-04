@@ -214,7 +214,7 @@ PHP_METHOD(Test_Flow, testIf13) {
 
 PHP_METHOD(Test_Flow, testIf14) {
 
-	zval a = zval_used_for_init, b = zval_used_for_init, _0 = zval_used_for_init;
+	zval a, b, _0;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_LONG(&a, 1);
@@ -231,7 +231,7 @@ PHP_METHOD(Test_Flow, testIf14) {
 
 PHP_METHOD(Test_Flow, testIf15) {
 
-	zval a = zval_used_for_init, b = zval_used_for_init, c = zval_used_for_init, _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zval a, b, c, _0, _1;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_LONG(&a, 1);
@@ -252,7 +252,7 @@ PHP_METHOD(Test_Flow, testIf15) {
 
 PHP_METHOD(Test_Flow, testLoop1) {
 
-	zval a = zval_used_for_init;
+	zval a;
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_BOOL(&a, 1);

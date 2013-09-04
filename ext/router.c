@@ -165,7 +165,7 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, getRewriteUri) {
 
-	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER, _1 = zval_used_for_init;
+	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER, _1;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_OBS_VAR(_0);
