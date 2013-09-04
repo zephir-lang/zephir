@@ -84,22 +84,64 @@ class MethodCall extends Call
 			 */
 			if (isset($expression['parameters'])) {
 				$callNumberParameters = count($expression['parameters']);
-				$classMethod = $classDefinition->getMethod($methodName);
-				$expectedNumberParameters = $classMethod->getNumberOfParameters();
-				if ($callNumberParameters != $expectedNumberParameters) {
-					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", expected: " . $callNumberParameters, $expression);
+			} else {
+				$callNumberParameters = 0;
+			}
+
+			$classMethod = $classDefinition->getMethod($methodName);
+			$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+			if (!$expectedNumberParameters && $callNumberParameters > 0) {
+				$numberParameters = $classMethod->getNumberOfParameters();
+				if ($callNumberParameters > $numberParameters) {
+					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 				}
 			}
 
+			if ($callNumberParameters < $expectedNumberParameters) {
+				throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+			}
+
 		} else {
+
+			/**
+			 * Variables whose dynamic type is 'object' can be used
+			 * to determine method existance in compile time
+			 */
 			if ($variableVariable->getDynamicType() == 'object') {
+
 				$classType = $variableVariable->getClassType();
 				$compiler = $compilationContext->compiler;
 				if ($compiler->isClass($classType)) {
+
 					$classDefinition = $compiler->getClassDefinition($classType);
 					if (!$classDefinition->hasMethod($methodName)) {
 						throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
 					}
+
+					/**
+					 * Try to produce an exception if method is called with a wrong number of parameters
+					 */
+					if (isset($expression['parameters'])) {
+						$callNumberParameters = count($expression['parameters']);
+					} else {
+						$callNumberParameters = 0;
+					}
+
+					$classMethod = $classDefinition->getMethod($methodName);
+					$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+					if (!$expectedNumberParameters && $callNumberParameters > 0) {
+						$numberParameters = $classMethod->getNumberOfParameters();
+						if ($callNumberParameters > $numberParameters) {
+							throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+						}
+					}
+
+					if ($callNumberParameters < $expectedNumberParameters) {
+						throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+					}
+
 				} else {
 					if ($compiler->isInternalClass($classType)) {
 						$classDefinition = $compiler->getInternalClassDefinition($classType);

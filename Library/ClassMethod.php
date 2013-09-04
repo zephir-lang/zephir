@@ -78,6 +78,28 @@ class ClassMethod
 		return 0;
 	}
 
+	/**
+	 * Returns the number of required parameters the method has
+	 *
+	 * @return int
+	 */
+	public function getNumberOfRequiredParameters()
+	{
+		if (is_object($this->_parameters)) {
+			$parameters = $this->_parameters->getParameters();
+			if (count($parameters)) {
+				$required = 0;
+				foreach ($parameters as $parameter) {
+					if (!isset($parameter['default'])) {
+						$required++;
+					}
+				}
+				return $required;
+			}
+		}
+		return 0;
+	}
+
 	public function getModifiers()
 	{
 		$modifiers = array();
