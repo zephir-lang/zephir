@@ -107,6 +107,16 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns the class definition related to the extended class
+	 *
+	 * @return \ClassDefinition
+	 */
+	public function getExtendsClassDefinition()
+	{
+		return $this->_extendsClassDefinition;
+	}
+
+	/**
 	 * Calculate the dependency rank of the class based on its dependencies
 	 *
 	 */

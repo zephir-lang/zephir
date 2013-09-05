@@ -15,7 +15,7 @@
 
 
 /**
- * Function calls
+ * Variable declaration
  */
 ZEPHIR_INIT_CLASS(Test_Declare) {
 

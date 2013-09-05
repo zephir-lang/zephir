@@ -166,7 +166,12 @@ class MethodCall extends Call
 		$compilationContext->headersManager->add('kernel/fcall');
 
 		/**
-		 *
+		 * Call methods must grown the stack
+		 */
+		$compilationContext->symbolTable->mustGrownStack(true);
+
+		/**
+		 * Generate the code according to parentheses
 		 */
 		if (!isset($expression['parameters'])) {
 			if ($mustInit) {

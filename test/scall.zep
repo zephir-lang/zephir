@@ -85,17 +85,27 @@ class Scall extends Test\ScallParent
 
 	public function testCall10(var a, var b)
 	{
-		return Test\Scall::testMethod4(a, b);
+		return self::testMethod4(a, b);
 	}
 
 	public function testCall11(var a, var b)
 	{
-		return Test\Scall::testMethod5(a, b);
+		return self::testMethod5(a, b);
 	}
 
 	public function testCall12(var a, var b)
 	{
-		return Test\Scall::testMethod6(a, b);
+		return self::testMethod6(a, b);
+	}
+
+	public function testCall13()
+	{
+		return parent::testMethod1();
+	}
+
+	public function testCall14()
+	{
+		return parent::testMethod2();
 	}
 
 }

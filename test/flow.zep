@@ -724,36 +724,4 @@ class Flow
 		return 2;
 	}
 
-	public function a()
-	{
-
-var r, shared;
-		let shared = true,
-			r = [
-			"router": new Test\Router\Route("router", "Phalcon\\Mvc\\Router", shared),
-			"dispatcher": new Test\Router\Route("dispatcher", "Phalcon\\Mvc\\Dispatcher", shared),
-			"url": new Test\Router\Route("url", "Phalcon\\Mvc\\Url", shared),
-			"modelsManager": new Test\Router\Route("modelsManager", "Phalcon\\Mvc\\Model\\Manager", shared),
-			"modelsMetadata": new Test\Router\Route("modelsMetadata", "Phalcon\\Mvc\\Model\\MetaData\\Memory", shared),
-			"response": new Test\Router\Route("response", "Phalcon\\Http\\Response", shared),
-			"cookies": new Test\Router\Route("cookies", "Phalcon\\Http\\Response\\Cookies", shared),
-			"request": new Test\Router\Route("request", "Phalcon\\Http\\Request", shared),
-			"filter": new Test\Router\Route("filter", "Phalcon\\Filter", shared),
-			"escaper": new Test\Router\Route("escaper", "Phalcon\\Escaper", shared),
-			"security": new Test\Router\Route("security", "Phalcon\\Security", shared),
-			"crypt": new Test\Router\Route("crypt", "Phalcon\\Crypt", shared),
-			"annotations": new Test\Router\Route("annotations", "Phalcon\\Annotations\\Adapter\\Memory", shared),
-			"flash": new Test\Router\Route("flash", "Phalcon\\Flash\\Direct", shared),
-			"flashSession": new Test\Router\Route("flashSession", "Phalcon\\Flash\\Session", shared),
-			"tag": new Test\Router\Route("tag", "Phalcon\\Tag", shared),
-			"session": new Test\Router\Route("session", "Phalcon\\Session\\Adapter\\Files", shared),
-			"sessionBag": new Test\Router\Route("sessionBag", "Phalcon\\Session\\Bag"),
-			"eventsManager": new Test\Router\Route("eventsManager", "Phalcon\\Events\\Manager", shared),
-			"transactionManager": new Test\Router\Route("transactions", "Phalcon\\Mvc\\Model\\Transaction\\Manager", shared),
-			"assets": new Test\Router\Route("assets", "Phalcon\\Assets\\Manager", shared)
-		];
-
-
-	}
-
 }

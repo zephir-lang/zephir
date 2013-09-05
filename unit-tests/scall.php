@@ -21,3 +21,6 @@ assert($t->testCall9() === "hello private");
 assert($t->testCall10(2, 3) === 5);
 assert($t->testCall11(6, 7) === 13);
 assert($t->testCall12(4, 5) === 9);
+
+assert($t->testCall13() == "hello parent public");
+assert($t->testCall14() == "hello parent protected");

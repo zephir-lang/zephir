@@ -1,6 +1,6 @@
 
 /**
- * Function calls
+ * Variable declaration
  */
 
 namespace Test;

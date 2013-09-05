@@ -36,11 +36,18 @@ class EchoStatement
 		foreach ($this->_statement['expressions'] as $expr) {
 
 			$expr = new Expression($expr);
+			$expr->setReadOnly(true);
 			$resolvedExpr = $expr->compile($compilationContext);
 
 			switch ($resolvedExpr->getType()) {
 				case 'int':
 					$compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
+					break;
+				case 'bool':
+					$compilationContext->codePrinter->output('php_printf("%s", ' . $resolvedExpr->getBooleanCode() . ' ? "1": "");');
+					break;
+				case 'double':
+					$compilationContext->codePrinter->output('php_printf("%f", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'char':
 					$compilationContext->codePrinter->output('php_printf("%c", \'' . $resolvedExpr->getCode() . '\');');

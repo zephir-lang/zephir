@@ -186,12 +186,14 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 	zval *n, *u, *v, *w;
 
-	zephir_fetch_params(0, 4, 0, &n, &u, &v, &w);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 4, 0, &n, &u, &v, &w);
 
 
 
 	zephir_call_method_p3_noret(this_ptr, "au", n, u, w);
 	zephir_call_method_p3_noret(this_ptr, "atu", n, w, v);
+	ZEPHIR_MM_RESTORE();
 
 }
 

@@ -186,6 +186,11 @@ class FunctionCall extends Call
 		return false;
 	}
 
+	/**
+	 * Checks if a function exists or is a built-in Zephir function
+	 *
+	 * @param string $functionName
+	 */
 	public function functionExists($functionName)
 	{
 		if (function_exists($functionName)) {
@@ -277,6 +282,11 @@ class FunctionCall extends Call
 		 * Include fcall header
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
+
+		/**
+		 * Call functions must grown the stack
+		 */
+		$compilationContext->symbolTable->mustGrownStack(true);
 
 		if (!isset($expression['parameters'])) {
 			if ($this->isExpectingReturn()) {
