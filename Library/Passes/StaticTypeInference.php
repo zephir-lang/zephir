@@ -18,14 +18,14 @@
 */
 
 /**
- * LocalContextPass
+ * StaticTypeInference
  *
- * This pass try to check if variables only live in the local context of the block
- * or it's used externally which will unallow variables to be placed in the heap
+ * This pass try to infer typing on dynamic variables so the compiler
+ * can replace them by low level types automatically
  */
-class LocalContextPass
+class StaticTypeInference
 {
-	protected $_variables;
+	protected $_variables = array();
 
 	/**
 	 * Do the compilation pass
@@ -39,7 +39,7 @@ class LocalContextPass
 
 	public function declareVariables(array $statement)
 	{
-		if (isset($statement['data-type'])) {
+		/*if (isset($statement['data-type'])) {
 			if ($statement['data-type'] != 'variable') {
 				return;
 			}
@@ -48,7 +48,7 @@ class LocalContextPass
 			if (!isset($this->_variables[$variable['variable']])) {
 				$this->_variables[$variable['variable']] = true;
 			}
-		}
+		}*/
 	}
 
 	/**
@@ -56,10 +56,76 @@ class LocalContextPass
 	 *
 	 * @param string $variable
 	 */
-	public function markVariableNoLocal($variable)
+	public function markVariable($variable, $type)
 	{
 		if (isset($this->_variables[$variable])) {
-			$this->_variables[$variable] = false;
+			$currentType = $this->_variables[$variable];
+			if ($currentType == 'undefined') {
+				return;
+			}
+		} else {
+			$this->_variables[$variable] = $type;
+			return;
+		}
+
+		switch ($currentType) {
+			case 'bool':
+				switch ($type) {
+					case 'bool':
+					case 'numeric':
+						break;
+					default:
+						$this->_variables[$variable] = 'undefined';
+						break;
+				}
+				break;
+			case 'double':
+				switch ($type) {
+					case 'double':
+					case 'numeric':
+						break;
+					default:
+						$this->_variables[$variable] = 'undefined';
+						break;
+				}
+				break;
+			case 'string':
+				switch ($type) {
+					case 'string':
+						break;
+					default:
+						$this->_variables[$variable] = 'undefined';
+						break;
+				}
+				break;
+			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
+			case 'char':
+			case 'uchar':
+				switch ($type) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
+					case 'char':
+					case 'uchar':
+					case 'numeric':
+						break;
+					default:
+						$this->_variables[$variable] = 'undefined';
+						break;
+				}
+				break;
+			case 'null':
+				if ($type != 'null') {
+					$this->_variables[$variable] = 'undefined';
+				}
+				break;
+			case 'variable':
+				$this->_variables[$variable] = 'undefined';
+				break;
 		}
 	}
 
@@ -69,11 +135,12 @@ class LocalContextPass
 	 * @param string $variable
 	 * @return boolean
 	 */
-	public function shouldBeLocal($variable)
+	public function getInferedType($variable)
 	{
 		if (isset($this->_variables[$variable])) {
-			if ($this->_variables[$variable]) {
-				return true;
+			$type = $this->_variables[$variable];
+			if ($type != 'variable' && $type != 'undefined' && $type != 'string' && $type != 'null' && $type != 'numeric') {
+				return $type;
 			}
 		}
 		return false;
@@ -82,50 +149,22 @@ class LocalContextPass
 	public function passLetStatement(array $statement)
 	{
 		foreach ($statement['assignments'] as $assigment) {
-			if (isset($assigment['expr'])) {
-				$this->passExpression($assigment['expr']);
-			}
 			switch ($assigment['assign-type']) {
 				case 'variable':
-					switch ($assigment['expr']['type']) {
-						case 'property-access':
-						case 'array-access':
-						case 'string':
-						case 'array':
-						case 'empty-array':
-						case 'new':
-						case 'fcall':
-						case 'mcall':
-							$this->markVariableNoLocal($assigment['variable']);
-							break;
-						case 'variable':
-							$this->markVariableNoLocal($assigment['expr']['value']);
-							$this->markVariableNoLocal($assigment['variable']);
-							break;
-						default:
-							//echo '[', $assigment['expr']['type'], ']';
+					$type = $this->passExpression($assigment['expr']);
+					//echo $assigment['variable'], ' ', $type, PHP_EOL;
+					if (is_string($type)) {
+						$this->markVariable($assigment['variable'], $type);
 					}
 					break;
 				case 'object-property':
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
-					switch ($assigment['expr']['type']) {
-						case 'variable':
-							$this->markVariableNoLocal($assigment['expr']['value']);
-							break;
-					}
-					$this->markVariableNoLocal($assigment['variable']);
+					//$this->markVariable($assigment['variable'], 'dynamical');
 					break;
 				case 'variable-append':
-					$this->markVariableNoLocal($assigment['variable']);
-					switch ($assigment['expr']['type']) {
-						case 'variable':
-							$this->markVariableNoLocal($assigment['expr']['value']);
-							break;
-						default:
-							//echo '[', $assigment['assign-type'], ']';
-					}
+					//$this->markVariable($assigment['variable'], 'dynamical');
 					break;
 				default:
 					//echo $assigment['assign-type'];
@@ -138,7 +177,7 @@ class LocalContextPass
 		if (isset($expression['parameters'])) {
 			foreach ($expression['parameters'] as $parameter) {
 				if ($parameter['type'] == 'variable') {
-					$this->markVariableNoLocal($parameter['value']);
+					//$this->markVariable($parameter['value']);
 				} else {
 					$this->passExpression($parameter);
 				}
@@ -150,7 +189,7 @@ class LocalContextPass
 	{
 		foreach ($expression['left'] as $item) {
 			if ($item['value']['type'] == 'variable') {
-				$this->markVariableNoLocal($item['value']['value']);
+				//$this->markVariable($item['value']['value'], 'dynamical');
 			} else {
 				$this->passExpression($item['value']);
 			}
@@ -162,7 +201,7 @@ class LocalContextPass
 		if (isset($expression['parameters'])) {
 			foreach ($expression['parameters'] as $parameter) {
 				if ($parameter['type'] == 'variable') {
-					$this->markVariableNoLocal($parameter['value']);
+					//$this->markVariable($parameter['value'], 'dynamical');
 				} else {
 					$this->passExpression($parameter);
 				}
@@ -183,19 +222,39 @@ class LocalContextPass
 			case 'null':
 			case 'char':
 			case 'uchar':
+				return $expression['type'];
 			case 'empty-array':
-			case 'variable':
-			case 'constant':
 			case 'static-constant-access':
-				break;
+				return 'variable';
+			case 'div':
+				return 'double';
 			case 'sub':
 			case 'add':
-			case 'div':
 			case 'mul':
+				$left = $this->passExpression($expression['left']);
+				$right = $this->passExpression($expression['right']);
+				if ($left == 'int' && $right == 'int') {
+					return 'int';
+				}
+				if ($left == 'double' && $right == 'double') {
+					return 'double';
+				}
+				if ($left == 'double' && $right == 'int') {
+					return 'double';
+				}
+				if ($left == 'int' && $right == 'double') {
+					return 'double';
+				}
+				return 'numeric';
 			case 'mod':
+				$left = $this->passExpression($expression['left']);
+				$right = $this->passExpression($expression['right']);
+				return 'int';
 			case 'and':
 			case 'or':
+				return 'bool';
 			case 'concat':
+				return 'string';
 			case 'equals':
 			case 'identical':
 			case 'not-identical':
@@ -204,39 +263,47 @@ class LocalContextPass
 			case 'greater':
 			case 'greater-equal':
 			case 'less-equal':
-				$this->passExpression($expression['left']);
-				$this->passExpression($expression['right']);
-				break;
+				$left = $this->passExpression($expression['left']);
+				$right = $this->passExpression($expression['right']);
+				return 'bool';
 			case 'typeof':
+				$this->passExpression($expression['left']);
+				return 'string';
 			case 'not':
 				$this->passExpression($expression['left']);
-				break;
+				return 'bool';
 			case 'mcall':
 			case 'fcall':
 			case 'scall':
 				$this->passCall($expression);
-				break;
+				return 'variable';
 			case 'array':
 				$this->passArray($expression);
-				break;
+				return 'variable';
 			case 'new':
 				$this->passNew($expression);
+				return 'variable';
 				break;
 			case 'property-access':
 			case 'array-access':
 				$this->passExpression($expression['left']);
+				return 'variable';
 				break;
 			case 'fetch':
 			case 'isset':
 				$this->passExpression($expression['left']);
+				return 'bool';
 				break;
 			case 'list':
-				$this->passExpression($expression['left']);
+				return $this->passExpression($expression['left']);
 				break;
 			case 'cast':
+				return $expression['left']['value'];
 			case 'type-hint':
-				$this->passExpression($expression['right']);
-				break;
+				return $this->passExpression($expression['right']);
+			case 'variable':
+			case 'constant':
+				return null;
 			default:
 				echo $expression['type'], PHP_EOL;
 				break;
@@ -301,10 +368,10 @@ class LocalContextPass
 						$this->passExpression($statement['expr']);
 					}
 					if (isset($statement['value'])) {
-						$this->markVariableNoLocal($statement['value']);
+						//$this->markVariable($statement['value']);
 					}
 					if (isset($statement['key'])) {
-						$this->markVariableNoLocal($statement['key']);
+						//$this->markVariable($statement['key']);
 					}
 					if (isset($statement['statements'])) {
 						$this->passStatementBlock($statement['statements']);

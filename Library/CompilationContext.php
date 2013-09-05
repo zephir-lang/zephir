@@ -61,6 +61,13 @@ class CompilationContext
 	public $symbolTable;
 
 	/**
+	 * Type inference data
+	 *
+	 * @param \StaticTypeInference
+	 */
+	public $typeInference;
+
+	/**
 	 * Represents the class currently being compiled
 	 *
 	 * @var \ClassDefinition

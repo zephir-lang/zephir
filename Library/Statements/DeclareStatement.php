@@ -45,20 +45,36 @@ class DeclareStatement
 			throw new CompilerException("Data type is required", $this->_statement);
 		}
 
+		$typeInference = $compilationContext->typeInference;
+		$symbolTable = $compilationContext->symbolTable;
+
 		$variables = array();
 		foreach ($statement['variables'] as $variable) {
 
-			if ($compilationContext->symbolTable->hasVariable($variable['variable'])) {
+			if ($symbolTable->hasVariable($variable['variable'])) {
 				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
+			}
+
+			/**
+			 * Replace original data type by the infered type
+			 */
+			if ($typeInference) {
+				if ($statement['data-type'] == 'variable') {
+					$type = $typeInference->getInferedType($variable['variable']);
+					if (is_string($type)) {
+						//echo $variable['variable'], ' ', $type, ' ', $statement['file'], ' ', $statement['line'], PHP_EOL;
+						$statement['data-type'] = $type;
+					}
+				}
 			}
 
 			/**
 			 * Variables are added to the symbol table
 			 */
 			if (isset($variable['expr'])) {
-				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext, $variable['expr']);
+				$symbolVariable = $symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext, $variable['expr']);
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext);
+				$symbolVariable = $symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext);
 			}
 
 			/**

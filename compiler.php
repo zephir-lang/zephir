@@ -63,9 +63,9 @@ require ZEPHIRPATH . 'Library/StaticCall.php';
 require ZEPHIRPATH . 'Library/Passes/LocalContextPass.php';
 require ZEPHIRPATH . 'Library/Passes/LoopBreakPass.php';
 require ZEPHIRPATH . 'Library/Passes/SkipVariantInit.php';
+require ZEPHIRPATH . 'Library/Passes/StaticTypeInference.php';
 require ZEPHIRPATH . 'Library/Config.php';
 require ZEPHIRPATH . 'Library/Logger.php';
 require ZEPHIRPATH . 'Library/Utils.php';
 
 Compiler::boot();
-

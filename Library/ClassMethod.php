@@ -289,16 +289,26 @@ class ClassMethod
 	public function compile(CompilationContext $compilationContext)
 	{
 
-		/**
-		 * This pass checks for zval variables than can be potentally
-		 * used without allocate memory and memory tracking
-		 * these variables are stored in the heap
-		 */
 		if (is_object($this->_statements)) {
+
+			/**
+			 * This pass checks for zval variables than can be potentally
+			 * used without allocate memory and memory tracking
+			 * these variables are stored in the stack
+			 */
 			$localContext = new LocalContextPass();
 			$localContext->pass($this->_statements);
+
+			/**
+			 * This pass tries to infer types for dynamic variables
+			 * replacing them by low level variables
+			 */
+			$typeInference = new StaticTypeInference();
+			$typeInference->pass($this->_statements);
+
 		} else {
 			$localContext = null;
+			$typeInference = null;
 		}
 
 		/**
@@ -309,6 +319,7 @@ class ClassMethod
 			$symbolTable->setLocalContext($localContext);
 		}
 
+		$compilationContext->typeInference = $typeInference;
 		$compilationContext->symbolTable = $symbolTable;
 
 		$oldCodePrinter = $compilationContext->codePrinter;
