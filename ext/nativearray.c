@@ -783,3 +783,17 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
+
+	zval *a, *_0;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_NULL(a);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 10);
+	zephir_array_update_string(&a, SL("hello"), &_0, PH_COPY | PH_SEPARATE);
+	RETURN_CCTOR(a);
+
+}
+

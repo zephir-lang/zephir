@@ -1751,6 +1751,10 @@ xx_common_expr(R) ::= PARENTHESES_OPEN xx_parameter_type(O1) PARENTHESES_CLOSE x
 	R = xx_ret_expr("cast", O1, O2, NULL, status->scanner_state);
 }
 
+xx_common_expr(R) ::= LESS IDENTIFIER(I) GREATER xx_common_expr(O2) . {
+	R = xx_ret_expr("type-hint", xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), O2, NULL, status->scanner_state);
+}
+
 xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }

@@ -340,4 +340,12 @@ class NativeArray
 		return a;
 	}
 
+	public function testArrayWrongUpdate1()
+	{
+		var a;
+		let a = null;
+		let a["hello"] = 10;
+		return a;
+	}
+
 }

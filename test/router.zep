@@ -103,9 +103,9 @@ class Router
 	/**
 	 * Sets the dependency injector
 	 *
-	 * @param Phalcon\DiInterface dependencyInjector
+	 * @param Test\DiInterface dependencyInjector
 	 */
-	public function setDI(<Phalcon\DiInterface> dependencyInjector)
+	public function setDI(<Test\DiInterface> dependencyInjector)
 	{
 		let this->_dependencyInjector = dependencyInjector;
 	}
@@ -113,7 +113,7 @@ class Router
 	/**
 	 * Returns the internal dependency injector
 	 *
-	 * @return Phalcon\DiInterface
+	 * @return Test\DiInterface
 	 */
 	public function getDI()
 	{
@@ -338,7 +338,7 @@ class Router
 				// Retrieve the request service from the container
 				if request === null {
 
-					let dependencyInjector = this->_dependencyInjector;
+					let dependencyInjector = <Test\DiInterface> this->_dependencyInjector;
 					if typeof dependencyInjector != "object" {
 						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
 					}

@@ -261,6 +261,11 @@ class Expression
 		}
 
 		/**
+		 * At this point, we don't know the exact dynamic type fetched from the property
+		 */
+		$symbolVariable->setDynamicType('undefined');
+
+		/**
 		 * If the property is accessed on 'this', we check if the method does exist
 		 */
 		if ($variableVariable->getRealName() == 'this') {
@@ -391,6 +396,11 @@ class Expression
 			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
 		}
 
+		/**
+		 * Mark the variable as an 'array'
+		 */
+		$symbolVariable->setDynamicType('array');
+
 		$compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -428,6 +438,14 @@ class Expression
 		}
 
 		/**
+		 * Variables that contain dynamic type data can be validated to be arrays
+		 */
+		$dynamicType = $variableVariable->getDynamicType();
+		if ($dynamicType != 'unknown' && $dynamicType != 'array') {
+			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $statement);
+		}
+
+		/**
 		 * Resolves the symbol that expects the value
 		 */
 		if ($this->_expecting) {
@@ -447,6 +465,11 @@ class Expression
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
 		}
+
+		/**
+		 * At this point, we don't know the type fetched from the index
+		 */
+		$symbolVariable->setDynamicType('undefined');
 
 		/**
 		 * Right part of expression is the index
@@ -610,6 +633,7 @@ class Expression
 					'char' => $newExpr['char'],
 				));
 			}
+
 			$methodCall = new MethodCall();
 			$callExpr->setExpectReturn(false);
 			$methodCall->compile($callExpr, $compilationContext);
@@ -709,6 +733,18 @@ class Expression
 		} else {
 			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 		}
+
+		/**
+		 * Arrays can only be variables
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an array", $expression);
+		}
+
+		/*+
+		 * Mark the variable as an array
+		 */
+		$symbolVariable->setDynamicType('array');
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -878,6 +914,34 @@ class Expression
 		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
+	 * Converts a value into another
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
+	public function compileTypeHint($expression, CompilationContext $compilationContext)
+	{
+
+		$expr = new Expression($expression['right']);
+		$resolved = $expr->compile($compilationContext);
+
+		if ($resolved->getType() != 'variable') {
+			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
+		}
+
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
+		}
+
+		$symbolVariable->setDynamicType('object');
+		$symbolVariable->setClassType($expression['left']['value']);
+
+		return $resolved;
 	}
 
 	/**
@@ -1157,6 +1221,9 @@ class Expression
 
 			case 'cast':
 				return $this->compileCast($expression, $compilationContext);
+
+			case 'type-hint':
+				return $this->compileTypeHint($expression, $compilationContext);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);

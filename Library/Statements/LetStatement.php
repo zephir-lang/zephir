@@ -574,6 +574,7 @@ class LetStatement
 						switch ($statement['operator']) {
 							case 'assign':
 								$symbolVariable->initVariant($compilationContext);
+								$symbolVariable->setDynamicType('null');
 								if ($symbolVariable->isLocalOnly()) {
 									$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
 								} else {
@@ -593,6 +594,7 @@ class LetStatement
 						}
 						switch ($statement['operator']) {
 							case 'assign':
+								$symbolVariable->setDynamicType('long');
 								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
 									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
@@ -616,6 +618,7 @@ class LetStatement
 						}
 						switch ($statement['operator']) {
 							case 'assign':
+								$symbolVariable->setDynamicType('long');
 								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
 									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
@@ -638,6 +641,7 @@ class LetStatement
 						}
 						switch ($statement['operator']) {
 							case 'assign':
+								$symbolVariable->setDynamicType('double');
 								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
 									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
 									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
@@ -660,6 +664,7 @@ class LetStatement
 						}
 						switch ($statement['operator']) {
 							case 'assign':
+								$symbolVariable->setDynamicType('bool');
 								if ($resolvedExpr->getCode() == 'true') {
 									$symbolVariable->initVariant($compilationContext);
 									$codePrinter->output('ZVAL_BOOL(' . $symbol . ', 1);');
@@ -688,6 +693,7 @@ class LetStatement
 						switch ($statement['operator']) {
 							case 'assign':
 								$symbolVariable->initVariant($compilationContext);
+								$symbolVariable->setDynamicType('string');
 								if ($symbolVariable->isLocalOnly()) {
 									$codePrinter->output('ZVAL_STRING(&' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
 								} else {
@@ -711,6 +717,7 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setDynamicType('long');
 										if ($symbolVariable->isLocalOnly()) {
 											$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $itemVariable->getName() . ');');
 										} else {
@@ -725,6 +732,7 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setDynamicType('double');
 										if ($symbolVariable->isLocalOnly()) {
 											$codePrinter->output('ZVAL_DOUBLE(&' . $variable . ', ' . $itemVariable->getName() . ');');
 										} else {
@@ -739,6 +747,7 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setDynamicType('bool');
 										if ($symbolVariable->isLocalOnly()) {
 											$codePrinter->output('ZVAL_BOOL(&' . $variable . ', ' . $itemVariable->getName() . ');');
 										} else {
@@ -753,8 +762,14 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										if ($itemVariable->getName() != $variable) {
+
 											$symbolVariable->setMustInitNull(true);
 											$compilationContext->symbolTable->mustGrownStack(true);
+
+											/* Inherit the dynamic type data from the assigned value */
+											$symbolVariable->setDynamicType($itemVariable->getDynamicType());
+											$symbolVariable->setClassType($itemVariable->getClassType());
+
 											$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 											if ($itemVariable->isTemporal()) {
 												$itemVariable->setIdle(true);
@@ -850,13 +865,37 @@ class LetStatement
 
 	/**
 	 * Compiles foo[y] = {expr}
+	 *
+	 * @param string $variable
+	 * @param Variable $symbolVariable
+	 * @param CompiledExpression $resolvedExpr
+	 * @param CompilationContext $compilationContext
+	 * @param array $statement
 	 */
 	public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
 
+		/**
+		 * Arrays must be stored in the HEAP
+		 */
 		if ($symbolVariable->isLocalOnly()) {
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+		}
+
+		/**
+		 * Only dynamic variables can be used as arrays
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Variable type: '" . $variable . "' cannot be used as an array", $statement);
+		}
+
+		/**
+		 * Variable could not possibly be initialized as an array
+		 */
+		$dynamicType = $symbolVariable->getDynamicType();
+		if ($dynamicType != 'unknown' && $dynamicType != 'array') {
+			$compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;

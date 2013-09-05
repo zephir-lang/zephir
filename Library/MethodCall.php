@@ -154,7 +154,7 @@ class MethodCall extends Call
 							throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
 						}
 					} else {
-						$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class");
+						$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
 					}
 				}
 			}
