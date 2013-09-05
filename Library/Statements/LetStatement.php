@@ -887,14 +887,22 @@ class LetStatement
 		 * Only dynamic variables can be used as arrays
 		 */
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Variable type: '" . $variable . "' cannot be used as an array", $statement);
+			throw new CompilerException("Variable type: '" . $symbolVariable->getType() . "' cannot be used as an array", $statement);
+		}
+
+		$dynamicType = $symbolVariable->getDynamicType();
+
+		/**
+		 * Variable is probably not initialized here
+		 */
+		if ($dynamicType == 'unknown') {
+			throw new CompilerException("Attempt to increment uninitialized variable", $statement);
 		}
 
 		/**
-		 * Variable could not possibly be initialized as an array
+		 * Update non-array variables will throw a notice in runtime
 		 */
-		$dynamicType = $symbolVariable->getDynamicType();
-		if ($dynamicType != 'unknown' && $dynamicType != 'array') {
+		if ($dynamicType != 'undefined' && $dynamicType != 'array') {
 			$compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
 		}
 
@@ -1002,6 +1010,23 @@ class LetStatement
 				$codePrinter->output($variable . '++;');
 				break;
 			case 'variable':
+
+				$dynamicType = $symbolVariable->getDynamicType();
+
+				/**
+				 * Variable is probably not initialized here
+				 */
+				if ($dynamicType == 'unknown') {
+					throw new CompilerException("Attempt to increment uninitialized variable", $statement);
+				}
+
+				/**
+				 * Update non-numeric dynamic variables could be expensive
+				 */
+				if ($dynamicType != 'undefined' && $dynamicType != 'long' && $dynamicType != 'double') {
+					$compilationContext->logger->warning('Possible attempt to increment non-numeric dynamic variable', 'non-valid-increment', $statement);
+				}
+
 				$compilationContext->headersManager->add('kernel/operators');
 				if ($symbolVariable->isLocalOnly()) {
 					$codePrinter->output('zephir_increment(&' . $variable . ');');
@@ -1038,6 +1063,23 @@ class LetStatement
 				$codePrinter->output($variable . '--;');
 				break;
 			case 'variable':
+
+				$dynamicType = $symbolVariable->getDynamicType();
+
+				/**
+				 * Variable is probably not initialized here
+				 */
+				if ($dynamicType == 'unknown') {
+					throw new CompilerException("Attempt to increment uninitialized variable", $statement);
+				}
+
+				/**
+				 * Decrement non-numeric variables could be expensive
+				 */
+				if ($dynamicType != 'undefined' && $dynamicType != 'long' && $dynamicType != 'double') {
+					$compilationContext->logger->warning('Possible attempt to decrement non-numeric dynamic variable', 'non-valid-decrement', $statement);
+				}
+
 				$compilationContext->headersManager->add('kernel/operators');
 				if ($symbolVariable->isLocalOnly()) {
 					$codePrinter->output('zephir_decrement(&' . $variable . ');');
@@ -1053,71 +1095,102 @@ class LetStatement
 
 	/**
 	 * Compiles foo[] = {expr}
+	 *
+	 * @param string $variable
+	 * @param Variable $symbolVariable
+	 * @param CompiledExpression $resolvedExpr
+	 * @param CompilationContext $compilationContext
+	 * @param array $statement
 	 */
-	public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
 	{
 
-		$codePrinter = $compilationContext->codePrinter;
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
+		}
 
 		$propertyName = $statement['property'];
 		if ($variable == 'this') {
 			if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
 				throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'", $statement);
 			}
+		} else {
+
 		}
 
-		$type = $symbolVariable->getType();
-		switch ($type) {
+		$dynamicType = $symbolVariable->getDynamicType();
+
+		/**
+		 * Variable is probably not initialized here
+		 */
+		if ($dynamicType == 'unknown') {
+			throw new CompilerException("Attempt to update property on uninitialized variable", $statement);
+		}
+
+		/**
+		 * Trying to use a non-object dynamic variable as object
+		 */
+		if ($dynamicType != 'undefined' && $dynamicType != 'object') {
+			$compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$compilationContext->headersManager->add('kernel/object');
+
+		switch ($resolvedExpr->getType()) {
+			case 'null':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				}
+				break;
+			case 'string':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				}
+				break;
+			case 'bool':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				}
+				break;
+			case 'empty-array':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				}
+				break;
 			case 'variable':
-				$compilationContext->headersManager->add('kernel/object');
-				$symbolVariable->initVariant($compilationContext);
-				switch ($resolvedExpr->getType()) {
-					case 'null':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+				switch ($variableVariable->getType()) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						if ($variable == 'this') {
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						} else {
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						}
-						break;
-					case 'bool':
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
-						if ($variable == 'this') {
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						} else {
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						}
-						break;
-					case 'empty-array':
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
-						if ($variable == 'this') {
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						} else {
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						}
+						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
-						$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-						switch ($variableVariable->getType()) {
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'ulong':
-								$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-								$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
-								$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-								break;
-							case 'variable':
-								if ($variable == 'this') {
-									$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
-								} else {
-									$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
-								}
-								break;
-							default:
-								throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+						if ($variable == 'this') {
+							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						} else {
+							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
 						}
 						break;
 					default:
@@ -1125,17 +1198,29 @@ class LetStatement
 				}
 				break;
 			default:
-				throw new CompilerException("Variable type '" . $type . "' cannot be used as object", $statement);
+				throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 		}
+
 	}
 
 	/**
 	 * Compiles x->y[] = foo
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
+	 * @param \CompilationContext $compilationContext,
+	 * @param array $statement
 	 */
-	public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+		}
 
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');
@@ -1158,11 +1243,21 @@ class LetStatement
 
 	/**
 	 * Compiles x->y[z] = foo
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
+	 * @param \CompilationContext $compilationContext,
+	 * @param array $statement
 	 */
 	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+		}
 
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');

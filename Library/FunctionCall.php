@@ -30,6 +30,11 @@ class FunctionCall extends Call
 
 	static protected $_functionReflection = array();
 
+	/**
+	 * Process the ReflectionFunction for the specified function name
+	 *
+	 * @param string $funcName
+	 */
 	protected function getReflector($funcName)
 	{
 		/**
@@ -218,7 +223,7 @@ class FunctionCall extends Call
 
 		$exists = true;
 		if (!$this->functionExists($funcName)) {
-			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistant-function");
+			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistant-function", $expression);
 			$exists = false;
 		}
 
@@ -277,6 +282,11 @@ class FunctionCall extends Call
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
+
+		/**
+		 * We don't know the exact dynamic type returned by the method call
+		 */
+		$symbolVariable->setDynamicType('undefined');
 
 		/**
 		 * Include fcall header

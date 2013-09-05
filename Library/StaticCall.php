@@ -171,6 +171,12 @@ class StaticCall extends Call
 		 * Method calls only return zvals so we need to validate the target variable is also a zval
 		 */
 		if ($isExpecting) {
+
+			/**
+			 * At this point, we don't know the exact dynamic type returned by the static method call
+			 */
+			$symbolVariable->setDynamicType('undefined');
+
 			if ($symbolVariable->getType() != 'variable') {
 				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 			}

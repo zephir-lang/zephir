@@ -68,9 +68,15 @@ class MethodCall extends Call
 		 * Method calls only return zvals so we need to validate the target variable is also a zval
 		 */
 		if ($isExpecting) {
+
 			if ($symbolVariable->getType() != 'variable') {
 				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 			}
+
+			/**
+			 * At this point, we don't know the exact dynamic type returned by the method call
+			 */
+			$symbolVariable->setDynamicType('undefined');
 		}
 
 		/**

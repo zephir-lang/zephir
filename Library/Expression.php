@@ -151,7 +151,16 @@ class Expression
 	 */
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
+
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value'], $compilationContext, $expression['left']['left']);
+		if ($variable->getType() != 'variable') {
+			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $arrayAccess['left']);
+		}
+
+		$dynamicType = $variable->getDynamicType();
+		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
+			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-increment', $statement);
+		}
 
 		$compilationContext->headersManager->add('kernel/array');
 
@@ -441,8 +450,8 @@ class Expression
 		 * Variables that contain dynamic type data can be validated to be arrays
 		 */
 		$dynamicType = $variableVariable->getDynamicType();
-		if ($dynamicType != 'unknown' && $dynamicType != 'array') {
-			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $statement);
+		if ($dynamicType != 'undefined' && $dynamicType != 'array') {
+			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $expression);
 		}
 
 		/**
@@ -549,6 +558,11 @@ class Expression
 		}
 
 		/**
+		 * Mark variables as dynamic objects
+		 */
+		$symbolVariable->setDynamicType('object');
+
+		/**
 		 * stdclass don't have constructors
 		 */
 		if (strtolower($newExpr['class']) == 'stdclass') {
@@ -567,7 +581,7 @@ class Expression
 				 * Classes inside the same extension
 				 */
 				if (!class_exists($newExpr['class'], false)) {
-					$compilationContext->logger->warning('Class "' . $newExpr['class'] . '" does not exist at compile time ', "nonexistant-class");
+					$compilationContext->logger->warning('Class "' . $newExpr['class'] . '" does not exist at compile time ', "nonexistant-class", $newExpr);
 				}
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $newExpr['class'] . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');

@@ -36,7 +36,7 @@ class SymbolTable
 	protected $_localContext;
 
 	/**
-	 *
+	 * Variable
 	 *
 	 * @param \CompilationContext $compilationContext
 	 */
@@ -48,6 +48,7 @@ class SymbolTable
 		$thisVar->increaseUses();
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
+		$thisVar->setDynamicType('object');
 		$this->_variables['this'] = $thisVar;
 
 		$returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
