@@ -805,16 +805,40 @@ class LetStatement
 
 	/**
 	 * Compiles foo[] = {expr}
+	 *
+	 * @param string $variable
+	 * @param Variable $symbolVariable
+	 * @param CompiledExpression $resolvedExpr
+	 * @param CompilationContext $compilationContext
+	 * @param array $statement
 	 */
 	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
 		if ($symbolVariable->isReadOnly())  {
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		if ($symbolVariable->isLocalOnly()) {
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+		}
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+		}
+
+		$dynamicType = $symbolVariable->getDynamicType();
+		if ($dynamicType == 'unknown') {
+			throw new CompilerException("Attempt to use variable '" . $variable . "' without be initialized", $statement);
+		}
+
+		if ($dynamicType != 'undefined' && $dynamicType != 'array') {
+			$compilationContext->logger->warning('Possible attempt to append elements on a non-array dynamic variable', 'non-array-append', $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -883,9 +907,25 @@ class LetStatement
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
 		}
 
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
+		if ($symbolVariable->isReadOnly())  {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+		}
+
+		if ($symbolVariable->isLocalOnly()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+		}
+
 		/**
 		 * Only dynamic variables can be used as arrays
 		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+		}
+
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Variable type: '" . $symbolVariable->getType() . "' cannot be used as an array", $statement);
 		}
@@ -990,9 +1030,19 @@ class LetStatement
 
 	/**
 	 * Compiles x++
+	 *
+	 * @param string $variable
+	 * @param Variable $symbolVariable
+	 * @param CompilationContext $compilationContext
+	 * @param array $statement
 	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
 		if ($symbolVariable->isReadOnly()) {
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
 		}
@@ -1042,9 +1092,18 @@ class LetStatement
 
 	/**
 	 * Compiles x--
+	 *
+	 * @param string $variable
+	 * @param Variable $symbolVariable
+	 * @param CompilationContext $compilationContext
+	 * @param array $statement
 	 */
 	public function assignDecr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
 		if ($symbolVariable->isReadOnly()) {
 			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
@@ -1105,6 +1164,10 @@ class LetStatement
 	public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
@@ -1216,11 +1279,15 @@ class LetStatement
 		CompilationContext $compilationContext, $statement)
 	{
 
-		$codePrinter = $compilationContext->codePrinter;
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
 		}
+
+		$codePrinter = $compilationContext->codePrinter;
 
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');
@@ -1250,14 +1317,19 @@ class LetStatement
 	 * @param \CompilationContext $compilationContext,
 	 * @param array $statement
 	 */
-	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
 	{
 
-		$codePrinter = $compilationContext->codePrinter;
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
 		}
+
+		$codePrinter = $compilationContext->codePrinter;
 
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');
@@ -1291,7 +1363,6 @@ class LetStatement
 				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to property", $statement);
 		}
 
-		//$codePrinter->output('phalcon_update_property_array(this_ptr, SL("_converters"), name, converter TSRMLS_CC);');
 	}
 
 	/**
@@ -1337,20 +1408,14 @@ class LetStatement
 				}
 			}
 
-			/**
-			 * Variables assigned are marked as initialized (after expression)
-			 */
-			$symbolVariable->setIsInitialized(true);
-
 			$codePrinter = $compilationContext->codePrinter;
-
-			//$codePrinter->outputBlankLine(true);
 
 			/**
 			 * There are four types of assignments
 			 */
 			switch ($assignment['assign-type']) {
 				case 'variable':
+					$symbolVariable->setIsInitialized(true);
 					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
 					break;
 				case 'variable-append':
@@ -1377,8 +1442,6 @@ class LetStatement
 				default:
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
 			}
-
-			//$codePrinter->outputBlankLine(true);
 		}
 	}
 

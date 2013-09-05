@@ -342,9 +342,9 @@ class NativeArray
 
 	public function testArrayWrongUpdate1()
 	{
-		var x;
-		let x = new stdClass;
-		let x->y = "hello";
+		var x, y;
+		let x = [], y = "hello";
+		let x[x] = new stdClass;
 	}
 
 }

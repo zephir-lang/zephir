@@ -15,7 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/string_type.h"
-#include "kernel/object.h"
 
 
 /**
@@ -786,14 +785,16 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 
 PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 
-	zval *x, *_0;
+	zval *x, *y, *_0;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(x);
-	object_init(x);
+	array_init(x);
+	ZEPHIR_INIT_VAR(y);
+	ZVAL_STRING(y, "hello", 1);
 	ZEPHIR_INIT_VAR(_0);
-	ZVAL_STRING(_0, "hello", 1);
-	zephir_update_property_zval(x, SL("y"), _0 TSRMLS_CC);
+	object_init(_0);
+	zephir_array_update_zval(&x, x, &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 
 }
