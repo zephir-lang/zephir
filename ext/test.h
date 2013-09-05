@@ -4,6 +4,7 @@
 #include "assign.h"
 #include "cast.h"
 #include "constants.h"
+#include "constantsparent.h"
 #include "declare.h"
 #include "echoes.h"
 #include "exception.h"

@@ -17,7 +17,7 @@
 
 ZEPHIR_INIT_CLASS(Test_Constants) {
 
-	ZEPHIR_REGISTER_CLASS(Test, Constants, constants, test_constants_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Test, Constants, constants, "test\\constantsparent", test_constants_method_entry, 0);
 
 	zend_declare_class_constant_null(test_constants_ce, SL("C1") TSRMLS_CC);
 	zend_declare_class_constant_bool(test_constants_ce, SL("C2"), 0 TSRMLS_CC);
@@ -36,9 +36,23 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 
 }
 
-PHP_METHOD(Test_Constants, testReadClassConstant) {
+PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Constants, testReadClassConstant2) {
+
+	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Constants, testReadClassConstant3) {
+
+	zephir_get_class_constant(return_value, test_constantsparent_ce, SS("P4") TSRMLS_CC);
 	return;
 
 }

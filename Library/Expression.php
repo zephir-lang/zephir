@@ -67,6 +67,11 @@ class Expression
 
 	protected $_expectingVariable;
 
+	/**
+	 * Expression constructor
+	 *
+	 * @param array $expression
+	 */
 	public function __construct(array $expression)
 	{
 		$this->_expression = $expression;
@@ -142,6 +147,7 @@ class Expression
 	 *
 	 * @param array $expression
 	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function compileIsset($expression, CompilationContext $compilationContext)
 	{
@@ -173,6 +179,7 @@ class Expression
 	 *
 	 * @param array $expression
 	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function compileFetch($expression, CompilationContext $compilationContext)
 	{
@@ -207,7 +214,11 @@ class Expression
 	}
 
 	/**
-	 * @
+	 * Resolves the access to a property in an object
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function propertyAccess($expression, CompilationContext $compilationContext)
 	{
@@ -276,17 +287,49 @@ class Expression
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
+	/**
+	 * Access a static constant class
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
 	public function staticConstantAccess($expression, CompilationContext $compilationContext)
 	{
 		$compiler = $compilationContext->compiler;
 
 		$className = $expression['left']['value'];
-		if (!$compiler->isClass($className)) {
-			throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+
+		/**
+		 * Fetch the class definition according to the class where the constant
+		 * is supposed to be declared
+		 */
+		if ($className != 'self' && $className != 'parent') {
+			if (!$compiler->isClass($className)) {
+				throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+			}
+			$classDefinition = $compiler->getClassDefinition($className);
+		} else {
+			if ($className == 'self') {
+				$classDefinition = $compilationContext->classDefinition;
+			} else {
+				if ($className == 'parent') {
+					$classDefinition = $compilationContext->classDefinition;
+					$extendsClass = $classDefinition->getExtendsClass();
+					if (!$extendsClass) {
+						throw new CompilerException('Cannot call method "' . $methodName . '" on parent because class ' .
+							$classDefinition->getCompleteName() . ' does not extend any class', $expression);
+					} else {
+						$classDefinition = $classDefinition->getExtendsClassDefinition();
+					}
+				}
+			}
 		}
 
-		$classDefinition = $compiler->getClassDefinition($className);
-
+		/**
+		 * Constants are resolved to its values in compile time
+		 * so we need to check that they effectively do exist
+		 */
 		$constant = $expression['right']['value'];
 		if (!$classDefinition->hasConstant($constant)) {
 			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
@@ -320,6 +363,10 @@ class Expression
 
 	/**
 	 * Compiles foo[x] = []
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function emptyArray($expression, CompilationContext $compilationContext)
 	{
@@ -351,6 +398,10 @@ class Expression
 
 	/**
 	 * Compiles foo[x] = {expr}
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function arrayAccess($expression, CompilationContext $compilationContext)
 	{
@@ -447,6 +498,7 @@ class Expression
 	 *
 	 * @param array $expression
 	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function newInstance($expression, CompilationContext $compilationContext)
 	{
@@ -639,6 +691,7 @@ class Expression
 	 *
 	 * @param array $expression
 	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
 	 */
 	public function compileArray($expression, CompilationContext $compilationContext)
 	{
@@ -827,7 +880,14 @@ class Expression
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
-	public function compileCast($expression, $compilationContext)
+	/**
+	 * Converts a value into another
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
+	public function compileCast($expression, CompilationContext $compilationContext)
 	{
 
 		$expr = new Expression($expression['right']);
@@ -875,6 +935,13 @@ class Expression
 
 	}
 
+	/**
+	 * Resolves a PHP constant value into C-code
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
 	public function compileConstant($expression, CompilationContext $compilationContext)
 	{
 
