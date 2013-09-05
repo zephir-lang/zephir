@@ -391,6 +391,14 @@ class ClassMethod
 				if (isset($parameter['cast'])) {
 					$symbol->setDynamicType('object');
 					$symbol->setClassType($parameter['cast']['value']);
+				} else {
+					if (isset($parameter['data-type'])) {
+						if ($parameter['data-type'] == 'variable') {
+							$symbol->setDynamicType('undefined');
+						}
+					} else {
+						$symbol->setDynamicType('undefined');
+					}
 				}
 			}
 		}

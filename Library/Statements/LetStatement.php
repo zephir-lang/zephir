@@ -1348,6 +1348,11 @@ class LetStatement
 				throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
 		}
 
+		$dynamicType = $indexVariable->getDynamicType();
+		if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
+			$compilationContext->logger->warning('Possible attempt to use non string/long dynamic variable as array index', 'invalid-array-index', $statement);
+		}
+
 		switch ($resolvedExpr->getType()) {
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
@@ -1377,10 +1382,6 @@ class LetStatement
 		foreach ($statement['assignments'] as $assignment) {
 
 			$variable = $assignment['variable'];
-
-			/**
-			 * @todo: variable-append we must check that variable is initialized
-			 */
 
 			/**
 			 * Get the symbol from the symbol table

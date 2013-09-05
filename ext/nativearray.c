@@ -794,7 +794,7 @@ PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 	ZVAL_STRING(y, "hello", 1);
 	ZEPHIR_INIT_VAR(_0);
 	object_init(_0);
-	zephir_array_update_zval(&x, x, &_0, PH_COPY | PH_SEPARATE);
+	zephir_array_update_zval(&x, y, &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 
 }
