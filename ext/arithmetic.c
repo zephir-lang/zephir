@@ -294,21 +294,19 @@ PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex5Sum) {
 
-	zval c;
+	int c;
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, (1 + 1));
-	RETURN_CCTORW(&c);
+	c = (1 + 1);
+	RETURN_LONG(c);
 
 }
 
 PHP_METHOD(Test_Arithmetic, complex6Sum) {
 
-	zval c;
+	int c;
 
-	ZEPHIR_SINIT_VAR(c);
-	ZVAL_BOOL(&c, (1 |((1) ? 1 : 0)));
-	RETURN_CCTORW(&c);
+	c = (1 |((1) ? 1 : 0));
+	RETURN_LONG(c);
 
 }
 

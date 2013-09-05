@@ -342,6 +342,34 @@ class Flow
 		return c;
 	}
 
+	public function testWhile10(var a)
+	{
+		var b; double c;
+		while a {
+			let b = 5;
+			while b {
+				let b--;
+			}
+			let a--;
+		}
+		let c = a + b;
+		return c;
+	}
+
+	public function testWhile11(var a, var d)
+	{
+		var b; double c;
+		while a {
+			let b = d;
+			while b {
+				let b--;
+			}
+			let a--;
+		}
+		let c = a + b;
+		return c;
+	}
+
 	public function testDoWhile1()
 	{
 		do {

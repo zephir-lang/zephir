@@ -62,7 +62,6 @@ class DeclareStatement
 				if ($statement['data-type'] == 'variable') {
 					$type = $typeInference->getInferedType($variable['variable']);
 					if (is_string($type)) {
-						//echo $variable['variable'], ' ', $type, ' ', $statement['file'], ' ', $statement['line'], PHP_EOL;
 						$statement['data-type'] = $type;
 					}
 				}

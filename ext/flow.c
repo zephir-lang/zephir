@@ -12,11 +12,11 @@
 #include "Zend/zend_interfaces.h"
 
 #include "kernel/main.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
 #include "kernel/string_type.h"
-#include "kernel/operators.h"
 
 
 /**
@@ -465,6 +465,68 @@ PHP_METHOD(Test_Flow, testWhile9) {
 	}
 	c = (double) ((a + b));
 	RETURN_DOUBLE(c);
+
+}
+
+PHP_METHOD(Test_Flow, testWhile10) {
+
+	double c;
+	int b;
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+	ZEPHIR_SEPARATE_PARAM(a);
+
+
+	while (1) {
+		if (!(zend_is_true(a))) {
+			break;
+		}
+		b = 5;
+		while (1) {
+			if (!(b)) {
+				break;
+			}
+			b--;
+		}
+		ZEPHIR_SEPARATE(a);
+		zephir_decrement(a);
+	}
+	c = (double) ((zephir_get_numberval(a) + b));
+	RETURN_DOUBLE(c);
+
+}
+
+PHP_METHOD(Test_Flow, testWhile11) {
+
+	double c;
+	zval *a, *d, *b = NULL, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &d);
+
+
+
+	while (1) {
+		if (!(zend_is_true(a))) {
+			break;
+		}
+		ZEPHIR_CPY_WRT(b, d);
+		while (1) {
+			if (!(zend_is_true(b))) {
+				break;
+			}
+			ZEPHIR_SEPARATE(b);
+			zephir_decrement(b);
+		}
+		ZEPHIR_SEPARATE(a);
+		zephir_decrement(a);
+	}
+	ZEPHIR_INIT_VAR(_0);
+	zephir_add_function(_0, a, b TSRMLS_CC);
+	c = zephir_get_numberval(_0);
+	RETURN_MM_DOUBLE(c);
 
 }
 

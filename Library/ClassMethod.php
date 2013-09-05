@@ -337,6 +337,27 @@ class ClassMethod
 			 */
 			foreach ($this->_parameters->getParameters() as $parameter) {
 
+				/**
+				 * Change dynamic variables by low level types
+				 */
+				if ($typeInference) {
+					if (isset($parameter['data-type'])) {
+						if ($parameter['data-type'] == 'variable') {
+							$type = $typeInference->getInferedType($parameter['name']);
+							if (is_string($type)) {
+								//echo $parameter['name'], ' ', $type, ' ', $parameter['file'], ' ', $parameter['line'], PHP_EOL;
+								//$statement['data-type'] = $type;
+							}
+						}
+					} else {
+						$type = $typeInference->getInferedType($parameter['name']);
+						if (is_string($type)) {
+							//echo $parameter['name'], ' ', $type, ' ', $parameter['file'], ' ', $parameter['line'], PHP_EOL;
+							//$statement['data-type'] = $type;
+						}
+					}
+				}
+
 				$symbolParam = null;
 				if (isset($parameter['data-type'])) {
 					if ($parameter['data-type'] == 'variable') {
@@ -431,7 +452,7 @@ class ClassMethod
 		 */
 		if (is_object($this->_parameters)) {
 
-			$code = '';
+			$code = "";
 
 			/**
 			 * Round 2. Fetch the parameters in the method

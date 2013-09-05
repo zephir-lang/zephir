@@ -236,19 +236,40 @@ class StaticTypeInference
 				if ($left == 'int' && $right == 'int') {
 					return 'int';
 				}
+				if ($left == 'uint' && $right == 'uint') {
+					return 'uint';
+				}
+				if ($left == 'long' && $right == 'long') {
+					return 'long';
+				}
 				if ($left == 'double' && $right == 'double') {
 					return 'double';
 				}
 				if ($left == 'double' && $right == 'int') {
 					return 'double';
 				}
+				if ($left == 'double' && $right == 'long') {
+					return 'double';
+				}
 				if ($left == 'int' && $right == 'double') {
 					return 'double';
+				}
+				if ($left == 'int' && $right == 'bool') {
+					return 'int';
+				}
+				if ($left == 'bool' && $right == 'int') {
+					return 'int';
 				}
 				return 'numeric';
 			case 'mod':
 				$left = $this->passExpression($expression['left']);
 				$right = $this->passExpression($expression['right']);
+				if ($left == 'long' && $right == 'long') {
+					return 'long';
+				}
+				if ($left == 'ulong' && $right == 'ulong') {
+					return 'ulong';
+				}
 				return 'int';
 			case 'and':
 			case 'or':
@@ -283,20 +304,16 @@ class StaticTypeInference
 			case 'new':
 				$this->passNew($expression);
 				return 'variable';
-				break;
 			case 'property-access':
 			case 'array-access':
 				$this->passExpression($expression['left']);
 				return 'variable';
-				break;
 			case 'fetch':
 			case 'isset':
 				$this->passExpression($expression['left']);
 				return 'bool';
-				break;
 			case 'list':
 				return $this->passExpression($expression['left']);
-				break;
 			case 'cast':
 				return $expression['left']['value'];
 			case 'type-hint':
