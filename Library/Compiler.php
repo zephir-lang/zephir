@@ -164,9 +164,6 @@ class Compiler
 	 */
 	public function init()
 	{
-		//if (file_exists('config.json')) {
-		//	throw new Exception("A Zephir extension is already initialized in this directory");
-		//}
 
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
@@ -321,33 +318,71 @@ class Compiler
 			throw new Exception("Template project.c doesn't exist");
 		}
 
-		$classEntries = array();
-		$classInits = array();
-		foreach ($this->_files as $file) {
+		$files = $this->_files;
+
+		/**
+		 * Round 1. Calculate the dependency rank
+		 * Classes are ordered according to a dependency ranking
+		 */
+		foreach ($files as $file) {
 			$classDefinition = $file->getClassDefinition();
 			if ($classDefinition) {
-				$classEntries[] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
-				$classInits[] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+				$classDefinition->calculateDependencyRank();
 			}
+		}
+
+		$classEntries = array();
+		$classInits = array();
+
+		/**
+		 * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
+		 */
+		foreach ($files as $file) {
+			$classDefinition = $file->getClassDefinition();
+			if ($classDefinition) {
+				$dependencyRank = $classDefinition->getDependencyRank();
+				if (!isset($classInits[$dependencyRank])) {
+					$classEntries[$dependencyRank] = array();
+					$classInits[$dependencyRank] = array();
+				}
+				$classEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+				$classInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+			}
+		}
+
+		asort($classInits);
+		asort($classEntries);
+
+		$completeClassInits = array();
+		foreach ($classInits as $dependencyRank => $rankClassInits) {
+			$completeClassInits = array_merge($completeClassInits, $rankClassInits);
+		}
+
+		$completeClassEntries = array();
+		foreach ($classEntries as $dependencyRank => $rankClassEntries) {
+			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
 
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		=> strtolower($project),
 			'%PROJECT_UPPER%' 		=> strtoupper($project),
 			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
-			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, $classEntries),
-			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", $classInits),
+			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, $completeClassEntries),
+			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", $completeClassInits),
 		);
 
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);
 		}
 
+		/**
+		 * Round 3. Generate and place the entry point of the project
+		 */
 		file_put_contents('ext/' . $project . '.c', $content);
 		unset($content);
 
 		/**
-		 * project.h
+		 * Round 4. Generate the project main header
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/project.h');
 		if (empty($content)) {

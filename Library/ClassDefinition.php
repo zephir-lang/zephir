@@ -39,6 +39,14 @@ class ClassDefinition
 
 	protected $_methods = array();
 
+	protected $_dependencyRank = 0;
+
+	/**
+	 * ClassDefinition
+	 *
+	 * @param string $namespace
+	 * @param string $name
+	 */
 	public function __construct($namespace, $name)
 	{
 		$this->_namespace = $namespace;
@@ -96,6 +104,39 @@ class ClassDefinition
 	public function setExtendsClassDefinition($classDefinition)
 	{
 		$this->_extendsClassDefinition = $classDefinition;
+	}
+
+	/**
+	 * Calculate the dependency rank of the class based on its dependencies
+	 *
+	 */
+	public function calculateDependencyRank()
+	{
+		if ($this->_extendsClassDefinition) {
+			$classDefinition = $this->_extendsClassDefinition;
+			if (method_exists($classDefinition, 'increaseDependencyRank')) {
+				$classDefinition->increaseDependencyRank();
+			}
+		}
+	}
+
+	/**
+	 * A class definition calls this method to mark this class as a dependency of another
+	 *
+	 */
+	public function increaseDependencyRank()
+	{
+		$this->_dependencyRank++;
+	}
+
+	/**
+	 * Returns the dependency rank for this class
+	 *
+	 * @return int
+	 */
+	public function getDependencyRank()
+	{
+		return $this->_dependencyRank;
 	}
 
 	/**
@@ -291,11 +332,14 @@ class ClassDefinition
 		 * Register the class with extends + interfaces
 		 */
 		if ($this->_extendsClass) {
+
 			if (substr($this->_extendsClass, 0, 1) == '\\') {
 				$extendsClass = substr($this->_extendsClass, 1);
 			} else {
 				$extendsClass = $this->_extendsClass;
 			}
+			$extendsClass = str_replace("\\", "\\\\", $extendsClass);
+
 			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
 				strtolower($this->getSCName()) . ', ' . '"' . strtolower($extendsClass) . '", ' .
 				strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry, 0);');

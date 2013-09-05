@@ -5,7 +5,7 @@
 
 namespace Test;
 
-class Scall
+class Scall extends Test\ScallParent
 {
 
 	static public function testMethod1()
@@ -81,6 +81,21 @@ class Scall
 	public function testCall9()
 	{
 		return self::testMethod3();
+	}
+
+	public function testCall10(var a, var b)
+	{
+		return Test\Scall::testMethod4(a, b);
+	}
+
+	public function testCall11(var a, var b)
+	{
+		return Test\Scall::testMethod5(a, b);
+	}
+
+	public function testCall12(var a, var b)
+	{
+		return Test\Scall::testMethod6(a, b);
 	}
 
 }

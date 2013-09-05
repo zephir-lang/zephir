@@ -22,7 +22,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Scall) {
 
-	ZEPHIR_REGISTER_CLASS(Test, Scall, scall, test_scall_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Test, Scall, scall, "test\\scallparent", test_scall_method_entry, 0);
 
 
 	return SUCCESS;
@@ -163,6 +163,45 @@ PHP_METHOD(Test_Scall, testCall8) {
 PHP_METHOD(Test_Scall, testCall9) {
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
+	return;
+
+}
+
+PHP_METHOD(Test_Scall, testCall10) {
+
+	zval *a, *b;
+
+	zephir_fetch_params(0, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod4", a, b);
+	return;
+
+}
+
+PHP_METHOD(Test_Scall, testCall11) {
+
+	zval *a, *b;
+
+	zephir_fetch_params(0, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod5", a, b);
+	return;
+
+}
+
+PHP_METHOD(Test_Scall, testCall12) {
+
+	zval *a, *b;
+
+	zephir_fetch_params(0, 2, 0, &a, &b);
+
+
+
+	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod6", a, b);
 	return;
 
 }

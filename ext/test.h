@@ -24,5 +24,6 @@
 #include "router/route.h"
 #include "router.h"
 #include "scall.h"
+#include "scallparent.h"
 #include "spectralnorm.h"
 #include "testinterface.h"
