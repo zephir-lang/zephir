@@ -16,6 +16,7 @@
  +----------------------------------------------------------------------+
 */
 
+#include "stdio.h"
 #include "string.h"
 #include "scanner.h"
 
@@ -427,12 +428,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		IDENTIFIER = [\\_]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
+		IDENTIFIER = [\\_\$]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
 
-			token->value = strndup(start, YYCURSOR - start);
-			token->len = YYCURSOR - start;
-			s->active_char += (YYCURSOR - start);
+			if (start[0] == '$') {
+				token->value = strndup(start + 1, YYCURSOR - start - 1);
+				token->len = YYCURSOR - start - 1;
+				s->active_char += (YYCURSOR - start - 1);
+			} else {
+				token->value = strndup(start, YYCURSOR - start);
+				token->len = YYCURSOR - start;
+				s->active_char += (YYCURSOR - start);
+			}
 			q = YYCURSOR;
 
 			if (!memcmp(token->value, "_GET", sizeof("_GET")-1)) {

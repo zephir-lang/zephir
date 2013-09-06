@@ -33,12 +33,12 @@
 
 %left COMMA .
 %right REQUIRE .
+%right TYPEOF INSTANCEOF .
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
 %right ISSET FETCH .
-%right TYPEOF INSTANCEOF .
 %right NEW .
 %right NOT .
 %right PARENTHESES_CLOSE .
@@ -961,12 +961,20 @@ xx_class_def(R) ::= CLASS IDENTIFIER(I) IMPLEMENTS xx_implements_list(L) xx_clas
 	R = xx_ret_class(I, B, 0, 0, NULL, L, status->scanner_state);
 }
 
+xx_class_def(R) ::= CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, 0, E, L, status->scanner_state);
+}
+
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) xx_class_body(B) . {
 	R = xx_ret_class(I, B, 1, 0, NULL, NULL, status->scanner_state);
 }
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
 	R = xx_ret_class(I, B, 1, 0, E, NULL, status->scanner_state);
+}
+
+xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 1, 0, NULL, L, status->scanner_state);
 }
 
 xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) xx_class_body(B) . {
@@ -1498,6 +1506,16 @@ xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) xx_assignment_operato
 	R = xx_ret_let_assignment("object-property", O, D, I, NULL, E, status->scanner_state);
 }
 
+/* y->{x} = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("variable-dynamic-object-property", O, D, I, NULL, E, status->scanner_state);
+}
+
+/* y->{"x"} = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("string-dynamic-object-property", O, D, S, NULL, E, status->scanner_state);
+}
+
 /* y->x[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("object-property-append", O, D, I, NULL, E, status->scanner_state);
@@ -1812,9 +1830,9 @@ xx_common_expr(R) ::= xx_common_expr(O1) OR xx_common_expr(O2) . {
 	R = xx_ret_expr("or", O1, O2, NULL, status->scanner_state);
 }
 
-/* y = instanceof b */
-xx_common_expr(R) ::= INSTANCEOF xx_common_expr(O1) . {
-	R = xx_ret_expr("instanceof", O1, NULL, NULL, status->scanner_state);
+/* y = a instanceof b */
+xx_common_expr(R) ::= xx_common_expr(O1) INSTANCEOF xx_common_expr(O2) . {
+	R = xx_ret_expr("instanceof", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = fetch x, z[k] */
