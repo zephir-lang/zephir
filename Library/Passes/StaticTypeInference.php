@@ -239,11 +239,15 @@ class StaticTypeInference
 			case 'uint';
 			case 'long':
 			case 'ulong':
-			case 'string':
 			case 'null':
 			case 'char':
 			case 'uchar':
 				return $expression['type'];
+			case 'string':
+				if (ctype_digit($expression['value'])) {
+					return 'int';
+				}
+				return 'string';
 			case 'empty-array':
 			case 'static-constant-access':
 				return 'variable';

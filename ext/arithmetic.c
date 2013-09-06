@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 
 
 /**
@@ -243,34 +242,25 @@ PHP_METHOD(Test_Arithmetic, intVarSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
-	int c;
-	zval *a, *b, *_0;
+	int a, b, c;
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_STRING(a, "1", 1);
-	ZEPHIR_INIT_VAR(b);
-	ZVAL_STRING(b, "2", 1);
-	ZEPHIR_INIT_VAR(_0);
-	zephir_add_function(_0, b, a TSRMLS_CC);
-	c = zephir_get_numberval(_0);
-	RETURN_MM_LONG(c);
+	a = 1;
+	b = 2;
+	c = (b + a);
+	RETURN_LONG(c);
 
 }
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
-	int b, c;
-	zval *a;
+	int a, b, c;
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_STRING(a, "1", 1);
+	a = 1;
 	b = 2;
-	c = (b + zephir_get_numberval(a));
-	RETURN_MM_LONG(c);
+	c = (b + a);
+	RETURN_LONG(c);
 
 }
 

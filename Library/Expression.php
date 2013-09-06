@@ -1117,7 +1117,7 @@ class Expression
 				return new CompiledExpression('bool', $expression['value'], $expression);
 
 			case 'string':
-				if (is_integer($expression['value'])) {
+				if (ctype_digit($expression['value'])) {
 					return new CompiledExpression('int', $expression['value'], $expression);
 				}
 				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
