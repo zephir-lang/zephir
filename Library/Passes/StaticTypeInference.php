@@ -261,6 +261,9 @@ class StaticTypeInference
 				if ($left == 'bool' && $right == 'int') {
 					return 'int';
 				}
+				if ($left == $right) {
+					return $left;
+				}
 				return 'numeric';
 			case 'mod':
 				$left = $this->passExpression($expression['left']);

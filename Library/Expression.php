@@ -1021,7 +1021,7 @@ class Expression
 						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
 					case 'variable':
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
-						return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+						return new CompiledExpression('int', 'zephir_get_numberval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}

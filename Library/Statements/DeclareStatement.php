@@ -61,8 +61,11 @@ class DeclareStatement
 			 * Replace original data type by the pre-processed infered type
 			 */
 			if ($typeInference) {
-				if ($statement['data-type'] == 'variable') {
+				if ($currentType == 'variable') {
 					$type = $typeInference->getInferedType($variable['variable']);
+					if ($variable['variable'] == 'd') {
+						echo $variable['variable'], $type, $currentType, PHP_EOL;
+					}
 					if (is_string($type)) {
 						$currentType = $type;
 					}

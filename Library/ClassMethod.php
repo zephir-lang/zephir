@@ -119,11 +119,12 @@ class ClassMethod
 	 * Checks whether the method has a specific modifier
 	 *
 	 * @param string $modifier
+	 * @return boolean
 	 */
 	public function hasModifier($modifier)
 	{
 		foreach ($this->_visibility as $visibility) {
-			if ($visibility == 'static') {
+			if ($visibility == $modifier) {
 				return true;
 			}
 		}
@@ -166,6 +167,9 @@ class ClassMethod
 		return join('|', array_keys($modifiers));
 	}
 
+	/**
+	 * Replace macros
+	 */
 	public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)
 	{
 		if (!$symbolTable->getMustGrownStack()) {
@@ -195,6 +199,7 @@ class ClassMethod
 	 * Assigns a default value
 	 *
 	 * @param array $parameter
+	 * @param CompilationContext $compilationContext
 	 */
 	public function assignDefaultValue($parameter, $compilationContext)
 	{

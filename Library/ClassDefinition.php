@@ -325,9 +325,15 @@ class ClassDefinition
 		return str_replace('\\', '\\\\', $this->_namespace);
 	}
 
-	public function getSCName()
+	/**
+	 * Class name without namespace prefix for class registration
+	 *
+	 * @param string $namespace
+	 * @return string
+	 */
+	public function getSCName($namespace)
 	{
-		return str_replace("test_", "", strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name));
+		return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name));
 	}
 
 	/**
@@ -358,6 +364,8 @@ class ClassDefinition
 			$methodEntry = 'NULL';
 		}
 
+		$namespace = $compilationContext->config->get('namespace');
+
 		/**
 		 * Register the class with extends + interfaces
 		 */
@@ -371,11 +379,11 @@ class ClassDefinition
 			$extendsClass = str_replace("\\", "\\\\", $extendsClass);
 
 			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-				strtolower($this->getSCName()) . ', ' . '"' . strtolower($extendsClass) . '", ' . $methodEntry . ', 0);');
+				strtolower($this->getSCName($namespace)) . ', ' . '"' . strtolower($extendsClass) . '", ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		} else {
 			$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-				strtolower($this->getSCName()) . ', ' . $methodEntry . ', 0);');
+				strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		}
 

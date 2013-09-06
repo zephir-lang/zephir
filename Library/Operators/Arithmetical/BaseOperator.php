@@ -76,9 +76,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($variableRight->isLocalOnly()) {
-									return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . '))', $expression);
+									return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
 								} else {
-									return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . '))', $expression);
+									return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
 								}
 							default:
 								throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
@@ -152,9 +152,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
 										} else {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
 										}
 									default:
 										throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -186,9 +186,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
 									case 'variable':
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
 										} else {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
 										}
 									default:
 										throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
@@ -222,9 +222,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(&' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
 										} else {
-											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_intval(' . $variableRight->getName() . '))', $expression);
+											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
 										}
 									default:
 										throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
