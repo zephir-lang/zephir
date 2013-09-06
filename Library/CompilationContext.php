@@ -102,7 +102,14 @@ class CompilationContext
 	public $currentBranch = 0;
 
 	/**
-	 * Compiler
+	 * Global config
+	 *
+	 * @var \Config
+	 */
+	public $config;
+
+	/**
+	 * Global logger
 	 *
 	 * @var \Logger
 	 */

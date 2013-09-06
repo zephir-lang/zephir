@@ -33,6 +33,7 @@ PHP_METHOD(Test_Oo, testInstance1) {
 	zval *o;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init(o);
 	RETURN_CCTOR(o);
@@ -44,6 +45,7 @@ PHP_METHOD(Test_Oo, testInstance2) {
 	zval *o;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstruct_ce);
 	zephir_call_method_noret(o, "__construct");
@@ -56,6 +58,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 	zval *o;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_oonoconstruct_ce);
 	RETURN_CCTOR(o);
@@ -67,6 +70,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	zval *o, *a, *b;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "a", 1);
 	ZEPHIR_INIT_VAR(b);
@@ -83,6 +87,7 @@ PHP_METHOD(Test_Oo, testInstance5) {
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	ZEPHIR_INIT_VAR(_0);
@@ -99,6 +104,7 @@ PHP_METHOD(Test_Oo, testInstance6) {
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	ZEPHIR_INIT_VAR(_0);
@@ -115,6 +121,7 @@ PHP_METHOD(Test_Oo, testInstance7) {
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	ZEPHIR_INIT_VAR(_0);
@@ -131,6 +138,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	ZEPHIR_INIT_VAR(_0);

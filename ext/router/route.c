@@ -472,6 +472,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
  */
 PHP_METHOD(Test_Router_Route, getName) {
 
+
 	RETURN_MEMBER(this_ptr, "_name");
 
 }
@@ -529,6 +530,7 @@ PHP_METHOD(Test_Router_Route, beforeMatch) {
  */
 PHP_METHOD(Test_Router_Route, getBeforeMatch) {
 
+
 	RETURN_MEMBER(this_ptr, "_beforeMatch");
 
 }
@@ -539,6 +541,7 @@ PHP_METHOD(Test_Router_Route, getBeforeMatch) {
  * @return string
  */
 PHP_METHOD(Test_Router_Route, getRouteId) {
+
 
 	RETURN_MEMBER(this_ptr, "_id");
 
@@ -551,6 +554,7 @@ PHP_METHOD(Test_Router_Route, getRouteId) {
  */
 PHP_METHOD(Test_Router_Route, getPattern) {
 
+
 	RETURN_MEMBER(this_ptr, "_pattern");
 
 }
@@ -562,6 +566,7 @@ PHP_METHOD(Test_Router_Route, getPattern) {
  */
 PHP_METHOD(Test_Router_Route, getCompiledPattern) {
 
+
 	RETURN_MEMBER(this_ptr, "_compiledPattern");
 
 }
@@ -572,6 +577,7 @@ PHP_METHOD(Test_Router_Route, getCompiledPattern) {
  * @return array
  */
 PHP_METHOD(Test_Router_Route, getPaths) {
+
 
 	RETURN_MEMBER(this_ptr, "_paths");
 
@@ -589,6 +595,7 @@ PHP_METHOD(Test_Router_Route, getReversedPaths) {
 	zval *reversed, *path = NULL, *position = NULL, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(reversed);
 	array_init(reversed);
 	ZEPHIR_OBS_VAR(_0);
@@ -637,6 +644,7 @@ PHP_METHOD(Test_Router_Route, setHttpMethods) {
  */
 PHP_METHOD(Test_Router_Route, getHttpMethods) {
 
+
 	RETURN_MEMBER(this_ptr, "_methods");
 
 }
@@ -671,6 +679,7 @@ PHP_METHOD(Test_Router_Route, setHostname) {
  */
 PHP_METHOD(Test_Router_Route, getHostname) {
 
+
 	RETURN_MEMBER(this_ptr, "_hostname");
 
 }
@@ -701,6 +710,7 @@ PHP_METHOD(Test_Router_Route, convert) {
  * @return array
  */
 PHP_METHOD(Test_Router_Route, getConverters) {
+
 
 	RETURN_MEMBER(this_ptr, "_converters");
 

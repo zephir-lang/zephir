@@ -32,11 +32,13 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 PHP_METHOD(Test_Constants, testReadConstant) {
 
+
 	RETURN_LONG(3);
 
 }
 
 PHP_METHOD(Test_Constants, testReadClassConstant1) {
+
 
 	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
 	return;
@@ -45,12 +47,14 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
+
 	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
 	return;
 
 }
 
 PHP_METHOD(Test_Constants, testReadClassConstant3) {
+
 
 	zephir_get_class_constant(return_value, test_constantsparent_ce, SS("P4") TSRMLS_CC);
 	return;

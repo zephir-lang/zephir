@@ -28,11 +28,13 @@ ZEPHIR_INIT_CLASS(Test_ScallParent) {
 
 PHP_METHOD(Test_ScallParent, testMethod1) {
 
+
 	RETURN_STRING("hello parent public", 1);
 
 }
 
 PHP_METHOD(Test_ScallParent, testMethod2) {
+
 
 	RETURN_STRING("hello parent protected", 1);
 

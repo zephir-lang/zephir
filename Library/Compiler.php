@@ -162,7 +162,7 @@ class Compiler
 	/**
 	 * Initializes a zephir extension
 	 */
-	public function init()
+	public function init($config , $logger)
 	{
 
 		if (!is_dir('.temp')) {
@@ -197,7 +197,7 @@ class Compiler
 	/**
 	 *
 	 */
-	public function compile()
+	public function compile($config , $logger)
 	{
 
 		if (!file_exists('config.json')) {
@@ -207,16 +207,6 @@ class Compiler
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
-
-		/**
-		 * Global config
-		 */
-		$config = new Config();
-
-		/**
-		 * Global logger
-		 */
-		$logger = new Logger();
 
 		/**
 		 * Get global namespace
@@ -238,7 +228,7 @@ class Compiler
 		 * Round 2. Check 'extends' and 'implements' dependencies
 		 */
 		foreach ($this->_files as $compileFile) {
-			$compileFile->checkDependencies($this, $logger);
+			$compileFile->checkDependencies($this, $config, $logger);
 		}
 
 		/**
@@ -246,7 +236,7 @@ class Compiler
 		 */
 		$files = array();
 		foreach ($this->_files as $compileFile) {
-			$compileFile->compile($this, $logger);
+			$compileFile->compile($this, $config, $logger);
 			$files[] = $compileFile->getCompiledFile();
 		}
 
@@ -442,22 +432,43 @@ class Compiler
 
 			$c = new Compiler();
 
+			/**
+			 * Global config
+			 */
+			$config = new Config();
+
+			/**
+			 * Global logger
+			 */
+			$logger = new Logger();
+
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
 			} else {
 				$action = 'compile';
 			}
 
+			/**
+			 * Change configurations flags
+			 */
+			if ($_SERVER['argc'] >= 2) {
+				for ($i = 2; $i < $_SERVER['argc']; $i++) {
+					if (preg_match('/^-fno-([a-z0-9\-]+)/', $_SERVER['argv'][$i], $matches)) {
+						$config->set($matches[1], false);
+					}
+				}
+			}
+
 			switch ($action) {
 				case 'init':
-					$c->init();
+					$c->init($config , $logger);
 					break;
 				case 'compile-only':
-					$c->compile();
+					$c->compile($config , $logger);
 					break;
 				case 'compile':
-					$c->compile();
-					$c->install();
+					$c->compile($config , $logger);
+					$c->install($config , $logger);
 					break;
 				case 'version':
 					echo self::VERSION, PHP_EOL;

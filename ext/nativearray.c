@@ -34,6 +34,7 @@ PHP_METHOD(Test_NativeArray, testArray1) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	RETURN_CCTOR(a);
@@ -45,6 +46,7 @@ PHP_METHOD(Test_NativeArray, testArray2) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -65,6 +67,7 @@ PHP_METHOD(Test_NativeArray, testArray3) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -85,6 +88,7 @@ PHP_METHOD(Test_NativeArray, testArray4) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -105,6 +109,7 @@ PHP_METHOD(Test_NativeArray, testArray5) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -125,6 +130,7 @@ PHP_METHOD(Test_NativeArray, testArray6) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -146,6 +152,7 @@ PHP_METHOD(Test_NativeArray, testArray7) {
 	zval *d, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	a = 1;
 	b = 2;
 	c = 3;
@@ -170,6 +177,7 @@ PHP_METHOD(Test_NativeArray, testArray8) {
 	zval *d, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	a = (double) (1);
 	b = (double) (2);
 	c = (double) (3);
@@ -194,6 +202,7 @@ PHP_METHOD(Test_NativeArray, testArray9) {
 	zval *d, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	a = 1;
 	b = 0;
 	c = 1;
@@ -218,6 +227,7 @@ PHP_METHOD(Test_NativeArray, testArray10) {
 	zval *d, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	zephir_str_assign(a, "hello1", sizeof("hello1")-1);
 	zephir_str_assign(b, "hello2", sizeof("hello2")-1);
 	zephir_str_assign(c, "hello3", sizeof("hello3")-1);
@@ -241,6 +251,7 @@ PHP_METHOD(Test_NativeArray, testArray11) {
 	zval *a, *b, *c, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -276,6 +287,7 @@ PHP_METHOD(Test_NativeArray, testArray12) {
 	zval *a, *b, *c, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -302,6 +314,7 @@ PHP_METHOD(Test_NativeArray, testArray13) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_index_stringl(a, 1, SL("hello1"), 1);
@@ -316,6 +329,7 @@ PHP_METHOD(Test_NativeArray, testArray14) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_long_ex(a, SS("hello1"), 1);
@@ -330,6 +344,7 @@ PHP_METHOD(Test_NativeArray, testArray15) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_bool_ex(a, SS("hello1"), 1);
@@ -344,6 +359,7 @@ PHP_METHOD(Test_NativeArray, testArray16) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_double_ex(a, SS("hello1"), 1.0);
@@ -358,6 +374,7 @@ PHP_METHOD(Test_NativeArray, testArray17) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_null_ex(a, SS(""));
@@ -372,6 +389,7 @@ PHP_METHOD(Test_NativeArray, testArray18) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_stringl_ex(a, SS("hello1"), SL("a"), 1);
@@ -386,6 +404,7 @@ PHP_METHOD(Test_NativeArray, testArray19) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_index_bool(a, 0, 1);
@@ -400,6 +419,7 @@ PHP_METHOD(Test_NativeArray, testArray20) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_index_double(a, 0, 1.0);
@@ -414,6 +434,7 @@ PHP_METHOD(Test_NativeArray, testArray21) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_index_null(a, 0);
@@ -428,6 +449,7 @@ PHP_METHOD(Test_NativeArray, testArray22) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_index_long(a, 0, 4);
@@ -443,6 +465,7 @@ PHP_METHOD(Test_NativeArray, testArray23) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -465,6 +488,7 @@ PHP_METHOD(Test_NativeArray, testArray24) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0.0;
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -487,6 +511,7 @@ PHP_METHOD(Test_NativeArray, testArray25) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -508,6 +533,7 @@ PHP_METHOD(Test_NativeArray, testArray26) {
 	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_NULL(b);
 	ZEPHIR_INIT_VAR(a);
@@ -525,6 +551,7 @@ PHP_METHOD(Test_NativeArray, testArray27) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -547,6 +574,7 @@ PHP_METHOD(Test_NativeArray, testArray28) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -569,6 +597,7 @@ PHP_METHOD(Test_NativeArray, testArray29) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	b = 1;
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -583,6 +612,7 @@ PHP_METHOD(Test_NativeArray, testArray30) {
 	zval *a;
 
 	ZEPHIR_MM_GROW();
+
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
@@ -596,6 +626,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 	zval *a, *b, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -618,6 +649,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess2) {
 	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_long_ex(a, SS("a"), 1);
@@ -635,6 +667,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess3) {
 	zval *a, *b, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -659,6 +692,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_long_ex(a, SS("a"), 1);
@@ -676,6 +710,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 	zval *a, *b, *c;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_long_ex(a, SS("a"), 1);
@@ -694,6 +729,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -718,6 +754,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate2) {
 	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -743,6 +780,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate3) {
 	zval *a, *_0 = NULL, *_1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
@@ -771,6 +809,7 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 	zval *a, *_0;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 	add_assoc_long_ex(a, SS("a"), 1);
@@ -788,6 +827,7 @@ PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 	zval *x, *y, *_0;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(x);
 	array_init(x);
 	ZEPHIR_INIT_VAR(y);

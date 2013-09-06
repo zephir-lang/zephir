@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Exceptions) {
 
 PHP_METHOD(Test_Exceptions, testException1) {
 
+
 	ZEPHIR_THROW_EXCEPTION_STRW(test_exception_ce, "hello1");
 	return;
 
@@ -38,6 +39,7 @@ PHP_METHOD(Test_Exceptions, testException2) {
 	zval *msg, *_0;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(msg);
 	ZVAL_STRING(msg, "hello2", 1);
 	ZEPHIR_INIT_VAR(_0);
@@ -53,6 +55,7 @@ PHP_METHOD(Test_Exceptions, testException3) {
 	zval *ex, *msg;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(msg);
 	ZVAL_STRING(msg, "hello3", 1);
 	ZEPHIR_INIT_VAR(ex);
@@ -68,6 +71,7 @@ PHP_METHOD(Test_Exceptions, getException) {
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
+
 	object_init_ex(return_value, test_exception_ce);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "hello4", 1);
@@ -81,6 +85,7 @@ PHP_METHOD(Test_Exceptions, testException4) {
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_method(_0, this_ptr, "getexception");
 	zephir_throw_exception(_0 TSRMLS_CC);

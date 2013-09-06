@@ -154,6 +154,7 @@ PHP_METHOD(Test_Router, setDI) {
  */
 PHP_METHOD(Test_Router, getDI) {
 
+
 	RETURN_MEMBER(this_ptr, "_dependencyInjector");
 
 }
@@ -168,6 +169,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER, _1;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_property_this(&_0, this_ptr, SL("_uriSource"), PH_NOISY_CC);
 	if (!(zend_is_true(_0))) {
@@ -982,6 +984,7 @@ PHP_METHOD(Test_Router, clear) {
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
 	zephir_update_property_this(this_ptr, SL("_routes"), _0 TSRMLS_CC);
@@ -996,6 +999,7 @@ PHP_METHOD(Test_Router, clear) {
  */
 PHP_METHOD(Test_Router, getNamespaceName) {
 
+
 	RETURN_MEMBER(this_ptr, "_namespace");
 
 }
@@ -1006,6 +1010,7 @@ PHP_METHOD(Test_Router, getNamespaceName) {
  * @return string
  */
 PHP_METHOD(Test_Router, getModuleName) {
+
 
 	RETURN_MEMBER(this_ptr, "_module");
 
@@ -1018,6 +1023,7 @@ PHP_METHOD(Test_Router, getModuleName) {
  */
 PHP_METHOD(Test_Router, getControllerName) {
 
+
 	RETURN_MEMBER(this_ptr, "_controller");
 
 }
@@ -1028,6 +1034,7 @@ PHP_METHOD(Test_Router, getControllerName) {
  * @return string
  */
 PHP_METHOD(Test_Router, getActionName) {
+
 
 	RETURN_MEMBER(this_ptr, "_action");
 
@@ -1040,6 +1047,7 @@ PHP_METHOD(Test_Router, getActionName) {
  */
 PHP_METHOD(Test_Router, getParams) {
 
+
 	RETURN_MEMBER(this_ptr, "_params");
 
 }
@@ -1050,6 +1058,7 @@ PHP_METHOD(Test_Router, getParams) {
  * @return Test\Router\Route
  */
 PHP_METHOD(Test_Router, getMatchedRoute) {
+
 
 	RETURN_MEMBER(this_ptr, "_matchedRoute");
 
@@ -1062,6 +1071,7 @@ PHP_METHOD(Test_Router, getMatchedRoute) {
  */
 PHP_METHOD(Test_Router, getMatches) {
 
+
 	RETURN_MEMBER(this_ptr, "_matches");
 
 }
@@ -1073,6 +1083,7 @@ PHP_METHOD(Test_Router, getMatches) {
  */
 PHP_METHOD(Test_Router, wasMatched) {
 
+
 	RETURN_MEMBER(this_ptr, "_wasMatched");
 
 }
@@ -1083,6 +1094,7 @@ PHP_METHOD(Test_Router, wasMatched) {
  * @return Test\Router\Route[]
  */
 PHP_METHOD(Test_Router, getRoutes) {
+
 
 	RETURN_MEMBER(this_ptr, "_routes");
 

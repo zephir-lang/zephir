@@ -61,4 +61,16 @@ class Declare
 		return a;
 	}
 
+	public function testDeclare10()
+	{
+		var a = 10;
+		return a;
+	}
+
+	public function testDeclare11()
+	{
+		var a = 10.5;
+		return a;
+	}
+
 }

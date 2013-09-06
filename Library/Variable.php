@@ -89,6 +89,8 @@ class Variable
 
 	protected $_numberSkips = 0;
 
+	protected $_original;
+
 	/**
 	 * @param string $type
 	 * @param string $name
@@ -251,6 +253,26 @@ class Variable
 	public function getBranch()
 	{
 		return $this->_branch;
+	}
+
+	/**
+	 * Set the original AST node where the variable was declared
+	 *
+	 * @param array $node
+	 */
+	public function setOriginal($node)
+	{
+		$this->_node = $node;
+	}
+
+	/**
+	 * Returns the original AST node where the variable was declared
+	 *
+	 * @return array
+	 */
+	public function getOriginal()
+	{
+		return $this->_node;
 	}
 
 	/**

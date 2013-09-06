@@ -56,7 +56,7 @@ class DeclareStatement
 			}
 
 			/**
-			 * Replace original data type by the infered type
+			 * Replace original data type by the pre-processed infered type
 			 */
 			if ($typeInference) {
 				if ($statement['data-type'] == 'variable') {
@@ -77,11 +77,9 @@ class DeclareStatement
 			}
 
 			/**
-			 * Variables with a default value are initialized by default
+			 * Set the node where the variable is declared
 			 */
-			if (isset($variable['expr'])) {
-				$symbolVariable->setIsInitialized(true);
-			}
+			$symbolVariable->setOriginal($variable);
 
 			if (isset($variable['expr'])) {
 				$defaultValue = $variable['expr']['value'];
@@ -89,6 +87,9 @@ class DeclareStatement
 				$defaultValue = null;
 			}
 
+			/**
+			 * Variables with a default value are initialized by default
+			 */
 			if ($defaultValue !== null) {
 
 				switch ($statement['data-type']) {
@@ -140,12 +141,30 @@ class DeclareStatement
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
+					case 'variable':
+						$defaultValue = $variable['expr'];
+						switch ($variable['expr']['type']) {
+							case 'int':
+							case 'uint':
+							case 'long':
+							case 'char':
+							case 'uchar':
+								$symbolVariable->setDynamicType('long');
+								break;
+							case 'double':
+								$symbolVariable->setDynamicType('double');
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
 					default:
 						throw new CompilerException('Invalid data type: ' . $statement['data-type'], $variable);
 				}
 
 				$symbolVariable->setDefaultInitValue($defaultValue);
 				$symbolVariable->setIsInitialized(true);
+				$symbolVariable->increaseMutates();
 			}
 		}
 

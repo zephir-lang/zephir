@@ -35,6 +35,7 @@ PHP_METHOD(Test_Flow, testIf1) {
 
 	int a;
 
+
 	a = 1;
 	if (a) {
 		RETURN_LONG(1);
@@ -46,6 +47,7 @@ PHP_METHOD(Test_Flow, testIf1) {
 PHP_METHOD(Test_Flow, testIf2) {
 
 	int a;
+
 
 	a = 0;
 	if (a) {
@@ -59,6 +61,7 @@ PHP_METHOD(Test_Flow, testIf3) {
 
 	double a;
 
+
 	a = (double) (1);
 	if (a) {
 		RETURN_LONG(1);
@@ -70,6 +73,7 @@ PHP_METHOD(Test_Flow, testIf3) {
 PHP_METHOD(Test_Flow, testIf4) {
 
 	double a;
+
 
 	a = (double) (0);
 	if (a) {
@@ -83,6 +87,7 @@ PHP_METHOD(Test_Flow, testIf5) {
 
 	zend_bool a;
 
+
 	a = (1) ? 1 : 0;
 	if (a) {
 		RETURN_LONG(1);
@@ -94,6 +99,7 @@ PHP_METHOD(Test_Flow, testIf5) {
 PHP_METHOD(Test_Flow, testIf6) {
 
 	zend_bool a;
+
 
 	a = (0) ? 1 : 0;
 	if (a) {
@@ -107,6 +113,7 @@ PHP_METHOD(Test_Flow, testIf7) {
 
 	int a;
 
+
 	a = 1;
 	if (a) {
 		RETURN_LONG(1);
@@ -119,6 +126,7 @@ PHP_METHOD(Test_Flow, testIf7) {
 PHP_METHOD(Test_Flow, testIf8) {
 
 	int a;
+
 
 	a = 0;
 	if (a) {
@@ -134,6 +142,7 @@ PHP_METHOD(Test_Flow, testIf9) {
 	zend_bool c;
 	double b;
 	int a;
+
 
 	a = 1;
 	if (a) {
@@ -154,6 +163,7 @@ PHP_METHOD(Test_Flow, testIf10) {
 	zend_bool c;
 	double b;
 	int a;
+
 
 	a = 1;
 	if (a) {
@@ -180,6 +190,7 @@ PHP_METHOD(Test_Flow, testIf12) {
 	double b;
 	int a;
 
+
 	a = 1;
 	if (a) {
 		b = (double) (1);
@@ -203,6 +214,7 @@ PHP_METHOD(Test_Flow, testIf13) {
 
 	int a, b;
 
+
 	a = 1;
 	b = 2;
 	if ((a + b)) {
@@ -216,6 +228,7 @@ PHP_METHOD(Test_Flow, testIf14) {
 
 	int a, b;
 
+
 	a = 1;
 	b = 2;
 	if ((a + b)) {
@@ -228,6 +241,7 @@ PHP_METHOD(Test_Flow, testIf14) {
 PHP_METHOD(Test_Flow, testIf15) {
 
 	int a, b, c;
+
 
 	a = 1;
 	b = 2;
@@ -243,6 +257,7 @@ PHP_METHOD(Test_Flow, testLoop1) {
 
 	zend_bool a;
 
+
 	a = 1;
 	while (1) {
 		if (a) {
@@ -256,6 +271,7 @@ PHP_METHOD(Test_Flow, testLoop1) {
 PHP_METHOD(Test_Flow, testLoop2) {
 
 	int a;
+
 
 	a = 1;
 	while (1) {
@@ -271,6 +287,7 @@ PHP_METHOD(Test_Flow, testLoop2) {
 PHP_METHOD(Test_Flow, testLoop3) {
 
 	int a;
+
 
 	a = 1;
 	while (1) {
@@ -291,6 +308,7 @@ PHP_METHOD(Test_Flow, testLoop4) {
 
 	int a;
 
+
 	a = 1;
 	while (1) {
 		a = (a + 1);
@@ -310,6 +328,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 
 	int a;
 
+
 	a = 5;
 	while (1) {
 		if (!(a)) {
@@ -324,6 +343,7 @@ PHP_METHOD(Test_Flow, testWhile1) {
 PHP_METHOD(Test_Flow, testWhile2) {
 
 	int a;
+
 
 	a = 5;
 	while (1) {
@@ -340,6 +360,7 @@ PHP_METHOD(Test_Flow, testWhile3) {
 
 	double c;
 	int a, b;
+
 
 	a = 5;
 	while (1) {
@@ -365,6 +386,7 @@ PHP_METHOD(Test_Flow, testWhile4) {
 	double c;
 	int a, b;
 
+
 	a = 5;
 	while (1) {
 		if (!(a)) {
@@ -388,6 +410,7 @@ PHP_METHOD(Test_Flow, testWhile5) {
 
 	int a;
 
+
 	a = 5;
 	while (1) {
 		if (!(a)) {
@@ -402,6 +425,7 @@ PHP_METHOD(Test_Flow, testWhile5) {
 PHP_METHOD(Test_Flow, testWhile6) {
 
 	int a;
+
 
 	a = 5;
 	while (1) {
@@ -418,6 +442,7 @@ PHP_METHOD(Test_Flow, testWhile7) {
 
 	double a;
 
+
 	a = (double) (5);
 	while (1) {
 		if (!(a)) {
@@ -432,6 +457,7 @@ PHP_METHOD(Test_Flow, testWhile7) {
 PHP_METHOD(Test_Flow, testWhile8) {
 
 	double a;
+
 
 	a = (double) (5);
 	while (1) {
@@ -448,6 +474,7 @@ PHP_METHOD(Test_Flow, testWhile9) {
 
 	double c;
 	int a, b;
+
 
 	a = 5;
 	while (1) {
@@ -532,6 +559,7 @@ PHP_METHOD(Test_Flow, testWhile11) {
 
 PHP_METHOD(Test_Flow, testDoWhile1) {
 
+
 	while (1) {
 	}
 
@@ -545,6 +573,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	zval *v = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
+
 	c = 0;
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
@@ -580,6 +609,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	zval *v = NULL, *k = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
+
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
@@ -615,6 +645,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	zval *v = NULL, *b, *c, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	ZEPHIR_INIT_VAR(b);
@@ -650,6 +681,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 10;
 	_1 = 1;
@@ -677,6 +709,7 @@ PHP_METHOD(Test_Flow, testFor5) {
 
 	zend_bool _0;
 	int a, b, _1, _2;
+
 
 	b = 0;
 	_2 = 10;
@@ -707,6 +740,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 10;
 	_1 = _2;
@@ -735,6 +769,7 @@ PHP_METHOD(Test_Flow, testFor7) {
 	zend_bool _0;
 	int a, b, _1, _2;
 
+
 	b = 0;
 	_2 = 10;
 	_1 = _2;
@@ -761,6 +796,7 @@ PHP_METHOD(Test_Flow, testFor8) {
 
 	zend_bool _0;
 	int a, b, c, d, _1, _2;
+
 
 	b = 0;
 	c = 1;
@@ -790,6 +826,7 @@ PHP_METHOD(Test_Flow, testFor9) {
 
 	zend_bool _0;
 	int a, b, c, d, _1, _2;
+
 
 	b = 0;
 	c = 1;
@@ -822,6 +859,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	c = 1;
 	d = 10;
@@ -853,6 +891,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 	zephir_str *b = NULL;
 	char a, _1, _2;
 
+
 	zephir_str_assign(b, "", sizeof("")-1);
 	_2 = 'z';
 	_1 = 'a';
@@ -880,6 +919,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 	zend_bool _0;
 	zephir_str *b = NULL;
 	char a, _1, _2;
+
 
 	zephir_str_assign(b, "", sizeof("")-1);
 	_2 = 'z';
@@ -909,6 +949,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 	zephir_str *b = NULL;
 	char a, _1, _2;
 
+
 	zephir_str_assign(b, "", sizeof("")-1);
 	_2 = '9';
 	_1 = '0';
@@ -936,6 +977,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 	zend_bool _0;
 	zephir_str *b = NULL;
 	char a, _1, _2;
+
 
 	zephir_str_assign(b, "", sizeof("")-1);
 	_2 = '9';
@@ -1000,6 +1042,7 @@ PHP_METHOD(Test_Flow, testFor16) {
 	zval *a = NULL, *b = NULL, *c = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_NVAR(c);
 	array_init(c);
 	_3 = 10;
@@ -1035,6 +1078,7 @@ PHP_METHOD(Test_Flow, testFor17) {
 	zval *a = NULL, *b = NULL, *c = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_NVAR(c);
 	array_init(c);
 	_3 = 10;
@@ -1070,6 +1114,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 	int a, b, _0, _2, _3;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_NVAR(c);
 	array_init(c);
 	_3 = 10;
@@ -1105,6 +1150,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 10;
 	_1 = 1;
@@ -1135,6 +1181,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 10;
 	_1 = 1;
@@ -1165,6 +1212,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 1;
 	_1 = 10;
@@ -1195,6 +1243,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	b = 0;
 	_2 = 1;
 	_1 = _2;
@@ -1226,6 +1275,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	zephir_str_assign(b, "", sizeof("")-1);
 	_2 = 'z';
 	_1 = _2;
@@ -1257,6 +1307,7 @@ PHP_METHOD(Test_Flow, testFor30) {
 	zval *a = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_NVAR(a);
 	array_init(a);
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
@@ -1277,6 +1328,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 	zval *a = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_INIT_NVAR(a);
 	array_init(a);
 	zephir_str_assign(b, "hello", sizeof("hello")-1);
@@ -1295,6 +1347,7 @@ PHP_METHOD(Test_Flow, testSwitch1) {
 
 	int a;
 
+
 	a = 10;
 	RETURN_LONG(a);
 
@@ -1303,6 +1356,7 @@ PHP_METHOD(Test_Flow, testSwitch1) {
 PHP_METHOD(Test_Flow, testSwitch2) {
 
 	int a;
+
 
 	a = 10;
 	do {
@@ -1319,6 +1373,7 @@ PHP_METHOD(Test_Flow, testSwitch3) {
 
 	int a;
 
+
 	a = 10;
 	do {
 		if ((a == 5)) {
@@ -1333,6 +1388,7 @@ PHP_METHOD(Test_Flow, testSwitch3) {
 PHP_METHOD(Test_Flow, testSwitch4) {
 
 	int a;
+
 
 	a = 10;
 	do {
@@ -1350,6 +1406,7 @@ PHP_METHOD(Test_Flow, testSwitch5) {
 
 	int a;
 
+
 	a = 10;
 	do {
 		if ((a == 10)) {
@@ -1366,6 +1423,7 @@ PHP_METHOD(Test_Flow, testSwitch6) {
 
 	int a;
 
+
 	a = 10;
 	do {
 		if ((a == 10) || (a == 4)) {
@@ -1380,6 +1438,7 @@ PHP_METHOD(Test_Flow, testSwitch6) {
 PHP_METHOD(Test_Flow, testSwitch7) {
 
 	int a;
+
 
 	a = 4;
 	do {
@@ -1396,6 +1455,7 @@ PHP_METHOD(Test_Flow, testSwitch8) {
 
 	int a;
 
+
 	a = 5;
 	do {
 		if ((a == 10) || (a == 4)) {
@@ -1410,6 +1470,7 @@ PHP_METHOD(Test_Flow, testSwitch8) {
 PHP_METHOD(Test_Flow, testSwitch9) {
 
 	int a;
+
 
 	a = 5;
 	do {
@@ -1428,6 +1489,7 @@ PHP_METHOD(Test_Flow, testSwitch9) {
 PHP_METHOD(Test_Flow, testSwitch10) {
 
 	int a;
+
 
 	a = 5;
 	do {

@@ -28,11 +28,13 @@ ZEPHIR_INIT_CLASS(Test_Echoes) {
 
 PHP_METHOD(Test_Echoes, testEcho1) {
 
+
 	php_printf("%d", 1);
 
 }
 
 PHP_METHOD(Test_Echoes, testEcho2) {
+
 
 	php_printf("%f", 1.0);
 
@@ -40,11 +42,13 @@ PHP_METHOD(Test_Echoes, testEcho2) {
 
 PHP_METHOD(Test_Echoes, testEcho3) {
 
+
 	php_printf("%s", 1 ? "1": "");
 
 }
 
 PHP_METHOD(Test_Echoes, testEcho4) {
+
 
 	php_printf("%s", 0 ? "1": "");
 

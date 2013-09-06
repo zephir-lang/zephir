@@ -31,17 +31,20 @@ ZEPHIR_INIT_CLASS(Test_Scall) {
 
 PHP_METHOD(Test_Scall, testMethod1) {
 
+
 	RETURN_STRING("hello public", 1);
 
 }
 
 PHP_METHOD(Test_Scall, testMethod2) {
 
+
 	RETURN_STRING("hello protected", 1);
 
 }
 
 PHP_METHOD(Test_Scall, testMethod3) {
+
 
 	RETURN_STRING("hello private", 1);
 
@@ -89,6 +92,7 @@ PHP_METHOD(Test_Scall, testMethod6) {
 PHP_METHOD(Test_Scall, testCall1) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
 	RETURN_MM();
 
@@ -97,6 +101,7 @@ PHP_METHOD(Test_Scall, testCall1) {
 PHP_METHOD(Test_Scall, testCall2) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
 	RETURN_MM();
 
@@ -105,6 +110,7 @@ PHP_METHOD(Test_Scall, testCall2) {
 PHP_METHOD(Test_Scall, testCall3) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
 	RETURN_MM();
 
@@ -155,6 +161,7 @@ PHP_METHOD(Test_Scall, testCall6) {
 PHP_METHOD(Test_Scall, testCall7) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
 	RETURN_MM();
 
@@ -163,6 +170,7 @@ PHP_METHOD(Test_Scall, testCall7) {
 PHP_METHOD(Test_Scall, testCall8) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
 	RETURN_MM();
 
@@ -171,6 +179,7 @@ PHP_METHOD(Test_Scall, testCall8) {
 PHP_METHOD(Test_Scall, testCall9) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
 	RETURN_MM();
 
@@ -221,6 +230,7 @@ PHP_METHOD(Test_Scall, testCall12) {
 PHP_METHOD(Test_Scall, testCall13) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_PARENT(return_value, this_ptr, "Test\\Scall", "testmethod1");
 	RETURN_MM();
 
@@ -229,6 +239,7 @@ PHP_METHOD(Test_Scall, testCall13) {
 PHP_METHOD(Test_Scall, testCall14) {
 
 	ZEPHIR_MM_GROW();
+
 	ZEPHIR_CALL_PARENT(return_value, this_ptr, "Test\\Scall", "testmethod2");
 	RETURN_MM();
 

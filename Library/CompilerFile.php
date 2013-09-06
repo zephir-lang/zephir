@@ -289,9 +289,10 @@ class CompilerFile
 	 * Check dependencies
 	 *
 	 * @param \Compiler $compiler
+	 * @param \Config $config
 	 * @param \Logger $logger
 	 */
-	public function checkDependencies(Compiler $compiler, Logger $logger)
+	public function checkDependencies(Compiler $compiler, Config $config, Logger $logger)
 	{
 		$classDefinition = $this->_classDefinition;
 		if (!$classDefinition) {
@@ -317,9 +318,10 @@ class CompilerFile
 	 * Compiles the file
 	 *
 	 * @param \Compiler $compiler
+	 * @param \Config $config
 	 * @param \Logger $logger
 	 */
-	public function compile(Compiler $compiler, Logger $logger)
+	public function compile(Compiler $compiler, Config $config, Logger $logger)
 	{
 
 		/**
@@ -331,6 +333,11 @@ class CompilerFile
 		 * Set global compiler in the compilation context
 		 */
 		$compilationContext->compiler = $compiler;
+
+		/**
+		 * Set global config in the compilation context
+		 */
+		$compilationContext->config = $config;
 
 		/**
 		 * Set global logger in the compilation context

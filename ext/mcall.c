@@ -31,17 +31,20 @@ ZEPHIR_INIT_CLASS(Test_Mcall) {
 
 PHP_METHOD(Test_Mcall, testMethod1) {
 
+
 	RETURN_STRING("hello public", 1);
 
 }
 
 PHP_METHOD(Test_Mcall, testMethod2) {
 
+
 	RETURN_STRING("hello protected", 1);
 
 }
 
 PHP_METHOD(Test_Mcall, testMethod3) {
+
 
 	RETURN_STRING("hello private", 1);
 
@@ -89,6 +92,7 @@ PHP_METHOD(Test_Mcall, testMethod6) {
 PHP_METHOD(Test_Mcall, testCall1) {
 
 	ZEPHIR_MM_GROW();
+
 	zephir_call_method(return_value, this_ptr, "testmethod1");
 	RETURN_MM();
 
@@ -97,6 +101,7 @@ PHP_METHOD(Test_Mcall, testCall1) {
 PHP_METHOD(Test_Mcall, testCall2) {
 
 	ZEPHIR_MM_GROW();
+
 	zephir_call_method(return_value, this_ptr, "testmethod2");
 	RETURN_MM();
 
@@ -105,6 +110,7 @@ PHP_METHOD(Test_Mcall, testCall2) {
 PHP_METHOD(Test_Mcall, testCall3) {
 
 	ZEPHIR_MM_GROW();
+
 	zephir_call_method(return_value, this_ptr, "testmethod3");
 	RETURN_MM();
 

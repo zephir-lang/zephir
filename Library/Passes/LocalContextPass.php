@@ -313,6 +313,9 @@ class LocalContextPass
 				case 'return':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
+						if ($statement['expr']['type'] == 'variable') {
+							$this->markVariableNoLocal($statement['expr']['value']);
+						}
 					}
 					break;
 				case 'loop':

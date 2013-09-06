@@ -39,16 +39,13 @@ class StaticTypeInference
 
 	public function declareVariables(array $statement)
 	{
-		/*if (isset($statement['data-type'])) {
-			if ($statement['data-type'] != 'variable') {
-				return;
-			}
-		}
 		foreach ($statement['variables'] as $variable) {
 			if (!isset($this->_variables[$variable['variable']])) {
-				$this->_variables[$variable['variable']] = true;
+				if (isset($variable['expr']['type'])) {
+					$this->markVariable($variable['variable'], $variable['expr']['type']);
+				}
 			}
-		}*/
+		}
 	}
 
 	/**

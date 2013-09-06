@@ -50,16 +50,31 @@ class ClassMethod
 		$this->_docblock = $docblock;
 	}
 
+	/**
+	 * Returns the method name
+	 *
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->_name;
 	}
 
+	/**
+	 * Returns the docblock
+	 *
+	 * @return string
+	 */
 	public function getDocBlock()
 	{
 		return $this->_docblock;
 	}
 
+	/**
+	 * Returns the parameters
+	 *
+	 * @return \ClassMethodParameters
+	 */
 	public function getParameters()
 	{
 		return $this->_parameters;
@@ -251,6 +266,7 @@ class ClassMethod
 	 * Assigns a zval value to a static type
 	 *
 	 * @param array $parameter
+	 * @param \CompilationContext $compilationContext
 	 */
 	public function assignZvalValue($parameter, $compilationContext)
 	{
@@ -296,15 +312,23 @@ class ClassMethod
 			 * used without allocate memory and memory tracking
 			 * these variables are stored in the stack
 			 */
-			$localContext = new LocalContextPass();
-			$localContext->pass($this->_statements);
+			if ($compilationContext->config->get('local-context-pass')) {
+				$localContext = new LocalContextPass();
+				$localContext->pass($this->_statements);
+			} else {
+				$localContext = null;
+			}
 
 			/**
 			 * This pass tries to infer types for dynamic variables
 			 * replacing them by low level variables
 			 */
-			$typeInference = new StaticTypeInference();
-			$typeInference->pass($this->_statements);
+			if ($compilationContext->config->get('static-type-inference')) {
+				$typeInference = new StaticTypeInference();
+				$typeInference->pass($this->_statements);
+			} else {
+				$typeInference = null;
+			}
 
 		} else {
 			$localContext = null;
@@ -448,11 +472,44 @@ class ClassMethod
 		}
 
 		/**
+		 * Initialize default values in dynamic variables
+		 */
+		$initVarCode = "";
+		foreach ($symbolTable->getVariables() as $variable) {
+			if ($variable->getType() == 'variable') {
+				if ($variable->getNumberUses() > 0) {
+					if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value') {
+						$defaultValue = $variable->getDefaultInitValue();
+						if (is_array($defaultValue)) {
+							$symbolTable->mustGrownStack(true);
+							switch ($defaultValue['type']) {
+								case 'int':
+								case 'uint':
+								case 'long':
+								case 'char':
+								case 'uchar':
+									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+									$initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
+									break;
+								case 'double':
+									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+									$initVarCode .= "\t" . 'ZVAL_DOUBLE(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
+									break;
+								default:
+									throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/**
 		 * Fetch parameters from vm-top
 		 */
+		$initCode = "";
+		$code = "";
 		if (is_object($this->_parameters)) {
-
-			$code = "";
 
 			/**
 			 * Round 2. Fetch the parameters in the method
@@ -510,7 +567,6 @@ class ClassMethod
 			/**
 			 * Initialize required parameters
 			 */
-			$initCode = "";
 			foreach ($requiredParams as $parameter) {
 
 				if (isset($parameter['data-type'])) {
@@ -583,10 +639,10 @@ class ClassMethod
 				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			}
 			$code .= PHP_EOL;
-			$code .= $initCode;
-
-			$codePrinter->preOutput($code);
 		}
+
+		$code .= $initCode . $initVarCode;
+		$codePrinter->preOutput($code);
 
 		/**
 		 * Grow the stack if needed
@@ -603,7 +659,7 @@ class ClassMethod
 		foreach ($symbolTable->getVariables() as $variable) {
 
 			if ($variable->getNumberUses() <= 0) {
-				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $compilationContext->classDefinition->getName() . '::' . $this->getName(), "unused-variable");
+				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $compilationContext->classDefinition->getName() . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
 				if ($variable->isExternal() == false) {
 					continue;
 				}
@@ -678,6 +734,7 @@ class ClassMethod
 			}
 
 			$groupVariables = array();
+			$defaultValues = array();
 			foreach ($variables as $variable) {
 				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
 					if ($variable->isLocalOnly()) {
@@ -698,7 +755,11 @@ class ClassMethod
 						} else {
 							$defaultValue = $variable->getDefaultInitValue();
 							if ($defaultValue !== null) {
-								$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;
+								if ($type == 'variable') {
+									$groupVariables[] = $pointer . $variable->getName();
+								} else {
+									$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;
+								}
 							} else {
 								$groupVariables[] = $pointer . $variable->getName();
 							}
