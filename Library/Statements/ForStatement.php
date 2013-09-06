@@ -92,7 +92,7 @@ class ForStatement
 		/**
 		 * Create a copy of the current value in the end of the range
 		 */
-		if ($parameters[0]->getType() != 'variable') {
+		if ($parameters[1]->getType() != 'variable') {
 			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
 		} else {
 			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode());

@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/operators.h"
 #include "kernel/array.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -36,8 +36,8 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 PHP_METHOD(Test_Fannkuch, process) {
 
 	zend_bool _0, _4, _9;
-	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_2, *_3 = NULL, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_11 = NULL, *_12 = NULL, *_13 = NULL;
-	int n, maxFlipsCount = 0, permCount = 0, checksum = 0, i, j, flipsCount, k, r, k2, _1, _5, _10;
+	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_3 = NULL, *_7 = NULL, *_8 = NULL, *_12 = NULL, *_13 = NULL;
+	int n, maxFlipsCount = 0, permCount = 0, checksum = 0, i, j, flipsCount, k, r, k2, _1, _2, _5, _6, _10, _11;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
@@ -51,15 +51,14 @@ PHP_METHOD(Test_Fannkuch, process) {
 	array_init(perm1);
 	ZEPHIR_INIT_VAR(count);
 	array_init(count);
-	ZEPHIR_INIT_VAR(_2);
-	ZVAL_LONG(_2, n);
+	_2 = n;
 	_1 = 0;
 	_0 = 0;
-	if (ZEPHIR_LE_LONG(_2, _1)) {
+	if ((_1 <= _2)) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!(ZEPHIR_LE_LONG(_2, _1))) {
+				if (!((_1 <= _2))) {
 					break;
 				}
 			} else {
@@ -85,15 +84,14 @@ PHP_METHOD(Test_Fannkuch, process) {
 			zephir_array_update_long(&count, (r - 1), &_3, PH_COPY | PH_SEPARATE);
 			r--;
 		}
-		ZEPHIR_INIT_NVAR(_6);
-		ZVAL_LONG(_6, n);
+		_6 = n;
 		_5 = 0;
 		_4 = 0;
-		if (ZEPHIR_LE_LONG(_6, _5)) {
+		if ((_5 <= _6)) {
 			while (1) {
 				if (_4) {
 					_5++;
-					if (!(ZEPHIR_LE_LONG(_6, _5))) {
+					if (!((_5 <= _6))) {
 						break;
 					}
 				} else {
@@ -117,15 +115,14 @@ PHP_METHOD(Test_Fannkuch, process) {
 			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY);
 			k = zephir_get_intval(_8);
 			k2 = (((((k + 1)) / 2)) - 1);
-			ZEPHIR_INIT_NVAR(_11);
-			ZVAL_LONG(_11, k2);
+			_11 = k2;
 			_10 = 0;
 			_9 = 0;
-			if (ZEPHIR_LE_LONG(_11, _10)) {
+			if ((_10 <= _11)) {
 				while (1) {
 					if (_9) {
 						_10++;
-						if (!(ZEPHIR_LE_LONG(_11, _10))) {
+						if (!((_10 <= _11))) {
 							break;
 						}
 					} else {
