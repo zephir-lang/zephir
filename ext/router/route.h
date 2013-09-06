@@ -30,7 +30,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route___construct, 0, 0, 0)
 	ZEND_ARG_INFO(0, httpMethods)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_compilePattern, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_compilepattern, 0, 0, 0)
 	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
@@ -38,28 +38,28 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_via, 0, 0, 0)
 	ZEND_ARG_INFO(0, httpMethods)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_extractNamedParams, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_extractnamedparams, 0, 0, 0)
 	ZEND_ARG_INFO(0, pattern)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_reConfigure, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_reconfigure, 0, 0, 0)
 	ZEND_ARG_INFO(0, pattern)
 	ZEND_ARG_INFO(0, paths)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_setName, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_setname, 0, 0, 0)
 	ZEND_ARG_INFO(0, name)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_beforeMatch, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_beforematch, 0, 0, 0)
 	ZEND_ARG_INFO(0, callback)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_setHttpMethods, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_sethttpmethods, 0, 0, 0)
 	ZEND_ARG_INFO(0, httpMethods)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_setHostname, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_router_route_sethostname, 0, 0, 0)
 	ZEND_ARG_INFO(0, hostname)
 ZEND_END_ARG_INFO()
 

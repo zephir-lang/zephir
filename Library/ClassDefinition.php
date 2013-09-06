@@ -350,6 +350,15 @@ class ClassDefinition
 		$codePrinter->increaseLevel();
 
 		/**
+		 * Method entry
+		 */
+		if (count($this->_methods)) {
+			$methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
+		} else {
+			$methodEntry = 'NULL';
+		}
+
+		/**
 		 * Register the class with extends + interfaces
 		 */
 		if ($this->_extendsClass) {
@@ -362,13 +371,11 @@ class ClassDefinition
 			$extendsClass = str_replace("\\", "\\\\", $extendsClass);
 
 			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-				strtolower($this->getSCName()) . ', ' . '"' . strtolower($extendsClass) . '", ' .
-				strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry, 0);');
+				strtolower($this->getSCName()) . ', ' . '"' . strtolower($extendsClass) . '", ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		} else {
 			$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-				strtolower($this->getSCName()) . ', ' . strtolower($this->getCNamespace()) . '_' .
-				strtolower($this->getName()) . '_method_entry, 0);');
+				strtolower($this->getSCName()) . ', ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		}
 
@@ -450,7 +457,7 @@ class ClassDefinition
 
 			$parameters = $method->getParameters();
 			if (count($parameters)) {
-				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', 0, 0, 0)');
+				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, 0)');
 				foreach ($parameters as $parameters) {
 					foreach ($parameters as $parameter) {
 						$codePrinter->output('	ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
@@ -462,17 +469,19 @@ class ClassDefinition
 
 		}
 
-		$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
-		foreach ($methods as $method) {
-			$parameters = $method->getParameters();
-			if (count($parameters)) {
-				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ' . $method->getModifiers() . ')');
-			} else {
-				$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+		if (count($methods)) {
+			$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
+			foreach ($methods as $method) {
+				$parameters = $method->getParameters();
+				if (count($parameters)) {
+					$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_' . $method->getName() . ', ' . $method->getModifiers() . ')');
+				} else {
+					$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+				}
 			}
+			$codePrinter->output('	PHP_FE_END');
+			$codePrinter->output('};');
 		}
-		$codePrinter->output('	PHP_FE_END');
-		$codePrinter->output('};');
 
 		$compilationContext->headerPrinter = $codePrinter;
 	}

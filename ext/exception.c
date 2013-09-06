@@ -19,7 +19,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Test, Exception, exception, "exception", test_exception_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Test, Exception, exception, "exception", NULL, 0);
 
 
 	return SUCCESS;

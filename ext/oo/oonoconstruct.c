@@ -19,7 +19,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Oo_OoNoConstruct) {
 
-	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoNoConstruct, oo_oonoconstruct, test_oo_oonoconstruct_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoNoConstruct, oo_oonoconstruct, NULL, 0);
 
 
 	return SUCCESS;

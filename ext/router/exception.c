@@ -21,7 +21,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Router_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Test\\Router, Exception, router_exception, "exception", test_router_exception_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Test\\Router, Exception, router_exception, "exception", NULL, 0);
 
 
 	return SUCCESS;

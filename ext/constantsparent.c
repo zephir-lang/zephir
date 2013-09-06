@@ -16,7 +16,7 @@
 
 ZEPHIR_INIT_CLASS(Test_ConstantsParent) {
 
-	ZEPHIR_REGISTER_CLASS(Test, ConstantsParent, constantsparent, test_constantsparent_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, ConstantsParent, constantsparent, NULL, 0);
 
 	zend_declare_class_constant_null(test_constantsparent_ce, SL("P1") TSRMLS_CC);
 	zend_declare_class_constant_bool(test_constantsparent_ce, SL("P2"), 0 TSRMLS_CC);

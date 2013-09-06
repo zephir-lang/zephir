@@ -19,47 +19,47 @@ PHP_METHOD(Test_Mcall, testCall7);
 PHP_METHOD(Test_Mcall, testCall8);
 PHP_METHOD(Test_Mcall, testCall9);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testMethod4, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod4, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testMethod5, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod5, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testMethod6, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod6, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall4, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall4, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall5, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall5, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall6, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall6, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall7, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall7, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall8, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall8, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testCall9, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall9, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()

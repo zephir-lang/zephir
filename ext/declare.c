@@ -125,3 +125,33 @@ PHP_METHOD(Test_Declare, testDeclare11) {
 
 }
 
+PHP_METHOD(Test_Declare, testDeclare12) {
+
+	zend_bool a = 0;
+
+
+	RETURN_BOOL(a);
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare13) {
+
+	zend_bool a = 1;
+
+
+	RETURN_BOOL(a);
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare14) {
+
+
+
+}
+
+PHP_METHOD(Test_Declare, testDeclare15) {
+
+
+
+}
+
