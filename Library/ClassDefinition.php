@@ -182,7 +182,18 @@ class ClassDefinition
 	 */
 	public function hasProperty($name)
 	{
-		return isset($this->_properties[$name]);
+		$exists = isset($this->_properties[$name]);
+		if ($exists) {
+			return true;
+		} else {
+			$extendsClassDefinition = $this->_extendsClassDefinition;
+			if ($extendsClassDefinition) {
+				if ($extendsClassDefinition->hasProperty($name)) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 
 	/**

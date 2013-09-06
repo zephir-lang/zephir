@@ -30,4 +30,6 @@ class EqualsOperator extends ComparisonBaseOperator
 
 	protected $_zvalLongOperator = 'ZEPHIR_IS_LONG';
 
+	protected $_zvalStringOperator = 'ZEPHIR_IS_STRING';
+
 }

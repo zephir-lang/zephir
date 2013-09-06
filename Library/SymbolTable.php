@@ -123,6 +123,11 @@ class SymbolTable
 		return $this->_variables;
 	}
 
+	/**
+	 * Checks if a variable is a superglobal
+	 *
+	 * @param string $name
+	 */
 	public function isSuperGlobal($name)
 	{
 		return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION';
@@ -240,7 +245,7 @@ class SymbolTable
 	 *
 	 * @param string $type
 	 * @param string $location
-	 * @return
+	 * @return \Variable
 	 */
 	protected function _reuseTempVariable($type, $location)
 	{

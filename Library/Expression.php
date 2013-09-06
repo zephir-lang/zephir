@@ -195,7 +195,7 @@ class Expression
 
 		$compilationContext->headersManager->add('kernel/array');
 
-		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value']);
+		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $expression['left']);
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
 
@@ -1238,6 +1238,12 @@ class Expression
 
 			case 'type-hint':
 				return $this->compileTypeHint($expression, $compilationContext);
+
+			/**
+			 * @TODO implement this
+			 */
+			case 'require':
+				return new CompiledExpression('null', null, $expression);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);

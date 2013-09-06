@@ -432,6 +432,11 @@ class ClassMethod
 				}
 
 				/**
+				 * Original node where the variable was declared
+				 */
+				$symbol->setOriginal($parameter);
+
+				/**
 				 * Parameters are marked as 'external'
 				 */
 				$symbol->setIsExternal(true);

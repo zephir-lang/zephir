@@ -1337,10 +1337,10 @@ class LetStatement
 		$indexExpression = new Expression($statement['index-expr']);
 		$resolvedExpression = $indexExpression->compile($compilationContext);
 		if ($resolvedExpression->getType() != 'variable') {
-			throw new CompilerException("Expression: " . $indexExpression->getType() . " cannot be used as index", $statement);
+			throw new CompilerException("Expression: " . $indexExpression->getType() . " cannot be used as index", $statement['index-expr']);
 		}
 
-		$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement);
+		$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement['index-expr']);
 		switch ($indexVariable->getType()) {
 			case 'variable':
 				break;
@@ -1354,18 +1354,28 @@ class LetStatement
 		}
 
 		switch ($resolvedExpr->getType()) {
+			case 'bool':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+				$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
+					case 'bool':
+						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						break;
 					case 'variable':
 						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
 						break;
 					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be updated into array property", $statement);
 				}
 				break;
 			default:
-				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to property", $statement);
+				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be updated into array property", $statement);
 		}
 
 	}

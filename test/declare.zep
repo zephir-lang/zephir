@@ -73,4 +73,28 @@ class Declare
 		return a;
 	}
 
+	public function testDeclare12()
+	{
+		var a = false;
+		return a;
+	}
+
+	public function testDeclare13()
+	{
+		var a = true;
+		return a;
+	}
+
+	public function testDeclare14()
+	{
+		var a = "hello";
+		return a;
+	}
+
+	public function testDeclare15()
+	{
+		var a = null;
+		return a;
+	}
+
 }

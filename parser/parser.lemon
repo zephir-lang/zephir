@@ -33,12 +33,13 @@
 
 %left COMMA .
 %right REQUIRE .
-%right TYPEOF INSTANCEOF .
+%left INSTANCEOF .
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
 %right ISSET FETCH .
+%right TYPEOF .
 %right NEW .
 %right NOT .
 %right PARENTHESES_CLOSE .
@@ -1625,29 +1626,11 @@ xx_unset_statement(R) ::= UNSET IDENTIFIER(D) ARROW IDENTIFIER(I) DOTCOMMA . {
 	);
 }
 
-/* unset v[x] */
-xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN IDENTIFIER(I) SBRACKET_CLOSE DOTCOMMA . {
+/* unset v[{expr}] */
+xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE DOTCOMMA . {
 	R = xx_ret_unset_statement(
 		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
-		xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state),
-		status->scanner_state
-	);
-}
-
-/* unset v[0] */
-xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN INTEGER(I) SBRACKET_CLOSE DOTCOMMA . {
-	R = xx_ret_unset_statement(
-		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
-		xx_ret_literal(XX_T_INTEGER, I, status->scanner_state),
-		status->scanner_state
-	);
-}
-
-/* unset v["some-index"] */
-xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN STRING(S) SBRACKET_CLOSE DOTCOMMA . {
-	R = xx_ret_unset_statement(
-		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
-		xx_ret_literal(XX_T_STRING, S, status->scanner_state),
+		E,
 		status->scanner_state
 	);
 }
@@ -1945,6 +1928,26 @@ xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHE
 	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
 }
 
+/* o->{m}(false, x) */
+xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, M, P, status->scanner_state);
+}
+
+/* o->{m}() */
+xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
+}
+
+/* o->{"m"}(false, x) */
+xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, S, P, status->scanner_state);
+}
+
+/* o->{"m"}() */
+xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_mcall(O, S, NULL, status->scanner_state);
+}
+
 /* y = o->m(false, x) or y = o->m() */
 xx_common_expr(R) ::= xx_mcall_expr(E) . {
 	R = E;
@@ -2035,6 +2038,10 @@ xx_literal_expr(R) ::= TRUE . {
 /* isset v[x] */
 xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), E, NULL, status->scanner_state);
+}
+
+xx_isset_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(P) . {
+	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, P, status->scanner_state), NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_common_expr(E) . {

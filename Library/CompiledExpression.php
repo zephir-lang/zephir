@@ -52,11 +52,21 @@ class CompiledExpression
 		return $this->_type;
 	}
 
+	/**
+	 * Returns the code produced by the compiled expression
+	 *
+	 * @return string
+	 */
 	public function getCode()
 	{
 		return $this->_code;
 	}
 
+	/**
+	 * Original AST code that produced the code
+	 *
+	 * @return array
+	 */
 	public function getOriginal()
 	{
 		return $this->_originalExpr;

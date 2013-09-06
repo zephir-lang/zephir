@@ -41,7 +41,11 @@ class FunctionCall extends Call
 		 * Check if the optimizer is already cached
 		 */
 		if (!isset(self::$_functionReflection[$funcName])) {
-			$reflectionFunction = new ReflectionFunction($funcName);
+			try {
+				$reflectionFunction = new ReflectionFunction($funcName);
+			} catch (Exception $e) {
+				$reflectionFunction = null;
+			}
 			self::$_functionReflection[$funcName] = $reflectionFunction;
 			return $reflectionFunction;
 		}
@@ -186,6 +190,7 @@ class FunctionCall extends Call
 			case 'uncamelize':
 			case 'starts_with':
 			case 'ends_with':
+			case 'prepare_virtual_path':
 				return true;
 		}
 		return false;
