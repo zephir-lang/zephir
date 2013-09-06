@@ -37,6 +37,11 @@ class ArithmeticalBaseOperator extends BaseOperator
 	 */
 	public function optimizeConstantFolding($expression, CompilationContext $compilationContext)
 	{
+
+		if ($expression['left']['type'] != 'int' && $expression['left']['type'] != 'double') {
+			return false;
+		}
+
 		if ($compilationContext->config->get('constant-folding')) {
 			if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
 				switch ($this->_operator) {
@@ -44,6 +49,22 @@ class ArithmeticalBaseOperator extends BaseOperator
 						return new CompiledExpression('int', $expression['left']['value'] + $expression['right']['value'], $expression);
 					case '-':
 						return new CompiledExpression('int', $expression['left']['value'] - $expression['right']['value'], $expression);
+					case '*':
+						return new CompiledExpression('int', $expression['left']['value'] * $expression['right']['value'], $expression);
+				}
+			}
+			if (
+				($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') ||
+				($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') ||
+				($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')
+			) {
+				switch ($this->_operator) {
+					case '+':
+						return new CompiledExpression('double', $expression['left']['value'] + $expression['right']['value'], $expression);
+					case '-':
+						return new CompiledExpression('double', $expression['left']['value'] - $expression['right']['value'], $expression);
+					case '*':
+						return new CompiledExpression('double', $expression['left']['value'] * $expression['right']['value'], $expression);
 				}
 			}
 		}
@@ -52,6 +73,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 	/**
 	 * @param array $expression
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
@@ -63,6 +85,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 			throw new Exception("Missing right part of the expression");
 		}
 
+		/**
+		 * Check for constant folding optimizations
+		 */
 		switch ($this->_operator) {
 			case '+':
 			case '-':

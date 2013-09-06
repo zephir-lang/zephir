@@ -144,7 +144,7 @@ PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 	double c;
 
 
-	c = (1.0 + 2.0);
+	c = 3;
 	RETURN_DOUBLE(c);
 
 }
@@ -189,7 +189,7 @@ PHP_METHOD(Test_Arithmetic, intDoubleSumSimple) {
 	int c;
 
 
-	c = (long) (((double) 1 + 2.0));
+	c = (long) (3);
 	RETURN_LONG(c);
 
 }
@@ -212,7 +212,7 @@ PHP_METHOD(Test_Arithmetic, doubleIntSumSimple) {
 	double c;
 
 
-	c = ((double) 1 + 2.0);
+	c = 3;
 	RETURN_DOUBLE(c);
 
 }
@@ -279,7 +279,7 @@ PHP_METHOD(Test_Arithmetic, complexSum) {
 	double c;
 
 
-	c = ((double) 2 + 1.0);
+	c = 3;
 	RETURN_DOUBLE(c);
 
 }
@@ -854,7 +854,7 @@ PHP_METHOD(Test_Arithmetic, complexSub) {
 	double c;
 
 
-	c = ((double) 2 - 1.0);
+	c = 1;
 	RETURN_DOUBLE(c);
 
 }
