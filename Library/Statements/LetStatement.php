@@ -724,6 +724,16 @@ class LetStatement
 											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
 										}
 										break;
+									case 'add-assign':
+										/* @todo, use temporary variable */
+										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setDynamicType('long');
+										if ($symbolVariable->isLocalOnly()) {
+											$codePrinter->output('ZVAL_LONG(&' . $variable . ', zephir_get_numberval(&' . $variable . ') + ' . $itemVariable->getName() . ');');
+										} else {
+											$codePrinter->output('ZVAL_LONG(' . $variable . ', zephir_get_numberval(&' . $variable . ') + ' . $itemVariable->getName() . ');');
+										}
+										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}

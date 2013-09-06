@@ -188,10 +188,10 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _12;
 	zend_bool notValid;
+	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _1, _7, _12;
 	char ch;
-	zval *pattern_param = NULL, *tmp = NULL, *matches, _0, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, *_8 = NULL, *_10 = NULL;
+	zval *pattern_param = NULL, *matches, _0, _2 = zval_used_for_init, _3 = zval_used_for_init, _4 = zval_used_for_init, *_5 = NULL, *_8 = NULL, *_10 = NULL;
 	zephir_str *pattern = NULL, *route = NULL, *item = NULL, *variable = NULL, *regexp = NULL, *_6 = NULL, *_9 = NULL, *_11 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -274,8 +274,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								}
 							}
 							if (!(notValid)) {
-								ZEPHIR_INIT_NVAR(tmp);
-								ZVAL_LONG(tmp, numberMatches);
+								tmp = numberMatches;
 								if ((variable && variable->len) && (regexp && regexp->len)) {
 									foundPattern = 0;
 									for (_12 = 0; _12 < regexp->len; _12++) {
@@ -301,10 +300,14 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									} else {
 										zephir_str_append(route, regexp->str, regexp->len);
 									}
-									zephir_array_update_string(&matches, variable->str, variable->len, &tmp, PH_COPY | PH_SEPARATE);
+									ZEPHIR_INIT_NVAR(_8);
+									ZVAL_LONG(_8, tmp);
+									zephir_array_update_string(&matches, variable->str, variable->len, &_8, PH_COPY | PH_SEPARATE);
 								} else {
 									zephir_str_append(route, "([^/]*)", sizeof("([^/]*)")-1);
-									zephir_array_update_string(&matches, item->str, item->len, &tmp, PH_COPY | PH_SEPARATE);
+									ZEPHIR_INIT_NVAR(_10);
+									ZVAL_LONG(_10, tmp);
+									zephir_array_update_string(&matches, item->str, item->len, &_10, PH_COPY | PH_SEPARATE);
 								}
 							} else {
 								zephir_str_append_char(route, '{');

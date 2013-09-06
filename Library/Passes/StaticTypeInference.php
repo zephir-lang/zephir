@@ -27,6 +27,8 @@ class StaticTypeInference
 {
 	protected $_variables = array();
 
+	protected $_infered = array();
+
 	/**
 	 * Do the compilation pass
 	 *
@@ -65,7 +67,6 @@ class StaticTypeInference
 			$this->_variables[$variable] = $type;
 			return;
 		}
-
 		switch ($currentType) {
 			case 'bool':
 				switch ($type) {
@@ -128,6 +129,25 @@ class StaticTypeInference
 				echo $type;
 				break;
 		}
+	}
+
+	/**
+	 * Process the found infered types and schedule a new pass
+	 *
+	 * @return boolean
+	 */
+	public function reduce()
+	{
+		$pass = false;
+		foreach ($this->_variables as $variable => $type) {
+			if ($type == 'variable' || $type == 'undefined' || $type == 'string' || $type == 'null' || $type == 'numeric') {
+				unset($this->_variables[$variable]);
+			} else {
+				$pass = true;
+				$this->_infered[$variable] = $type;
+			}
+		}
+		return $pass;
 	}
 
 	/**
@@ -323,6 +343,10 @@ class StaticTypeInference
 			case 'type-hint':
 				return $this->passExpression($expression['right']);
 			case 'variable':
+				if (isset($this->_infered[$expression['value']])) {
+					return $this->_infered[$expression['value']];
+				}
+				return null;
 			case 'constant':
 				return null;
 			default:

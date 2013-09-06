@@ -342,6 +342,10 @@ class ClassMethod
 			if ($compilationContext->config->get('static-type-inference')) {
 				$typeInference = new StaticTypeInference();
 				$typeInference->pass($this->_statements);
+				if ($compilationContext->config->get('static-type-inference-second-pass')) {
+					$typeInference->reduce();
+					$typeInference->pass($this->_statements);
+				}
 			} else {
 				$typeInference = null;
 			}

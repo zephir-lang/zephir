@@ -28,6 +28,31 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 	protected $_literalOnly = true;
 
+	/**
+	 * This tries to perform arithmetical operations
+	 * Probably gcc/clang will optimize them without this optimization
+	 *
+	 * @see http://en.wikipedia.org/wiki/Constant_folding
+	 * @param array $expression
+	 */
+	public function optimizeConstantFolding($expression, CompilationContext $compilationContext)
+	{
+		if ($compilationContext->config->get('constant-folding')) {
+			if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
+				switch ($this->_operator) {
+					case '+':
+						return new CompiledExpression('int', $expression['left']['value'] + $expression['right']['value'], $expression);
+					case '-':
+						return new CompiledExpression('int', $expression['left']['value'] - $expression['right']['value'], $expression);
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param array $expression
+	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
@@ -36,6 +61,17 @@ class ArithmeticalBaseOperator extends BaseOperator
 
 		if (!isset($expression['right'])) {
 			throw new Exception("Missing right part of the expression");
+		}
+
+		switch ($this->_operator) {
+			case '+':
+			case '-':
+			case '*':
+				$optimized = $this->optimizeConstantFolding($expression, $compilationContext);
+				if (is_object($optimized)) {
+					return $optimized;
+				}
+				break;
 		}
 
 		$leftExpr = new Expression($expression['left']);
@@ -83,6 +119,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 							default:
 								throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
 						}
+						break;
 					default:
 						throw new Exception("Cannot operate 'int' with '" . $right->getType() . "'");
 				}
@@ -112,6 +149,29 @@ class ArithmeticalBaseOperator extends BaseOperator
 						return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 					case 'bool':
 						return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
+					case 'variable':
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+						switch ($variableRight->getType()) {
+							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
+								return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'bool':
+								return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'double':
+								return new CompiledExpression('double', '(double) (' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'variable':
+								$compilationContext->headersManager->add('kernel/operators');
+								if ($variableRight->isLocalOnly()) {
+									return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
+								} else {
+									return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
+								}
+							default:
+								throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
+						}
+						break;
 					default:
 						throw new CompilerException("Cannot operate 'double' with '" . $right->getType() . "'", $expression);
 				}
@@ -361,11 +421,11 @@ class ArithmeticalBaseOperator extends BaseOperator
 										$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
 										switch ($variableRight->getType()) {
 											case 'int':
-												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
+												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . ' (double) ' . $variableRight->getName(), $expression);
 											case 'double':
-												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
+												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 											case 'bool':
-												return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $variableRight->getName(), $expression);
+												return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
 											case 'variable':
 												$compilationContext->headersManager->add('kernel/operators');
 

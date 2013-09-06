@@ -26,7 +26,9 @@ class Config
 {
 	protected $_config = array(
 		'static-type-inference' => true,
-		'local-context-pass' => true
+		'static-type-inference-second-pass' => true,
+		'local-context-pass' => true,
+		'constant-folding' => true
 	);
 
 	public function __construct()

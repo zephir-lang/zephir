@@ -360,71 +360,58 @@ PHP_METHOD(Test_Assign, testAssign31) {
 
 PHP_METHOD(Test_Assign, testAssign32) {
 
-	zval *a;
-	zend_bool b;
+	zend_bool b, a;
 
-	ZEPHIR_MM_GROW();
 
 	b = 0;
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_BOOL(a, b);
-	RETURN_CCTOR(a);
+	a = b;
+	RETURN_BOOL(a);
 
 }
 
 PHP_METHOD(Test_Assign, testAssign33) {
 
-	zval *a;
-	zend_bool b;
+	zend_bool b, a;
 
-	ZEPHIR_MM_GROW();
 
 	b = 0;
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_BOOL(a, b);
-	RETURN_CCTOR(a);
+	a = b;
+	RETURN_BOOL(a);
 
 }
 
 PHP_METHOD(Test_Assign, testAssign34) {
 
-	zval *a;
+	zend_bool a;
 	int b;
 
-	ZEPHIR_MM_GROW();
 
 	b = 0;
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_LONG(a, b);
-	RETURN_CCTOR(a);
+	a = (b) ? 1 : 0;
+	RETURN_BOOL(a);
 
 }
 
 PHP_METHOD(Test_Assign, testAssign35) {
 
-	zval *a;
+	zend_bool a;
 	double b;
 
-	ZEPHIR_MM_GROW();
 
 	b = 0;
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_DOUBLE(a, b);
-	RETURN_CCTOR(a);
+	a = (b) ? 1 : 0;
+	RETURN_BOOL(a);
 
 }
 
 PHP_METHOD(Test_Assign, testAssign36) {
 
-	zval *a;
-	zend_bool b;
+	zend_bool b, a;
 
-	ZEPHIR_MM_GROW();
 
 	b = 0;
-	ZEPHIR_INIT_VAR(a);
-	ZVAL_BOOL(a, b);
-	RETURN_CCTOR(a);
+	a = b;
+	RETURN_BOOL(a);
 
 }
 

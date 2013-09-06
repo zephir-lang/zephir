@@ -63,9 +63,6 @@ class DeclareStatement
 			if ($typeInference) {
 				if ($currentType == 'variable') {
 					$type = $typeInference->getInferedType($variable['variable']);
-					if ($variable['variable'] == 'd') {
-						echo $variable['variable'], $type, $currentType, PHP_EOL;
-					}
 					if (is_string($type)) {
 						$currentType = $type;
 					}
