@@ -152,6 +152,9 @@ class ClassMethod
 				case 'static':
 					$modifiers['ZEND_ACC_STATIC'] = $visibility;
 					break;
+				case 'final':
+					$modifiers['ZEND_ACC_FINAL'] = $visibility;
+					break;
 				case 'inline':
 					break;
 				case 'scoped':
@@ -249,6 +252,13 @@ class ClassMethod
 					case 'double':
 						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
+					case 'bool':
+						if ($parameter['default']['value'] == 'true') {
+							$code .= "\t\t" . 'ZVAL_BOOL' . $parameter['name'] . ', 1);' . PHP_EOL;
+						} else {
+							$code .= "\t\t" . 'ZVAL_BOOL' . $parameter['name'] . ', 0);' . PHP_EOL;
+						}
+						break;
 					case 'null':
 						break;
 					default:
@@ -267,6 +277,7 @@ class ClassMethod
 	 *
 	 * @param array $parameter
 	 * @param \CompilationContext $compilationContext
+	 * @return string
 	 */
 	public function assignZvalValue($parameter, $compilationContext)
 	{

@@ -55,6 +55,8 @@ class DeclareStatement
 				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
 			}
 
+			$currentType = $statement['data-type'];
+
 			/**
 			 * Replace original data type by the pre-processed infered type
 			 */
@@ -62,7 +64,7 @@ class DeclareStatement
 				if ($statement['data-type'] == 'variable') {
 					$type = $typeInference->getInferedType($variable['variable']);
 					if (is_string($type)) {
-						$statement['data-type'] = $type;
+						$currentType = $type;
 					}
 				}
 			}
@@ -71,9 +73,9 @@ class DeclareStatement
 			 * Variables are added to the symbol table
 			 */
 			if (isset($variable['expr'])) {
-				$symbolVariable = $symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext, $variable['expr']);
+				$symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext, $variable['expr']);
 			} else {
-				$symbolVariable = $symbolTable->addVariable($statement['data-type'], $variable['variable'], $compilationContext);
+				$symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext);
 			}
 
 			/**
@@ -92,7 +94,7 @@ class DeclareStatement
 			 */
 			if ($defaultValue !== null) {
 
-				switch ($statement['data-type']) {
+				switch ($currentType) {
 					case 'int':
 					case 'uint':
 					case 'ulong':
@@ -159,7 +161,7 @@ class DeclareStatement
 						}
 						break;
 					default:
-						throw new CompilerException('Invalid data type: ' . $statement['data-type'], $variable);
+						throw new CompilerException('Invalid data type: ' . $currentType, $variable);
 				}
 
 				$symbolVariable->setDefaultInitValue($defaultValue);

@@ -166,7 +166,10 @@ class Expression
 
 		switch ($expression['left']['type']) {
 			case 'array-access':
+				/* @todo, resolve index expression */
 				switch ($expression['left']['right']['type'])	{
+					case 'int':
+						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $expression['left']['right']['value'] . ')', $expression);
 					case 'string':
 						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
 					case 'variable':
@@ -198,20 +201,30 @@ class Expression
 		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $expression['left']);
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
+		$variable->setDynamicType('undefined');
 
 		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
-				switch ($expression['right']['right']['type'])	{
+				$expr = new Expression($expression['right']['right']);
+				$resolvedExpr = $expr->compile($compilationContext);
+				switch ($resolvedExpr->getType())	{
 					case 'string':
 						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
 					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['right']['value'], $compilationContext, $expression['right']['left']);
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
 						switch ($indexVariable->getType()) {
+							case 'int':
+							case 'long':
+							case 'uint':
+								return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
 							case 'variable':
 								return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+							default:
+								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
 						}
+						break;
 					default:
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}
@@ -402,7 +415,7 @@ class Expression
 		 * Variable that receives property accesses must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
+			throw new CompilerException("Cannot use variable: " . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ") to create empty array", $expression);
 		}
 
 		/**
@@ -562,35 +575,47 @@ class Expression
 		 */
 		$symbolVariable->setDynamicType('object');
 
+		if ($newExpr['class'] == 'self') {
+			$className = $compilationContext->classDefinition->getCompleteName();
+		} else {
+			$className = $newExpr['class'];
+		}
+
 		/**
 		 * stdclass don't have constructors
 		 */
-		if (strtolower($newExpr['class']) == 'stdclass') {
+		if (strtolower($className) == 'stdclass') {
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
 			$symbolVariable->setClassType('stdclass');
 		} else {
 			/**
 			 * Classes inside the same extension
 			 */
-			if ($compilationContext->compiler->isClass($newExpr['class'])) {
-				$classCe = strtolower(str_replace('\\', '_', $newExpr['class'])) . '_ce';
+			if ($compilationContext->compiler->isClass($className)) {
+				$classCe = strtolower(str_replace('\\', '_', $className)) . '_ce';
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
-				$symbolVariable->setClassType($newExpr['class']);
+				$symbolVariable->setClassType($className);
 			} else {
+
 				/**
 				 * Classes inside the same extension
 				 */
-				if (!class_exists($newExpr['class'], false)) {
+				if (!class_exists($className, false)) {
 					$compilationContext->logger->warning('Class "' . $newExpr['class'] . '" does not exist at compile time ', "nonexistant-class", $newExpr);
 				}
+
+				/**
+				 * @TODO, check if variable is really internal
+				 */
+
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $newExpr['class'] . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $className . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
 				$symbolVariable->setClassType($newExpr['class']);
 			}
 		}
 
-		if (strtolower($newExpr['class']) == 'stdclass') {
+		if (strtolower($className) == 'stdclass') {
 			if (isset($newExpr['parameters'])) {
 				if (count($newExpr['parameters'])) {
 					throw new CompilerException("stdclass don't receive parameters in its constructor", $statement);
@@ -613,14 +638,14 @@ class Expression
 		 * For external classes we always assume the class does implement a constructor
 		 */
 		$callConstructor = false;
-		if ($compilationContext->compiler->isClass($newExpr['class'])) {
-			$classDefinition = $compilationContext->compiler->getClassDefinition($newExpr['class']);
+		if ($compilationContext->compiler->isClass($className)) {
+			$classDefinition = $compilationContext->compiler->getClassDefinition($className);
 			if ($classDefinition->hasMethod("__construct")) {
 				$callConstructor = true;
 			}
 		} else {
-			if ($compilationContext->compiler->isInternalClass($newExpr['class'])) {
-				$classDefinition = $compilationContext->compiler->getInternalClassDefinition($newExpr['class']);
+			if ($compilationContext->compiler->isInternalClass($className)) {
+				$classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
 				if ($classDefinition->hasMethod("__construct")) {
 					$callConstructor = true;
 				}
@@ -634,6 +659,7 @@ class Expression
 					'variable' => $symbolVariable->getRealName(),
 					'name' => '__construct',
 					'parameters' => $newExpr['parameters'],
+					'call-type' => MethodCall::CALL_NORMAL,
 					'file' => $newExpr['file'],
 					'line' => $newExpr['line'],
 					'char' => $newExpr['char'],
@@ -642,6 +668,7 @@ class Expression
 				$callExpr = new Expression(array(
 					'variable' => $symbolVariable->getRealName(),
 					'name' => '__construct',
+					'call-type' => MethodCall::CALL_NORMAL,
 					'file' => $newExpr['file'],
 					'line' => $newExpr['line'],
 					'char' => $newExpr['char'],
@@ -866,7 +893,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $value->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}
@@ -1070,6 +1097,9 @@ class Expression
 				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
 
 			case 'char':
+				if (strlen($expression['value']) > 2) {
+					throw new CompilerException("Invalid char literal: " . $expression['value'], $expression);
+				}
 				return new CompiledExpression('char', $expression['value'], $expression);
 
 			case 'variable':
@@ -1243,6 +1273,9 @@ class Expression
 			 * @TODO implement this
 			 */
 			case 'require':
+			case 'instanceof':
+			case 'typeof':
+			case 'static-property-access':
 				return new CompiledExpression('null', null, $expression);
 
 			default:

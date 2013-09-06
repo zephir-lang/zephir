@@ -936,7 +936,7 @@ class LetStatement
 		 * Variable is probably not initialized here
 		 */
 		if ($dynamicType == 'unknown') {
-			throw new CompilerException("Attempt to increment uninitialized variable", $statement);
+			throw new CompilerException("Attempt to update index on uninitialized variable", $statement);
 		}
 
 		/**
@@ -1044,7 +1044,11 @@ class LetStatement
 		}
 
 		if ($symbolVariable->isReadOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			/**
+			 * @TODO implement increment of objects members
+			 */
+			//throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			return;
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1211,6 +1215,16 @@ class LetStatement
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				}
 				break;
+			case 'int':
+			case 'long':
+				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				}
+				break;
 			case 'string':
 				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
@@ -1245,8 +1259,21 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						break;
+					case 'bool':
+						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						break;
+					case 'string':
+						/* @todo, use ZVAL_STRINGL */
+						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . '->str, 1);');
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
@@ -1257,7 +1284,7 @@ class LetStatement
 						}
 						break;
 					default:
-						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
 				}
 				break;
 			default:
@@ -1394,9 +1421,16 @@ class LetStatement
 			$variable = $assignment['variable'];
 
 			/**
-			 * Get the symbol from the symbol table
+			 * Get the symbol from the symbol table if necessary
 			 */
-			$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
+			switch ($assignment['assign-type']) {
+				case 'static-property':
+				case 'static-property-append':
+					break;
+				default:
+					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
+					break;
+			}
 
 			/**
 			 * Incr/Decr assignments don't require an expression
@@ -1434,6 +1468,18 @@ class LetStatement
 					break;
 				case 'object-property':
 					$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+					break;
+				case 'variable-dynamic-object-property':
+					/* @todo, implement this */
+					break;
+				case 'string-dynamic-object-property':
+					/* @todo, implement this */
+					break;
+				case 'static-property':
+					/* @todo, implement this */
+					break;
+				case 'static-property-append':
+					/* @todo, implement this */
 					break;
 				case 'array-index':
 					$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);

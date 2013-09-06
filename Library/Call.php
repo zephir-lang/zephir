@@ -214,13 +214,19 @@ class Call
 						case 'long':
 						case 'ulong':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+							$codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
+							$params[] = $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
+							break;
+						case 'bool':
+							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_BOOL(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
 							$params[] = $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'string':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_STRINGL(' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 1);');
+							$codePrinter->output('ZVAL_STRINGL(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . '->str, ' . $parameterVariable->getName() . '->len, 1);');
 							$params[] = $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;

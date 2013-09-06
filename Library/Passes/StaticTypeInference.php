@@ -52,6 +52,7 @@ class StaticTypeInference
 	 * Marks a variable to mandatory be stored in the heap
 	 *
 	 * @param string $variable
+	 * @param string $type
 	 */
 	public function markVariable($variable, $type)
 	{
@@ -123,6 +124,9 @@ class StaticTypeInference
 			case 'variable':
 				$this->_variables[$variable] = 'undefined';
 				break;
+			default:
+				echo $type;
+				break;
 		}
 	}
 
@@ -137,6 +141,7 @@ class StaticTypeInference
 		if (isset($this->_variables[$variable])) {
 			$type = $this->_variables[$variable];
 			if ($type != 'variable' && $type != 'undefined' && $type != 'string' && $type != 'null' && $type != 'numeric') {
+				//echo $variable, ' ', $type, PHP_EOL;
 				return $type;
 			}
 		}
@@ -149,7 +154,6 @@ class StaticTypeInference
 			switch ($assigment['assign-type']) {
 				case 'variable':
 					$type = $this->passExpression($assigment['expr']);
-					//echo $assigment['variable'], ' ', $type, PHP_EOL;
 					if (is_string($type)) {
 						$this->markVariable($assigment['variable'], $type);
 					}
@@ -158,10 +162,10 @@ class StaticTypeInference
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
-					//$this->markVariable($assigment['variable'], 'dynamical');
+					$this->markVariable($assigment['variable'], 'variable');
 					break;
 				case 'variable-append':
-					//$this->markVariable($assigment['variable'], 'dynamical');
+					$this->markVariable($assigment['variable'], 'variable');
 					break;
 				default:
 					//echo $assigment['assign-type'];

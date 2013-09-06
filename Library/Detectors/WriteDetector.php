@@ -23,6 +23,8 @@
  * Detects if a variable is written in a given context
  * If a variable is not modified in a local context we could avoid allocate memory for its body
  * Separate parameters to avoid them to be touched modifying its reference count
+ *
+ * @todo, variable is assigned in the fetch operator and in functions that pass parameters by reference
  */
 class WriteDetector
 {
@@ -69,8 +71,10 @@ class WriteDetector
 					break;
 				case 'switch':
 					foreach ($statement['clauses'] as $clause) {
-						if ($this->detect($variable, $clause['statements']) === true) {
-							return true;
+						if (isset($clause['statements'])) {
+							if ($this->detect($variable, $clause['statements']) === true) {
+								return true;
+							}
 						}
 					}
 					break;

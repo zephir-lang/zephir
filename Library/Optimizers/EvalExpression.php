@@ -80,8 +80,13 @@ class EvalExpression
 				case 'string':
 					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_STRING';
 					break;
+				case 'int':
+				case 'integer':
+				case 'long':
+					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_LONG';
+					break;
 				default:
-					echo $expr['right']['value'];
+					throw new CompilerException($expr['right']['value'], $expr['right']);
 			}
 
 			return $condition;

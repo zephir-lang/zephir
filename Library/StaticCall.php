@@ -36,7 +36,7 @@ class StaticCall extends Call
 	 * @param ClassDefinition $classDefinition
 	 * @param CompilationContext $compilationContext
 	 */
-	protected function callSelf($methodName, array $expression, Variable $symbolVariable, $mustInit, $isExpecting,
+	protected function callSelf($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
 		ClassDefinition $classDefinition, CompilationContext $compilationContext)
 	{
 
@@ -91,7 +91,7 @@ class StaticCall extends Call
 	 * @param ClassDefinition $classDefinition
 	 * @param CompilationContext $compilationContext
 	 */
-	protected function callParent($methodName, array $expression, Variable $symbolVariable, $mustInit, $isExpecting,
+	protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
 		ClassDefinition $classDefinition, CompilationContext $compilationContext)
 	{
 
@@ -127,7 +127,7 @@ class StaticCall extends Call
 				if ($isExpecting) {
 					$codePrinter->output('ZEPHIR_CALL_PARENT_PARAMS_' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('ZEPHIR_CALL_PARENT_PARAMS_' . count($params) . '_NORETURN(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('ZEPHIR_CALL_PARENT_PARAMS_' . count($params) . '_NORETURN(this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
 			} else {
 				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
@@ -147,6 +147,9 @@ class StaticCall extends Call
 		$expression = $expr->getExpression();
 
 		$methodName = strtolower($expression['name']);
+
+		$symbolVariable = null;
+		$type = null;
 
 		/**
 		 * Create temporary variable if needed

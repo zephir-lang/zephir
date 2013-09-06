@@ -807,13 +807,14 @@ static json_object *xx_ret_fcall(xx_parser_token *F, json_object *parameters, xx
 	return ret;
 }
 
-static json_object *xx_ret_mcall(xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_mcall(int type, xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("mcall"));
 	json_object_object_add(ret, "variable", json_object_new_string(O->token));
 	json_object_object_add(ret, "name", json_object_new_string(M->token));
+	json_object_object_add(ret, "call-type", json_object_new_int(type));
 
 	if (parameters) {
 		json_object_object_add(ret, "parameters", parameters);
@@ -1920,32 +1921,32 @@ xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PA
 
 /* o->m(false, x) */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, M, P, status->scanner_state);
+	R = xx_ret_mcall(1, O, M, P, status->scanner_state);
 }
 
 /* o->m() */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
+	R = xx_ret_mcall(1, O, M, NULL, status->scanner_state);
 }
 
 /* o->{m}(false, x) */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, M, P, status->scanner_state);
+	R = xx_ret_mcall(2, O, M, P, status->scanner_state);
 }
 
 /* o->{m}() */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, M, NULL, status->scanner_state);
+	R = xx_ret_mcall(2, O, M, NULL, status->scanner_state);
 }
 
 /* o->{"m"}(false, x) */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, S, P, status->scanner_state);
+	R = xx_ret_mcall(3, O, S, P, status->scanner_state);
 }
 
 /* o->{"m"}() */
 xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_mcall(O, S, NULL, status->scanner_state);
+	R = xx_ret_mcall(3, O, S, NULL, status->scanner_state);
 }
 
 /* y = o->m(false, x) or y = o->m() */
