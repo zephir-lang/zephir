@@ -383,7 +383,7 @@ class CompilerFile
 			}
 		}
 
-		$path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower(preg_replace('#^test\\\\#i', '', $this->_compiledFilePath)));
+		$path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower(preg_replace('#^' . $config->get('namespace') . '\\\\#i', '', $this->_compiledFilePath)));
 		if (!is_dir('ext/' . $path)) {
 			mkdir('ext/' . $path, 0777, true);
 		}

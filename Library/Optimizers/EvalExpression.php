@@ -67,6 +67,7 @@ class EvalExpression
 				}
 			}
 
+			/** @todo, read left variable from the symbol table */
 			switch ($expr['right']['value']) {
 				case 'array':
 					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_ARRAY';
@@ -114,11 +115,16 @@ class EvalExpression
 			return $conditions;
 		}
 
-		//echo $exprRaw['type'], PHP_EOL;
-
 		$expr = new Expression($exprRaw);
 		$expr->setReadOnly(true);
 		$compiledExpression = $expr->compile($compilationContext);
+
+		/**
+		 * Possible corrupted expression?
+		 */
+		if (!is_object($compiledExpression)) {
+			throw new CompilerException('Corrupted expression: ' . $exprRaw['type'], $exprRaw);
+		}
 
 		/**
 		 * Generate the condition according to the value returned by the evaluted expression

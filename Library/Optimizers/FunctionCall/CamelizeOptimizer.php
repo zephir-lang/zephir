@@ -25,9 +25,13 @@ class CamelizeOptimizer
 		 */
 		$call->processExpectedReturn($context);
 
-		$symbolVariable = $this->getSymbolVariable();
+		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+		}
+
+		if ($call->mustInitSymbolVariable()) {
+			$symbolVariable->initVariant($context);
 		}
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);

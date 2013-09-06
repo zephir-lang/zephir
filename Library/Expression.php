@@ -166,19 +166,33 @@ class Expression
 
 		switch ($expression['left']['type']) {
 			case 'array-access':
-				/* @todo, resolve index expression */
-				switch ($expression['left']['right']['type'])	{
+				$expr = new Expression($expression['left']['right']);
+				$resolvedExpr= $expr->compile($compilationContext);
+				switch ($resolvedExpr->getType())	{
 					case 'int':
-						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $expression['left']['right']['value'] . ')', $expression);
+					case 'long':
+						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $expression['left']['right']);
 					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '"))', $expression);
+						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $expression['left']['right']);
 					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($expression['left']['right']['value'], $compilationContext, $expression['left']['right']);
-						return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['left']['right']);
+						switch ($indexVariable->getType()) {
+							case 'int':
+							case 'long':
+								return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+							case 'variable':
+								return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+							default:
+								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
+						}
+						break;
 					default:
 						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
 				}
 				break;
+			case 'property-access':
+				/* @todo, implement this */
+				return new CompiledExpression('bool', 'false', $expression);
 			default:
 				throw new CompilerException('[' . $expression['left']['type'] . ']', $expression);
 		}
@@ -198,7 +212,7 @@ class Expression
 
 		$compilationContext->headersManager->add('kernel/array');
 
-		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $expression['left']);
+		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
 		$variable->setDynamicType('undefined');
@@ -1008,6 +1022,15 @@ class Expression
 					case 'variable':
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
 						return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+					default:
+						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+				}
+				break;
+			case 'bool':
+				switch ($resolved->getType()) {
+					case 'variable':
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}

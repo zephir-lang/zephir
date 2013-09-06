@@ -70,6 +70,7 @@ class FunctionCall extends Call
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
 
+
 			if (isset($expression['parameters'])) {
 				/**
 				 * Check if the number of parameters
@@ -79,6 +80,7 @@ class FunctionCall extends Call
 					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
 				}
 			} else {
+				$numberParameters = 0;
 				if ($reflector->getNumberOfRequiredParameters() > 0) {
 					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
 				}
@@ -151,11 +153,9 @@ class FunctionCall extends Call
 
 			$camelizeFunctionName = Utils::camelize($funcName);
 
-			$path = 'Library/Optimizers/FunctionCall/' . $camelizeFunctionName . 'Optimizer.php';
+			$path = ZEPHIRPATH . 'Library/Optimizers/FunctionCall/' . $camelizeFunctionName . 'Optimizer.php';
 			if (file_exists($path)) {
-
 				require $path;
-
 				$className = $camelizeFunctionName . 'Optimizer';
 				$optimizer = new $className();
 			} else {

@@ -156,10 +156,6 @@ class SwitchStatement
 
 			}
 
-			$compilationContext->insideSwitch--;
-
-			$compilationContext->codePrinter->decreaseLevel();
-
 			/**
 			 * The default block is resolved at the end of the 'switch'
 			 */
@@ -167,6 +163,10 @@ class SwitchStatement
 				$st = new StatementsBlock($defaultBlock);
 				$st->compile($compilationContext);
 			}
+
+			$compilationContext->insideSwitch--;
+
+			$compilationContext->codePrinter->decreaseLevel();
 
 			$codePrinter->output('} while(0);');
 			$codePrinter->outputBlankLine();

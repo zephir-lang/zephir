@@ -776,6 +776,11 @@ class LetStatement
 											}
 										}
 										break;
+									case 'concat-assign':
+										$compilationContext->symbolTable->mustGrownStack(true);
+										$compilationContext->headersManager->add('kernel/operators');
+										//$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
 									case 'add-assign':
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
@@ -1428,7 +1433,7 @@ class LetStatement
 				case 'static-property-append':
 					break;
 				default:
-					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $assignment);
+					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
 					break;
 			}
 

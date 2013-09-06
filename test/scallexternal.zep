@@ -6,6 +6,7 @@
 namespace Test;
 
 class ScallExternal
+{
 
 	public function testCall1()
 	{

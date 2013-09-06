@@ -415,7 +415,7 @@ class ForStatement
 		 * Initialize 'key' variable
 		 */
 		if (isset($this->_statement['key'])) {
-			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $compilationContext, $this->_statement['expr']);
 			switch ($keyVariable->getType()) {
 				case 'int':
 				case 'uint':
@@ -435,7 +435,7 @@ class ForStatement
 		 * Initialize 'value' variable
 		 */
 		if (isset($this->_statement['value'])) {
-			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $compilationContext, $this->_statement['expr']);
 			switch ($variable->getType()) {
 				case 'int':
 				case 'uint':
@@ -506,7 +506,7 @@ class ForStatement
 		 * Initialize 'key' variable
 		 */
 		if (isset($this->_statement['key'])) {
-			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $this->_statement['expr']);
+			$keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
 			if ($keyVariable->getType() != 'variable') {
 				throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
 			}
@@ -518,7 +518,7 @@ class ForStatement
 		 * Initialize 'value' variable
 		 */
 		if (isset($this->_statement['value'])) {
-			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $this->_statement['expr']);
+			$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
 			if ($variable->getType() != 'variable') {
 				throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
 			}

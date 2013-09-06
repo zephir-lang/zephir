@@ -27,6 +27,9 @@ class Logger
 
 	/**
 	 *
+	 * @param string $message
+	 * @param string $type
+	 * @param array $node
 	 */
 	public function warning($message, $type, $node)
 	{

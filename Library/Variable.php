@@ -89,7 +89,10 @@ class Variable
 
 	protected $_numberSkips = 0;
 
-	protected $_original;
+	/**
+	 * AST node where the variable was originally declared or created
+	 */
+	protected $_node;
 
 	/**
 	 * @param string $type
@@ -272,7 +275,11 @@ class Variable
 	 */
 	public function getOriginal()
 	{
-		return $this->_node;
+		$node = $this->_node;
+		if ($node) {
+			return $node;
+		}
+		return array('file' => 'unknown', 'line' => 0, 'char' => 0);
 	}
 
 	/**

@@ -166,6 +166,7 @@ class SymbolTable
 
 				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
 				$superVar->setIsInitialized(true);
+				$superVar->setDynamicType('array');
 				$this->_variables[$name] = $superVar;
 			}
 		}
@@ -189,10 +190,30 @@ class SymbolTable
 	 *
 	 * @param string $name
 	 * @param array $statement
+	 * @param CompilationContext $compilationContext
 	 * @return \Variable
 	 */
-	public function getVariableForWrite($name, $statement=null)
+	public function getVariableForWrite($name, $compilationContext, $statement=null)
 	{
+		/**
+		 * Create superglobals just in time
+		 */
+		if ($this->isSuperGlobal($name)) {
+
+			if (!$this->hasVariable($name)) {
+
+				/**
+				 * @TODO, injecting globals, initialize to null and check first?
+				 */
+				$compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
+
+				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
+				$superVar->setIsInitialized(true);
+				$superVar->setDynamicType('array');
+				$this->_variables[$name] = $superVar;
+				return $superVar;
+			}
+		}
 
 		if (!$this->hasVariable($name)) {
 			throw new CompilerException("Cannot write variable '" . $name . "' because it wasn't defined", $statement);
