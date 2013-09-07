@@ -190,8 +190,8 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	zend_bool notValid;
 	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _0, _5, _10;
 	char ch;
-	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3, *_6 = NULL, *_8 = NULL;
-	zval *pattern = NULL, *route, *item, *variable = NULL, *regexp = NULL, *_4 = NULL, *_7 = NULL, *_9 = NULL;
+	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3 = NULL, *_6 = NULL, *_8 = NULL;
+	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_7 = NULL, *_9 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -223,18 +223,18 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 					if ((intermediate > 0)) {
 						if ((bracketCount == 0)) {
 							numberMatches++;
-							ZEPHIR_INIT_VAR(variable);
+							ZEPHIR_INIT_NVAR(variable);
 							ZVAL_EMPTY_STRING(variable);
-							ZEPHIR_INIT_VAR(regexp);
+							ZEPHIR_INIT_NVAR(regexp);
 							ZVAL_EMPTY_STRING(regexp);
 							ZEPHIR_SINIT_NVAR(_1);
 							ZVAL_LONG(&_1, marker);
 							ZEPHIR_SINIT_NVAR(_2);
 							ZVAL_LONG(&_2, (cursor - marker));
-							ZEPHIR_INIT_VAR(_3);
+							ZEPHIR_INIT_NVAR(_3);
 							zephir_call_func_p3(_3, "substr", pattern, &_1, &_2);
 							zephir_get_strval(_3, &_4);
-							ZEPHIR_INIT_VAR(item);
+							ZEPHIR_INIT_NVAR(item);
 							ZEPHIR_CPY_WRT(item, _4);
 							for (_5 = 0; _5 < Z_STRLEN_P(item); _5++) {
 								cursorVar = _5; 
@@ -252,14 +252,14 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 										ZVAL_LONG(&_1, 0);
 										ZEPHIR_SINIT_NVAR(_2);
 										ZVAL_LONG(&_2, cursorVar);
-										ZEPHIR_INIT_VAR(_6);
+										ZEPHIR_INIT_NVAR(_6);
 										zephir_call_func_p3(_6, "substr", item, &_1, &_2);
 										zephir_get_strval(_6, &_7);
 										ZEPHIR_INIT_NVAR(variable);
 										ZEPHIR_CPY_WRT(variable, _7);
 										ZEPHIR_SINIT_NVAR(_1);
 										ZVAL_LONG(&_1, (cursorVar + 1));
-										ZEPHIR_INIT_VAR(_8);
+										ZEPHIR_INIT_NVAR(_8);
 										zephir_call_func_p2(_8, "substr", item, &_1);
 										zephir_get_strval(_8, &_9);
 										ZEPHIR_INIT_NVAR(regexp);

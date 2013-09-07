@@ -89,10 +89,10 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 						_3 = 1;
 					}
 					j = _4;
-					ZEPHIR_INIT_VAR(_6);
-					ZEPHIR_INIT_VAR(_7);
+					ZEPHIR_INIT_NVAR(_6);
+					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, i);
-					ZEPHIR_INIT_VAR(_8);
+					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, j);
 					zephir_call_method_p2(_6, this_ptr, "ax", _7, _8);
 					ZEPHIR_INIT_NVAR(_7);
@@ -156,10 +156,10 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 						_3 = 1;
 					}
 					j = _4;
-					ZEPHIR_INIT_VAR(_6);
-					ZEPHIR_INIT_VAR(_7);
+					ZEPHIR_INIT_NVAR(_6);
+					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
-					ZEPHIR_INIT_VAR(_8);
+					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, i);
 					zephir_call_method_p2(_6, this_ptr, "ax", _7, _8);
 					ZEPHIR_INIT_NVAR(_7);
@@ -201,7 +201,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 
 	zend_bool _4, _8, _11;
 	zend_class_entry *_0, *_2, *_3;
-	zval *n_param = NULL, *u, *v, *w, *_1 = NULL, *_7 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, _17 = zval_used_for_init;
+	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_7 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, _17 = zval_used_for_init;
 	int n, i, vv = 0, vBv = 0, _5, _6, _9, _10, _12, _13;
 
 	ZEPHIR_MM_GROW();
@@ -210,19 +210,19 @@ PHP_METHOD(Test_SpectralNorm, process) {
 		n = zephir_get_intval(n_param);
 
 
-	ZEPHIR_INIT_VAR(u);
+	ZEPHIR_INIT_NVAR(u);
 	_0 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(u, _0);
-	ZEPHIR_INIT_VAR(_1);
+	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_call_method_p1_noret(u, "__construct", _1);
-	ZEPHIR_INIT_VAR(v);
+	ZEPHIR_INIT_NVAR(v);
 	_2 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(v, _2);
 	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_call_method_p1_noret(v, "__construct", _1);
-	ZEPHIR_INIT_VAR(w);
+	ZEPHIR_INIT_NVAR(w);
 	_3 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(w, _3);
 	ZEPHIR_INIT_NVAR(_1);
@@ -244,7 +244,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			i = _5;
 			ZEPHIR_INIT_NVAR(_1);
 			ZVAL_LONG(_1, i);
-			ZEPHIR_INIT_VAR(_7);
+			ZEPHIR_INIT_NVAR(_7);
 			ZVAL_LONG(_7, 1);
 			zephir_call_method_p2_noret(u, "offsetset", _1, _7);
 			ZEPHIR_INIT_NVAR(_1);
@@ -300,7 +300,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZVAL_LONG(_7, i);
 			zephir_call_method_p1(_1, u, "offsetget", _7);
 			ZEPHIR_INIT_NVAR(_7);
-			ZEPHIR_INIT_VAR(_14);
+			ZEPHIR_INIT_NVAR(_14);
 			ZVAL_LONG(_14, i);
 			zephir_call_method_p1(_7, v, "offsetget", _14);
 			ZEPHIR_INIT_LNVAR(_15);
