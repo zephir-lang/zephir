@@ -430,7 +430,7 @@ class LetStatement
 							case 'string':
 								switch ($statement['operator']) {
 									case 'assign':
-										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setMustInitNull(true);
 										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'concat-assign':

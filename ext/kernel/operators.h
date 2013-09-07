@@ -61,9 +61,6 @@ extern void zephir_cast(zval *result, zval *var, zend_uint type);
 extern long zephir_get_intval(const zval *op);
 extern double zephir_get_doubleval(const zval *op);
 extern zend_bool zephir_get_boolval(const zval *op);
-//extern void zephir_get_strval(zval *op, zephir_str **str_p);
-
-#define zephir_get_strval()
 
 extern int zephir_is_numeric(const zval *op);
 
@@ -126,4 +123,18 @@ extern int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 				}  \
 			}  \
 		}  \
+	}
+
+#define zephir_get_strval(left, right) \
+	{ \
+		int use_copy_right; \
+		zval right_tmp; \
+		if (Z_TYPE_P(left) == IS_STRING) { \
+			ZEPHIR_CPY_WRT(left, right); \
+		} else { \
+			zephir_make_printable_zval(left, &right_tmp, &use_copy_right); \
+			if (use_copy_right) { \
+				ZEPHIR_CPY_WRT_CTOR(left, &right_tmp); \
+			} \
+		} \
 	}

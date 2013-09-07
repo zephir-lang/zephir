@@ -307,7 +307,7 @@ class ClassMethod
 				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'string':
 				$compilationContext->headersManager->add('kernel/operators');
-				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . '_param, &' . $parameter['name'] . ');' . PHP_EOL;
+				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
 		}
@@ -409,6 +409,9 @@ class ClassMethod
 					} else {
 						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
 						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
+						if ($parameter['data-type'] == 'string') {
+							$symbol->setMustInitNull(true);
+						}
 					}
 				} else {
 					$symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);

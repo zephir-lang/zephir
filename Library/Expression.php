@@ -1032,9 +1032,10 @@ class Expression
 			case 'string':
 				switch ($resolved->getType()) {
 					case 'variable':
-						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext, $expression);
+						$symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
 						$symbolVariable->setMustInitNull(true);
-						$compilationContext->codePrinter->output('zephir_get_strval(' . $resolved->getCode() . ', &' . $symbolVariable->getName() . ');');
+						$symbolVariable->setIsInitialized(true);
+						$compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
 						return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
