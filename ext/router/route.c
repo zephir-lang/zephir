@@ -17,8 +17,8 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/concat.h"
-#include "kernel/array.h"
 #include "kernel/operators.h"
+#include "kernel/array.h"
 #include "kernel/exception.h"
 #include "kernel/hash.h"
 

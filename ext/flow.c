@@ -911,7 +911,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 			a = _1;
 		}
 	}
-	RETURN_MM_CTOR(b);
+	RETURN_CTOR(b);
 
 }
 
@@ -941,7 +941,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 			a = _1;
 		}
 	}
-	RETURN_MM_CTOR(b);
+	RETURN_CTOR(b);
 
 }
 
@@ -971,7 +971,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 			a = _1;
 		}
 	}
-	RETURN_MM_CTOR(b);
+	RETURN_CTOR(b);
 
 }
 
@@ -1001,7 +1001,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 			a = _1;
 		}
 	}
-	RETURN_MM_CTOR(b);
+	RETURN_CTOR(b);
 
 }
 
@@ -1300,7 +1300,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 			_3 = (char) zephir_get_intval(a);
 		}
 	}
-	RETURN_MM_CTOR(b);
+	RETURN_CTOR(b);
 
 }
 

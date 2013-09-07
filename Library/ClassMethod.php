@@ -292,21 +292,34 @@ class ClassMethod
 			$dataType = 'variable';
 		}
 
+		$compilationContext->headersManager->add('kernel/operators');
 		switch ($dataType) {
 			case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
-				$compilationContext->headersManager->add('kernel/operators');
 				return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'bool':
-				$compilationContext->headersManager->add('kernel/operators');
 				return "\t\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'double':
-				$compilationContext->headersManager->add('kernel/operators');
 				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'string':
-				$compilationContext->headersManager->add('kernel/operators');
+
+				/*$s = '{' . PHP_EOL;
+				$s .= 'int use_copy_right;' . PHP_EOL;
+				$s .= 'zval right_tmp;' . PHP_EOL;
+				$s .= 'if (Z_TYPE_P('.$parameter['name'].') == IS_STRING) {' . PHP_EOL;
+				$s .= 'ZEPHIR_CPY_WRT('.$parameter['name'].', '.$parameter['name'].'_param);' . PHP_EOL;
+				$s .= '} else {' . PHP_EOL;
+				$s .= 'INIT_ZVAL(right_tmp);' . PHP_EOL;
+				$s .= 'zephir_make_printable_zval('.$parameter['name'].'_param, &right_tmp, &use_copy_right);' . PHP_EOL;
+				$s .= 'if (use_copy_right) {' . PHP_EOL;
+				$s .= 'ZEPHIR_CPY_WRT_CTOR('.$parameter['name'].', &right_tmp);' . PHP_EOL;
+				$s .= '}' . PHP_EOL;
+				$s .= '}' . PHP_EOL;
+				$s .= '}' . PHP_EOL;
+				return $s;*/
+
 				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);

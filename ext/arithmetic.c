@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -834,7 +835,7 @@ PHP_METHOD(Test_Arithmetic, addSum23) {
 	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_BNVAR(a);
-	ZVAL_LONG(a, zephir_get_numberval(&a) + b);
+	ZVAL_LONG(a, zephir_get_numberval(a) + b);
 	RETURN_CCTOR(a);
 
 }

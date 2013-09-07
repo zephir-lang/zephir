@@ -23,6 +23,8 @@ class StrlenOptimizer
 			return false;
 		}
 
+		$context->headersManager->add('kernel/string');
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		return new CompiledExpression('int', 'zephir_fast_strlen_ev(' . $resolvedParams[0] . ')', $expression);
 	}

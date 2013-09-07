@@ -44,6 +44,8 @@
 #define zephir_decrement(var) fast_decrement_function(var)
 #endif
 
+void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy);
+
 /** Operator functions */
 extern int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 extern int zephir_and_function(zval *result, zval *left, zval *right);
@@ -129,10 +131,11 @@ extern int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 	{ \
 		int use_copy_right; \
 		zval right_tmp; \
-		if (Z_TYPE_P(left) == IS_STRING) { \
+		if (Z_TYPE_P(right) == IS_STRING) { \
 			ZEPHIR_CPY_WRT(left, right); \
 		} else { \
-			zephir_make_printable_zval(left, &right_tmp, &use_copy_right); \
+			INIT_ZVAL(right_tmp); \
+			zephir_make_printable_zval(right, &right_tmp, &use_copy_right); \
 			if (use_copy_right) { \
 				ZEPHIR_CPY_WRT_CTOR(left, &right_tmp); \
 			} \

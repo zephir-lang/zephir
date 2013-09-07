@@ -98,3 +98,12 @@ ext/kernel/concat.o
 ext/mcall.o
 ext/scall.o
 ext/regexdna.o
+ext/constantsparent.o
+ext/echoes.o
+ext/exception.o
+ext/exceptions.o
+ext/fannkuch.o
+ext/scallexternal.o
+ext/scallparent.o
+ext/spectralnorm.o
+ext/testinterface.o

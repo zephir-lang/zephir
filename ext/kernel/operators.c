@@ -11,6 +11,7 @@
 #include "kernel/string_type.h"
 
 #include "Zend/zend_operators.h"
+#include "Zend/zend_exceptions.h"
 
 void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy){
 	zend_make_printable_zval(expr, expr_copy, use_copy);
@@ -137,14 +138,18 @@ void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
 	char *right_char;
 	int use_copy = 0, right_length = 0;
 
-	if (Z_TYPE_PP(left) == IS_NULL) {
+	right_length = zend_spprintf(&right_char, 0, "%ld", right);
 
+	if (Z_TYPE_PP(left) == IS_NULL) {
 		Z_STRVAL_PP(left) = emalloc(right_length + 1);
-		memcpy(Z_STRVAL_PP(left), right, right_length);
+		if (right_length > 0) {
+			memcpy(Z_STRVAL_PP(left), right_char, right_length);
+		} else {
+			memcpy(Z_STRVAL_PP(left), "", 0);
+		}
 		Z_STRVAL_PP(left)[right_length] = 0;
 		Z_STRLEN_PP(left) = right_length;
 		Z_TYPE_PP(left) = IS_STRING;
-
 		return;
 	}
 
@@ -155,7 +160,6 @@ void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
 		}
 	}
 
-	right_length = zend_spprintf(&right_char, 0, "%ld", right);
 	if (right_length > 0) {
 		length = Z_STRLEN_PP(left) + right_length;
 		Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), length + 1);

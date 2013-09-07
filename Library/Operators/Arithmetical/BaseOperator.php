@@ -270,6 +270,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 									case 'bool':
 										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
 									case 'variable':
+										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
 											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
 										} else {
@@ -340,6 +341,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 								} else {
 									return new CompiledExpression('int', '(zephir_get_numberval(' . $op1 . ') ' . $op . ' ' . $op2 . ')', $expression);
 								}
+								break;
 							/* a(var) + a(x) */
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);

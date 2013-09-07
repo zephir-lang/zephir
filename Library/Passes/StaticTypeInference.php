@@ -343,7 +343,7 @@ class StaticTypeInference
 			case 'list':
 				return $this->passExpression($expression['left']);
 			case 'cast':
-				return $expression['left']['value'];
+				return $expression['left'];
 			case 'type-hint':
 				return $this->passExpression($expression['right']);
 			case 'variable':

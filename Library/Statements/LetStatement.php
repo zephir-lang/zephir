@@ -208,6 +208,7 @@ class LetStatement
 								}
 								break;
 							case 'variable':
+								$compilationContext->headersManager->add('kernel/operators');
 								switch ($statement['operator']) {
 									case 'assign':
 										$codePrinter->output($variable . ' = zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
@@ -354,6 +355,7 @@ class LetStatement
 								}
 								break;
 							case 'variable':
+								$compilationContext->headersManager->add('kernel/operators');
 								switch ($statement['operator']) {
 									case 'assign':
 										$codePrinter->output($variable . ' = zephir_get_numberval(' . $itemVariable->getName() . ');');
@@ -731,12 +733,13 @@ class LetStatement
 										break;
 									case 'add-assign':
 										/* @todo, use temporary variable */
+										$compilationContext->headersManager->add('kernel/operators');
 										$symbolVariable->initVariant($compilationContext);
 										$symbolVariable->setDynamicType('long');
 										if ($symbolVariable->isLocalOnly()) {
 											$codePrinter->output('ZVAL_LONG(&' . $variable . ', zephir_get_numberval(&' . $variable . ') + ' . $itemVariable->getName() . ');');
 										} else {
-											$codePrinter->output('ZVAL_LONG(' . $variable . ', zephir_get_numberval(&' . $variable . ') + ' . $itemVariable->getName() . ');');
+											$codePrinter->output('ZVAL_LONG(' . $variable . ', zephir_get_numberval(' . $variable . ') + ' . $itemVariable->getName() . ');');
 										}
 										break;
 									default:

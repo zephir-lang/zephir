@@ -1014,6 +1014,7 @@ class Expression
 					case 'bool':
 						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
 					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
 						return new CompiledExpression('int', 'zephir_get_numberval(' . $symbolVariable->getName() . ')', $expression);
 					default:
@@ -1023,6 +1024,7 @@ class Expression
 			case 'bool':
 				switch ($resolved->getType()) {
 					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
 						return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
 					default:
@@ -1032,6 +1034,7 @@ class Expression
 			case 'string':
 				switch ($resolved->getType()) {
 					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
 						$symbolVariable->setMustInitNull(true);
 						$symbolVariable->setIsInitialized(true);
@@ -1044,6 +1047,7 @@ class Expression
 			case 'char':
 				switch ($resolved->getType()) {
 					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
 						$compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
