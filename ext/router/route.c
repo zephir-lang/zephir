@@ -289,7 +289,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 										}
 									}
 									if ((foundPattern != 2)) {
+										zephir_concat_self_str(&route, "(", sizeof("(")-1 TSRMLS_DC);
 										zephir_concat_self(&route, regexp);
+										zephir_concat_self_str(&route, ")", sizeof(")")-1 TSRMLS_DC);
 									} else {
 										zephir_concat_self(&route, regexp);
 									}
@@ -303,7 +305,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									zephir_array_update_zval(&matches, item, &_8, PH_COPY | PH_SEPARATE);
 								}
 							} else {
+								zephir_concat_self_str(&route, "{", sizeof("{")-1 TSRMLS_DC);
 								zephir_concat_self(&route, item);
+								zephir_concat_self_str(&route, "}", sizeof("}")-1 TSRMLS_DC);
 							}
 							continue;
 						}
@@ -326,6 +330,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		if ((bracketCount > 0)) {
 			intermediate++;
 		} else {
+			zephir_concat_self_char(route, ch);
 		}
 	}
 	array_init(return_value);

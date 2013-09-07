@@ -415,12 +415,15 @@ class LetStatement
 						switch ($statement['operator']) {
 							case 'assign':
 								$symbolVariable->initVariant($compilationContext);
-								//$compilationContext->headersManager->add('kernel/string_type');
-								//$codePrinter->output('zephir_str_assign_char(' . $variable . ', \'' . $resolvedExpr->getCode() . '\');');
+								if ($resolvedExpr->getCode()) {
+									$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+								} else {
+									$codePrinter->output('ZVAL_EMPTY_STRING(' . $variable . ');');
+								}
 								break;
 							case 'concat-assign':
-								//$compilationContext->headersManager->add('kernel/string_type');
-								//$codePrinter->output('zephir_str_append_char(' . $variable . ', \'' . $resolvedExpr->getCode() . '\');');
+								$compilationContext->headersManager->add('kernel/operators');
+								$codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_DC);');
 								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
@@ -436,6 +439,7 @@ class LetStatement
 										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'concat-assign':
+										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									default:
@@ -449,7 +453,8 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
-										$codePrinter->output('Z_STRLEN_P(' . $variable . ') = zend_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%ld", ' . $itemVariable->getName() . ');');
+										$compilationContext->headersManager->add('kernel/string');
+										$codePrinter->output('Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%ld", ' . $itemVariable->getName() . ');');
 										$codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
 										break;
 									case 'concat-assign':
@@ -469,8 +474,8 @@ class LetStatement
 										$codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
 										break;
 									case 'concat-assign':
-										//$compilationContext->headersManager->add('kernel/string_type');
-										//$codePrinter->output('zephir_str_append_char(' . $variable . ', ' . $itemVariable->getName() . ');');
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('zephir_concat_self_char(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);

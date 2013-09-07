@@ -8,6 +8,7 @@
 #include "php_test.h"
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 #include "kernel/string_type.h"
 
 #include "Zend/zend_operators.h"
@@ -138,7 +139,7 @@ void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
 	char *right_char;
 	int use_copy = 0, right_length = 0;
 
-	right_length = zend_spprintf(&right_char, 0, "%ld", right);
+	right_length = zephir_spprintf(&right_char, 0, "%ld", right);
 
 	if (Z_TYPE_PP(left) == IS_NULL) {
 		Z_STRVAL_PP(left) = emalloc(right_length + 1);
@@ -168,6 +169,42 @@ void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
 		Z_STRLEN_PP(left) = length;
 		Z_TYPE_PP(left) = IS_STRING;
 	}
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}
+
+/**
+ * Appends the content of the right operator to the left operator
+ */
+void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC) {
+
+	zval left_copy;
+	uint length;
+	int use_copy = 0;
+
+	if (Z_TYPE_PP(left) == IS_NULL) {
+		Z_STRVAL_PP(left) = emalloc(2);
+		Z_STRVAL_PP(left)[0] = right;
+		Z_STRVAL_PP(left)[1] = 0;
+		Z_STRLEN_PP(left) = 1;
+		Z_TYPE_PP(left) = IS_STRING;
+		return;
+	}
+
+	if (Z_TYPE_PP(left) != IS_STRING) {
+		zephir_make_printable_zval(*left, &left_copy, &use_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(*left, (&left_copy));
+		}
+	}
+
+	Z_STRLEN_PP(left)++;
+	Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), 1);
+	Z_STRVAL_PP(left)[Z_STRLEN_PP(left) - 1] = right;
+	Z_STRVAL_PP(left)[Z_STRLEN_PP(left)] = 0;
+	Z_TYPE_PP(left) = IS_STRING;
 
 	if (use_copy) {
 		zval_dtor(&left_copy);

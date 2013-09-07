@@ -909,6 +909,7 @@ PHP_METHOD(Test_Flow, testFor11) {
 				_0 = 1;
 			}
 			a = _1;
+			zephir_concat_self_char(b, a);
 		}
 	}
 	RETURN_CTOR(b);
@@ -939,6 +940,7 @@ PHP_METHOD(Test_Flow, testFor12) {
 				_0 = 1;
 			}
 			a = _1;
+			zephir_concat_self_char(b, a);
 		}
 	}
 	RETURN_CTOR(b);
@@ -969,6 +971,7 @@ PHP_METHOD(Test_Flow, testFor13) {
 				_0 = 1;
 			}
 			a = _1;
+			zephir_concat_self_char(b, a);
 		}
 	}
 	RETURN_CTOR(b);
@@ -999,6 +1002,7 @@ PHP_METHOD(Test_Flow, testFor14) {
 				_0 = 1;
 			}
 			a = _1;
+			zephir_concat_self_char(b, a);
 		}
 	}
 	RETURN_CTOR(b);
@@ -1298,6 +1302,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
 			_3 = (char) zephir_get_intval(a);
+			zephir_concat_self_char(b, _3);
 		}
 	}
 	RETURN_CTOR(b);

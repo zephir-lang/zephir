@@ -958,8 +958,7 @@ void zephir_remove_extra_slashes(zval *return_value, const zval *str) {
 /**
  * This function is not external in the Zend API so we redeclare it here in the extension
  */
-int zephir_spprintf(char **message, int max_len, char *format, ...)
-{
+int zephir_spprintf(char **message, int max_len, char *format, ...) {
     va_list arg;
     int len;
 
