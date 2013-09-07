@@ -50,6 +50,7 @@ extern int zephir_and_function(zval *result, zval *left, zval *right);
 
 extern void zephir_concat_self(zval **left, zval *right TSRMLS_DC);
 extern void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC);
+extern void zephir_concat_self_long(zval **left, const long right TSRMLS_DC);
 
 /** Strict comparing */
 extern int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length);
@@ -61,6 +62,8 @@ extern long zephir_get_intval(const zval *op);
 extern double zephir_get_doubleval(const zval *op);
 extern zend_bool zephir_get_boolval(const zval *op);
 //extern void zephir_get_strval(zval *op, zephir_str **str_p);
+
+#define zephir_get_strval()
 
 extern int zephir_is_numeric(const zval *op);
 

@@ -609,8 +609,8 @@ class ClassMethod
 				}
 
 				if ($dataType == 'variable') {
-					if (isset($parametersToSeparate[$name])) {
-						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+					if (isset($parametersToSeparate[$parameter['name']])) {
+						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
 					}
 				}
 
@@ -735,10 +735,6 @@ class ClassMethod
 					$code = 'double ';
 					break;
 				case 'string':
-					$compilationContext->headersManager->add('kernel/string_type');
-					$pointer = '*';
-					$code = 'zephir_str ';
-					break;
 				case 'variable':
 					$pointer = '*';
 					$code = 'zval ';
@@ -780,7 +776,7 @@ class ClassMethod
 						} else {
 							$defaultValue = $variable->getDefaultInitValue();
 							if ($defaultValue !== null) {
-								if ($type == 'variable') {
+								if ($type == 'variable' || $type == 'string') {
 									$groupVariables[] = $pointer . $variable->getName();
 								} else {
 									$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;

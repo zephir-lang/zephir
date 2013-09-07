@@ -71,8 +71,6 @@ class EchoStatement
 							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');
 							break;
 						case 'string':
-							$compilationContext->codePrinter->output('php_printf("%s", ' . $variable->getName() . '->str);');
-							break;
 						case 'variable':
 							$compilationContext->codePrinter->output('zend_print_zval(' . $variable->getName() . ', 0);');
 							break;

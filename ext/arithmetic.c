@@ -826,14 +826,14 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 PHP_METHOD(Test_Arithmetic, addSum23) {
 
 	int b;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	ZVAL_LONG(a, zephir_get_numberval(&a) + b);
 	RETURN_CCTOR(a);
 

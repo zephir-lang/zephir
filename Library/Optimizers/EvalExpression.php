@@ -149,7 +149,7 @@ class EvalExpression
 					case 'int':
 						return $variableRight->getName();
 					case 'string':
-						return $variableRight->getName() . ' && ' . $variableRight->getName() . '->len';
+						return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
 					case 'bool':
 						return $variableRight->getName();
 					case 'double':

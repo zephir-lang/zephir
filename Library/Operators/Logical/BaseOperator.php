@@ -192,28 +192,28 @@ class LogicalBaseOperator extends BaseOperator
 					case 'string':
 						switch ($right->getType()) {
 							case 'int':
-								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'double':
-								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $right->getCode(), $expression);
 							case 'bool':
-								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
-										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 									case 'double':
-										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . '  ' . $variableRight->getName(), $expression);
 									case 'string':
-										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_operator . ' (' . $variableRight->getName() . ' && ' . $variableRight->getName() . '->len)', $expression);
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' (' . $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . '))', $expression);
 									case 'bool':
-										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
+										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableRight->isLocalOnly()) {
-											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . ')', $expression);
 										} else {
-											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && ' . $variableLeft->getName() . '->len) ' . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . ')', $expression);
+											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
 										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");

@@ -225,11 +225,6 @@ class Call
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'string':
-							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_STRINGL(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . '->str, ' . $parameterVariable->getName() . '->len, 1);');
-							$params[] = $parameterTempVariable->getName();
-							$this->_temporalVariables[] = $parameterTempVariable;
-							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							break;
@@ -304,11 +299,6 @@ class Call
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'string':
-							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_STRINGL(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . '->str, ' . $compiledExpression->getCode() . '->len, 0);');
-							$params[] = '&' . $parameterTempVariable->getName();
-							$this->_temporalVariables[] = $parameterTempVariable;
-							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							break;

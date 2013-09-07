@@ -65,7 +65,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_INIT_NVAR(_3);
+			ZEPHIR_INIT_VAR(_3);
 			ZVAL_LONG(_3, i);
 			zephir_array_update_long(&perm1, i, &_3, PH_COPY | PH_SEPARATE);
 		}
@@ -150,7 +150,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 		while (1) {
 			if ((r == n)) {
 				array_init(return_value);
-				ZEPHIR_INIT_NVAR(_13);
+				ZEPHIR_INIT_VAR(_13);
 				ZVAL_LONG(_13, checksum);
 				zephir_array_append(&return_value, _13, 0);
 				ZEPHIR_INIT_NVAR(_13);

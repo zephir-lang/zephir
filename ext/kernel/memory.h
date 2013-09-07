@@ -66,6 +66,22 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 		zephir_memory_alloc(&z TSRMLS_CC); \
 	}
 
+/**
+ Second allocation, assumes the variable was allocated for the first time
+ in the branch zero
+*/
+#define ZEPHIR_INIT_BNVAR(z) \
+	if (Z_REFCOUNT_P(z) > 1) { \
+		Z_DELREF_P(z); \
+		ALLOC_ZVAL(z); \
+		Z_SET_REFCOUNT_P(z, 1); \
+		Z_UNSET_ISREF_P(z); \
+		ZVAL_NULL(z); \
+	} else {\
+		zval_ptr_dtor(&z); \
+		ZEPHIR_ALLOC_ZVAL(z); \
+	}
+
 #define ZEPHIR_INIT_NVAR_PNULL(z)\
 	if (z) { \
 		if (Z_REFCOUNT_P(z) > 1) { \

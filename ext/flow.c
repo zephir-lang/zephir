@@ -16,7 +16,6 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
-#include "kernel/string_type.h"
 
 
 /**
@@ -533,6 +532,7 @@ PHP_METHOD(Test_Flow, testWhile11) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &d);
 
+	ZEPHIR_SEPARATE_PARAM(a);
 
 
 	while (1) {
@@ -570,7 +570,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	HashTable *_2;
 	HashPosition _1;
 	int c;
-	zval *v = NULL, *b, *_0 = NULL, **_3;
+	zval *v = NULL, *b, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -580,13 +580,13 @@ PHP_METHOD(Test_Flow, testFor1) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_append(&b, _0, 0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
@@ -606,7 +606,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	HashTable *_2;
 	HashPosition _1;
 	double c;
-	zval *v = NULL, *k = NULL, *b, *_0 = NULL, **_3;
+	zval *v = NULL, *k = NULL, *b, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -616,13 +616,13 @@ PHP_METHOD(Test_Flow, testFor2) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_append(&b, _0, 0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
@@ -642,7 +642,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 	HashTable *_2;
 	HashPosition _1;
-	zval *v = NULL, *b, *c, *_0 = NULL, **_3;
+	zval *v = NULL, *b, *c, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -653,13 +653,13 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
 	zephir_array_append(&b, _0, 0);
-	ZEPHIR_INIT_NVAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_append(&b, _0, 0);
 	zephir_is_iterable(b, &_2, &_1, 0, 1);
@@ -678,7 +678,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -696,7 +696,7 @@ PHP_METHOD(Test_Flow, testFor4) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -737,7 +737,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -755,7 +755,7 @@ PHP_METHOD(Test_Flow, testFor6) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -856,7 +856,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 
 	zend_bool _0;
 	int b, c, d, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -876,7 +876,7 @@ PHP_METHOD(Test_Flow, testFor10) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -888,11 +888,13 @@ PHP_METHOD(Test_Flow, testFor10) {
 PHP_METHOD(Test_Flow, testFor11) {
 
 	zend_bool _0;
-	zephir_str *b = NULL;
+	zval *b;
 	char a, _1, _2;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_str_assign(b, "", sizeof("")-1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "", 1);
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
@@ -907,21 +909,22 @@ PHP_METHOD(Test_Flow, testFor11) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_str_append_char(b, a);
 		}
 	}
-	RETURN_STRING(b->str, 1);
+	RETURN_MM_CTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor12) {
 
 	zend_bool _0;
-	zephir_str *b = NULL;
+	zval *b;
 	char a, _1, _2;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_str_assign(b, "", sizeof("")-1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "", 1);
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -936,21 +939,22 @@ PHP_METHOD(Test_Flow, testFor12) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_str_append_char(b, a);
 		}
 	}
-	RETURN_STRING(b->str, 1);
+	RETURN_MM_CTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor13) {
 
 	zend_bool _0;
-	zephir_str *b = NULL;
+	zval *b;
 	char a, _1, _2;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_str_assign(b, "", sizeof("")-1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "", 1);
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
@@ -965,21 +969,22 @@ PHP_METHOD(Test_Flow, testFor13) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_str_append_char(b, a);
 		}
 	}
-	RETURN_STRING(b->str, 1);
+	RETURN_MM_CTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor14) {
 
 	zend_bool _0;
-	zephir_str *b = NULL;
+	zval *b;
 	char a, _1, _2;
 
+	ZEPHIR_MM_GROW();
 
-	zephir_str_assign(b, "", sizeof("")-1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "", 1);
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
@@ -994,10 +999,9 @@ PHP_METHOD(Test_Flow, testFor14) {
 				_0 = 1;
 			}
 			a = _1;
-			zephir_str_append_char(b, a);
 		}
 	}
-	RETURN_STRING(b->str, 1);
+	RETURN_MM_CTOR(b);
 
 }
 
@@ -1039,11 +1043,11 @@ PHP_METHOD(Test_Flow, testFor16) {
 
 	zend_bool _1;
 	int _0, _2, _3;
-	zval *a = NULL, *b = NULL, *c = NULL;
+	zval *a, *b, *c;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_NVAR(c);
+	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	_3 = 10;
 	_2 = 1;
@@ -1060,9 +1064,9 @@ PHP_METHOD(Test_Flow, testFor16) {
 			} else {
 				_1 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _0);
-			ZEPHIR_INIT_NVAR(b);
+			ZEPHIR_INIT_VAR(b);
 			ZVAL_LONG(b, _2);
 			zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 		}
@@ -1075,11 +1079,11 @@ PHP_METHOD(Test_Flow, testFor17) {
 
 	zend_bool _1;
 	int _0, _2, _3;
-	zval *a = NULL, *b = NULL, *c = NULL;
+	zval *a, *b, *c;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_NVAR(c);
+	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	_3 = 10;
 	_2 = _3;
@@ -1096,9 +1100,9 @@ PHP_METHOD(Test_Flow, testFor17) {
 			} else {
 				_1 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _0);
-			ZEPHIR_INIT_NVAR(b);
+			ZEPHIR_INIT_VAR(b);
 			ZVAL_LONG(b, _2);
 			zephir_array_update_zval(&c, a, &b, PH_COPY | PH_SEPARATE);
 		}
@@ -1110,12 +1114,12 @@ PHP_METHOD(Test_Flow, testFor17) {
 PHP_METHOD(Test_Flow, testFor18) {
 
 	zend_bool _1;
-	zval *c = NULL, *_4 = NULL;
+	zval *c, *_4;
 	int a, b, _0, _2, _3;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_NVAR(c);
+	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	_3 = 10;
 	_2 = 1;
@@ -1134,7 +1138,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			}
 			a = _0;
 			b = _2;
-			ZEPHIR_INIT_NVAR(_4);
+			ZEPHIR_INIT_VAR(_4);
 			ZVAL_LONG(_4, b);
 			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE);
 		}
@@ -1147,7 +1151,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -1165,7 +1169,7 @@ PHP_METHOD(Test_Flow, testFor19) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -1178,7 +1182,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -1196,7 +1200,7 @@ PHP_METHOD(Test_Flow, testFor20) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -1209,7 +1213,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -1227,7 +1231,7 @@ PHP_METHOD(Test_Flow, testFor21) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -1240,7 +1244,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 
 	zend_bool _0;
 	int b, _1, _2;
-	zval *a = NULL;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
@@ -1258,7 +1262,7 @@ PHP_METHOD(Test_Flow, testFor22) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			b += zephir_get_numberval(a);
 		}
@@ -1271,12 +1275,13 @@ PHP_METHOD(Test_Flow, testFor23) {
 
 	char _1, _2, _3;
 	zend_bool _0;
-	zephir_str *b = NULL;
-	zval *a = NULL;
+	zval *b;
+	zval *a;
 
 	ZEPHIR_MM_GROW();
 
-	zephir_str_assign(b, "", sizeof("")-1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "", 1);
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1290,30 +1295,30 @@ PHP_METHOD(Test_Flow, testFor23) {
 			} else {
 				_0 = 1;
 			}
-			ZEPHIR_INIT_NVAR(a);
+			ZEPHIR_INIT_VAR(a);
 			ZVAL_LONG(a, _1);
 			_3 = (char) zephir_get_intval(a);
-			zephir_str_append_char(b, _3);
 		}
 	}
-	RETURN_MM_STRING(b->str, 1);
+	RETURN_MM_CTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor30) {
 
 	int v, _0;
-	zephir_str *b = NULL;
-	zval *a = NULL, *_1 = NULL;
+	zval *b;
+	zval *a, *_1;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_str_assign(b, "hello", sizeof("hello")-1);
-	for (_0 = 0; _0 < b->len; _0++) {
-		v = b->str[_0]; 
-		ZEPHIR_INIT_NVAR(_1);
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "hello", 1);
+	for (_0 = 0; _0 < Z_STRLEN_P(b); _0++) {
+		v = Z_STRVAL_P(b)[_0]; 
+		ZEPHIR_INIT_VAR(_1);
 		ZVAL_LONG(_1, v);
 		zephir_array_append(&a, _1, PH_SEPARATE);
 	}
@@ -1324,18 +1329,19 @@ PHP_METHOD(Test_Flow, testFor30) {
 PHP_METHOD(Test_Flow, testFor31) {
 
 	int k, v, _0;
-	zephir_str *b = NULL;
-	zval *a = NULL, *_1 = NULL;
+	zval *b;
+	zval *a, *_1;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_NVAR(a);
+	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_str_assign(b, "hello", sizeof("hello")-1);
-	for (_0 = 0; _0 < b->len; _0++) {
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "hello", 1);
+	for (_0 = 0; _0 < Z_STRLEN_P(b); _0++) {
 		k = _0; 
-		v = b->str[_0]; 
-		ZEPHIR_INIT_NVAR(_1);
+		v = Z_STRVAL_P(b)[_0]; 
+		ZEPHIR_INIT_VAR(_1);
 		ZVAL_LONG(_1, v);
 		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE);
 	}

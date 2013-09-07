@@ -454,12 +454,12 @@ class ForStatement
 		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
 
 		if ($this->_statement['reverse']) {
-			$codePrinter->output('for (' . $tempVariable->getName() . ' = ' . $expression->getCode() . '->len; ' .
+			$codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $expression->getCode() . '); ' .
 				$tempVariable->getName() . ' >= 0; ' .
 				$tempVariable->getName() . '--) {');
 		} else {
 			$codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
-				$tempVariable->getName() . ' < ' . $expression->getCode() . '->len; ' .
+				$tempVariable->getName() . ' < Z_STRLEN_P(' . $expression->getCode() . '); ' .
 				$tempVariable->getName() . '++) {');
 		}
 
@@ -467,7 +467,7 @@ class ForStatement
 			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
 		}
 
-		$codePrinter->output("\t" . $variable->getName() . ' = ' . $expression->getCode() . '->str[' . $tempVariable->getName() . ']; ');
+		$codePrinter->output("\t" . $variable->getName() . ' = Z_STRVAL_P(' . $expression->getCode() . ')[' . $tempVariable->getName() . ']; ');
 
 		/**
 		 * Variables are initialized in a different way inside cycle

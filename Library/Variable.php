@@ -45,6 +45,11 @@ class Variable
 	protected $_branch;
 
 	/**
+	 * Branch where the variable was initialized for the first time
+	 */
+	protected $_initBranch = false;
+
+	/**
 	 * Compiled variable's name
 	 */
 	protected $_lowName;
@@ -476,15 +481,39 @@ class Variable
 			return;
 		}
 
+		/**
+		 * Variables are allocated for the first time using ZEPHIR_INIT_VAR
+		 * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
+		 * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
+		 */
+
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+
+			if ($this->_initBranch === false) {
+				$this->_initBranch = $compilationContext->currentBranch;
+			}
+
 			$compilationContext->headersManager->add('kernel/memory');
 			if (!$this->isLocalOnly()) {
 				$compilationContext->symbolTable->mustGrownStack(true);
-				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-					$this->_mustInitNull = true;
-					$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+				if ($compilationContext->insideCycle) {
+					if ($this->_variantInits > 0) {
+						$this->_mustInitNull = true;
+						$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+					} else {
+						$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+					}
 				} else {
-					$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+					if ($this->_variantInits > 0) {
+						if ($this->_initBranch === 1) {
+							$compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
+						} else {
+							$this->_mustInitNull = true;
+							$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+						}
+					} else {
+						$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+					}
 				}
 			} else {
 				if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
@@ -513,6 +542,11 @@ class Variable
 		}
 
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+
+			if ($this->_initBranch === false) {
+				$this->_initBranch = $compilationContext->currentBranch;
+			}
+
 			$compilationContext->headersManager->add('kernel/memory');
 			if (!$this->isLocalOnly()) {
 				$compilationContext->symbolTable->mustGrownStack(true);
@@ -548,6 +582,11 @@ class Variable
 		}
 
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+
+			if ($this->_initBranch === false) {
+				$this->_initBranch = $compilationContext->currentBranch;
+			}
+
 			$compilationContext->headersManager->add('kernel/memory');
 			$compilationContext->symbolTable->mustGrownStack(true);
 			if ($this->_variantInits > 0 || $compilationContext->insideCycle) {

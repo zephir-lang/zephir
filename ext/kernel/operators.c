@@ -23,7 +23,7 @@ void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy){
 /**
  * Performs logical AND function operator
  */
-int zephir_and_function(zval *result, zval *left, zval *right){
+int zephir_and_function(zval *result, zval *left, zval *right) {
 	int istrue = zend_is_true(left);
 	if (istrue) {
 		istrue = zend_is_true(right);
@@ -35,7 +35,7 @@ int zephir_and_function(zval *result, zval *left, zval *right){
 /**
  * Appends the content of the right operator to the left operator
  */
-void zephir_concat_self(zval **left, zval *right TSRMLS_DC){
+void zephir_concat_self(zval **left, zval *right TSRMLS_DC) {
 
 	zval left_copy, right_copy;
 	uint length;
@@ -90,7 +90,7 @@ void zephir_concat_self(zval **left, zval *right TSRMLS_DC){
 /**
  * Appends the content of the right operator to the left operator
  */
-void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC){
+void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC) {
 
 	zval left_copy;
 	uint length;
@@ -121,6 +121,49 @@ void zephir_concat_self_str(zval **left, const char *right, int right_length TSR
 	Z_STRVAL_PP(left)[length] = 0;
 	Z_STRLEN_PP(left) = length;
 	Z_TYPE_PP(left) = IS_STRING;
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}
+
+/**
+ * Appends the content of the right operator to the left operator
+ */
+void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
+
+	zval left_copy;
+	uint length;
+	char *right_char;
+	int use_copy = 0, right_length = 0;
+
+	if (Z_TYPE_PP(left) == IS_NULL) {
+
+		Z_STRVAL_PP(left) = emalloc(right_length + 1);
+		memcpy(Z_STRVAL_PP(left), right, right_length);
+		Z_STRVAL_PP(left)[right_length] = 0;
+		Z_STRLEN_PP(left) = right_length;
+		Z_TYPE_PP(left) = IS_STRING;
+
+		return;
+	}
+
+	if (Z_TYPE_PP(left) != IS_STRING) {
+		zephir_make_printable_zval(*left, &left_copy, &use_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(*left, (&left_copy));
+		}
+	}
+
+	right_length = zend_spprintf(&right_char, 0, "%ld", right);
+	if (right_length > 0) {
+		length = Z_STRLEN_PP(left) + right_length;
+		Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), length + 1);
+		memcpy(Z_STRVAL_PP(left) + Z_STRLEN_PP(left), right_char, right_length);
+		Z_STRVAL_PP(left)[length] = 0;
+		Z_STRLEN_PP(left) = length;
+		Z_TYPE_PP(left) = IS_STRING;
+	}
 
 	if (use_copy) {
 		zval_dtor(&left_copy);
@@ -326,27 +369,6 @@ zend_bool zephir_get_boolval(const zval *op) {
 	}
 
 	return 0;
-}
-
-/**
- * Returns the long value of a zval
- */
-void zephir_get_strval(zval *op, zephir_str **str_p) {
-
-	zval op_copy;
-	int use_copy_op;
-
-	zephir_make_printable_zval(op, &op_copy, &use_copy_op);
-
-	if (use_copy_op) {
-		zephir_str_assign(*str_p, Z_STRVAL(op_copy), Z_STRLEN(op_copy));
-	} else {
-		zephir_str_assign(*str_p, Z_STRVAL_P(op), Z_STRLEN_P(op));
-	}
-
-	if (use_copy_op) {
-		zval_dtor(&op_copy);
-	}
 }
 
 /**

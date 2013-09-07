@@ -534,9 +534,6 @@ class Expression
 						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
 						break;
 					case 'string':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . '->str, ' . $exprIndex->getCode() . '->len, PH_NOISY);');
-						break;
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
@@ -746,14 +743,11 @@ class Expression
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
 						return $tempVar;
-					case 'string':
-						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_STRINGL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . '->str, ' . $itemVariable->getName() . '->len, 1);');
-						return $tempVar;
 					case 'bool':
 						$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
 						return $tempVar;
+					case 'string':
 					case 'variable':
 						return $itemVariable;
 					default:
@@ -924,19 +918,19 @@ class Expression
 									case 'uint':
 									case 'long':
 									case 'ulong':
-										$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $resolvedExpr->getCode() . ');');
+										$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'double':
-										$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $resolvedExpr->getCode() . ');');
+										$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'bool':
-										$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len, ' . $resolvedExpr->getBooleanCode() . ');');
+										$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getBooleanCode() . ');');
 										break;
 									case 'string':
-										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
+										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
 										break;
 									case 'null':
-										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . '->str, ' . $item['key']['value'] . '->len + 1);');
+										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1);');
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);

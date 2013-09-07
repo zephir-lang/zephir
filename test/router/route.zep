@@ -139,7 +139,8 @@ class Route
 			return false;
 		}
 
-		let matches = [];
+		let matches = [],
+		route = "";
 
 		for cursor, ch in pattern {
 
