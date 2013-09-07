@@ -59,7 +59,7 @@ PHP_METHOD(Test_Scall, testMethod4) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -72,7 +72,7 @@ PHP_METHOD(Test_Scall, testMethod5) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -85,7 +85,7 @@ PHP_METHOD(Test_Scall, testMethod6) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -94,7 +94,7 @@ PHP_METHOD(Test_Scall, testCall1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Scall, testCall2) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -112,7 +112,7 @@ PHP_METHOD(Test_Scall, testCall3) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -126,7 +126,7 @@ PHP_METHOD(Test_Scall, testCall4) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod4", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -140,7 +140,7 @@ PHP_METHOD(Test_Scall, testCall5) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod5", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -154,7 +154,7 @@ PHP_METHOD(Test_Scall, testCall6) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod6", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -163,7 +163,7 @@ PHP_METHOD(Test_Scall, testCall7) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod1");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -172,7 +172,7 @@ PHP_METHOD(Test_Scall, testCall8) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod2");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -181,7 +181,7 @@ PHP_METHOD(Test_Scall, testCall9) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_SELF(return_value, this_ptr, test_scall_ce, "testmethod3");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -195,7 +195,7 @@ PHP_METHOD(Test_Scall, testCall10) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod4", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -209,7 +209,7 @@ PHP_METHOD(Test_Scall, testCall11) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod5", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -223,7 +223,7 @@ PHP_METHOD(Test_Scall, testCall12) {
 
 
 	ZEPHIR_CALL_SELF_PARAMS_2(return_value, this_ptr, "testmethod6", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -232,7 +232,7 @@ PHP_METHOD(Test_Scall, testCall13) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_PARENT(return_value, this_ptr, "Test\\Scall", "testmethod1");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -241,7 +241,7 @@ PHP_METHOD(Test_Scall, testCall14) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_CALL_PARENT(return_value, this_ptr, "Test\\Scall", "testmethod2");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 

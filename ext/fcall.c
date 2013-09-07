@@ -39,7 +39,7 @@ PHP_METHOD(Test_Fcall, testCall1) {
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_STRING(&_1, "h", 0);
 	zephir_call_func_p2(return_value, "strpos", &_0, &_1);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 

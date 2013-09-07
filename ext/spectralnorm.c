@@ -322,7 +322,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	ZEPHIR_SINIT_VAR(_17);
 	ZVAL_LONG(&_17, (vBv / vv));
 	zephir_call_func_p1(return_value, "sqrt", &_17);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 

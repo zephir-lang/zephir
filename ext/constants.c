@@ -41,7 +41,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 
 	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 
 	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -57,7 +57,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 
 	zephir_get_class_constant(return_value, test_constantsparent_ce, SS("P4") TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 

@@ -190,7 +190,7 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 	return;
 
 /** Return without change return_value */
-#define RETURN_MM() ZEPHIR_MM_RESTORE(); return;
+#define RETURN_MM() ZEPHIR_MM_RESTORE(); RETURN_NULL();
 
 /** Return null restoring memory frame */
 #define RETURN_MM_NULL() ZEPHIR_MM_RESTORE(); RETURN_NULL();

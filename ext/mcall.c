@@ -59,7 +59,7 @@ PHP_METHOD(Test_Mcall, testMethod4) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -72,7 +72,7 @@ PHP_METHOD(Test_Mcall, testMethod5) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -85,7 +85,7 @@ PHP_METHOD(Test_Mcall, testMethod6) {
 
 
 	zephir_add_function(return_value, a, b TSRMLS_CC);
-	return;
+	RETURN_NULL();
 
 }
 
@@ -94,7 +94,7 @@ PHP_METHOD(Test_Mcall, testCall1) {
 	ZEPHIR_MM_GROW();
 
 	zephir_call_method(return_value, this_ptr, "testmethod1");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -103,7 +103,7 @@ PHP_METHOD(Test_Mcall, testCall2) {
 	ZEPHIR_MM_GROW();
 
 	zephir_call_method(return_value, this_ptr, "testmethod2");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -112,7 +112,7 @@ PHP_METHOD(Test_Mcall, testCall3) {
 	ZEPHIR_MM_GROW();
 
 	zephir_call_method(return_value, this_ptr, "testmethod3");
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -126,7 +126,7 @@ PHP_METHOD(Test_Mcall, testCall4) {
 
 
 	zephir_call_method_p2(return_value, this_ptr, "testmethod4", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -140,7 +140,7 @@ PHP_METHOD(Test_Mcall, testCall5) {
 
 
 	zephir_call_method_p2(return_value, this_ptr, "testmethod5", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -154,7 +154,7 @@ PHP_METHOD(Test_Mcall, testCall6) {
 
 
 	zephir_call_method_p2(return_value, this_ptr, "testmethod6", a, b);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -172,7 +172,7 @@ PHP_METHOD(Test_Mcall, testCall7) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod4", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -190,7 +190,7 @@ PHP_METHOD(Test_Mcall, testCall8) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
@@ -208,7 +208,7 @@ PHP_METHOD(Test_Mcall, testCall9) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
-	RETURN_MM();
+	RETURN_MM_NULL();
 
 }
 
