@@ -201,7 +201,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 
 	zend_bool _4, _8, _11;
 	zend_class_entry *_0, *_2, *_3;
-	zval *n_param = NULL, *u = NULL, *v = NULL, *w = NULL, *_1 = NULL, *_7 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, _17 = zval_used_for_init;
+	zval *n_param = NULL, *u, *v, *w, *_1 = NULL, *_7 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, _17;
 	int n, i, vv = 0, vBv = 0, _5, _6, _9, _10, _12, _13;
 
 	ZEPHIR_MM_GROW();
@@ -210,22 +210,22 @@ PHP_METHOD(Test_SpectralNorm, process) {
 		n = zephir_get_intval(n_param);
 
 
-	ZEPHIR_INIT_NVAR(u);
+	ZEPHIR_INIT_VAR(u);
 	_0 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(u, _0);
-	ZEPHIR_INIT_NVAR(_1);
+	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_call_method_p1_noret(u, "__construct", _1);
-	ZEPHIR_INIT_NVAR(v);
+	ZEPHIR_INIT_VAR(v);
 	_2 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(v, _2);
-	ZEPHIR_INIT_NVAR(_1);
+	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_call_method_p1_noret(v, "__construct", _1);
-	ZEPHIR_INIT_NVAR(w);
+	ZEPHIR_INIT_VAR(w);
 	_3 = zend_fetch_class(SL("SplFixedArray"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(w, _3);
-	ZEPHIR_INIT_NVAR(_1);
+	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, n);
 	zephir_call_method_p1_noret(w, "__construct", _1);
 	_6 = (n - 1);
@@ -319,7 +319,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			vv += zephir_get_numberval(_16);
 		}
 	}
-	ZEPHIR_SINIT_NVAR(_17);
+	ZEPHIR_SINIT_VAR(_17);
 	ZVAL_LONG(&_17, (vBv / vv));
 	zephir_call_func_p1(return_value, "sqrt", &_17);
 	RETURN_MM();

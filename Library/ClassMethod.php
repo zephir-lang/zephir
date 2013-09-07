@@ -409,9 +409,6 @@ class ClassMethod
 					} else {
 						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
 						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
-						if ($parameter['data-type'] == 'string') {
-							$symbol->setMustInitNull(true);
-						}
 					}
 				} else {
 					$symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);

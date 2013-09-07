@@ -395,7 +395,11 @@ class LetStatement
 						switch ($statement['operator']) {
 							case 'assign':
 								$symbolVariable->initVariant($compilationContext);
-								$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+								if ($resolvedExpr->getCode()) {
+									$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+								} else {
+									$codePrinter->output('ZVAL_EMPTY_STRING(' . $variable . ');');
+								}
 								break;
 							case 'concat-assign':
 								$codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_DC);');

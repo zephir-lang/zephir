@@ -497,12 +497,8 @@ class Variable
 			if (!$this->isLocalOnly()) {
 				$compilationContext->symbolTable->mustGrownStack(true);
 				if ($compilationContext->insideCycle) {
-					if ($this->_variantInits > 0) {
-						$this->_mustInitNull = true;
-						$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
-					} else {
-						$compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
-					}
+					$this->_mustInitNull = true;
+					$compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
 				} else {
 					if ($this->_variantInits > 0) {
 						if ($this->_initBranch === 1) {
@@ -523,6 +519,7 @@ class Variable
 					$compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
 				}
 			}
+
 			$this->_variantInits++;
 		}
 	}

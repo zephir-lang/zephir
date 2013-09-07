@@ -90,7 +90,8 @@ class ForStatement
 		}
 
 		/**
-		 * Create a copy of the current value in the end of the range
+		 * Create a copy of the current value in the end of the range to avoid modify the range
+		 * inside the cycle
 		 */
 		if ($parameters[1]->getType() != 'variable') {
 			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
@@ -181,11 +182,6 @@ class ForStatement
 		}
 		$codePrinter->output($flagVariable->getName() . ' = 0;');
 
-		/**
-		 * Inside a cycle
-		 */
-		$compilationContext->insideCycle++;
-
 		if ($this->_statement['reverse']) {
 			$conditionExpr = array(
 				'type' => 'greater-equal',
@@ -205,6 +201,11 @@ class ForStatement
 
 		$codePrinter->output('if (' . $condition . ') {');
 		$codePrinter->increaseLevel();
+
+		/**
+		 * Inside a cycle
+		 */
+		$compilationContext->insideCycle++;
 
 		$codePrinter->output('while (1) {');
 		$codePrinter->increaseLevel();
@@ -371,11 +372,6 @@ class ForStatement
 		}
 
 		$codePrinter->decreaseLevel();
-
-		/**
-		 * Variables are initialized in a different way inside cycle
-		 */
-		$compilationContext->insideCycle++;
 
 		/**
 		 * Compile statements in the 'for' block
