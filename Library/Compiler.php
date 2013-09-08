@@ -70,7 +70,6 @@ class Compiler
 		}
 		sort($files, SORT_STRING);
 		foreach ($files as $file) {
-			echo $file, PHP_EOL;
 			$this->_preCompile($file);
 		}
 	}
@@ -342,8 +341,8 @@ class Compiler
 			}
 		}
 
-		asort($classInits);
-		asort($classEntries);
+		asort($classInits, SORT_STRING);
+		asort($classEntries, SORT_STRING);
 
 		$completeClassInits = array();
 		foreach ($classInits as $dependencyRank => $rankClassInits) {
