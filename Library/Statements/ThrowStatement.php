@@ -72,6 +72,7 @@ class ThrowStatement
 		}
 
 		$codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
+		$codePrinter->output('ZEPHIR_MM_RESTORE();');
 		$codePrinter->output('return;');
 
 		if ($variableVariable->isTemporal()) {

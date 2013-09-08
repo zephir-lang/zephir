@@ -62,3 +62,4 @@ assert($t->testSwitch6() === 1);
 assert($t->testSwitch7() === 1);
 assert($t->testSwitch8() === 2);
 assert($t->testSwitch9() === 2);
+

@@ -44,4 +44,3 @@ assert($t->complex20Sum() === 8.0);
 assert($t->complex21Sum() === 12.0);
 assert($t->complex22Sum() === 21.0);
 
-var_dump($t->complex10Sum());
