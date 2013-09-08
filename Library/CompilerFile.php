@@ -383,15 +383,29 @@ class CompilerFile
 			}
 		}
 
-		$path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower(preg_replace('#^' . $config->get('namespace') . '\\\\#i', '', $this->_compiledFilePath)));
-		if (!is_dir('ext/' . $path)) {
-			mkdir('ext/' . $path, 0777, true);
+		$classDefinition = $this->_classDefinition;
+		if (!$classDefinition) {
+			return;
+		}
+
+		$completeName = $classDefinition->getCompleteName();
+
+		$path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
+
+		$filePath = 'ext/' . $path . '.c';
+		$filePathHeader = 'ext/' . $path . '.h';
+
+		if (strpos($path, DIRECTORY_SEPARATOR)) {
+			$dirname = dirname($filePath);
+			if (!is_dir($dirname)) {
+				mkdir($dirname, 0777, true);
+			}
 		}
 
 		if ($codePrinter) {
-			file_put_contents('ext/' . $path . '.c', $codePrinter->getOutput());
+			file_put_contents($filePath, $codePrinter->getOutput());
 			if ($compilationContext->headerPrinter) {
-				file_put_contents('ext/' . $path . '.h', $compilationContext->headerPrinter->getOutput());
+				file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
 			}
 		}
 

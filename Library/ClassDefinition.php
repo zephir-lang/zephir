@@ -371,18 +371,18 @@ class ClassDefinition
 		 */
 		if ($this->_extendsClass) {
 
-			if (substr($this->_extendsClass, 0, 1) == '\\') {
-				$extendsClass = substr($this->_extendsClass, 1);
+			$classExtendsDefinition = $this->_extendsClassDefinition;
+			if (method_exists($classExtendsDefinition, 'getClassEntry')) {
+				$classEntry = $classExtendsDefinition->getClassEntry();
 			} else {
-				$extendsClass = $this->_extendsClass;
+				$classEntry = 'zend_exception_get_default(TSRMLS_C)';
 			}
-			$extendsClass = str_replace("\\", "\\\\", $extendsClass);
 
-			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
-				strtolower($this->getSCName($namespace)) . ', ' . '"' . strtolower($extendsClass) . '", ' . $methodEntry . ', 0);');
+			$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $namespace  . ', ' . $this->getName() . ', ' .
+				strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		} else {
-			$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' .
+			$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $namespace . ', ' . $this->getName() . ', ' .
 				strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', 0);');
 			$codePrinter->outputBlankLine();
 		}

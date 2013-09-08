@@ -55,10 +55,9 @@ class StaticCall extends Call
 			}
 
 			if ($isExpecting) {
-				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
-				$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '");');
+				$codePrinter->output('zephir_call_self(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '");');
 			} else {
-				$codePrinter->output('ZEPHIR_CALL_SELF_NORETURN("' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('zephir_call_self_noret("' . $className . '", "' . $methodName . '");');
 			}
 		} else {
 
@@ -70,12 +69,16 @@ class StaticCall extends Call
 
 			if (count($params)) {
 				if ($isExpecting) {
-					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_self_p' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('ZEPHIR_CALL_SELF_PARAMS_' . count($params) . '_NORETURN(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_self_p' . count($params) . '_noret(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
 			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_self(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '");');
+				} else {
+					$codePrinter->output('zephir_call_self_noret("' . $className . '", "' . $methodName . '");');
+				}
 			}
 		}
 	}
@@ -110,10 +113,9 @@ class StaticCall extends Call
 			}
 
 			if ($isExpecting) {
-				//$codePrinter->output('ZEPHIR_CALL_SELF(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
-				$codePrinter->output('ZEPHIR_CALL_PARENT(' . $symbolVariable->getName() . ', this_ptr, "' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('zephir_call_parent(' . $symbolVariable->getName() . ', this_ptr, "' . $className . '", "' . $methodName . '");');
 			} else {
-				$codePrinter->output('ZEPHIR_CALL_PARENT_NORETURN("' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('zephir_call_parent("' . $className . '", "' . $methodName . '");');
 			}
 		} else {
 
@@ -125,12 +127,16 @@ class StaticCall extends Call
 
 			if (count($params)) {
 				if ($isExpecting) {
-					$codePrinter->output('ZEPHIR_CALL_PARENT_PARAMS_' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_parent_p' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('ZEPHIR_CALL_PARENT_PARAMS_' . count($params) . '_NORETURN(this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_parent_p' . count($params) . '_noret(this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
 			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_parent(' . $symbolVariable->getName() . ', this_ptr, "' . $className . '", "' . $methodName . '");');
+				} else {
+					$codePrinter->output('zephir_call_parent("' . $className . '", "' . $methodName . '");');
+				}
 			}
 		}
 	}

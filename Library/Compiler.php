@@ -187,7 +187,6 @@ class Compiler
 			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
 			copy(__DIR__ . '/../ext/install', 'ext/install');
 			chmod('ext/install', 0755);
-			copy(__DIR__ . '/../ext/php_test.h', 'ext/php_test.h');
 		}
 
 		if (!is_dir($namespace)) {
@@ -382,9 +381,11 @@ class Compiler
 
 		$includeHeaders = array();
 		foreach ($this->_compiledFiles as $file) {
-			$fileH = str_replace(".c", ".h", $file);
-			$include = '#include "' . $fileH . '"';
-			$includeHeaders[] = $include;
+			if ($file) {
+				$fileH = str_replace(".c", ".h", $file);
+				$include = '#include "' . $fileH . '"';
+				$includeHeaders[] = $include;
+			}
 		}
 
 		$toReplace = array(
@@ -396,6 +397,28 @@ class Compiler
 		}
 
 		file_put_contents('ext/' . $project . '.h', $content);
+
+		/**
+		 * Round 5. Create php_project.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/php_project.h');
+		if (empty($content)) {
+			throw new Exception("Template php_project.h doesn't exist");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project),
+			'%PROJECT_UPPER%' 		=> strtoupper($project),
+			'%PROJECT_EXTNAME%' 	=> strtolower($project),
+			'%PROJECT_VERSION%' 	=> '0.0.1'
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/php_' . $project . '.h', $content);
+
 	}
 
 	protected static function showException($e)
