@@ -99,7 +99,7 @@ class StaticCall extends Call
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
-		$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
+		$classCe = $classDefinition->getClassEntry();
 
 		/**
 		 * Call static methods must grown the stack
@@ -113,9 +113,9 @@ class StaticCall extends Call
 			}
 
 			if ($isExpecting) {
-				$codePrinter->output('zephir_call_parent(' . $symbolVariable->getName() . ', this_ptr, "' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('zephir_call_parent(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '");');
 			} else {
-				$codePrinter->output('zephir_call_parent("' . $className . '", "' . $methodName . '");');
+				$codePrinter->output('zephir_call_parent_noret(this_ptr, ' . $classCe . ', "' . $methodName . '");');
 			}
 		} else {
 
@@ -127,9 +127,9 @@ class StaticCall extends Call
 
 			if (count($params)) {
 				if ($isExpecting) {
-					$codePrinter->output('zephir_call_parent_p' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_parent_p' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, ' . $classCe . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('zephir_call_parent_p' . count($params) . '_noret(this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_parent_p' . count($params) . '_noret(this_ptr, ' . $classCe . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
 			} else {
 				if ($isExpecting) {

@@ -222,6 +222,9 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 /* Return long */
 #define RETURN_MM_LONG(value) ZEPHIR_MM_RESTORE(); RETURN_LONG(value);
 
+/* Return double */
+#define RETURN_MM_DOUBLE(value) ZEPHIR_MM_RESTORE(); RETURN_DOUBLE(value);
+
 #ifndef IS_INTERNED
 #define IS_INTERNED(key) 0
 #define INTERNED_HASH(key) 0
@@ -271,7 +274,7 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 	Z_ADDREF_P(var);
 
 #define ZEPHIR_GET_HVALUE(var, hd) \
-	ZEPHIR_OBSERVE_VAR(var); \
+	ZEPHIR_OBS_VAR(var); \
 	var = *hd; \
 	Z_ADDREF_P(var);
 

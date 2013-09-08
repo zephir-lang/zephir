@@ -1,6 +1,6 @@
 #!/bin/bash
 export CC="gcc"
-export CFLAGS="-O0 -g"
+export CFLAGS="-O0 -g -Wall"
 if [ -f Makefile ]; then
 	sudo make --silent clean
 	sudo phpize --silent --clean

@@ -142,6 +142,88 @@ void zephir_concat_self_str(zval **left, const char *right, int right_length TSR
 }
 
 /**
+ * Appends the content of the right operator to the left operator
+ */
+void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
+
+	zval left_copy;
+	uint length;
+	char *right_char;
+	int use_copy = 0, right_length = 0;
+
+	right_length = zephir_spprintf(&right_char, 0, "%ld", right);
+
+	if (Z_TYPE_PP(left) == IS_NULL) {
+		Z_STRVAL_PP(left) = emalloc(right_length + 1);
+		if (right_length > 0) {
+			memcpy(Z_STRVAL_PP(left), right_char, right_length);
+		} else {
+			memcpy(Z_STRVAL_PP(left), "", 0);
+		}
+		Z_STRVAL_PP(left)[right_length] = 0;
+		Z_STRLEN_PP(left) = right_length;
+		Z_TYPE_PP(left) = IS_STRING;
+		return;
+	}
+
+	if (Z_TYPE_PP(left) != IS_STRING) {
+		zephir_make_printable_zval(*left, &left_copy, &use_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(*left, (&left_copy));
+		}
+	}
+
+	if (right_length > 0) {
+		length = Z_STRLEN_PP(left) + right_length;
+		Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), length + 1);
+		memcpy(Z_STRVAL_PP(left) + Z_STRLEN_PP(left), right_char, right_length);
+		Z_STRVAL_PP(left)[length] = 0;
+		Z_STRLEN_PP(left) = length;
+		Z_TYPE_PP(left) = IS_STRING;
+	}
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}
+
+/**
+ * Appends the content of the right operator to the left operator
+ */
+void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC) {
+
+	zval left_copy;
+	uint length;
+	int use_copy = 0;
+
+	if (Z_TYPE_PP(left) == IS_NULL) {
+		Z_STRVAL_PP(left) = emalloc(2);
+		Z_STRVAL_PP(left)[0] = right;
+		Z_STRVAL_PP(left)[1] = 0;
+		Z_STRLEN_PP(left) = 1;
+		Z_TYPE_PP(left) = IS_STRING;
+		return;
+	}
+
+	if (Z_TYPE_PP(left) != IS_STRING) {
+		zephir_make_printable_zval(*left, &left_copy, &use_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(*left, (&left_copy));
+		}
+	}
+
+	Z_STRLEN_PP(left)++;
+	Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), Z_STRLEN_PP(left) + 1);
+	Z_STRVAL_PP(left)[Z_STRLEN_PP(left) - 1] = right;
+	Z_STRVAL_PP(left)[Z_STRLEN_PP(left)] = 0;
+	Z_TYPE_PP(left) = IS_STRING;
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}
+
+/**
  * Natural compare with string operandus on right
  */
 int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length){
