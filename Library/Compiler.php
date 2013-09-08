@@ -61,15 +61,17 @@ class Compiler
 		/**
 		 * Pre compile all files
 		 */
-		$iterator = new DirectoryIterator($path);
+		$files = array();
+		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
 		foreach ($iterator as $item) {
-			if ($item->isDir()) {
-				if ($item->getFileName() != '.' && $item->getFileName() != '..') {
-					$this->_recursivePreCompile($item->getPathname());
-				}
-			} else {
-				$this->_preCompile($item->getPathname());
+			if (!$item->isDir()) {
+				$files[] = $item->getPathname();
 			}
+		}
+		sort($files, SORT_STRING);
+		foreach ($files as $file) {
+			echo $file, PHP_EOL;
+			$this->_preCompile($file);
 		}
 	}
 
