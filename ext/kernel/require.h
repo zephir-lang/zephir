@@ -17,5 +17,10 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_REQUIRE_H
+#define ZEPHIR_KERNEL_REQUIRE_H
+
 int ZEPHIR_FASTCALL zephir_require(const zval *require_path TSRMLS_DC);
 int ZEPHIR_FASTCALL zephir_require_ret(zval *return_value, const zval *require_path TSRMLS_DC);
+
+#endif

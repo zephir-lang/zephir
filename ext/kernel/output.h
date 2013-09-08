@@ -17,6 +17,9 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_OUTPUT_H
+#define ZEPHIR_KERNEL_OPERATORS_H
+
 void zephir_ob_start(TSRMLS_D);
 void zephir_ob_get_contents(zval *result TSRMLS_DC);
 int zephir_ob_end_flush(TSRMLS_D);
@@ -24,3 +27,5 @@ int zephir_ob_end_clean(TSRMLS_D);
 int zephir_ob_flush(TSRMLS_D);
 int zephir_ob_clean(TSRMLS_D);
 int zephir_ob_get_level(TSRMLS_D);
+
+#endif

@@ -17,6 +17,9 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_OPERATORS_H
+#define ZEPHIR_KERNEL_OPERATORS_H
+
 /** Strict comparing */
 #define ZEPHIR_IS_LONG(op1, op2)   zephir_compare_strict_long(op1, op2 TSRMLS_CC)
 #define ZEPHIR_IS_STRING(op1, op2) zephir_compare_strict_string(op1, op2, strlen(op2))
@@ -155,3 +158,5 @@ extern int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 			} \
 		} \
 	}
+
+#endif

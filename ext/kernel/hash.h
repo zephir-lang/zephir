@@ -17,6 +17,9 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_HASH_H
+#define ZEPHIR_KERNEL_HASH_H
+
 int zephir_hash_exists(const HashTable *ht, const char *arKey, uint nKeyLength);
 int zephir_hash_quick_exists(const HashTable *ht, const char *arKey, uint nKeyLength, ulong h);
 int zephir_hash_find(const HashTable *ht, const char *arKey, uint nKeyLength, void **pData);
@@ -27,3 +30,5 @@ int zephir_has_numeric_keys(const zval *data);
 void zephir_hash_update_or_insert(HashTable *ht, zval *offset, zval *value);
 zval** zephir_hash_get(HashTable *ht, zval *key, int type);
 int zephir_hash_unset(HashTable *ht, zval *offset);
+
+#endif

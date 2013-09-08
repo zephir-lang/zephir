@@ -17,8 +17,12 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_ASSERT_H
+#define ZEPHIR_KERNEL_ASSERT_H
+
 #ifndef ZEPHIR_RELEASE
 
 extern int zephir_assert_class(zval *object, char *class_name TSRMLS_DC);
 
+#endif
 #endif

@@ -17,6 +17,9 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_BACKTRACE_H
+#define ZEPHIR_KERNEL_BACKTRACE_H
+
 #ifndef ZEPHIR_RELEASE
 
 extern void zephir_print_backtrace(void);
@@ -27,4 +30,5 @@ extern void zephir_print_backtrace(void);
 #define zephir_print_backtrace()
 #endif
 
+#endif
 #endif

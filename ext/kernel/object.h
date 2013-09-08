@@ -17,6 +17,9 @@
   +------------------------------------------------------------------------+
 */
 
+#ifndef ZEPHIR_KERNEL_OBJECT_H
+#define ZEPHIR_KERNEL_OBJECT_H
+
 /** Class Retrieving/Checking */
 extern int zephir_class_exists(const zval *class_name, int autoload TSRMLS_DC);
 extern void zephir_get_class(zval *result, zval *object, int lower TSRMLS_DC);
@@ -100,3 +103,4 @@ zval* zephir_fetch_static_property_ce(zend_class_entry *ce, char *property, int 
 extern int zephir_create_instance(zval *return_value, const zval *class_name TSRMLS_DC);
 extern int zephir_create_instance_params(zval *return_value, const zval *class_name, zval *params TSRMLS_DC);
 
+#endif
