@@ -201,7 +201,7 @@ void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC) {
 	}
 
 	Z_STRLEN_PP(left)++;
-	Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), 1);
+	Z_STRVAL_PP(left) = erealloc(Z_STRVAL_PP(left), Z_STRLEN_PP(left) + 1);
 	Z_STRVAL_PP(left)[Z_STRLEN_PP(left) - 1] = right;
 	Z_STRVAL_PP(left)[Z_STRLEN_PP(left)] = 0;
 	Z_TYPE_PP(left) = IS_STRING;

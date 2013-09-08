@@ -76,7 +76,7 @@ PHP_METHOD(Test_Exceptions, getException) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "hello4", 1);
 	zephir_call_method_p1_noret(return_value, "__construct", _0);
-	RETURN_MM_NULL();
+	RETURN_MM();
 
 }
 
