@@ -2,7 +2,7 @@
 export CC="gcc"
 export CFLAGS="-O0 -g"
 if [ -f Makefile ]; then
-	sudo make --silent clean  
+	sudo make --silent clean
 	sudo phpize --silent --clean
 fi
 phpize --silent

@@ -1,4 +1,22 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -20,13 +38,12 @@
 void zephir_throw_exception(zval *object TSRMLS_DC){
 	Z_ADDREF_P(object);
 	zend_throw_exception_object(object TSRMLS_CC);
-	zephir_memory_restore_stack(TSRMLS_C);
 }
 
 /**
  * Throws an exception with a single string parameter
  */
-void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len, int restore_stack TSRMLS_DC){
+void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len TSRMLS_DC){
 
 	zval *object, *msg;
 
@@ -41,16 +58,12 @@ void zephir_throw_exception_string(zend_class_entry *ce, const char *message, ze
 	zend_throw_exception_object(object TSRMLS_CC);
 
 	zval_ptr_dtor(&msg);
-
-	if (restore_stack) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
 }
 
 /**
  * Throws an exception with a single zval parameter
  */
-void zephir_throw_exception_zval(zend_class_entry *ce, zval *message, int restore_stack TSRMLS_DC){
+void zephir_throw_exception_zval(zend_class_entry *ce, zval *message TSRMLS_DC){
 
 	zval *object;
 
@@ -60,10 +73,6 @@ void zephir_throw_exception_zval(zend_class_entry *ce, zval *message, int restor
 	zephir_call_method_p1_noret(object, "__construct", message);
 
 	zend_throw_exception_object(object TSRMLS_CC);
-
-	if (restore_stack) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
 }
 
 /**
@@ -100,37 +109,3 @@ void zephir_throw_exception_internal(zval *exception TSRMLS_DC) {
 	EG(current_execute_data)->opline = EG(exception_op);
 
 }
-
-/*void zephir_try_execute(zval *success, zval *return_value, zval *call_object, zval *params, zval **exception TSRMLS_DC){
-
-	zval *fn = NULL;
-	int status = FAILURE;
-	zval *func_params[] = { call_object, params };
-
-	PHALCON_ALLOC_ZVAL(fn);
-	ZVAL_STRING(fn, "call_user_func_array", 0);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, 2, func_params TSRMLS_CC);
-	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function call_user_func_array()");
-	}
-
-	ZVAL_NULL(fn);
-	zval_ptr_dtor(&fn);
-
-	if (status == SUCCESS) {
-		zend_exception_restore(TSRMLS_C);
-		if (EG(exception)) {
-			zval_ptr_dtor(exception);
-			*exception = EG(exception);
-			EG(exception) = NULL;
-			EG(current_execute_data)->opline->opcode = 40;
-			ZVAL_BOOL(success, 0);
-		} else {
-			ZVAL_BOOL(success, 1);
-		}
-	} else {
-		ZVAL_BOOL(success, 0);
-	}
-
-}*/

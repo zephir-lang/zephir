@@ -1,6 +1,28 @@
 
-#ifndef ZEPHIR_MAIN_H
-#define ZEPHIR_MAIN_H 1
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
+#ifndef ZEPHIR_KERNEL_MAIN_H
+#define ZEPHIR_KERNEL_MAIN_H
+
+#include "Zend/zend_interfaces.h"
+#include "ext/spl/spl_exceptions.h"
+#include "ext/spl/spl_iterators.h"
 
 /** Main macros */
 #define PH_DEBUG 0
@@ -15,25 +37,15 @@
 #define PH_COPY 1024
 #define PH_CTOR 4096
 
-#define PH_FETCH_CLASS_SILENT (zend_bool) ZEND_FETCH_CLASS_SILENT TSRMLS_CC
-
 #define SL(str) ZEND_STRL(str)
 #define SS(str) ZEND_STRS(str)
+#define ISL(str) (zephir_interned_##str), (sizeof(#str)-1)
+#define ISS(str) (zephir_interned_##str), (sizeof(#str))
 
-/** SPL dependencies */
-#if defined(HAVE_SPL) && ((PHP_MAJOR_VERSION > 5) || (PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 1))
-extern ZEND_API zend_class_entry *zend_ce_iterator;
-extern ZEND_API zend_class_entry *zend_ce_arrayaccess;
-extern ZEND_API zend_class_entry *zend_ce_serializable;
-extern PHPAPI zend_class_entry *spl_ce_RuntimeException;
-extern PHPAPI zend_class_entry *spl_ce_Countable;
-extern PHPAPI zend_class_entry *spl_ce_SeekableIterator;
-extern PHPAPI zend_class_entry *spl_ce_BadMethodCallException;
-#endif
 
 /* Startup functions */
-extern void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC);
-extern zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_class_entry, char *parent_name TSRMLS_DC);
+extern void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC);
+extern zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC);
 
 /* Globals functions */
 extern int zephir_init_global(char *global, unsigned int global_length TSRMLS_DC);
@@ -47,14 +59,14 @@ extern int zephir_function_quick_exists_ex(const char *func_name, unsigned int f
 /* Count */
 extern void zephir_fast_count(zval *result, zval *array TSRMLS_DC);
 extern int zephir_fast_count_ev(zval *array TSRMLS_DC);
-extern int zephir_fast_count_int(zval *value TSRMLS_DC);
 
 /* Utils functions */
-extern void zephir_inherit_not_found(const char *class_name, const char *inherit_name);
 extern int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse);
+void zephir_safe_zval_ptr_dtor(zval *pzval);
+
 
 /* Fetch Parameters */
-extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int required_args, int optional_args, ...);
+extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...);
 
 /* Compatibility with PHP 5.3 */
 #ifndef ZVAL_COPY_VALUE
@@ -179,14 +191,14 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
  * Returns a zval in an object member
  */
 #define RETURN_MEMBER(object, member_name) \
-	zephir_return_property_quick(return_value, object, SL(member_name), zend_inline_hash_func(SS(member_name)) TSRMLS_CC); \
+	zephir_return_property_quick(return_value, return_value_ptr, object, SL(member_name), zend_inline_hash_func(SS(member_name)) TSRMLS_CC); \
 	return;
 
 /**
  * Returns a zval in an object member (quick)
  */
 #define RETURN_MEMBER_QUICK(object, member_name, key) \
- 	zephir_return_property_quick(return_value, object, SL(member_name), key TSRMLS_CC); \
+ 	zephir_return_property_quick(return_value, return_value_ptr, object, SL(member_name), key TSRMLS_CC); \
 	return;
 
 /** Return without change return_value */
@@ -203,16 +215,16 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 #define RETURN_MM_STRING(str, copy) ZEPHIR_MM_RESTORE(); RETURN_STRING(str, copy);
 #define RETURN_MM_EMPTY_STRING() ZEPHIR_MM_RESTORE(); RETURN_EMPTY_STRING();
 
-#define RETURN_MM_LONG(value) ZEPHIR_MM_RESTORE(); RETURN_LONG(value);
-#define RETURN_MM_DOUBLE(value) ZEPHIR_MM_RESTORE(); RETURN_DOUBLE(value);
-#define RETURN_MM_BOOL(value) ZEPHIR_MM_RESTORE(); RETURN_BOOL(value);
-
 /** Return empty array */
 #define RETURN_EMPTY_ARRAY() array_init(return_value); return;
 #define RETURN_MM_EMPTY_ARRAY() ZEPHIR_MM_RESTORE(); RETURN_EMPTY_ARRAY();
 
+/* Return long */
+#define RETURN_MM_LONG(value) ZEPHIR_MM_RESTORE(); RETURN_LONG(value);
+
 #ifndef IS_INTERNED
 #define IS_INTERNED(key) 0
+#define INTERNED_HASH(key) 0
 #endif
 
 /** Get the current hash key without copying the hash key */
@@ -227,7 +239,7 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		uint hash_index_len; \
 		ulong hash_num; \
 		 \
-		ZEPHIR_INIT_LNVAR(var); \
+		ZEPHIR_INIT_NVAR(var); \
 		hash_type = zend_hash_get_current_key_ex(hash, &hash_index, &hash_index_len, &hash_num, 0, &hash_pointer); \
 		if (hash_type == HASH_KEY_IS_STRING) { \
 			if (IS_INTERNED(hash_index)) { \
@@ -242,11 +254,19 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 		}\
 	}
 
-/** Check if an array is iterable or not */
-#define zephir_is_iterable(var, array_hash, hash_pointer, duplicate, reverse) if (!zephir_is_iterable_ex(var, array_hash, hash_pointer, duplicate, reverse)) { return; }
+/** Foreach */
+#define ZEPHIR_GET_FOREACH_KEY(var, hash, hash_pointer) ZEPHIR_GET_HMKEY(var, hash, hash_pointer)
 
-#define ZEPHIR_GET_FOREACH_VALUE(var, hd) \
-	ZEPHIR_OBSERVE_VAR(var); \
+/** Check if an array is iterable or not */
+#define zephir_is_iterable(var, array_hash, hash_pointer, duplicate, reverse) \
+	if (!zephir_is_iterable_ex(var, array_hash, hash_pointer, duplicate, reverse)) { \
+		zend_error(E_ERROR, "The argument is not iterable()"); \
+		ZEPHIR_MM_RESTORE(); \
+		return; \
+	}
+
+#define ZEPHIR_GET_FOREACH_VALUE(var) \
+	ZEPHIR_OBS_NVAR(var); \
 	var = *hd; \
 	Z_ADDREF_P(var);
 
@@ -256,46 +276,46 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 	Z_ADDREF_P(var);
 
 /** class/interface registering */
-#define ZEPHIR_REGISTER_CLASS(ns, class_name, name, methods, flags) \
+#define ZEPHIR_REGISTER_CLASS(ns, lower_ns, class_name, name, methods, flags) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		test_ ##name## _ce = zend_register_internal_class(&ce TSRMLS_CC); \
-		test_ ##name## _ce->ce_flags |= flags;  \
+		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce TSRMLS_CC); \
+		lower_ns## _ ##name## _ce->ce_flags |= flags;  \
 	}
 
-#define ZEPHIR_REGISTER_CLASS_EX(ns, class_name, name, parent, methods, flags) \
+#define ZEPHIR_REGISTER_CLASS_EX(ns, lower_ns, class_name, lcname, parent_ce, methods, flags) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		test_ ##name## _ce = zend_register_internal_class_ex(&ce, NULL, parent TSRMLS_CC); \
-		if (!test_ ##name## _ce) { \
-			zephir_inherit_not_found(parent, ZEND_NS_NAME(#ns, #class_name)); \
-			return FAILURE;	\
-		}  \
-		test_ ##name## _ce->ce_flags |= flags;  \
+		lower_ns## _ ##lcname## _ce = zend_register_internal_class_ex(&ce, parent_ce, NULL TSRMLS_CC); \
+		if (!lower_ns## _ ##lcname## _ce) { \
+			fprintf(stderr, "Phalcon Error: Class to extend '%s' was not found when registering class '%s'\n", (parent_ce ? parent_ce->name : "(null)"), ZEND_NS_NAME(#ns, #class_name)); \
+			return FAILURE; \
+		} \
+		lower_ns## _ ##lcname## _ce->ce_flags |= flags;  \
 	}
 
-#define ZEPHIR_REGISTER_INTERFACE(ns, classname, name, methods) \
+#define ZEPHIR_REGISTER_INTERFACE(ns, lower_ns, classname, name, methods) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		test_ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
+		##lower_ns## _ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
 	}
 
-#define ZEPHIR_REGISTER_INTERFACE_EX(ns, classname, name, parent, methods) \
+#define ZEPHIR_REGISTER_INTERFACE_EX(ns, lower_ns, classname, lcname, parent_ce, methods) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		test_ ##name## _ce = zephir_register_internal_interface_ex(&ce, parent TSRMLS_CC); \
-		if (!test_ ##name## _ce) { \
-			fprintf(stderr, "Can't register interface with parent: %s", parent); \
-			return FAILURE;	\
-		}  \
+		##lower_ns## _ ##lcname## _ce = zephir_register_internal_interface_ex(&ce, parent_ce TSRMLS_CC); \
+		if (!##lower_ns## _ ##lcname## _ce) { \
+			fprintf(stderr, "Can't register interface %s with parent %s\n", ZEND_NS_NAME(#ns, #classname), (parent_ce ? parent_ce->name : "(null)")); \
+			return FAILURE; \
+		} \
 	}
 
 /** Method declaration for API generation */
@@ -303,12 +323,44 @@ extern int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int r
 
 /** Low overhead parse/fetch parameters */
 #define zephir_fetch_params(memory_grow, required_params, optional_params, ...) \
-	if (zephir_fetch_parameters(memory_grow, ZEND_NUM_ARGS() TSRMLS_CC, required_params, optional_params, __VA_ARGS__) == FAILURE) { \
+	if (zephir_fetch_parameters(ZEND_NUM_ARGS() TSRMLS_CC, required_params, optional_params, __VA_ARGS__) == FAILURE) { \
 		if (memory_grow) { \
 			RETURN_MM_NULL(); \
 		} else { \
 			RETURN_NULL(); \
 		} \
 	}
+
+#define ZEPHIR_VERIFY_INTERFACE(instance, interface_ce) \
+	do { \
+		if (Z_TYPE_P(instance) != IS_OBJECT || !instanceof_function_ex(Z_OBJCE_P(instance), interface_ce, 1 TSRMLS_CC)) { \
+			char *buf; \
+			if (Z_TYPE_P(instance) != IS_OBJECT) { \
+				spprintf(&buf, 0, "Unexpected value type: expected object implementing %s, %s given", interface_ce->name, zend_zval_type_name(instance)); \
+			} \
+			else { \
+				spprintf(&buf, 0, "Unexpected value type: expected object implementing %s, object of type %s given", interface_ce->name, Z_OBJCE_P(instance)->name); \
+			} \
+			ZEPHIR_THROW_EXCEPTION_STR(spl_ce_LogicException, buf); \
+			efree(buf); \
+			return; \
+		} \
+	} while (0)
+
+#define ZEPHIR_VERIFY_CLASS(instance, class_ce) \
+	do { \
+		if (Z_TYPE_P(instance) != IS_OBJECT || !instanceof_function_ex(Z_OBJCE_P(instance), class_ce, 0 TSRMLS_CC)) { \
+			char *buf; \
+			if (Z_TYPE_P(instance) != IS_OBJECT) { \
+				spprintf(&buf, 0, "Unexpected value type: expected object of type %s, %s given", class_ce->name, zend_zval_type_name(instance)); \
+			} \
+			else { \
+				spprintf(&buf, 0, "Unexpected value type: expected object of type %s, object of type %s given", class_ce->name, Z_OBJCE_P(instance)->name); \
+			} \
+			ZEPHIR_THROW_EXCEPTION_STR(spl_ce_LogicException, buf); \
+			efree(buf); \
+			return; \
+		} \
+	} while (0)
 
 #endif

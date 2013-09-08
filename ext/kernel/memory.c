@@ -1,13 +1,35 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  |          Vladimir Kolesnikov <vladimir@extrememember.com>              |
+  +------------------------------------------------------------------------+
+*/
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "php.h"
+#include "main/php.h"
 #include "php_test.h"
+
+#include "Zend/zend_alloc.h"
 
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/backtrace.h"
 
 /*
  * Memory Frames/Virtual Symbol Scopes
@@ -132,327 +154,308 @@ inline void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC) {
 	Z_UNSET_ISREF_PP(dest);
 }
 
+static zephir_memory_entry* zephir_memory_grow_stack_common(zend_zephir_globals *zephir_globals_ptr)
+{
+	assert(zephir_globals_ptr->start_memory != NULL);
+	if (!zephir_globals_ptr->active_memory) {
+		zephir_globals_ptr->active_memory = zephir_globals_ptr->start_memory;
+		return zephir_globals_ptr->start_memory;
+	}
+
+	{
+		zephir_memory_entry *entry = (zephir_memory_entry *) ecalloc(1, sizeof(zephir_memory_entry));
+	/* ecalloc() will take care of these members
+		entry->pointer   = 0;
+		entry->capacity  = 0;
+		entry->addresses = NULL;
+		entry->hash_pointer   = 0;
+		entry->hash_capacity  = 0;
+		entry->hash_addresses = NULL;
+		entry->next = NULL;
+	*/
+		entry->prev       = zephir_globals_ptr->active_memory;
+		entry->prev->next = entry;
+		zephir_globals_ptr->active_memory = entry;
+		return entry;
+	}
+}
+
+static void zephir_memory_restore_stack_common(zend_zephir_globals *zephir_globals_ptr TSRMLS_DC) {
+
+	size_t i;
+	zephir_memory_entry *prev, *active_memory;
+	zephir_symbol_table *active_symbol_table;
+/*
+#if ZEND_DEBUG
+	char* __zend_filename = __FILE__;
+	char* __zend_orig_filename = __FILE__;
+	int __zend_lineno = 0;
+	int __zend_orig_lineno = 0;
+#endif
+*/
+
+	active_memory = zephir_globals_ptr->active_memory;
+	assert(active_memory != NULL);
+
+	if (likely(!CG(unclean_shutdown))) {
+		/* Clean active symbol table */
+		if (zephir_globals_ptr->active_symbol_table) {
+			active_symbol_table = zephir_globals_ptr->active_symbol_table;
+			if (active_symbol_table->scope == active_memory) {
+				zend_hash_destroy(EG(active_symbol_table));
+				FREE_HASHTABLE(EG(active_symbol_table));
+				EG(active_symbol_table) = active_symbol_table->symbol_table;
+				zephir_globals_ptr->active_symbol_table = active_symbol_table->prev;
+				efree(active_symbol_table);
+			}
+		}
+
+		/**
+		 * Check for non freed hash key zvals, mark as null to avoid string freeing
+		 */
+		for (i = 0; i < active_memory->hash_pointer; ++i) {
+			assert(active_memory->hash_addresses[i] != NULL && *(active_memory->hash_addresses[i]) != NULL);
+/*
+#if ZEND_DEBUG
+			_mem_block_check(*active_memory->hash_addresses[i], 1 ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);
+#endif
+*/
+			if (Z_REFCOUNT_PP(active_memory->hash_addresses[i]) <= 1) {
+				ZVAL_NULL(*active_memory->hash_addresses[i]);
+			} else {
+				zval_copy_ctor(*active_memory->hash_addresses[i]);
+			}
+		}
+
+#ifndef ZEPHIR_RELEASE
+		for (i = 0; i < active_memory->pointer; ++i) {
+			if (likely(active_memory->addresses[i] != NULL && *(active_memory->addresses[i]) != NULL)) {
+				zval **var = active_memory->addresses[i];
+/*
+#if ZEND_DEBUG
+				_mem_block_check(*var, 1 ZEND_FILE_LINE_RELAY_CC ZEND_FILE_LINE_ORIG_RELAY_CC);
+#endif
+*/
+#if PHP_VERSION_ID < 50400
+				if (Z_TYPE_PP(var) > IS_CONSTANT_ARRAY) {
+					fprintf(stderr, "%s: observed variable #%d (%p) has invalid type %u\n", __func__, (int)i, *var, Z_TYPE_PP(var));
+				}
+#else
+				if (Z_TYPE_PP(var) > IS_CALLABLE) {
+					fprintf(stderr, "%s: observed variable #%d (%p) has invalid type %u\n", __func__, (int)i, *var, Z_TYPE_PP(var));
+				}
+#endif
+
+				if (Z_REFCOUNT_PP(var) == 0) {
+					fprintf(stderr, "%s: observed variable #%d (%p) has 0 references\n", __func__, (int)i, *var);
+				}
+				else if (Z_REFCOUNT_PP(var) >= 1000000) {
+					fprintf(stderr, "%s: observed variable #%d (%p) has too many references (%u)\n", __func__, (int)i, *var, Z_REFCOUNT_PP(var));
+				}
+				else if (Z_REFCOUNT_PP(var) == 1 && Z_ISREF_PP(var)) {
+					fprintf(stderr, "%s: observed variable #%d (%p) is a reference with reference count = 1\n", __func__, (int)i, *var);
+				}
+			}
+		}
+#endif
+
+		/**
+		 * Traverse all zvals allocated, reduce the reference counting or free them
+		 */
+		for (i = 0; i < active_memory->pointer; ++i) {
+			if (likely(active_memory->addresses[i] != NULL && *(active_memory->addresses[i]) != NULL)) {
+				if (Z_REFCOUNT_PP(active_memory->addresses[i]) == 1) {
+					zval_ptr_dtor(active_memory->addresses[i]);
+				} else {
+					Z_DELREF_PP(active_memory->addresses[i]);
+				}
+			}
+		}
+	}
+
+	prev = active_memory->prev;
+
+	if (prev != NULL) {
+		if (active_memory->hash_addresses != NULL) {
+			efree(active_memory->hash_addresses);
+		}
+
+		if (likely(active_memory->addresses != NULL)) {
+			efree(active_memory->addresses);
+		}
+
+		efree(zephir_globals_ptr->active_memory);
+		zephir_globals_ptr->active_memory = prev;
+		prev->next = NULL;
+	} else {
+		assert(zephir_globals_ptr->start_memory == active_memory);
+		assert(active_memory->next == NULL);
+		active_memory->pointer      = 0;
+		active_memory->hash_pointer = 0;
+		zephir_globals_ptr->active_memory = NULL;
+	}
+}
+
+#ifndef ZEPHIR_RELEASE
+
+/**
+ * Finishes the current memory stack by releasing allocated memory
+ */
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
+{
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	if (unlikely(zephir_globals_ptr->active_memory == NULL)) {
+		fprintf(stderr, "WARNING: calling zephir_memory_restore_stack() without an active memory frame!\n");
+		zephir_print_backtrace();
+		return FAILURE;
+	}
+
+	if (unlikely(zephir_globals_ptr->active_memory->func != func)) {
+		fprintf(stderr, "Trying to free someone else's memory frame!\n");
+		fprintf(stderr, "The frame was created by %s\n", zephir_globals_ptr->active_memory->func);
+		fprintf(stderr, "Calling function: %s\n", func);
+		zephir_print_backtrace();
+	}
+
+	zephir_globals_ptr->active_memory->func = NULL;
+
+	zephir_memory_restore_stack_common(zephir_globals_ptr TSRMLS_CC);
+	return SUCCESS;
+}
+
 /**
  * Adds a memory frame in the current executed method
  */
-int ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D) {
+void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC) {
 
-	zephir_memory_entry *entry, *start;
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
-
-	if (!zephir_globals_ptr->start_memory) {
-		start = (zephir_memory_entry *) emalloc(sizeof(zephir_memory_entry));
-		start->pointer = -1;
-		start->hash_pointer = -1;
-		start->prev = NULL;
-		start->next = NULL;
-		zephir_globals_ptr->start_memory = start;
-		zephir_globals_ptr->active_memory = start;
-	}
-
-	entry = (zephir_memory_entry *) emalloc(sizeof(zephir_memory_entry));
-	entry->pointer = -1;
-	entry->hash_pointer = -1;
-	entry->prev = zephir_globals_ptr->active_memory;
-	zephir_globals_ptr->active_memory->next = entry;
-	zephir_globals_ptr->active_memory = entry;
-
-	return SUCCESS;
+	zephir_memory_entry *entry = zephir_memory_grow_stack_common(ZEPHIR_VGLOBAL);
+	entry->func = func;
+}
+#else
+/**
+ * Adds a memory frame in the current executed method
+ */
+void ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D) {
+	zephir_memory_grow_stack_common(ZEPHIR_VGLOBAL);
 }
 
 /**
  * Finishes the current memory stack by releasing allocated memory
  */
 int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D) {
-
-	register int i;
-	zephir_memory_entry *prev, *active_memory;
-	zephir_symbol_table *active_symbol_table;
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
-
-	active_memory = zephir_globals_ptr->active_memory;
-	if (active_memory == NULL) {
-		return FAILURE;
-	}
-
-	/*#ifndef ZEPHIR_RELEASE
-	//if(!ZEPHIR_GLOBAL(zephir_stack_stats)){
-	//	ZEPHIR_GLOBAL(zephir_stack_stats) += active_memory->pointer;
-	//	ZEPHIR_GLOBAL(zephir_number_grows)++;
-	//} else {
-	//	if (active_memory->pointer > ZEPHIR_GLOBAL(zephir_stack_stats)) {
-	//		ZEPHIR_GLOBAL(zephir_stack_stats) = active_memory->pointer;
-	//	}
-	//}
-	#endif*/
-
-	if (zephir_globals_ptr->active_symbol_table) {
-		active_symbol_table = zephir_globals_ptr->active_symbol_table;
-		if (active_symbol_table->scope == active_memory) {
-			zend_hash_destroy(EG(active_symbol_table));
-			FREE_HASHTABLE(EG(active_symbol_table));
-			EG(active_symbol_table) = active_symbol_table->symbol_table;
-			zephir_globals_ptr->active_symbol_table = active_symbol_table->prev;
-			efree(active_symbol_table);
-		}
-	}
-
-	/**
-	 * Check for non freed hash key zvals, mark as null to avoid string freeing
-	 */
-	if (active_memory->hash_pointer > -1) {
-		for (i = active_memory->hash_pointer; i >= 0; i--) {
-			if (Z_REFCOUNT_P(*active_memory->hash_addresses[i]) <= 1) {
-				ZVAL_NULL(*active_memory->hash_addresses[i]);
-			} else {
-				zval_copy_ctor(*active_memory->hash_addresses[i]);
-			}
-		}
-		efree(active_memory->hash_addresses);
-	}
-
-	/**
-	 * Traverse all zvals allocated, reduce the reference counting or free them
-	 */
-	if (active_memory->pointer > -1) {
-
-		//zephir_globals_ptr->zephir_stack_derivate[active_memory->pointer]++;
-
-		for (i = active_memory->pointer; i >= 0; i--) {
-
-			if (active_memory->addresses[i] == NULL) {
-				continue;
-			}
-
-			if ((Z_REFCOUNT_PP(active_memory->addresses[i]) - 1) == 0) {
-				zval_ptr_dtor(active_memory->addresses[i]);
-				active_memory->addresses[i] = NULL;
-			} else {
-				Z_DELREF_PP(active_memory->addresses[i]);
-				if (Z_REFCOUNT_PP(active_memory->addresses[i]) == 1) {
-					active_memory->addresses[i] = NULL;
-				}
-			}
-		}
-
-		efree(active_memory->addresses);
-	}
-
-	prev = active_memory->prev;
-	efree(zephir_globals_ptr->active_memory);
-	zephir_globals_ptr->active_memory = prev;
-	if (prev != NULL) {
-		zephir_globals_ptr->active_memory->next = NULL;
-		if (zephir_globals_ptr->active_memory == zephir_globals_ptr->start_memory) {
-			efree(zephir_globals_ptr->active_memory);
-			zephir_globals_ptr->start_memory = NULL;
-			zephir_globals_ptr->active_memory = NULL;
-		}
-	} else {
-		zephir_globals_ptr->start_memory = NULL;
-		zephir_globals_ptr->active_memory = NULL;
-	}
-
+	zephir_memory_restore_stack_common(ZEPHIR_VGLOBAL TSRMLS_CC);
 	return SUCCESS;
 }
+#endif
 
-/**
- * Finishes memory stack when PHP throws a fatal error
- */
-int ZEPHIR_FASTCALL zephir_clean_shutdown_stack(TSRMLS_D) {
+static void zephir_reallocate_memory(zephir_memory_entry *frame)
+{
+	void *buf = perealloc(frame->addresses, sizeof(zval **) * (frame->capacity + 16), unlikely(frame->prev == NULL));
+	if (likely(buf != NULL)) {
+		frame->capacity += 16;
+		frame->addresses = buf;
+	}
+	else {
+		zend_error(E_CORE_ERROR, "Memory allocation failed");
+	}
+}
 
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+static void zephir_reallocate_hmemory(zephir_memory_entry *frame)
+{
+	void *buf = perealloc(frame->hash_addresses, sizeof(zval **) * (frame->hash_capacity + 4), unlikely(frame->prev == NULL));
+	if (likely(buf != NULL)) {
+		frame->hash_capacity += 4;
+		frame->hash_addresses = buf;
+	}
+	else {
+		zend_error(E_CORE_ERROR, "Memory allocation failed");
+	}
+}
 
-	#if !ZEND_DEBUG && PHP_VERSION_ID <= 50400
+static inline void zephir_do_memory_observe(zval **var, zephir_memory_entry *frame)
+{
+#ifndef ZEPHIR_RELEASE
+	if (unlikely(frame == NULL)) {
+		TSRMLS_FETCH();
+		fprintf(stderr, "ZEPHIR_MM_GROW() must be called before using any of MM functions or macros!");
+		zephir_memory_grow_stack("N/A" TSRMLS_CC);
+	}
+#endif
 
-	zephir_memory_entry *prev, *active_memory = zephir_globals_ptr->active_memory;
-
-	while (active_memory != NULL) {
-
-		prev = active_memory->prev;
-		efree(active_memory);
-		active_memory = prev;
-		if (prev != NULL) {
-			active_memory->next = NULL;
-			if (active_memory == zephir_globals_ptr->start_memory) {
-				efree(active_memory);
-				zephir_globals_ptr->start_memory = NULL;
-				active_memory = NULL;
-			}
-		} else {
-			zephir_globals_ptr->start_memory = NULL;
-			active_memory = NULL;
-		}
-
+	if (unlikely(frame->pointer == frame->capacity)) {
+		zephir_reallocate_memory(frame);
 	}
 
-	#endif
-
-	zephir_globals_ptr->start_memory = NULL;
-	zephir_globals_ptr->active_memory = NULL;
-
-	return SUCCESS;
+	frame->addresses[frame->pointer] = var;
+	++frame->pointer;
 }
 
 /**
  * Observes a memory pointer to release its memory at the end of the request
  */
-int ZEPHIR_FASTCALL zephir_memory_observe(zval **var TSRMLS_DC) {
+void ZEPHIR_FASTCALL zephir_memory_observe(zval **var TSRMLS_DC) {
 
-	zephir_memory_entry *active_memory = ZEPHIR_GLOBAL(active_memory);
-
-	active_memory->pointer++;
-
-	/** Incremental dynamic reallocation saving memory */
-	if (active_memory->pointer <= 0) {
-		active_memory->addresses = emalloc(sizeof(zval **) * 8);
-	} else {
-		if (active_memory->pointer >= 8 && active_memory->pointer < 20) {
-			active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 20);
-		} else {
-			if (active_memory->pointer >= 20 && active_memory->pointer < 36) {
-				active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 36);
-			} else {
-				if (active_memory->pointer >= 36) {
-					active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * ZEPHIR_MAX_MEMORY_STACK);
-				}
-			}
-		}
-	}
-
-	#ifndef ZEPHIR_RELEASE
-	if (active_memory->pointer >= (ZEPHIR_MAX_MEMORY_STACK - 1)) {
-		fprintf(stderr, "ERROR: Phalcon memory stack is too small %d\n", ZEPHIR_MAX_MEMORY_STACK);
-		return FAILURE;
-	}
-	#endif
-
-	active_memory->addresses[active_memory->pointer] = var;
-	return SUCCESS;
+	zephir_do_memory_observe(var, ZEPHIR_GLOBAL(active_memory));
+	*var = NULL; /* In case an exception or error happens BEFORE the observed variable gets initialized */
 }
 
 /**
- * Observe a variable and allocates memory for it
+ * Observes a variable and allocates memory for it
  */
-int ZEPHIR_FASTCALL zephir_memory_alloc(zval **var TSRMLS_DC) {
+void ZEPHIR_FASTCALL zephir_memory_alloc(zval **var TSRMLS_DC) {
 
-	zephir_memory_entry *active_memory = ZEPHIR_GLOBAL(active_memory);
-
-	active_memory->pointer++;
-
-	/** Incremental dynamic reallocation saving memory */
-	if (active_memory->pointer <= 0) {
-		active_memory->addresses = emalloc(sizeof(zval **) * 8);
-	} else {
-		if (active_memory->pointer >= 8 && active_memory->pointer < 20) {
-			active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 20);
-		} else {
-			if (active_memory->pointer >= 20 && active_memory->pointer < 36) {
-				active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 36);
-			} else {
-				if (active_memory->pointer >= 36) {
-					active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * ZEPHIR_MAX_MEMORY_STACK);
-				}
-			}
-		}
-	}
-
-	#ifndef ZEPHIR_RELEASE
-	if (active_memory->pointer >= (ZEPHIR_MAX_MEMORY_STACK - 1)) {
-		fprintf(stderr, "ERROR: Phalcon memory stack is too small %d\n", ZEPHIR_MAX_MEMORY_STACK);
-		return FAILURE;
-	}
-	#endif
-
-	active_memory->addresses[active_memory->pointer] = var;
-
-	ALLOC_ZVAL(*var);
-	INIT_PZVAL(*var);
-	ZVAL_NULL(*var);
-
-	return SUCCESS;
+	zephir_do_memory_observe(var, ZEPHIR_GLOBAL(active_memory));
+	ALLOC_INIT_ZVAL(*var);
 }
 
 /**
- * Observe a variable and allocates memory for it
- * Marks hash key zvals to be nulled before be freed
+ * Observes a variable and allocates memory for it
+ * Marks hash key zvals to be nulled before freeing
  */
-int ZEPHIR_FASTCALL zephir_memory_alloc_pnull(zval **var TSRMLS_DC) {
+void ZEPHIR_FASTCALL zephir_memory_alloc_pnull(zval **var TSRMLS_DC) {
 
 	zephir_memory_entry *active_memory = ZEPHIR_GLOBAL(active_memory);
 
-	active_memory->pointer++;
+	zephir_do_memory_observe(var, active_memory);
+	ALLOC_INIT_ZVAL(*var);
 
-	/** Incremental dynamic reallocation saving memory */
-	if (active_memory->pointer <= 0) {
-		active_memory->addresses = emalloc(sizeof(zval **) * 8);
-	} else {
-		if (active_memory->pointer >= 8 && active_memory->pointer < 20) {
-			active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 20);
-		} else {
-			if (active_memory->pointer >= 20 && active_memory->pointer < 36) {
-				active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * 36);
-			} else {
-				if (active_memory->pointer >= 36) {
-					active_memory->addresses = erealloc(active_memory->addresses, sizeof(zval **) * ZEPHIR_MAX_MEMORY_STACK);
-				}
-			}
-		}
+	if (active_memory->hash_pointer == active_memory->hash_capacity) {
+		zephir_reallocate_hmemory(active_memory);
 	}
 
-	active_memory->hash_pointer++;
-
-	/** Incremental dynamic reallocation saving memory */
-	if (active_memory->hash_pointer <= 0) {
-		active_memory->hash_addresses = emalloc(sizeof(zval **) * 4);
-	} else {
-		if (active_memory->hash_pointer >= 4) {
-			active_memory->hash_addresses = erealloc(active_memory->hash_addresses, sizeof(zval **) * 16);
-		}
-	}
-
-	#ifndef ZEPHIR_RELEASE
-	if (active_memory->pointer >= (ZEPHIR_MAX_MEMORY_STACK - 1)) {
-		fprintf(stderr, "ERROR: Phalcon memory stack is too small %d\n", ZEPHIR_MAX_MEMORY_STACK);
-		return FAILURE;
-	}
-	#endif
-
-	active_memory->addresses[active_memory->pointer] = var;
 	active_memory->hash_addresses[active_memory->hash_pointer] = var;
-
-	ALLOC_ZVAL(*var);
-	INIT_PZVAL(*var);
-	ZVAL_NULL(*var);
-
-	return SUCCESS;
+	++active_memory->hash_pointer;
 }
 
 /**
  * Removes a memory pointer from the active memory pool
  */
-int ZEPHIR_FASTCALL zephir_memory_remove(zval **var TSRMLS_DC) {
+void ZEPHIR_FASTCALL zephir_memory_remove(zval **var TSRMLS_DC) {
 	zval_ptr_dtor(var);
 	*var = NULL;
-	return SUCCESS;
 }
 
 /**
  * Cleans the phalcon memory stack recursivery
  */
 int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D) {
-	while (ZEPHIR_GLOBAL(active_memory) != NULL) {
-		zephir_memory_restore_stack(TSRMLS_C);
+
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	while (zephir_globals_ptr->active_memory != NULL) {
+		zephir_memory_restore_stack_common(zephir_globals_ptr TSRMLS_CC);
 	}
+
 	return SUCCESS;
 }
 
 /**
  * Copies a variable only if its refcount is greater than 1
  */
-void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin) {
+void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destination, zval *origin) {
 	if (Z_REFCOUNT_P(origin) > 1) {
-		zval_copy_ctor(destiny);
+		zval_copy_ctor(destination);
 	} else {
 		ZVAL_NULL(origin);
 	}
@@ -464,15 +467,16 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin) {
 void zephir_create_symbol_table(TSRMLS_D) {
 
 	zephir_symbol_table *entry;
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	HashTable *symbol_table;
 
-	#ifndef ZEPHIR_RELEASE
+#ifndef ZEPHIR_RELEASE
 	if (!zephir_globals_ptr->active_memory) {
 		fprintf(stderr, "ERROR: Trying to create a virtual symbol table without a memory frame");
+		zephir_print_backtrace();
 		return;
 	}
-	#endif
+#endif
 
 	entry = (zephir_symbol_table *) emalloc(sizeof(zephir_symbol_table));
 	entry->scope = zephir_globals_ptr->active_memory;

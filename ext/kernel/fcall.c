@@ -1,4 +1,22 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -19,82 +37,13 @@
 
 #include "kernel/alternative/fcall.h"
 
-/**
- * Finds the correct scope to execute the function
- */
-static inline int zephir_find_scope(zend_class_entry *ce, char *method_name, int method_len, int lower, unsigned long hash TSRMLS_DC){
-
-	char *lcname;
-
-	if (lower) {
-		lcname = method_name;
-	} else {
-		lcname = zend_str_tolower_dup(method_name, method_len);
-	}
-
-	if (!hash) {
-		hash = zend_inline_hash_func(lcname, method_len + 1);
-	}
-
-	while (ce) {
-		if (zephir_hash_quick_exists(&ce->function_table, lcname, method_len + 1, hash)) {
-			EG(scope) = ce;
-			if (!lower) {
-				efree(lcname);
-			}
-			return SUCCESS;
-		}
-		ce = ce->parent;
-	}
-
-	if (!lower) {
-		if (lcname) {
-			efree(lcname);
-		}
-	}
-
-	return FAILURE;
-}
-
-/**
- * Find out the function scope on parent classes
- */
-static inline int zephir_find_parent_scope(zend_class_entry *ce, const char *active_class, int active_class_len, char *method_name, int method_len TSRMLS_DC){
-
-	char *lcname = zend_str_tolower_dup(method_name, method_len);
-	unsigned long hash = zend_inline_hash_func(lcname, method_len + 1);
-
-	while (ce) {
-		if (ce->name_length == active_class_len) {
-			if (!zend_binary_strcasecmp(ce->name, ce->name_length, active_class, active_class_len)) {
-				if (zephir_hash_quick_exists(&ce->function_table, lcname, method_len + 1, hash)) {
-					EG(scope) = ce;
-					efree(lcname);
-					return SUCCESS;
-				}
-			}
-		}
-		ce = ce->parent;
-	}
-
-	if (lcname) {
-		efree(lcname);
-	}
-
-	return FAILURE;
-}
-
-/**
- * Check if an object has a constructor
- */
-int zephir_has_constructor(const zval *object TSRMLS_DC){
-
-	zend_class_entry *ce = Z_OBJCE_P(object);
+int zephir_has_constructor_ce(zend_class_entry *ce) {
 
 	while (ce) {
 		if (ce->constructor) {
 			return 1;
 		}
+
 		ce = ce->parent;
 	}
 
@@ -102,822 +51,233 @@ int zephir_has_constructor(const zval *object TSRMLS_DC){
 }
 
 /**
- * This is a function to call PHP functions in a old-style secure way
+ * Check if an object has a constructor
  */
-static inline int zephir_call_func_internal(zval *return_value, const char *func_name, int func_length, int noreturn TSRMLS_DC){
+int zephir_has_constructor(const zval *object TSRMLS_DC){
 
-	zval *fn = NULL;
-	int status = FAILURE;
+	return zephir_has_constructor_ce(Z_OBJCE_P(object));
+}
 
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
+/**
+ * Calls a function/method in the PHP userland
+ */
+static int zephir_call_user_function(HashTable *function_table, zval **object_pp, zval *function_name, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count, zval *params[] TSRMLS_DC) {
+
+	zval ***params_array = NULL;
+	zval **static_params_array[10];
+	zval ***params_ptr;
+	zval *local_retval_ptr = NULL;
+	zend_uint i;
+	int ex_retval;
+	zend_fcall_info fci;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	if (retval_ptr_ptr && *retval_ptr_ptr) {
+		zval_ptr_dtor(retval_ptr_ptr);
+		*retval_ptr_ptr = NULL;
 	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
 
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
+	zephir_globals_ptr->recursive_lock++;
+
+	if (unlikely(zephir_globals_ptr->recursive_lock > 2048)) {
+		ex_retval = FAILURE;
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Maximum recursion depth exceeded");
+	} else {
+
+		if (param_count) {
+			if (unlikely(param_count > 10)) {
+				params_array = (zval ***) emalloc(param_count * sizeof(zval**));
+				params_ptr   = params_array;
+				for (i = 0; i < param_count; i++) {
+					params_array[i] = &params[i];
+				}
+			} else {
+				params_ptr = static_params_array;
+				for (i = 0; i < param_count; i++) {
+					static_params_array[i] = &params[i];
+				}
 			}
 		}
+		else {
+			params_ptr = NULL;
+		}
 
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
+		fci.size           = sizeof(fci);
+		fci.function_table = function_table;
+		fci.object_ptr     = object_pp ? *object_pp : NULL;
+		fci.function_name  = function_name;
+		fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
+		fci.param_count    = param_count;
+		fci.params         = params_ptr;
+		fci.no_separation  = 1;
+		fci.symbol_table   = NULL;
+
+		ex_retval = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, NULL TSRMLS_CC);
+
+		if (local_retval_ptr) {
+			if (Z_TYPE_P(local_retval_ptr) == IS_NULL) {
+				zval_ptr_dtor(&local_retval_ptr);
+			}
+			else {
+				COPY_PZVAL_TO_ZVAL(*retval_ptr, local_retval_ptr);
+			}
+		}
+		else if (!retval_ptr_ptr) {
+			INIT_ZVAL(*retval_ptr);
+		}
+
+		if (unlikely(params_array != NULL)) {
+			efree(params_array);
 		}
 	}
+
+	zephir_globals_ptr->recursive_lock--;
+
+	return ex_retval;
+}
+
+
+static void zephir_check_return_value(zval *return_value) {
+#ifndef ZEPHIR_RELEASE
+	int valid_return_value = 1;
+
+	assert(return_value != NULL);
+
+	if (Z_REFCOUNT_P(return_value) > 1) {
+		valid_return_value = 0;
+		fprintf(stderr, "return_value has %u references, expect crashes!\n", Z_REFCOUNT_P(return_value));
+	} else if (Z_TYPE_P(return_value) > IS_BOOL) {
+		valid_return_value = 0;
+		fprintf(stderr, "return_value is of complex type (%d), expect memory leaks (refcnt=%u)!\n", Z_TYPE_P(return_value), Z_REFCOUNT_P(return_value));
+	}
+
+	if (!valid_return_value) {
+		zephir_print_backtrace();
+		abort();
+	}
 #endif
+}
 
-	ZEPHIR_ALLOC_ZVAL(fn);
-	ZVAL_STRINGL(fn, func_name, func_length, 0);
+static int zephir_call_func_vparams(zval *return_value, zval **return_value_ptr, zval *func TSRMLS_DC, int param_count, va_list ap)
+{
+	zval **params_ptr, **params = NULL;
+	zval *static_params[10];
+	int free_params = 0, i, status, caller_wants_result = 1;
 
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, 0, NULL TSRMLS_CC);
+	if (!return_value) {
+		ALLOC_INIT_ZVAL(return_value);
+		caller_wants_result = 0;
+	}
+	else {
+		zephir_check_return_value(return_value);
+	}
+
+	if (param_count < 0) {
+		params      = va_arg(ap, zval**);
+		param_count = -param_count;
+		params_ptr  = params;
+	}
+	else if (param_count > 0 && param_count <= 10) {
+		params_ptr = static_params;
+		for (i=0; i<param_count; ++i) {
+			static_params[i] = va_arg(ap, zval*);
+		}
+	}
+	else if (unlikely(param_count > 10)) {
+		free_params = 1;
+		params      = (zval**)emalloc(param_count * sizeof(zval*));
+		params_ptr  = params;
+		for (i=0; i<param_count; ++i) {
+			params[i] = va_arg(ap, zval*);
+		}
+	}
+	else {
+		params_ptr = NULL;
+	}
+
+	status = zephir_call_user_function(EG(function_table), NULL, func, return_value, return_value_ptr, param_count, params_ptr TSRMLS_CC);
+
+	if (unlikely(free_params)) {
+		efree(params);
+	}
+
 	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s()", func_name);
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s()", Z_STRVAL_P(func));
 	}
-
-	ZVAL_NULL(fn);
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
+	else if (EG(exception)) {
 		status = FAILURE;
 	}
 
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
+	if (!caller_wants_result) {
+		zval_ptr_dtor(&return_value);
 	}
 
 	return status;
 }
 
-/**
- * This is an alternative function to call PHP functions (that requires parameters) in a faster way
- */
-static inline int zephir_call_func_params_internal(zval *return_value, const char *func_name, int func_length, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
+int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, va_list ap) {
 
-	zval *fn = NULL;
-	int status = FAILURE;
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
-
-	ZEPHIR_ALLOC_ZVAL(fn);
-	ZVAL_STRINGL(fn, func_name, func_length, 0);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, param_count, params TSRMLS_CC);
-	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s()", func_name);
-	}
-
-	ZVAL_NULL(fn);
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call single function which not requires parameters
- */
-int zephir_call_func_ex(zval *return_value, const char *func_name, int func_length, int noreturn TSRMLS_DC){
-	return zephir_call_func_internal(return_value, func_name, func_length, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires arbitrary number of parameters
- */
-int zephir_call_func_params(zval *return_value, const char *func_name, int func_length, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
-	return zephir_call_func_params_internal(return_value, func_name, func_length, param_count, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires only 1 parameter
- */
-int zephir_call_func_one_param(zval *return_value, const char *func_name, int func_length, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_func_params(return_value, func_name, func_length, 1, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires only 2 parameters
- */
-int zephir_call_func_two_params(zval *return_value, const char *func_name, int func_length, zval *param1, zval *param2, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_func_params(return_value, func_name, func_length, 2, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires only 3 parameters
- */
-int zephir_call_func_three_params(zval *return_value, const char *func_name, int func_length, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_func_params(return_value, func_name, func_length, 3, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires only 4 parameters
- */
-int zephir_call_func_four_params(zval *return_value, const char *func_name, int func_length, zval *param1, zval *param2, zval *param3, zval *param4, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4 };
-	return zephir_call_func_params(return_value, func_name, func_length, 4, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single function which requires only 5 parameters
- */
-int zephir_call_func_five_params(zval *return_value, const char *func_name, int func_length, zval *param1, zval *param2, zval *param3, zval *param4, zval *param5, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4, param5 };
-	return zephir_call_func_params(return_value, func_name, func_length, 5, params, noreturn TSRMLS_CC);
-}
-
-/**
- * This function implements a secure old-style way to call functions
- */
-static inline int zephir_call_method_internal(zval *return_value, zval *object, char *method_name, int method_len, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-
-	int status = FAILURE;
+	int i, status, free_params = -0, caller_wants_result = 1;
 	zend_class_entry *ce, *active_scope = NULL;
+	zval **params_ptr, **params = NULL;
+	zval *static_params[10];
 
-	if (Z_TYPE_P(object) != IS_OBJECT) {
+	if (unlikely(Z_TYPE_P(object) != IS_OBJECT)) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to method %s() on a non object", method_name);
-		zephir_memory_restore_stack(TSRMLS_C);
 		return FAILURE;
 	}
 
-	if (!noreturn) {
+	if (!return_value) {
 		ALLOC_INIT_ZVAL(return_value);
+		caller_wants_result = 0;
 	}
-#ifndef ZEPHIR_RELEASE
 	else {
-		int valid_return_value = 1;
+		zephir_check_return_value(return_value);
+	}
 
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
+	if (param_count < 0) {
+		params      = va_arg(ap, zval**);
+		param_count = -param_count;
+		params_ptr  = params;
+	}
+	else if (param_count > 0 && param_count <= 10) {
+		params_ptr = static_params;
+		for (i=0; i<param_count; ++i) {
+			static_params[i] = va_arg(ap, zval*);
 		}
 	}
-#endif
+	else if (unlikely(param_count > 10)) {
+		free_params = 1;
+		params      = (zval**)emalloc(param_count * sizeof(zval*));
+		params_ptr  = params;
+		for (i=0; i<param_count; ++i) {
+			params[i] = va_arg(ap, zval*);
+		}
+	}
+	else {
+		params_ptr = NULL;
+	}
 
+	ce           = Z_OBJCE_P(object);
 	active_scope = EG(scope);
+	EG(scope)    = ce;
+	status       = zephir_alt_call_user_method(ce, &object, method_name, method_len, return_value, return_value_ptr, param_count, params_ptr, method_key TSRMLS_CC);
+	EG(scope)    = active_scope;
 
-	/* Find class_entry scope */
-	ce = Z_OBJCE_P(object);
-	if (ce->parent) {
-		zephir_find_scope(ce, method_name, method_len, lower, method_key TSRMLS_CC);
-	} else {
-		EG(scope) = ce;
+	if (unlikely(free_params)) {
+		efree(params);
 	}
 
-	status = zephir_alt_call_user_method(ce, &object, method_name, method_len, return_value, 0, NULL, method_key TSRMLS_CC);
 	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined method %s()", method_name);
+		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined method %s::%s()", ce->name, method_name);
+		status = FAILURE;
 	}
-	EG(scope) = active_scope;
+	else if (EG(exception)) {
+		status = FAILURE;
+	}
 
-	if (!noreturn) {
+	if (!caller_wants_result) {
 		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call methods that require parameters in an old-style secure way
- */
-static inline int zephir_call_method_params_internal(zval *return_value, zval *object, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-
-	int status = FAILURE;
-	zend_class_entry *ce, *active_scope = NULL;
-
-	if (Z_TYPE_P(object) != IS_OBJECT) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to method %s() on a non object", method_name);
-		zephir_memory_restore_stack(TSRMLS_C);
-		return FAILURE;
-	}
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			 if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
-
-	active_scope = EG(scope);
-
-	/* Find class_entry scope */
-	ce = Z_OBJCE_P(object);
-	if (ce->parent) {
-		zephir_find_scope(ce, method_name, method_len, lower, method_key TSRMLS_CC);
-	} else {
-		EG(scope) = ce;
-	}
-
-	status = zephir_alt_call_user_method(ce, &object, method_name, method_len, return_value, param_count, params, method_key TSRMLS_CC);
-	if (status == FAILURE) {
-		EG(scope) = active_scope;
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined method %s() on class %s", method_name, ce->name);
-		status = FAILURE;
-	}
-	EG(scope) = active_scope;
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-		return_value = NULL;
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call method on an object that not requires parameters
- *
- */
-int zephir_call_method_ex(zval *return_value, zval *object, char *method_name, int method_len, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	return zephir_call_method_internal(return_value, object, method_name, method_len, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call a zval method on an object that not requires parameters
- *
- */
-int zephir_call_method_zval_ex(zval *return_value, zval *object, zval *method, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	if (likely(Z_TYPE_P(method) == IS_STRING)) {
-		return zephir_call_method_internal(return_value, object, Z_STRVAL_P(method), Z_STRLEN_P(method), noreturn, method_key, lower TSRMLS_CC);
-	}
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Method name must be string");
-	return FAILURE;
-}
-
-/**
- * Call method on an object that requires an arbitrary number of parameters
- *
- */
-int zephir_call_method_params(zval *return_value, zval *object, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	return zephir_call_method_params_internal(return_value, object, method_name, method_len, param_count, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call method on an object that requires only 1 parameter
- *
- */
-int zephir_call_method_one_param(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_method_params(return_value, object, method_name, method_len, 1, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call zval method on an object that requires only 1 parameter
- *
- */
-int zephir_call_method_zval_one_param(zval *return_value, zval *object, zval *method, zval *param1, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1 };
-	if (likely(Z_TYPE_P(method) == IS_STRING)) {
-		return zephir_call_method_params(return_value, object, Z_STRVAL_P(method), Z_STRLEN_P(method), 1, params, noreturn, method_key, lower TSRMLS_CC);
-	}
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Method name must be string");
-	return FAILURE;
-}
-
-/**
- * Call method on an object that requires only 2 parameters
- *
- */
-int zephir_call_method_two_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_method_params(return_value, object, method_name, method_len, 2, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call method on an object that requires only 3 parameters
- *
- */
-int zephir_call_method_three_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_method_params(return_value, object, method_name, method_len, 3, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call method on an object that requires only 3 parameters
- *
- */
-int zephir_call_method_zval_three_params(zval *return_value, zval *object, zval *method, zval *param1, zval *param2, zval *param3, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	if (likely(Z_TYPE_P(method) == IS_STRING)) {
-		return zephir_call_method_params(return_value, object, Z_STRVAL_P(method), Z_STRLEN_P(method), 3, params, noreturn, method_key, lower TSRMLS_CC);
-	}
-	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Method name must be string");
-	return FAILURE;
-}
-
-/**
- * Call method on an object that requires only 4 parameters
- *
- */
-int zephir_call_method_four_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4 };
-	return zephir_call_method_params(return_value, object, method_name, method_len, 4, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call method on an object that requires only 5 parameters
- *
- */
-int zephir_call_method_five_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, zval *param5, int noreturn, unsigned long method_key, int lower TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4, param5 };
-	return zephir_call_method_params(return_value, object, method_name, method_len, 5, params, noreturn, method_key, lower TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires an arbitrary number of parameters
- */
-inline int zephir_call_static_func_params(zval *return_value, char *class_name, int class_length, char *method_name, int method_length, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
-
-	zval *fn, *fn_class, *fn_method;
-	int status;
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
-
-	ALLOC_INIT_ZVAL(fn);
-	array_init_size(fn, 2);
-
-	ALLOC_INIT_ZVAL(fn_class);
-	ZVAL_STRINGL(fn_class, class_name, class_length, 0);
-	add_next_index_zval(fn, fn_class);
-
-	ALLOC_INIT_ZVAL(fn_method);
-	ZVAL_STRINGL(fn_method, method_name, method_length, 0);
-	add_next_index_zval(fn, fn_method);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, param_count, params TSRMLS_CC);
-	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", class_name, method_name);
-	}
-
-	ZVAL_NULL(fn_class);
-	ZVAL_NULL(fn_method);
-
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call single static function which not requires parameters
- */
-inline int zephir_call_static_func(zval *return_value, char *class_name, int class_length, char *method_name, int method_length, int noreturn TSRMLS_DC){
-
-	zval *fn, *fn_class, *fn_method;
-	int status = FAILURE;
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
-
-	ALLOC_INIT_ZVAL(fn);
-	array_init_size(fn, 2);
-
-	ALLOC_INIT_ZVAL(fn_class);
-	ZVAL_STRINGL(fn_class, class_name, class_length, 0);
-	add_next_index_zval(fn, fn_class);
-
-	ALLOC_INIT_ZVAL(fn_method);
-	ZVAL_STRINGL(fn_method, method_name, method_length, 0);
-	add_next_index_zval(fn, fn_method);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, 0, NULL TSRMLS_CC);
-	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", class_name, method_name);
-	}
-
-	ZVAL_NULL(fn_class);
-	ZVAL_NULL(fn_method);
-
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call parent static function which not requires parameters
- */
-int zephir_call_parent_func(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, int noreturn TSRMLS_DC){
-
-	int success;
-	zend_class_entry *active_scope = NULL;
-
-	if (object) {
-		active_scope = EG(scope);
-		zephir_find_parent_scope(Z_OBJCE_P(object), active_class, active_class_len, method_name, method_len TSRMLS_CC);
-	}
-
-	success = zephir_call_static_func(return_value, SL("parent"), method_name, method_len, noreturn TSRMLS_CC);
-	if (object) {
-		EG(scope) = active_scope;
-	}
-
-	return success;
-}
-
-/**
- * Call parent static function that requires an arbitrary number of parameters
- */
-int zephir_call_parent_func_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
-
-	int success;
-	zend_class_entry *active_scope = NULL;
-
-	if (object) {
-		active_scope = EG(scope);
-		zephir_find_parent_scope(Z_OBJCE_P(object), active_class, active_class_len, method_name, method_len TSRMLS_CC);
-	}
-
-	success = zephir_call_static_func_params(return_value, SL("parent"), method_name, method_len, param_count, params, noreturn TSRMLS_CC);
-
-	if (object) {
-		EG(scope) = active_scope;
-	}
-
-	return success;
-}
-
-/**
- * Call parent static function that requires one parameter
- */
-int zephir_call_parent_func_one_param(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_parent_func_params(return_value, object, active_class, active_class_len, method_name, method_len, 1, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call parent static function that requires two parameters
- */
-int zephir_call_parent_func_two_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, zval *param2, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_parent_func_params(return_value, object, active_class, active_class_len, method_name, method_len, 2, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call parent static function that requires three parameters
- */
-int zephir_call_parent_func_three_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_parent_func_params(return_value, object, active_class, active_class_len, method_name, method_len, 3, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call parent static function that requires four parameters
- */
-int zephir_call_parent_func_four_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4 };
-	return zephir_call_parent_func_params(return_value, object, active_class, active_class_len, method_name, method_len, 4, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call parent static function that requires five parameters
- */
-int zephir_call_parent_func_five_params(zval *return_value, zval *object, char *active_class, int active_class_len, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, zval *param5, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4, param5 };
-	return zephir_call_parent_func_params(return_value, object, active_class, active_class_len, method_name, method_len, 5, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call self-class static function which not requires parameters
- */
-int zephir_call_self_func(zval *return_value, zval *object, zend_class_entry *current_ce, char *method_name, int method_len, int noreturn TSRMLS_DC) {
-
-	int success;
-	zend_class_entry *ce, *active_scope = NULL;
-
-	if (object) {
-		active_scope = EG(scope);
-		ce = Z_OBJCE_P(object);
-		if (ce->parent) {
-			zephir_find_scope(ce, method_name, method_len, 0, 0 TSRMLS_CC);
-		} else {
-			EG(scope) = ce;
-		}
-	} else {
-		active_scope = EG(scope);
-		EG(scope) = current_ce;
-	}
-
-	success = zephir_call_static_func(return_value, SL("self"), method_name, method_len, noreturn TSRMLS_CC);
-	if (object) {
-		EG(scope) = active_scope;
-	} else {
-		EG(scope) = active_scope;
-	}
-
-	return success;
-}
-
-/**
- * Call self-class static function which requires parameters
- */
-inline int zephir_call_self_func_params(zval *return_value, zval *object, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
-
-	int success;
-	zend_class_entry *ce, *active_scope = NULL;
-
-	if (object) {
-		active_scope = EG(scope);
-		ce = Z_OBJCE_P(object);
-		if (ce->parent) {
-			zephir_find_scope(ce, method_name, method_len, 0, 0 TSRMLS_CC);
-		} else {
-			EG(scope) = ce;
-		}
-	}
-
-	success = zephir_call_static_func_params(return_value, SL("self"), method_name, method_len, param_count, params, noreturn TSRMLS_CC);
-	if (object) {
-		EG(scope) = active_scope;
-	}
-
-	return success;
-}
-
-int zephir_call_self_func_one_param(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_self_func_params(return_value, object, method_name, method_len, 1, params, noreturn TSRMLS_CC);
-}
-
-int zephir_call_self_func_two_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_self_func_params(return_value, object, method_name, method_len, 2, params, noreturn TSRMLS_CC);
-}
-
-int zephir_call_self_func_three_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_self_func_params(return_value, object, method_name, method_len, 3, params, noreturn TSRMLS_CC);
-}
-
-int zephir_call_self_func_four_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4 };
-	return zephir_call_self_func_params(return_value, object, method_name, method_len, 4, params, noreturn TSRMLS_CC);
-}
-
-int zephir_call_self_func_five_params(zval *return_value, zval *object, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, zval *param5, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4, param5 };
-	return zephir_call_self_func_params(return_value, object, method_name, method_len, 5, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires one parameter
- */
-int zephir_call_static_func_one_param(zval *return_value, char *class_name, int class_length, char *method_name, int method_len, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_static_func_params(return_value, class_name, class_length, method_name, method_len, 1, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires two parameters
- */
-int zephir_call_static_func_two_params(zval *return_value, char *class_name, int class_length, char *method_name, int method_len, zval *param1, zval *param2, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_static_func_params(return_value, class_name, class_length, method_name, method_len, 2, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires three parameters
- */
-int zephir_call_static_func_three_params(zval *return_value, char *class_name, int class_length, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_static_func_params(return_value, class_name, class_length, method_name, method_len, 3, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires four parameters
- */
-int zephir_call_static_func_four_params(zval *return_value, char *class_name, int class_length, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4 };
-	return zephir_call_static_func_params(return_value, class_name, class_length, method_name, method_len, 4, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function that requires five parameters
- */
-int zephir_call_static_func_five_params(zval *return_value, char *class_name, int class_length, char *method_name, int method_len, zval *param1, zval *param2, zval *param3, zval *param4, zval *param5, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3, param4, param5 };
-	return zephir_call_static_func_params(return_value, class_name, class_length, method_name, method_len, 5, params, noreturn TSRMLS_CC);
-}
-
-/**
- * Call single static function on a zval which not requires any parameter
- */
-int zephir_call_static_zval_func(zval *return_value, zval *mixed_name, zval *method, int noreturn TSRMLS_DC){
-
-	zval *fn;
-	int status = FAILURE;
-
-	if (Z_TYPE_P(method) != IS_STRING) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::not-callable()");
-		zephir_memory_restore_stack(TSRMLS_C);
-		return FAILURE;
-	}
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
-
-	Z_ADDREF_P(mixed_name);
-
-	ALLOC_INIT_ZVAL(fn);
-	array_init_size(fn, 2);
-	add_next_index_zval(fn, mixed_name);
-	add_next_index_zval(fn, method);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, 0, NULL TSRMLS_CC);
-	if (status == FAILURE) {
-		if (Z_TYPE_P(mixed_name) == IS_STRING) {
-			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", Z_STRVAL_P(mixed_name), Z_STRVAL_P(method));
-		} else {
-			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::%s()", Z_STRVAL_P(method));
-		}
-	}
-
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
 	}
 
 	return status;
@@ -926,105 +286,19 @@ int zephir_call_static_zval_func(zval *return_value, zval *mixed_name, zval *met
 /**
  * Call single static function on a zval which requires parameters
  */
-inline int zephir_call_static_zval_func_params(zval *return_value, zval *mixed_name, zval *method, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
+static int zephir_call_static_zval_str_func_vparams(zval *return_value, zval **return_value_ptr, zval *mixed_name, char *method_name, int method_len TSRMLS_DC, int param_count, va_list ap) {
 
-	zval *fn;
-	int status = FAILURE;
+	zval **params_ptr, **params = NULL, *fn;
+	zval *static_params[10];
+	int free_params = 0, i, status, caller_wants_result = 1;
 
-	if (Z_TYPE_P(method) != IS_STRING) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::not-callable()");
-		zephir_memory_restore_stack(TSRMLS_C);
-		return FAILURE;
-	}
-
-	if (!noreturn) {
+	if (!return_value) {
 		ALLOC_INIT_ZVAL(return_value);
+		caller_wants_result = 0;
 	}
-#ifndef ZEPHIR_RELEASE
 	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
+		zephir_check_return_value(return_value);
 	}
-#endif
-
-	Z_ADDREF_P(mixed_name);
-
-	ALLOC_INIT_ZVAL(fn);
-	array_init_size(fn, 2);
-	add_next_index_zval(fn, mixed_name);
-	add_next_index_zval(fn, method);
-
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, param_count, params TSRMLS_CC);
-	if (status == FAILURE) {
-		if (Z_TYPE_P(mixed_name) == IS_STRING) {
-			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", Z_STRVAL_P(mixed_name), Z_STRVAL_P(method));
-		} else {
-			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::%s()", Z_STRVAL_P(method));
-		}
-	}
-
-	zval_ptr_dtor(&fn);
-
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Call single static function on a zval which requires parameters
- */
-inline int zephir_call_static_zval_str_func_params(zval *return_value, zval *mixed_name, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
-
-	zval *fn;
-	int status = FAILURE;
-
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
-
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
-
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
 
 	Z_ADDREF_P(mixed_name);
 
@@ -1033,7 +307,35 @@ inline int zephir_call_static_zval_str_func_params(zval *return_value, zval *mix
 	add_next_index_zval(fn, mixed_name);
 	add_next_index_stringl(fn, method_name, method_len, 1);
 
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, param_count, params TSRMLS_CC);
+	if (param_count < 0) {
+		params      = va_arg(ap, zval**);
+		param_count = -param_count;
+		params_ptr  = params;
+	}
+	else if (param_count > 0 && param_count <= 10) {
+		params_ptr = static_params;
+		for (i=0; i<param_count; ++i) {
+			static_params[i] = va_arg(ap, zval*);
+		}
+	}
+	else if (unlikely(param_count > 10)) {
+		free_params = 1;
+		params      = (zval**)emalloc(param_count * sizeof(zval*));
+		params_ptr  = params;
+		for (i=0; i<param_count; ++i) {
+			params[i] = va_arg(ap, zval*);
+		}
+	}
+	else {
+		params_ptr = NULL;
+	}
+
+	status = zephir_call_user_function(EG(function_table), NULL, fn, return_value, return_value_ptr, param_count, params_ptr TSRMLS_CC);
+
+	if (unlikely(free_params)) {
+		efree(params);
+	}
+
 	if (status == FAILURE) {
 		if (Z_TYPE_P(mixed_name) == IS_STRING) {
 			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", Z_STRVAL_P(mixed_name), method_name);
@@ -1041,167 +343,209 @@ inline int zephir_call_static_zval_str_func_params(zval *return_value, zval *mix
 			php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::%s()", method_name);
 		}
 	}
+	else if (EG(exception)) {
+		status = FAILURE;
+	}
 
 	zval_ptr_dtor(&fn);
 
-	if (!noreturn) {
+	if (!caller_wants_result) {
 		zval_ptr_dtor(&return_value);
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
 	}
 
 	return status;
 }
 
 /**
- * Call single static function on a zval that requires one parameter
+ * @brief Calls function @a func_name which accepts @a param_count arguments @a params
+ * @param[out] Return value; set to @c NULL if the return value is not needed
+ * @param func_name Function name
+ * @param func_length Length of the function name
+ * @param param_count Number of arguments
+ * @param params Arguments
+ * @return Whether the call succeeded
+ * @retval @c SUCCESS
+ * @retval @c FAILURE
  */
-int zephir_call_static_zval_func_one_param(zval *return_value, zval *mixed_name, zval *method, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_static_zval_func_params(return_value, mixed_name, method, 1, params, noreturn TSRMLS_CC);
+int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...) {
+	zval fn;
+	int status;
+	va_list ap;
+
+	INIT_ZVAL(fn);
+	ZVAL_STRINGL(&fn, func_name, func_length, 0);
+
+	va_start(ap, param_count);
+	status = zephir_call_func_vparams(return_value, return_value_ptr, &fn TSRMLS_CC, param_count, ap);
+	va_end(ap);
+
+	return status;
 }
 
 /**
- * Call single static function on a zval that requires one parameter
+ * @brief Calls methid @a method_name from @a object which accepts @a param_count arguments @a params
+ * @param[out] Return value; set to @c NULL if the return value is not needed
+ * @param object Object
+ * @param method_name Method name
+ * @param method_length Length of the method name
+ * @param param_count Number of arguments
+ * @param params Arguments
+ * @return Whether the call succeeded
+ * @retval @c SUCCESS
+ * @retval @c FAILURE
  */
-int zephir_call_static_zval_str_func_one_param(zval *return_value, zval *mixed_name, char *method_name, int method_len, zval *param1, int noreturn TSRMLS_DC){
-	zval *params[] = { param1 };
-	return zephir_call_static_zval_str_func_params(return_value, mixed_name, method_name, method_len, 1, params, noreturn TSRMLS_CC);
+int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...) {
+
+	int status;
+	va_list ap;
+
+	va_start(ap, param_count);
+	status = zephir_call_method_vparams(return_value, return_value_ptr, object, method_name, method_len, method_key TSRMLS_CC, param_count, ap);
+	va_end(ap);
+
+	return status;
 }
 
-/**
- * Call single static function on a zval that requires one parameter
- */
-int zephir_call_static_zval_func_two_params(zval *return_value, zval *mixed_name, zval *method, int method_len, zval *param1, zval *param2, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2 };
-	return zephir_call_static_zval_func_params(return_value, mixed_name, method, 2, params, noreturn TSRMLS_CC);
+int zephir_call_method_zval_params(zval *return_value, zval **return_value_ptr, zval *object, zval *method TSRMLS_DC, int param_count, ...)
+{
+	if (likely(Z_TYPE_P(method) == IS_STRING)) {
+		va_list ap;
+		int status;
+		char *m = Z_STRVAL_P(method);
+
+		va_start(ap, param_count);
+		status = zephir_call_method_vparams(return_value, return_value_ptr, object, m, Z_STRLEN_P(method), (IS_INTERNED(m) ? INTERNED_HASH(m) : 0) TSRMLS_CC, param_count, ap);
+		va_end(ap);
+
+		return status;
+	}
+
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Method name must be string");
+	return FAILURE;
 }
 
-/**
- * Call single static function on a zval that requires one parameter
- */
-int zephir_call_static_zval_func_three_params(zval *return_value, zval *mixed_name, zval *method, zval *param1, zval *param2, zval *param3, int noreturn TSRMLS_DC){
-	zval *params[] = { param1, param2, param3 };
-	return zephir_call_static_zval_func_params(return_value, mixed_name, method, 3, params, noreturn TSRMLS_CC);
-}
 
 /**
- * Call single static function direct on a zend_class_entry which requires parameters
+ * Call single static function that requires an arbitrary number of parameters
  */
-int zephir_call_static_ce_func_params(zval *return_value, zend_class_entry *ce, char *method_name, int method_len, zend_uint param_count, zval *params[], int noreturn TSRMLS_DC){
+int zephir_call_static_func_params(zval *return_value, zval **return_value_ptr, char *class_name, int class_length, char *method_name, int method_length TSRMLS_DC, int param_count, ...) {
 
-	zval *fn;
+	zval cls;
+	va_list ap;
 	int status;
 
-	if (!noreturn) {
-		ALLOC_INIT_ZVAL(return_value);
-	}
-#ifndef ZEPHIR_RELEASE
-	else {
-		int valid_return_value = 1;
+	INIT_ZVAL(cls);
+	ZVAL_STRINGL(&cls, class_name, class_length, 0);
 
-		if (Z_REFCOUNT_P(return_value) > 1) {
-			valid_return_value = 0;
-			fprintf(stderr, "%s: return_value has %d references, expect crashes!\n", "zephir_call_func_internal", Z_REFCOUNT_P(return_value));
-		} else {
-			if (Z_TYPE_P(return_value) > IS_BOOL) {
-				valid_return_value = 0;
-				fprintf(stderr, "%s: return_value is of complex type (%d), expect memory leaks!\n", "zephir_call_func_internal", Z_TYPE_P(return_value));
-			}
-		}
+	va_start(ap, param_count);
+	status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, &cls, method_name, method_length TSRMLS_CC, param_count, ap);
+	va_end(ap);
 
-		if (!valid_return_value) {
-			ZEPHIR_INIT_NVAR(return_value);
-			zephir_print_backtrace();
-		}
-	}
-#endif
+	assert(!Z_ISREF_P(&cls));
+	assert(Z_REFCOUNT_P(&cls) == 1);
+	return status;
+}
 
-	ALLOC_INIT_ZVAL(fn);
-	array_init_size(fn, 2);
-	add_next_index_stringl(fn, ce->name, ce->name_length, 0);
-	add_next_index_stringl(fn, method_name, method_len, 0);
+/**
+ * Call parent static function that requires an arbitrary number of parameters
+ */
+int zephir_call_parent_func_params(zval *return_value, zval **return_value_ptr, zval *object, zend_class_entry *active_class_ce, char *method_name, int method_len TSRMLS_DC, int param_count, ...) {
 
-	status = zephir_call_user_function(CG(function_table), NULL, fn, return_value, param_count, params TSRMLS_CC);
-	if (status == FAILURE) {
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function %s::%s()", ce->name, method_name);
+	zval cls;
+	int status;
+	zend_class_entry *active_scope;
+	va_list ap;
+
+	if (object) {
+		active_scope = EG(scope);
+		EG(scope)    = active_class_ce;
 	}
 
-	if (!noreturn) {
-		zval_ptr_dtor(&return_value);
-	}
+	INIT_ZVAL(cls);
+	ZVAL_STRING(&cls, "parent", 0);
 
-	if (EG(exception)) {
-		status = FAILURE;
-	}
+	va_start(ap, param_count);
+	status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, &cls, method_name, method_len TSRMLS_CC, param_count, ap);
+	va_end(ap);
 
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
+	if (object) {
+		EG(scope) = active_scope;
 	}
 
 	return status;
-
 }
+
+/**
+ * Call self-class static function which requires parameters
+ */
+int zephir_call_self_func_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len TSRMLS_DC, int param_count, ...) {
+
+	int status;
+	zend_class_entry *active_scope;
+	va_list ap;
+	zval cls;
+
+	if (object) {
+		active_scope = EG(scope);
+		EG(scope)    = Z_OBJCE_P(object);
+	}
+
+	INIT_ZVAL(cls);
+	ZVAL_STRING(&cls, "self", 0);
+
+	va_start(ap, param_count);
+	status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, &cls, method_name, method_len TSRMLS_CC, param_count, ap);
+	va_end(ap);
+
+	if (object) {
+		EG(scope) = active_scope;
+	}
+
+	return status;
+}
+
+/**
+ * Call single static function on a zval which requires parameters
+ */
+int zephir_call_static_zval_func_params(zval *return_value, zval **return_value_ptr, zval *mixed_name, zval *method TSRMLS_DC, int param_count, ...) {
+
+	if (likely(Z_TYPE_P(method) == IS_STRING)) {
+		int status;
+		va_list ap;
+
+		va_start(ap, param_count);
+		status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, mixed_name, Z_STRVAL_P(method), Z_STRLEN_P(method) TSRMLS_CC, param_count, ap);
+		va_end(ap);
+
+		return status;
+	}
+
+	php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined function not-callable::not-callable()");
+	return FAILURE;
+}
+
+int zephir_call_static_zval_str_func_params(zval *return_value, zval **return_value_ptr, zval *mixed_name, char *method_name, int method_len TSRMLS_DC, int param_count, ...) {
+
+	int status;
+	va_list ap;
+
+	va_start(ap, param_count);
+	status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, mixed_name, method_name, method_len TSRMLS_CC, param_count, ap);
+	va_end(ap);
+
+	return status;
+}
+
 
 /**
  * Replaces call_user_func_array avoiding function lookup
  */
 int zephir_call_user_func_array(zval *return_value, zval *handler, zval *params TSRMLS_DC){
 
-	zval *retval_ptr = NULL;
-	zend_fcall_info fci;
-	zend_fcall_info_cache fci_cache;
-	char *is_callable_error = NULL;
-	int status = FAILURE;
-
-	if (Z_TYPE_P(params) != IS_ARRAY) {
-		ZVAL_NULL(return_value);
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_call_user_func_array()");
-		zephir_memory_restore_stack(TSRMLS_C);
-		return FAILURE;
-	}
-
-	if (zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error TSRMLS_CC) == SUCCESS) {
-		if (is_callable_error) {
-			zend_error(E_STRICT, "%s", is_callable_error);
-			efree(is_callable_error);
-		}
-		status = SUCCESS;
-	} else {
-		if (is_callable_error) {
-			zend_error(E_WARNING, "%s", is_callable_error);
-			efree(is_callable_error);
-		} else {
-			status = SUCCESS;
-		}
-	}
-
-	if (status == SUCCESS) {
-
-		zend_fcall_info_args(&fci, params TSRMLS_CC);
-		fci.retval_ptr_ptr = &retval_ptr;
-
-		if (zend_call_function(&fci, &fci_cache TSRMLS_CC) == SUCCESS && fci.retval_ptr_ptr && *fci.retval_ptr_ptr) {
-			COPY_PZVAL_TO_ZVAL(*return_value, *fci.retval_ptr_ptr);
-		}
-
-		if (fci.params) {
-			efree(fci.params);
-		}
-	}
+	int status = zephir_call_user_func_array_noex(return_value, handler, params TSRMLS_CC);
 
 	if (EG(exception)) {
 		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
 	}
 
 	return status;
@@ -1219,10 +563,9 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	char *is_callable_error = NULL;
 	int status = FAILURE;
 
-	if (Z_TYPE_P(params) != IS_ARRAY) {
+	if (params && Z_TYPE_P(params) != IS_ARRAY) {
 		ZVAL_NULL(return_value);
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_call_user_func_array_noex()");
-		zephir_memory_restore_stack(TSRMLS_C);
 		return FAILURE;
 	}
 
@@ -1259,143 +602,10 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 		status = SUCCESS;
 	}
 
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
 	return status;
-}
-
-/**
- * Replaces call_user_func avoiding function lookup, this function does not accept parameters
- */
-int zephir_call_user_func(zval *return_value, zval *handler TSRMLS_DC){
-
-	zval *retval_ptr = NULL;
-	zend_fcall_info fci;
-	zend_fcall_info_cache fci_cache;
-	char *is_callable_error = NULL;
-	int status = FAILURE;
-
-	if (zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error TSRMLS_CC) == SUCCESS) {
-		if (is_callable_error) {
-			zend_error(E_STRICT, "%s", is_callable_error);
-			efree(is_callable_error);
-		}
-		status = SUCCESS;
-	} else {
-		if (is_callable_error) {
-			zend_error(E_WARNING, "%s", is_callable_error);
-			efree(is_callable_error);
-		} else {
-			status = SUCCESS;
-		}
-	}
-
-	if (likely(status == SUCCESS)) {
-
-		fci.param_count = 0;
-		fci.retval_ptr_ptr = &retval_ptr;
-
-		if (zend_call_function(&fci, &fci_cache TSRMLS_CC) == SUCCESS && fci.retval_ptr_ptr && *fci.retval_ptr_ptr) {
-			COPY_PZVAL_TO_ZVAL(*return_value, *fci.retval_ptr_ptr);
-		}
-
-		if (fci.params) {
-			efree(fci.params);
-		}
-	}
-
-	if (EG(exception)) {
-		status = FAILURE;
-	}
-
-	if (status == FAILURE) {
-		zephir_memory_restore_stack(TSRMLS_C);
-	}
-
-	return status;
-}
-
-/**
- * Calls a function/method in the PHP userland
- */
-int zephir_call_user_function(HashTable *function_table, zval **object_pp, zval *function_name, zval *retval_ptr, zend_uint param_count, zval *params[] TSRMLS_DC) {
-
-	zval ***params_array = NULL;
-	zval **static_params_array[5];
-	zend_uint i;
-	int ex_retval;
-	zval *local_retval_ptr = NULL;
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
-
-	zephir_globals_ptr->recursive_lock++;
-
-	if (unlikely(zephir_globals_ptr->recursive_lock > 2048)) {
-		ex_retval = FAILURE;
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Maximum recursion depth exceeded");
-	} else {
-
-		if (param_count) {
-			if (param_count > 5) {
-				params_array = (zval ***) emalloc(sizeof(zval **) * param_count);
-				for (i = 0; i < param_count; i++) {
-					params_array[i] = &params[i];
-				}
-			} else {
-				for (i = 0; i < param_count; i++) {
-					static_params_array[i] = &params[i];
-				}
-			}
-		}
-
-		if (likely(param_count > 5)) {
-			ex_retval = ZEPHIR_CALL_USER_FUNCTION_EX(function_table, object_pp, function_name, &local_retval_ptr, param_count, params_array, 1, NULL TSRMLS_CC);
-		} else {
-			ex_retval = ZEPHIR_CALL_USER_FUNCTION_EX(function_table, object_pp, function_name, &local_retval_ptr, param_count, static_params_array, 1, NULL TSRMLS_CC);
-		}
-	}
-
-	zephir_globals_ptr->recursive_lock--;
-
-	if (local_retval_ptr) {
-		if (Z_TYPE_P(local_retval_ptr) == IS_NULL) {
-			zval_ptr_dtor(&local_retval_ptr);
-		} else {
-			COPY_PZVAL_TO_ZVAL(*retval_ptr, local_retval_ptr);
-		}
-	} else {
-		INIT_ZVAL(*retval_ptr);
-	}
-
-	if (params_array) {
-		efree(params_array);
-	}
-
-	return ex_retval;
 }
 
 #if PHP_VERSION_ID <= 50309
-
-/**
- * These functions are based on the ones in PHP 5.3.21, versions lower than 5.3.9 have problems with closures
- */
-int zephir_call_user_function_ex(HashTable *function_table, zval **object_pp, zval *function_name, zval **retval_ptr_ptr, zend_uint param_count, zval **params[], int no_separation, HashTable *symbol_table TSRMLS_DC) {
-
-	zend_fcall_info fci;
-
-	fci.size = sizeof(fci);
-	fci.function_table = function_table;
-	fci.object_ptr = object_pp ? *object_pp : NULL;
-	fci.function_name = function_name;
-	fci.retval_ptr_ptr = retval_ptr_ptr;
-	fci.param_count = param_count;
-	fci.params = params;
-	fci.no_separation = (zend_bool) no_separation;
-	fci.symbol_table = symbol_table;
-
-	return zephir_call_function(&fci, NULL TSRMLS_CC);
-}
 
 int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC) {
 
@@ -1682,115 +892,6 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 		zephir_throw_exception_internal(NULL TSRMLS_CC);
 	}
 	return SUCCESS;
-}
-
-int zephir_lookup_class_ex(const char *name, int name_length, int use_autoload, zend_class_entry ***ce TSRMLS_DC){
-
-	zval **args[1];
-	zval autoload_function;
-	zval *class_name_ptr;
-	zval *retval_ptr = NULL;
-	int retval, lc_length;
-	char *lc_name;
-	char *lc_free;
-	zend_fcall_info fcall_info;
-	zend_fcall_info_cache fcall_cache;
-	char dummy = 1;
-	unsigned long hash;
-	ALLOCA_FLAG(use_heap)
-
-	if (name == NULL || !name_length) {
-		return FAILURE;
-	}
-
-	lc_free = lc_name = do_alloca(name_length + 1, use_heap);
-	zend_str_tolower_copy(lc_name, name, name_length);
-	lc_length = name_length + 1;
-
-	if (lc_name[0] == '\\') {
-		lc_name += 1;
-		lc_length -= 1;
-	}
-
-	hash = zend_inline_hash_func(lc_name, lc_length);
-
-	if (zend_hash_quick_find(EG(class_table), lc_name, lc_length, hash, (void **) ce) == SUCCESS) {
-		free_alloca(lc_free, use_heap);
-		return SUCCESS;
-	}
-
-	/* The compiler is not-reentrant. Make sure we __autoload() only during run-time
-	 * (doesn't impact fuctionality of __autoload()
-	*/
-	if (!use_autoload || zend_is_compiling(TSRMLS_C)) {
-		free_alloca(lc_free, use_heap);
-		return FAILURE;
-	}
-
-	if (EG(in_autoload) == NULL) {
-		ALLOC_HASHTABLE(EG(in_autoload));
-		zend_hash_init(EG(in_autoload), 0, NULL, NULL, 0);
-	}
-
-	if (zend_hash_quick_add(EG(in_autoload), lc_name, lc_length, hash, (void**)&dummy, sizeof(char), NULL) == FAILURE) {
-		free_alloca(lc_free, use_heap);
-		return FAILURE;
-	}
-
-	ZVAL_STRINGL(&autoload_function, ZEND_AUTOLOAD_FUNC_NAME, sizeof(ZEND_AUTOLOAD_FUNC_NAME) - 1, 0);
-
-	ALLOC_ZVAL(class_name_ptr);
-	INIT_PZVAL(class_name_ptr);
-	if (name[0] == '\\') {
-		ZVAL_STRINGL(class_name_ptr, name + 1, name_length - 1, 1);
-	} else {
-		ZVAL_STRINGL(class_name_ptr, name, name_length, 1);
-	}
-
-	args[0] = &class_name_ptr;
-
-	fcall_info.size = sizeof(fcall_info);
-	fcall_info.function_table = EG(function_table);
-	fcall_info.function_name = &autoload_function;
-	fcall_info.symbol_table = NULL;
-	fcall_info.retval_ptr_ptr = &retval_ptr;
-	fcall_info.param_count = 1;
-	fcall_info.params = args;
-	fcall_info.object_ptr = NULL;
-	fcall_info.no_separation = 1;
-
-	fcall_cache.initialized = EG(autoload_func) ? 1 : 0;
-	fcall_cache.function_handler = EG(autoload_func);
-	fcall_cache.calling_scope = NULL;
-	fcall_cache.called_scope = NULL;
-	fcall_cache.object_ptr = NULL;
-
-	zend_exception_save(TSRMLS_C);
-	retval = zephir_call_function(&fcall_info, &fcall_cache TSRMLS_CC);
-	zend_exception_restore(TSRMLS_C);
-
-	EG(autoload_func) = fcall_cache.function_handler;
-
-	zval_ptr_dtor(&class_name_ptr);
-
-	zend_hash_quick_del(EG(in_autoload), lc_name, lc_length, hash);
-
-	if (retval_ptr) {
-		zval_ptr_dtor(&retval_ptr);
-	}
-
-	if (retval == FAILURE) {
-		free_alloca(lc_free, use_heap);
-		return FAILURE;
-	}
-
-	retval = zend_hash_quick_find(EG(class_table), lc_name, lc_length, hash, (void **) ce);
-	free_alloca(lc_free, use_heap);
-	return retval;
-}
-
-int zephir_lookup_class(const char *name, int name_length, zend_class_entry ***ce TSRMLS_DC){
-	return zephir_lookup_class_ex(name, name_length, 1, ce TSRMLS_CC);
 }
 
 #endif

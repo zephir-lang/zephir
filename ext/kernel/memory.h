@@ -1,27 +1,56 @@
 
-#ifndef ZEPHIR_MEMORY_H
-#define ZEPHIR_MEMORY_H 1
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  |          Vladimir Kolesnikov <vladimir@extrememember.com>              |
+  +------------------------------------------------------------------------+
+*/
 
-#define ZEPHIR_MEMORY_FRAME_CHUNK 16
+#ifndef ZEPHIR_KERNEL_MEMORY_H
+#define ZEPHIR_KERNEL_MEMORY_H
 
 /* Variable Tracking */
 extern void zephir_init_nvar(zval **var TSRMLS_DC);
 extern void zephir_cpy_wrt(zval **dest, zval *var TSRMLS_DC);
 extern void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC);
 
-/* Memory Frames */
-extern int ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D);
-extern int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D);
-
-extern int ZEPHIR_FASTCALL zephir_memory_observe(zval **var TSRMLS_DC);
-extern int ZEPHIR_FASTCALL zephir_memory_remove(zval **var TSRMLS_DC);
-extern int ZEPHIR_FASTCALL zephir_memory_alloc(zval **var TSRMLS_DC);
-extern int ZEPHIR_FASTCALL zephir_memory_alloc_pnull(zval **var TSRMLS_DC);
-
-extern int ZEPHIR_FASTCALL zephir_clean_shutdown_stack(TSRMLS_D);
-extern int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
-
 extern void zephir_value_dtor(zval *zvalue ZEND_FILE_LINE_DC);
+
+/* Memory Frames */
+#ifndef ZEPHIR_RELEASE
+void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC);
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC);
+
+#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(__func__ TSRMLS_CC)
+#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(__func__ TSRMLS_CC)
+
+#else
+void ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D);
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(TSRMLS_D);
+
+#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(TSRMLS_C)
+#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(TSRMLS_C)
+
+#endif
+
+extern void ZEPHIR_FASTCALL zephir_memory_observe(zval **var TSRMLS_DC);
+extern void ZEPHIR_FASTCALL zephir_memory_remove(zval **var TSRMLS_DC);
+extern void ZEPHIR_FASTCALL zephir_memory_alloc(zval **var TSRMLS_DC);
+extern void ZEPHIR_FASTCALL zephir_memory_alloc_pnull(zval **var TSRMLS_DC);
+
+extern int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 
 /* Virtual symbol tables */
 extern void zephir_create_symbol_table(TSRMLS_D);
@@ -34,21 +63,18 @@ extern int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *
 
 extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 
-#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(TSRMLS_C)
-#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(TSRMLS_C)
-
 /* Memory macros */
 #define ZEPHIR_ALLOC_ZVAL(z) \
-	ALLOC_ZVAL(z); INIT_PZVAL(z); ZVAL_NULL(z);
-
-#define ZEPHIR_INIT_VAR(z) \
-	zephir_memory_alloc(&z TSRMLS_CC);
+	ALLOC_INIT_ZVAL(z)
 
 #define ZEPHIR_SINIT_VAR(z) \
 	INIT_PZVAL(&z); \
 	ZVAL_NULL(&z);
 
 #define ZEPHIR_SINIT_NVAR(z)
+
+#define ZEPHIR_INIT_VAR(z) \
+	zephir_memory_alloc(&z TSRMLS_CC)
 
 #define ZEPHIR_INIT_NVAR(z)\
 	if (z) { \
@@ -67,9 +93,9 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 	}
 
 /**
- Second allocation, assumes the variable was allocated for the first time
- in the branch zero
-*/
+ * Second allocation, assumes the variable was allocated for the first time
+ * in the branch zero
+ */
 #define ZEPHIR_INIT_BNVAR(z) \
 	if (Z_REFCOUNT_P(z) > 1) { \
 		Z_DELREF_P(z); \
@@ -146,7 +172,7 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 
 /* */
 #define ZEPHIR_OBS_VAR(z) \
-	zephir_memory_observe(&z TSRMLS_CC);
+	zephir_memory_observe(&z TSRMLS_CC)
 
 #define ZEPHIR_OBS_NVAR(z)\
 	if (z) { \
@@ -154,14 +180,11 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 			Z_DELREF_P(z); \
 		} else {\
 			zval_ptr_dtor(&z); \
+			z = NULL; \
 		} \
 	} else { \
 		zephir_memory_observe(&z TSRMLS_CC); \
 	}
-
-#define ZEPHIR_ALLOC_ZVAL_MM(z) \
-	ZEPHIR_ALLOC_ZVAL(z); \
-	zephir_memory_observe(&z TSRMLS_CC);
 
 #define ZEPHIR_SEPARATE_ARRAY(a) \
 	{ \
@@ -175,38 +198,14 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 		} \
 	}
 
-#define ZEPHIR_SEPARATE(z) \
-	{ \
-		zval *orig_ptr = z; \
-		if (Z_REFCOUNT_P(orig_ptr) > 1) { \
-			Z_DELREF_P(orig_ptr); \
-			ALLOC_ZVAL(z); \
-			*z = *orig_ptr; \
-			zval_copy_ctor(z); \
-			Z_SET_REFCOUNT_P(z, 1); \
-			Z_UNSET_ISREF_P(z); \
-		} \
-	}
-
-#define ZEPHIR_SEPARATE_NMO(z) \
-	{\
-		zval *orig_ptr = z;\
-		if (Z_REFCOUNT_P(orig_ptr) > 1) {\
-			Z_DELREF_P(orig_ptr);\
-			ALLOC_ZVAL(z);\
-			*z = *orig_ptr;\
-			zval_copy_ctor(z);\
-			Z_SET_REFCOUNT_P(z, 1);\
-			Z_UNSET_ISREF_P(z);\
-		}\
-	}
+#define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(&z)
 
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	{\
 		zval *orig_ptr = z;\
 		if (Z_REFCOUNT_P(orig_ptr) > 1) {\
-			ALLOC_ZVAL(z);\
 			zephir_memory_observe(&z TSRMLS_CC);\
+			ALLOC_ZVAL(z);\
 			*z = *orig_ptr;\
 			zval_copy_ctor(z);\
 			Z_SET_REFCOUNT_P(z, 1);\
@@ -223,13 +222,6 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 			Z_SET_REFCOUNT_P(z, 1); \
 			Z_UNSET_ISREF_P(z); \
 		} \
-	}
-
-#define ZEPHIR_OBSERVE_VAR(var) \
-	if (!var) { \
-		zephir_memory_observe(&var TSRMLS_CC); \
-	} else { \
-		zval_ptr_dtor(&var); \
 	}
 
 #endif

@@ -1,16 +1,47 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
+#ifndef ZEPHIR_KERNEL_EXCEPTIONS_H
+#define ZEPHIR_KERNEL_EXCEPTIONS_H
+
+#include "Zend/zend.h"
 
 /** Exceptions */
-#define ZEPHIR_THROW_EXCEPTION_STR(class_entry, message) zephir_throw_exception_string(class_entry, message, sizeof(message)-1, 1 TSRMLS_CC);
-#define ZEPHIR_THROW_EXCEPTION_STRW(class_entry, message) zephir_throw_exception_string(class_entry, message, sizeof(message)-1, 0 TSRMLS_CC);
-#define ZEPHIR_THROW_EXCEPTION_ZVAL(class_entry, message) zephir_throw_exception_zval(class_entry, message, 1 TSRMLS_CC);
-#define ZEPHIR_THROW_EXCEPTION_ZVALW(class_entry, message) zephir_throw_exception_zval(class_entry, message, 0 TSRMLS_CC);
+#define ZEPHIR_THROW_EXCEPTION_STR(class_entry, message) \
+	do { \
+		zephir_throw_exception_string(class_entry, message, strlen(message) TSRMLS_CC); \
+		ZEPHIR_MM_RESTORE(); \
+	} while (0)
+
+#define ZEPHIR_THROW_EXCEPTION_ZVAL(class_entry, message) \
+	do { \
+		zephir_throw_exception_zval(class_entry, message TSRMLS_CC); \
+		ZEPHIR_MM_RESTORE(); \
+	} while (0)
+
+#define ZEPHIR_THROW_EXCEPTION_STRW(class_entry, message) zephir_throw_exception_string(class_entry, message, strlen(message) TSRMLS_CC)
+#define ZEPHIR_THROW_EXCEPTION_ZVALW(class_entry, message) zephir_throw_exception_zval(class_entry, message TSRMLS_CC)
 
 /** Throw Exceptions */
-extern void zephir_throw_exception(zval *object TSRMLS_DC);
-extern void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len, int restore_stack TSRMLS_DC);
-extern void zephir_throw_exception_zval(zend_class_entry *ce, zval *message, int restore_stack TSRMLS_DC);
-extern void zephir_throw_exception_internal(zval *exception TSRMLS_DC);
+void zephir_throw_exception(zval *object TSRMLS_DC);
+void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len TSRMLS_DC);
+void zephir_throw_exception_zval(zend_class_entry *ce, zval *message TSRMLS_DC);
+void zephir_throw_exception_internal(zval *exception TSRMLS_DC);
 
-/** Catch Exceptions */
-/* extern void zephir_try_execute(zval *success, zval *return_value, zval *call_object, zval *params, zval **exception TSRMLS_DC); */
+#endif /* ZEPHIR_KERNEL_EXCEPTIONS_H */

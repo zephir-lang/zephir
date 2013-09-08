@@ -1,10 +1,29 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "php.h"
 #include "php_test.h"
+#include "ext/standard/php_smart_str.h"
 
 #include "Zend/zend_API.h"
 #include "Zend/zend_exceptions.h"
@@ -43,7 +62,7 @@ static int zephir_alt_is_callable_check_method(zend_class_entry *ce, int check_f
 		retval = 1;
 		if ((fcc->function_handler->op_array.fn_flags & ZEND_ACC_CHANGED) && ZEPHIR_EG(scope) && instanceof_function(fcc->function_handler->common.scope, EG(scope) TSRMLS_CC)) {
 			zend_function *priv_fbc;
-			if (zephir_hash_quick_find(&ZEPHIR_EG(scope)->function_table, method_name, method_len + 1, method_key, (void **) &priv_fbc)==SUCCESS && priv_fbc->common.fn_flags & ZEND_ACC_PRIVATE && priv_fbc->common.scope == EG(scope)) {
+			if (zephir_hash_quick_find(&ZEPHIR_EG(scope)->function_table, method_name, method_len + 1, method_key, (void **) &priv_fbc)==SUCCESS && (priv_fbc->common.fn_flags & ZEND_ACC_PRIVATE) && priv_fbc->common.scope == EG(scope)) {
 				fcc->function_handler = priv_fbc;
 			}
 		}
@@ -172,7 +191,7 @@ static inline zend_bool zephir_alt_is_callable_method_ex(zend_class_entry *ce, c
  */
 int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name, unsigned int method_len, unsigned long method_key TSRMLS_DC)
 {
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_uint i, exists = 0, is_zephir_function = 0;
 	zend_class_entry *current_scope;
 	zend_class_entry *current_called_scope;
@@ -516,7 +535,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 {
 	zend_uint i;
 	zend_executor_globals *executor_globals_ptr = ZEPHIR_VEG;
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval **original_return_value;
 	HashTable *calling_symbol_table;
 	zend_op_array *original_op_array;
@@ -533,6 +552,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 
 	fci_cache = &fci_local;
 
+	assert(*fci->retval_ptr_ptr == NULL);
 	*fci->retval_ptr_ptr = NULL;
 
 	/* Initialize execute_data */
@@ -810,7 +830,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			{
 				INIT_PZVAL(*fci->retval_ptr_ptr);
 			}*/
-			if (executor_globals_ptr->exception && fci->retval_ptr_ptr) {
+			if (executor_globals_ptr->exception && fci->retval_ptr_ptr && *fci->retval_ptr_ptr) {
 				zval_ptr_dtor(fci->retval_ptr_ptr);
 				*fci->retval_ptr_ptr = NULL;
 			}
@@ -834,7 +854,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			}
 			efree(EX(function_state).function);
 
-			if (executor_globals_ptr->exception && fci->retval_ptr_ptr) {
+			if (executor_globals_ptr->exception && fci->retval_ptr_ptr && *fci->retval_ptr_ptr) {
 				zval_ptr_dtor(fci->retval_ptr_ptr);
 				*fci->retval_ptr_ptr = NULL;
 			}
@@ -857,6 +877,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	if (executor_globals_ptr->exception) {
 		zephir_throw_exception_internal(NULL TSRMLS_CC);
 	}
+
 	return SUCCESS;
 }
 
@@ -865,15 +886,15 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 /**
  * Calls a method caching its function handler
  */
-int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name, unsigned int method_len, zval *retval_ptr, zend_uint param_count, zval *params[], unsigned long method_key TSRMLS_DC)
+int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name, unsigned int method_len, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count, zval *params[], unsigned long method_key TSRMLS_DC)
 {
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval ***params_array = NULL;
 	zval **static_params_array[5];
 	zend_uint i;
 	int ex_retval;
 	zval *local_retval_ptr = NULL;
-	zend_fcall_info *fci, fci_local;
+	zend_fcall_info fci;
 	unsigned long hash_key = 0;
 
 	zephir_globals_ptr->recursive_lock++;
@@ -897,7 +918,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 		}
 
 		/** Create a unique key */
-		if (ce->name[7] == '\\') {
+		if (ce->name_length >= 8 && ce->name[7] == '\\') {
 
 			for (i = 7; i < ce->name_length; i++) {
 				hash_key = ce->name[i] + (hash_key << 6) + (hash_key << 16) - hash_key;
@@ -911,26 +932,30 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 
 		}
 
-		fci = &fci_local;
-		fci->size = sizeof(fci);
-		fci->no_separation = 1;
-		fci->symbol_table = NULL;
-		fci->function_table = &ce->function_table;
-		fci->object_ptr = *object_pp;
-		fci->function_name = NULL;
-		fci->retval_ptr_ptr = &local_retval_ptr;
-		fci->param_count = param_count;
-		if (param_count > 5) {
-			fci->params = params_array;
-		} else{
-			fci->params = static_params_array;
+		if (retval_ptr_ptr && *retval_ptr_ptr) {
+			zval_ptr_dtor(retval_ptr_ptr);
+			*retval_ptr_ptr = NULL;
 		}
 
-		ex_retval = zephir_alt_call_method(fci, ce, hash_key, method_name, method_len, method_key TSRMLS_CC);
+		fci.size = sizeof(fci);
+		fci.no_separation = 1;
+		fci.symbol_table = NULL;
+		fci.function_table = &ce->function_table;
+		fci.object_ptr = *object_pp;
+		fci.function_name = NULL;
+		fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
+		fci.param_count = param_count;
+		if (param_count > 5) {
+			fci.params = params_array;
+		} else{
+			fci.params = static_params_array;
+		}
 
-		if (fci->function_name) {
-			ZVAL_NULL(fci->function_name);
-			zval_ptr_dtor(&fci->function_name);
+		ex_retval = zephir_alt_call_method(&fci, ce, hash_key, method_name, method_len, method_key TSRMLS_CC);
+
+		if (fci.function_name) {
+			ZVAL_NULL(fci.function_name);
+			zval_ptr_dtor(&fci.function_name);
 		}
 	}
 
@@ -938,7 +963,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 
 	if (local_retval_ptr) {
 		COPY_PZVAL_TO_ZVAL(*retval_ptr, local_retval_ptr);
-	} else {
+	} else if (!retval_ptr_ptr) {
 		INIT_ZVAL(*retval_ptr);
 	}
 

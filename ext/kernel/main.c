@@ -1,4 +1,22 @@
 
+/*
+  +------------------------------------------------------------------------+
+  | Zephir Language                                                        |
+  +------------------------------------------------------------------------+
+  | Copyright (c) 2011-2013 Zephir Team (http://www.zephir-lang.com)       |
+  +------------------------------------------------------------------------+
+  | This source file is subject to the New BSD License that is bundled     |
+  | with this package in the file docs/LICENSE.txt.                        |
+  |                                                                        |
+  | If you did not receive a copy of the license and are unable to         |
+  | obtain it through the world-wide-web, please send an email             |
+  | to license@zephir-lang.com so we can send you a copy immediately.      |
+  +------------------------------------------------------------------------+
+  | Authors: Andres Gutierrez <andres@zephir-lang.com>                     |
+  |          Eduar Carvajal <eduar@zephir-lang.com>                        |
+  +------------------------------------------------------------------------+
+*/
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -19,10 +37,9 @@
 /**
  * Initialize globals on each request or each thread started
  */
-void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC) {
+void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC) {
 
 	/* Memory options */
-	zephir_globals->start_memory = NULL;
 	zephir_globals->active_memory = NULL;
 
 	/* Virtual Symbol Tables */
@@ -33,36 +50,18 @@ void php_test_init_globals(zend_test_globals *zephir_globals TSRMLS_DC) {
 
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
-
-	/* Stats options */
-	#ifndef ZEPHIR_RELEASE
-
-	//zephir_globals->zephir_stack_stats = 0;
-	//zephir_globals->zephir_number_grows = 0;
-
-	//int i;
-	//for (i = 0; i < ZEPHIR_MAX_MEMORY_STACK; i++) {
-	//	zephir_globals->zephir_stack_derivate[i] = 0;
-	//}
-
-	#endif
-
 }
 
 /**
  * Initializes internal interface with extends
  */
-zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_class_entry, char *parent_name TSRMLS_DC) {
+zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC) {
 
-	zend_class_entry *ce, **pce;
+	zend_class_entry *ce;
 
-	if (zend_hash_find(CG(class_table), parent_name, strlen(parent_name) + 1, (void **) &pce) == FAILURE) {
-		return NULL;
-	}
-
-	ce = zend_register_internal_interface(orig_class_entry TSRMLS_CC);
-	if (*pce) {
-		zend_do_inheritance(ce, *pce TSRMLS_CC);
+	ce = zend_register_internal_interface(orig_ce TSRMLS_CC);
+	if (parent_ce) {
+		zend_do_inheritance(ce, parent_ce TSRMLS_CC);
 	}
 
 	return ce;
@@ -214,51 +213,6 @@ int zephir_fast_count_ev(zval *value TSRMLS_DC) {
 }
 
 /**
- * Makes fast count on implicit array types without creating a return zval value
- */
-int zephir_fast_count_int(zval *value TSRMLS_DC) {
-
-	long count = 0;
-
-	if (Z_TYPE_P(value) == IS_ARRAY) {
-		return (int) zend_hash_num_elements(Z_ARRVAL_P(value));
-	}
-
-	if (Z_TYPE_P(value) == IS_OBJECT) {
-
-		#ifdef HAVE_SPL
-		zval *retval = NULL;
-		#endif
-
-		if (Z_OBJ_HT_P(value)->count_elements) {
-			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
-			return (int) count;
-		}
-
-		#ifdef HAVE_SPL
-		if (Z_OBJ_HT_P(value)->get_class_entry && instanceof_function(Z_OBJCE_P(value), spl_ce_Countable TSRMLS_CC)) {
-			zend_call_method_with_0_params(&value, NULL, NULL, "count", &retval);
-			if (retval) {
-				convert_to_long_ex(&retval);
-				count = Z_LVAL_P(retval);
-				zval_ptr_dtor(&retval);
-				return (int) count;
-			}
-			return 0;
-		}
-		#endif
-
-		return 0;
-	}
-
-	if (Z_TYPE_P(value) == IS_NULL) {
-		return 0;
-	}
-
-	return 1;
-}
-
-/**
  * Check if a function exists
  */
 int zephir_function_exists(const zval *function_name TSRMLS_DC) {
@@ -315,9 +269,6 @@ int zephir_is_callable(zval *var TSRMLS_DC) {
 int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse) {
 
 	if (unlikely(Z_TYPE_P(arr) != IS_ARRAY)) {
-		TSRMLS_FETCH();
-		zend_error(E_ERROR, "The argument is not iterable()");
-		zephir_memory_restore_stack(TSRMLS_C);
 		return 0;
 	}
 
@@ -338,29 +289,30 @@ int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_po
 	return 1;
 }
 
-/**
- * Generates error when inherited class isn't found
- */
-void zephir_inherit_not_found(const char *class_name, const char *inherit_name) {
-	fprintf(stderr, "Phalcon Error: Class to extend '%s' was not found when registering class '%s'\n", class_name, inherit_name);
+void zephir_safe_zval_ptr_dtor(zval *pzval)
+{
+	if (pzval) {
+		zval_ptr_dtor(&pzval);
+	}
 }
 
 /**
  * Parses method parameters with minimum overhead
  */
-int zephir_fetch_parameters(int grow_stack, int num_args TSRMLS_DC, int required_args, int optional_args, ...) {
+int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...)
+{
 	va_list va;
 	int arg_count = (int) (zend_uintptr_t) *(zend_vm_stack_top(TSRMLS_C) - 1);
 	zval **arg, **p;
 	int i;
 
 	if (num_args < required_args || (num_args > (required_args + optional_args))) {
-		zephir_throw_exception_string(spl_ce_BadMethodCallException, SL("Wrong number of parameters"), grow_stack TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_BadMethodCallException, SL("Wrong number of parameters") TSRMLS_CC);
 		return FAILURE;
 	}
 
 	if (num_args > arg_count) {
-		zephir_throw_exception_string(spl_ce_BadMethodCallException, SL("Could not obtain parameters for parsing"), grow_stack TSRMLS_CC);
+		zephir_throw_exception_string(spl_ce_BadMethodCallException, SL("Could not obtain parameters for parsing") TSRMLS_CC);
 		return FAILURE;
 	}
 
