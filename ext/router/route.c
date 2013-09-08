@@ -289,25 +289,25 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 										}
 									}
 									if ((foundPattern != 2)) {
-										zephir_concat_self_str(&route, "(", sizeof("(")-1 TSRMLS_DC);
-										zephir_concat_self(&route, regexp TSRMLS_DC);
-										zephir_concat_self_str(&route, ")", sizeof(")")-1 TSRMLS_DC);
+										zephir_concat_self_str(&route, "(", sizeof("(")-1 TSRMLS_CC);
+										zephir_concat_self(&route, regexp TSRMLS_CC);
+										zephir_concat_self_str(&route, ")", sizeof(")")-1 TSRMLS_CC);
 									} else {
-										zephir_concat_self(&route, regexp TSRMLS_DC);
+										zephir_concat_self(&route, regexp TSRMLS_CC);
 									}
 									ZEPHIR_INIT_NVAR(_6);
 									ZVAL_LONG(_6, tmp);
 									zephir_array_update_zval(&matches, variable, &_6, PH_COPY | PH_SEPARATE);
 								} else {
-									zephir_concat_self_str(&route, "([^/]*)", sizeof("([^/]*)")-1 TSRMLS_DC);
+									zephir_concat_self_str(&route, "([^/]*)", sizeof("([^/]*)")-1 TSRMLS_CC);
 									ZEPHIR_INIT_NVAR(_8);
 									ZVAL_LONG(_8, tmp);
 									zephir_array_update_zval(&matches, item, &_8, PH_COPY | PH_SEPARATE);
 								}
 							} else {
-								zephir_concat_self_str(&route, "{", sizeof("{")-1 TSRMLS_DC);
-								zephir_concat_self(&route, item TSRMLS_DC);
-								zephir_concat_self_str(&route, "}", sizeof("}")-1 TSRMLS_DC);
+								zephir_concat_self_str(&route, "{", sizeof("{")-1 TSRMLS_CC);
+								zephir_concat_self(&route, item TSRMLS_CC);
+								zephir_concat_self_str(&route, "}", sizeof("}")-1 TSRMLS_CC);
 							}
 							continue;
 						}
@@ -330,7 +330,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 		if ((bracketCount > 0)) {
 			intermediate++;
 		} else {
-			zephir_concat_self_char(&route, ch TSRMLS_DC);
+			zephir_concat_self_char(&route, ch TSRMLS_CC);
 		}
 	}
 	array_init(return_value);
