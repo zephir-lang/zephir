@@ -35,7 +35,7 @@ assert($t->testAssign30() === 0);
 assert($t->testAssign31() === 0.0);
 assert($t->testAssign32() === false);
 assert($t->testAssign33() === false);
-assert($t->testAssign34() === 0);
-assert($t->testAssign35() === 0.0);
+assert($t->testAssign34() === false);
+assert($t->testAssign35() === false);
 assert($t->testAssign36() === false);
 
