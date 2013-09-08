@@ -31,8 +31,8 @@ assert($t->complex5Sum() === 2);
 assert($t->complex6Sum() === true);
 assert($t->complex7Sum() === 3);
 assert($t->complex9Sum() === 3);
-assert($t->complex10Sum() === 3);
-assert($t->complex11Sum() === 3);
+assert($t->complex10Sum() === 3.0);
+assert($t->complex11Sum() === 3.0);
 assert($t->complex12Sum() === 3);
 assert($t->complex13Sum() === 1);
 assert($t->complex14Sum() === 2);
@@ -44,3 +44,4 @@ assert($t->complex20Sum() === 8.0);
 assert($t->complex21Sum() === 12.0);
 assert($t->complex22Sum() === 21.0);
 
+var_dump($t->complex10Sum());

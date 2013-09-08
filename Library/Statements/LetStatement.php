@@ -737,14 +737,29 @@ class LetStatement
 										}
 										break;
 									case 'add-assign':
-										/* @todo, use temporary variable */
 										$compilationContext->headersManager->add('kernel/operators');
 										$symbolVariable->initVariant($compilationContext);
 										$symbolVariable->setDynamicType('long');
+										$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
 										if ($symbolVariable->isLocalOnly()) {
-											$codePrinter->output('ZVAL_LONG(&' . $variable . ', zephir_get_numberval(&' . $variable . ') + ' . $itemVariable->getName() . ');');
+											$codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(&' . $variable . ');');
+											$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $tempVariable->getName() . ' + ' . $itemVariable->getName() . ');');
 										} else {
-											$codePrinter->output('ZVAL_LONG(' . $variable . ', zephir_get_numberval(' . $variable . ') + ' . $itemVariable->getName() . ');');
+											$codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $variable . ');');
+											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $tempVariable->getName() . ' + ' . $itemVariable->getName() . ');');
+										}
+										break;
+									case 'sub-assign':
+										$compilationContext->headersManager->add('kernel/operators');
+										$symbolVariable->initVariant($compilationContext);
+										$symbolVariable->setDynamicType('long');
+										$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
+										if ($symbolVariable->isLocalOnly()) {
+											$codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(&' . $variable . ');');
+											$codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $tempVariable->getName() . ' - ' . $itemVariable->getName() . ');');
+										} else {
+											$codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $variable . ');');
+											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $tempVariable->getName() . ' - ' . $itemVariable->getName() . ');');
 										}
 										break;
 									default:

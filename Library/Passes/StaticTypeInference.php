@@ -283,7 +283,10 @@ class StaticTypeInference
 					return 'int';
 				}
 				if ($left == 'bool' && $right == 'int') {
-					return 'int';
+					return 'bool';
+				}
+				if ($left == 'bool' && $right == 'double') {
+					return 'bool';
 				}
 				if ($left == $right) {
 					return $left;
