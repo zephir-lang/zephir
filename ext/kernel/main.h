@@ -274,7 +274,7 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 	Z_ADDREF_P(var);
 
 #define ZEPHIR_GET_HVALUE(var, hd) \
-	ZEPHIR_OBS_VAR(var); \
+	ZEPHIR_OBS_NVAR(var); \
 	var = *hd; \
 	Z_ADDREF_P(var);
 
