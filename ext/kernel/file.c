@@ -408,8 +408,7 @@ void zephir_is_dir(zval *return_value, zval *path TSRMLS_DC)
 {
 	if (likely(Z_TYPE_P(path) == IS_STRING)) {
 		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_IS_DIR, return_value TSRMLS_CC);
-	}
-	else {
+	} else {
 		ZVAL_FALSE(return_value);
 	}
 }
@@ -446,8 +445,7 @@ void zephir_filemtime(zval *return_value, zval *path TSRMLS_DC)
 {
 	if (likely(Z_TYPE_P(path) == IS_STRING)) {
 		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value TSRMLS_CC);
-	}
-	else {
+	} else {
 		ZVAL_FALSE(return_value);
 	}
 }
@@ -460,8 +458,7 @@ void zephir_basename(zval *return_value, zval *path TSRMLS_DC)
 
 		php_basename(Z_STRVAL_P(path), Z_STRLEN_P(path), NULL, 0, &ret, &ret_len TSRMLS_CC);
 		ZVAL_STRINGL(return_value, ret, (int)ret_len, 0);
-	}
-	else {
+	} else {
 		ZVAL_FALSE(return_value);
 	}
 }
