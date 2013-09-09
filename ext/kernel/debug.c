@@ -30,8 +30,8 @@
 
 FILE *zephir_log = NULL;
 int zephir_debug_trace = 0;
-zephir_debug_entry *start = NULL;
-zephir_debug_entry *active = NULL;
+static zephir_debug_entry *start = NULL;
+static zephir_debug_entry *active = NULL;
 
 /**
  * Stars debug on file pipe
