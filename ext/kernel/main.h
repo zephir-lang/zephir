@@ -296,7 +296,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 	{ \
 		zend_class_entry ce; \
 		if (!parent_ce) { \
-			fprintf(stderr, "Can't register class %s with null parent\n", ZEND_NS_NAME(#ns, #classname)); \
+			fprintf(stderr, "Can't register class %s::%s with null parent\n", #ns, #class_name); \
 			return FAILURE; \
 		} \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
