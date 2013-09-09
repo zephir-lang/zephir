@@ -311,12 +311,12 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
 		return FAILURE;
 	}
 
-	if (unlikely(zephir_globals_ptr->active_memory->func != func)) {
+	/*if (unlikely(zephir_globals_ptr->active_memory->func != func)) {
 		fprintf(stderr, "Trying to free someone else's memory frame!\n");
 		fprintf(stderr, "The frame was created by %s\n", zephir_globals_ptr->active_memory->func);
 		fprintf(stderr, "Calling function: %s\n", func);
 		zephir_print_backtrace();
-	}
+	}*/
 
 	zephir_globals_ptr->active_memory->func = NULL;
 

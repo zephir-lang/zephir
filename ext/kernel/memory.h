@@ -33,8 +33,8 @@ extern void zephir_value_dtor(zval *zvalue ZEND_FILE_LINE_DC);
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC);
 int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC);
 
-#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(__func__ TSRMLS_CC)
-#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(__func__ TSRMLS_CC)
+#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(NULL TSRMLS_CC)
+#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(NULL TSRMLS_CC)
 
 #else
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(TSRMLS_D);
