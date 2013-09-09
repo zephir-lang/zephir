@@ -488,11 +488,13 @@ class ClassDefinition
 
 		$methods = $this->getMethods();
 
-		if (count($methods)) {
-			foreach ($methods as $method) {
-				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+		if ($this->getType() == 'class') {
+			if (count($methods)) {
+				foreach ($methods as $method) {
+					$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+				}
+				$codePrinter->outputBlankLine();
 			}
-			$codePrinter->outputBlankLine();
 		}
 
 		/**
@@ -518,10 +520,18 @@ class ClassDefinition
 			$codePrinter->output('ZEPHIR_INIT_FUNCS(' . strtolower($this->getCNamespace() . '_' . $this->getName()) . '_method_entry) {');
 			foreach ($methods as $method) {
 				$parameters = $method->getParameters();
-				if (count($parameters)) {
-					$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
+				if ($this->getType() == 'class') {
+					if (count($parameters)) {
+						$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
+					} else {
+						$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+					}
 				} else {
-					$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+					if (count($parameters)) {
+						$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
+					} else {
+						$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+					}
 				}
 			}
 			$codePrinter->output('	PHP_FE_END');

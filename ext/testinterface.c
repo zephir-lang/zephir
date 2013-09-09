@@ -1,4 +1,0 @@
-
-/**
- * Sample exception class
- */
