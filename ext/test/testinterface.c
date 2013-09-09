@@ -15,16 +15,10 @@
  */
 ZEPHIR_INIT_CLASS(Test_TestInterface) {
 
-	ZEPHIR_REGISTER_INTERFACE(Test, TestInterface, test, testinterface, test_testinterface_method_entry);
+	ZEPHIR_REGISTER_INTERFACE(Test, TestInterface, test, testinterface, NULL);
 
 
 	return SUCCESS;
 
 }
 
-/**
- * Sets a default action
- *
- * @param int defaultAccess
- */
-ZEPHIR_DOC_METHOD(Test_TestInterface, setAction);

@@ -352,11 +352,6 @@ class Compiler
 			}
 		}
 
-		asort($classInits, SORT_STRING);
-		asort($classEntries, SORT_STRING);
-		asort($interfaceInits, SORT_STRING);
-		asort($interfaceEntries, SORT_STRING);
-
 		$completeInterfaceInits = array();
 		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
 			$completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
@@ -381,6 +376,11 @@ class Compiler
 		foreach ($classEntries as $dependencyRank => $rankClassEntries) {
 			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
+
+		asort($completeClassInits, SORT_STRING);
+		asort($completeClassEntries, SORT_STRING);
+		asort($completeInterfaceInits, SORT_STRING);
+		asort($completeInterfaceEntries, SORT_STRING);
 
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		=> strtolower($project),
