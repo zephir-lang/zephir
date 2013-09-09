@@ -295,6 +295,10 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define ZEPHIR_REGISTER_CLASS_EX(ns, class_name, lower_ns, lcname, parent_ce, methods, flags) \
 	{ \
 		zend_class_entry ce; \
+		if (!parent_ce) { \
+			fprintf(stderr, "Can't register class %s with null parent\n", ZEND_NS_NAME(#ns, #classname)); \
+			return FAILURE; \
+		} \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
 		lower_ns## _ ##lcname## _ce = zend_register_internal_class_ex(&ce, parent_ce, NULL TSRMLS_CC); \
@@ -316,6 +320,10 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define ZEPHIR_REGISTER_INTERFACE_EX(ns, classname, lower_ns, lcname, parent_ce, methods) \
 	{ \
 		zend_class_entry ce; \
+		if (!parent_ce) { \
+			fprintf(stderr, "Can't register interface %s with null parent\n", ZEND_NS_NAME(#ns, #classname)); \
+			return FAILURE; \
+		} \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
 		lower_ns## _ ##lcname## _ce = zephir_register_internal_interface_ex(&ce, parent_ce TSRMLS_CC); \

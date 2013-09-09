@@ -352,35 +352,34 @@ class Compiler
 			}
 		}
 
+		asort($classInits);
+		asort($classEntries);
+		asort($interfaceInits);
+		asort($interfaceEntries);
+
 		$completeInterfaceInits = array();
 		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
+			asort($rankInterfaceInits, SORT_STRING);
 			$completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
 		}
 
 		$completeInterfaceEntries = array();
 		foreach ($interfaceEntries as $dependencyRank => $rankInterfaceEntries) {
+			asort($rankInterfaceEntries, SORT_STRING);
 			$completeInterfaceEntries = array_merge($completeInterfaceEntries, $rankInterfaceEntries);
-		}
-
-		$completeClassEntries = array();
-		foreach ($classEntries as $dependencyRank => $rankClassEntries) {
-			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
 
 		$completeClassInits = array();
 		foreach ($classInits as $dependencyRank => $rankClassInits) {
+			asort($rankClassInits, SORT_STRING);
 			$completeClassInits = array_merge($completeClassInits, $rankClassInits);
 		}
 
 		$completeClassEntries = array();
 		foreach ($classEntries as $dependencyRank => $rankClassEntries) {
+			asort($rankClassEntries, SORT_STRING);
 			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
-
-		asort($completeClassInits, SORT_STRING);
-		asort($completeClassEntries, SORT_STRING);
-		asort($completeInterfaceInits, SORT_STRING);
-		asort($completeInterfaceEntries, SORT_STRING);
 
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		=> strtolower($project),
