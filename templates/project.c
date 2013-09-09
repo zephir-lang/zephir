@@ -95,43 +95,10 @@ static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 	zephir_globals->start_memory = NULL;
 }
 
-static
-#if ZEND_MODULE_API_NO > 20060613
-const
-#endif
-zend_module_dep %PROJECT_LOWER%_deps[] = {
-	ZEND_MOD_REQUIRED("spl")
-#if %PROJECT_UPPER%_USE_PHP_JSON
-	ZEND_MOD_REQUIRED("json")
-#else
-	ZEND_MOD_OPTIONAL("json")
-#endif
-#if %PROJECT_UPPER%_USE_PHP_SESSION
-	ZEND_MOD_REQUIRED("session")
-#else
-	ZEND_MOD_OPTIONAL("session")
-#endif
-#if %PROJECT_UPPER%_USE_PHP_PCRE
-	ZEND_MOD_REQUIRED("pcre")
-#else
-	ZEND_MOD_OPTIONAL("pcre")
-#endif
-	ZEND_MOD_OPTIONAL("filter")
-	ZEND_MOD_OPTIONAL("iconv")
-	ZEND_MOD_OPTIONAL("libxml")
-	ZEND_MOD_OPTIONAL("mbstring")
-	ZEND_MOD_OPTIONAL("mcrypt")
-	ZEND_MOD_OPTIONAL("openssl")
-	ZEND_MOD_OPTIONAL("pdo")
-	ZEND_MOD_OPTIONAL("gd")
-	ZEND_MOD_OPTIONAL("imagick")
-	ZEND_MOD_END
-};
-
 zend_module_entry %PROJECT_LOWER%_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	%PROJECT_LOWER%_deps,
+	NULL,
 	PHP_%PROJECT_UPPER%_EXTNAME,
 	NULL,
 	PHP_MINIT(%PROJECT_LOWER%),

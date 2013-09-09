@@ -189,7 +189,7 @@ zend_module_dep test_deps[] = {
 zend_module_entry test_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
-	test_deps,
+	NULL,
 	PHP_TEST_EXTNAME,
 	NULL,
 	PHP_MINIT(test),
