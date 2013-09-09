@@ -1,14 +1,14 @@
 #!/bin/bash
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/assign.php
-php ./unit-tests/arithmetic.php
-php ./unit-tests/nativearray.php
-php ./unit-tests/flow.php
-php ./unit-tests/fibonacci.php
-php ./unit-tests/oo.php
-php ./unit-tests/mcall.php
-php ./unit-tests/scall.php
-php ./unit-tests/properties.php
-php ./unit-tests/constants.php
-php ./unit-tests/exceptions.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/arithmetic.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/nativearray.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/flow.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/fibonacci.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/oo.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/mcall.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/scall.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/properties.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/constants.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/exceptions.php
 #php ./unit-tests/regexdna.php
-php ./unit-tests/fannkuch.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/fannkuch.php
