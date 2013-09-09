@@ -10,10 +10,11 @@ before_install:
 
 before_script:
  - git submodule --quiet update --init --recursive
+ - sudo apt-get -qq install valgrind
  - ./install
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - $(phpenv which php) compiler.php compile-only
- - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize && ./configure --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
+ - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"; phpize && ./configure --silent --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
 script:

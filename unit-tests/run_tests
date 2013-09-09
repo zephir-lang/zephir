@@ -1,5 +1,5 @@
 #!/bin/bash
-php ./unit-tests/assign.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes php ./unit-tests/assign.php
 php ./unit-tests/arithmetic.php
 php ./unit-tests/nativearray.php
 php ./unit-tests/flow.php
