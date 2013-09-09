@@ -16,7 +16,7 @@
 
 ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
-	ZEPHIR_REGISTER_CLASS(Test\\Properties, test, PublicProperties, properties_publicproperties, NULL, 0);
+	ZEPHIR_REGISTER_CLASS(Test\\Properties, PublicProperties, test, properties_publicproperties, NULL, 0);
 
 /**
  * This is a public property with no initial value

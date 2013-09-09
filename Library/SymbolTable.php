@@ -130,7 +130,7 @@ class SymbolTable
 	 */
 	public function isSuperGlobal($name)
 	{
-		return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION';
+		return $name == '_GET' || $name == '_POST' || $name == '_COOKIE' || $name == '_SERVER' || $name == '_SESSION' || $name == '_REQUEST';
 	}
 
 	/**

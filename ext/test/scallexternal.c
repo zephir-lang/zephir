@@ -20,7 +20,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, ScallExternal, scallexternal, test_scallexternal_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, ScallExternal, test, scallexternal, test_scallexternal_method_entry, 0);
 
 
 	return SUCCESS;

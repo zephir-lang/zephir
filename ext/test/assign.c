@@ -20,7 +20,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Assign) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Assign, assign, test_assign_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Assign, test, assign, test_assign_method_entry, 0);
 
 
 	return SUCCESS;

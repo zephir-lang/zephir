@@ -24,7 +24,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, SpectralNorm, spectralnorm, test_spectralnorm_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, SpectralNorm, test, spectralnorm, test_spectralnorm_method_entry, 0);
 
 
 	return SUCCESS;

@@ -45,6 +45,7 @@ zend_class_entry *test_router_route_ce;
 zend_class_entry *test_scall_ce;
 zend_class_entry *test_scallexternal_ce;
 zend_class_entry *test_spectralnorm_ce;
+zend_class_entry *test_testinterface_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
@@ -82,6 +83,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Scall);
 	ZEPHIR_INIT(Test_ScallExternal);
 	ZEPHIR_INIT(Test_SpectralNorm);
+	ZEPHIR_INIT(Test_TestInterface);
 	return SUCCESS;
 }
 

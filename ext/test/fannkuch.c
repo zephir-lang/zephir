@@ -26,7 +26,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Fannkuch, fannkuch, test_fannkuch_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Fannkuch, test, fannkuch, test_fannkuch_method_entry, 0);
 
 
 	return SUCCESS;

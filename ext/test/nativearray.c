@@ -21,7 +21,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_NativeArray) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, NativeArray, nativearray, test_nativearray_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, NativeArray, test, nativearray, test_nativearray_method_entry, 0);
 
 
 	return SUCCESS;

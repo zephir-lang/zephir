@@ -19,7 +19,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Cast) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Cast, cast, test_cast_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Cast, test, cast, test_cast_method_entry, 0);
 
 
 	return SUCCESS;

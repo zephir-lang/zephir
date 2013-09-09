@@ -17,7 +17,7 @@
 
 ZEPHIR_INIT_CLASS(Test_Properties_ProtectedProperties) {
 
-	ZEPHIR_REGISTER_CLASS(Test\\Properties, test, ProtectedProperties, properties_protectedproperties, test_properties_protectedproperties_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test\\Properties, ProtectedProperties, test, properties_protectedproperties, test_properties_protectedproperties_method_entry, 0);
 
 /**
  * This is a protected property with no initial value

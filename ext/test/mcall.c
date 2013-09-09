@@ -22,7 +22,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Mcall) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Mcall, mcall, test_mcall_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Mcall, test, mcall, test_mcall_method_entry, 0);
 
 
 	return SUCCESS;

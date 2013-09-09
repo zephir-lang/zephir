@@ -51,7 +51,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Router) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Router, router, test_router_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Router, test, router, test_router_method_entry, 0);
 
 	zend_declare_property_null(test_router_ce, SL("_dependencyInjector"), ZEND_ACC_PUBLIC TSRMLS_CC);
 	zend_declare_property_null(test_router_ce, SL("_uriSource"), ZEND_ACC_PUBLIC TSRMLS_CC);

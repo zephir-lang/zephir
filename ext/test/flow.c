@@ -23,7 +23,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_Flow) {
 
-	ZEPHIR_REGISTER_CLASS(Test, test, Flow, flow, test_flow_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test, Flow, test, flow, test_flow_method_entry, 0);
 
 
 	return SUCCESS;

@@ -94,9 +94,6 @@ class CompilerFile
 	public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
 	{
 		$classDefinition = $this->_classDefinition;
-		if (!$classDefinition) {
-			return;
-		}
 
 		/**
 		 * Do the compilation
@@ -114,15 +111,19 @@ class CompilerFile
 		$code .= '#include "test.h"' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
-		$code .= '#include "Zend/zend_operators.h"' . PHP_EOL;
-		$code .= '#include "Zend/zend_exceptions.h"' . PHP_EOL;
-		$code .= '#include "Zend/zend_interfaces.h"' . PHP_EOL;
-		$code .= '' . PHP_EOL;
+		if ($classDefinition->getType() == 'class') {
+			$code .= '#include "Zend/zend_operators.h"' . PHP_EOL;
+			$code .= '#include "Zend/zend_exceptions.h"' . PHP_EOL;
+			$code .= '#include "Zend/zend_interfaces.h"' . PHP_EOL;
+			$code .= '' . PHP_EOL;
+		}
 
 		$code .= '#include "kernel/main.h"' . PHP_EOL;
 
-		foreach ($compilationContext->headersManager->get() as $header => $one) {
-			$code .= '#include "' . $header . '.h"' . PHP_EOL;
+		if ($classDefinition->getType() == 'class') {
+			foreach ($compilationContext->headersManager->get() as $header => $one) {
+				$code .= '#include "' . $header . '.h"' . PHP_EOL;
+			}
 		}
 
 		/**
@@ -147,6 +148,28 @@ class CompilerFile
 	 */
 	public function preCompileInterface($namespace, $topStatement)
 	{
+
+		$classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+
+		if (isset($topStatement['extends'])) {
+			$classDefinition->setExtendsClass($topStatement['extends']);
+		}
+
+		$classDefinition->setType('interface');
+
+		if (isset($topStatement['methods'])) {
+			foreach ($topStatement['methods'] as $method) {
+				$classDefinition->addMethod(new ClassMethod(
+					$method['visibility'],
+					$method['name'],
+					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+					null,
+					isset($method['docblock']) ? $method['docblock'] : null
+				), $method);
+			}
+		}
+
+		$this->_classDefinition = $classDefinition;
 	}
 
 	/**

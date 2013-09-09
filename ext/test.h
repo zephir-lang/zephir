@@ -28,3 +28,4 @@
 #include "test/scallexternal.h"
 #include "test/scallparent.h"
 #include "test/spectralnorm.h"
+#include "test/testinterface.h"
