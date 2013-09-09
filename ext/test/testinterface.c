@@ -15,7 +15,7 @@
  */
 ZEPHIR_INIT_CLASS(Test_TestInterface) {
 
-	ZEPHIR_REGISTER_INTERFACE(Test, TestInterface, test, testinterface, test_testinterface_method_entry, 0);
+	ZEPHIR_REGISTER_INTERFACE(Test, TestInterface, test, testinterface, test_testinterface_method_entry);
 
 
 	return SUCCESS;

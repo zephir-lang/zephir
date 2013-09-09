@@ -406,7 +406,7 @@ class ClassDefinition
 				$codePrinter->outputBlankLine();
 			} else {
 				$codePrinter->output('ZEPHIR_REGISTER_INTERFACE_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace  . ', ' .
-					strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', 0);');
+					strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ');');
 				$codePrinter->outputBlankLine();
 			}
 		} else {
@@ -415,7 +415,7 @@ class ClassDefinition
 					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', 0);');
 			} else {
 				$codePrinter->output('ZEPHIR_REGISTER_INTERFACE(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace . ', ' .
-					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', 0);');
+					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ');');
 			}
 			$codePrinter->outputBlankLine();
 		}

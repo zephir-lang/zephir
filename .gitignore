@@ -79,3 +79,4 @@ ext/kernel/memory.lo
 ext/kernel/object.lo
 ext/kernel/operators.lo
 ext/kernel/string.lo
+ext/test/testinterface.lo

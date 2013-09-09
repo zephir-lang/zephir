@@ -65,40 +65,42 @@
 #define zephir_decrement(var) fast_decrement_function(var)
 #endif
 
-/** Operator functions */
-extern int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_and_function(zval *result, zval *left, zval *right);
+void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy);
 
-extern void zephir_concat_self(zval **left, zval *right TSRMLS_DC);
-extern void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC);
-extern void zephir_concat_self_long(zval **left, const long right TSRMLS_DC);
-extern void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC);
+/** Operator functions */
+int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+int zephir_and_function(zval *result, zval *left, zval *right);
+
+void zephir_concat_self(zval **left, zval *right TSRMLS_DC);
+void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC);
+void zephir_concat_self_long(zval **left, const long right TSRMLS_DC);
+void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC);
 
 /** Strict comparing */
-extern int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length);
-extern int zephir_compare_strict_long(zval *op1, long op2 TSRMLS_DC);
+int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length);
+int zephir_compare_strict_long(zval *op1, long op2 TSRMLS_DC);
 
-extern void zephir_cast(zval *result, zval *var, zend_uint type);
-extern long zephir_get_intval(const zval *op);
-extern double zephir_get_doubleval(const zval *op);
-extern zend_bool zephir_get_boolval(const zval *op);
+void zephir_cast(zval *result, zval *var, zend_uint type);
+long zephir_get_intval(const zval *op);
+double zephir_get_doubleval(const zval *op);
+zend_bool zephir_get_boolval(const zval *op);
 
-extern int zephir_is_numeric(const zval *op);
+int zephir_is_numeric(const zval *op);
 
-extern int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_is_identical(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_is_identical(zval *op1, zval *op2 TSRMLS_DC);
 
-extern int zephir_less(zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_less_long(zval *op1, long op2 TSRMLS_DC);
+int zephir_less(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_less_long(zval *op1, long op2 TSRMLS_DC);
 
-extern int zephir_greater(zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_greater_long(zval *op1, long op2 TSRMLS_DC);
+int zephir_greater(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_greater_long(zval *op1, long op2 TSRMLS_DC);
 
-extern int zephir_less_equal(zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_less_equal_long(zval *op1, long op2 TSRMLS_DC);
+int zephir_less_equal(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_less_equal_long(zval *op1, long op2 TSRMLS_DC);
 
-extern int zephir_greater_equal(zval *op1, zval *op2 TSRMLS_DC);
-extern int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
+int zephir_greater_equal(zval *op1, zval *op2 TSRMLS_DC);
+int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 
 #define zephir_get_numberval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_doubleval(z))
 

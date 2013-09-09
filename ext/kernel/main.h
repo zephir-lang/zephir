@@ -44,29 +44,30 @@
 
 
 /* Startup functions */
-extern void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC);
-extern zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC);
+void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC);
+zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC);
 
 /* Globals functions */
-extern int zephir_init_global(char *global, unsigned int global_length TSRMLS_DC);
-extern int zephir_get_global(zval **arr, const char *global, unsigned int global_length TSRMLS_DC);
+int zephir_init_global(char *global, unsigned int global_length TSRMLS_DC);
+int zephir_get_global(zval **arr, const char *global, unsigned int global_length TSRMLS_DC);
 
-extern int zephir_is_callable(zval *var TSRMLS_DC);
-extern int zephir_function_exists(const zval *function_name TSRMLS_DC);
-extern int zephir_function_exists_ex(const char *func_name, unsigned int func_len TSRMLS_DC);
-extern int zephir_function_quick_exists_ex(const char *func_name, unsigned int func_len, unsigned long key TSRMLS_DC);
+int zephir_is_callable(zval *var TSRMLS_DC);
+int zephir_function_exists(const zval *function_name TSRMLS_DC);
+int zephir_function_exists_ex(const char *func_name, unsigned int func_len TSRMLS_DC);
+int zephir_function_quick_exists_ex(const char *func_name, unsigned int func_len, unsigned long key TSRMLS_DC);
 
 /* Count */
-extern void zephir_fast_count(zval *result, zval *array TSRMLS_DC);
-extern int zephir_fast_count_ev(zval *array TSRMLS_DC);
+void zephir_fast_count(zval *result, zval *array TSRMLS_DC);
+int zephir_fast_count_ev(zval *array TSRMLS_DC);
+int zephir_fast_count_int(zval *value TSRMLS_DC);
 
 /* Utils functions */
-extern int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse);
+int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse);
 void zephir_safe_zval_ptr_dtor(zval *pzval);
 
 
 /* Fetch Parameters */
-extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...);
+int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...);
 
 /* Compatibility with PHP 5.3 */
 #ifndef ZVAL_COPY_VALUE
@@ -205,6 +206,9 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 #define RETURN_MM() ZEPHIR_MM_RESTORE(); return;
 
 /** Return null restoring memory frame */
+#define RETURN_MM_BOOL(value) ZEPHIR_MM_RESTORE(); RETURN_BOOL(value);
+
+/** Return null restoring memory frame */
 #define RETURN_MM_NULL() ZEPHIR_MM_RESTORE(); RETURN_NULL();
 
 /** Return bool restoring memory frame */
@@ -279,7 +283,7 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 	Z_ADDREF_P(var);
 
 /** class/interface registering */
-#define ZEPHIR_REGISTER_CLASS(ns, lower_ns, class_name, name, methods, flags) \
+#define ZEPHIR_REGISTER_CLASS(ns, class_name, lower_ns, name, methods, flags) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
@@ -288,7 +292,7 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 		lower_ns## _ ##name## _ce->ce_flags |= flags;  \
 	}
 
-#define ZEPHIR_REGISTER_CLASS_EX(ns, lower_ns, class_name, lcname, parent_ce, methods, flags) \
+#define ZEPHIR_REGISTER_CLASS_EX(ns, class_name, lower_ns, lcname, parent_ce, methods, flags) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
@@ -301,21 +305,21 @@ extern int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, in
 		lower_ns## _ ##lcname## _ce->ce_flags |= flags;  \
 	}
 
-#define ZEPHIR_REGISTER_INTERFACE(ns, lower_ns, classname, name, methods) \
+#define ZEPHIR_REGISTER_INTERFACE(ns, classname, lower_ns, name, methods) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		##lower_ns## _ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
+		lower_ns## _ ##name## _ce = zend_register_internal_interface(&ce TSRMLS_CC); \
 	}
 
-#define ZEPHIR_REGISTER_INTERFACE_EX(ns, lower_ns, classname, lcname, parent_ce, methods) \
+#define ZEPHIR_REGISTER_INTERFACE_EX(ns, classname, lower_ns, lcname, parent_ce, methods) \
 	{ \
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
-		##lower_ns## _ ##lcname## _ce = zephir_register_internal_interface_ex(&ce, parent_ce TSRMLS_CC); \
-		if (!##lower_ns## _ ##lcname## _ce) { \
+		lower_ns## _ ##lcname## _ce = zephir_register_internal_interface_ex(&ce, parent_ce TSRMLS_CC); \
+		if (!lower_ns## _ ##lcname## _ce) { \
 			fprintf(stderr, "Can't register interface %s with parent %s\n", ZEND_NS_NAME(#ns, #classname), (parent_ce ? parent_ce->name : "(null)")); \
 			return FAILURE; \
 		} \

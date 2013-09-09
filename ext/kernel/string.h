@@ -32,6 +32,7 @@ int zephir_memnstr_str(const zval *haystack, char *needle, unsigned int needle_l
 
 /** Function replacement */
 void zephir_fast_strlen(zval *return_value, zval *str);
+int zephir_fast_strlen_ev(zval *str);
 void zephir_fast_strtolower(zval *return_value, zval *str);
 void zephir_strtolower_inplace(zval *s);
 void zephir_fast_join(zval *result, zval *glue, zval *pieces TSRMLS_DC);

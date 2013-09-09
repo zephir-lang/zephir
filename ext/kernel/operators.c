@@ -26,6 +26,7 @@
 #include "php_test.h"
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 
 #include "Zend/zend_operators.h"
 
@@ -193,7 +194,6 @@ void zephir_concat_self_long(zval **left, const long right TSRMLS_DC) {
 void zephir_concat_self_char(zval **left, unsigned char right TSRMLS_DC) {
 
 	zval left_copy;
-	uint length;
 	int use_copy = 0;
 
 	if (Z_TYPE_PP(left) == IS_NULL) {

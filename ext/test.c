@@ -16,6 +16,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 
+zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_scallparent_ce;
 zend_class_entry *test_arithmetic_ce;
@@ -45,7 +46,6 @@ zend_class_entry *test_router_route_ce;
 zend_class_entry *test_scall_ce;
 zend_class_entry *test_scallexternal_ce;
 zend_class_entry *test_spectralnorm_ce;
-zend_class_entry *test_testinterface_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
@@ -54,6 +54,7 @@ PHP_MINIT_FUNCTION(test){
 	/** Init globals */
 	ZEND_INIT_MODULE_GLOBALS(test, php_zephir_init_globals, NULL);
 
+	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_ScallParent);
 	ZEPHIR_INIT(Test_Arithmetic);
@@ -83,7 +84,6 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Scall);
 	ZEPHIR_INIT(Test_ScallExternal);
 	ZEPHIR_INIT(Test_SpectralNorm);
-	ZEPHIR_INIT(Test_TestInterface);
 	return SUCCESS;
 }
 

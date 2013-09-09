@@ -324,6 +324,9 @@ class Compiler
 		$classEntries = array();
 		$classInits = array();
 
+		$interfaceEntries = array();
+		$interfaceInits = array();
+
 		/**
 		 * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
 		 */
@@ -331,17 +334,43 @@ class Compiler
 			$classDefinition = $file->getClassDefinition();
 			if ($classDefinition) {
 				$dependencyRank = $classDefinition->getDependencyRank();
-				if (!isset($classInits[$dependencyRank])) {
-					$classEntries[$dependencyRank] = array();
-					$classInits[$dependencyRank] = array();
+				if ($classDefinition->getType() == 'class') {
+					if (!isset($classInits[$dependencyRank])) {
+						$classEntries[$dependencyRank] = array();
+						$classInits[$dependencyRank] = array();
+					}
+					$classEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+					$classInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+				} else {
+					if (!isset($interfaceInits[$dependencyRank])) {
+						$interfaceEntries[$dependencyRank] = array();
+						$interfaceInits[$dependencyRank] = array();
+					}
+					$interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+					$interfaceInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
 				}
-				$classEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
-				$classInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
 			}
 		}
 
 		asort($classInits, SORT_STRING);
 		asort($classEntries, SORT_STRING);
+		asort($interfaceInits, SORT_STRING);
+		asort($interfaceEntries, SORT_STRING);
+
+		$completeInterfaceInits = array();
+		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
+			$completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
+		}
+
+		$completeInterfaceEntries = array();
+		foreach ($interfaceEntries as $dependencyRank => $rankInterfaceEntries) {
+			$completeInterfaceEntries = array_merge($completeInterfaceEntries, $rankInterfaceEntries);
+		}
+
+		$completeClassEntries = array();
+		foreach ($classEntries as $dependencyRank => $rankClassEntries) {
+			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
+		}
 
 		$completeClassInits = array();
 		foreach ($classInits as $dependencyRank => $rankClassInits) {
@@ -357,8 +386,8 @@ class Compiler
 			'%PROJECT_LOWER%' 		=> strtolower($project),
 			'%PROJECT_UPPER%' 		=> strtoupper($project),
 			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
-			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, $completeClassEntries),
-			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", $completeClassInits),
+			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
+			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
 		);
 
 		foreach ($toReplace as $mark => $replace) {
