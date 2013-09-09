@@ -330,7 +330,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC) {
 
 	zephir_memory_entry *entry = zephir_memory_grow_stack_common(ZEPHIR_VGLOBAL);
-	entry->func = func;
+	//entry->func = func;
 }
 #else
 /**
