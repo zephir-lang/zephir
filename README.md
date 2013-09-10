@@ -42,10 +42,9 @@ Once you have the required packages installed, you can generate the parser as fo
 ```
 
 Additional notes on Ubuntu
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 The following packages are needed in Ubuntu:
 
-* apt-get install libjson0 libjson0-dev libjson0-dbg
 * apt-get install re2c
 
 Usage
