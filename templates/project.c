@@ -92,7 +92,7 @@ static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 	pefree(%PROJECT_LOWER%_globals->start_memory->hash_addresses, 1);
 	pefree(%PROJECT_LOWER%_globals->start_memory->addresses, 1);
 	pefree(%PROJECT_LOWER%_globals->start_memory, 1);
-	zephir_%PROJECT_LOWER%->start_memory = NULL;
+	%PROJECT_LOWER%_globals->start_memory = NULL;
 }
 
 zend_module_entry %PROJECT_LOWER%_module_entry = {

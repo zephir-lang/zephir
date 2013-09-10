@@ -132,7 +132,7 @@ static PHP_GINIT_FUNCTION(test)
 {
 	zephir_memory_entry *start;
 
-	php_zephir_init_globals(zephir_globals TSRMLS_CC);
+	php_zephir_init_globals(test_globals TSRMLS_CC);
 
 	start = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
 	start->addresses       = pecalloc(24, sizeof(zval*), 1);
@@ -140,51 +140,18 @@ static PHP_GINIT_FUNCTION(test)
 	start->hash_addresses  = pecalloc(8, sizeof(zval*), 1);
 	start->hash_capacity   = 8;
 
-	zephir_globals->start_memory = start;
+	test_globals->start_memory = start;
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)
 {
-	assert(zephir_globals->start_memory != NULL);
+	assert(test_globals->start_memory != NULL);
 
-	pefree(zephir_globals->start_memory->hash_addresses, 1);
-	pefree(zephir_globals->start_memory->addresses, 1);
-	pefree(zephir_globals->start_memory, 1);
-	zephir_globals->start_memory = NULL;
+	pefree(test_globals->start_memory->hash_addresses, 1);
+	pefree(test_globals->start_memory->addresses, 1);
+	pefree(test_globals->start_memory, 1);
+	test_globals->start_memory = NULL;
 }
-
-static
-#if ZEND_MODULE_API_NO > 20060613
-const
-#endif
-zend_module_dep test_deps[] = {
-	ZEND_MOD_REQUIRED("spl")
-#if TEST_USE_PHP_JSON
-	ZEND_MOD_REQUIRED("json")
-#else
-	ZEND_MOD_OPTIONAL("json")
-#endif
-#if TEST_USE_PHP_SESSION
-	ZEND_MOD_REQUIRED("session")
-#else
-	ZEND_MOD_OPTIONAL("session")
-#endif
-#if TEST_USE_PHP_PCRE
-	ZEND_MOD_REQUIRED("pcre")
-#else
-	ZEND_MOD_OPTIONAL("pcre")
-#endif
-	ZEND_MOD_OPTIONAL("filter")
-	ZEND_MOD_OPTIONAL("iconv")
-	ZEND_MOD_OPTIONAL("libxml")
-	ZEND_MOD_OPTIONAL("mbstring")
-	ZEND_MOD_OPTIONAL("mcrypt")
-	ZEND_MOD_OPTIONAL("openssl")
-	ZEND_MOD_OPTIONAL("pdo")
-	ZEND_MOD_OPTIONAL("gd")
-	ZEND_MOD_OPTIONAL("imagick")
-	ZEND_MOD_END
-};
 
 zend_module_entry test_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
