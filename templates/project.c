@@ -29,7 +29,7 @@ PHP_MINIT_FUNCTION(%PROJECT_LOWER%){
 	return SUCCESS;
 }
 
-#ifndef %PROJECT_UPPER%_RELEASE
+#ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
@@ -74,7 +74,7 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	zephir_memory_entry *start;
 
-	php_zephir_init_globals(zephir_globals TSRMLS_CC);
+	php_zephir_init_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
 
 	start = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
 	start->addresses       = pecalloc(24, sizeof(zval*), 1);
@@ -82,17 +82,17 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 	start->hash_addresses  = pecalloc(8, sizeof(zval*), 1);
 	start->hash_capacity   = 8;
 
-	zephir_globals->start_memory = start;
+	%PROJECT_LOWER%_globals->start_memory = start;
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
-	assert(zephir_globals->start_memory != NULL);
+	assert(%PROJECT_LOWER%_globals->start_memory != NULL);
 
-	pefree(zephir_globals->start_memory->hash_addresses, 1);
-	pefree(zephir_globals->start_memory->addresses, 1);
-	pefree(zephir_globals->start_memory, 1);
-	zephir_globals->start_memory = NULL;
+	pefree(%PROJECT_LOWER%_globals->start_memory->hash_addresses, 1);
+	pefree(%PROJECT_LOWER%_globals->start_memory->addresses, 1);
+	pefree(%PROJECT_LOWER%_globals->start_memory, 1);
+	zephir_%PROJECT_LOWER%->start_memory = NULL;
 }
 
 zend_module_entry %PROJECT_LOWER%_module_entry = {
@@ -102,7 +102,7 @@ zend_module_entry %PROJECT_LOWER%_module_entry = {
 	PHP_%PROJECT_UPPER%_EXTNAME,
 	NULL,
 	PHP_MINIT(%PROJECT_LOWER%),
-#ifndef %PROJECT_UPPER%_RELEASE
+#ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(%PROJECT_LOWER%),
 #else
 	NULL,

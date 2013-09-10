@@ -87,7 +87,7 @@ PHP_MINIT_FUNCTION(test){
 	return SUCCESS;
 }
 
-#ifndef TEST_RELEASE
+#ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(test){
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
@@ -193,7 +193,7 @@ zend_module_entry test_module_entry = {
 	PHP_TEST_EXTNAME,
 	NULL,
 	PHP_MINIT(test),
-#ifndef TEST_RELEASE
+#ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(test),
 #else
 	NULL,
