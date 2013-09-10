@@ -156,7 +156,7 @@ inline void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC) {
 
 static zephir_memory_entry* zephir_memory_grow_stack_common(zend_zephir_globals *zephir_globals_ptr)
 {
-	zephir_memory_entry *entry = (zephir_memory_entry *)
+	zephir_memory_entry *entry;
 
 	assert(zephir_globals_ptr->start_memory != NULL);
 	if (!zephir_globals_ptr->active_memory) {
@@ -164,7 +164,8 @@ static zephir_memory_entry* zephir_memory_grow_stack_common(zend_zephir_globals 
 		return zephir_globals_ptr->start_memory;
 	}
 
-	entry = emalloc(1, sizeof(zephir_memory_entry));
+	//entry = emalloc(1, sizeof(zephir_memory_entry));
+	entry = emalloc(sizeof(zephir_memory_entry));
 	/* ecalloc() will take care of these members*/
 	entry->pointer   = 0;
 	entry->capacity  = 0;
