@@ -156,28 +156,27 @@ inline void zephir_cpy_wrt_ctor(zval **dest, zval *var TSRMLS_DC) {
 
 static zephir_memory_entry* zephir_memory_grow_stack_common(zend_zephir_globals *zephir_globals_ptr)
 {
+	zephir_memory_entry *entry = (zephir_memory_entry *)
+
 	assert(zephir_globals_ptr->start_memory != NULL);
 	if (!zephir_globals_ptr->active_memory) {
 		zephir_globals_ptr->active_memory = zephir_globals_ptr->start_memory;
 		return zephir_globals_ptr->start_memory;
 	}
 
-	{
-		zephir_memory_entry *entry = (zephir_memory_entry *) ecalloc(1, sizeof(zephir_memory_entry));
-	/* ecalloc() will take care of these members
-		entry->pointer   = 0;
-		entry->capacity  = 0;
-		entry->addresses = NULL;
-		entry->hash_pointer   = 0;
-		entry->hash_capacity  = 0;
-		entry->hash_addresses = NULL;
-		entry->next = NULL;
-	*/
-		entry->prev       = zephir_globals_ptr->active_memory;
-		entry->prev->next = entry;
-		zephir_globals_ptr->active_memory = entry;
-		return entry;
-	}
+	entry = emalloc(1, sizeof(zephir_memory_entry));
+	/* ecalloc() will take care of these members*/
+	entry->pointer   = 0;
+	entry->capacity  = 0;
+	entry->addresses = NULL;
+	entry->hash_pointer   = 0;
+	entry->hash_capacity  = 0;
+	entry->hash_addresses = NULL;
+	entry->next = NULL;
+	entry->prev       = zephir_globals_ptr->active_memory;
+	entry->prev->next = entry;
+	zephir_globals_ptr->active_memory = entry;
+	return entry;
 }
 
 static void zephir_memory_restore_stack_common(zend_zephir_globals *zephir_globals_ptr TSRMLS_DC) {
@@ -330,7 +329,7 @@ int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC) {
 
 	zephir_memory_entry *entry = zephir_memory_grow_stack_common(ZEPHIR_VGLOBAL);
-	//entry->func = func;
+	entry->func = func;
 }
 #else
 /**
