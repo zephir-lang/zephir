@@ -629,7 +629,7 @@ class Expression
 		if (strtolower($className) == 'stdclass') {
 			if (isset($newExpr['parameters'])) {
 				if (count($newExpr['parameters'])) {
-					throw new CompilerException("stdclass don't receive parameters in its constructor", $statement);
+					throw new CompilerException("stdclass does not receive parameters in its constructor", $statement);
 				}
 			}
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -651,6 +651,9 @@ class Expression
 		$callConstructor = false;
 		if ($compilationContext->compiler->isClass($className)) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+			if ($classDefinition->getType() != 'class') {
+				throw new CompilerException("Only classes can be instantiated", $statement);
+			}
 			if ($classDefinition->hasMethod("__construct")) {
 				$callConstructor = true;
 			}
