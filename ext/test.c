@@ -51,9 +51,6 @@ ZEND_DECLARE_MODULE_GLOBALS(test)
 
 PHP_MINIT_FUNCTION(test){
 
-	/** Init globals */
-	ZEND_INIT_MODULE_GLOBALS(test, php_zephir_init_globals, NULL);
-
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_ScallParent);
