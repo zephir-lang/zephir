@@ -28,3 +28,4 @@ ZEPHIR_INIT_CLASS(Test_TestInterface) {
  * @param int defaultAccess
  */
 ZEPHIR_DOC_METHOD(Test_TestInterface, setAction);
+

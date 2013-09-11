@@ -82,10 +82,29 @@ class Compiler
 	 */
 	public function isClass($className)
 	{
-		$classes = array_keys($this->_definitions);
-		foreach ($classes as $value) {
-			if (!strcasecmp($value, $className)) {
-				return true;
+		foreach ($this->_definitions as $key => $value) {
+			if (!strcasecmp($key, $className)) {
+				if ($value->getType() == 'class') {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Allows to check if an interface is part of the compiled extension
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isInterface($className)
+	{
+		foreach ($this->_definitions as $key => $value) {
+			if (!strcasecmp($key, $className)) {
+				if ($value->getType() == 'interface') {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -100,6 +119,17 @@ class Compiler
 	public function isInternalClass($className)
 	{
 		return class_exists($className, false);
+	}
+
+	/**
+	 * Allows to check if a interface is part of PHP
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isInternalInterface($className)
+	{
+		return interface_exists($className, false);
 	}
 
 	/**
@@ -162,8 +192,11 @@ class Compiler
 
 	/**
 	 * Initializes a zephir extension
+	 *
+	 * @param Config $config
+	 * @param Config $logger
 	 */
-	public function init($config , $logger)
+	public function init($config, $logger)
 	{
 
 		if (!is_dir('.temp')) {
@@ -196,8 +229,10 @@ class Compiler
 
 	/**
 	 *
+	 * @param Config $config
+	 * @param Config $logger
 	 */
-	public function compile($config , $logger)
+	public function compile($config, $logger)
 	{
 
 		if (!file_exists('config.json')) {

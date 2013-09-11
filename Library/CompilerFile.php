@@ -318,20 +318,32 @@ class CompilerFile
 	public function checkDependencies(Compiler $compiler, Config $config, Logger $logger)
 	{
 		$classDefinition = $this->_classDefinition;
-		if (!$classDefinition) {
-			return;
-		}
+
 		$extendedClass = $classDefinition->getExtendsClass();
 		if ($extendedClass) {
-			if ($compiler->isClass($extendedClass)) {
-				$extendedDefinition = $compiler->getClassDefinition($extendedClass);
-				$classDefinition->setExtendsClassDefinition($extendedDefinition);
-			} else {
-				if ($compiler->isInternalClass($extendedClass)) {
-					$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+			if ($classDefinition->getType() == 'class') {
+				if ($compiler->isClass($extendedClass)) {
+					$extendedDefinition = $compiler->getClassDefinition($extendedClass);
 					$classDefinition->setExtendsClassDefinition($extendedDefinition);
 				} else {
-					throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+					if ($compiler->isInternalClass($extendedClass)) {
+						$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+						$classDefinition->setExtendsClassDefinition($extendedDefinition);
+					} else {
+						throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+					}
+				}
+			} else {
+				if ($compiler->isInterface($extendedClass)) {
+					$extendedDefinition = $compiler->getClassDefinition($extendedClass);
+					$classDefinition->setExtendsClassDefinition($extendedDefinition);
+				} else {
+					if ($compiler->isInternalInterface($extendedClass)) {
+						$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+						$classDefinition->setExtendsClassDefinition($extendedDefinition);
+					} else {
+						throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"');
+					}
 				}
 			}
 		}

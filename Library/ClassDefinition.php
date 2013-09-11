@@ -380,7 +380,8 @@ class ClassDefinition
 		/**
 		 * Method entry
 		 */
-		if (count($this->_methods)) {
+		$methods = $this->_methods;
+		if (count($methods)) {
 			$methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
 		} else {
 			$methodEntry = 'NULL';
@@ -454,7 +455,7 @@ class ClassDefinition
 		/**
 		 * Compile methods
 		 */
-		foreach ($this->getMethods() as $method) {
+		foreach ($methods as $method) {
 
 			$docBlock = $method->getDocBlock();
 			if ($docBlock) {
@@ -468,9 +469,10 @@ class ClassDefinition
 				$method->compile($compilationContext);
 
 				$codePrinter->output('}');
-				$codePrinter->outputBlankLine(true);
+				$codePrinter->outputBlankLine();
 			} else {
 				$codePrinter->output('ZEPHIR_DOC_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+				$codePrinter->outputBlankLine();
 			}
 		}
 
@@ -485,8 +487,6 @@ class ClassDefinition
 
 		$codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ');');
 		$codePrinter->outputBlankLine();
-
-		$methods = $this->getMethods();
 
 		if ($this->getType() == 'class') {
 			if (count($methods)) {
