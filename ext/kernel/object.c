@@ -427,8 +427,8 @@ int zephir_read_property(zval **result, zval *object, char *property_name, unsig
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Trying to get property of non-object");
 		}
 
-		ALLOC_INIT_ZVAL(*result);
-		ZVAL_NULL(*result);
+		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
 		return FAILURE;
 	}
 
@@ -497,7 +497,8 @@ int zephir_read_property_this_quick(zval **result, zval *object, char *property_
 		return SUCCESS;
 	}
 
-	ALLOC_INIT_ZVAL(*result);
+	*result = ZEPHIR_GLOBAL(global_null);
+	Z_ADDREF_P(*result);
 	return FAILURE;
 }
 
@@ -507,7 +508,7 @@ zval* zephir_fetch_nproperty_this(zval *object, char *property_name, unsigned in
 
 zval* zephir_fetch_nproperty_this_quick(zval *object, char *property_name, unsigned int property_length, unsigned long key, int silent TSRMLS_DC) {
 	zval *result = zephir_fetch_property_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), silent TSRMLS_CC);
-	return result ? result : EG(uninitialized_zval_ptr);
+	return result ? result : ZEPHIR_GLOBAL(global_null);
 }
 
 
@@ -709,7 +710,8 @@ int zephir_read_property_zval(zval **result, zval *object, zval *property, int s
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
 		}
 
-		ALLOC_INIT_ZVAL(*result);
+		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
 		return FAILURE;
 	}
 
@@ -756,30 +758,14 @@ int zephir_update_property_string(zval *object, char *property_name, unsigned in
  * Checks whether obj is an object and updates property with bool value
  */
 int zephir_update_property_bool(zval *object, char *property_name, unsigned int property_length, int value TSRMLS_DC) {
-
-	zval *v;
-
-	ALLOC_ZVAL(v);
-	Z_UNSET_ISREF_P(v);
-	Z_SET_REFCOUNT_P(v, 0);
-	ZVAL_BOOL(v, value ? 1 : 0);
-
-	return zephir_update_property_zval(object, property_name, property_length, v TSRMLS_CC);
+	return zephir_update_property_zval(object, property_name, property_length, value ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 }
 
 /**
  * Checks whether obj is an object and updates property with null value
  */
 int zephir_update_property_null(zval *object, char *property_name, unsigned int property_length TSRMLS_DC) {
-
-	zval *v;
-
-	ALLOC_ZVAL(v);
-	Z_UNSET_ISREF_P(v);
-	Z_SET_REFCOUNT_P(v, 0);
-	ZVAL_NULL(v);
-
-	return zephir_update_property_zval(object, property_name, property_length, v TSRMLS_CC);
+	return zephir_update_property_zval(object, property_name, property_length, ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
 }
 
 /**
