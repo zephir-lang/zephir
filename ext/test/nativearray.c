@@ -337,9 +337,9 @@ PHP_METHOD(Test_NativeArray, testArray15) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_array_update_string(&a, SS("hello1"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);
-	zephir_array_update_string(&a, SS("hello2"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);
-	zephir_array_update_string(&a, SS("hello3"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&a, SL("hello1"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&a, SL("hello2"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&a, SL("hello3"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);
 	RETURN_CCTOR(a);
 
 }

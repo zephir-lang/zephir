@@ -746,9 +746,9 @@ class Expression
 								break;
 							case 'bool':
 								if ($resolvedExpr->getCode() == 'true') {
-									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);');
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);');
 								} else {
-									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
 								}
 								break;
 							case 'string':
@@ -759,7 +759,7 @@ class Expression
 								break;
 							case 'variable':
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
 								}
@@ -867,7 +867,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}

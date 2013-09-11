@@ -21,7 +21,7 @@
 #define ZEPHIR_KERNEL_OPERATORS_H
 
 /** Strict comparing */
-#define ZEPHIR_IS_LONG(op1, op2)   zephir_compare_strict_long(op1, op2 TSRMLS_CC)
+#define ZEPHIR_IS_LONG(op1, op2)   ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) == op2) || zephir_compare_strict_long(op1, op2 TSRMLS_CC))
 #define ZEPHIR_IS_STRING(op1, op2) zephir_compare_strict_string(op1, op2, strlen(op2))
 
 /** strict boolean comparison */
@@ -44,7 +44,7 @@
 #define ZEPHIR_IS_IDENTICAL(op1, op2)  zephir_is_identical(op1, op2 TSRMLS_CC)
 
 /** Greater/Smaller equals */
-#define ZEPHIR_LE(op1, op2)       zephir_less_equal(op1, op2 TSRMLS_CC)
+#define ZEPHIR_LE(op1, op2)       ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) <= op2) || zephir_less_equal(op1, op2 TSRMLS_CC))
 #define ZEPHIR_LE_LONG(op1, op2)  zephir_less_equal_long(op1, op2 TSRMLS_CC)
 #define ZEPHIR_GE(op1, op2)       zephir_greater_equal(op1, op2 TSRMLS_CC)
 #define ZEPHIR_GE_LONG(op1, op2)  zephir_greater_equal_long(op1, op2 TSRMLS_CC)
@@ -85,7 +85,7 @@ long zephir_get_intval(const zval *op);
 double zephir_get_doubleval(const zval *op);
 zend_bool zephir_get_boolval(const zval *op);
 
-int zephir_is_numeric(const zval *op);
+int zephir_is_numeric_ex(const zval *op);
 
 int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC);
 int zephir_is_identical(zval *op1, zval *op2 TSRMLS_DC);
@@ -162,5 +162,7 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 			} \
 		} \
 	}
+
+#define zephir_is_numeric(value) (Z_TYPE_P(value) == IS_LONG || Z_TYPE_P(value) == IS_DOUBLE || zephir_is_numeric(value))
 
 #endif

@@ -424,7 +424,7 @@ zend_bool zephir_get_boolval(const zval *op) {
 /**
  * Returns the long value of a zval
  */
-int zephir_is_numeric(const zval *op) {
+int zephir_is_numeric_ex(const zval *op) {
 
 	int type;
 
@@ -451,8 +451,12 @@ int zephir_is_numeric(const zval *op) {
  */
 int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC) {
 	zval result;
+	#if PHP_VERSION_ID < 50400
 	is_equal_function(&result, op1, op2 TSRMLS_CC);
 	return Z_BVAL(result);
+	#else
+	return fast_equal_function(&result, op1, op2 TSRMLS_CC);
+	#endif
 }
 
 /**
