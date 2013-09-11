@@ -52,6 +52,7 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
 	int result;
 
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		TSRMLS_FETCH();
 		*fetched = ZEPHIR_GLOBAL(global_null);
 		Z_ADDREF_P(*fetched);
 		return 0;
@@ -79,6 +80,7 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
 
 		default:
 			zend_error(E_WARNING, "Illegal offset type");
+			TSRMLS_FETCH();
 			*fetched = ZEPHIR_GLOBAL(global_null);
 			Z_ADDREF_P(*fetched);
 			return 0;
@@ -90,6 +92,7 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
 		return 1;
 	}
 
+	TSRMLS_FETCH();
 	*fetched = ZEPHIR_GLOBAL(global_null);
 	Z_ADDREF_P(*fetched);
 	return 0;
@@ -107,6 +110,7 @@ int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index
 		}
 	}
 
+	TSRMLS_FETCH();
 	*fetched = ZEPHIR_GLOBAL(global_null);
 	Z_ADDREF_P(*fetched);
 	return 0;
@@ -129,6 +133,7 @@ int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index
 		}
 	}
 
+	TSRMLS_FETCH();
 	*fetched = ZEPHIR_GLOBAL(global_null);
 	Z_ADDREF_P(*fetched);
 	return 0;
