@@ -244,18 +244,17 @@ class ClassMethod
 				}
 				break;
 			case 'variable':
+				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
-						$compilationContext->symbolTable->mustGrownStack(true);
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
 					case 'double':
-						$compilationContext->symbolTable->mustGrownStack(true);
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
