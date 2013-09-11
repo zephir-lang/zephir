@@ -645,9 +645,11 @@ class Expression
 				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
 			case 'bool':
-				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $exprCompiled->getBooleanCode() . ');');
-				return $tempVar;
+				if ($exprCompiled->getCode() == 'true') {
+					return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
+				} else {
+					return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+				}
 			case 'null':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
@@ -743,7 +745,11 @@ class Expression
 								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'bool':
-								$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getBooleanCode() . ');');
+								if ($resolvedExpr->getCode() == 'true') {
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);');
+								} else {
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
+								}
 								break;
 							case 'string':
 								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');

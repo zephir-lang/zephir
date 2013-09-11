@@ -233,8 +233,8 @@ class ClassDefinition
 
 		$extendsClassDefinition = $this->_extendsClassDefinition;
 		if ($extendsClassDefinition) {
-			if ($extendsClassDefinition->hasMethod($methodName)) {
-				return $extendsClassDefinition->getMethod($methodName);
+			if ($extendsClassDefinition->hasProperty($propertyName)) {
+				return $extendsClassDefinition->getProperty($propertyName);
 			}
 		}
 		return false;

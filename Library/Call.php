@@ -195,10 +195,6 @@ class Call
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'bool':
-					//$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-					//$codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
-					//$this->_temporalVariables[] = $parameterVariable;
-					//$params[] = $parameterVariable->getName();
 					if ($compiledExpression->getCode() == 'true') {
 						$params[] = 'ZEPHIR_GLOBAL(global_true)';
 					} else {
@@ -224,10 +220,7 @@ class Call
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'bool':
-							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_BOOL(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
-							$params[] = $parameterTempVariable->getName();
-							$this->_temporalVariables[] = $parameterTempVariable;
+							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;
 						case 'string':
 						case 'variable':
@@ -280,10 +273,6 @@ class Call
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'bool':
-					/*$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
-					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = '&' . $parameterVariable->getName();*/
 					if ($compiledExpression->getCode() == 'true') {
 						$params[] = 'ZEPHIR_GLOBAL(global_true)';
 					} else {
@@ -307,6 +296,9 @@ class Call
 							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
+							break;
+						case 'bool':
+							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;
 						case 'string':
 						case 'variable':

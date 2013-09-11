@@ -33,6 +33,7 @@ require ZEPHIRPATH . 'Library/Compiler.php';
 require ZEPHIRPATH . 'Library/CompilerFile.php';
 require ZEPHIRPATH . 'Library/SymbolTable.php';
 require ZEPHIRPATH . 'Library/Variable.php';
+require ZEPHIRPATH . 'Library/GlobalConstant.php';
 require ZEPHIRPATH . 'Library/Expression.php';
 require ZEPHIRPATH . 'Library/CompiledExpression.php';
 require ZEPHIRPATH . 'Library/CodePrinter.php';
