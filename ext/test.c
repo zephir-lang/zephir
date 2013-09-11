@@ -152,6 +152,11 @@ static PHP_GINIT_FUNCTION(test)
 	INIT_PZVAL(test_globals->global_true);
 	ZVAL_TRUE(test_globals->global_true);
 	Z_ADDREF_P(test_globals->global_true);
+
+	ALLOC_PERMANENT_ZVAL(test_globals->global_null);
+	INIT_PZVAL(test_globals->global_null);
+	ZVAL_NULL(test_globals->global_null);
+	Z_ADDREF_P(test_globals->global_null);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)

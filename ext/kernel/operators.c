@@ -464,8 +464,12 @@ int zephir_is_equal(zval *op1, zval *op2 TSRMLS_DC) {
  */
 int zephir_less(zval *op1, zval *op2 TSRMLS_DC) {
 	zval result;
+	#if PHP_VERSION_ID < 50400
 	is_smaller_function(&result, op1, op2 TSRMLS_CC);
 	return Z_BVAL(result);
+	#else
+	return fast_is_smaller_function(&result, op1, op2 TSRMLS_CC);
+	#endif
 }
 
 /**

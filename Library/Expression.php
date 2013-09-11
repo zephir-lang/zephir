@@ -651,9 +651,7 @@ class Expression
 					return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
 				}
 			case 'null':
-				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
-				return $tempVar;
+				return new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
 			case 'string':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
@@ -755,7 +753,7 @@ class Expression
 								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'null':
-								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"));');
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_null), PH_COPY | PH_SEPARATE);');
 								break;
 							case 'variable':
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
@@ -783,19 +781,24 @@ class Expression
 								break;
 							case 'bool':
 								$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
+								if ($resolvedExpr->getCode() == 'true') {
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_true), PH_COPY);');
+								} else {
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_false), PH_COPY);');
+								}
 								break;
 							case 'double':
 								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'null':
-								$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_null), PH_COPY);');
 								break;
 							case 'string':
 								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'variable':
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
 								}
@@ -821,7 +824,7 @@ class Expression
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'bool':
-										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ';');
+										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
 										break;
 									case 'double':
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
@@ -834,7 +837,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}
@@ -867,7 +870,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}

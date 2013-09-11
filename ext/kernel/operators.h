@@ -44,14 +44,14 @@
 #define ZEPHIR_IS_IDENTICAL(op1, op2)  zephir_is_identical(op1, op2 TSRMLS_CC)
 
 /** Greater/Smaller equals */
-#define ZEPHIR_LE(op1, op2)       ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) <= op2) || zephir_less_equal(op1, op2 TSRMLS_CC))
-#define ZEPHIR_LE_LONG(op1, op2)  zephir_less_equal_long(op1, op2 TSRMLS_CC)
+#define ZEPHIR_LE(op1, op2)       zephir_less_equal(op1, op2 TSRMLS_CC)
+#define ZEPHIR_LE_LONG(op1, op2)  ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) <= op2) || zephir_less_equal_long(op1, op2 TSRMLS_CC))
 #define ZEPHIR_GE(op1, op2)       zephir_greater_equal(op1, op2 TSRMLS_CC)
 #define ZEPHIR_GE_LONG(op1, op2)  zephir_greater_equal_long(op1, op2 TSRMLS_CC)
 #define ZEPHIR_LT(op1, op2)       zephir_less(op1, op2 TSRMLS_CC)
-#define ZEPHIR_LT_LONG(op1, op2)  zephir_less_long(op1, op2 TSRMLS_CC)
+#define ZEPHIR_LT_LONG(op1, op2)  ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) < op2) || zephir_less_long(op1, op2 TSRMLS_CC))
 #define ZEPHIR_GT(op1, op2)       zephir_greater(op1, op2 TSRMLS_CC)
-#define ZEPHIR_GT_LONG(op1, op2)  zephir_greater_long(op1, op2 TSRMLS_CC)
+#define ZEPHIR_GT_LONG(op1, op2)  ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) > op2) || zephir_greater_long(op1, op2 TSRMLS_CC))
 
 #if PHP_VERSION_ID < 50400
 #define zephir_increment(var) increment_function(var)
@@ -163,6 +163,6 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 		} \
 	}
 
-#define zephir_is_numeric(value) (Z_TYPE_P(value) == IS_LONG || Z_TYPE_P(value) == IS_DOUBLE || zephir_is_numeric(value))
+#define zephir_is_numeric(value) (Z_TYPE_P(value) == IS_LONG || Z_TYPE_P(value) == IS_DOUBLE || zephir_is_numeric_ex(value))
 
 #endif
