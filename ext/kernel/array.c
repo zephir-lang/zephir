@@ -53,6 +53,7 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
 
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
 		*fetched = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*fetched);
 		return 0;
 	}
 
@@ -79,15 +80,18 @@ int zephir_array_isset_fetch(zval **fetched, const zval *arr, zval *index) {
 		default:
 			zend_error(E_WARNING, "Illegal offset type");
 			*fetched = ZEPHIR_GLOBAL(global_null);
+			Z_ADDREF_P(*fetched);
 			return 0;
 	}
 
 	if (result == SUCCESS) {
 		*fetched = *val;
+		Z_ADDREF_P(*fetched);
 		return 1;
 	}
 
 	*fetched = ZEPHIR_GLOBAL(global_null);
+	Z_ADDREF_P(*fetched);
 	return 0;
 }
 
@@ -98,11 +102,13 @@ int zephir_array_isset_quick_string_fetch(zval **fetched, zval *arr, char *index
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zephir_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*fetched = *zv;
+			Z_ADDREF_P(*fetched);
 			return 1;
 		}
 	}
 
 	*fetched = ZEPHIR_GLOBAL(global_null);
+	Z_ADDREF_P(*fetched);
 	return 0;
 }
 
@@ -118,11 +124,13 @@ int zephir_array_isset_long_fetch(zval **fetched, zval *arr, unsigned long index
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_index_find(Z_ARRVAL_P(arr), index, (void**)&zv) == SUCCESS) {
 			*fetched = *zv;
+			Z_ADDREF_P(*fetched);
 			return 1;
 		}
 	}
 
 	*fetched = ZEPHIR_GLOBAL(global_null);
+	Z_ADDREF_P(*fetched);
 	return 0;
 }
 

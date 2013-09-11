@@ -711,6 +711,7 @@ int zephir_read_property_zval(zval **result, zval *object, zval *property, int s
 		}
 
 		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
 		return FAILURE;
 	}
 
