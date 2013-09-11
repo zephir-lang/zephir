@@ -32,15 +32,15 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Router, Route, test, router_route, test_router_route_method_entry, 0);
 
-	zend_declare_property_null(test_router_route_ce, SL("_pattern"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_compiledPattern"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_paths"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_methods"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_hostname"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_converters"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_id"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_name"), ZEND_ACC_PUBLIC TSRMLS_CC);
-	zend_declare_property_null(test_router_route_ce, SL("_beforeMatch"), ZEND_ACC_PUBLIC TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_pattern"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_compiledPattern"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_paths"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_methods"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_hostname"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_converters"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_id"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_name"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_router_route_ce, SL("_beforeMatch"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
 

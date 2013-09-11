@@ -236,10 +236,11 @@ class ClassDefinition
 	 */
 	public function addMethod(ClassMethod $method, $statement=null)
 	{
-		if (isset($this->_methods[$method->getName()])) {
+		$methodName = strtolower($method->getName());
+		if (isset($this->_methods[$methodName])) {
 			throw new CompilerException("Method '" . $method->getName() . "' was defined more than one time", $statement);
 		}
-		$this->_methods[$method->getName()] = $method;
+		$this->_methods[$methodName] = $method;
 	}
 
 	/**
@@ -280,8 +281,9 @@ class ClassDefinition
 	 */
 	public function hasMethod($methodName)
 	{
+		$methodNameLower = strtolower($methodName);
 		foreach ($this->_methods as $name => $method) {
-			if (!strcasecmp($methodName, $name)) {
+			if ($methodNameLower == $name) {
 				return true;
 			}
 		}
@@ -302,8 +304,9 @@ class ClassDefinition
 	 */
 	public function getMethod($methodName)
 	{
+		$methodNameLower = strtolower($methodName);
 		foreach ($this->_methods as $name => $method) {
-			if (!strcasecmp($methodName, $name)) {
+			if ($methodNameLower == $name) {
 				return $method;
 			}
 		}

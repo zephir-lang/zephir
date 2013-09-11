@@ -33,7 +33,15 @@ class ClassProperty
 
 	protected $_docblock;
 
-	public function __construct($visibility, $name, $defaultValue=null, $docBlock)
+	/**
+	 *
+	 *
+	 * @param array $visibility
+	 * @param string $name
+	 * @param mixed $defaultValue
+	 * @param string $docBlock
+	 */
+	public function __construct($visibility, $name, $defaultValue, $docBlock)
 	{
 		$this->_visibility = $visibility;
 		$this->_name = $name;
@@ -48,11 +56,21 @@ class ClassProperty
 
 	public function getVisibilityAccesor()
 	{
-		if ($this->_visibility == 'protected') {
-			return 'ZEND_ACC_PROTECTED';
-		} else {
-			return 'ZEND_ACC_PUBLIC';
+		$modifiers = array();
+		foreach ($this->_visibility as $visibility) {
+			switch ($visibility) {
+				case 'protected':
+					$modifiers['ZEND_ACC_PROTECTED'] = true;
+					break;
+				case 'public':
+					$modifiers['ZEND_ACC_PUBLIC'] = true;
+					break;
+				default:
+					throw new Exception("Unknown modifier " . $visibility);
+
+			}
 		}
+		return join('|', array_keys($modifiers));
 	}
 
 	public function getDocBlock()
