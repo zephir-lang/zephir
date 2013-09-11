@@ -170,8 +170,7 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property_this(&_0, this_ptr, SL("_uriSource"), PH_NOISY_CC);
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_uriSource"), PH_NOISY_CC);
 	if (!(zend_is_true(_0))) {
 		ZEPHIR_OBS_VAR(url);
 		zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);

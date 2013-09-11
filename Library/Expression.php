@@ -50,6 +50,9 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 
+/* Expression Resolving */
+require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
+
 /**
  * Expressions
  *
@@ -247,85 +250,6 @@ class Expression
 				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
 		}
 
-	}
-
-	/**
-	 * Resolves the access to a property in an object
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function propertyAccess($expression, CompilationContext $compilationContext)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$propertyAccess = $expression;
-
-		$expr = new Expression($propertyAccess['left']);
-		$exprVariable = $expr->compile($compilationContext);
-
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
-				}
-				break;
-			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
-		}
-
-		$property = $propertyAccess['right']['value'];
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->observeVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * At this point, we don't know the exact dynamic type fetched from the property
-		 */
-		$symbolVariable->setDynamicType('undefined');
-
-		/**
-		 * If the property is accessed on 'this', we check if the method does exist
-		 */
-		if ($variableVariable->getRealName() == 'this') {
-			$classDefinition = $compilationContext->classDefinition;
-			if (!$classDefinition->hasProperty($property)) {
-				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
-			}
-		}
-
-		/**
-		 * Variable that receives the method call must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
-		}
-
-		$compilationContext->headersManager->add('kernel/object');
-		if ($variableVariable->getRealName() == 'this') {
-			$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-		} else {
-			$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-		}
-
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
 	/**
@@ -1143,7 +1067,10 @@ class Expression
 				return $this->arrayAccess($expression, $compilationContext);
 
 			case 'property-access':
-				return $this->propertyAccess($expression, $compilationContext);
+				$propertyAccess = new PropertyAccess();
+				$propertyAccess->setReadOnly($this->isReadOnly());
+				$propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $propertyAccess->compile($expression, $compilationContext);
 
 			case 'static-constant-access':
 				return $this->staticConstantAccess($expression, $compilationContext);
