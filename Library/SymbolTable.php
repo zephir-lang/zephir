@@ -328,6 +328,33 @@ class SymbolTable
 	}
 
 	/**
+	 * Creates a temporary variable to be used to point to a heap variable
+	 * this kind of variables MUST not be tracked by the Zephir memory manager
+	 *
+	 * @param string $type
+	 * @param \CompilationContext $context
+	 */
+	public function getTempNonTrackedVariable($type, CompilationContext $context)
+	{
+		$variable = $this->_reuseTempVariable($type, 'non-tracked');
+		if (is_object($variable)) {
+			$variable->increaseUses();
+			$variable->increaseMutates();
+			return $variable;
+		}
+
+		$tempVar = $this->_tempVariable++;
+		$variable = $this->addVariable($type, '_' . $tempVar, $context);
+		$variable->setIsInitialized(true);
+		$variable->setTemporal(true);
+		$variable->increaseUses();
+		$variable->increaseMutates();
+
+		$this->_registerTempVariable($type, 'non-tracked', $variable);
+		return $variable;
+	}
+
+	/**
 	 * Creates a temporary variable to be used in a write operation
 	 * the body of the variable is freed between iterations instead of
 	 * request a new full zval variable

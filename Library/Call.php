@@ -195,10 +195,15 @@ class Call
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'bool':
-					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
-					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = $parameterVariable->getName();
+					//$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					//$codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
+					//$this->_temporalVariables[] = $parameterVariable;
+					//$params[] = $parameterVariable->getName();
+					if ($compiledExpression->getCode() == 'true') {
+						$params[] = 'ZEPHIR_GLOBAL(global_true)';
+					} else {
+						$params[] = 'ZEPHIR_GLOBAL(global_false)';
+					}
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -275,10 +280,15 @@ class Call
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'bool':
-					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					/*$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = '&' . $parameterVariable->getName();
+					$params[] = '&' . $parameterVariable->getName();*/
+					if ($compiledExpression->getCode() == 'true') {
+						$params[] = 'ZEPHIR_GLOBAL(global_true)';
+					} else {
+						$params[] = 'ZEPHIR_GLOBAL(global_false)';
+					}
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);

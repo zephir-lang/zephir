@@ -219,6 +219,28 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns a method by its name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function getProperty($propertyName)
+	{
+
+		if (isset($this->_properties[$propertyName])) {
+			return $this->_properties[$propertyName];
+		}
+
+		$extendsClassDefinition = $this->_extendsClassDefinition;
+		if ($extendsClassDefinition) {
+			if ($extendsClassDefinition->hasMethod($methodName)) {
+				return $extendsClassDefinition->getMethod($methodName);
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if class definition has a property
 	 *
 	 * @param string $name

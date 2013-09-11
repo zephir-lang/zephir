@@ -85,6 +85,8 @@ class PropertyAccess
 
 		$property = $propertyAccess['right']['value'];
 
+		$propertyDefinition = null;
+		$classDefinition = null;
 		$currentClassDefinition = $compilationContext->classDefinition;
 
 		/**
@@ -97,6 +99,7 @@ class PropertyAccess
 				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
 			}
 
+			$propertyDefinition = $classDefinition->getProperty($property);
 		} else {
 
 			/**
@@ -118,7 +121,47 @@ class PropertyAccess
 						throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $expression);
 					}
 
+					$propertyDefinition = $classDefinition->getProperty($property);
 				}
+			}
+		}
+
+		/**
+		 * Having a proper propertyDefinition we can check if the property is readable
+		 * according to its modifiers
+		 */
+		if ($propertyDefinition) {
+
+			if ($propertyDefinition->isStatic()) {
+				throw new CompilerException("Attempt to access static property '" . $property . "' as non static", $expression);
+			}
+
+			if (!$propertyDefinition->isPublic()) {
+
+				/**
+				 * Protected variables only can be read in the class context
+				 * where they were declared
+				 */
+				if ($classDefinition == $currentClassDefinition) {
+					if ($propertyDefinition->isPrivate()) {
+						$declarationDefinition = $propertyDefinition->getDeclarationClass();
+						if ($declarationDefinition != $currentClassDefinition) {
+							throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
+						}
+					}
+				} else {
+					if ($propertyDefinition->isProtected()) {
+
+					} else {
+						if ($propertyDefinition->isPrivate()) {
+							$declarationDefinition = $propertyDefinition->getDeclarationClass();
+							if ($declarationDefinition != $currentClassDefinition) {
+								throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
+							}
+						}
+					}
+				}
+
 			}
 		}
 
@@ -132,12 +175,10 @@ class PropertyAccess
 					$symbolVariable->observeVariant($compilationContext);
 					$this->_readOnly = false;
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $expression);
-					$symbolVariable->setIsInitialized(true);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $expression);
-				$symbolVariable->setIsInitialized(true);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 			}
 		} else {
 			if ($this->_expecting) {
@@ -153,7 +194,7 @@ class PropertyAccess
 		}
 
 		/**
-		 * Variable that receives the property values must be polimorphic
+		 * Variable that receives a property value must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);

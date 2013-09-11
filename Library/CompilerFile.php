@@ -197,7 +197,8 @@ class CompilerFile
 						$property['visibility'],
 						$property['name'],
 						isset($property['default']) ? $property['default'] : null,
-						isset($property['docblock']) ? $property['docblock'] : null
+						isset($property['docblock']) ? $property['docblock'] : null,
+						$property
 					));
 				}
 			}
