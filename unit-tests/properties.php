@@ -19,3 +19,13 @@ assert($t->getSomeTrue() === true);
 assert($t->getSomeInteger() === 10);
 assert($t->getSomeDouble() === 10.25);
 assert($t->getSomeString() === "test");
+
+$t = new Test\Properties\PrivateProperties();
+
+assert($t->getSomeNull() === null);
+assert($t->getSomeNullInitial() === null);
+assert($t->getSomeFalse() === false);
+assert($t->getSomeTrue() === true);
+assert($t->getSomeInteger() === 10);
+assert($t->getSomeDouble() === 10.25);
+assert($t->getSomeString() === "test");

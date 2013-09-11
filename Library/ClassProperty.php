@@ -62,6 +62,9 @@ class ClassProperty
 				case 'protected':
 					$modifiers['ZEND_ACC_PROTECTED'] = true;
 					break;
+				case 'private':
+					$modifiers['ZEND_ACC_PRIVATE'] = true;
+					break;
 				case 'public':
 					$modifiers['ZEND_ACC_PUBLIC'] = true;
 					break;
@@ -73,6 +76,11 @@ class ClassProperty
 		return join('|', array_keys($modifiers));
 	}
 
+	/**
+	 * Returns the docblock related to the property
+	 *
+	 * @return string
+	 */
 	public function getDocBlock()
 	{
 		return $this->_docblock;

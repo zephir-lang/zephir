@@ -18,6 +18,7 @@
 #include "test/oo/ooconstruct.h"
 #include "test/oo/ooconstructparams.h"
 #include "test/oo/oonoconstruct.h"
+#include "test/properties/privateproperties.h"
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"
 #include "test/regexdna.h"

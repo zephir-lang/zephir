@@ -373,9 +373,9 @@ PHP_METHOD(Test_NativeArray, testArray17) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	add_assoc_null_ex(a, SS(""));
-	add_assoc_null_ex(a, SS(""));
-	add_assoc_null_ex(a, SS(""));
+	add_assoc_null_ex(a, SS("hello1"));
+	add_assoc_null_ex(a, SS("hello2"));
+	add_assoc_null_ex(a, SS("hello3"));
 	RETURN_CCTOR(a);
 
 }

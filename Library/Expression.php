@@ -825,7 +825,7 @@ class Expression
 								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'null':
-								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"));');
+								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"));');
 								break;
 							case 'variable':
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
