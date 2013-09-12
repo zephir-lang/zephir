@@ -415,8 +415,7 @@ PHP_METHOD(Test_Router, handle) {
 	} else {
 		ZEPHIR_CPY_WRT(realUri, uri);
 	}
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property_this(&_0, this_ptr, SL("_removeExtraSlashes"), PH_NOISY_CC);
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_removeExtraSlashes"), PH_NOISY_CC);
 	if (zend_is_true(_0)) {
 		ZEPHIR_INIT_VAR(handledUri);
 		zephir_call_method_p1(handledUri, this_ptr, "doremoveextraslashes", realUri);

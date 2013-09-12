@@ -115,7 +115,14 @@ class EvalExpression
 			return $conditions;
 		}
 
-		$expr = new Expression($exprRaw);
+		/**
+		 * Discard first level parentheses
+		 */
+		if ($exprRaw['type'] == 'list') {
+			$expr = new Expression($exprRaw['left']);
+		} else {
+			$expr = new Expression($exprRaw);
+		}
 		$expr->setReadOnly(true);
 		$compiledExpression = $expr->compile($compilationContext);
 

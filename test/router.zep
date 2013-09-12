@@ -313,7 +313,7 @@ class Router
 		}
 
 		// Remove extra slashes in the route
-		if (this->_removeExtraSlashes) {
+		if this->_removeExtraSlashes {
 			let handledUri = this->doRemoveExtraSlashes(realUri);
 		} else {
 			let handledUri = realUri;

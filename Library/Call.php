@@ -144,14 +144,16 @@ class Call
 	 * @param array $parameters
 	 * @param CompilationContext $compilationContext
 	 * @param array $expression
+	 * @param boolean $readOnly
 	 * @return array
 	 */
-	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression)
+	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression, $readOnly=false)
 	{
 		if (!$this->_resolvedParams) {
 			$params = array();
 			foreach ($parameters as $parameter) {
 				$paramExpr = new Expression($parameter);
+				$paramExpr->setReadOnly($readOnly);
 				$params[] = $paramExpr->compile($compilationContext);
 			}
 			$this->_resolvedParams = $params;
@@ -251,7 +253,7 @@ class Call
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
+		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
 		$params = array();
 		foreach ($exprParams as $compiledExpression) {

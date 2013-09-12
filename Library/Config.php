@@ -28,7 +28,8 @@ class Config
 		'static-type-inference' => true,
 		'static-type-inference-second-pass' => true,
 		'local-context-pass' => true,
-		'constant-folding' => true
+		'constant-folding' => true,
+		'static-constant-class-folding' => true
 	);
 
 	public function __construct()

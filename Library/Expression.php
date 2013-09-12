@@ -52,6 +52,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
+require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
 
 /**
  * Expressions
@@ -170,6 +171,7 @@ class Expression
 		switch ($expression['left']['type']) {
 			case 'array-access':
 				$expr = new Expression($expression['left']['right']);
+				$expr->setReadOnly(true);
 				$resolvedExpr= $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType())	{
 					case 'int':
@@ -225,6 +227,7 @@ class Expression
 		switch ($expression['right']['type']) {
 			case 'array-access':
 				$expr = new Expression($expression['right']['right']);
+				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType())	{
 					case 'string':
@@ -246,84 +249,13 @@ class Expression
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}
 				break;
+			case 'property-access':
+				/* @todo, implement this */
+				return new CompiledExpression('bool', 'false', $expression);
 			default:
 				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
 		}
 
-	}
-
-	/**
-	 * Access a static constant class
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function staticConstantAccess($expression, CompilationContext $compilationContext)
-	{
-		$compiler = $compilationContext->compiler;
-
-		$className = $expression['left']['value'];
-
-		/**
-		 * Fetch the class definition according to the class where the constant
-		 * is supposed to be declared
-		 */
-		if ($className != 'self' && $className != 'parent') {
-			if (!$compiler->isClass($className)) {
-				throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
-			}
-			$classDefinition = $compiler->getClassDefinition($className);
-		} else {
-			if ($className == 'self') {
-				$classDefinition = $compilationContext->classDefinition;
-			} else {
-				if ($className == 'parent') {
-					$classDefinition = $compilationContext->classDefinition;
-					$extendsClass = $classDefinition->getExtendsClass();
-					if (!$extendsClass) {
-						throw new CompilerException('Cannot call method "' . $methodName . '" on parent because class ' .
-							$classDefinition->getCompleteName() . ' does not extend any class', $expression);
-					} else {
-						$classDefinition = $classDefinition->getExtendsClassDefinition();
-					}
-				}
-			}
-		}
-
-		/**
-		 * Constants are resolved to its values in compile time
-		 * so we need to check that they effectively do exist
-		 */
-		$constant = $expression['right']['value'];
-		if (!$classDefinition->hasConstant($constant)) {
-			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
-		}
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->initVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * Variable that receives property accesses must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
-		}
-
-		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
 	/**
@@ -1082,7 +1014,10 @@ class Expression
 				return $propertyAccess->compile($expression, $compilationContext);
 
 			case 'static-constant-access':
-				return $this->staticConstantAccess($expression, $compilationContext);
+				$staticConstantAccess = new StaticConstantAccess();
+				$staticConstantAccess->setReadOnly($this->isReadOnly());
+				$staticConstantAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $staticConstantAccess->compile($expression, $compilationContext);
 
 			case 'fcall':
 				$functionCall = new FunctionCall();

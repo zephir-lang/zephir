@@ -198,7 +198,7 @@ class ClassDefinition
 	}
 
 	/**
-	 * Checks if class definition has a property
+	 * Checks if a class definition has a property
 	 *
 	 * @param string $name
 	 */
@@ -219,7 +219,7 @@ class ClassDefinition
 	}
 
 	/**
-	 * Returns a method by its name
+	 * Returns a method definition by its name
 	 *
 	 * @param string string
 	 * @return boolean
@@ -248,6 +248,20 @@ class ClassDefinition
 	public function hasConstant($name)
 	{
 		return isset($this->_constants[$name]);
+	}
+
+	/**
+	 * Returns a constant definition by its name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function getConstant($constantName)
+	{
+		if (isset($this->_constants[$constantName])) {
+			return $this->_constants[$constantName];
+		}
+		return false;
 	}
 
 	/**
