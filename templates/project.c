@@ -3,15 +3,15 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_%PROJECT_LOWER%.h"
+#include <php.h>
+#include "php_ext.h"
 #include "%PROJECT_LOWER%.h"
 
-#include "ext/standard/info.h"
+#include <ext/standard/info.h>
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -83,20 +83,20 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 	%PROJECT_LOWER%_globals->start_memory = start;
 
 	/* Global Constants */
-	ALLOC_PERMANENT_ZVAL(test_globals->global_false);
-	INIT_PZVAL(test_globals->global_false);
-	ZVAL_FALSE(test_globals->global_false);
-	Z_ADDREF_P(test_globals->global_false);
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_false);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_false);
+	ZVAL_FALSE(%PROJECT_LOWER%_globals->global_false);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_false);
 
-	ALLOC_PERMANENT_ZVAL(test_globals->global_true);
-	INIT_PZVAL(test_globals->global_true);
-	ZVAL_TRUE(test_globals->global_true);
-	Z_ADDREF_P(test_globals->global_true);
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_true);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_true);
+	ZVAL_TRUE(%PROJECT_LOWER%_globals->global_true);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_true);
 
-	ALLOC_PERMANENT_ZVAL(test_globals->global_null);
-	INIT_PZVAL(test_globals->global_null);
-	ZVAL_NULL(test_globals->global_null);
-	Z_ADDREF_P(test_globals->global_null);
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_null);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_null);
+	ZVAL_NULL(%PROJECT_LOWER%_globals->global_null);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_null);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)

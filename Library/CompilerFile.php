@@ -102,21 +102,23 @@ class CompilerFile
 
 		$code  = '' . PHP_EOL;
 		$code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
-		$code .= '#include "config.h"' . PHP_EOL;
+		$code .= '#include "ext_config.h"' . PHP_EOL;
 		$code .= '#endif' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
-		$code .= '#include "php.h"' . PHP_EOL;
-		$code .= '#include "php_test.h"' . PHP_EOL;
-		$code .= '#include "test.h"' . PHP_EOL;
+		$code .= '#include <php.h>' . PHP_EOL;
+		$code .= '#include "../php_ext.h"' . PHP_EOL;
+		$code .= '#include "../ext.h"' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
 		if ($classDefinition->getType() == 'class') {
-			$code .= '#include "Zend/zend_operators.h"' . PHP_EOL;
-			$code .= '#include "Zend/zend_exceptions.h"' . PHP_EOL;
-			$code .= '#include "Zend/zend_interfaces.h"' . PHP_EOL;
-			$code .= '' . PHP_EOL;
+			$code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
+			$code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+			$code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
+		} else {
+			$code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
 		}
+		$code .= '' . PHP_EOL;
 
 		$code .= '#include "kernel/main.h"' . PHP_EOL;
 

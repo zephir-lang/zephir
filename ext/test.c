@@ -3,15 +3,15 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
+#include <php.h>
+#include "php_ext.h"
 #include "test.h"
 
-#include "ext/standard/info.h"
+#include <ext/standard/info.h>
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"

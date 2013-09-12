@@ -1,15 +1,15 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/operators.h"
@@ -208,6 +208,75 @@ PHP_METHOD(Test_Mcall, testCall9) {
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method_p2(_1, this_ptr, "testmethod5", a, b);
 	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall10) {
+
+	ZEPHIR_MM_GROW();
+
+	zephir_call_method(return_value, this_ptr, "testmethod1");
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall11) {
+
+	ZEPHIR_MM_GROW();
+
+	zephir_call_method(return_value, this_ptr, "testmethod2");
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall12) {
+
+	ZEPHIR_MM_GROW();
+
+	zephir_call_method(return_value, this_ptr, "testmethod3");
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall13) {
+
+	zval *a, *b;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	zephir_call_method_p2(return_value, this_ptr, "testmethod4", a, b);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall14) {
+
+	zval *a, *b;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	zephir_call_method_p2(return_value, this_ptr, "testmethod5", a, b);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCall15) {
+
+	zval *a, *b;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	zephir_call_method_p2(return_value, this_ptr, "testmethod6", a, b);
 	RETURN_MM();
 
 }

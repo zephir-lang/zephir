@@ -37,9 +37,17 @@ class ConcatOperator extends BaseOperator
 		$leftExpr->setReadOnly($this->_readOnly);
 		$left = $leftExpr->compile($compilationContext);
 
+		if ($left->getType() == 'variable') {
+			$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['right']);
+		}
+
 		$rightExpr = new Expression($expression['right']);
 		$rightExpr->setReadOnly($this->_readOnly);
 		$right = $rightExpr->compile($compilationContext);
+
+		if ($right->getType() == 'variable') {
+			$variableLeft = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
+		}
 
 		$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
 

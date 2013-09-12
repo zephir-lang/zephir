@@ -951,6 +951,8 @@ class Expression
 			switch (gettype($value)) {
 				case 'integer':
 					return new CompiledExpression('int', $value, $expression);
+				case 'string':
+					return new CompiledExpression('string', Utils::addSlaches($value), $expression);
 			}
 			return new CompiledExpression(gettype($value), $value, $expression);
 		}

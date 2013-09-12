@@ -22,7 +22,7 @@
 #endif
 
 #include "php.h"
-#include "php_test.h"
+#include "php_ext.h"
 
 /* represents a connection to a database */
 struct _zephir_persist_obj {

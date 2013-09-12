@@ -147,7 +147,7 @@ class ClassDefinition
 		if ($this->_extendsClassDefinition) {
 			$classDefinition = $this->_extendsClassDefinition;
 			if (method_exists($classDefinition, 'increaseDependencyRank')) {
-				$classDefinition->increaseDependencyRank();
+				$classDefinition->increaseDependencyRank($this->_dependencyRank * 2);
 			}
 		}
 	}
@@ -156,9 +156,9 @@ class ClassDefinition
 	 * A class definition calls this method to mark this class as a dependency of another
 	 *
 	 */
-	public function increaseDependencyRank()
+	public function increaseDependencyRank($rank)
 	{
-		$this->_dependencyRank++;
+		$this->_dependencyRank += ($rank + 1);
 	}
 
 	/**

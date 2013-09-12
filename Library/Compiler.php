@@ -325,6 +325,60 @@ class Compiler
 		}
 
 		file_put_contents('ext/config.m4', $content);
+
+		/**
+		 * php_ext.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
+		if (empty($content)) {
+			throw new Exception("Template php_ext.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/php_ext.h', $content);
+
+		/**
+		 * ext.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/ext.h');
+		if (empty($content)) {
+			throw new Exception("Template ext.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/ext.h', $content);
+
+		/**
+		 * ext_config.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/ext_config.h');
+		if (empty($content)) {
+			throw new Exception("Template ext_config.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/ext_config.h', $content);
 	}
 
 	/**
@@ -348,6 +402,18 @@ class Compiler
 		/**
 		 * Round 1. Calculate the dependency rank
 		 * Classes are ordered according to a dependency ranking
+		 * Classes that are dependencies of classes that are dependency of other classes
+		 * have more weight
+		 */
+		foreach ($files as $file) {
+			$classDefinition = $file->getClassDefinition();
+			if ($classDefinition) {
+				$classDefinition->calculateDependencyRank();
+			}
+		}
+
+		/**
+		 * Round 1.5 Make a second pass to ensure classes will have the correct weight
 		 */
 		foreach ($files as $file) {
 			$classDefinition = $file->getClassDefinition();
@@ -387,10 +453,12 @@ class Compiler
 			}
 		}
 
-		asort($classInits);
-		asort($classEntries);
-		asort($interfaceInits);
-		asort($interfaceEntries);
+		krsort($classInits);
+		krsort($classEntries);
+		krsort($interfaceInits);
+		krsort($interfaceEntries);
+
+		print_r($classInits);
 
 		$completeInterfaceInits = array();
 		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {

@@ -18,6 +18,12 @@ PHP_METHOD(Test_Mcall, testCall6);
 PHP_METHOD(Test_Mcall, testCall7);
 PHP_METHOD(Test_Mcall, testCall8);
 PHP_METHOD(Test_Mcall, testCall9);
+PHP_METHOD(Test_Mcall, testCall10);
+PHP_METHOD(Test_Mcall, testCall11);
+PHP_METHOD(Test_Mcall, testCall12);
+PHP_METHOD(Test_Mcall, testCall13);
+PHP_METHOD(Test_Mcall, testCall14);
+PHP_METHOD(Test_Mcall, testCall15);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod4, 0, 0, 0)
 	ZEND_ARG_INFO(0, a)
@@ -64,6 +70,21 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall9, 0, 0, 0)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall13, 0, 0, 0)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall14, 0, 0, 0)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall15, 0, 0, 0)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testMethod1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testMethod2, NULL, ZEND_ACC_PROTECTED)
@@ -80,5 +101,11 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testCall7, arginfo_test_mcall_testcall7, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testCall8, arginfo_test_mcall_testcall8, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testCall9, arginfo_test_mcall_testcall9, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall10, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall11, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall12, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall13, arginfo_test_mcall_testcall13, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall14, arginfo_test_mcall_testcall14, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall15, arginfo_test_mcall_testcall15, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

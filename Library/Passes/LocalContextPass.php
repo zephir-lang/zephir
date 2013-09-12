@@ -96,7 +96,16 @@ class LocalContextPass
 						case 'new':
 						case 'fcall':
 						case 'mcall':
+						case 'scall':
+						case 'concat':
 							$this->markVariableNoLocal($assigment['variable']);
+							break;
+						case 'constant':
+							if (defined($assigment['expr']['value'])) {
+								if (gettype(constant($assigment['expr']['value'])) == 'string') {
+									$this->markVariableNoLocal($assigment['variable']);
+								}
+							}
 							break;
 						case 'variable':
 							$this->markVariableNoLocal($assigment['expr']['value']);
@@ -226,9 +235,12 @@ class LocalContextPass
 			case 'array-access':
 				$this->passExpression($expression['left']);
 				break;
-			case 'fetch':
 			case 'isset':
 				$this->passExpression($expression['left']);
+				break;
+			case 'fetch':
+				$this->markVariableNoLocal($expression['left']['value']);
+				$this->passExpression($expression['right']);
 				break;
 			case 'list':
 				$this->passExpression($expression['left']);

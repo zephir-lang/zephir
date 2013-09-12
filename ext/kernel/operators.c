@@ -23,7 +23,7 @@
 
 #include "php.h"
 #include "ext/standard/php_string.h"
-#include "php_test.h"
+#include "php_ext.h"
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/string.h"

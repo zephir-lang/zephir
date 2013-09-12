@@ -27,7 +27,7 @@
 #include "php_string.h"
 #endif
 
-#include "php_test.h"
+#include "php_ext.h"
 
 #include "kernel/main.h"
 #include "kernel/memory.h"

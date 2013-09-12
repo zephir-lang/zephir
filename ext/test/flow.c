@@ -1,15 +1,15 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/operators.h"
@@ -1406,7 +1406,7 @@ PHP_METHOD(Test_Flow, testSwitch4) {
 		if ((a == 5)) {
 			RETURN_LONG(1);
 		}
-			RETURN_LONG(2);
+		RETURN_LONG(2);
 	} while(0);
 
 	RETURN_LONG(3);
@@ -1423,7 +1423,7 @@ PHP_METHOD(Test_Flow, testSwitch5) {
 		if ((a == 10)) {
 			RETURN_LONG(1);
 		}
-			RETURN_LONG(2);
+		RETURN_LONG(2);
 	} while(0);
 
 	RETURN_LONG(3);
