@@ -49,6 +49,16 @@ class ClassConstant
 	}
 
 	/**
+	 * Returns the constant's value
+	 *
+	 * @return array
+	 */
+	public function getValue()
+	{
+		return $this->_value;
+	}
+
+	/**
 	 * Returns the docblock related to the constant
 	 *
 	 * @return string

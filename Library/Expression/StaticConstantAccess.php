@@ -126,13 +126,34 @@ class StaticConstantAccess
 		/**
 		 * We can optimize the reading of constants by avoiding query their value everytime
 		 */
-		//if (!$config->get('static-constant-class-folding')) {
+		if (!$compilationContext->config->get('static-constant-class-folding')) {
 			$compilationContext->headersManager->add('kernel/object');
 			$compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		//}
+		}
 
-		//$constantDefinition = $classDefinition->getConstant($constant);
+		$constantDefinition = $classDefinition->getConstant($constant);
+
+		/**
+		 * Create an implicit 'let' operation, this assigns the constant value to the variable
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable' => $symbolVariable->getRealName(),
+					'operator' => 'assign',
+					'expr' => $constantDefinition->getValue(),
+					'file' => $expression['file'],
+					'line' => $expression['line'],
+					'char' => $expression['char']
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
 }
