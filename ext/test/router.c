@@ -436,8 +436,7 @@ PHP_METHOD(Test_Router, handle) {
 	ZVAL_NULL(matches);
 	zephir_update_property_this(this_ptr, SL("_wasMatched"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("_matchedRoute"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
-	ZEPHIR_OBS_VAR(_1);
-	zephir_read_property_this(&_1, this_ptr, SL("_routes"), PH_NOISY_CC);
+	_1 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
 	zephir_is_iterable(_1, &_3, &_2, 0, 1);
 	for (
 		; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
@@ -1108,8 +1107,7 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 
 
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property_this(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	for (
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
@@ -1143,8 +1141,7 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 
 
-	ZEPHIR_OBS_VAR(_0);
-	zephir_read_property_this(&_0, this_ptr, SL("_routes"), PH_NOISY_CC);
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
 	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	for (
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS

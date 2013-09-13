@@ -601,6 +601,7 @@ class ForStatement
 		}
 
 		$expr = new Expression($exprRaw);
+		$expr->setReadOnly(true);
 		$expression = $expr->compile($compilationContext);
 
 		if ($expression->getType() != 'variable') {

@@ -95,15 +95,29 @@ class NativeArrayAccess
 		/**
 		 * Resolves the symbol that expects the value
 		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->observeVariant($compilationContext);
+		if ($this->_readOnly) {
+			if ($this->_expecting) {
+				if ($this->_expectingVariable) {
+					$symbolVariable = $this->_expectingVariable;
+					$symbolVariable->observeVariant($compilationContext);
+					$this->_readOnly = false;
+				} else {
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+				}
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+			}
+		} else {
+			if ($this->_expecting) {
+				if ($this->_expectingVariable) {
+					$symbolVariable = $this->_expectingVariable;
+					$symbolVariable->observeVariant($compilationContext);
+				} else {
+					$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+				}
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 		}
 
 		/**
@@ -118,6 +132,12 @@ class NativeArrayAccess
 		 */
 		$symbolVariable->setDynamicType('undefined');
 
+		if ($this->_readOnly) {
+			$flags = 'PH_NOISY|PH_READONLY';
+		} else {
+			$flags = 'PH_NOISY';
+		}
+
 		/**
 		 * Right part of expression is the index
 		 */
@@ -129,11 +149,11 @@ class NativeArrayAccess
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
+				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
 				break;
 			case 'string':
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
+				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
 				break;
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
@@ -142,12 +162,12 @@ class NativeArrayAccess
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
+						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
+						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
