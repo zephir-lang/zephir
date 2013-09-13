@@ -715,10 +715,8 @@ PHP_METHOD(Test_NativeArray, testArrayAccess6) {
 	add_assoc_long_ex(a, SS("a"), 1);
 	add_assoc_long_ex(a, SS("b"), 2);
 	add_assoc_long_ex(a, SS("c"), 3);
-	ZEPHIR_OBS_VAR(_0);
-	zephir_array_fetch_string(&_0, a, SL("a"), PH_NOISY TSRMLS_CC);
-	ZEPHIR_OBS_VAR(_1);
-	zephir_array_fetch_string(&_1, a, SL("b"), PH_NOISY TSRMLS_CC);
+	zephir_array_fetch_string(&_0, a, SL("a"), PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_string(&_1, a, SL("b"), PH_NOISY | PH_READONLY TSRMLS_CC);
 	ZEPHIR_INIT_VAR(b);
 	zephir_add_function(b, _0, _1 TSRMLS_CC);
 	RETURN_CCTOR(b);

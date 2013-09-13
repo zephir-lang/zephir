@@ -1072,7 +1072,7 @@ void zephir_fast_array_merge(zval *return_value, zval **array1, zval **array2 TS
  * Equivalent to <tt>$a1 = array_merge_recursive($a1, $a2)</tt> in PHP with the only exception
  * that Phalcon's version preserves numeric keys
  */
-void zephir_array_merge_recursive_n(zval **a1, zval *a2)
+void zephir_array_merge_recursive_n(zval **a1, zval *a2 TSRMLS_DC)
 {
 	HashPosition hp;
 	zval **value, key, *tmp1, *tmp2;

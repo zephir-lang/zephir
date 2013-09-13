@@ -36,7 +36,7 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch) {
 PHP_METHOD(Test_Fannkuch, process) {
 
 	zend_bool _0, _4, _9;
-	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_3 = NULL, *_7 = NULL, *_8, *_12 = NULL, *_13 = NULL, *_14;
+	zval *n_param = NULL, *perm, *perm0 = NULL, *perm1, *count, *temp = NULL, *_3 = NULL, *_7 = NULL, *_8, *_12 = NULL, *_13 = NULL, *_14, *_15;
 	int n, maxFlipsCount = 0, permCount = 0, checksum = 0, i, j, flipsCount, k, r, k2, _1, _2, _5, _6, _10, _11;
 
 	ZEPHIR_MM_GROW();
@@ -174,13 +174,12 @@ PHP_METHOD(Test_Fannkuch, process) {
 				i = j;
 			}
 			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE);
-			ZEPHIR_OBS_NVAR(_12);
-			zephir_array_fetch_long(&_12, count, r, PH_NOISY TSRMLS_CC);
-			ZEPHIR_INIT_NVAR(_13);
-			ZVAL_LONG(_13, (zephir_get_numberval(_12) - 1));
-			zephir_array_update_long(&count, r, &_13, PH_COPY | PH_SEPARATE);
 			zephir_array_fetch_long(&_14, count, r, PH_NOISY | PH_READONLY TSRMLS_CC);
-			if (ZEPHIR_GT_LONG(_14, 0)) {
+			ZEPHIR_INIT_NVAR(_13);
+			ZVAL_LONG(_13, (zephir_get_numberval(_14) - 1));
+			zephir_array_update_long(&count, r, &_13, PH_COPY | PH_SEPARATE);
+			zephir_array_fetch_long(&_15, count, r, PH_NOISY | PH_READONLY TSRMLS_CC);
+			if (ZEPHIR_GT_LONG(_15, 0)) {
 				break;
 			}
 			r++;

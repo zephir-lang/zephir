@@ -39,11 +39,11 @@ class ComparisonBaseOperator extends BaseOperator
 		}
 
 		$leftExpr = new Expression($expression['left']);
-		$leftExpr->setReadOnly($this->_readOnly);
+		$leftExpr->setReadOnly(true);
 		$left = $leftExpr->compile($compilationContext);
 
 		$rightExpr = new Expression($expression['right']);
-		$rightExpr->setReadOnly($this->_readOnly);
+		$rightExpr->setReadOnly(true);
 		$right = $rightExpr->compile($compilationContext);
 
 		switch ($left->getType()) {

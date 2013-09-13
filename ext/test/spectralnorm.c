@@ -33,7 +33,7 @@ ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 
 PHP_METHOD(Test_SpectralNorm, Ax) {
 
-	zval *i, *j, *_0, *_1;
+	zval *i, *j, *_0, _1;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &i, &j);
@@ -42,9 +42,9 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, i, j TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_add_function(_1, i, j TSRMLS_CC);
-	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(_1) + 1)) / 2) + zephir_get_numberval(i)) + 1)));
+	ZEPHIR_SINIT_VAR(_1);
+	zephir_add_function(&_1, i, j TSRMLS_CC);
+	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(&_1) + 1)) / 2) + zephir_get_numberval(i)) + 1)));
 
 }
 

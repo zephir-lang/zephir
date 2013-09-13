@@ -1489,6 +1489,7 @@ class LetStatement
 						$expr->setExpectReturn(true, $symbolVariable);
 						break;
 					case 'property-access':
+					case 'array-access':
 						$expr->setReadOnly(true);
 						break;
 				}

@@ -68,7 +68,7 @@ int zephir_fast_in_array(zval *needle, zval *haystack TSRMLS_DC);
 void zephir_fast_array_merge(zval *return_value, zval **array1, zval **array2 TSRMLS_DC);
 
 /** Recursive merge */
-void zephir_array_merge_recursive_n(zval **a1, zval *a2);
+void zephir_array_merge_recursive_n(zval **a1, zval *a2 TSRMLS_DC);
 
 void zephir_array_unshift(zval *arr, zval *arg);
 void zephir_array_keys(zval *return_value, zval *arr);
