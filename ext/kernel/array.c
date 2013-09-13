@@ -849,13 +849,7 @@ int zephir_array_update_long_long(zval **arr, unsigned long index, long value, i
  * Only @c PH_SEPARATE is meaningful with this function.
  */
 int zephir_array_update_long_bool(zval **arr, unsigned long index, int value, int flags){
-
-	zval *zvalue;
-
-	ALLOC_INIT_ZVAL(zvalue);
-	ZVAL_BOOL(zvalue, value);
-
-	return zephir_array_update_long(arr, index, &zvalue, flags);
+	return zephir_array_update_long(arr, index, value ? &ZEPHIR_GLOBAL(global_true) : &ZEPHIR_GLOBAL(global_false), flags);
 }
 
 /**
@@ -873,7 +867,7 @@ int zephir_array_update_long_bool(zval **arr, unsigned long index, int value, in
  * @warning @c *return_value should be either @c NULL (preferred) or point to not initialized memory; if @c *return_value points to a valid variable, mmemory leak is possible
  * @note @c index will be handled as follows: @c NULL is treated as an empty string, @c double values are cast to @c integer, @c bool or @c resource are treated as @c integer
  */
-int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int silent){
+int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int flags){
 
 	zval **zv;
 	HashTable *ht;
@@ -907,21 +901,22 @@ int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int silent){
 				break;
 
 			default:
-				if (silent == PH_NOISY) {
+				if ((flags & PH_NOISY) == PH_NOISY) {
 					zend_error(E_WARNING, "Illegal offset type");
 				}
-
 				result = FAILURE;
 				break;
 		}
 
 		if (result != FAILURE) {
 			*return_value = *zv;
-			Z_ADDREF_PP(return_value);
+			if ((flags & PH_READONLY) != PH_READONLY) {
+				Z_ADDREF_PP(return_value);
+			}
 			return SUCCESS;
 		}
 
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			if (sidx == NULL) {
 				zend_error(E_NOTICE, "Undefined index: %ld", uidx);
 			} else {
@@ -930,7 +925,7 @@ int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int silent){
 		}
 	}
 
-	ALLOC_INIT_ZVAL(*return_value);
+	*return_value = ZEPHIR_GLOBAL(global_null);
 	return FAILURE;
 }
 
@@ -949,28 +944,28 @@ int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int silent){
  * @throw @c E_NOTICE if @c index does not exist and @c silent = @c PH_NOISY
  * @warning @c *return_value should be either @c NULL (preferred) or point to not initialized memory; if @c *return_value points to a valid variable, mmemory leak is possible
  */
-int zephir_array_fetch_quick_string(zval **return_value, zval *arr, const char *index, uint index_length, unsigned long key, int silent){
+int zephir_array_fetch_quick_string(zval **return_value, zval *arr, const char *index, uint index_length, unsigned long key, int flags){
 
 	zval **zv;
 
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zephir_hash_quick_find(Z_ARRVAL_P(arr), index, index_length, key, (void**) &zv) == SUCCESS) {
 			*return_value = *zv;
-			Z_ADDREF_PP(return_value);
+			if ((flags & PH_READONLY) != PH_READONLY) {
+				Z_ADDREF_PP(return_value);
+			}
 			return SUCCESS;
 		}
-
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Undefined index: %s", index);
 		}
-	}
-	else {
-		if (silent == PH_NOISY) {
+	} else {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Cannot use a scalar value as an array");
 		}
 	}
 
-	ALLOC_INIT_ZVAL(*return_value);
+	*return_value = ZEPHIR_GLOBAL(global_null);
 	return FAILURE;
 }
 
@@ -991,9 +986,9 @@ int zephir_array_fetch_quick_string(zval **return_value, zval *arr, const char *
  *
  * The function is a wrapper over @c zephir_array_fetch_quick_string()
  */
-int zephir_array_fetch_string(zval **return_value, zval *arr, const char *index, uint index_length, int silent){
+int zephir_array_fetch_string(zval **return_value, zval *arr, const char *index, uint index_length, int flags){
 
-	return zephir_array_fetch_quick_string(return_value, arr, index, index_length + 1, zend_inline_hash_func(index, index_length + 1), silent);
+	return zephir_array_fetch_quick_string(return_value, arr, index, index_length + 1, zend_inline_hash_func(index, index_length + 1), flags);
 }
 
 /**
@@ -1009,28 +1004,30 @@ int zephir_array_fetch_string(zval **return_value, zval *arr, const char *index,
  * @throw @c E_NOTICE if @c index does not exist and @c silent = @c PH_NOISY
  * @warning @c *return_value should be either @c NULL (preferred) or point to not initialized memory; if @c *return_value points to a valid variable, mmemory leak is possible
  */
-int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index, int silent){
+int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index, int flags){
 
 	zval **zv;
 
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		if (zend_hash_index_find(Z_ARRVAL_P(arr), index, (void**)&zv) == SUCCESS) {
 			*return_value = *zv;
-			Z_ADDREF_PP(return_value);
+			if ((flags & PH_READONLY) != PH_READONLY) {
+				Z_ADDREF_PP(return_value);
+			}
 			return SUCCESS;
 		}
 
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Undefined index: %lu", index);
 		}
 	}
 	else {
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			zend_error(E_NOTICE, "Cannot use a scalar value as an array");
 		}
 	}
 
-	ALLOC_INIT_ZVAL(*return_value);
+	*return_value = ZEPHIR_GLOBAL(global_null);
 	return FAILURE;
 }
 
@@ -1445,7 +1442,6 @@ void zephir_fast_array_merge(zval *return_value, zval **array1, zval **array2 TS
 	php_array_merge(Z_ARRVAL_P(return_value), Z_ARRVAL_PP(array1), 0 TSRMLS_CC);
 
 	php_array_merge(Z_ARRVAL_P(return_value), Z_ARRVAL_PP(array2), 0 TSRMLS_CC);
-
 }
 
 /**
