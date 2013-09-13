@@ -133,7 +133,7 @@ class NativeArrayAccess
 		$symbolVariable->setDynamicType('undefined');
 
 		if ($this->_readOnly) {
-			$flags = 'PH_NOISY|PH_READONLY';
+			$flags = 'PH_NOISY | PH_READONLY';
 		} else {
 			$flags = 'PH_NOISY';
 		}
@@ -149,11 +149,11 @@ class NativeArrayAccess
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
+				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ' TSRMLS_CC);');
 				break;
 			case 'string':
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
+				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ' TSRMLS_CC);');
 				break;
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
@@ -162,12 +162,12 @@ class NativeArrayAccess
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
