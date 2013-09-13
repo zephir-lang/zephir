@@ -680,10 +680,11 @@ class ClassMethod
 		 * Check if there are unused variables
 		 */
 		$usedVariables = array();
+		$completeName = $compilationContext->classDefinition->getCompleteName();
 		foreach ($symbolTable->getVariables() as $variable) {
 
 			if ($variable->getNumberUses() <= 0) {
-				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $compilationContext->classDefinition->getName() . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
 				if ($variable->isExternal() == false) {
 					continue;
 				}

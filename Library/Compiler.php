@@ -458,8 +458,6 @@ class Compiler
 		krsort($interfaceInits);
 		krsort($interfaceEntries);
 
-		print_r($classInits);
-
 		$completeInterfaceInits = array();
 		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
 			asort($rankInterfaceInits, SORT_STRING);

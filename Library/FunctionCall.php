@@ -191,6 +191,8 @@ class FunctionCall extends Call
 			case 'starts_with':
 			case 'ends_with':
 			case 'prepare_virtual_path':
+			case 'create_instance':
+			case 'create_instance_params':
 				return true;
 		}
 		return false;

@@ -100,15 +100,17 @@ class CompilerFile
 		 */
 		$classDefinition->compile($compilationContext);
 
+		$separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+
 		$code  = '' . PHP_EOL;
 		$code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
-		$code .= '#include "ext_config.h"' . PHP_EOL;
+		$code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
 		$code .= '#endif' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
 		$code .= '#include <php.h>' . PHP_EOL;
-		$code .= '#include "../php_ext.h"' . PHP_EOL;
-		$code .= '#include "../ext.h"' . PHP_EOL;
+		$code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
+		$code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
 		if ($classDefinition->getType() == 'class') {

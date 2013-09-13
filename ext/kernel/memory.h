@@ -108,7 +108,7 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 		ZEPHIR_ALLOC_ZVAL(z); \
 	}
 
-#define PHALCON_INIT_NVAR_PNULL(z)\
+#define ZEPHIR_INIT_NVAR_PNULL(z)\
 	if (z) { \
 		if (Z_REFCOUNT_P(z) > 1) { \
 			Z_DELREF_P(z); \
@@ -121,7 +121,7 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 		} \
 		ZVAL_NULL(z); \
 	} else { \
-		phalcon_memory_alloc_pnull(&z TSRMLS_CC); \
+		zephir_memory_alloc_pnull(&z TSRMLS_CC); \
 	}
 
 /* only removes the value body of the zval */

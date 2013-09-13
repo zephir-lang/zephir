@@ -155,6 +155,7 @@ class ClassDefinition
 	/**
 	 * A class definition calls this method to mark this class as a dependency of another
 	 *
+	 * @param int $rank
 	 */
 	public function increaseDependencyRank($rank)
 	{
