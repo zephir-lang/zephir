@@ -33,6 +33,7 @@
 
 %left COMMA .
 %right REQUIRE .
+%right CLONE EMPTY .
 %left INSTANCEOF .
 %left AND OR .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
@@ -1711,6 +1712,14 @@ xx_common_expr(R) ::= ISSET xx_isset_expr(O1) . {
 
 xx_common_expr(R) ::= REQUIRE xx_common_expr(O1) . {
 	R = xx_ret_expr("require", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= CLONE xx_common_expr(O1) . {
+	R = xx_ret_expr("clone", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= EMPTY xx_common_expr(O1) . {
+	R = xx_ret_expr("empty", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= xx_common_expr(O1) EQUALS xx_common_expr(O2) . {

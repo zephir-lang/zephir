@@ -56,6 +56,7 @@ class Call
 		 * Create temporary variable if needed
 		 */
 		$mustInit = false;
+		$symbolVariable = null;
 		$isExpecting = $expr->isExpectingReturn();
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();

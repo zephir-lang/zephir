@@ -309,6 +309,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'clone' {
+			s->active_char += sizeof("clone")-1;
+			token->opcode = XX_T_CLONE;
+			return 0;
+		}
+
+		'empty' {
+			s->active_char += sizeof("empty")-1;
+			token->opcode = XX_T_EMPTY;
+			return 0;
+		}
+
 		'loop' {
 			token->opcode = XX_T_LOOP;
 			s->active_char += sizeof("loop")-1;

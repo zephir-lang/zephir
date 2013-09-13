@@ -70,7 +70,6 @@ class FunctionCall extends Call
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
 
-
 			if (isset($expression['parameters'])) {
 				/**
 				 * Check if the number of parameters
@@ -286,14 +285,17 @@ class FunctionCall extends Call
 		 * PHP functions only return zvals so we need to validate the target variable is also a zval
 		 */
 		$symbolVariable = $this->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+		if ($symbolVariable) {
 
-		/**
-		 * We don't know the exact dynamic type returned by the method call
-		 */
-		$symbolVariable->setDynamicType('undefined');
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+
+			/**
+			 * We don't know the exact dynamic type returned by the method call
+			 */
+			$symbolVariable->setDynamicType('undefined');
+		}
 
 		/**
 		 * Include fcall header

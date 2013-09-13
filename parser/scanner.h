@@ -85,6 +85,8 @@
 #define XX_T_CONSTANT 387
 #define XX_T_DO 388
 #define XX_T_REQUIRE 389
+#define XX_T_CLONE 390
+#define XX_T_EMPTY 391
 
 /* Operators */
 #define XX_T_AT '@'

@@ -229,9 +229,13 @@ class Expression
 				$expr = new Expression($expression['right']['right']);
 				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);
-				switch ($resolvedExpr->getType())	{
+				switch ($resolvedExpr->getType()) {
+					case 'int':
+					case 'long':
+					case 'uint':
+						return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ')', $expression);
 					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
+						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $expression);
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
 						switch ($indexVariable->getType()) {
@@ -1177,6 +1181,8 @@ class Expression
 			case 'instanceof':
 			case 'typeof':
 			case 'static-property-access':
+			case 'clone':
+			case 'empty':
 				return new CompiledExpression('null', null, $expression);
 
 			default:

@@ -1250,11 +1250,10 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'null':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				if ($variable == 'this') {
-					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				} else {
-					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				}
 				break;
 			case 'int':
@@ -1277,12 +1276,18 @@ class LetStatement
 				}
 				break;
 			case 'bool':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 				if ($variable == 'this') {
-					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					if ($resolvedExpr->getBooleanCode() == '1') {
+						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+					} else {
+						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					}
 				} else {
-					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					if ($resolvedExpr->getBooleanCode() == '1') {
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+					} else {
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					}
 				}
 				break;
 			case 'empty-array':
@@ -1482,6 +1487,9 @@ class LetStatement
 				switch ($assignment['assign-type']) {
 					case 'variable':
 						$expr->setExpectReturn(true, $symbolVariable);
+						break;
+					case 'property-access':
+						$expr->setReadOnly(true);
 						break;
 				}
 				$resolvedExpr = $expr->compile($compilationContext);
