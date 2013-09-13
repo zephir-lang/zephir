@@ -304,6 +304,16 @@ class NativeArray
 		return b;
 	}
 
+	public function testArrayAccess6()
+	{
+		var a, b;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			b = a["a"] + a["b"];
+
+		return b;
+	}
+
 	public function testArrayUpdate1()
 	{
 		var a;

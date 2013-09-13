@@ -442,7 +442,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_2);
-			zephir_array_fetch_long(&_3, extracted, 1, PH_NOISY|PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_3, extracted, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
 			zephir_fast_array_merge(_2, &(routePaths), &(_3) TSRMLS_CC);
 			ZEPHIR_CPY_WRT(routePaths, _2);
 		} else {

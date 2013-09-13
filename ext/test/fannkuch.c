@@ -106,7 +106,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 		flipsCount = 0;
 		k = 0;
 		while (1) {
-			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY|PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 			if (!(!ZEPHIR_IS_LONG(_8, 0))) {
 				break;
 			}
@@ -179,7 +179,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			ZEPHIR_INIT_NVAR(_13);
 			ZVAL_LONG(_13, (zephir_get_numberval(_12) - 1));
 			zephir_array_update_long(&count, r, &_13, PH_COPY | PH_SEPARATE);
-			zephir_array_fetch_long(&_14, count, r, PH_NOISY|PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_14, count, r, PH_NOISY | PH_READONLY TSRMLS_CC);
 			if (ZEPHIR_GT_LONG(_14, 0)) {
 				break;
 			}
