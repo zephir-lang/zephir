@@ -74,9 +74,9 @@ void zephir_array_update_string_zval_zval_multi_3(zval **arr, zval *index1, zval
 void zephir_array_update_zval_string_string_multi_3(zval **arr, zval *index1, char *index2, uint index2_length, char *index3, uint index3_length, zval **value, int flags);
 
 /** Fetch items from arrays */
-int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int flags);
-int zephir_array_fetch_string(zval **return_value, zval *arr, const char *index, uint index_length, int flags);
-int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index, int flags);
+int zephir_array_fetch(zval **return_value, zval *arr, zval *index, int flags TSRMLS_DC);
+int zephir_array_fetch_string(zval **return_value, zval *arr, const char *index, uint index_length, int flags TSRMLS_DC);
+int zephir_array_fetch_long(zval **return_value, zval *arr, unsigned long index, int flags TSRMLS_DC);
 
 /** Merge+Append */
 void zephir_merge_append(zval *left, zval *values);

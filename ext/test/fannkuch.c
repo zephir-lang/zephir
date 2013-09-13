@@ -99,19 +99,19 @@ PHP_METHOD(Test_Fannkuch, process) {
 				}
 				i = _5;
 				ZEPHIR_OBS_NVAR(_7);
-				zephir_array_fetch_long(&_7, perm1, i, PH_NOISY);
+				zephir_array_fetch_long(&_7, perm1, i, PH_NOISY TSRMLS_CC);
 				zephir_array_update_long(&perm, i, &_7, PH_COPY | PH_SEPARATE);
 			}
 		}
 		flipsCount = 0;
 		k = 0;
 		while (1) {
-			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY|PH_READONLY);
+			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY|PH_READONLY TSRMLS_CC);
 			if (!(!ZEPHIR_IS_LONG(_8, 0))) {
 				break;
 			}
 			ZEPHIR_OBS_NVAR(_7);
-			zephir_array_fetch_long(&_7, perm, 0, PH_NOISY);
+			zephir_array_fetch_long(&_7, perm, 0, PH_NOISY TSRMLS_CC);
 			k = zephir_get_numberval(_7);
 			k2 = (((((k + 1)) / 2)) - 1);
 			_11 = k2;
@@ -129,9 +129,9 @@ PHP_METHOD(Test_Fannkuch, process) {
 					}
 					i = _10;
 					ZEPHIR_OBS_NVAR(temp);
-					zephir_array_fetch_long(&temp, perm, i, PH_NOISY);
+					zephir_array_fetch_long(&temp, perm, i, PH_NOISY TSRMLS_CC);
 					ZEPHIR_OBS_NVAR(_12);
-					zephir_array_fetch_long(&_12, perm, (k - i), PH_NOISY);
+					zephir_array_fetch_long(&_12, perm, (k - i), PH_NOISY TSRMLS_CC);
 					zephir_array_update_long(&perm, i, &_12, PH_COPY | PH_SEPARATE);
 					zephir_array_update_long(&perm, (k - i), &temp, PH_COPY | PH_SEPARATE);
 				}
@@ -161,7 +161,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 				RETURN_MM();
 			}
 			ZEPHIR_OBS_NVAR(perm0);
-			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY);
+			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY TSRMLS_CC);
 			i = 0;
 			while (1) {
 				if (!((i < r))) {
@@ -169,17 +169,17 @@ PHP_METHOD(Test_Fannkuch, process) {
 				}
 				j = (i + 1);
 				ZEPHIR_OBS_NVAR(_7);
-				zephir_array_fetch_long(&_7, perm1, j, PH_NOISY);
+				zephir_array_fetch_long(&_7, perm1, j, PH_NOISY TSRMLS_CC);
 				zephir_array_update_long(&perm1, i, &_7, PH_COPY | PH_SEPARATE);
 				i = j;
 			}
 			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE);
 			ZEPHIR_OBS_NVAR(_12);
-			zephir_array_fetch_long(&_12, count, r, PH_NOISY);
+			zephir_array_fetch_long(&_12, count, r, PH_NOISY TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_13);
 			ZVAL_LONG(_13, (zephir_get_numberval(_12) - 1));
 			zephir_array_update_long(&count, r, &_13, PH_COPY | PH_SEPARATE);
-			zephir_array_fetch_long(&_14, count, r, PH_NOISY|PH_READONLY);
+			zephir_array_fetch_long(&_14, count, r, PH_NOISY|PH_READONLY TSRMLS_CC);
 			if (ZEPHIR_GT_LONG(_14, 0)) {
 				break;
 			}
