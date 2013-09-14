@@ -488,8 +488,8 @@ PHP_METHOD(Test_Router, handle) {
 				continue;
 			}
 			ZEPHIR_INIT_NVAR(matched);
-			if (zephir_memnstr_str(hostname, SL("("))) {
-				if (zephir_memnstr_str(hostname, SL("#"))) {
+			if (zephir_memnstr_str(hostname, SL("("), "/Users/gutierrezandresfelipe/xx/test/router.zep", 381)) {
+				if (zephir_memnstr_str(hostname, SL("#"), "/Users/gutierrezandresfelipe/xx/test/router.zep", 382)) {
 					ZEPHIR_INIT_LNVAR(_7);
 					ZEPHIR_CONCAT_SV(_7, "#^", hostname);
 					ZEPHIR_INIT_NVAR(regexHostName);
@@ -508,7 +508,7 @@ PHP_METHOD(Test_Router, handle) {
 		ZEPHIR_INIT_NVAR(pattern);
 		zephir_call_method(pattern, route, "getcompiledpattern");
 		ZEPHIR_INIT_NVAR(routeFound);
-		if (zephir_memnstr_str(pattern, SL("^"))) {
+		if (zephir_memnstr_str(pattern, SL("^"), "/Users/gutierrezandresfelipe/xx/test/router.zep", 400)) {
 			Z_SET_ISREF_P(matches);
 			zephir_call_func_p3(routeFound, "preg_match", pattern, handledUri, matches);
 		} else {

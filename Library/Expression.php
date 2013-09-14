@@ -765,6 +765,24 @@ class Expression
 		return $resolved;
 	}
 
+	public function compileInstanceOf($expression, CompilationContext $compilationContext)
+	{
+
+		$expr = new Expression($expression['left']);
+		$resolved = $expr->compile($compilationContext);
+
+		if ($resolved->getType() != 'variable') {
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand");
+		}
+
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
+		}
+
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlaches($expression['right']['value'])) . '") TSRMLS_CC)', $expression);
+	}
+
 	/**
 	 * Converts a value into another
 	 *
@@ -1077,11 +1095,13 @@ class Expression
 			case 'type-hint':
 				return $this->compileTypeHint($expression, $compilationContext);
 
+			case 'instanceof':
+				return $this->compileInstanceOf($expression, $compilationContext);
+
 			/**
 			 * @TODO implement this
 			 */
 			case 'require':
-			case 'instanceof':
 			case 'typeof':
 			case 'static-property-access':
 			case 'clone':

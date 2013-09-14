@@ -443,9 +443,18 @@ class CompilerFile
 		}
 
 		if ($codePrinter) {
-			file_put_contents($filePath, $codePrinter->getOutput());
-			if ($compilationContext->headerPrinter) {
-				file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+			if (!file_exists($filePath)) {
+				file_put_contents($filePath, $codePrinter->getOutput());
+				if ($compilationContext->headerPrinter) {
+					file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+				}
+			} else {
+				//if (filemtime($filePath) < filemtime($this->_filePath)) {
+					file_put_contents($filePath, $codePrinter->getOutput());
+					if ($compilationContext->headerPrinter) {
+						file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+					}
+				//}
 			}
 		}
 
