@@ -449,12 +449,12 @@ class CompilerFile
 					file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
 				}
 			} else {
-				//if (filemtime($filePath) < filemtime($this->_filePath)) {
+				if (filemtime($filePath) < filemtime($this->_filePath)) {
 					file_put_contents($filePath, $codePrinter->getOutput());
 					if ($compilationContext->headerPrinter) {
 						file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
 					}
-				//}
+				}
 			}
 		}
 

@@ -22,6 +22,8 @@ class NotEqualsOperator extends ComparisonBaseOperator
 
 	protected $_commutative = true;
 
+	protected $_inverse = true;
+
 	protected $_operator = '!=';
 
 	protected $_bitOperator = '!=';
@@ -31,5 +33,9 @@ class NotEqualsOperator extends ComparisonBaseOperator
 	protected $_zvalLongOperator = '!ZEPHIR_IS_LONG';
 
 	protected $_zvalStringOperator = '!ZEPHIR_IS_STRING';
+
+	protected $_zvalBoolTrueOperator = '!ZEPHIR_IS_TRUE';
+
+	protected $_zvalBoolFalseOperator = '!ZEPHIR_IS_FALSE';
 
 }

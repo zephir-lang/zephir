@@ -27,4 +27,8 @@ class IdenticalOperator extends ComparisonBaseOperator
 
 	protected $_zvalOperator = 'ZEPHIR_IS_IDENTICAL';
 
+	protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
+
+	protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
+
 }

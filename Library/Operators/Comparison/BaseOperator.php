@@ -174,12 +174,16 @@ class ComparisonBaseOperator extends BaseOperator
 								$compilationContext->headersManager->add('kernel/operators');
 								if ($right->getCode() == 'true') {
 									if ($variable->isLocalOnly()) {
-										return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(&' . $variable->getName() . ')', $expression['left']);
+										return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(&' . $variable->getName() . ')', $expression['left']);
 									} else {
-										return new CompiledExpression('bool', 'ZEPHIR_IS_TRUE(' . $variable->getName() . ')', $expression['left']);
+										return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(' . $variable->getName() . ')', $expression['left']);
 									}
 								} else {
-									return new CompiledExpression('bool', 'ZEPHIR_IS_FALSE(' . $left->getCode() . ')', $expression['left']);
+									if ($variable->isLocalOnly()) {
+										return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(&' . $left->getCode() . ')', $expression['left']);
+									} else {
+										return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(' . $left->getCode() . ')', $expression['left']);
+									}
 								}
 								break;
 							case 'null':
