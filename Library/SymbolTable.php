@@ -140,7 +140,7 @@ class SymbolTable
 	 * @param \CompilationContext $compilationContext
 	 * @return \Variable
 	 */
-	public function getVariableForRead($name, $compilationContext=null, $statement=null)
+	public function getVariableForRead($name, CompilationContext $compilationContext=null, $statement=null)
 	{
 
 		/**

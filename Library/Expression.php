@@ -164,7 +164,7 @@ class Expression
 
 		$dynamicType = $variable->getDynamicType();
 		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
-			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-increment', $statement);
+			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-isset', $expression);
 		}
 
 		$compilationContext->headersManager->add('kernel/array');
@@ -754,7 +754,7 @@ class Expression
 			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
 		}
 
-		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
 		}
@@ -775,7 +775,7 @@ class Expression
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand");
 		}
 
-		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
@@ -805,7 +805,7 @@ class Expression
 						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						return new CompiledExpression('int', 'zephir_get_numberval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
@@ -815,7 +815,7 @@ class Expression
 				switch ($resolved->getType()) {
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
@@ -963,9 +963,6 @@ class Expression
 
 			case 'fetch':
 				return $this->compileFetch($expression, $compilationContext);
-
-			case 'typeof':
-				return new CompiledExpression('typeof', null, $expression);
 
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);

@@ -7,6 +7,7 @@
  */
 class ArrayMergeOptimizer
 {
+
 	/**
 	 *
 	 * @param array $expression
@@ -43,4 +44,5 @@ class ArrayMergeOptimizer
 		$context->codePrinter->output('zephir_fast_array_merge(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . '), &(' . $resolvedParams[1] . ') TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
+
 }

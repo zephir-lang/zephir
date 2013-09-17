@@ -28,8 +28,72 @@ class ComparisonBaseOperator extends BaseOperator
 
 	protected $_commutative = false;
 
+	/**
+	 *
+	 * @param array $expr
+	 * @param array $compilationContext
+	 */
+	public function optimizeTypeOf($expr, $compilationContext)
+	{
+
+		if (!isset($expr['left'])) {
+			return false;
+		}
+
+		if ($expr['left']['type'] == 'typeof' && $expr['right']['type'] == 'string') {
+
+			if (isset($expr['type'])) {
+				switch ($expr['type']) {
+					case 'identical':
+					case 'equals':
+						$operator = '==';
+						break;
+					case 'not-identical':
+					case 'not-equals':
+						$operator = '!=';
+						break;
+					default:
+						return false;
+				}
+			}
+
+			/** @todo, read left variable from the symbol table */
+			switch ($expr['right']['value']) {
+				case 'array':
+					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_ARRAY)';
+					break;
+				case 'object':
+					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_OBJECT)';
+					break;
+				case 'null':
+					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_NULL)';
+					break;
+				case 'string':
+					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_STRING)';
+					break;
+				case 'int':
+				case 'integer':
+				case 'long':
+					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_LONG)';
+					break;
+				default:
+					throw new CompilerException($expr['right']['value'], $expr['right']);
+			}
+
+			return new CompiledExpression('bool', $condition, $expr);
+		}
+
+		return false;
+	}
+
 	public function compile($expression, CompilationContext $compilationContext)
 	{
+
+		$conditions = $this->optimizeTypeOf($expression, $compilationContext);
+		if ($conditions !== false) {
+			return $conditions;
+		}
+
 		if (!isset($expression['left'])) {
 			throw new Exception("Missing left part of the expression");
 		}
@@ -47,6 +111,24 @@ class ComparisonBaseOperator extends BaseOperator
 		$right = $rightExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
+			case 'null':
+				switch ($right->getType()) {
+					case 'null':
+						return new CompiledExpression('bool', '(0 ' . $this->_operator . ' 0)', $expression);
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
+						return new CompiledExpression('bool', '(0 ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+					case 'char':
+					case 'uchar':
+						return new CompiledExpression('bool', '(\'\\0\' ' . $this->_operator . ' \'' . $right->getCode() . '\')', $expression);
+					case 'double':
+						return new CompiledExpression('bool', '(0 ' . $this->_operator . ' (int) ' . $right->getCode() . ')', $expression);
+					default:
+						throw new CompilerException("Unknown type: " . $right->getType(), $expression);
+				}
+				break;
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -235,7 +317,7 @@ class ComparisonBaseOperator extends BaseOperator
 				}
 				break;
 			default:
-				throw new CompilerException("Error Processing Request", $expression);
+				throw new CompilerException("Unknown type: " . $left->getType(), $expression);
 		}
 
 	}

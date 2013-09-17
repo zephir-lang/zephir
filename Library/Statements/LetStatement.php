@@ -1477,8 +1477,10 @@ class LetStatement
 			switch ($assignment['assign-type']) {
 				case 'static-property':
 				case 'static-property-append':
+				case 'static-property-array-index':
 					break;
 				default:
+					echo $assignment['assign-type'];
 					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
 					break;
 			}
@@ -1533,6 +1535,9 @@ class LetStatement
 					/* @todo, implement this */
 					break;
 				case 'static-property-append':
+					/* @todo, implement this */
+					break;
+				case 'static-property-array-index':
 					/* @todo, implement this */
 					break;
 				case 'array-index':

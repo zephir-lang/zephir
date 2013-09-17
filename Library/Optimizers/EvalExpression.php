@@ -39,64 +39,6 @@ class EvalExpression
 	}
 
 	/**
-	 *
-	 * @param array $expr
-	 * @param array $compilationContext
-	 */
-	public function optimizeTypeOf($expr, $compilationContext)
-	{
-
-		if (!isset($expr['left'])) {
-			return false;
-		}
-
-		if ($expr['left']['type'] == 'typeof' && $expr['right']['type'] == 'string') {
-
-			if (isset($expr['type'])) {
-				switch ($expr['type']) {
-					case 'identical':
-					case 'equals':
-						$operator = '==';
-						break;
-					case 'not-identical':
-					case 'not-equals':
-						$operator = '!=';
-						break;
-					default:
-						return false;
-				}
-			}
-
-			/** @todo, read left variable from the symbol table */
-			switch ($expr['right']['value']) {
-				case 'array':
-					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_ARRAY';
-					break;
-				case 'object':
-					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_OBJECT';
-					break;
-				case 'null':
-					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_NULL';
-					break;
-				case 'string':
-					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_STRING';
-					break;
-				case 'int':
-				case 'integer':
-				case 'long':
-					$condition = 'Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_LONG';
-					break;
-				default:
-					throw new CompilerException($expr['right']['value'], $expr['right']);
-			}
-
-			return $condition;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Optimizes expressions
 	 *
 	 * @param array $exprRaw
@@ -106,11 +48,6 @@ class EvalExpression
 	{
 
 		$conditions = $this->optimizeNot($exprRaw, $compilationContext);
-		if ($conditions !== false) {
-			return $conditions;
-		}
-
-		$conditions = $this->optimizeTypeOf($exprRaw, $compilationContext);
 		if ($conditions !== false) {
 			return $conditions;
 		}
@@ -151,7 +88,7 @@ class EvalExpression
 				 */
 				return $compiledExpression->getBooleanCode();
 			case 'variable':
-				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $exprRaw);
+				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
 				switch ($variableRight->getType()) {
 					case 'int':
 						return $variableRight->getName();
