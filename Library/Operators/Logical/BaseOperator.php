@@ -118,7 +118,7 @@ class LogicalBaseOperator extends BaseOperator
 			case 'string':
 				switch ($right->getType()) {
 					default:
-						throw new CompilerException("Add is not supported between strings", $expression);
+						throw new CompilerException("Operation is not supported between strings", $expression);
 				}
 				break;
 			case 'variable':
@@ -377,4 +377,5 @@ class LogicalBaseOperator extends BaseOperator
 				throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
 		}
 	}
+
 }
