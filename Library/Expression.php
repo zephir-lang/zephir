@@ -219,11 +219,23 @@ class Expression
 		$compilationContext->headersManager->add('kernel/array');
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
+		if ($variable->getType() != 'variable') {
+			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "fetch" operator', $expression);
+		}
+
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
 		$variable->setDynamicType('undefined');
 
 		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
+		if ($evalVariable->getType() != 'variable') {
+			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $expression['right']);
+		}
+
+		$dynamicType = $evalVariable->getDynamicType();
+		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
+			$compilationContext->logger->warning('Possible attempt to use non array/object in fetch operator', 'non-valid-fetch', $expression['right']);
+		}
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
@@ -839,7 +851,7 @@ class Expression
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						$compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
 						return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 					default:

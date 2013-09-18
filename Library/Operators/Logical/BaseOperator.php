@@ -53,7 +53,7 @@ class LogicalBaseOperator extends BaseOperator
 					case 'bool':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
 					case 'variable':
-						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 						switch ($variableRight->getType()) {
 							case 'int':
 								return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
@@ -68,10 +68,10 @@ class LogicalBaseOperator extends BaseOperator
 									return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . '))', $expression);
 								}
 							default:
-								throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+								throw new Exception("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')");
 						}
 					default:
-						throw new Exception("Cannot add 'int' with '" . $right->getType() . "'");
+						throw new Exception("Cannot compare 'int' with '" . $right->getType() . "'");
 				}
 				break;
 			case 'bool':
@@ -81,8 +81,26 @@ class LogicalBaseOperator extends BaseOperator
 						return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ((' . $right->getCode() . ') ? 1 : 0))', $expression);
 					case 'bool':
 						return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+					case 'variable':
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
+						switch ($variableRight->getType()) {
+							case 'int':
+								return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'bool':
+								return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'double':
+								return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'variable':
+								if ($variableRight->isLocalOnly()) {
+									return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zend_is_true(&' . $variableRight->getName() . '))', $expression);
+								} else {
+									return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . '))', $expression);
+								}
+							default:
+								throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+						}
 					default:
-						throw new Exception("Cannot add 'bool' with '" . $right->getType() . "'");
+						throw new Exception("Cannot compare 'bool' with '" . $right->getType() . "'");
 				}
 				break;
 			case 'double':
@@ -94,7 +112,7 @@ class LogicalBaseOperator extends BaseOperator
 					case 'bool':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
 					default:
-						throw new CompilerException("Cannot add 'double' with '" . $right->getType() . "'", $expression);
+						throw new CompilerException("Cannot compare 'double' with '" . $right->getType() . "'", $expression);
 				}
 				break;
 			case 'string':
@@ -112,7 +130,7 @@ class LogicalBaseOperator extends BaseOperator
 							case 'int':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
@@ -128,10 +146,10 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . '))', $expression);
 										}
 									default:
-										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					case 'bool':
@@ -141,7 +159,7 @@ class LogicalBaseOperator extends BaseOperator
 							case 'bool':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
@@ -154,10 +172,10 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . '))', $expression);
 										}
 									default:
-										throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 					case 'double':
 						switch ($right->getType()) {
@@ -168,7 +186,7 @@ class LogicalBaseOperator extends BaseOperator
 							case 'bool':
 								return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
@@ -183,10 +201,10 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
-										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
+										throw new Exception("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')");
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					case 'string':
@@ -198,7 +216,7 @@ class LogicalBaseOperator extends BaseOperator
 							case 'bool':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
 							case 'variable':
-								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {
 									case 'int':
 										return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -216,15 +234,15 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zend_is_true(' . $variableRight->getName() . ')', $expression);
 										}
 									default:
-										throw new Exception("Cannot add variable('double') with variable('" . $variableRight->getType() . "')");
+										throw new Exception("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')");
 								}
 							default:
-								throw new CompilerException("Cannot add variable('int') with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					case 'variable':
 						switch ($right->getType()) {
-							/* a + 1 */
+							/* a && 1 */
 							case 'int':
 							case 'double':
 								$compilationContext->headersManager->add('kernel/operators');
@@ -236,11 +254,11 @@ class LogicalBaseOperator extends BaseOperator
 								}
 								$op2 = $right->getCode();
 								return new CompiledExpression('bool', 'zend_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
-							/* a(var) + a(x) */
+							/* a(var) && a(x) */
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
 								switch ($variableRight->getType()) {
-									/* a(var) + a(int) */
+									/* a(var) && a(int) */
 									case 'int':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableLeft->isLocalOnly()) {
@@ -249,7 +267,7 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('bool', 'zend_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 										}
 										break;
-									/* a(var) + a(bool) */
+									/* a(var) && a(bool) */
 									case 'bool':
 										$compilationContext->headersManager->add('kernel/operators');
 										if ($variableLeft->isLocalOnly()) {
@@ -258,7 +276,7 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('bool', 'zend_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 										}
 										break;
-									/* a(var) + a(var) */
+									/* a(var) && a(var) */
 									case 'variable':
 
 										$compilationContext->headersManager->add('kernel/operators');
@@ -284,10 +302,10 @@ class LogicalBaseOperator extends BaseOperator
 										return new CompiledExpression('variable', $expected->getName(), $expression);
 
 									default:
-										throw new CompilerException("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot compare 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add 'variable' with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare 'variable' with '" . $right->getType() . "'", $expression);
 						}
 					case 'variable':
 						switch ($right->getType()) {
@@ -320,7 +338,7 @@ class LogicalBaseOperator extends BaseOperator
 											return new CompiledExpression('int', 'zend_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 										}
 									case 'variable':
-										$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+										$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 										switch ($variableRight->getType()) {
 											case 'int':
 												return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
@@ -341,14 +359,14 @@ class LogicalBaseOperator extends BaseOperator
 												}
 												return new CompiledExpression('bool', '(zend_is_true(' . $expected->getName() . ') ' . $this->_operator . ' zend_is_true(' . $op2 . '))', $expression);
 											default:
-												throw new CompilerException("Cannot add variable('double') with variable('" . $variableRight->getType() . "')", $expression);
+												throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
 										}
 										break;
 									default:
-										throw new CompilerException("Cannot add 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
+										throw new CompilerException("Cannot compare 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
 							default:
-								throw new CompilerException("Cannot add 'variable' with '" . $right->getType() . "'", $expression);
+								throw new CompilerException("Cannot compare 'variable' with '" . $right->getType() . "'", $expression);
 						}
 						break;
 					default:
