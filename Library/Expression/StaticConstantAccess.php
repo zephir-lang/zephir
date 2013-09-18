@@ -72,10 +72,15 @@ class StaticConstantAccess
 		 * is supposed to be declared
 		 */
 		if ($className != 'self' && $className != 'parent') {
-			if (!$compiler->isClass($className)) {
-				throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+			if ($compiler->isClass($className)) {
+				$classDefinition = $compiler->getClassDefinition($className);
+			} else {
+				if ($compiler->isInternalClass($className)) {
+					$classDefinition = $compiler->getInternalClassDefinition($className);
+				} else {
+					throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
+				}
 			}
-			$classDefinition = $compiler->getClassDefinition($className);
 		} else {
 			if ($className == 'self') {
 				$classDefinition = $compilationContext->classDefinition;
@@ -134,6 +139,15 @@ class StaticConstantAccess
 
 		$constantDefinition = $classDefinition->getConstant($constant);
 
+		if ($constantDefinition instanceof ClassConstant) {
+			$value = $constantDefinition->getValue();
+		} else {
+			$value = array(
+				'type' => gettype($constantDefinition),
+				'value' => $constantDefinition
+			);
+		}
+
 		/**
 		 * Create an implicit 'let' operation, this assigns the constant value to the variable
 		 */
@@ -144,7 +158,7 @@ class StaticConstantAccess
 					'assign-type' => 'variable',
 					'variable' => $symbolVariable->getRealName(),
 					'operator' => 'assign',
-					'expr' => $constantDefinition->getValue(),
+					'expr' => $value,
 					'file' => $expression['file'],
 					'line' => $expression['line'],
 					'char' => $expression['char']

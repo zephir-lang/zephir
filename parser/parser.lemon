@@ -2045,6 +2045,10 @@ xx_literal_expr(R) ::= TRUE . {
 	R = xx_ret_literal(XX_T_TRUE, NULL, status->scanner_state);
 }
 
+xx_literal_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
+	R = xx_ret_expr("static-constant-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
 /* isset v[x] */
 xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), E, NULL, status->scanner_state);

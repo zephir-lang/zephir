@@ -1480,7 +1480,6 @@ class LetStatement
 				case 'static-property-array-index':
 					break;
 				default:
-					echo $assignment['assign-type'];
 					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
 					break;
 			}

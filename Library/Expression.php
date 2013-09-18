@@ -369,6 +369,7 @@ class Expression
 			 * Classes inside the same extension
 			 */
 			if ($compilationContext->compiler->isClass($className)) {
+				/* @todo, use the class definition instead */
 				$classCe = strtolower(str_replace('\\', '_', $className)) . '_ce';
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
 				$symbolVariable->setClassType($className);
@@ -911,6 +912,7 @@ class Expression
 				return new CompiledExpression('null', null, $expression);
 
 			case 'int':
+			case 'integer':
 				return new CompiledExpression('int', $expression['value'], $expression);
 
 			case 'double':
@@ -927,7 +929,11 @@ class Expression
 
 			case 'char':
 				if (strlen($expression['value']) > 2) {
-					throw new CompilerException("Invalid char literal: " . $expression['value'], $expression);
+					if (strlen($expression['value']) > 10) {
+						throw new CompilerException("Invalid char literal: '" . substr($expression['value'], 0, 10) . "...'", $expression);
+					} else {
+						throw new CompilerException("Invalid char literal: '" . $expression['value'] . "'", $expression);
+					}
 				}
 				return new CompiledExpression('char', $expression['value'], $expression);
 
