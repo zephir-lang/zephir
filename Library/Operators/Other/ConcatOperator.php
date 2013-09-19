@@ -52,7 +52,7 @@ class ConcatOperator extends BaseOperator
 		}
 
 		if ($left->getType() == 'variable' && $right->getType() == 'variable') {
-			$compilationContext->codePrinter->output('concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ');');
+			$compilationContext->codePrinter->output('concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC);');
 		}
 
 		return new CompiledExpression('variable', $expected->getName(), $expression);
