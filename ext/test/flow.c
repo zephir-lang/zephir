@@ -506,7 +506,7 @@ PHP_METHOD(Test_Flow, testWhile10) {
 
 
 	while (1) {
-		if (!(zend_is_true(a))) {
+		if (!(zephir_is_true(a))) {
 			break;
 		}
 		b = 5;
@@ -536,12 +536,12 @@ PHP_METHOD(Test_Flow, testWhile11) {
 
 
 	while (1) {
-		if (!(zend_is_true(a))) {
+		if (!(zephir_is_true(a))) {
 			break;
 		}
 		ZEPHIR_CPY_WRT(b, d);
 		while (1) {
-			if (!(zend_is_true(b))) {
+			if (!(zephir_is_true(b))) {
 				break;
 			}
 			ZEPHIR_SEPARATE(b);
