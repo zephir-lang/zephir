@@ -1013,6 +1013,13 @@ class LetStatement
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
+			case 'bool':
+				if ($resolvedExpr->getBooleanCode() == '1') {
+					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
+				} else {
+					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+				}
+				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
@@ -1022,6 +1029,10 @@ class LetStatement
 					case 'ulong':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+						break;
+					case 'bool':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
 					case 'variable':
 						$symbolVariable = $variableExpr;

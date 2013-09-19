@@ -573,6 +573,19 @@ static json_object *xx_ret_loop_statement(json_object *statements, xx_scanner_st
 	return ret;
 }
 
+static json_object *xx_ret_empty_statement(xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("empty"));
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_break_statement(xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -1358,6 +1371,14 @@ xx_statement(R) ::= xx_for_statement(S) . {
 
 xx_statement(R) ::= xx_comment(S) . {
 	R = S;
+}
+
+xx_statement(R) ::= xx_empty_statement(S) . {
+	R = S;
+}
+
+xx_empty_statement(R) ::= DOTCOMMA . {
+	R = xx_ret_empty_statement(status->scanner_state);
 }
 
 xx_break_statement(R) ::= BREAK DOTCOMMA . {
