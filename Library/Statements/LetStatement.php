@@ -816,17 +816,17 @@ class LetStatement
 										break;
 									case 'concat-assign':
 										$compilationContext->headersManager->add('kernel/operators');
-										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ');');
+										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
 									case 'add-assign':
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
-										$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
+										$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
 									case 'sub-assign':
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
-										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
+										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
