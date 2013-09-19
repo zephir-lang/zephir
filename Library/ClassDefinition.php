@@ -180,13 +180,13 @@ class ClassDefinition
 	public function addProperty(ClassProperty $property)
 	{
 		if (isset($this->_properties[$property->getName()])) {
-			throw new Exception("Property '" . $property->getName() . "' was defined more than one time");
+			throw new CompilerException("Property '" . $property->getName() . "' was defined more than one time", $property->getOriginal());
 		}
 		$this->_properties[$property->getName()] = $property;
 	}
 
 	/**
-	 * Adds a property to the definition
+	 * Adds a constant to the definition
 	 *
 	 * @param ClassConstant $constant
 	 */

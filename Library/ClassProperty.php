@@ -33,6 +33,8 @@ class ClassProperty
 
 	protected $_docblock;
 
+	protected $_original;
+
 	/**
 	 *
 	 *
@@ -51,6 +53,7 @@ class ClassProperty
 		$this->_name = $name;
 		$this->_defaultValue = $defaultValue;
 		$this->_docblock = $docBlock;
+		$this->_original = $original;
 	}
 
 	/**
@@ -61,6 +64,11 @@ class ClassProperty
 	public function getName()
 	{
 		return $this->_name;
+	}
+
+	public function getOriginal()
+	{
+		return $this->_original;
 	}
 
 	public function checkVisibility($visibility, $name, $original)

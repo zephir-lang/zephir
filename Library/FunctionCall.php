@@ -126,6 +126,8 @@ class FunctionCall extends Call
 				foreach ($funcParameters as $parameter) {
 					if ($numberParameters >= $n) {
 						if ($parameter->isPassedByReference()) {
+							$variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
+							$variable->setDynamicType('undefined');
 							$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
 							$references[] = $parameters[$n - 1] ;
 							return false;
