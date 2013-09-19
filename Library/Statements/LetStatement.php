@@ -1163,7 +1163,11 @@ class LetStatement
 		}
 
 		if ($symbolVariable->isReadOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			/**
+			 * @TODO implement increment of objects members
+			 */
+			//throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			return;
 		}
 
 		$codePrinter = $compilationContext->codePrinter;

@@ -192,6 +192,7 @@ class FunctionCall extends Call
 			case 'prepare_virtual_path':
 			case 'create_instance':
 			case 'create_instance_params':
+			case 'create_symbol_table':
 				return true;
 		}
 		return false;

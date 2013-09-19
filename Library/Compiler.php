@@ -635,4 +635,14 @@ class Compiler
 		}
 	}
 
+	/**
+	 * Returns a short path
+	 *
+	 * @param string $path
+	 */
+	public function getShortPath($path)
+	{
+		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
+	}
+
 }

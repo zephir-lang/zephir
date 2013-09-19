@@ -98,6 +98,8 @@ class LocalContextPass
 						case 'mcall':
 						case 'scall':
 						case 'concat':
+						case 'clone':
+						case 'require':
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
 						case 'constant':
@@ -236,6 +238,8 @@ class LocalContextPass
 				$this->passExpression($expression['left']);
 				break;
 			case 'isset':
+			case 'empty':
+			case 'instanceof':
 				$this->passExpression($expression['left']);
 				break;
 			case 'fetch':
@@ -343,6 +347,7 @@ class LocalContextPass
 				case 'mcall':
 				case 'scall':
 				case 'fcall':
+				case 'require':
 					$this->passCall($statement['expr']);
 					break;
 				case 'break':

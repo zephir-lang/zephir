@@ -340,7 +340,12 @@ class StaticTypeInference
 				$this->passExpression($expression['left']);
 				return 'variable';
 			case 'fetch':
+				$this->markVariable($expression['left']['value'], 'variable');
+				$this->passExpression($expression['right']);
+				return 'bool';
 			case 'isset':
+			case 'empty':
+			case 'instanceof':
 				$this->passExpression($expression['left']);
 				return 'bool';
 			case 'list':
@@ -356,6 +361,9 @@ class StaticTypeInference
 				return null;
 			case 'constant':
 				return null;
+			case 'clone':
+			case 'require':
+				return 'variable';
 			default:
 				echo $expression['type'], PHP_EOL;
 				break;
