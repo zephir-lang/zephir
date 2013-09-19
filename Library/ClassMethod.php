@@ -244,27 +244,29 @@ class ClassMethod
 				}
 				break;
 			case 'variable':
-				$compilationContext->headersManager->add('kernel/memory');
 				$compilationContext->symbolTable->mustGrownStack(true);
-				$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
 					case 'double':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
 					case 'bool':
 						if ($parameter['default']['value'] == 'true') {
-							$code .= "\t\t" . 'ZVAL_BOOL' . $parameter['name'] . ', 1);' . PHP_EOL;
+							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_true));' . PHP_EOL;
 						} else {
-							$code .= "\t\t" . 'ZVAL_BOOL' . $parameter['name'] . ', 0);' . PHP_EOL;
+							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_false));' . PHP_EOL;
 						}
 						break;
 					case 'null':
+						$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_null));' . PHP_EOL;
 						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
@@ -678,10 +680,11 @@ class ClassMethod
 		 * Check if there are unused variables
 		 */
 		$usedVariables = array();
+		$completeName = $compilationContext->classDefinition->getCompleteName();
 		foreach ($symbolTable->getVariables() as $variable) {
 
 			if ($variable->getNumberUses() <= 0) {
-				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $compilationContext->classDefinition->getName() . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
 				if ($variable->isExternal() == false) {
 					continue;
 				}

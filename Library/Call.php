@@ -56,6 +56,7 @@ class Call
 		 * Create temporary variable if needed
 		 */
 		$mustInit = false;
+		$symbolVariable = null;
 		$isExpecting = $expr->isExpectingReturn();
 		if ($isExpecting) {
 			$symbolVariable = $expr->getExpectingVariable();
@@ -144,14 +145,16 @@ class Call
 	 * @param array $parameters
 	 * @param CompilationContext $compilationContext
 	 * @param array $expression
+	 * @param boolean $readOnly
 	 * @return array
 	 */
-	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression)
+	public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression, $readOnly=false)
 	{
 		if (!$this->_resolvedParams) {
 			$params = array();
 			foreach ($parameters as $parameter) {
 				$paramExpr = new Expression($parameter);
+				$paramExpr->setReadOnly($readOnly);
 				$params[] = $paramExpr->compile($compilationContext);
 			}
 			$this->_resolvedParams = $params;
@@ -195,10 +198,11 @@ class Call
 					$params[] = $parameterVariable->getName();
 					break;
 				case 'bool':
-					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
-					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = $parameterVariable->getName();
+					if ($compiledExpression->getCode() == 'true') {
+						$params[] = 'ZEPHIR_GLOBAL(global_true)';
+					} else {
+						$params[] = 'ZEPHIR_GLOBAL(global_false)';
+					}
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -219,10 +223,7 @@ class Call
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
 						case 'bool':
-							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-							$codePrinter->output('ZVAL_BOOL(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
-							$params[] = $parameterTempVariable->getName();
-							$this->_temporalVariables[] = $parameterTempVariable;
+							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;
 						case 'string':
 						case 'variable':
@@ -253,7 +254,7 @@ class Call
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
+		$exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
 		$params = array();
 		foreach ($exprParams as $compiledExpression) {
@@ -275,10 +276,11 @@ class Call
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'bool':
-					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
-					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = '&' . $parameterVariable->getName();
+					if ($compiledExpression->getCode() == 'true') {
+						$params[] = 'ZEPHIR_GLOBAL(global_true)';
+					} else {
+						$params[] = 'ZEPHIR_GLOBAL(global_false)';
+					}
 					break;
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
@@ -297,6 +299,9 @@ class Call
 							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
+							break;
+						case 'bool':
+							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;
 						case 'string':
 						case 'variable':

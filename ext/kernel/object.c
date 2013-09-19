@@ -27,7 +27,7 @@
 #include "php_string.h"
 #endif
 
-#include "php_test.h"
+#include "php_ext.h"
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -416,19 +416,19 @@ static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, cha
 /**
  * Reads a property from an object
  */
-int zephir_read_property(zval **result, zval *object, char *property_name, unsigned int property_length, int silent TSRMLS_DC) {
+int zephir_read_property(zval **result, zval *object, char *property_name, unsigned int property_length, int flags TSRMLS_DC) {
 
 	zval *property;
 	zend_class_entry *ce, *old_scope;
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Trying to get property of non-object");
 		}
 
-		ALLOC_INIT_ZVAL(*result);
-		ZVAL_NULL(*result);
+		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
 		return FAILURE;
 	}
 
@@ -456,9 +456,9 @@ int zephir_read_property(zval **result, zval *object, char *property_name, unsig
 	ZVAL_STRINGL(property, property_name, property_length, 0);
 
 #if PHP_VERSION_ID < 50400
-	*result = Z_OBJ_HT_P(object)->read_property(object, property, silent ? BP_VAR_IS : BP_VAR_R TSRMLS_CC);
+	*result = Z_OBJ_HT_P(object)->read_property(object, property, (flags & PH_NOISY) == PH_NOISY ? BP_VAR_IS : BP_VAR_R TSRMLS_CC);
 #else
-	*result = Z_OBJ_HT_P(object)->read_property(object, property, silent ? BP_VAR_IS : BP_VAR_R, 0 TSRMLS_CC);
+	*result = Z_OBJ_HT_P(object)->read_property(object, property, (flags & PH_NOISY) == PH_NOISY ? BP_VAR_IS : BP_VAR_R, 0 TSRMLS_CC);
 #endif
 
 	Z_ADDREF_PP(result);
@@ -479,43 +479,44 @@ int zephir_read_property(zval **result, zval *object, char *property_name, unsig
  * Reads a property from this_ptr
  * Variables must be defined in the class definition. This function ignores magic methods or dynamic properties
  */
-int zephir_read_property_this(zval **result, zval *object, char *property_name, unsigned int property_length, int silent TSRMLS_DC) {
+int zephir_read_property_this(zval **result, zval *object, char *property_name, unsigned int property_length, int flags TSRMLS_DC) {
 
-	return zephir_read_property_this_quick(result, object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), silent TSRMLS_CC);
+	return zephir_read_property_this_quick(result, object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), flags TSRMLS_CC);
 }
 
 /**
  * Reads a property from this_ptr (with pre-calculated key)
  * Variables must be defined in the class definition. This function ignores magic methods or dynamic properties
  */
-int zephir_read_property_this_quick(zval **result, zval *object, char *property_name, unsigned int property_length, unsigned long key, int silent TSRMLS_DC) {
+int zephir_read_property_this_quick(zval **result, zval *object, char *property_name, unsigned int property_length, unsigned long key, int flags TSRMLS_DC) {
 
-	zval *tmp = zephir_fetch_property_this_quick(object, property_name, property_length, key, silent TSRMLS_CC);
+	zval *tmp = zephir_fetch_property_this_quick(object, property_name, property_length, key, flags TSRMLS_CC);
 	if (likely(tmp != NULL)) {
 		*result = tmp;
 		Z_ADDREF_PP(result);
 		return SUCCESS;
 	}
 
-	ALLOC_INIT_ZVAL(*result);
+	*result = ZEPHIR_GLOBAL(global_null);
+	Z_ADDREF_P(*result);
 	return FAILURE;
 }
 
-zval* zephir_fetch_nproperty_this(zval *object, char *property_name, unsigned int property_length, int silent TSRMLS_DC) {
-	return zephir_fetch_nproperty_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), silent TSRMLS_CC);
+zval* zephir_fetch_nproperty_this(zval *object, char *property_name, unsigned int property_length, int flags TSRMLS_DC) {
+	return zephir_fetch_nproperty_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), flags TSRMLS_CC);
 }
 
-zval* zephir_fetch_nproperty_this_quick(zval *object, char *property_name, unsigned int property_length, unsigned long key, int silent TSRMLS_DC) {
-	zval *result = zephir_fetch_property_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), silent TSRMLS_CC);
-	return result ? result : EG(uninitialized_zval_ptr);
+zval* zephir_fetch_nproperty_this_quick(zval *object, char *property_name, unsigned int property_length, unsigned long key, int flags TSRMLS_DC) {
+	zval *result = zephir_fetch_property_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), flags TSRMLS_CC);
+	return result ? result : ZEPHIR_GLOBAL(global_null);
 }
 
 
-zval* zephir_fetch_property_this(zval *object, char *property_name, unsigned int property_length, int silent TSRMLS_DC) {
-	return zephir_fetch_property_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), silent TSRMLS_CC);
+zval* zephir_fetch_property_this(zval *object, char *property_name, unsigned int property_length, int flags TSRMLS_DC) {
+	return zephir_fetch_property_this_quick(object, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1), flags TSRMLS_CC);
 }
 
-zval* zephir_fetch_property_this_quick(zval *object, char *property_name, unsigned int property_length, unsigned long key, int silent TSRMLS_DC) {
+zval* zephir_fetch_property_this_quick(zval *object, char *property_name, unsigned int property_length, unsigned long key, int flags TSRMLS_DC) {
 
 	zval **zv = NULL;
 	zend_object *zobj;
@@ -583,7 +584,7 @@ zval* zephir_fetch_property_this_quick(zval *object, char *property_name, unsign
 		EG(scope) = old_scope;
 
 	} else {
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Trying to get property of non-object");
 		}
 	}
@@ -701,19 +702,20 @@ int zephir_return_property(zval *return_value, zval **return_value_ptr, zval *ob
 /**
  * Reads a property from an object
  */
-int zephir_read_property_zval(zval **result, zval *object, zval *property, int silent TSRMLS_DC) {
+int zephir_read_property_zval(zval **result, zval *object, zval *property, int flags TSRMLS_DC) {
 
 	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
 
-		if (silent == PH_NOISY) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
 			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
 		}
 
-		ALLOC_INIT_ZVAL(*result);
+		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
 		return FAILURE;
 	}
 
-	return zephir_read_property(result, object, Z_STRVAL_P(property), Z_STRLEN_P(property), silent TSRMLS_CC);
+	return zephir_read_property(result, object, Z_STRVAL_P(property), Z_STRLEN_P(property), flags TSRMLS_CC);
 }
 
 /**
@@ -756,30 +758,14 @@ int zephir_update_property_string(zval *object, char *property_name, unsigned in
  * Checks whether obj is an object and updates property with bool value
  */
 int zephir_update_property_bool(zval *object, char *property_name, unsigned int property_length, int value TSRMLS_DC) {
-
-	zval *v;
-
-	ALLOC_ZVAL(v);
-	Z_UNSET_ISREF_P(v);
-	Z_SET_REFCOUNT_P(v, 0);
-	ZVAL_BOOL(v, value ? 1 : 0);
-
-	return zephir_update_property_zval(object, property_name, property_length, v TSRMLS_CC);
+	return zephir_update_property_zval(object, property_name, property_length, value ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 }
 
 /**
  * Checks whether obj is an object and updates property with null value
  */
 int zephir_update_property_null(zval *object, char *property_name, unsigned int property_length TSRMLS_DC) {
-
-	zval *v;
-
-	ALLOC_ZVAL(v);
-	Z_UNSET_ISREF_P(v);
-	Z_SET_REFCOUNT_P(v, 0);
-	ZVAL_NULL(v);
-
-	return zephir_update_property_zval(object, property_name, property_length, v TSRMLS_CC);
+	return zephir_update_property_zval(object, property_name, property_length, ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
 }
 
 /**

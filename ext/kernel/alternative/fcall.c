@@ -22,7 +22,7 @@
 #endif
 
 #include "php.h"
-#include "php_test.h"
+#include "php_ext.h"
 #include "ext/standard/php_smart_str.h"
 
 #include "Zend/zend_API.h"
@@ -954,7 +954,11 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 		ex_retval = zephir_alt_call_method(&fci, ce, hash_key, method_name, method_len, method_key TSRMLS_CC);
 
 		if (fci.function_name) {
-			ZVAL_NULL(fci.function_name);
+			if (Z_REFCOUNT_P(fci.function_name) == 1) {
+				ZVAL_NULL(fci.function_name);
+			} else {
+				zval_copy_ctor(fci.function_name);
+			}
 			zval_ptr_dtor(&fci.function_name);
 		}
 	}

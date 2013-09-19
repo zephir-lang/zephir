@@ -7,8 +7,12 @@
  */
 class UncamelizeOptimizer
 {
+
 	/**
 	 *
+	 * @param array $expression
+	 * @param Call $call
+	 * @param CompilationContext $context
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
@@ -40,4 +44,5 @@ class UncamelizeOptimizer
 		$context->codePrinter->output('zephir_uncamelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
+
 }

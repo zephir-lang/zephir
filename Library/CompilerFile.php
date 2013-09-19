@@ -100,23 +100,27 @@ class CompilerFile
 		 */
 		$classDefinition->compile($compilationContext);
 
+		$separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+
 		$code  = '' . PHP_EOL;
 		$code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
-		$code .= '#include "config.h"' . PHP_EOL;
+		$code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
 		$code .= '#endif' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
-		$code .= '#include "php.h"' . PHP_EOL;
-		$code .= '#include "php_test.h"' . PHP_EOL;
-		$code .= '#include "test.h"' . PHP_EOL;
+		$code .= '#include <php.h>' . PHP_EOL;
+		$code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
+		$code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
 		$code .= '' . PHP_EOL;
 
 		if ($classDefinition->getType() == 'class') {
-			$code .= '#include "Zend/zend_operators.h"' . PHP_EOL;
-			$code .= '#include "Zend/zend_exceptions.h"' . PHP_EOL;
-			$code .= '#include "Zend/zend_interfaces.h"' . PHP_EOL;
-			$code .= '' . PHP_EOL;
+			$code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
+			$code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+			$code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
+		} else {
+			$code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
 		}
+		$code .= '' . PHP_EOL;
 
 		$code .= '#include "kernel/main.h"' . PHP_EOL;
 
@@ -197,7 +201,8 @@ class CompilerFile
 						$property['visibility'],
 						$property['name'],
 						isset($property['default']) ? $property['default'] : null,
-						isset($property['docblock']) ? $property['docblock'] : null
+						isset($property['docblock']) ? $property['docblock'] : null,
+						$property
 					));
 				}
 			}
@@ -318,20 +323,32 @@ class CompilerFile
 	public function checkDependencies(Compiler $compiler, Config $config, Logger $logger)
 	{
 		$classDefinition = $this->_classDefinition;
-		if (!$classDefinition) {
-			return;
-		}
+
 		$extendedClass = $classDefinition->getExtendsClass();
 		if ($extendedClass) {
-			if ($compiler->isClass($extendedClass)) {
-				$extendedDefinition = $compiler->getClassDefinition($extendedClass);
-				$classDefinition->setExtendsClassDefinition($extendedDefinition);
-			} else {
-				if ($compiler->isInternalClass($extendedClass)) {
-					$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+			if ($classDefinition->getType() == 'class') {
+				if ($compiler->isClass($extendedClass)) {
+					$extendedDefinition = $compiler->getClassDefinition($extendedClass);
 					$classDefinition->setExtendsClassDefinition($extendedDefinition);
 				} else {
-					throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+					if ($compiler->isInternalClass($extendedClass)) {
+						$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+						$classDefinition->setExtendsClassDefinition($extendedDefinition);
+					} else {
+						throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+					}
+				}
+			} else {
+				if ($compiler->isInterface($extendedClass)) {
+					$extendedDefinition = $compiler->getClassDefinition($extendedClass);
+					$classDefinition->setExtendsClassDefinition($extendedDefinition);
+				} else {
+					if ($compiler->isInternalInterface($extendedClass)) {
+						$extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
+						$classDefinition->setExtendsClassDefinition($extendedDefinition);
+					} else {
+						throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"');
+					}
 				}
 			}
 		}
@@ -426,9 +443,18 @@ class CompilerFile
 		}
 
 		if ($codePrinter) {
-			file_put_contents($filePath, $codePrinter->getOutput());
-			if ($compilationContext->headerPrinter) {
-				file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+			if (!file_exists($filePath)) {
+				file_put_contents($filePath, $codePrinter->getOutput());
+				if ($compilationContext->headerPrinter) {
+					file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+				}
+			} else {
+				//if (filemtime($filePath) < filemtime($this->_filePath)) {
+					file_put_contents($filePath, $codePrinter->getOutput());
+					if ($compilationContext->headerPrinter) {
+						file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+					}
+				//}
 			}
 		}
 

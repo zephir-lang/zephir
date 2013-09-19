@@ -21,9 +21,10 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
+#include <php.h>
+#include "php_ext.h"
 #include "kernel/debug.h"
+#include "kernel/main.h"
 #include "kernel/string.h"
 
 #ifndef ZEPHIR_RELEASE

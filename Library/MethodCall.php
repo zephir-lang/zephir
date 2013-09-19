@@ -59,7 +59,18 @@ class MethodCall extends Call
 		$codePrinter = $compilationContext->codePrinter;
 
 		$type = $expression['call-type'];
-		$methodName = strtolower($expression['name']);
+
+		/**
+		 * In normal method calls and dynamic string method calls we just use the name gave by the user
+		 */
+		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
+			$methodName = strtolower($expression['name']);
+		} else {
+			$variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
+			if ($variableMethod->getType() != 'variable') {
+				throw new CompilerException("Cannot use variable type: " . $variableMethod->getType() . " as dynamic method name", $expression);
+			}
+		}
 
 		/**
 		 * Create temporary variable if needed
@@ -96,9 +107,10 @@ class MethodCall extends Call
 		}
 
 		/**
-		 * Try to check if the method exist in the callee
+		 * Try to check if the method exist in the callee, only when method call is self::CALL_NORMAL
 		 */
 		if ($type == self::CALL_NORMAL) {
+
 			if ($variableVariable->getRealName() == 'this') {
 
 				$classDefinition = $compilationContext->classDefinition;
@@ -201,32 +213,66 @@ class MethodCall extends Call
 		/**
 		 * Generate the code according to parentheses
 		 */
-		if (!isset($expression['parameters'])) {
-			if ($mustInit) {
-				$symbolVariable->initVariant($compilationContext);
-			}
-			if ($isExpecting) {
-				$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
-			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
-			}
-		} else {
+		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 
-			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-			if ($mustInit) {
-				$symbolVariable->initVariant($compilationContext);
-			}
-
-			if (count($params)) {
+			if (!isset($expression['parameters'])) {
+				if ($mustInit) {
+					$symbolVariable->initVariant($compilationContext);
+				}
 				if ($isExpecting) {
-					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 				} else {
-					$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 				}
 			} else {
-				$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+
+				$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+
+				if ($mustInit) {
+					$symbolVariable->initVariant($compilationContext);
+				}
+
+				if (count($params)) {
+					if ($isExpecting) {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					}
+				} else {
+					$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+				}
 			}
+
+		} else {
+
+			if (!isset($expression['parameters'])) {
+				if ($mustInit) {
+					$symbolVariable->initVariant($compilationContext);
+				}
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_method_zval(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+				} else {
+					$codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+				}
+			} else {
+
+				$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+
+				if ($mustInit) {
+					$symbolVariable->initVariant($compilationContext);
+				}
+
+				if (count($params)) {
+					if ($isExpecting) {
+						$codePrinter->output('zephir_call_method_zval_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_method_zval_p' . count($params) . '_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
+					}
+				} else {
+					$codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+				}
+			}
+
 		}
 
 		/**

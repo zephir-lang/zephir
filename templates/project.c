@@ -3,15 +3,15 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_%PROJECT_LOWER%.h"
+#include <php.h>
+#include "php_ext.h"
 #include "%PROJECT_LOWER%.h"
 
-#include "ext/standard/info.h"
+#include <ext/standard/info.h>
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -73,6 +73,7 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
 
+	/* Start Memory Frame */
 	start = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
 	start->addresses       = pecalloc(24, sizeof(zval*), 1);
 	start->capacity        = 24;
@@ -80,6 +81,22 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 	start->hash_capacity   = 8;
 
 	%PROJECT_LOWER%_globals->start_memory = start;
+
+	/* Global Constants */
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_false);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_false);
+	ZVAL_FALSE(%PROJECT_LOWER%_globals->global_false);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_false);
+
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_true);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_true);
+	ZVAL_TRUE(%PROJECT_LOWER%_globals->global_true);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_true);
+
+	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_null);
+	INIT_PZVAL(%PROJECT_LOWER%_globals->global_null);
+	ZVAL_NULL(%PROJECT_LOWER%_globals->global_null);
+	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_null);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)

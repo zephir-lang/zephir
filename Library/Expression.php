@@ -50,6 +50,11 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 
+/* Expression Resolving */
+require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
+require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
+require ZEPHIRPATH . 'Library/Expression/NativeArrayAccess.php';
+
 /**
  * Expressions
  *
@@ -159,7 +164,7 @@ class Expression
 
 		$dynamicType = $variable->getDynamicType();
 		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
-			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-increment', $statement);
+			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-isset', $expression);
 		}
 
 		$compilationContext->headersManager->add('kernel/array');
@@ -167,6 +172,7 @@ class Expression
 		switch ($expression['left']['type']) {
 			case 'array-access':
 				$expr = new Expression($expression['left']['right']);
+				$expr->setReadOnly(true);
 				$resolvedExpr= $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType())	{
 					case 'int':
@@ -213,28 +219,45 @@ class Expression
 		$compilationContext->headersManager->add('kernel/array');
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
+		if ($variable->getType() != 'variable') {
+			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "fetch" operator', $expression);
+		}
+
 		$variable->setIsInitialized(true);
 		$variable->observeVariant($compilationContext);
 		$variable->setDynamicType('undefined');
 
 		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
+		if ($evalVariable->getType() != 'variable') {
+			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $expression['right']);
+		}
+
+		$dynamicType = $evalVariable->getDynamicType();
+		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
+			$compilationContext->logger->warning('Possible attempt to use non array/object in fetch operator', 'non-valid-fetch', $expression['right']);
+		}
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
 				$expr = new Expression($expression['right']['right']);
+				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);
-				switch ($resolvedExpr->getType())	{
+				switch ($resolvedExpr->getType()) {
+					case 'int':
+					case 'long':
+					case 'uint':
+						return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC)', $expression);
 					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $expression['right']['right']['value'] . '"))', $expression);
+						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '") TSRMLS_CC)', $expression);
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
 						switch ($indexVariable->getType()) {
 							case 'int':
 							case 'long':
 							case 'uint':
-								return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+								return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
 							case 'variable':
-								return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ')', $expression);
+								return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
 							default:
 								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
 						}
@@ -243,163 +266,13 @@ class Expression
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}
 				break;
+			case 'property-access':
+				/* @todo, implement this */
+				return new CompiledExpression('bool', 'false', $expression);
 			default:
 				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
 		}
 
-	}
-
-	/**
-	 * Resolves the access to a property in an object
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function propertyAccess($expression, CompilationContext $compilationContext)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$propertyAccess = $expression;
-
-		$expr = new Expression($propertyAccess['left']);
-		$exprVariable = $expr->compile($compilationContext);
-
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
-				}
-				break;
-			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
-		}
-
-		$property = $propertyAccess['right']['value'];
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->observeVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * At this point, we don't know the exact dynamic type fetched from the property
-		 */
-		$symbolVariable->setDynamicType('undefined');
-
-		/**
-		 * If the property is accessed on 'this', we check if the method does exist
-		 */
-		if ($variableVariable->getRealName() == 'this') {
-			$classDefinition = $compilationContext->classDefinition;
-			if (!$classDefinition->hasProperty($property)) {
-				throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
-			}
-		}
-
-		/**
-		 * Variable that receives the method call must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
-		}
-
-		$compilationContext->headersManager->add('kernel/object');
-		if ($variableVariable->getRealName() == 'this') {
-			$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-		} else {
-			$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-		}
-
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
-	/**
-	 * Access a static constant class
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function staticConstantAccess($expression, CompilationContext $compilationContext)
-	{
-		$compiler = $compilationContext->compiler;
-
-		$className = $expression['left']['value'];
-
-		/**
-		 * Fetch the class definition according to the class where the constant
-		 * is supposed to be declared
-		 */
-		if ($className != 'self' && $className != 'parent') {
-			if (!$compiler->isClass($className)) {
-				throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
-			}
-			$classDefinition = $compiler->getClassDefinition($className);
-		} else {
-			if ($className == 'self') {
-				$classDefinition = $compilationContext->classDefinition;
-			} else {
-				if ($className == 'parent') {
-					$classDefinition = $compilationContext->classDefinition;
-					$extendsClass = $classDefinition->getExtendsClass();
-					if (!$extendsClass) {
-						throw new CompilerException('Cannot call method "' . $methodName . '" on parent because class ' .
-							$classDefinition->getCompleteName() . ' does not extend any class', $expression);
-					} else {
-						$classDefinition = $classDefinition->getExtendsClassDefinition();
-					}
-				}
-			}
-		}
-
-		/**
-		 * Constants are resolved to its values in compile time
-		 * so we need to check that they effectively do exist
-		 */
-		$constant = $expression['right']['value'];
-		if (!$classDefinition->hasConstant($constant)) {
-			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
-		}
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->initVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * Variable that receives property accesses must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
-		}
-
-		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
 	/**
@@ -438,113 +311,6 @@ class Expression
 		$symbolVariable->setDynamicType('array');
 
 		$compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
-
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
-	/**
-	 * Compiles foo[x] = {expr}
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function arrayAccess($expression, CompilationContext $compilationContext)
-	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$arrayAccess = $expression;
-
-		$expr = new Expression($arrayAccess['left']);
-		$exprVariable = $expr->compile($compilationContext);
-
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
-				}
-				break;
-			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
-		}
-
-		/**
-		 * Variables that contain dynamic type data can be validated to be arrays
-		 */
-		$dynamicType = $variableVariable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'array') {
-			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $expression);
-		}
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->observeVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * Variable that receives property accesses must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);
-		}
-
-		/**
-		 * At this point, we don't know the type fetched from the index
-		 */
-		$symbolVariable->setDynamicType('undefined');
-
-		/**
-		 * Right part of expression is the index
-		 */
-		$expr = new Expression($arrayAccess['right']);
-		$exprIndex = $expr->compile($compilationContext);
-
-		switch ($exprIndex->getType()) {
-			case 'int':
-			case 'uint':
-			case 'long':
-				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', PH_NOISY);');
-				break;
-			case 'string':
-				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), PH_NOISY);');
-				break;
-			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
-				switch ($variableIndex->getType()) {
-					case 'int':
-					case 'uint':
-					case 'long':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
-						break;
-					case 'string':
-					case 'variable':
-						$compilationContext->headersManager->add('kernel/array');
-						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', PH_NOISY);');
-						break;
-					default:
-						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
-				}
-				break;
-			default:
-				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
-		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
@@ -603,6 +369,7 @@ class Expression
 			 * Classes inside the same extension
 			 */
 			if ($compilationContext->compiler->isClass($className)) {
+				/* @todo, use the class definition instead */
 				$classCe = strtolower(str_replace('\\', '_', $className)) . '_ce';
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
 				$symbolVariable->setClassType($className);
@@ -721,13 +488,13 @@ class Expression
 				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
 			case 'bool':
-				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $exprCompiled->getBooleanCode() . ');');
-				return $tempVar;
+				if ($exprCompiled->getCode() == 'true') {
+					return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
+				} else {
+					return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+				}
 			case 'null':
-				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_NULL(' . $tempVar->getName() . ');');
-				return $tempVar;
+				return new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
 			case 'string':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
@@ -819,17 +586,24 @@ class Expression
 								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'bool':
-								$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getBooleanCode() . ');');
+								$compilationContext->headersManager->add('kernel/array');
+								if ($resolvedExpr->getCode() == 'true') {
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);');
+								} else {
+									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
+								}
 								break;
 							case 'string':
 								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'null':
-								$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"));');
+								$compilationContext->headersManager->add('kernel/array');
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_null), PH_COPY | PH_SEPARATE);');
 								break;
 							case 'variable':
+								$compilationContext->headersManager->add('kernel/array');
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
 								}
@@ -852,20 +626,28 @@ class Expression
 								$codePrinter->output('add_index_long(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'bool':
+								$compilationContext->headersManager->add('kernel/array');
 								$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
+								if ($resolvedExpr->getCode() == 'true') {
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_true), PH_COPY);');
+								} else {
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_false), PH_COPY);');
+								}
 								break;
 							case 'double':
 								$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 								break;
 							case 'null':
-								$codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ');');
+								$compilationContext->headersManager->add('kernel/array');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_null), PH_COPY);');
 								break;
 							case 'string':
 								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
 							case 'variable':
+								$compilationContext->headersManager->add('kernel/array');
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
 								}
@@ -891,7 +673,7 @@ class Expression
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 										break;
 									case 'bool':
-										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ';');
+										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
 										break;
 									case 'double':
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
@@ -904,7 +686,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}
@@ -937,7 +719,7 @@ class Expression
 										break;
 									case 'variable':
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}
@@ -985,7 +767,7 @@ class Expression
 			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
 		}
 
-		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 		if ($symbolVariable->getType() != 'variable') {
 			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
 		}
@@ -994,6 +776,24 @@ class Expression
 		$symbolVariable->setClassType($expression['left']['value']);
 
 		return $resolved;
+	}
+
+	public function compileInstanceOf($expression, CompilationContext $compilationContext)
+	{
+
+		$expr = new Expression($expression['left']);
+		$resolved = $expr->compile($compilationContext);
+
+		if ($resolved->getType() != 'variable') {
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand");
+		}
+
+		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
+		}
+
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlaches($expression['right']['value'])) . '") TSRMLS_CC)', $expression);
 	}
 
 	/**
@@ -1018,7 +818,7 @@ class Expression
 						return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						return new CompiledExpression('int', 'zephir_get_numberval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
@@ -1028,7 +828,7 @@ class Expression
 				switch ($resolved->getType()) {
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
@@ -1052,7 +852,7 @@ class Expression
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
-						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $expression);
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
 						$compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
 						return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 					default:
@@ -1086,6 +886,8 @@ class Expression
 			switch (gettype($value)) {
 				case 'integer':
 					return new CompiledExpression('int', $value, $expression);
+				case 'string':
+					return new CompiledExpression('string', Utils::addSlaches($value), $expression);
 			}
 			return new CompiledExpression(gettype($value), $value, $expression);
 		}
@@ -1110,6 +912,7 @@ class Expression
 				return new CompiledExpression('null', null, $expression);
 
 			case 'int':
+			case 'integer':
 				return new CompiledExpression('int', $expression['value'], $expression);
 
 			case 'double':
@@ -1126,7 +929,11 @@ class Expression
 
 			case 'char':
 				if (strlen($expression['value']) > 2) {
-					throw new CompilerException("Invalid char literal: " . $expression['value'], $expression);
+					if (strlen($expression['value']) > 10) {
+						throw new CompilerException("Invalid char literal: '" . substr($expression['value'], 0, 10) . "...'", $expression);
+					} else {
+						throw new CompilerException("Invalid char literal: '" . $expression['value'] . "'", $expression);
+					}
 				}
 				return new CompiledExpression('char', $expression['value'], $expression);
 
@@ -1140,13 +947,22 @@ class Expression
 				return $this->emptyArray($expression, $compilationContext);
 
 			case 'array-access':
-				return $this->arrayAccess($expression, $compilationContext);
+				$arrayAccess = new NativeArrayAccess();
+				$arrayAccess->setReadOnly($this->isReadOnly());
+				$arrayAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $arrayAccess->compile($expression, $compilationContext);
 
 			case 'property-access':
-				return $this->propertyAccess($expression, $compilationContext);
+				$propertyAccess = new PropertyAccess();
+				$propertyAccess->setReadOnly($this->isReadOnly());
+				$propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $propertyAccess->compile($expression, $compilationContext);
 
 			case 'static-constant-access':
-				return $this->staticConstantAccess($expression, $compilationContext);
+				$staticConstantAccess = new StaticConstantAccess();
+				$staticConstantAccess->setReadOnly($this->isReadOnly());
+				$staticConstantAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $staticConstantAccess->compile($expression, $compilationContext);
 
 			case 'fcall':
 				$functionCall = new FunctionCall();
@@ -1165,9 +981,6 @@ class Expression
 
 			case 'fetch':
 				return $this->compileFetch($expression, $compilationContext);
-
-			case 'typeof':
-				return new CompiledExpression('typeof', null, $expression);
 
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
@@ -1297,13 +1110,17 @@ class Expression
 			case 'type-hint':
 				return $this->compileTypeHint($expression, $compilationContext);
 
+			case 'instanceof':
+				return $this->compileInstanceOf($expression, $compilationContext);
+
 			/**
 			 * @TODO implement this
 			 */
 			case 'require':
-			case 'instanceof':
 			case 'typeof':
 			case 'static-property-access':
+			case 'clone':
+			case 'empty':
 				return new CompiledExpression('null', null, $expression);
 
 			default:

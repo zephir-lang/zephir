@@ -23,7 +23,7 @@
 #endif
 
 #include "main/php.h"
-#include "php_test.h"
+#include "php_ext.h"
 
 #include "Zend/zend_alloc.h"
 

@@ -1,15 +1,15 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "../ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/operators.h"
@@ -36,7 +36,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 	y = 2;
 	n = 10;
 	while (1) {
-		if (!(((z < n)))) {
+		if (!((z < n))) {
 			break;
 		}
 		z = (x + y);
@@ -57,7 +57,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 	y = 2.0;
 	n = 10.0;
 	while (1) {
-		if (!(((z < n)))) {
+		if (!((z < n))) {
 			break;
 		}
 		z = (x + y);
@@ -86,15 +86,15 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	i = 2;
 	n = 10;
 	while (1) {
-		if (!(((i < n)))) {
+		if (!((i < n))) {
 			break;
 		}
 		k = (i - 1);
 		j = (i - 2);
 		ZEPHIR_OBS_NVAR(a);
-		zephir_array_fetch_long(&a, fib, k, PH_NOISY);
+		zephir_array_fetch_long(&a, fib, k, PH_NOISY TSRMLS_CC);
 		ZEPHIR_OBS_NVAR(b);
-		zephir_array_fetch_long(&b, fib, j, PH_NOISY);
+		zephir_array_fetch_long(&b, fib, j, PH_NOISY TSRMLS_CC);
 		ZEPHIR_INIT_NVAR(c);
 		zephir_add_function(c, a, b TSRMLS_CC);
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE);

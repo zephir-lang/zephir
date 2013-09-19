@@ -22,7 +22,7 @@
 #endif
 
 #include "php.h"
-#include "php_test.h"
+#include "php_ext.h"
 
 #include "Zend/zend_API.h"
 #include "Zend/zend_exceptions.h"
@@ -43,7 +43,6 @@ int zephir_has_constructor_ce(zend_class_entry *ce) {
 		if (ce->constructor) {
 			return 1;
 		}
-
 		ce = ce->parent;
 	}
 
@@ -54,7 +53,6 @@ int zephir_has_constructor_ce(zend_class_entry *ce) {
  * Check if an object has a constructor
  */
 int zephir_has_constructor(const zval *object TSRMLS_DC){
-
 	return zephir_has_constructor_ce(Z_OBJCE_P(object));
 }
 
@@ -167,8 +165,7 @@ static int zephir_call_func_vparams(zval *return_value, zval **return_value_ptr,
 	if (!return_value) {
 		ALLOC_INIT_ZVAL(return_value);
 		caller_wants_result = 0;
-	}
-	else {
+	} else {
 		zephir_check_return_value(return_value);
 	}
 
@@ -176,24 +173,26 @@ static int zephir_call_func_vparams(zval *return_value, zval **return_value_ptr,
 		params      = va_arg(ap, zval**);
 		param_count = -param_count;
 		params_ptr  = params;
-	}
-	else if (param_count > 0 && param_count <= 10) {
-		params_ptr = static_params;
-		for (i=0; i<param_count; ++i) {
-			static_params[i] = va_arg(ap, zval*);
+	} else {
+		if (param_count > 0 && param_count <= 10) {
+			params_ptr = static_params;
+			for (i = 0; i < param_count; ++i) {
+				static_params[i] = va_arg(ap, zval*);
+			}
+		} else {
+			if (unlikely(param_count > 10)) {
+				free_params = 1;
+				params      = (zval**)emalloc(param_count * sizeof(zval*));
+				params_ptr  = params;
+				for (i = 0; i < param_count; ++i) {
+					params[i] = va_arg(ap, zval*);
+				}
+			} else {
+				params_ptr = NULL;
+			}
 		}
 	}
-	else if (unlikely(param_count > 10)) {
-		free_params = 1;
-		params      = (zval**)emalloc(param_count * sizeof(zval*));
-		params_ptr  = params;
-		for (i=0; i<param_count; ++i) {
-			params[i] = va_arg(ap, zval*);
-		}
-	}
-	else {
-		params_ptr = NULL;
-	}
+
 
 	status = zephir_call_user_function(EG(function_table), NULL, func, return_value, return_value_ptr, param_count, params_ptr TSRMLS_CC);
 
@@ -230,8 +229,7 @@ int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval
 	if (!return_value) {
 		ALLOC_INIT_ZVAL(return_value);
 		caller_wants_result = 0;
-	}
-	else {
+	} else {
 		zephir_check_return_value(return_value);
 	}
 
@@ -271,9 +269,10 @@ int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval
 	if (status == FAILURE) {
 		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Call to undefined method %s::%s()", ce->name, method_name);
 		status = FAILURE;
-	}
-	else if (EG(exception)) {
-		status = FAILURE;
+	} else {
+		if (EG(exception)) {
+			status = FAILURE;
+		}
 	}
 
 	if (!caller_wants_result) {
@@ -311,8 +310,7 @@ static int zephir_call_static_zval_str_func_vparams(zval *return_value, zval **r
 		params      = va_arg(ap, zval**);
 		param_count = -param_count;
 		params_ptr  = params;
-	}
-	else if (param_count > 0 && param_count <= 10) {
+	} else if (param_count > 0 && param_count <= 10) {
 		params_ptr = static_params;
 		for (i=0; i<param_count; ++i) {
 			static_params[i] = va_arg(ap, zval*);

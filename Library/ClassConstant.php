@@ -38,11 +38,31 @@ class ClassConstant
 		$this->_docblock = $docBlock;
 	}
 
+	/**
+	 * Returns the constant's name
+	 *
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->_name;
 	}
 
+	/**
+	 * Returns the constant's value
+	 *
+	 * @return array
+	 */
+	public function getValue()
+	{
+		return $this->_value;
+	}
+
+	/**
+	 * Returns the docblock related to the constant
+	 *
+	 * @return string
+	 */
 	public function getDocBlock()
 	{
 		return $this->_docblock;

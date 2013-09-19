@@ -1013,6 +1013,13 @@ class LetStatement
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
+			case 'bool':
+				if ($resolvedExpr->getBooleanCode() == '1') {
+					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
+				} else {
+					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+				}
+				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
@@ -1022,6 +1029,10 @@ class LetStatement
 					case 'ulong':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+						break;
+					case 'bool':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
 					case 'variable':
 						$symbolVariable = $variableExpr;
@@ -1152,7 +1163,11 @@ class LetStatement
 		}
 
 		if ($symbolVariable->isReadOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			/**
+			 * @TODO implement increment of objects members
+			 */
+			//throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			return;
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1250,11 +1265,10 @@ class LetStatement
 
 		switch ($resolvedExpr->getType()) {
 			case 'null':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				if ($variable == 'this') {
-					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				} else {
-					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				}
 				break;
 			case 'int':
@@ -1277,12 +1291,18 @@ class LetStatement
 				}
 				break;
 			case 'bool':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 				if ($variable == 'this') {
-					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					if ($resolvedExpr->getBooleanCode() == '1') {
+						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+					} else {
+						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					}
 				} else {
-					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+					if ($resolvedExpr->getBooleanCode() == '1') {
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+					} else {
+						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					}
 				}
 				break;
 			case 'empty-array':
@@ -1422,10 +1442,15 @@ class LetStatement
 		}
 
 		switch ($resolvedExpr->getType()) {
+			case 'null':
+				$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+				break;
 			case 'bool':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
-				$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				if ($resolvedExpr->getBooleanCode() == '1') {
+					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+				}
 				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
@@ -1467,6 +1492,7 @@ class LetStatement
 			switch ($assignment['assign-type']) {
 				case 'static-property':
 				case 'static-property-append':
+				case 'static-property-array-index':
 					break;
 				default:
 					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
@@ -1482,6 +1508,10 @@ class LetStatement
 				switch ($assignment['assign-type']) {
 					case 'variable':
 						$expr->setExpectReturn(true, $symbolVariable);
+						break;
+					case 'property-access':
+					case 'array-access':
+						$expr->setReadOnly(true);
 						break;
 				}
 				$resolvedExpr = $expr->compile($compilationContext);
@@ -1519,6 +1549,9 @@ class LetStatement
 					/* @todo, implement this */
 					break;
 				case 'static-property-append':
+					/* @todo, implement this */
+					break;
+				case 'static-property-array-index':
 					/* @todo, implement this */
 					break;
 				case 'array-index':

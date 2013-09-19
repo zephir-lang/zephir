@@ -1,15 +1,15 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "../ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/operators.h"
@@ -33,7 +33,7 @@ ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 
 PHP_METHOD(Test_SpectralNorm, Ax) {
 
-	zval *i, *j, *_0, *_1;
+	zval *i, *j, *_0, _1;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &i, &j);
@@ -42,9 +42,9 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_add_function(_0, i, j TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_add_function(_1, i, j TSRMLS_CC);
-	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(_1) + 1)) / 2) + zephir_get_numberval(i)) + 1)));
+	ZEPHIR_SINIT_VAR(_1);
+	zephir_add_function(&_1, i, j TSRMLS_CC);
+	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(&_1) + 1)) / 2) + zephir_get_numberval(i)) + 1)));
 
 }
 

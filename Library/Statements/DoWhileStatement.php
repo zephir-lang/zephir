@@ -26,6 +26,11 @@ class DoWhileStatement
 {
 	protected $_statement;
 
+	/**
+	 * Perform the compilation of code
+	 *
+	 * @param array $statement
+	 */
 	public function __construct($statement)
 	{
 		$this->_statement = $statement;
@@ -33,6 +38,8 @@ class DoWhileStatement
 
 	/**
 	 * Perform the compilation of code
+	 *
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

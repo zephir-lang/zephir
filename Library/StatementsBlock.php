@@ -107,6 +107,12 @@ class StatementsBlock
 					$expr->setExpectReturn(false);
 					$methodCall->compile($expr, $compilationContext);
 					break;
+				case 'fcall':
+					$functionCall = new FunctionCall();
+					$expr = new Expression($statement['expr']);
+					$expr->setExpectReturn(false);
+					$functionCall->compile($expr, $compilationContext);
+					break;
 				case 'scall':
 					$methodCall = new StaticCall();
 					$expr = new Expression($statement['expr']);

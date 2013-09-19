@@ -53,6 +53,7 @@ ext/test/oo/ooconstruct.lo
 ext/test/oo/ooconstructparams.lo
 ext/test/oo/oonoconstruct.lo
 ext/test/properties/.libs/
+ext/test/properties/privateproperties.lo
 ext/test/properties/protectedproperties.lo
 ext/test/properties/publicproperties.lo
 ext/test/regexdna.lo
@@ -99,6 +100,7 @@ ext/test/oo.o
 ext/test/oo/ooconstruct.o
 ext/test/oo/ooconstructparams.o
 ext/test/oo/oonoconstruct.o
+ext/test/properties/privateproperties.o
 ext/test/properties/protectedproperties.o
 ext/test/properties/publicproperties.o
 ext/test/regexdna.o

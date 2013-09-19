@@ -9,18 +9,23 @@
 
 ZEND_BEGIN_MODULE_GLOBALS(test)
 
-	/** Memory */
+	/* Memory */
 	zephir_memory_entry *start_memory;
 	zephir_memory_entry *active_memory;
 
-	/** Virtual Symbol Tables */
+	/* Virtual Symbol Tables */
 	zephir_symbol_table *active_symbol_table;
 
-	/** Function cache */
+	/* Function cache */
 	HashTable *function_cache;
 
-	/** Max recursion control */
+	/* Max recursion control */
 	unsigned int recursive_lock;
+
+	/* Global constants */
+	zval *global_true;
+	zval *global_false;
+	zval *global_null;
 
 ZEND_END_MODULE_GLOBALS(test)
 

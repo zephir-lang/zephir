@@ -3,15 +3,15 @@
 #include "config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
+#include <php.h>
+#include "php_ext.h"
 #include "test.h"
 
-#include "ext/standard/info.h"
+#include <ext/standard/info.h>
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -37,6 +37,7 @@ zend_class_entry *test_oo_ce;
 zend_class_entry *test_oo_ooconstruct_ce;
 zend_class_entry *test_oo_ooconstructparams_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
+zend_class_entry *test_properties_privateproperties_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
 zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_regexdna_ce;
@@ -72,6 +73,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoConstructParams);
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
+	ZEPHIR_INIT(Test_Properties_PrivateProperties);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_RegexDNA);
@@ -131,6 +133,7 @@ static PHP_GINIT_FUNCTION(test)
 
 	php_zephir_init_globals(test_globals TSRMLS_CC);
 
+	/* Start Memory Frame */
 	start = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
 	start->addresses       = pecalloc(24, sizeof(zval*), 1);
 	start->capacity        = 24;
@@ -138,6 +141,22 @@ static PHP_GINIT_FUNCTION(test)
 	start->hash_capacity   = 8;
 
 	test_globals->start_memory = start;
+
+	/* Global Constants */
+	ALLOC_PERMANENT_ZVAL(test_globals->global_false);
+	INIT_PZVAL(test_globals->global_false);
+	ZVAL_FALSE(test_globals->global_false);
+	Z_ADDREF_P(test_globals->global_false);
+
+	ALLOC_PERMANENT_ZVAL(test_globals->global_true);
+	INIT_PZVAL(test_globals->global_true);
+	ZVAL_TRUE(test_globals->global_true);
+	Z_ADDREF_P(test_globals->global_true);
+
+	ALLOC_PERMANENT_ZVAL(test_globals->global_null);
+	INIT_PZVAL(test_globals->global_null);
+	ZVAL_NULL(test_globals->global_null);
+	Z_ADDREF_P(test_globals->global_null);
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)

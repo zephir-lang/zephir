@@ -10,6 +10,8 @@ class MemstrOptimizer
 	/**
 	 *
 	 * @param array $expression
+	 * @param Call $call
+	 * @param CompilationContext $context
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
@@ -31,10 +33,10 @@ class MemstrOptimizer
 		$context->headersManager->add('kernel/string');
 
 		if (isset($str)) {
-			return new CompiledExpression('bool', 'zephir_memnstr_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
+			return new CompiledExpression('bool', 'zephir_memnstr_str(' . $resolvedParams[0] . ', SL("' . $str . '"), "' . Compiler::getShortPath($expression['file']) . '", ' . $expression['line'] . ')', $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+		return new CompiledExpression('bool', 'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortPath($expression['file']) . '", ' . $expression['line'] . ')', $expression);
 	}
 
 }

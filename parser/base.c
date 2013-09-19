@@ -211,6 +211,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_REQUIRE:
 				xx_(xx_parser, XX_REQUIRE, NULL, parser_status);
 				break;
+			case XX_T_CLONE:
+				xx_(xx_parser, XX_CLONE, NULL, parser_status);
+				break;
+			case XX_T_EMPTY:
+				xx_(xx_parser, XX_EMPTY, NULL, parser_status);
+				break;
 			case XX_T_IF:
 				xx_(xx_parser, XX_IF, NULL, parser_status);
 				break;

@@ -7,8 +7,12 @@
  */
 class ArrayMergeOptimizer
 {
+
 	/**
 	 *
+	 * @param array $expression
+	 * @param Call $call
+	 * @param CompilationContext $context
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
@@ -40,4 +44,5 @@ class ArrayMergeOptimizer
 		$context->codePrinter->output('zephir_fast_array_merge(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . '), &(' . $resolvedParams[1] . ') TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
+
 }

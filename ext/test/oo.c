@@ -1,15 +1,15 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "../ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -118,17 +118,13 @@ PHP_METHOD(Test_Oo, testInstance6) {
 
 PHP_METHOD(Test_Oo, testInstance7) {
 
-	zval *o, *_0, *_1;
+	zval *o;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_BOOL(_0, 0);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_BOOL(_1, 1);
-	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_call_method_p2_noret(o, "__construct", ZEPHIR_GLOBAL(global_false), ZEPHIR_GLOBAL(global_true));
 	RETURN_CCTOR(o);
 
 }

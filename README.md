@@ -42,10 +42,9 @@ Once you have the required packages installed, you can generate the parser as fo
 ```
 
 Additional notes on Ubuntu
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 The following packages are needed in Ubuntu:
 
-* apt-get install libjson0 libjson0-dev libjson0-dbg
 * apt-get install re2c
 
 Usage
@@ -71,7 +70,7 @@ The current build status is:
 Donate & Sponsor
 ----------------
 Zephir is driven by the voluntary and altruist efforts of the core developers and contributors.
-We invite you to sponsor our work, by [donating](https://www.gittip.com/phalcon/) or
+We invite you to sponsor our work, by [donating](http://phalconphp.com/en/donate) or
 [contacting us][mailto:team@phalconphp.com] regarding
 sponsorship, allowing us to invest more time and resources to the project, ensuring it will be
 ready sooner and with loads of features.

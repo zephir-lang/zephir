@@ -33,31 +33,130 @@ class ClassProperty
 
 	protected $_docblock;
 
-	public function __construct($visibility, $name, $defaultValue=null, $docBlock)
+	protected $_original;
+
+	/**
+	 *
+	 *
+	 * @param array $visibility
+	 * @param string $name
+	 * @param mixed $defaultValue
+	 * @param string $docBlock
+	 * @param array $original
+	 */
+	public function __construct($visibility, $name, $defaultValue, $docBlock, $original)
 	{
+
+		$this->checkVisibility($visibility, $name, $original);
+
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_defaultValue = $defaultValue;
 		$this->_docblock = $docBlock;
+		$this->_original = $original;
 	}
 
+	/**
+	 * Returns the property name
+	 *
+	 * @return string
+	 */
 	public function getName()
 	{
 		return $this->_name;
 	}
 
-	public function getVisibilityAccesor()
+	public function getOriginal()
 	{
-		if ($this->_visibility == 'protected') {
-			return 'ZEND_ACC_PROTECTED';
-		} else {
-			return 'ZEND_ACC_PUBLIC';
+		return $this->_original;
+	}
+
+	public function checkVisibility($visibility, $name, $original)
+	{
+		if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+			throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
+		}
+		if (in_array('public', $visibility) && in_array('private', $visibility)) {
+			throw new CompilerException("Property '$name' cannot be 'public' and 'private' at the same time", $original);
+		}
+		if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+			throw new CompilerException("Property '$name' cannot be 'protected' and 'private' at the same time", $original);
 		}
 	}
 
+	public function getVisibilityAccesor()
+	{
+		$modifiers = array();
+		foreach ($this->_visibility as $visibility) {
+			switch ($visibility) {
+				case 'protected':
+					$modifiers['ZEND_ACC_PROTECTED'] = true;
+					break;
+				case 'private':
+					$modifiers['ZEND_ACC_PRIVATE'] = true;
+					break;
+				case 'public':
+					$modifiers['ZEND_ACC_PUBLIC'] = true;
+					break;
+				case 'static':
+					$modifiers['ZEND_ACC_STATIC'] = true;
+					break;
+				default:
+					throw new Exception("Unknown modifier " . $visibility);
+
+			}
+		}
+		return join('|', array_keys($modifiers));
+	}
+
+	/**
+	 * Returns the docblock related to the property
+	 *
+	 * @return string
+	 */
 	public function getDocBlock()
 	{
 		return $this->_docblock;
+	}
+
+	/**
+	 * Checks whether the variable is static
+	 *
+	 * @return boolean
+	 */
+	public function isStatic()
+	{
+		return in_array('static', $this->_visibility);
+	}
+
+	/**
+	 * Checks whether the variable is public
+	 *
+	 * @return boolean
+	 */
+	public function isPublic()
+	{
+		return in_array('public', $this->_visibility);
+	}
+
+	/**
+	 * Checks whether the variable is protected
+	 *
+	 * @return boolean
+	 */
+	public function isProtected()
+	{
+		return in_array('protected', $this->_visibility);
+	}
+
+	/**
+	 * Checks whether the variable is private
+	 *
+	 * @return boolean
+	 */
+	public function isPrivate()
+	{
+		return in_array('private', $this->_visibility);
 	}
 
 	/**

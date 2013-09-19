@@ -22,7 +22,7 @@
 #endif
 
 #include "php.h"
-#include "php_test.h"
+#include "php_ext.h"
 #include "php_main.h"
 #include "kernel/main.h"
 #include "kernel/require.h"

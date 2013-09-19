@@ -147,7 +147,7 @@ class ClassDefinition
 		if ($this->_extendsClassDefinition) {
 			$classDefinition = $this->_extendsClassDefinition;
 			if (method_exists($classDefinition, 'increaseDependencyRank')) {
-				$classDefinition->increaseDependencyRank();
+				$classDefinition->increaseDependencyRank($this->_dependencyRank * 2);
 			}
 		}
 	}
@@ -155,10 +155,11 @@ class ClassDefinition
 	/**
 	 * A class definition calls this method to mark this class as a dependency of another
 	 *
+	 * @param int $rank
 	 */
-	public function increaseDependencyRank()
+	public function increaseDependencyRank($rank)
 	{
-		$this->_dependencyRank++;
+		$this->_dependencyRank += ($rank + 1);
 	}
 
 	/**
@@ -179,13 +180,13 @@ class ClassDefinition
 	public function addProperty(ClassProperty $property)
 	{
 		if (isset($this->_properties[$property->getName()])) {
-			throw new Exception("Property '" . $property->getName() . "' was defined more than one time");
+			throw new CompilerException("Property '" . $property->getName() . "' was defined more than one time", $property->getOriginal());
 		}
 		$this->_properties[$property->getName()] = $property;
 	}
 
 	/**
-	 * Adds a property to the definition
+	 * Adds a constant to the definition
 	 *
 	 * @param ClassConstant $constant
 	 */
@@ -198,7 +199,7 @@ class ClassDefinition
 	}
 
 	/**
-	 * Checks if class definition has a property
+	 * Checks if a class definition has a property
 	 *
 	 * @param string $name
 	 */
@@ -219,6 +220,28 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns a method definition by its name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function getProperty($propertyName)
+	{
+
+		if (isset($this->_properties[$propertyName])) {
+			return $this->_properties[$propertyName];
+		}
+
+		$extendsClassDefinition = $this->_extendsClassDefinition;
+		if ($extendsClassDefinition) {
+			if ($extendsClassDefinition->hasProperty($propertyName)) {
+				return $extendsClassDefinition->getProperty($propertyName);
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if class definition has a property
 	 *
 	 * @param string $name
@@ -229,6 +252,20 @@ class ClassDefinition
 	}
 
 	/**
+	 * Returns a constant definition by its name
+	 *
+	 * @param string string
+	 * @return boolean
+	 */
+	public function getConstant($constantName)
+	{
+		if (isset($this->_constants[$constantName])) {
+			return $this->_constants[$constantName];
+		}
+		return false;
+	}
+
+	/**
 	 * Adds a method to the class definition
 	 *
 	 * @param \ClassMethod $method
@@ -236,10 +273,11 @@ class ClassDefinition
 	 */
 	public function addMethod(ClassMethod $method, $statement=null)
 	{
-		if (isset($this->_methods[$method->getName()])) {
+		$methodName = strtolower($method->getName());
+		if (isset($this->_methods[$methodName])) {
 			throw new CompilerException("Method '" . $method->getName() . "' was defined more than one time", $statement);
 		}
-		$this->_methods[$method->getName()] = $method;
+		$this->_methods[$methodName] = $method;
 	}
 
 	/**
@@ -280,8 +318,9 @@ class ClassDefinition
 	 */
 	public function hasMethod($methodName)
 	{
+		$methodNameLower = strtolower($methodName);
 		foreach ($this->_methods as $name => $method) {
-			if (!strcasecmp($methodName, $name)) {
+			if ($methodNameLower == $name) {
 				return true;
 			}
 		}
@@ -302,8 +341,9 @@ class ClassDefinition
 	 */
 	public function getMethod($methodName)
 	{
+		$methodNameLower = strtolower($methodName);
 		foreach ($this->_methods as $name => $method) {
-			if (!strcasecmp($methodName, $name)) {
+			if ($methodNameLower == $name) {
 				return $method;
 			}
 		}
@@ -380,7 +420,8 @@ class ClassDefinition
 		/**
 		 * Method entry
 		 */
-		if (count($this->_methods)) {
+		$methods = $this->_methods;
+		if (count($methods)) {
 			$methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
 		} else {
 			$methodEntry = 'NULL';
@@ -454,7 +495,7 @@ class ClassDefinition
 		/**
 		 * Compile methods
 		 */
-		foreach ($this->getMethods() as $method) {
+		foreach ($methods as $method) {
 
 			$docBlock = $method->getDocBlock();
 			if ($docBlock) {
@@ -468,9 +509,10 @@ class ClassDefinition
 				$method->compile($compilationContext);
 
 				$codePrinter->output('}');
-				$codePrinter->outputBlankLine(true);
+				$codePrinter->outputBlankLine();
 			} else {
 				$codePrinter->output('ZEPHIR_DOC_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+				$codePrinter->outputBlankLine();
 			}
 		}
 
@@ -485,8 +527,6 @@ class ClassDefinition
 
 		$codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ');');
 		$codePrinter->outputBlankLine();
-
-		$methods = $this->getMethods();
 
 		if ($this->getType() == 'class') {
 			if (count($methods)) {

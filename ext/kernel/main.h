@@ -27,8 +27,9 @@
 /** Main macros */
 #define PH_DEBUG 0
 
-#define PH_NOISY 0
-#define PH_SILENT 1
+#define PH_NOISY 256
+#define PH_SILENT 1024
+#define PH_READONLY 4096
 
 #define PH_NOISY_CC PH_NOISY TSRMLS_CC
 #define PH_SILENT_CC PH_SILENT TSRMLS_CC
@@ -378,4 +379,10 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 		} \
 	} while (0)
 
+#ifndef ZEPHIR_RELEASE
+#define ZEPHIR_DEBUG_PARAMS , const char *file, int line
+#else
+#define ZEPHIR_DEBUG_PARAMS
 #endif
+
+#endif /* ZEPHIR_KERNEL_MAIN_H */

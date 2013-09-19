@@ -70,7 +70,6 @@ class FunctionCall extends Call
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
 
-
 			if (isset($expression['parameters'])) {
 				/**
 				 * Check if the number of parameters
@@ -127,6 +126,8 @@ class FunctionCall extends Call
 				foreach ($funcParameters as $parameter) {
 					if ($numberParameters >= $n) {
 						if ($parameter->isPassedByReference()) {
+							$variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
+							$variable->setDynamicType('undefined');
 							$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
 							$references[] = $parameters[$n - 1] ;
 							return false;
@@ -191,6 +192,9 @@ class FunctionCall extends Call
 			case 'starts_with':
 			case 'ends_with':
 			case 'prepare_virtual_path':
+			case 'create_instance':
+			case 'create_instance_params':
+			case 'create_symbol_table':
 				return true;
 		}
 		return false;
@@ -284,14 +288,17 @@ class FunctionCall extends Call
 		 * PHP functions only return zvals so we need to validate the target variable is also a zval
 		 */
 		$symbolVariable = $this->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+		if ($symbolVariable) {
 
-		/**
-		 * We don't know the exact dynamic type returned by the method call
-		 */
-		$symbolVariable->setDynamicType('undefined');
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+
+			/**
+			 * We don't know the exact dynamic type returned by the method call
+			 */
+			$symbolVariable->setDynamicType('undefined');
+		}
 
 		/**
 		 * Include fcall header

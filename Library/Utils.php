@@ -33,11 +33,10 @@ class Utils
 	 */
 	public static function addSlaches($str)
 	{
-		//$str = str_replace('\\', "\\\\", $str);
-		$str = str_replace('"', "\\\"", $str);
 		$str = str_replace("\n", "\\n", $str);
 		$str = str_replace("\r", "\\r", $str);
 		$str = str_replace("\t", "\\t", $str);
+		$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
 		return $str;
 	}
 
@@ -47,7 +46,8 @@ class Utils
 	 * @param       string $str
 	 * @return      string
 	 */
-	static public function camelize($str) {
+	static public function camelize($str)
+	{
 		return str_replace(' ', '', ucwords(str_replace('_', ' ', $str)));
 	}
 

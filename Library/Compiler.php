@@ -82,10 +82,29 @@ class Compiler
 	 */
 	public function isClass($className)
 	{
-		$classes = array_keys($this->_definitions);
-		foreach ($classes as $value) {
-			if (!strcasecmp($value, $className)) {
-				return true;
+		foreach ($this->_definitions as $key => $value) {
+			if (!strcasecmp($key, $className)) {
+				if ($value->getType() == 'class') {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Allows to check if an interface is part of the compiled extension
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isInterface($className)
+	{
+		foreach ($this->_definitions as $key => $value) {
+			if (!strcasecmp($key, $className)) {
+				if ($value->getType() == 'interface') {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -100,6 +119,17 @@ class Compiler
 	public function isInternalClass($className)
 	{
 		return class_exists($className, false);
+	}
+
+	/**
+	 * Allows to check if a interface is part of PHP
+	 *
+	 * @param string $className
+	 * @return bolean
+	 */
+	public function isInternalInterface($className)
+	{
+		return interface_exists($className, false);
 	}
 
 	/**
@@ -162,8 +192,11 @@ class Compiler
 
 	/**
 	 * Initializes a zephir extension
+	 *
+	 * @param Config $config
+	 * @param Config $logger
 	 */
-	public function init($config , $logger)
+	public function init($config, $logger)
 	{
 
 		if (!is_dir('.temp')) {
@@ -196,8 +229,10 @@ class Compiler
 
 	/**
 	 *
+	 * @param Config $config
+	 * @param Config $logger
 	 */
-	public function compile($config , $logger)
+	public function compile($config, $logger)
 	{
 
 		if (!file_exists('config.json')) {
@@ -290,6 +325,60 @@ class Compiler
 		}
 
 		file_put_contents('ext/config.m4', $content);
+
+		/**
+		 * php_ext.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
+		if (empty($content)) {
+			throw new Exception("Template php_ext.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/php_ext.h', $content);
+
+		/**
+		 * ext.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/ext.h');
+		if (empty($content)) {
+			throw new Exception("Template ext.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/ext.h', $content);
+
+		/**
+		 * ext_config.h
+		 */
+		$content = file_get_contents(__DIR__ . '/../templates/ext_config.h');
+		if (empty($content)) {
+			throw new Exception("Template ext_config.h doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/ext_config.h', $content);
 	}
 
 	/**
@@ -313,6 +402,18 @@ class Compiler
 		/**
 		 * Round 1. Calculate the dependency rank
 		 * Classes are ordered according to a dependency ranking
+		 * Classes that are dependencies of classes that are dependency of other classes
+		 * have more weight
+		 */
+		foreach ($files as $file) {
+			$classDefinition = $file->getClassDefinition();
+			if ($classDefinition) {
+				$classDefinition->calculateDependencyRank();
+			}
+		}
+
+		/**
+		 * Round 1.5 Make a second pass to ensure classes will have the correct weight
 		 */
 		foreach ($files as $file) {
 			$classDefinition = $file->getClassDefinition();
@@ -352,10 +453,10 @@ class Compiler
 			}
 		}
 
-		asort($classInits);
-		asort($classEntries);
-		asort($interfaceInits);
-		asort($interfaceEntries);
+		krsort($classInits);
+		krsort($classEntries);
+		krsort($interfaceInits);
+		krsort($interfaceEntries);
 
 		$completeInterfaceInits = array();
 		foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
@@ -532,6 +633,16 @@ class Compiler
 		} catch (Exception $e) {
 			self::showException($e);
 		}
+	}
+
+	/**
+	 * Returns a short path
+	 *
+	 * @param string $path
+	 */
+	public function getShortPath($path)
+	{
+		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}
 
 }

@@ -22,7 +22,7 @@
  *
  * Detects if a variable is written in a given context
  * If a variable is not modified in a local context we could avoid allocate memory for its body
- * Separate parameters to avoid them to be touched modifying its reference count
+ * Separate parameters to avoid them to be touched by modifying its reference count
  *
  * @todo, variable is assigned in the fetch operator and in functions that pass parameters by reference
  */

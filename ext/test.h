@@ -1,4 +1,7 @@
 
+#ifndef ZEPHIR_CLASS_ENTRIES_H
+#define ZEPHIR_CLASS_ENTRIES_H
+
 #include "test/arithmetic.h"
 #include "test/assign.h"
 #include "test/cast.h"
@@ -18,6 +21,7 @@
 #include "test/oo/ooconstruct.h"
 #include "test/oo/ooconstructparams.h"
 #include "test/oo/oonoconstruct.h"
+#include "test/properties/privateproperties.h"
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"
 #include "test/regexdna.h"
@@ -29,3 +33,5 @@
 #include "test/scallparent.h"
 #include "test/spectralnorm.h"
 #include "test/testinterface.h"
+
+#endif

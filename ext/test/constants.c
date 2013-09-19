@@ -1,18 +1,17 @@
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "../ext_config.h"
 #endif
 
-#include "php.h"
-#include "php_test.h"
-#include "test.h"
+#include <php.h>
+#include "../php_ext.h"
+#include "../ext.h"
 
-#include "Zend/zend_operators.h"
-#include "Zend/zend_exceptions.h"
-#include "Zend/zend_interfaces.h"
+#include <Zend/zend_operators.h>
+#include <Zend/zend_exceptions.h>
+#include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Constants) {
@@ -40,7 +39,7 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 
-	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
+	ZVAL_LONG(return_value, 10);
 	return;
 
 }
@@ -48,7 +47,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant1) {
 PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 
-	zephir_get_class_constant(return_value, test_constants_ce, SS("C4") TSRMLS_CC);
+	ZVAL_LONG(return_value, 10);
 	return;
 
 }
@@ -56,7 +55,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant2) {
 PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 
-	zephir_get_class_constant(return_value, test_constantsparent_ce, SS("P4") TSRMLS_CC);
+	ZVAL_LONG(return_value, 10);
 	return;
 
 }
