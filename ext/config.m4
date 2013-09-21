@@ -1,4 +1,4 @@
-PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test framework])
+PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test])
 
 if test "$PHP_TEST" = "yes"; then
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])

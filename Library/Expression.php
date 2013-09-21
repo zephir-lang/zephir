@@ -387,7 +387,7 @@ class Expression
 				 */
 
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . $className . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
 				$symbolVariable->setClassType($newExpr['class']);
 			}
@@ -761,6 +761,7 @@ class Expression
 	{
 
 		$expr = new Expression($expression['right']);
+		$expr->setReadOnly($this->_readOnly);
 		$resolved = $expr->compile($compilationContext);
 
 		if ($resolved->getType() != 'variable') {

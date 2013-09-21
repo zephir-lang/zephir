@@ -54,6 +54,7 @@ require ZEPHIRPATH . 'Library/Statements/SwitchStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ForStatement.php';
 require ZEPHIRPATH . 'Library/Statements/BreakStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ContinueStatement.php';
+require ZEPHIRPATH . 'Library/Statements/UnsetStatement.php';
 require ZEPHIRPATH . 'Library/Optimizers/EvalExpression.php';
 require ZEPHIRPATH . 'Library/Builder/Operators/BinaryOperatorBuilder.php';
 require ZEPHIRPATH . 'Library/Builder/VariableBuilder.php';

@@ -97,6 +97,10 @@ class StatementsBlock
 					$continueStatement = new ContinueStatement($statement);
 					$continueStatement->compile($compilationContext);
 					break;
+				case 'unset':
+					$unsetStatement = new UnsetStatement($statement);
+					$unsetStatement->compile($compilationContext);
+					break;
 				case 'throw':
 					$throwStatement = new ThrowStatement($statement);
 					$throwStatement->compile($compilationContext);
