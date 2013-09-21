@@ -182,6 +182,7 @@ class StaticTypeInference
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
+				case 'static-property-access':
 					$this->markVariable($assigment['variable'], 'variable');
 					break;
 				case 'variable-append':

@@ -90,6 +90,7 @@ class LocalContextPass
 					switch ($assigment['expr']['type']) {
 						case 'property-access':
 						case 'array-access':
+						case 'static-property-access':
 						case 'string':
 						case 'array':
 						case 'empty-array':
@@ -100,6 +101,7 @@ class LocalContextPass
 						case 'concat':
 						case 'clone':
 						case 'require':
+						case 'type-hint':
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
 						case 'constant':

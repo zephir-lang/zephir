@@ -1,4 +1,4 @@
-PHP_ARG_ENABLE(%PROJECT_LOWER%, whether to enable %PROJECT_LOWER%, [ --enable-%PROJECT_LOWER%   Enable %PROJECT_CAMELIZE% framework])
+PHP_ARG_ENABLE(%PROJECT_LOWER%, whether to enable %PROJECT_LOWER%, [ --enable-%PROJECT_LOWER%   Enable %PROJECT_CAMELIZE%])
 
 if test "$PHP_%PROJECT_UPPER%" = "yes"; then
 	AC_DEFINE(HAVE_%PROJECT_UPPER%, 1, [Whether you have %PROJECT_CAMELIZE%])
