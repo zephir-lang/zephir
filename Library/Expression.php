@@ -383,9 +383,8 @@ class Expression
 				}
 
 				/**
-				 * @TODO, check if variable is really internal
+				 * @TODO, check if the variable is really internal
 				 */
-
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');

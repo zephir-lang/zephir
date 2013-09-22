@@ -191,6 +191,10 @@ class CompilerFile
 			$classDefinition->setExtendsClass($topStatement['extends']);
 		}
 
+		if (isset($topStatement['implements'])) {
+			$classDefinition->setImplementsInterfaces($topStatement['implements']);
+		}
+
 		if (isset($topStatement['definition'])) {
 
 			$definition = $topStatement['definition'];

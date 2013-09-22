@@ -57,6 +57,11 @@ class WriteDetector
 						}
 					}
 					break;
+				case 'unset':
+					if ($statement['domain']['value'] == $variable) {
+						return true;
+					}
+					break;
 				case 'if':
 					if (isset($statement['statements'])) {
 						if ($this->detect($variable, $statement['statements']) === true) {

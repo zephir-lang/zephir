@@ -168,6 +168,19 @@ class ClassMethod
 	}
 
 	/**
+	 * Checks if the method is static
+	 *
+	 * @return boolean
+	 */
+	public function isStatic()
+	{
+		if (is_array($this->_visibility)) {
+			return in_array('static', $this->_visibility);
+		}
+		return false;
+	}
+
+	/**
 	 * Replace macros
 	 */
 	public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)

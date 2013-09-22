@@ -33,6 +33,8 @@ class ClassDefinition
 
 	protected $_extendsClass;
 
+	protected $_interfaces;
+
 	protected $_extendsClassDefinition;
 
 	protected $_properties = array();
@@ -109,6 +111,23 @@ class ClassDefinition
 	}
 
 	/**
+	 * Sets the implemented interfaces
+	 *
+	 * @param string $implementedInterfaces
+	 */
+	public function setImplementsInterfaces($implementedInterfaces)
+	{
+		$interfaces = array();
+		foreach ($implementedInterfaces as $implementedInterface) {
+			if (substr($implementedInterface['value'], 0, 1) == '\\') {
+				$implementedInterface['value'] = substr($implementedInterface['value'], 1);
+			}
+			$interfaces[] = $implementedInterface['value'];
+		}
+		$this->_interfaces = $interfaces;
+	}
+
+	/**
 	 * Returns the extended class
 	 *
 	 * @return string
@@ -116,6 +135,16 @@ class ClassDefinition
 	public function getExtendsClass()
 	{
 		return $this->_extendsClass;
+	}
+
+	/**
+	 * Returns the implemented interfaces
+	 *
+	 * @return array
+	 */
+	public function getImplementedInterfaces()
+	{
+		return $this->_interfaces;
 	}
 
 	/**
@@ -483,6 +512,25 @@ class ClassDefinition
 			$constant->compile($compilationContext);
 		}
 
+		/**
+		 * Implemented interfaces
+		 */
+		$interfaces = $this->_interfaces;
+		if (is_array($interfaces)) {
+			$interfacesEntries = array();
+			$compiler = $compilationContext->compiler;
+			foreach ($interfaces as $interface) {
+				if ($compiler->isInterface($interface)) {
+					$classDefinition = $compiler->getClassDefinition($interface);
+					$interfacesEntries[] = $classDefinition->getClassEntry();
+				}
+			}
+			if (count($interfacesEntries)) {
+				$codePrinter->outputBlankLine(true);
+				$codePrinter->output('zend_class_implements(' . $this->getClassEntry() . ' TSRMLS_CC, ' . count($interfacesEntries) . ', ' . join(', ', $interfacesEntries) . ');');
+			}
+		}
+
 		$codePrinter->outputBlankLine();
 		$codePrinter->output('return SUCCESS;');
 
@@ -567,10 +615,18 @@ class ClassDefinition
 						$codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
 					}
 				} else {
-					if (count($parameters)) {
-						$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
+					if ($method->isStatic()) {
+						if (count($parameters)) {
+							$codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
+						} else {
+							$codePrinter->output("\t" . 'ZEND_FENTRY(' . $method->getName() . ', NULL, NULL, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)');
+						}
 					} else {
-						$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');
+						if (count($parameters)) {
+							$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ')');
+						} else {
+							$codePrinter->output("\t" . 'PHP_ABSTRACT_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL)');
+						}
 					}
 				}
 			}

@@ -40,18 +40,38 @@ class UnsetStatement
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['domain']['value'], $compilationContext, $this->_statement);
 		if ($variable->getType() != 'variable') {
-			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression);
+			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $this->_statement['domain']);
 		}
 
 		$expr = new Expression($this->_statement['index']);
 		$expr->setReadOnly(true);
 		$exprIndex = $expr->compile($compilationContext);
 
+		$flags = 'PH_SEPARATE';
+
 		switch ($exprIndex->getType()) {
 			case 'string':
-				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), PH_SEPARATE);');
+				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
 				break;
 			case 'long':
+				break;
+			case 'variable':
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $this->_statement['index']);
+				switch ($variableIndex->getType()) {
+					case 'int':
+					case 'uint':
+					case 'long':
+						$compilationContext->headersManager->add('kernel/array');
+						$compilationContext->codePrinter->output('zephir_array_unset_string(' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						break;
+					case 'string':
+					case 'variable':
+						$compilationContext->headersManager->add('kernel/array');
+						$compilationContext->codePrinter->output('zephir_array_unset(' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						break;
+					default:
+						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $this->_statement['index']);
+				}
 				break;
 			default:
 				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $this->_statement['index']);

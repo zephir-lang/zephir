@@ -1511,6 +1511,7 @@ class LetStatement
 						break;
 					case 'property-access':
 					case 'array-access':
+					case 'type-hint':
 						$expr->setReadOnly(true);
 						break;
 				}
