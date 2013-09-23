@@ -55,9 +55,10 @@ Compile the extension:
 ./bin/zephir compile
 ```
 
-Documentation
--------------
+Documentation & Blog
+--------------------
 A preliminary documentation can be found [here](http://zephir-lang.com/)
+Official Blog can be found [here](http://zephir-lang.tumblr.com/)
 
 Current Build Status
 --------------------
