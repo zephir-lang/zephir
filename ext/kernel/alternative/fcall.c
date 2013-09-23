@@ -189,7 +189,8 @@ static inline zend_bool zephir_alt_is_callable_method_ex(zend_class_entry *ce, c
 /**
  * Call a method caching its function pointer address
  */
-int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name, unsigned int method_len, unsigned long method_key TSRMLS_DC)
+int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name,
+	unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
 {
 	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_uint i, exists = 0, is_zephir_function = 0;
@@ -886,11 +887,13 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 /**
  * Calls a method caching its function handler
  */
-int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name, unsigned int method_len, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count, zval *params[], unsigned long method_key TSRMLS_DC)
+int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name,
+	unsigned int method_len, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count,
+	zval *params[], unsigned long method_key, zend_fcall_info_cache *fcc TSRMLS_DC)
 {
 	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval ***params_array = NULL;
-	zval **static_params_array[5];
+	zval **static_params_array[10];
 	zend_uint i;
 	int ex_retval;
 	zval *local_retval_ptr = NULL;
@@ -905,7 +908,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 	} else {
 
 		if (param_count) {
-			if (param_count > 5) {
+			if (param_count > 10) {
 				params_array = (zval ***) emalloc(sizeof(zval **)*param_count);
 				for (i = 0; i < param_count; i++) {
 					params_array[i] = &params[i];
@@ -951,7 +954,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 			fci.params = static_params_array;
 		}
 
-		ex_retval = zephir_alt_call_method(&fci, ce, hash_key, method_name, method_len, method_key TSRMLS_CC);
+		ex_retval = zephir_alt_call_method(&fci, ce, hash_key, method_name, method_len, method_key, fcc TSRMLS_CC);
 
 		if (fci.function_name) {
 			if (Z_REFCOUNT_P(fci.function_name) == 1) {
