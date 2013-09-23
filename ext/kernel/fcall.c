@@ -467,7 +467,7 @@ int zephir_call_parent_func_params(zval *return_value, zval **return_value_ptr, 
 	zend_class_entry *active_scope;
 	va_list ap;
 
-	if (active_class_ce) {
+	if (object) {
 		active_scope = EG(scope);
 		EG(scope)    = active_class_ce;
 	}
@@ -479,7 +479,7 @@ int zephir_call_parent_func_params(zval *return_value, zval **return_value_ptr, 
 	status = zephir_call_static_zval_str_func_vparams(return_value, return_value_ptr, &cls, method_name, method_len TSRMLS_CC, param_count, ap);
 	va_end(ap);
 
-	if (active_class_ce) {
+	if (object) {
 		EG(scope) = active_scope;
 	}
 

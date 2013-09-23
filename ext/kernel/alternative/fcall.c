@@ -948,7 +948,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 		fci.function_name = NULL;
 		fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
 		fci.param_count = param_count;
-		if (param_count > 5) {
+		if (param_count > 10) {
 			fci.params = params_array;
 		} else{
 			fci.params = static_params_array;
