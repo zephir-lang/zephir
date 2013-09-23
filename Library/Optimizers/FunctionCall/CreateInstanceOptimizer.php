@@ -39,6 +39,8 @@ class CreateInstanceOptimizer
 
 		$context->headersManager->add('kernel/object');
 
+		$symbolVariable->setDynamicType('object');
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
 		$context->codePrinter->output('if (zephir_create_instance(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC) == FAILURE) {');

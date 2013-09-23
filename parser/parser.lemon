@@ -803,12 +803,13 @@ static json_object *xx_ret_throw_exception(json_object *expr, xx_scanner_state *
 	return ret;
 }
 
-static json_object *xx_ret_fcall(xx_parser_token *F, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_fcall(int type, xx_parser_token *F, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("fcall"));
 	json_object_object_add(ret, "name", json_object_new_string(F->token));
+	json_object_object_add(ret, "call-type", json_object_new_int(type));
 
 	if (parameters) {
 		json_object_object_add(ret, "parameters", parameters);
@@ -1931,12 +1932,22 @@ xx_common_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) P
 
 /* y = f(false, x) */
 xx_fcall_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_fcall(I, P, status->scanner_state);
+	R = xx_ret_fcall(1, I, P, status->scanner_state);
 }
 
 /* y = f() */
 xx_fcall_expr(R) ::= IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_fcall(I, NULL, status->scanner_state);
+	R = xx_ret_fcall(1, I, NULL, status->scanner_state);
+}
+
+/* y = {f}(false, x) */
+xx_fcall_expr(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(2, I, P, status->scanner_state);
+}
+
+/* y = {f}() */
+xx_fcall_expr(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_fcall(2, I, NULL, status->scanner_state);
 }
 
 /* o::m(false, x) */

@@ -39,6 +39,8 @@ class CamelizeOptimizer
 
 		$context->headersManager->add('kernel/string');
 
+		$symbolVariable->setDynamicType('string');
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		$context->codePrinter->output('zephir_camelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

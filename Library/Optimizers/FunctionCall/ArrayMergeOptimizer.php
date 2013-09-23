@@ -40,6 +40,8 @@ class ArrayMergeOptimizer
 
 		$context->headersManager->add('kernel/array');
 
+		$symbolVariable->setDynamicType('array');
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		$context->codePrinter->output('zephir_fast_array_merge(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . '), &(' . $resolvedParams[1] . ') TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

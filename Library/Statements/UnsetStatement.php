@@ -62,12 +62,12 @@ class UnsetStatement
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
-						$compilationContext->codePrinter->output('zephir_array_unset_string(' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
-						$compilationContext->codePrinter->output('zephir_array_unset(' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						$compilationContext->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $this->_statement['index']);
