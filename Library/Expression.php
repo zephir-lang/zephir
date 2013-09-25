@@ -187,6 +187,7 @@ class Expression
 							case 'long':
 								return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
 							case 'variable':
+							case 'string':
 								return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
 							default:
 								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
@@ -256,6 +257,7 @@ class Expression
 							case 'long':
 							case 'uint':
 								return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
+							case 'string':
 							case 'variable':
 								return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
 							default:

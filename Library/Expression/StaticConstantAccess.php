@@ -108,30 +108,31 @@ class StaticConstantAccess
 		}
 
 		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->initVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * Variable that receives property accesses must be polimorphic
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
-		}
-
-		/**
 		 * We can optimize the reading of constants by avoiding query their value everytime
 		 */
 		if (!$compilationContext->config->get('static-constant-class-folding')) {
+
+			/**
+			 * Resolves the symbol that expects the value
+			 */
+			if ($this->_expecting) {
+				if ($this->_expectingVariable) {
+					$symbolVariable = $this->_expectingVariable;
+					$symbolVariable->initVariant($compilationContext);
+				} else {
+					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				}
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+			}
+
+			/**
+			 * Variable that receives property accesses must be polimorphic
+			 */
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+			}
+
 			$compilationContext->headersManager->add('kernel/object');
 			$compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -140,34 +141,21 @@ class StaticConstantAccess
 		$constantDefinition = $classDefinition->getConstant($constant);
 
 		if ($constantDefinition instanceof ClassConstant) {
-			$value = $constantDefinition->getValue();
+			$constant = $constantDefinition->getValue();
+			$value = $constant['value'];
+			$type = $constant['type'];
 		} else {
-			$value = array(
-				'type' => gettype($constantDefinition),
-				'value' => $constantDefinition
-			);
+			$value = $constantDefinition;
+			$type = gettype($value);
+			if ($type == 'integer') {
+				$type = 'int';
+			}
 		}
 
 		/**
-		 * Create an implicit 'let' operation, this assigns the constant value to the variable
+		 * Return the value as a literal expression
 		 */
-		$statement = new LetStatement(array(
-			'type' => 'let',
-			'assignments' => array(
-				array(
-					'assign-type' => 'variable',
-					'variable' => $symbolVariable->getRealName(),
-					'operator' => 'assign',
-					'expr' => $value,
-					'file' => $expression['file'],
-					'line' => $expression['line'],
-					'char' => $expression['char']
-				)
-			)
-		));
-		$statement->compile($compilationContext);
-
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		return new CompiledExpression($type, $value, $expression);
 	}
 
 }

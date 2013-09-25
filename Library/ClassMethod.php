@@ -256,6 +256,18 @@ class ClassMethod
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
 				}
 				break;
+			case 'string':
+				$compilationContext->symbolTable->mustGrownStack(true);
+				$compilationContext->headersManager->add('kernel/memory');
+				switch ($parameter['default']['type']) {
+					case 'null':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'ZVAL_EMPTY_STRING(' . $parameter['name'] . ');' . PHP_EOL;
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+				}
+				break;
 			case 'variable':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');

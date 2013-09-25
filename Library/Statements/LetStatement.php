@@ -712,6 +712,10 @@ class LetStatement
 									$codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
 								}
 								break;
+							case 'concat-assign':
+								$compilationContext->headersManager->add('kernel/operators');
+								$codePrinter->output('zephir_concat_self_str(&' . $variable . ', SL("' . $resolvedExpr->getCode() . '") TSRMLS_CC);');
+								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
@@ -827,6 +831,32 @@ class LetStatement
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+								}
+								break;
+							case 'string':
+								switch ($statement['operator']) {
+									case 'assign':
+										if ($itemVariable->getName() != $variable) {
+
+											$symbolVariable->setMustInitNull(true);
+											$compilationContext->symbolTable->mustGrownStack(true);
+
+											/* Inherit the dynamic type data from the assigned value */
+											$symbolVariable->setDynamicType($itemVariable->getDynamicType());
+											$symbolVariable->setClassType($itemVariable->getClassType());
+
+											$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+											if ($itemVariable->isTemporal()) {
+												$itemVariable->setIdle(true);
+											}
+										}
+										break;
+									case 'concat-assign':
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
@@ -1379,8 +1409,8 @@ class LetStatement
 		$propertyName = $statement['property'];
 
 		$propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
-		if ($propertyVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type '" . $symbolVariable->getType() . "' to update object property", $statement);
+		if ($propertyVariable->getType() != 'variable' && $propertyVariable->getType() != 'string') {
+			throw new CompilerException("Cannot use variable type '" . $propertyVariable->getType() . "' to update object property", $statement);
 		}
 
 		$dynamicType = $symbolVariable->getDynamicType();
@@ -1567,6 +1597,7 @@ class LetStatement
 		$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement['index-expr']);
 		switch ($indexVariable->getType()) {
 			case 'variable':
+			case 'string':
 				break;
 			default:
 				throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);

@@ -201,6 +201,10 @@ class CompilerFile
 
 			if (isset($definition['properties'])) {
 				foreach ($definition['properties'] as $property) {
+
+					/**
+					 * Add property to the definition
+					 */
 					$classDefinition->addProperty(new ClassProperty(
 						$property['visibility'],
 						$property['name'],
@@ -208,9 +212,63 @@ class CompilerFile
 						isset($property['docblock']) ? $property['docblock'] : null,
 						$property
 					));
+
+					/**
+					 * Check for shortcuts
+					 */
+					if (isset($property['shortcuts'])) {
+						foreach ($property['shortcuts'] as $shortcut) {
+							if (substr($property['name'], 0, 1) == '_') {
+								$name = substr($property['name'], 1);
+							} else {
+								$name = $property['name'];
+							}
+							switch ($shortcut['name']) {
+								case 'get':
+									$classDefinition->addMethod(new ClassMethod(
+										array('public'),
+										'get' . ucfirst($name),
+										null,
+										null,
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+									), $shortcut);
+									break;
+								case 'set':
+									$classDefinition->addMethod(new ClassMethod(
+										array('public'),
+										'set' . ucfirst($name),
+										new ClassMethodParameters(array(array(
+											'type' => 'parameter',
+											'name' => $name,
+											'file' => $shortcut['file'],
+											'line' => $shortcut['line'],
+											'char' => $shortcut['char'],
+										))),
+										null,
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+									), $shortcut);
+									break;
+								case '__toString':
+									$classDefinition->addMethod(new ClassMethod(
+										array('public'),
+										'__toString',
+										null,
+										null,
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+									), $shortcut);
+									break;
+								default:
+									throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
+							}
+						}
+					}
+
 				}
 			}
 
+			/**
+			 * Register constants
+			 */
 			if (isset($definition['constants'])) {
 				foreach ($definition['constants'] as $constant) {
 					$classDefinition->addConstant(new ClassConstant(
@@ -221,6 +279,9 @@ class CompilerFile
 				}
 			}
 
+			/**
+			 * Register methods
+			 */
 			if (isset($definition['methods'])) {
 				foreach ($definition['methods'] as $method) {
 					$classDefinition->addMethod(new ClassMethod(

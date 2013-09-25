@@ -152,7 +152,7 @@ class MethodCall extends Call
 
 					$classType = $variableVariable->getClassType();
 					$compiler = $compilationContext->compiler;
-					if ($compiler->isClass($classType)) {
+					if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
 
 						$classDefinition = $compiler->getClassDefinition($classType);
 						if (!$classDefinition) {

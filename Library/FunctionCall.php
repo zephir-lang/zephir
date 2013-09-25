@@ -195,6 +195,9 @@ class FunctionCall extends Call
 			case 'create_instance':
 			case 'create_instance_params':
 			case 'create_symbol_table':
+			case 'globals_get':
+			case 'globals_set':
+			case 'merge_append':
 				return true;
 		}
 		return false;

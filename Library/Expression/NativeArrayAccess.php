@@ -77,7 +77,7 @@ class NativeArrayAccess
 					case 'variable':
 						break;
 					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
+						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
 				}
 				break;
 			default:

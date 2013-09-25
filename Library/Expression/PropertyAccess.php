@@ -197,7 +197,7 @@ class PropertyAccess
 		 * Variable that receives a property value must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
+			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
 		}
 
 		/**
