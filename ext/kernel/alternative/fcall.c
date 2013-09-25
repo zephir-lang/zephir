@@ -532,7 +532,8 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 /**
  * Call a method caching its function pointer address
  */
-int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name, unsigned int method_len, unsigned long method_key TSRMLS_DC)
+int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name,
+	unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
 {
 	zend_uint i;
 	zend_executor_globals *executor_globals_ptr = ZEPHIR_VEG;

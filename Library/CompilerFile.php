@@ -138,6 +138,9 @@ class CompilerFile
 
 	/**
 	 * Compiles a comment as a top-level statement
+	 *
+	 * @param CompilationContext $compilationContext
+	 * @param array $topStatement
 	 */
 	public function compileComment(CompilationContext $compilationContext, $topStatement)
 	{
@@ -178,6 +181,65 @@ class CompilerFile
 	}
 
 	/**
+	 * Creates the property shortcuts
+	 *
+	 * @param array $property
+	 * @param ClassDefinition $classDefinition
+	 */
+	protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
+	{
+		foreach ($property['shortcuts'] as $shortcut) {
+
+			if (substr($property['name'], 0, 1) == '_') {
+				$name = substr($property['name'], 1);
+			} else {
+				$name = $property['name'];
+			}
+
+			switch ($shortcut['name']) {
+				case 'get':
+					$classDefinition->addMethod(new ClassMethod(
+						array('public'),
+						'get' . ucfirst($name),
+						null,
+						null,
+						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+						null
+					), $shortcut);
+					break;
+				case 'set':
+					$classDefinition->addMethod(new ClassMethod(
+						array('public'),
+						'set' . ucfirst($name),
+						new ClassMethodParameters(array(array(
+							'type' => 'parameter',
+							'name' => $name,
+							'file' => $shortcut['file'],
+							'line' => $shortcut['line'],
+							'char' => $shortcut['char'],
+						))),
+						null,
+						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+						null
+					), $shortcut);
+					break;
+				case '__toString':
+					$classDefinition->addMethod(new ClassMethod(
+						array('public'),
+						'__toString',
+						null,
+						null,
+						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+						null
+					), $shortcut);
+					break;
+				default:
+					throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
+			}
+		}
+	}
+
+	/**
 	 * Creates a definition for a class
 	 *
 	 * @param string $namespace
@@ -215,58 +277,11 @@ class CompilerFile
 					));
 
 					/**
-					 * Check for shortcuts
+					 * Check and process shortcuts
 					 */
 					if (isset($property['shortcuts'])) {
-						foreach ($property['shortcuts'] as $shortcut) {
-							if (substr($property['name'], 0, 1) == '_') {
-								$name = substr($property['name'], 1);
-							} else {
-								$name = $property['name'];
-							}
-							switch ($shortcut['name']) {
-								case 'get':
-									$classDefinition->addMethod(new ClassMethod(
-										array('public'),
-										'get' . ucfirst($name),
-										null,
-										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-										null
-									), $shortcut);
-									break;
-								case 'set':
-									$classDefinition->addMethod(new ClassMethod(
-										array('public'),
-										'set' . ucfirst($name),
-										new ClassMethodParameters(array(array(
-											'type' => 'parameter',
-											'name' => $name,
-											'file' => $shortcut['file'],
-											'line' => $shortcut['line'],
-											'char' => $shortcut['char'],
-										))),
-										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-										null
-									), $shortcut);
-									break;
-								case '__toString':
-									$classDefinition->addMethod(new ClassMethod(
-										array('public'),
-										'__toString',
-										null,
-										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-										null
-									), $shortcut);
-									break;
-								default:
-									throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
-							}
-						}
+						$this->_processShorcuts($property, $classDefinition);
 					}
-
 				}
 			}
 
