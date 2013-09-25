@@ -24,6 +24,7 @@
  */
 class ClassMethod
 {
+	protected $_classDefinition;
 
 	protected $_visibility;
 
@@ -40,18 +41,20 @@ class ClassMethod
 	/**
 	 * ClassMethod constructor
 	 *
+	 * @param ClassDefinition $classDefinition
 	 * @param string $visibility
 	 * @param string $name
 	 * @param StatementsBlock $statements
 	 * @param string $docblock
 	 * @param string $returnType
 	 */
-	public function __construct($visibility, $name, $parameters,
+	public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters,
 		StatementsBlock $statements=null, $docblock=null, $returnType=null, $original=null)
 	{
 
 		$this->checkVisibility($visibility, $name, $original);
 
+		$this->_classDefinition = $classDefinition;
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_parameters = $parameters;
@@ -78,6 +81,27 @@ class ClassMethod
 		if (in_array('private', $visibility) && in_array('protected', $visibility)) {
 			throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
 		}
+		if ($name == '__construct') {
+			if (in_array('static', $visibility)) {
+				throw new CompilerException("Constructors cannot be 'static'", $original);
+			}
+		} else {
+			if ($name == '__destruct') {
+				if (in_array('static', $visibility)) {
+					throw new CompilerException("Destructors cannot be 'static'", $original);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns the class definition where the method was declared
+	 *
+	 * @return ClassDefinition
+	 */
+	public function getClassDefinition()
+	{
+		return $this->_classDefinition;
 	}
 
 	/**
@@ -212,6 +236,19 @@ class ClassMethod
 			}
 		}
 		return join('|', array_keys($modifiers));
+	}
+
+	/**
+	 * Checks if the method is private
+	 *
+	 * @return boolean
+	 */
+	public function isPrivate()
+	{
+		if (is_array($this->_visibility)) {
+			return in_array('private', $this->_visibility);
+		}
+		return false;
 	}
 
 	/**

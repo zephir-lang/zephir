@@ -118,6 +118,17 @@ class MethodCall extends Call
 					throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
 				}
 
+				$method = $classDefinition->getMethod($methodName);
+
+				/**
+				 * Private methods must be called in their declaration scope
+				 */
+				if ($method->isPrivate()) {
+					if ($method->getClassDefinition() != $classDefinition) {
+						throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
+					}
+				}
+
 				/**
 				 * Try to produce an exception if method is called with a wrong number
 				 * of parameters
@@ -163,6 +174,17 @@ class MethodCall extends Call
 							throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
 						}
 
+						$method = $classDefinition->getMethod($methodName);
+
+						/**
+						 * Private methods must be called in their declaration scope
+						 */
+						if ($method->isPrivate()) {
+							if ($method->getClassDefinition() != $classDefinition) {
+								throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
+							}
+						}
+
 						/**
 						 * Try to produce an exception if method is called with a wrong number of parameters
 						 */
@@ -195,6 +217,23 @@ class MethodCall extends Call
 						} else {
 							$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
 						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Transfer the return type-hint to the returned variable
+		 */
+		if ($isExpecting) {
+			if (isset($method)) {
+				$returnType = $method->getReturnType();
+				if ($returnType !== null) {
+					if (is_array($returnType)) {
+						$symbolVariable->setDynamicType('object');
+						$symbolVariable->setClassType($returnType['value']);
+					} else {
+						$symbolVariable->setDynamicType($returnType);
 					}
 				}
 			}

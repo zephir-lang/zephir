@@ -167,6 +167,7 @@ class CompilerFile
 		if (isset($topStatement['methods'])) {
 			foreach ($topStatement['methods'] as $method) {
 				$classDefinition->addMethod(new ClassMethod(
+					$classDefinition,
 					$method['visibility'],
 					$method['name'],
 					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
@@ -200,6 +201,7 @@ class CompilerFile
 			switch ($shortcut['name']) {
 				case 'get':
 					$classDefinition->addMethod(new ClassMethod(
+						$classDefinition,
 						array('public'),
 						'get' . ucfirst($name),
 						null,
@@ -211,6 +213,7 @@ class CompilerFile
 					break;
 				case 'set':
 					$classDefinition->addMethod(new ClassMethod(
+						$classDefinition,
 						array('public'),
 						'set' . ucfirst($name),
 						new ClassMethodParameters(array(array(
@@ -228,6 +231,7 @@ class CompilerFile
 					break;
 				case '__toString':
 					$classDefinition->addMethod(new ClassMethod(
+						$classDefinition,
 						array('public'),
 						'__toString',
 						null,
@@ -308,6 +312,7 @@ class CompilerFile
 			if (isset($definition['methods'])) {
 				foreach ($definition['methods'] as $method) {
 					$classDefinition->addMethod(new ClassMethod(
+						$classDefinition,
 						$method['visibility'],
 						$method['name'],
 						isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
