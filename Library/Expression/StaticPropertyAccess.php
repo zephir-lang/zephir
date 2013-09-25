@@ -18,11 +18,11 @@
 */
 
 /**
- * StaticConstantAccess
+ * StaticPropertyAccess
  *
- * Resolves class constants
+ * Resolves class static properties
  */
-class StaticConstantAccess
+class StaticPropertyAccess
 {
 
 	protected $_expecting = true;
@@ -55,7 +55,7 @@ class StaticConstantAccess
 	}
 
 	/**
-	 * Access a static constant class
+	 * Access a static property
 	 *
 	 * @param array $expression
 	 * @param CompilationContext $compilationContext
@@ -98,66 +98,55 @@ class StaticConstantAccess
 			}
 		}
 
-		/**
-		 * Constants are resolved to their values at compile time
-		 * so we need to check that they effectively do exist
-		 */
-		$constant = $expression['right']['value'];
-		if (!$classDefinition->hasConstant($constant)) {
-			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
+		$property = $expression['right']['value'];
+
+		$classDefinition = $classDefinition;
+		if (!$classDefinition->hasProperty($property)) {
+			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
+		}
+
+		$propertyDefinition = $classDefinition->getProperty($property);
+		if (!$propertyDefinition->isStatic()) {
+			throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $expression);
+		}
+
+		if ($propertyDefinition->isPrivate()) {
+			if ($propertyDefinition->getDeclaringClass() != $classDefinition) {
+				throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $expression);
+			}
 		}
 
 		/**
-		 * We can optimize the reading of constants by avoiding query their value every time
+		 * Resolves the symbol that expects the value
 		 */
-		if (!$compilationContext->config->get('static-constant-class-folding')) {
-
-			/**
-			 * Resolves the symbol that expects the value
-			 */
-			if ($this->_expecting) {
-				if ($this->_expectingVariable) {
-					$symbolVariable = $this->_expectingVariable;
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				if ($symbolVariable->getName() != 'return_value') {
 					$symbolVariable->initVariant($compilationContext);
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 			}
-
-			/**
-			 * Variable that receives property accesses must be polimorphic
-			 */
-			if ($symbolVariable->getType() != 'variable') {
-				throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
-			}
-
-			$symbolVariable->setDynamicType('undefined');
-
-			$compilationContext->headersManager->add('kernel/object');
-			$compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
-			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		}
-
-		$constantDefinition = $classDefinition->getConstant($constant);
-
-		if ($constantDefinition instanceof ClassConstant) {
-			$constant = $constantDefinition->getValue();
-			$value = $constant['value'];
-			$type = $constant['type'];
 		} else {
-			$value = $constantDefinition;
-			$type = gettype($value);
-			if ($type == 'integer') {
-				$type = 'int';
-			}
+			$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 		}
 
 		/**
-		 * Return the value as a literal expression
+		 * Variable that receives property accesses must be polimorphic
 		 */
-		return new CompiledExpression($type, $value, $expression);
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+		}
+
+		$symbolVariable->setDynamicType('undefined');
+
+		$compilationContext->headersManager->add('kernel/object');
+		$compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() .' , SL("' . $property . '") TSRMLS_CC););');
+
+		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
 }

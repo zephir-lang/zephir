@@ -57,8 +57,9 @@ Compile the extension:
 
 Documentation & Blog
 --------------------
-A preliminary documentation can be found [here](http://zephir-lang.com/)
-Official Blog can be found [here](http://zephir-lang.tumblr.com/)
+
+* A preliminary documentation can be found [here](http://zephir-lang.com/)
+* Official Blog can be found [here](http://blog.zephir-lang.com/)
 
 Current Build Status
 --------------------

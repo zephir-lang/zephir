@@ -54,6 +54,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
 require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
 require ZEPHIRPATH . 'Library/Expression/NativeArrayAccess.php';
+require ZEPHIRPATH . 'Library/Expression/StaticPropertyAccess.php';
 
 /**
  * Expressions
@@ -966,6 +967,12 @@ class Expression
 				$staticConstantAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $staticConstantAccess->compile($expression, $compilationContext);
 
+			case 'static-property-access':
+				$staticPropertyAccess = new StaticPropertyAccess();
+				$staticPropertyAccess->setReadOnly($this->isReadOnly());
+				$staticPropertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $staticPropertyAccess->compile($expression, $compilationContext);
+
 			case 'fcall':
 				$functionCall = new FunctionCall();
 				return $functionCall->compile($this, $compilationContext);
@@ -1120,7 +1127,6 @@ class Expression
 			 */
 			case 'require':
 			case 'typeof':
-			case 'static-property-access':
 			case 'clone':
 			case 'empty':
 				return new CompiledExpression('null', null, $expression);
