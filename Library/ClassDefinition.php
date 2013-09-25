@@ -625,7 +625,7 @@ class ClassDefinition
 
 			$parameters = $method->getParameters();
 			if (count($parameters)) {
-				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, 0)');
+				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
 				foreach ($parameters as $parameters) {
 					foreach ($parameters as $parameter) {
 						$codePrinter->output('	ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');

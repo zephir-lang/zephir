@@ -7,7 +7,7 @@ PHP_METHOD(Test_Oo_OoConstructParams, __construct);
 PHP_METHOD(Test_Oo_OoConstructParams, getA);
 PHP_METHOD(Test_Oo_OoConstructParams, getB);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooconstructparams___construct, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooconstructparams___construct, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()

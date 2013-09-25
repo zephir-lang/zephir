@@ -39,24 +39,21 @@ PHP_METHOD(Test_Constants, testReadConstant) {
 PHP_METHOD(Test_Constants, testReadClassConstant1) {
 
 
-	ZVAL_LONG(return_value, 10);
-	return;
+	RETURN_LONG(10);
 
 }
 
 PHP_METHOD(Test_Constants, testReadClassConstant2) {
 
 
-	ZVAL_LONG(return_value, 10);
-	return;
+	RETURN_LONG(10);
 
 }
 
 PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 
-	ZVAL_LONG(return_value, 10);
-	return;
+	RETURN_LONG(10);
 
 }
 

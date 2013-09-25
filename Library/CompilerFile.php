@@ -168,7 +168,8 @@ class CompilerFile
 					$method['name'],
 					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
 					null,
-					isset($method['docblock']) ? $method['docblock'] : null
+					isset($method['docblock']) ? $method['docblock'] : null,
+					isset($method['return-type']) ? $method['return-type'] : null
 				), $method);
 			}
 		}
@@ -230,7 +231,8 @@ class CompilerFile
 										'get' . ucfirst($name),
 										null,
 										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+										null
 									), $shortcut);
 									break;
 								case 'set':
@@ -245,7 +247,8 @@ class CompilerFile
 											'char' => $shortcut['char'],
 										))),
 										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+										null
 									), $shortcut);
 									break;
 								case '__toString':
@@ -254,7 +257,8 @@ class CompilerFile
 										'__toString',
 										null,
 										null,
-										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null
+										isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+										null
 									), $shortcut);
 									break;
 								default:
@@ -289,7 +293,8 @@ class CompilerFile
 						$method['name'],
 						isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
 						isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
-						isset($method['docblock']) ? $method['docblock'] : null
+						isset($method['docblock']) ? $method['docblock'] : null,
+						isset($method['return-type']) ? $method['return-type'] : null
 					), $method);
 				}
 			}

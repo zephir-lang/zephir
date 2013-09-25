@@ -16,32 +16,32 @@ PHP_METHOD(Test_ScallExternal, testCall10);
 PHP_METHOD(Test_ScallExternal, testCall11);
 PHP_METHOD(Test_ScallExternal, testCall12);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall4, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall4, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall5, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall5, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall6, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall6, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall10, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall10, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall11, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall11, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall12, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scallexternal_testcall12, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()

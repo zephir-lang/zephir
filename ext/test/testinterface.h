@@ -3,7 +3,7 @@ extern zend_class_entry *test_testinterface_ce;
 
 ZEPHIR_INIT_CLASS(Test_TestInterface);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_testinterface_setaction, 0, 0, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_testinterface_setaction, 0, 0, 1)
 	ZEND_ARG_INFO(0, action)
 ZEND_END_ARG_INFO()
 

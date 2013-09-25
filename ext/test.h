@@ -25,6 +25,7 @@
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"
 #include "test/regexdna.h"
+#include "test/returns.h"
 #include "test/router.h"
 #include "test/router/exception.h"
 #include "test/router/route.h"

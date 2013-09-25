@@ -35,19 +35,26 @@ class ClassMethod
 
 	protected $_docblock;
 
+	protected $_returnType;
+
 	/**
 	 * ClassMethod constructor
 	 *
 	 * @param string $visibility
 	 * @param string $name
+	 * @param StatementsBlock $statements
+	 * @param string $docblock
+	 * @param string $returnType
 	 */
-	public function __construct($visibility, $name, $parameters, StatementsBlock $statements=null, $docblock=null)
+	public function __construct($visibility, $name, $parameters,
+		StatementsBlock $statements=null, $docblock=null, $returnType=null)
 	{
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_parameters = $parameters;
 		$this->_statements = $statements;
 		$this->_docblock = $docblock;
+		$this->_returnType = $returnType;
 	}
 
 	/**

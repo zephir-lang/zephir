@@ -331,6 +331,10 @@ static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token
 		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
 	}
 
+	if (return_type) {
+		json_object_object_add(ret, "return-type", return_type);
+	}
+
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
 	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
