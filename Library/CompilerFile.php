@@ -172,7 +172,8 @@ class CompilerFile
 					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
 					null,
 					isset($method['docblock']) ? $method['docblock'] : null,
-					isset($method['return-type']) ? $method['return-type'] : null
+					isset($method['return-type']) ? $method['return-type'] : null,
+					$method
 				), $method);
 			}
 		}
@@ -204,7 +205,8 @@ class CompilerFile
 						null,
 						null,
 						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-						null
+						null,
+						$shortcut
 					), $shortcut);
 					break;
 				case 'set':
@@ -220,7 +222,8 @@ class CompilerFile
 						))),
 						null,
 						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-						null
+						null,
+						$shortcut
 					), $shortcut);
 					break;
 				case '__toString':
@@ -230,7 +233,8 @@ class CompilerFile
 						null,
 						null,
 						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-						null
+						null,
+						$shortcut
 					), $shortcut);
 					break;
 				default:
@@ -309,7 +313,8 @@ class CompilerFile
 						isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
 						isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
 						isset($method['docblock']) ? $method['docblock'] : null,
-						isset($method['return-type']) ? $method['return-type'] : null
+						isset($method['return-type']) ? $method['return-type'] : null,
+						$method
 					), $method);
 				}
 			}

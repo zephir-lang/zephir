@@ -75,6 +75,13 @@ class CompilationContext
 	public $classDefinition;
 
 	/**
+	 * Current method being compiled
+	 *
+	 * @var \ClassMethod
+	 */
+	public $currentMethod;
+
+	/**
 	 * Represents the c-headers added to the file
 	 *
 	 * @var \HeadersManager

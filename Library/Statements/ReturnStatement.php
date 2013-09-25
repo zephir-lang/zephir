@@ -45,6 +45,10 @@ class ReturnStatement
 
 		if (isset($statement['expr'])) {
 
+			if ($compilationContext->currentMethod->isConstructor()) {
+				throw new CompilerException("Constructors cannot return values", $statement['expr']);
+			}
+
 			/**
 			 * Use return member for properties on this
 			 */

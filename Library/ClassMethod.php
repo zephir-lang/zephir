@@ -47,14 +47,37 @@ class ClassMethod
 	 * @param string $returnType
 	 */
 	public function __construct($visibility, $name, $parameters,
-		StatementsBlock $statements=null, $docblock=null, $returnType=null)
+		StatementsBlock $statements=null, $docblock=null, $returnType=null, $original=null)
 	{
+
+		$this->checkVisibility($visibility, $name, $original);
+
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_parameters = $parameters;
 		$this->_statements = $statements;
 		$this->_docblock = $docblock;
 		$this->_returnType = $returnType;
+	}
+
+	/**
+	 * Checks for visibility congruence
+	 *
+	 * @param array $visibility
+	 * @param string $name
+	 * @param array $original
+	 */
+	public function checkVisibility($visibility, $name, $original)
+	{
+		if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+			throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
+		}
+		if (in_array('public', $visibility) && in_array('private', $visibility)) {
+			throw new CompilerException("Method'$name' cannot be 'public' and 'private' at the same time", $original);
+		}
+		if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+			throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
+		}
 	}
 
 	/**
@@ -85,6 +108,16 @@ class ClassMethod
 	public function getParameters()
 	{
 		return $this->_parameters;
+	}
+
+	/**
+	 * Return type by the method
+	 *
+	 * @return string
+	 */
+	public function getReturnType()
+	{
+		return $this->_returnType;
 	}
 
 	/**
@@ -171,6 +204,13 @@ class ClassMethod
 					throw new Exception('Unknown modifier "' . $visibility . '"');
 			}
 		}
+		if ($this->_name == '__construct') {
+			$modifiers['ZEND_ACC_CTOR'] = true;
+		} else {
+			if ($this->_name == '__destruct') {
+				$modifiers['ZEND_ACC_DTOR'] = true;
+			}
+		}
 		return join('|', array_keys($modifiers));
 	}
 
@@ -188,7 +228,20 @@ class ClassMethod
 	}
 
 	/**
+	 * Check if the current method is a constructor
+	 *
+	 * @return boolean
+	 */
+	public function isConstructor()
+	{
+		return $this->_name == '__construct';
+	}
+
+	/**
 	 * Replace macros
+	 *
+	 * @param SymbolTable $symbolTable
+	 * @param string $containerCode
 	 */
 	public function removeMemoryStackReferences(SymbolTable $symbolTable, $containerCode)
 	{
@@ -351,6 +404,11 @@ class ClassMethod
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
+
+		/**
+		 * Set the method currently being compiled
+		 */
+		$compilationContext->currentMethod = $this;
 
 		if (is_object($this->_statements)) {
 

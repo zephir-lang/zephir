@@ -71,6 +71,13 @@ class ClassProperty
 		return $this->_original;
 	}
 
+	/**
+	 * Checks for visibility congruence
+	 *
+	 * @param array $visibility
+	 * @param string $name
+	 * @param array $original
+	 */
 	public function checkVisibility($visibility, $name, $original)
 	{
 		if (in_array('public', $visibility) && in_array('protected', $visibility)) {
@@ -84,6 +91,11 @@ class ClassProperty
 		}
 	}
 
+	/**
+	 * Returns the C-visibility accesors for the model
+	 *
+	 * @return string
+	 */
 	public function getVisibilityAccesor()
 	{
 		$modifiers = array();
