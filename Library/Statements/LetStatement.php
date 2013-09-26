@@ -1304,7 +1304,8 @@ class LetStatement
 				break;
 			case 'int':
 			case 'long':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
@@ -1313,7 +1314,8 @@ class LetStatement
 				}
 				break;
 			case 'string':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
@@ -1337,7 +1339,8 @@ class LetStatement
 				}
 				break;
 			case 'empty-array':
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 				$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
@@ -1354,12 +1357,14 @@ class LetStatement
 					case 'ulong':
 					case 'char':
 					case 'uchar':
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'bool':
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						if ($variable == 'this') {
 							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');

@@ -302,6 +302,7 @@ class SymbolTable
 	 *
 	 * @param string $type
 	 * @param \CompilationContext $context
+	 * @return \Variable
 	 */
 	public function getTempVariableForWrite($type, CompilationContext $context)
 	{
@@ -335,6 +336,7 @@ class SymbolTable
 	 *
 	 * @param string $type
 	 * @param \CompilationContext $context
+	 * @return \Variable
 	 */
 	public function getTempNonTrackedVariable($type, CompilationContext $context)
 	{
@@ -363,6 +365,7 @@ class SymbolTable
 	 *
 	 * @param string $type
 	 * @param \CompilationContext $context
+	 * @return \Variable
 	 */
 	public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
 	{

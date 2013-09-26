@@ -144,7 +144,7 @@ class StaticPropertyAccess
 		$symbolVariable->setDynamicType('undefined');
 
 		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() .' , SL("' . $property . '") TSRMLS_CC););');
+		$compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() .' , SL("' . $property . '") TSRMLS_CC);');
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}

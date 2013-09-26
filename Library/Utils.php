@@ -33,10 +33,11 @@ class Utils
 	 */
 	public static function addSlaches($str)
 	{
+		//$str = str_replace('\\', '\\\\', $str);
 		$str = str_replace("\n", "\\n", $str);
 		$str = str_replace("\r", "\\r", $str);
 		$str = str_replace("\t", "\\t", $str);
-		$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
+		//$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
 		return $str;
 	}
 

@@ -90,8 +90,14 @@ class Variable
 
 	protected $_defaultInitValue;
 
+	/**
+	 * Class type
+	 */
 	protected $_classType;
 
+	/**
+	 * Initialization skips
+	 */
 	protected $_numberSkips = 0;
 
 	/**
