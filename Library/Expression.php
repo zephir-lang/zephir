@@ -880,7 +880,7 @@ class Expression
 
 		$exists = true;
 		if (!defined($expression['value'])) {
-			$compilationContext->logger->warning("Constant \"" . $expression['value'] . "\" does not exist at compile time", "nonexistant-constant");
+			$compilationContext->logger->warning("Constant \"" . $expression['value'] . "\" does not exist at compile time", "nonexistant-constant", $expression);
 			$exists = false;
 		}
 
@@ -1100,7 +1100,7 @@ class Expression
 
 			case 'list':
 				if ($expression['left']['type'] == 'list') {
-					$compilationContext->logger->warning("Unnecessary extra parentheses", "extra-parentheses");
+					$compilationContext->logger->warning("Unnecessary extra parentheses", "extra-parentheses", $expression);
 				}
 				$numberPrints = $compilationContext->codePrinter->getNumberPrints();
 				$expr = new Expression($expression['left']);
