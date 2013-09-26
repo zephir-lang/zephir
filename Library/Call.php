@@ -288,12 +288,6 @@ class Call
 					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
-				case 'resource':
-					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-					$codePrinter->output('ZVAL_RESOURCE(&' . $parameterVariable->getName() . ', '.intval($compiledExpression->getCode()).');');
-					$this->_temporalVariables[] = $parameterVariable;
-					$params[] = '&' . $parameterVariable->getName();
-					break;
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {
