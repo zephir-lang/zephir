@@ -919,10 +919,10 @@ class ClassMethod
 								if ($type == 'variable' || $type == 'string') {
 									$groupVariables[] = $pointer . $variable->getName();
 								} else {
-									$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;
+									$groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
 								}
 							} else {
-								if ($variable->mustInitNull()) {
+								if ($variable->mustInitNull() && $pointer) {
 									$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
 								} else {
 									$groupVariables[] = $pointer . $variable->getName();
