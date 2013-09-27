@@ -295,15 +295,13 @@ class MethodCall extends Call
 		 */
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 
-			if (!isset($expression['parameters']) || !count($expression['parameters'])) {
+			if (!isset($expression['parameters']) || !count($params)) {
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
 				if ($compilationContext->insideCycle) {
-
 					$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
 					$functionCache->setMustInitNull(true);
-
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
 					} else {
@@ -322,17 +320,27 @@ class MethodCall extends Call
 					$symbolVariable->initVariant($compilationContext);
 				}
 
-				if ($isExpecting) {
-					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+				if ($compilationContext->insideCycle) {
+					$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
+					$functionCache->setMustInitNull(true);
+					if ($isExpecting) {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
+					}
 				} else {
-					$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					if ($isExpecting) {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+					}
 				}
 
 			}
 
 		} else {
 
-			if (!isset($expression['parameters'])) {
+			if (!isset($expression['parameters']) || !count($params)) {
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
@@ -342,19 +350,13 @@ class MethodCall extends Call
 					$codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
 				}
 			} else {
-
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-
-				if (count($params)) {
-					if ($isExpecting) {
-						$codePrinter->output('zephir_call_method_zval_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
-					} else {
-						$codePrinter->output('zephir_call_method_zval_p' . count($params) . '_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
-					}
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_method_zval_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+					$codePrinter->output('zephir_call_method_zval_p' . count($params) . '_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
 				}
 			}
 

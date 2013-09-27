@@ -13,3 +13,12 @@ assert($t->testCall6(4, 5) === 9);
 assert($t->testCall7(2, 3) === 10);
 assert($t->testCall8(6, 7) === 26);
 assert($t->testCall9(4, 5) === 18);
+
+assert($t->testCall10() === "hello public");
+assert($t->testCall11() === "hello protected");
+assert($t->testCall12() === "hello private");
+
+assert($t->testCall13(2, 3) === 5);
+assert($t->testCall14(6, 7) === 13);
+assert($t->testCall15(4, 5) === 9);
+

@@ -1,6 +1,6 @@
 #!/bin/bash
 export CC="gcc"
-export CFLAGS="-O1 -g3 -Wall"
+export CFLAGS="-O0 -g3 -Wall -fvisibility=hidden"
 if [ -f Makefile ]; then
 	sudo make --silent clean
 	sudo phpize --silent --clean

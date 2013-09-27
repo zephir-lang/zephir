@@ -219,7 +219,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	EX(object) = NULL;
 
 	/* Check if a fci_cache is already loaded for this method */
-	if (!prepared_function) {
+	if (!prepared_function || !*prepared_function) {
 
 		if (hash_key > 0 && zephir_globals_ptr->function_cache) {
 			if (zend_hash_index_find(zephir_globals_ptr->function_cache, hash_key, (void**) &function_handler) == SUCCESS) {
@@ -229,9 +229,9 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			}
 		}
 
-		/** Check if it's a Phalcon function */
+		/** Check if it's an internal function */
 		if (!is_zephir_function) {
-			is_zephir_function = ce->type == ZEND_INTERNAL_CLASS && ce->name_length > 10 && !memcmp(ce->name, SL("Phalcon\\"));
+			is_zephir_function = ce->type == ZEND_INTERNAL_CLASS;
 		}
 
 		/* The fci_cache doesn't exist, so we check it */
@@ -242,7 +242,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 
 			if (is_zephir_function) {
 
-				/** Use the Phalcon optimized version */
+				/** Use the optimized version */
 				if (!zephir_alt_is_callable_method_ex(ce, method_name, method_len, fci->object_ptr, IS_CALLABLE_CHECK_SILENT, fci_cache, &error, exists, method_key TSRMLS_CC)) {
 					if (error) {
 						zend_error(E_WARNING, "Invalid callback %s, %s", method_name, error);
@@ -293,6 +293,11 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 					);
 				}
 			}
+
+			if (prepared_function) {
+				*prepared_function = fci_cache->function_handler;
+			}
+
 		} else {
 			fci_cache->called_scope = ce;
 			fci_cache->object_ptr = fci->object_ptr;
@@ -300,10 +305,11 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			fci_cache->initialized = 1;
 		}
 	} else {
-		fci_cache->function_handler = *prepared_function;
+		fci_cache->called_scope = ce;
 		fci_cache->object_ptr = fci->object_ptr;
 		fci_cache->calling_scope = ce;
 		fci_cache->initialized = 1;
+		fci_cache->function_handler = *prepared_function;
 		exists = 1;
 		is_zephir_function = 1;
 	}
@@ -597,7 +603,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			}
 		}
 
-		/** Check if it's a Phalcon function */
+		/** Check if it's an internal function */
 		if (!is_zephir_function) {
 			if (ce->type == ZEND_INTERNAL_CLASS) {
 				is_zephir_function = 1;
@@ -612,7 +618,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 
 			if (is_zephir_function) {
 
-				/** Use the Phalcon optimized version */
+				/** Use the optimized version */
 				if (unlikely(!zephir_alt_is_callable_method_ex(ce, method_name, method_len, fci->object_ptr, IS_CALLABLE_CHECK_SILENT, fci_cache, &error, exists, method_key TSRMLS_CC))) {
 					if (error) {
 						zend_error(E_WARNING, "Invalid callback %s, %s", method_name, error);

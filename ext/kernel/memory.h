@@ -73,13 +73,13 @@ extern void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 
 #define ZEPHIR_SINIT_NVAR(z)
 
-#define ZEPHIR_INIT_VAR(z) \
-	zephir_memory_alloc(&z TSRMLS_CC)
-
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	ALLOC_ZVAL(z); \
 	Z_SET_REFCOUNT_P(z, 0); \
 	Z_UNSET_ISREF_P(z);
+
+#define ZEPHIR_INIT_VAR(z) \
+	zephir_memory_alloc(&z TSRMLS_CC)
 
 #define ZEPHIR_INIT_NVAR(z)\
 	if (z) { \

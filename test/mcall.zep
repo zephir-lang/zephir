@@ -117,7 +117,7 @@ class Mcall
 		int i = 0; var s = "";
 		loop {
 			let s.= this->testMethod1();
-			if i > 5 {
+			if i == 5 {
 				break;
 			} else {
 				let i++;
