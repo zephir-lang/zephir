@@ -1684,7 +1684,13 @@ class LetStatement
 				$expr = new Expression($assignment['expr']);
 				switch ($assignment['assign-type']) {
 					case 'variable':
-						$expr->setExpectReturn(true, $symbolVariable);
+						if (isset($assignment['operator'])) {
+							if ($assignment['operator'] == 'assign') {
+								$expr->setExpectReturn(true, $symbolVariable);
+							}
+						} else {
+							$expr->setExpectReturn(true, $symbolVariable);
+						}
 						break;
 					case 'property-access':
 					case 'array-access':

@@ -156,6 +156,9 @@ class DeclareStatement
 							case 'double':
 								$symbolVariable->setDynamicType('double');
 								break;
+							case 'string':
+								$symbolVariable->setDynamicType('string');
+								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}

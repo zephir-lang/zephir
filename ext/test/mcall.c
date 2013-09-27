@@ -15,6 +15,7 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/array.h"
 
 
 /**
@@ -283,15 +284,30 @@ PHP_METHOD(Test_Mcall, testCall15) {
 
 PHP_METHOD(Test_Mcall, testCall16) {
 
-	zend_function **_0 = NULL;
+	zend_function *_1 = NULL;
+	zval *s, *_0 = NULL;
+	int i = 0;
 
 	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(s);
+	ZVAL_STRING(s, "", 1);
 
 	while (1) {
-		zephir_call_method_cache_noret(this_ptr, "testmethod1", _0);
-		break;
+		ZEPHIR_INIT_NVAR(_0);
+		zephir_call_method_cache(_0, this_ptr, "testmethod1", &_1);
+		zephir_concat_self(&s, _0 TSRMLS_CC);
+		if ((i > 5)) {
+			break;
+		} else {
+			i++;
+		}
 	}
-	ZEPHIR_MM_RESTORE();
+	array_init(return_value);
+	zephir_array_append(&return_value, s, 0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, i);
+	zephir_array_append(&return_value, _0, 0);
+	RETURN_MM();
 
 }
 

@@ -1311,7 +1311,7 @@ PHP_METHOD(Test_Flow, testFor23) {
 
 PHP_METHOD(Test_Flow, testFor30) {
 
-	int v, _0;
+	int v = NULL, _0;
 	zval *b;
 	zval *a, *_1 = NULL;
 
@@ -1333,7 +1333,7 @@ PHP_METHOD(Test_Flow, testFor30) {
 
 PHP_METHOD(Test_Flow, testFor31) {
 
-	int k, v, _0;
+	int k = NULL, v = NULL, _0;
 	zval *b;
 	zval *a, *_1 = NULL;
 

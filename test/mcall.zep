@@ -114,10 +114,16 @@ class Mcall
 
 	public function testCall16()
 	{
+		int i = 0; var s = "";
 		loop {
-			this->testMethod1();
-			break;
+			let s.= this->testMethod1();
+			if i > 5 {
+				break;
+			} else {
+				let i++;
+			}
 		}
+		return [s, i];
 	}
 
 }
