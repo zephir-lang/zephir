@@ -123,7 +123,7 @@ class StaticPropertyAccess
 			if ($this->_expectingVariable) {
 				$symbolVariable = $this->_expectingVariable;
 				if ($symbolVariable->getName() != 'return_value') {
-					$symbolVariable->initVariant($compilationContext);
+					//$symbolVariable->initVariant($compilationContext);
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}

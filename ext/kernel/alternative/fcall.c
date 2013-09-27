@@ -190,7 +190,7 @@ static inline zend_bool zephir_alt_is_callable_method_ex(zend_class_entry *ce, c
  * Call a method caching its function pointer address
  */
 int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name,
-	unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
+  unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
 {
 	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_uint i, exists = 0, is_zephir_function = 0;
@@ -206,6 +206,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	zend_execute_data execute_data;
 	zend_fcall_info_cache *fci_cache, fci_local;
 	zend_function **function_handler;
+	int allocated = 0;
 
 	fci_cache = &fci_local;
 
@@ -226,9 +227,9 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 		}
 	}
 
-	/** Check if it's an internal function */
+	/** Check if it's a Phalcon function */
 	if (!is_zephir_function) {
-		is_zephir_function = ce->type == ZEND_INTERNAL_CLASS;
+		is_zephir_function = ce->type == ZEND_INTERNAL_CLASS && ce->name_length > 10 && !memcmp(ce->name, SL("Phalcon\\"));
 	}
 
 	/* The fci_cache doesn't exist, so we check it */
@@ -439,7 +440,6 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	EG(current_execute_data) = &execute_data;
 
 	if (EX(function_state).function->type == ZEND_USER_FUNCTION) {
-
 		calling_symbol_table = EG(active_symbol_table);
 		EG(scope) = EX(function_state).function->common.scope;
 		if (fci->symbol_table) {
@@ -465,13 +465,17 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 		}
 		EG(active_symbol_table) = calling_symbol_table;
 		EG(active_op_array) = original_op_array;
-		EG(return_value_ptr_ptr) = original_return_value;
+		EG(return_value_ptr_ptr)=original_return_value;
 		EG(opline_ptr) = original_opline_ptr;
 	} else {
 		if (EX(function_state).function->type == ZEND_INTERNAL_FUNCTION) {
 
 			int call_via_handler = (EX(function_state).function->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
-			ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+
+			if (!*fci->retval_ptr_ptr) {
+				ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+				allocated = 1;
+			}
 
 			if (EX(function_state).function->common.scope) {
 				EG(scope) = EX(function_state).function->common.scope;
@@ -479,15 +483,21 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 
 			((zend_internal_function *) EX(function_state).function)->handler(fci->param_count, *fci->retval_ptr_ptr, fci->retval_ptr_ptr, fci->object_ptr, 1 TSRMLS_CC);
 			if (EG(exception) && fci->retval_ptr_ptr) {
-				zval_ptr_dtor(fci->retval_ptr_ptr);
-				*fci->retval_ptr_ptr = NULL;
+				if (allocated) {
+					zval_ptr_dtor(fci->retval_ptr_ptr);
+					*fci->retval_ptr_ptr = NULL;
+				}
 			}
 
 			if (call_via_handler) {
 				fci_cache->initialized = 0;
 			}
 		} else {
-			ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+
+			if (!*fci->retval_ptr_ptr) {
+				ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+				allocated = 1;
+			}
 
 			if (fci->object_ptr) {
 				Z_OBJ_HT_P(fci->object_ptr)->call_method(EX(function_state).function->common.function_name, fci->param_count, *fci->retval_ptr_ptr, fci->retval_ptr_ptr, fci->object_ptr, 1 TSRMLS_CC);
@@ -501,11 +511,14 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			efree(EX(function_state).function);
 
 			if (EG(exception) && fci->retval_ptr_ptr) {
-				zval_ptr_dtor(fci->retval_ptr_ptr);
-				*fci->retval_ptr_ptr = NULL;
+				if (allocated) {
+					zval_ptr_dtor(fci->retval_ptr_ptr);
+					*fci->retval_ptr_ptr = NULL;
+				}
 			}
 		}
 	}
+
 	#if PHP_VERSION_ID < 50500
 	zend_vm_stack_clear_multiple(TSRMLS_C);
 	#else
@@ -534,7 +547,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
  * Call a method caching its function pointer address
  */
 int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned long hash_key, char *method_name,
-	unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
+  unsigned int method_len, unsigned long method_key, zend_fcall_info_cache *prepared_fci_cache TSRMLS_DC)
 {
 	zend_uint i;
 	zend_executor_globals *executor_globals_ptr = ZEPHIR_VEG;
@@ -551,12 +564,12 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	zend_execute_data execute_data;
 	zend_fcall_info_cache *fci_cache, fci_local;
 	zend_function **function_handler;
-	int exists = 0, is_zephir_function = 0;
+	int exists = 0, is_zephir_function = 0, allocated = 0;
 
 	fci_cache = &fci_local;
 
-	assert(*fci->retval_ptr_ptr == NULL);
-	*fci->retval_ptr_ptr = NULL;
+	//assert(*fci->retval_ptr_ptr == NULL);
+	//*fci->retval_ptr_ptr = NULL;
 
 	/* Initialize execute_data */
 	execute_data = *executor_globals_ptr->current_execute_data;
@@ -576,9 +589,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	/** Check if it's a Phalcon function */
 	if (!is_zephir_function) {
 		if (ce->type == ZEND_INTERNAL_CLASS) {
-			if (ce->name_length > 10) {
-				is_zephir_function =  !memcmp(ce->name, SL("Phalcon\\"));
-			}
+			is_zephir_function = 1;
 		}
 	}
 
@@ -822,7 +833,12 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	} else {
 		if (EX(function_state).function->type == ZEND_INTERNAL_FUNCTION) {
 			int call_via_handler = (EX(function_state).function->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
-			ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+
+			if (!*fci->retval_ptr_ptr) {
+				ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+				allocated = 1;
+			}
+
 			if (EX(function_state).function->common.scope) {
 				executor_globals_ptr->scope = EX(function_state).function->common.scope;
 			}
@@ -834,8 +850,10 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 				INIT_PZVAL(*fci->retval_ptr_ptr);
 			}*/
 			if (executor_globals_ptr->exception && fci->retval_ptr_ptr && *fci->retval_ptr_ptr) {
-				zval_ptr_dtor(fci->retval_ptr_ptr);
-				*fci->retval_ptr_ptr = NULL;
+				if (allocated) {
+					zval_ptr_dtor(fci->retval_ptr_ptr);
+					*fci->retval_ptr_ptr = NULL;
+				}
 			}
 
 			if (call_via_handler) {
@@ -843,7 +861,11 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 				fci_cache->initialized = 0;
 			}
 		} else { /* ZEND_OVERLOADED_FUNCTION */
-			ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+
+			if (!*fci->retval_ptr_ptr) {
+				ALLOC_INIT_ZVAL(*fci->retval_ptr_ptr);
+				allocated = 1;
+			}
 
 			/* Not sure what should be done here if it's a static method */
 			if (fci->object_ptr) {
@@ -858,8 +880,10 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 			efree(EX(function_state).function);
 
 			if (executor_globals_ptr->exception && fci->retval_ptr_ptr && *fci->retval_ptr_ptr) {
-				zval_ptr_dtor(fci->retval_ptr_ptr);
-				*fci->retval_ptr_ptr = NULL;
+				if (allocated) {
+					zval_ptr_dtor(fci->retval_ptr_ptr);
+					*fci->retval_ptr_ptr = NULL;
+				}
 			}
 		}
 	}
@@ -890,12 +914,12 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
  * Calls a method caching its function handler
  */
 int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *method_name,
-	unsigned int method_len, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count,
-	zval *params[], unsigned long method_key, zend_fcall_info_cache *fcc TSRMLS_DC)
+  unsigned int method_len, zval *retval_ptr, zval **retval_ptr_ptr, zend_uint param_count,
+  zval *params[], unsigned long method_key, zend_fcall_info_cache *fcc TSRMLS_DC)
 {
 	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zval ***params_array = NULL;
-	zval **static_params_array[10];
+	zval **static_params_array[5];
 	zend_uint i;
 	int ex_retval;
 	zval *local_retval_ptr = NULL;
@@ -910,7 +934,7 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 	} else {
 
 		if (param_count) {
-			if (param_count > 10) {
+			if (param_count > 5) {
 				params_array = (zval ***) emalloc(sizeof(zval **)*param_count);
 				for (i = 0; i < param_count; i++) {
 					params_array[i] = &params[i];
@@ -937,10 +961,10 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 
 		}
 
-		if (retval_ptr_ptr && *retval_ptr_ptr) {
+		/*if (retval_ptr_ptr && *retval_ptr_ptr) {
 			zval_ptr_dtor(retval_ptr_ptr);
 			*retval_ptr_ptr = NULL;
-		}
+		}*/
 
 		fci.size = sizeof(fci);
 		fci.no_separation = 1;
@@ -948,9 +972,14 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 		fci.function_table = &ce->function_table;
 		fci.object_ptr = *object_pp;
 		fci.function_name = NULL;
-		fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
+		//fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
+		if (retval_ptr_ptr) {
+			fci.retval_ptr_ptr = retval_ptr_ptr;
+		} else {
+			fci.retval_ptr_ptr = &retval_ptr;
+		}
 		fci.param_count = param_count;
-		if (param_count > 10) {
+		if (param_count > 5) {
 			fci.params = params_array;
 		} else{
 			fci.params = static_params_array;
@@ -970,11 +999,13 @@ int zephir_alt_call_user_method(zend_class_entry *ce, zval **object_pp, char *me
 
 	zephir_globals_ptr->recursive_lock--;
 
-	if (local_retval_ptr) {
+	/*if (local_retval_ptr) {
 		COPY_PZVAL_TO_ZVAL(*retval_ptr, local_retval_ptr);
-	} else if (!retval_ptr_ptr) {
-		INIT_ZVAL(*retval_ptr);
-	}
+	} else {
+		if (!retval_ptr_ptr) {
+			INIT_ZVAL(*retval_ptr);
+		}
+	}*/
 
 	if (params_array) {
 		efree(params_array);

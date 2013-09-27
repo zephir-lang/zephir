@@ -428,6 +428,7 @@ class ClassMethod
 			case 'double':
 				return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'string':
+				$compilationContext->symbolTable->mustGrownStack(true);
 				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);

@@ -299,19 +299,19 @@ class MethodCall extends Call
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-				if ($compilationContext->insideCycle) {
+				/*if ($compilationContext->insideCycle) {
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 					} else {
 						$codePrinter->output('zephir_call_method_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 					}
-				} else {
+				} else {*/
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 					} else {
 						$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 					}
-				}
+				//}
 			} else {
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
