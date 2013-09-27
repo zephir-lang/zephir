@@ -878,6 +878,10 @@ class ClassMethod
 					$pointer = '*';
 					$code = 'zend_class_entry ';
 					break;
+				case 'zend_function':
+					$pointer = '*';
+					$code = 'zend_function ';
+					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
 			}
@@ -900,7 +904,11 @@ class ClassMethod
 						$groupVariables[] = $variable->getName();
 					} else {
 						if ($variable->isDoublePointer()) {
-							$groupVariables[] = $pointer . $pointer . $variable->getName();
+							if ($variable->mustInitNull()) {
+								$groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
+							} else {
+								$groupVariables[] = $pointer . $pointer . $variable->getName();
+							}
 						} else {
 							$defaultValue = $variable->getDefaultInitValue();
 							if ($defaultValue !== null) {
@@ -910,7 +918,11 @@ class ClassMethod
 									$groupVariables[] = $pointer . $variable->getName() . ' = '. $defaultValue;
 								}
 							} else {
-								$groupVariables[] = $pointer . $variable->getName();
+								if ($variable->mustInitNull()) {
+									$groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+								} else {
+									$groupVariables[] = $pointer . $variable->getName();
+								}
 							}
 						}
 					}

@@ -569,7 +569,7 @@
 
 int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...);
 int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...);
-int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_fcall_info_cache *fcc TSRMLS_DC, int param_count, ...);
+int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_function **fcc TSRMLS_DC, int param_count, ...);
 int zephir_call_method_zval_params(zval *return_value, zval **return_value_ptr, zval *object, zval *method TSRMLS_DC, int param_count, ...);
 int zephir_call_parent_func_params(zval *return_value, zval **return_value_ptr, zval *object, zend_class_entry *active_class_ce, char *method_name, int method_len TSRMLS_DC, int param_count, ...);
 int zephir_call_self_func_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len TSRMLS_DC, int param_count, ...);
@@ -578,7 +578,7 @@ int zephir_call_static_zval_func_params(zval *return_value, zval **return_value_
 int zephir_call_static_zval_str_func_params(zval *return_value, zval **return_value_ptr, zval *mixed_name, char *method_name, int method_len TSRMLS_DC, int param_count, ...);
 
 int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len,
-	ulong method_key, zend_fcall_info_cache *fcc TSRMLS_DC, int param_count, va_list ap);
+	ulong method_key, zend_function **fcc TSRMLS_DC, int param_count, va_list ap);
 
 /** Fast call_user_func_array/call_user_func */
 int zephir_call_user_func_array(zval *return_value, zval *handler, zval *params TSRMLS_DC);

@@ -295,36 +295,39 @@ class MethodCall extends Call
 		 */
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 
-			if (!isset($expression['parameters'])) {
+			if (!isset($expression['parameters']) || !count($expression['parameters'])) {
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-				/*if ($compilationContext->insideCycle) {
+				if ($compilationContext->insideCycle) {
+
+					$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
+					$functionCache->setMustInitNull(true);
+
 					if ($isExpecting) {
-						$codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
+						$codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
 					} else {
-						$codePrinter->output('zephir_call_method_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+						$codePrinter->output('zephir_call_method_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
 					}
-				} else {*/
+				} else {
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 					} else {
 						$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 					}
-				//}
+				}
 			} else {
+
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-				if (count($params)) {
-					if ($isExpecting) {
-						$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-					} else {
-						$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-					}
+
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
+					$codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
+
 			}
 
 		} else {

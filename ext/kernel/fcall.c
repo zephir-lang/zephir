@@ -215,7 +215,7 @@ static int zephir_call_func_vparams(zval *return_value, zval **return_value_ptr,
 }
 
 int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval *object, char *method_name,
-	int method_len, ulong method_key, zend_fcall_info_cache *fcc TSRMLS_DC, int param_count, va_list ap) {
+	int method_len, ulong method_key, zend_function **prepared_function TSRMLS_DC, int param_count, va_list ap) {
 
 	int i, status, free_params = -0, caller_wants_result = 1;
 	zend_class_entry *ce, *active_scope = NULL;
@@ -260,7 +260,7 @@ int zephir_call_method_vparams(zval *return_value, zval **return_value_ptr, zval
 	ce           = Z_OBJCE_P(object);
 	active_scope = EG(scope);
 	EG(scope)    = ce;
-	status       = zephir_alt_call_user_method(ce, &object, method_name, method_len, return_value, return_value_ptr, param_count, params_ptr, method_key, fcc TSRMLS_CC);
+	status       = zephir_alt_call_user_method(ce, &object, method_name, method_len, return_value, return_value_ptr, param_count, params_ptr, method_key, prepared_function TSRMLS_CC);
 	EG(scope)    = active_scope;
 
 	if (unlikely(free_params)) {
@@ -405,13 +405,13 @@ int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval 
 	return status;
 }
 
-int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_fcall_info_cache *fcc TSRMLS_DC, int param_count, ...) {
+int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_function **prepared_function TSRMLS_DC, int param_count, ...) {
 
 	int status;
 	va_list ap;
 
 	va_start(ap, param_count);
-	status = zephir_call_method_vparams(return_value, return_value_ptr, object, method_name, method_len, method_key, fcc TSRMLS_CC, param_count, ap);
+	status = zephir_call_method_vparams(return_value, return_value_ptr, object, method_name, method_len, method_key, prepared_function TSRMLS_CC, param_count, ap);
 	va_end(ap);
 
 	return status;
