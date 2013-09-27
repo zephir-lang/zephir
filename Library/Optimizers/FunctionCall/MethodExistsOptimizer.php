@@ -32,7 +32,7 @@ class MethodExistsOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		if (isset($str)) {
-			return new CompiledExpression('int', 'zephir_method_exists_str(' . $resolvedParams[0] . ', SS("' . $str . '") TSRMLS_CC)', $expression);
+			return new CompiledExpression('int', 'zephir_method_exists_str(' . $resolvedParams[0] . ', SS("' . strtolower($str) . '") TSRMLS_CC)', $expression);
 		}
 
 		return new CompiledExpression('int', 'zephir_method_exists(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC)', $expression);
