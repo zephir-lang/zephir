@@ -203,6 +203,8 @@ class StaticCall extends Call
 		if ($className != 'self' && $className != 'parent') {
 			if ($compiler->isClass($className)) {
 				$classDefinition = $compiler->getClassDefinition($className);
+			} else {
+				throw new CompilerException("Incorrect class name: " . $expression['class'], $expression);
 			}
 		} else {
 			if ($className == 'self') {
