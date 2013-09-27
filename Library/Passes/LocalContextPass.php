@@ -237,11 +237,14 @@ class LocalContextPass
 				break;
 			case 'property-access':
 			case 'array-access':
+			case 'static-property-access':
 				$this->passExpression($expression['left']);
 				break;
 			case 'isset':
 			case 'empty':
 			case 'instanceof':
+			case 'require':
+			case 'clone':
 				$this->passExpression($expression['left']);
 				break;
 			case 'fetch':
@@ -256,7 +259,7 @@ class LocalContextPass
 				$this->passExpression($expression['right']);
 				break;
 			default:
-				echo $expression['type'], PHP_EOL;
+				echo 'Type=', $expression['type'], PHP_EOL;
 				break;
 		}
 	}
@@ -355,9 +358,10 @@ class LocalContextPass
 				case 'break':
 				case 'continue':
 				case 'unset':
+				case 'empty':
 					break;
 				default:
-					echo $statement['type'];
+					echo 'Statement=', $statement['type'], PHP_EOL;
 			}
 		}
 	}

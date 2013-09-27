@@ -1050,6 +1050,10 @@ class LetStatement
 					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
 				}
 				break;
+			case 'string':
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+				break;
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
@@ -1556,10 +1560,11 @@ class LetStatement
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableExpr->getType()) {
 					case 'variable':
+					case 'string':
 						$codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
 						break;
 					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be used as object", $statement);
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to property array", $statement);
 				}
 				break;
 			default:

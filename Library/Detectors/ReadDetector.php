@@ -35,7 +35,7 @@ class ReadDetector
 			}
 		}
 
-		if ($expression['type'] == 'fcall' || $expression['type'] == 'mcall') {
+		if ($expression['type'] == 'fcall' || $expression['type'] == 'mcall' || $expression['type'] == 'scall') {
 			if (isset($expression['parameters'])) {
 				foreach ($expression['parameters'] as $parameter) {
 					if ($parameter['type'] == 'variable') {

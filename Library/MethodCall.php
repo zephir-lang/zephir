@@ -163,9 +163,15 @@ class MethodCall extends Call
 
 					$classType = $variableVariable->getClassType();
 					$compiler = $compilationContext->compiler;
-					if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
+					if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
+						$compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
 
-						$classDefinition = $compiler->getClassDefinition($classType);
+						if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
+							$classDefinition = $compiler->getClassDefinition($classType);
+						} else {
+							$classDefinition = $compiler->getInternalClassDefinition($classType);
+						}
+
 						if (!$classDefinition) {
 							throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
 						}
@@ -187,36 +193,35 @@ class MethodCall extends Call
 
 						/**
 						 * Try to produce an exception if method is called with a wrong number of parameters
+						 * We only check extension parameters if methods are extension methods
+						 * Internal methods may have invalid Reflection information
 						 */
-						if (isset($expression['parameters'])) {
-							$callNumberParameters = count($expression['parameters']);
-						} else {
-							$callNumberParameters = 0;
-						}
+						if ($method instanceof ClassMethod) {
 
-						$classMethod = $classDefinition->getMethod($methodName);
-						$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+							if (isset($expression['parameters'])) {
+								$callNumberParameters = count($expression['parameters']);
+							} else {
+								$callNumberParameters = 0;
+							}
 
-						if (!$expectedNumberParameters && $callNumberParameters > 0) {
-							$numberParameters = $classMethod->getNumberOfParameters();
-							if ($callNumberParameters > $numberParameters) {
+							$classMethod = $classDefinition->getMethod($methodName);
+							$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+							if (!$expectedNumberParameters && $callNumberParameters > 0) {
+								$numberParameters = $classMethod->getNumberOfParameters();
+								if ($callNumberParameters > $numberParameters) {
+									$className = $classDefinition->getCompleteName();
+									throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+								}
+							}
+
+							if ($callNumberParameters < $expectedNumberParameters) {
 								throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 							}
 						}
 
-						if ($callNumberParameters < $expectedNumberParameters) {
-							throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
-						}
-
 					} else {
-						if ($compiler->isInternalClass($classType)) {
-							$classDefinition = $compiler->getInternalClassDefinition($classType);
-							if (!$classDefinition->hasMethod($methodName)) {
-								throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
-							}
-						} else {
-							$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
-						}
+						$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
 					}
 				}
 			}
@@ -227,13 +232,35 @@ class MethodCall extends Call
 		 */
 		if ($isExpecting) {
 			if (isset($method)) {
-				$returnType = $method->getReturnType();
-				if ($returnType !== null) {
-					if (is_array($returnType)) {
-						$symbolVariable->setDynamicType('object');
-						$symbolVariable->setClassType($returnType['value']);
-					} else {
-						$symbolVariable->setDynamicType($returnType);
+				if ($method instanceof ClassMethod) {
+					$returnType = $method->getReturnType();
+					if ($returnType !== null) {
+						if (is_array($returnType)) {
+							$symbolVariable->setDynamicType('object');
+							$symbolVariable->setClassType($returnType['value']);
+						} else {
+							$symbolVariable->setDynamicType($returnType);
+						}
+					}
+				}
+			}
+		}
+
+		/**
+		 * Some parameters in internal methods receive parameters as references
+		 */
+		if (isset($expression['parameters'])) {
+			$references = array();
+			if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
+				if (isset($method)) {
+					if ($method instanceof ReflectionMethod) {
+						$position = 0;
+						foreach ($method->getParameters() as $parameter) {
+							if ($parameter->isPassedByReference()) {
+								$references[$position] = true;
+							}
+							$position++;
+						}
 					}
 				}
 			}
@@ -250,6 +277,20 @@ class MethodCall extends Call
 		$compilationContext->symbolTable->mustGrownStack(true);
 
 		/**
+		 * Mark references
+		 */
+		if (isset($expression['parameters'])) {
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+			if (count($references)) {
+				foreach ($params as $position => $param) {
+					if (isset($references[$position])) {
+						$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $param . ');');
+					}
+				}
+			}
+		}
+
+		/**
 		 * Generate the code according to parentheses
 		 */
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
@@ -264,13 +305,9 @@ class MethodCall extends Call
 					$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 				}
 			} else {
-
-				$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-
 				if (count($params)) {
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
@@ -295,8 +332,6 @@ class MethodCall extends Call
 				}
 			} else {
 
-				$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
@@ -319,6 +354,19 @@ class MethodCall extends Call
 		 */
 		foreach ($this->getTemporalVariables() as $tempVariable) {
 			$tempVariable->setIdle(true);
+		}
+
+		/**
+		 * Release parameters marked as references
+		 */
+		if (isset($expression['parameters'])) {
+			if (count($references)) {
+				foreach ($params as $position => $param) {
+					if (isset($references[$position])) {
+						$compilationContext->codePrinter->output('Z_UNSET_ISREF_P(' . $param . ');');
+					}
+				}
+			}
 		}
 
 		if ($isExpecting) {

@@ -353,6 +353,7 @@ class ClassDefinition
 				return true;
 			}
 		}
+
 		$extendsClassDefinition = $this->_extendsClassDefinition;
 		if ($extendsClassDefinition) {
 			if ($extendsClassDefinition->hasMethod($methodName)) {

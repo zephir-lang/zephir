@@ -272,12 +272,12 @@ class FunctionCall extends Call
 
 		/**
 		 * Some functions receive parameters as references
-		 * We mark those parameters temporary as references to properly assign them
+		 * We mark those parameters temporary as references to properly pass them
 		 */
 		$this->markReferences($funcName, $params, $compilationContext, $references, $expression);
-		if (count($references)) {
+		//if (count($references)) {
 			//var_dump($references);
-		}
+		//}
 
 		$codePrinter = $compilationContext->codePrinter;
 

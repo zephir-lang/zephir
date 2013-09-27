@@ -126,7 +126,7 @@ class StaticTypeInference
 				$this->_variables[$variable] = 'undefined';
 				break;
 			default:
-				echo $type;
+				echo 'StaticTypeInference=', $type;
 				break;
 		}
 	}
@@ -338,6 +338,7 @@ class StaticTypeInference
 				return 'variable';
 			case 'property-access':
 			case 'array-access':
+			case 'static-property-access':
 				$this->passExpression($expression['left']);
 				return 'variable';
 			case 'fetch':
@@ -366,7 +367,7 @@ class StaticTypeInference
 			case 'require':
 				return 'variable';
 			default:
-				echo $expression['type'], PHP_EOL;
+				echo 'STI=', $expression['type'], PHP_EOL;
 				break;
 		}
 	}
@@ -461,9 +462,10 @@ class StaticTypeInference
 				case 'break':
 				case 'continue':
 				case 'unset':
+				case 'empty':
 					break;
 				default:
-					echo $statement['type'];
+					echo 'SSTI=', $statement['type'];
 			}
 		}
 	}

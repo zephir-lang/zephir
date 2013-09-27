@@ -7,6 +7,7 @@
  */
 class StartsWithOptimizer
 {
+
 	/**
 	 *
 	 */
@@ -35,4 +36,5 @@ class StartsWithOptimizer
 
 		return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
 	}
+
 }

@@ -57,6 +57,11 @@ class ComparisonBaseOperator extends BaseOperator
 				}
 			}
 
+			$variableVariable = $compilationContext->symbolTable->getVariableForRead($expr['left']['left']['value'], $compilationContext, $expr);
+			if ($variableVariable->getType() != 'variable') {
+				throw new CompilerException("Typeof operator on non-variable", $expr);
+			}
+
 			/** @todo, read left variable from the symbol table */
 			switch ($expr['right']['value']) {
 				case 'array':

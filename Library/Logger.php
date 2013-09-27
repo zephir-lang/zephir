@@ -33,9 +33,9 @@ class Logger
 	 */
 	public function warning($message, $type, $node)
 	{
-		echo 'Warning: ' . $message;
+		/*echo 'Warning: ' . $message;
 		echo ' in ' . $node['file'] . ' on ' . $node['line'];
-		echo ' [' . $type . ']' . PHP_EOL;
+		echo ' [' . $type . ']' . PHP_EOL;*/
 	}
 
 }
