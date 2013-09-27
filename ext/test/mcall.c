@@ -281,3 +281,15 @@ PHP_METHOD(Test_Mcall, testCall15) {
 
 }
 
+PHP_METHOD(Test_Mcall, testCall16) {
+
+	ZEPHIR_MM_GROW();
+
+	while (1) {
+		zephir_call_method_cache_noret(this_ptr, "testmethod1");
+		break;
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+

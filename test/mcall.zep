@@ -112,4 +112,12 @@ class Mcall
 		return this->{"testMethod6"}(a, b);
 	}
 
+	public function testCall16()
+	{
+		loop {
+			this->testMethod1();
+			break;
+		}
+	}
+
 }

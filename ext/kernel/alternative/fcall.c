@@ -226,9 +226,9 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 		}
 	}
 
-	/** Check if it's a Phalcon function */
+	/** Check if it's an internal function */
 	if (!is_zephir_function) {
-		is_zephir_function = ce->type == ZEND_INTERNAL_CLASS && ce->name_length > 10 && !memcmp(ce->name, SL("Phalcon\\"));
+		is_zephir_function = ce->type == ZEND_INTERNAL_CLASS;
 	}
 
 	/* The fci_cache doesn't exist, so we check it */
@@ -439,6 +439,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 	EG(current_execute_data) = &execute_data;
 
 	if (EX(function_state).function->type == ZEND_USER_FUNCTION) {
+
 		calling_symbol_table = EG(active_symbol_table);
 		EG(scope) = EX(function_state).function->common.scope;
 		if (fci->symbol_table) {
@@ -464,7 +465,7 @@ int zephir_alt_call_method(zend_fcall_info *fci, zend_class_entry *ce, unsigned 
 		}
 		EG(active_symbol_table) = calling_symbol_table;
 		EG(active_op_array) = original_op_array;
-		EG(return_value_ptr_ptr)=original_return_value;
+		EG(return_value_ptr_ptr) = original_return_value;
 		EG(opline_ptr) = original_opline_ptr;
 	} else {
 		if (EX(function_state).function->type == ZEND_INTERNAL_FUNCTION) {
