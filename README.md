@@ -60,6 +60,7 @@ Documentation & Blog
 
 * A preliminary documentation can be found [here](http://zephir-lang.com/)
 * Official Blog can be found [here](http://blog.zephir-lang.com/)
+* Sublime/TextMate highlight syntax bundle [here](http://github.com/phalcon/zephir-sublime)
 
 Current Build Status
 --------------------

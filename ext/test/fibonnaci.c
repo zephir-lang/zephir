@@ -104,3 +104,35 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 }
 
+PHP_METHOD(Test_Fibonnaci, fibArray2) {
+
+	int i, n;
+	zval *fib, *_0, *_1, *_2, *_3 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(fib);
+	array_init(fib);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 0);
+	zephir_array_append(&fib, _0, 0);
+	ZEPHIR_INIT_BNVAR(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_array_append(&fib, _0, 0);
+	i = 2;
+	n = 10;
+	while (1) {
+		if (!((i < n))) {
+			break;
+		}
+		zephir_array_fetch_long(&_1, fib, (i - 1), PH_NOISY | PH_READONLY TSRMLS_CC);
+		zephir_array_fetch_long(&_2, fib, (i - 2), PH_NOISY | PH_READONLY TSRMLS_CC);
+		ZEPHIR_INIT_LNVAR(_3);
+		zephir_add_function(_3, _1, _2 TSRMLS_CC);
+		zephir_array_update_long(&fib, i, &_3, PH_COPY | PH_SEPARATE);
+		i++;
+	}
+	RETURN_CCTOR(fib);
+
+}
+

@@ -296,7 +296,7 @@ PHP_METHOD(Test_Mcall, testCall16) {
 		ZEPHIR_INIT_NVAR(_0);
 		zephir_call_method_cache(_0, this_ptr, "testmethod1", &_1);
 		zephir_concat_self(&s, _0 TSRMLS_CC);
-		if ((i > 5)) {
+		if ((i == 5)) {
 			break;
 		} else {
 			i++;

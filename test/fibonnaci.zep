@@ -12,7 +12,7 @@ class Fibonnaci
 			x = 1,
 			y = 2,
 			n = 10;
-		while (z < n) {
+		while z < n {
 			let z = x + y,
 				x = y,
 				y = z;
@@ -28,7 +28,7 @@ class Fibonnaci
 			x = 1.0,
 			y = 2.0,
 			n = 10.0;
-		while (z < n) {
+		while z < n {
 			let z = x + y,
 				x = y,
 				y = z;
@@ -45,7 +45,7 @@ class Fibonnaci
 			i = 2,
 			n = 10;
 
-		while (i < n) {
+		while i < n {
 			let k = i - 1,
 				j = i - 2,
 				a = fib[k],
@@ -53,6 +53,19 @@ class Fibonnaci
 				c = a + b,
 				fib[i] = c,
 				i++;
+		}
+
+		return fib;
+	}
+
+	public function fibArray2()
+	{
+		var fib, a, b, c;
+		int i, n;
+
+		let fib = [0, 1], i = 2, n = 10;
+		while i < n {
+			let fib[i] = fib[i - 1] + fib[i - 2], i++;
 		}
 
 		return fib;
