@@ -361,6 +361,10 @@ class Expression
 			$className = $newExpr['class'];
 		}
 
+		if (!$className) {
+			throw new CompilerException("A class name is required to instantiate the object", $expression);
+		}
+
 		/**
 		 * stdclass don't have constructors
 		 */
@@ -382,7 +386,7 @@ class Expression
 				 * Classes inside the same extension
 				 */
 				if (!class_exists($className, false)) {
-					$compilationContext->logger->warning('Class "' . $newExpr['class'] . '" does not exist at compile time ', "nonexistant-class", $newExpr);
+					$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistant-class", $newExpr);
 				}
 
 				/**

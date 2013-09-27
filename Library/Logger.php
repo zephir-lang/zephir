@@ -24,6 +24,7 @@
  */
 class Logger
 {
+	private static $_files = array();
 
 	/**
 	 *
@@ -36,6 +37,20 @@ class Logger
 		echo 'Warning: ' . $message;
 		echo ' in ' . $node['file'] . ' on ' . $node['line'];
 		echo ' [' . $type . ']' . PHP_EOL;
+		echo PHP_EOL;
+		if (!isset($_files[$node['file']])) {
+			$lines = file($node['file']);
+			$_files[$node['file']] = $lines;
+		} else {
+			$lines = $_files[$node['file']];
+		}
+		if (isset($lines[$node['line'] - 1])) {
+			$line = $lines[$node['line'] - 1];
+			echo "\t", str_replace("\t", " ", $line);
+			if (($node['char'] - 1) > 0) {
+				echo "\t", str_repeat("-", $node['char'] - 1), "^", PHP_EOL;
+			}
+		}
 	}
 
 }

@@ -1613,9 +1613,11 @@ class LetStatement
 				throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
 		}
 
-		$dynamicType = $indexVariable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
-			$compilationContext->logger->warning('Possible attempt to use non string/long dynamic variable as array index', 'invalid-array-index', $statement);
+		if ($indexVariable->getType() == 'variable') {
+			$dynamicType = $indexVariable->getDynamicType();
+			if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
+				$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
+			}
 		}
 
 		switch ($resolvedExpr->getType()) {

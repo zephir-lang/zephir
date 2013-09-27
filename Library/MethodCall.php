@@ -162,66 +162,70 @@ class MethodCall extends Call
 				if ($variableVariable->getDynamicType() == 'object') {
 
 					$classType = $variableVariable->getClassType();
-					$compiler = $compilationContext->compiler;
-					if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
-						$compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
 
-						if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
-							$classDefinition = $compiler->getClassDefinition($classType);
-						} else {
-							$classDefinition = $compiler->getInternalClassDefinition($classType);
-						}
+					if ($classType) {
 
-						if (!$classDefinition) {
-							throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
-						}
+						$compiler = $compilationContext->compiler;
+						if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
+							$compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
 
-						if (!$classDefinition->hasMethod($methodName)) {
-							throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
-						}
-
-						$method = $classDefinition->getMethod($methodName);
-
-						/**
-						 * Private methods must be called in their declaration scope
-						 */
-						if ($method->isPrivate()) {
-							if ($method->getClassDefinition() != $classDefinition) {
-								throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
-							}
-						}
-
-						/**
-						 * Try to produce an exception if method is called with a wrong number of parameters
-						 * We only check extension parameters if methods are extension methods
-						 * Internal methods may have invalid Reflection information
-						 */
-						if ($method instanceof ClassMethod) {
-
-							if (isset($expression['parameters'])) {
-								$callNumberParameters = count($expression['parameters']);
+							if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
+								$classDefinition = $compiler->getClassDefinition($classType);
 							} else {
-								$callNumberParameters = 0;
+								$classDefinition = $compiler->getInternalClassDefinition($classType);
 							}
 
-							$classMethod = $classDefinition->getMethod($methodName);
-							$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+							if (!$classDefinition) {
+								throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
+							}
 
-							if (!$expectedNumberParameters && $callNumberParameters > 0) {
-								$numberParameters = $classMethod->getNumberOfParameters();
-								if ($callNumberParameters > $numberParameters) {
-									$className = $classDefinition->getCompleteName();
-									throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+							if (!$classDefinition->hasMethod($methodName)) {
+								throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
+							}
+
+							$method = $classDefinition->getMethod($methodName);
+
+							/**
+							 * Private methods must be called in their declaration scope
+							 */
+							if ($method->isPrivate()) {
+								if ($method->getClassDefinition() != $classDefinition) {
+									throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
 								}
 							}
 
-							if ($callNumberParameters < $expectedNumberParameters) {
-								throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+							/**
+							 * Try to produce an exception if method is called with a wrong number of parameters
+							 * We only check extension parameters if methods are extension methods
+							 * Internal methods may have invalid Reflection information
+							 */
+							if ($method instanceof ClassMethod) {
+
+								if (isset($expression['parameters'])) {
+									$callNumberParameters = count($expression['parameters']);
+								} else {
+									$callNumberParameters = 0;
+								}
+
+								$classMethod = $classDefinition->getMethod($methodName);
+								$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+								if (!$expectedNumberParameters && $callNumberParameters > 0) {
+									$numberParameters = $classMethod->getNumberOfParameters();
+									if ($callNumberParameters > $numberParameters) {
+										$className = $classDefinition->getCompleteName();
+										throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+									}
+								}
+
+								if ($callNumberParameters < $expectedNumberParameters) {
+									throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+								}
 							}
+						} else {
+							$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
 						}
 
-					} else {
-						$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
 					}
 				}
 			}

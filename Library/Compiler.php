@@ -550,7 +550,12 @@ class Compiler
 
 	}
 
-	protected static function showException($e)
+	/**
+	 * Shows an exception opening the file and highlighing the wrong part
+	 *
+	 * @param Exception $e
+	 */
+	protected static function showException(Exception $e)
 	{
 		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
 		if (method_exists($e, 'getExtra')) {
