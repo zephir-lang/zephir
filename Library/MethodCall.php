@@ -300,8 +300,11 @@ class MethodCall extends Call
 					$symbolVariable->initVariant($compilationContext);
 				}
 				if ($compilationContext->insideCycle) {
+
 					$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
 					$functionCache->setMustInitNull(true);
+					$functionCache->setReusable(false);
+
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
 					} else {
@@ -315,14 +318,15 @@ class MethodCall extends Call
 					}
 				}
 			} else {
-
 				if ($mustInit) {
 					$symbolVariable->initVariant($compilationContext);
 				}
-
 				if ($compilationContext->insideCycle) {
+
 					$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
 					$functionCache->setMustInitNull(true);
+					$functionCache->setReusable(false);
+
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_method_p' . count($params) . '_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
 					} else {

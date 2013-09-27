@@ -70,6 +70,11 @@ class Variable
 	protected $_idle = false;
 
 	/**
+	 * Reusable temporary variables?
+	 */
+	protected $_reusable = true;
+
+	/**
 	 * Number of mutations to the variable
 	 */
 	protected $_numberMutates = 0;
@@ -239,14 +244,17 @@ class Variable
 	}
 
 	/**
-	 * Once a temporal variable is unused in a specific branch
-	 * it is marked as idle
+	 * Once a temporal variable is unused in a specific branch it is marked as idle
 	 *
 	 * @param boolean $idle
 	 */
 	public function setIdle($idle)
 	{
-		$this->_idle = $idle;
+		if ($this->_reusable) {
+			$this->_idle = $idle;
+		} else {
+			$this->_idle = false;
+		}
 	}
 
 	/**
@@ -257,6 +265,26 @@ class Variable
 	public function isIdle()
 	{
 		return $this->_idle;
+	}
+
+	/**
+	 * Some temporary variables can't be reused
+	 *
+	 * @param boolean $reusable
+	 */
+	public function setReusable($reusable)
+	{
+		$this->_reusable = $reusable;
+	}
+
+	/**
+	 * Checks if the temporary variable is reusable
+	 *
+	 * @return boolean
+	 */
+	public function isReusable()
+	{
+		return $this->_reusable;
 	}
 
 	/**

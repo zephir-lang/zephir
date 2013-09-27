@@ -24,7 +24,7 @@ class MemstrOptimizer
 		}
 
 		if ($expression['parameters'][1]['type'] == 'string') {
-			$str = $expression['parameters'][1]['value'];
+			$str = Utils::addSlaches($expression['parameters'][1]['value']);
 			unset($expression['parameters'][1]);
 		}
 
