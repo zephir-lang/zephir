@@ -87,8 +87,8 @@ class Declare
 
 	public function testDeclare14()
 	{
-		//var a = "hello";
-		//return a;
+		var a = "hello";
+		return a;
 	}
 
 	public function testDeclare15()

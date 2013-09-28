@@ -182,6 +182,9 @@ class Call
 		foreach ($exprParams as $compiledExpression) {
 			$expression = $compiledExpression->getOriginal();
 			switch ($compiledExpression->getType()) {
+				case 'null':
+					$params[] = 'ZEPHIR_GLOBAL(global_null)';
+					break;
 				case 'int':
 				case 'uint':
 				case 'long':

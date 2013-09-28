@@ -327,6 +327,9 @@ class ClassMethod
 			case 'long':
 			case 'ulong':
 				switch ($parameter['default']['type']) {
+					case 'null':
+						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
+						break;
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -342,6 +345,9 @@ class ClassMethod
 				break;
 			case 'bool':
 				switch ($parameter['default']['type']) {
+					case 'null':
+						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
+						break;
 					case 'bool':
 						if ($parameter['default']['value'] == 'true') {
 							$code .= "\t\t" . $parameter['name'] . ' = 1;' . PHP_EOL;
@@ -350,7 +356,7 @@ class ClassMethod
 						}
 						break;
 					default:
-						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
 				}
 				break;
 			case 'string':

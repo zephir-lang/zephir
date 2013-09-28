@@ -917,16 +917,19 @@ class LetStatement
 
 		$type = $symbolVariable->getType();
 		switch ($type) {
-			case 'int':
+			/*case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 				$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
-				break;
+				break;*/
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
+					case 'null':
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ZEPHIR_GLOBAL(global_null), PH_SEPARATE);');
+						break;
 					case 'string':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 						$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . Utils::addSlaches($resolvedExpr->getCode()) . '", 1);');
@@ -1600,35 +1603,46 @@ class LetStatement
 
 		$indexExpression = new Expression($statement['index-expr']);
 		$resolvedExpression = $indexExpression->compile($compilationContext);
-		if ($resolvedExpression->getType() != 'variable') {
-			throw new CompilerException("Expression: " . $indexExpression->getType() . " cannot be used as index", $statement['index-expr']);
+		if ($resolvedExpression->getType() != 'variable' && $resolvedExpression->getType() != 'string') {
+			throw new CompilerException("Expression: " . $resolvedExpression->getType() . " cannot be used as index", $statement['index-expr']);
 		}
 
-		$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement['index-expr']);
-		switch ($indexVariable->getType()) {
-			case 'variable':
-			case 'string':
-				break;
-			default:
-				throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
-		}
+		if ($resolvedExpression->getType() == 'variable') {
 
-		if ($indexVariable->getType() == 'variable') {
-			$dynamicType = $indexVariable->getDynamicType();
-			if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
-				$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
+			$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement['index-expr']);
+			switch ($indexVariable->getType()) {
+				case 'variable':
+				case 'string':
+					break;
+				default:
+					throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
 			}
+
+			if ($indexVariable->getType() == 'variable') {
+				$dynamicType = $indexVariable->getDynamicType();
+				if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
+					$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
+				}
+			}
+
 		}
 
 		switch ($resolvedExpr->getType()) {
 			case 'null':
-				$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+				if ($resolvedExpression->getType() == 'string') {
+					$codePrinter->output('zephir_update_property_array_string(' . $symbolVariable->getName() . ', SL("' . $property . '"), "' . $resolvedExpression->getCode() . '", ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+				}
 				break;
 			case 'bool':
-				if ($resolvedExpr->getBooleanCode() == '1') {
-					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+				if ($resolvedExpression->getType() == 'string') {
 				} else {
-					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					if ($resolvedExpr->getBooleanCode() == '1') {
+						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+					} else {
+						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+					}
 				}
 				break;
 			case 'variable':
@@ -1640,7 +1654,11 @@ class LetStatement
 						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
-						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						if ($resolvedExpression->getType() == 'string') {
+							$codePrinter->output('zephir_update_property_array_string(' . $symbolVariable->getName() . ', SL("' . $property . '"), "' . $resolvedExpression->getCode() . '", ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						} else {
+							$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						}
 						break;
 					default:
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be updated into array property", $statement);
