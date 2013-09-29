@@ -46,9 +46,11 @@ class SkipVariantInit
 	{
 		foreach ($statement['assignments'] as $assignment) {
 			if ($assignment['assign-type'] == 'variable') {
-				if ($assignment['expr']['type'] != 'variable' && $assignment['expr']['type'] != 'array-access') {
-					//echo $assignment['variable'], ' ', $assignment['expr']['type'], PHP_EOL;
-					$this->_variablesToSkip[$branchNumber][$assignment['variable']] = 1;
+				if ($assignment['operator'] == 'assign') {
+					if ($assignment['expr']['type'] != 'variable' && $assignment['expr']['type'] != 'array-access') {
+						//echo $assignment['variable'], ' ', $assignment['expr']['type'], PHP_EOL;
+						$this->_variablesToSkip[$branchNumber][$assignment['variable']] = 1;
+					}
 				}
 			}
 		}

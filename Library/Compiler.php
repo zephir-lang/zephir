@@ -575,9 +575,8 @@ class Compiler
 			}
 		}
 		echo PHP_EOL;
-		$pwd = getcwd();
-		echo 'at ', str_replace($pwd, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
-		echo str_replace($pwd, '', $e->getTraceAsString()), PHP_EOL;
+		echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
+		echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
 		exit(1);
 	}
 
@@ -646,6 +645,16 @@ class Compiler
 	 * @param string $path
 	 */
 	public function getShortPath($path)
+	{
+		return str_replace(ZEPHIRPATH . DIRECTORY_SEPARATOR, '', $path);
+	}
+
+	/**
+	 * Returns a short user path
+	 *
+	 * @param string $path
+	 */
+	public function getShortUserPath($path)
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}

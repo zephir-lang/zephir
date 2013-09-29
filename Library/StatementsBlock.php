@@ -105,6 +105,11 @@ class StatementsBlock
 					$throwStatement = new ThrowStatement($statement);
 					$throwStatement->compile($compilationContext);
 					break;
+				case 'fetch':
+					$expr = new Expression($statement['expr']);
+					$expr->setExpectReturn(false);
+					$expr->compile($compilationContext);
+					break;
 				case 'mcall':
 					$methodCall = new MethodCall();
 					$expr = new Expression($statement['expr']);

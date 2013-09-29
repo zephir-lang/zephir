@@ -236,6 +236,7 @@ class LocalContextPass
 				$this->passNew($expression);
 				break;
 			case 'property-access':
+			case 'property-dynamic-access':
 			case 'array-access':
 			case 'static-property-access':
 				$this->passExpression($expression['left']);
@@ -348,6 +349,9 @@ class LocalContextPass
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
 					}
+					break;
+				case 'fetch':
+					$this->passExpression($statement['expr']);
 					break;
 				case 'mcall':
 				case 'scall':
