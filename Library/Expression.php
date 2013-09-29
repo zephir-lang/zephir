@@ -1134,6 +1134,7 @@ class Expression
 			case 'typeof':
 			case 'clone':
 			case 'empty':
+			case 'property-dynamic-access':
 				return new CompiledExpression('null', null, $expression);
 
 			default:

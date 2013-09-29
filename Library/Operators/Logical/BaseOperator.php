@@ -259,6 +259,18 @@ class LogicalBaseOperator extends BaseOperator
 								$op2 = $right->getCode();
 								$compilationContext->headersManager->add('kernel/operators');
 								return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
+							/* a && 1 */
+							case 'bool':
+								$compilationContext->headersManager->add('kernel/operators');
+								$op = $this->_operator;
+								if ($variableLeft->isLocalOnly()) {
+									$op1 = '&' . $variableLeft->getName();
+								} else {
+									$op1 = $variableLeft->getName();
+								}
+								$op2 = $right->getCode();
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
 							/* a(var) && a(x) */
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -309,6 +321,7 @@ class LogicalBaseOperator extends BaseOperator
 									default:
 										throw new CompilerException("Cannot compare 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}
+								break;
 							default:
 								throw new CompilerException("Cannot compare 'variable' with '" . $right->getType() . "'", $expression);
 						}

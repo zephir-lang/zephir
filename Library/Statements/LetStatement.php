@@ -1654,6 +1654,7 @@ class LetStatement
 						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'variable':
+					case 'string':
 						if ($resolvedExpression->getType() == 'string') {
 							$codePrinter->output('zephir_update_property_array_string(' . $symbolVariable->getName() . ', SL("' . $property . '"), "' . $resolvedExpression->getCode() . '", ' . $variableExpr->getName() . ' TSRMLS_CC);');
 						} else {

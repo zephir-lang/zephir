@@ -1944,6 +1944,14 @@ xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
+xx_common_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE . {
+	R = xx_ret_expr("property-dynamic-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE . {
+	R = xx_ret_expr("property-string-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+}
+
 xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON IDENTIFIER(I) . {
 	R = xx_ret_expr("static-property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
