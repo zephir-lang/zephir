@@ -95,6 +95,7 @@ class NativeArrayAccess
 		/**
 		 * Resolves the symbol that expects the value
 		 */
+		$readOnly = false;
 		if ($this->_readOnly) {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
@@ -112,10 +113,29 @@ class NativeArrayAccess
 		} else {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
+
 					$symbolVariable = $this->_expectingVariable;
-					if ($symbolVariable->getName() != 'return_value') {
-						$symbolVariable->observeVariant($compilationContext);
+
+					/**
+					 * If a variable is assigned once in the method, we try to promote it
+					 * to a read only variable
+					 */
+					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+					if ($numberMutations == 1) {
+						if ($symbolVariable->getNumberMutations() == $numberMutations) {
+							$readOnly = true;
+						}
 					}
+
+					/**
+					 * Variable is not read-only or it wasn't promoted
+					 */
+					if (!$readOnly) {
+						if ($symbolVariable->getName() != 'return_value') {
+							$symbolVariable->observeVariant($compilationContext);
+						}
+					}
+
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 				}
@@ -136,7 +156,7 @@ class NativeArrayAccess
 		 */
 		$symbolVariable->setDynamicType('undefined');
 
-		if ($this->_readOnly) {
+		if ($this->_readOnly || $readOnly) {
 			$flags = 'PH_NOISY | PH_READONLY';
 		} else {
 			$flags = 'PH_NOISY';

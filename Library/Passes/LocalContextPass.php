@@ -20,12 +20,12 @@
 /**
  * LocalContextPass
  *
- * This pass try to check whether variables only live in the local context of the method block
- * or they're used externally which will unallow variables to be placed in the stack
+ * This pass tries to check whether variables only do exist in the local context of the method block
+ * or if they're used externally which will unallow variables to be placed in the stack
  *
- * This pass also tracks the number of initializations a variable have, this allows
- * to mark variables as read only after their last initialization. The number of
- * mutations is relative, since assignments inside cycles may perform a n-number of
+ * This pass also tracks the number of initializations a variable may have, this allows
+ * to mark variables as read-only after their last initialization. The number of
+ * mutations is relative, since assignments inside cycles/loops may perform a n-number of
  * mutations
  */
 class LocalContextPass
