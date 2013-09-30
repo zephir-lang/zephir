@@ -618,7 +618,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 	ZVAL_LONG(_0, 3);
 	zephir_array_append(&a, _0, 0);
 	zephir_array_fetch_long(&b, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CCTOR(b);
+	RETURN_ZVAL(b, 1, 0);
 
 }
 
@@ -634,7 +634,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess2) {
 	add_assoc_long_ex(a, SS("b"), 2);
 	add_assoc_long_ex(a, SS("c"), 3);
 	zephir_array_fetch_string(&b, a, SL("a"), PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CCTOR(b);
+	RETURN_ZVAL(b, 1, 0);
 
 }
 
@@ -658,7 +658,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess3) {
 	zephir_array_append(&a, _0, 0);
 	c = 0;
 	zephir_array_fetch_long(&b, a, c, PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CCTOR(b);
+	RETURN_ZVAL(b, 1, 0);
 
 }
 
@@ -677,7 +677,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess4) {
 	ZEPHIR_INIT_VAR(c);
 	ZVAL_STRING(c, "a", 1);
 	zephir_array_fetch(&b, a, c, PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CCTOR(b);
+	RETURN_ZVAL(b, 1, 0);
 
 }
 
@@ -695,7 +695,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess5) {
 	ZEPHIR_INIT_VAR(c);
 	ZVAL_STRING(c, "a", 1);
 	zephir_array_fetch(&b, a, c, PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CCTOR(b);
+	RETURN_ZVAL(b, 1, 0);
 
 }
 

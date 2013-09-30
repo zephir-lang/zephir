@@ -122,9 +122,13 @@ class ReturnStatement
 							} else {
 								if ($symbolVariable->getName() != 'return_value') {
 									if ($symbolVariable->isLocalOnly()) {
-										$codePrinter->output('RETURN_CCTOR(&' . $symbolVariable->getName() . ');');
+										$codePrinter->output('RETURN_ZVAL(&' . $symbolVariable->getName() . ', 1, 0);');
 									} else {
-										$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+										if (!$symbolVariable->isMemoryTracked()) {
+											$codePrinter->output('RETURN_ZVAL(' . $symbolVariable->getName() . ', 1, 0);');
+										} else {
+											$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
+										}
 									}
 								} else {
 									$codePrinter->output('RETURN_MM();');

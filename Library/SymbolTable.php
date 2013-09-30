@@ -354,6 +354,7 @@ class SymbolTable
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
 		$variable->setIsInitialized(true);
 		$variable->setTemporal(true);
+		$variable->setMemoryTracked(false);
 		$variable->increaseUses();
 		$variable->increaseMutates();
 

@@ -123,6 +123,7 @@ class NativeArrayAccess
 					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
 					if ($numberMutations == 1) {
 						if ($symbolVariable->getNumberMutations() == $numberMutations) {
+							$symbolVariable->setMemoryTracked(false);
 							$readOnly = true;
 						}
 					}

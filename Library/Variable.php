@@ -91,6 +91,8 @@ class Variable
 
 	protected $_localOnly = false;
 
+	protected $_memoryTracked = true;
+
 	protected $_doublePointer = false;
 
 	protected $_defaultInitValue;
@@ -285,6 +287,26 @@ class Variable
 	public function isReusable()
 	{
 		return $this->_reusable;
+	}
+
+	/**
+	 * Sets if the variable is not tracked by the memory manager
+	 *
+	 * @param boolean $memoryTracked
+	 */
+	public function setMemoryTracked($memoryTracked)
+	{
+		$this->_memoryTracked = $memoryTracked;
+	}
+
+	/**
+	 * Checks if the variable is tracked by the memory manager
+	 *
+	 * @return boolean
+	 */
+	public function isMemoryTracked()
+	{
+		return $this->_memoryTracked;
 	}
 
 	/**
