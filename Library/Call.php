@@ -154,7 +154,16 @@ class Call
 			$params = array();
 			foreach ($parameters as $parameter) {
 				$paramExpr = new Expression($parameter);
-				$paramExpr->setReadOnly($readOnly);
+				switch ($parameter['type']) {
+					case 'property-access':
+					case 'array-access':
+					case 'static-property-access':
+						$paramExpr->setReadOnly(true);
+						break;
+					default:
+						$paramExpr->setReadOnly($readOnly);
+						break;
+				}
 				$params[] = $paramExpr->compile($compilationContext);
 			}
 			$this->_resolvedParams = $params;

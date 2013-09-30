@@ -152,6 +152,13 @@ class StaticCall extends Call
 
 		$expression = $expr->getExpression();
 
+		/**
+		 * TODO: implement dynamic calls
+		 */
+		if ($expression['dynamic-class']) {
+			return new CompiledExpression('null', null, $expression);
+		}
+
 		$methodName = strtolower($expression['name']);
 
 		$symbolVariable = null;

@@ -1039,6 +1039,9 @@ class LetStatement
 		}
 
 		switch ($resolvedExpr->getType()) {
+			case 'null':
+				$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
+				break;
 			case 'int':
 			case 'uint':
 			case 'long':

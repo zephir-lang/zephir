@@ -47,6 +47,7 @@ class SwitchStatement
 		$compilationContext->insideSwitch++;
 
 		$exprEval = new Expression($exprRaw);
+		$exprEval->setReadOnly(true);
 		$resolvedExpr = $exprEval->compile($compilationContext);
 
 		if (isset($this->_statement['clauses'])) {

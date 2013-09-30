@@ -809,12 +809,13 @@ static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *exp
 	return ret;
 }
 
-static json_object *xx_ret_new_instance(xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_new_instance(int dynamic, xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("new"));
 	json_object_object_add(ret, "class", json_object_new_string(T->token));
+	json_object_object_add(ret, "dynamic", json_object_new_int(dynamic));
 
 	if (parameters) {
 		json_object_object_add(ret, "parameters", parameters);
@@ -882,11 +883,12 @@ static json_object *xx_ret_mcall(int type, xx_parser_token *O, xx_parser_token *
 	return ret;
 }
 
-static json_object *xx_ret_scall(xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_scall(int dynamic_class, xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("scall"));
+	json_object_object_add(ret, "dynamic-class", json_object_new_int(dynamic_class));
 	json_object_object_add(ret, "class", json_object_new_string(O->token));
 	json_object_object_add(ret, "name", json_object_new_string(M->token));
 
@@ -2082,17 +2084,32 @@ xx_common_expr(R) ::= SBRACKET_OPEN xx_array_list(L) SBRACKET_CLOSE . {
 
 /* y = new MyClass */
 xx_common_expr(R) ::= NEW IDENTIFIER(I) . {
-	R = xx_ret_new_instance(I, NULL, status->scanner_state);
+	R = xx_ret_new_instance(0, I, NULL, status->scanner_state);
 }
 
 /* y = new MyClass() */
 xx_common_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_new_instance(I, NULL, status->scanner_state);
+	R = xx_ret_new_instance(0, I, NULL, status->scanner_state);
 }
 
 /* y = new MyClass(false, x) */
 xx_common_expr(R) ::= NEW IDENTIFIER(I) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_new_instance(I, P, status->scanner_state);
+	R = xx_ret_new_instance(0, I, P, status->scanner_state);
+}
+
+/* y = new {MyClass} */
+xx_common_expr(R) ::= NEW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE . {
+	R = xx_ret_new_instance(1, I, NULL, status->scanner_state);
+}
+
+/* y = new {MyClass}() */
+xx_common_expr(R) ::= NEW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_new_instance(1, I, NULL, status->scanner_state);
+}
+
+/* y = new {MyClass}(false, x) */
+xx_common_expr(R) ::= NEW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_new_instance(1, I, P, status->scanner_state);
 }
 
 /* y = f(false, x) */
@@ -2117,12 +2134,32 @@ xx_fcall_expr(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN P
 
 /* o::m(false, x) */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_scall(O, M, P, status->scanner_state);
+	R = xx_ret_scall(0, O, M, P, status->scanner_state);
 }
 
 /* o::m() */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_scall(O, M, NULL, status->scanner_state);
+	R = xx_ret_scall(0, O, M, NULL, status->scanner_state);
+}
+
+/* {o}::m(false, x) */
+xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_scall(1, O, M, P, status->scanner_state);
+}
+
+/* {o}::m() */
+xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_scall(1, O, M, NULL, status->scanner_state);
+}
+
+/* {o}::{m}(false, x) */
+xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_scall(1, O, M, P, status->scanner_state);
+}
+
+/* {o}::{m}() */
+xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_scall(1, O, M, NULL, status->scanner_state);
 }
 
 /* o->m(false, x) */
