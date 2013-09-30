@@ -33,6 +33,9 @@ class SymbolTable
 
 	protected $_tempVariables = array();
 
+	/**
+	 * @var \LocalContext
+	 */
 	protected $_localContext;
 
 	/**
@@ -514,6 +517,20 @@ class SymbolTable
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns the number of expected mutations for a variable
+	 *
+	 * @param string $variable
+	 * @return int
+	 */
+	public function getExpectedMutations($variable)
+	{
+		if ($this->_localContext) {
+			return $this->_localContext->getNumberOfMutations($variable);
+		}
+		return 0;
 	}
 
 }

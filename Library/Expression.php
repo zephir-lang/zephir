@@ -768,7 +768,7 @@ class Expression
 	{
 
 		$expr = new Expression($expression['right']);
-		$expr->setReadOnly($this->_readOnly);
+		$expr->setReadOnly(true);
 		$resolved = $expr->compile($compilationContext);
 
 		if ($resolved->getType() != 'variable') {

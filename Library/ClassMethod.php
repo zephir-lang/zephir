@@ -496,6 +496,17 @@ class ClassMethod
 			$symbolTable->setLocalContext($localContext);
 		}
 
+		/**
+		 * Parameters has an additional extra mutation
+		 */
+		if ($localContext) {
+			if (is_object($this->_parameters)) {
+				foreach ($this->_parameters->getParameters() as $parameter) {
+					$localContext->increaseMutations($parameter['name']);
+				}
+			}
+		}
+
 		$compilationContext->typeInference = $typeInference;
 		$compilationContext->symbolTable = $symbolTable;
 
@@ -522,15 +533,13 @@ class ClassMethod
 						if ($parameter['data-type'] == 'variable') {
 							$type = $typeInference->getInferedType($parameter['name']);
 							if (is_string($type)) {
-								//echo $parameter['name'], ' ', $type, ' ', $parameter['file'], ' ', $parameter['line'], PHP_EOL;
-								//$statement['data-type'] = $type;
+								/* promote polymorphic parameters to low level types */
 							}
 						}
 					} else {
 						$type = $typeInference->getInferedType($parameter['name']);
 						if (is_string($type)) {
-							//echo $parameter['name'], ' ', $type, ' ', $parameter['file'], ' ', $parameter['line'], PHP_EOL;
-							//$statement['data-type'] = $type;
+							/* promote polymorphic parameters to low level types */
 						}
 					}
 				}

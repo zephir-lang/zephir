@@ -62,24 +62,27 @@ class ComparisonBaseOperator extends BaseOperator
 				throw new CompilerException("Typeof operator on non-variable", $expr);
 			}
 
-			/** @todo, read left variable from the symbol table */
 			switch ($expr['right']['value']) {
 				case 'array':
-					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_ARRAY)';
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY)';
 					break;
 				case 'object':
-					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_OBJECT)';
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT)';
 					break;
 				case 'null':
-					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_NULL)';
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL)';
 					break;
 				case 'string':
-					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_STRING)';
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING)';
 					break;
 				case 'int':
 				case 'integer':
 				case 'long':
-					$condition = '(Z_TYPE_P(' . $expr['left']['left']['value'] . ') ' . $operator . ' IS_LONG)';
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG)';
+					break;
+				case 'boolean':
+				case 'bool':
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
 					break;
 				default:
 					throw new CompilerException($expr['right']['value'], $expr['right']);
@@ -91,6 +94,12 @@ class ComparisonBaseOperator extends BaseOperator
 		return false;
 	}
 
+	/**
+	 * Compile the expression
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 

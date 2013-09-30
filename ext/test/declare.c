@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -145,7 +146,13 @@ PHP_METHOD(Test_Declare, testDeclare13) {
 
 PHP_METHOD(Test_Declare, testDeclare14) {
 
+	zval *a;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "hello", 1);
+
+	RETURN_CCTOR(a);
 
 }
 

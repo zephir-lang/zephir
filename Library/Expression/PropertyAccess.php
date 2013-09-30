@@ -168,11 +168,14 @@ class PropertyAccess
 		/**
 		 * Resolves the symbol that expects the value
 		 */
+		$readOnly = false;
 		if ($classDefinition == $currentClassDefinition && $this->_readOnly) {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
 					$symbolVariable = $this->_expectingVariable;
-					$symbolVariable->observeVariant($compilationContext);
+					if ($symbolVariable->getName() != 'return_value') {
+						$symbolVariable->observeVariant($compilationContext);
+					}
 					$this->_readOnly = false;
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
@@ -183,8 +186,29 @@ class PropertyAccess
 		} else {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
+
 					$symbolVariable = $this->_expectingVariable;
-					$symbolVariable->observeVariant($compilationContext);
+
+					/**
+					 * If a variable is assigned once in the method, we try to promote it
+					 * to a read only variable
+					 */
+					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+					if ($numberMutations == 1) {
+						if ($symbolVariable->getNumberMutations() == $numberMutations) {
+							$readOnly = true;
+						}
+					}
+
+					/**
+					 * Variable is not read only or it wasn't promoted
+					 */
+					if (!$readOnly) {
+						if ($symbolVariable->getName() != 'return_value') {
+							$symbolVariable->observeVariant($compilationContext);
+						}
+					}
+
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 				}
@@ -207,7 +231,7 @@ class PropertyAccess
 
 		$compilationContext->headersManager->add('kernel/object');
 		if ($classDefinition == $currentClassDefinition) {
-			if ($this->_readOnly) {
+			if ($this->_readOnly || $readOnly) {
 				$codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_nproperty_this(' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
 			} else {
 				$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');

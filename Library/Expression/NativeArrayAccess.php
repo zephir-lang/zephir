@@ -99,8 +99,10 @@ class NativeArrayAccess
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
 					$symbolVariable = $this->_expectingVariable;
-					$symbolVariable->observeVariant($compilationContext);
-					$this->_readOnly = false;
+					if ($symbolVariable->getName() != 'return_value') {
+						$symbolVariable->observeVariant($compilationContext);
+						$this->_readOnly = false;
+					}
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}
@@ -111,7 +113,9 @@ class NativeArrayAccess
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
 					$symbolVariable = $this->_expectingVariable;
-					$symbolVariable->observeVariant($compilationContext);
+					if ($symbolVariable->getName() != 'return_value') {
+						$symbolVariable->observeVariant($compilationContext);
+					}
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 				}

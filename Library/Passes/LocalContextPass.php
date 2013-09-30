@@ -20,12 +20,19 @@
 /**
  * LocalContextPass
  *
- * This pass try to check if variables only live in the local context of the block
- * or it's used externally which will unallow variables to be placed in the heap
+ * This pass try to check whether variables only live in the local context of the method block
+ * or they're used externally which will unallow variables to be placed in the stack
+ *
+ * This pass also tracks the number of initializations a variable have, this allows
+ * to mark variables as read only after their last initialization. The number of
+ * mutations is relative, since assignments inside cycles may perform a n-number of
+ * mutations
  */
 class LocalContextPass
 {
-	protected $_variables;
+	protected $_variables = array();
+
+	protected $_mutations = array();
 
 	/**
 	 * Do the compilation pass
@@ -79,12 +86,43 @@ class LocalContextPass
 		return false;
 	}
 
+	/**
+	 * Increase the number of mutations a variable has inside a statement block
+	 *
+	 * @param string $variable
+	 */
+	public function increaseMutations($variable)
+	{
+		if (isset($this->_mutations[$variable])) {
+			$this->_mutations[$variable]++;
+		} else {
+			$this->_mutations[$variable] = 1;
+		}
+	}
+
+	/**
+	 * Returns the number of assignment instructions that mutated a variable
+	 *
+	 * @param string $variable
+	 * @return int
+	 */
+	public function getNumberOfMutations($variable)
+	{
+		if (isset($this->_mutations[$variable])) {
+			return $this->_mutations[$variable];
+		}
+		return 0;
+	}
+
 	public function passLetStatement(array $statement)
 	{
 		foreach ($statement['assignments'] as $assigment) {
+
 			if (isset($assigment['expr'])) {
 				$this->passExpression($assigment['expr']);
 			}
+			$this->increaseMutations($assigment['variable']);
+
 			switch ($assigment['assign-type']) {
 				case 'variable':
 					switch ($assigment['expr']['type']) {
@@ -249,6 +287,7 @@ class LocalContextPass
 				$this->passExpression($expression['left']);
 				break;
 			case 'fetch':
+				$this->increaseMutations($expression['left']['value']);
 				$this->markVariableNoLocal($expression['left']['value']);
 				$this->passExpression($expression['right']);
 				break;
