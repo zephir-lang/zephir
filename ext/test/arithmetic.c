@@ -297,13 +297,12 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 
 PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
-	zval *c;
+	zval c;
 
-	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(c);
-	ZVAL_DOUBLE(c, (1.0 + 1));
-	RETURN_CCTOR(c);
+	ZEPHIR_SINIT_VAR(c);
+	ZVAL_DOUBLE(&c, (1.0 + 1));
+	RETURN_ZVAL(&c, 1, 0);
 
 }
 

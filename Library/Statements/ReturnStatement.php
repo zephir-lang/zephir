@@ -122,9 +122,11 @@ class ReturnStatement
 							} else {
 								if ($symbolVariable->getName() != 'return_value') {
 									if ($symbolVariable->isLocalOnly()) {
+										$codePrinter->output('ZEPHIR_MM_RESTORE();');
 										$codePrinter->output('RETURN_ZVAL(&' . $symbolVariable->getName() . ', 1, 0);');
 									} else {
 										if (!$symbolVariable->isMemoryTracked()) {
+											$codePrinter->output('ZEPHIR_MM_RESTORE();');
 											$codePrinter->output('RETURN_ZVAL(' . $symbolVariable->getName() . ', 1, 0);');
 										} else {
 											$codePrinter->output('RETURN_CCTOR(' . $symbolVariable->getName() . ');');
