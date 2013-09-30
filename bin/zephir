@@ -1,6 +1,12 @@
 #!/bin/bash
+CURDIR=`dirname $0`
+PARENTDIR=`dirname $CURDIR`
 if [ -z "$ZEPHIRDIR" ]; then
-	echo "Environment variable ZEPHIRDIR is not set"
-	exit 1
+	if [ -f $PARENTDIR/compiler.php ]; then
+		export ZEPHIRDIR=$PARENTDIR
+	else
+		echo "Environment variable ZEPHIRDIR is not set"
+		exit 1
+	fi
 fi
 php $ZEPHIRDIR/compiler.php $*
