@@ -720,7 +720,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess6) {
 	ZEPHIR_SINIT_VAR(b);
 	zephir_add_function(&b, _0, _1 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
-	RETURN_ZVAL(&b, 1, 0);
+	RETURN_LCTOR(b);
 
 }
 

@@ -52,6 +52,12 @@ class LocalContextPass
 			}
 		}
 		foreach ($statement['variables'] as $variable) {
+			if (isset($variable['expr'])) {
+				if ($variable['expr']['type'] == 'string') {
+					$this->_variables[$variable['variable']] = false;
+					continue;
+				}
+			}
 			if (!isset($this->_variables[$variable['variable']])) {
 				$this->_variables[$variable['variable']] = true;
 			}

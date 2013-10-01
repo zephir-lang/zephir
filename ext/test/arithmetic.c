@@ -302,7 +302,7 @@ PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
 	ZEPHIR_SINIT_VAR(c);
 	ZVAL_DOUBLE(&c, (1.0 + 1));
-	RETURN_ZVAL(&c, 1, 0);
+	RETURN_LCTOR(c);
 
 }
 

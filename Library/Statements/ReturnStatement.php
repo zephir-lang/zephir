@@ -123,7 +123,7 @@ class ReturnStatement
 								if ($symbolVariable->getName() != 'return_value') {
 									if ($symbolVariable->isLocalOnly()) {
 										$codePrinter->output('ZEPHIR_MM_RESTORE();');
-										$codePrinter->output('RETURN_ZVAL(&' . $symbolVariable->getName() . ', 1, 0);');
+										$codePrinter->output('RETURN_LCTOR(' . $symbolVariable->getName() . ');');
 									} else {
 										if (!$symbolVariable->isMemoryTracked()) {
 											$codePrinter->output('ZEPHIR_MM_RESTORE();');

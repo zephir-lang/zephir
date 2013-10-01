@@ -224,7 +224,7 @@ PHP_METHOD(Test_Assign, testAssign20) {
 
 	ZEPHIR_SINIT_VAR(a);
 	ZVAL_NULL(&a);
-	RETURN_ZVAL(&a, 1, 0);
+	RETURN_LCTOR(a);
 
 }
 
