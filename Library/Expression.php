@@ -955,6 +955,9 @@ class Expression
 				return $this->emptyArray($expression, $compilationContext);
 
 			case 'array-access':
+			if ($compilationContext->currentMethod->getName() == 'proof') {
+			var_dump($this->isReadOnly());
+		}
 				$arrayAccess = new NativeArrayAccess();
 				$arrayAccess->setReadOnly($this->isReadOnly());
 				$arrayAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);

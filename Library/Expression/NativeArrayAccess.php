@@ -92,6 +92,10 @@ class NativeArrayAccess
 			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $expression);
 		}
 
+		if ($compilationContext->currentMethod->getName() == 'proof') {
+			var_dump($this->_readOnly);
+		}
+
 		/**
 		 * Resolves the symbol that expects the value
 		 */
