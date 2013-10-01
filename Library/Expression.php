@@ -394,7 +394,7 @@ class Expression
 				 * @TODO, check if the variable is really internal
 				 */
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className, true) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
 				$symbolVariable->setClassType($newExpr['class']);
 			}
@@ -403,7 +403,7 @@ class Expression
 		if (strtolower($className) == 'stdclass') {
 			if (isset($newExpr['parameters'])) {
 				if (count($newExpr['parameters'])) {
-					throw new CompilerException("stdclass does not receive parameters in its constructor", $statement);
+					throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
 				}
 			}
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
@@ -426,7 +426,7 @@ class Expression
 		if ($compilationContext->compiler->isClass($className)) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($className);
 			if ($classDefinition->getType() != 'class') {
-				throw new CompilerException("Only classes can be instantiated", $statement);
+				throw new CompilerException("Only classes can be instantiated", $expression);
 			}
 			if ($classDefinition->hasMethod("__construct")) {
 				$callConstructor = true;
@@ -801,7 +801,7 @@ class Expression
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlaches($expression['right']['value'])) . '") TSRMLS_CC)', $expression);
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlaches($expression['right']['value'], true)) . '") TSRMLS_CC)', $expression);
 	}
 
 	/**
