@@ -33,6 +33,7 @@
 
 %left COMMA .
 %right REQUIRE .
+%right LIKELY UNLIKELY .
 %right CLONE EMPTY .
 %left INSTANCEOF .
 %left AND OR .
@@ -342,7 +343,8 @@ static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token
 	return ret;
 }
 
-static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value, xx_scanner_state *state)
+static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value,
+	int mandatory, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -351,6 +353,7 @@ static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_pa
 
 	if (type) {
 		json_object_object_add(ret, "data-type", type);
+		json_object_object_add(ret, "mandatory", json_object_new_int(mandatory));
 	}
 	if (cast) {
 		json_object_object_add(ret, "cast", cast);
@@ -358,6 +361,29 @@ static json_object *xx_ret_parameter(json_object *type, json_object *cast, xx_pa
 	if (default_value) {
 		json_object_object_add(ret, "default", default_value);
 	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_return_type(json_object *type, json_object *cast, int mandatory, int is_void, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("return-type"));
+
+	if (type) {
+		json_object_object_add(ret, "data-type", type);
+		json_object_object_add(ret, "mandatory", json_object_new_int(mandatory));
+	}
+	if (cast) {
+		json_object_object_add(ret, "cast", cast);
+	}
+
+	json_object_object_add(ret, "void", json_object_new_int(is_void));
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1275,6 +1301,7 @@ xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDEN
 	R = xx_ret_class_method(V, I, L, S, C, T, status->scanner_state);
 }
 
+/* method definition */
 xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, T, status->scanner_state);
 }
@@ -1291,7 +1318,6 @@ xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION 
 	R = xx_ret_class_method(V, I, L, NULL, C, T, status->scanner_state);
 }
 
-/* method definition */
 xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, NULL, status->scanner_state);
 }
@@ -1350,12 +1376,20 @@ xx_visibility(R) ::= FINAL . {
 }
 
 /* return type */
+xx_method_return_type(R) ::= VOID . {
+	R = xx_ret_return_type(NULL, NULL, 0, 1, status->scanner_state);
+}
+
 xx_method_return_type(R) ::= xx_parameter_type(T) . {
-	R = T;
+	R = xx_ret_return_type(T, NULL, 0, 0, status->scanner_state);
+}
+
+xx_method_return_type(R) ::= xx_parameter_type(T) NOT . {
+	R = xx_ret_return_type(T, NULL, 1, 0, status->scanner_state);
 }
 
 xx_method_return_type(R) ::= xx_parameter_cast(T) . {
-	R = T;
+	R = xx_ret_return_type(NULL, T, 0, 0, status->scanner_state);
 }
 
 /* parameters list */
@@ -1368,27 +1402,35 @@ xx_parameter_list(R) ::= xx_parameter(P) . {
 }
 
 xx_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_parameter(NULL, NULL, I, NULL, status->scanner_state);
+	R = xx_ret_parameter(NULL, NULL, I, NULL, 0, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(T, NULL, I, NULL, status->scanner_state);
+	R = xx_ret_parameter(T, NULL, I, NULL, 0, status->scanner_state);
+}
+
+xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) . {
+	R = xx_ret_parameter(T, NULL, I, NULL, 1, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) . {
-	R = xx_ret_parameter(NULL, C, I, NULL, status->scanner_state);
+	R = xx_ret_parameter(NULL, C, I, NULL, 0, status->scanner_state);
 }
 
 xx_parameter(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(NULL, NULL, I, E, status->scanner_state);
+	R = xx_ret_parameter(NULL, NULL, I, E, 0, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(T, NULL, I, E, status->scanner_state);
+	R = xx_ret_parameter(T, NULL, I, E, 0, status->scanner_state);
+}
+
+xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+	R = xx_ret_parameter(T, NULL, I, E, 1, status->scanner_state);
 }
 
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(NULL, C, I, E, status->scanner_state);
+	R = xx_ret_parameter(NULL, C, I, E, 0, status->scanner_state);
 }
 
 xx_parameter_cast(R) ::= LESS IDENTIFIER(I) GREATER . {
@@ -1896,6 +1938,14 @@ xx_common_expr(R) ::= CLONE xx_common_expr(O1) . {
 
 xx_common_expr(R) ::= EMPTY xx_common_expr(O1) . {
 	R = xx_ret_expr("empty", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= LIKELY xx_common_expr(O1) . {
+	R = xx_ret_expr("likely", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= UNLIKELY xx_common_expr(O1) . {
+	R = xx_ret_expr("unlikely", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= xx_common_expr(O1) EQUALS xx_common_expr(O2) . {

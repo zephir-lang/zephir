@@ -60,7 +60,10 @@ class ClassMethod
 		$this->_parameters = $parameters;
 		$this->_statements = $statements;
 		$this->_docblock = $docblock;
-		$this->_returnType = $returnType;
+
+		if (isset($returnType['cast'])) {
+			$this->_returnType = $returnType['cast'];
+		}
 	}
 
 	/**

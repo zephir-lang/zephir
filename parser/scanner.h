@@ -87,6 +87,9 @@
 #define XX_T_REQUIRE 389
 #define XX_T_CLONE 390
 #define XX_T_EMPTY 391
+#define XX_T_VOID 392
+#define XX_T_LIKELY 393
+#define XX_T_UNLIKELY 394
 
 /* Operators */
 #define XX_T_AT '@'

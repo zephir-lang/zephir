@@ -458,6 +458,16 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				xx_parse_with_token(xx_parser, XX_T_CONSTANT, XX_CONSTANT, &token, parser_status);
 				break;
 
+			case XX_T_VOID:
+				xx_(xx_parser, XX_VOID, NULL, parser_status);
+				break;
+			case XX_T_LIKELY:
+				xx_(xx_parser, XX_LIKELY, NULL, parser_status);
+				break;
+			case XX_T_UNLIKELY:
+				xx_(xx_parser, XX_UNLIKELY, NULL, parser_status);
+				break;
+
 			default:
 				parser_status->status = XX_PARSING_FAILED;
 				fprintf(stderr, "Scanner: unknown opcode %d\n", token.opcode);

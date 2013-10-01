@@ -321,6 +321,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'void' {
+			s->active_char += sizeof("void")-1;
+			token->opcode = XX_T_VOID;
+			return 0;
+		}
+
 		'loop' {
 			token->opcode = XX_T_LOOP;
 			s->active_char += sizeof("loop")-1;
@@ -348,6 +354,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		'instanceof' {
 			token->opcode = XX_T_INSTANCEOF;
 			s->active_char += sizeof("instanceof")-1;
+			return 0;
+		}
+
+		'likely' {
+			s->active_char += sizeof("likely")-1;
+			token->opcode = XX_T_LIKELY;
+			return 0;
+		}
+
+		'unlikely' {
+			s->active_char += sizeof("unlikely")-1;
+			token->opcode = XX_T_UNLIKELY;
 			return 0;
 		}
 
