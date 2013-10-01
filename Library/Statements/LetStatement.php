@@ -1675,6 +1675,149 @@ class LetStatement
 	}
 
 	/**
+	 * Compiles ClassName::foo = {expr}
+	 *
+	 * @param                    $className
+	 * @param                    $property
+	 * @param Variable           $symbolVariable
+	 * @param CompiledExpression $resolvedExpr
+	 * @param CompilationContext $compilationContext
+	 * @param array              $statement
+	 *
+	 * @throws CompilerException
+	 * @internal param string $variable
+	 */
+	public function assignStaticProperty($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
+	{
+		$compiler = $compilationContext->compiler;
+		if ($className != 'self' && $className != 'parent') {
+			if ($compiler->isClass($className)) {
+				$classDefinition = $compiler->getClassDefinition($className);
+			} elseif ($compiler->isInternalClass($className)) {
+				$classDefinition = $compiler->getInternalClassDefinition($className);
+			} else {
+				throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+			}
+		} elseif ($className == 'self') {
+			$classDefinition = $compilationContext->classDefinition;
+		} elseif ($className == 'parent') {
+			$classDefinition = $compilationContext->classDefinition;
+			$extendsClass = $classDefinition->getExtendsClass();
+			if (!$extendsClass) {
+				throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' .
+				$classDefinition->getCompleteName() . ' does not extend any class', $statement);
+			} else {
+				$classDefinition = $classDefinition->getExtendsClassDefinition();
+			}
+		}
+
+		if (!$classDefinition->hasProperty($property)) {
+			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+		}
+
+		/** @var $propertyDefinition ClassProperty */
+		$propertyDefinition = $classDefinition->getProperty($property);
+		if (!$propertyDefinition->isStatic()) {
+			throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $statement);
+		}
+
+		if ($propertyDefinition->isPrivate()) {
+			if ($classDefinition != $compilationContext->classDefinition) {
+				throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $statement);
+			}
+		}
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write static property '".$classDefinition->getCompleteName()."::" . $property . "' because it is not initialized", $statement);
+		}
+
+		$dynamicType = $symbolVariable->getDynamicType();
+
+		/**
+		 * Variable is probably not initialized here
+		 */
+		if ($dynamicType == 'unknown') {
+			$dynamicType = 'undefined'; // @todo check this. I'm not sure if this hack is correct.
+		}
+
+		/**
+		 * Trying to use a non-object dynamic variable as object
+		 */
+		if ($dynamicType != 'undefined' && $dynamicType != 'object') {
+			$compilationContext->logger->warning('Possible attempt to update property on non-object dynamic property', 'non-valid-objectupdate', $statement);
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		$compilationContext->headersManager->add('kernel/object');
+		$classEntry = $classDefinition->getClassEntry();
+
+		switch ($resolvedExpr->getType()) {
+			case 'null':
+				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+				break;
+			case 'int':
+			case 'long':
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				break;
+			case 'string':
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				break;
+			case 'bool':
+				if ($resolvedExpr->getBooleanCode() == '1') {
+					$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+				}
+				break;
+			case 'empty-array':
+				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+				$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
+				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				break;
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+				switch ($variableVariable->getType()) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
+					case 'char':
+					case 'uchar':
+						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						break;
+					case 'bool':
+						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						break;
+					case 'string':
+					case 'variable':
+						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						break;
+					default:
+						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+				}
+				break;
+			default:
+				throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+		}
+
+	}
+
+	/**
 	 * Compiles the let statement
 	 *
 	 * @param CompilationContext $compilationContext
@@ -1694,6 +1837,7 @@ class LetStatement
 				case 'static-property':
 				case 'static-property-append':
 				case 'static-property-array-index':
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $assignment);
 					break;
 				default:
 					$symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
@@ -1754,7 +1898,7 @@ class LetStatement
 					/* @todo, implement this */
 					break;
 				case 'static-property':
-					/* @todo, implement this */
+					$this->assignStaticProperty($variable, $assignment['property'], $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				case 'static-property-append':
 					/* @todo, implement this */
