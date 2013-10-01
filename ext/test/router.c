@@ -187,10 +187,10 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 			ZVAL_STRING(&_1, "?", 0);
 			ZEPHIR_INIT_VAR(urlParts);
 			zephir_call_func_p2(urlParts, "explode", &_1, url);
-			ZEPHIR_OBS_VAR(realUri);
-			zephir_array_fetch_long(&realUri, urlParts, 0, PH_NOISY TSRMLS_CC);
+			zephir_array_fetch_long(&realUri, urlParts, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 			if (!(zephir_is_true(realUri))) {
-				RETURN_CCTOR(realUri);
+				ZEPHIR_MM_RESTORE();
+				RETURN_ZVAL(realUri, 1, 0);
 			}
 		}
 	}
@@ -470,6 +470,7 @@ PHP_METHOD(Test_Router, handle) {
 		if ((Z_TYPE_P(hostname) != IS_NULL)) {
 			if ((Z_TYPE_P(request) == IS_NULL)) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
+				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if ((Z_TYPE_P(dependencyInjector) != IS_OBJECT)) {
 					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "A dependency injection container is required to access the 'request' service");
@@ -566,7 +567,7 @@ PHP_METHOD(Test_Router, handle) {
 	}
 	if (!(zephir_is_true(routeFound))) {
 		ZEPHIR_OBS_VAR(notFoundPaths);
-		zephir_read_property_this(&notFoundPaths, this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
+		notFoundPaths = zephir_fetch_nproperty_this(this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
 		if ((Z_TYPE_P(notFoundPaths) != IS_NULL)) {
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
 			ZEPHIR_INIT_BNVAR(routeFound);
@@ -921,7 +922,7 @@ PHP_METHOD(Test_Router, mount) {
 		}
 	}
 	ZEPHIR_OBS_VAR(routes);
-	zephir_read_property_this(&routes, this_ptr, SL("_routes"), PH_NOISY_CC);
+	routes = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
 	if ((Z_TYPE_P(routes) == IS_ARRAY)) {
 		ZEPHIR_INIT_VAR(_8);
 		zephir_fast_array_merge(_8, &(routes), &(groupRoutes) TSRMLS_CC);

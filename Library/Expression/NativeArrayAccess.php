@@ -92,10 +92,6 @@ class NativeArrayAccess
 			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $expression);
 		}
 
-		if ($compilationContext->currentMethod->getName() == 'proof') {
-			var_dump($this->_readOnly);
-		}
-
 		/**
 		 * Resolves the symbol that expects the value
 		 */
@@ -103,11 +99,30 @@ class NativeArrayAccess
 		if ($this->_readOnly) {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
+
 					$symbolVariable = $this->_expectingVariable;
-					if ($symbolVariable->getName() != 'return_value') {
-						$symbolVariable->observeVariant($compilationContext);
-						$this->_readOnly = false;
+
+					/**
+					 * If a variable is assigned once in the method, we try to promote it
+					 * to a read only variable
+					 */
+					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+					if ($numberMutations == 1) {
+						if ($symbolVariable->getNumberMutations() == $numberMutations) {
+							$symbolVariable->setMemoryTracked(false);
+							$readOnly = true;
+						}
 					}
+
+					/**
+					 * Variable is not read-only or it wasn't promoted
+					 */
+					if (!$readOnly) {
+						if ($symbolVariable->getName() != 'return_value') {
+							$symbolVariable->observeVariant($compilationContext);
+						}
+					}
+
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}

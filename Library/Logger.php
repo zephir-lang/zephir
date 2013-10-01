@@ -34,7 +34,7 @@ class Logger
 	 */
 	public function warning($message, $type, $node)
 	{
-		/*echo 'Warning: ' . $message;
+		echo 'Warning: ' . $message;
 		echo ' in ' . $node['file'] . ' on ' . $node['line'];
 		echo ' [' . $type . ']' . PHP_EOL;
 		echo PHP_EOL;
@@ -50,7 +50,7 @@ class Logger
 			if (($node['char'] - 1) > 0) {
 				echo "\t", str_repeat("-", $node['char'] - 1), "^", PHP_EOL;
 			}
-		}*/
+		}
 	}
 
 }

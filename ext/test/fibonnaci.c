@@ -71,7 +71,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	int i, n, k, j;
-	zval *fib, *a = NULL, *b = NULL, *c = NULL, *_0;
+	zval *fib, *a, *b, *c = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -91,10 +91,8 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 		}
 		k = (i - 1);
 		j = (i - 2);
-		ZEPHIR_OBS_NVAR(a);
-		zephir_array_fetch_long(&a, fib, k, PH_NOISY TSRMLS_CC);
-		ZEPHIR_OBS_NVAR(b);
-		zephir_array_fetch_long(&b, fib, j, PH_NOISY TSRMLS_CC);
+		zephir_array_fetch_long(&a, fib, k, PH_NOISY | PH_READONLY TSRMLS_CC);
+		zephir_array_fetch_long(&b, fib, j, PH_NOISY | PH_READONLY TSRMLS_CC);
 		ZEPHIR_INIT_NVAR(c);
 		zephir_add_function(c, a, b TSRMLS_CC);
 		zephir_array_update_long(&fib, i, &c, PH_COPY | PH_SEPARATE);
