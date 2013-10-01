@@ -71,7 +71,7 @@ class StaticCall extends Call
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_self_p' . count($params) . '(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('zephir_call_self_p' . count($params) . '_noret(' . $variableVariable->getName() . ', this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_self_p' . count($params) . '_noret(this_ptr, "' . $methodName . '", ' . join(', ', $params) . ');');
 				}
 			} else {
 				if ($isExpecting) {
@@ -142,6 +142,64 @@ class StaticCall extends Call
 	}
 
 	/**
+	 * Calls static methods on the some class context
+	 *
+	 * @param string $methodName
+	 * @param array $expression
+	 * @param Variable $symbolVariable
+	 * @param boolean $mustInit
+	 * @param boolean $isExpecting
+	 * @param ClassDefinition $classDefinition
+	 * @param CompilationContext $compilationContext
+	 */
+	protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
+		ClassDefinition $classDefinition, CompilationContext $compilationContext)
+	{
+
+		$codePrinter = $compilationContext->codePrinter;
+		$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
+
+		/**
+		 * Call static methods must grown the stack
+		 */
+		$compilationContext->symbolTable->mustGrownStack(true);
+
+		if (!isset($expression['parameters'])) {
+
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
+
+			if ($isExpecting) {
+				$codePrinter->output('zephir_call_static(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
+			} else {
+				$codePrinter->output('zephir_call_static_noret("' . $className . '", "' . $methodName . '");');
+			}
+		} else {
+
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+
+			if ($mustInit) {
+				$symbolVariable->initVariant($compilationContext);
+			}
+
+			if (count($params)) {
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_static_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '", ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('zephir_call_static_p' . count($params) . '_noret("' . $className . '", "' . $methodName . '", ' . join(', ', $params) . ');');
+				}
+			} else {
+				if ($isExpecting) {
+					$codePrinter->output('zephir_call_static(' . $symbolVariable->getName() . ', "' . $className . '", "' . $methodName . '");');
+				} else {
+					$codePrinter->output('zephir_call_static("' . $className . '", "' . $methodName . '");');
+				}
+			}
+		}
+	}
+
+	/**
 	 * Compiles a static method call
 	 *
 	 * @param array $expr
@@ -155,7 +213,7 @@ class StaticCall extends Call
 		/**
 		 * TODO: implement dynamic calls
 		 */
-		if ($expression['dynamic-class']) {
+		if (array_key_exists('dynamic-class', $expression) && $expression['dynamic-class']) {
 			return new CompiledExpression('null', null, $expression);
 		}
 
@@ -278,11 +336,12 @@ class StaticCall extends Call
 		if ($type == 'self') {
 			$this->callSelf($methodName, $expression, $symbolVariable, $mustInit,
 				$isExpecting, $classDefinition, $compilationContext);
+		} elseif ($type == 'parent') {
+			$this->callParent($methodName, $expression, $symbolVariable, $mustInit,
+				$isExpecting, $currentClassDefinition, $compilationContext);
 		} else {
-			if ($type == 'parent') {
-				$this->callParent($methodName, $expression, $symbolVariable, $mustInit,
-					$isExpecting, $currentClassDefinition, $compilationContext);
-			}
+			$this->callFromClass($methodName, $expression, $symbolVariable, $mustInit,
+				$isExpecting, $classDefinition, $compilationContext);
 		}
 
 		/**
