@@ -106,11 +106,13 @@ class NativeArrayAccess
 					 * If a variable is assigned once in the method, we try to promote it
 					 * to a read only variable
 					 */
-					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-					if ($numberMutations == 1) {
-						if ($symbolVariable->getNumberMutations() == $numberMutations) {
-							$symbolVariable->setMemoryTracked(false);
-							$readOnly = true;
+					if ($symbolVariable->getName() != 'return_value') {
+						$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+						if ($numberMutations == 1) {
+							if ($symbolVariable->getNumberMutations() == $numberMutations) {
+								$symbolVariable->setMemoryTracked(false);
+								$readOnly = true;
+							}
 						}
 					}
 
@@ -120,6 +122,9 @@ class NativeArrayAccess
 					if (!$readOnly) {
 						if ($symbolVariable->getName() != 'return_value') {
 							$symbolVariable->observeVariant($compilationContext);
+							$this->_readOnly = false;
+						} else {
+							$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 						}
 					}
 
@@ -139,11 +144,13 @@ class NativeArrayAccess
 					 * If a variable is assigned once in the method, we try to promote it
 					 * to a read only variable
 					 */
-					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-					if ($numberMutations == 1) {
-						if ($symbolVariable->getNumberMutations() == $numberMutations) {
-							$symbolVariable->setMemoryTracked(false);
-							$readOnly = true;
+					if ($symbolVariable->getName() != 'return_value') {
+						$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+						if ($numberMutations == 1) {
+							if ($symbolVariable->getNumberMutations() == $numberMutations) {
+								$symbolVariable->setMemoryTracked(false);
+								$readOnly = true;
+							}
 						}
 					}
 
@@ -153,6 +160,9 @@ class NativeArrayAccess
 					if (!$readOnly) {
 						if ($symbolVariable->getName() != 'return_value') {
 							$symbolVariable->observeVariant($compilationContext);
+							$this->_readOnly = false;
+						} else {
+							$symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 						}
 					}
 

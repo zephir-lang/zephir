@@ -470,7 +470,6 @@ PHP_METHOD(Test_Router, handle) {
 		if ((Z_TYPE_P(hostname) != IS_NULL)) {
 			if ((Z_TYPE_P(request) == IS_NULL)) {
 				ZEPHIR_OBS_NVAR(dependencyInjector);
-				ZEPHIR_OBS_NVAR(dependencyInjector);
 				zephir_read_property_this(&dependencyInjector, this_ptr, SL("_dependencyInjector"), PH_NOISY_CC);
 				if ((Z_TYPE_P(dependencyInjector) != IS_OBJECT)) {
 					ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "A dependency injection container is required to access the 'request' service");
@@ -566,7 +565,6 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_update_property_this(this_ptr, SL("_wasMatched"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 	}
 	if (!(zephir_is_true(routeFound))) {
-		ZEPHIR_OBS_VAR(notFoundPaths);
 		notFoundPaths = zephir_fetch_nproperty_this(this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
 		if ((Z_TYPE_P(notFoundPaths) != IS_NULL)) {
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
@@ -921,7 +919,6 @@ PHP_METHOD(Test_Router, mount) {
 			zephir_call_method_p1_cache_noret(route, "sethostname", &_7, hostname);
 		}
 	}
-	ZEPHIR_OBS_VAR(routes);
 	routes = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
 	if ((Z_TYPE_P(routes) == IS_ARRAY)) {
 		ZEPHIR_INIT_VAR(_8);

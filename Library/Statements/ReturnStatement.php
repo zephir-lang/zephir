@@ -78,6 +78,7 @@ class ReturnStatement
 
 			$expr = new Expression($statement['expr']);
 			$expr->setExpectReturn(true, $variable);
+			$expr->setReadOnly(true);
 			$resolvedExpr = $expr->compile($compilationContext);
 
 			switch ($resolvedExpr->getType()) {
