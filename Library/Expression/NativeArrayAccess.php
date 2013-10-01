@@ -99,11 +99,30 @@ class NativeArrayAccess
 		if ($this->_readOnly) {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
+
 					$symbolVariable = $this->_expectingVariable;
-					if ($symbolVariable->getName() != 'return_value') {
-						$symbolVariable->observeVariant($compilationContext);
-						$this->_readOnly = false;
+
+					/**
+					 * If a variable is assigned once in the method, we try to promote it
+					 * to a read only variable
+					 */
+					$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+					if ($numberMutations == 1) {
+						if ($symbolVariable->getNumberMutations() == $numberMutations) {
+							$symbolVariable->setMemoryTracked(false);
+							$readOnly = true;
+						}
 					}
+
+					/**
+					 * Variable is not read-only or it wasn't promoted
+					 */
+					if (!$readOnly) {
+						if ($symbolVariable->getName() != 'return_value') {
+							$symbolVariable->observeVariant($compilationContext);
+						}
+					}
+
 				} else {
 					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 				}

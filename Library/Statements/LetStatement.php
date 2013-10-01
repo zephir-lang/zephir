@@ -1848,6 +1848,7 @@ class LetStatement
 			 * Incr/Decr assignments don't require an expression
 			 */
 			if (isset($assignment['expr'])) {
+
 				$readDetector = new ReadDetector($assignment['expr']);
 				$expr = new Expression($assignment['expr']);
 				switch ($assignment['assign-type']) {
@@ -1860,6 +1861,9 @@ class LetStatement
 							$expr->setExpectReturn(true, $symbolVariable);
 						}
 						break;
+				}
+
+				switch ($assignment['expr']['type']) {
 					case 'property-access':
 					case 'array-access':
 					case 'type-hint':

@@ -15,6 +15,7 @@
 #include "test/fcall.h"
 #include "test/fibonnaci.h"
 #include "test/flow.h"
+#include "test/fortytwo.h"
 #include "test/mcall.h"
 #include "test/nativearray.h"
 #include "test/oo.h"
