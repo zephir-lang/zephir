@@ -10,7 +10,7 @@ class FortyTwo
 
 	public function proof() -> void
 	{
-		var box, side, data, row;
+		var box, side;
 		int i, j;
 
 		let box = [
