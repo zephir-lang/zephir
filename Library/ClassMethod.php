@@ -722,7 +722,14 @@ class ClassMethod
 			 */
 			$parametersToSeparate = array();
 			if (is_object($this->_statements)) {
-				$writeDetector = new WriteDetector();
+
+				/**
+				 * If local context is available
+				 */
+				if (!$localContext) {
+					$writeDetector = new WriteDetector();
+				}
+
 				foreach ($this->_parameters->getParameters() as $parameter) {
 					if (isset($parameter['data-type'])) {
 						$dataType = $parameter['data-type'];
@@ -731,8 +738,14 @@ class ClassMethod
 					}
 					if ($dataType == 'variable') {
 						$name = $parameter['name'];
-						if ($writeDetector->detect($name, $this->_statements->getStatements())) {
-							$parametersToSeparate[$name] = true;
+						if (!$localContext) {
+							if ($writeDetector->detect($name, $this->_statements->getStatements())) {
+								$parametersToSeparate[$name] = true;
+							}
+						} else {
+							if ($localContext->getNumberOfMutations($name) > 1) {
+								$parametersToSeparate[$name] = true;
+							}
 						}
 					}
 				}

@@ -39,7 +39,15 @@ class ConcatOperator extends BaseOperator
 		$compilationContext->headersManager->add('kernel/concat');
 
 		$leftExpr = new Expression($expression['left']);
-		$leftExpr->setReadOnly($this->_readOnly);
+		switch ($expression['left']['type']) {
+			case 'array-access':
+			case 'property-access':
+				$leftExpr->setReadOnly(true);
+				break;
+			default:
+				$leftExpr->setReadOnly($this->_readOnly);
+				break;
+		}
 		$left = $leftExpr->compile($compilationContext);
 
 		if ($left->getType() == 'variable') {
@@ -47,7 +55,15 @@ class ConcatOperator extends BaseOperator
 		}
 
 		$rightExpr = new Expression($expression['right']);
-		$rightExpr->setReadOnly($this->_readOnly);
+		switch ($expression['left']['type']) {
+			case 'array-access':
+			case 'property-access':
+				$rightExpr->setReadOnly(true);
+				break;
+			default:
+				$rightExpr->setReadOnly($this->_readOnly);
+				break;
+		}
 		$right = $rightExpr->compile($compilationContext);
 
 		if ($right->getType() == 'variable') {

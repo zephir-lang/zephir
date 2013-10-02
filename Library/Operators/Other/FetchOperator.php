@@ -47,11 +47,17 @@ class FetchOperator extends BaseOperator
 		 */
 		if ($variable->getName() != 'return_value') {
 
+			/*
+			 * @todo use a read detector here
+			 */
+
 			$readOnly = false;
 			$numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
 			if ($numberMutations == 1) {
-				if ($variable->getNumberMutations() == 0) {
+				if ($variable->getNumberMutations() == 1) {
+					$variable->setIsInitialized(true);
 					$variable->setMemoryTracked(false);
+					$variable->setDynamicType('undefined');
 					$readOnly = true;
 				}
 			}
