@@ -51,13 +51,13 @@ PHP_METHOD(Test_NativeArray, testArray2) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(a);
 
 }
@@ -72,13 +72,13 @@ PHP_METHOD(Test_NativeArray, testArray3) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_DOUBLE(_0, 1.1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, 2.2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, 3.3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(a);
 
 }
@@ -91,9 +91,9 @@ PHP_METHOD(Test_NativeArray, testArray4) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_false), 0);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_true), 0);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_false), 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_false), sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_true), sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_false), sizeof(zval *), NULL);
 	RETURN_CCTOR(a);
 
 }
@@ -106,9 +106,9 @@ PHP_METHOD(Test_NativeArray, testArray5) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), 0);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), 0);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_null), sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_null), sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &ZEPHIR_GLOBAL(global_null), sizeof(zval *), NULL);
 	RETURN_CCTOR(a);
 
 }
@@ -123,13 +123,13 @@ PHP_METHOD(Test_NativeArray, testArray6) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "x", 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_STRING(_0, "y", 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_STRING(_0, "z", 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(a);
 
 }
@@ -148,13 +148,13 @@ PHP_METHOD(Test_NativeArray, testArray7) {
 	array_init(d);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, b);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, c);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(d);
 
 }
@@ -173,13 +173,13 @@ PHP_METHOD(Test_NativeArray, testArray8) {
 	array_init(d);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_DOUBLE(_0, a);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, b);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, c);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(d);
 
 }
@@ -198,13 +198,13 @@ PHP_METHOD(Test_NativeArray, testArray9) {
 	array_init(d);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_BOOL(_0, a);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_BOOL(_0, b);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_BOOL(_0, c);
-	zephir_array_append(&d, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &_0, sizeof(zval *), NULL);
 	RETURN_CCTOR(d);
 
 }
@@ -224,9 +224,9 @@ PHP_METHOD(Test_NativeArray, testArray10) {
 	ZVAL_STRING(c, "hello3", 1);
 	ZEPHIR_INIT_VAR(d);
 	array_init(d);
-	zephir_array_append(&d, a, 0);
-	zephir_array_append(&d, b, 0);
-	zephir_array_append(&d, c, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &a, sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &b, sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(d), &c, sizeof(zval *), NULL);
 	RETURN_CCTOR(d);
 
 }
@@ -241,28 +241,28 @@ PHP_METHOD(Test_NativeArray, testArray11) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 5);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 6);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
-	zephir_array_append(&c, a, 0);
-	zephir_array_append(&c, b, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(c), &a, sizeof(zval *), NULL);
+	zend_hash_next_index_insert(Z_ARRVAL_P(c), &b, sizeof(zval *), NULL);
 	RETURN_CCTOR(c);
 
 }
@@ -277,19 +277,19 @@ PHP_METHOD(Test_NativeArray, testArray12) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_VAR(b);
 	array_init(b);
-	zephir_array_append(&b, a, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &a, sizeof(zval *), NULL);
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
-	zephir_array_append(&c, b, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(c), &b, sizeof(zval *), NULL);
 	RETURN_CCTOR(c);
 
 }
@@ -610,13 +610,13 @@ PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	zephir_array_fetch_long(&b, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	RETURN_ZVAL(b, 1, 0);
@@ -651,13 +651,13 @@ PHP_METHOD(Test_NativeArray, testArrayAccess3) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	c = 0;
 	zephir_array_fetch_long(&b, a, c, PH_NOISY | PH_READONLY TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -734,13 +734,13 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_update_long(&a, 0, &_0, PH_COPY | PH_SEPARATE);
@@ -759,13 +759,13 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate2) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	b = 0;
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
@@ -785,13 +785,13 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate3) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&a, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(a), &_0, sizeof(zval *), NULL);
 	b = 0;
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);

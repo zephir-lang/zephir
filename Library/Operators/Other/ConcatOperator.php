@@ -17,6 +17,11 @@
  +----------------------------------------------------------------------+
 */
 
+/**
+ * ConcatOperator
+ *
+ * Perform concatenations and optimizations
+ */
 class ConcatOperator extends BaseOperator
 {
 

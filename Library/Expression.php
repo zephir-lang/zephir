@@ -49,6 +49,7 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
@@ -208,78 +209,6 @@ class Expression
 	}
 
 	/**
-	 * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
-	 * without calculating the hash key twice
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compileFetch($expression, CompilationContext $compilationContext)
-	{
-
-		$compilationContext->headersManager->add('kernel/array');
-
-		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
-		if ($variable->getType() != 'variable') {
-			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "fetch" operator', $expression);
-		}
-
-		$variable->setIsInitialized(true);
-		$variable->observeVariant($compilationContext);
-		$variable->setDynamicType('undefined');
-
-		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
-		if ($evalVariable->getType() != 'variable') {
-			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $expression['right']);
-		}
-
-		$dynamicType = $evalVariable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
-			$compilationContext->logger->warning('Possible attempt to use non array/object in fetch operator', 'non-valid-fetch', $expression['right']);
-		}
-
-		switch ($expression['right']['type']) {
-			case 'array-access':
-				$expr = new Expression($expression['right']['right']);
-				$expr->setReadOnly(true);
-				$resolvedExpr = $expr->compile($compilationContext);
-				switch ($resolvedExpr->getType()) {
-					case 'int':
-					case 'long':
-					case 'uint':
-						return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC)', $expression);
-					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '") TSRMLS_CC)', $expression);
-					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
-						switch ($indexVariable->getType()) {
-							case 'int':
-							case 'long':
-							case 'uint':
-								return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
-							case 'string':
-							case 'variable':
-								return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression);
-							default:
-								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-						}
-						break;
-					default:
-						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
-				}
-				break;
-			case 'property-access':
-			case 'property-dynamic-access':
-				/* @todo, implement this */
-				return new CompiledExpression('bool', 'false', $expression);
-			default:
-				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
-		}
-
-	}
-
-	/**
 	 * Compiles foo[x] = []
 	 *
 	 * @param array $expression
@@ -359,7 +288,11 @@ class Expression
 		if ($newExpr['class'] == 'self') {
 			$className = $compilationContext->classDefinition->getCompleteName();
 		} else {
-			$className = $newExpr['class'];
+			if (substr($newExpr['class'], 0, 1) == '\\') {
+				$className = substr($newExpr['class'], 1);
+			} else {
+				$className = $newExpr['class'];
+			}
 		}
 
 		if (!$className) {
@@ -377,9 +310,10 @@ class Expression
 			 * Classes inside the same extension
 			 */
 			if ($compilationContext->compiler->isClass($className)) {
-				/* @todo, use the class definition instead */
-				$classCe = strtolower(str_replace('\\', '_', $className)) . '_ce';
-				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classCe . ');');
+
+				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+
+				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
 				$symbolVariable->setClassType($className);
 			} else {
 
@@ -747,7 +681,8 @@ class Expression
 				$resolvedExpr = $expr->compile($compilationContext);
 				$itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 				$compilationContext->headersManager->add('kernel/array');
-				$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ', 0);');
+				//$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ', 0);');
+				$codePrinter->output('zend_hash_next_index_insert(Z_ARRVAL_P(' . $symbolVariable->getName() . '), &' . $itemVariable->getName() . ', sizeof(zval *), NULL);');
 				if ($itemVariable->isTemporal()) {
 					$itemVariable->setIdle(true);
 				}
@@ -994,7 +929,10 @@ class Expression
 				return $this->compileIsset($expression, $compilationContext);
 
 			case 'fetch':
-				return $this->compileFetch($expression, $compilationContext);
+				$expr = new FetchOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);

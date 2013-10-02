@@ -579,16 +579,16 @@ PHP_METHOD(Test_Flow, testFor1) {
 	array_init(b);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
@@ -615,16 +615,16 @@ PHP_METHOD(Test_Flow, testFor2) {
 	array_init(b);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
@@ -652,16 +652,16 @@ PHP_METHOD(Test_Flow, testFor3) {
 	array_init(b);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 2);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
-	zephir_array_append(&b, _0, 0);
+	zend_hash_next_index_insert(Z_ARRVAL_P(b), &_0, sizeof(zval *), NULL);
 	zephir_is_iterable(b, &_2, &_1, 0, 1);
 	for (
 		; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS

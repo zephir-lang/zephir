@@ -148,13 +148,13 @@ PHP_METHOD(Test_Fannkuch, process) {
 				array_init(return_value);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, checksum);
-				zephir_array_append(&return_value, _13, 0);
+				zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &_13, sizeof(zval *), NULL);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, n);
-				zephir_array_append(&return_value, _13, 0);
+				zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &_13, sizeof(zval *), NULL);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, maxFlipsCount);
-				zephir_array_append(&return_value, _13, 0);
+				zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &_13, sizeof(zval *), NULL);
 				RETURN_MM();
 			}
 			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY | PH_READONLY TSRMLS_CC);

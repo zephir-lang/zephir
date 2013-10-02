@@ -1621,11 +1621,9 @@ class LetStatement
 					throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
 			}
 
-			if ($indexVariable->getType() == 'variable') {
-				$dynamicType = $indexVariable->getDynamicType();
-				if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
-					$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
-				}
+			$dynamicType = $indexVariable->getDynamicType();
+			if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
+				$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
 			}
 
 		}
@@ -1633,7 +1631,7 @@ class LetStatement
 		switch ($resolvedExpr->getType()) {
 			case 'null':
 				if ($resolvedExpression->getType() == 'string') {
-					$codePrinter->output('zephir_update_property_array_string(' . $symbolVariable->getName() . ', SL("' . $property . '"), "' . $resolvedExpression->getCode() . '", ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), SL("' . $resolvedExpression->getCode() . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				} else {
 					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				}
@@ -1659,7 +1657,7 @@ class LetStatement
 					case 'variable':
 					case 'string':
 						if ($resolvedExpression->getType() == 'string') {
-							$codePrinter->output('zephir_update_property_array_string(' . $symbolVariable->getName() . ', SL("' . $property . '"), "' . $resolvedExpression->getCode() . '", ' . $variableExpr->getName() . ' TSRMLS_CC);');
+
 						} else {
 							$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
 						}
@@ -1694,21 +1692,27 @@ class LetStatement
 		if ($className != 'self' && $className != 'parent') {
 			if ($compiler->isClass($className)) {
 				$classDefinition = $compiler->getClassDefinition($className);
-			} elseif ($compiler->isInternalClass($className)) {
-				$classDefinition = $compiler->getInternalClassDefinition($className);
 			} else {
-				throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+				if ($compiler->isInternalClass($className)) {
+					$classDefinition = $compiler->getInternalClassDefinition($className);
+				} else {
+					throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+				}
 			}
-		} elseif ($className == 'self') {
-			$classDefinition = $compilationContext->classDefinition;
-		} elseif ($className == 'parent') {
-			$classDefinition = $compilationContext->classDefinition;
-			$extendsClass = $classDefinition->getExtendsClass();
-			if (!$extendsClass) {
-				throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' .
-				$classDefinition->getCompleteName() . ' does not extend any class', $statement);
+		} else {
+			if ($className == 'self') {
+				$classDefinition = $compilationContext->classDefinition;
 			} else {
-				$classDefinition = $classDefinition->getExtendsClassDefinition();
+				if ($className == 'parent') {
+					$classDefinition = $compilationContext->classDefinition;
+					$extendsClass = $classDefinition->getExtendsClass();
+					if (!$extendsClass) {
+						throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' .
+							$classDefinition->getCompleteName() . ' does not extend any class', $statement);
+					} else {
+						$classDefinition = $classDefinition->getExtendsClassDefinition();
+					}
+				}
 			}
 		}
 
@@ -1805,7 +1809,7 @@ class LetStatement
 						break;
 					case 'string':
 					case 'variable':
-						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
 						break;
 					default:
 						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
