@@ -179,47 +179,60 @@ class MethodCall extends Call
 								throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
 							}
 
-							if (!$classDefinition->hasMethod($methodName)) {
+							if (!$classDefinition->hasMethod("__call") && !$classDefinition->hasMethod($methodName)) {
 								throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
-							}
+							} elseif (!$classDefinition->hasMethod("__call")) {
+								$method = $classDefinition->getMethod($methodName);
 
-							$method = $classDefinition->getMethod($methodName);
-
-							/**
-							 * Private methods must be called in their declaration scope
-							 */
-							if ($method->isPrivate()) {
-								if ($method->getClassDefinition() != $classDefinition) {
-									throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
-								}
-							}
-
-							/**
-							 * Try to produce an exception if method is called with a wrong number of parameters
-							 * We only check extension parameters if methods are extension methods
-							 * Internal methods may have invalid Reflection information
-							 */
-							if ($method instanceof ClassMethod) {
-
-								if (isset($expression['parameters'])) {
-									$callNumberParameters = count($expression['parameters']);
-								} else {
-									$callNumberParameters = 0;
-								}
-
-								$classMethod = $classDefinition->getMethod($methodName);
-								$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
-
-								if (!$expectedNumberParameters && $callNumberParameters > 0) {
-									$numberParameters = $classMethod->getNumberOfParameters();
-									if ($callNumberParameters > $numberParameters) {
-										$className = $classDefinition->getCompleteName();
-										throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+								/**
+								 * Private methods must be called in their declaration scope
+								 */
+								if ($method->isPrivate()) {
+									if ($method->getClassDefinition() != $classDefinition) {
+										throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
 									}
 								}
 
-								if ($callNumberParameters < $expectedNumberParameters) {
-									throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+								if ($method->isProtected() && $method->getClassDefinition() != $classDefinition && $method->getClassDefinition() != $classDefinition->getExtendsClass()) {
+									throw new CompilerException("Cannot call protected method '" . $expression['name'] . "' out of its scope", $expression);
+								}
+
+								/**
+								 * Try to produce an exception if method is called with a wrong number of parameters
+								 * We only check extension parameters if methods are extension methods
+								 * Internal methods may have invalid Reflection information
+								 */
+								if ($method instanceof ClassMethod) {
+
+									if (isset($expression['parameters'])) {
+										$callNumberParameters = count($expression['parameters']);
+									} else {
+										$callNumberParameters = 0;
+									}
+
+									$classMethod = $classDefinition->getMethod($methodName);
+									$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+									if (!$expectedNumberParameters && $callNumberParameters > 0) {
+										$numberParameters = $classMethod->getNumberOfParameters();
+										if ($callNumberParameters > $numberParameters) {
+											$className = $classDefinition->getCompleteName();
+											throw new CompilerException("Method '" . $className . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+										}
+									}
+
+									if ($callNumberParameters < $expectedNumberParameters) {
+										throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+									}
+								}
+							} else {
+								$method = $classDefinition->getMethod("__call");
+
+								if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+									throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
+								}
+								if ($method->isProtected() && $method->getClassDefinition() != $compilationContext->classDefinition && $method->getClassDefinition() != $compilationContext->classDefinition->getExtendsClass()) {
+									throw new CompilerException("Cannot call protected magic method '__call' out of its scope", $expression);
 								}
 							}
 						} else {
