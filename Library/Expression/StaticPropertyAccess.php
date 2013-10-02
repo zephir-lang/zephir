@@ -66,6 +66,7 @@ class StaticPropertyAccess
 		$compiler = $compilationContext->compiler;
 
 		$className = $expression['left']['value'];
+		$property = $expression['right']['value'];
 
 		/**
 		 * Fetch the class definition according to the class where the constant
@@ -89,7 +90,7 @@ class StaticPropertyAccess
 					$classDefinition = $compilationContext->classDefinition;
 					$extendsClass = $classDefinition->getExtendsClass();
 					if (!$extendsClass) {
-						throw new CompilerException('Cannot call method "' . $methodName . '" on parent because class ' .
+						throw new CompilerException('Cannot access static property "' . $property . '" on parent because class ' .
 							$classDefinition->getCompleteName() . ' does not extend any class', $expression);
 					} else {
 						$classDefinition = $classDefinition->getExtendsClassDefinition();
@@ -98,21 +99,25 @@ class StaticPropertyAccess
 			}
 		}
 
-		$property = $expression['right']['value'];
-
-		$classDefinition = $classDefinition;
 		if (!$classDefinition->hasProperty($property)) {
 			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
 		}
 
+		/** @var $propertyDefinition ClassProperty */
 		$propertyDefinition = $classDefinition->getProperty($property);
 		if (!$propertyDefinition->isStatic()) {
 			throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $expression);
 		}
 
 		if ($propertyDefinition->isPrivate()) {
-			if ($propertyDefinition->getDeclaringClass() != $classDefinition) {
+			if ($classDefinition != $compilationContext->classDefinition) {
 				throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $expression);
+			}
+		}
+
+		if ($propertyDefinition->isProtected()) {
+			if ($classDefinition != $compilationContext->classDefinition && $classDefinition != $compilationContext->classDefinition->getExtendsClassDefinition()) {
+				throw new CompilerException("Cannot access protected static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $expression);
 			}
 		}
 
@@ -138,13 +143,22 @@ class StaticPropertyAccess
 		 * Variable that receives property accesses must be polimorphic
 		 */
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
 		}
 
 		$symbolVariable->setDynamicType('undefined');
 
 		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() .' , SL("' . $property . '") TSRMLS_CC);');
+
+		if ($classDefinition == $compilationContext->classDefinition) {
+			if ($this->_readOnly) {
+				$compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
+			} else {
+				$compilationContext->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
+			}
+		} else {
+			$compilationContext->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
+		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}

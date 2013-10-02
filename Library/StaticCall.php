@@ -292,31 +292,40 @@ class StaticCall extends Call
 		/**
 		 * Check if the class implements the method
 		 */
-		if (!$classDefinition->hasMethod($methodName)) {
+		if (!$classDefinition->hasMethod("__callStatic") && !$classDefinition->hasMethod($methodName)) {
 			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
-		}
+		} elseif (!$classDefinition->hasMethod("__callStatic")) {
+			/**
+			 * Try to produce an exception if method is called with a wrong number of parameters
+			 */
+			if (isset($expression['parameters'])) {
+				$callNumberParameters = count($expression['parameters']);
+			} else {
+				$callNumberParameters = 0;
+			}
 
-		/**
-		 * Try to produce an exception if method is called with a wrong number of parameters
-		 */
-		if (isset($expression['parameters'])) {
-			$callNumberParameters = count($expression['parameters']);
-		} else {
-			$callNumberParameters = 0;
-		}
+			$classMethod = $classDefinition->getMethod($methodName);
+			$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
 
-		$classMethod = $classDefinition->getMethod($methodName);
-		$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+			if (!$expectedNumberParameters && $callNumberParameters > 0) {
+				$numberParameters = $classMethod->getNumberOfParameters();
+				if ($callNumberParameters > $numberParameters) {
+					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+				}
+			}
 
-		if (!$expectedNumberParameters && $callNumberParameters > 0) {
-			$numberParameters = $classMethod->getNumberOfParameters();
-			if ($callNumberParameters > $numberParameters) {
+			if ($callNumberParameters < $expectedNumberParameters) {
 				throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 			}
-		}
+		} else {
+			$method = $classDefinition->getMethod("__callStatic");
 
-		if ($callNumberParameters < $expectedNumberParameters) {
-			throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+			if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+				throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
+			}
+			if ($method->isProtected() && $method->getClassDefinition() != $compilationContext->classDefinition && $method->getClassDefinition() != $compilationContext->classDefinition->getExtendsClass()) {
+				throw new CompilerException("Cannot call protected magic method '__call' out of its scope", $expression);
+			}
 		}
 
 		/**
