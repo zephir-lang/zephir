@@ -303,10 +303,10 @@ PHP_METHOD(Test_Mcall, testCall16) {
 		}
 	}
 	array_init(return_value);
-	zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &s, sizeof(zval *), NULL);
+	zephir_array_fast_append(return_value, s);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, i);
-	zend_hash_next_index_insert(Z_ARRVAL_P(return_value), &_0, sizeof(zval *), NULL);
+	zephir_array_fast_append(return_value, _0);
 	RETURN_MM();
 
 }

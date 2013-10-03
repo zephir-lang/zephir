@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
 #include "kernel/memory.h"
 
 
@@ -29,103 +30,43 @@ ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
 PHP_METHOD(Test_ScallExternal, testCall1) {
 
+	zval *a, *b;
 
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod4", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_ScallExternal, testCall2) {
 
+	zval *a, *b;
 
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
+
+
+
+	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod5", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_ScallExternal, testCall3) {
 
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall4) {
-
 	zval *a, *b;
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall5) {
-
-	zval *a, *b;
-
-	zephir_fetch_params(0, 2, 0, &a, &b);
-
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall6) {
-
-	zval *a, *b;
-
-	zephir_fetch_params(0, 2, 0, &a, &b);
-
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall7) {
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall8) {
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall9) {
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall10) {
-
-	zval *a, *b;
-
-	zephir_fetch_params(0, 2, 0, &a, &b);
-
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall11) {
-
-	zval *a, *b;
-
-	zephir_fetch_params(0, 2, 0, &a, &b);
-
-
-
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall12) {
-
-	zval *a, *b;
-
-	zephir_fetch_params(0, 2, 0, &a, &b);
-
-
-
+	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod6", a, b);
+	RETURN_MM();
 
 }
 

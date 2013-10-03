@@ -126,3 +126,4 @@ ext/kernel/object.o
 ext/kernel/operators.o
 ext/kernel/string.o
 ext/test.o
+ext/test/fortytwo.lo

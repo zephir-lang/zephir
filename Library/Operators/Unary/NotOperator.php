@@ -38,11 +38,22 @@ class NotOperator extends BaseOperator
 
 		switch ($left->getType()) {
 			case 'bool':
+			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 				return new CompiledExpression('bool', '!' . $left->getCode(), $expression);
+			case 'variable':
+				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+				switch ($variable->getType()) {
+					case 'variable':
+						return new CompiledExpression('bool', '!zephir_is_true(' . $variable->getName() . ')', $expression);
+					default:
+						throw new CompilerException("Unknown type: " . $variable->getType(), $expression);
+				}
 			default:
 				throw new CompilerException("Unknown type: " . $left->getType(), $expression);
 		}
-
 
 	}
 

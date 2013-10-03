@@ -79,10 +79,10 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	array_init(fib);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
-	zend_hash_next_index_insert(Z_ARRVAL_P(fib), &_0, sizeof(zval *), NULL);
+	zephir_array_fast_append(fib, _0);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 1);
-	zend_hash_next_index_insert(Z_ARRVAL_P(fib), &_0, sizeof(zval *), NULL);
+	zephir_array_fast_append(fib, _0);
 	i = 2;
 	n = 10;
 	while (1) {
@@ -113,10 +113,10 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	array_init(fib);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
-	zend_hash_next_index_insert(Z_ARRVAL_P(fib), &_0, sizeof(zval *), NULL);
+	zephir_array_fast_append(fib, _0);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 1);
-	zend_hash_next_index_insert(Z_ARRVAL_P(fib), &_0, sizeof(zval *), NULL);
+	zephir_array_fast_append(fib, _0);
 	i = 2;
 	n = 10;
 	while (1) {

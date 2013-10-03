@@ -681,8 +681,7 @@ class Expression
 				$resolvedExpr = $expr->compile($compilationContext);
 				$itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 				$compilationContext->headersManager->add('kernel/array');
-				//$codePrinter->output('zephir_array_append(&' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ', 0);');
-				$codePrinter->output('zend_hash_next_index_insert(Z_ARRVAL_P(' . $symbolVariable->getName() . '), &' . $itemVariable->getName() . ', sizeof(zval *), NULL);');
+				$codePrinter->output('zephir_array_fast_append(' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ');');
 				if ($itemVariable->isTemporal()) {
 					$itemVariable->setIdle(true);
 				}
