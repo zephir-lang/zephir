@@ -380,9 +380,6 @@ class LocalContextPass
 				case 'return':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
-						/*if ($statement['expr']['type'] == 'variable') {
-							$this->markVariableNoLocal($statement['expr']['value']);
-						}*/
 					}
 					break;
 				case 'loop':
@@ -404,9 +401,12 @@ class LocalContextPass
 				case 'require':
 					$this->passCall($statement['expr']);
 					break;
+				case 'unset':
+					$this->increaseMutations($statement['domain']['value']);
+					$this->increaseMutations($statement['domain']['value']);
+					break;
 				case 'break':
 				case 'continue':
-				case 'unset':
 				case 'empty':
 					break;
 				default:

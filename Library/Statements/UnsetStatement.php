@@ -50,6 +50,12 @@ class UnsetStatement
 		$flags = 'PH_SEPARATE';
 
 		switch ($exprIndex->getType()) {
+			case 'int':
+			case 'uint':
+			case 'long':
+				$compilationContext->headersManager->add('kernel/array');
+				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', ' . $exprIndex->getType() . ', ' . $flags . ' TSRMLS_CC);');
+				break;
 			case 'string':
 				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
 				break;

@@ -66,6 +66,10 @@ class StaticPropertyAccess
 		$compiler = $compilationContext->compiler;
 
 		$className = $expression['left']['value'];
+		if (substr($className, 0, 1) == '\\') {
+			$className = substr($className, 1);
+		}
+
 		$property = $expression['right']['value'];
 
 		/**
