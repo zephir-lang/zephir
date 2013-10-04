@@ -175,7 +175,7 @@ class Expression
 			case 'array-access':
 				$expr = new Expression($expression['left']['right']);
 				$expr->setReadOnly(true);
-				$resolvedExpr= $expr->compile($compilationContext);
+				$resolvedExpr = $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType())	{
 					case 'int':
 					case 'long':
@@ -200,9 +200,25 @@ class Expression
 				}
 				break;
 			case 'property-access':
+				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $expression['left']['right'] . '"))', $expression['left']['right']);
 			case 'property-dynamic-access':
-				/* @todo, implement this */
-				return new CompiledExpression('bool', 'false', $expression);
+				$expr = new Expression($expression['left']['right']);
+				$expr->setReadOnly(true);
+				$resolvedExpr = $expr->compile($compilationContext);
+				switch ($resolvedExpr->getType()) {
+					case 'variable':
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['left']['right']);
+						switch ($indexVariable->getType()) {
+							case 'variable':
+							case 'string':
+								return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+							default:
+								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
+						}
+						break;
+					default:
+						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
+				}
 			default:
 				throw new CompilerException('[' . $expression['left']['type'] . ']', $expression);
 		}

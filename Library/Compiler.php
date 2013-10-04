@@ -33,7 +33,7 @@ class Compiler
 
 	protected static $_reflections = array();
 
-	const VERSION = '0.2.0a';
+	const VERSION = '0.2.1a';
 
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
@@ -618,7 +618,6 @@ class Compiler
 							case '-w':
 								$config->set('silent', true);
 								break;
-
 							default:
 								break;
 						}
