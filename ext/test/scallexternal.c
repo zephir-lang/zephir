@@ -30,14 +30,9 @@ ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
 PHP_METHOD(Test_ScallExternal, testCall1) {
 
-	zval *a, *b;
-
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &a, &b);
 
-
-
-	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod4", a, b);
+	zephir_call_static(return_value, "Test\\Scall", "testmethod1");
 	RETURN_MM();
 
 }
@@ -51,21 +46,7 @@ PHP_METHOD(Test_ScallExternal, testCall2) {
 
 
 
-	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod5", a, b);
-	RETURN_MM();
-
-}
-
-PHP_METHOD(Test_ScallExternal, testCall3) {
-
-	zval *a, *b;
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &a, &b);
-
-
-
-	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod6", a, b);
+	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod4", a, b);
 	RETURN_MM();
 
 }
