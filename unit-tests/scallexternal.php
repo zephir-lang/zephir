@@ -3,4 +3,4 @@
 $t = new Test\ScallExternal();
 
 assert($t->testCall1() == "hello public");
-assert($t->testCall4(2, 3) === 5);
+assert($t->testCall2(2, 3) === 5);
