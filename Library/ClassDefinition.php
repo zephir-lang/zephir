@@ -535,6 +535,7 @@ class ClassDefinition
 				switch (strtolower($classExtendsDefinition->getName())) {
 					case 'arrayaccess':
 						$classEntry = 'zend_ce_arrayaccess';
+						break;
 					case 'exception':
 						$classEntry = 'zend_exception_get_default(TSRMLS_C)';
 						break;

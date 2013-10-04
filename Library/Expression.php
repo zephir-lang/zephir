@@ -53,6 +53,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
+require ZEPHIRPATH . 'Library/Expression/PropertyDynamicAccess.php';
 require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
 require ZEPHIRPATH . 'Library/Expression/NativeArrayAccess.php';
 require ZEPHIRPATH . 'Library/Expression/StaticPropertyAccess.php';
@@ -200,7 +201,7 @@ class Expression
 				}
 				break;
 			case 'property-access':
-				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $expression['left']['right'] . '"))', $expression['left']['right']);
+				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '") TSRMLS_CC)', $expression['left']['right']);
 			case 'property-dynamic-access':
 				$expr = new Expression($expression['left']['right']);
 				$expr->setReadOnly(true);
@@ -211,7 +212,7 @@ class Expression
 						switch ($indexVariable->getType()) {
 							case 'variable':
 							case 'string':
-								return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+								return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression['left']['right']);
 							default:
 								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
 						}
@@ -226,7 +227,7 @@ class Expression
 	}
 
 	/**
-	 * Compiles foo[x] = []
+	 * Compiles foo = []
 	 *
 	 * @param array $expression
 	 * @param CompilationContext $compilationContext
@@ -851,6 +852,7 @@ class Expression
 			return new CompiledExpression(gettype($value), $value, $expression);
 		}
 
+		/* @todo read the constant every time */
 		return new CompiledExpression('null', null, $expression);
 	}
 
@@ -913,6 +915,12 @@ class Expression
 
 			case 'property-access':
 				$propertyAccess = new PropertyAccess();
+				$propertyAccess->setReadOnly($this->isReadOnly());
+				$propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $propertyAccess->compile($expression, $compilationContext);
+
+			case 'property-dynamic-access':
+				$propertyAccess = new PropertyDynamicAccess();
 				$propertyAccess->setReadOnly($this->isReadOnly());
 				$propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $propertyAccess->compile($expression, $compilationContext);

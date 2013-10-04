@@ -54,7 +54,7 @@ class UnsetStatement
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
-				$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getType() . ', ' . $flags . ' TSRMLS_CC);');
+				$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
 				break;
 			case 'string':
 				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
@@ -68,12 +68,12 @@ class UnsetStatement
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
-						$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
-						$compilationContext->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						$compilationContext->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $this->_statement['index']);
