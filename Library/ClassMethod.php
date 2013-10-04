@@ -302,6 +302,7 @@ class ClassMethod
 			$containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_STR', 'ZEPHIR_THROW_EXCEPTION_STRW', $containerCode);
 			$containerCode = str_replace('ZEPHIR_THROW_EXCEPTION_ZVAL', 'ZEPHIR_THROW_EXCEPTION_ZVALW', $containerCode);
 			$containerCode = str_replace('RETURN_THIS', 'RETURN_THISW', $containerCode);
+			$containerCode = str_replace('RETURN_LCTOR', 'RETURN_LCTORW', $containerCode);
 			$containerCode = str_replace('RETURN_CTOR', 'RETURN_CTORW', $containerCode);
 			$containerCode = str_replace('RETURN_NCTOR', 'RETURN_NCTORW', $containerCode);
 			$containerCode = str_replace('RETURN_CCTOR', 'RETURN_CCTORW', $containerCode);
