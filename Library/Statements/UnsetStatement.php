@@ -54,7 +54,7 @@ class UnsetStatement
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
-				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', ' . $exprIndex->getType() . ', ' . $flags . ' TSRMLS_CC);');
+				$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getType() . ', ' . $flags . ' TSRMLS_CC);');
 				break;
 			case 'string':
 				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
@@ -68,7 +68,7 @@ class UnsetStatement
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
-						$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+						$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
 					case 'string':
 					case 'variable':

@@ -1604,70 +1604,101 @@ class LetStatement
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');
 
+		/**
+		 * Only string/variable/int
+		 */
 		$indexExpression = new Expression($statement['index-expr']);
-		$resolvedExpression = $indexExpression->compile($compilationContext);
-		if ($resolvedExpression->getType() != 'variable' && $resolvedExpression->getType() != 'string') {
-			throw new CompilerException("Expression: " . $resolvedExpression->getType() . " cannot be used as index", $statement['index-expr']);
+		$resolvedIndex = $indexExpression->compile($compilationContext);
+
+		switch ($resolvedIndex->getType()) {
+			case 'string':
+			case 'int':
+			case 'uint':
+			case 'ulong':
+			case 'long':
+			case 'variable':
+				break;
+			default:
+				throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement['index-expr']);
 		}
 
-		if ($resolvedExpression->getType() == 'variable') {
+		if ($resolvedIndex->getType() == 'variable') {
 
-			$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpression->getCode(), $compilationContext, $statement['index-expr']);
+			$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
 			switch ($indexVariable->getType()) {
-				case 'variable':
 				case 'string':
+				case 'int':
+				case 'uint':
+				case 'ulong':
+				case 'long':
+				case 'variable':
 					break;
 				default:
-					throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index", $statement);
+					throw new CompilerException("Variable: " . $indexVariable->getType() . " cannot be used as index without cast", $statement);
 			}
 
-			$dynamicType = $indexVariable->getDynamicType();
-			if ($dynamicType != 'undefined' && $dynamicType != 'string' && $dynamicType != 'long') {
-				$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
+			if ($indexVariable->getType() == 'variable') {
+				$dynamicType = $indexVariable->getDynamicType();
+				switch ($dynamicType) {
+					case 'undefined':
+					case 'long':
+					case 'int':
+					case 'string':
+						break;
+					default:
+						$compilationContext->logger->warning('Possible attempt to use non string/long dynamic ' . $dynamicType . ' variable as array index', 'invalid-array-index', $statement);
+						break;
+				}
 			}
 
 		}
 
-		switch ($resolvedExpr->getType()) {
-			case 'null':
-				if ($resolvedExpression->getType() == 'string') {
-					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), SL("' . $resolvedExpression->getCode() . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
-				} else {
-					$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
-				}
-				break;
-			case 'bool':
-				if ($resolvedExpression->getType() == 'string') {
-				} else {
-					if ($resolvedExpr->getBooleanCode() == '1') {
-						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
-					} else {
-						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-					}
-				}
+		switch ($resolvedIndex->getType()) {
+			case 'string':
+				$codePrinter->output('//missing');
 				break;
 			case 'variable':
-				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-				switch ($variableExpr->getType()) {
-					case 'bool':
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
-						$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+				switch ($indexVariable->getType()) {
+					case 'int':
+						$codePrinter->output('//missing');
 						break;
 					case 'variable':
 					case 'string':
-						if ($resolvedExpression->getType() == 'string') {
-
-						} else {
-							$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						switch ($resolvedExpr->getType()) {
+							case 'null':
+								$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+								break;
+							case 'bool':
+								if ($resolvedExpr->getBooleanCode() == '1') {
+									$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+								} else {
+									$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+								}
+								break;
+							case 'variable':
+								$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['index-expr']);
+								switch ($variableExpr->getType()) {
+									case 'bool':
+										$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+										$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+										$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+										break;
+									case 'variable':
+									case 'string':
+										$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+										break;
+									default:
+										throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
+								}
+								break;
 						}
 						break;
 					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be updated into array property", $statement);
+						throw new CompilerException("Variable index: " . $indexVariable->getType() . " cannot be updated into array property", $statement);
 				}
 				break;
 			default:
-				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be updated into array property", $statement);
+				throw new CompilerException("Index: " . $resolvedIndex->getType() . " cannot be updated into array property", $statement);
 		}
 
 	}
