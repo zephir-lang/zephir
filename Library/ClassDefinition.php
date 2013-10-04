@@ -35,6 +35,10 @@ class ClassDefinition
 
 	protected $_interfaces;
 
+	protected $_final;
+
+	protected $_abstract;
+
 	protected $_extendsClassDefinition;
 
 	protected $_properties = array();
@@ -85,6 +89,46 @@ class ClassDefinition
 	public function getName()
 	{
 		return $this->_name;
+	}
+
+	/**
+	 * Sets if the class is final
+	 *
+	 * @param booelan $final
+	 */
+	public function setIsFinal($final)
+	{
+		$this->_final = $final;
+	}
+
+	/**
+	 * Sets if the class is final
+	 *
+	 * @param booelan $abstract
+	 */
+	public function setIsAbstract($abstract)
+	{
+		$this->_abstract = $abstract;
+	}
+
+	/**
+	 * Checks whether the class is abstract or not
+	 *
+	 * @return boolean
+	 */
+	public function isAbstract()
+	{
+		return $this->_abstract;
+	}
+
+	/**
+	 * Checks whether the class is abstract or not
+	 *
+	 * @return boolean
+	 */
+	public function isFinal()
+	{
+		return $this->_final;
 	}
 
 	/**
@@ -429,6 +473,25 @@ class ClassDefinition
 	}
 
 	/**
+	 * Checks if a class implements an interface
+	 *
+	 * @param ClassDefinition $classDefinition
+	 * @param ClassDefinition $interfaceDefinition
+	 */
+	public function checkInterfaceImplements($classDefinition, $interfaceDefinition)
+	{
+		foreach ($interfaceDefinition->getMethods() as $method) {
+			if (!$classDefinition->hasMethod($method->getName())) {
+				if (method_exists($classDefinition, 'getCompleteName')) {
+					throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
+				} else {
+					throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interface);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Compiles a class/interface
 	 *
 	 * @param CompilationContext $compilationContext
@@ -462,18 +525,21 @@ class ClassDefinition
 		/**
 		 * Register the class with extends + interfaces
 		 */
+		$classExtendsDefinition = null;
 		if ($this->_extendsClass) {
 
 			$classExtendsDefinition = $this->_extendsClassDefinition;
-			if (method_exists($classExtendsDefinition, 'getClassEntry')) {
+			if ($classExtendsDefinition instanceof ClassDefinition) {
 				$classEntry = $classExtendsDefinition->getClassEntry();
 			} else {
-				switch ($classExtendsDefinition->getName()) {
-					case 'ArrayAccess':
+				switch (strtolower($classExtendsDefinition->getName())) {
+					case 'arrayaccess':
 						$classEntry = 'zend_ce_arrayaccess';
+					case 'exception':
+						$classEntry = 'zend_exception_get_default(TSRMLS_C)';
 						break;
 					default:
-						$classEntry = 'zend_exception_get_default(TSRMLS_C)';
+						throw new Exception($classExtendsDefinition->getName());
 				}
 			}
 
@@ -523,26 +589,36 @@ class ClassDefinition
 		 * Implemented interfaces
 		 */
 		$interfaces = $this->_interfaces;
+		$compiler = $compilationContext->compiler;
+
 		if (is_array($interfaces)) {
+
 			$interfacesEntries = array();
-			$compiler = $compilationContext->compiler;
 			$codePrinter->outputBlankLine(true);
+
 			foreach ($interfaces as $interface) {
+
 				if ($compiler->isInterface($interface)) {
 					$classInterfaceDefinition = $compiler->getClassDefinition($interface);
 					$classEntry = $classInterfaceDefinition->getClassEntry();
 				} else {
 					if ($compiler->isInternalInterface($interface)) {
 						$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-						switch ($classInterfaceDefinition->getName()) {
-							case 'Iterator':
+						switch (strtolower($classInterfaceDefinition->getName())) {
+							case 'iterator':
 								$classEntry = 'zend_ce_iterator';
 								break;
-							case 'Countable':
+							case 'countable':
 								$classEntry = 'spl_ce_Countable';
 								break;
-							case 'ArrayAccess':
+							case 'arrayaccess':
 								$classEntry = 'zend_ce_arrayaccess';
+								break;
+							case 'seekableiterator':
+								$classEntry = 'spl_ce_SeekableIterator';
+								break;
+							case 'serializable':
+								$classEntry = 'zend_ce_serializable';
 								break;
 							default:
 								throw new CompilerException($classInterfaceDefinition->getName());
@@ -551,17 +627,47 @@ class ClassDefinition
 						throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
 					}
 				}
-				foreach ($classInterfaceDefinition->getMethods() as $method) {
-					if (!$this->hasMethod($method->getName())) {
-						if (method_exists($classInterfaceDefinition, 'getCompleteName')) {
-							throw new CompilerException("Class " . $this->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $classInterfaceDefinition->getCompleteName());
-						} else {
-							throw new CompilerException("Class " . $this->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interface);
+
+				/**
+				 * We dont' check if abstract classes implement the methods in their interfaces
+				 */
+				if (!$this->isAbstract()) {
+					$this->checkInterfaceImplements($this, $classInterfaceDefinition);
+				}
+
+				$codePrinter->output('zend_class_implements(' . $this->getClassEntry() . ' TSRMLS_CC, 1, ' . $classEntry . ');');
+			}
+		}
+
+		if (!$this->isAbstract()) {
+
+			/**
+			 * Interfaces in extended classes may have
+			 */
+			if ($classExtendsDefinition) {
+
+				if ($classExtendsDefinition instanceof ClassDefinition) {
+					$interfaces = $classExtendsDefinition->getImplementedInterfaces();
+					if (is_array($interfaces)) {
+						foreach ($interfaces as $interface) {
+
+							$classInterfaceDefinition = null;
+							if ($compiler->isInterface($interface)) {
+								$classInterfaceDefinition = $compiler->getClassDefinition($interface);
+							} else {
+								if ($compiler->isInternalInterface($interface)) {
+									$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+								}
+							}
+
+							if ($classInterfaceDefinition) {
+								$this->checkInterfaceImplements($this, $classInterfaceDefinition);
+							}
+
 						}
 					}
 				}
 
-				$codePrinter->output('zend_class_implements(' . $this->getClassEntry() . ' TSRMLS_CC, 1, ' . $classEntry . ');');
 			}
 		}
 

@@ -167,7 +167,7 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 	json_object_object_add(ret, "type", json_object_new_string("class"));
 	json_object_object_add(ret, "name", json_object_new_string(T->token));
 
-	json_object_object_add(ret, "abtract", json_object_new_int(is_abstract));
+	json_object_object_add(ret, "abstract", json_object_new_int(is_abstract));
 	json_object_object_add(ret, "final", json_object_new_int(is_final));
 
 	if (E) {

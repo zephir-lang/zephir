@@ -200,6 +200,7 @@ class Expression
 				}
 				break;
 			case 'property-access':
+			case 'property-dynamic-access':
 				/* @todo, implement this */
 				return new CompiledExpression('bool', 'false', $expression);
 			default:

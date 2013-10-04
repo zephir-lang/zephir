@@ -266,6 +266,14 @@ class CompilerFile
 			$classDefinition->setImplementsInterfaces($topStatement['implements']);
 		}
 
+		if (isset($topStatement['abstract'])) {
+			$classDefinition->setIsAbstract($topStatement['abstract']);
+		}
+
+		if (isset($topStatement['final'])) {
+			$classDefinition->setIsFinal($topStatement['final']);
+		}
+
 		if (isset($topStatement['definition'])) {
 
 			$definition = $topStatement['definition'];

@@ -597,7 +597,7 @@ class Compiler
 			/**
 			 * Global logger
 			 */
-			$logger = new Logger();
+			$logger = new Logger($config);
 
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
@@ -610,8 +610,18 @@ class Compiler
 			 */
 			if ($_SERVER['argc'] >= 2) {
 				for ($i = 2; $i < $_SERVER['argc']; $i++) {
-					if (preg_match('/^-fno-([a-z0-9\-]+)/', $_SERVER['argv'][$i], $matches)) {
+					$parameter = $_SERVER['argv'][$i];
+					if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches)) {
 						$config->set($matches[1], false);
+					} else {
+						switch ($parameter) {
+							case '-w':
+								$config->set('silent', true);
+								break;
+
+							default:
+								break;
+						}
 					}
 				}
 			}
