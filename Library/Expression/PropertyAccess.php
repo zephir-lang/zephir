@@ -106,7 +106,7 @@ class PropertyAccess
 			 * If we know the class related to a variable we could check if the property
 			 * is defined on that class
 			 */
-			if ($variableVariable->getDynamicType() == 'object') {
+			if ($variableVariable->hasAnyDynamicType('object')) {
 
 				$classType = $variableVariable->getClassType();
 				$compiler = $compilationContext->compiler;
@@ -258,7 +258,7 @@ class PropertyAccess
 		/**
 		 * At this point, we don't know the exact dynamic type fetched from the property
 		 */
-		$symbolVariable->setDynamicType('undefined');
+		$symbolVariable->setDynamicTypes('undefined');
 
 		$compilationContext->headersManager->add('kernel/object');
 		if ($classDefinition == $currentClassDefinition) {

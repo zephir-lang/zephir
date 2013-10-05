@@ -31,7 +31,7 @@ class Variable
 	/**
 	 * Current dynamic type of the variable
 	 */
-	protected $_dynamicType = array('unknown' => true);
+	protected $_dynamicTypes = array('unknown' => true);
 
 	/**
 	 * Variable's name
@@ -99,7 +99,7 @@ class Variable
 	/**
 	 * Class type
 	 */
-	protected $_classType;
+	protected $_classTypes = array();
 
 	/**
 	 * Initialization skips
@@ -345,42 +345,54 @@ class Variable
 	/**
 	 * Sets the PHP class related to variable
 	 *
-	 * @param string $classType
+	 * @param string|array $classTypes
 	 */
-	public function setClassType($classType)
+	public function setClassTypes($classTypes)
 	{
-		$this->_classType = $classType;
+		if ($classTypes) {
+			if (is_string($classTypes)) {
+				if (!in_array($classTypes, $this->_classTypes)) {
+					$this->_classTypes[] = $classTypes;
+				}
+			} else {
+				foreach ($classTypes as $classType) {
+					if (!in_array($classType, $this->_classTypes)) {
+						$this->_classTypes[] = $classType;
+					}
+				}
+			}
+		}
 	}
 
 	/**
-	 * Returns the PHP class associated to the variable
+	 * Returns the PHP classes associated to the variable
 	 *
 	 * @return string
 	 */
-	public function getClassType()
+	public function getClassTypes()
 	{
-		return $this->_classType;
+		return $this->_classTypes;
 	}
 
 	/**
 	 * Sets the current dynamic type in a polimorphic variable
 	 *
-	 * @param string $type
+	 * @param string|array $types
 	 */
-	public function setDynamicType($types)
+	public function setDynamicTypes($types)
 	{
 		if ($types) {
 			if (is_string($types)) {
 				if ($types != 'unknown') {
-					unset($this->_dynamicType['unknown']);
+					unset($this->_dynamicTypes['unknown']);
 				}
 				if (!isset($this->_dynamicType[$types])) {
-					$this->_dynamicType[$types] = true;
+					$this->_dynamicTypes[$types] = true;
 				}
 			} else {
 				foreach ($types as $type => $one) {
-					if (!isset($this->_dynamicType[$type])) {
-						$this->_dynamicType[$type] = true;
+					if (!isset($this->_dynamicTypes[$type])) {
+						$this->_dynamicTypes[$type] = true;
 					}
 				}
 			}
@@ -390,11 +402,11 @@ class Variable
 	/**
 	 * Returns the current dynamic type in a polimorphic variable
 	 *
-	 * @return string
+	 * @return array
 	 */
-	public function getDynamicType()
+	public function getDynamicTypes()
 	{
-		return $this->_dynamicType;
+		return $this->_dynamicTypes;
 	}
 
 	/**
@@ -405,10 +417,10 @@ class Variable
 	public function hasAnyDynamicType($types)
 	{
 		if (is_string($types)) {
-			return isset($this->_dynamicType[$types]);
+			return isset($this->_dynamicTypes[$types]);
 		} else {
 			foreach ($types as $type) {
-				if (isset($this->_dynamicType[$type])) {
+				if (isset($this->_dynamicTypes[$type])) {
 					return true;
 				}
 			}
@@ -425,7 +437,7 @@ class Variable
 	{
 		$number = 0;
 		foreach ($types as $type) {
-			if (isset($this->_dynamicType[$type])) {
+			if (isset($this->_dynamicTypes[$type])) {
 				$number++;
 			}
 		}

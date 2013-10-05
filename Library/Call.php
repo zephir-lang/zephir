@@ -264,7 +264,7 @@ class Call
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							$types[] = $parameterVariable->getType();
-							$dynamicTypes[] = $parameterVariable->getDynamicType();
+							$dynamicTypes[] = $parameterVariable->getDynamicTypes();
 							break;
 						default:
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);

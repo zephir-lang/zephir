@@ -150,7 +150,7 @@ class StaticPropertyAccess
 			throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
 		}
 
-		$symbolVariable->setDynamicType('undefined');
+		$symbolVariable->setDynamicTypes('undefined');
 
 		$compilationContext->headersManager->add('kernel/object');
 

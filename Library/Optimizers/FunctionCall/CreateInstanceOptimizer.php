@@ -56,7 +56,7 @@ class CreateInstanceOptimizer
 
 		$context->headersManager->add('kernel/object');
 
-		$symbolVariable->setDynamicType('object');
+		$symbolVariable->setDynamicTypes('object');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 

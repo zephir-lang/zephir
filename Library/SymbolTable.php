@@ -51,7 +51,7 @@ class SymbolTable
 		$thisVar->increaseUses();
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
-		$thisVar->setDynamicType('object');
+		$thisVar->setDynamicTypes('object');
 		$this->_variables['this'] = $thisVar;
 
 		$returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
@@ -169,7 +169,7 @@ class SymbolTable
 
 				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
 				$superVar->setIsInitialized(true);
-				$superVar->setDynamicType('array');
+				$superVar->setDynamicTypes('array');
 				$this->_variables[$name] = $superVar;
 			}
 		}
@@ -212,7 +212,7 @@ class SymbolTable
 
 				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
 				$superVar->setIsInitialized(true);
-				$superVar->setDynamicType('array');
+				$superVar->setDynamicTypes('array');
 				$superVar->increaseMutates();
 				$superVar->increaseUses();
 				$this->_variables[$name] = $superVar;

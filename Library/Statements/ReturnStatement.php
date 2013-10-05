@@ -45,11 +45,13 @@ class ReturnStatement
 
 		if (isset($statement['expr'])) {
 
-			if ($compilationContext->currentMethod->isConstructor()) {
+			$currentMethod = $compilationContext->currentMethod;
+
+			if ($currentMethod->isConstructor()) {
 				throw new CompilerException("Constructors cannot return values", $statement['expr']);
 			}
 
-			if ($compilationContext->currentMethod->isVoid()) {
+			if ($currentMethod->isVoid()) {
 				throw new CompilerException("Method is marked as 'void' and it must not return any value", $statement['expr']);
 			}
 
@@ -85,7 +87,48 @@ class ReturnStatement
 			$expr->setReadOnly(true);
 			$resolvedExpr = $expr->compile($compilationContext);
 
+			/**
+			 * Here we check if the variable returns a compatible type according to its type hints
+			 */
+			$expectedValid = false;
+			$returnTypes = $currentMethod->getReturnTypes();
+			if (is_array($returnTypes)) {
+				if ($resolvedExpr->getType() == 'variable') {
+					$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
+				}
+				foreach ($returnTypes as $returnType => $returnDefinition) {
+					if ($resolvedExpr->getType() == $returnType) {
+						$expectedValid = true;
+						break;
+					} else {
+						if ($resolvedExpr->getType() == 'variable') {
+							//if ($returnType)
+						}
+						echo $returnType, ' ', $resolvedExpr->getType(), PHP_EOL;
+					}
+				}
+			}
+
+			$classTypes = $currentMethod->getReturnClassTypes();
+			if ($classTypes) {
+				/*switch ($resolvedExpr->getType()) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'char':
+					case 'uchar':
+					case 'bool':
+					case 'double':
+					case 'string':
+						$compilationContext->logger->warning("Method's return hint specifies return an object of class/interface: " .
+							$classType['value'] . ' but method returns: ' . $resolvedExpr->getType(), "invalid-return-type", $statement['expr']);
+				}*/
+			}
+
 			switch ($resolvedExpr->getType()) {
+				case 'null':
+					$codePrinter->output('RETURN_MM_NULL();');
+					break;
 				case 'int':
 				case 'uint':
 				case 'long':
@@ -103,7 +146,9 @@ class ReturnStatement
 					$codePrinter->output('RETURN_MM_STRING("' . $resolvedExpr->getCode() . '", 1);');
 					break;
 				case 'variable':
-					$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
+					if (!isset($symbolVariable)) {
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
+					}
 					switch ($symbolVariable->getType()) {
 						case 'int':
 						case 'uint':
@@ -143,9 +188,6 @@ class ReturnStatement
 						default:
 							throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 					}
-					break;
-				case 'null':
-					$codePrinter->output('RETURN_MM_NULL();');
 					break;
 				default:
 					throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);

@@ -106,6 +106,8 @@
 #define XX_T_SBRACKET_CLOSE ']'
 #define XX_T_PARENTHESES_OPEN '('
 #define XX_T_PARENTHESES_CLOSE ')'
+#define XX_T_BITWISE_OR '|'
+#define XX_T_BITWISE_AND '&'
 #define XX_T_ARROW 400
 #define XX_T_EQUALS 401
 #define XX_T_IDENTICAL 402

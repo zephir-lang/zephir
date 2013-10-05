@@ -151,13 +151,13 @@ class DeclareStatement
 							case 'long':
 							case 'char':
 							case 'uchar':
-								$symbolVariable->setDynamicType('long');
+								$symbolVariable->setDynamicTypes('long');
 								break;
 							case 'double':
-								$symbolVariable->setDynamicType('double');
+								$symbolVariable->setDynamicTypes('double');
 								break;
 							case 'string':
-								$symbolVariable->setDynamicType('string');
+								$symbolVariable->setDynamicTypes('string');
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);

@@ -36,7 +36,9 @@ class ClassMethod
 
 	protected $_docblock;
 
-	protected $_returnType;
+	protected $_returnTypes;
+
+	protected $_returnClassTypes;
 
 	protected $_void = false;
 
@@ -63,12 +65,28 @@ class ClassMethod
 		$this->_statements = $statements;
 		$this->_docblock = $docblock;
 
-		if (isset($returnType['cast'])) {
-			$this->_returnType = $returnType['cast'];
-		}
-
 		if ($returnType['void']) {
 			$this->_void = true;
+			return;
+		}
+
+		if (isset($returnType['list'])) {
+			$types = array();
+			$castTypes = array();
+			foreach ($returnType['list'] as $returnTypeItem) {
+				if (isset($returnTypeItem['cast'])) {
+					$castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast'];
+				} else {
+					$types[$returnTypeItem['data-type']] = $returnTypeItem;
+				}
+			}
+			if (count($castTypes)) {
+				$types['object'] = array();
+				$this->_returnClassTypes = $castTypes;
+			}
+			if (count($types)) {
+				$this->_returnTypes = $types;
+			}
 		}
 	}
 
@@ -144,13 +162,23 @@ class ClassMethod
 	}
 
 	/**
-	 * Return type by the method
+	 * Returned types by the method
 	 *
-	 * @return string
+	 * @return array
 	 */
-	public function getReturnType()
+	public function getReturnTypes()
 	{
-		return $this->_returnType;
+		return $this->_returnTypes;
+	}
+
+	/**
+	 * Returned class-types by the method
+	 *
+	 * @return array
+	 */
+	public function getReturnClassTypes()
+	{
+		return $this->_returnClassTypes;
 	}
 
 	/**
@@ -658,15 +686,15 @@ class ClassMethod
 				 * Variables with class/type must be objects across the execution
 				 */
 				if (isset($parameter['cast'])) {
-					$symbol->setDynamicType('object');
-					$symbol->setClassType($parameter['cast']['value']);
+					$symbol->setDynamicTypes('object');
+					$symbol->setClassTypes($parameter['cast']['value']);
 				} else {
 					if (isset($parameter['data-type'])) {
 						if ($parameter['data-type'] == 'variable') {
-							$symbol->setDynamicType('undefined');
+							$symbol->setDynamicTypes('undefined');
 						}
 					} else {
-						$symbol->setDynamicType('undefined');
+						$symbol->setDynamicTypes('undefined');
 					}
 				}
 			}

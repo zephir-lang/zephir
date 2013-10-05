@@ -117,7 +117,7 @@ class PropertyDynamicAccess
 		/**
 		 * At this point, we don't know the exact dynamic type fetched from the property
 		 */
-		$symbolVariable->setDynamicType('undefined');
+		$symbolVariable->setDynamicTypes('undefined');
 
 		$compilationContext->headersManager->add('kernel/object');
 		$codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $propertyVariable->getName() . ', PH_NOISY_CC);');

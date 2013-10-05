@@ -249,7 +249,7 @@ class StaticCall extends Call
 			/**
 			 * At this point, we don't know the exact dynamic type returned by the static method call
 			 */
-			$symbolVariable->setDynamicType('undefined');
+			$symbolVariable->setDynamicTypes('undefined');
 
 			if ($symbolVariable->getType() != 'variable') {
 				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
@@ -292,39 +292,41 @@ class StaticCall extends Call
 		/**
 		 * Check if the class implements the method
 		 */
-		if (!$classDefinition->hasMethod("__callStatic") && !$classDefinition->hasMethod($methodName)) {
-			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
-		} elseif (!$classDefinition->hasMethod("__callStatic")) {
-			/**
-			 * Try to produce an exception if method is called with a wrong number of parameters
-			 */
-			if (isset($expression['parameters'])) {
-				$callNumberParameters = count($expression['parameters']);
-			} else {
-				$callNumberParameters = 0;
-			}
+		if (!$classDefinition->hasMethod($methodName)) {
+			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
+		} else {
+			if (!$classDefinition->hasMethod("__callStatic")) {
+				/**
+				 * Try to produce an exception if method is called with a wrong number of parameters
+				 */
+				if (isset($expression['parameters'])) {
+					$callNumberParameters = count($expression['parameters']);
+				} else {
+					$callNumberParameters = 0;
+				}
 
-			$classMethod = $classDefinition->getMethod($methodName);
-			$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+				$classMethod = $classDefinition->getMethod($methodName);
+				$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
 
-			if (!$expectedNumberParameters && $callNumberParameters > 0) {
-				$numberParameters = $classMethod->getNumberOfParameters();
-				if ($callNumberParameters > $numberParameters) {
+				if (!$expectedNumberParameters && $callNumberParameters > 0) {
+					$numberParameters = $classMethod->getNumberOfParameters();
+					if ($callNumberParameters > $numberParameters) {
+						throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+					}
+				}
+
+				if ($callNumberParameters < $expectedNumberParameters) {
 					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 				}
-			}
+			} else {
+				$method = $classDefinition->getMethod("__callStatic");
 
-			if ($callNumberParameters < $expectedNumberParameters) {
-				throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
-			}
-		} else {
-			$method = $classDefinition->getMethod("__callStatic");
-
-			if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
-				throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
-			}
-			if ($method->isProtected() && $method->getClassDefinition() != $compilationContext->classDefinition && $method->getClassDefinition() != $compilationContext->classDefinition->getExtendsClass()) {
-				throw new CompilerException("Cannot call protected magic method '__call' out of its scope", $expression);
+				if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+					throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
+				}
+				if ($method->isProtected() && $method->getClassDefinition() != $compilationContext->classDefinition && $method->getClassDefinition() != $compilationContext->classDefinition->getExtendsClass()) {
+					throw new CompilerException("Cannot call protected magic method '__call' out of its scope", $expression);
+				}
 			}
 		}
 
@@ -345,12 +347,40 @@ class StaticCall extends Call
 		if ($type == 'self') {
 			$this->callSelf($methodName, $expression, $symbolVariable, $mustInit,
 				$isExpecting, $classDefinition, $compilationContext);
-		} elseif ($type == 'parent') {
-			$this->callParent($methodName, $expression, $symbolVariable, $mustInit,
-				$isExpecting, $currentClassDefinition, $compilationContext);
 		} else {
-			$this->callFromClass($methodName, $expression, $symbolVariable, $mustInit,
-				$isExpecting, $classDefinition, $compilationContext);
+			if ($type == 'parent') {
+				$this->callParent($methodName, $expression, $symbolVariable, $mustInit,
+					$isExpecting, $currentClassDefinition, $compilationContext);
+			} else {
+				$this->callFromClass($methodName, $expression, $symbolVariable, $mustInit,
+					$isExpecting, $classDefinition, $compilationContext);
+			}
+		}
+
+		/**
+		 * Transfer the return type-hint to the returned variable
+		 */
+		if ($isExpecting) {
+			if (isset($method)) {
+				if ($method instanceof ClassMethod) {
+
+					$returnClassTypes = $method->getReturnClassTypes();
+					if ($returnClassTypes !== null) {
+						foreach ($returnClassTypes as $returnClassType) {
+							$symbolVariable->setDynamicTypes('object');
+							$symbolVariable->setClassTypes($returnClassType['value']);
+						}
+					}
+
+					$returnTypes = $method->getReturnTypes();
+					if ($returnTypes !== null) {
+						foreach ($returnTypes as $dataType => $returnType) {
+							$symbolVariable->setDynamicTypes($dataType);
+						}
+					}
+
+				}
+			}
 		}
 
 		/**

@@ -190,7 +190,7 @@ class NativeArrayAccess
 		/**
 		 * At this point, we don't know the type fetched from the index
 		 */
-		$symbolVariable->setDynamicType('undefined');
+		$symbolVariable->setDynamicTypes('undefined');
 
 		if ($this->_readOnly || $readOnly) {
 			$flags = 'PH_NOISY | PH_READONLY';

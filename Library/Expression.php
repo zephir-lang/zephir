@@ -258,7 +258,7 @@ class Expression
 		/**
 		 * Mark the variable as an 'array'
 		 */
-		$symbolVariable->setDynamicType('array');
+		$symbolVariable->setDynamicTypes('array');
 
 		$compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
 
@@ -300,7 +300,7 @@ class Expression
 		/**
 		 * Mark variables as dynamic objects
 		 */
-		$symbolVariable->setDynamicType('object');
+		$symbolVariable->setDynamicTypes('object');
 
 		if ($newExpr['class'] == 'self') {
 			$className = $compilationContext->classDefinition->getCompleteName();
@@ -321,7 +321,7 @@ class Expression
 		 */
 		if (strtolower($className) == 'stdclass') {
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
-			$symbolVariable->setClassType('stdclass');
+			$symbolVariable->setClassTypes('stdclass');
 		} else {
 			/**
 			 * Classes inside the same extension
@@ -331,7 +331,7 @@ class Expression
 				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
 
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
-				$symbolVariable->setClassType($className);
+				$symbolVariable->setClassTypes($className);
 			} else {
 
 				/**
@@ -347,7 +347,7 @@ class Expression
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className, true) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
-				$symbolVariable->setClassType($newExpr['class']);
+				$symbolVariable->setClassTypes($newExpr['class']);
 			}
 		}
 
@@ -360,7 +360,7 @@ class Expression
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
 
-		$symbolVariable->setDynamicType('object');
+		$symbolVariable->setDynamicTypes('object');
 
 		/**
 		 * Mark variable initialized
@@ -521,7 +521,7 @@ class Expression
 		/*+
 		 * Mark the variable as an array
 		 */
-		$symbolVariable->setDynamicType('array');
+		$symbolVariable->setDynamicTypes('array');
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -731,8 +731,8 @@ class Expression
 			throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
 		}
 
-		$symbolVariable->setDynamicType('object');
-		$symbolVariable->setClassType($expression['left']['value']);
+		$symbolVariable->setDynamicTypes('object');
+		$symbolVariable->setClassTypes($expression['left']['value']);
 
 		return $resolved;
 	}

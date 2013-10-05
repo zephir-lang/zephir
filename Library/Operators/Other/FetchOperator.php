@@ -57,7 +57,7 @@ class FetchOperator extends BaseOperator
 				if ($variable->getNumberMutations() == 1) {
 					$variable->setIsInitialized(true);
 					$variable->setMemoryTracked(false);
-					$variable->setDynamicType('undefined');
+					$variable->setDynamicTypes('undefined');
 					$readOnly = true;
 				}
 			}
@@ -65,7 +65,7 @@ class FetchOperator extends BaseOperator
 			if (!$readOnly) {
 				$variable->setIsInitialized(true);
 				$variable->observeVariant($compilationContext);
-				$variable->setDynamicType('undefined');
+				$variable->setDynamicTypes('undefined');
 			}
 
 		} else {

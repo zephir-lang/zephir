@@ -38,7 +38,8 @@ class Logger
 		'non-valid-objectupdate' => true,
 		'non-valid-fetch' => true,
 		'invalid-array-index' => true,
-		'non-array-append' => true
+		'non-array-append' => true,
+		'invalid-return-type' => true
 	);
 
 	/**

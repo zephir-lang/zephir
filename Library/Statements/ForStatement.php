@@ -508,7 +508,7 @@ class ForStatement
 			}
 			$keyVariable->setMustInitNull(true);
 			$keyVariable->setIsInitialized(true);
-			$keyVariable->setDynamicType('undefined');
+			$keyVariable->setDynamicTypes('undefined');
 		}
 
 		/**
@@ -521,7 +521,7 @@ class ForStatement
 			}
 			$variable->setMustInitNull(true);
 			$variable->setIsInitialized(true);
-			$variable->setDynamicType('undefined');
+			$variable->setDynamicTypes('undefined');
 		}
 
 		/**

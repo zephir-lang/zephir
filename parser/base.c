@@ -438,6 +438,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_OR:
 				xx_(xx_parser, XX_OR, NULL, parser_status);
 				break;
+			case XX_T_BITWISE_AND:
+				xx_(xx_parser, XX_BITWISE_AND, NULL, parser_status);
+				break;
+			case XX_T_BITWISE_OR:
+				xx_(xx_parser, XX_BITWISE_OR, NULL, parser_status);
+				break;
 
 			case XX_T_INTEGER:
 				xx_parse_with_token(xx_parser, XX_T_INTEGER, XX_INTEGER, &token, parser_status);

@@ -84,7 +84,7 @@ class ConcatOperator extends BaseOperator
 			$compilationContext->codePrinter->output('concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC);');
 		}
 
-		$expected->setDynamicType('string');
+		$expected->setDynamicTypes('string');
 
 		return new CompiledExpression('variable', $expected->getName(), $expression);
 	}

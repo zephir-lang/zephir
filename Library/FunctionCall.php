@@ -127,7 +127,7 @@ class FunctionCall extends Call
 					if ($numberParameters >= $n) {
 						if ($parameter->isPassedByReference()) {
 							$variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
-							$variable->setDynamicType('undefined');
+							$variable->setDynamicTypes('undefined');
 							$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
 							$references[] = $parameters[$n - 1] ;
 							return false;
@@ -304,7 +304,7 @@ class FunctionCall extends Call
 			/**
 			 * We don't know the exact dynamic type returned by the method call
 			 */
-			$symbolVariable->setDynamicType('undefined');
+			$symbolVariable->setDynamicTypes('undefined');
 		}
 
 		/**
