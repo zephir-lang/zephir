@@ -70,6 +70,10 @@ The current build status is:
 
 [![Build Status](https://secure.travis-ci.org/phalcon/zephir.png?branch=master)](http://travis-ci.org/phalcon/zephir)
 
+License
+-------
+Zephir is open-sourced software licensed under the MIT License. See the LICENSE file for more information.
+
 Donate & Sponsor
 ----------------
 Zephir is driven by the voluntary and altruist efforts of the core developers and contributors.
