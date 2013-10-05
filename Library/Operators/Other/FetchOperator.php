@@ -77,8 +77,7 @@ class FetchOperator extends BaseOperator
 			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $expression['right']);
 		}
 
-		$dynamicType = $evalVariable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
+		if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
 			$compilationContext->logger->warning('Possible attempt to use non array/object in fetch operator', 'non-valid-fetch', $expression['right']);
 		}
 

@@ -61,7 +61,7 @@ class MethodCall extends Call
 		$type = $expression['call-type'];
 
 		/**
-		 * In normal method calls and dynamic string method calls we just use the name gave by the user
+		 * In normal method calls and dynamic string method calls we just use the name given by the user
 		 */
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 			$methodName = strtolower($expression['name']);
@@ -228,7 +228,7 @@ class MethodCall extends Call
 							}
 
 						} else {
-							$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistant-class", $expression);
+							$compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistent-class", $expression);
 						}
 
 					}
@@ -289,6 +289,7 @@ class MethodCall extends Call
 		 * Mark references
 		 */
 		if (isset($expression['parameters'])) {
+
 			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
 			if (count($references)) {
 				foreach ($params as $position => $param) {
@@ -297,10 +298,51 @@ class MethodCall extends Call
 					}
 				}
 			}
+
+			/**
+			 * We check here if the correct type of parameter is passed to the called method
+			 */
+			if ($type == self::CALL_NORMAL) {
+				if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
+					$n = 0;
+					$resolvedTypes = $this->getResolvedTypes();
+					$resolvedDynamicTypes = $this->getResolvedDynamicTypes();
+					foreach ($method->getParameters() as $parameter) {
+						if (isset($parameter[0]['data-type'])) {
+
+							/**
+							 * If the passed parameter is different to the expected type we show a warning
+							 */
+							if ($resolvedTypes[$n] != $parameter[0]['data-type']) {
+
+								/**
+								 * Passing polymorphic variables to static typed parameters
+								 * could lead to potential transformations
+								 */
+								if ($resolvedTypes[$n] == 'variable') {
+									if ($resolvedDynamicTypes[$n] != $parameter[0]['data-type']) {
+										if ($resolvedDynamicTypes[$n] == 'undefined') {
+											$compilationContext->logger->warning("Passing possible incorrect type to parameter: " . $classDefinition->getCompleteName() . '::' . $parameter[0]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' .
+												"expecting: " . $parameter[0]['data-type'], "possible-wrong-parameter-undefined", $expression);
+										}
+										//echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
+									}
+								} else {
+									if ($parameter[0]['data-type'] != 'variable')	 {
+										echo '2: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
+									}
+								}
+							}
+						}
+						$n++;
+					}
+				}
+			}
+
 		}
 
 		/**
-		 * Generate the code according to parentheses
+		 * Generate the code according to the call type
 		 */
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 

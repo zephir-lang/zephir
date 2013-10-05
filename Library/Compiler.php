@@ -613,20 +613,27 @@ class Compiler
 			 */
 			if ($_SERVER['argc'] >= 2) {
 				for ($i = 2; $i < $_SERVER['argc']; $i++) {
+
 					$parameter = $_SERVER['argv'][$i];
 					if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches)) {
 						$config->set($matches[1], false);
-					} else {
-						switch ($parameter) {
-							case '-w':
-								$config->set('silent', true);
-								break;
-							case '-v':
-								$config->set('verbose', true);
-								break;
-							default:
-								break;
-						}
+						continue;
+					}
+
+					if (preg_match('/^-W([a-z0-9\-]+)/', $parameter, $matches)) {
+						$logger->set($matches[1], false);
+						continue;
+					}
+
+					switch ($parameter) {
+						case '-w':
+							$config->set('silent', true);
+							break;
+						case '-v':
+							$config->set('verbose', true);
+							break;
+						default:
+							break;
 					}
 				}
 			}

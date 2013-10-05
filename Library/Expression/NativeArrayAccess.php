@@ -70,6 +70,9 @@ class NativeArrayAccess
 		$expr = new Expression($arrayAccess['left']);
 		$exprVariable = $expr->compile($compilationContext);
 
+		/**
+		 * Only dynamic variables can be used as arrays
+		 */
 		switch ($exprVariable->getType()) {
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
@@ -84,12 +87,15 @@ class NativeArrayAccess
 				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
 		}
 
+		if ($variableVariable->hasAnyDynamicType('unknown')) {
+			throw new CompilerException("Cannot use non-initialized variable as an array", $statement);
+		}
+
 		/**
-		 * Variables that contain dynamic type data can be validated to be arrays
+		 * Trying to use a non-object dynamic variable as object
 		 */
-		$dynamicType = $variableVariable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'array') {
-			$compilationContext->logger->warning('Possible attempt to access index on a non-array dynamic variable', 'non-array-update', $expression);
+		if ($variableVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+			$compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $statement);
 		}
 
 		/**

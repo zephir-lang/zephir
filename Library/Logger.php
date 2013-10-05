@@ -26,9 +26,40 @@ class Logger
 {
 	private static $_files = array();
 
+	protected $_warnings = array(
+		'unused-variable' => true,
+		'unused-variable-external' => false,
+		'possible-wrong-parameter' => true,
+		'possible-wrong-parameter-undefined' => false,
+		'nonexistent-function' => true,
+		'nonexistent-class' => true,
+		'non-valid-isset' => true,
+		'non-array-update' => true,
+		'non-valid-objectupdate' => true,
+		'non-valid-fetch' => true,
+		'invalid-array-index' => true,
+		'non-array-append' => true
+	);
+
+	/**
+	 * Logger constructor
+	 *
+	 * @param Config $config
+	 */
 	public function __construct(Config $config)
 	{
 		$this->_config = $config;
+	}
+
+	/**
+	 * Changes a warning status on/off
+	 *
+	 * @param string $type
+	 * @param boolean $value
+	 */
+	public function set($type, $value)
+	{
+		$this->_warnings[$type] = $value;
 	}
 
 	/**
@@ -36,14 +67,24 @@ class Logger
 	 * @param string $message
 	 * @param string $type
 	 * @param array $node
+	 * @return boolean
 	 */
 	public function warning($message, $type, $node)
 	{
 		if (!$this->_config->get('silent')) {
-			echo 'Warning: ' . $message;
-			echo ' in ' . $node['file'] . ' on ' . $node['line'];
-			echo ' [' . $type . ']' . PHP_EOL;
-			echo PHP_EOL;
+
+			if (!isset($this->_warnings[$type])) {
+				throw new CompilerException("Unknown warning type: " . $type, $node);
+			}
+
+			if (!$this->_warnings[$type]) {
+				return false;
+			}
+
+			$warning  = 'Warning: ' . $message;
+			$warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
+			$warning .= ' [' . $type . ']' . PHP_EOL;
+			$warning .= PHP_EOL;
 			if (!isset($_files[$node['file']])) {
 				$lines = file($node['file']);
 				$_files[$node['file']] = $lines;
@@ -52,11 +93,16 @@ class Logger
 			}
 			if (isset($lines[$node['line'] - 1])) {
 				$line = $lines[$node['line'] - 1];
-				echo "\t", str_replace("\t", " ", $line);
+				$warning .= "\t" . str_replace("\t", " ", $line);
 				if (($node['char'] - 1) > 0) {
-					echo "\t", str_repeat("-", $node['char'] - 1), "^", PHP_EOL;
+					$warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
 				}
 			}
+			$warning .= PHP_EOL;
+
+			echo Color::warning($warning);
+
+			return true;
 		}
 	}
 

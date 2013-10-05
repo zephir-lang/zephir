@@ -239,7 +239,7 @@ class FunctionCall extends Call
 
 		$exists = true;
 		if (!$this->functionExists($funcName)) {
-			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistant-function", $expression);
+			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistent-function", $expression);
 			$exists = false;
 		}
 

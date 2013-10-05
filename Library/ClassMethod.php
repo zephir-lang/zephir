@@ -890,10 +890,11 @@ class ClassMethod
 		foreach ($symbolTable->getVariables() as $variable) {
 
 			if ($variable->getNumberUses() <= 0) {
-				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
 				if ($variable->isExternal() == false) {
+					$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
 					continue;
 				}
+				$compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable-external", $variable->getOriginal());
 			}
 
 			if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value') {

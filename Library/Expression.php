@@ -165,8 +165,7 @@ class Expression
 			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $arrayAccess['left']);
 		}
 
-		$dynamicType = $variable->getDynamicType();
-		if ($dynamicType != 'undefined' && $dynamicType != 'array' && $dynamicType != 'object') {
+		if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
 			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-isset', $expression);
 		}
 
@@ -339,7 +338,7 @@ class Expression
 				 * Classes inside the same extension
 				 */
 				if (!class_exists($className, false)) {
-					$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistant-class", $newExpr);
+					$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $newExpr);
 				}
 
 				/**

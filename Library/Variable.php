@@ -31,7 +31,7 @@ class Variable
 	/**
 	 * Current dynamic type of the variable
 	 */
-	protected $_dynamicType = 'unknown';
+	protected $_dynamicType = array('unknown' => true);
 
 	/**
 	 * Variable's name
@@ -367,9 +367,24 @@ class Variable
 	 *
 	 * @param string $type
 	 */
-	public function setDynamicType($type)
+	public function setDynamicType($types)
 	{
-		$this->_dynamicType = $type;
+		if ($types) {
+			if (is_string($types)) {
+				if ($types != 'unknown') {
+					unset($this->_dynamicType['unknown']);
+				}
+				if (!isset($this->_dynamicType[$types])) {
+					$this->_dynamicType[$types] = true;
+				}
+			} else {
+				foreach ($types as $type => $one) {
+					if (!isset($this->_dynamicType[$type])) {
+						$this->_dynamicType[$type] = true;
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -380,6 +395,41 @@ class Variable
 	public function getDynamicType()
 	{
 		return $this->_dynamicType;
+	}
+
+	/**
+	 * Checks if the variable has any of the passed dynamic
+	 *
+	 * @param mixed $types
+	 */
+	public function hasAnyDynamicType($types)
+	{
+		if (is_string($types)) {
+			return isset($this->_dynamicType[$types]);
+		} else {
+			foreach ($types as $type) {
+				if (isset($this->_dynamicType[$type])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if the variable has at least one dynamic type to the ones passed in the list
+	 *
+	 * @param array|string $types
+	 */
+	public function hasDifferentDynamicType($types)
+	{
+		$number = 0;
+		foreach ($types as $type) {
+			if (isset($this->_dynamicType[$type])) {
+				$number++;
+			}
+		}
+		return $number == 0;
 	}
 
 	/**

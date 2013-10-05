@@ -68,6 +68,7 @@ require ZEPHIRPATH . 'Library/Passes/SkipVariantInit.php';
 require ZEPHIRPATH . 'Library/Passes/StaticTypeInference.php';
 require ZEPHIRPATH . 'Library/Config.php';
 require ZEPHIRPATH . 'Library/Logger.php';
+require ZEPHIRPATH . 'Library/Color.php';
 require ZEPHIRPATH . 'Library/Utils.php';
 
 Compiler::boot();
