@@ -233,6 +233,10 @@ class FunctionCall extends Call
 
 		$funcName = strtolower($expression['name']);
 
+		if ($funcName == 'array') {
+			throw new CompilerException("Cannot use 'array' as a function call", $expression);
+		}
+
 		$exists = true;
 		if (!$this->functionExists($funcName)) {
 			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistant-function", $expression);

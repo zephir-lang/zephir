@@ -554,8 +554,9 @@ class Compiler
 	 * Shows an exception opening the file and highlighing the wrong part
 	 *
 	 * @param Exception $e
+	 * @param Config $config
 	 */
-	protected static function showException(Exception $e)
+	protected static function showException(Exception $e, Config $config)
 	{
 		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
 		if (method_exists($e, 'getExtra')) {
@@ -575,8 +576,10 @@ class Compiler
 			}
 		}
 		echo PHP_EOL;
-		echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
-		echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
+		if ($config->get('verbose')) {
+			echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
+			echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
+		}
 		exit(1);
 	}
 
@@ -618,6 +621,9 @@ class Compiler
 							case '-w':
 								$config->set('silent', true);
 								break;
+							case '-v':
+								$config->set('verbose', true);
+								break;
 							default:
 								break;
 						}
@@ -644,7 +650,7 @@ class Compiler
 			}
 
 		} catch (Exception $e) {
-			self::showException($e);
+			self::showException($e, $config);
 		}
 	}
 

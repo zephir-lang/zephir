@@ -49,6 +49,10 @@ class ReturnStatement
 				throw new CompilerException("Constructors cannot return values", $statement['expr']);
 			}
 
+			if ($compilationContext->currentMethod->isVoid()) {
+				throw new CompilerException("Method is marked as 'void' and it must not return any value", $statement['expr']);
+			}
+
 			/**
 			 * Use return member for properties on this
 			 */

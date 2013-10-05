@@ -218,11 +218,14 @@ class ClassProperty
 						", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlaches($this->_defaultValue['value']) . "\", " .
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 					break;
-				default:
+				case 'null':
 					$compilationContext->codePrinter->output("zend_declare_property_null(" .
 						$compilationContext->classDefinition->getClassEntry() .
 						", SL(\"" . $this->getName() . "\"), " .
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					break;
+				default:
+					throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
 			}
 		}
 	}

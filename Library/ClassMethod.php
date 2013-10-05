@@ -38,6 +38,8 @@ class ClassMethod
 
 	protected $_returnType;
 
+	protected $_void = false;
+
 	/**
 	 * ClassMethod constructor
 	 *
@@ -63,6 +65,10 @@ class ClassMethod
 
 		if (isset($returnType['cast'])) {
 			$this->_returnType = $returnType['cast'];
+		}
+
+		if ($returnType['void']) {
+			$this->_void = true;
 		}
 	}
 
@@ -239,6 +245,29 @@ class ClassMethod
 			}
 		}
 		return join('|', array_keys($modifiers));
+	}
+
+	/**
+	 * Checks if the method must not return any value
+	 *
+	 * @return boolean
+	 */
+	public function isVoid()
+	{
+		return $this->_void;
+	}
+
+	/**
+	 * Checks if the method is inline
+	 *
+	 * @return boolean
+	 */
+	public function isInline()
+	{
+		if (is_array($this->_visibility)) {
+			return in_array('inline', $this->_visibility);
+		}
+		return false;
 	}
 
 	/**
