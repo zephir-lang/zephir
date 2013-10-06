@@ -1206,7 +1206,7 @@ class LetStatement
 				break;
 			case 'variable':
 
-				$dynamicType = $symbolVariable->getDynamicType();
+				$dynamicType = $symbolVariable->getDynamicTypes();
 
 				/**
 				 * Variable is probably not initialized here
