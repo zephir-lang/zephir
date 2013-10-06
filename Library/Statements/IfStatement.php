@@ -74,7 +74,7 @@ class IfStatement
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext);
+			$st->compile($compilationContext, $expr->isUnrecheable());
 		}
 
 		/**
@@ -82,7 +82,7 @@ class IfStatement
 		 */
 		if (isset($this->_statement['else_statements'])) {
 			$compilationContext->codePrinter->output('} else {');
-			$st = new StatementsBlock($this->_statement['else_statements']);
+			$st = new StatementsBlock($this->_statement['else_statements'], $expr->isUnrecheableElse());
 			$st->compile($compilationContext);
 		}
 

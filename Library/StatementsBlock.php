@@ -41,13 +41,13 @@ class StatementsBlock
 		$this->_statements = $statements;
 	}
 
-	public function compile(CompilationContext $compilationContext)
+	public function compile(CompilationContext $compilationContext, $unrecheable=false)
 	{
 
 		$compilationContext->codePrinter->increaseLevel();
 		$compilationContext->currentBranch++;
 
-		$this->_unrecheable = false;
+		$this->_unrecheable = $unrecheable;
 
 		$statements = $this->_statements;
 		foreach ($statements as $statement) {

@@ -50,6 +50,8 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
@@ -957,6 +959,12 @@ class Expression
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
+			case 'empty':
+				$expr = new EmptyOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			case 'array':
 				return $this->compileArray($expression, $compilationContext);
 
@@ -1088,15 +1096,19 @@ class Expression
 			case 'instanceof':
 				return $this->compileInstanceOf($expression, $compilationContext);
 
+			case 'clone':
+				$expr = new CloneOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			/**
 			 * @TODO implement this
 			 */
 			case 'require':
 			case 'typeof':
-			case 'clone':
 			case 'empty':
-			case 'property-dynamic-access':
-				return new CompiledExpression('null', null, $expression);
+				return new CompiledExpression('int', '(0 == 1)', $expression);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);

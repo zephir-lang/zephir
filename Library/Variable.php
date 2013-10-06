@@ -382,10 +382,8 @@ class Variable
 	public function setDynamicTypes($types)
 	{
 		if ($types) {
+			unset($this->_dynamicTypes['unknown']);
 			if (is_string($types)) {
-				if ($types != 'unknown') {
-					unset($this->_dynamicTypes['unknown']);
-				}
 				if (!isset($this->_dynamicType[$types])) {
 					$this->_dynamicTypes[$types] = true;
 				}

@@ -151,6 +151,8 @@ class ComparisonBaseOperator extends BaseOperator
 			case 'char':
 			case 'uchar':
 				switch ($right->getType()) {
+					case 'null':
+						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' 0)', $expression);
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -162,7 +164,7 @@ class ComparisonBaseOperator extends BaseOperator
 					case 'double':
 						return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' (int) ' . $right->getCode() . ')', $expression);
 					default:
-						throw new CompilerException("Error Processing Request", $expression);
+						throw new CompilerException("Cannot compare " . $left->getType() . " with " . $right->getType(), $expression);
 				}
 				break;
 			case 'variable':

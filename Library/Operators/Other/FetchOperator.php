@@ -120,7 +120,7 @@ class FetchOperator extends BaseOperator
 			case 'property-access':
 			case 'property-dynamic-access':
 				/* @todo, implement this */
-				return new CompiledExpression('bool', 'false', $expression);
+				return new CompiledExpression('bool', '(0 == 1)', $expression);
 			default:
 				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
 		}

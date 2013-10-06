@@ -1039,7 +1039,12 @@ class LetStatement
 				if ($resolvedExpr->getBooleanCode() == '1') {
 					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
 				} else {
-					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+					if ($resolvedExpr->getBooleanCode() == '0') {
+						$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+					} else {
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+					}
 				}
 				break;
 			case 'string':
@@ -1319,13 +1324,25 @@ class LetStatement
 					if ($resolvedExpr->getBooleanCode() == '1') {
 						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
 					} else {
-						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+						if ($resolvedExpr->getBooleanCode() == '0') {
+							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+						} else {
+							$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+							$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						}
 					}
 				} else {
 					if ($resolvedExpr->getBooleanCode() == '1') {
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
 					} else {
-						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+						if ($resolvedExpr->getBooleanCode() == '0') {
+							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+						} else {
+							$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+							$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						}
 					}
 				}
 				break;

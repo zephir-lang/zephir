@@ -20,10 +20,15 @@
 /**
  * EvalExpression
  *
- * Resolves evaluation expressions returning a C-int expression that can be used by 'if'/'while' statements
+ * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while' statements
  */
 class EvalExpression
 {
+
+	protected $_unrecheable = false;
+
+	protected $_unrecheableElse = false;
+
 	public function optimizeNot($expr, $compilationContext)
 	{
 		/**
@@ -75,18 +80,35 @@ class EvalExpression
 		 */
 		switch ($compiledExpression->getType()) {
 			case 'null':
-				/**
-				 * @TODO This potentially would create unrecheable code
-				 */
+				$this->_unrecheable = true;
 				return '0';
 			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
 			case 'double':
+				$code = $compiledExpression->getCode();
+				if (is_numeric($code)) {
+					if ($code == '1') {
+						$this->_unrecheableElse = true;
+					} else {
+						$this->_unrecheable = true;
+					}
+				}
+				return $code;
+			case 'char':
+			case 'uchar':
 				return $compiledExpression->getCode();
 			case 'bool':
-				/**
-				 * @TODO This potentially would create unrecheable code if is evaluated to false
-				 */
-				return $compiledExpression->getBooleanCode();
+				$code = $compiledExpression->getBooleanCode();
+				if ($code == '1') {
+					$this->_unrecheableElse = true;
+				} else {
+					if ($code == '0') {
+						$this->_unrecheable = true;
+					}
+				}
+				return $code;
 			case 'variable':
 				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
 				switch ($variableRight->getType()) {
@@ -112,6 +134,26 @@ class EvalExpression
 			default:
 				throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
 		}
+	}
+
+	/**
+	 * Checks if the evaluation produce unrecheable code
+	 *
+	 * @return boolean
+	 */
+	public function isUnrecheable()
+	{
+		return $this->_unrecheable;
+	}
+
+	/**
+	 * Checks if the evaluation not produce unrecheable code
+	 *
+	 * @return boolean
+	 */
+	public function isUnrecheableElse()
+	{
+		return $this->_unrecheableElse;
 	}
 
 }
