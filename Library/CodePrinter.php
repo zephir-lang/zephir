@@ -105,15 +105,22 @@ class CodePrinter
 	/**
 	 * Adds a comment to the output with indentation level
 	 *
-	 * @param string $docBlock
+	 * @param $docblock
+	 * @param bool $replaceTab
 	 */
-	public function outputDocBlock($docblock)
+	public function outputDocBlock($docblock, $replaceTab = true)
 	{
 		$code = '';
 		$docblock = '/' . $docblock . '/';
+
 		foreach (explode("\n", $docblock) as $line) {
-			$code .= preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+			if ($replaceTab) {
+				$code .= preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+			} else {
+				$code .= $line . PHP_EOL;
+			}
 		}
+
 		$this->_lastLine = $code;
 		$this->_code .= $code;
 		$this->_currentPrints++;
