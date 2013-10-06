@@ -570,7 +570,7 @@ class ClassDefinition
 		foreach ($this->getProperties() as $property) {
 			$docBlock = $property->getDocBlock();
 			if ($docBlock) {
-				$codePrinter->outputDocBlock($docBlock);
+				$codePrinter->outputDocBlock($docBlock, false);
 			}
 			$property->compile($compilationContext);
 		}
