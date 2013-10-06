@@ -94,7 +94,7 @@ class ClassDefinition
 	/**
 	 * Sets if the class is final
 	 *
-	 * @param booelan $final
+	 * @param boolean $final
 	 */
 	public function setIsFinal($final)
 	{
@@ -104,7 +104,7 @@ class ClassDefinition
 	/**
 	 * Sets if the class is final
 	 *
-	 * @param booelan $abstract
+	 * @param boolean $abstract
 	 */
 	public function setIsAbstract($abstract)
 	{
