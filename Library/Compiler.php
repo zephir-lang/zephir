@@ -666,7 +666,7 @@ class Compiler
 	 *
 	 * @param string $path
 	 */
-	public function getShortPath($path)
+	public static function getShortPath($path)
 	{
 		return str_replace(ZEPHIRPATH . DIRECTORY_SEPARATOR, '', $path);
 	}
@@ -676,7 +676,7 @@ class Compiler
 	 *
 	 * @param string $path
 	 */
-	public function getShortUserPath($path)
+	public static function getShortUserPath($path)
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}

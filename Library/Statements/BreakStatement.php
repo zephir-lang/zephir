@@ -39,7 +39,7 @@ class BreakStatement
 		if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
 			$compilationContext->codePrinter->output('break;');
 		} else {
-			throw new CompilerException("Cannot use 'break' outside a cycle", $this->_statement);
+			throw new CompilerException("Cannot use 'break' outside of a loop", $this->_statement);
 		}
 	}
 

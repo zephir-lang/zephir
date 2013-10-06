@@ -127,3 +127,5 @@ ext/kernel/operators.o
 ext/kernel/string.o
 ext/test.o
 ext/test/fortytwo.lo
+ext/test/fortytwo.o
+bin/zephir55

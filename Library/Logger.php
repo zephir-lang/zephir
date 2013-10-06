@@ -39,7 +39,8 @@ class Logger
 		'non-valid-fetch' => true,
 		'invalid-array-index' => true,
 		'non-array-append' => true,
-		'invalid-return-type' => true
+		'invalid-return-type' => true,
+		'unrecheable-code' => true
 	);
 
 	/**
@@ -87,7 +88,11 @@ class Logger
 			$warning .= ' [' . $type . ']' . PHP_EOL;
 			$warning .= PHP_EOL;
 			if (!isset($_files[$node['file']])) {
-				$lines = file($node['file']);
+				if (file_exists($node['file'])) {
+					$lines = file($node['file']);
+				} else {
+					$lines = array();
+				}
 				$_files[$node['file']] = $lines;
 			} else {
 				$lines = $_files[$node['file']];

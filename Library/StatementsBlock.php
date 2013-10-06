@@ -27,8 +27,15 @@ class StatementsBlock
 {
 	protected $_statements;
 
+	protected $_unrecheable;
+
+	protected $_debug = false;
+
 	protected $_lastStatement;
 
+	/**
+	 *
+	 */
 	public function __construct(array $statements)
 	{
 		$this->_statements = $statements;
@@ -40,13 +47,47 @@ class StatementsBlock
 		$compilationContext->codePrinter->increaseLevel();
 		$compilationContext->currentBranch++;
 
-		$statements = $this->_statements;
+		$this->_unrecheable = false;
 
+		$statements = $this->_statements;
 		foreach ($statements as $statement) {
 
-			/*if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
-				$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
-			}*/
+			/**
+			 * Generate GDB hints
+			 */
+			if ($this->_debug) {
+				if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
+					$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
+				}
+			}
+
+			/**
+			 * Show warnings if code is generated when the 'unrecheable state' is 'on'
+			 */
+			if ($this->_unrecheable) {
+				switch ($statement['type']) {
+					case 'echo':
+						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expressions'][0]);
+						break;
+					case 'let':
+						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['assignments'][0]);
+						break;
+					case 'fetch':
+					case 'fcall':
+					case 'mcall':
+					case 'scall':
+					case 'if':
+					case 'while':
+					case 'do-while':
+					case 'switch':
+					case 'for':
+					case 'return':
+						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expr']);
+						break;
+					default:
+						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
+				}
+			}
 
 			switch ($statement['type']) {
 				case 'let':
@@ -84,6 +125,7 @@ class StatementsBlock
 				case 'return':
 					$returnStatement = new ReturnStatement($statement);
 					$returnStatement->compile($compilationContext);
+					$this->_unrecheable = true;
 					break;
 				case 'loop':
 					$loopStatement = new LoopStatement($statement);
@@ -92,10 +134,12 @@ class StatementsBlock
 				case 'break':
 					$breakStatement = new BreakStatement($statement);
 					$breakStatement->compile($compilationContext);
+					$this->_unrecheable = true;
 					break;
 				case 'continue':
 					$continueStatement = new ContinueStatement($statement);
 					$continueStatement->compile($compilationContext);
+					$this->_unrecheable = true;
 					break;
 				case 'unset':
 					$unsetStatement = new UnsetStatement($statement);
@@ -104,6 +148,7 @@ class StatementsBlock
 				case 'throw':
 					$throwStatement = new ThrowStatement($statement);
 					$throwStatement->compile($compilationContext);
+					$this->_unrecheable = true;
 					break;
 				case 'fetch':
 					$expr = new Expression($statement['expr']);
@@ -147,13 +192,20 @@ class StatementsBlock
 		$compilationContext->codePrinter->decreaseLevel();
 	}
 
+	/**
+	 * Returns the statements in the block
+	 *
+	 * @return array
+	 */
 	public function getStatements()
 	{
 		return $this->_statements;
 	}
 
 	/**
+	 * Returns the type of the last statement executed
 	 *
+	 * @return string
 	 */
 	public function getLastStatementType()
 	{

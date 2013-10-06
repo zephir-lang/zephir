@@ -162,7 +162,91 @@ class ClassMethod
 	}
 
 	/**
-	 * Returned types by the method
+	 * Checks if the method has return-type or cast hints
+	 *
+	 * @return boolean
+	 */
+	public function hasReturnTypes()
+	{
+		if (count($this->_returnTypes)) {
+			return true;
+		}
+		if (count($this->_returnClassTypes)) {
+			return true;
+		}
+
+	}
+
+	/**
+	 * Checks whether at least one return type hint is null compatible
+	 *
+	 * @param string $type
+	 */
+	public function areReturnTypesNullCompatible($type=null)
+	{
+		return false;
+	}
+
+	/**
+	 * Checks whether at least one return type hint is integer compatible
+	 *
+	 * @param string $type
+	 */
+	public function areReturnTypesIntCompatible($type=null)
+	{
+		if (count($this->_returnTypes)) {
+			foreach ($this->_returnTypes as $returnType => $definition) {
+				switch ($returnType) {
+					case 'int':
+					case 'uint':
+					case 'char':
+					case 'uchar':
+					case 'long':
+					case 'ulong':
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * Checks whether at least one return type hint is integer compatible
+	 *
+	 * @param string $type
+	 */
+	public function areReturnTypesBoolCompatible($type=null)
+	{
+		if (count($this->_returnTypes)) {
+			foreach ($this->_returnTypes as $returnType => $definition) {
+				switch ($returnType) {
+					case 'bool':
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether at least one return type hint is integer compatible
+	 *
+	 * @param string $type
+	 */
+	public function areReturnTypesStringCompatible($type=null)
+	{
+		if (count($this->_returnTypes)) {
+			foreach ($this->_returnTypes as $returnType => $definition) {
+				switch ($returnType) {
+					case 'string':
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returned type hints by the method
 	 *
 	 * @return array
 	 */
@@ -172,7 +256,7 @@ class ClassMethod
 	}
 
 	/**
-	 * Returned class-types by the method
+	 * Returned class-type hints by the method
 	 *
 	 * @return array
 	 */
@@ -1040,14 +1124,33 @@ class ClassMethod
 		}
 
 		/**
-		 * Compile the block of statements if any
+		 * Finalize the method compilation
 		 */
 		if (is_object($this->_statements)) {
-			if ($symbolTable->getMustGrownStack()) {
-				$lastType = $this->_statements->getLastStatementType();
-				if ($lastType != 'return' && $lastType != 'throw') {
+
+
+			/**
+			 * If the last statement is not a 'return' or 'throw' we need to
+			 * restore the memory stack if needed
+			 */
+			$lastType = $this->_statements->getLastStatementType();
+
+			if ($lastType != 'return' && $lastType != 'throw') {
+
+				if ($symbolTable->getMustGrownStack()) {
 					$compilationContext->headersManager->add('kernel/memory');
 					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+				}
+
+				/**
+				 * If a method has return-type hints we need to ensure the last statement is a 'return' statement
+				 */
+				if ($this->hasReturnTypes()) {
+					if (is_object($this->_parameters)) {
+						$parameters = $this->_parameters->getParameters();
+						throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $parameters[0]);
+					}
+					throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints');
 				}
 			}
 		}

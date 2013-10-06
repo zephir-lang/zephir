@@ -39,7 +39,7 @@ class ContinueStatement
 		if ($compilationContext->insideCycle) {
 			$compilationContext->codePrinter->output('continue;');
 		} else {
-			throw new CompilerException("Cannot use 'continue' outside a cycle", $this->_statement);
+			throw new CompilerException("Cannot use 'continue' outside of a loop", $this->_statement);
 		}
 	}
 

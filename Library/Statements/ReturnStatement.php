@@ -90,39 +90,69 @@ class ReturnStatement
 			/**
 			 * Here we check if the variable returns a compatible type according to its type hints
 			 */
-			$expectedValid = false;
-			$returnTypes = $currentMethod->getReturnTypes();
-			if (is_array($returnTypes)) {
-				if ($resolvedExpr->getType() == 'variable') {
-					$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
-				}
-				foreach ($returnTypes as $returnType => $returnDefinition) {
-					if ($resolvedExpr->getType() == $returnType) {
-						$expectedValid = true;
-						break;
-					} else {
-						if ($resolvedExpr->getType() == 'variable') {
-							//if ($returnType)
+			if ($currentMethod->hasReturnTypes()) {
+				switch ($resolvedExpr->getType()) {
+					case 'null':
+						if (!$currentMethod->areReturnTypesNullCompatible()) {
+							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
-						echo $returnType, ' ', $resolvedExpr->getType(), PHP_EOL;
-					}
-				}
-			}
-
-			$classTypes = $currentMethod->getReturnClassTypes();
-			if ($classTypes) {
-				/*switch ($resolvedExpr->getType()) {
+						break;
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'char':
 					case 'uchar':
+						if (!$currentMethod->areReturnTypesIntCompatible()) {
+							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+						}
+						break;
 					case 'bool':
+						if (!$currentMethod->areReturnTypesBoolCompatible()) {
+							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+						}
+						break;
 					case 'double':
+						if (!$currentMethod->areReturnTypesDoubleCompatible()) {
+							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+						}
+						break;
 					case 'string':
-						$compilationContext->logger->warning("Method's return hint specifies return an object of class/interface: " .
-							$classType['value'] . ' but method returns: ' . $resolvedExpr->getType(), "invalid-return-type", $statement['expr']);
-				}*/
+						if (!$currentMethod->areReturnTypesStringCompatible()) {
+							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+						}
+						break;
+					case 'variable':
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
+						switch ($symbolVariable->getType()) {
+							case 'int':
+							case 'uint':
+							case 'long':
+							case 'char':
+							case 'uchar':
+								if (!$currentMethod->areReturnTypesIntCompatible()) {
+									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+								}
+								break;
+							case 'double':
+								if (!$currentMethod->areReturnTypesDoubleCompatible()) {
+									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+								}
+								break;
+							case 'string':
+								if (!$currentMethod->areReturnTypesStringCompatible()) {
+									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+								}
+								break;
+							case 'bool':
+								if (!$currentMethod->areReturnTypesBoolCompatible()) {
+									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
+								}
+								break;
+							case 'variable':
+								break;
+						}
+						break;
+				}
 			}
 
 			switch ($resolvedExpr->getType()) {
