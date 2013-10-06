@@ -1421,7 +1421,7 @@ xx_method_return_type_item(R) ::= xx_parameter_cast(T) . {
 	R = xx_ret_return_type_item(NULL, T, 0, 0, status->scanner_state);
 }
 
-xx_method_return_type_item(R) ::= xx_parameter_cast(T) SBRACKET_OPEN SBRACKET_CLOSE . {
+xx_method_return_type_item(R) ::= xx_parameter_cast_collection(T) . {
 	R = xx_ret_return_type_item(NULL, T, 0, 1, status->scanner_state);
 }
 
@@ -1467,6 +1467,10 @@ xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E)
 }
 
 xx_parameter_cast(R) ::= LESS IDENTIFIER(I) GREATER . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
+}
+
+xx_parameter_cast_collection(R) ::= LESS IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE GREATER . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }
 

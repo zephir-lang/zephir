@@ -265,6 +265,10 @@ class MethodCall extends Call
 			if (isset($method)) {
 				if ($method instanceof ClassMethod) {
 
+					if ($method->isVoid()) {
+						throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' is marked as 'void' and it does not return anything", $expression);
+					}
+
 					$returnClassTypes = $method->getReturnClassTypes();
 					if ($returnClassTypes !== null) {
 						foreach ($returnClassTypes as $returnClassType) {

@@ -1206,19 +1206,17 @@ class LetStatement
 				break;
 			case 'variable':
 
-				$dynamicType = $symbolVariable->getDynamicTypes();
-
 				/**
 				 * Variable is probably not initialized here
 				 */
-				if ($dynamicType == 'unknown') {
+				if ($dynamicType->hasAnyDynamicType('unknown')) {
 					throw new CompilerException("Attempt to increment uninitialized variable", $statement);
 				}
 
 				/**
 				 * Decrement non-numeric variables could be expensive
 				 */
-				if ($dynamicType != 'undefined' && $dynamicType != 'long' && $dynamicType != 'double') {
+				if ($dynamicType->hasAnyDynamicType(array('undefined', 'int', 'long', 'double', 'uint'))) {
 					$compilationContext->logger->warning('Possible attempt to decrement non-numeric dynamic variable', 'non-valid-decrement', $statement);
 				}
 
