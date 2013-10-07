@@ -54,6 +54,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 
 /* Expression Resolving */
+require ZEPHIRPATH . 'Library/Expression/Constants.php';
 require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
 require ZEPHIRPATH . 'Library/Expression/PropertyDynamicAccess.php';
 require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
@@ -827,37 +828,6 @@ class Expression
 	}
 
 	/**
-	 * Resolves a PHP constant value into C-code
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compileConstant($expression, CompilationContext $compilationContext)
-	{
-
-		$exists = true;
-		if (!defined($expression['value'])) {
-			$compilationContext->logger->warning("Constant \"" . $expression['value'] . "\" does not exist at compile time", "nonexistant-constant", $expression);
-			$exists = false;
-		}
-
-		if ($exists) {
-			$value = constant($expression['value']);
-			switch (gettype($value)) {
-				case 'integer':
-					return new CompiledExpression('int', $value, $expression);
-				case 'string':
-					return new CompiledExpression('string', Utils::addSlaches($value), $expression);
-			}
-			return new CompiledExpression(gettype($value), $value, $expression);
-		}
-
-		/* @todo read the constant every time */
-		return new CompiledExpression('null', null, $expression);
-	}
-
-	/**
 	 * Resolves an expression
 	 *
 	 * @param \CompilationContext $compilationContext
@@ -903,7 +873,10 @@ class Expression
 				return new CompiledExpression('variable', $expression['value'], $expression);
 
 			case 'constant':
-				return $this->compileConstant($expression, $compilationContext);
+				$constant = new Constants();
+				$constant->setReadOnly($this->isReadOnly());
+				$constant->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $constant->compile($expression, $compilationContext);
 
 			case 'empty-array':
 				return $this->emptyArray($expression, $compilationContext);

@@ -27,9 +27,14 @@ class Compiler
 
 	protected $_files;
 
+	/*+
+	 * @var ClassDefinition[]
+	 */
 	protected $_definitions;
 
 	protected $_compiledFiles;
+
+	protected $_constants = array();
 
 	protected static $_reflections = array();
 
@@ -191,12 +196,58 @@ class Compiler
 	}
 
 	/**
-	 * Initializes a zephir extension
+	 * Registers C-constants as PHP constants from a C-file
+	 *
+	 * @param array $constantsSources
+	 */
+	protected function _loadConstantsSources($constantsSources)
+	{
+		foreach ($constantsSources as $constantsSource) {
+
+			if (!file_exists($constantsSource)) {
+				throw new Exception("File '" . $constantsSource . "' with constants definitions");
+			}
+
+			foreach (file($constantsSource) as $line) {
+				if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
+					$this->_constants[$matches[1]] = array('int', $matches[2]);
+					continue;
+				}
+				if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
+					$this->_constants[$matches[1]] = array('char', $matches[3]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if $name is Zephir constant
+	 *
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function isConstant($name)
+	{
+		return isset($this->_constants[$name]);
+	}
+
+	/**
+	 * Returns a Zephir Constant by its name
+	 *
+	 * @param string $name
+	 */
+	public function getConstant($name)
+	{
+		return $this->_constants[$name];
+	}
+
+	/**
+	 * Initializes a Zephir extension
 	 *
 	 * @param Config $config
-	 * @param Config $logger
+	 * @param Logger $logger
 	 */
-	public function init($config, $logger)
+	public function init(Config $config, Logger $logger)
 	{
 
 		if (!is_dir('.temp')) {
@@ -230,9 +281,9 @@ class Compiler
 	/**
 	 *
 	 * @param Config $config
-	 * @param Config $logger
+	 * @param Logger $logger
 	 */
-	public function compile($config, $logger)
+	public function compile(Config $config, Logger $logger)
 	{
 
 		if (!file_exists('config.json')) {
@@ -264,6 +315,14 @@ class Compiler
 		 */
 		foreach ($this->_files as $compileFile) {
 			$compileFile->checkDependencies($this, $config, $logger);
+		}
+
+		/**
+		 * Convert C-constants into PHP constants
+		 */
+		$constantsSources = $config->get('constants-sources');
+		if (is_array($constantsSources)) {
+			$this->_loadConstantsSources($constantsSources);
 		}
 
 		/**
@@ -556,7 +615,7 @@ class Compiler
 	 * @param Exception $e
 	 * @param Config $config
 	 */
-	protected static function showException(Exception $e, Config $config)
+	protected static function showException(Exception $e, Config $config=null)
 	{
 		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
 		if (method_exists($e, 'getExtra')) {
@@ -576,7 +635,7 @@ class Compiler
 			}
 		}
 		echo PHP_EOL;
-		if ($config->get('verbose')) {
+		if ($config && $config->get('verbose')) {
 			echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
 			echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
 		}
@@ -657,7 +716,7 @@ class Compiler
 			}
 
 		} catch (Exception $e) {
-			self::showException($e, $config);
+			self::showException($e, isset($config) ? $config : null);
 		}
 	}
 

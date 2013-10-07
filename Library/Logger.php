@@ -40,7 +40,8 @@ class Logger
 		'invalid-array-index' => true,
 		'non-array-append' => true,
 		'invalid-return-type' => true,
-		'unrecheable-code' => true
+		'unrecheable-code' => true,
+		'nonexistant-constant' => true
 	);
 
 	/**

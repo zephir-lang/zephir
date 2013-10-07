@@ -36,6 +36,9 @@ class Config
 	{
 		if (file_exists('config.json')) {
 			$config = json_decode(file_get_contents('config.json'), true);
+			if (!is_array($config)) {
+				throw new Exception("config.json is not valid");
+			}
 			$this->_config = array_merge($this->_config, $config);
 		}
 	}
