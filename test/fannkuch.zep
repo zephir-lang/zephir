@@ -30,6 +30,7 @@ class Fannkuch
 		let r = n;
 		loop {
 
+			/* ??? */
 			if false {
 				break;
 			}

@@ -41,7 +41,9 @@ class Logger
 		'non-array-append' => true,
 		'invalid-return-type' => true,
 		'unrecheable-code' => true,
-		'nonexistant-constant' => true
+		'nonexistant-constant' => true,
+		'non-valid-decrement' => true,
+		'non-valid-increment' => true,
 	);
 
 	/**

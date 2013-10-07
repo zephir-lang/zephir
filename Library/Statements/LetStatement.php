@@ -1216,7 +1216,7 @@ class LetStatement
 				/**
 				 * Decrement non-numeric variables could be expensive
 				 */
-				if ($symbolVariable->hasAnyDynamicType(array('undefined', 'int', 'long', 'double', 'uint'))) {
+				if (!$symbolVariable->hasAnyDynamicType(array('undefined', 'int', 'long', 'double', 'uint'))) {
 					$compilationContext->logger->warning('Possible attempt to decrement non-numeric dynamic variable', 'non-valid-decrement', $statement);
 				}
 
