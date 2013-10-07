@@ -2105,18 +2105,13 @@ xx_fetch_expr(R) ::= FETCH IDENTIFIER(O1) COMMA xx_isset_expr(O2) . {
 }
 
 /* y = fetch x, z[k] */
-xx_common_expr(R) ::=  xx_fetch_expr(E) . {
+xx_common_expr(R) ::= xx_fetch_expr(E) . {
 	R = E;
 }
 
 /* y = typeof b */
 xx_common_expr(R) ::= TYPEOF xx_common_expr(O1) . {
 	R = xx_ret_expr("typeof", O1, NULL, NULL, status->scanner_state);
-}
-
-/* y = X */
-xx_common_expr(R) ::= CONSTANT(I) . {
-	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
 }
 
 /* y = x */
@@ -2157,6 +2152,11 @@ xx_common_expr(R) ::= TRUE . {
 /* y = false */
 xx_common_expr(R) ::= FALSE . {
 	R = xx_ret_literal(XX_T_FALSE, NULL, status->scanner_state);
+}
+
+/* y = XX */
+xx_common_expr(R) ::= CONSTANT(I) . {
+	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
 }
 
 /* y = [] */
@@ -2368,6 +2368,10 @@ xx_literal_expr(R) ::= TRUE . {
 
 xx_literal_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 	R = xx_ret_expr("static-constant-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+}
+
+xx_literal_expr(R) ::= CONSTANT(I) . {
+	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
 }
 
 /* isset v[x] */
