@@ -212,6 +212,25 @@ class ClassMethod
 		}
 		return false;
 	}
+
+	/**
+	 * Checks whether at least one return type hint is double compatible
+	 *
+	 * @param string $type
+	 */
+	public function areReturnTypesDoubleCompatible($type=null)
+	{
+		if (count($this->_returnTypes)) {
+			foreach ($this->_returnTypes as $returnType => $definition) {
+				switch ($returnType) {
+					case 'double':
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Checks whether at least one return type hint is integer compatible
 	 *

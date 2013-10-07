@@ -1,6 +1,5 @@
-Zephir Language
-===============
-
+Zephir
+======
 Zephir - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high level language that eases the creation and maintainability
 of extensions for PHP. Zephir extensions are exported to C code that can be compiled and optimized by major C compilers
 such as gcc/clang/vc++. Functionality is exposed to the PHP language.
@@ -57,10 +56,25 @@ Compile the extension:
 
 Documentation & Blog
 --------------------
-
 * A preliminary documentation can be found [here](http://zephir-lang.com/)
 * Official Blog can be found [here](http://blog.zephir-lang.com/)
-* Sublime/TextMate highlight syntax bundle [here](http://github.com/phalcon/zephir-sublime)
+* Sublime/TextMate highlight-syntax bundle [here](http://github.com/phalcon/zephir-sublime)
+
+License
+-------
+Zephir is open-sourced software licensed under the MIT License. See the LICENSE file for more information.
+
+Donate & Sponsor
+----------------
+Zephir is available to the public without charge, under the permissive MIT License.
+Zephir is available to everyone freely on terms that allow both non-commercial and commercial activity.
+This license allows for academics, for-profit software developers, volunteers and enthusiasts alike to
+collaborate together to make a better software for everyone.
+
+Donate to the project and allowing us to invest more time and resources to the project,
+ensuring it will be ready sooner and with loads of features.
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8N7LHE5QH376N)
 
 Current Build Status
 --------------------
@@ -69,18 +83,4 @@ integration service and will run all PHPUnit tests to ensure that everything is 
 The current build status is:
 
 [![Build Status](https://secure.travis-ci.org/phalcon/zephir.png?branch=master)](http://travis-ci.org/phalcon/zephir)
-
-License
--------
-Zephir is open-sourced software licensed under the MIT License. See the LICENSE file for more information.
-
-Donate & Sponsor
-----------------
-Zephir is driven by the voluntary and altruist efforts of the core developers and contributors.
-We invite you to sponsor our work, by [donating](http://phalconphp.com/en/donate) or
-[contacting us][mailto:team@phalconphp.com] regarding
-sponsorship, allowing us to invest more time and resources to the project, ensuring it will be
-ready sooner and with loads of features.
-
-Hopefully, you can take advantage of the features provided by Zephir too!
 
