@@ -29,21 +29,21 @@ ZEPHIR_INIT_CLASS(Test_Returns) {
 PHP_METHOD(Test_Returns, testReturnCast1) {
 
 
-	RETURN_DOUBLE(5.0);
+	RETURN_LONG((int) 5.0);
 
 }
 
 PHP_METHOD(Test_Returns, testReturnCast2) {
 
 
-	RETURN_BOOL(1);
+	RETURN_LONG(1);
 
 }
 
 PHP_METHOD(Test_Returns, testReturnCast3) {
 
 
-	RETURN_BOOL(0);
+	RETURN_LONG(0);
 
 }
 
