@@ -40,6 +40,15 @@ class Compiler
 
 	const VERSION = '0.2.1a';
 
+	const LOGO ='
+ _____              __    _
+/__  /  ___  ____  / /_  (_)____
+  / /  / _ \/ __ \/ __ \/ / ___/
+ / /__/  __/ /_/ / / / / / /
+/____/\___/ .___/_/ /_/_/_/
+         /_/
+';
+
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -733,6 +742,7 @@ class Compiler
 	 */
 	public function help() {
 
+		echo self::LOGO, PHP_EOL;
 		echo "zephir version " , self::VERSION,  PHP_EOL, PHP_EOL;
 		echo "Usage: ", PHP_EOL;
 		echo "\tcommand [options]", PHP_EOL;
