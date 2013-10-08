@@ -36,6 +36,8 @@ class CompilerFile
 
 	protected $_compiledFile;
 
+	protected $_config;
+
 	/**
 	 * @var \ClassDefinition
 	 */
@@ -47,12 +49,13 @@ class CompilerFile
 	 * @param string $className
 	 * @param string $filePath
 	 */
-	public function __construct($className, $filePath)
+	public function __construct($className, $filePath, Config $config)
 	{
 		$this->_className = $className;
 		$this->_filePath = $filePath;
 		$this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
 		$this->_filesCompiled = array();
+		$this->_config = $config;
 	}
 
 	/**
@@ -399,7 +402,7 @@ class CompilerFile
 			throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
 		}
 
-		if ($this->_filePath != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
+		if (strpos(strtolower($namespace), $this->_config->get('namespace')) !== 0) {
 			throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
 		}
 

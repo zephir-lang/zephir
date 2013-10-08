@@ -36,6 +36,8 @@ class Compiler
 
 	protected $_constants = array();
 
+	protected $_config;
+	
 	protected static $_reflections = array();
 
 	const VERSION = '0.2.1a';
@@ -50,6 +52,16 @@ class Compiler
 ';
 
 	/**
+	 * Compiler constructor
+	 *
+	 * @param Config $config
+	 */
+	public function __construct(Config $config)
+	{
+		$this->_config = $config;
+	}
+
+	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
 	 * @param string $filePath
@@ -60,7 +72,8 @@ class Compiler
 			$className = str_replace('/', '\\', $filePath);
 			$className = preg_replace('/.zep$/', '', $className);
 			$className = join('\\', array_map(function($i) { return ucfirst($i); }, explode('\\', $className)));
-			$this->_files[$className] = new CompilerFile($className, $filePath);
+			$className = ucfirst($this->_config->get('namespace')) . '\\' . $className;
+			$this->_files[$className] = new CompilerFile($className, $filePath, $this->_config);
 			$this->_files[$className]->preCompile();
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
 		}
@@ -76,10 +89,12 @@ class Compiler
 		 * Pre compile all files
 		 */
 		$files = array();
+		$path = '../'.$path;
+		$pathLen = strlen($path);
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
-				$files[] = $item->getPathname();
+				$files[] = substr($item->getPathname(), $pathLen + 1);
 			}
 		}
 		sort($files, SORT_STRING);
@@ -177,29 +192,25 @@ class Compiler
 	}
 
 	/**
-	 * Copies the base kernel to the extension destination
+	 * Copies the base extension folder to the extension destination
 	 *
 	 * @param string $path
 	 */
-	protected function _copyBaseKernel($path)
+	protected function _copyBaseKernel($src, $dest)
 	{
-		/**
-		 * Pre compile all files
-		 */
-		$iterator = new DirectoryIterator($path);
-		foreach ($iterator as $item) {
-			if ($item->isDir()) {
-				if ($item->getFileName() != '.' && $item->getFileName() != '..') {
-					$this->_copyBaseKernel($item->getPathname());
-				}
-			} else {
-				if (preg_match('/\.[hc]$/', $item->getPathname())) {
-					if (strpos($item->getPathName(), 'alternative') !== false) {
-						copy($item->getPathname(), 'ext/kernel/alternative/' . $item->getBaseName());
-					} else {
-						copy($item->getPathname(), 'ext/kernel/' . $item->getBaseName());
-					}
-				}
+			foreach (scandir($src) as $file) {
+		    if (!is_readable($src.'/'.$file)) {
+		    	continue;
+		    }
+		    if (is_dir($src.'/'.$file)) {
+		    	if ($file != '.' && $file != '..') {
+		    		if (!is_dir($dest . '/' . $file)) {
+			        	mkdir($dest . '/' . $file);
+			    	}
+			      $this->_copyBaseKernel($src.'/'.$file, $dest.'/'.$file);
+			  	}
+		    } else {
+		  	copy($src.'/'.$file, $dest.'/'.$file);
 			}
 		}
 	}
@@ -258,43 +269,34 @@ class Compiler
 	 */
 	public function init(Config $config, Logger $logger)
 	{
-
-		if (!is_dir('.temp')) {
-			mkdir('.temp');
-		}
-
-		$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
+		$namespace = $config->get('namespace');
 		if (!$namespace) {
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
 
+		if ($config->get('skip-create-namespace') !== true) {
+			if (!is_dir($namespace)) {
+				mkdir($namespace);
+			}
+			chdir($namespace);
+		}
+		// Create the config.json file
 		file_put_contents('config.json', '{"namespace": "' . $namespace . '"}');
-
-		/**
-		 * Create 'kernel'
-		 */
-		if (!is_dir('ext')) {
-			mkdir('ext');
-			mkdir('ext/kernel');
-			mkdir('ext/kernel/alternative');
-			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
-			copy(__DIR__ . '/../ext/install', 'ext/install');
-			chmod('ext/install', 0755);
+		// Create the ext and ext/kernel directories
+		if (!is_dir('ext/kernel')) {
+			mkdir('ext/kernel', 0755, true);
 		}
-
-		if (!is_dir($namespace)) {
-			mkdir($namespace);
-		}
+		// Copy the latest kernel files
+		$this->_copyBaseKernel(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
 	}
 
 	/**
 	 *
 	 * @param Config $config
-	 * @param Logger $logger
+	 * @param Config $logger
 	 */
-	public function compile(Config $config, Logger $logger)
+	public function generate($config, $logger)
 	{
-
 		if (!file_exists('config.json')) {
 			throw new Exception("Zephir extension is not initialized in this directory");
 		}
@@ -344,6 +346,19 @@ class Compiler
 		}
 
 		$this->_compiledFiles = $files;
+	}
+
+	/**
+	 *
+	 * @param Config $config
+	 * @param Logger $logger
+	 */
+	public function compile(Config $config, Logger $logger)
+	{
+		$namespace = $config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
+		}
 
 		/**
 		 * Round 4. create config.m4 and config.w32 files
@@ -354,18 +369,23 @@ class Compiler
 		 * Round 5. create project.c and project.h files
 		 */
 		$this->createProjectFiles($namespace);
+
+		echo "Compiling...\n";
+		exec('(export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize && ./configure --enable-' . $namespace . ' && make) > /dev/null 2>&1', $output, $exit);
 	}
 
 	/**
 	 * Compiles an installs the extension
 	 */
-	public function install()
+	public function install($config, $logger)
 	{
-		if (!file_exists('ext/Makefile')) {
-			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize --silent && ./configure --silent --enable-test && sudo make --silent install 1> /dev/null');
-		} else {
-			system('cd ext && sudo make --silent install 1> /dev/null');
+		$namespace = $config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
 		}
+
+		echo "Installing...\n";
+		exec('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && sudo make install', $output, $exit);
 	}
 
 	/**
@@ -376,7 +396,7 @@ class Compiler
 	public function createConfigFiles($project)
 	{
 
-		$content = file_get_contents(__DIR__ . '/../templates/config.m4');
+		$content = file_get_contents(__DIR__ . '/../ext/config.m4');
 		if (empty($content)) {
 			throw new Exception("Template config.m4 doesn't exists");
 		}
@@ -397,7 +417,7 @@ class Compiler
 		/**
 		 * php_ext.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
+		$content = file_get_contents(__DIR__ . '/../ext/php_ext.h');
 		if (empty($content)) {
 			throw new Exception("Template php_ext.h doesn't exists");
 		}
@@ -415,7 +435,7 @@ class Compiler
 		/**
 		 * ext.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/ext.h');
+		$content = file_get_contents(__DIR__ . '/../ext/ext.h');
 		if (empty($content)) {
 			throw new Exception("Template ext.h doesn't exists");
 		}
@@ -433,7 +453,7 @@ class Compiler
 		/**
 		 * ext_config.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/ext_config.h');
+		$content = file_get_contents(__DIR__ . '/../ext/ext_config.h');
 		if (empty($content)) {
 			throw new Exception("Template ext_config.h doesn't exists");
 		}
@@ -447,6 +467,36 @@ class Compiler
 		}
 
 		file_put_contents('ext/ext_config.h', $content);
+
+		/**
+		 * ext_clean
+		 */
+		$content = file_get_contents(__DIR__ . '/../ext/clean');
+		if (empty($content)) {
+			throw new Exception("clean file doesn't exists");
+		}
+
+		file_put_contents('ext/clean', $content);
+		chmod('ext/clean', 0755);
+
+		/**
+		 * ext_install
+		 */
+		$content = file_get_contents(__DIR__ . '/../ext/install');
+		if (empty($content)) {
+			throw new Exception("install file doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		file_put_contents('ext/install', $content);
+		chmod('ext/install', 0755);
 	}
 
 	/**
@@ -460,7 +510,7 @@ class Compiler
 		/**
 		 * project.c
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/project.c');
+		$content = file_get_contents(__DIR__ . '/../ext/project.c');
 		if (empty($content)) {
 			throw new Exception("Template project.c doesn't exist");
 		}
@@ -571,7 +621,7 @@ class Compiler
 		/**
 		 * Round 4. Generate the project main header
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/project.h');
+		$content = file_get_contents(__DIR__ . '/../ext/project.h');
 		if (empty($content)) {
 			throw new Exception("Template project.h doesn't exists");
 		}
@@ -598,7 +648,7 @@ class Compiler
 		/**
 		 * Round 5. Create php_project.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../templates/php_project.h');
+		$content = file_get_contents(__DIR__ . '/../ext/php_project.h');
 		if (empty($content)) {
 			throw new Exception("Template php_project.h doesn't exist");
 		}
@@ -658,21 +708,36 @@ class Compiler
 	{
 		try {
 
-			$c = new Compiler();
-
 			/**
 			 * Global config
 			 */
 			$config = new Config();
 
 			/**
+			 * Global compiler
+			 */
+			$c = new Compiler($config);
+
+			/**
 			 * Global logger
 			 */
 			$logger = new Logger($config);
 
+			$argcoffset = 2;
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
-			} else {
+				if ($action == 'init') {
+					if (isset($_SERVER['argv'][2]) && $_SERVER['argv'][2][0] != '-') {
+						$namespace = $_SERVER['argv'][2];
+						$argcoffset = 3;
+					}
+					else {
+						$namespace = basename(getcwd());
+						$config->set('skip-create-namespace', true);
+					}
+					$config->set('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $namespace)));
+				}
+							} else {
 				if (!file_exists('config.json')) {
 					$action = 'help';
 				}else {
@@ -683,8 +748,8 @@ class Compiler
 			/**
 			 * Change configurations flags
 			 */
-			if ($_SERVER['argc'] >= 2) {
-				for ($i = 2; $i < $_SERVER['argc']; $i++) {
+			if ($_SERVER['argc'] >= $argcoffset) {
+				for ($i = $argcoffset; $i < $_SERVER['argc']; $i++) {
 
 					$parameter = $_SERVER['argv'][$i];
 					if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches)) {
@@ -714,12 +779,17 @@ class Compiler
 				case 'init':
 					$c->init($config , $logger);
 					break;
-				case 'compile-only':
-					$c->compile($config , $logger);
+				case 'generate':
+					$c->generate($config, $logger);
 					break;
 				case 'compile':
-					$c->compile($config , $logger);
-					$c->install($config , $logger);
+					$c->generate($config, $logger);
+					$c->compile($config, $logger);
+					break;
+				case 'install':
+					$c->generate($config, $logger);
+					$c->compile($config, $logger);
+					$c->install($config, $logger);
 					break;
 				case 'version':
 					echo self::VERSION, PHP_EOL;
@@ -748,9 +818,10 @@ class Compiler
 		echo "\tcommand [options]", PHP_EOL;
 		echo PHP_EOL;
 		echo "Available commands:", PHP_EOL;
-		echo sprintf("\t%-20s%s\n","init", "Initializes a Zephir extension");
-		echo sprintf("\t%-20s%s\n","compile", "Compile and installs an extension");
-		echo sprintf("\t%-20s%s\n","compile-only", "Compile an extension");
+		echo sprintf("\t%-20s%s\n","init namespace", "Initializes a Zephir extension");
+		echo sprintf("\t%-20s%s\n","generate", "Generate the C code only");
+		echo sprintf("\t%-20s%s\n","compile", "Generate and Compile the extension");
+		echo sprintf("\t%-20s%s\n","install", "Generate, Compile and install the extension");
 		echo sprintf("\t%-20s%s\n","version", "Display zephir version");
 		echo sprintf("\t%-20s%s\n","help", "Displays help");
 		echo PHP_EOL;
