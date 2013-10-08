@@ -264,11 +264,13 @@ class Compiler
 		if (!$namespace) {
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
-		
-		if (!is_dir($namespace)) {
-			mkdir($namespace);
+
+		if ($config->get('skip-create-namespace') !== true) {
+			if (!is_dir($namespace)) {
+				mkdir($namespace);
+			}
+			chdir($namespace);
 		}
-		chdir($namespace);
 		// Create the config.json file
 		file_put_contents('config.json', '{"namespace": "' . $namespace . '"}');
 		// Create the ext and ext/kernel directories
@@ -716,13 +718,15 @@ class Compiler
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
 				if ($action == 'init') {
-					if (!isset($_SERVER['argv'][2]) || $_SERVER['argv'][2][0] == '-') {
-						$action = 'help';
-					}
-					else {
-						$config->set('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
+					if (isset($_SERVER['argv'][2]) && !$_SERVER['argv'][2][0] == '-') {
+						$namespace = $_SERVER['argv'][2];
 						$argcoffset = 3;
 					}
+					else {
+						$namespace = basename(getcwd());
+						$config->set('skip-create-namespace', true);
+					}
+					$config->set('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $namespace)));
 				}
 							} else {
 				if (!file_exists('config.json')) {
