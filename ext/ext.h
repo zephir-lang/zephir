@@ -1,2 +1,2 @@
 
-#include "test.h"
+#include "%PROJECT_LOWER%.h"

@@ -1,7 +1,7 @@
-PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test])
+PHP_ARG_ENABLE(%PROJECT_LOWER%, whether to enable %PROJECT_LOWER%, [ --enable-%PROJECT_LOWER%   Enable %PROJECT_CAMELIZE%])
 
-if test "$PHP_TEST" = "yes"; then
-	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
-	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/alternative/fcall.c kernel/operators.c kernel/concat.c test/arithmetic.c test/assign.c test/cast.c test/constants.c test/constantsparent.c test/declare.c test/echoes.c test/exception.c test/exceptions.c test/fannkuch.c test/fcall.c test/fibonnaci.c test/flow.c test/fortytwo.c test/mcall.c test/nativearray.c test/oo.c test/oo/ooconstruct.c test/oo/ooconstructparams.c test/oo/oonoconstruct.c test/properties/privateproperties.c test/properties/protectedproperties.c test/properties/publicproperties.c test/regexdna.c test/returns.c test/router.c test/router/exception.c test/router/route.c test/scall.c test/scallexternal.c test/scallparent.c test/spectralnorm.c test/testinterface.c"
-	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared)
+if test "$PHP_%PROJECT_UPPER%" = "yes"; then
+	AC_DEFINE(HAVE_%PROJECT_UPPER%, 1, [Whether you have %PROJECT_CAMELIZE%])
+	%PROJECT_LOWER%_sources="%PROJECT_LOWER%.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/alternative/fcall.c kernel/operators.c kernel/concat.c %FILES_COMPILED%"
+	PHP_NEW_EXTENSION(%PROJECT_LOWER%, $%PROJECT_LOWER%_sources, $ext_shared)
 fi
