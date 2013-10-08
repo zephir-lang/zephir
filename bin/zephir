@@ -1,3 +1,15 @@
 #!/bin/bash
-ZEPHIRDIR=%ZEPHIREDIR%
+if [ -z "$ZEPHIRDIR" ]; then
+  ZEPHIRDIR="%ZEPHIRDIR%"
+  if [[ "$ZEPHIRDIR" == "%""ZEPHIRDIR""%" ]]; then
+    CURDIR=`dirname $0`
+    PARENTDIR=`cd $CURDIR/..; pwd`
+    if [ -f $PARENTDIR/compiler.php ]; then
+      export ZEPHIRDIR=$PARENTDIR
+    else
+      echo "Environment variable ZEPHIRDIR is not set"
+      exit 1
+    fi
+  fi
+fi
 php $ZEPHIRDIR/compiler.php $*

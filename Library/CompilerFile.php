@@ -79,10 +79,10 @@ class CompilerFile
 		$zepRealPath = realpath($this->_filePath);
 		if (file_exists($compilePath)) {
 			if (filemtime($compilePath) < filemtime($zepRealPath)) {
-				system('zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+				system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 			}
 		} else {
-			system('zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+			system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 		}
 		return json_decode(file_get_contents($compilePath), true);
 	}

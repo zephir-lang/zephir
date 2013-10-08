@@ -11,11 +11,11 @@ before_install:
 before_script:
  - git submodule --quiet update --init --recursive
  - sudo apt-get -qq install valgrind
- - ./install
+ - ./install -c
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - zephir init test
  - (cd test; zephir install)
- - (cd test; phpenv config-add ./unit-tests/ci/test.ini)
+ - phpenv config-add ./test/unit-tests/ci/test.ini
  - ulimit -c unlimited || true
 
 script:
