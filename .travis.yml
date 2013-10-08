@@ -13,8 +13,8 @@ before_script:
  - sudo apt-get -qq install valgrind
  - ./install
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
- - $(phpenv which php) compiler.php init test
- - (cd test; $(phpenv which php) compiler.php install)
+ - zephir init test
+ - (cd test; zephir install)
  - (cd test; phpenv config-add ./unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
