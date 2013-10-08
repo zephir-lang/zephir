@@ -664,7 +664,11 @@ class Compiler
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
 			} else {
-				$action = 'compile';
+				if (!file_exists('config.json')) {
+					$action = 'help';
+				}else {
+					$action = 'compile';
+				}
 			}
 
 			/**
@@ -711,6 +715,9 @@ class Compiler
 				case 'version':
 					echo self::VERSION, PHP_EOL;
 					break;
+				case 'help':
+					$c->help();
+					break;
 				default:
 					throw new Exception('Unrecognized action "' . $action . '"');
 			}
@@ -718,6 +725,29 @@ class Compiler
 		} catch (Exception $e) {
 			self::showException($e, isset($config) ? $config : null);
 		}
+	}
+
+
+	/**
+	 * Display zephir commands help
+	 */
+	public function help() {
+
+		echo "zephir version " , self::VERSION,  PHP_EOL, PHP_EOL;
+		echo "Usage: ", PHP_EOL;
+		echo "\tcommand [options]", PHP_EOL;
+		echo PHP_EOL;
+		echo "Available commands:", PHP_EOL;
+		echo sprintf("\t%-20s%s\n","init", "Initializes a Zephir extension");
+		echo sprintf("\t%-20s%s\n","compile", "Compile and installs an extension");
+		echo sprintf("\t%-20s%s\n","compile-only", "Compile an extension");
+		echo sprintf("\t%-20s%s\n","version", "Display zephir version");
+		echo sprintf("\t%-20s%s\n","help", "Displays help");
+		echo PHP_EOL;
+		echo "Options:", PHP_EOL;
+		echo sprintf("\t%-20s%s\n","-fno-([a-z0-9\-]+)", "Setting options to Compiler");
+		echo sprintf("\t%-20s%s\n","-W([a-z0-9\-]+)", "Setting warning options to Compiler");
+
 	}
 
 	/**
