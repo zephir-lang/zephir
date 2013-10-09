@@ -130,3 +130,4 @@ ext/test.o
 ext/test/fortytwo.lo
 ext/test/fortytwo.o
 bin/zephir55
+ext/test/returns.lo
