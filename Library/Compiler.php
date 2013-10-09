@@ -791,6 +791,9 @@ class Compiler
 					$c->compile($config, $logger);
 					$c->install($config, $logger);
 					break;
+				case 'install':
+					$c->install($config , $logger);
+					break;
 				case 'version':
 					echo self::VERSION, PHP_EOL;
 					break;
