@@ -1,2 +1,2 @@
 
-#include "php_%PROJECT_LOWER%.h"
+#include "php_test.h"
