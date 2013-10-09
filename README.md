@@ -71,16 +71,14 @@ Zephir is available to everyone freely on terms that allow both non-commercial a
 This license allows for academics, for-profit software developers, volunteers and enthusiasts alike to
 collaborate together to make a better software for everyone.
 
-Donate to the project and allowing us to invest more time and resources to the project,
+Donate allowing us to invest more time and resources to the project,
 ensuring it will be ready sooner and with loads of features.
 
 [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8N7LHE5QH376N)
 
 Current Build Status
 --------------------
-Zephir is built under Travis CI service. Every commit pushed to this repository will queue a build into the continuous
-integration service and will run all PHPUnit tests to ensure that everything is going well and the project is stable.
-The current build status is:
+Zephir is built under Travis CI service. Every commit pushed to this repository will queue a build into the continuous integration service and will run all PHPUnit tests to ensure that everything is going well and the project is stable. The current build status is:
 
 [![Build Status](https://secure.travis-ci.org/phalcon/zephir.png?branch=master)](http://travis-ci.org/phalcon/zephir)
 

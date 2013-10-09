@@ -942,7 +942,7 @@ class LetStatement
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 								break;
 							case 'variable':
-								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $resolvedExpr->getCode() . ', PH_SEPARATE);');
+								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $exprVariable->getName() . ', PH_SEPARATE);');
 								break;
 							default:
 								throw new CompilerException("Unknown type " . $exprVariable->getType(), $statement);
@@ -1298,6 +1298,7 @@ class LetStatement
 				break;
 			case 'int':
 			case 'long':
+			case 'uint':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
@@ -1306,6 +1307,7 @@ class LetStatement
 				} else {
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				}
+				$tempVariable->setIdle(true);
 				break;
 			case 'string':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
@@ -1316,32 +1318,13 @@ class LetStatement
 				} else {
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				}
+				$tempVariable->setIdle(true);
 				break;
 			case 'bool':
 				if ($variable == 'this') {
-					if ($resolvedExpr->getBooleanCode() == '1') {
-						$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
-					} else {
-						if ($resolvedExpr->getBooleanCode() == '0') {
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-						} else {
-							$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-							$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						}
-					}
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 				} else {
-					if ($resolvedExpr->getBooleanCode() == '1') {
-						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
-					} else {
-						if ($resolvedExpr->getBooleanCode() == '0') {
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-						} else {
-							$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-							$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-						}
-					}
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 				}
 				break;
 			case 'empty-array':
@@ -1353,6 +1336,7 @@ class LetStatement
 				} else {
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				}
+				$tempVariable->setIdle(true);
 				break;
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
@@ -1367,15 +1351,13 @@ class LetStatement
 						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+						$tempVariable->setIdle(true);
 						break;
 					case 'bool':
-						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
-						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						if ($variable == 'this') {
-							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 						} else {
-							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 						}
 						break;
 					case 'string':
@@ -1384,6 +1366,9 @@ class LetStatement
 							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
 						} else {
 							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						}
+						if ($symbolVariable->isTemporal()) {
+							$symbolVariable->setIdle(true);
 						}
 						break;
 					default:
@@ -1523,6 +1508,9 @@ class LetStatement
 					case 'string':
 					case 'variable':
 						$codePrinter->output('zephir_update_property_zval_zval(' . $symbolVariable->getName() . ', ' . $propertyVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+						if ($symbolVariable->isTemporal()) {
+							$symbolVariable->setIdle(true);
+						}
 						break;
 					default:
 						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
@@ -1567,6 +1555,9 @@ class LetStatement
 					case 'variable':
 					case 'string':
 						$codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
+						if ($variableExpr->isTemporal()) {
+							$variableExpr->setIdle(true);
+						}
 						break;
 					default:
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to property array", $statement);
@@ -1677,6 +1668,9 @@ class LetStatement
 									case 'variable':
 									case 'string':
 										$codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+										if ($variableExpr->isTemporal()) {
+											$variableExpr->setIdle(true);
+										}
 										break;
 									default:
 										throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
@@ -1812,6 +1806,9 @@ class LetStatement
 					case 'string':
 					case 'variable':
 						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
+						if ($variableVariable->isTemporal()) {
+							$variableVariable->setIdle(true);
+						}
 						break;
 					default:
 						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);

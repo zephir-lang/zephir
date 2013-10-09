@@ -196,6 +196,7 @@ class ComparisonBaseOperator extends BaseOperator
 									case 'ulong':
 									case 'char':
 									case 'uchar':
+									case 'double':
 										return new CompiledExpression('bool', '(' . $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');

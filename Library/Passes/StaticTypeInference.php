@@ -68,6 +68,19 @@ class StaticTypeInference
 			return;
 		}
 		switch ($currentType) {
+			case 'numeric':
+				switch ($type) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
+					case 'double':
+						break;
+					default:
+						$this->_variables[$variable] = 'undefined';
+						break;
+				}
+				break;
 			case 'bool':
 				switch ($type) {
 					case 'bool':
@@ -126,7 +139,7 @@ class StaticTypeInference
 				$this->_variables[$variable] = 'undefined';
 				break;
 			default:
-				echo 'StaticTypeInference=', $type;
+				echo 'StaticTypeInference=', $currentType, ' ', $type, PHP_EOL;
 				break;
 		}
 	}

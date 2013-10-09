@@ -198,6 +198,7 @@ class FunctionCall extends Call
 			case 'globals_get':
 			case 'globals_set':
 			case 'merge_append':
+			case 'get_class_lower':
 				return true;
 		}
 		return false;
