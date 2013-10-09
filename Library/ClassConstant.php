@@ -16,6 +16,7 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+
 /**
  * ClassConstant
  *

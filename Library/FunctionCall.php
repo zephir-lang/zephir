@@ -21,10 +21,25 @@
  * FunctionCall
  *
  * Call functions. By default functions are called in the PHP userland if an optimizer
- * is not found or there is not a user handler for it
+ * was not found or there is not a user-handler for it
  */
 class FunctionCall extends Call
 {
+
+	/**
+	 * Function is called using a normal method name
+	 */
+	const CALL_NORMAL = 1;
+
+	/**
+	 * Function is called using a dynamic variable as method name
+	 */
+	const CALL_DYNAMIC = 2;
+
+	/**
+	 * Function is called using a dynamic string as method name
+	 */
+	const CALL_DYNAMIC_STRING = 3;
 
 	static protected $_optimizers = array();
 
@@ -221,16 +236,11 @@ class FunctionCall extends Call
 	}
 
 	/**
-	 * Compiles a function
-	 *
-	 * @param Expression $expr
-	 * @param CompilationContext $expr
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
 	 */
-	public function compile(Expression $expr, CompilationContext $compilationContext)
+	protected function _callNormal($expression, $compilationContext)
 	{
-
-		$this->_expression = $expr;
-		$expression = $expr->getExpression();
 
 		$funcName = strtolower($expression['name']);
 
@@ -351,6 +361,125 @@ class FunctionCall extends Call
 
 		if ($this->isExpectingReturn()) {
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		return new CompiledExpression('null', null, $expression);
+	}
+
+	/**
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 */
+	protected function _callDynamic($expression, $compilationContext)
+	{
+
+		$variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
+		switch ($variable->getType()) {
+			case 'variable':
+				break;
+			default:
+				throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $propertyAccess['left']);
+		}
+
+		/**
+		 * Resolve parameters
+		 */
+		if (isset($expression['parameters'])) {
+			$params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+		} else {
+			$params = array();
+		}
+
+		$codePrinter = $compilationContext->codePrinter;
+
+		/**
+		 * Process the expected symbol to be returned
+		 */
+		$this->processExpectedReturn($compilationContext);
+
+		/**
+		 * At this point the function will be called in the PHP userland.
+		 * PHP functions only return zvals so we need to validate the target variable is also a zval
+		 */
+		$symbolVariable = $this->getSymbolVariable();
+		if ($symbolVariable) {
+
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+
+			/**
+			 * We don't know the exact dynamic type returned by the method call
+			 */
+			$symbolVariable->setDynamicTypes('undefined');
+		}
+
+		/**
+		 * Include fcall header
+		 */
+		$compilationContext->headersManager->add('kernel/fcall');
+
+		/**
+		 * Call functions must grown the stack
+		 */
+		$compilationContext->symbolTable->mustGrownStack(true);
+
+		/*if (!isset($expression['parameters'])) {
+			if ($this->isExpectingReturn()) {
+				if ($this->mustInitSymbolVariable()) {
+					$symbolVariable->initVariant($compilationContext);
+				}
+				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
+			} else {
+				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+			}
+		} else {
+			if (count($params)) {
+				if ($this->isExpectingReturn()) {
+					if ($this->mustInitSymbolVariable()) {
+						$symbolVariable->initVariant($compilationContext);
+					}
+					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+				}
+			} else {
+				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+			}
+		}*/
+
+		/**
+		 * We can mark temporary variables generated as idle
+		 */
+		foreach ($this->getTemporalVariables() as $tempVariable) {
+			$tempVariable->setIdle(true);
+		}
+
+		if ($this->isExpectingReturn()) {
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		return new CompiledExpression('null', null, $expression);
+	}
+
+	/**
+	 * Compiles a function
+	 *
+	 * @param Expression $expr
+	 * @param CompilationContext $expr
+	 */
+	public function compile(Expression $expr, CompilationContext $compilationContext)
+	{
+
+		$this->_expression = $expr;
+		$expression = $expr->getExpression();
+
+		switch ($expression['call-type']) {
+			case self::CALL_NORMAL:
+				return $this->_callNormal($expression, $compilationContext);
+			case self::CALL_DYNAMIC:
+				return $this->_callDynamic($expression, $compilationContext);
 		}
 
 		return new CompiledExpression('null', null, $expression);

@@ -272,8 +272,8 @@ class Compiler
 
 			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
 
-			copy(__DIR__ . '/../ext/install', 'ext/install');
-			chmod('ext/install', 0755);
+			//copy(__DIR__ . '/../ext/install', 'ext/install');
+			//chmod('ext/install', 0755);
 		}
 
 		if (!is_dir($namespace)) {
