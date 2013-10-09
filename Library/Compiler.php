@@ -48,7 +48,7 @@ class Compiler
   / /  / _ \/ __ \/ __ \/ / ___/
  / /__/  __/ /_/ / / / / / /
 /____/\___/ .___/_/ /_/_/_/
-		 /_/
+         /_/
 ';
 
 	/**
@@ -286,14 +286,17 @@ class Compiler
 			}
 			chdir($namespace);
 		}
+
 		// Create the config.json file
 		file_put_contents('config.json', '{"namespace": "' . $namespace . '"}');
+
 		// Create the ext and ext/kernel directories
 		if (!is_dir('ext/kernel')) {
 			mkdir('ext/kernel', 0755, true);
 		}
+
 		// Copy the latest kernel files
-		$this->_copyBaseKernel(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
+		$this->_copyBaseKernel(realpath(__DIR__ . '/../base-ext/kernel'), 'ext/kernel');
 	}
 
 	/**
@@ -402,7 +405,7 @@ class Compiler
 	public function createConfigFiles($project)
 	{
 
-		$content = file_get_contents(__DIR__ . '/../ext/config.m4');
+		$content = file_get_contents(__DIR__ . '/../base-ext/config.m4');
 		if (empty($content)) {
 			throw new Exception("Template config.m4 doesn't exists");
 		}
@@ -423,7 +426,7 @@ class Compiler
 		/**
 		 * php_ext.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/php_ext.h');
+		$content = file_get_contents(__DIR__ . '/../base-ext/php_ext.h');
 		if (empty($content)) {
 			throw new Exception("Template php_ext.h doesn't exists");
 		}
@@ -441,7 +444,7 @@ class Compiler
 		/**
 		 * ext.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/ext.h');
+		$content = file_get_contents(__DIR__ . '/../base-ext/ext.h');
 		if (empty($content)) {
 			throw new Exception("Template ext.h doesn't exists");
 		}
@@ -459,7 +462,7 @@ class Compiler
 		/**
 		 * ext_config.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/ext_config.h');
+		$content = file_get_contents(__DIR__ . '/../base-ext/ext_config.h');
 		if (empty($content)) {
 			throw new Exception("Template ext_config.h doesn't exists");
 		}
@@ -477,7 +480,7 @@ class Compiler
 		/**
 		 * ext_clean
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/clean');
+		$content = file_get_contents(__DIR__ . '/../base-ext/clean');
 		if (empty($content)) {
 			throw new Exception("clean file doesn't exists");
 		}
@@ -488,7 +491,7 @@ class Compiler
 		/**
 		 * ext_install
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/install');
+		$content = file_get_contents(__DIR__ . '/../base-ext/install');
 		if (empty($content)) {
 			throw new Exception("install file doesn't exists");
 		}
@@ -516,7 +519,7 @@ class Compiler
 		/**
 		 * project.c
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/project.c');
+		$content = file_get_contents(__DIR__ . '/../base-ext/project.c');
 		if (empty($content)) {
 			throw new Exception("Template project.c doesn't exist");
 		}
@@ -627,7 +630,7 @@ class Compiler
 		/**
 		 * Round 4. Generate the project main header
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/project.h');
+		$content = file_get_contents(__DIR__ . '/../base-ext/project.h');
 		if (empty($content)) {
 			throw new Exception("Template project.h doesn't exists");
 		}
@@ -654,7 +657,7 @@ class Compiler
 		/**
 		 * Round 5. Create php_project.h
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/php_project.h');
+		$content = file_get_contents(__DIR__ . '/../base-ext/php_project.h');
 		if (empty($content)) {
 			throw new Exception("Template php_project.h doesn't exist");
 		}
