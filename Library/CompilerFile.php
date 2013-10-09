@@ -36,8 +36,6 @@ class CompilerFile
 
 	protected $_compiledFile;
 
-	protected $_config;
-
 	/**
 	 * @var \ClassDefinition
 	 */
@@ -49,13 +47,12 @@ class CompilerFile
 	 * @param string $className
 	 * @param string $filePath
 	 */
-	public function __construct($className, $filePath, Config $config)
+	public function __construct($className, $filePath)
 	{
 		$this->_className = $className;
 		$this->_filePath = $filePath;
 		$this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
 		$this->_filesCompiled = array();
-		$this->_config = $config;
 	}
 
 	/**
@@ -79,10 +76,10 @@ class CompilerFile
 		$zepRealPath = realpath($this->_filePath);
 		if (file_exists($compilePath)) {
 			if (filemtime($compilePath) < filemtime($zepRealPath)) {
-				system(ZEPHIRPATH . 'bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+				system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 			}
 		} else {
-			system(ZEPHIRPATH . 'bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+			system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 		}
 		return json_decode(file_get_contents($compilePath), true);
 	}
@@ -402,7 +399,7 @@ class CompilerFile
 			throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
 		}
 
-		if (strpos(strtolower($namespace), $this->_config->get('namespace')) !== 0) {
+		if ($this->_filePath != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
 			throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
 		}
 
