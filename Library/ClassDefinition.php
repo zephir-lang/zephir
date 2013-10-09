@@ -540,7 +540,7 @@ class ClassDefinition
 						$classEntry = 'zend_exception_get_default(TSRMLS_C)';
 						break;
 					default:
-						throw new Exception($classExtendsDefinition->getName());
+						throw new Exception(get_class($classExtendsDefinition) . '-' . $classExtendsDefinition->getName());
 				}
 			}
 

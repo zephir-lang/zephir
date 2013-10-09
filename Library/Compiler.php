@@ -37,7 +37,7 @@ class Compiler
 	protected $_constants = array();
 
 	protected $_config;
-	
+
 	protected static $_reflections = array();
 
 	const VERSION = '0.2.1a';
@@ -48,7 +48,7 @@ class Compiler
   / /  / _ \/ __ \/ __ \/ / ___/
  / /__/  __/ /_/ / / / / / /
 /____/\___/ .___/_/ /_/_/_/
-         /_/
+		 /_/
 ';
 
 	/**
@@ -72,7 +72,7 @@ class Compiler
 			$className = str_replace('/', '\\', $filePath);
 			$className = preg_replace('/.zep$/', '', $className);
 			$className = join('\\', array_map(function($i) { return ucfirst($i); }, explode('\\', $className)));
-			$className = ucfirst($this->_config->get('namespace')) . '\\' . $className;
+			//$className = ucfirst($this->_config->get('namespace')) . '\\' . $className;
 			$this->_files[$className] = new CompilerFile($className, $filePath, $this->_config);
 			$this->_files[$className]->preCompile();
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
@@ -89,14 +89,19 @@ class Compiler
 		 * Pre compile all files
 		 */
 		$files = array();
-		$path = '../'.$path;
+		//$path = '../' . $path;
 		$pathLen = strlen($path);
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+		$iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($path),
+			RecursiveIteratorIterator::SELF_FIRST
+		);
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
-				$files[] = substr($item->getPathname(), $pathLen + 1);
+				//$files[] = substr($item->getPathname(), $pathLen + 1);
+				$files[] = $item->getPathname();
 			}
 		}
+
 		sort($files, SORT_STRING);
 		foreach ($files as $file) {
 			$this->_preCompile($file);
@@ -111,6 +116,7 @@ class Compiler
 	 */
 	public function isClass($className)
 	{
+		//var_dump(array_keys($this->_definitions));
 		foreach ($this->_definitions as $key => $value) {
 			if (!strcasecmp($key, $className)) {
 				if ($value->getType() == 'class') {
@@ -198,19 +204,19 @@ class Compiler
 	 */
 	protected function _copyBaseKernel($src, $dest)
 	{
-			foreach (scandir($src) as $file) {
-		    if (!is_readable($src.'/'.$file)) {
-		    	continue;
-		    }
-		    if (is_dir($src.'/'.$file)) {
-		    	if ($file != '.' && $file != '..') {
-		    		if (!is_dir($dest . '/' . $file)) {
-			        	mkdir($dest . '/' . $file);
-			    	}
-			      $this->_copyBaseKernel($src.'/'.$file, $dest.'/'.$file);
-			  	}
-		    } else {
-		  	copy($src.'/'.$file, $dest.'/'.$file);
+		foreach (scandir($src) as $file) {
+			if (!is_readable($src . '/' . $file)) {
+				continue;
+			}
+			if (is_dir($src . '/' . $file)) {
+				if ($file != '.' && $file != '..') {
+					if (!is_dir($dest . '/' . $file)) {
+						mkdir($dest . '/' . $file);
+					}
+				  $this->_copyBaseKernel($src . '/' . $file, $dest . '/' . $file);
+				}
+			} else {
+				copy($src . '/' . $file, $dest . '/' . $file);
 			}
 		}
 	}
@@ -725,6 +731,7 @@ class Compiler
 
 			$argcoffset = 2;
 			if (isset($_SERVER['argv'][1])) {
+
 				$action = $_SERVER['argv'][1];
 				if ($action == 'init') {
 					if (isset($_SERVER['argv'][2]) && $_SERVER['argv'][2][0] != '-') {
@@ -737,10 +744,11 @@ class Compiler
 					}
 					$config->set('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $namespace)));
 				}
-							} else {
+
+			} else {
 				if (!file_exists('config.json')) {
 					$action = 'help';
-				}else {
+				} else {
 					$action = 'compile';
 				}
 			}

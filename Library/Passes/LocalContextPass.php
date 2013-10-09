@@ -369,9 +369,11 @@ class LocalContextPass
 					}
 					if (isset($statement['value'])) {
 						$this->markVariableNoLocal($statement['value']);
+						$this->increaseMutations($statement['value']);
 					}
 					if (isset($statement['key'])) {
 						$this->markVariableNoLocal($statement['key']);
+						$this->increaseMutations($statement['key']);
 					}
 					if (isset($statement['statements'])) {
 						$this->passStatementBlock($statement['statements']);
