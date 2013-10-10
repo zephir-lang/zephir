@@ -205,7 +205,6 @@ class Call
 				case 'int':
 				case 'uint':
 				case 'long':
-				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
@@ -229,6 +228,7 @@ class Call
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
+				case 'ulong':
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 1);');
@@ -243,7 +243,7 @@ class Call
 						case 'int':
 						case 'uint':
 						case 'long':
-						case 'ulong':
+						case 'ulong': /* ulong must be stored in string */
 							$parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
 							$params[] = $parameterTempVariable->getName();

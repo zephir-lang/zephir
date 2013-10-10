@@ -18,13 +18,12 @@
 */
 
 /**
- * UncamelizeOptimizer
+ * JoinOptimizer
  *
- * Optimizes calls to 'uncamelize' using internal function
+ * Optimizes calls to 'join' using internal function
  */
-class UncamelizeOptimizer
+class JoinOptimizer
 {
-
 	/**
 	 *
 	 * @param array $expression
@@ -37,7 +36,7 @@ class UncamelizeOptimizer
 			return false;
 		}
 
-		if (count($expression['parameters']) != 1) {
+		if (count($expression['parameters']) != 2) {
 			return false;
 		}
 
@@ -51,16 +50,26 @@ class UncamelizeOptimizer
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
 
+		if ($expression['parameters'][0]['type'] == 'string') {
+			$str = Utils::addSlaches($expression['parameters'][0]['value']);
+			unset($expression['parameters'][0]);
+		}
+
 		if ($call->mustInitSymbolVariable()) {
 			$symbolVariable->initVariant($context);
 		}
 
-		$context->headersManager->add('kernel/string');
+		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
+		$context->headersManager->add('kernel/string');
 		$symbolVariable->setDynamicTypes('string');
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_uncamelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+		if (isset($str)) {
+			$context->codePrinter->output('zephir_fast_join_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		$context->codePrinter->output('zephir_fast_join(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 

@@ -46,7 +46,7 @@ class CamelizeOptimizer
 		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable') {
+		if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'string') {
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
 
