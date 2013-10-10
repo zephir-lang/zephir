@@ -38,7 +38,7 @@ class Compiler
 
 	protected static $_reflections = array();
 
-	const VERSION = '0.2.1a';
+	const VERSION = '0.2.2a';
 
 	const LOGO ='
  _____              __    _
@@ -59,7 +59,9 @@ class Compiler
 		if (preg_match('/\.zep$/', $filePath)) {
 			$className = str_replace('/', '\\', $filePath);
 			$className = preg_replace('/.zep$/', '', $className);
-			$className = join('\\', array_map(function($i) { return ucfirst($i); }, explode('\\', $className)));
+			$className = join('\\', array_map(function($i) {
+				return ucfirst($i);
+			}, explode('\\', $className)));
 			$this->_files[$className] = new CompilerFile($className, $filePath);
 			$this->_files[$className]->preCompile();
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
@@ -275,13 +277,17 @@ class Compiler
 		}
 
 		// using json_encode with pretty-print
-		$configArray = array('namespace' => $namespace,
-					'name' => $namespace, 'description' => '', 'author' => '');
+		$configArray = array(
+			'namespace' => $namespace,
+			'name' => $namespace,
+			'description' => '',
+			'author' => ''
+		);
 
 		// above PHP 5.4
 		if (defined('JSON_PRETTY_PRINT')) {
 			$configArray = json_encode($configArray, JSON_PRETTY_PRINT);
-		}else {
+		} else {
 			$configArray = json_encode($configArray);
 		}
 		file_put_contents('config.json', $configArray);
@@ -323,6 +329,11 @@ class Compiler
 		}
 
 		/**
+		 * The string manager manages
+		 */
+		$stringManager = new StringsManager();
+
+		/**
 		 * Get global namespace
 		 */
 		$namespace = $config->get('namespace');
@@ -358,21 +369,23 @@ class Compiler
 		 */
 		$files = array();
 		foreach ($this->_files as $compileFile) {
-			$compileFile->compile($this, $config, $logger);
+			$compileFile->compile($this, $config, $logger, $stringManager);
 			$files[] = $compileFile->getCompiledFile();
 		}
 
 		$this->_compiledFiles = $files;
 
 		/**
-		 * Round 4. create config.m4 and config.w32 files
+		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
 		$this->createConfigFiles($namespace);
+		$this->createProjectFiles($namespace);
 
 		/**
-		 * Round 5. create project.c and project.h files
+		 * Round 5.
 		 */
-		$this->createProjectFiles($namespace);
+		$stringManager->genConcatCode();
+
 	}
 
 	/**

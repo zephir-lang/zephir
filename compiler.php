@@ -25,6 +25,7 @@ require ZEPHIRPATH . 'Library/ParseException.php';
 require ZEPHIRPATH . 'Library/CompilerException.php';
 require ZEPHIRPATH . 'Library/CompilationContext.php';
 require ZEPHIRPATH . 'Library/HeadersManager.php';
+require ZEPHIRPATH . 'Library/StringsManager.php';
 require ZEPHIRPATH . 'Library/ClassDefinition.php';
 require ZEPHIRPATH . 'Library/ClassProperty.php';
 require ZEPHIRPATH . 'Library/ClassConstant.php';

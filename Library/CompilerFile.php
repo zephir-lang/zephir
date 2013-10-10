@@ -463,8 +463,9 @@ class CompilerFile
 	 * @param \Compiler $compiler
 	 * @param \Config $config
 	 * @param \Logger $logger
+	 * @param \StringsManager $stringsManager
 	 */
-	public function compile(Compiler $compiler, Config $config, Logger $logger)
+	public function compile(Compiler $compiler, Config $config, Logger $logger, StringsManager $stringsManager)
 	{
 
 		/**
@@ -486,6 +487,11 @@ class CompilerFile
 		 * Set global logger in the compilation context
 		 */
 		$compilationContext->logger = $logger;
+
+		/**
+		 * Set global strings manager
+		 */
+		$compilationContext->stringsManager = $stringsManager;
 
 		/**
 		 * Headers manager

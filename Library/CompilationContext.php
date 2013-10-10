@@ -89,6 +89,13 @@ class CompilationContext
 	public $headersManager;
 
 	/**
+	 * Represents the c-headers added to the file
+	 *
+	 * @var \HeadersManager
+	 */
+	public $stringsManager;
+
+	/**
 	 * Tells if the the compilation is being made inside a cycle
 	 *
 	 * @var int

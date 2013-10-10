@@ -91,6 +91,7 @@ class ConcatOperator extends BaseOperator
 
 		}
 
+		$compilationContext->stringsManager->addConcatKey($key);
 		return array($key, join(', ', $concatParts));
 	}
 
