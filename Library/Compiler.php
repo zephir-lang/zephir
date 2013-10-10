@@ -254,12 +254,28 @@ class Compiler
 			mkdir('.temp');
 		}
 
-		$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
+		// if init namespace is specified
+		if (isset($_SERVER['argv'][2])) {
+			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
+		}else {
+			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
+		}
+
 		if (!$namespace) {
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
 
-		file_put_contents('config.json', '{"namespace": "' . $namespace . '"}');
+		// using json_encode with pretty-print
+		$configArray = array('namespace' => $namespace,
+					'name' => $namespace, 'description' => '', 'author' => '');
+
+		// above PHP 5.4
+		if (defined('JSON_PRETTY_PRINT')) {
+			$configArray = json_encode($configArray, JSON_PRETTY_PRINT);
+		}else {
+			$configArray = json_encode($configArray);
+		}
+		file_put_contents('config.json', $configArray);
 
 		/**
 		 * Create 'kernel'
@@ -745,7 +761,7 @@ class Compiler
 		echo "\tcommand [options]", PHP_EOL;
 		echo PHP_EOL;
 		echo "Available commands:", PHP_EOL;
-		echo sprintf("\t%-20s%s\n", "init", "Initializes a Zephir extension");
+		echo sprintf("\t%-20s%s\n", "init [namespace]", "Initializes a Zephir extension");
 		echo sprintf("\t%-20s%s\n", "compile", "Compile and installs an extension");
 		echo sprintf("\t%-20s%s\n", "compile-only", "Compile an extension");
 		echo sprintf("\t%-20s%s\n", "version", "Display zephir version");
