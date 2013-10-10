@@ -4,7 +4,7 @@
 #endif
 
 #include "php.h"
-#include "php_phalcon.h"
+#include "php_ext.h"
 #include "ext/standard/php_string.h"
 #include "ext.h"
 

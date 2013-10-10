@@ -1800,8 +1800,20 @@ xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignmen
 }
 
 /* y[x] = {expr} */
-xx_let_assignment(R) ::= IDENTIFIER(D) SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
-	R = xx_ret_let_assignment("array-index", O, D, NULL, I, E, status->scanner_state);
+xx_let_assignment(R) ::= IDENTIFIER(D) xx_array_offset_list(A) xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("array-index", O, D, NULL, A, E, status->scanner_state);
+}
+
+xx_array_offset_list(R) ::= xx_array_offset_list(L) xx_array_offset(O) . {
+	R = xx_ret_list(L, O);
+}
+
+xx_array_offset_list(R) ::= xx_array_offset(O) . {
+	R = xx_ret_list(NULL, O);
+}
+
+xx_array_offset(R) ::= SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE . {
+	R = I;
 }
 
 /* t->y++ */
