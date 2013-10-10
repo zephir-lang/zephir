@@ -35,9 +35,9 @@ ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 PHP_METHOD(Test_RegexDNA, process) {
 
-	HashTable *_27;
-	HashPosition _26;
-	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7, *_8, *_9, *_10, *_11, *_12, *_13, *_14, *_15, *_16, *_17, *_18, *_19, *_20, *_21, *_22, *_23, _24, *_25 = NULL, **_28, *_29 = NULL, *_30 = NULL, *_31;
+	HashTable *_26;
+	HashPosition _25;
+	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7, *_8, *_9, *_10, *_11, *_12, *_13, *_14, *_15, *_16, *_17, *_18, *_19, *_20, *_21, *_22, _23, *_24 = NULL, **_27, *_28 = NULL, *_29;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
@@ -152,37 +152,33 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_VAR(initialLength);
 	ZVAL_LONG(initialLength, zephir_fast_strlen_ev(contents));
 	ZEPHIR_INIT_VAR(_22);
-	ZEPHIR_CONCAT_SV(_22, "/", stuffToRemove);
-	ZEPHIR_INIT_VAR(_23);
-	ZEPHIR_CONCAT_VS(_23, _22, "/mS");
-	ZEPHIR_SINIT_VAR(_24);
-	ZVAL_STRING(&_24, "", 0);
-	ZEPHIR_INIT_VAR(_25);
-	zephir_call_func_p3(_25, "preg_replace", _23, &_24, contents);
-	ZEPHIR_CPY_WRT(contents, _25);
+	ZEPHIR_CONCAT_SVS(_22, "/", stuffToRemove, "/mS");
+	ZEPHIR_SINIT_VAR(_23);
+	ZVAL_STRING(&_23, "", 0);
+	ZEPHIR_INIT_VAR(_24);
+	zephir_call_func_p3(_24, "preg_replace", _22, &_23, contents);
+	ZEPHIR_CPY_WRT(contents, _24);
 	ZEPHIR_INIT_VAR(codeLength);
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
-	zephir_is_iterable(variants, &_27, &_26, 0, 0);
+	zephir_is_iterable(variants, &_26, &_25, 0, 0);
 	for (
-		; zend_hash_get_current_data_ex(_27, (void**) &_28, &_26) == SUCCESS
-		; zend_hash_move_forward_ex(_27, &_26)
+		; zend_hash_get_current_data_ex(_26, (void**) &_27, &_25) == SUCCESS
+		; zend_hash_move_forward_ex(_26, &_25)
 	) {
-		ZEPHIR_GET_HVALUE(regex, _28);
+		ZEPHIR_GET_HVALUE(regex, _27);
 		zend_print_zval(regex, 0);
 		php_printf(" ");
-		ZEPHIR_INIT_LNVAR(_29);
-		ZEPHIR_CONCAT_SV(_29, "/", regex);
-		ZEPHIR_INIT_LNVAR(_30);
-		ZEPHIR_CONCAT_VS(_30, _29, "/iS");
+		ZEPHIR_INIT_LNVAR(_28);
+		ZEPHIR_CONCAT_SVS(_28, "/", regex, "/iS");
 		Z_SET_ISREF_P(discard);
-		ZEPHIR_INIT_NVAR(_25);
-		zephir_call_func_p3(_25, "preg_match_all", _30, contents, discard);
-		zend_print_zval(_25, 0);
+		ZEPHIR_INIT_NVAR(_24);
+		zephir_call_func_p3(_24, "preg_match_all", _28, contents, discard);
+		zend_print_zval(_24, 0);
 		php_printf("%c", '\n');
 	}
-	ZEPHIR_INIT_VAR(_31);
-	zephir_call_func_p3(_31, "preg_replace", vIUB, vIUBnew, contents);
-	ZEPHIR_CPY_WRT(contents, _31);
+	ZEPHIR_INIT_VAR(_29);
+	zephir_call_func_p3(_29, "preg_replace", vIUB, vIUBnew, contents);
+	ZEPHIR_CPY_WRT(contents, _29);
 	php_printf("%c", '\n');
 	zend_print_zval(initialLength, 0);
 	php_printf("%c", '\n');
