@@ -45,6 +45,7 @@
 %right NEW .
 %right NOT .
 %right PARENTHESES_CLOSE .
+%right SBRACKET_OPEN .
 
 %include {
 
@@ -2062,8 +2063,12 @@ xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 }
 
 /* y = v[expr] */
-xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(I) SBRACKET_CLOSE . {
+/*xx_common_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(I) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), I, NULL, status->scanner_state);
+}*/
+
+xx_common_expr(R) ::= xx_common_expr(V) SBRACKET_OPEN xx_common_expr(I) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array-access", V, I, NULL, status->scanner_state);
 }
 
 /* y = a + b */

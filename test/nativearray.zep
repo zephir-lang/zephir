@@ -241,125 +241,6 @@ class NativeArray
 		return a;
 	}
 
-	public function testMultipleArray1()
-	{
-		var a;
-
-		let a = [], a["x"]["y"] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray2()
-	{
-		var a;
-
-		let a = [], a["x"]["y"]["z"] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray3()
-	{
-		var a;
-
-		let a = [], a[0][1] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray4()
-	{
-		var a;
-
-		let a = [], a[0][1][2] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray5()
-	{
-		var a;
-
-		let a = [], a["a"][1]["c"] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray6()
-	{
-		var a;
-
-		let a = [], a[0]["b"][2] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray7()
-	{
-		var a;
-
-		let a = [],
-			a["a"][1]["c"] = true,
-			a[0]["b"][2] = false;
-
-		return a;
-	}
-
-	public function testMultipleArray8()
-	{
-		var a;
-
-		let a = [],
-			a["a"][0] = null,
-			a["a"][1] = true,
-			a["a"][2] = false;
-
-		return a;
-	}
-
-	public function testMultipleArray9()
-	{
-		var a;
-
-		let a = [],
-			a["a"][0] = null,
-			a["a"][1] = true,
-			a["a"][1] = false;
-
-		return a;
-	}
-
-	public function testMultipleArray10()
-	{
-		var a;
-
-		let a = [],
-			a["a"][0] = null,
-			a["a"][1] = true,
-			a["a"][1]["c"] = false;
-
-		return a;
-	}
-
-	public function testMultipleArray11()
-	{
-		var a, b = "y", c = "x";
-
-		let a = [], a[b][c] = null;
-
-		return a;
-	}
-
-	public function testMultipleArray12()
-	{
-		var a, b = "y", c = "x", d = "z";
-
-		let a = [], a[b][c][d] = null;
-
-		return a;
-	}
-
 	public function testArrayAccess1()
 	{
 		var a, b;
@@ -424,11 +305,60 @@ class NativeArray
 		return b;
 	}
 
+	public function testArrayMultipleAccess1()
+	{
+		var a, b;
+
+		let a = [0: [0: "a", 1: "b"]],
+			b = a[0][0];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess2()
+	{
+		var a, b;
+
+		let a = [["a", "b"]],
+			b = a[0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess3()
+	{
+		var a, b;
+
+		let a = [[["a", "b"]]],
+			b = a[0][0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess4()
+	{
+		var a, b;
+
+		let a = [[["a", "b"]]],
+			b = a[0][0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess5()
+	{
+		var a, b;
+
+		let a = ["a": ["b": ["c": 0, "d": 1]]],
+			b = a["a"]["b"]["c"];
+
+		return b;
+	}
+
 	public function testArrayUpdate1()
 	{
 		var a;
-		let a = [1, 2, 3],
-			a[0] = 4;
+		let a = [1, 2, 3], a[0] = 4;
 		return a;
 	}
 
@@ -455,8 +385,126 @@ class NativeArray
 	public function testArrayUpdate4()
 	{
 		var a;
-		let a = ["a": 1, "b": 2, "c": 3],
-			a["a"] = 4;
+		let a = ["a": 1, "b": 2, "c": 3], a["a"] = 4;
+		return a;
+	}
+
+	public function testMultipleArrayUpdate1()
+	{
+		var a;
+
+		let a = [], a["x"]["y"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate2()
+	{
+		var a;
+
+		let a = [], a["x"]["y"]["z"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate3()
+	{
+		var a;
+
+		let a = [], a[0][1] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate4()
+	{
+		var a;
+
+		let a = [], a[0][1][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate5()
+	{
+		var a;
+
+		let a = [], a["a"][1]["c"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate6()
+	{
+		var a;
+
+		let a = [], a[0]["b"][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate7()
+	{
+		var a;
+
+		let a = [],
+			a["a"][1]["c"] = true,
+			a[0]["b"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate8()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate9()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][1] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate10()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][1]["c"] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate11()
+	{
+		var a, b = "y", c = "x";
+
+		let a = [], a[b][c] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate12()
+	{
+		var a, b = "y", c = "x", d = "z";
+
+		let a = [], a[b][c][d] = null;
+
 		return a;
 	}
 
