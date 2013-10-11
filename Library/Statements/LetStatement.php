@@ -1180,7 +1180,7 @@ class LetStatement
 			}
 		}
 
-		$codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, "' . $keys . '", ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+		$codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
 	}
 
 	/**

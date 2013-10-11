@@ -41,6 +41,7 @@ PHP_METHOD(Test_NativeArray, testMultipleArray5);
 PHP_METHOD(Test_NativeArray, testMultipleArray6);
 PHP_METHOD(Test_NativeArray, testMultipleArray7);
 PHP_METHOD(Test_NativeArray, testMultipleArray8);
+PHP_METHOD(Test_NativeArray, testMultipleArray9);
 PHP_METHOD(Test_NativeArray, testMultipleArray10);
 PHP_METHOD(Test_NativeArray, testArrayAccess1);
 PHP_METHOD(Test_NativeArray, testArrayAccess2);
@@ -93,6 +94,7 @@ ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testMultipleArray6, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testMultipleArray7, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testMultipleArray8, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, testMultipleArray9, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testMultipleArray10, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testArrayAccess1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testArrayAccess2, NULL, ZEND_ACC_PUBLIC)

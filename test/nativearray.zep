@@ -318,6 +318,18 @@ class NativeArray
 		return a;
 	}
 
+	public function testMultipleArray9()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][1] = false;
+
+		return a;
+	}
+
 	public function testMultipleArray10()
 	{
 		var a;
@@ -325,7 +337,7 @@ class NativeArray
 		let a = [],
 			a["a"][0] = null,
 			a["a"][1] = true,
-			a["a"][2] = false;
+			a["a"][1]["c"] = false;
 
 		return a;
 	}
