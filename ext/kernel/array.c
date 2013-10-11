@@ -1238,26 +1238,28 @@ int zephir_array_is_associative(zval *arr) {
 
 int zephir_array_update_multi(zval **arr TSRMLS_DC, const char *types, int types_count, ...) {
 
-	int i, l; char *s;
+	int i, l, types_length; char *s;
 	va_list ap;
-	zval *fetched, **tmp, **p;
+	zval *fetched, *tmp, *p;
 
 	va_start(ap, types_count);
-	fprintf(stderr, "%d\n", types_count);
 
-	p = arr;
-	for (i = 0; i < strlen(types); ++i) {
+	p = *arr; types_length = strlen(types);
+	for (i = 0; i < types_length; ++i) {
 		switch (types[i]) {
 			case 's':
 				s = va_arg(ap, char*);
 				l = va_arg(ap, int);
-				if (zephir_array_isset_string_fetch(&fetched, *p, s, l, 1 TSRMLS_CC)) {
+				if (zephir_array_isset_string_fetch(&fetched, p, s, l, 1 TSRMLS_CC)) {
 
 				} else {
-					MAKE_STD_ZVAL(*tmp);
-					Z_SET_REFCOUNT_PP(tmp, 0);
-					array_init(*tmp);
-					zephir_array_update_string(p, s, l, tmp, PH_COPY | PH_SEPARATE);
+					MAKE_STD_ZVAL(tmp);
+					if (i == (types_length - 1)) {
+						ZVAL_BOOL(tmp, 1);
+					} else {
+						array_init(tmp);
+					}
+					zephir_array_update_string(&p, s, l, &tmp, PH_SEPARATE);
 					p = tmp;
 				}
 				break;
