@@ -980,7 +980,7 @@ struct symbol *errsym;   /* The error symbol (if defined.  NULL otherwise) */
     spy = apy->x.rp->precsym;
     if( spy==0 || spx->prec<0 || spy->prec<0 ){
       /* Not enough precedence information. */
-      fprintf(stderr, "Not enough precedence: %s\n", errsym->name);
+      fprintf(stderr, "Not enough precedence: %s, %s\n", errsym->name, spx->name);
       apy->type = CONFLICT;
       errcnt++;
     }else if( spx->prec>spy->prec ){    /* Lower precedence wins */

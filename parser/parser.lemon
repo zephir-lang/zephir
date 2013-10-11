@@ -46,6 +46,7 @@
 %right NOT .
 %right PARENTHESES_CLOSE .
 %right SBRACKET_OPEN .
+%right ARROW .
 
 %include {
 
@@ -907,12 +908,12 @@ static json_object *xx_ret_fcall(int type, xx_parser_token *F, json_object *para
 	return ret;
 }
 
-static json_object *xx_ret_mcall(int type, xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_mcall(int type, json_object *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("mcall"));
-	json_object_object_add(ret, "variable", json_object_new_string(O->token));
+	json_object_object_add(ret, "variable", O);
 	json_object_object_add(ret, "name", json_object_new_string(M->token));
 	json_object_object_add(ret, "call-type", json_object_new_int(type));
 
@@ -2042,16 +2043,16 @@ xx_common_expr(R) ::= LESS IDENTIFIER(I) GREATER xx_common_expr(O2) . {
 	R = xx_ret_expr("type-hint", xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), O2, NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(I) . {
-	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+xx_common_expr(R) ::= xx_common_expr(V) ARROW IDENTIFIER(I) . {
+	R = xx_ret_expr("property-access", V, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE . {
-	R = xx_ret_expr("property-dynamic-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
+xx_common_expr(R) ::= xx_common_expr(V) ARROW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE . {
+	R = xx_ret_expr("property-dynamic-access", V, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE . {
-	R = xx_ret_expr("property-string-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
+xx_common_expr(R) ::= xx_common_expr(V) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE . {
+	R = xx_ret_expr("property-string-access", V, xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON IDENTIFIER(I) . {
@@ -2267,32 +2268,32 @@ xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKE
 }
 
 /* o->m(false, x) */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(1, O, M, P, status->scanner_state);
 }
 
 /* o->m() */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(1, O, M, NULL, status->scanner_state);
 }
 
 /* o->{m}(false, x) */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(2, O, M, P, status->scanner_state);
 }
 
 /* o->{m}() */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(2, O, M, NULL, status->scanner_state);
 }
 
 /* o->{"m"}(false, x) */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(3, O, S, P, status->scanner_state);
 }
 
 /* o->{"m"}() */
-xx_mcall_expr(R) ::= IDENTIFIER(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
+xx_mcall_expr(R) ::= xx_common_expr(O) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
 	R = xx_ret_mcall(3, O, S, NULL, status->scanner_state);
 }
 
