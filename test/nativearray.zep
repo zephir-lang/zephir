@@ -171,8 +171,7 @@ class NativeArray
 
 	public function testArray23()
 	{
-		var a;
-		int b;
+		var a; int b;
 
 		let b = 0,
 			a = [0: b, 1: b, 2: b];
@@ -181,8 +180,7 @@ class NativeArray
 
 	public function testArray24()
 	{
-		var a;
-		double b;
+		var a; double b;
 
 		let b = 0.0,
 			a = [0: b, 1: b, 2: b];
@@ -191,8 +189,7 @@ class NativeArray
 
 	public function testArray25()
 	{
-		var a;
-		boolean b;
+		var a; boolean b;
 
 		let b = false,
 			a = [0: b, 1: b, 2: b];
@@ -201,8 +198,7 @@ class NativeArray
 
 	public function testArray26()
 	{
-		var a;
-		var b;
+		var a; var b;
 
 		let b = null,
 			a = [0: b, 1: b, 2: b];
@@ -211,8 +207,7 @@ class NativeArray
 
 	public function testArray27()
 	{
-		var a;
-		string b;
+		var a; string b;
 
 		let b = "hello",
 			a = [0: b, 1: b, 2: b];
@@ -221,8 +216,7 @@ class NativeArray
 
 	public function testArray28()
 	{
-		var a;
-		string b;
+		var a; string b;
 
 		let b = "hello",
 			a = [0: b, 1: b, 2: b];
@@ -231,8 +225,7 @@ class NativeArray
 
 	public function testArray29()
 	{
-		var a;
-		long b;
+		var a; long b;
 
 		let b = 1,
 			a = [b : "hello"];
@@ -241,11 +234,19 @@ class NativeArray
 
 	public function testArray30()
 	{
-		var a;
-		string b;
+		var a; string b;
 
 		let b = "hello",
 			a = [b : "hello"];
+		return a;
+	}
+
+	public function testMultipleArray1()
+	{
+		var a;
+
+		let a = [], a["x"]["y"] = null;
+
 		return a;
 	}
 

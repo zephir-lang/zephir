@@ -1218,7 +1218,7 @@ int zephir_array_is_associative(zval *arr) {
 		ulong expected = 0;
 
 		zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(arr), &pos);
-		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(arr), (void**)&entry, &pos) == SUCCESS) {
+		while (zend_hash_get_current_data_ex(Z_ARRVAL_P(arr), (void**) &entry, &pos) == SUCCESS) {
 
 			if (HASH_KEY_IS_LONG == zend_hash_get_current_key_ex(Z_ARRVAL_P(arr), &skey, &skey_len, &nkey, 1, &pos)) {
 				if (expected != nkey) {
@@ -1232,6 +1232,39 @@ int zephir_array_is_associative(zval *arr) {
 			zend_hash_move_forward_ex(Z_ARRVAL_P(arr), &pos);
 		}
 	}
+
+	return 0;
+}
+
+int zephir_array_update_multi(zval **arr TSRMLS_DC, const char *types, int types_count, ...) {
+
+	int i, l; char *s;
+	va_list ap;
+	zval *fetched, **tmp, **p;
+
+	va_start(ap, types_count);
+	fprintf(stderr, "%d\n", types_count);
+
+	p = arr;
+	for (i = 0; i < strlen(types); ++i) {
+		switch (types[i]) {
+			case 's':
+				s = va_arg(ap, char*);
+				l = va_arg(ap, int);
+				if (zephir_array_isset_string_fetch(&fetched, *p, s, l, 1 TSRMLS_CC)) {
+
+				} else {
+					MAKE_STD_ZVAL(*tmp);
+					Z_SET_REFCOUNT_PP(tmp, 0);
+					array_init(*tmp);
+					zephir_array_update_string(p, s, l, tmp, PH_COPY | PH_SEPARATE);
+					p = tmp;
+				}
+				break;
+		}
+	}
+
+	va_end(ap);
 
 	return 0;
 }

@@ -600,6 +600,19 @@ PHP_METHOD(Test_NativeArray, testArray30) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testMultipleArray1) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a TSRMLS_CC, "ss", 4, SL("x"), SL("y"));
+	RETURN_CCTOR(a);
+
+}
+
 PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 
 	zval *a, *b, *_0;
