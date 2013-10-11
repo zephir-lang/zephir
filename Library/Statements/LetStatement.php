@@ -1131,6 +1131,11 @@ class LetStatement
 
 		$compilationContext->headersManager->add('kernel/array');
 
+		/**
+		 * Create a temporal zval (if needed)
+		 */
+		$symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+
 		$keys = '';
 		$numberParams = 0;
 		$offsetItems = array();
@@ -1141,7 +1146,7 @@ class LetStatement
 				case 'long':
 				case 'ulong':
 					$keys .= 'l';
-					$offsetItems[] = $exprIndex->getCode();
+					$offsetItems[] = $offsetExpr->getCode();
 					$numberParams++;
 					break;
 				case 'string':
@@ -1161,12 +1166,8 @@ class LetStatement
 							$numberParams++;
 							break;
 						case 'string':
-							$keys .= 's';
-							$offsetItems = $variableIndex->getName();
-							$numberParams++;
-							break;
 						case 'variable':
-							$keys .= 'v';
+							$keys .= 'z';
 							$offsetItems = $variableIndex->getName();
 							$numberParams++;
 							break;
@@ -1179,7 +1180,7 @@ class LetStatement
 			}
 		}
 
-		$codePrinter->output('zephir_array_update_multi(&' . $variable . ' TSRMLS_CC, "' . $keys . '", ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+		$codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, "' . $keys . '", ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
 	}
 
 	/**

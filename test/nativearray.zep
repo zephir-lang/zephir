@@ -250,6 +250,86 @@ class NativeArray
 		return a;
 	}
 
+	public function testMultipleArray2()
+	{
+		var a;
+
+		let a = [], a["x"]["y"]["z"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray3()
+	{
+		var a;
+
+		let a = [], a[0][1] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray4()
+	{
+		var a;
+
+		let a = [], a[0][1][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray5()
+	{
+		var a;
+
+		let a = [], a["a"][1]["c"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray6()
+	{
+		var a;
+
+		let a = [], a[0]["b"][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray7()
+	{
+		var a;
+
+		let a = [],
+			a["a"][1]["c"] = true,
+			a[0]["b"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArray8()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArray10()
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][2] = false;
+
+		return a;
+	}
+
 	public function testArrayAccess1()
 	{
 		var a, b;
