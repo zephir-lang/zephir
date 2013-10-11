@@ -1250,7 +1250,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 			case 's':
 				s = va_arg(ap, char*);
 				l = va_arg(ap, int);
-				if (zephir_array_isset_string_fetch(&fetched, p, s, l, 1 TSRMLS_CC)) {
+				if (zephir_array_isset_string_fetch(&fetched, p, s, l + 1, 1 TSRMLS_CC)) {
 					if (Z_TYPE_P(fetched) == IS_ARRAY) {
 						p = fetched;
 					} else {
