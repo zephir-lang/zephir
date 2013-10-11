@@ -1162,13 +1162,13 @@ class LetStatement
 						case 'long':
 						case 'ulong':
 							$keys .= 'l';
-							$offsetItems = $variableIndex->getName();
+							$offsetItems[] = $variableIndex->getName();
 							$numberParams++;
 							break;
 						case 'string':
 						case 'variable':
 							$keys .= 'z';
-							$offsetItems = $variableIndex->getName();
+							$offsetItems[] = $variableIndex->getName();
 							$numberParams++;
 							break;
 						default:
@@ -1180,7 +1180,12 @@ class LetStatement
 			}
 		}
 
-		$codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+		$codePrinter->output('zephir_array_update_multi(&' .
+			$variable .
+			', &' . $symbolVariable->getName() .
+			' TSRMLS_CC, SL("' . $keys . '"), ' . strlen($keys) . ', ' .
+			$numberParams . ', ' . join(', ', $offsetItems) .
+		');');
 	}
 
 	/**

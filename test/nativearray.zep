@@ -342,12 +342,29 @@ class NativeArray
 		return a;
 	}
 
+	public function testMultipleArray11()
+	{
+		var a, b = "y", c = "x";
+
+		let a = [], a[b][c] = null;
+
+		return a;
+	}
+
+	public function testMultipleArray12()
+	{
+		var a, b = "y", c = "x", d = "z";
+
+		let a = [], a[b][c][d] = null;
+
+		return a;
+	}
+
 	public function testArrayAccess1()
 	{
 		var a, b;
 
-		let a = [1, 2, 3],
-			b = a[0];
+		let a = [1, 2, 3], b = a[0];
 
 		return b;
 	}
