@@ -12,9 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/concat.h"
 #include "kernel/operators.h"
@@ -55,7 +55,7 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
-	zval *pattern, *paths = NULL, *httpMethods = NULL, *_0;
+	zval *pattern, *paths = NULL, *httpMethods = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
@@ -68,8 +68,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	}
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "reconfigure", pattern, paths);
+	zephir_call_method_p2_noret(this_ptr, "reconfigure", pattern, paths);
 	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
@@ -346,7 +345,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
 	int _1;
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted = NULL, _0, *_2 = NULL, *_3;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, _0, *_2 = NULL, *_3;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -434,9 +433,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 351)) {
-			ZEPHIR_INIT_NVAR(_2);
-			zephir_call_method_p1(_2, this_ptr, "extractnamedparams", pattern);
-			ZEPHIR_CPY_WRT(extracted, _2);
+			ZEPHIR_INIT_VAR(extracted);
+			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_2);
@@ -446,9 +444,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		} else {
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);
 		}
-		ZEPHIR_INIT_NVAR(_2);
-		zephir_call_method_p1(_2, this_ptr, "compilepattern", pcrePattern);
-		ZEPHIR_CPY_WRT(compiledPattern, _2);
+		ZEPHIR_INIT_VAR(compiledPattern);
+		zephir_call_method_p1(compiledPattern, this_ptr, "compilepattern", pcrePattern);
 	} else {
 		ZEPHIR_CPY_WRT(compiledPattern, pattern);
 	}

@@ -15,11 +15,10 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
-#include "kernel/array.h"
 
 
 /**
- * Function calls
+ * Method calls
  */
 ZEPHIR_INIT_CLASS(Test_Mcall) {
 
@@ -92,82 +91,70 @@ PHP_METHOD(Test_Mcall, testMethod6) {
 
 PHP_METHOD(Test_Mcall, testCall1) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod1");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod1");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall2) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod2");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod2");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall3) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod3");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod3");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall4) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod4", a, b);
-	RETURN_CCTOR(_0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod4", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall5) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod5", a, b);
-	RETURN_CCTOR(_0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod5", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall6) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod6", a, b);
-	RETURN_CCTOR(_0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod6", a, b);
+	RETURN_MM();
 
 }
 
@@ -227,110 +214,69 @@ PHP_METHOD(Test_Mcall, testCall9) {
 
 PHP_METHOD(Test_Mcall, testCall10) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod1");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod1");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall11) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod2");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod2");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall12) {
 
-	zval *_0;
-
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method(_0, this_ptr, "testmethod3");
-	RETURN_CCTOR(_0);
+	zephir_call_method(return_value, this_ptr, "testmethod3");
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall13) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod4", a, b);
-	RETURN_CCTOR(_0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod4", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall14) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod5", a, b);
-	RETURN_CCTOR(_0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod5", a, b);
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Mcall, testCall15) {
 
-	zval *a, *b, *_0;
+	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_method_p2(_0, this_ptr, "testmethod6", a, b);
-	RETURN_CCTOR(_0);
-
-}
-
-PHP_METHOD(Test_Mcall, testCall16) {
-
-	zend_function *_1 = NULL;
-	zval *s, *_0 = NULL;
-	int i = 0;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(s);
-	ZVAL_STRING(s, "", 1);
-
-	while (1) {
-		ZEPHIR_INIT_NVAR(_0);
-		zephir_call_method_cache(_0, this_ptr, "testmethod1", &_1);
-		zephir_concat_self(&s, _0 TSRMLS_CC);
-		if ((i == 5)) {
-			break;
-		} else {
-			i++;
-		}
-	}
-	array_init(return_value);
-	zephir_array_fast_append(return_value, s);
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_LONG(_0, i);
-	zephir_array_fast_append(return_value, _0);
+	zephir_call_method_p2(return_value, this_ptr, "testmethod6", a, b);
 	RETURN_MM();
 
 }

@@ -1,6 +1,6 @@
 
 /**
- * Function calls
+ * Method calls
  */
 
 namespace Test;
@@ -110,20 +110,6 @@ class Mcall
 	public function testCall15(var a, var b)
 	{
 		return this->{"testMethod6"}(a, b);
-	}
-
-	public function testCall16()
-	{
-		int i = 0; var s = "";
-		loop {
-			let s.= this->testMethod1();
-			if i == 5 {
-				break;
-			} else {
-				let i++;
-			}
-		}
-		return [s, i];
 	}
 
 }

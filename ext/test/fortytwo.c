@@ -33,13 +33,13 @@ ZEPHIR_INIT_CLASS(Test_FortyTwo) {
 
 PHP_METHOD(Test_FortyTwo, proof) {
 
-	zend_function *_11 = NULL;
+	zend_function *_10 = NULL;
 	zend_class_entry *_9;
 	zend_bool _5;
 	HashTable *_3;
 	HashPosition _2;
 	int i, j, _6, _7;
-	zval *box, *side = NULL, *_0 = NULL, *_1 = NULL, **_4, *_8, *_10 = NULL;
+	zval *box, *side = NULL, *_0 = NULL, *_1 = NULL, **_4, *_8;
 
 	ZEPHIR_MM_GROW();
 
@@ -255,9 +255,8 @@ PHP_METHOD(Test_FortyTwo, proof) {
 			_9 = zend_fetch_class(SL("Exception"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 			object_init_ex(_0, _9);
 			ZEPHIR_INIT_NVAR(_1);
-			ZEPHIR_INIT_NVAR(_10);
-			ZVAL_STRING(_10, "not true", 1);
-			zephir_call_method_p1_cache(_1, _0, "__construct", &_11, _10);
+			ZVAL_STRING(_1, "not true", 1);
+			zephir_call_method_p1_cache_noret(_0, "__construct", &_10, _1);
 			zephir_throw_exception(_0 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
 			return;

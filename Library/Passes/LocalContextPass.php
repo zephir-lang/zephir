@@ -410,6 +410,7 @@ class LocalContextPass
 				case 'break':
 				case 'continue':
 				case 'empty':
+				case 'cblock':
 					break;
 				default:
 					echo 'Statement=', $statement['type'], PHP_EOL;

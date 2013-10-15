@@ -48,7 +48,7 @@ class WhileStatement
 		$codePrinter->increaseLevel();
 
 		/**
-		 * Variables are initialized in a different way inside cycle
+		 * Variables are initialized in a different way inside loops
 		 */
 		$compilationContext->insideCycle++;
 

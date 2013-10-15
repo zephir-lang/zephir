@@ -480,6 +480,7 @@ class StaticTypeInference
 				case 'continue':
 				case 'unset':
 				case 'empty':
+				case 'cblock':
 					break;
 				default:
 					echo 'SSTI=', $statement['type'];

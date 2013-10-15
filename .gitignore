@@ -132,3 +132,5 @@ ext/test/fortytwo.o
 bin/zephir55
 ext/test/returns.lo
 ext/test/returns.o
+ext/test/cblock.lo
+ext/test/mcallchained.lo

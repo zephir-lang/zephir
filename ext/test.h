@@ -18,6 +18,7 @@
 #include "test/flow.h"
 #include "test/fortytwo.h"
 #include "test/mcall.h"
+#include "test/mcallchained.h"
 #include "test/nativearray.h"
 #include "test/oo.h"
 #include "test/oo/ooconstruct.h"
