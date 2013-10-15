@@ -376,7 +376,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 					xx_parse_with_token(xx_parser, XX_T_COMMENT, XX_COMMENT, &token, parser_status);
 				}
 				break;
-
+			case XX_T_CBLOCK:
+				xx_parse_with_token(xx_parser, XX_T_CBLOCK, XX_CBLOCK, &token, parser_status);
+				break;
 			case XX_T_TYPE_INTEGER:
 				xx_(xx_parser, XX_TYPE_INTEGER, NULL, parser_status);
 				break;

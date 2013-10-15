@@ -132,6 +132,8 @@
 #define XX_T_OR 416
 #define XX_T_DOUBLECOLON 417
 
+#define XX_T_CBLOCK 451
+
 /* List of tokens and their names */
 typedef struct _xx_token_names {
 	unsigned int code;

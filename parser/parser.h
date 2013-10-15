@@ -101,3 +101,4 @@
 #define XX_NULL                           101
 #define XX_TRUE                           102
 #define XX_FALSE                          103
+#define XX_CBLOCK                         104

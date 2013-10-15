@@ -465,6 +465,27 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		CBLOCK = ("%{"([^}]+|[}]+[^%{])*"}%");
+		CBLOCK {
+			token->opcode = XX_T_CBLOCK;
+			token->value = strndup(q+1, YYCURSOR - q - 3 );
+			token->len = YYCURSOR - q - 3;
+			{
+				int k, ch = s->active_char;
+				for (k = 0; k < (token->len - 1); k++) {
+					if (token->value[k] == '\n') {
+						ch = 1;
+						s->active_line++;
+					} else {
+						ch++;
+					}
+				}
+				s->active_char = ch;
+			}
+			q = YYCURSOR;
+			return 0;
+		}
+
 		IDENTIFIER = [\\_\$]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
 
