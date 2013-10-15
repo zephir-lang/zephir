@@ -1705,7 +1705,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles x->y[z] = foo
+	 * Compiles x->y[z] = {expr} (single offset assignment)
 	 *
 	 * @param string $variable
 	 * @param \Variable $symbolVariable
@@ -1713,17 +1713,9 @@ class LetStatement
 	 * @param \CompilationContext $compilationContext,
 	 * @param array $statement
 	 */
-	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+	protected function _assignPropertyArraySingleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
-
-		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
-		}
-
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
-		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
@@ -1733,7 +1725,7 @@ class LetStatement
 		/**
 		 * Only string/variable/int
 		 */
-		$indexExpression = new Expression($statement['index-expr']);
+		$indexExpression = new Expression($statement['index-expr'][0]);
 		$resolvedIndex = $indexExpression->compile($compilationContext);
 
 		switch ($resolvedIndex->getType()) {
@@ -1820,6 +1812,85 @@ class LetStatement
 				break;
 			default:
 				throw new CompilerException("Index: " . $resolvedIndex->getType() . " cannot be updated into array property", $statement);
+		}
+	}
+
+	/**
+	 * Compiles x->y[a][b] = {expr} (multiple offset assignment)
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
+	 * @param \CompilationContext $compilationContext,
+	 * @param array $statement
+	 */
+	protected function _assignPropertyArrayMultipleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
+	{
+
+		//print_r($statement);
+
+		/**
+		 * We read the variable member in read-only mode, this must return a reference
+		 * to the real property in the object
+		 *
+		 * This could introduce a bug because the variable will be separated
+		 *
+		 * @todo, use a builder
+		 */
+		$propertyExpr = new Expression(array(
+			'type' => 'property-access',
+			'left' => array(
+				'type' => 'variable',
+				'value' => $statement['variable']
+			),
+			'right' => array(
+				'type' => 'variable',
+				'value' => $statement['property']
+			)
+		));
+
+		$propertyExpr->setReadOnly(true);
+		$property = $propertyExpr->compile($compilationContext);
+
+		$propertyVariable = $compilationContext->symbolTable->getVariableForRead($property->getCode(), $compilationContext, $statement);
+		switch ($propertyVariable->getType()) {
+
+		}
+
+		$this->assignArrayIndex($propertyVariable->getName(), $propertyVariable, $resolvedExpr, $compilationContext, $statement);
+
+		echo $property->getCode(), PHP_EOL;
+	}
+
+	/**
+	 * Compiles x->y[z] = foo
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
+	 * @param \CompilationContext $compilationContext,
+	 * @param array $statement
+	 */
+	public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
+	{
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+		}
+
+		/**
+		 * Update the property according to the number of array-offsets
+		 */
+		if (count($statement['index-expr']) == 1) {
+			$this->_assignPropertyArraySingleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+		} else {
+			$this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
 		}
 
 	}

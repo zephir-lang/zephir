@@ -86,6 +86,7 @@ class FunctionCall extends Call
 		if ($reflector) {
 
 			if (isset($expression['parameters'])) {
+
 				/**
 				 * Check if the number of parameters
 				 */

@@ -635,7 +635,6 @@ class ClassMethod
 			case 'int':
 			case 'uint':
 			case 'long':
-			case 'ulong':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
 				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
 				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
@@ -663,6 +662,7 @@ class ClassMethod
 				$code .= PHP_EOL;
 				return $code;
 			case 'string':
+			case 'ulong':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING) {' . PHP_EOL;
 				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
