@@ -588,7 +588,67 @@ class ClassMethod
 	}
 
 	/**
-	 * Assigns a zval value to a static type
+	 * Assigns a zval value to a static low-level type
+	 *
+	 * @param array $parameter
+	 * @param \CompilationContext $compilationContext
+	 * @return string
+	 */
+	public function checkStrictType($parameter, $compilationContext)
+	{
+		if (isset($parameter['data-type'])) {
+			$dataType = $parameter['data-type'];
+		} else {
+			$dataType = 'variable';
+		}
+
+		$compilationContext->headersManager->add('ext/spl/spl_exceptions');
+		$compilationContext->headersManager->add('kernel/exception');
+
+		switch ($dataType) {
+			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
+				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t" . '}' . PHP_EOL;
+				$code .= PHP_EOL;
+				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				return $code;
+			case 'bool':
+				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t" . '}' . PHP_EOL;
+				$code .= PHP_EOL;
+				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				return $code;
+			case 'double':
+				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t" . '}' . PHP_EOL;
+				$code .= PHP_EOL;
+				$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				return $code;
+			case 'string':
+				$compilationContext->symbolTable->mustGrownStack(true);
+				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING) {' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t" . '}' . PHP_EOL;
+				$code .= PHP_EOL;
+				$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
+				return $code;
+			default:
+				throw new CompilerException("Parameter type: " . $dataType, $parameter);
+		}
+	}
+
+	/**
+	 * Assigns a zval value to a static low-level type
 	 *
 	 * @param array $parameter
 	 * @param \CompilationContext $compilationContext
@@ -933,6 +993,12 @@ class ClassMethod
 			 */
 			foreach ($requiredParams as $parameter) {
 
+				if (isset($parameter['mandatory'])) {
+					$mandatory = $parameter['mandatory'];
+				} else {
+					$mandatory = 0;
+				}
+
 				if (isset($parameter['data-type'])) {
 					$dataType = $parameter['data-type'];
 				} else {
@@ -944,7 +1010,11 @@ class ClassMethod
 					/**
 					 * Assign value from zval to low level type
 					 */
-					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+					if ($mandatory) {
+						$initCode .= $this->checkStrictType($parameter, $compilationContext);
+					} else {
+						$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+					}
 				}
 
 				if ($dataType == 'variable') {

@@ -14,6 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 
 
 /**
@@ -82,6 +84,44 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 
 	RETURN_BOOL(enabled);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
+
+	zval *age_param = NULL;
+	int age;
+
+	zephir_fetch_params(0, 1, 0, &age_param);
+
+		if (Z_TYPE_P(age_param) != IS_LONG) {
+				zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a long/integer") TSRMLS_CC);
+				RETURN_NULL();
+		}
+
+		age = Z_LVAL_P(age_param);
+
+
+	RETURN_LONG(age);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
+
+	zval *average_param = NULL;
+	double average;
+
+	zephir_fetch_params(0, 1, 0, &average_param);
+
+		if (Z_TYPE_P(average_param) != IS_DOUBLE) {
+				zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be a double") TSRMLS_CC);
+				RETURN_NULL();
+		}
+
+		average = Z_DVAL_P(average_param);
+
+
+	RETURN_DOUBLE(average);
 
 }
 

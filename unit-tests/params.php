@@ -20,3 +20,11 @@ assert($t->setEnabled(1) === true);
 assert($t->setEnabled(0) === false);
 assert($t->setEnabled("1") === true);
 assert($t->setEnabled("0") === false);
+
+assert($t->setStrictAge(17) === 17);
+try { $t->setStrictAge(17.0); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
+try { $t->setStrictAge("17"); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
+
+assert($t->setStrictAverage(17.1) === 17.1);
+try { $t->setStrictAverage(17); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
+try { $t->setStrictAverage("17"); assert(false); } catch (InvalidArgumentException $e) { assert(true); }

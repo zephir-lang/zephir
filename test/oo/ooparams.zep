@@ -28,4 +28,14 @@ class OoParams
 		return enabled;
 	}
 
+	public function setStrictAge(int! age)
+	{
+		return age;
+	}
+
+	public function setStrictAverage(double! average)
+	{
+		return average;
+	}
+
 }
