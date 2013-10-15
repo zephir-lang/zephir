@@ -51,12 +51,12 @@ class MethodCall extends Call
 
 		$expression = $expr->getExpression();
 
-		$expr = new Expression($expression['variable']);
-		$exprVariable = $expr->compile($compilationContext);
+		$exprVariable = new Expression($expression['variable']);
+		$exprCompiledVariable = $exprVariable->compile($compilationContext);
 
-		switch ($exprVariable->getType()) {
+		switch ($exprCompiledVariable->getType()) {
 			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
 					case 'variable':
 						break;
@@ -65,7 +65,7 @@ class MethodCall extends Call
 				}
 				break;
 			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as method caller", $expression['variable']);
+				throw new CompiledException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -268,10 +268,6 @@ class MethodCall extends Call
 					}
 				}
 			}
-		}
-
-		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-			echo strtolower($expression['name']), PHP_EOL;
 		}
 
 		/**
