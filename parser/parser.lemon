@@ -962,6 +962,20 @@ static json_object *xx_ret_comment(xx_parser_token *T, xx_scanner_state *state)
 	return ret;
 }
 
+static json_object *xx_ret_cblock(xx_parser_token *T, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("cblock"));
+	json_object_object_add(ret, "value", json_object_new_string(T->token));
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 }
 
 %syntax_error {
@@ -1040,6 +1054,11 @@ xx_top_statement(R) ::= xx_interface_def(T) . {
 xx_top_statement(R) ::= xx_comment(T) . {
 	R = T;
 }
+
+xx_top_statement(R) ::= xx_cblock(T) . {
+	R = T;
+}
+
 
 xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_namespace(I, status->scanner_state);
@@ -1528,6 +1547,10 @@ xx_statement_list(R) ::= xx_statement(S) . {
 	R = xx_ret_list(NULL, S);
 }
 
+xx_statement(R) ::= xx_cblock(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_let_statement(S) . {
 	R = S;
 }
@@ -1603,6 +1626,8 @@ xx_statement(R) ::= xx_for_statement(S) . {
 xx_statement(R) ::= xx_comment(S) . {
 	R = S;
 }
+
+
 
 xx_statement(R) ::= xx_empty_statement(S) . {
 	R = S;
@@ -2418,4 +2443,8 @@ xx_eval_expr(R) ::= xx_common_expr(E) . {
 
 xx_comment(R) ::= COMMENT(C) . {
 	R = xx_ret_comment(C, status->scanner_state);
+}
+
+xx_cblock(R) ::= CBLOCK(C) . {
+	R = xx_ret_cblock(C, status->scanner_state);
 }

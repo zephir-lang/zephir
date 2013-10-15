@@ -173,6 +173,9 @@ class StatementsBlock
 					$expr->setExpectReturn(false);
 					$methodCall->compile($expr, $compilationContext);
 					break;
+				case 'cblock':
+					$compilationContext->codePrinter->output($statement['value']);
+					break;
 				default:
 					$compilationContext->codePrinter->output('//missing ' . $statement['type']);
 			}
