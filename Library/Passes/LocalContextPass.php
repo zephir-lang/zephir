@@ -281,8 +281,8 @@ class LocalContextPass
 				break;
 			case 'property-access':
 			case 'property-dynamic-access':
-			case 'array-access':
 			case 'static-property-access':
+			case 'array-access':
 				$this->passExpression($expression['left']);
 				break;
 			case 'isset':

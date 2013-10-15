@@ -5,6 +5,7 @@
 #include "test/arithmetic.h"
 #include "test/assign.h"
 #include "test/cast.h"
+#include "test/cblock.h"
 #include "test/constants.h"
 #include "test/constantsparent.h"
 #include "test/declare.h"

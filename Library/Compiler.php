@@ -38,17 +38,6 @@ class Compiler
 
 	protected static $_reflections = array();
 
-	const VERSION = '0.2.2a';
-
-	const LOGO ='
- _____              __    _
-/__  /  ___  ____  / /_  (_)____
-  / /  / _ \/ __ \/ __ \/ / ___/
- / /__/  __/ /_/ / / / / / /
-/____/\___/ .___/_/ /_/_/_/
-         /_/
-';
-
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -312,14 +301,8 @@ class Compiler
 		}
 	}
 
-	/**
-	 *
-	 * @param Config $config
-	 * @param Logger $logger
-	 */
-	public function compile(Config $config, Logger $logger)
+	protected function _checkDirectory()
 	{
-
 		if (!file_exists('config.json')) {
 			throw new Exception("Zephir extension is not initialized in this directory");
 		}
@@ -328,10 +311,45 @@ class Compiler
 			mkdir('.temp');
 		}
 
+	}
+
+	public function dumpJson(Config $config, Logger $logger)
+	{
+		//JSON_PRETTY_PRINT
+
+		$this->_checkDirectory();
+
 		/**
-		 * The string manager manages
+		 * Get global namespace
 		 */
-		$stringManager = new StringsManager();
+		$namespace = $config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
+		}
+
+		/**
+		 * Round 1. pre-compile all files in memory
+		 */
+		$this->_recursivePreCompile($namespace);
+		if (!count($this->_files)) {
+			throw new Exception("Zephir files to compile weren't found");
+		}
+
+		if (isset($_SERVER['argv'][2])) {
+			//$this->_
+		}
+
+	}
+
+	/**
+	 *
+	 * @param Config $config
+	 * @param Logger $logger
+	 */
+	public function compile(Config $config, Logger $logger)
+	{
+
+		$this->_checkDirectory();
 
 		/**
 		 * Get global namespace
@@ -363,6 +381,11 @@ class Compiler
 		if (is_array($constantsSources)) {
 			$this->_loadConstantsSources($constantsSources);
 		}
+
+		/**
+		 * The string manager manages
+		 */
+		$stringManager = new StringsManager();
 
 		/**
 		 * Round 3. compile all files to C sources
@@ -647,153 +670,6 @@ class Compiler
 		}
 
 		file_put_contents('ext/php_' . $project . '.h', $content);
-
-	}
-
-	/**
-	 * Shows an exception opening the file and highlighing the wrong part
-	 *
-	 * @param Exception $e
-	 * @param Config $config
-	 */
-	protected static function showException(Exception $e, Config $config=null)
-	{
-		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
-		if (method_exists($e, 'getExtra')) {
-			$extra = $e->getExtra();
-			if (is_array($extra)) {
-				if (isset($extra['file'])) {
-					echo PHP_EOL;
-					$lines = file($extra['file']);
-					if (isset($lines[$extra['line'] - 1])) {
-						$line = $lines[$extra['line'] - 1];
-						echo "\t", str_replace("\t", " ", $line);
-						if (($extra['char'] - 1) > 0) {
-							echo "\t", str_repeat("-", $extra['char'] - 1), "^", PHP_EOL;
-						}
-					}
-				}
-			}
-		}
-		echo PHP_EOL;
-		if ($config && $config->get('verbose')) {
-			echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
-			echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
-		}
-		exit(1);
-	}
-
-	/**
-	 * Boots the compiler executing the specified action
-	 */
-	public static function boot()
-	{
-		try {
-
-			$c = new Compiler();
-
-			/**
-			 * Global config
-			 */
-			$config = new Config();
-
-			/**
-			 * Global logger
-			 */
-			$logger = new Logger($config);
-
-			if (isset($_SERVER['argv'][1])) {
-				$action = $_SERVER['argv'][1];
-			} else {
-				if (!file_exists('config.json')) {
-					$action = 'help';
-				}else {
-					$action = 'compile';
-				}
-			}
-
-			/**
-			 * Change configurations flags
-			 */
-			if ($_SERVER['argc'] >= 2) {
-				for ($i = 2; $i < $_SERVER['argc']; $i++) {
-
-					$parameter = $_SERVER['argv'][$i];
-					if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches)) {
-						$config->set($matches[1], false);
-						continue;
-					}
-
-					if (preg_match('/^-W([a-z0-9\-]+)/', $parameter, $matches)) {
-						$logger->set($matches[1], false);
-						continue;
-					}
-
-					switch ($parameter) {
-						case '-w':
-							$config->set('silent', true);
-							break;
-						case '-v':
-							$config->set('verbose', true);
-							break;
-						default:
-							break;
-					}
-				}
-			}
-
-			switch ($action) {
-				case 'init':
-					$c->init($config, $logger);
-					break;
-				case 'generate':
-					$c->compile($config, $logger);
-					break;
-				case 'compile':
-					$c->compile($config, $logger);
-					$c->install($config, $logger);
-					break;
-				case 'install':
-					$c->install($config, $logger);
-					break;
-				case 'version':
-					echo self::VERSION, PHP_EOL;
-					break;
-				case 'help':
-					$c->help();
-					break;
-				default:
-					throw new Exception('Unrecognized action "' . $action . '"');
-			}
-
-		} catch (Exception $e) {
-			self::showException($e, isset($config) ? $config : null);
-		}
-	}
-
-
-	/**
-	 * Display zephir commands help
-	 */
-	public function help()
-	{
-
-		echo self::LOGO, PHP_EOL;
-		echo "zephir version " , self::VERSION,  PHP_EOL, PHP_EOL;
-		echo "Usage: ", PHP_EOL;
-		echo "\tcommand [options]", PHP_EOL;
-		echo PHP_EOL;
-		echo "Available commands:", PHP_EOL;
-		echo sprintf("\t%-20s%s\n", "init [namespace]", "Initializes a Zephir extension");
-		echo sprintf("\t%-20s%s\n", "compile", "Compile and installs an extension");
-		echo sprintf("\t%-20s%s\n", "compile-only", "Compile an extension");
-		echo sprintf("\t%-20s%s\n", "version", "Display zephir version");
-		echo sprintf("\t%-20s%s\n", "help", "Displays help");
-		echo PHP_EOL;
-		echo "Options:", PHP_EOL;
-		echo sprintf("\t%-20s%s\n", "-fno-([a-z0-9\-]+)", "Setting options to Compiler");
-		echo sprintf("\t%-20s%s\n", "-W([a-z0-9\-]+)", "Setting warning options to Compiler");
-		echo PHP_EOL;
 
 	}
 

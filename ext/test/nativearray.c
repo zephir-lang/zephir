@@ -600,179 +600,6 @@ PHP_METHOD(Test_NativeArray, testArray30) {
 
 }
 
-PHP_METHOD(Test_NativeArray, testMultipleArray1) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("ss"), 4, SL("x"), SL("y"));
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray2) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sss"), 6, SL("x"), SL("y"), SL("z"));
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray3) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("ll"), 2, 0, 1);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray4) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("lll"), 3, 0, 1, 2);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray5) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray6) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("lsl"), 4, 0, SL("b"), 2);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray7) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("lsl"), 4, 0, SL("b"), 2);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray8) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sl"), 3, SL("a"), 2);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray9) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray10) {
-
-	zval *a;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray11) {
-
-	zval *a, *b, *c;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(b);
-	ZVAL_STRING(b, "y", 1);
-	ZEPHIR_INIT_VAR(c);
-	ZVAL_STRING(c, "x", 1);
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("zz"), 2, b, c);
-	RETURN_CCTOR(a);
-
-}
-
-PHP_METHOD(Test_NativeArray, testMultipleArray12) {
-
-	zval *a, *b, *c, *d;
-
-	ZEPHIR_MM_GROW();
-	ZEPHIR_INIT_VAR(b);
-	ZVAL_STRING(b, "y", 1);
-	ZEPHIR_INIT_VAR(c);
-	ZVAL_STRING(c, "x", 1);
-	ZEPHIR_INIT_VAR(d);
-	ZVAL_STRING(d, "z", 1);
-
-	ZEPHIR_INIT_VAR(a);
-	array_init(a);
-	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("zzz"), 3, b, c, d);
-	RETURN_CCTOR(a);
-
-}
-
 PHP_METHOD(Test_NativeArray, testArrayAccess1) {
 
 	zval *a, *b, *_0;
@@ -891,6 +718,125 @@ PHP_METHOD(Test_NativeArray, testArrayAccess6) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testArrayMultipleAccess1) {
+
+	zval *a, *b, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	add_index_stringl(_0, 0, SL("a"), 1);
+	add_index_stringl(_0, 1, SL("b"), 1);
+	zephir_array_update_long(&a, 0, &_0, PH_COPY);
+	zephir_array_fetch_long(&_1, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&b, _1, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTOR(b);
+
+}
+
+PHP_METHOD(Test_NativeArray, testArrayMultipleAccess2) {
+
+	zval *a, *b, *_0, *_1, *_2;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "a", 1);
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_STRING(_1, "b", 1);
+	zephir_array_fast_append(_0, _1);
+	zephir_array_fast_append(a, _0);
+	zephir_array_fetch_long(&_2, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&b, _2, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTOR(b);
+
+}
+
+PHP_METHOD(Test_NativeArray, testArrayMultipleAccess3) {
+
+	zval *a, *b, *_0, *_1, *_2, *_3, *_4;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	ZEPHIR_INIT_VAR(_1);
+	array_init(_1);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_STRING(_2, "a", 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_BNVAR(_2);
+	ZVAL_STRING(_2, "b", 1);
+	zephir_array_fast_append(_1, _2);
+	zephir_array_fast_append(_0, _1);
+	zephir_array_fast_append(a, _0);
+	zephir_array_fetch_long(&_3, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&_4, _3, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&b, _4, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTOR(b);
+
+}
+
+PHP_METHOD(Test_NativeArray, testArrayMultipleAccess4) {
+
+	zval *a, *b, *_0, *_1, *_2, *_3, *_4;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	ZEPHIR_INIT_VAR(_1);
+	array_init(_1);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_STRING(_2, "a", 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_BNVAR(_2);
+	ZVAL_STRING(_2, "b", 1);
+	zephir_array_fast_append(_1, _2);
+	zephir_array_fast_append(_0, _1);
+	zephir_array_fast_append(a, _0);
+	zephir_array_fetch_long(&_3, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&_4, _3, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&b, _4, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTOR(b);
+
+}
+
+PHP_METHOD(Test_NativeArray, testArrayMultipleAccess5) {
+
+	zval *a, *b, *_0, *_1, *_2, *_3;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	ZEPHIR_INIT_VAR(_1);
+	array_init(_1);
+	add_assoc_long_ex(_1, SS("c"), 0);
+	add_assoc_long_ex(_1, SS("d"), 1);
+	zephir_array_update_string(&_0, SL("b"), &_1, PH_COPY | PH_SEPARATE);
+	zephir_array_update_string(&a, SL("a"), &_0, PH_COPY | PH_SEPARATE);
+	zephir_array_fetch_string(&_2, a, SL("a"), PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_string(&_3, _2, SL("b"), PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_string(&b, _3, SL("c"), PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTOR(b);
+
+}
+
 PHP_METHOD(Test_NativeArray, testArrayUpdate1) {
 
 	zval *a, *_0;
@@ -985,6 +931,179 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_update_string(&a, SL("a"), &_0, PH_COPY | PH_SEPARATE);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate1) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("ss"), 4, SL("x"), SL("y"));
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate2) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sss"), 6, SL("x"), SL("y"), SL("z"));
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate3) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("ll"), 2, 0, 1);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate4) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("lll"), 3, 0, 1, 2);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate5) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate6) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("lsl"), 4, 0, SL("b"), 2);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate7) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("lsl"), 4, 0, SL("b"), 2);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate8) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sl"), 3, SL("a"), 2);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate9) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate10) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("sl"), 3, SL("a"), 0);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("sl"), 3, SL("a"), 1);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("sls"), 5, SL("a"), 1, SL("c"));
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate11) {
+
+	zval *a, *b, *c;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "y", 1);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_STRING(c, "x", 1);
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("zz"), 2, b, c);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate12) {
+
+	zval *a, *b, *c, *d;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_STRING(b, "y", 1);
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_STRING(c, "x", 1);
+	ZEPHIR_INIT_VAR(d);
+	ZVAL_STRING(d, "z", 1);
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_multi(&a, &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("zzz"), 3, b, c, d);
 	RETURN_CCTOR(a);
 
 }

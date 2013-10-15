@@ -67,7 +67,11 @@ class NativeArrayAccess
 
 		$arrayAccess = $expression;
 
+		/**
+		 * Resolve the left part of the expression
+		 */
 		$expr = new Expression($arrayAccess['left']);
+		$expr->setReadOnly(true);
 		$exprVariable = $expr->compile($compilationContext);
 
 		/**
@@ -84,7 +88,7 @@ class NativeArrayAccess
 				}
 				break;
 			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
+				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
 		}
 
 		if ($variableVariable->hasAnyDynamicType('unknown')) {

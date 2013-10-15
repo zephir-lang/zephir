@@ -33,8 +33,26 @@ assert($t->testArrayAccess3() == 1);
 assert($t->testArrayAccess4() == 1);
 assert($t->testArrayAccess5() == 1);
 
+assert($t->testArrayMultipleAccess1() == "a");
+assert($t->testArrayMultipleAccess2() == "b");
+assert($t->testArrayMultipleAccess3() == "b");
+assert($t->testArrayMultipleAccess4() == "b");
+assert($t->testArrayMultipleAccess5() == 0);
+
 assert($t->testArrayUpdate1() == array(4, 2, 3));
 assert($t->testArrayUpdate2() == array(4, 2, 3));
 assert($t->testArrayUpdate3() == array(4, 5, 3));
 assert($t->testArrayUpdate4() == array("a" => 4, "b" => 2, "c" => 3));
 
+assert($t->testMultipleArrayUpdate1() == array('x' => array('y' => NULL)));
+assert($t->testMultipleArrayUpdate2() == array('x' => array('y' => array('z' => NULL))));
+assert($t->testMultipleArrayUpdate3() == array(0 => array(1 => NULL)));
+assert($t->testMultipleArrayUpdate4() == array(0 => array(1 => array(2 => NULL))));
+assert($t->testMultipleArrayUpdate5() == array('a' => array(1 => array('c' => NULL))));
+assert($t->testMultipleArrayUpdate6() == array(0 => array('b' => array(2 => NULL))));
+assert($t->testMultipleArrayUpdate7() == array('a' => array(1 => array('c' => true)), 0 => array('b' => array(2 => false))));
+assert($t->testMultipleArrayUpdate8() == array('a' => array(0 => NULL, 1 => true, 2 => false)));
+assert($t->testMultipleArrayUpdate9() == array('a' => array(0 => NULL, 1 => false)));
+assert($t->testMultipleArrayUpdate10() == array('a' => array(0 => NULL, 1 => array('c' => false))));
+assert($t->testMultipleArrayUpdate11() == array('y' => array('x' => NULL)));
+assert($t->testMultipleArrayUpdate12() == array('y' => array('x' => array('z' => NULL))));

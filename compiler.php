@@ -30,6 +30,7 @@ require ZEPHIRPATH . 'Library/ClassDefinition.php';
 require ZEPHIRPATH . 'Library/ClassProperty.php';
 require ZEPHIRPATH . 'Library/ClassConstant.php';
 require ZEPHIRPATH . 'Library/ClassMethod.php';
+require ZEPHIRPATH . 'Library/Bootstrap.php';
 require ZEPHIRPATH . 'Library/Compiler.php';
 require ZEPHIRPATH . 'Library/CompilerFile.php';
 require ZEPHIRPATH . 'Library/SymbolTable.php';
@@ -72,4 +73,4 @@ require ZEPHIRPATH . 'Library/Logger.php';
 require ZEPHIRPATH . 'Library/Color.php';
 require ZEPHIRPATH . 'Library/Utils.php';
 
-Compiler::boot();
+Bootstrap::boot();

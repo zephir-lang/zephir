@@ -170,6 +170,7 @@ class PropertyAccess
 		 */
 		$readOnly = false;
 		if ($classDefinition == $currentClassDefinition && $this->_readOnly) {
+
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {
 
@@ -208,6 +209,7 @@ class PropertyAccess
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
 			}
+
 		} else {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {

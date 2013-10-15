@@ -398,7 +398,7 @@ class Expression
 
 			if (isset($newExpr['parameters'])) {
 				$callExpr = new Expression(array(
-					'variable' => $symbolVariable->getRealName(),
+					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
 					'name' => '__construct',
 					'parameters' => $newExpr['parameters'],
 					'call-type' => MethodCall::CALL_NORMAL,
@@ -408,7 +408,7 @@ class Expression
 				));
 			} else {
 				$callExpr = new Expression(array(
-					'variable' => $symbolVariable->getRealName(),
+					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
 					'name' => '__construct',
 					'call-type' => MethodCall::CALL_NORMAL,
 					'file' => $newExpr['file'],

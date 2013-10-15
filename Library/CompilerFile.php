@@ -41,6 +41,8 @@ class CompilerFile
 	 */
 	protected $_classDefinition;
 
+	protected $_headerCBlocks;
+
 	/**
 	 * CompilerFile constructor
 	 *
@@ -53,6 +55,7 @@ class CompilerFile
 		$this->_filePath = $filePath;
 		$this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
 		$this->_filesCompiled = array();
+		$this->_headerCBlocks = array();
 	}
 
 	/**
@@ -128,6 +131,10 @@ class CompilerFile
 			foreach ($compilationContext->headersManager->get() as $header => $one) {
 				$code .= '#include "' . $header . '.h"' . PHP_EOL;
 			}
+		}
+
+		if (count($this->_headerCBlocks) >0) {
+			$code .= implode($this->_headerCBlocks, PHP_EOL) . PHP_EOL;
 		}
 
 		/**
@@ -364,6 +371,9 @@ class CompilerFile
 					}
 					$namespace = $topStatement['name'];
 					$this->_namespace = $namespace;
+					break;
+				case 'cblock':
+					$this->_headerCBlocks[] = $topStatement['value'];
 					break;
 			}
 		}

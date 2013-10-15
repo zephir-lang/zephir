@@ -1182,7 +1182,7 @@ class LetStatement
 
 		$codePrinter->output('zephir_array_update_multi(&' .
 			$variable .
-			', &' . $symbolVariable->getName() . ' TSRMLS_CC, code SL("' . $keys . '"), ' .
+			', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' .
 			$numberParams . ', ' . join(', ', $offsetItems) .
 		');');
 	}

@@ -51,9 +51,21 @@ class MethodCall extends Call
 
 		$expression = $expr->getExpression();
 
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($expression['variable'], $compilationContext, $expression);
-		if ($variableVariable->getType() != 'variable') {
-			throw new CompilerException("Methods cannot be called on variable type: " . $symbolVariable->getType(), $expression);
+		$expr = new Expression($expression['variable']);
+		$exprVariable = $expr->compile($compilationContext);
+
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
+				switch ($variableVariable->getType()) {
+					case 'variable':
+						break;
+					default:
+						throw new CompilerException("Methods cannot be called on variable type: " . $variableVariable->getType(), $expression);
+				}
+				break;
+			default:
+				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as method caller", $expression['variable']);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -258,6 +270,10 @@ class MethodCall extends Call
 			}
 		}
 
+		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
+			echo strtolower($expression['name']), PHP_EOL;
+		}
+
 		/**
 		 * Transfer the return type-hint to the returned variable
 		 */
@@ -270,6 +286,7 @@ class MethodCall extends Call
 					}
 
 					$returnClassTypes = $method->getReturnClassTypes();
+
 					if ($returnClassTypes !== null) {
 						foreach ($returnClassTypes as $returnClassType) {
 							$symbolVariable->setDynamicTypes('object');
