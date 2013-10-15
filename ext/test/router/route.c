@@ -61,10 +61,10 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 	if (!httpMethods) {
-		ZEPHIR_CPY_WRT(httpMethods, ZEPHIR_GLOBAL(global_null));
+		httpMethods = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -351,7 +351,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 

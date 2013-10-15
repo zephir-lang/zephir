@@ -38,4 +38,14 @@ class OoParams
 		return average;
 	}
 
+	public function setStrictName(string name)
+	{
+		return name;
+	}
+
+	public function setStrictEnabled(boolean enabled)
+	{
+		return enabled;
+	}
+
 }

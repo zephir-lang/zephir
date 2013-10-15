@@ -102,6 +102,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 		age = Z_LVAL_P(age_param);
 
 
+
 	RETURN_LONG(age);
 
 }
@@ -121,7 +122,37 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 		average = Z_DVAL_P(average_param);
 
 
+
 	RETURN_DOUBLE(average);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictName) {
+
+	zval *name_param = NULL;
+	zval *name = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &name_param);
+
+		zephir_get_strval(name, name_param);
+
+
+	RETURN_CTOR(name);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
+
+	zval *enabled_param = NULL;
+	zend_bool enabled;
+
+	zephir_fetch_params(0, 1, 0, &enabled_param);
+
+		enabled = zephir_get_boolval(enabled_param);
+
+
+	RETURN_BOOL(enabled);
 
 }
 

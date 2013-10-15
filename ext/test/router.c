@@ -399,7 +399,7 @@ PHP_METHOD(Test_Router, handle) {
 	zephir_fetch_params(1, 0, 1, &uri);
 
 	if (!uri) {
-		ZEPHIR_CPY_WRT(uri, ZEPHIR_GLOBAL(global_null));
+		uri = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -655,10 +655,10 @@ PHP_METHOD(Test_Router, add) {
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 	if (!httpMethods) {
-		ZEPHIR_CPY_WRT(httpMethods, ZEPHIR_GLOBAL(global_null));
+		httpMethods = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -685,7 +685,7 @@ PHP_METHOD(Test_Router, addGet) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -711,7 +711,7 @@ PHP_METHOD(Test_Router, addPost) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -737,7 +737,7 @@ PHP_METHOD(Test_Router, addPut) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -763,7 +763,7 @@ PHP_METHOD(Test_Router, addPatch) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -789,7 +789,7 @@ PHP_METHOD(Test_Router, addDelete) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -815,7 +815,7 @@ PHP_METHOD(Test_Router, addOptions) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 
@@ -841,7 +841,7 @@ PHP_METHOD(Test_Router, addHead) {
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
 	if (!paths) {
-		ZEPHIR_CPY_WRT(paths, ZEPHIR_GLOBAL(global_null));
+		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
 

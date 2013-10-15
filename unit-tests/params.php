@@ -28,3 +28,6 @@ try { $t->setStrictAge("17"); assert(false); } catch (InvalidArgumentException $
 assert($t->setStrictAverage(17.1) === 17.1);
 try { $t->setStrictAverage(17); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
 try { $t->setStrictAverage("17"); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
+
+assert($t->setStrictName("peter") === "peter");
+try { $t->setStrictName(1234); assert(false); } catch (InvalidArgumentException $e) { assert(true); }

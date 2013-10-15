@@ -562,18 +562,34 @@ class CompilerFile
 		}
 
 		if ($codePrinter) {
+
+			/**
+			 * If the file does not exists we create it for the first time
+			 */
 			if (!file_exists($filePath)) {
 				file_put_contents($filePath, $codePrinter->getOutput());
 				if ($compilationContext->headerPrinter) {
 					file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
 				}
 			} else {
-				//if (filemtime($filePath) < filemtime($this->_filePath)) {
-					file_put_contents($filePath, $codePrinter->getOutput());
-					if ($compilationContext->headerPrinter) {
-						file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+
+				/**
+				 * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
+				 * thus avoiding unnecesary recompilations
+				 */
+				$output = $codePrinter->getOutput();
+				$hash = hash_file('md5', $filePath);
+				if (md5($output) != $hash) {
+					file_put_contents($filePath, $output);
+				}
+
+				if ($compilationContext->headerPrinter) {
+					$output = $compilationContext->headerPrinter->getOutput();
+					$hash = hash_file('md5', $filePathHeader);
+					if (md5($output) != $hash) {
+						file_put_contents($filePathHeader, $output);
 					}
-				//}
+				}
 			}
 		}
 

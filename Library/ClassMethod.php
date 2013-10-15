@@ -552,29 +552,55 @@ class ClassMethod
 				}
 				break;
 			case 'variable':
-				$compilationContext->symbolTable->mustGrownStack(true);
-				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
+						$compilationContext->symbolTable->mustGrownStack(true);
+						$compilationContext->headersManager->add('kernel/memory');
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
 					case 'double':
+						$compilationContext->symbolTable->mustGrownStack(true);
+						$compilationContext->headersManager->add('kernel/memory');
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
+					case 'string':
+						$compilationContext->symbolTable->mustGrownStack(true);
+						$compilationContext->headersManager->add('kernel/memory');
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'ZVAL_STRING(' . $parameter['name'] . ', "' . Utils::addSlashes($parameter['default']['value']) . '", 1);' . PHP_EOL;
+						break;
 					case 'bool':
-						if ($parameter['default']['value'] == 'true') {
-							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_true));' . PHP_EOL;
+						$expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
+						if ($expectedMutations < 2) {
+							if ($parameter['default']['value'] == 'true') {
+								$code .= "\t\t" . $parameter['name'] . ' = ZEPHIR_GLOBAL(global_true);' . PHP_EOL;
+							} else {
+								$code .= "\t\t" . $parameter['name'] . ' = ZEPHIR_GLOBAL(global_false);' . PHP_EOL;
+							}
 						} else {
-							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_false));' . PHP_EOL;
+							$compilationContext->symbolTable->mustGrownStack(true);
+							$compilationContext->headersManager->add('kernel/memory');
+							if ($parameter['default']['value'] == 'true') {
+								$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_true));' . PHP_EOL;
+							} else {
+								$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_false));' . PHP_EOL;
+							}
 						}
 						break;
 					case 'null':
-						$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_null));' . PHP_EOL;
+						$expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
+						if ($expectedMutations < 2) {
+							$code .= "\t\t" . $parameter['name'] . ' = ZEPHIR_GLOBAL(global_null);' . PHP_EOL;
+						} else {
+							$compilationContext->symbolTable->mustGrownStack(true);
+							$compilationContext->headersManager->add('kernel/memory');
+							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_null));' . PHP_EOL;
+						}
 						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
@@ -616,6 +642,7 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$code .= PHP_EOL;
 				return $code;
 			case 'bool':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
@@ -624,6 +651,7 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$code .= PHP_EOL;
 				return $code;
 			case 'double':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
@@ -632,6 +660,7 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				$code .= PHP_EOL;
 				return $code;
 			case 'string':
 				$compilationContext->symbolTable->mustGrownStack(true);
@@ -641,6 +670,7 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
+				$code .= PHP_EOL;
 				return $code;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
@@ -968,11 +998,13 @@ class ClassMethod
 				}
 
 				foreach ($this->_parameters->getParameters() as $parameter) {
+
 					if (isset($parameter['data-type'])) {
 						$dataType = $parameter['data-type'];
 					} else {
 						$dataType = 'variable';
 					}
+
 					if ($dataType == 'variable') {
 						$name = $parameter['name'];
 						if (!$localContext) {
