@@ -26,4 +26,9 @@ class Echoes
 	{
 		echo false;
 	}
+
+	public function testEcho5()
+	{
+		echo "hello";
+	}
 }

@@ -693,7 +693,8 @@ class Variable
 			return;
 		}
 
-		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+		$name = $this->getName();
+		if ($name != 'this_ptr' && $name != 'return_value') {
 
 			if ($this->_initBranch === false) {
 				$this->_initBranch = $compilationContext->currentBranch;

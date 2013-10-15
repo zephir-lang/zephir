@@ -8,10 +8,10 @@ interface TestInterface
 {
 
 	/**
-         * Sets a default action
-         *
-         * @param int defaultAccess
-         */
-        public function setAction(action);
+	 * Sets a default action
+	 *
+	 * @param int defaultAccess
+	 */
+	public function setAction(action);
 
 }

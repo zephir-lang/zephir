@@ -54,3 +54,10 @@ PHP_METHOD(Test_Echoes, testEcho4) {
 
 }
 
+PHP_METHOD(Test_Echoes, testEcho5) {
+
+
+	php_printf("hello");
+
+}
+

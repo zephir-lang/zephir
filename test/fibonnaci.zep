@@ -60,8 +60,7 @@ class Fibonnaci
 
 	public function fibArray2()
 	{
-		var fib;
-		int i, n;
+		var fib; int i, n;
 
 		let fib = [0, 1], i = 2, n = 10;
 		while i < n {

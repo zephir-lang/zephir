@@ -25,8 +25,8 @@
 
 // c implement fibonacci
 static long fibonacci(long n) {
-        if (n < 2) return n;
-        else return fibonacci(n-2)+fibonacci(n-1);
+		if (n < 2) return n;
+		else return fibonacci(n - 2) + fibonacci(n - 1);
 }
 
 
@@ -51,7 +51,7 @@ PHP_METHOD(Test_Cblock, testCblock1) {
 
 
 	
-                a = MAX_FACTOR;
+			a = MAX_FACTOR;
 		
 	RETURN_LONG(a);
 
@@ -63,8 +63,8 @@ PHP_METHOD(Test_Cblock, testCblock2) {
 
 
 	
-            a = fibonacci(MAX_FACTOR);
-            
+				a = fibonacci(MAX_FACTOR);
+			
 	RETURN_LONG(a);
 
 }
