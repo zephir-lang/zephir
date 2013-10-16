@@ -20,7 +20,7 @@
 /**
  * StartsWithOptimizer
  *
- * Like 'strpos' but it returns a boolean value
+ * Checks if a string starts with another
  */
 class StartsWithOptimizer
 {

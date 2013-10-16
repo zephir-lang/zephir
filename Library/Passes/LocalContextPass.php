@@ -404,8 +404,9 @@ class LocalContextPass
 					$this->passCall($statement['expr']);
 					break;
 				case 'unset':
-					$this->increaseMutations($statement['domain']['value']);
-					$this->increaseMutations($statement['domain']['value']);
+					if ($statement['expr']['left']['type'] == 'variable') {
+						$this->increaseMutations($statement['expr']['left']['value']);
+					}
 					break;
 				case 'break':
 				case 'continue':

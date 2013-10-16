@@ -72,15 +72,6 @@ class FetchOperator extends BaseOperator
 			$variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
 		}
 
-		$evalVariable = $compilationContext->symbolTable->getVariableForRead($expression['right']['left']['value'], $compilationContext, $expression['right']['left']);
-		if ($evalVariable->getType() != 'variable') {
-			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $expression['right']);
-		}
-
-		if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
-			$compilationContext->logger->warning('Possible attempt to use non array/object in fetch operator', 'non-valid-fetch', $expression['right']);
-		}
-
 		if ($readOnly) {
 			$flags = '1';
 		} else {
@@ -89,6 +80,23 @@ class FetchOperator extends BaseOperator
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
+
+				$exprVariable = new Expression($expression['right']['left']);
+				$exprVariable->setReadOnly(true);
+				$exprCompiledVariable = $exprVariable->compile($compilationContext);
+				if ($exprCompiledVariable->getType() != 'variable') {
+					throw new CompiledException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['right']['left']);
+				}
+
+				$evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+				if ($evalVariable->getType() != 'variable') {
+					throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['right']['left']);
+				}
+
+				if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+					$compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-fetch', $expression['right']);
+				}
+
 				$expr = new Expression($expression['right']['right']);
 				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);
@@ -122,7 +130,7 @@ class FetchOperator extends BaseOperator
 				/* @todo, implement this */
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
 			default:
-				throw new CompilerException('[' . $expression['right']['type'] . ']', $expression);
+				throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);
 		}
 
 	}

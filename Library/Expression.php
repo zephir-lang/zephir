@@ -50,6 +50,7 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/IssetOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 
@@ -151,81 +152,6 @@ class Expression
 	public function getExpectingVariable()
 	{
 		return $this->_expectingVariable;
-	}
-
-	/**
-	 * Compiles an 'isset' operator
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compileIsset($expression, CompilationContext $compilationContext)
-	{
-
-		$variable = $compilationContext->symbolTable->getVariableForRead($expression['left']['left']['value'], $compilationContext, $expression['left']['left']);
-		if ($variable->getType() != 'variable') {
-			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array/object", $arrayAccess['left']);
-		}
-
-		if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
-			$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-isset', $expression);
-		}
-
-		$compilationContext->headersManager->add('kernel/array');
-
-		switch ($expression['left']['type']) {
-			case 'array-access':
-				$expr = new Expression($expression['left']['right']);
-				$expr->setReadOnly(true);
-				$resolvedExpr = $expr->compile($compilationContext);
-				switch ($resolvedExpr->getType())	{
-					case 'int':
-					case 'long':
-						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $expression['left']['right']);
-					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $expression['left']['right']);
-					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['left']['right']);
-						switch ($indexVariable->getType()) {
-							case 'int':
-							case 'long':
-								return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
-							case 'variable':
-							case 'string':
-								return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
-							default:
-								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-						}
-						break;
-					default:
-						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
-				}
-				break;
-			case 'property-access':
-				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '") TSRMLS_CC)', $expression['left']['right']);
-			case 'property-dynamic-access':
-				$expr = new Expression($expression['left']['right']);
-				$expr->setReadOnly(true);
-				$resolvedExpr = $expr->compile($compilationContext);
-				switch ($resolvedExpr->getType()) {
-					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['left']['right']);
-						switch ($indexVariable->getType()) {
-							case 'variable':
-							case 'string':
-								return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression['left']['right']);
-							default:
-								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-						}
-						break;
-					default:
-						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
-				}
-			default:
-				throw new CompilerException('[' . $expression['left']['type'] . ']', $expression);
-		}
-
 	}
 
 	/**
@@ -949,7 +875,10 @@ class Expression
 				return $staticCall->compile($this, $compilationContext);
 
 			case 'isset':
-				return $this->compileIsset($expression, $compilationContext);
+				$expr = new IssetOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'fetch':
 				$expr = new FetchOperator();

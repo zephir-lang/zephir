@@ -769,14 +769,13 @@ static json_object *xx_ret_scall_statement(json_object *expr, xx_scanner_state *
 	return ret;
 }
 
-static json_object *xx_ret_unset_statement(json_object *domain, json_object *index, xx_scanner_state *state)
+static json_object *xx_ret_unset_statement(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("unset"));
 
-	json_object_object_add(ret, "domain", domain);
-	json_object_object_add(ret, "index", index);
+	json_object_object_add(ret, "expr", expr);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1913,22 +1912,9 @@ xx_return_statement(R) ::= RETURN DOTCOMMA . {
 	R = xx_ret_return_statement(NULL, status->scanner_state);
 }
 
-/* unset v->x */
-xx_unset_statement(R) ::= UNSET IDENTIFIER(D) ARROW IDENTIFIER(I) DOTCOMMA . {
-	R = xx_ret_unset_statement(
-		xx_ret_literal(XX_T_IDENTIFIER, D, status->scanner_state),
-		xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state),
-		status->scanner_state
-	);
-}
-
-/* unset v[{expr}] */
-xx_unset_statement(R) ::= UNSET IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE DOTCOMMA . {
-	R = xx_ret_unset_statement(
-		xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state),
-		E,
-		status->scanner_state
-	);
+/* unset {expr} */
+xx_unset_statement(R) ::= UNSET xx_common_expr(E) DOTCOMMA . {
+	R = xx_ret_unset_statement(E, status->scanner_state);
 }
 
 /* throw {expr} */
@@ -2000,7 +1986,7 @@ xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= ISSET xx_isset_expr(O1) . {
+xx_common_expr(R) ::= ISSET xx_common_expr(O1) . {
 	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
 }
 
@@ -2143,7 +2129,7 @@ xx_common_expr(R) ::= xx_common_expr(O1) INSTANCEOF xx_common_expr(O2) . {
 }
 
 /* y = fetch x, z[k] */
-xx_fetch_expr(R) ::= FETCH IDENTIFIER(O1) COMMA xx_isset_expr(O2) . {
+xx_fetch_expr(R) ::= FETCH IDENTIFIER(O1) COMMA xx_common_expr(O2) . {
 	R = xx_ret_expr("fetch", xx_ret_literal(XX_T_IDENTIFIER, O1, status->scanner_state), O2, NULL, status->scanner_state);
 }
 
@@ -2415,26 +2401,6 @@ xx_literal_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 
 xx_literal_expr(R) ::= CONSTANT(I) . {
 	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
-}
-
-/* isset v[x] */
-xx_isset_expr(R) ::= IDENTIFIER(V) SBRACKET_OPEN xx_common_expr(E) SBRACKET_CLOSE . {
-	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), E, NULL, status->scanner_state);
-}
-
-/* isset v->x */
-xx_isset_expr(R) ::= IDENTIFIER(V) ARROW IDENTIFIER(P) . {
-	R = xx_ret_expr("property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, P, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* isset v->{x} */
-xx_isset_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN IDENTIFIER(P) BRACKET_CLOSE . {
-	R = xx_ret_expr("property-dynamic-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, P, status->scanner_state), NULL, status->scanner_state);
-}
-
-/* isset v->{"x"} */
-xx_isset_expr(R) ::= IDENTIFIER(V) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE . {
-	R = xx_ret_expr("property-string-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
 }
 
 xx_eval_expr(R) ::= xx_common_expr(E) . {

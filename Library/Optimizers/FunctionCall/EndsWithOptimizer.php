@@ -55,4 +55,5 @@ class EndsWithOptimizer
 
 		return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
 	}
+
 }

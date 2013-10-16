@@ -341,7 +341,7 @@ class Compiler
 	protected function _checkDirectory()
 	{
 		if (!file_exists('config.json')) {
-			throw new Exception("Zephir extension is not initialized in this directory");
+			throw new Exception("There is no Zephir extension initialized in this directory");
 		}
 
 		if (!is_dir('.temp')) {

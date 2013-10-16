@@ -36,7 +36,10 @@ class UnsetStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$compilationContext->headersManager->add('kernel/array');
+
+		//var_dump($this->_statement);
+
+		/*$compilationContext->headersManager->add('kernel/array');
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['domain']['value'], $compilationContext, $this->_statement);
 		if ($variable->getType() != 'variable') {
@@ -81,7 +84,7 @@ class UnsetStatement
 				break;
 			default:
 				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $this->_statement['index']);
-		}
+		}*/
 	}
 
 }

@@ -51,6 +51,12 @@ class GlobalsGetOptimizer
 		}
 
 		$globalDefinition = $context->compiler->getExtensionGlobal($globalName);
+
+		if (strpos($globalName, '.') !== false) {
+			$parts = explode('.', $globalName);
+			return new CompiledExpression($globalDefinition['type'], 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1], $expression);
+		}
+
 		return new CompiledExpression($globalDefinition['type'], 'ZEPHIR_GLOBAL(' . $globalName . ')', $expression);
 	}
 
