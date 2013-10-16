@@ -43,6 +43,10 @@ class Config
 		}
 	}
 
+	/**
+	 *
+	 * @param string $key
+	 */
 	public function get($key)
 	{
 		if (isset($this->_config[$key])) {
@@ -51,6 +55,11 @@ class Config
 		return null;
 	}
 
+	/**
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
 	public function set($key, $value)
 	{
 		$this->_config[$key] = $value;

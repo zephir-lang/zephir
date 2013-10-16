@@ -1267,8 +1267,7 @@ class LetStatement
 			/**
 			 * @TODO implement increment of objects members
 			 */
-			//throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
-			return;
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1321,11 +1320,7 @@ class LetStatement
 		}
 
 		if ($symbolVariable->isReadOnly()) {
-			/**
-			 * @TODO implement increment of objects members
-			 */
-			//throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
-			return;
+			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -2134,6 +2129,12 @@ class LetStatement
 					break;
 				case 'decr':
 					$this->assignDecr($variable, $symbolVariable, $compilationContext, $assignment);
+					break;
+				case 'object-property-incr':
+					/* @todo, implement this */
+					break;
+				case 'object-property-decr':
+					/* @todo, implement this */
 					break;
 				default:
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);

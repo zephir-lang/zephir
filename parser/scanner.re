@@ -525,6 +525,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				return 0;
 			}
 
+			if (!memcmp(token->value, "_FILES", sizeof("_FILES")-1)) {
+				token->opcode = XX_T_IDENTIFIER;
+				return 0;
+			}
+
 			is_constant = 1;
 			for (j = 0; j < token->len; j++) {
 				if (!((token->value[j] >= 'A' && token->value[j] <= 'Z') || (token->value[j] >= '0' && token->value[j] <= '9') || token->value[j] == '_')) {

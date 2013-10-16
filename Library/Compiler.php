@@ -36,6 +36,8 @@ class Compiler
 
 	protected $_constants = array();
 
+	protected $_globals = array();
+
 	protected static $_reflections = array();
 
 	/**
@@ -242,6 +244,38 @@ class Compiler
 	}
 
 	/**
+	 * @param array $globals
+	 */
+	public function _setExtensionGlobals($globals)
+	{
+		foreach ($globals as $key => $value) {
+			$this->_globals[$key] = $value;
+		}
+	}
+
+	/**
+	 * Checks if a specific extension global is defined
+	 *
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function isExtensionGlobal($name)
+	{
+		return isset($this->_globals[$name]);
+	}
+
+	/**
+	 * Returns a extension global by its name
+	 *
+	 * @param string $name
+	 * @return boolean
+	 */
+	public function getExtensionGlobal($name)
+	{
+		return $this->_globals[$name];
+	}
+
+	/**
 	 * Initializes a Zephir extension
 	 *
 	 * @param Config $config
@@ -254,10 +288,12 @@ class Compiler
 			mkdir('.temp');
 		}
 
-		// if init namespace is specified
+		/**
+		 * If init namespace is specified
+		 */
 		if (isset($_SERVER['argv'][2])) {
 			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
-		}else {
+		} else {
 			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
 		}
 
@@ -265,15 +301,19 @@ class Compiler
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
 
-		// using json_encode with pretty-print
+		/**
+		 * Using json_encode with pretty-print
+		 */
 		$configArray = array(
-			'namespace' => $namespace,
-			'name' => $namespace,
+			'namespace'   => $namespace,
+			'name'        => $namespace,
 			'description' => '',
-			'author' => ''
+			'author'      => ''
 		);
 
-		// above PHP 5.4
+		/**
+		 * Above PHP 5.4
+		 */
 		if (defined('JSON_PRETTY_PRINT')) {
 			$configArray = json_encode($configArray, JSON_PRETTY_PRINT);
 		} else {
@@ -291,9 +331,6 @@ class Compiler
 			mkdir('ext/kernel/alternative');
 
 			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
-
-			//copy(__DIR__ . '/../ext/install', 'ext/install');
-			//chmod('ext/install', 0755);
 		}
 
 		if (!is_dir($namespace)) {
@@ -309,34 +346,6 @@ class Compiler
 
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
-		}
-
-	}
-
-	public function dumpJson(Config $config, Logger $logger)
-	{
-		//JSON_PRETTY_PRINT
-
-		$this->_checkDirectory();
-
-		/**
-		 * Get global namespace
-		 */
-		$namespace = $config->get('namespace');
-		if (!$namespace) {
-			throw new Exception("Extension namespace cannot be loaded");
-		}
-
-		/**
-		 * Round 1. pre-compile all files in memory
-		 */
-		$this->_recursivePreCompile($namespace);
-		if (!count($this->_files)) {
-			throw new Exception("Zephir files to compile weren't found");
-		}
-
-		if (isset($_SERVER['argv'][2])) {
-			//$this->_
 		}
 
 	}
@@ -380,6 +389,14 @@ class Compiler
 		$constantsSources = $config->get('constants-sources');
 		if (is_array($constantsSources)) {
 			$this->_loadConstantsSources($constantsSources);
+		}
+
+		/**
+		 * Set extension globals
+		 */
+		$globals = $config->get('globals');
+		if (is_array($globals)) {
+			$this->_setExtensionGlobals($globals);
 		}
 
 		/**

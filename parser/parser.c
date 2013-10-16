@@ -5128,7 +5128,7 @@ static void yy_reduce(
       case 198:
 // 1847 "parser.lemon"
 {
-	yygotominor.yy259 = xx_ret_let_assignment("incr", NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy0, NULL, NULL, status->scanner_state);
+	yygotominor.yy259 = xx_ret_let_assignment("object-property-incr", NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy0, NULL, NULL, status->scanner_state);
   yy_destructor(38,&yymsp[-2].minor);
   yy_destructor(92,&yymsp[0].minor);
 }
@@ -5137,7 +5137,7 @@ static void yy_reduce(
       case 199:
 // 1852 "parser.lemon"
 {
-	yygotominor.yy259 = xx_ret_let_assignment("decr", NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy0, NULL, NULL, status->scanner_state);
+	yygotominor.yy259 = xx_ret_let_assignment("object-property-decr", NULL, yymsp[-3].minor.yy0, yymsp[-1].minor.yy0, NULL, NULL, status->scanner_state);
   yy_destructor(38,&yymsp[-2].minor);
   yy_destructor(93,&yymsp[0].minor);
 }

@@ -1845,12 +1845,12 @@ xx_array_offset(R) ::= SBRACKET_OPEN xx_index_expr(I) SBRACKET_CLOSE . {
 
 /* t->y++ */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) INCR . {
-	R = xx_ret_let_assignment("incr", NULL, D, I, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("object-property-incr", NULL, D, I, NULL, NULL, status->scanner_state);
 }
 
 /* t->y-- */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) DECR . {
-	R = xx_ret_let_assignment("decr", NULL, D, I, NULL, NULL, status->scanner_state);
+	R = xx_ret_let_assignment("object-property-decr", NULL, D, I, NULL, NULL, status->scanner_state);
 }
 
 /* y++ */

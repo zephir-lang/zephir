@@ -38,7 +38,7 @@ class UncamelizeOptimizer
 		}
 
 		if (count($expression['parameters']) != 1) {
-			return false;
+			throw new CompilerException("'uncamelize' only accepts one parameter");
 		}
 
 		/**

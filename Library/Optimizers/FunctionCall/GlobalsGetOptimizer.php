@@ -18,11 +18,11 @@
 */
 
 /**
- * CamelizeOptimizer
+ * GlobalsGetOptimizer
  *
- * Optimizes calls to 'camelize' using internal function
+ * Reads values from extensions globals
  */
-class CamelizeOptimizer
+class GlobalsGetOptimizer
 {
 	/**
 	 *
@@ -37,29 +37,21 @@ class CamelizeOptimizer
 		}
 
 		if (count($expression['parameters']) != 1) {
-			throw new CompilerException("'camelize' only accepts one parameter");
+			throw new CompilerException("'globals_get' only accepts one parameter", $expression);
 		}
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
-
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'string') {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+		if ($expression['parameters'][0]['type'] != 'string') {
+			throw new CompilerException("A string parameter is required for 'globals_get'", $expression);
 		}
 
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
+		$globalName = $expression['parameters'][0]['value'];
+
+		if (!$context->compiler->isExtensionGlobal($globalName)) {
+			throw new CompilerException("Global '" . $globalName . "' cannot be read because it isn't defined", $expression);
 		}
 
-		$context->headersManager->add('kernel/string');
-
-		$symbolVariable->setDynamicTypes('string');
-
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_camelize(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		$globalDefinition = $context->compiler->getExtensionGlobal($globalName);
+		return new CompiledExpression($globalDefinition['type'], 'ZEPHIR_GLOBAL(' . $globalName . ')', $expression);
 	}
+
 }
