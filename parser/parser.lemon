@@ -422,6 +422,10 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("double");
 		case XX_TYPE_BOOL:
 			return json_object_new_string("bool");
+		case XX_TYPE_LONG:
+			return json_object_new_string("long");
+		case XX_TYPE_ULONG:
+			return json_object_new_string("ulong");
 		case XX_TYPE_STRING:
 			return json_object_new_string("string");
 		case XX_TYPE_CHAR:
@@ -431,7 +435,7 @@ static json_object *xx_ret_type(int type)
 		case XX_TYPE_VAR:
 			return json_object_new_string("variable");
 		default:
-			fprintf(stderr, "err 1?\n");
+			fprintf(stderr, "unknown type?\n");
 	}
 
 }
