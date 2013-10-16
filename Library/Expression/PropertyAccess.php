@@ -67,6 +67,7 @@ class PropertyAccess
 		$propertyAccess = $expression;
 
 		$expr = new Expression($propertyAccess['left']);
+		$expr->setReadOnly(true);
 		$exprVariable = $expr->compile($compilationContext);
 
 		switch ($exprVariable->getType()) {

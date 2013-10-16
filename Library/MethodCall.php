@@ -52,6 +52,7 @@ class MethodCall extends Call
 		$expression = $expr->getExpression();
 
 		$exprVariable = new Expression($expression['variable']);
+		$exprVariable->setReadOnly(true);
 		$exprCompiledVariable = $exprVariable->compile($compilationContext);
 
 		switch ($exprCompiledVariable->getType()) {
