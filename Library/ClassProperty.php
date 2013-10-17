@@ -24,6 +24,7 @@
  */
 class ClassProperty
 {
+	protected $_classDefinition;
 
 	protected $_visibility;
 
@@ -37,23 +38,34 @@ class ClassProperty
 
 	/**
 	 *
-	 *
+	 * @param ClassDefinition $classDefinition
 	 * @param array $visibility
 	 * @param string $name
 	 * @param mixed $defaultValue
 	 * @param string $docBlock
 	 * @param array $original
 	 */
-	public function __construct($visibility, $name, $defaultValue, $docBlock, $original)
+	public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
 	{
 
 		$this->checkVisibility($visibility, $name, $original);
 
+		$this->_classDefinition = $classDefinition;
 		$this->_visibility = $visibility;
 		$this->_name = $name;
 		$this->_defaultValue = $defaultValue;
 		$this->_docblock = $docBlock;
 		$this->_original = $original;
+	}
+
+	/**
+	 * Returns the class definition where the method was declared
+	 *
+	 * @return ClassDefinition
+	 */
+	public function getClassDefinition()
+	{
+		return $this->_classDefinition;
 	}
 
 	/**

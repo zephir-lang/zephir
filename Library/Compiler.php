@@ -173,8 +173,9 @@ class Compiler
 	 * Copies the base kernel to the extension destination
 	 *
 	 * @param string $path
+	 * @param string $destination
 	 */
-	protected function _copyBaseKernel($path)
+	protected function _copyBaseKernel($path, $destination)
 	{
 		/**
 		 * Pre compile all files
@@ -183,14 +184,14 @@ class Compiler
 		foreach ($iterator as $item) {
 			if ($item->isDir()) {
 				if ($item->getFileName() != '.' && $item->getFileName() != '..') {
-					$this->_copyBaseKernel($item->getPathname());
+					$this->_copyBaseKernel($item->getPathname(), $destination);
 				}
 			} else {
 				if (preg_match('/\.[hc]$/', $item->getPathname())) {
 					if (strpos($item->getPathName(), 'alternative') !== false) {
-						copy($item->getPathname(), 'ext/kernel/alternative/' . $item->getBaseName());
+						copy($item->getPathname(), $destination . '/ext/kernel/alternative/' . $item->getBaseName());
 					} else {
-						copy($item->getPathname(), 'ext/kernel/' . $item->getBaseName());
+						copy($item->getPathname(), $destination . '/ext/kernel/' . $item->getBaseName());
 					}
 				}
 			}
@@ -284,17 +285,12 @@ class Compiler
 	public function init(Config $config, Logger $logger)
 	{
 
-		if (!is_dir('.temp')) {
-			mkdir('.temp');
-		}
-
 		/**
 		 * If init namespace is specified
 		 */
+		$namespace = null;
 		if (isset($_SERVER['argv'][2])) {
 			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
-		} else {
-			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', basename(getcwd())));
 		}
 
 		if (!$namespace) {
@@ -311,6 +307,18 @@ class Compiler
 			'author'      => ''
 		);
 
+		if (!is_dir($namespace)) {
+			mkdir($namespace);
+		}
+
+		if (!is_dir($namespace . '/'. $namespace)) {
+			mkdir($namespace . '/'. $namespace);
+		}
+
+		if (!is_dir($namespace . '/.temp')) {
+			mkdir($namespace . '/.temp');
+		}
+
 		/**
 		 * Above PHP 5.4
 		 */
@@ -319,23 +327,20 @@ class Compiler
 		} else {
 			$configArray = json_encode($configArray);
 		}
-		file_put_contents('config.json', $configArray);
+		file_put_contents($namespace . '/config.json', $configArray);
 
 		/**
 		 * Create 'kernel'
 		 */
-		if (!is_dir('ext')) {
+		if (!is_dir($namespace . '/ext')) {
 
-			mkdir('ext');
-			mkdir('ext/kernel');
-			mkdir('ext/kernel/alternative');
+			mkdir($namespace . '/ext');
+			mkdir($namespace . '/ext/kernel');
+			mkdir($namespace . '/ext/kernel/alternative');
 
-			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/');
+			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/', $namespace);
 		}
 
-		if (!is_dir($namespace)) {
-			mkdir($namespace);
-		}
 	}
 
 	protected function _checkDirectory()
@@ -347,7 +352,6 @@ class Compiler
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
-
 	}
 
 	/**

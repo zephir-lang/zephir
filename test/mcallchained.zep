@@ -7,6 +7,8 @@ namespace Test;
 
 class McallChained
 {
+	private temp;
+
 	public function testMethod1()
 	{
 		return this;
@@ -40,6 +42,12 @@ class McallChained
 		return this->testMethod3()
 				   ->testMethod2()
 				   ->testMethod1();
+	}
+
+	public function testChained4()
+	{
+		let this->temp = this;
+		return this->temp->testMethod1()->testMethod2();
 	}
 
 }

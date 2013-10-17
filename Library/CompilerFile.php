@@ -292,6 +292,7 @@ class CompilerFile
 					 * Add property to the definition
 					 */
 					$classDefinition->addProperty(new ClassProperty(
+						$classDefinition,
 						$property['visibility'],
 						$property['name'],
 						isset($property['default']) ? $property['default'] : null,

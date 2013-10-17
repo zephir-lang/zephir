@@ -145,7 +145,7 @@ class PropertyAccess
 				 */
 				if ($classDefinition == $currentClassDefinition) {
 					if ($propertyDefinition->isPrivate()) {
-						$declarationDefinition = $propertyDefinition->getDeclarationClass();
+						$declarationDefinition = $propertyDefinition->getClassDefinition();
 						if ($declarationDefinition != $currentClassDefinition) {
 							throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
 						}
@@ -155,7 +155,7 @@ class PropertyAccess
 
 					} else {
 						if ($propertyDefinition->isPrivate()) {
-							$declarationDefinition = $propertyDefinition->getDeclarationClass();
+							$declarationDefinition = $propertyDefinition->getClassDefinition();
 							if ($declarationDefinition != $currentClassDefinition) {
 								throw new CompilerException("Attempt to access private property '" . $property . "' outside of its declared class context: '" . $declarationDefinition->getCompleteName() . "'", $expression);
 							}
