@@ -102,7 +102,7 @@ class ClassConstant
 			case 'string':
 				$compilationContext->codePrinter->output("zend_declare_class_constant_string(" .
 					$compilationContext->classDefinition->getClassEntry() .
-					", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlaches($this->_value['value']) . "\" TSRMLS_CC);");
+					", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->_value['value']) . "\" TSRMLS_CC);");
 				break;
 			default:
 				$compilationContext->codePrinter->output("zend_declare_class_constant_null(" .

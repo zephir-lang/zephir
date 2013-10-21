@@ -927,7 +927,7 @@ class LetStatement
 						break;
 					case 'string':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-						$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . Utils::addSlaches($resolvedExpr->getCode()) . '", 1);');
+						$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . Utils::addSlashes($resolvedExpr->getCode()) . '", 1);');
 						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 						break;
 					case 'variable':

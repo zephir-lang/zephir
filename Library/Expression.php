@@ -274,7 +274,7 @@ class Expression
 				 * @TODO, check if the variable is really internal
 				 */
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlaches($className, true) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlashes($className, true) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
 				$symbolVariable->setClassTypes($newExpr['class']);
 			}
@@ -681,7 +681,7 @@ class Expression
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlaches($expression['right']['value'], true)) . '") TSRMLS_CC)', $expression);
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlashes($expression['right']['value'], true)) . '") TSRMLS_CC)', $expression);
 	}
 
 	/**
@@ -808,7 +808,7 @@ class Expression
 				if (ctype_digit($expression['value'])) {
 					return new CompiledExpression('int', $expression['value'], $expression);
 				}
-				return new CompiledExpression('string', Utils::addSlaches($expression['value']), $expression);
+				return new CompiledExpression('string', Utils::addSlashes($expression['value']), $expression);
 
 			case 'char':
 				if (strlen($expression['value']) > 2) {

@@ -51,7 +51,7 @@ class ThrowStatement
 				if ($compilationContext->compiler->isClass($className)) {
 					if ($expr['parameters'][0]['type'] == 'string') {
 						$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-						$codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlaches($expr['parameters'][0]['value']) . '");');
+						$codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['value']) . '");');
 						$codePrinter->output('return;');
 						return;
 					}
