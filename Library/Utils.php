@@ -31,7 +31,7 @@ class Utils
 	 * @param       string $str
 	 * @return      string
 	 */
-	public static function addSlaches($str, $escapeSlash = false)
+	public static function addSlashes($str, $escapeSlash = false)
 	{
 		if ($escapeSlash) {
 			$str = str_replace('\\', '\\\\', $str);

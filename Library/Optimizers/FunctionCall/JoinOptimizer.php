@@ -51,7 +51,7 @@ class JoinOptimizer
 		}
 
 		if ($expression['parameters'][0]['type'] == 'string') {
-			$str = Utils::addSlaches($expression['parameters'][0]['value']);
+			$str = Utils::addSlashes($expression['parameters'][0]['value']);
 			unset($expression['parameters'][0]);
 		}
 

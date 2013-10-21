@@ -41,7 +41,7 @@ class MethodExistsOptimizer
 		}
 
 		if ($expression['parameters'][1]['type'] == 'string') {
-			$str = Utils::addSlaches($expression['parameters'][1]['value']);
+			$str = Utils::addSlashes($expression['parameters'][1]['value']);
 			unset($expression['parameters'][1]);
 		}
 
