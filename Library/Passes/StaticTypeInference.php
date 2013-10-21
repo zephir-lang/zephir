@@ -362,6 +362,8 @@ class StaticTypeInference
 			case 'isset':
 			case 'empty':
 			case 'instanceof':
+			case 'likely':
+			case 'unlikely':
 				$this->passExpression($expression['left']);
 				return 'bool';
 			case 'list':

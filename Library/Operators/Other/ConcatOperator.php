@@ -27,6 +27,7 @@ class ConcatOperator extends BaseOperator
 
 	private function _getOptimizedConcat($expression, CompilationContext $compilationContext)
 	{
+		$originalExpr = $expression;
 
 		$parts = array();
 		while ($expression && isset($expression['left'])){
@@ -62,7 +63,7 @@ class ConcatOperator extends BaseOperator
 			$compiledExpr = $expr->compile($compilationContext);
 			switch ($compiledExpr->getType()) {
 				case 'variable':
-					$variable = $compilationContext->symbolTable->getVariableForRead($compiledExpr->getCode(), $compilationContext, $expression);
+					$variable = $compilationContext->symbolTable->getVariableForRead($compiledExpr->getCode(), $compilationContext, $originalExpr);
 					switch ($variable->getType()) {
 						case 'variable':
 						case 'string':
@@ -72,7 +73,7 @@ class ConcatOperator extends BaseOperator
 						case 'int':
 						case 'long':
 							$key .= 'v';
-							$tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+							$tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
 							$compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ', 0);');
 							$concatParts[] = '&' . $tempVariable->getName();
 							break;

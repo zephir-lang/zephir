@@ -1035,6 +1035,8 @@ class Expression
 			case 'require':
 			case 'typeof':
 			case 'empty':
+			case 'unlikely':
+			case 'likely':
 				return new CompiledExpression('int', '(0 == 1)', $expression);
 
 			default:

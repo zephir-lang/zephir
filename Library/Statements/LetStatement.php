@@ -1830,6 +1830,7 @@ class LetStatement
 		 * to the real property in the object
 		 *
 		 * This could introduce a bug because the variable will be separated
+		 * However null values are not converted implicity to objects or arrays
 		 *
 		 * @todo, use a builder
 		 */
@@ -1854,8 +1855,6 @@ class LetStatement
 		}
 
 		$this->assignArrayIndex($propertyVariable->getName(), $propertyVariable, $resolvedExpr, $compilationContext, $statement);
-
-		echo $property->getCode(), PHP_EOL;
 	}
 
 	/**

@@ -290,6 +290,8 @@ class LocalContextPass
 			case 'instanceof':
 			case 'require':
 			case 'clone':
+			case 'likely':
+			case 'unlikely':
 				$this->passExpression($expression['left']);
 				break;
 			case 'fetch':
