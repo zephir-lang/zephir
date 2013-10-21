@@ -81,7 +81,7 @@ class Constants
 				case 'integer':
 					return new CompiledExpression('int', $value, $expression);
 				case 'string':
-					return new CompiledExpression('string', Utils::addSlaches($value), $expression);
+					return new CompiledExpression('string', Utils::addSlashes($value), $expression);
 			}
 			return new CompiledExpression(strtolower(gettype($value)), $value, $expression);
 		}

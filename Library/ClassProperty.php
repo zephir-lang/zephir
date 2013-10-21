@@ -227,7 +227,7 @@ class ClassProperty
 				case 'string':
 					$compilationContext->codePrinter->output("zend_declare_property_string(" .
 						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlaches($this->_defaultValue['value']) . "\", " .
+						", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->_defaultValue['value']) . "\", " .
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 					break;
 				case 'null':

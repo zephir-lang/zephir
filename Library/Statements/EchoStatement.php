@@ -56,7 +56,7 @@ class EchoStatement
 					$compilationContext->codePrinter->output('php_printf("%ld", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'string':
-					$compilationContext->codePrinter->output('php_printf("' . Utils::addSlaches($resolvedExpr->getCode()) . '");');
+					$compilationContext->codePrinter->output('php_printf("' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
 					break;
 				case 'variable':
 					$variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
