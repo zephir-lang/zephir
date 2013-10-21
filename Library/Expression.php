@@ -615,6 +615,39 @@ class Expression
 										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
 								}
 								break;
+							case 'variable':
+								$expr = new Expression($item['value']);
+								$resolvedExpr = $expr->compile($compilationContext);
+								switch ($resolvedExpr->getType()) {
+									/*case 'int':
+									case 'uint':
+									case 'long':
+									case 'ulong':
+										$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode() . ');');
+										break;
+									case 'double':
+										$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getCode() . ');');
+										break;
+									case 'bool':
+										$codePrinter->output('add_assoc_bool_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . '), ' . $resolvedExpr->getBooleanCode() . ');');
+										break;
+									case 'string':
+										$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
+										break;
+									case 'null':
+										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1);');
+										break;*/
+									case 'variable':
+										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+										$codePrinter->output('zephir_array_update(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+										if ($valueVariable->isTemporal()) {
+											$valueVariable->setIdle(true);
+										}
+										break;
+									default:
+										throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
+								}
+								break;
 							default:
 								throw new CompilerException("Cannot use variable type: " . $variableVariable->getType(). " as array index", $item['key']);
 						}

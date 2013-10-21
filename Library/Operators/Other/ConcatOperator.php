@@ -78,7 +78,7 @@ class ConcatOperator extends BaseOperator
 							$concatParts[] = '&' . $tempVariable->getName();
 							break;
 						default:
-							throw new CompilerException("Variable type: " . $variable->getType() . " cannot be in concat operation", $compiledExpr->getOriginal());
+							throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
 					}
 					break;
 				case 'string':

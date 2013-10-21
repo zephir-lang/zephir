@@ -1287,7 +1287,7 @@ class LetStatement
 				/**
 				 * Update non-numeric dynamic variables could be expensive
 				 */
-				if ($symbolVariable->hasAnyDynamicType(array('undefined', 'long', 'double'))) {
+				if (!$symbolVariable->hasAnyDynamicType(array('undefined', 'long', 'double'))) {
 					$compilationContext->logger->warning('Possible attempt to increment non-numeric dynamic variable', 'non-valid-increment', $statement);
 				}
 
