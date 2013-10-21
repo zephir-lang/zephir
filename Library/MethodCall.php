@@ -85,6 +85,8 @@ class MethodCall extends Call
 			}
 		}
 
+		$symbolVariable = null;
+
 		/**
 		 * Create temporary variable if needed
 		 */
@@ -176,6 +178,9 @@ class MethodCall extends Call
 
 					$classTypes = $variableVariable->getClassTypes();
 					if (count($classTypes)) {
+
+						//var_dump($classTypes);
+						//var_dump($variableVariable->getOriginal());
 
 						$numberImplemented = 0;
 						$compiler = $compilationContext->compiler;
@@ -285,10 +290,8 @@ class MethodCall extends Call
 					$returnClassTypes = $method->getReturnClassTypes();
 
 					if ($returnClassTypes !== null) {
-						foreach ($returnClassTypes as $returnClassType) {
-							$symbolVariable->setDynamicTypes('object');
-							$symbolVariable->setClassTypes($returnClassType['value']);
-						}
+						$symbolVariable->setDynamicTypes('object');
+						$symbolVariable->setClassTypes($returnClassTypes);
 					}
 
 					$returnTypes = $method->getReturnTypes();

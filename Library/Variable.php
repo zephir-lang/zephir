@@ -252,6 +252,8 @@ class Variable
 	public function setIdle($idle)
 	{
 		if ($this->_reusable) {
+			$this->_classTypes = array();
+			$this->_dynamicTypes = array('unknown' => true);
 			$this->_idle = $idle;
 		} else {
 			$this->_idle = false;

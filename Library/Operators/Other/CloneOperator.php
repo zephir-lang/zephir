@@ -38,6 +38,7 @@ class CloneOperator extends BaseOperator
 
 		$exprVariable = new Expression($expression['left']);
 		$exprVariable->setReadOnly(true);
+		$exprVariable->setExpectReturn(true);
 		$exprCompiledVariable = $exprVariable->compile($compilationContext);
 		if ($exprCompiledVariable->getType() != 'variable') {
 			throw new CompiledException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression);
@@ -58,7 +59,11 @@ class CloneOperator extends BaseOperator
 
 		$symbolVariable->setIsInitialized(true);
 
-		$compilationContext->codePrinter->output('if (phalcon_clone(' . $symbolVariable->getName() . ', ' . $clonedVariable->getName() . ' TSRMLS_CC) == FAILURE) {');
+		/* Inherit the dynamic type data from the cloned object */
+		$symbolVariable->setDynamicTypes($clonedVariable->getDynamicTypes());
+		$symbolVariable->setClassTypes($clonedVariable->getClassTypes());
+
+		$compilationContext->codePrinter->output('if (zephir_clone(' . $symbolVariable->getName() . ', ' . $clonedVariable->getName() . ' TSRMLS_CC) == FAILURE) {');
 		$compilationContext->codePrinter->output("\t" . 'RETURN_MM();');
         $compilationContext->codePrinter->output('}');
 

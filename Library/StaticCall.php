@@ -366,10 +366,8 @@ class StaticCall extends Call
 
 					$returnClassTypes = $method->getReturnClassTypes();
 					if ($returnClassTypes !== null) {
-						foreach ($returnClassTypes as $returnClassType) {
-							$symbolVariable->setDynamicTypes('object');
-							$symbolVariable->setClassTypes($returnClassType['value']);
-						}
+						$symbolVariable->setDynamicTypes('object');
+						$symbolVariable->setClassTypes($returnClassTypes);
 					}
 
 					$returnTypes = $method->getReturnTypes();

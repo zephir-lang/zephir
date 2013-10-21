@@ -75,10 +75,11 @@ class ClassMethod
 			$castTypes = array();
 			foreach ($returnType['list'] as $returnTypeItem) {
 				if (isset($returnTypeItem['cast'])) {
-					if (!isset($returnTypeItem['cast']['collection'])) {
+					if (isset($returnTypeItem['cast']['collection'])) {
 						//var_dump($returnTypeItem);
+						continue;
 					}
-					$castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast'];
+					$castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
 				} else {
 					$types[$returnTypeItem['data-type']] = $returnTypeItem;
 				}
