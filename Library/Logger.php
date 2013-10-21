@@ -44,6 +44,7 @@ class Logger
 		'nonexistant-constant' => true,
 		'non-valid-decrement' => true,
 		'non-valid-increment' => true,
+		'non-valid-clone' => true
 	);
 
 	/**
