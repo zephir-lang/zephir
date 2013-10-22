@@ -745,7 +745,16 @@ class Expression
 						if ($symbolVariable->isTemporal()) {
 							$symbolVariable->setIdle(true);
 						}
-						return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+						switch ($symbolVariable->getType()) {
+							case 'int':
+								return new CompiledExpression('int', $symbolVariable->getName(), $expression);
+							case 'double':
+								return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
+							case 'variable':
+								return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+							default:
+								throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+						}
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
@@ -772,7 +781,12 @@ class Expression
 						if ($symbolVariable->isTemporal()) {
 							$symbolVariable->setIdle(true);
 						}
-						return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
+						switch ($symbolVariable->getType()) {
+							case 'variable':
+								return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
+							default:
+								throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+						}
 					default:
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}

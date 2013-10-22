@@ -54,7 +54,7 @@ class StartsWithOptimizer
 			return new CompiledExpression('bool', 'zephir_start_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+		return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', 0)', $expression);
 	}
 
 }
