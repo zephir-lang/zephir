@@ -15,8 +15,8 @@ class Fcall
 
 	public function testCall1FromVar()
 	{
-	    var funcName;
-	    let funcName = "strpos";
+		var funcName;
+		let funcName = "strpos";
 		return {funcName}("hello", "l");
 	}
 
