@@ -42,7 +42,32 @@ class FwriteOptimizer
 
 		$context->headersManager->add('kernel/file');
 
+		/**
+		 * Process the expected symbol to be returned
+		 */
+		$call->processExpectedReturn($context);
+
+		$symbolVariable = $call->getSymbolVariable();
+		if ($symbolVariable) {
+
+			if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'string') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+
+			if ($call->mustInitSymbolVariable()) {
+				$symbolVariable->initVariant($context);
+			}
+		}
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('int', 'zephir_fwrite(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+		if ($symbolVariable) {
+			$context->codePrinter->output('zephir_fwrite(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		} else {
+			$context->codePrinter->output('zephir_fwrite(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+		}
+
+		return new CompiledExpression('null', 'null', $expression);
+
 	}
 }
