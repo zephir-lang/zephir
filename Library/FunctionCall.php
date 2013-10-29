@@ -426,29 +426,62 @@ class FunctionCall extends Call
 		 */
 		$compilationContext->symbolTable->mustGrownStack(true);
 
-		/*if (!isset($expression['parameters'])) {
-			if ($this->isExpectingReturn()) {
-				if ($this->mustInitSymbolVariable()) {
-					$symbolVariable->initVariant($compilationContext);
-				}
-				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
-			} else {
-				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
-			}
-		} else {
-			if (count($params)) {
-				if ($this->isExpectingReturn()) {
-					if ($this->mustInitSymbolVariable()) {
-						$symbolVariable->initVariant($compilationContext);
-					}
-					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
-				} else {
-					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
-				}
-			} else {
-				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
-			}
-		}*/
+        /**
+         * Find last value of variable
+         */
+        $methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
+        $varName          = $expression['name'];
+        $lastValue        = null;
+        foreach ($methodStatements as $statement) {
+
+            if (isset($statement['line'])
+                && $statement['line'] <= $expression['line']
+                && isset($statement['type'])
+                && $statement['type'] === 'let'
+                && isset($statement['assignments'])
+                && is_array($statement['assignments'])
+            ) {
+
+                foreach ($statement['assignments'] as $assignment) {
+
+                    if (isset($assignment['variable'])
+                        && $assignment['variable'] === $varName
+                        && isset($assignment['expr']['value'])
+                    ) {
+                        $lastValue = $assignment['expr']['value'];
+                    }
+                }
+            }
+        }
+
+        if ($lastValue) {
+
+            $funcName = $lastValue;
+
+            if (!isset($expression['parameters'])) {
+                if ($this->isExpectingReturn()) {
+                    if ($this->mustInitSymbolVariable()) {
+                        $symbolVariable->initVariant($compilationContext);
+                    }
+                    $codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
+                } else {
+                    $codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+                }
+            } else {
+                if (count($params)) {
+                    if ($this->isExpectingReturn()) {
+                        if ($this->mustInitSymbolVariable()) {
+                            $symbolVariable->initVariant($compilationContext);
+                        }
+                        $codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+                    } else {
+                        $codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+                    }
+                } else {
+                    $codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+                }
+            }
+        }
 
 		/**
 		 * We can mark temporary variables generated as idle
