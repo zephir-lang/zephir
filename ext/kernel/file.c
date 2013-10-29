@@ -462,3 +462,36 @@ void zephir_basename(zval *return_value, zval *path TSRMLS_DC)
 		ZVAL_FALSE(return_value);
 	}
 }
+
+void zephir_fwrite(zval *return_value, zval *stream_zval, zval *data TSRMLS_DC)
+{
+
+	zval *arg1;
+	char *arg2;
+	int arg2len;
+	int ret;
+	int num_bytes;
+	long arg3 = 0;
+	char *buffer = NULL;
+	php_stream *stream;
+
+	if (Z_TYPE_P(stream_zval) != IS_RESOURCE) {
+		/* @todo convert data to string */
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		RETVAL_FALSE;
+	}
+
+	if (Z_TYPE_P(data) != IS_STRING) {
+		/* @todo convert data to string */
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		RETVAL_FALSE;
+	}
+
+	if (!num_bytes) {
+		RETURN_LONG(0);
+	}
+
+	PHP_STREAM_TO_ZVAL(stream, &stream_zval);
+
+	RETURN_LONG(php_stream_write(stream, data, Z_STRLEN_P(data)));
+}

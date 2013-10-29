@@ -783,7 +783,7 @@ class Expression
 						}
 						switch ($symbolVariable->getType()) {
 							case 'variable':
-								return new CompiledExpression('int', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
+								return new CompiledExpression('bool', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
 							default:
 								throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
 						}

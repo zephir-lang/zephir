@@ -551,6 +551,11 @@ class ClassMethod
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_EMPTY_STRING(' . $parameter['name'] . ');' . PHP_EOL;
 						break;
+					case 'string':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'ZVAL_STRING(' . $parameter['name'] . ', "' . $parameter['default']['value'] . '", 1);' . PHP_EOL;
+						break;
+						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
 				}

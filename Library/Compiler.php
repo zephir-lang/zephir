@@ -433,12 +433,21 @@ class Compiler
 	}
 
 	/**
-	 * Compiles an installs the extension
+	 * Compiles and installs the extension
+	 *
+	 * @param Config $config
+	 * @param Logger $logger
 	 */
-	public function install()
+	public function install(Config $config, Logger $logger)
 	{
+
+		$namespace = $config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
+		}
+
 		if (!file_exists('ext/Makefile')) {
-			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize --silent && ./configure --silent --enable-test && sudo make --silent install 1> /dev/null');
+			system('export CC="gcc" && export CFLAGS="-O0 -g" && cd ext && phpize --silent && ./configure --silent --enable-' . $namespace . ' && sudo make --silent install 1> /dev/null');
 		} else {
 			system('cd ext && sudo make --silent install 1> /dev/null');
 		}
