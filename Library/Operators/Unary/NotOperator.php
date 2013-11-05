@@ -46,6 +46,11 @@ class NotOperator extends BaseOperator
 			case 'variable':
 				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
 				switch ($variable->getType()) {
+					case 'bool':
+					case 'int':
+					case 'uint':
+					case 'long':
+						return new CompiledExpression('bool', '!' . $variable->getName(), $expression);
 					case 'variable':
 						return new CompiledExpression('bool', '!zephir_is_true(' . $variable->getName() . ')', $expression);
 					default:

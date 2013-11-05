@@ -28,7 +28,11 @@ class StringsManager
 	 * List of headers
 	 * @var array
 	 */
-	protected $_concatKeys = array();
+	protected $_concatKeys = array(
+		'vv' => true,
+		'vs' => true,
+		'sv' => true
+	);
 
 	/**
 	 * @param string $path

@@ -910,6 +910,8 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
+		$compilationContext->headersManager->add('kernel/array');
+
 		$type = $symbolVariable->getType();
 		switch ($type) {
 			/*case 'int':
