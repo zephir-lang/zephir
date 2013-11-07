@@ -464,10 +464,12 @@ class Compiler
 	 */
 	public function install(CommandInstall $command)
 	{
-		$namespace = $this->_config->get('namespace');
-		if (!$namespace) {
-			throw new Exception("Extension namespace cannot be loaded");
-		}
+		/**
+		 * Get global namespace
+		 */
+		$namespace = $this->_checkDirectory();
+
+		$this->compile($command);
 
 		echo "Installing...\n";
 		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
