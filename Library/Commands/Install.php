@@ -18,19 +18,19 @@
 */
 
 /**
- * InstallCommand
+ * CommandInstall
  *
  * Produce the extension installation
  */
-class InstallCommand
+class CommandInstall extends CommandAbstract
 {
 
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getCommands()
+	public function getCommand()
 	{
 		return 'install';
 	}
@@ -50,19 +50,6 @@ class InstallCommand
 	 */
 	public function getDescription()
 	{
-		return 'Installs the extension';
+		return 'Installs the extension (requires root password)';
 	}
-
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		$compiler = new Compiler();
-		$compiler->install($config, $logger);
-	}
-
 }

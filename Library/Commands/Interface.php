@@ -18,38 +18,37 @@
 */
 
 /**
- * CompileCommand
+ * CommandInterface
  *
- * Produce the extension installation
+ * Provides an interface to build commands
  */
-class CommandCompile extends CommandAbstract
+interface CommandInterface
 {
 
-	/**
-	 * Commands provided by this command
-	 *
-	 * @return array|string
-	 */
-	public function getCommand()
-	{
-		return 'compile';
-	}
+  /**
+   * Command provided by this command
+   *
+   * @return string
+   */
+  public function getCommand();
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'compile';
-	}
+  /**
+   * Command usage
+   *
+   * @return string
+   */
+  public function getUsage();
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Compile a Zephir extension';
-	}
+  /**
+   * @return string
+   */
+  public function getDescription();
+
+  /**
+   * Executes the command
+   *
+   * Config $config
+   * Logger $logger
+   */
+  public function execute(Config $config, Logger $logger);
 }
