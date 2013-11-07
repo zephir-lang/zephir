@@ -515,6 +515,11 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				return 0;
 			}
 
+			if (!memcmp(token->value, "_COOKIE", sizeof("_COOKIE")-1)) {
+				token->opcode = XX_T_IDENTIFIER;
+				return 0;
+			}
+
 			if (!memcmp(token->value, "_SERVER", sizeof("_SERVER")-1)) {
 				token->opcode = XX_T_IDENTIFIER;
 				return 0;

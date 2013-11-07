@@ -18,11 +18,11 @@
 */
 
 /**
- * HelpCommand
+ * CommandHelp
  *
  * Shows compiler help
  */
-class HelpCommand
+class CommandHelp extends CommandAbstract
 {
 	const LOGO ='
  _____              __    _
@@ -34,11 +34,11 @@ class HelpCommand
 ';
 
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getCommands()
+	public function getCommand()
 	{
 		return 'help';
 	}
@@ -58,7 +58,7 @@ class HelpCommand
 	 */
 	public function getDescription()
 	{
-		return 'Displays help';
+		return 'Displays this help';
 	}
 
 	/**
@@ -69,9 +69,8 @@ class HelpCommand
 	 */
 	public function execute(Config $config, Logger $logger)
 	{
-
 		echo self::LOGO, PHP_EOL;
-		echo "zephir version " , VersionCommand::VERSION,  PHP_EOL, PHP_EOL;
+		echo "zephir version " , CommandVersion::VERSION,  PHP_EOL, PHP_EOL;
 		echo "Usage: ", PHP_EOL;
 		echo "\tcommand [options]", PHP_EOL;
 		echo PHP_EOL;
@@ -84,7 +83,5 @@ class HelpCommand
 		echo sprintf("\t%-20s%s\n", "-fno-([a-z0-9\-]+)", "Setting options to Compiler");
 		echo sprintf("\t%-20s%s\n", "-W([a-z0-9\-]+)", "Setting warning options to Compiler");
 		echo PHP_EOL;
-
 	}
-
 }

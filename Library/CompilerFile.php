@@ -43,19 +43,25 @@ class CompilerFile
 
 	protected $_headerCBlocks;
 
+	protected $_config = null;
+	
+	protected $_logger = null;
+	
 	/**
 	 * CompilerFile constructor
 	 *
 	 * @param string $className
 	 * @param string $filePath
 	 */
-	public function __construct($className, $filePath)
+	public function __construct($className, $filePath, Config $config, Logger $logger)
 	{
 		$this->_className = $className;
 		$this->_filePath = $filePath;
 		$this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
 		$this->_filesCompiled = array();
 		$this->_headerCBlocks = array();
+		$this->_config = $config;
+		$this->_logger = $logger;
 	}
 
 	/**
@@ -431,10 +437,8 @@ class CompilerFile
 	 * Check dependencies
 	 *
 	 * @param \Compiler $compiler
-	 * @param \Config $config
-	 * @param \Logger $logger
 	 */
-	public function checkDependencies(Compiler $compiler, Config $config, Logger $logger)
+	public function checkDependencies(Compiler $compiler)
 	{
 		$classDefinition = $this->_classDefinition;
 
@@ -472,11 +476,9 @@ class CompilerFile
 	 * Compiles the file
 	 *
 	 * @param \Compiler $compiler
-	 * @param \Config $config
-	 * @param \Logger $logger
 	 * @param \StringsManager $stringsManager
 	 */
-	public function compile(Compiler $compiler, Config $config, Logger $logger, StringsManager $stringsManager)
+	public function compile(Compiler $compiler, StringsManager $stringsManager)
 	{
 
 		/**
@@ -492,12 +494,12 @@ class CompilerFile
 		/**
 		 * Set global config in the compilation context
 		 */
-		$compilationContext->config = $config;
+		$compilationContext->config = $this->_config;
 
 		/**
 		 * Set global logger in the compilation context
 		 */
-		$compilationContext->logger = $logger;
+		$compilationContext->logger = $this->_logger;
 
 		/**
 		 * Set global strings manager

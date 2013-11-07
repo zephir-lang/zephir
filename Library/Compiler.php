@@ -37,9 +37,24 @@ class Compiler
 	protected $_constants = array();
 
 	protected $_globals = array();
+	
+	protected $_stringManager = null;
+
+	protected $_config = null;
+	
+	protected $_logger = null;
 
 	protected static $_reflections = array();
 
+	public function __construct(Config $config = null, Logger $logger = null)
+	{
+		$this->_config = $config;
+		$this->_logger = $logger;
+		/**
+		 * The string manager manages
+		 */
+		$this->_stringManager = new StringsManager();
+	}
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -53,7 +68,7 @@ class Compiler
 			$className = join('\\', array_map(function($i) {
 				return ucfirst($i);
 			}, explode('\\', $className)));
-			$this->_files[$className] = new CompilerFile($className, $filePath);
+			$this->_files[$className] = new CompilerFile($className, $filePath, $this->_config, $this->_logger);
 			$this->_files[$className]->preCompile();
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
 		}
@@ -175,27 +190,35 @@ class Compiler
 	 * @param string $path
 	 * @param string $destination
 	 */
-	protected function _copyBaseKernel($path, $destination)
+	protected function _recursiveProcess($src, $dest, $pattern=null, $callback = "copy")
 	{
-		/**
-		 * Pre compile all files
-		 */
-		$iterator = new DirectoryIterator($path);
+		$success = true;
+		$iterator = new DirectoryIterator($src);
 		foreach ($iterator as $item) {
+			$pathName = $item->getPathname();
+		  if (!is_readable($pathName)) {
+		  	continue;
+		  }
+			$fileName = $item->getFileName();
 			if ($item->isDir()) {
-				if ($item->getFileName() != '.' && $item->getFileName() != '..') {
-					$this->_copyBaseKernel($item->getPathname(), $destination);
-				}
-			} else {
-				if (preg_match('/\.[hc]$/', $item->getPathname())) {
-					if (strpos($item->getPathName(), 'alternative') !== false) {
-						copy($item->getPathname(), $destination . '/ext/kernel/alternative/' . $item->getBaseName());
-					} else {
-						copy($item->getPathname(), $destination . '/ext/kernel/' . $item->getBaseName());
-					}
-				}
+		  	if ($fileName != '.' && $fileName != '..') {
+		  		if (!is_dir($dest . '/' . $fileName)) {
+		       	mkdir($dest . '/' . $fileName);
+		    	}
+		      $this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
+		  	}
+		  } else if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+		  	if (is_string($callback))
+		  	{
+		  		$success = $success && $callback($pathName, $dest.'/'.$fileName);
+		  	}
+		  	else
+		  	{
+		  		$success = $success && call_user_func($callback, $pathName, $dest.'/'.$fileName);
+		  	}
 			}
 		}
+		return $success;
 	}
 
 	/**
@@ -276,101 +299,67 @@ class Compiler
 		return $this->_globals[$name];
 	}
 
-	/**
-	 * Initializes a Zephir extension
-	 *
-	 * @param Config $config
-	 * @param Logger $logger
-	 */
-	public function init(Config $config, Logger $logger)
-	{
-
-		/**
-		 * If init namespace is specified
-		 */
-		$namespace = null;
-		if (isset($_SERVER['argv'][2])) {
-			$namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
-		}
-
-		if (!$namespace) {
-			throw new Exception("Cannot obtain a valid initial namespace for the project");
-		}
-
-		/**
-		 * Using json_encode with pretty-print
-		 */
-		$configArray = array(
-			'namespace'   => $namespace,
-			'name'        => $namespace,
-			'description' => '',
-			'author'      => ''
-		);
-
-		if (!is_dir($namespace)) {
-			mkdir($namespace);
-		}
-
-		if (!is_dir($namespace . '/'. $namespace)) {
-			mkdir($namespace . '/'. $namespace);
-		}
-
-		if (!is_dir($namespace . '/.temp')) {
-			mkdir($namespace . '/.temp');
-		}
-
-		/**
-		 * Above PHP 5.4
-		 */
-		if (defined('JSON_PRETTY_PRINT')) {
-			$configArray = json_encode($configArray, JSON_PRETTY_PRINT);
-		} else {
-			$configArray = json_encode($configArray);
-		}
-		file_put_contents($namespace . '/config.json', $configArray);
-
-		/**
-		 * Create 'kernel'
-		 */
-		if (!is_dir($namespace . '/ext')) {
-
-			mkdir($namespace . '/ext');
-			mkdir($namespace . '/ext/kernel');
-			mkdir($namespace . '/ext/kernel/alternative');
-
-			$this->_copyBaseKernel(__DIR__ . '/../ext/kernel/', $namespace);
-		}
-
-	}
-
 	protected function _checkDirectory()
 	{
-		if (!file_exists('config.json')) {
-			throw new Exception("There is no Zephir extension initialized in this directory");
+		$namespace = $this->_config->get('namespace');
+		if (!$namespace) {
+			throw new Exception("Extension namespace cannot be loaded");
 		}
 
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
+		
+		return $namespace;
 	}
 
 	/**
-	 *
-	 * @param Config $config
-	 * @param Logger $logger
+	 * Initializes a Zephir extension
 	 */
-	public function compile(Config $config, Logger $logger)
+	public function init(CommandInitialize $command)
 	{
+		/**
+		 * If init namespace is specified
+		 */
+		$namespace = $command->getNamespace();
 
-		$this->_checkDirectory();
+		if (!$namespace) {
+			throw new Exception("Cannot obtain a valid initial namespace for the project");
+		}
 
+		$this->_config->set('namespace', $namespace);
+		$this->_config->set('name', $namespace);
+
+		if (!is_dir($namespace)) {
+			mkdir($namespace);
+		}
+
+		chdir($namespace);
+		if (!is_dir($namespace)) {
+			mkdir($namespace);
+		}
+
+		/**
+		 * Create 'kernel'
+		 */
+		if (!is_dir('ext/kernel')) {
+			mkdir('ext/kernel', 0755, true);
+		}
+		// Copy the latest kernel files
+		$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
+	}
+
+	/**
+	 * 
+	 * @param CommandGenerate $command
+	 * @throws Exception
+	 */
+	public function generate(CommandInterface $command)
+	{
 		/**
 		 * Get global namespace
 		 */
-		$namespace = $config->get('namespace');
-		if (!$namespace) {
-			throw new Exception("Extension namespace cannot be loaded");
-		}
+		$namespace = $this->_checkDirectory();
 
 		/**
 		 * Round 1. pre-compile all files in memory
@@ -384,13 +373,13 @@ class Compiler
 		 * Round 2. Check 'extends' and 'implements' dependencies
 		 */
 		foreach ($this->_files as $compileFile) {
-			$compileFile->checkDependencies($this, $config, $logger);
+			$compileFile->checkDependencies($this);
 		}
 
 		/**
 		 * Convert C-constants into PHP constants
 		 */
-		$constantsSources = $config->get('constants-sources');
+		$constantsSources = $this->_config->get('constants-sources');
 		if (is_array($constantsSources)) {
 			$this->_loadConstantsSources($constantsSources);
 		}
@@ -398,58 +387,156 @@ class Compiler
 		/**
 		 * Set extension globals
 		 */
-		$globals = $config->get('globals');
+		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
 			$this->_setExtensionGlobals($globals);
 		}
-
-		/**
-		 * The string manager manages
-		 */
-		$stringManager = new StringsManager();
 
 		/**
 		 * Round 3. compile all files to C sources
 		 */
 		$files = array();
 		foreach ($this->_files as $compileFile) {
-			$compileFile->compile($this, $config, $logger, $stringManager);
+			$compileFile->compile($this, $this->_stringManager);
 			$files[] = $compileFile->getCompiledFile();
 		}
 
 		$this->_compiledFiles = $files;
+	}
+
+	/**
+	 * 
+	 * @param CommandCompile $command
+	 */
+	public function compile(CommandInterface $command)
+	{
+
+		/**
+		 * Get global namespace
+		 */
+		$namespace = $this->_checkDirectory();
+
+		$this->generate($command);
 
 		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
-		$this->createConfigFiles($namespace);
+		$need_configure = $this->createConfigFiles($namespace);
+
+		/**
+		 * Round 5. create project.c and project.h files
+		 */
 		$this->createProjectFiles($namespace);
 
 		/**
 		 * Round 5.
 		 */
-		$stringManager->genConcatCode();
+		$this->_stringManager->genConcatCode();
 
+		$verbose = ($this->_config->get('verbose') ? true : false);
+		if (!$this->_config->get('phpized'))
+		{
+			echo "Preparing for PHP compilation...\n";
+			exec('cd ext && phpize', $output, $exit);
+			$this->_config->set('phpized', true);
+		}
+		if ($need_configure)
+		{
+			echo "Preparing configuration file...\n";
+			exec('export CC="gcc" && export CFLAGS="-O2" && cd ext && ./configure --enable-' . $namespace);
+		}
+		echo "Compiling...\n";
+		if ($verbose)
+		{
+			passthru('cd ext && make', $exit);
+		}
+		else
+		{
+			exec('cd ext && make' . $verbose, $output, $exit);
+		}
 	}
 
 	/**
+	 * 
 	 * Compiles and installs the extension
-	 *
-	 * @param Config $config
-	 * @param Logger $logger
+	 * @param CommandInstall $command
+	 * @throws Exception
 	 */
-	public function install(Config $config, Logger $logger)
+	public function install(CommandInstall $command)
 	{
-
-		$namespace = $config->get('namespace');
+		$namespace = $this->_config->get('namespace');
 		if (!$namespace) {
 			throw new Exception("Extension namespace cannot be loaded");
 		}
 
-		if (!file_exists('ext/Makefile')) {
-			system('export CC="gcc" && export CFLAGS="-O2" && cd ext && phpize --silent && ./configure --silent --enable-' . $namespace . ' && sudo make --silent install 1> /dev/null');
-		} else {
-			system('cd ext && sudo make --silent install 1> /dev/null');
+		echo "Installing...\n";
+		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
+		echo "Don't forget to restart your web server\n";
+	}
+
+	/**
+	 * Run tests
+	 * @param CommandInterface $command
+	 */
+	public function test(CommandInterface $command)
+	{
+		/**
+		 * Get global namespace
+		 */
+		$namespace = $this->_checkDirectory();
+		
+		echo "Running tests...\n";
+		system('export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
+	}
+
+	/**
+	 * Clean the extension directory
+	 * @param CommandClean $command
+	 */
+	public function clean(CommandClean $command)
+	{
+			system('cd ext && make clean 1> /dev/null');
+	}
+	
+	/**
+	 * Checks if the content of the file on the disk is the same as
+	 * the content.
+	 * Returns true if the file has been written
+	 * @param string $content
+	 * @param string $path
+	 */
+	protected function _checkAndWriteIfNeeded($content, $path)
+	{
+		if (file_exists($path))
+		{
+			$content_md5 = md5($content);
+			$existing_md5 = md5_file($path);
+			if ($content_md5 != $existing_md5)
+			{
+				file_put_contents($path, $content);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected function _checkKernelFile($src, $dst)
+	{
+		if (strstr($src, 'ext/kernel/concat.') !== false)
+		{
+			return true;
+		}
+		$srcmd5 = md5_file($src);
+		$dstmd5 = md5_file($dst);
+		return ($srcmd5 == $dstmd5);
+	}
+
+	protected function checkKernelFiles()
+	{
+		if (!$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', NULL, array($this, '_checkKernelFile')))
+		{
+			echo "Copying new kernel files...\n";
+			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
 		}
 	}
 
@@ -457,10 +544,12 @@ class Compiler
 	 * Create config.m4 and config.w32 by compiled files to test extension
 	 *
 	 * @param string $project
+	 * @return bool true if need to run configure
 	 */
 	public function createConfigFiles($project)
 	{
 
+		$need_configure = false;
 		$content = file_get_contents(__DIR__ . '/../templates/config.m4');
 		if (empty($content)) {
 			throw new Exception("Template config.m4 doesn't exists");
@@ -476,8 +565,8 @@ class Compiler
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);
 		}
-
-		file_put_contents('ext/config.m4', $content);
+		
+		$need_configure = $this->_checkAndWriteIfNeeded($content, 'ext/config.m4');
 
 		/**
 		 * php_ext.h
@@ -495,7 +584,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/php_ext.h', $content);
+		$this->_checkAndWriteIfNeeded($content, 'ext/php_ext.h');
 
 		/**
 		 * ext.h
@@ -513,7 +602,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/ext.h', $content);
+		$this->_checkAndWriteIfNeeded($content, 'ext/ext.h');
 
 		/**
 		 * ext_config.h
@@ -531,7 +620,43 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/ext_config.h', $content);
+		$this->_checkAndWriteIfNeeded($content, 'ext/ext_config.h');
+
+		/**
+		 * ext_clean
+		 */
+		$content = file_get_contents(__DIR__ . '/../ext/clean');
+		if (empty($content)) {
+			throw new Exception("clean file doesn't exists");
+		}
+
+		if ($this->_checkAndWriteIfNeeded($content, 'ext/clean'))
+		{
+			chmod('ext/clean', 0755);
+		}
+		
+		/**
+		 * ext_install
+		 */
+		$content = file_get_contents(__DIR__ . '/../ext/install');
+		if (empty($content)) {
+			throw new Exception("install file doesn't exists");
+		}
+
+		$toReplace = array(
+			'%PROJECT_LOWER%' 		=> strtolower($project)
+		);
+
+		foreach ($toReplace as $mark => $replace) {
+			$content = str_replace($mark, $replace, $content);
+		}
+
+		if ($this->_checkAndWriteIfNeeded($content, 'ext/install'))
+		{
+			chmod('ext/install', 0755);
+		}
+		
+		return $need_configure;
 	}
 
 	/**
@@ -542,6 +667,7 @@ class Compiler
 	public function createProjectFiles($project)
 	{
 
+		$this->checkKernelFiles();
 		/**
 		 * project.c
 		 */
@@ -650,7 +776,7 @@ class Compiler
 		/**
 		 * Round 3. Generate and place the entry point of the project
 		 */
-		file_put_contents('ext/' . $project . '.c', $content);
+		$this->_checkAndWriteIfNeeded($content, 'ext/' . $project . '.c');
 		unset($content);
 
 		/**
@@ -678,7 +804,8 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/' . $project . '.h', $content);
+		$this->_checkAndWriteIfNeeded($content, 'ext/' . $project . '.h');
+		unset($content);
 
 		/**
 		 * Round 5. Create php_project.h
@@ -699,8 +826,8 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		file_put_contents('ext/php_' . $project . '.h', $content);
-
+		$this->_checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
+		unset($content);
 	}
 
 	/**

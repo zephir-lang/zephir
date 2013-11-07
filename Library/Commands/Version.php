@@ -18,21 +18,20 @@
 */
 
 /**
- * VersionCommand
+ * CommandVersion
  *
  * Shows Zephir version
  */
-class VersionCommand
+class CommandVersion extends CommandAbstract
 {
-
 	const VERSION = '0.2.2a';
 
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getCommands()
+	public function getCommand()
 	{
 		return 'version';
 	}
@@ -65,5 +64,4 @@ class VersionCommand
 	{
 		echo self::VERSION, PHP_EOL;
 	}
-
 }
