@@ -132,10 +132,13 @@ class Bootstrap
 			 */
 			foreach (new DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
 				if (!$item->isDir()) {
-					require $item->getRealPath();
-					$className = str_replace('.php', '', $item->getBaseName()) . 'Command';
-					$command = new $className();
-					self::$_commands[$command->getCommands()] = $command;
+					require_once $item->getRealPath();
+					$className = 'Command' . str_replace('.php', '', $item->getBaseName());
+					$class = new ReflectionClass($className);
+					if (!$class->isAbstract() && !$class->isInterface()) {
+						$command = new $className();
+						self::$_commands[$command->getCommand()] = $command;
+					}
 				}
 			}
 

@@ -83,7 +83,7 @@ class DeclareStatement
 			 */
 			$symbolVariable->setOriginal($variable);
 
-			if (isset($variable['expr'])) {
+			if (isset($variable['expr']['value'])) {
 				$defaultValue = $variable['expr']['value'];
 			} else {
 				$defaultValue = null;

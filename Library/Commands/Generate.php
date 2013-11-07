@@ -18,19 +18,19 @@
 */
 
 /**
- * GenerateCommand
+ * CommandGenerate
  *
  * Generate the code without compiling it
  */
-class GenerateCommand
+class CommandGenerate extends CommandAbstract
 {
 
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
 	 * @return array|string
 	 */
-	public function getCommands()
+	public function getCommand()
 	{
 		return 'generate';
 	}
@@ -50,19 +50,6 @@ class GenerateCommand
 	 */
 	public function getDescription()
 	{
-		return 'Compiles the extension without install it';
+		return 'Generates C code from the Zephir code';
 	}
-
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		$compiler = new Compiler();
-		$compiler->compile($config, $logger);
-	}
-
 }

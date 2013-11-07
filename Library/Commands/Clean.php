@@ -18,21 +18,21 @@
 */
 
 /**
- * CompileCommand
+ * CleanCommand
  *
  * Produce the extension installation
  */
-class CommandCompile extends CommandAbstract
+class CommandClean extends CommandAbstract
 {
 
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
-	 * @return array|string
+	 * @return string
 	 */
 	public function getCommand()
 	{
-		return 'compile';
+		return 'clean';
 	}
 
 	/**
@@ -42,7 +42,7 @@ class CommandCompile extends CommandAbstract
 	 */
 	public function getUsage()
 	{
-		return 'compile';
+		return 'clean';
 	}
 
 	/**
@@ -50,6 +50,6 @@ class CommandCompile extends CommandAbstract
 	 */
 	public function getDescription()
 	{
-		return 'Compile a Zephir extension';
+		return 'Clean the extension code';
 	}
 }

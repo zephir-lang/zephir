@@ -18,19 +18,20 @@
 */
 
 /**
- * InitializeCommand
+ * CommandInitialize
  *
- * Shows Zephir version
+ * Initialize a zephir extension
  */
-class InitializeCommand
+class CommandInitialize extends CommandAbstract
 {
-
+	private $_namespace;
+	
 	/**
-	 * Commands provided by this command
+	 * Command provided by this command
 	 *
-	 * @return array|string
+	 * @return string
 	 */
-	public function getCommands()
+	public function getCommand()
 	{
 		return 'init';
 	}
@@ -53,16 +54,16 @@ class InitializeCommand
 		return 'Initializes a Zephir extension';
 	}
 
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
+	public function getNamespace()
 	{
-		$compiler = new Compiler();
-		$compiler->init($config, $logger);
+		return $this->_namespace;
 	}
 
+	public function execute(Config $config, Logger $logger)
+	{
+		if (isset($_SERVER['argv'][2])) {
+			$this->_namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
+		}
+		parent::execute($config, $logger);
+	}
 }

@@ -29,7 +29,11 @@ class Config
 		'static-type-inference-second-pass' => true,
 		'local-context-pass' => true,
 		'constant-folding' => true,
-		'static-constant-class-folding' => true
+		'static-constant-class-folding' => true,
+		'namespace'   => '',
+		'name'        => '',
+		'description' => '',
+		'author'      => ''
 	);
 
 	public function __construct()
@@ -37,10 +41,11 @@ class Config
 		if (file_exists('config.json')) {
 			$config = json_decode(file_get_contents('config.json'), true);
 			if (!is_array($config)) {
-				throw new Exception("config.json is not valid");
+				throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");
 			}
 			$this->_config = array_merge($this->_config, $config);
 		}
+		register_shutdown_function(array($this, '_saveOnExit'));
 	}
 
 	/**
@@ -65,4 +70,16 @@ class Config
 		$this->_config[$key] = $value;
 	}
 
+	public function _saveOnExit()
+	{
+		/**
+		 * Above PHP 5.4
+		 */
+		if (defined('JSON_PRETTY_PRINT')) {
+			$config = json_encode($this->_config, JSON_PRETTY_PRINT);
+		} else {
+			$config = json_encode($this->_config);
+		}
+		file_put_contents('config.json', $config);
+	}
 }

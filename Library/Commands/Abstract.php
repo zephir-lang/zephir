@@ -17,39 +17,44 @@
  +--------------------------------------------------------------------------+
 */
 
+require_once __DIR__ . '/Interface.php';
 /**
- * CompileCommand
+ * CommandAbstract
  *
- * Produce the extension installation
+ * Provides a superclass for commands
  */
-class CommandCompile extends CommandAbstract
+abstract class CommandAbstract implements CommandInterface
 {
 
-	/**
-	 * Commands provided by this command
-	 *
-	 * @return array|string
-	 */
-	public function getCommand()
-	{
-		return 'compile';
-	}
+  /**
+   * Command provided by this command
+   *
+   * @return string
+   */
+  abstract public function getCommand();
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'compile';
-	}
+  /**
+   * Command usage
+   *
+   * @return string
+   */
+  abstract public function getUsage();
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Compile a Zephir extension';
-	}
+  /**
+   * @return string
+   */
+  abstract public function getDescription();
+
+  /**
+   * Executes the command
+   *
+   * Config $config
+   * Logger $logger
+   */
+  public function execute(Config $config, Logger $logger)
+  {
+  	$compiler = new Compiler($config, $logger);
+  	$command = $this->getCommand();
+  	$compiler->$command($this);
+  }
 }
