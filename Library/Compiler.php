@@ -421,9 +421,8 @@ class Compiler
 		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
-		$this->createConfigFiles($namespace, $config, $logger);
-		$this->createProjectFiles($namespace, $config, $logger);
 		$needConfigure = $this->createConfigFiles($namespace);
+		$this->createProjectFiles($namespace);
 
 		/**
 		 * Round 5.
@@ -658,7 +657,7 @@ class Compiler
 	 *
 	 * @param string $project
 	 */
-	public function createProjectFiles($project, $config, $logger)
+	public function createProjectFiles($project)
 	{
 
 		$this->checkKernelFiles();
@@ -812,7 +811,7 @@ class Compiler
 		/**
 		 * Generate the globals declaration
 		 */
-		$globals = $config->get('globals');
+		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
 
 			$structures = array();
