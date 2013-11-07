@@ -422,8 +422,8 @@ class Compiler
 		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
-		$this->createConfigFiles($namespace);
-		$this->createProjectFiles($namespace);
+		$this->createConfigFiles($namespace, $config, $logger);
+		$this->createProjectFiles($namespace, $config, $logger);
 
 		/**
 		 * Round 5.
@@ -539,7 +539,7 @@ class Compiler
 	 *
 	 * @param string $project
 	 */
-	public function createProjectFiles($project)
+	public function createProjectFiles($project, $config, $logger)
 	{
 
 		/**
@@ -688,11 +688,37 @@ class Compiler
 			throw new Exception("Template php_project.h doesn't exist");
 		}
 
+		/**
+		 * Generate the globals declaration
+		 */
+		$globals = $config->get('globals');
+		if (is_array($globals)) {
+
+			$structures = array();
+			foreach ($globals as $name => $global) {
+				$parts = explode(".", $name);
+				$structures[$parts[0]][$parts[1]] = $global['default'];
+			}
+
+			$globalCode = PHP_EOL;
+			foreach ($structures as $structureName => $internalStructure) {
+				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
+			}
+
+			$globalStruct = null;
+
+		} else {
+			$globalCode = null;
+			$globalStruct = null;
+		}
+
 		$toReplace = array(
-			'%PROJECT_LOWER%' 		=> strtolower($project),
-			'%PROJECT_UPPER%' 		=> strtoupper($project),
-			'%PROJECT_EXTNAME%' 	=> strtolower($project),
-			'%PROJECT_VERSION%' 	=> '0.0.1'
+			'%PROJECT_LOWER%' 		     => strtolower($project),
+			'%PROJECT_UPPER%' 		     => strtoupper($project),
+			'%PROJECT_EXTNAME%' 	     => strtolower($project),
+			'%PROJECT_VERSION%' 	     => '0.0.1',
+			'%EXTENSION_GLOBALS%'        => $globalCode,
+			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
 		);
 
 		foreach ($toReplace as $mark => $replace) {

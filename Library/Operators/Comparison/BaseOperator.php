@@ -84,6 +84,9 @@ class ComparisonBaseOperator extends BaseOperator
 				case 'bool':
 					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
 					break;
+				case 'resource':
+					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
+					break;
 				default:
 					throw new CompilerException($expr['right']['value'], $expr['right']);
 			}
