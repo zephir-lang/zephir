@@ -510,6 +510,11 @@ class Compiler
 				return true;
 			}
 		}
+		else
+		{
+			file_put_contents($path, $content);
+			return true;
+		}
 		return false;
 	}
 

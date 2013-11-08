@@ -30,3 +30,11 @@ $obj8 = $t->testInstance8();
 assert(is_object($obj8));
 assert($obj8->getA() == 1.2);
 assert($obj8->getB() == 7.30);
+
+$obj9 = $t->testInstance9();
+assert(is_object($obj9));
+assert($obj9 instanceOf Test\Oo\OoDynamicA);
+
+$obj10 = $t->testInstance10();
+assert(is_object($obj10));
+assert($obj10 instanceOf Test\Oo\OoDynamicB);

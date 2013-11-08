@@ -231,6 +231,7 @@ class Expression
 		 */
 		$symbolVariable->setDynamicTypes('object');
 
+		$dynamic = false;
 		if ($newExpr['class'] == 'self') {
 			$className = $compilationContext->classDefinition->getCompleteName();
 		} else {
@@ -238,6 +239,7 @@ class Expression
 				$className = substr($newExpr['class'], 1);
 			} else {
 				$className = $newExpr['class'];
+				$dynamic = $newExpr['dynamic'];
 			}
 		}
 
@@ -274,7 +276,9 @@ class Expression
 				 * @TODO, check if the variable is really internal
 				 */
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(SL("' . Utils::addSlashes($className, true) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+				
+				$classNameToFetch = $dynamic ? 'Z_STRVAL_P('.$className.'), Z_STRLEN_P('.$className.')' : 'SL("' . Utils::addSlashes($className, true) . '")';
+				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class('.$classNameToFetch.', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
 				$symbolVariable->setClassTypes($newExpr['class']);
 			}
