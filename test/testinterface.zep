@@ -7,11 +7,15 @@ namespace Test;
 interface TestInterface
 {
 
-	/**
-	 * Sets a default action
-	 *
-	 * @param int defaultAccess
-	 */
-	public function setAction(action);
+  const C1 = null;
+  
+  const C2 = false;
+  
+  const C3 = true;
+  
+  const C4 = 10;
+  
+  const C5 = 10.25;
 
+  const C6 = "test";
 }

@@ -84,7 +84,7 @@ class CompilerFile
 		$compilePath = '.temp/' . str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
 		$zepRealPath = realpath($this->_filePath);
 		if (file_exists($compilePath)) {
-			if (filemtime($compilePath) < filemtime($zepRealPath)) {
+			if (filemtime($compilePath) < filemtime($zepRealPath) || filemtime($compilePath) < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
 				system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 			}
 		} else {
@@ -177,21 +177,39 @@ class CompilerFile
 
 		$classDefinition->setType('interface');
 
-		if (isset($topStatement['methods'])) {
-			foreach ($topStatement['methods'] as $method) {
-				$classDefinition->addMethod(new ClassMethod(
-					$classDefinition,
-					$method['visibility'],
-					$method['name'],
-					isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
-					null,
-					isset($method['docblock']) ? $method['docblock'] : null,
-					isset($method['return-type']) ? $method['return-type'] : null,
-					$method
-				), $method);
+		if (isset($topStatement['definition'])) {
+			$definition = $topStatement['definition'];
+			/**
+			 * Register constants
+			 */
+			if (isset($definition['constants'])) {
+				foreach ($definition['constants'] as $constant) {
+					$classDefinition->addConstant(new ClassConstant(
+							$constant['name'],
+							isset($constant['default']) ? $constant['default'] : null,
+							isset($constant['docblock']) ? $constant['docblock'] : null
+					));
+				}
+			}			
+			/**
+			 * Register methods
+			 */
+			if (isset($definition['methods'])) {
+				foreach ($definition['methods'] as $method) {
+					$classDefinition->addMethod(new ClassMethod(
+						$classDefinition,
+						$method['visibility'],
+						$method['name'],
+						isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+						null,
+						isset($method['docblock']) ? $method['docblock'] : null,
+						isset($method['return-type']) ? $method['return-type'] : null,
+						$method
+					), $method);
+				}
 			}
 		}
-
+						
 		$this->_classDefinition = $classDefinition;
 	}
 

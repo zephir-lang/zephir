@@ -72,10 +72,10 @@ class StaticConstantAccess
 		 * is supposed to be declared
 		 */
 		if ($className != 'self' && $className != 'parent') {
-			if ($compiler->isClass($className)) {
+			if ($compiler->isClass($className) || $compiler->isInterface($className)) {
 				$classDefinition = $compiler->getClassDefinition($className);
 			} else {
-				if ($compiler->isInternalClass($className)) {
+				if ($compiler->isInternalClass($className) || $compiler->isInternalInterface($className)) {
 					$classDefinition = $compiler->getInternalClassDefinition($className);
 				} else {
 					throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);

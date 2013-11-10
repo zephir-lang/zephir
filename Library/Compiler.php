@@ -422,7 +422,7 @@ class Compiler
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
 		$needConfigure = $this->createConfigFiles($namespace);
-		$this->createProjectFiles($namespace);
+		$needConfigure|= $this->createProjectFiles($namespace);
 
 		/**
 		 * Round 5.
@@ -430,12 +430,9 @@ class Compiler
 		$this->_stringManager->genConcatCode();
 
 		$verbose = ($this->_config->get('verbose') ? true : false);
-		if (!$this->_config->get('phpized')) {
+		if ($needConfigure) {
 			echo "Preparing for PHP compilation...\n";
 			exec('cd ext && phpize', $output, $exit);
-			$this->_config->set('phpized', true);
-		}
-		if ($needConfigure) {
 			echo "Preparing configuration file...\n";
 			exec('export CC="gcc" && export CFLAGS="-O2" && cd ext && ./configure --enable-' . $namespace);
 		}
@@ -524,6 +521,10 @@ class Compiler
 		{
 			return true;
 		}
+		if (!file_exists($dst))
+		{
+			return false;
+		}
 		$srcmd5 = md5_file($src);
 		$dstmd5 = md5_file($dst);
 		return ($srcmd5 == $dstmd5);
@@ -531,11 +532,14 @@ class Compiler
 
 	protected function checkKernelFiles()
 	{
-		if (!$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', NULL, array($this, '_checkKernelFile')))
+		$configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
+		if (!$configured)
 		{
 			echo "Copying new kernel files...\n";
+			exec("rm -fr ext/kernel/*");
 			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
 		}
+		return !$configured;
 	}
 
 	/**
@@ -665,7 +669,7 @@ class Compiler
 	public function createProjectFiles($project)
 	{
 
-		$this->checkKernelFiles();
+		$need_configure = $this->checkKernelFiles();
 		/**
 		 * project.c
 		 */
@@ -852,6 +856,8 @@ class Compiler
 
 		$this->_checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
 		unset($content);
+		
+		return $need_configure;
 	}
 
 	/**
