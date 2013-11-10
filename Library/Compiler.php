@@ -203,7 +203,7 @@ class Compiler
 			if ($item->isDir()) {
 		  	if ($fileName != '.' && $fileName != '..') {
 		  		if (!is_dir($dest . '/' . $fileName)) {
-		       	mkdir($dest . '/' . $fileName);
+		       	mkdir($dest . '/' . $fileName, 0755, true);
 		    	}
 		      $this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
 		  	}
@@ -537,7 +537,7 @@ class Compiler
 		{
 			echo "Copying new kernel files...\n";
 			exec("rm -fr ext/kernel/*");
-			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
+			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^[^\.]@');
 		}
 		return !$configured;
 	}

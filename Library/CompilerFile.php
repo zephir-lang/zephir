@@ -578,7 +578,7 @@ class CompilerFile
 		if (strpos($path, DIRECTORY_SEPARATOR)) {
 			$dirname = dirname($filePath);
 			if (!is_dir($dirname)) {
-				mkdir($dirname, 0777, true);
+				mkdir($dirname, 0755, true);
 			}
 		}
 

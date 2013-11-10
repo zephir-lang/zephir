@@ -710,7 +710,7 @@ class Expression
 		$resolved = $expr->compile($compilationContext);
 
 		if ($resolved->getType() != 'variable') {
-			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand");
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
 		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -718,7 +718,26 @@ class Expression
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlashes($expression['right']['value'], true)) . '") TSRMLS_CC)', $expression);
+		switch ($expression['right']['type'])
+		{
+			case 'variable':
+				$code = 'SL("' . strtolower(Utils::addSlashes($expression['right']['value'], true)) . '")';
+				break;
+			case 'string':
+				$code = 'SL("' . strtolower($expression['right']['value']) . '")';
+				break;
+			case 'property-access':
+			case 'array-access':
+				{
+					$rightExpr = new Expression($expression['right']);
+					$right = $rightExpr->compile($compilationContext);
+					$code = 'Z_STRVAL_P(' . $right->getCode() . '), Z_STRLEN_P(' . $right->getCode() . ')';
+				}
+				break;
+			default:
+				throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
+		}
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
 	}
 
 	/**
