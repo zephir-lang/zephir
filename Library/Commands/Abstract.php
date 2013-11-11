@@ -17,7 +17,6 @@
  +--------------------------------------------------------------------------+
 */
 
-require_once __DIR__ . '/Interface.php';
 /**
  * CommandAbstract
  *
@@ -26,35 +25,36 @@ require_once __DIR__ . '/Interface.php';
 abstract class CommandAbstract implements CommandInterface
 {
 
-  /**
-   * Command provided by this command
-   *
-   * @return string
-   */
-  abstract public function getCommand();
+	/**
+	 * Command provided by this command
+	 *
+	 * @return string
+	 */
+	abstract public function getCommand();
 
-  /**
-   * Command usage
-   *
-   * @return string
-   */
-  abstract public function getUsage();
+	/**
+	 * Command usage
+	 *
+	 * @return string
+	 */
+	abstract public function getUsage();
 
-  /**
-   * @return string
-   */
-  abstract public function getDescription();
+	/**
+	 * @return string
+	 */
+	abstract public function getDescription();
 
-  /**
-   * Executes the command
-   *
-   * Config $config
-   * Logger $logger
-   */
-  public function execute(Config $config, Logger $logger)
-  {
-  	$compiler = new Compiler($config, $logger);
-  	$command = $this->getCommand();
-  	$compiler->$command($this);
-  }
+	/**
+	 * Executes the command
+	 *
+	 * Config $config
+	 * Logger $logger
+	 */
+	public function execute(Config $config, Logger $logger)
+	{
+		$compiler = new Compiler($config, $logger);
+		$command = $this->getCommand();
+		$compiler->$command($this);
+	}
+
 }

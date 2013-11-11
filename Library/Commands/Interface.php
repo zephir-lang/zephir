@@ -25,30 +25,31 @@
 interface CommandInterface
 {
 
-  /**
-   * Command provided by this command
-   *
-   * @return string
-   */
-  public function getCommand();
+	/**
+	 * Command provided by this command
+	 *
+	 * @return string
+	 */
+	public function getCommand();
 
-  /**
-   * Command usage
-   *
-   * @return string
-   */
-  public function getUsage();
+	/**
+	 * Command usage
+	 *
+	 * @return string
+	 */
+	public function getUsage();
 
-  /**
-   * @return string
-   */
-  public function getDescription();
+	/**
+	 * @return string
+	 */
+	public function getDescription();
 
-  /**
-   * Executes the command
-   *
-   * Config $config
-   * Logger $logger
-   */
-  public function execute(Config $config, Logger $logger);
+	/**
+	 * Executes the command
+	 *
+	 * Config $config
+	 * Logger $logger
+	 */
+	public function execute(Config $config, Logger $logger);
+
 }

@@ -17,6 +17,9 @@
  +--------------------------------------------------------------------------+
 */
 
+require ZEPHIRPATH . 'Library/Commands/Interface.php';
+require ZEPHIRPATH . 'Library/Commands/Abstract.php';
+
 /**
  * Compiler
  *
