@@ -43,3 +43,20 @@ PHP_METHOD(Test_Fcall, testCall1) {
 
 }
 
+PHP_METHOD(Test_Fcall, testCall1FromVar) {
+
+	zval *funcName, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(funcName);
+	ZVAL_STRING(funcName, "strpos", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "hello", 1);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "l", 1);
+	zephir_call_func_p2(return_value, "strpos", _0, _1);
+	RETURN_MM();
+
+}
+

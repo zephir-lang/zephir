@@ -146,3 +146,27 @@ PHP_METHOD(Test_Oo, testInstance8) {
 
 }
 
+PHP_METHOD(Test_Oo, testInstance9) {
+
+	zval *o;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(o);
+	zephir_call_static(o, "Test\\Oo\\OoDynamicA", "getnew");
+	RETURN_CCTOR(o);
+
+}
+
+PHP_METHOD(Test_Oo, testInstance10) {
+
+	zval *o;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(o);
+	zephir_call_static(o, "Test\\Oo\\OoDynamicB", "getnew");
+	RETURN_CCTOR(o);
+
+}
+

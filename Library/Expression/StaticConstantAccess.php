@@ -144,7 +144,11 @@ class StaticConstantAccess
 
 		if ($constantDefinition instanceof ClassConstant) {
 			$constant = $constantDefinition->getValue();
-			$value = $constant['value'];
+			if (isset($constant['value'])) {
+				$value = $constant['value'];
+			} else {
+				$value = null;
+			}
 			$type = $constant['type'];
 		} else {
 			$value = $constantDefinition;

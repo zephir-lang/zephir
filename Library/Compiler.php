@@ -37,11 +37,11 @@ class Compiler
 	protected $_constants = array();
 
 	protected $_globals = array();
-	
+
 	protected $_stringManager = null;
 
 	protected $_config = null;
-	
+
 	protected $_logger = null;
 
 	protected static $_reflections = array();
@@ -309,7 +309,7 @@ class Compiler
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
 		}
-		
+
 		return $namespace;
 	}
 
@@ -350,7 +350,7 @@ class Compiler
 	}
 
 	/**
-	 * 
+	 *
 	 * @param CommandGenerate $command
 	 * @throws Exception
 	 */
@@ -405,7 +405,7 @@ class Compiler
 	}
 
 	/**
-	 * 
+	 *
 	 * @param CommandCompile $command
 	 */
 	public function compile(CommandInterface $command)
@@ -445,7 +445,7 @@ class Compiler
 	}
 
 	/**
-	 * 
+	 *
 	 * Compiles and installs the extension
 	 * @param CommandInstall $command
 	 * @throws Exception
@@ -474,7 +474,7 @@ class Compiler
 		 * Get global namespace
 		 */
 		$namespace = $this->_checkDirectory();
-		
+
 		echo "Running tests...\n";
 		system('export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
 	}
@@ -487,7 +487,7 @@ class Compiler
 	{
 			system('cd ext && make clean 1> /dev/null');
 	}
-	
+
 	/**
 	 * Checks if the content of the file on the disk is the same as
 	 * the content.
@@ -567,7 +567,7 @@ class Compiler
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);
 		}
-		
+
 		$need_configure = $this->_checkAndWriteIfNeeded($content, 'ext/config.m4');
 
 		/**
@@ -636,7 +636,7 @@ class Compiler
 		{
 			chmod('ext/clean', 0755);
 		}
-		
+
 		/**
 		 * ext_install
 		 */
@@ -657,7 +657,7 @@ class Compiler
 		{
 			chmod('ext/install', 0755);
 		}
-		
+
 		return $need_configure;
 	}
 
@@ -823,18 +823,23 @@ class Compiler
 		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
 
+			$globalStruct = "";
+
 			$structures = array();
 			foreach ($globals as $name => $global) {
 				$parts = explode(".", $name);
 				$structures[$parts[0]][$parts[1]] = $global['default'];
 			}
 
+			foreach ($structures as $structureName => $internalStructure) {
+				$globalStruct .= 'struct zephir_struct_' . $structureName . ' {' . PHP_EOL;
+				$globalStruct .= '} zephir_struct_' . $structureName . ';' . PHP_EOL;
+			}
+
 			$globalCode = PHP_EOL;
 			foreach ($structures as $structureName => $internalStructure) {
 				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
 			}
-
-			$globalStruct = null;
 
 		} else {
 			$globalCode = null;
@@ -856,7 +861,7 @@ class Compiler
 
 		$this->_checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
 		unset($content);
-		
+
 		return $need_configure;
 	}
 
