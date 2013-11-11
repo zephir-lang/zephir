@@ -27,7 +27,7 @@ class Compiler
 
 	protected $_files;
 
-	/*+
+	/**
 	 * @var ClassDefinition[]
 	 */
 	protected $_definitions;
@@ -190,32 +190,31 @@ class Compiler
 	 * @param string $path
 	 * @param string $destination
 	 */
-	protected function _recursiveProcess($src, $dest, $pattern=null, $callback = "copy")
+	protected function _recursiveProcess($src, $dest, $pattern=null, $callback="copy")
 	{
 		$success = true;
 		$iterator = new DirectoryIterator($src);
 		foreach ($iterator as $item) {
 			$pathName = $item->getPathname();
-		  if (!is_readable($pathName)) {
-		  	continue;
-		  }
+			if (!is_readable($pathName)) {
+				continue;
+			}
 			$fileName = $item->getFileName();
 			if ($item->isDir()) {
-		  	if ($fileName != '.' && $fileName != '..') {
-		  		if (!is_dir($dest . '/' . $fileName)) {
-		       	mkdir($dest . '/' . $fileName, 0755, true);
-		    	}
-		      $this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
-		  	}
-		  } else if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-		  	if (is_string($callback))
-		  	{
-		  		$success = $success && $callback($pathName, $dest.'/'.$fileName);
-		  	}
-		  	else
-		  	{
-		  		$success = $success && call_user_func($callback, $pathName, $dest.'/'.$fileName);
-		  	}
+				if ($fileName != '.' && $fileName != '..') {
+					if (!is_dir($dest . '/' . $fileName)) {
+						mkdir($dest . '/' . $fileName, 0755, true);
+					}
+					$this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
+				}
+			} else {
+			  	if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+					if (is_string($callback)) {
+						$success = $success && $callback($pathName, $dest.'/'.$fileName);
+					} else {
+						$success = $success && call_user_func($callback, $pathName, $dest.'/'.$fileName);
+					}
+				}
 			}
 		}
 		return $success;
@@ -315,6 +314,8 @@ class Compiler
 
 	/**
 	 * Initializes a Zephir extension
+	 *
+	 * @param CommandInitialize $command
 	 */
 	public function init(CommandInitialize $command)
 	{
@@ -322,7 +323,6 @@ class Compiler
 		 * If init namespace is specified
 		 */
 		$namespace = $command->getNamespace();
-
 		if (!$namespace) {
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
@@ -421,11 +421,11 @@ class Compiler
 		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
-		$needConfigure = $this->createConfigFiles($namespace);
-		$needConfigure|= $this->createProjectFiles($namespace);
+		$needConfigure  = $this->createConfigFiles($namespace);
+		$needConfigure |= $this->createProjectFiles($namespace);
 
 		/**
-		 * Round 5.
+		 * Round 5. Generate the concatenation cubrid_error_code(oid)
 		 */
 		$this->_stringManager->genConcatCode();
 
@@ -436,6 +436,7 @@ class Compiler
 			echo "Preparing configuration file...\n";
 			exec('export CC="gcc" && export CFLAGS="-O2" && cd ext && ./configure --enable-' . $namespace);
 		}
+
 		echo "Compiling...\n";
 		if ($verbose) {
 			passthru('cd ext && make', $exit);
@@ -485,7 +486,7 @@ class Compiler
 	 */
 	public function clean(CommandClean $command)
 	{
-			system('cd ext && make clean 1> /dev/null');
+		system('cd ext && make clean 1> /dev/null');
 	}
 
 	/**
@@ -494,21 +495,18 @@ class Compiler
 	 * Returns true if the file has been written
 	 * @param string $content
 	 * @param string $path
+	 * @return boolean
 	 */
 	protected function _checkAndWriteIfNeeded($content, $path)
 	{
-		if (file_exists($path))
-		{
-			$content_md5 = md5($content);
-			$existing_md5 = md5_file($path);
-			if ($content_md5 != $existing_md5)
-			{
+		if (file_exists($path)) {
+			$contentMd5 = md5($content);
+			$existingMd5 = md5_file($path);
+			if ($contentMd5 != $existingMd5) {
 				file_put_contents($path, $content);
 				return true;
 			}
-		}
-		else
-		{
+		} else {
 			file_put_contents($path, $content);
 			return true;
 		}
@@ -517,24 +515,19 @@ class Compiler
 
 	protected function _checkKernelFile($src, $dst)
 	{
-		if (strstr($src, 'ext/kernel/concat.') !== false)
-		{
+		if (strstr($src, 'ext/kernel/concat.') !== false) {
 			return true;
 		}
-		if (!file_exists($dst))
-		{
+		if (!file_exists($dst)) {
 			return false;
 		}
-		$srcmd5 = md5_file($src);
-		$dstmd5 = md5_file($dst);
-		return ($srcmd5 == $dstmd5);
+		return md5_file($src) == md5_file($dst);
 	}
 
 	protected function checkKernelFiles()
 	{
 		$configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
-		if (!$configured)
-		{
+		if (!$configured) {
 			echo "Copying new kernel files...\n";
 			exec("rm -fr ext/kernel/*");
 			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^[^\.]@');
@@ -568,7 +561,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$need_configure = $this->_checkAndWriteIfNeeded($content, 'ext/config.m4');
+		$needConfigure = $this->_checkAndWriteIfNeeded($content, 'ext/config.m4');
 
 		/**
 		 * php_ext.h
@@ -632,8 +625,7 @@ class Compiler
 			throw new Exception("clean file doesn't exists");
 		}
 
-		if ($this->_checkAndWriteIfNeeded($content, 'ext/clean'))
-		{
+		if ($this->_checkAndWriteIfNeeded($content, 'ext/clean')) {
 			chmod('ext/clean', 0755);
 		}
 
@@ -653,23 +645,24 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		if ($this->_checkAndWriteIfNeeded($content, 'ext/install'))
-		{
+		if ($this->_checkAndWriteIfNeeded($content, 'ext/install')) {
 			chmod('ext/install', 0755);
 		}
 
-		return $need_configure;
+		return $needConfigure;
 	}
 
 	/**
 	 * Create project.c and project.h by compiled files to test extension
 	 *
 	 * @param string $project
+	 * @return boolean
 	 */
 	public function createProjectFiles($project)
 	{
 
-		$need_configure = $this->checkKernelFiles();
+		$needConfigure = $this->checkKernelFiles();
+
 		/**
 		 * project.c
 		 */
@@ -770,7 +763,6 @@ class Compiler
 			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
 			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
 		);
-
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);
 		}
@@ -828,11 +820,20 @@ class Compiler
 			$structures = array();
 			foreach ($globals as $name => $global) {
 				$parts = explode(".", $name);
-				$structures[$parts[0]][$parts[1]] = $global['default'];
+				$structures[$parts[0]][$parts[1]] = $global;
 			}
 
 			foreach ($structures as $structureName => $internalStructure) {
-				$globalStruct .= 'struct zephir_struct_' . $structureName . ' {' . PHP_EOL;
+				$globalStruct .= 'typedef struct _zephir_struct_' . $structureName . ' {' . PHP_EOL;
+				foreach ($internalStructure as $field => $global) {
+					switch ($global['type']) {
+						case 'bool':
+							$globalStruct .= "\t" . 'zend_bool ' . $field . ';' . PHP_EOL;
+							break;
+						default:
+							throw new Exception('Unknown global type: ' . $global['type']);
+					}
+				}
 				$globalStruct .= '} zephir_struct_' . $structureName . ';' . PHP_EOL;
 			}
 
@@ -846,11 +847,16 @@ class Compiler
 			$globalStruct = null;
 		}
 
+		$version = $this->_config->get('version');
+		if (!$version) {
+			$version = '0.0.1';
+		}
+
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
 			'%PROJECT_EXTNAME%' 	     => strtolower($project),
-			'%PROJECT_VERSION%' 	     => '0.0.1',
+			'%PROJECT_VERSION%' 	     => $version,
 			'%EXTENSION_GLOBALS%'        => $globalCode,
 			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
 		);
@@ -862,7 +868,7 @@ class Compiler
 		$this->_checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
 		unset($content);
 
-		return $need_configure;
+		return $needConfigure;
 	}
 
 	/**

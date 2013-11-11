@@ -74,7 +74,7 @@ class ConcatOperator extends BaseOperator
 						case 'long':
 							$key .= 'v';
 							$tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
-							$compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ', 0);');
+							$compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
 							$concatParts[] = '&' . $tempVariable->getName();
 							break;
 						default:
