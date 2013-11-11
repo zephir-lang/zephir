@@ -706,11 +706,11 @@ class Expression
 	public function compileInstanceOf($expression, CompilationContext $compilationContext)
 	{
 
-		$expr = new Expression($expression['left']);
-		$resolved = $expr->compile($compilationContext);
+		$left = new Expression($expression['left']);
+		$resolved = $left->compile($compilationContext);
 
 		if ($resolved->getType() != 'variable') {
-			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand");
+			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
 		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -718,7 +718,43 @@ class Expression
 			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
 		}
 
-		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', SL("' . strtolower(Utils::addSlashes($expression['right']['value'], true)) . '") TSRMLS_CC)', $expression);
+		$right = new Expression($expression['right']);
+		$resolved = $right->compile($compilationContext);
+		$resolvedVariable = $resolved->getCode();
+		switch ($resolved->getType())
+		{
+			case 'string':
+				$code = 'SL("' . trim($resolvedVariable, "\\") . '")';
+				break;
+			default:
+				{
+					switch ($resolved->getType())
+					{
+						case 'variable':
+							{
+								if (!$compilationContext->symbolTable->hasVariable($resolvedVariable))
+								{
+									$code = 'SL("' . Utils::addSlashes(trim($resolvedVariable, "\\"), true) . '")';
+									break;
+								}
+							}
+			case 'property-access':
+			case 'array-access':
+				{
+								$compilationContext->headersManager->add('kernel/operators');
+								$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
+								$tempVariable->setMustInitNull(true);
+								$tempVariableName = $tempVariable->getName();
+								$compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
+								$code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
+				}
+				break;
+			default:
+				throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
+		}
+				}
+		}
+		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
 	}
 
 	/**

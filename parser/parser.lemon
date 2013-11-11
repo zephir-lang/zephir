@@ -191,26 +191,26 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 	return ret;
 }
 
-static json_object *xx_ret_interface(xx_parser_token *T, json_object *methods_definition, xx_parser_token *E, xx_scanner_state *state)
+static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_definition, xx_parser_token *E, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+  json_object *ret = json_object_new_object();
 
-	json_object_object_add(ret, "type", json_object_new_string("interface"));
-	json_object_object_add(ret, "name", json_object_new_string(T->token));
+  json_object_object_add(ret, "type", json_object_new_string("interface"));
+  json_object_object_add(ret, "name", json_object_new_string(T->token));
 
-	if (E) {
-		json_object_object_add(ret, "extends", json_object_new_string(E->token));
-	}
+  if (E) {
+    json_object_object_add(ret, "extends", json_object_new_string(E->token));
+  }
 
-	if (methods_definition) {
-		json_object_object_add(ret, "methods", methods_definition);
-	}
+  if (interface_definition) {
+    json_object_object_add(ret, "definition", interface_definition);
+  }
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+  json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+  json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+  json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
-	return ret;
+  return ret;
 }
 
 static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
@@ -234,19 +234,22 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	return ret;
 }
 
-static json_object *xx_ret_interface_definition(json_object *methods, xx_scanner_state *state)
+static json_object *xx_ret_interface_definition(json_object *methods, json_object *constants, xx_scanner_state *state)
 {
-	json_object *ret = json_object_new_object();
+  json_object *ret = json_object_new_object();
 
-	if (methods) {
-		json_object_object_add(ret, "methods", methods);
-	}
+  if (methods) {
+    json_object_object_add(ret, "methods", methods);
+  }
+  if (constants) {
+    json_object_object_add(ret, "constants", constants);
+  }
 
-	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+  json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+  json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+  json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
-	return ret;
+  return ret;
 }
 
 static json_object *xx_ret_class_property(json_object *visibility, xx_parser_token *T,
@@ -1132,11 +1135,11 @@ xx_implements(R) ::= IDENTIFIER(I) . {
 }
 
 xx_interface_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
-	R = NULL;
+  R = NULL;
 }
 
-xx_interface_body(R) ::= BRACKET_OPEN xx_interface_methods_definition(D) BRACKET_CLOSE . {
-	R = D;
+xx_interface_body(R) ::= BRACKET_OPEN xx_interface_definition(D) BRACKET_CLOSE . {
+  R = D;
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) . {
@@ -1175,9 +1178,17 @@ xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_def
 	R = xx_ret_class_definition(C, M, K, status->scanner_state);
 }
 
-/*xx_interface_definition(R) ::= xx_interface_methods_definition(M) . {
-	R = xx_ret_interface_definition(M, status->scanner_state);
-}*/
+xx_interface_definition(R) ::= xx_class_consts_definition(C) . {
+  R = xx_ret_interface_definition(NULL, C, status->scanner_state);
+}
+
+xx_interface_definition(R) ::= xx_interface_methods_definition(M) . {
+  R = xx_ret_interface_definition(M, NULL, status->scanner_state);
+}
+
+xx_interface_definition(R) ::= xx_class_consts_definition(C) xx_interface_methods_definition(M) . {
+  R = xx_ret_interface_definition(M, C, status->scanner_state);
+}
 
 xx_class_properties_definition(R) ::= xx_class_properties_definition(L) xx_class_property_definition(P) . {
 	R = xx_ret_list(L, P);

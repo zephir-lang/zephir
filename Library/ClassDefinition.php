@@ -321,7 +321,14 @@ class ClassDefinition
 	 */
 	public function hasConstant($name)
 	{
-		return isset($this->_constants[$name]);
+		if (isset($this->_constants[$name]))
+		{
+			return true; 
+		}
+		/**
+		 * @todo add code to check if constant is defined in interfaces
+		 */
+		return false;
 	}
 
 	/**
@@ -335,6 +342,9 @@ class ClassDefinition
 		if (isset($this->_constants[$constantName])) {
 			return $this->_constants[$constantName];
 		}
+		/**
+		 * @todo add code to get constant from interfaces
+		 */
 		return false;
 	}
 
