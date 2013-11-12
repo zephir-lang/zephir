@@ -244,7 +244,8 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); ZEPHIR_MM_RESTORE(); return; }
 
 /** Return empty array */
-#define RETURN_EMPTY_ARRAY()        { array_init(return_value); return; }
+#define RETVAL_EMPTY_ARRAY()        { array_init(return_value); }
+#define RETURN_EMPTY_ARRAY()        { RETVAL_EMPTY_ARRAY(); return; }
 #define RETURN_MM_EMPTY_ARRAY()     { RETVAL_EMPTY_ARRAY(); ZEPHIR_MM_RESTORE(); return; }
 
 /* Return long */
