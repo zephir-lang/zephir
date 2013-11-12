@@ -431,7 +431,7 @@ class Compiler
 
 		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($needConfigure) {
-			exec('cd ext && clean', $output, $exit);
+			exec('cd ext && make clean', $output, $exit);
 			echo "Preparing for PHP compilation...\n";
 			exec('cd ext && phpize', $output, $exit);
 			echo "Preparing configuration file...\n";
