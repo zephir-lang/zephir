@@ -483,6 +483,7 @@ class Compiler
 
 	/**
 	 * Clean the extension directory
+	 *
 	 * @param CommandClean $command
 	 */
 	public function clean(CommandClean $command)
@@ -491,9 +492,9 @@ class Compiler
 	}
 
 	/**
-	 * Checks if the content of the file on the disk is the same as
-	 * the content.
+	 * Checks if the content of the file on the disk is the same as the content.
 	 * Returns true if the file has been written
+	 *
 	 * @param string $content
 	 * @param string $path
 	 * @return boolean

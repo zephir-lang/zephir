@@ -276,7 +276,7 @@ class Expression
 				 * @TODO, check if the variable is really internal
 				 */
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				
+
 				$classNameToFetch = $dynamic ? 'Z_STRVAL_P('.$className.'), Z_STRLEN_P('.$className.')' : 'SL("' . Utils::addSlashes($className, true) . '")';
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class('.$classNameToFetch.', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
@@ -576,6 +576,7 @@ class Expression
 										$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
 										break;
 									case 'variable':
+										$compilationContext->headersManager->add('kernel/array');
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
@@ -609,6 +610,7 @@ class Expression
 										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1);');
 										break;
 									case 'variable':
+										$compilationContext->headersManager->add('kernel/array');
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
 										$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
@@ -642,8 +644,9 @@ class Expression
 										$codePrinter->output('add_assoc_null_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $item['key']['value'] . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1);');
 										break;*/
 									case 'variable':
+										$compilationContext->headersManager->add('kernel/array');
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+										$codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}
@@ -721,37 +724,28 @@ class Expression
 		$right = new Expression($expression['right']);
 		$resolved = $right->compile($compilationContext);
 		$resolvedVariable = $resolved->getCode();
-		switch ($resolved->getType())
-		{
+		switch ($resolved->getType()) {
 			case 'string':
 				$code = 'SL("' . trim($resolvedVariable, "\\") . '")';
 				break;
 			default:
-				{
-					switch ($resolved->getType())
-					{
-						case 'variable':
-							{
-								if (!$compilationContext->symbolTable->hasVariable($resolvedVariable))
-								{
-									$code = 'SL("' . Utils::addSlashes(trim($resolvedVariable, "\\"), true) . '")';
-									break;
-								}
-							}
-			case 'property-access':
-			case 'array-access':
-				{
-								$compilationContext->headersManager->add('kernel/operators');
-								$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
-								$tempVariable->setMustInitNull(true);
-								$tempVariableName = $tempVariable->getName();
-								$compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
-								$code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
-				}
-				break;
-			default:
-				throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
-		}
+				switch ($resolved->getType()) {
+					case 'variable':
+						if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
+							$code = 'SL("' . Utils::addSlashes(trim($resolvedVariable, "\\"), true) . '")';
+						}
+						break;
+					case 'property-access':
+					case 'array-access':
+						$compilationContext->headersManager->add('kernel/operators');
+						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
+						$tempVariable->setMustInitNull(true);
+						$tempVariableName = $tempVariable->getName();
+						$compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
+						$code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
+						break;
+					default:
+						throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
 				}
 		}
 		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
