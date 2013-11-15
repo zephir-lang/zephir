@@ -132,6 +132,7 @@
 #define XX_T_AND 415
 #define XX_T_OR 416
 #define XX_T_DOUBLECOLON 417
+#define XX_T_MODASSIGN 418
 
 #define XX_T_CBLOCK 451
 

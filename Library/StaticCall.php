@@ -57,7 +57,7 @@ class StaticCall extends Call
 			if ($isExpecting) {
 				$codePrinter->output('zephir_call_self(' . $symbolVariable->getName() . ', this_ptr, "' . $methodName . '");');
 			} else {
-				$codePrinter->output('zephir_call_self_noret("' . $className . '", "' . $methodName . '");');
+				//$codePrinter->output('zephir_call_self_noret(' . $symbolVariable->getName() . ', "' . $methodName . '");');
 			}
 		} else {
 

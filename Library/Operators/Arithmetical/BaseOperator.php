@@ -123,7 +123,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 					case 'bool':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
 					case 'variable':
-						$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 						switch ($variableRight->getType()) {
 							case 'int':
 							case 'uint':

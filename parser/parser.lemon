@@ -1791,6 +1791,10 @@ xx_assignment_operator(R) ::= CONCATASSIGN . {
 	R = json_object_new_string("concat-assign");
 }
 
+xx_assignment_operator(R) ::= MODASSIGN . {
+	R = json_object_new_string("mod-assign");
+}
+
 /* y = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("variable", O, I, NULL, NULL, E, status->scanner_state);

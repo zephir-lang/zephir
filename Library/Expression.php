@@ -1118,6 +1118,7 @@ class Expression
 			case 'empty':
 			case 'unlikely':
 			case 'likely':
+			case 'ternary':
 				return new CompiledExpression('int', '(0 == 1)', $expression);
 
 			default:

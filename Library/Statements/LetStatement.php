@@ -109,6 +109,12 @@ class LetStatement
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
 								break;
+							case 'div-assign':
+								$codePrinter->output($variable . ' /= ' . $resolvedExpr->getCode() . ';');
+								break;
+							case 'mod-assign':
+								$codePrinter->output($variable . ' %= ' . $resolvedExpr->getCode() . ';');
+								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}

@@ -284,11 +284,17 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_SUBASSIGN:
 				xx_(xx_parser, XX_SUBASSIGN, NULL, parser_status);
 				break;
+			case XX_T_DIVASSIGN:
+				xx_(xx_parser, XX_DIVASSIGN, NULL, parser_status);
+				break;
 			case XX_T_MULASSIGN:
 				xx_(xx_parser, XX_MULASSIGN, NULL, parser_status);
 				break;
 			case XX_T_CONCATASSIGN:
 				xx_(xx_parser, XX_CONCATASSIGN, NULL, parser_status);
+				break;
+			case XX_T_MODASSIGN:
+				xx_(xx_parser, XX_MODASSIGN, NULL, parser_status);
 				break;
 			case XX_T_EQUALS:
 				xx_(xx_parser, XX_EQUALS, NULL, parser_status);
