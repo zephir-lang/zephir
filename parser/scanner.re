@@ -784,6 +784,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		"?" {
+			s->active_char++;
+			token->opcode = XX_T_QUESTION;
+			return 0;
+		}
+
 		[ \t\r]+ {
 			s->active_char += (YYCURSOR - start);
 			token->opcode = XX_T_IGNORE;

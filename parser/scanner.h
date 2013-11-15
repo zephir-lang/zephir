@@ -100,6 +100,7 @@
 #define XX_T_GREATER '>'
 #define XX_T_COLON ':'
 #define XX_T_DOTCOMMA ';'
+#define XX_T_QUESTION '?'
 #define XX_T_BRACKET_OPEN '{'
 #define XX_T_BRACKET_CLOSE '}'
 #define XX_T_SBRACKET_OPEN '['

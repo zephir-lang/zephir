@@ -314,6 +314,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_GREATEREQUAL:
 				xx_(xx_parser, XX_GREATEREQUAL, NULL, parser_status);
 				break;
+			case XX_T_QUESTION:
+				xx_(xx_parser, XX_QUESTION, NULL, parser_status);
+				break;
 			case XX_T_COLON:
 				xx_(xx_parser, XX_COLON, NULL, parser_status);
 				break;

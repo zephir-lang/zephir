@@ -33,6 +33,7 @@
 
 %left COMMA .
 %right REQUIRE .
+%right QUESTION .
 %right LIKELY UNLIKELY .
 %right CLONE EMPTY .
 %left INSTANCEOF .
@@ -2336,6 +2337,11 @@ xx_common_expr(R) ::= xx_scall_expr(E) . {
 /* f() or f(1, 2, 3) */
 xx_common_expr(R) ::= xx_fcall_expr(E) . {
 	R = E;
+}
+
+/* a ? b : c */
+xx_common_expr(R) ::= xx_common_expr(O1) QUESTION xx_common_expr(O2) COLON xx_common_expr(O3) . {
+	R = xx_ret_expr("ternary", O1, O2, O3, status->scanner_state);
 }
 
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
