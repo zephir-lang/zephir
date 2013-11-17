@@ -2428,6 +2428,10 @@ xx_literal_expr(R) ::= CONSTANT(I) . {
 	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
 }
 
+xx_literal_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
+  R = xx_ret_expr("empty-array", NULL, NULL, NULL, status->scanner_state);
+}
+
 xx_eval_expr(R) ::= xx_common_expr(E) . {
 	R = E;
 }

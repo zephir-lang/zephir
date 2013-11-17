@@ -493,6 +493,7 @@ class ClassMethod
 			$containerCode = str_replace('RETURN_MM_FALSE', 'RETURN_FALSE', $containerCode);
 			$containerCode = str_replace('RETURN_MM_EMPTY_STRING', 'RETURN_MM_EMPTY_STRING', $containerCode);
 			$containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
+			$containerCode = str_replace('RETURN_MM_MEMBER', 'RETURN_MEMBER', $containerCode);
 			$containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
 			$containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);' . PHP_EOL . '/s', '', $containerCode);
 		}
@@ -620,6 +621,12 @@ class ClassMethod
 							$compilationContext->headersManager->add('kernel/memory');
 							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_null));' . PHP_EOL;
 						}
+						break;
+					case 'empty-array':
+						$compilationContext->symbolTable->mustGrownStack(true);
+						$compilationContext->headersManager->add('kernel/memory');
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
 						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
@@ -1096,7 +1103,7 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
+				$initCode .= "\t" . 'if (!' . $name . ' || Z_TYPE_P('. $name .') == IS_NULL) {' . PHP_EOL;
 				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 				if ($dataType == 'variable') {
 					$initCode .= "\t" . '}' . PHP_EOL;

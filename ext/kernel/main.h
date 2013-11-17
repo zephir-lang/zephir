@@ -220,11 +220,25 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 	return;
 
 /**
+ * Returns a zval in an object member
+ */
+#define RETURN_MM_MEMBER(object, member_name) \
+  zephir_return_property_quick(return_value, return_value_ptr, object, SL(member_name), zend_inline_hash_func(SS(member_name)) TSRMLS_CC); \
+  RETURN_MM();
+
+/**
  * Returns a zval in an object member (quick)
  */
 #define RETURN_MEMBER_QUICK(object, member_name, key) \
  	zephir_return_property_quick(return_value, return_value_ptr, object, SL(member_name), key TSRMLS_CC); \
 	return;
+
+/**
+ * Returns a zval in an object member (quick)
+ */
+#define RETURN_MM_MEMBER_QUICK(object, member_name, key) \
+  zephir_return_property_quick(return_value, return_value_ptr, object, SL(member_name), key TSRMLS_CC); \
+  RETURN_MM();
 
 /** Return without change return_value */
 #define RETURN_MM()                 { ZEPHIR_MM_RESTORE(); return; }
