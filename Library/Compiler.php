@@ -317,12 +317,12 @@ class Compiler
 	 *
 	 * @param CommandInitialize $command
 	 */
-	public function init(CommandInitialize $command)
+	public function init(CommandInterface $command)
 	{
 		/**
 		 * If init namespace is specified
 		 */
-		$namespace = $command->getNamespace();
+		$namespace = $command->getParameter('namespace');
 		if (!$namespace) {
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}

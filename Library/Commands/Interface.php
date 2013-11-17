@@ -45,6 +45,14 @@ interface CommandInterface
 	public function getDescription();
 
 	/**
+	 * Returns parameter named parameterName if specified
+	 * on the commmand line else null
+	 * @param string $parameterName
+	 * @return string
+	 */
+	public function getParameter($parameterName);
+
+	/**
 	 * Executes the command
 	 *
 	 * Config $config

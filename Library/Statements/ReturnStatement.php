@@ -73,7 +73,7 @@ class ReturnStatement
 							}
 
 							$compilationContext->headersManager->add('kernel/object');
-							$codePrinter->output('RETURN_MEMBER(this_ptr, "' . $property . '");');
+							$codePrinter->output('RETURN_MM_MEMBER(this_ptr, "' . $property . '");');
 							return;
 						}
 					}
