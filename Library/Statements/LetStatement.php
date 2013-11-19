@@ -1032,7 +1032,7 @@ class LetStatement
 						$symbolVariable = $variableExpr;
 						break;
 					default:
-						throw new CompilerException("Variable: " . $exprIndex->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 				}
 				break;
 			default:
