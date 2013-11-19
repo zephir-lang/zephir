@@ -57,6 +57,10 @@ class ComparisonBaseOperator extends BaseOperator
 				}
 			}
 
+			if (!isset($expr['left']['left']['value'])) {
+				throw new CompilerException("Typeof operator on non-variable", $expr);
+			}
+
 			$variableVariable = $compilationContext->symbolTable->getVariableForRead($expr['left']['left']['value'], $compilationContext, $expr);
 			if ($variableVariable->getType() != 'variable') {
 				throw new CompilerException("Typeof operator on non-variable", $expr);

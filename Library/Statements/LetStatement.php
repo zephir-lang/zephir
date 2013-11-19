@@ -623,6 +623,18 @@ class LetStatement
 									$codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
 								}
 								break;
+							case 'div-assign':
+								$symbolVariable->setDynamicTypes('double');
+								if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+									$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
+									$codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
+								} else {
+									$symbolVariable->initVariant($compilationContext);
+									$codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+								}
+								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}

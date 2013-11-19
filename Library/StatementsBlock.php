@@ -82,7 +82,11 @@ class StatementsBlock
 					case 'switch':
 					case 'for':
 					case 'return':
-						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expr']);
+						if (isset($statement['expr'])) {
+							$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expr']);
+						} else {
+							$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
+						}
 						break;
 					default:
 						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);

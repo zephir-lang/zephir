@@ -221,6 +221,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 							case 'uint':
 							case 'long':
 							case 'ulong':
+							case 'double':
 								return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);

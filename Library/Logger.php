@@ -27,24 +27,25 @@ class Logger
 	private static $_files = array();
 
 	protected $_warnings = array(
-		'unused-variable' => true,
-		'unused-variable-external' => false,
-		'possible-wrong-parameter' => true,
+		'unused-variable'                    => true,
+		'unused-variable-external'           => false,
+		'possible-wrong-parameter'           => true,
 		'possible-wrong-parameter-undefined' => false,
-		'nonexistent-function' => true,
-		'nonexistent-class' => true,
-		'non-valid-isset' => true,
-		'non-array-update' => true,
-		'non-valid-objectupdate' => true,
-		'non-valid-fetch' => true,
-		'invalid-array-index' => true,
-		'non-array-append' => true,
-		'invalid-return-type' => true,
-		'unrecheable-code' => true,
-		'nonexistant-constant' => true,
-		'non-valid-decrement' => true,
-		'non-valid-increment' => true,
-		'non-valid-clone' => true
+		'nonexistent-function'               => true,
+		'nonexistent-class'                  => true,
+		'non-valid-isset'                    => true,
+		'non-array-update'                   => true,
+		'non-valid-objectupdate'             => true,
+		'non-valid-fetch'                    => true,
+		'invalid-array-index'                => true,
+		'non-array-append'                   => true,
+		'invalid-return-type'                => true,
+		'unrecheable-code'                   => true,
+		'nonexistant-constant'               => true,
+		'non-valid-decrement'                => true,
+		'non-valid-increment'                => true,
+		'non-valid-clone'                    => true,
+		'non-array-access'                   => true
 	);
 
 	/**
