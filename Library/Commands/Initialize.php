@@ -24,7 +24,6 @@
  */
 class CommandInitialize extends CommandAbstract
 {
-	private $_namespace;
 	
 	/**
 	 * Command provided by this command
@@ -54,15 +53,10 @@ class CommandInitialize extends CommandAbstract
 		return 'Initializes a Zephir extension';
 	}
 
-	public function getNamespace()
-	{
-		return $this->_namespace;
-	}
-
 	public function execute(Config $config, Logger $logger)
 	{
 		if (isset($_SERVER['argv'][2])) {
-			$this->_namespace = strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2]));
+			$this->setParameter('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
 		}
 		parent::execute($config, $logger);
 	}

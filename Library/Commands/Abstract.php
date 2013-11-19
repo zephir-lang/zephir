@@ -24,6 +24,7 @@
  */
 abstract class CommandAbstract implements CommandInterface
 {
+	private $_parameters = null;
 
 	/**
 	 * Command provided by this command
@@ -44,6 +45,31 @@ abstract class CommandAbstract implements CommandInterface
 	 */
 	abstract public function getDescription();
 
+	/**
+	 * Returns parameter named $name if specified
+	 * on the commmand line else null
+	 * @param string $name
+	 * @return string
+	 */
+	protected function setParameter($name, $value)
+	{
+		if (!isset($this->_parameters)) {
+			$this->_parameters = array();
+		}
+		$this->_parameters[$name] = $value;
+	}
+	
+	/**
+	 * Returns parameter named $name if specified
+	 * on the commmand line else null
+	 * @param string $parameterName
+	 * @return string
+	 */
+	public function getParameter($name)
+	{
+		return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
+	}
+	
 	/**
 	 * Executes the command
 	 *
