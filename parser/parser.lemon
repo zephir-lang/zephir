@@ -721,6 +721,20 @@ static json_object *xx_ret_return_statement(json_object *expr, xx_scanner_state 
 	return ret;
 }
 
+static json_object *xx_ret_require_statement(json_object *expr, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("require"));
+	json_object_object_add(ret, "expr", expr);
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_fetch_statement(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -1586,6 +1600,10 @@ xx_statement(R) ::= xx_return_statement(S) . {
 	R = S;
 }
 
+xx_statement(R) ::= xx_require_statement(S) . {
+	R = S;
+}
+
 xx_statement(R) ::= xx_fetch_statement(S) . {
 	R = S;
 }
@@ -1882,6 +1900,11 @@ xx_let_assignment(R) ::= IDENTIFIER(I) DECR . {
 	R = xx_ret_let_assignment("decr", NULL, I, NULL, NULL, NULL, status->scanner_state);
 }
 
+/* {y} = {expr} */
+xx_let_assignment(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("dynamic-variable", O, I, NULL, NULL, E, status->scanner_state);
+}
+
 xx_index_expr(R) ::= xx_common_expr(E) . {
 	R = E;
 }
@@ -1930,6 +1953,11 @@ xx_return_statement(R) ::= RETURN xx_common_expr(E) DOTCOMMA . {
 /* return statement */
 xx_return_statement(R) ::= RETURN DOTCOMMA . {
 	R = xx_ret_return_statement(NULL, status->scanner_state);
+}
+
+/* require statement */
+xx_require_statement(R) ::= REQUIRE xx_common_expr(E) DOTCOMMA . {
+	R = xx_ret_require_statement(E, status->scanner_state);
 }
 
 /* unset {expr} */

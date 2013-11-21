@@ -1029,6 +1029,7 @@ class LetStatement
 						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
 					case 'variable':
+					case 'string':
 						$symbolVariable = $variableExpr;
 						break;
 					default:
@@ -1272,8 +1273,8 @@ class LetStatement
 	 * Compiles x++
 	 *
 	 * @param string $variable
-	 * @param Variable $symbolVariable
-	 * @param CompilationContext $compilationContext
+	 * @param \Variable $symbolVariable
+	 * @param \CompilationContext $compilationContext
 	 * @param array $statement
 	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
@@ -1843,8 +1844,6 @@ class LetStatement
 		CompilationContext $compilationContext, $statement)
 	{
 
-		//print_r($statement);
-
 		/**
 		 * We read the variable member in read-only mode, this must return a reference
 		 * to the real property in the object
@@ -2049,7 +2048,6 @@ class LetStatement
 	public function compile(CompilationContext $compilationContext)
 	{
 		$statement = $this->_statement;
-
 		foreach ($statement['assignments'] as $assignment) {
 
 			$variable = $assignment['variable'];
@@ -2153,6 +2151,9 @@ class LetStatement
 					/* @todo, implement this */
 					break;
 				case 'object-property-decr':
+					/* @todo, implement this */
+					break;
+				case 'dynamic-variable':
 					/* @todo, implement this */
 					break;
 				default:
