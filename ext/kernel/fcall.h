@@ -335,6 +335,39 @@
 		ZEPHIR_CALL_FUNCTION(return_value, return_value_ptr, func, 8, p1, p2, p3, p4, p5, p6, p7, p8); \
 	} while (0)
 
+#define zephir_call_func_p9_ex(return_value, return_value_ptr, func, p1, p2, p3, p4, p5, p6, p7, p8, p9) \
+	do { \
+		if (0) { \
+			if (Z_TYPE_P(p1)) {} \
+			if (Z_TYPE_P(p2)) {} \
+			if (Z_TYPE_P(p3)) {} \
+			if (Z_TYPE_P(p4)) {} \
+			if (Z_TYPE_P(p5)) {} \
+			if (Z_TYPE_P(p6)) {} \
+			if (Z_TYPE_P(p7)) {} \
+			if (Z_TYPE_P(p8)) {} \
+			if (Z_TYPE_P(p9)) {} \
+		} \
+		ZEPHIR_CALL_FUNCTION(return_value, return_value_ptr, func, 9, p1, p2, p3, p4, p5, p6, p7, p8, p9); \
+	} while (0)
+
+#define zephir_call_func_p10_ex(return_value, return_value_ptr, func, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) \
+	do { \
+		if (0) { \
+			if (Z_TYPE_P(p1)) {} \
+			if (Z_TYPE_P(p2)) {} \
+			if (Z_TYPE_P(p3)) {} \
+			if (Z_TYPE_P(p4)) {} \
+			if (Z_TYPE_P(p5)) {} \
+			if (Z_TYPE_P(p6)) {} \
+			if (Z_TYPE_P(p7)) {} \
+			if (Z_TYPE_P(p8)) {} \
+			if (Z_TYPE_P(p9)) {} \
+			if (Z_TYPE_P(p10)) {} \
+		} \
+		ZEPHIR_CALL_FUNCTION(return_value, return_value_ptr, func, 10, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10); \
+	} while (0)
+
 #define zephir_call_func(return_value, func)                                                          zephir_call_func_p0_ex(return_value, NULL, func)
 #define zephir_call_func_p1(return_value, func, p1)                                                   zephir_call_func_p1_ex(return_value, NULL, func, p1)
 #define zephir_call_func_p2(return_value, func, p1, p2)                                               zephir_call_func_p2_ex(return_value, NULL, func, p1, p2)
@@ -344,6 +377,8 @@
 #define zephir_call_func_p6(return_value, func, p1, p2, p3, p4, p5, p6)                               zephir_call_func_p6_ex(return_value, NULL, func, p1, p2, p3, p4, p5, p6)
 #define zephir_call_func_p7(return_value, func, p1, p2, p3, p4, p5, p6, p7)                           zephir_call_func_p7_ex(return_value, NULL, func, p1, p2, p3, p4, p5, p6, p7)
 #define zephir_call_func_p8(return_value, func, p1, p2, p3, p4, p5, p6, p7, p8)                       zephir_call_func_p8_ex(return_value, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8)
+#define zephir_call_func_p9(return_value, func, p1, p2, p3, p4, p5, p6, p7, p8, p9)                   zephir_call_func_p9_ex(return_value, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+#define zephir_call_func_p10(return_value, func, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)             zephir_call_func_p10_ex(return_value, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
 
 #define zephir_call_func_noret(func)                                                                  zephir_call_func_p0_ex(NULL, NULL, func)
 #define zephir_call_func_p1_noret(func, p1)                                                           zephir_call_func_p1_ex(NULL, NULL, func, p1)
@@ -354,6 +389,8 @@
 #define zephir_call_func_p6_noret(func, p1, p2, p3, p4, p5, p6)                                       zephir_call_func_p6_ex(NULL, NULL, func, p1, p2, p3, p4, p5, p6)
 #define zephir_call_func_p7_noret(func, p1, p2, p3, p4, p5, p6, p7)                                   zephir_call_func_p7_ex(NULL, NULL, func, p1, p2, p3, p4, p5, p6, p7)
 #define zephir_call_func_p8_noret(func, p1, p2, p3, p4, p5, p6, p7, p8)                               zephir_call_func_p8_ex(NULL, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8)
+#define zephir_call_func_p9_noret(func, p1, p2, p3, p4, p5, p6, p7, p8, p9)                           zephir_call_func_p9_ex(NULL, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+#define zephir_call_func_p10_noret(func, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)                     zephir_call_func_p10_ex(NULL, NULL, func, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
 
 /** Macros to call methods in the PHP userland */
 #define zephir_call_method_p0_key_ex(return_value, return_value_ptr, object, method_name, key) \
