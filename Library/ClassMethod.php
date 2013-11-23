@@ -757,7 +757,7 @@ class ClassMethod
 			 * used without allocate memory and memory tracking
 			 * these variables are stored in the stack
 			 */
-			if ($compilationContext->config->get('local-context-pass')) {
+			if ($compilationContext->config->get('local-context-pass', 'optimizations')) {
 				$localContext = new LocalContextPass();
 				$localContext->pass($this->_statements);
 			} else {
@@ -768,10 +768,10 @@ class ClassMethod
 			 * This pass tries to infer types for dynamic variables
 			 * replacing them by low level variables
 			 */
-			if ($compilationContext->config->get('static-type-inference')) {
+			if ($compilationContext->config->get('static-type-inference', 'optimizations')) {
 				$typeInference = new StaticTypeInference();
 				$typeInference->pass($this->_statements);
-				if ($compilationContext->config->get('static-type-inference-second-pass')) {
+				if ($compilationContext->config->get('static-type-inference-second-pass', 'optimizations')) {
 					$typeInference->reduce();
 					$typeInference->pass($this->_statements);
 				}

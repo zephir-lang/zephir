@@ -42,7 +42,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 			return false;
 		}
 
-		if ($compilationContext->config->get('constant-folding')) {
+		if ($compilationContext->config->get('constant-folding', 'optimizations')) {
+
 			if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
 				switch ($this->_operator) {
 					case '+':
@@ -53,6 +54,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 						return new CompiledExpression('int', $expression['left']['value'] * $expression['right']['value'], $expression);
 				}
 			}
+
 			if (
 				($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') ||
 				($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') ||
@@ -68,6 +70,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -149,6 +152,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 						throw new Exception("Cannot operate 'int' with '" . $right->getType() . "'");
 				}
 				break;
+
 			case 'bool':
 				switch ($right->getType()) {
 					case 'int':
@@ -163,6 +167,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 						throw new Exception("Cannot operate 'bool' with '" . $right->getType() . "'");
 				}
 				break;
+
 			case 'double':
 				switch ($right->getType()) {
 					case 'int':
@@ -201,12 +206,14 @@ class ArithmeticalBaseOperator extends BaseOperator
 						throw new CompilerException("Cannot operate 'double' with '" . $right->getType() . "'", $expression);
 				}
 				break;
+
 			case 'string':
 				switch ($right->getType()) {
 					default:
 						throw new CompilerException("Operation is not supported between strings", $expression);
 				}
 				break;
+
 			case 'variable':
 
 				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);

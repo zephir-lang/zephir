@@ -110,7 +110,7 @@ class StaticConstantAccess
 		/**
 		 * We can optimize the reading of constants by avoiding query their value every time
 		 */
-		if (!$compilationContext->config->get('static-constant-class-folding')) {
+		if (!$compilationContext->config->get('static-constant-class-folding', 'optimizations')) {
 
 			/**
 			 * Resolves the symbol that expects the value

@@ -748,6 +748,8 @@ class Expression
 						throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
 				}
 		}
+
+		$compilationContext->headersManager->add('kernel/object');
 		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
 	}
 
@@ -1113,13 +1115,15 @@ class Expression
 			/**
 			 * @TODO implement this
 			 */
-			case 'require':
-			case 'typeof':
-			case 'empty':
 			case 'unlikely':
 			case 'likely':
 			case 'ternary':
 				return new CompiledExpression('int', '(0 == 1)', $expression);
+
+			case 'typeof':
+			case 'empty':
+			case 'require':
+				return new CompiledExpression('bool', '(0 == 1)', $expression);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);

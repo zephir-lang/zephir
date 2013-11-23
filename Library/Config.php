@@ -25,16 +25,20 @@
 class Config
 {
 	protected $_config = array(
-		'static-type-inference' => true,
-		'static-type-inference-second-pass' => true,
-		'local-context-pass' => true,
-		'constant-folding' => true,
-		'static-constant-class-folding' => true,
+		'optimizations' => array(
+			'static-type-inference' => true,
+			'static-type-inference-second-pass' => true,
+			'local-context-pass' => true,
+			'constant-folding' => true,
+			'static-constant-class-folding' => true,
+		),
 		'namespace'   => '',
 		'name'        => '',
 		'description' => '',
 		'author'      => ''
 	);
+
+	protected $_changed = false;
 
 	public function __construct()
 	{
@@ -50,12 +54,19 @@ class Config
 
 	/**
 	 *
+	 *
 	 * @param string $key
 	 */
-	public function get($key)
+	public function get($key, $namespace=null)
 	{
-		if (isset($this->_config[$key])) {
-			return $this->_config[$key];
+		if ($namespace !== null) {
+			if (isset($this->_config[$namespace][$key])) {
+				return $this->_config[$namespace][$key];
+			}
+		} else {
+			if (isset($this->_config[$key])) {
+				return $this->_config[$key];
+			}
 		}
 		return null;
 	}
@@ -68,18 +79,21 @@ class Config
 	public function set($key, $value)
 	{
 		$this->_config[$key] = $value;
+		$this->_changed = true;
 	}
 
 	public function _saveOnExit()
 	{
-		/**
-		 * Above PHP 5.4
-		 */
-		if (defined('JSON_PRETTY_PRINT')) {
-			$config = json_encode($this->_config, JSON_PRETTY_PRINT);
-		} else {
-			$config = json_encode($this->_config);
+		if ($this->_changed) {
+			/**
+			 * Above PHP 5.4
+			 */
+			if (defined('JSON_PRETTY_PRINT')) {
+				$config = json_encode($this->_config, JSON_PRETTY_PRINT);
+			} else {
+				$config = json_encode($this->_config);
+			}
+			file_put_contents('config.json', $config);
 		}
-		file_put_contents('config.json', $config);
 	}
 }
