@@ -127,7 +127,7 @@ class FunctionCall extends Call
 	 * @param array $references
 	 * @return boolean
 	 */
-	protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references)
+	protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references, $expression)
 	{
 		if ($this->isBuiltInFunction($funcName)) {
 			return false;
@@ -142,11 +142,17 @@ class FunctionCall extends Call
 				foreach ($funcParameters as $parameter) {
 					if ($numberParameters >= $n) {
 						if ($parameter->isPassedByReference()) {
+							if (!preg_match('/^[a-zA-Z0-9]+$/', $parameters[$n - 1])) {
+								$compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
+								continue;
+							}
 							$variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
-							$variable->setDynamicTypes('undefined');
-							$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
-							$references[] = $parameters[$n - 1] ;
-							return false;
+							if ($variable) {
+								$variable->setDynamicTypes('undefined');
+								$compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
+								$references[] = $parameters[$n - 1] ;
+								return false;
+							}
 						}
 					}
 					$n++;
