@@ -61,10 +61,10 @@ class FwriteOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		if ($symbolVariable) {
-			$context->codePrinter->output('zephir_fwrite(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+			$context->codePrinter->output('zephir_fwrite(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		} else {
-			$context->codePrinter->output('zephir_fwrite(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+			$context->codePrinter->output('zephir_fwrite(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
 		}
 
 		return new CompiledExpression('null', 'null', $expression);
