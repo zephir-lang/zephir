@@ -33,10 +33,44 @@ class EmptyOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-
 		$compilationContext->headersManager->add('kernel/operators');
+
+		if (isset($expression['left']['type'])
+			&& $expression['left']['type'] == 'variable'
+		) {
+			return $this->evaluateVariableExpression($expression, $compilationContext);
+		}
 
 		return new CompiledExpression('int', '(0 == 0)', $expression);
 	}
 
+    /**
+	 * Evaluates variable expressions like
+	 * if empty $a
+	 * if !empty $b
+	 *
+	 * it will create something around below lines:
+	 * ZEPHIR_IS_EMPTY(var)
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
+	protected function evaluateVariableExpression(
+		$expression,
+		CompilationContext $compilationContext
+	) {
+
+		$variable = $compilationContext->symbolTable->getVariableForWrite(
+			$expression['left']['value'],
+			$compilationContext,
+			$expression['left']
+		);
+
+		return new CompiledExpression(
+			'bool',
+			'ZEPHIR_IS_EMPTY(' . $variable->getName() . ')',
+			$expression
+		);
+    }
 }

@@ -46,7 +46,7 @@ class CloneOperator extends BaseOperator
 
 		$clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
 		if ($clonedVariable->getType() != 'variable') {
-			throw new CompiledException("Variable type: " . $variable->getType() . " cannot be cloned");
+			throw new CompiledException("Variable type: " . $exprVariable->getType() . " cannot be cloned");
 		}
 
 		if ($clonedVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
