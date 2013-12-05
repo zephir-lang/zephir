@@ -532,6 +532,11 @@ class ClassDefinition
 
 		$namespace = $compilationContext->config->get('namespace');
 
+		$abstractFlag = '0';
+		if ($this->isAbstract()) {
+			$abstractFlag = 'ZEND_ACC_EXPLICIT_ABSTRACT_CLASS';
+		}
+
 		/**
 		 * Register the class with extends + interfaces
 		 */
@@ -556,7 +561,7 @@ class ClassDefinition
 
 			if ($this->getType() == 'class') {
 				$codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace  . ', ' .
-					strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', 0);');
+					strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', ' . $abstractFlag . ');');
 				$codePrinter->outputBlankLine();
 			} else {
 				$codePrinter->output('ZEPHIR_REGISTER_INTERFACE_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace  . ', ' .
@@ -566,7 +571,7 @@ class ClassDefinition
 		} else {
 			if ($this->getType() == 'class') {
 				$codePrinter->output('ZEPHIR_REGISTER_CLASS(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace . ', ' .
-					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', 0);');
+					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ', ' . $abstractFlag . ');');
 			} else {
 				$codePrinter->output('ZEPHIR_REGISTER_INTERFACE(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace . ', ' .
 					strtolower($this->getSCName($namespace)) . ', ' . $methodEntry . ');');
