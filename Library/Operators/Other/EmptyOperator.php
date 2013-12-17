@@ -35,13 +35,7 @@ class EmptyOperator extends BaseOperator
 	{
 		$compilationContext->headersManager->add('kernel/operators');
 
-		if (isset($expression['left']['type'])
-			&& $expression['left']['type'] == 'variable'
-		) {
-			return $this->evaluateVariableExpression($expression, $compilationContext);
-		}
-
-		return new CompiledExpression('int', '(0 == 0)', $expression);
+        return $this->evaluateVariableExpression($expression, $compilationContext);
 	}
 
     /**
@@ -61,10 +55,25 @@ class EmptyOperator extends BaseOperator
 		CompilationContext $compilationContext
 	) {
 
+        switch (true) {
+            case isset($expression['left']['left']['value'])
+                && isset($expression['left']['left']['type'])
+                && $expression['left']['left']['type'] == 'variable':
+
+                $name = $expression['left']['left']['value'];
+
+                break;
+
+            default:
+                throw new Exception(
+                    'Empty syntax not supported'
+                );
+        }
+
 		$variable = $compilationContext->symbolTable->getVariableForWrite(
-			$expression['left']['value'],
+			$name,
 			$compilationContext,
-			$expression['left']
+			$expression['left']['left']
 		);
 
 		return new CompiledExpression(

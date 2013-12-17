@@ -189,11 +189,11 @@ class SymbolTable
 
 	/**
 	 * Return a variable in the symbol table, it will be used for a write operation
-	 * Some variables aren't writables themselves but their members do
+	 * Some variables aren't writable themselves but their members do
 	 *
 	 * @param string $name
-	 * @param array $statement
 	 * @param CompilationContext $compilationContext
+     * @param array $statement
 	 * @return \Variable
 	 */
 	public function getVariableForWrite($name, $compilationContext, $statement=null)

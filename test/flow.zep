@@ -119,15 +119,15 @@ class Flow
 			if b {
 				let c = 1;
 				if c {
-					return 1;
+					return 654;
 				} else {
-					return 0;
+					return -1;
 				}
 			} else {
-				return 0;
+				return -2;
 			}
 		} else {
-			return 0;
+			return -3;
 		}
 	}
 
@@ -142,7 +142,7 @@ class Flow
 			if b {
 				let c = 1;
 				if c {
-					return 1;
+					return 987;
 				} else {
 					return 0;
 				}
@@ -158,7 +158,7 @@ class Flow
 	{
 		int a, b;
 		let a = 1, b = 2;
-		if a + b { return 1; }
+		if a + b { return -12; }
 		return 0;
 	}
 
@@ -166,7 +166,7 @@ class Flow
 	{
 		var a, b;
 		let a = 1, b = 2;
-		if a + b { return 1; }
+		if a + b { return 74; }
 		return 0;
 	}
 
@@ -174,8 +174,14 @@ class Flow
 	{
 		var a, b, c;
 		let a = 1, b = 2, c = 3;
-		if a + b + c { return 1; }
+		if a + b + c { return 89; }
 		return 0;
+	}
+
+	public function testIf16(var a)
+	{
+		if empty(a) { return true; }
+		return false;
 	}
 
 	public function testLoop1()
