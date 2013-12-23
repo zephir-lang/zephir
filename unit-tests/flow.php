@@ -11,7 +11,15 @@ assert($t->testIf6() === 0);
 assert($t->testIf7() === 1);
 assert($t->testIf8() === 0);
 assert($t->testIf9() === 1);
-assert($t->testIf10() === 1);
+assert($t->testIf10() === 654);
+assert($t->testIf12() === 987);
+assert($t->testIf13() === -12);
+assert($t->testIf14() === 74);
+assert($t->testIf15() === 89);
+assert($t->testIf16(array()) === false);
+assert($t->testIf16('') === true);
+assert($t->testIf16(null) === true);
+assert($t->testIf16(' ') === false);
 
 assert($t->testLoop1() === true);
 assert($t->testLoop2() === 5);
