@@ -16,7 +16,7 @@ assert($t->testIf12() === 987);
 assert($t->testIf13() === -12);
 assert($t->testIf14() === 74);
 assert($t->testIf15() === 89);
-assert($t->testIf16(array()) === false);
+assert($t->testIf16(array()) === true);
 assert($t->testIf16('') === true);
 assert($t->testIf16(null) === true);
 assert($t->testIf16(' ') === false);

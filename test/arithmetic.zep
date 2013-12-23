@@ -7,6 +7,8 @@ namespace Test;
 
 class Arithmetic
 {
+    /* ---------- SUM ----------------*/
+
 	public function intSum()
 	{
 		int a, b, c;
@@ -451,6 +453,14 @@ class Arithmetic
 		return a;
 	}
 
+	public function addSum2b()
+	{
+		int a;
+		let a = 5,
+			a += null;
+		return a;
+	}
+
 	public function addSum3()
 	{
 		int a;
@@ -499,6 +509,14 @@ class Arithmetic
 		return a;
 	}
 
+	public function addSum8b()
+	{
+		double a;
+		let a = 6.3,
+			a += null;
+		return a;
+	}
+
 	public function addSum9()
 	{
 		double a;
@@ -525,17 +543,18 @@ class Arithmetic
 
 	public function addSum12()
 	{
-		double a;
-		let a = 0.0,
-			a += 1.0;
+		int a, b;
+		let a = 0,
+			b = 10,
+			a += b;
 		return a;
 	}
 
 	public function addSum13()
 	{
-		int a, b;
+		int a; boolean b;
 		let a = 0,
-			b = 10,
+			b = true,
 			a += b;
 		return a;
 	}
@@ -544,21 +563,12 @@ class Arithmetic
 	{
 		int a; boolean b;
 		let a = 0,
-			b = true,
-			a += b;
-		return a;
-	}
-
-	public function addSum15()
-	{
-		int a; boolean b;
-		let a = 0,
 			b = false,
 			a += b;
 		return a;
 	}
 
-	public function addSum16()
+	public function addSum15()
 	{
 		int a; double b;
 		let a = 0,
@@ -567,7 +577,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum17()
+	public function addSum16()
 	{
 		double a, b;
 		let a = 0.0,
@@ -576,7 +586,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum18()
+	public function addSum17()
 	{
 		double a; boolean b;
 		let a = 0.0,
@@ -585,7 +595,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum19()
+	public function addSum18()
 	{
 		double a; boolean b;
 		let a = 0.0,
@@ -594,7 +604,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum20()
+	public function addSum19()
 	{
 		double a; int b;
 		let a = 0.0,
@@ -603,7 +613,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum21()
+	public function addSum20()
 	{
 		int a; var b;
 		let a = 0.0,
@@ -612,7 +622,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum22()
+	public function addSum21()
 	{
 		double a; var b;
 		let a = 0.0,
@@ -621,7 +631,7 @@ class Arithmetic
 		return a;
 	}
 
-	public function addSum23()
+	public function addSum22()
 	{
 		var a; var b;
 		let a = 0.0,
@@ -630,11 +640,647 @@ class Arithmetic
 		return a;
 	}
 
+	/* --------------- SUB ----------------*/
+
+	public function intSub()
+	{
+		int a, b, c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function int2Sub()
+	{
+		int a, c;
+
+		let a = 1,
+			c = a - 2;
+
+		return c;
+	}
+
+	public function intSubSimple()
+	{
+		int c;
+
+		let c = 1 - 2;
+		return c;
+	}
+
+	public function boolSub()
+	{
+		boolean a, b, c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function bool2Sub()
+	{
+		boolean a, c;
+
+		let a = 1,
+			c = a - 2;
+
+		return c;
+	}
+
+	public function bool3Sub()
+	{
+		boolean a, c;
+
+		let a = true,
+			c = a - false;
+
+		return c;
+	}
+
+	public function bool4Sub()
+	{
+		boolean a, c;
+
+		let a = true,
+			c = a - true;
+
+		return c;
+	}
+
+	public function boolSubSimple()
+	{
+		boolean c;
+
+		let c = 1 - 2;
+		return c;
+	}
+
+	public function doubleSub()
+	{
+		double a, b, c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function double2Sub()
+	{
+		double a, b, c;
+
+		let a = 1.0,
+			b = 2.0,
+			c = a - b;
+
+		return c;
+	}
+
+	public function doubleSubSimple()
+	{
+		double c;
+
+		let c = 1 - 2;
+		return c;
+	}
+
+	public function doubleSub2Simple()
+	{
+		double c;
+
+		let c = 1.0 - 2.0;
+		return c;
+	}
+
+	public function varSub()
+	{
+		var a, b, c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function varSubSimple()
+	{
+		var c;
+
+		let c = 1 - 2;
+		return c;
+	}
+
+	public function intDoubleSub()
+	{
+		int b, c;
+		double a;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function intDoubleSubSimple()
+	{
+		int c;
+
+		let c = 1 - 2.0;
+		return c;
+	}
+
+	public function doubleIntSub()
+	{
+		int b;
+		double a, c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function doubleIntSubSimple()
+	{
+		double c;
+
+		let c = 1 - 2.0;
+		return c;
+	}
+
+	public function varIntSub()
+	{
+		var b, c;
+		int a;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+
+		return c;
+	}
+
+	public function intVarSub()
+	{
+		var b;
+		int c, a;
+
+		let a = 1,
+			b = 2,
+			c = b - a;
+
+		return c;
+	}
+
+	public function intVarImplicitCastSub()
+	{
+		var a, b;
+		int c;
+
+		let a = "1",
+			b = "2",
+			c = b - a;
+
+		return c;
+	}
+
+	public function intVarImplicitCast2Sub()
+	{
+		var a, b;
+		int c;
+
+		let a = "1",
+			b = 2,
+			c = b - a;
+
+		return c;
+	}
+
 	public function complexSub()
 	{
 		var c;
 		let c = 2 - 1.0;
 		return c;
+	}
+
+	public function complex2Sub()
+	{
+		var c;
+		let c = true - true;
+		return c;
+	}
+
+	public function complex3Sub()
+	{
+		var c;
+		let c = true - 1.0;
+		return c;
+	}
+
+	public function complex4Sub()
+	{
+		var c;
+		let c = 1.0 - true;
+		return c;
+	}
+
+	public function complex5Sub()
+	{
+		var c;
+		let c = 1 - true;
+		return c;
+	}
+
+	public function complex6Sub()
+	{
+		var c;
+		let c = true - 1;
+		return c;
+	}
+
+	public function complex7Sub()
+	{
+		boolean a; int b; var c;
+
+		let a = 1,
+			b = 2,
+			c = a - b;
+		return c;
+	}
+
+	public function complex9Sub()
+	{
+		boolean a; int b; var c;
+
+		let a = 1,
+			b = 2,
+			c = b - a;
+		return c;
+	}
+
+	public function complex10Sub()
+	{
+		boolean a; int b; var c;
+
+		let a = 1.0,
+			b = 2,
+			c = b - a;
+		return c;
+	}
+
+	public function complex11Sub()
+	{
+		boolean a; int b; var c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex12Sub()
+	{
+		boolean a; int b; int c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex13Sub()
+	{
+		boolean a; boolean b; int c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex14Sub()
+	{
+		var a; boolean b; int c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex15Sub()
+	{
+		var a; var b; boolean c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex16Sub()
+	{
+		var a; var b; double c;
+
+		let a = 1,
+			b = 2.0,
+			c = b - a;
+		return c;
+	}
+
+	public function complex17Sub()
+	{
+		var a; boolean b; double c;
+
+		let a = 1,
+			b = 2.0,
+			c = a - b;
+		return c;
+	}
+
+	public function complex18Sub()
+	{
+		var a, d; boolean b; double c;
+
+		let a = 1,
+			b = 2.0,
+			d = a - b,
+			c = a - b - d;
+		return c;
+	}
+
+	public function complex19Sub()
+	{
+		var a, d; boolean b; double c;
+
+		let a = 1,
+			b = 2.0,
+			d = a - b,
+			c = a - d - b;
+		return c;
+	}
+
+	public function complex20Sub()
+	{
+		var a, d; boolean b; double c;
+
+		let a = 1,
+			b = 2.0,
+			d = a - b,
+			c = d - d - d - d;
+		return c;
+	}
+
+	public function complex21Sub()
+	{
+		var a, d; boolean b; double c;
+
+		let a = 1,
+			b = 2.0,
+			d = a - b,
+			c = b - d - b - d - d - b - d - b;
+		return c;
+	}
+
+	public function complex22Sub()
+	{
+		var a, d; int b; double c;
+
+		let a = 1,
+			b = 2.0,
+			d = a - b,
+			c = b - d - d - d - d - b - d - b;
+		return c;
+	}
+
+	public function complex23Sub()
+	{
+		var a; boolean b; double d;
+		let a = 1,
+			b = 2.0,
+			d = a - b;
+		return d;
+	}
+
+	public function complex24Sub()
+	{
+		var a; var d; boolean b;
+		let a = 1,
+			b = 2.0,
+			d = 1 - a - false - b;
+		return d;
+	}
+
+	public function sub1()
+	{
+		int a;
+		let a = 0,
+			a -= 10;
+		return a;
+	}
+
+	public function sub2()
+	{
+		int a;
+		let a = 0,
+			a -= null;
+		return a;
+	}
+
+	public function sub2b()
+	{
+		int a;
+		let a = 5,
+			a -= null;
+		return a;
+	}
+
+	public function sub3()
+	{
+		int a;
+		let a = 0,
+			a -= true;
+		return a;
+	}
+
+	public function sub4()
+	{
+		int a;
+		let a = 0,
+			a -= false;
+		return a;
+	}
+
+	public function sub5()
+	{
+		int a;
+		let a = 0,
+			a -= 1.0;
+		return a;
+	}
+
+	public function sub6()
+	{
+		int a;
+		let a = 0,
+			a -= 1.0;
+		return a;
+	}
+
+	public function sub7()
+	{
+		double a;
+		let a = 0.0,
+			a -= 10;
+		return a;
+	}
+
+	public function sub8()
+	{
+		double a;
+		let a = 0.0,
+			a -= null;
+		return a;
+	}
+
+	public function sub8b()
+	{
+		double a;
+		let a = 6.3,
+			a -= null;
+		return a;
+	}
+
+	public function sub9()
+	{
+		double a;
+		let a = 0.0,
+			a -= true;
+		return a;
+	}
+
+	public function sub10()
+	{
+		double a;
+		let a = 0.0,
+			a -= false;
+		return a;
+	}
+
+	public function sub11()
+	{
+		double a;
+		let a = 0.0,
+			a -= 1.0;
+		return a;
+	}
+
+	public function sub12()
+	{
+		int a, b;
+		let a = 0,
+			b = 10,
+			a -= b;
+		return a;
+	}
+
+	public function sub13()
+	{
+		int a; boolean b;
+		let a = 0,
+			b = true,
+			a -= b;
+		return a;
+	}
+
+	public function sub14()
+	{
+		int a; boolean b;
+		let a = 0,
+			b = false,
+			a -= b;
+		return a;
+	}
+
+	public function sub15()
+	{
+		int a; double b;
+		let a = 0,
+			b = 1.0,
+			a -= b;
+		return a;
+	}
+
+	public function sub16()
+	{
+		double a, b;
+		let a = 0.0,
+			b = 10.0,
+			a -= b;
+		return a;
+	}
+
+	public function sub17()
+	{
+		double a; boolean b;
+		let a = 0.0,
+			b = true,
+			a -= b;
+		return a;
+	}
+
+	public function sub18()
+	{
+		double a; boolean b;
+		let a = 0.0,
+			b = false,
+			a -= b;
+		return a;
+	}
+
+	public function sub19()
+	{
+		double a; int b;
+		let a = 0.0,
+			b = 1,
+			a -= b;
+		return a;
+	}
+
+	public function sub20()
+	{
+		int a; var b;
+		let a = 0.0,
+			b = 1,
+			a -= b;
+		return a;
+	}
+
+	public function sub21()
+	{
+		double a; var b;
+		let a = 0.0,
+			b = 1,
+			a -= b;
+		return a;
+	}
+
+	public function sub22()
+	{
+		var a; var b;
+		let a = 0.0,
+			b = 1,
+			a -= b;
+		return a;
 	}
 
 }
