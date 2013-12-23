@@ -33,53 +33,27 @@ class EmptyOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
+
 		$compilationContext->headersManager->add('kernel/operators');
 
-        return $this->evaluateVariableExpression($expression, $compilationContext);
+		if (!isset($expression['left'])) {
+			throw new CompilerException("Invalid 'left' operand for 'empty' expression", $expression['left']);
+		}
+
+		$leftExpr = new Expression($expression['left']);
+		$leftExpr->setReadOnly(true);
+		$left = $leftExpr->compile($compilationContext);
+
+		if ($left->getType() != 'variable') {
+			throw new CompilerException("'empty' operand only can be a variable", $expression['left']);
+		}
+
+		$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+		if ($variableLeft->getType() != 'variable' && $variableLeft->getType() != 'string') {
+			throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
+		}
+
+		return new CompiledExpression('bool', 'ZEPHIR_IS_EMPTY(' . $variableLeft->getName() . ')', $expression);
 	}
 
-    /**
-	 * Evaluates variable expressions like
-	 * if empty $a
-	 * if !empty $b
-	 *
-	 * it will create something around below lines:
-	 * ZEPHIR_IS_EMPTY(var)
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	protected function evaluateVariableExpression(
-		$expression,
-		CompilationContext $compilationContext
-	) {
-
-        switch (true) {
-            case isset($expression['left']['left']['value'])
-                && isset($expression['left']['left']['type'])
-                && $expression['left']['left']['type'] == 'variable':
-
-                $name = $expression['left']['left']['value'];
-
-                break;
-
-            default:
-                throw new Exception(
-                    'Empty syntax not supported'
-                );
-        }
-
-		$variable = $compilationContext->symbolTable->getVariableForWrite(
-			$name,
-			$compilationContext,
-			$expression['left']['left']
-		);
-
-		return new CompiledExpression(
-			'bool',
-			'ZEPHIR_IS_EMPTY(' . $variable->getName() . ')',
-			$expression
-		);
-    }
 }

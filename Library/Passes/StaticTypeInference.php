@@ -476,13 +476,14 @@ class StaticTypeInference
 				case 'mcall':
 				case 'scall':
 				case 'fcall':
+				case 'require':
 					$this->passCall($statement['expr']);
 					break;
 				case 'break':
 				case 'continue':
 				case 'unset':
-				case 'empty':
 				case 'cblock':
+				case 'empty': // empty statement != empty operator
 					break;
 				default:
 					echo 'SSTI=', $statement['type'];
