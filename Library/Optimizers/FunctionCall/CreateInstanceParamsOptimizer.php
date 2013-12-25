@@ -23,6 +23,7 @@
  * Built-in function that creates new instances of objects from its class name passing parameters as an array
  */
 class CreateInstanceParamsOptimizer
+	extends OptimizerAbstract
 {
 	/**
 	 *

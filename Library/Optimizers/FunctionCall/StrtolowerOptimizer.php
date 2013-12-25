@@ -23,12 +23,14 @@
  * Optimizes calls to 'strtolower' using internal function
  */
 class StrtolowerOptimizer
+	extends OptimizerAbstract
 {
 	/**
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return bool|CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{

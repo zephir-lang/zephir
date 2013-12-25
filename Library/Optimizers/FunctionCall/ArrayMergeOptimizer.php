@@ -23,13 +23,14 @@
  * Optimizes calls to 'array_merge' using internal function
  */
 class ArrayMergeOptimizer
+	extends OptimizerAbstract
 {
-
 	/**
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return bool|CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{

@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+require ZEPHIRPATH . 'Library/Optimizers/OptimizerAbstract.php';
+
 /**
  * FunctionCall
  *
@@ -173,20 +175,24 @@ class FunctionCall extends Call
 		 * Check if the optimizer is already cached
 		 */
 		if (!isset(self::$_optimizers[$funcName])) {
-
 			$camelizeFunctionName = Utils::camelize($funcName);
 
 			$path = ZEPHIRPATH . 'Library/Optimizers/FunctionCall/' . $camelizeFunctionName . 'Optimizer.php';
+
 			if (file_exists($path)) {
 				require $path;
+
 				$className = $camelizeFunctionName . 'Optimizer';
 				$optimizer = new $className();
+
+				if (!$optimizer instanceof OptimizerAbstract) {
+					throw new Exception('Class '.$className.' must be instance of OptimizerAbstract');
+				}
 			} else {
 				$optimizer = null;
 			}
 
 			self::$_optimizers[$funcName] = $optimizer;
-
 		} else {
 			$optimizer = self::$_optimizers[$funcName];
 		}
@@ -524,5 +530,4 @@ class FunctionCall extends Call
 
 		return new CompiledExpression('null', null, $expression);
 	}
-
 }
