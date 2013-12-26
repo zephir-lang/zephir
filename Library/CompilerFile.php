@@ -83,6 +83,7 @@ class CompilerFile
 	{
 		$compilePath = '.temp/' . str_replace(DIRECTORY_SEPARATOR, '.', realpath($this->_filePath)) . ".js";
 		$zepRealPath = realpath($this->_filePath);
+
 		if (file_exists($compilePath)) {
 			if (filemtime($compilePath) < filemtime($zepRealPath) || filemtime($compilePath) < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
 				system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
@@ -90,6 +91,7 @@ class CompilerFile
 		} else {
 			system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
 		}
+
 		return json_decode(file_get_contents($compilePath), true);
 	}
 
@@ -369,13 +371,14 @@ class CompilerFile
 	}
 
 	/**
-	 *
-	 *
+	 * @throws ParseException
+	 * @throws CompilerException
+	 * @throws Exception
 	 */
 	public function preCompile()
 	{
-
 		$ir = $this->genIR();
+
 		if (!is_array($ir)) {
 			throw new Exception("Cannot parse file: " . realpath($this->_filePath));
 		}
@@ -409,6 +412,7 @@ class CompilerFile
 
 		$class = false;
 		$interface = false;
+
 		foreach ($ir as $topStatement) {
 			switch ($topStatement['type']) {
 				case 'class':
@@ -434,7 +438,7 @@ class CompilerFile
 			throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
 		}
 
-		if ($this->_filePath != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
+		if (strtolower($this->_filePath) != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
 			throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
 		}
 
