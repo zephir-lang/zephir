@@ -164,6 +164,9 @@ class LetStatement
 							case 'add-assign':
 								$codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
 								break;
+							case 'sub-assign':
+								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
+								break;
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
