@@ -23,12 +23,14 @@
  * Built-in function that creates a virtual symbol table
  */
 class CreateSymbolTableOptimizer
+	extends OptimizerAbstract
 {
 	/**
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{

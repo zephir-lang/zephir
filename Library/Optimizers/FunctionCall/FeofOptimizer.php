@@ -23,12 +23,13 @@
  * Optimizes calls to 'feof' using internal function
  */
 class FeofOptimizer
+	extends OptimizerAbstract
 {
 	/**
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return bool|CompiledExpression|mixed
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{

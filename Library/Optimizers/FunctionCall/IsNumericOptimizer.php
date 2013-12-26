@@ -23,11 +23,13 @@
  * Optimizes calls to 'is_numeric' using internal function
  */
 class IsNumericOptimizer
+	extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return bool|CompiledExpression|mixed
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
