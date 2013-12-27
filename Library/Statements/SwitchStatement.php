@@ -23,17 +23,9 @@
  * Switch statement, the same as in PHP/C
  */
 class SwitchStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
-	 * Perform the compilation of code
-	 *
 	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)

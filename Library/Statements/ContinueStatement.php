@@ -23,16 +23,11 @@
  * Continue statement
  */
 class ContinueStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
 	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

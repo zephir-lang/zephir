@@ -23,23 +23,17 @@
  * Throws exceptions
  */
 class ThrowStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
+	/**
+	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
+	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		$codePrinter = $compilationContext->codePrinter;
-
 		$statement = $this->_statement;
-
 		$compilationContext->headersManager->add('kernel/exception');
-
 		$expr = $statement['expr'];
 
 		/**

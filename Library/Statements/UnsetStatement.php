@@ -23,16 +23,10 @@
  * Unset statement
  */
 class UnsetStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
-	 * @param \CompilationContext $compilationContext
+	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

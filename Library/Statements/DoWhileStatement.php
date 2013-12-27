@@ -23,22 +23,9 @@
  * DoWhile statement, the same as in PHP/C
  */
 class DoWhileStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
 	/**
-	 * Perform the compilation of code
-	 *
-	 * @param array $statement
-	 */
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
-	/**
-	 * Perform the compilation of code
-	 *
 	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)

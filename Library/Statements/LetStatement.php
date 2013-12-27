@@ -23,19 +23,8 @@
  * Let statement is used to assign variables
  */
 class LetStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	/**
-	 * LetStatement constructor
-	 *
-	 * @param array $statement
-	 */
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
 	 * Compiles foo = {expr}
 	 * Changes the value of a mutable variable
@@ -2044,9 +2033,8 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles the let statement
-	 *
 	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

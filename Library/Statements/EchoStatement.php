@@ -23,14 +23,12 @@
  * Produce output according to the type
  */
 class EchoStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
+	/**
+	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
+	 */
 	public function compile(CompilationContext $compilationContext)
 	{
 		foreach ($this->_statement['expressions'] as $expr) {
