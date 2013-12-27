@@ -208,7 +208,7 @@ class Compiler
 					$this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
 				}
 			} else {
-			  	if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
+				if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
 					if (is_string($callback)) {
 						$success = $success && $callback($pathName, $dest.'/'.$fileName);
 					} else {
@@ -393,6 +393,29 @@ class Compiler
 		}
 
 		/**
+		 * Set optimizers
+		 */
+		FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
+		$optimizerDirs = $this->_config->get('optimizer-dirs');
+		if (is_array($optimizerDirs)) {
+			foreach ($optimizerDirs as $directory) {
+				FunctionCall::addOptimizerDir(realpath($directory));
+			}
+		}
+
+		/**
+		 * Load additional extension prototypes
+		 */
+		foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
+			if (!$file->isDir()) {
+				$extension = str_replace('.php', '', $file);
+				if (!extension_loaded($extension)) {
+					require $file->getRealPath();
+				}
+			}
+		}
+
+		/**
 		 * Round 3. compile all files to C sources
 		 */
 		$files = array();
@@ -402,8 +425,8 @@ class Compiler
 		}
 
 		$this->_compiledFiles = $files;
-                
-                /**
+
+		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
 		 */
 		$needConfigure  = $this->createConfigFiles($namespace);
@@ -413,8 +436,8 @@ class Compiler
 		 * Round 5. Generate the concatenation cubrid_error_code(oid)
 		 */
 		$this->_stringManager->genConcatCode();
-                
-                return $needConfigure;
+
+				return $needConfigure;
 	}
 
 	/**

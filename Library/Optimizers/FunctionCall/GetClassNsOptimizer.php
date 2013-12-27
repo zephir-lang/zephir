@@ -40,7 +40,7 @@ class GetClassNsOptimizer
 		}
 
 		if (count($expression['parameters']) != 1) {
-				throw new CompilerException("'get_class_ns' only accepts one parameter");
+				throw new CompilerException("'get_class_ns' only accepts one parameter", $expression);
 		}
 
 		/**

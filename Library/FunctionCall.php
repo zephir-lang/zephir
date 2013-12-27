@@ -47,6 +47,8 @@ class FunctionCall extends Call
 
 	static protected $_functionReflection = array();
 
+	static protected $_optimizerDirectories = array();
+
 	/**
 	 * Process the ReflectionFunction for the specified function name
 	 *
@@ -171,28 +173,39 @@ class FunctionCall extends Call
 	 */
 	protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
 	{
+		$optimizer = false;
+
 		/**
 		 * Check if the optimizer is already cached
 		 */
 		if (!isset(self::$_optimizers[$funcName])) {
+
 			$camelizeFunctionName = Utils::camelize($funcName);
 
-			$path = ZEPHIRPATH . 'Library/Optimizers/FunctionCall/' . $camelizeFunctionName . 'Optimizer.php';
+			/**
+			 * Check every optimizer directory for an optimizer
+			 */
+			foreach (self::$_optimizerDirectories as $directory) {
 
-			if (file_exists($path)) {
-				require $path;
+				$path =  $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
+				if (file_exists($path)) {
 
-				$className = $camelizeFunctionName . 'Optimizer';
-				$optimizer = new $className();
+					require $path;
 
-				if (!$optimizer instanceof OptimizerAbstract) {
-					throw new Exception('Class '.$className.' must be instance of OptimizerAbstract');
+					$className = $camelizeFunctionName . 'Optimizer';
+					$optimizer = new $className();
+
+					if (!($optimizer instanceof OptimizerAbstract)) {
+						throw new Exception('Class ' . $className . ' must be instance of OptimizerAbstract');
+					}
+
+					break;
 				}
-			} else {
-				$optimizer = null;
+
 			}
 
 			self::$_optimizers[$funcName] = $optimizer;
+
 		} else {
 			$optimizer = self::$_optimizers[$funcName];
 		}
@@ -261,18 +274,18 @@ class FunctionCall extends Call
 			throw new CompilerException("Cannot use 'array' as a function call", $expression);
 		}
 
-		$exists = true;
-		if (!$this->functionExists($funcName)) {
-			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistent-function", $expression);
-			$exists = false;
-		}
-
 		/**
-		 * Try to optimize function calls
+		 * Try to optimize function calls using existing optimizers
 		 */
 		$compiledExpr = $this->optimize($funcName, $expression, $this, $compilationContext);
 		if (is_object($compiledExpr)) {
 			return $compiledExpr;
+		}
+
+		$exists = true;
+		if (!$this->functionExists($funcName)) {
+			$compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistent-function", $expression);
+			$exists = false;
 		}
 
 		/**
@@ -530,4 +543,15 @@ class FunctionCall extends Call
 
 		return new CompiledExpression('null', null, $expression);
 	}
+
+	/**
+	 * Appends an optimizer directory to the directory list
+	 *
+	 * @param string $directory
+	 */
+	public static function addOptimizerDir($directory)
+	{
+		self::$_optimizerDirectories[] = $directory;
+	}
+
 }
