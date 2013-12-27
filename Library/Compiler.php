@@ -457,13 +457,14 @@ class Compiler
 		 */
 		$needConfigure  = $this->createConfigFiles($namespace);
 		$needConfigure |= $this->createProjectFiles($namespace);
+		$needConfigure |= $this->checkIfPhpized($namespace);
 
 		/**
 		 * Round 5. Generate the concatenation cubrid_error_code(oid)
 		 */
 		$this->_stringManager->genConcatCode();
 
-				return $needConfigure;
+		return $needConfigure;
 	}
 
 	/**
@@ -481,6 +482,7 @@ class Compiler
 		$needConfigure = $this->generate($command);
 
 		if ($needConfigure) {
+
 			exec('cd ext && make clean', $output, $exit);
 			$this->_logger->output('Preparing for PHP compilation...');
 
@@ -895,6 +897,11 @@ class Compiler
 		unset($content);
 
 		return $needConfigure;
+	}
+
+	public function checkIfPhpized($namespace)
+	{
+		return !file_exists('ext/Makefile');
 	}
 
 	/**
