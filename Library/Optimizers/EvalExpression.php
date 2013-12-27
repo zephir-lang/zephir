@@ -53,6 +53,7 @@ class EvalExpression
 	{
 
 		$conditions = $this->optimizeNot($exprRaw, $compilationContext);
+
 		if ($conditions !== false) {
 			return $conditions;
 		}
@@ -95,6 +96,7 @@ class EvalExpression
 						$this->_unrecheable = true;
 					}
 				}
+
 				return $code;
 			case 'char':
 			case 'uchar':

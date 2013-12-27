@@ -24,37 +24,52 @@
  */
 class Compiler
 {
-
-	protected $_files;
+	/**
+	 * @var CompilerFile[]
+	 */
+	protected $_files = array();
 
 	/**
 	 * @var ClassDefinition[]
 	 */
-	protected $_definitions;
+	protected $_definitions = array();
 
-	protected $_compiledFiles;
+	/**
+	 * @var array|string[]
+	 */
+	protected $_compiledFiles = array();
 
 	protected $_constants = array();
 
 	protected $_globals = array();
 
-	protected $_stringManager = null;
+	/**
+	 * @var StringsManager
+	 */
+	protected $_stringManager;
 
-	protected $_config = null;
+	/**
+	 * @var Config
+	 */
+	protected $_config;
 
-	protected $_logger = null;
+	/**
+	 * @var Logger
+	 */
+	protected $_logger;
 
+	/**
+	 * @var array|ReflectionClass[]
+	 */
 	protected static $_reflections = array();
 
-	public function __construct(Config $config = null, Logger $logger = null)
+	public function __construct(Config $config, Logger $logger)
 	{
 		$this->_config = $config;
 		$this->_logger = $logger;
-		/**
-		 * The string manager manages
-		 */
 		$this->_stringManager = new StringsManager();
 	}
+
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -65,11 +80,14 @@ class Compiler
 		if (preg_match('/\.zep$/', $filePath)) {
 			$className = str_replace('/', '\\', $filePath);
 			$className = preg_replace('/.zep$/', '', $className);
+
 			$className = join('\\', array_map(function($i) {
 				return ucfirst($i);
 			}, explode('\\', $className)));
+
 			$this->_files[$className] = new CompilerFile($className, $filePath, $this->_config, $this->_logger);
 			$this->_files[$className]->preCompile();
+
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
 		}
 	}
@@ -85,11 +103,13 @@ class Compiler
 		 */
 		$files = array();
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				$files[] = $item->getPathname();
 			}
 		}
+
 		sort($files, SORT_STRING);
 		foreach ($files as $file) {
 			$this->_preCompile($file);
@@ -181,6 +201,7 @@ class Compiler
 		if (!isset(self::$_reflections[$className])) {
 			self::$_reflections[$className] = new ReflectionClass($className);
 		}
+
 		return self::$_reflections[$className];
 	}
 
@@ -298,6 +319,10 @@ class Compiler
 		return $this->_globals[$name];
 	}
 
+	/**
+	 * @return string
+	 * @throws Exception
+	 */
 	protected function _checkDirectory()
 	{
 		$namespace = $this->_config->get('namespace');
@@ -419,6 +444,7 @@ class Compiler
 		 * Round 3. compile all files to C sources
 		 */
 		$files = array();
+
 		foreach ($this->_files as $compileFile) {
 			$compileFile->compile($this, $this->_stringManager);
 			$files[] = $compileFile->getCompiledFile();
@@ -454,16 +480,19 @@ class Compiler
 
 		$needConfigure = $this->generate($command);
 
-		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($needConfigure) {
 			exec('cd ext && make clean', $output, $exit);
-			echo "Preparing for PHP compilation...\n";
+			$this->_logger->output('Preparing for PHP compilation...');
+
 			exec('cd ext && phpize', $output, $exit);
-			echo "Preparing configuration file...\n";
+			$this->_logger->output('Preparing configuration file...');
+
 			exec('export CC="gcc" && export CFLAGS="-O2" && cd ext && ./configure --enable-' . $namespace);
 		}
 
-		echo "Compiling...\n";
+		$this->_logger->output('Compiling...');
+
+		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($verbose) {
 			passthru('cd ext && make', $exit);
 		} else {
@@ -486,9 +515,9 @@ class Compiler
 
 		$this->compile($command);
 
-		echo "Installing...\n";
+		$this->_logger->output('Installing...');
 		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
-		echo "Don't forget to restart your web server\n";
+		$this->_logger->output('Don`t forget to restart your web server');
 	}
 
 	/**
@@ -502,7 +531,7 @@ class Compiler
 		 */
 		$namespace = $this->_checkDirectory();
 
-		echo "Running tests...\n";
+		$this->_logger->output('Running tests...');
 		system('export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
 	}
 
@@ -555,7 +584,7 @@ class Compiler
 	{
 		$configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
 		if (!$configured) {
-			echo "Copying new kernel files...\n";
+			$this->_logger->output('Copying new kernel files...');
 			exec("rm -fr ext/kernel/*");
 			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^[^\.]@');
 		}
@@ -917,5 +946,4 @@ class Compiler
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}
-
 }
