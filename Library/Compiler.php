@@ -120,7 +120,7 @@ class Compiler
 	 * Allows to check if a class is part of the compiled extension
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isClass($className)
 	{
@@ -138,7 +138,7 @@ class Compiler
 	 * Allows to check if an interface is part of the compiled extension
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInterface($className)
 	{
@@ -156,7 +156,7 @@ class Compiler
 	 * Allows to check if a class is part of PHP
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInternalClass($className)
 	{
@@ -167,7 +167,7 @@ class Compiler
 	 * Allows to check if a interface is part of PHP
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInternalInterface($className)
 	{
