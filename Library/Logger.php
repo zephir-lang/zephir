@@ -131,7 +131,7 @@ class Logger
 	public function output($message)
 	{
 		if (!$this->_config->get('silent')) {
-			echo $message;
+			echo $message . PHP_EOL;
 
 			return true;
 		}
