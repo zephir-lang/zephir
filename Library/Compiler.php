@@ -428,14 +428,16 @@ class Compiler
 			}
 		}
 
-		/**
-		 * Load additional extension prototypes
-		 */
-		foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
-			if (!$file->isDir()) {
-				$extension = str_replace('.php', '', $file);
-				if (!extension_loaded($extension)) {
-					require $file->getRealPath();
+		if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
+			/**
+			 * Load additional extension prototypes
+			 */
+			foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
+				if (!$file->isDir()) {
+					$extension = str_replace('.php', '', $file);
+					if (!extension_loaded($extension)) {
+						require $file->getRealPath();
+					}
 				}
 			}
 		}
