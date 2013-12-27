@@ -43,7 +43,6 @@ class StatementsBlock
 
 	public function compile(CompilationContext $compilationContext, $unrecheable=false)
 	{
-
 		$compilationContext->codePrinter->increaseLevel();
 		$compilationContext->currentBranch++;
 

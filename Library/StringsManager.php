@@ -35,28 +35,6 @@ class StringsManager
 	);
 
 	/**
-	* Checks if the content of the file on the disk is the same as
-	* the content.
-	* Returns true if the file has been written
-	* @param string $content
-	* @param string $path
-	*/
-	protected function _checkAndWriteIfNeeded($content, $path)
-	{
-		if (file_exists($path)) {
-			$content_md5 = md5($content);
-			$existing_md5 = md5_file($path);
-
-			if ($content_md5 != $existing_md5) {
-				file_put_contents($path, $content);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	* @param string $path
 	*/
 	public function addConcatKey($key)
@@ -191,8 +169,8 @@ class StringsManager
 			$code .= "}" . PHP_EOL . PHP_EOL;
 		}
 
-    	$this->_checkAndWriteIfNeeded(join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
-    	$this->_checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
+		Utils::checkAndWriteIfNeeded(join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
+		Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
 	}
 
 	public function getConcatKeys()
