@@ -1121,7 +1121,6 @@ class Expression
 				return new CompiledExpression('int', '(0 == 1)', $expression);
 
 			case 'typeof':
-			case 'empty':
 			case 'require':
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
 
