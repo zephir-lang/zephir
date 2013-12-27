@@ -91,7 +91,7 @@ PHP_METHOD(Test_Router, __construct) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &defaultRoutes_param);
 
-	if (!defaultRoutes_param) {
+	if (!defaultRoutes_param || Z_TYPE_P(defaultRoutes_param) == IS_NULL) {
 		defaultRoutes = 1;
 	} else {
 		defaultRoutes = zephir_get_boolval(defaultRoutes_param);
@@ -398,7 +398,7 @@ PHP_METHOD(Test_Router, handle) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
 
-	if (!uri) {
+	if (!uri || Z_TYPE_P(uri) == IS_NULL) {
 		uri = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -649,10 +649,10 @@ PHP_METHOD(Test_Router, add) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
-	if (!httpMethods) {
+	if (!httpMethods || Z_TYPE_P(httpMethods) == IS_NULL) {
 		httpMethods = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -679,7 +679,7 @@ PHP_METHOD(Test_Router, addGet) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -705,7 +705,7 @@ PHP_METHOD(Test_Router, addPost) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -731,7 +731,7 @@ PHP_METHOD(Test_Router, addPut) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -757,7 +757,7 @@ PHP_METHOD(Test_Router, addPatch) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -783,7 +783,7 @@ PHP_METHOD(Test_Router, addDelete) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -809,7 +809,7 @@ PHP_METHOD(Test_Router, addOptions) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -835,7 +835,7 @@ PHP_METHOD(Test_Router, addHead) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths) {
+	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 

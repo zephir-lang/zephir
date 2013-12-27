@@ -170,15 +170,15 @@ PHP_METHOD(Test_Flow, testIf10) {
 		if (b) {
 			c = (1) ? 1 : 0;
 			if (c) {
-				RETURN_LONG(1);
+				RETURN_LONG(654);
 			} else {
-				RETURN_LONG(0);
+				RETURN_LONG(-1);
 			}
 		} else {
-			RETURN_LONG(0);
+			RETURN_LONG(-2);
 		}
 	} else {
-		RETURN_LONG(0);
+		RETURN_LONG(-3);
 	}
 
 }
@@ -196,7 +196,7 @@ PHP_METHOD(Test_Flow, testIf12) {
 		if (b) {
 			c = (1) ? 1 : 0;
 			if (c) {
-				RETURN_LONG(1);
+				RETURN_LONG(987);
 			} else {
 				RETURN_LONG(0);
 			}
@@ -217,7 +217,7 @@ PHP_METHOD(Test_Flow, testIf13) {
 	a = 1;
 	b = 2;
 	if ((a + b)) {
-		RETURN_LONG(1);
+		RETURN_LONG(-12);
 	}
 	RETURN_LONG(0);
 
@@ -231,7 +231,7 @@ PHP_METHOD(Test_Flow, testIf14) {
 	a = 1;
 	b = 2;
 	if ((a + b)) {
-		RETURN_LONG(1);
+		RETURN_LONG(74);
 	}
 	RETURN_LONG(0);
 
@@ -246,9 +246,24 @@ PHP_METHOD(Test_Flow, testIf15) {
 	b = 2;
 	c = 3;
 	if (((a + b) + c)) {
-		RETURN_LONG(1);
+		RETURN_LONG(89);
 	}
 	RETURN_LONG(0);
+
+}
+
+PHP_METHOD(Test_Flow, testIf16) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	if (ZEPHIR_IS_EMPTY(a)) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
 
 }
 

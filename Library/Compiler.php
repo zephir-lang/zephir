@@ -502,6 +502,7 @@ class Compiler
 		} else {
 			exec('cd ext && make' . $verbose, $output, $exit);
 		}
+
 	}
 
 	/**
@@ -901,6 +902,11 @@ class Compiler
 		return $needConfigure;
 	}
 
+	/*+
+	 * Check if the project must be phpized again
+	 *
+	 * @param string $namespace
+	 */
 	public function checkIfPhpized($namespace)
 	{
 		return !file_exists('ext/Makefile');

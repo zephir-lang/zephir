@@ -1,5 +1,5 @@
 <?php
- 
+
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,7 +16,7 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
- 
+
 /**
  * GetClassNsOptimizer
  *
@@ -36,11 +36,12 @@ class GetClassNsOptimizer
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
 		if (!isset($expression['parameters'])) {
-				return false;
+			return false;
 		}
 
-		if (count($expression['parameters']) != 1) {
-				throw new CompilerException("'get_class_ns' only accepts one parameter", $expression);
+		$numberParameters = count($expression['parameters']);
+		if ($numberParameters != 1 && $numberParameters != 2) {
+			throw new CompilerException("'get_class_ns' only accepts one or two parameters", $expression);
 		}
 
 		/**
@@ -50,19 +51,23 @@ class GetClassNsOptimizer
 
 		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'string') {
-				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
 
 		if ($call->mustInitSymbolVariable()) {
-				$symbolVariable->initVariant($context);
+			$symbolVariable->initVariant($context);
 		}
 
-		$context->headersManager->add('kernel/string');
+		$context->headersManager->add('kernel/object');
 
 		$symbolVariable->setDynamicTypes('string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0);');
+		if (!isset($resolvedParams[1])) {
+			$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0);');
+		} else {
+			$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+		}
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }

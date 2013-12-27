@@ -1,5 +1,5 @@
 <?php
- 
+
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -16,7 +16,7 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
- 
+
 /**
  * GetNsClassOptimizer
  *
@@ -56,7 +56,7 @@ class GetNsClassOptimizer
 				$symbolVariable->initVariant($context);
 		}
 
-		$context->headersManager->add('kernel/string');
+		$context->headersManager->add('kernel/object');
 
 		$symbolVariable->setDynamicTypes('string');
 

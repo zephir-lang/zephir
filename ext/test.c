@@ -18,12 +18,14 @@
 
 zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
+zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_scallparent_ce;
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_assign_ce;
 zend_class_entry *test_cast_ce;
 zend_class_entry *test_cblock_ce;
 zend_class_entry *test_constants_ce;
+zend_class_entry *test_constantsinterface_ce;
 zend_class_entry *test_declare_ce;
 zend_class_entry *test_echoes_ce;
 zend_class_entry *test_exception_ce;
@@ -39,6 +41,7 @@ zend_class_entry *test_nativearray_ce;
 zend_class_entry *test_oo_ce;
 zend_class_entry *test_oo_ooconstruct_ce;
 zend_class_entry *test_oo_ooconstructparams_ce;
+zend_class_entry *test_oo_oodynamicb_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ooparams_ce;
 zend_class_entry *test_properties_privateproperties_ce;
@@ -59,12 +62,14 @@ PHP_MINIT_FUNCTION(test){
 
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
+	ZEPHIR_INIT(Test_Oo_OoDynamicA);
 	ZEPHIR_INIT(Test_ScallParent);
 	ZEPHIR_INIT(Test_Arithmetic);
 	ZEPHIR_INIT(Test_Assign);
 	ZEPHIR_INIT(Test_Cast);
 	ZEPHIR_INIT(Test_Cblock);
 	ZEPHIR_INIT(Test_Constants);
+	ZEPHIR_INIT(Test_ConstantsInterface);
 	ZEPHIR_INIT(Test_Declare);
 	ZEPHIR_INIT(Test_Echoes);
 	ZEPHIR_INIT(Test_Exception);
@@ -80,6 +85,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Oo);
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoConstructParams);
+	ZEPHIR_INIT(Test_Oo_OoDynamicB);
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoParams);
 	ZEPHIR_INIT(Test_Properties_PrivateProperties);
