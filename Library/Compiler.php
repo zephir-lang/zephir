@@ -402,6 +402,19 @@ class Compiler
 		}
 
 		$this->_compiledFiles = $files;
+                
+                /**
+		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
+		 */
+		$needConfigure  = $this->createConfigFiles($namespace);
+		$needConfigure |= $this->createProjectFiles($namespace);
+
+		/**
+		 * Round 5. Generate the concatenation cubrid_error_code(oid)
+		 */
+		$this->_stringManager->genConcatCode();
+                
+                return $needConfigure;
 	}
 
 	/**
@@ -416,18 +429,7 @@ class Compiler
 		 */
 		$namespace = $this->_checkDirectory();
 
-		$this->generate($command);
-
-		/**
-		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
-		 */
-		$needConfigure  = $this->createConfigFiles($namespace);
-		$needConfigure |= $this->createProjectFiles($namespace);
-
-		/**
-		 * Round 5. Generate the concatenation cubrid_error_code(oid)
-		 */
-		$this->_stringManager->genConcatCode();
+		$needConfigure = $this->generate($command);
 
 		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($needConfigure) {
