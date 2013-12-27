@@ -846,7 +846,6 @@ class Compiler
 		 */
 		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
-
 			$globalStruct = "";
 
 			$structures = array();
@@ -879,16 +878,11 @@ class Compiler
 			$globalStruct = null;
 		}
 
-		$version = $this->_config->get('version');
-		if (!$version) {
-			$version = '0.0.1';
-		}
-
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
 			'%PROJECT_EXTNAME%' 	     => strtolower($project),
-			'%PROJECT_VERSION%' 	     => $version,
+			'%PROJECT_VERSION%' 	     => $this->_config->get('version'),
 			'%EXTENSION_GLOBALS%'        => $globalCode,
 			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
 		);

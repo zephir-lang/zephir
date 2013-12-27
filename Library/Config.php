@@ -35,7 +35,8 @@ class Config
 		'namespace'   => '',
 		'name'        => '',
 		'description' => '',
-		'author'      => ''
+		'author'      => '',
+		'version'	  => '0.0.1'
 	);
 
 	protected $_changed = false;
