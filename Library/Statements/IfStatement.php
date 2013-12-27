@@ -23,21 +23,13 @@
  * If statement, the same as in PHP/C
  */
 class IfStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
-	 *
 	 * @param CompilationContext $compilationContext
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		$condition = false;
 
 		/**

@@ -43,6 +43,7 @@ require ZEPHIRPATH . 'Library/ClassMethodParameters.php';
 require ZEPHIRPATH . 'Library/StatementsBlock.php';
 require ZEPHIRPATH . 'Library/Detectors/ReadDetector.php';
 require ZEPHIRPATH . 'Library/Detectors/WriteDetector.php';
+require ZEPHIRPATH . 'Library/Statements/Abstract.php';
 require ZEPHIRPATH . 'Library/Statements/ThrowStatement.php';
 require ZEPHIRPATH . 'Library/Statements/EchoStatement.php';
 require ZEPHIRPATH . 'Library/Statements/LetStatement.php';

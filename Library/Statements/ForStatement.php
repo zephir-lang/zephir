@@ -23,20 +23,14 @@
  * For statement
  */
 class ForStatement
+	extends StatementAbstract
 {
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
 	 * Compiles a for statement that use a 'range' as expression
 	 *
 	 * @param array $exprRaw
 	 * @param \CompilationContext $compilationContext
-	 * @return boolan
+	 * @return boolean
 	 */
 	public function compileRange($exprRaw, $compilationContext)
 	{
@@ -582,9 +576,8 @@ class ForStatement
 	}
 
 	/**
-	 * Perform the compilation of code
-	 *
 	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

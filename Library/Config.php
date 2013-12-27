@@ -35,7 +35,8 @@ class Config
 		'namespace'   => '',
 		'name'        => '',
 		'description' => '',
-		'author'      => ''
+		'author'      => '',
+		'version'	  => '0.0.1'
 	);
 
 	protected $_changed = false;
@@ -53,9 +54,9 @@ class Config
 	}
 
 	/**
-	 *
-	 *
-	 * @param string $key
+	 * @param $key
+	 * @param null $namespace
+	 * @return mixed
 	 */
 	public function get($key, $namespace=null)
 	{
@@ -68,6 +69,7 @@ class Config
 				return $this->_config[$key];
 			}
 		}
+
 		return null;
 	}
 

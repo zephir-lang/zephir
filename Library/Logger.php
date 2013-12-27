@@ -26,6 +26,11 @@ class Logger
 {
 	private static $_files = array();
 
+	/**
+	 * @var Config
+	 */
+	protected $_config;
+
 	protected $_warnings = array(
 		'unused-variable'                    => true,
 		'unused-variable-external'           => false,
@@ -71,16 +76,15 @@ class Logger
 	}
 
 	/**
-	 *
-	 * @param string $message
-	 * @param string $type
-	 * @param array $node
-	 * @return boolean
+	 * @param $message
+	 * @param $type
+	 * @param $node
+	 * @return bool
+	 * @throws CompilerException
 	 */
 	public function warning($message, $type, $node)
 	{
 		if (!$this->_config->get('silent')) {
-
 			if (!isset($this->_warnings[$type])) {
 				throw new CompilerException("Unknown warning type: " . $type, $node);
 			}
@@ -116,6 +120,22 @@ class Logger
 
 			return true;
 		}
+
+		return false;
 	}
 
+	/**
+	 * @param $message
+	 * @return bool
+	 */
+	public function output($message)
+	{
+		if (!$this->_config->get('silent')) {
+			echo $message;
+
+			return true;
+		}
+
+		return false;
+	}
 }

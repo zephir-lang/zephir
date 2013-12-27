@@ -51,8 +51,9 @@ class BaseOperator
 	public function getExpected(CompilationContext $compilationContext, $expression)
 	{
 		$isExpecting = $this->_expecting;
+		$symbolVariable = $this->_expectingVariable;
+
 		if ($isExpecting) {
-			$symbolVariable = $this->_expectingVariable;
 			if (is_object($symbolVariable)) {
 				if ($symbolVariable->getType() == 'variable') {
 					$symbolVariable->initVariant($compilationContext);
@@ -93,8 +94,9 @@ class BaseOperator
 	public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression)
 	{
 		$isExpecting = $this->_expecting;
+		$symbolVariable = $this->_expectingVariable;
+
 		if ($isExpecting) {
-			$symbolVariable = $this->_expectingVariable;
 			if (is_object($symbolVariable)) {
 				if ($symbolVariable->getType() == 'variable') {
 					$symbolVariable->initVariant($compilationContext);
@@ -113,6 +115,7 @@ class BaseOperator
 				}
 			}
 		}
+
 		return $symbolVariable;
 	}
 
@@ -135,5 +138,4 @@ class BaseOperator
 	{
 		return $this->_readOnly;
 	}
-
 }

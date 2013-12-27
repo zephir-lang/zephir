@@ -24,37 +24,52 @@
  */
 class Compiler
 {
-
-	protected $_files;
+	/**
+	 * @var CompilerFile[]
+	 */
+	protected $_files = array();
 
 	/**
 	 * @var ClassDefinition[]
 	 */
-	protected $_definitions;
+	protected $_definitions = array();
 
-	protected $_compiledFiles;
+	/**
+	 * @var array|string[]
+	 */
+	protected $_compiledFiles = array();
 
 	protected $_constants = array();
 
 	protected $_globals = array();
 
-	protected $_stringManager = null;
+	/**
+	 * @var StringsManager
+	 */
+	protected $_stringManager;
 
-	protected $_config = null;
+	/**
+	 * @var Config
+	 */
+	protected $_config;
 
-	protected $_logger = null;
+	/**
+	 * @var Logger
+	 */
+	protected $_logger;
 
+	/**
+	 * @var array|ReflectionClass[]
+	 */
 	protected static $_reflections = array();
 
-	public function __construct(Config $config = null, Logger $logger = null)
+	public function __construct(Config $config, Logger $logger)
 	{
 		$this->_config = $config;
 		$this->_logger = $logger;
-		/**
-		 * The string manager manages
-		 */
 		$this->_stringManager = new StringsManager();
 	}
+
 	/**
 	 * Pre-compiles classes creating a CompilerFile definition
 	 *
@@ -65,11 +80,14 @@ class Compiler
 		if (preg_match('/\.zep$/', $filePath)) {
 			$className = str_replace('/', '\\', $filePath);
 			$className = preg_replace('/.zep$/', '', $className);
+
 			$className = join('\\', array_map(function($i) {
 				return ucfirst($i);
 			}, explode('\\', $className)));
+
 			$this->_files[$className] = new CompilerFile($className, $filePath, $this->_config, $this->_logger);
 			$this->_files[$className]->preCompile();
+
 			$this->_definitions[$className] = $this->_files[$className]->getClassDefinition();
 		}
 	}
@@ -85,11 +103,13 @@ class Compiler
 		 */
 		$files = array();
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				$files[] = $item->getPathname();
 			}
 		}
+
 		sort($files, SORT_STRING);
 		foreach ($files as $file) {
 			$this->_preCompile($file);
@@ -100,7 +120,7 @@ class Compiler
 	 * Allows to check if a class is part of the compiled extension
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isClass($className)
 	{
@@ -118,7 +138,7 @@ class Compiler
 	 * Allows to check if an interface is part of the compiled extension
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInterface($className)
 	{
@@ -136,7 +156,7 @@ class Compiler
 	 * Allows to check if a class is part of PHP
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInternalClass($className)
 	{
@@ -147,7 +167,7 @@ class Compiler
 	 * Allows to check if a interface is part of PHP
 	 *
 	 * @param string $className
-	 * @return bolean
+	 * @return boolean
 	 */
 	public function isInternalInterface($className)
 	{
@@ -181,6 +201,7 @@ class Compiler
 		if (!isset(self::$_reflections[$className])) {
 			self::$_reflections[$className] = new ReflectionClass($className);
 		}
+
 		return self::$_reflections[$className];
 	}
 
@@ -298,6 +319,10 @@ class Compiler
 		return $this->_globals[$name];
 	}
 
+	/**
+	 * @return string
+	 * @throws Exception
+	 */
 	protected function _checkDirectory()
 	{
 		$namespace = $this->_config->get('namespace');
@@ -419,6 +444,7 @@ class Compiler
 		 * Round 3. compile all files to C sources
 		 */
 		$files = array();
+
 		foreach ($this->_files as $compileFile) {
 			$compileFile->compile($this, $this->_stringManager);
 			$files[] = $compileFile->getCompiledFile();
@@ -454,16 +480,19 @@ class Compiler
 
 		$needConfigure = $this->generate($command);
 
-		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($needConfigure) {
 			exec('cd ext && make clean', $output, $exit);
-			echo "Preparing for PHP compilation...\n";
+			$this->_logger->output('Preparing for PHP compilation...');
+
 			exec('cd ext && phpize', $output, $exit);
-			echo "Preparing configuration file...\n";
+			$this->_logger->output('Preparing configuration file...');
+
 			exec('export CC="gcc" && export CFLAGS="-O2" && cd ext && ./configure --enable-' . $namespace);
 		}
 
-		echo "Compiling...\n";
+		$this->_logger->output('Compiling...');
+
+		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($verbose) {
 			passthru('cd ext && make', $exit);
 		} else {
@@ -486,9 +515,9 @@ class Compiler
 
 		$this->compile($command);
 
-		echo "Installing...\n";
+		$this->_logger->output('Installing...');
 		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
-		echo "Don't forget to restart your web server\n";
+		$this->_logger->output('Don`t forget to restart your web server');
 	}
 
 	/**
@@ -502,7 +531,7 @@ class Compiler
 		 */
 		$namespace = $this->_checkDirectory();
 
-		echo "Running tests...\n";
+		$this->_logger->output('Running tests...');
 		system('export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
 	}
 
@@ -514,30 +543,6 @@ class Compiler
 	public function clean(CommandClean $command)
 	{
 		system('cd ext && make clean 1> /dev/null');
-	}
-
-	/**
-	 * Checks if the content of the file on the disk is the same as the content.
-	 * Returns true if the file has been written
-	 *
-	 * @param string $content
-	 * @param string $path
-	 * @return boolean
-	 */
-	protected function _checkAndWriteIfNeeded($content, $path)
-	{
-		if (file_exists($path)) {
-			$contentMd5 = md5($content);
-			$existingMd5 = md5_file($path);
-			if ($contentMd5 != $existingMd5) {
-				file_put_contents($path, $content);
-				return true;
-			}
-		} else {
-			file_put_contents($path, $content);
-			return true;
-		}
-		return false;
 	}
 
 	protected function _checkKernelFile($src, $dst)
@@ -555,7 +560,7 @@ class Compiler
 	{
 		$configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
 		if (!$configured) {
-			echo "Copying new kernel files...\n";
+			$this->_logger->output('Copying new kernel files...');
 			exec("rm -fr ext/kernel/*");
 			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^[^\.]@');
 		}
@@ -588,7 +593,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$needConfigure = $this->_checkAndWriteIfNeeded($content, 'ext/config.m4');
+		$needConfigure = Utils::checkAndWriteIfNeeded($content, 'ext/config.m4');
 
 		/**
 		 * php_ext.h
@@ -606,7 +611,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$this->_checkAndWriteIfNeeded($content, 'ext/php_ext.h');
+		Utils::checkAndWriteIfNeeded($content, 'ext/php_ext.h');
 
 		/**
 		 * ext.h
@@ -624,7 +629,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$this->_checkAndWriteIfNeeded($content, 'ext/ext.h');
+		Utils::checkAndWriteIfNeeded($content, 'ext/ext.h');
 
 		/**
 		 * ext_config.h
@@ -642,7 +647,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$this->_checkAndWriteIfNeeded($content, 'ext/ext_config.h');
+		Utils::checkAndWriteIfNeeded($content, 'ext/ext_config.h');
 
 		/**
 		 * ext_clean
@@ -652,7 +657,7 @@ class Compiler
 			throw new Exception("clean file doesn't exists");
 		}
 
-		if ($this->_checkAndWriteIfNeeded($content, 'ext/clean')) {
+		if (Utils::checkAndWriteIfNeeded($content, 'ext/clean')) {
 			chmod('ext/clean', 0755);
 		}
 
@@ -672,7 +677,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		if ($this->_checkAndWriteIfNeeded($content, 'ext/install')) {
+		if (Utils::checkAndWriteIfNeeded($content, 'ext/install')) {
 			chmod('ext/install', 0755);
 		}
 
@@ -797,7 +802,7 @@ class Compiler
 		/**
 		 * Round 3. Generate and place the entry point of the project
 		 */
-		$this->_checkAndWriteIfNeeded($content, 'ext/' . $project . '.c');
+		Utils::checkAndWriteIfNeeded($content, 'ext/' . $project . '.c');
 		unset($content);
 
 		/**
@@ -825,7 +830,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$this->_checkAndWriteIfNeeded($content, 'ext/' . $project . '.h');
+		Utils::checkAndWriteIfNeeded($content, 'ext/' . $project . '.h');
 		unset($content);
 
 		/**
@@ -841,7 +846,6 @@ class Compiler
 		 */
 		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
-
 			$globalStruct = "";
 
 			$structures = array();
@@ -874,16 +878,11 @@ class Compiler
 			$globalStruct = null;
 		}
 
-		$version = $this->_config->get('version');
-		if (!$version) {
-			$version = '0.0.1';
-		}
-
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
 			'%PROJECT_EXTNAME%' 	     => strtolower($project),
-			'%PROJECT_VERSION%' 	     => $version,
+			'%PROJECT_VERSION%' 	     => $this->_config->get('version'),
 			'%EXTENSION_GLOBALS%'        => $globalCode,
 			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
 		);
@@ -892,7 +891,7 @@ class Compiler
 			$content = str_replace($mark, $replace, $content);
 		}
 
-		$this->_checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
+		Utils::checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
 		unset($content);
 
 		return $needConfigure;
@@ -917,5 +916,4 @@ class Compiler
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}
-
 }

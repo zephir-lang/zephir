@@ -23,19 +23,11 @@
  * This creates variables in the current symbol table
  */
 class DeclareStatement
+	extends StatementAbstract
 {
-
-	protected $_statement;
-
-	public function __construct($statement)
-	{
-		$this->_statement = $statement;
-	}
-
 	/**
-	 * Compiles the statement
-	 *
-	 * @param \CompilationContext $compilationContext
+	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{

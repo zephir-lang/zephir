@@ -48,8 +48,10 @@ abstract class CommandAbstract implements CommandInterface
 	/**
 	 * Returns parameter named $name if specified
 	 * on the commmand line else null
+	 *
 	 * @param string $name
-	 * @return string
+	 * @param string $value
+	 * @return void
 	 */
 	protected function setParameter($name, $value)
 	{

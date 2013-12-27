@@ -27,6 +27,9 @@ require ZEPHIRPATH . 'Library/Commands/Abstract.php';
  */
 class Bootstrap
 {
+	/**
+	 * @var array|CommandAbstract[]
+	 */
 	protected static $_commands = array();
 
 	/**
@@ -132,14 +135,25 @@ class Bootstrap
 
 			/**
 			 * Register built-in commands
+			 * @var $item DirectoryIterator
 			 */
 			foreach (new DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
 				if (!$item->isDir()) {
 					require_once $item->getRealPath();
+
 					$className = 'Command' . str_replace('.php', '', $item->getBaseName());
 					$class = new ReflectionClass($className);
+
 					if (!$class->isAbstract() && !$class->isInterface()) {
+						/**
+						 * @var $command CommandAbstract
+						 */
 						$command = new $className();
+
+						if (!$command instanceof CommandAbstract) {
+							throw new Exception('Class '.$class->name.' must be instance of CommandAbstract');
+						}
+
 						self::$_commands[$command->getCommand()] = $command;
 					}
 				}
