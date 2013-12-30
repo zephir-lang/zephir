@@ -261,8 +261,7 @@ class StaticCall extends Call
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
 
-		$compiler = $compilationContext->compiler;
-
+		$compiler = &$compilationContext->compiler;
 		$className = $expression['class'];
 
 		if ($className != 'self' && $className != 'parent') {

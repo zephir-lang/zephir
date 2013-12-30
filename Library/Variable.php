@@ -369,7 +369,7 @@ class Variable
 	/**
 	 * Returns the PHP classes associated to the variable
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function getClassTypes()
 	{

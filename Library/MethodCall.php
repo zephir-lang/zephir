@@ -167,24 +167,19 @@ class MethodCall extends Call
 				if ($callNumberParameters < $expectedNumberParameters) {
 					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 				}
-
 			} else {
-
 				/**
 				 * Variables whose dynamic type is 'object' can be used
 				 * to determine method existance in compile time
 				 */
 				if ($variableVariable->hasAnyDynamicType('object')) {
-
 					$classTypes = $variableVariable->getClassTypes();
+
 					if (count($classTypes)) {
-
-						//var_dump($classTypes);
-						//var_dump($variableVariable->getOriginal());
-
 						$numberImplemented = 0;
-						$compiler = $compilationContext->compiler;
-						foreach ($classTypes as $classType) {
+						$compiler = &$compilationContext->compiler;
+
+						foreach($classTypes as $classType) {
 
 							if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
 								$compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {

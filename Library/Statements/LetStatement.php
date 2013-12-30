@@ -1916,7 +1916,7 @@ class LetStatement
 	public function assignStaticProperty($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
-		$compiler = $compilationContext->compiler;
+		$compiler = &$compilationContext->compiler;
 		if ($className != 'self' && $className != 'parent') {
 			if ($compiler->isClass($className)) {
 				$classDefinition = $compiler->getClassDefinition($className);

@@ -63,8 +63,7 @@ class StaticConstantAccess
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-		$compiler = $compilationContext->compiler;
-
+		$compiler = &$compilationContext->compiler;
 		$className = $expression['left']['value'];
 
 		/**
