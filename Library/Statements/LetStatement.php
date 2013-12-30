@@ -1405,7 +1405,7 @@ class LetStatement
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type: " . $symbolVariable->geType() . " as an object", $statement);
+			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
 		}
 
 		if ($symbolVariable->hasAnyDynamicType('unknown')) {
@@ -1558,7 +1558,7 @@ class LetStatement
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type: " . $symbolVariable->geType() . " as an object", $statement);
+			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
 		}
 
 		if ($symbolVariable->hasAnyDynamicType('unknown')) {
