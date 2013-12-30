@@ -80,7 +80,7 @@ class MethodCall extends Call
 			$methodName = strtolower($expression['name']);
 		} else {
 			$variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
-			if ($variableMethod->getType() != 'variable' && $variableMethod->getType() != 'string') {
+			if (!$variableMethod->isVariableOrString()) {
 				throw new CompilerException("Cannot use variable type: " . $variableMethod->getType() . " as dynamic method name", $expression);
 			}
 		}

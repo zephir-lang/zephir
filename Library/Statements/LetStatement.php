@@ -1549,7 +1549,7 @@ class LetStatement
 		$propertyName = $statement['property'];
 
 		$propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
-		if ($propertyVariable->getType() != 'variable' && $propertyVariable->getType() != 'string') {
+		if (!$propertyVariable->isVariableOrString()) {
 			throw new CompilerException("Cannot use variable type '" . $propertyVariable->getType() . "' to update object property", $statement);
 		}
 
