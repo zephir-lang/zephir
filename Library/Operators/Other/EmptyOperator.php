@@ -33,7 +33,6 @@ class EmptyOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-
 		$compilationContext->headersManager->add('kernel/operators');
 
 		if (!isset($expression['left'])) {
