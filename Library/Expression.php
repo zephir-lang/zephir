@@ -168,7 +168,7 @@ class Expression
 		 */
 		if ($this->_expecting) {
 			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable = &$this->_expectingVariable;
 				$symbolVariable->initVariant($compilationContext);
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -203,17 +203,14 @@ class Expression
 	 */
 	public function newInstance($expression, CompilationContext $compilationContext)
 	{
-
-		$codePrinter = $compilationContext->codePrinter;
-
-		$newExpr = $expression;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		/**
 		 * Resolves the symbol that expects the value
 		 */
 		if ($this->_expecting) {
 			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
+				$symbolVariable = &$this->_expectingVariable;
 				$symbolVariable->initVariant($compilationContext);
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -232,14 +229,14 @@ class Expression
 		$symbolVariable->setDynamicTypes('object');
 
 		$dynamic = false;
-		if ($newExpr['class'] == 'self') {
+		if ($expression['class'] == 'self') {
 			$className = $compilationContext->classDefinition->getCompleteName();
 		} else {
-			if (substr($newExpr['class'], 0, 1) == '\\') {
-				$className = substr($newExpr['class'], 1);
+			if (substr($expression['class'], 0, 1) == '\\') {
+				$className = substr($expression['class'], 1);
 			} else {
-				$className = $newExpr['class'];
-				$dynamic = $newExpr['dynamic'];
+				$className = $expression['class'];
+				$dynamic = $expression['dynamic'];
 			}
 		}
 
@@ -251,6 +248,10 @@ class Expression
 		 * stdclass don't have constructors
 		 */
 		if (strtolower($className) == 'stdclass') {
+			if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
+				throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
+			}
+
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
 			$symbolVariable->setClassTypes('stdclass');
 		} else {
@@ -269,7 +270,17 @@ class Expression
 				 * Classes inside the same extension
 				 */
 				if (!class_exists($className, false)) {
-					$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $newExpr);
+					if ($compilationContext->symbolTable->hasVariable($className)) {
+						$classNameVariable = $compilationContext->symbolTable->getVariableForRead($className);
+
+						if (!$classNameVariable->isVariableOrString()) {
+							throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
+						}
+
+						unset($classNameVariable);
+					} else {
+						$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
+					}
 				}
 
 				/**
@@ -280,20 +291,9 @@ class Expression
 				$classNameToFetch = $dynamic ? 'Z_STRVAL_P('.$className.'), Z_STRLEN_P('.$className.')' : 'SL("' . Utils::addSlashes($className, true) . '")';
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class('.$classNameToFetch.', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
-				$symbolVariable->setClassTypes($newExpr['class']);
+				$symbolVariable->setClassTypes($expression['class']);
 			}
 		}
-
-		if (strtolower($className) == 'stdclass') {
-			if (isset($newExpr['parameters'])) {
-				if (count($newExpr['parameters'])) {
-					throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
-				}
-			}
-			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		}
-
-		$symbolVariable->setDynamicTypes('object');
 
 		/**
 		 * Mark variable initialized
@@ -309,9 +309,11 @@ class Expression
 		$callConstructor = false;
 		if ($compilationContext->compiler->isClass($className)) {
 			$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+
 			if ($classDefinition->getType() != 'class') {
 				throw new CompilerException("Only classes can be instantiated", $expression);
 			}
+
 			if ($classDefinition->hasMethod("__construct")) {
 				$callConstructor = true;
 			}
@@ -326,24 +328,24 @@ class Expression
 
 		if ($callConstructor) {
 
-			if (isset($newExpr['parameters'])) {
+			if (isset($expression['parameters'])) {
 				$callExpr = new Expression(array(
 					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
 					'name' => '__construct',
-					'parameters' => $newExpr['parameters'],
+					'parameters' => $expression['parameters'],
 					'call-type' => MethodCall::CALL_NORMAL,
-					'file' => $newExpr['file'],
-					'line' => $newExpr['line'],
-					'char' => $newExpr['char'],
+					'file' => $expression['file'],
+					'line' => $expression['line'],
+					'char' => $expression['char'],
 				));
 			} else {
 				$callExpr = new Expression(array(
 					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
 					'name' => '__construct',
 					'call-type' => MethodCall::CALL_NORMAL,
-					'file' => $newExpr['file'],
-					'line' => $newExpr['line'],
-					'char' => $newExpr['char'],
+					'file' => $expression['file'],
+					'line' => $expression['line'],
+					'char' => $expression['char'],
 				));
 			}
 
@@ -364,7 +366,7 @@ class Expression
 	 */
 	public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
 	{
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		switch ($exprCompiled->getType()) {
 			case 'int':
@@ -412,11 +414,11 @@ class Expression
 					case 'variable':
 						return $itemVariable;
 					default:
-						throw new CompilerException("Unknown " . $itemVariable->getType(), $item);
+						throw new CompilerException("Unknown " . $itemVariable->getType(), $itemVariable);
 				}
 				break;
 			default:
-				throw new CompilerException("Unknown", $item);
+				throw new CompilerException("Unknown", $exprCompiled);
 		}
 	}
 
@@ -456,7 +458,7 @@ class Expression
 		 */
 		$symbolVariable->setDynamicTypes('array');
 
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		$codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
 		foreach ($expression['left'] as $item) {
@@ -706,9 +708,14 @@ class Expression
 		return $resolved;
 	}
 
+	/**
+	 * @param $expression
+	 * @param CompilationContext $compilationContext
+	 * @return CompiledExpression
+	 * @throws CompilerException
+	 */
 	public function compileInstanceOf($expression, CompilationContext $compilationContext)
 	{
-
 		$left = new Expression($expression['left']);
 		$resolved = $left->compile($compilationContext);
 
@@ -724,6 +731,7 @@ class Expression
 		$right = new Expression($expression['right']);
 		$resolved = $right->compile($compilationContext);
 		$resolvedVariable = $resolved->getCode();
+
 		switch ($resolved->getType()) {
 			case 'string':
 				$code = 'SL("' . trim($resolvedVariable, "\\") . '")';

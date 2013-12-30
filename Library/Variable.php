@@ -714,4 +714,30 @@ class Variable
 		}
 	}
 
+	/**
+	 * Shortcut is type variable?
+	 * @return bool
+	 */
+	public function isVariable()
+	{
+		return $this->_type == 'variable';
+	}
+
+	/**
+	 * Shortcut is type string?
+	 * @return bool
+	 */
+	public function isString()
+	{
+		return $this->_type == 'string';
+	}
+
+	/**
+	 * Shortcut is type variable or string?
+	 * @return bool
+	 */
+	public function isVariableOrString()
+	{
+		return $this->isVariable() && $this->isString();
+	}
 }
