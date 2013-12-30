@@ -168,7 +168,6 @@ class ConcatOperator extends BaseOperator
 		}
 
 		$expected->setDynamicTypes('string');
-
 		return new CompiledExpression('variable', $expected->getName(), $expression);
 	}
 

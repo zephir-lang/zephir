@@ -51,8 +51,7 @@ class FwriteOptimizer
 
 		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable) {
-
-			if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'string') {
+			if ($symbolVariable->isNotVariableAndString()) {
 				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 			}
 

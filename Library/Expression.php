@@ -273,7 +273,7 @@ class Expression
 					if ($compilationContext->symbolTable->hasVariable($className)) {
 						$classNameVariable = $compilationContext->symbolTable->getVariableForRead($className);
 
-						if ($classNameVariable->getType() != 'variable' && $classNameVariable->getType() != 'string') {
+						if ($classNameVariable->isNotVariableAndString()) {
 							throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
 						}
 

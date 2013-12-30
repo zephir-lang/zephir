@@ -731,4 +731,13 @@ class Variable
 	{
 		return $this->_type == 'string';
 	}
+
+	/**
+	 * Shortcut is type variable or string?
+	 * @return bool
+	 */
+	public function isNotVariableAndString()
+	{
+		return !$this->isVariable() && !$this->isString();
+	}
 }
