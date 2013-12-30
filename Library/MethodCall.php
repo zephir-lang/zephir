@@ -66,7 +66,7 @@ class MethodCall extends Call
 				}
 				break;
 			default:
-				throw new CompiledException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
+				throw new CompilerException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;

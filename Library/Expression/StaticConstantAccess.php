@@ -130,7 +130,7 @@ class StaticConstantAccess
 			 * Variable that receives property accesses must be polimorphic
 			 */
 			if ($symbolVariable->getType() != 'variable') {
-				throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+				throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
 			}
 
 			$symbolVariable->setDynamicTypes('undefined');

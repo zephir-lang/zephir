@@ -287,7 +287,6 @@ class Expression
 				 * @TODO, check if the variable is really internal
 				 */
 				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-
 				$classNameToFetch = $dynamic ? 'Z_STRVAL_P('.$className.'), Z_STRLEN_P('.$className.')' : 'SL("' . Utils::addSlashes($className, true) . '")';
 				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class('.$classNameToFetch.', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');

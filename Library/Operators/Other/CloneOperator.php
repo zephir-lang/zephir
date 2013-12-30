@@ -39,14 +39,15 @@ class CloneOperator extends BaseOperator
 		$exprVariable = new Expression($expression['left']);
 		$exprVariable->setReadOnly(true);
 		$exprVariable->setExpectReturn(true);
+
 		$exprCompiledVariable = $exprVariable->compile($compilationContext);
 		if ($exprCompiledVariable->getType() != 'variable') {
-			throw new CompiledException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression);
+			throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression);
 		}
 
 		$clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
 		if ($clonedVariable->getType() != 'variable') {
-			throw new CompiledException("Variable type: " . $exprVariable->getType() . " cannot be cloned");
+			throw new CompilerException("Variable type: " . $exprVariable->getType() . " cannot be cloned");
 		}
 
 		if ($clonedVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {

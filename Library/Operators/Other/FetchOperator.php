@@ -79,17 +79,17 @@ class FetchOperator extends BaseOperator
 
 		switch ($expression['right']['type']) {
 			case 'array-access':
-
 				$exprVariable = new Expression($expression['right']['left']);
 				$exprVariable->setReadOnly(true);
+
 				$exprCompiledVariable = $exprVariable->compile($compilationContext);
 				if ($exprCompiledVariable->getType() != 'variable') {
-					throw new CompiledException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['right']['left']);
+					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['right']['left']);
 				}
 
 				$evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
 				if ($evalVariable->getType() != 'variable') {
-					throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['right']['left']);
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['right']['left']);
 				}
 
 				if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
