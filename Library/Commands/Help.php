@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013 Zephir Team and contributors                          |
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -70,7 +70,7 @@ class CommandHelp extends CommandAbstract
 	public function execute(Config $config, Logger $logger)
 	{
 		echo self::LOGO, PHP_EOL;
-		echo "zephir version " , CommandVersion::VERSION,  PHP_EOL, PHP_EOL;
+		echo "Zephir version " , CommandVersion::VERSION,  PHP_EOL, PHP_EOL;
 		echo "Usage: ", PHP_EOL;
 		echo "\tcommand [options]", PHP_EOL;
 		echo PHP_EOL;
