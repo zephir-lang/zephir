@@ -63,8 +63,7 @@ class StaticConstantAccess
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-		$compiler = $compilationContext->compiler;
-
+		$compiler = &$compilationContext->compiler;
 		$className = $expression['left']['value'];
 
 		/**
@@ -130,7 +129,7 @@ class StaticConstantAccess
 			 * Variable that receives property accesses must be polimorphic
 			 */
 			if ($symbolVariable->getType() != 'variable') {
-				throw new CompiledException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
+				throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign class constants", $expression);
 			}
 
 			$symbolVariable->setDynamicTypes('undefined');

@@ -42,14 +42,15 @@ class IssetOperator extends BaseOperator
 
 				$exprVariable = new Expression($expression['left']['left']);
 				$exprVariable->setReadOnly(true);
+
 				$exprCompiledVariable = $exprVariable->compile($compilationContext);
 				if ($exprCompiledVariable->getType() != 'variable') {
-					throw new CompiledException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['left']['left']);
+					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['left']['left']);
 				}
 
 				$variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['left']['left']);
 				if ($variable->getType() != 'variable') {
-					throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['left']['left']);
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['left']['left']);
 				}
 
 				if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {

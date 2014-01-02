@@ -605,7 +605,7 @@ class ClassDefinition
 		 * Implemented interfaces
 		 */
 		$interfaces = $this->_interfaces;
-		$compiler = $compilationContext->compiler;
+		$compiler = &$compilationContext->compiler;
 
 		if (is_array($interfaces)) {
 

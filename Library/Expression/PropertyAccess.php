@@ -77,11 +77,11 @@ class PropertyAccess
 					case 'variable':
 						break;
 					default:
-						throw new CompiledException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
 				}
 				break;
 			default:
-				throw new CompiledException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
+				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
 		}
 
 		$property = $propertyAccess['right']['value'];
@@ -108,11 +108,10 @@ class PropertyAccess
 			 * is defined on that class
 			 */
 			if ($variableVariable->hasAnyDynamicType('object')) {
+				$classType = $variableVariable->getClassTypes()[0];
+				$compiler = &$compilationContext->compiler;
 
-				$classType = $variableVariable->getClassType();
-				$compiler = $compilationContext->compiler;
 				if ($compiler->isClass($classType)) {
-
 					$classDefinition = $compiler->getClassDefinition($classType);
 					if (!$classDefinition) {
 						throw new CompilerException("Cannot locate class definition for class: " . $classType, $expression);

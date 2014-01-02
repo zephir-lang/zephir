@@ -33,7 +33,6 @@ class EmptyOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-
 		$compilationContext->headersManager->add('kernel/operators');
 
 		if (!isset($expression['left'])) {
@@ -49,7 +48,7 @@ class EmptyOperator extends BaseOperator
 		}
 
 		$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-		if ($variableLeft->getType() != 'variable' && $variableLeft->getType() != 'string') {
+		if ($variableLeft->isNotVariableAndString()) {
 			throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
 		}
 

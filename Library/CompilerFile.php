@@ -502,7 +502,6 @@ class CompilerFile
 	 */
 	public function compile(Compiler $compiler, StringsManager $stringsManager)
 	{
-
 		/**
 		 * Compilation context stores common objects required by compilation entities
 		 */
@@ -511,7 +510,7 @@ class CompilerFile
 		/**
 		 * Set global compiler in the compilation context
 		 */
-		$compilationContext->compiler = $compiler;
+		$compilationContext->compiler = &$compiler;
 
 		/**
 		 * Set global config in the compilation context

@@ -1405,7 +1405,7 @@ class LetStatement
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type: " . $symbolVariable->geType() . " as an object", $statement);
+			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
 		}
 
 		if ($symbolVariable->hasAnyDynamicType('unknown')) {
@@ -1549,7 +1549,7 @@ class LetStatement
 		$propertyName = $statement['property'];
 
 		$propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
-		if ($propertyVariable->getType() != 'variable' && $propertyVariable->getType() != 'string') {
+		if ($propertyVariable->isNotVariableAndString()) {
 			throw new CompilerException("Cannot use variable type '" . $propertyVariable->getType() . "' to update object property", $statement);
 		}
 
@@ -1558,7 +1558,7 @@ class LetStatement
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type: " . $symbolVariable->geType() . " as an object", $statement);
+			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
 		}
 
 		if ($symbolVariable->hasAnyDynamicType('unknown')) {
@@ -1916,7 +1916,7 @@ class LetStatement
 	public function assignStaticProperty($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
 	{
-		$compiler = $compilationContext->compiler;
+		$compiler = &$compilationContext->compiler;
 		if ($className != 'self' && $className != 'parent') {
 			if ($compiler->isClass($className)) {
 				$classDefinition = $compiler->getClassDefinition($className);

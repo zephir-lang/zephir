@@ -405,7 +405,7 @@ class FunctionCall extends Call
 			case 'variable':
 				break;
 			default:
-				throw new CompiledException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $propertyAccess['left']);
+				throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $propertyAccess['left']);
 		}
 
 		/**
