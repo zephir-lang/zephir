@@ -430,20 +430,6 @@ class LetStatement
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
-							case 'string':
-								switch ($statement['operator']) {
-									case 'assign':
-										$symbolVariable->setMustInitNull(true);
-										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
-										break;
-									case 'concat-assign':
-										$compilationContext->headersManager->add('kernel/operators');
-										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
-										break;
-									default:
-										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
-								}
-								break;
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -479,16 +465,29 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}
 								break;
+							case 'string':
+								switch ($statement['operator']) {
+									case 'assign':
+										$symbolVariable->setMustInitNull(true);
+										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+										break;
+									case 'concat-assign':
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+										break;
+									default:
+										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+								}
+								break;
 							case 'variable':
 								switch ($statement['operator']) {
 									case 'assign':
-										$symbolVariable->initVariant($compilationContext);
-										//$compilationContext->headersManager->add('kernel/string_type');
-										//$codePrinter->output('zephir_str_assign_long(' . $variable . ', zephir_get_intval(' . $itemVariable->getName() . '));');
+										$symbolVariable->setMustInitNull(true);
+										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'concat-assign':
-										//$compilationContext->headersManager->add('kernel/string_type');
-										//$codePrinter->output('zephir_str_append_long(' . $variable . ', ' . $itemVariable->getName() . ');');
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
