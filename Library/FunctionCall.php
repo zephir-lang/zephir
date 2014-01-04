@@ -453,8 +453,9 @@ class FunctionCall extends Call
 
         /**
          * Find last value of variable
+         * @todo rewrite this
          */
-        $methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
+        /*$methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
         $varName          = $expression['name'];
         $lastValue        = null;
         foreach ($methodStatements as $statement) {
@@ -506,7 +507,7 @@ class FunctionCall extends Call
                     $codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
                 }
             }
-        }
+        }*/
 
 		/**
 		 * We can mark temporary variables generated as idle

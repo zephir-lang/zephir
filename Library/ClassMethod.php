@@ -1031,7 +1031,7 @@ class ClassMethod
 						$dataType = 'variable';
 					}
 
-					if ($dataType == 'variable') {
+					if ($dataType == 'variable' || $dataType == 'string') {
 						$name = $parameter['name'];
 						if (!$localContext) {
 							if ($writeDetector->detect($name, $this->_statements->getStatements())) {
@@ -1075,7 +1075,7 @@ class ClassMethod
 					}
 				}
 
-				if ($dataType == 'variable') {
+				if ($dataType == 'variable' || $dataType == 'string') {
 					if (isset($parametersToSeparate[$parameter['name']])) {
 						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
 					}
@@ -1113,7 +1113,7 @@ class ClassMethod
 					$initCode .= "\t" . '}' . PHP_EOL;
 				}
 
-				if ($dataType == 'variable') {
+				if ($dataType == 'variable' || $dataType == 'string') {
 					if (isset($parametersToSeparate[$name])) {
 						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
 					}
