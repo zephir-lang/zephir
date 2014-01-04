@@ -24,8 +24,8 @@
 /** Class Retrieving/Checking */
 extern int zephir_class_exists(const zval *class_name, int autoload TSRMLS_DC);
 extern void zephir_get_class(zval *result, zval *object, int lower TSRMLS_DC);
-extern void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
-extern void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
+extern int zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
+extern int zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
 extern void zephir_get_called_class(zval *return_value TSRMLS_DC);
 extern zend_class_entry *zephir_fetch_class(const zval *class_name TSRMLS_DC);
 zend_class_entry* zephir_fetch_self_class(TSRMLS_D);

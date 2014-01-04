@@ -116,7 +116,7 @@ void zephir_get_class(zval *result, zval *object, int lower TSRMLS_DC) {
 /**
  * Returns a class name into a zval result
  */
-void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC) {
+int zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC) {
 
 	int found = 0;
 	zend_class_entry *ce;
@@ -142,7 +142,7 @@ void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC) {
 
 	if (!class_length) {
 		ZVAL_NULL(result);
-		return;
+		return 0;
 	}
 
 	i = class_length;
@@ -171,12 +171,13 @@ void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC) {
 		zend_str_tolower(Z_STRVAL_P(result), Z_STRLEN_P(result));
 	}
 
+    return 0;
 }
 
 /**
  * Returns a namespace from a class name
  */
-void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC) {
+int zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC) {
 
 	zend_class_entry *ce;
 	int found = 0;
@@ -202,7 +203,7 @@ void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC) {
 
 	if (!class_length) {
 		ZVAL_NULL(result);
-		return;
+		return 0;
 	}
 
 	j = 0;
@@ -238,6 +239,7 @@ void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC) {
 		ZVAL_NULL(result);
 	}
 
+    return 0;
 }
 
 /**
