@@ -64,7 +64,7 @@ class GetClassNsOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 		if (!isset($resolvedParams[1])) {
-			$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0);');
+			$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0 TSRMLS_DC);');
 		} else {
 			$context->codePrinter->output('zephir_get_class_ns(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
 		}
