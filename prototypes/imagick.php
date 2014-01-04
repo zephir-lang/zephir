@@ -76,7 +76,6 @@ class Imagick
 	{
 
 	}
-
 }
 
 class ImagickPixel
