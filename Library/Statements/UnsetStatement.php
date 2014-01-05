@@ -31,16 +31,31 @@ class UnsetStatement
 	public function compile(CompilationContext $compilationContext)
 	{
 
-		//var_dump($this->_statement);
+		$compilationContext->headersManager->add('kernel/array');
 
-		/*$compilationContext->headersManager->add('kernel/array');
+		$expression = $this->_statement['expr'];
 
-		$variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['domain']['value'], $compilationContext, $this->_statement);
-		if ($variable->getType() != 'variable') {
-			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $this->_statement['domain']);
+		switch ($expression['type']) {
+			case 'array-access':
+				break;
+			default:
+				throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
 		}
 
-		$expr = new Expression($this->_statement['index']);
+		$expr = new Expression($expression['left']);
+		$expr->setReadOnly(true);
+		$exprVar = $expr->compile($compilationContext);
+
+		$variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+		if ($variable->getType() != 'variable') {
+			throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression['left']);
+		}
+
+		if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
+			$compilationContext->logger->warning('Possible attempt to use non array/object in unset operator', 'non-valid-unset', $expression['left']);
+		}
+
+		$expr = new Expression($expression['right']);
 		$expr->setReadOnly(true);
 		$exprIndex = $expr->compile($compilationContext);
 
@@ -59,7 +74,7 @@ class UnsetStatement
 			case 'long':
 				break;
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $this->_statement['index']);
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression['right']);
 				switch ($variableIndex->getType()) {
 					case 'int':
 					case 'uint':
@@ -73,12 +88,12 @@ class UnsetStatement
 						$compilationContext->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
 					default:
-						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $this->_statement['index']);
+						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
 				}
 				break;
 			default:
-				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $this->_statement['index']);
-		}*/
+				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $expression['right']);
+		}
 	}
 
 }
