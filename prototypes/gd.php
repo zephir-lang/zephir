@@ -256,6 +256,23 @@ function imagecolorresolvealpha($image, $red, $green, $blue, $alpha) {}
 function imagecolorset($image, $index, $red, $green, $blue, $alpha = 0) {}
 
 /**
+ * @link http://www.php.net/manual/ru/function.imagecolorsforindex.php
+ * @param resource $image
+ * @param int $index
+ * @return array
+ */
+function imagecolorsforindex($image, $index) {}
+
+/**
+ * @link http://www.php.net/manual/ru/function.imagecreate.php
+ * @param $width
+ * @param $height
+ * @return resource
+ */
+function imagecreate($width, $height) {}
+
+
+/**
  * @link http://php.net/manual/en/image.constants.php
  */
 define('IMG_GIF', 1);
