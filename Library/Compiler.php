@@ -418,7 +418,7 @@ class Compiler
 		}
 
 		/**
-		 * Set optimizers
+		 * Load function optimizers
 		 */
 		FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
 		$optimizerDirs = $this->_config->get('optimizer-dirs');
@@ -429,6 +429,7 @@ class Compiler
 		}
 
 		if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
+
 			/**
 			 * Load additional extension prototypes
 			 */
@@ -453,6 +454,14 @@ class Compiler
 		}
 
 		$this->_compiledFiles = $files;
+
+		/* Load extra C-sources */
+		$extraSources = $this->_config->get('extra-sources');
+		if (is_array($extraSources)) {
+			$this->_extraFiles = $extraSources;
+		} else {
+			$this->_extraFiles = array();
+		}
 
 		/**
 		 * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
@@ -581,17 +590,17 @@ class Compiler
 	public function createConfigFiles($project)
 	{
 
-		$need_configure = false;
 		$content = file_get_contents(__DIR__ . '/../templates/config.m4');
 		if (empty($content)) {
-			throw new Exception("Template config.m4 doesn't exists");
+			throw new Exception("Template config.m4 doesn't exist");
 		}
 
 		$toReplace = array(
-			'%PROJECT_LOWER%' 		=> strtolower($project),
-			'%PROJECT_UPPER%' 		=> strtoupper($project),
-			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
-			'%FILES_COMPILED%' 		=> implode(' ', $this->_compiledFiles),
+			'%PROJECT_LOWER%' 	 	      => strtolower($project),
+			'%PROJECT_UPPER%' 		      => strtoupper($project),
+			'%PROJECT_CAMELIZE%' 	      => ucfirst($project),
+			'%FILES_COMPILED%' 		      => implode(' ', $this->_compiledFiles),
+			'%EXTRA_FILES_COMPILED%'      => implode(' ', $this->_extraFiles),
 		);
 
 		foreach ($toReplace as $mark => $replace) {
@@ -605,7 +614,7 @@ class Compiler
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
 		if (empty($content)) {
-			throw new Exception("Template php_ext.h doesn't exists");
+			throw new Exception("Template php_ext.h doesn't exist");
 		}
 
 		$toReplace = array(
@@ -623,7 +632,7 @@ class Compiler
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/ext.h');
 		if (empty($content)) {
-			throw new Exception("Template ext.h doesn't exists");
+			throw new Exception("Template ext.h doesn't exist");
 		}
 
 		$toReplace = array(
@@ -641,7 +650,7 @@ class Compiler
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/ext_config.h');
 		if (empty($content)) {
-			throw new Exception("Template ext_config.h doesn't exists");
+			throw new Exception("Template ext_config.h doesn't exist");
 		}
 
 		$toReplace = array(
@@ -659,7 +668,7 @@ class Compiler
 		 */
 		$content = file_get_contents(__DIR__ . '/../ext/clean');
 		if (empty($content)) {
-			throw new Exception("clean file doesn't exists");
+			throw new Exception("Clean file doesn't exist");
 		}
 
 		if (Utils::checkAndWriteIfNeeded($content, 'ext/clean')) {
@@ -669,9 +678,9 @@ class Compiler
 		/**
 		 * ext_install
 		 */
-		$content = file_get_contents(__DIR__ . '/../ext/install');
+		$content = file_get_contents(__DIR__ . '/../templates/install');
 		if (empty($content)) {
-			throw new Exception("install file doesn't exists");
+			throw new Exception("Install file doesn't exist");
 		}
 
 		$toReplace = array(

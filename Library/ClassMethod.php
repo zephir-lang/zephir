@@ -1103,20 +1103,20 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				$initCode .= "\t" . 'if (!' . $name . ' || Z_TYPE_P('. $name .') == IS_NULL) {' . PHP_EOL;
+				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
 				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
-				if ($dataType == 'variable') {
-					$initCode .= "\t" . '}' . PHP_EOL;
+				if ($dataType == 'variable'  || $dataType == 'string') {
+					if (isset($parametersToSeparate[$name])) {
+						$initCode .= "\t" . '} else {' . PHP_EOL;
+						$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+						$initCode .= "\t" . '}' . PHP_EOL;
+					} else {
+						$initCode .= "\t" . '}' . PHP_EOL;
+					}
 				} else {
 					$initCode .= "\t" . '} else {' . PHP_EOL;
 					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
 					$initCode .= "\t" . '}' . PHP_EOL;
-				}
-
-				if ($dataType == 'variable' || $dataType == 'string') {
-					if (isset($parametersToSeparate[$name])) {
-						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
-					}
 				}
 			}
 

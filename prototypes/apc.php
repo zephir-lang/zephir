@@ -1,5 +1,9 @@
 <?php
 
+if (function_exists('apc_cache_info')) {
+	return false;
+}
+
 /**
  * @link http://www.php.net/manual/en/function.apc-cache-info.php
  * @param string $type

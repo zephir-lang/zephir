@@ -24,6 +24,10 @@
  */
 class HeadersManager
 {
+
+	const POSITION_FIRST = 1;
+	const POSITION_LAST = 2;
+
 	/**
 	 * List of headers
 	 * @var array
@@ -31,14 +35,39 @@ class HeadersManager
 	protected $_headers = array();
 
 	/**
+	 * List of headers
+	 * @var array
+	 */
+	protected $_headersFirst = array();
+
+	/**
+	 * List of headers
+	 * @var array
+	 */
+	protected $_headersLast = array();
+
+	/**
 	 * @param string $path
 	 */
-	public function add($path)
+	public function add($path, $position=0)
 	{
 		if (!is_string($path)) {
 			throw new \InvalidArgumentException('$path must be only string type');
 		}
-		$this->_headers[$path] = $path;
+		if (!$position) {
+			$this->_headers[$path] = $path;
+		} else {
+			switch ($position) {
+				case self::POSITION_FIRST:
+					$this->_headersFirst[$path] = $path;
+					break;
+				case self::POSITION_LAST:
+					$this->_headersLast[$path] = $path;
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 	/**
@@ -46,6 +75,6 @@ class HeadersManager
 	 */
 	public function get()
 	{
-		return $this->_headers;
+		return array_merge($this->_headersFirst, $this->_headers, $this->_headersLast);
 	}
 }

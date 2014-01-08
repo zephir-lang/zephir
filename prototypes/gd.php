@@ -1,5 +1,9 @@
 <?php
 
+if (function_exists('gd_info')) {
+	return false;
+}
+
 /**
  * Function was prototyped by docs
  * @link http://www.php.net/manual/ru/ref.image.php
@@ -15,7 +19,7 @@ function gd_info() {}
  * @param string $filename
  * @param array $imageinfo
  */
-function getimagesize($filename, array &$imageinfo) {}
+//function getimagesize($filename, array &$imageinfo) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.getimagesizefromstring.php
@@ -29,14 +33,14 @@ function getimagesizefromstring($imagedata, array &$imageinfo) {}
  * @param $imagetype
  * @param bool $include_dot
  */
-function image_type_to_extension($imagetype, $include_dot = true) {}
+//function image_type_to_extension($imagetype, $include_dot = true) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.image-type-to-mime-type.php
  * @param int $imagetype
  * @return string
  */
-function image_type_to_mime_type($imagetype) {}
+//function image_type_to_mime_type($imagetype) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.image2wbmp.php
