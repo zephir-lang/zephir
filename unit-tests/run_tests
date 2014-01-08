@@ -14,7 +14,7 @@ valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv whic
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/exceptions.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/params.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/emptytest.php
-#php ./unit-tests/regexdna.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/regexdna.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/fannkuch.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/scallexternal.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/cblock.php
