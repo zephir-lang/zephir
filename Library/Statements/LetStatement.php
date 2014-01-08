@@ -1075,7 +1075,7 @@ class LetStatement
 			case 'uint':
 			case 'long':
 			case 'ulong':
-				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE, "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
 				break;
 			case 'string':
 				$codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
@@ -1087,7 +1087,7 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
-						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE, "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
 						break;
 					case 'string':
 						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');

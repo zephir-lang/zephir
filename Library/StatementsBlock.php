@@ -130,6 +130,10 @@ class StatementsBlock
 					$returnStatement->compile($compilationContext);
 					$this->_unrecheable = true;
 					break;
+				case 'require':
+					$requireStatement = new RequireStatement($statement);
+					$requireStatement->compile($compilationContext);
+					break;
 				case 'loop':
 					$loopStatement = new LoopStatement($statement);
 					$loopStatement->compile($compilationContext);

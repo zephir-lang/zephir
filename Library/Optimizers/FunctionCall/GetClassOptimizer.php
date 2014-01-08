@@ -18,11 +18,11 @@
 */
 
 /**
- * GetClassLowerOptimizer
+ * GetClassOptimizer
  *
- * Optimizes calls to 'get_class_lower' using internal function
+ * Optimizes calls to 'get_class' using internal function
  */
-class GetClassLowerOptimizer
+class GetClassOptimizer
 	extends OptimizerAbstract
 {
 
@@ -40,8 +40,8 @@ class GetClassLowerOptimizer
 		}
 
 		$numberParameters = count($expression['parameters']);
-		if ($numberParameters != 1) {
-			throw new CompilerException("'get_class_lower' only accepts one parameters", $expression);
+		if ($numberParameters != 1 && $numberParameters != 2) {
+			throw new CompilerException("'get_class' only accepts one or two parameters", $expression);
 		}
 
 		/**
@@ -63,7 +63,7 @@ class GetClassLowerOptimizer
 		$symbolVariable->setDynamicTypes('string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_get_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 1 TSRMLS_CC);');
+		$context->codePrinter->output('zephir_get_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0 TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }

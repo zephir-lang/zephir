@@ -521,9 +521,9 @@ class Expression
 								$compilationContext->headersManager->add('kernel/array');
 								$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
 								if ($resolvedExpr->getCode() == 'true') {
-									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_true), PH_COPY);');
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_true), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
 								} else {
-									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_false), PH_COPY);');
+									$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_false), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
 								}
 								break;
 							case 'double':
@@ -531,7 +531,7 @@ class Expression
 								break;
 							case 'null':
 								$compilationContext->headersManager->add('kernel/array');
-								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_null), PH_COPY);');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &ZEPHIR_GLOBAL(global_null), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
 								break;
 							case 'string':
 								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
@@ -539,7 +539,7 @@ class Expression
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/array');
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
 								if ($valueVariable->isTemporal()) {
 									$valueVariable->setIdle(true);
 								}
@@ -579,7 +579,7 @@ class Expression
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/array');
 										$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY);');
+										$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($item['file']) . '", ' . $item['line'] . ');');
 										if ($valueVariable->isTemporal()) {
 											$valueVariable->setIdle(true);
 										}

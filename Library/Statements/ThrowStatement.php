@@ -31,9 +31,10 @@ class ThrowStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
+		$compilationContext->headersManager->add('kernel/exception');
+
 		$codePrinter = $compilationContext->codePrinter;
 		$statement = $this->_statement;
-		$compilationContext->headersManager->add('kernel/exception');
 		$expr = $statement['expr'];
 
 		/**

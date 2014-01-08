@@ -11,6 +11,7 @@
 #include "test/constantsparent.h"
 #include "test/declare.h"
 #include "test/echoes.h"
+#include "test/emptytest.h"
 #include "test/exception.h"
 #include "test/exceptions.h"
 #include "test/fannkuch.h"
