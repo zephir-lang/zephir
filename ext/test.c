@@ -44,6 +44,7 @@ zend_class_entry *test_oo_ooconstructparams_ce;
 zend_class_entry *test_oo_oodynamicb_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ooparams_ce;
+zend_class_entry *test_oo_propertyaccess_ce;
 zend_class_entry *test_properties_privateproperties_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
 zend_class_entry *test_properties_publicproperties_ce;
@@ -88,6 +89,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Oo_OoDynamicB);
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoParams);
+	ZEPHIR_INIT(Test_Oo_PropertyAccess);
 	ZEPHIR_INIT(Test_Properties_PrivateProperties);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);

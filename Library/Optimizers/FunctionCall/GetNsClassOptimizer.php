@@ -60,7 +60,7 @@ class GetNsClassOptimizer
 		$symbolVariable->setDynamicTypes('string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_get_ns_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0);');
+		$context->codePrinter->output('zephir_get_ns_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', 0 TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }

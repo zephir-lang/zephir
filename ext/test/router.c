@@ -91,7 +91,7 @@ PHP_METHOD(Test_Router, __construct) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &defaultRoutes_param);
 
-	if (!defaultRoutes_param || Z_TYPE_P(defaultRoutes_param) == IS_NULL) {
+	if (!defaultRoutes_param) {
 		defaultRoutes = 1;
 	} else {
 		defaultRoutes = zephir_get_boolval(defaultRoutes_param);
@@ -398,7 +398,7 @@ PHP_METHOD(Test_Router, handle) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
 
-	if (!uri || Z_TYPE_P(uri) == IS_NULL) {
+	if (!uri) {
 		uri = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -567,6 +567,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (!(zephir_is_numeric(vnamespace))) {
 				zephir_update_property_this(this_ptr, SL("_namespace"), vnamespace TSRMLS_CC);
 			}
+			zephir_array_unset_string(&parts, SS("namespace"), PH_SEPARATE);
 		} else {
 			_6 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultNamespace"), PH_NOISY_CC);
 			zephir_update_property_this(this_ptr, SL("_namespace"), _6 TSRMLS_CC);
@@ -575,6 +576,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (!(zephir_is_numeric(module))) {
 				zephir_update_property_this(this_ptr, SL("_module"), module TSRMLS_CC);
 			}
+			zephir_array_unset_string(&parts, SS("module"), PH_SEPARATE);
 		} else {
 			_6 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultModule"), PH_NOISY_CC);
 			zephir_update_property_this(this_ptr, SL("_module"), _6 TSRMLS_CC);
@@ -583,6 +585,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (!(zephir_is_numeric(controller))) {
 				zephir_update_property_this(this_ptr, SL("_controller"), controller TSRMLS_CC);
 			}
+			zephir_array_unset_string(&parts, SS("controller"), PH_SEPARATE);
 		} else {
 			_6 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultController"), PH_NOISY_CC);
 			zephir_update_property_this(this_ptr, SL("_controller"), _6 TSRMLS_CC);
@@ -591,6 +594,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (!(zephir_is_numeric(action))) {
 				zephir_update_property_this(this_ptr, SL("_action"), action TSRMLS_CC);
 			}
+			zephir_array_unset_string(&parts, SS("action"), PH_SEPARATE);
 		} else {
 			_6 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultAction"), PH_NOISY_CC);
 			zephir_update_property_this(this_ptr, SL("_action"), _6 TSRMLS_CC);
@@ -606,6 +610,7 @@ PHP_METHOD(Test_Router, handle) {
 				ZEPHIR_INIT_BNVAR(params);
 				zephir_call_func_p2(params, "explode", &_20, strParams);
 			}
+			zephir_array_unset_string(&parts, SS("params"), PH_SEPARATE);
 		}
 		if (zephir_fast_count_int(params TSRMLS_CC)) {
 			ZEPHIR_INIT_VAR(paramsMerge);
@@ -649,10 +654,10 @@ PHP_METHOD(Test_Router, add) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
-	if (!httpMethods || Z_TYPE_P(httpMethods) == IS_NULL) {
+	if (!httpMethods) {
 		httpMethods = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -679,7 +684,7 @@ PHP_METHOD(Test_Router, addGet) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -705,7 +710,7 @@ PHP_METHOD(Test_Router, addPost) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -731,7 +736,7 @@ PHP_METHOD(Test_Router, addPut) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -757,7 +762,7 @@ PHP_METHOD(Test_Router, addPatch) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -783,7 +788,7 @@ PHP_METHOD(Test_Router, addDelete) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -809,7 +814,7 @@ PHP_METHOD(Test_Router, addOptions) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -835,7 +840,7 @@ PHP_METHOD(Test_Router, addHead) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 

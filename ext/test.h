@@ -28,6 +28,7 @@
 #include "test/oo/oodynamicb.h"
 #include "test/oo/oonoconstruct.h"
 #include "test/oo/ooparams.h"
+#include "test/oo/propertyaccess.h"
 #include "test/properties/privateproperties.h"
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"

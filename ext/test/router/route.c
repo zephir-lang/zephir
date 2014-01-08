@@ -60,10 +60,10 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
-	if (!httpMethods || Z_TYPE_P(httpMethods) == IS_NULL) {
+	if (!httpMethods) {
 		httpMethods = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -350,7 +350,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 
-	if (!paths || Z_TYPE_P(paths) == IS_NULL) {
+	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
@@ -404,9 +404,9 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			if ((Z_TYPE_P(controllerName) != IS_NULL)) {
 				if (zephir_memnstr_str(controllerName, SL("\\"), "test/router/route.zep", 313)) {
 					ZEPHIR_INIT_VAR(realClassName);
-					zephir_get_class_ns(realClassName, controllerName, 0);
+					zephir_get_class_ns(realClassName, controllerName, 0 TSRMLS_CC);
 					ZEPHIR_INIT_VAR(namespaceName);
-					zephir_get_ns_class(namespaceName, controllerName, 0);
+					zephir_get_ns_class(namespaceName, controllerName, 0 TSRMLS_CC);
 					if (zephir_is_true(namespaceName)) {
 						zephir_array_update_string(&routePaths, SL("namespace"), &namespaceName, PH_COPY | PH_SEPARATE);
 					}
