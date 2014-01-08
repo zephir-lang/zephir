@@ -34,7 +34,7 @@ class SymbolTable
 	protected $_tempVariables = array();
 
 	/**
-	 * @var \LocalContext
+	 * @var \LocalContextPass
 	 */
 	protected $_localContext;
 

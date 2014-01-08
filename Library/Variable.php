@@ -733,6 +733,15 @@ class Variable
 	}
 
 	/**
+	 * Shortcut is type int?
+	 * @return bool
+	 */
+	public function isInt()
+	{
+		return $this->_type == 'int';
+	}
+
+	/**
 	 * Shortcut is type variable or string?
 	 * @return bool
 	 */
