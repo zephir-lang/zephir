@@ -26,7 +26,7 @@ function gd_info() {}
  * @param string $imagedata
  * @param array $imageinfo
  */
-function getimagesizefromstring($imagedata, array &$imageinfo) {}
+//function getimagesizefromstring($imagedata, array &$imageinfo) {}
 
 /**
  * @link http://www.php.net/manual/ru/function.image-type-to-extension.php
