@@ -875,11 +875,14 @@ class Compiler
 						case 'bool':
 							$globalStruct .= "\t" . 'zend_bool ' . $field . ';' . PHP_EOL;
 							break;
+						case 'int':
+							$globalStruct .= "\t" . 'int ' . $field . ';' . PHP_EOL;
+							break;
 						default:
 							throw new Exception('Unknown global type: ' . $global['type']);
 					}
 				}
-				$globalStruct .= '} zephir_struct_' . $structureName . ';' . PHP_EOL;
+				$globalStruct .= '} zephir_struct_' . $structureName . ';' . PHP_EOL . PHP_EOL;
 			}
 
 			$globalCode = PHP_EOL;
