@@ -44,4 +44,9 @@ class Constants extends Test\ConstantsParent
 	{
 	    return __CLASS__;
 	}
+
+	public function testMethodMagicConstant()
+	{
+	    return __METHOD__;
+	}
 }

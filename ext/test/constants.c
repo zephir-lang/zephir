@@ -79,3 +79,13 @@ PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
 }
 
+PHP_METHOD(Test_Constants, testMethodMagicConstant) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	RETURN_STRING("testMethodMagicConstant", 1);
+
+}
+
