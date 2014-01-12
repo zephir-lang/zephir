@@ -142,6 +142,16 @@ class ClassDefinition
 	}
 
 	/**
+	 * Return the class namespace
+	 *
+	 * @return string
+	 */
+	public function getNamespace()
+	{
+		return $this->_namespace;
+	}
+
+	/**
 	 * Sets the extended class
 	 *
 	 * @param string $extendsClass

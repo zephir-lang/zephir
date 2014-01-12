@@ -89,3 +89,13 @@ PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
 }
 
+PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	RETURN_STRING("Test", 1);
+
+}
+

@@ -18,3 +18,4 @@ assert(is_string($phpVersion) && !empty($phpVersion));
 
 assert($t->testClassMagicConstant() == 'Constants');
 assert($t->testMethodMagicConstant() == 'testMethodMagicConstant');
+assert($t->testNamespaceMagicConstant() == 'TEST');

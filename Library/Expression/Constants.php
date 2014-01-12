@@ -147,6 +147,9 @@ class Constants
 				case '__CLASS__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getName(), $expression);
 					break;
+				case '__NAMESPACE__':
+					return new CompiledExpression('string', $compilationContext->classDefinition->getCNamespace(), $expression);
+					break;
 				case '__METHOD__':
 					return new CompiledExpression('string', $compilationContext->currentMethod->getName(), $expression);
 					break;
