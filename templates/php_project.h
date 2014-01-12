@@ -5,6 +5,7 @@
 
 #include "kernel/globals.h"
 
+#define PHP_%PROJECT_UPPER%_NAME    "%PROJECT_NAME%"
 #define PHP_%PROJECT_UPPER%_VERSION "%PROJECT_VERSION%"
 #define PHP_%PROJECT_UPPER%_EXTNAME "%PROJECT_EXTNAME%"
 

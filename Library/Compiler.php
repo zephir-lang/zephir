@@ -889,6 +889,7 @@ class Compiler
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
 			'%PROJECT_EXTNAME%' 	     => strtolower($project),
+			'%PROJECT_NAME%'             => $this->_config->get('name'),
 			'%PROJECT_VERSION%' 	     => $this->_config->get('version'),
 			'%EXTENSION_GLOBALS%'        => $globalCode,
 			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct

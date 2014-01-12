@@ -1,7 +1,4 @@
 #!/bin/bash
-
-
-
 cd parser
 rm -f *.o
 rm -f *.lo
