@@ -10,6 +10,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant3);
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstant);
 PHP_METHOD(Test_Constants, testClassMagicConstant);
 PHP_METHOD(Test_Constants, testMethodMagicConstant);
+PHP_METHOD(Test_Constants, testFunctionMagicConstant);
 PHP_METHOD(Test_Constants, testNamespaceMagicConstant);
 
 ZEPHIR_INIT_FUNCS(test_constants_method_entry) {
@@ -20,6 +21,7 @@ ZEPHIR_INIT_FUNCS(test_constants_method_entry) {
 	PHP_ME(Test_Constants, testPHPVersionEnvConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Constants, testClassMagicConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Constants, testMethodMagicConstant, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Constants, testFunctionMagicConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Constants, testNamespaceMagicConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -50,6 +50,11 @@ class Constants extends Test\ConstantsParent
 	    return __METHOD__;
 	}
 
+	public function testFunctionMagicConstant()
+	{
+	    return __FUNCTION__;
+	}
+
 	public function testNamespaceMagicConstant()
 	{
 	    return __NAMESPACE__;

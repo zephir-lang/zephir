@@ -17,5 +17,6 @@ $phpVersion = $t->testPHPVersionEnvConstant();
 assert(is_string($phpVersion) && !empty($phpVersion));
 
 assert($t->testClassMagicConstant() == 'Constants');
-assert($t->testMethodMagicConstant() == 'testMethodMagicConstant');
-assert($t->testNamespaceMagicConstant() == 'TEST');
+assert($t->testMethodMagicConstant() == 'Constants:testMethodMagicConstant');
+assert($t->testFunctionMagicConstant() == 'testFunctionMagicConstant');
+assert($t->testNamespaceMagicConstant() == 'Test');

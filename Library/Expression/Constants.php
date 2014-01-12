@@ -151,6 +151,9 @@ class Constants
 					return new CompiledExpression('string', $compilationContext->classDefinition->getCNamespace(), $expression);
 					break;
 				case '__METHOD__':
+					return new CompiledExpression('string', $compilationContext->classDefinition->getName().':'.$compilationContext->currentMethod->getName(), $expression);
+					break;
+				case '__FUNCTION__':
 					return new CompiledExpression('string', $compilationContext->currentMethod->getName(), $expression);
 					break;
 			}

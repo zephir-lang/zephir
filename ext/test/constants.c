@@ -85,7 +85,17 @@ PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
 
 	ZEPHIR_SINIT_VAR(_0);
-	RETURN_STRING("testMethodMagicConstant", 1);
+	RETURN_STRING("Constants:testMethodMagicConstant", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	RETURN_STRING("testFunctionMagicConstant", 1);
 
 }
 
