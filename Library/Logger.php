@@ -47,6 +47,7 @@ class Logger
 		'invalid-return-type'                => true,
 		'unrecheable-code'                   => true,
 		'nonexistant-constant'               => true,
+		'notsupported-magic-constant'		 => true,
 		'non-valid-decrement'                => true,
 		'non-valid-increment'                => true,
 		'non-valid-clone'                    => true,

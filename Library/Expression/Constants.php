@@ -54,16 +54,45 @@ class Constants
 	}
 
 	/**
-	 * Dynamic ENV Constants
+	 * Reserved ENV Constants
+	 * @link http://www.php.net/manual/ru/reserved.constants.php
 	 * @var array
 	 */
-	protected $dynamicConstans = array(
+	protected $envConstans = array(
 		'PHP_VERSION',
+		'PHP_MAJOR_VERSION',
+		'PHP_MINOR_VERSION',
+		'PHP_RELEASE_VERSION',
+		'PHP_VERSION_ID',
+		'PHP_EXTRA_VERSION',
+		'PHP_ZTS',
+		'PHP_DEBUG',
+		'PHP_MAXPATHLEN',
 		'PHP_OS',
+		'PHP_SAPI',
+		'PHP_EOL',
+		'PHP_INT_MAX',
+		'PHP_INT_SIZE',
+		'DEFAULT_INCLUDE_PATH',
 		'PHP_BINDIR',
 		'PHP_LIBDIR',
 		'PHP_DATADIR',
-		'__DIR__'
+	);
+
+	/**
+	 * Magick constants
+	 * @link http://php.net/manual/en/language.constants.predefined.php
+	 * @var array
+	 */
+	protected $magickConstants = array(
+		'__LINE__',
+		'__FILE__',
+		'__DIR__',
+		'__FUNCTION__',
+		'__CLASS__',
+		'__TRAIT__',
+		'__METHOD__',
+		'__NAMESPACE__'
 	);
 
 	/**
@@ -78,9 +107,12 @@ class Constants
 		$isPhpConstant = false;
 		$isZephirConstant = false;
 
-		if (!defined($expression['value'])) {
-			if (!$compilationContext->compiler->isConstant($expression['value'])) {
-				$compilationContext->logger->warning("Constant \"" . $expression['value'] . "\" does not exist at compile time", "nonexistant-constant", $expression);
+		$value = &$expression['value'];
+		$mergedConstants = array_merge($this->envConstans, $this->magickConstants);
+
+		if (!defined($expression['value']) && !in_array($value, $mergedConstants)) {
+			if (!$compilationContext->compiler->isConstant($value)) {
+				$compilationContext->logger->warning("Constant \"" . $value . "\" does not exist at compile time", "nonexistant-constant", $expression);
 			} else {
 				$isZephirConstant = true;
 			}
@@ -88,8 +120,8 @@ class Constants
 			$isPhpConstant = true;
 		}
 
-		if ($isPhpConstant && !in_array($expression['value'], $this->dynamicConstans)) {
-			$value = constant($expression['value']);
+		if ($isPhpConstant && !in_array($value, $mergedConstants)) {
+			$value = constant($value);
 			$type = strtolower(gettype($value));
 
 			switch ($type) {
@@ -104,8 +136,12 @@ class Constants
 		}
 
 		if ($isZephirConstant) {
-			$constant = $compilationContext->compiler->getConstant($expression['value']);
+			$constant = $compilationContext->compiler->getConstant($value);
 			return new CompiledExpression($constant[0], $constant[1], $expression);
+		}
+
+		if (in_array($value, $this->magickConstants)) {
+			$compilationContext->logger->warning("Constant \"" . $value . "\" is not supported magic constant", 'notsupported-magic-constant', $expression);
 		}
 
 		$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);

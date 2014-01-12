@@ -14,4 +14,6 @@ assert($t->testReadClassConstant2() === Test\Constants::C4);
 assert($t->testReadClassConstant3() === Test\ConstantsParent::P4);
 
 $phpVersion = $t->taskPHPVersionConstant();
-assert(is_string($phpVersion) && !empty($phpVersion));
+var_dump($phpVersion);
+var_dump(__DIR__);
+//assert(is_string($phpVersion) && !empty($phpVersion));
