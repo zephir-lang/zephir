@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Constants) {
@@ -54,6 +55,17 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 
 	RETURN_LONG(10);
+
+}
+
+PHP_METHOD(Test_Constants, taskPHPVersionConstant) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZEPHIR_GET_CONSTANT(_0, "PHP_VERSION");
+	RETURN_LCTORW(_0);
 
 }
 

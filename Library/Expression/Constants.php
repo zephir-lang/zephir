@@ -54,6 +54,19 @@ class Constants
 	}
 
 	/**
+	 * Dynamic ENV Constants
+	 * @var array
+	 */
+	protected $dynamicConstans = array(
+		'PHP_VERSION',
+		'PHP_OS',
+		'PHP_BINDIR',
+		'PHP_LIBDIR',
+		'PHP_DATADIR',
+		'__DIR__'
+	);
+
+	/**
 	 * Resolves a PHP constant value into C-code
 	 *
 	 * @param array $expression
@@ -75,15 +88,19 @@ class Constants
 			$isPhpConstant = true;
 		}
 
-		if ($isPhpConstant) {
+		if ($isPhpConstant && !in_array($expression['value'], $this->dynamicConstans)) {
 			$value = constant($expression['value']);
-			switch (gettype($value)) {
+			$type = strtolower(gettype($value));
+
+			switch ($type) {
 				case 'integer':
 					return new CompiledExpression('int', $value, $expression);
 				case 'string':
 					return new CompiledExpression('string', Utils::addSlashes($value), $expression);
+				default:
+					return new CompiledExpression($type, $value, $expression);
+					break;
 			}
-			return new CompiledExpression(strtolower(gettype($value)), $value, $expression);
 		}
 
 		if ($isZephirConstant) {
@@ -91,8 +108,9 @@ class Constants
 			return new CompiledExpression($constant[0], $constant[1], $expression);
 		}
 
-		/* @todo read the constant every time */
-		return new CompiledExpression('null', null, $expression);
+		$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+		$compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$symbolVariable->getName().', "'.$expression['value'].'");');
+		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 	}
 
 }

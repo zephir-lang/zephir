@@ -3,7 +3,6 @@ namespace Test;
 
 class Constants extends Test\ConstantsParent
 {
-
 	const C1 = null;
 
 	const C2 = false;
@@ -34,5 +33,10 @@ class Constants extends Test\ConstantsParent
 	public function testReadClassConstant3()
 	{
 		return parent::P4;
+	}
+
+	public function taskPHPVersionConstant()
+	{
+	    return PHP_VERSION;
 	}
 }
