@@ -112,7 +112,7 @@ class Constants
 
 		if (!defined($expression['value']) && !in_array($value, $mergedConstants)) {
 			if (!$compilationContext->compiler->isConstant($value)) {
-				$compilationContext->logger->warning("Constant \"" . $value . "\" does not exist at compile time", "nonexistant-constant", $expression);
+				$compilationContext->logger->warning("Constant '".$value."' does not exist at compile time", 'nonexistant-constant', $expression);
 			} else {
 				$isZephirConstant = true;
 			}
@@ -140,11 +140,17 @@ class Constants
 			return new CompiledExpression($constant[0], $constant[1], $expression);
 		}
 
+		$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+
 		if (in_array($value, $this->magickConstants)) {
-			$compilationContext->logger->warning("Constant \"" . $value . "\" is not supported magic constant", 'notsupported-magic-constant', $expression);
+			switch($value) {
+				case '__CLASS__':
+					return new CompiledExpression('string', $compilationContext->classDefinition->getName(), $expression);
+					break;
+			}
+			$compilationContext->logger->warning("Constant '".$value."' is not supported magic constant", 'notsupported-magic-constant', $expression);
 		}
 
-		$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 		$compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$symbolVariable->getName().', "'.$expression['value'].'");');
 		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 	}

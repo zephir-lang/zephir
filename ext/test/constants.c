@@ -58,7 +58,7 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 }
 
-PHP_METHOD(Test_Constants, taskPHPVersionConstant) {
+PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
 	zval _0;
 
@@ -66,6 +66,16 @@ PHP_METHOD(Test_Constants, taskPHPVersionConstant) {
 	ZEPHIR_SINIT_VAR(_0);
 	ZEPHIR_GET_CONSTANT(_0, "PHP_VERSION");
 	RETURN_LCTORW(_0);
+
+}
+
+PHP_METHOD(Test_Constants, testClassMagicConstant) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	RETURN_STRING("Constants", 1);
 
 }
 

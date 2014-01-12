@@ -35,8 +35,13 @@ class Constants extends Test\ConstantsParent
 		return parent::P4;
 	}
 
-	public function taskPHPVersionConstant()
+	public function testPHPVersionEnvConstant()
 	{
 	    return PHP_VERSION;
+	}
+
+	public function testClassMagicConstant()
+	{
+	    return __CLASS__;
 	}
 }

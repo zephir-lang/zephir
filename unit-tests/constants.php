@@ -13,7 +13,7 @@ assert($t->testReadClassConstant1() === Test\Constants::C4);
 assert($t->testReadClassConstant2() === Test\Constants::C4);
 assert($t->testReadClassConstant3() === Test\ConstantsParent::P4);
 
-$phpVersion = $t->taskPHPVersionConstant();
-var_dump($phpVersion);
-var_dump(__DIR__);
-//assert(is_string($phpVersion) && !empty($phpVersion));
+$phpVersion = $t->testPHPVersionEnvConstant();
+assert(is_string($phpVersion) && !empty($phpVersion));
+
+assert($t->testClassMagicConstant() == 'Constants');
