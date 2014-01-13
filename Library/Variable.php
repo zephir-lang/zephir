@@ -592,7 +592,6 @@ class Variable
 	 */
 	public function initVariant(CompilationContext $compilationContext)
 	{
-
 		if ($this->_numberSkips) {
 			$this->_numberSkips--;
 			return;
@@ -603,7 +602,6 @@ class Variable
 		 * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
 		 * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
 		 */
-
 		if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 
 			if ($this->_initBranch === false) {
@@ -649,7 +647,6 @@ class Variable
 	 */
 	public function initComplexLiteralVariant(CompilationContext $compilationContext)
 	{
-
 		if ($this->_numberSkips) {
 			$this->_numberSkips--;
 			return;

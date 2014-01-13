@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Constants) {
@@ -54,6 +55,61 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 
 	RETURN_LONG(10);
+
+}
+
+PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
+
+
+	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
+	return;
+
+}
+
+PHP_METHOD(Test_Constants, testClassMagicConstant) {
+
+
+	RETURN_STRING("Constants", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testMethodMagicConstant) {
+
+
+	RETURN_STRING("Constants:testMethodMagicConstant", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
+
+
+	RETURN_STRING("testFunctionMagicConstant", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
+
+
+	RETURN_STRING("Test", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testDirConstant) {
+
+
+	RETURN_NULL();
+
+}
+
+PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_GET_CONSTANT(a, "PHP_VERSION");
+	RETURN_CCTOR(a);
 
 }
 

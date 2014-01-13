@@ -3,7 +3,6 @@ namespace Test;
 
 class Constants extends Test\ConstantsParent
 {
-
 	const C1 = null;
 
 	const C2 = false;
@@ -34,5 +33,43 @@ class Constants extends Test\ConstantsParent
 	public function testReadClassConstant3()
 	{
 		return parent::P4;
+	}
+
+	public function testPHPVersionEnvConstant()
+	{
+	    return PHP_VERSION;
+	}
+
+	public function testClassMagicConstant()
+	{
+	    return __CLASS__;
+	}
+
+	public function testMethodMagicConstant()
+	{
+	    return __METHOD__;
+	}
+
+	public function testFunctionMagicConstant()
+	{
+	    return __FUNCTION__;
+	}
+
+	public function testNamespaceMagicConstant()
+	{
+	    return __NAMESPACE__;
+	}
+
+	public function testDirConstant()
+	{
+	    return __DIR__;
+	}
+
+	public function testPHPVersionEnvConstantInExpValue()
+	{
+	    var a;
+	    let a = PHP_VERSION;
+
+	    return a;
 	}
 }
