@@ -20,3 +20,6 @@ assert($t->testClassMagicConstant() == 'Constants');
 assert($t->testMethodMagicConstant() == 'Constants:testMethodMagicConstant');
 assert($t->testFunctionMagicConstant() == 'testFunctionMagicConstant');
 assert($t->testNamespaceMagicConstant() == 'Test');
+
+$phpVersion = $t->testPHPVersionEnvConstantInExpValue();
+assert(is_string($phpVersion) && !empty($phpVersion));

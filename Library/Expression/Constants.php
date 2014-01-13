@@ -24,10 +24,19 @@
  */
 class Constants
 {
+	/**
+	 * @var bool
+	 */
 	protected $_expecting = true;
 
+	/**
+	 * @var bool
+	 */
 	protected $_readOnly = false;
 
+	/**
+	 * @var Variable
+	 */
 	protected $_expectingVariable;
 
 	/**
@@ -37,7 +46,7 @@ class Constants
 	 * @param boolean $expecting
 	 * @param Variable $expectingVariable
 	 */
-	public function setExpectReturn($expecting, Variable $expectingVariable=null)
+	public function setExpectReturn($expecting, Variable $expectingVariable = null)
 	{
 		$this->_expecting = $expecting;
 		$this->_expectingVariable = $expectingVariable;
@@ -107,12 +116,12 @@ class Constants
 		$isPhpConstant = false;
 		$isZephirConstant = false;
 
-		$value = &$expression['value'];
+		$constantName = &$expression['value'];
 		$mergedConstants = array_merge($this->envConstans, $this->magickConstants);
 
-		if (!defined($expression['value']) && !in_array($value, $mergedConstants)) {
-			if (!$compilationContext->compiler->isConstant($value)) {
-				$compilationContext->logger->warning("Constant '".$value."' does not exist at compile time", 'nonexistant-constant', $expression);
+		if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
+			if (!$compilationContext->compiler->isConstant($constantName)) {
+				$compilationContext->logger->warning("Constant '".$constantName."' does not exist at compile time", 'nonexistant-constant', $expression);
 			} else {
 				$isZephirConstant = true;
 			}
@@ -120,30 +129,28 @@ class Constants
 			$isPhpConstant = true;
 		}
 
-		if ($isPhpConstant && !in_array($value, $mergedConstants)) {
-			$value = constant($value);
-			$type = strtolower(gettype($value));
+		if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
+			$constantName = constant($constantName);
+			$type = strtolower(gettype($constantName));
 
 			switch ($type) {
 				case 'integer':
-					return new CompiledExpression('int', $value, $expression);
+					return new CompiledExpression('int', $constantName, $expression);
 				case 'string':
-					return new CompiledExpression('string', Utils::addSlashes($value), $expression);
+					return new CompiledExpression('string', Utils::addSlashes($constantName), $expression);
 				default:
-					return new CompiledExpression($type, $value, $expression);
+					return new CompiledExpression($type, $constantName, $expression);
 					break;
 			}
 		}
 
 		if ($isZephirConstant) {
-			$constant = $compilationContext->compiler->getConstant($value);
+			$constant = $compilationContext->compiler->getConstant($constantName);
 			return new CompiledExpression($constant[0], $constant[1], $expression);
 		}
 
-		$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-
-		if (in_array($value, $this->magickConstants)) {
-			switch($value) {
+		if (in_array($constantName, $this->magickConstants)) {
+			switch($constantName) {
 				case '__CLASS__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getName(), $expression);
 					break;
@@ -157,11 +164,23 @@ class Constants
 					return new CompiledExpression('string', $compilationContext->currentMethod->getName(), $expression);
 					break;
 			}
-			$compilationContext->logger->warning("Constant '".$value."' is not supported magic constant", 'notsupported-magic-constant', $expression);
+
+			$compilationContext->logger->warning("Magic constant '".$constantName."' is not supported", 'not-supported-magic-constant', $expression);
+			return new CompiledExpression('null', null, $expression);
+		}
+
+		if ($this->_expecting && $this->_expectingVariable) {
+			$symbolVariable = $this->_expectingVariable;
+			$symbolVariable->initVariant($compilationContext);
+		} else {
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+		}
+
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
 		}
 
 		$compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$symbolVariable->getName().', "'.$expression['value'].'");');
 		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 	}
-
 }

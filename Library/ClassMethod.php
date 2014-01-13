@@ -1176,7 +1176,6 @@ class ClassMethod
 		 * Generate the variable definition for variables used
 		 */
 		foreach ($usedVariables as $type => $variables) {
-
 			$pointer = null;
 			switch ($type) {
 				case 'int':

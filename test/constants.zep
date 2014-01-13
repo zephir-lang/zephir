@@ -59,4 +59,17 @@ class Constants extends Test\ConstantsParent
 	{
 	    return __NAMESPACE__;
 	}
+
+	public function testDirConstant()
+	{
+	    return __DIR__;
+	}
+
+	public function testPHPVersionEnvConstantInExpValue()
+	{
+	    var a;
+	    let a = PHP_VERSION;
+
+	    return a;
+	}
 }

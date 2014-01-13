@@ -60,52 +60,56 @@ PHP_METHOD(Test_Constants, testReadClassConstant3) {
 
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 
-	zval _0;
 
-
-	ZEPHIR_SINIT_VAR(_0);
-	ZEPHIR_GET_CONSTANT(_0, "PHP_VERSION");
-	RETURN_LCTORW(_0);
+	ZEPHIR_GET_CONSTANT(return_value, "PHP_VERSION");
+	return;
 
 }
 
 PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
-	zval _0;
 
-
-	ZEPHIR_SINIT_VAR(_0);
 	RETURN_STRING("Constants", 1);
 
 }
 
 PHP_METHOD(Test_Constants, testMethodMagicConstant) {
 
-	zval _0;
 
-
-	ZEPHIR_SINIT_VAR(_0);
 	RETURN_STRING("Constants:testMethodMagicConstant", 1);
 
 }
 
 PHP_METHOD(Test_Constants, testFunctionMagicConstant) {
 
-	zval _0;
 
-
-	ZEPHIR_SINIT_VAR(_0);
 	RETURN_STRING("testFunctionMagicConstant", 1);
 
 }
 
 PHP_METHOD(Test_Constants, testNamespaceMagicConstant) {
 
-	zval _0;
 
-
-	ZEPHIR_SINIT_VAR(_0);
 	RETURN_STRING("Test", 1);
+
+}
+
+PHP_METHOD(Test_Constants, testDirConstant) {
+
+
+	RETURN_NULL();
+
+}
+
+PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_GET_CONSTANT(a, "PHP_VERSION");
+	RETURN_CCTOR(a);
 
 }
 
