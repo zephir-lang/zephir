@@ -419,7 +419,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) \
 	do { \
-		if (FAILURE == zend_get_constant(SL(const_name), &return_value TSRMLS_CC)) { \
+		if (FAILURE == zend_get_constant(SL(const_name), return_value TSRMLS_CC)) { \
 			ZEPHIR_MM_RESTORE(); \
 			return; \
 		} \
