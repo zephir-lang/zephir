@@ -44,5 +44,6 @@
 #include "test/scallparent.h"
 #include "test/spectralnorm.h"
 #include "test/testinterface.h"
+#include "test/vars.h"
 
 #endif
