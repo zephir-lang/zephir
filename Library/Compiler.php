@@ -531,7 +531,10 @@ class Compiler
 
 		$this->_logger->output('Installing...');
 		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
-		$this->_logger->output('Don`t forget to restart your web server');
+
+		$this->_logger->output('Extension installed!');
+		$this->_logger->output('Add extension=' . $namespace . '.so to your php.ini');
+		$this->_logger->output('Don\'t forget to restart your web server');
 	}
 
 	/**

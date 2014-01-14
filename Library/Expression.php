@@ -459,7 +459,16 @@ class Expression
 
 		$codePrinter = &$compilationContext->codePrinter;
 
-		$codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
+		/**
+		 * This calculates a prime number bigger than the current array size to possibly
+		 * reduce hash collisions when adding new members to the array
+		 */
+		if (!function_exists('gmp_nextprime')) {
+			$codePrinter->output('array_init_size(' . $symbolVariable->getName() . ', ' . (count($expression['left']) + 1) . ');');
+		} else {
+			$codePrinter->output('array_init_size(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime(count($expression['left']))) . ');');
+		}
+
 		foreach ($expression['left'] as $item) {
 			if (isset($item['key'])) {
 				$key = null;

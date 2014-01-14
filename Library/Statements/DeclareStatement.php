@@ -135,6 +135,15 @@ class DeclareStatement
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
+					case 'string':
+						$defaultValue = $variable['expr'];
+						switch ($variable['expr']['type']) {
+							case 'string':
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+						}
+						break;
 					case 'variable':
 						$defaultValue = $variable['expr'];
 						switch ($variable['expr']['type']) {

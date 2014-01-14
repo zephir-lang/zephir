@@ -939,6 +939,10 @@ class ClassMethod
 		 */
 		$initVarCode = "";
 		foreach ($symbolTable->getVariables() as $variable) {
+
+			/**
+			 * Initialize 'dynamic' variables with default values
+			 */
 			if ($variable->getType() == 'variable') {
 				if ($variable->getNumberUses() > 0) {
 					if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value') {
@@ -965,6 +969,27 @@ class ClassMethod
 								default:
 									throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 							}
+						}
+					}
+				}
+				continue;
+			}
+
+			/**
+			 * Initialize 'string' variables with default values
+			 */
+			if ($variable->getType() == 'string') {
+				if ($variable->getNumberUses() > 0) {
+					$defaultValue = $variable->getDefaultInitValue();
+					if (is_array($defaultValue)) {
+						$symbolTable->mustGrownStack(true);
+						switch ($defaultValue['type']) {
+							case 'string':
+								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+								$initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . $defaultValue['value'] . '", 1);' . PHP_EOL;
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 						}
 					}
 				}

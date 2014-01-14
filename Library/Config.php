@@ -84,6 +84,9 @@ class Config
 		$this->_changed = true;
 	}
 
+	/**
+	 * Writes the configuration if it has been changed
+	 */
 	public function _saveOnExit()
 	{
 		if ($this->_changed) {

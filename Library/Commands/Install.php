@@ -52,4 +52,5 @@ class CommandInstall extends CommandAbstract
 	{
 		return 'Installs the extension (requires root password)';
 	}
+
 }
