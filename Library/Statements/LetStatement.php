@@ -2032,6 +2032,25 @@ class LetStatement
 	}
 
 	/**
+	 * Compiles {var} = {expr}
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompiledExpression $resolvedExpr
+	 * @param \CompilationContext $compilationContext,
+	 * @param array $statement
+	 */
+	protected function _exportSymbol($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
+		CompilationContext $compilationContext, $statement)
+	{
+		$codePrinter = $compilationContext->codePrinter;
+
+		$codePrinter->output('if (phalcon_set_symbol(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE){');
+		$codePrinter->output('	return;');
+		$codePrinter->output('}');
+	}
+
+	/**
 	 * @param CompilationContext $compilationContext
 	 * @throws CompilerException
 	 */
@@ -2092,8 +2111,6 @@ class LetStatement
 				}
 			}
 
-			$codePrinter = $compilationContext->codePrinter;
-
 			/**
 			 * There are four types of assignments
 			 */
@@ -2144,7 +2161,7 @@ class LetStatement
 					/* @todo, implement this */
 					break;
 				case 'dynamic-variable':
-					/* @todo, implement this */
+					$this->_exportSymbol($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
 				default:
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);

@@ -63,7 +63,7 @@ class CreateInstanceOptimizer
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
 		$context->codePrinter->output('if (zephir_create_instance(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC) == FAILURE) {');
-		$context->codePrinter->output("\t" . 'return;');
+		$context->codePrinter->output("\t" . 'RETURN_MM();');
 		$context->codePrinter->output('}');
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
