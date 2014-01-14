@@ -10,7 +10,7 @@ Main features:
 * Reduced execution overhead compared with full interpretation
 * Restricted procedural programming, promoting OOP
 * Memory safety
-* Ahead-of-time compiler
+* Ahead-of-time (AOT) compiler to provide predictable performance
 
 Compiler design goals:
 
