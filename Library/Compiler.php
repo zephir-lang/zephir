@@ -855,34 +855,30 @@ class Compiler
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/php_project.h');
 		if (empty($content)) {
-			throw new Exception("Template php_project.h doesn't exist");
+			throw new Exception('Template php_project.h doesn`t exist');
 		}
+
+		$globalCode = '';
+		$globalStruct = '';
 
 		/**
 		 * Generate the globals declaration
 		 */
 		$globals = $this->_config->get('globals');
 		if (is_array($globals)) {
-			$globalStruct = "";
-
 			$structures = array();
 			foreach ($globals as $name => $global) {
-				$parts = explode(".", $name);
+				$parts = explode('.', $name);
 				$structures[$parts[0]][$parts[1]] = $global;
 			}
 
 			foreach ($structures as $structureName => $internalStructure) {
-				$globalStruct .= 'typedef struct _zephir_struct_' . $structureName . ' {' . PHP_EOL;
+				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName);
 				foreach ($internalStructure as $field => $global) {
-					switch ($global['type']) {
-						case 'bool':
-							$globalStruct .= "\t" . 'zend_bool ' . $field . ';' . PHP_EOL;
-							break;
-						default:
-							throw new Exception('Unknown global type: ' . $global['type']);
-					}
+					$structBuilder->addProperty($global['type'], $field);
 				}
-				$globalStruct .= '} zephir_struct_' . $structureName . ';' . PHP_EOL;
+
+				$globalStruct .= $structBuilder . PHP_EOL;
 			}
 
 			$globalCode = PHP_EOL;
@@ -890,15 +886,13 @@ class Compiler
 				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
 			}
 
-		} else {
-			$globalCode = null;
-			$globalStruct = null;
 		}
 
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
 			'%PROJECT_EXTNAME%' 	     => strtolower($project),
+			'%PROJECT_NAME%'             => $this->_config->get('name'),
 			'%PROJECT_VERSION%' 	     => $this->_config->get('version'),
 			'%EXTENSION_GLOBALS%'        => $globalCode,
 			'%EXTENSION_STRUCT_GLOBALS%' => $globalStruct

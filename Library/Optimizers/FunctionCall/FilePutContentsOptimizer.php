@@ -18,28 +18,31 @@
 */
 
 /**
- * CreateInstanceParamsOptimizer
+ * FilePutContentsOptimizer
  *
- * Built-in function that creates new instances of objects from its class name passing parameters as an array
+ * Optimizes calls to 'file_put_contents' using internal function
  */
-class CreateInstanceParamsOptimizer
+class FilePutContentsOptimizer
 	extends OptimizerAbstract
 {
 	/**
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
+	 * @return bool|CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
 		if (!isset($expression['parameters'])) {
-			throw new CompilerException("This function requires parameters", $expression);
+			return false;
 		}
 
 		if (count($expression['parameters']) != 2) {
-			throw new CompilerException("This function only requires two parameter", $expression);
+			return false;
 		}
+
+		$context->headersManager->add('kernel/file');
 
 		/**
 		 * Process the expected symbol to be returned
@@ -47,25 +50,24 @@ class CreateInstanceParamsOptimizer
 		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+		if ($symbolVariable) {
+			if ($symbolVariable->isNotVariableAndString()) {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+			if ($call->mustInitSymbolVariable()) {
+				$symbolVariable->initVariant($context);
+			}
 		}
-
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
-
-		$context->headersManager->add('kernel/object');
-
-		$symbolVariable->setDynamicTypes('object');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+		if ($symbolVariable) {
+			$context->codePrinter->output('zephir_file_put_contents(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		} else {
+			$context->codePrinter->output('zephir_file_put_contents(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+		}
 
-		$context->codePrinter->output('if (zephir_create_instance_params(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC) == FAILURE) {');
-		$context->codePrinter->output("\t" . 'RETURN_MM();');
-		$context->codePrinter->output('}');
+		return new CompiledExpression('null', 'null', $expression);
 
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
-
 }

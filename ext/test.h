@@ -30,6 +30,7 @@
 #include "test/oo/oonoconstruct.h"
 #include "test/oo/ooparams.h"
 #include "test/oo/propertyaccess.h"
+#include "test/pregmatch.h"
 #include "test/properties/privateproperties.h"
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"
@@ -43,5 +44,6 @@
 #include "test/scallparent.h"
 #include "test/spectralnorm.h"
 #include "test/testinterface.h"
+#include "test/vars.h"
 
 #endif

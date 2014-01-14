@@ -5,7 +5,8 @@
 
 #include "kernel/globals.h"
 
-#define PHP_TEST_VERSION "0.0.1"
+#define PHP_TEST_NAME    "Test Extension"
+#define PHP_TEST_VERSION "1.0.0"
 #define PHP_TEST_EXTNAME "test"
 
 

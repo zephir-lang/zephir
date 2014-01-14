@@ -37,6 +37,25 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 }
 #endif
 
+/**
+ * Initialize globals on each request or each thread started
+ */
+static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC) {
+
+	/* Memory options */
+	zephir_globals->active_memory = NULL;
+
+	/* Virtual Symbol Tables */
+	zephir_globals->active_symbol_table = NULL;
+
+	/* Cache options */
+	zephir_globals->function_cache = NULL;
+
+	/* Recursive Lock */
+	zephir_globals->recursive_lock = 0;
+
+}
+
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%){
 
 	php_zephir_init_globals(ZEPHIR_VGLOBAL TSRMLS_CC);
@@ -63,6 +82,7 @@ static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 {
 	php_info_print_table_start();
+	php_info_print_table_header(2, PHP_%PROJECT_UPPER%_NAME, "enabled");
 	php_info_print_table_row(2, "Version", PHP_%PROJECT_UPPER%_VERSION);
 	php_info_print_table_end();
 }
