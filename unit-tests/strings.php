@@ -34,3 +34,17 @@ assert($ar2[2] == "piece3");
 $ar3 = $t->testExplodeLimit($pizza, 3);
 assert(count($ar3) == 3);
 assert($ar3[2] == "piece3,piece4,piece5,piece6");
+
+assert($t->testSubstr('abcdef', 1, 3) == "bcd");
+assert($t->testSubstr('abcdef', 0, 4) == "abcd" );
+assert($t->testSubstr('abcdef', 0, 8) == "abcdef");
+assert($t->testSubstr('abcdef', -1, 1) == "f");
+assert($t->testSubstr('abcdef', -3, -1) == "de");
+assert($t->testSubstr('abcdef', 2, -1) == "cde");
+
+assert($t->testSubstr2('abcdef', -1) == "f");
+assert($t->testSubstr2('abcdef', -2) == "ef");
+assert($t->testSubstr2('abcdef', 2) == "cdef");
+
+assert($t->testSubstr3('abcdef') == "f");
+assert($t->testSubstr4('abcdef') == "abcde");

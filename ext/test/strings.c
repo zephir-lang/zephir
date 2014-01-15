@@ -151,3 +151,66 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 }
 
+PHP_METHOD(Test_Strings, testSubstr) {
+
+	int from, len;
+	zval *str, *from_param = NULL, *len_param = NULL, _0, _1;
+
+	zephir_fetch_params(0, 3, 0, &str, &from_param, &len_param);
+
+		from = zephir_get_intval(from_param);
+		len = zephir_get_intval(len_param);
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, from);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_LONG(&_1, len);
+	zephir_substr(return_value, str, Z_LVAL_P(&_0) , Z_LVAL_P(&_1) );
+	return;
+
+}
+
+PHP_METHOD(Test_Strings, testSubstr2) {
+
+	int from;
+	zval *str, *from_param = NULL, _0;
+
+	zephir_fetch_params(0, 2, 0, &str, &from_param);
+
+		from = zephir_get_intval(from_param);
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, from);
+	zephir_substr(return_value, str, Z_LVAL_P(&_0) , 0 );
+	return;
+
+}
+
+PHP_METHOD(Test_Strings, testSubstr3) {
+
+	zval *str;
+
+	zephir_fetch_params(0, 1, 0, &str);
+
+
+
+	zephir_substr(return_value, str, -1 , 0 );
+	return;
+
+}
+
+PHP_METHOD(Test_Strings, testSubstr4) {
+
+	zval *str;
+
+	zephir_fetch_params(0, 1, 0, &str);
+
+
+
+	zephir_substr(return_value, str, 0 , -1 );
+	return;
+
+}
+

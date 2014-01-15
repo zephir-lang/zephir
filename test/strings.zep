@@ -46,4 +46,24 @@ class Strings
         {
             return explode(",", str, limit);
         }
+
+        public function testSubstr(var str, int from, int len)
+        {
+            return substr(str, from, len);
+        }
+
+        public function testSubstr2(var str, int from)
+        {
+            return substr(str, from);
+        }
+
+        public function testSubstr3(var str)
+        {
+            return substr(str, -1);
+        }
+
+        public function testSubstr4(var str)
+        {
+            return substr(str, 0, -1);
+        }
 }

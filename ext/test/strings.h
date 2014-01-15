@@ -12,6 +12,10 @@ PHP_METHOD(Test_Strings, testStrposOffset);
 PHP_METHOD(Test_Strings, testExplode);
 PHP_METHOD(Test_Strings, testExplodeStr);
 PHP_METHOD(Test_Strings, testExplodeLimit);
+PHP_METHOD(Test_Strings, testSubstr);
+PHP_METHOD(Test_Strings, testSubstr2);
+PHP_METHOD(Test_Strings, testSubstr3);
+PHP_METHOD(Test_Strings, testSubstr4);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testtrim, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
@@ -55,6 +59,25 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testexplodelimit, 0, 0, 2)
 	ZEND_ARG_INFO(0, limit)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr, 0, 0, 3)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, from)
+	ZEND_ARG_INFO(0, len)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr2, 0, 0, 2)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, from)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr3, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testsubstr4, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testTrim, arginfo_test_strings_testtrim, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testRtrim, arginfo_test_strings_testrtrim, ZEND_ACC_PUBLIC)
@@ -65,5 +88,9 @@ ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testExplode, arginfo_test_strings_testexplode, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testExplodeStr, arginfo_test_strings_testexplodestr, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testExplodeLimit, arginfo_test_strings_testexplodelimit, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testSubstr, arginfo_test_strings_testsubstr, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testSubstr2, arginfo_test_strings_testsubstr2, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testSubstr3, arginfo_test_strings_testsubstr3, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testSubstr4, arginfo_test_strings_testsubstr4, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
