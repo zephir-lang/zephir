@@ -343,7 +343,7 @@ void zephir_uncamelize(zval *return_value, const zval *str){
 /**
  * Fast call to explode php function
  */
-void zephir_fast_explode(zval *result, zval *delimiter, zval *str, long limit){
+void zephir_fast_explode(zval *result, zval *delimiter, zval *str, long limit TSRMLS_DC){
 
 	if (unlikely(Z_TYPE_P(str) != IS_STRING || Z_TYPE_P(delimiter) != IS_STRING)) {
 		ZVAL_NULL(result);
@@ -358,7 +358,7 @@ void zephir_fast_explode(zval *result, zval *delimiter, zval *str, long limit){
 /**
  * Fast call to explode php function
  */
-void zephir_fast_explode_str(zval *result, const char *delimiter, int delimiter_length, zval *str, long limit){
+void zephir_fast_explode_str(zval *result, const char *delimiter, int delimiter_length, zval *str, long limit TSRMLS_DC){
 
 	zval delimiter_zval;
 
