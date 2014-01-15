@@ -103,6 +103,9 @@ class DeclareStatement
 						break;
 					case 'double':
 						switch ($variable['expr']['type']) {
+							case 'int':
+							case 'uint':
+							case 'long':
 							case 'double':
 								break;
 							default:

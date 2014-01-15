@@ -1691,6 +1691,8 @@ class LetStatement
 		$property = $statement['property'];
 		$compilationContext->headersManager->add('kernel/object');
 
+		/* @todo check whether property really does exist */
+
 		switch ($resolvedExpr->getType()) {
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);

@@ -18,22 +18,21 @@
 */
 
 /**
- * CommandVersion
+ * BuildCommand
  *
- * Shows Zephir version
+ * Produce the extension installation
  */
-class CommandVersion extends CommandAbstract
+class CommandBuild extends CommandAbstract
 {
-	const VERSION = '0.3.0a';
 
 	/**
-	 * Command provided by this command
+	 * Commands provided by this command
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	public function getCommand()
 	{
-		return 'version';
+		return 'build';
 	}
 
 	/**
@@ -43,7 +42,7 @@ class CommandVersion extends CommandAbstract
 	 */
 	public function getUsage()
 	{
-		return 'version';
+		return 'build';
 	}
 
 	/**
@@ -51,17 +50,6 @@ class CommandVersion extends CommandAbstract
 	 */
 	public function getDescription()
 	{
-		return 'Shows Zephir version';
-	}
-
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		echo self::VERSION, PHP_EOL;
+		return 'Generate/Compile/Install a Zephir extension';
 	}
 }

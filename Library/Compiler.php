@@ -63,6 +63,11 @@ class Compiler
 	 */
 	protected static $_reflections = array();
 
+	/**
+	 * @var boolean
+	 */
+	protected static $_loadedPrototypes = false;
+
 	public function __construct(Config $config, Logger $logger)
 	{
 		$this->_config = $config;
@@ -226,14 +231,14 @@ class Compiler
 					if (!is_dir($dest . '/' . $fileName)) {
 						mkdir($dest . '/' . $fileName, 0755, true);
 					}
-					$this->_recursiveProcess($pathName, $dest.'/'.$fileName, $pattern, $callback);
+					$this->_recursiveProcess($pathName, $dest . '/' . $fileName, $pattern, $callback);
 				}
 			} else {
 				if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
 					if (is_string($callback)) {
-						$success = $success && $callback($pathName, $dest.'/'.$fileName);
+						$success = $success && $callback($pathName, $dest . '/' . $fileName);
 					} else {
-						$success = $success && call_user_func($callback, $pathName, $dest.'/'.$fileName);
+						$success = $success && call_user_func($callback, $pathName, $dest . '/' . $fileName);
 					}
 				}
 			}
@@ -353,7 +358,7 @@ class Compiler
 		}
 
 		$this->_config->set('namespace', $namespace);
-		$this->_config->set('name', $namespace);
+		$this->_config->set('name',      $namespace);
 
 		if (!is_dir($namespace)) {
 			mkdir($namespace);
@@ -370,6 +375,7 @@ class Compiler
 		if (!is_dir('ext/kernel')) {
 			mkdir('ext/kernel', 0755, true);
 		}
+
 		// Copy the latest kernel files
 		$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
 	}
@@ -420,27 +426,33 @@ class Compiler
 		/**
 		 * Load function optimizers
 		 */
-		FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
-		$optimizerDirs = $this->_config->get('optimizer-dirs');
-		if (is_array($optimizerDirs)) {
-			foreach ($optimizerDirs as $directory) {
-				FunctionCall::addOptimizerDir(realpath($directory));
+		if (self::$_loadedPrototypes == false) {
+
+			FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
+
+			$optimizerDirs = $this->_config->get('optimizer-dirs');
+			if (is_array($optimizerDirs)) {
+				foreach ($optimizerDirs as $directory) {
+					FunctionCall::addOptimizerDir(realpath($directory));
+				}
 			}
-		}
 
-		if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
+			if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
 
-			/**
-			 * Load additional extension prototypes
-			 */
-			foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
-				if (!$file->isDir()) {
-					$extension = str_replace('.php', '', $file);
-					if (!extension_loaded($extension)) {
-						require $file->getRealPath();
+				/**
+				 * Load additional extension prototypes
+				 */
+				foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
+					if (!$file->isDir()) {
+						$extension = str_replace('.php', '', $file);
+						if (!extension_loaded($extension)) {
+							require $file->getRealPath();
+						}
 					}
 				}
 			}
+
+			self::$_loadedPrototypes = true;
 		}
 
 		/**
@@ -448,10 +460,14 @@ class Compiler
 		 */
 		$files = array();
 
+		$hash = "";
 		foreach ($this->_files as $compileFile) {
 			$compileFile->compile($this, $this->_stringManager);
-			$files[] = $compileFile->getCompiledFile();
+			$compiledFile = $compileFile->getCompiledFile();
+			$files[] = $compiledFile;
+			$hash .= '|' . $compiledFile;
 		}
+		$hash = md5($hash);
 
 		$this->_compiledFiles = $files;
 
@@ -471,7 +487,22 @@ class Compiler
 		$needConfigure |= $this->checkIfPhpized($namespace);
 
 		/**
-		 * Round 5. Generate the concatenation cubrid_error_code(oid)
+		 * When a new file is added or removed we need to run configure again
+		 */
+		if (!($command instanceof CommandGenerate)) {
+			if (!file_exists('.temp/compiled-files-sum')) {
+				$needConfigure = true;
+				file_put_contents('.temp/compiled-files-sum', $hash);
+			} else {
+				if (file_get_contents('.temp/compiled-files-sum') != $hash) {
+					$needConfigure = true;
+					file_put_contents('.temp/compiled-files-sum', $hash);
+				}
+			}
+		}
+
+		/**
+		 * Round 5. Generate the concatenation
 		 */
 		$this->_stringManager->genConcatCode();
 
@@ -494,7 +525,7 @@ class Compiler
 
 		if ($needConfigure) {
 
-			exec('cd ext && make clean', $output, $exit);
+			exec('cd ext && make clean && phpize --clean', $output, $exit);
 			$this->_logger->output('Preparing for PHP compilation...');
 
 			exec('cd ext && phpize', $output, $exit);
@@ -509,18 +540,18 @@ class Compiler
 		if ($verbose) {
 			passthru('cd ext && make', $exit);
 		} else {
-			exec('cd ext && make' . $verbose, $output, $exit);
+			exec('cd ext && make --silent' . $verbose, $output, $exit);
 		}
 
 	}
 
 	/**
-	 *
 	 * Compiles and installs the extension
+	 *
 	 * @param CommandInstall $command
 	 * @throws Exception
 	 */
-	public function install(CommandInstall $command)
+	public function install(CommandInterface $command)
 	{
 		/**
 		 * Get global namespace
@@ -530,7 +561,7 @@ class Compiler
 		$this->compile($command);
 
 		$this->_logger->output('Installing...');
-		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make install) > /dev/null 2>&1', $output, $exit);
+		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
 
 		$this->_logger->output('Extension installed!');
 		$this->_logger->output('Add extension=' . $namespace . '.so to your php.ini');
@@ -555,13 +586,32 @@ class Compiler
 	/**
 	 * Clean the extension directory
 	 *
-	 * @param CommandClean $command
+	 * @param CommandInterface $command
 	 */
-	public function clean(CommandClean $command)
+	public function clean(CommandInterface $command)
 	{
 		system('cd ext && make clean 1> /dev/null');
 	}
 
+	/**
+	 *
+	 * Compiles and installs the extension
+	 * @param CommandInstall $command
+	 * @throws Exception
+	 */
+	public function build(CommandInterface $command)
+	{
+		$this->compile($command);
+		$this->install($command);
+	}
+
+	/**
+	 * Checks if a file must be copied
+	 *
+	 * @param string $src
+	 * @param string $dst
+	 * @return boolean
+	 */
 	protected function _checkKernelFile($src, $dst)
 	{
 		if (strstr($src, 'ext/kernel/concat.') !== false) {
@@ -573,13 +623,18 @@ class Compiler
 		return md5_file($src) == md5_file($dst);
 	}
 
+	/**
+	 * Checks which files in the base kernel must be copied
+	 *
+	 * @return boolean
+	 */
 	protected function checkKernelFiles()
 	{
 		$configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
 		if (!$configured) {
 			$this->_logger->output('Copying new kernel files...');
 			exec("rm -fr ext/kernel/*");
-			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^[^\.]@');
+			$this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@');
 		}
 		return !$configured;
 	}

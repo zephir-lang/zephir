@@ -36,11 +36,15 @@ class Config
 		'name'        => '',
 		'description' => '',
 		'author'      => '',
-		'version'	  => '0.0.1'
+		'version'	  => '0.0.1',
+		'verbose'     => false
 	);
 
 	protected $_changed = false;
 
+	/**
+	 * Config constructor
+	 */
 	public function __construct()
 	{
 		if (file_exists('config.json')) {

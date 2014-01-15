@@ -425,6 +425,13 @@ class ComparisonBaseOperator extends BaseOperator
 										} else {
 											return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
 										}
+									case 'double':
+										$compilationContext->headersManager->add('kernel/operators');
+										if ($variable->isLocalOnly()) {
+											return new CompiledExpression('bool', $this->_zvalDoubleOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										} else {
+											return new CompiledExpression('bool', $this->_zvalDoubleOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+										}
 									case 'string':
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');

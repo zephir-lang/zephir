@@ -551,11 +551,13 @@ class ForStatement
 		$codePrinter->output(') {');
 
 		if (isset($this->_statement['key'])) {
+			$compilationContext->symbolTable->mustGrownStack(true);
 			$compilationContext->headersManager->add('kernel/hash');
 			$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
 		}
 
 		if (isset($this->_statement['value'])) {
+			$compilationContext->symbolTable->mustGrownStack(true);
 			$codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $this->_statement['value'] . ', ' . $tempVariable->getName() . ');');
 		}
 
