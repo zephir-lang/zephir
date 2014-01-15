@@ -44,33 +44,39 @@ class SubstrOptimizer
 			throw new CompilerException("'substr' require two or three parameters");
 		}
 
-                /**
-                 * Process parameters
-                 */
-                $lengthOffset = 2;
-                if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'int') {
-                    $length = $expression['parameters'][2]['value'] . ' ';
-                    unset($expression['parameters'][2]);
-                }
+		/**
+		 * Process parameters
+		 */
+		$lengthOffset = 2;
+		if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'int') {
+			$length = $expression['parameters'][2]['value'] . ' ';
+			unset($expression['parameters'][2]);
+		}
 
-                if (isset($expression['parameters'][1]) && $expression['parameters'][1]['type'] == 'int') {
-                    $from = $expression['parameters'][1]['value'] . ' ';
-                    unset($expression['parameters'][1]);
-                    $lengthOffset = 1;
-                }
+		if (isset($expression['parameters'][1]) && $expression['parameters'][1]['type'] == 'int') {
+			$from = $expression['parameters'][1]['value'] . ' ';
+			unset($expression['parameters'][1]);
+			$lengthOffset = 1;
+		}
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                if (!isset($length) && isset($resolvedParams[$lengthOffset])) {
-                    $length = 'Z_LVAL_P(' . $resolvedParams[$lengthOffset] . ') ';
-                }
+		if (!isset($length) && isset($resolvedParams[$lengthOffset])) {
+			$context->headersManager->add('kernel/operators');
+			$length = 'zephir_get_intval(' . $resolvedParams[$lengthOffset] . ') ';
+		}
 
-                if (!isset($from) && isset($resolvedParams[1])) {
-                    $from = 'Z_LVAL_P(' . $resolvedParams[1] . ') ';
-                }
+		if (!isset($from) && isset($resolvedParams[1])) {
+			$context->headersManager->add('kernel/operators');
+			$from = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
+		}
 
-                if (!isset($from)) $from = '0 ';
-                if (!isset($length)) $length = '0 ';
+		if (!isset($from)) {
+			$from = '0 ';
+		}
+		if (!isset($length)) {
+			$length = '0 ';
+		}
 
 		/**
 		 * Process the expected symbol to be returned

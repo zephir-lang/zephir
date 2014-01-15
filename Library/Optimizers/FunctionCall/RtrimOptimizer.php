@@ -39,7 +39,7 @@ class RtrimOptimizer
 		}
 
 		if (count($expression['parameters']) != 1) {
-			throw new CompilerException("'trim' only accepts one parameter");
+			return false;
 		}
 
 		/**
