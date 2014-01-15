@@ -2047,7 +2047,7 @@ class LetStatement
 	{
 		$codePrinter = $compilationContext->codePrinter;
 
-		$codePrinter->output('if (phalcon_set_symbol(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE){');
+		$codePrinter->output('if (zephir_set_symbol(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE){');
 		$codePrinter->output('	return;');
 		$codePrinter->output('}');
 	}

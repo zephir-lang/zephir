@@ -52,20 +52,22 @@ class ExplodeOptimizer
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 		}
 
-                /**
-                 * Process limit
-                 */
-                $limit = PHP_INT_MAX . ' ' ;
-                $limitOffset = 2;
-                if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'int') {
-                    $limit = $expression['parameters'][2]['value'] . ' ';
-                    unset($expression['parameters'][2]);
-                }
+		/**
+		 * Process limit
+		 */
+		$limit = 'LONG_MAX' ;
+		$limitOffset = 2;
+		if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'int') {
+			$limit = $expression['parameters'][2]['value'] . ' ';
+			unset($expression['parameters'][2]);
+		}
 
 		if ($expression['parameters'][0]['type'] == 'string') {
 			$str = Utils::addSlashes($expression['parameters'][0]['value']);
 			unset($expression['parameters'][0]);
-                        if (count($expression['parameters']) ==2) $limitOffset = 1;
+			if (count($expression['parameters']) == 2) {
+				$limitOffset = 1;
+			}
 		}
 
 		if ($call->mustInitSymbolVariable()) {
@@ -74,9 +76,9 @@ class ExplodeOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                if (isset($resolvedParams[$limitOffset])) {
-                    $limit = 'Z_LVAL_P(' . $resolvedParams[$limitOffset] . ') ';
-                }
+		if (isset($resolvedParams[$limitOffset])) {
+			$limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
+		}
 
 		$context->headersManager->add('kernel/string');
 		$symbolVariable->setDynamicTypes('array');
