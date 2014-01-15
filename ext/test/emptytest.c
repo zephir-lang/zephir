@@ -51,7 +51,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(a);
-	array_init(a);
+	array_init_size(a, 5);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(a, _0);

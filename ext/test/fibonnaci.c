@@ -76,7 +76,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(fib);
-	array_init(fib);
+	array_init_size(fib, 3);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
 	zephir_array_fast_append(fib, _0);
@@ -110,7 +110,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(fib);
-	array_init(fib);
+	array_init_size(fib, 3);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
 	zephir_array_fast_append(fib, _0);
