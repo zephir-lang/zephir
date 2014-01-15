@@ -14,9 +14,10 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/fcall.h"
+#include "kernel/file.h"
 #include "kernel/string.h"
 #include "kernel/concat.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -148,7 +149,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_VAR(discard);
 	ZVAL_NULL(discard);
 	ZEPHIR_INIT_VAR(contents);
-	zephir_call_func_p1(contents, "file_get_contents", path);
+	zephir_file_get_contents(contents, path TSRMLS_CC);
 	ZEPHIR_INIT_VAR(initialLength);
 	ZVAL_LONG(initialLength, zephir_fast_strlen_ev(contents));
 	ZEPHIR_INIT_VAR(_22);
