@@ -72,7 +72,7 @@ void zephir_unique_key(zval *return_value, zval *prefix, zval *value TSRMLS_DC);
 int zephir_spprintf(char **message, int max_len, char *format, ...);
 
 /* Substr */
-void zephir_substr(zval *return_value, zval *str, unsigned long from, unsigned long length);
+void zephir_substr(zval *return_value, zval *str, long from, long length);
 
 /** EOL */
 zval *zephir_eol(int eol TSRMLS_DC);
