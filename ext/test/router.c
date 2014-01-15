@@ -17,8 +17,8 @@
 #include "kernel/array.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
-#include "kernel/exception.h"
 #include "kernel/string.h"
+#include "kernel/exception.h"
 #include "kernel/concat.h"
 #include "kernel/hash.h"
 
@@ -166,7 +166,7 @@ PHP_METHOD(Test_Router, getDI) {
  */
 PHP_METHOD(Test_Router, getRewriteUri) {
 
-	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER, _1;
+	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER;
 
 	ZEPHIR_MM_GROW();
 
@@ -183,10 +183,8 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 		ZEPHIR_OBS_NVAR(url);
 		zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 		if (zephir_array_isset_string_fetch(&url, _SERVER, SS("REQUEST_URI"), 0 TSRMLS_CC)) {
-			ZEPHIR_SINIT_VAR(_1);
-			ZVAL_STRING(&_1, "?", 0);
 			ZEPHIR_INIT_VAR(urlParts);
-			zephir_call_func_p2(urlParts, "explode", &_1, url);
+			zephir_fast_explode_str(urlParts, SL("?"), url, 9223372036854775807  TSRMLS_CC);
 			zephir_array_fetch_long(&realUri, urlParts, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 			if (!(zephir_is_true(realUri))) {
 				RETURN_CTOR(realUri);
@@ -393,7 +391,7 @@ PHP_METHOD(Test_Router, handle) {
 	zend_function *_5 = NULL, *_8 = NULL, *_9 = NULL, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_14 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL;
 	HashTable *_3, *_19;
 	HashPosition _2, _18;
-	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition, *_0, *_1, **_4, *_6, *_7 = NULL, *_13 = NULL, **_20, _21 = zval_used_for_init, *_22, *_23, *_24, *_25;
+	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition, *_0, *_1, **_4, *_6, *_7 = NULL, *_13 = NULL, **_20, _21, *_22, *_23, *_24, *_25;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
@@ -605,10 +603,8 @@ PHP_METHOD(Test_Router, handle) {
 			ZEPHIR_INIT_VAR(strParams);
 			zephir_call_func_p2(strParams, "substr", paramsStr, &_21);
 			if (zephir_is_true(strParams)) {
-				ZEPHIR_SINIT_NVAR(_21);
-				ZVAL_STRING(&_21, "/", 0);
 				ZEPHIR_INIT_BNVAR(params);
-				zephir_call_func_p2(params, "explode", &_21, strParams);
+				zephir_fast_explode_str(params, SL("/"), strParams, 9223372036854775807  TSRMLS_CC);
 			}
 			zephir_array_unset_string(&parts, SS("params"), PH_SEPARATE);
 		}
