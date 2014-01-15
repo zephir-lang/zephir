@@ -38,5 +38,6 @@ ext/test/properties/.libs/
 ext/test/router/.libs/
 parser/lemon
 parser/lemon.dSYM/
+bin/zephir-parser.dSYM/
 bin/zephir-parser
 bin/zephir55
