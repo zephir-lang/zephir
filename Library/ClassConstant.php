@@ -69,7 +69,7 @@ class ClassConstant
 	}
 
 	/**
-	 * Produce the code to register a property
+	 * Produce the code to register a class constant
 	 *
 	 * @param CompilationContext $compilationContext
 	 */
