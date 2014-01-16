@@ -52,7 +52,7 @@ class StrposOptimizer
                 }
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
                 if (count($resolvedParams) >= 3) {
-                    $offset = 'Z_LVAL_P(' . $resolvedParams[2] . ') ';
+                    $offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
                 }
 
 		/**
