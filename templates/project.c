@@ -117,6 +117,7 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 	INIT_PZVAL(%PROJECT_LOWER%_globals->global_null);
 	ZVAL_NULL(%PROJECT_LOWER%_globals->global_null);
 	Z_ADDREF_P(%PROJECT_LOWER%_globals->global_null);
+
 }
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)

@@ -45,30 +45,30 @@ class JsonEncodeOptimizer
 		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
-                if ($symbolVariable) {
-                    if ($symbolVariable->getType() != 'variable') {
-                            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-                    }
-                    if ($call->mustInitSymbolVariable()) {
-                            $symbolVariable->initVariant($context);
-                    }
-                } else {
-                    $symbolVariable = $context->symbolTable->addTemp('variable', $context);
-                    $symbolVariable->initVariant($context);
-                }
+		if ($symbolVariable) {
+			if ($symbolVariable->getType() != 'variable') {
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+			if ($call->mustInitSymbolVariable()) {
+				$symbolVariable->initVariant($context);
+			}
+		} else {
+			$symbolVariable = $context->symbolTable->addTemp('variable', $context);
+			$symbolVariable->initVariant($context);
+		}
 
 		$context->headersManager->add('kernel/string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                /**
-                 * Process encode options
-                 */
-                if (count($resolvedParams) >= 2) {
-                    $options = 'Z_LVAL_P('.$resolvedParams[1].') ';
-                }else {
-                    $options = '0 ';
-                }
+		/**
+		 * Process encode options
+		 */
+		if (count($resolvedParams) >= 2) {
+			$options = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
+		} else {
+			$options = '0 ';
+		}
 
 		$context->codePrinter->output('zephir_json_encode(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

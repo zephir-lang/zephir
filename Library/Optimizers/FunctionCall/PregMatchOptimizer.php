@@ -35,27 +35,30 @@ class PregMatchOptimizer
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
+
 		if (!isset($expression['parameters'])) {
 			return false;
 		}
+
 		if (count($expression['parameters']) < 2) {
 			return false;
 		}
 
-                /**
-                 * Process the matches result
-                 */
-                if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'variable') {
-                    $matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
-                    if (!$matchesVariable->isInitialized()) {
-                        $matchesVariable->initVariant($context);
-                        $matchesVariable->setIsInitialized(true);
-                    }
-                } else {
-                    $matchesVariable = $context->symbolTable->addTemp('variable', $context);
-                    $matchesVariable->initVariant($context);
-                }
-                $matchesVariable->setDynamicTypes('array');
+		/**
+		 * Process the matches result
+		 */
+		if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'variable') {
+			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
+			if (!$matchesVariable->isInitialized()) {
+				$matchesVariable->initVariant($context);
+				$matchesVariable->setIsInitialized(true);
+			}
+		} else {
+			$matchesVariable = $context->symbolTable->addTemp('variable', $context);
+			$matchesVariable->initVariant($context);
+		}
+
+		$matchesVariable->setDynamicTypes('array');
 
 		/**
 		 * Process the expected symbol to be returned
@@ -63,17 +66,17 @@ class PregMatchOptimizer
 		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
-                if ($symbolVariable) {
-                    if ($symbolVariable->getType() != 'variable') {
-                            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-                    }
-                    if ($call->mustInitSymbolVariable()) {
-                            $symbolVariable->initVariant($context);
-                    }
-                } else {
-                    $symbolVariable = $context->symbolTable->addTemp('variable', $context);
-                    $symbolVariable->initVariant($context);
-                }
+		if ($symbolVariable) {
+			if ($symbolVariable->getType() != 'variable') {
+					throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+			if ($call->mustInitSymbolVariable()) {
+				$symbolVariable->initVariant($context);
+			}
+		} else {
+			$symbolVariable = $context->symbolTable->addTemp('variable', $context);
+			$symbolVariable->initVariant($context);
+		}
 
 		$context->headersManager->add('kernel/string');
 

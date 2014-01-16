@@ -662,8 +662,8 @@ class ClassMethod
 			case 'uint':
 			case 'long':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
@@ -671,8 +671,8 @@ class ClassMethod
 				return $code;
 			case 'bool':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
@@ -680,23 +680,26 @@ class ClassMethod
 				return $code;
 			case 'double':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-				$code .= "\t\t" . '}' . PHP_EOL;
+				$code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-				$code .= PHP_EOL;
 				return $code;
 			case 'string':
 			case 'ulong':
 				$compilationContext->symbolTable->mustGrownStack(true);
-				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING) {' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
-				$code .= "\t\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-				$code .= "\t\t" . '}' . PHP_EOL;
+				$code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING && Z_TYPE_P(' . $parameter['name'] . '_param) != IS_NULL) {' . PHP_EOL;
+				$code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
+				$code .= "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) == IS_STRING) {' . PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
-				$code .= PHP_EOL;
+				$code .= "\t" . '} else {' . PHP_EOL;
+				$code .= "\t\tZEPHIR_INIT_VAR(" . $parameter['name'] . ');' . PHP_EOL;
+				$code .= "\t\tZVAL_EMPTY_STRING(" . $parameter['name'] . ');' . PHP_EOL;
+				$code .= "\t" . '}' . PHP_EOL;
 				return $code;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
