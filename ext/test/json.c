@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/array.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Json) {
