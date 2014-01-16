@@ -21,3 +21,4 @@ valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv whic
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/pregmatch.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/json.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/strings.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/typeoff.php

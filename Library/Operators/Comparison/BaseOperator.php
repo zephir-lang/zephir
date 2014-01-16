@@ -29,14 +29,19 @@ class ComparisonBaseOperator extends BaseOperator
 	protected $_commutative = false;
 
 	/**
-	 *
-	 * @param array $expr
-	 * @param array $compilationContext
+	 * @param $expr
+	 * @param CompilationContext $compilationContext
+	 * @return bool|CompiledExpression
+	 * @throws CompilerException
 	 */
-	public function optimizeTypeOf($expr, $compilationContext)
+	public function optimizeTypeOf($expr, CompilationContext $compilationContext)
 	{
 
 		if (!isset($expr['left'])) {
+			return false;
+		}
+
+		if (!isset($expr['right']) && !isset($expr['right']['value'])) {
 			return false;
 		}
 
@@ -57,42 +62,55 @@ class ComparisonBaseOperator extends BaseOperator
 				}
 			}
 
-			if (!isset($expr['left']['left']['value'])) {
-				throw new CompilerException("Typeof operator on non-variable", $expr);
+			$expression = new Expression($expr['left']['left']);
+			$condition = $expression->compile($compilationContext);
+			$variableVariable = $compilationContext->symbolTable->getVariable($condition->getCode());
+
+			if ($expr['right']['type'] != 'string') {
+				throw new CompilerException('TypeOf right expr must be `string` type', $expr['right']);
 			}
 
-			$variableVariable = $compilationContext->symbolTable->getVariableForRead($expr['left']['left']['value'], $compilationContext, $expr);
-			if ($variableVariable->getType() != 'variable') {
-				throw new CompilerException("Typeof operator on non-variable", $expr);
-			}
+			$value = strtolower($expr['right']['value']);
 
-			switch ($expr['right']['value']) {
-				case 'array':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY)';
-					break;
-				case 'object':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT)';
-					break;
-				case 'null':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL)';
-					break;
-				case 'string':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING)';
-					break;
-				case 'int':
-				case 'integer':
-				case 'long':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG)';
-					break;
-				case 'boolean':
+			switch($variableVariable->getType()) {
 				case 'bool':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
+				case 'double':
+				case 'string':
+				case 'int':
+					return new CompiledExpression('bool', $variableVariable->getType() == $value, $expr);
 					break;
-				case 'resource':
-					$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
+				case 'variable':
+					switch ($value) {
+						case 'array':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY)';
+							break;
+						case 'object':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT)';
+							break;
+						case 'null':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL)';
+							break;
+						case 'string':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING)';
+							break;
+						case 'int':
+						case 'integer':
+						case 'long':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG)';
+							break;
+						case 'boolean':
+						case 'bool':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
+							break;
+						case 'resource':
+							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
+							break;
+						default:
+							throw new CompilerException('Unsupported variable type: '.$variableVariable->getType().'', $expr['right']);
+					}
 					break;
 				default:
-					throw new CompilerException($expr['right']['value'], $expr['right']);
+					throw new CompilerException('Unsupported variable type: `'.$variableVariable->getType().'`', $expr['left']);
 			}
 
 			return new CompiledExpression('bool', $condition, $expr);
@@ -109,7 +127,6 @@ class ComparisonBaseOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-
 		$conditions = $this->optimizeTypeOf($expression, $compilationContext);
 		if ($conditions !== false) {
 			return $conditions;
