@@ -52,6 +52,7 @@ class StrposOptimizer
                 }
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
                 if (count($resolvedParams) >= 3) {
+                    $context->headersManager->add('kernel/operators');
                     $offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
                 }
 
