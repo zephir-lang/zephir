@@ -86,7 +86,7 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 	zephir_array_fast_append(arr, _0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, 1);
-	zephir_json_encode(return_value, &(return_value), arr, Z_LVAL_P(&_1)  TSRMLS_CC);
+	zephir_json_encode(return_value, &(return_value), arr, zephir_get_intval(&_1)  TSRMLS_CC);
 	RETURN_MM();
 
 }
@@ -112,7 +112,7 @@ PHP_METHOD(Test_Json, testDecodeObject2) {
 	ZEPHIR_INIT_VAR(obj);
 	ZVAL_STRING(obj, "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}", 1);
 
-	zephir_json_decode(return_value, &(return_value), obj, Z_LVAL_P(ZEPHIR_GLOBAL(global_true))  TSRMLS_CC);
+	zephir_json_decode(return_value, &(return_value), obj, zephir_get_intval(ZEPHIR_GLOBAL(global_true))  TSRMLS_CC);
 	RETURN_MM();
 
 }
