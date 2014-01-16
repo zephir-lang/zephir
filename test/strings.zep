@@ -4,66 +4,81 @@ class Strings
 {
 	public function testTrim(var str)
 	{
-            return trim(str);
+		return trim(str);
 	}
 
 	public function testRtrim(var str)
 	{
-            return rtrim(str);
+		return rtrim(str);
 	}
 
 	public function testLtrim(var str)
 	{
-            return ltrim(str);
+		return ltrim(str);
 	}
 
-        public function testImplode(var glue, var pieces)
-        {
-            return implode(glue, pieces);
-        }
+	public function testTrim2Params(var str, var charlist)
+	{
+		return trim(str, charlist);
+	}
 
-        public function testStrpos(var haystack, var needle)
-        {
-            return strpos(haystack, needle);
-        }
+	public function testRtrim2Params(var str, var charlist)
+	{
+		return rtrim(str, charlist);
+	}
 
-        public function testStrposOffset(var haystack, var needle, int offset)
-        {
-            return strpos(haystack, needle, offset);
-        }
+	public function testLtrim2Params(var str, var charlist)
+	{
+		return ltrim(str, charlist);
+	}
 
-        public function testExplode(var delimiter, var str)
-        {
-            return explode(delimiter, str);
-        }
+	public function testImplode(var glue, var pieces)
+	{
+		return implode(glue, pieces);
+	}
 
-        public function testExplodeStr(var str)
-        {
-            return explode(",", str);
-        }
+	public function testStrpos(var haystack, var needle)
+	{
+		return strpos(haystack, needle);
+	}
 
-        public function testExplodeLimit(var str, int limit)
-        {
-            return explode(",", str, limit);
-        }
+	public function testStrposOffset(var haystack, var needle, int offset)
+	{
+		return strpos(haystack, needle, offset);
+	}
 
-        public function testSubstr(var str, int from, int len)
-        {
-            return substr(str, from, len);
-        }
+	public function testExplode(var delimiter, var str)
+	{
+		return explode(delimiter, str);
+	}
 
-        public function testSubstr2(var str, int from)
-        {
-            return substr(str, from);
-        }
+	public function testExplodeStr(var str)
+	{
+		return explode(",", str);
+	}
 
-        public function testSubstr3(var str)
-        {
-            return substr(str, -1);
-        }
+	public function testExplodeLimit(var str, int limit)
+	{
+		return explode(",", str, limit);
+	}
 
-        public function testSubstr4(var str)
-        {
-            return substr(str, 0, -1);
-        }
+	public function testSubstr(var str, int from, int len)
+	{
+		return substr(str, from, len);
+	}
+
+	public function testSubstr2(var str, int from)
+	{
+		return substr(str, from);
+	}
+
+	public function testSubstr3(var str)
+	{
+		return substr(str, -1);
+	}
+
+	public function testSubstr4(var str)
+	{
+		return substr(str, 0, -1);
+	}
 }

@@ -5,6 +5,7 @@ $t = new Test\Strings();
 assert($t->testTrim(" hello ") == "hello");
 assert($t->testTrim("hello ") == "hello");
 assert($t->testTrim(" hello") == "hello");
+assert($t->testTrim(" hello X", 'X') == " hello ");
 
 assert($t->testLtrim(" hello ") == "hello ");
 assert($t->testLtrim("hello ") == "hello ");
