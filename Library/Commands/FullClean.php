@@ -32,7 +32,7 @@ class CommandFullClean extends CommandAbstract
 	 */
 	public function getCommand()
 	{
-		return 'fullClean';
+		return 'fullclean';
 	}
 
 	/**
@@ -42,7 +42,7 @@ class CommandFullClean extends CommandAbstract
 	 */
 	public function getUsage()
 	{
-		return 'full-clean';
+		return 'fullclean';
 	}
 
 	/**

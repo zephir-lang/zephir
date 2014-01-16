@@ -77,6 +77,7 @@ class ExplodeOptimizer
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
 		if (isset($resolvedParams[$limitOffset])) {
+			$context->headersManager->add('kernel/operators');
 			$limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
 		}
 

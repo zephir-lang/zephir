@@ -357,6 +357,13 @@ class Compiler
 			throw new Exception("Cannot obtain a valid initial namespace for the project");
 		}
 
+		/**
+		 * Tell the user the name could be reserved by another extension
+		 */
+		if (extension_loaded($namespace)) {
+			echo 'This extension can have conflicts with an existing loaded extension', PHP_EOL;
+		}
+
 		$this->_config->set('namespace', $namespace);
 		$this->_config->set('name',      $namespace);
 
@@ -538,9 +545,9 @@ class Compiler
 
 		$verbose = ($this->_config->get('verbose') ? true : false);
 		if ($verbose) {
-			passthru('cd ext && make', $exit);
+			passthru('cd ext && make -j2', $exit);
 		} else {
-			exec('cd ext && make --silent' . $verbose, $output, $exit);
+			exec('cd ext && make --silent -j2', $output, $exit);
 		}
 
 	}
@@ -564,7 +571,9 @@ class Compiler
 		exec('(export CC="gcc" && export CFLAGS="-O2" && cd ext && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
 
 		$this->_logger->output('Extension installed!');
-		$this->_logger->output('Add extension=' . $namespace . '.so to your php.ini');
+		if (!extension_loaded($namespace)) {
+			$this->_logger->output('Add extension=' . $namespace . '.so to your php.ini');
+		}
 		$this->_logger->output('Don\'t forget to restart your web server');
 	}
 
@@ -591,6 +600,17 @@ class Compiler
 	public function clean(CommandInterface $command)
 	{
 		system('cd ext && make clean 1> /dev/null');
+	}
+
+	/**
+	 * Clean the extension directory
+	 *
+	 * @param CommandInterface $command
+	 */
+	public function fullClean(CommandInterface $command)
+	{
+		system('cd ext && phpize --clean 1> /dev/null');
+		system('cd ext && sudo make clean 1> /dev/null');
 	}
 
 	/**

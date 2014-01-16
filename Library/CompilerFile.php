@@ -44,9 +44,9 @@ class CompilerFile
 	protected $_headerCBlocks;
 
 	protected $_config = null;
-	
+
 	protected $_logger = null;
-	
+
 	/**
 	 * CompilerFile constructor
 	 *
@@ -192,7 +192,7 @@ class CompilerFile
 							isset($constant['docblock']) ? $constant['docblock'] : null
 					));
 				}
-			}			
+			}
 			/**
 			 * Register methods
 			 */
@@ -211,7 +211,7 @@ class CompilerFile
 				}
 			}
 		}
-						
+
 		$this->_classDefinition = $classDefinition;
 	}
 
@@ -502,6 +502,11 @@ class CompilerFile
 	 */
 	public function compile(Compiler $compiler, StringsManager $stringsManager)
 	{
+
+		if (!$this->_ir) {
+			throw new CompilerException('IR related to compiled file is missing');
+		}
+
 		/**
 		 * Compilation context stores common objects required by compilation entities
 		 */
@@ -510,7 +515,7 @@ class CompilerFile
 		/**
 		 * Set global compiler in the compilation context
 		 */
-		$compilationContext->compiler = &$compiler;
+		$compilationContext->compiler = $compiler;
 
 		/**
 		 * Set global config in the compilation context
@@ -568,6 +573,7 @@ class CompilerFile
 
 		$classDefinition = $this->_classDefinition;
 		if (!$classDefinition) {
+			$this->_ir = null;
 			return;
 		}
 
@@ -621,6 +627,7 @@ class CompilerFile
 		 * Add to file compiled
 		 */
 		$this->_compiledFile = $path . '.c';
+		$this->_ir = null;
 	}
 
 }

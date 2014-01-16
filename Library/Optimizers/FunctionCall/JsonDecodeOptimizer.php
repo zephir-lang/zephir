@@ -65,6 +65,7 @@ class JsonDecodeOptimizer
 		 * Process encode options
 		 */
 		if (count($resolvedParams) >= 2) {
+			$context->headersManager->add('kernel/operators');
 			$options = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
 		} else {
 			$options = '0 ';
