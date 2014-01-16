@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/string.h"
 #include "kernel/memory.h"
-#include "kernel/fcall.h"
 #include "kernel/operators.h"
 
 
@@ -35,7 +34,7 @@ PHP_METHOD(Test_Strings, testTrim) {
 
 
 
-	zephir_fast_trim(return_value, str, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	return;
 
 }
@@ -48,7 +47,7 @@ PHP_METHOD(Test_Strings, testRtrim) {
 
 
 
-	zephir_fast_trim(return_value, str, ZEPHIR_TRIM_RIGHT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_RIGHT TSRMLS_CC);
 	return;
 
 }
@@ -61,7 +60,7 @@ PHP_METHOD(Test_Strings, testLtrim) {
 
 
 
-	zephir_fast_trim(return_value, str, ZEPHIR_TRIM_LEFT TSRMLS_CC);
+	zephir_fast_trim(return_value, str, NULL , ZEPHIR_TRIM_LEFT TSRMLS_CC);
 	return;
 
 }
@@ -70,13 +69,12 @@ PHP_METHOD(Test_Strings, testTrim2Params) {
 
 	zval *str, *charlist;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &str, &charlist);
+	zephir_fetch_params(0, 2, 0, &str, &charlist);
 
 
 
-	zephir_call_func_p2(return_value, "trim", str, charlist);
-	RETURN_MM();
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	return;
 
 }
 
@@ -84,13 +82,12 @@ PHP_METHOD(Test_Strings, testRtrim2Params) {
 
 	zval *str, *charlist;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &str, &charlist);
+	zephir_fetch_params(0, 2, 0, &str, &charlist);
 
 
 
-	zephir_call_func_p2(return_value, "rtrim", str, charlist);
-	RETURN_MM();
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_RIGHT TSRMLS_CC);
+	return;
 
 }
 
@@ -98,13 +95,12 @@ PHP_METHOD(Test_Strings, testLtrim2Params) {
 
 	zval *str, *charlist;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &str, &charlist);
+	zephir_fetch_params(0, 2, 0, &str, &charlist);
 
 
 
-	zephir_call_func_p2(return_value, "ltrim", str, charlist);
-	RETURN_MM();
+	zephir_fast_trim(return_value, str, charlist, ZEPHIR_TRIM_LEFT TSRMLS_CC);
+	return;
 
 }
 

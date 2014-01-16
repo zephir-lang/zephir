@@ -406,7 +406,6 @@ class SymbolTable
 	 */
 	public function getTempLocalVariableForWrite($type, CompilationContext $context)
 	{
-
 		$variable = $this->_reuseTempVariable($type, 'stack');
 		if (is_object($variable)) {
 			$variable->increaseUses();
