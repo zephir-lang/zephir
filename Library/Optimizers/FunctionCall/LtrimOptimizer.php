@@ -23,46 +23,9 @@
  * Optimizes calls to 'ltrim' using internal function
  */
 class LtrimOptimizer
-	extends OptimizerAbstract
+	extends TrimOptimizer
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
-
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
-
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->isNotVariableAndString()) {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
-
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
-
-		$context->headersManager->add('kernel/string');
-
-		$symbolVariable->setDynamicTypes('string');
-
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_fast_trim(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ZEPHIR_TRIM_LEFT TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
+        protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
 
 }
