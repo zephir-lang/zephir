@@ -14,6 +14,7 @@
 #include "test/emptytest.h"
 #include "test/exception.h"
 #include "test/exceptions.h"
+#include "test/exists.h"
 #include "test/fannkuch.h"
 #include "test/fcall.h"
 #include "test/fibonnaci.h"

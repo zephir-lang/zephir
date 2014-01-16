@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/string.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/operators.h"
 
 
@@ -62,6 +63,48 @@ PHP_METHOD(Test_Strings, testLtrim) {
 
 	zephir_fast_trim(return_value, str, ZEPHIR_TRIM_LEFT TSRMLS_CC);
 	return;
+
+}
+
+PHP_METHOD(Test_Strings, testTrim2Params) {
+
+	zval *str, *charlist;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str, &charlist);
+
+
+
+	zephir_call_func_p2(return_value, "trim", str, charlist);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Strings, testRtrim2Params) {
+
+	zval *str, *charlist;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str, &charlist);
+
+
+
+	zephir_call_func_p2(return_value, "rtrim", str, charlist);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Strings, testLtrim2Params) {
+
+	zval *str, *charlist;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str, &charlist);
+
+
+
+	zephir_call_func_p2(return_value, "ltrim", str, charlist);
+	RETURN_MM();
 
 }
 
@@ -116,7 +159,7 @@ PHP_METHOD(Test_Strings, testExplode) {
 
 
 
-	zephir_fast_explode(return_value, delimiter, str, 9223372036854775807  TSRMLS_CC);
+	zephir_fast_explode(return_value, delimiter, str, LONG_MAX TSRMLS_CC);
 	return;
 
 }
@@ -129,7 +172,7 @@ PHP_METHOD(Test_Strings, testExplodeStr) {
 
 
 
-	zephir_fast_explode_str(return_value, SL(","), str, 9223372036854775807  TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, LONG_MAX TSRMLS_CC);
 	return;
 
 }
@@ -146,7 +189,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, limit);
-	zephir_fast_explode_str(return_value, SL(","), str, Z_LVAL_P(&_0)  TSRMLS_CC);
+	zephir_fast_explode_str(return_value, SL(","), str, zephir_get_intval(&_0)  TSRMLS_CC);
 	return;
 
 }
@@ -166,7 +209,7 @@ PHP_METHOD(Test_Strings, testSubstr) {
 	ZVAL_LONG(&_0, from);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, len);
-	zephir_substr(return_value, str, Z_LVAL_P(&_0) , Z_LVAL_P(&_1) );
+	zephir_substr(return_value, str, zephir_get_intval(&_0) , zephir_get_intval(&_1) );
 	return;
 
 }
@@ -183,7 +226,7 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, from);
-	zephir_substr(return_value, str, Z_LVAL_P(&_0) , 0 );
+	zephir_substr(return_value, str, zephir_get_intval(&_0) , 0 );
 	return;
 
 }
