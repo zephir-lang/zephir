@@ -14,6 +14,14 @@ assert($t->testRtrim(" hello ") == " hello");
 assert($t->testRtrim("hello ") == "hello");
 assert($t->testRtrim(" hello") == " hello");
 
+// 2 params tests
+
+assert($t->testTrim2Params('Hello World', "Hdle") == "o Wor");
+
+assert($t->testLtrim2Params('Hello World', "Hdle") == "o World");
+
+assert($t->testRtrim2Params('Hello World', "Hdle") == "Hello Wor");
+
 assert($t->testStrpos("abcdef abcdef", "a") == 0);
 assert($t->testStrposOffset("abcdef abcdef", "a", 1) == 7);
 
