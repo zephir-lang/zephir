@@ -41,4 +41,14 @@ class Pregmatch
             return matched;
 	}
 
+        public function testPregMatchAll() {
+
+            var pattern, subject, matched;
+
+            let pattern = "/def$/";
+            let subject = "abcdef";
+
+            return preg_match_all(pattern, subject);
+        }
+
 }

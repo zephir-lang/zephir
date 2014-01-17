@@ -27,6 +27,9 @@
 class PregMatchOptimizer
 	extends OptimizerAbstract
 {
+
+        protected static $GLOBAL_MATCH = 0;
+
 	/**
 	 * @param array $expression
 	 * @param Call $call
@@ -82,7 +85,7 @@ class PregMatchOptimizer
 		$context->headersManager->add('kernel/string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ' TSRMLS_CC);');
+		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . static::$GLOBAL_MATCH .' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }

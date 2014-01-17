@@ -76,3 +76,18 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
 }
 
+PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
+
+	zval *pattern, *subject;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(pattern);
+	ZVAL_STRING(pattern, "/def$/", 1);
+	ZEPHIR_INIT_VAR(subject);
+	ZVAL_STRING(subject, "abcdef", 1);
+	zephir_call_func_p2(return_value, "preg_match_all", pattern, subject);
+	RETURN_MM();
+
+}
+
