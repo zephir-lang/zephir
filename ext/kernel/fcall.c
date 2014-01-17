@@ -447,7 +447,9 @@ int zephir_call_internal_method_params(zval *return_value, zval **return_value_p
 
 	va_start(va, param_count);
 	for (i = 0; i < param_count; ++i) {
+
 		zval *param = va_arg(va, zval*);
+		Z_ADDREF_P(param);
 
 		#if PHP_VERSION_ID < 50500
 		zend_vm_stack_push_nocheck(param TSRMLS_CC);
