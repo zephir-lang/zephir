@@ -400,10 +400,12 @@ class MethodCall extends Call
 			}
 
 			$privateCall = false;
-			if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-				if ($method->isPrivate() && false) {
-					if ($method->getClassDefinition() == $classDefinition) {
-						$privateCall = true;
+			if ($compilationContext->config->get('private-internal-methods', 'optimizations')) {
+				if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
+					if ($method->isPrivate() && false) {
+						if ($method->getClassDefinition() == $classDefinition) {
+							$privateCall = true;
+						}
 					}
 				}
 			}

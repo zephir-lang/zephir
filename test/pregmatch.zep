@@ -19,7 +19,7 @@ class Pregmatch
 
 	public function testWithoutReturns()
 	{
-            var pattern, subject, matches;
+            var pattern, subject, matches = "";
 
             let pattern = "/def$/";
             let subject = "abcdef";
