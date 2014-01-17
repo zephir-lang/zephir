@@ -385,19 +385,6 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 		} \
 	}
 
-/** Low overhead parse/fetch parameters */
-#define zephir_fetch_internal_params(memory_grow, variadic_list, variadic_param_count, required_params, optional_params, ...) \
-	va_start(variadic_list, variadic_param_count); \
-	if (zephir_fetch_internal_parameters(ZEND_NUM_ARGS() TSRMLS_CC, required_params, optional_params, __VA_ARGS__) == FAILURE) { \
-		va_end(variadic_list); \
-		if (memory_grow) { \
-			RETURN_MM_NULL(); \
-		} else { \
-			RETURN_NULL(); \
-		} \
-	} \
-	va_end(variadic_list);
-
 #define ZEPHIR_VERIFY_INTERFACE(instance, interface_ce) \
 	do { \
 		if (Z_TYPE_P(instance) != IS_OBJECT || !instanceof_function_ex(Z_OBJCE_P(instance), interface_ce, 1 TSRMLS_CC)) { \

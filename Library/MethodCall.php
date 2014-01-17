@@ -463,7 +463,7 @@ class MethodCall extends Call
 				if (!isset($expression['parameters']) || !count($params)) {
 
 					if ($isExpecting) {
-						$codePrinter->output('zephir_call_internal_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
+						$codePrinter->output('zephir_call_internal_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . $classDefinition->getNCNamespace() . '_' . $classDefinition->getName() . '_' . $methodName . '));');
 					} else {
 						$codePrinter->output('zephir_call_internal_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 					}
@@ -471,7 +471,7 @@ class MethodCall extends Call
 				} else {
 
 					if ($isExpecting) {
-						$codePrinter->output('zephir_call_internal_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
+						$codePrinter->output('zephir_call_internal_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . $classDefinition->getNCNamespace() . '_' . $classDefinition->getName() . '_' . $methodName . '), ' . join(', ', $params) . ');');
 					} else {
 						$codePrinter->output('zephir_call_internal_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 					}

@@ -40,8 +40,6 @@ class ClassMethod
 
 	protected $_returnClassTypes;
 
-	protected $_variadicList;
-
 	protected $_void = false;
 
 	/**
@@ -970,17 +968,6 @@ class ClassMethod
 		}
 
 		/**
-		 * Generate va_list internal parameter
-		 */
-		if ($this->isPrivate() && $compilationContext->config->get('private-internal-methods', 'optimizations')) {
-			if (count($parameters)) {
-				$variadicList = $symbolTable->getTempVariable('va_list', $compilationContext);
-				$variadicList->increaseUses();
-				$this->_variadicList = $variadicList;
-			}
-		}
-
-		/**
 		 * Initialize default values in dynamic variables
 		 */
 		$initVarCode = "";
@@ -1204,18 +1191,10 @@ class ClassMethod
 			 */
 			$codePrinter->preOutputBlankLine();
 			$compilationContext->headersManager->add('kernel/memory');
-			if ($this->isPrivate() == true && $compilationContext->config->get('private-internal-methods', 'optimizations')) {
-				if ($symbolTable->getMustGrownStack()) {
-					$code .= "\t" . 'zephir_fetch_internal_params(1, ' . $variadicList->getName() . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-				} else {
-					$code .= "\t" . 'zephir_fetch_internal_params(0, ' . $variadicList->getName() . ', ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-				}
+			if ($symbolTable->getMustGrownStack()) {
+				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			} else {
-				if ($symbolTable->getMustGrownStack()) {
-					$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-				} else {
-					$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
-				}
+				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 			}
 			$code .= PHP_EOL;
 		}
@@ -1308,9 +1287,6 @@ class ClassMethod
 				case 'zend_function':
 					$pointer = '*';
 					$code = 'zend_function ';
-					break;
-				case 'va_list':
-					$code = 'va_list ';
 					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
