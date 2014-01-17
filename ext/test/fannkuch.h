@@ -6,7 +6,6 @@ ZEPHIR_INIT_CLASS(Test_Fannkuch);
 PHP_METHOD(Test_Fannkuch, process);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fannkuch_process, 0, 0, 1)
-	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_fannkuch_method_entry) {

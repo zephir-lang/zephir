@@ -71,21 +71,15 @@ PHP_METHOD(Test_Flow, testSwitch9);
 PHP_METHOD(Test_Flow, testSwitch10);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testif16, 0, 0, 1)
-	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testwhile10, 0, 0, 1)
-	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testwhile11, 0, 0, 2)
-	ZEND_ARG_INFO(0, a)
-	ZEND_ARG_INFO(0, d)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor15, 0, 0, 2)
-	ZEND_ARG_INFO(0, c)
-	ZEND_ARG_INFO(0, d)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_flow_method_entry) {

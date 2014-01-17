@@ -40,6 +40,8 @@ class ClassMethod
 
 	protected $_returnClassTypes;
 
+	protected $_variadicList;
+
 	protected $_void = false;
 
 	/**
@@ -304,6 +306,19 @@ class ClassMethod
 	/**
 	 * Returns the number of parameters the method has
 	 *
+	 * @return boolean
+	 */
+	public function hasParameters()
+	{
+		if (is_object($this->_parameters)) {
+			return count($this->_parameters->getParameters()) > 0;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the number of parameters the method has
+	 *
 	 * @return int
 	 */
 	public function getNumberOfParameters()
@@ -334,6 +349,22 @@ class ClassMethod
 			}
 		}
 		return 0;
+	}
+
+	/**
+	 * Returns the number of required parameters the method has
+	 *
+	 * @return string
+	 */
+	public function getInternalParameters()
+	{
+		if (is_object($this->_parameters)) {
+			$parameters = $this->_parameters->getParameters();
+			if (count($parameters)) {
+				return count($parameters) . ', ...';
+			}
+		}
+		return "";
 	}
 
 	/**
@@ -798,9 +829,10 @@ class ClassMethod
 		/**
 		 * Parameters has an additional extra mutation
 		 */
+		$parameters = $this->_parameters;
 		if ($localContext) {
-			if (is_object($this->_parameters)) {
-				foreach ($this->_parameters->getParameters() as $parameter) {
+			if (is_object($parameters)) {
+				foreach ($parameters->getParameters() as $parameter) {
 					$localContext->increaseMutations($parameter['name']);
 				}
 			}
@@ -817,12 +849,12 @@ class ClassMethod
 		$codePrinter = new CodePrinter();
 		$compilationContext->codePrinter = $codePrinter;
 
-		if (is_object($this->_parameters)) {
+		if (is_object($parameters)) {
 
 			/**
 			 * Round 1. Create variables in parameters in the symbol table
 			 */
-			foreach ($this->_parameters->getParameters() as $parameter) {
+			foreach ($parameters->getParameters() as $parameter) {
 
 				/**
 				 * Change dynamic variables by low level types
@@ -938,6 +970,17 @@ class ClassMethod
 		}
 
 		/**
+		 * Generate va_list internal parameter
+		 */
+		if ($this->isPrivate() && false) {
+			if (count($parameters)) {
+				$variadicList = $symbolTable->getTempVariable('va_list', $compilationContext);
+				$variadicList->increaseUses();
+				$this->_variadicList = $variadicList;
+			}
+		}
+
+		/**
 		 * Initialize default values in dynamic variables
 		 */
 		$initVarCode = "";
@@ -1004,7 +1047,7 @@ class ClassMethod
 		 */
 		$initCode = "";
 		$code = "";
-		if (is_object($this->_parameters)) {
+		if (is_object($parameters)) {
 
 			/**
 			 * Round 2. Fetch the parameters in the method
@@ -1014,7 +1057,7 @@ class ClassMethod
 			$optionalParams = array();
 			$numberRequiredParams = 0;
 			$numberOptionalParams = 0;
-			foreach ($this->_parameters->getParameters() as $parameter) {
+			foreach ($parameters->getParameters() as $parameter) {
 
 				if (isset($parameter['data-type'])) {
 					$dataType = $parameter['data-type'];
@@ -1051,7 +1094,7 @@ class ClassMethod
 					$writeDetector = new WriteDetector();
 				}
 
-				foreach ($this->_parameters->getParameters() as $parameter) {
+				foreach ($parameters->getParameters() as $parameter) {
 
 					if (isset($parameter['data-type'])) {
 						$dataType = $parameter['data-type'];
@@ -1153,10 +1196,18 @@ class ClassMethod
 			 */
 			$codePrinter->preOutputBlankLine();
 			$compilationContext->headersManager->add('kernel/memory');
-			if ($symbolTable->getMustGrownStack()) {
-				$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+			if ($this->isPrivate() == false || true) {
+				if ($symbolTable->getMustGrownStack()) {
+					$code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+				} else {
+					$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+				}
 			} else {
-				$code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+				if ($symbolTable->getMustGrownStack()) {
+					$code .= "\t" . 'zephir_fetch_internal_params(1, ' . $variadicList->getName() . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+				} else {
+					$code .= "\t" . 'zephir_fetch_internal_params(0, ' . $variadicList->getName() . ', ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+				}
 			}
 			$code .= PHP_EOL;
 		}
@@ -1250,6 +1301,9 @@ class ClassMethod
 					$pointer = '*';
 					$code = 'zend_function ';
 					break;
+				case 'va_list':
+					$code = 'va_list ';
+					break;
 				default:
 					throw new CompilerException("Unsupported type in declare: " . $type);
 			}
@@ -1323,8 +1377,7 @@ class ClassMethod
 				 * If a method has return-type hints we need to ensure the last statement is a 'return' statement
 				 */
 				if ($this->hasReturnTypes()) {
-					if (is_object($this->_parameters)) {
-						$parameters = $this->_parameters->getParameters();
+					if (is_object($parameters)) {
 						throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $parameters[0]);
 					}
 					throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints');

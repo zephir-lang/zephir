@@ -44,7 +44,7 @@ PHP_METHOD(Test_McallChained, testMethod2) {
 
 }
 
-PHP_METHOD(Test_McallChained, testMethod3) {
+ZEPHIR_INTERNAL_METHOD(Test_McallChained, testMethod3) {
 
 
 	RETURN_THISW();

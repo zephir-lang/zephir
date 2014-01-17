@@ -174,6 +174,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 		Z_SET_ISREF_P(discard);
 		ZEPHIR_INIT_NVAR(_0);
 		zephir_call_func_p3(_0, "preg_match_all", _6, contents, discard);
+		Z_UNSET_ISREF_P(discard);
 		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}

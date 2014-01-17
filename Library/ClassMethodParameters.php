@@ -22,8 +22,9 @@
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters
+class ClassMethodParameters implements Countable
 {
+	private $_parameters = array();
 
 	/**
 	 *
@@ -34,9 +35,22 @@ class ClassMethodParameters
 		$this->_parameters = $parameters;
 	}
 
+	/**
+	 * Return internal parameters
+	 *
+	 * @return array
+	 */
 	public function getParameters()
 	{
 		return $this->_parameters;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function count()
+	{
+		return count($this->_parameters);
 	}
 
 }

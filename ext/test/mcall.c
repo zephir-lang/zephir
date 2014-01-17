@@ -43,7 +43,7 @@ PHP_METHOD(Test_Mcall, testMethod2) {
 
 }
 
-PHP_METHOD(Test_Mcall, testMethod3) {
+ZEPHIR_INTERNAL_METHOD(Test_Mcall, testMethod3) {
 
 
 	RETURN_STRING("hello private", 1);
@@ -76,11 +76,12 @@ PHP_METHOD(Test_Mcall, testMethod5) {
 
 }
 
-PHP_METHOD(Test_Mcall, testMethod6) {
+ZEPHIR_INTERNAL_METHOD(Test_Mcall, testMethod6, 2, ...) {
 
+	va_list _0;
 	zval *a, *b;
 
-	zephir_fetch_params(0, 2, 0, &a, &b);
+	zephir_fetch_internal_params(0, _0, 2, 0, &a, &b);
 
 
 

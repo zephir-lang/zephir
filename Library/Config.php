@@ -26,11 +26,12 @@ class Config
 {
 	protected $_config = array(
 		'optimizations' => array(
-			'static-type-inference' => true,
+			'static-type-inference'             => true,
 			'static-type-inference-second-pass' => true,
-			'local-context-pass' => true,
-			'constant-folding' => true,
-			'static-constant-class-folding' => true,
+			'local-context-pass'                => true,
+			'constant-folding'                  => true,
+			'static-constant-class-folding'     => true,
+			'private-internal-methods'          => false
 		),
 		'namespace'   => '',
 		'name'        => '',

@@ -401,7 +401,7 @@ class MethodCall extends Call
 
 			$privateCall = false;
 			if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-				if ($method->isPrivate()) {
+				if ($method->isPrivate() && false) {
 					if ($method->getClassDefinition() == $classDefinition) {
 						$privateCall = true;
 					}
@@ -410,7 +410,7 @@ class MethodCall extends Call
 
 			if (!$privateCall) {
 
-				if (!isset($expression['parameters']) || !count($params)) {				
+				if (!isset($expression['parameters']) || !count($params)) {
 
 					if ($compilationContext->insideCycle) {
 
@@ -430,7 +430,7 @@ class MethodCall extends Call
 							$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 						}
 					}
-				} else {				
+				} else {
 
 					if ($compilationContext->insideCycle) {
 
@@ -458,21 +458,21 @@ class MethodCall extends Call
 				/**
 				 * Calls to internal private methods are called directly without using the PHP userland
 				 */
-				if (!isset($expression['parameters']) || !count($params)) {				
-					
+				if (!isset($expression['parameters']) || !count($params)) {
+
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_internal_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
 					} else {
 						$codePrinter->output('zephir_call_internal_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 					}
-					
-				} else {				
-					
+
+				} else {
+
 					if ($isExpecting) {
 						$codePrinter->output('zephir_call_internal_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
 					} else {
 						$codePrinter->output('zephir_call_internal_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-					}					
+					}
 
 				}
 
@@ -484,13 +484,13 @@ class MethodCall extends Call
 				$symbolVariable->initVariant($compilationContext);
 			}
 
-			if (!isset($expression['parameters']) || !count($params)) {				
+			if (!isset($expression['parameters']) || !count($params)) {
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_method_zval(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
 				} else {
 					$codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
 				}
-			} else {				
+			} else {
 				if ($isExpecting) {
 					$codePrinter->output('zephir_call_method_zval_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
 				} else {

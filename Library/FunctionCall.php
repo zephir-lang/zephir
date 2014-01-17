@@ -378,6 +378,12 @@ class FunctionCall extends Call
 			}
 		}
 
+		if (is_array($references)) {
+			foreach ($references as $reference) {
+				$compilationContext->codePrinter->output('Z_UNSET_ISREF_P(' . $reference . ');');
+			}
+		}
+
 		/**
 		 * We can mark temporary variables generated as idle
 		 */

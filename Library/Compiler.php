@@ -609,8 +609,8 @@ class Compiler
 	 */
 	public function fullClean(CommandInterface $command)
 	{
-		system('cd ext && phpize --clean 1> /dev/null');
 		system('cd ext && sudo make clean 1> /dev/null');
+		system('cd ext && phpize --clean 1> /dev/null');
 	}
 
 	/**

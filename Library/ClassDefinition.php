@@ -333,7 +333,7 @@ class ClassDefinition
 	{
 		if (isset($this->_constants[$name]))
 		{
-			return true; 
+			return true;
 		}
 		/**
 		 * @todo add code to check if constant is defined in interfaces
@@ -717,7 +717,16 @@ class ClassDefinition
 			}
 
 			if ($this->getType() == 'class') {
-				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+
+				if ($method->isPrivate() == false || true) {
+					$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+				} else {
+					if ($method->hasParameters() == false) {
+						$codePrinter->output('ZEPHIR_INTERNAL_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+					} else {
+						$codePrinter->output('ZEPHIR_INTERNAL_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', ' . $method->getInternalParameters() . ') {');
+					}
+				}
 				$codePrinter->outputBlankLine();
 
 				$method->compile($compilationContext);
@@ -759,10 +768,8 @@ class ClassDefinition
 			$parameters = $method->getParameters();
 			if (count($parameters)) {
 				$codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
-				foreach ($parameters as $parameters) {
-					foreach ($parameters as $parameter) {
-						$codePrinter->output('	ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
-					}
+				foreach ($parameters->getParameters() as $parameter) {
+					$codePrinter->output('	ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
 				}
 				$codePrinter->output('ZEND_END_ARG_INFO()');
 				$codePrinter->outputBlankLine();

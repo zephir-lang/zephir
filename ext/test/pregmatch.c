@@ -13,7 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/string.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Pregmatch) {
@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 
-	zval *pattern, *subject, *_0, *_1, *_2;
+	zval *pattern, *subject;
 
 	ZEPHIR_MM_GROW();
 
@@ -35,35 +35,34 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_preg_match(_1, &(_1), pattern, subject, _0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_2);
-	zephir_preg_match(return_value, &(return_value), pattern, subject, _2 TSRMLS_CC);
+	zephir_call_func_p2_noret("preg_match", pattern, subject);
+	zephir_call_func_p2(return_value, "preg_match", pattern, subject);
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
-	zval *pattern, *subject, *matches, *_0;
+	zval *pattern, *subject, *matches;
 
 	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(matches);
+	ZVAL_STRING(matches, "", 1);
 
 	ZEPHIR_INIT_VAR(pattern);
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_INIT_VAR(matches);
-	ZEPHIR_INIT_VAR(_0);
-	zephir_preg_match(_0, &(_0), pattern, subject, matches TSRMLS_CC);
+	Z_SET_ISREF_P(matches);
+	zephir_call_func_p3_noret("preg_match", pattern, subject, matches);
+	Z_UNSET_ISREF_P(matches);
 	RETURN_CCTOR(matches);
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
-	zval *pattern, *subject, *matched, *_0;
+	zval *pattern, *subject, *matched;
 
 	ZEPHIR_MM_GROW();
 
@@ -71,9 +70,8 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_INIT_VAR(matched);
-	zephir_preg_match(matched, &(matched), pattern, subject, _0 TSRMLS_CC);
+	zephir_call_func_p2(matched, "preg_match", pattern, subject);
 	RETURN_CCTOR(matched);
 
 }

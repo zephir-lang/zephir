@@ -31,12 +31,13 @@ ZEPHIR_INIT_CLASS(Test_SpectralNorm) {
 
 }
 
-PHP_METHOD(Test_SpectralNorm, Ax) {
+ZEPHIR_INTERNAL_METHOD(Test_SpectralNorm, Ax, 2, ...) {
 
+	va_list _2;
 	zval *i, *j, *_0, _1;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &i, &j);
+	zephir_fetch_internal_params(1, _2, 0, &i, &j);
 
 
 
@@ -48,15 +49,16 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 
 }
 
-PHP_METHOD(Test_SpectralNorm, Au) {
+ZEPHIR_INTERNAL_METHOD(Test_SpectralNorm, Au, 3, ...) {
 
+	va_list _12;
 	zend_function *_9 = NULL, *_11 = NULL;
 	zend_bool _0, _3;
 	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL;
 	int n, t, i, j, _1, _2, _4, _5;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
+	zephir_fetch_internal_params(1, _12, 0, &n_param, &u, &v);
 
 		n = zephir_get_intval(n_param);
 
@@ -116,15 +118,16 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 
 }
 
-PHP_METHOD(Test_SpectralNorm, Atu) {
+ZEPHIR_INTERNAL_METHOD(Test_SpectralNorm, Atu, 3, ...) {
 
+	va_list _12;
 	zend_function *_9 = NULL, *_11 = NULL;
 	zend_bool _0, _3;
 	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL;
 	int n, t, i, j, _1, _2, _4, _5;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
+	zephir_fetch_internal_params(1, _12, 0, &n_param, &u, &v);
 
 		n = zephir_get_intval(n_param);
 
@@ -184,12 +187,13 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 
 }
 
-PHP_METHOD(Test_SpectralNorm, AtAu) {
+ZEPHIR_INTERNAL_METHOD(Test_SpectralNorm, AtAu, 4, ...) {
 
+	va_list _0;
 	zval *n, *u, *v, *w;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 4, 0, &n, &u, &v, &w);
+	zephir_fetch_internal_params(1, _0, 0, &n, &u, &v, &w);
 
 
 
