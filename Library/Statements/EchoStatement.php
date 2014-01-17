@@ -61,12 +61,15 @@ class EchoStatement
 					switch ($variable->getType()) {
 						case 'int':
 							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
-							break;
+							break;						
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
 							break;
 						case 'char':
 							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');
+							break;
+						case 'bool':
+							$compilationContext->codePrinter->output('php_printf("%s", ' . $variable->getName() . ' ? "1": "");');
 							break;
 						case 'string':
 						case 'variable':

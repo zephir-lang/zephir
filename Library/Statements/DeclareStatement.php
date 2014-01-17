@@ -41,7 +41,7 @@ class DeclareStatement
 		$symbolTable = $compilationContext->symbolTable;
 
 		$variables = array();
-		foreach ($statement['variables'] as $variable) {
+		foreach ($statement['variables'] as $variable) {			
 
 			if ($symbolTable->hasVariable($variable['variable'])) {
 				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
@@ -75,45 +75,57 @@ class DeclareStatement
 			 */
 			$symbolVariable->setOriginal($variable);
 
+			if (isset($variable['expr']['type'])) {
+				$defaultType = $variable['expr']['type'];
+			} else {
+				$defaultType = null;
+			}
+
 			if (isset($variable['expr']['value'])) {
 				$defaultValue = $variable['expr']['value'];
 			} else {
 				$defaultValue = null;
-			}
+			}			
 
 			/**
 			 * Variables with a default value are initialized by default
 			 */
-			if ($defaultValue !== null) {
+			if ($defaultValue !== null || $defaultType !== null) {
 
 				switch ($currentType) {
 					case 'int':
 					case 'uint':
 					case 'ulong':
 					case 'long':
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'int':
 							case 'uint':
 							case 'ulong':
 							case 'int':
+								break;
+							case 'null':
+								$defaultValue = 0;
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
 					case 'double':
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'double':
+								break;
+							case 'null':
+								$defaultValue = 0;
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
 					case 'bool':
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'bool':
 								if ($variable['expr']['value'] == 'true') {
 									$defaultValue = 1;
@@ -121,18 +133,24 @@ class DeclareStatement
 									$defaultValue = 0;
 								}
 								break;
+							case 'null':
+								$defaultValue = 0;
+								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
 					case 'char':
 					case 'uchar':
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'char':
 							case 'uchar':
 								$defaultValue = '\'' . $defaultValue . '\'';
 								break;
 							case 'int':
+								break;
+							case 'null':
+								$defaultValue = 0;
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
@@ -140,8 +158,9 @@ class DeclareStatement
 						break;
 					case 'string':
 						$defaultValue = $variable['expr'];
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'string':
+							case 'null':
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
@@ -149,7 +168,7 @@ class DeclareStatement
 						break;
 					case 'variable':
 						$defaultValue = $variable['expr'];
-						switch ($variable['expr']['type']) {
+						switch ($defaultType) {
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -161,10 +180,14 @@ class DeclareStatement
 								$symbolVariable->setDynamicTypes('double');
 								break;
 							case 'string':
+							case 'ulong':
 								$symbolVariable->setDynamicTypes('string');
 								break;
+							case 'null':
+								$symbolVariable->setDynamicTypes('null');
+								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $statement['data-type'], $variable);
 						}
 						break;
 					default:
