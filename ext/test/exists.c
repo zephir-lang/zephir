@@ -83,7 +83,7 @@ PHP_METHOD(Test_Exists, testFileExists) {
 
 
 
-	RETURN_BOOL(zephir_file_exists(fileName TSRMLS_CC) == SUCCESS);
+	RETURN_BOOL((zephir_file_exists(fileName TSRMLS_CC) == SUCCESS));
 
 }
 

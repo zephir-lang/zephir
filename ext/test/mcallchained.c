@@ -44,7 +44,7 @@ PHP_METHOD(Test_McallChained, testMethod2) {
 
 }
 
-ZEPHIR_INTERNAL_METHOD(Test_McallChained, testMethod3) {
+PHP_METHOD(Test_McallChained, testMethod3) {
 
 
 	RETURN_THISW();
@@ -86,7 +86,7 @@ PHP_METHOD(Test_McallChained, testChained3) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_internal_method(_0, this_ptr, "testmethod3");
+	zephir_call_method(_0, this_ptr, "testmethod3");
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method(_1, _0, "testmethod2");
 	zephir_call_method(return_value, _1, "testmethod1");
