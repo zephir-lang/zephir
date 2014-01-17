@@ -1204,7 +1204,7 @@ class ClassMethod
 			 */
 			$codePrinter->preOutputBlankLine();
 			$compilationContext->headersManager->add('kernel/memory');
-			if ($this->isPrivate() == true || $compilationContext->config->get('private-internal-methods', 'optimizations')) {
+			if ($this->isPrivate() == true && $compilationContext->config->get('private-internal-methods', 'optimizations')) {
 				if ($symbolTable->getMustGrownStack()) {
 					$code .= "\t" . 'zephir_fetch_internal_params(1, ' . $variadicList->getName() . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
 				} else {

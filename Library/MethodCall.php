@@ -176,9 +176,9 @@ class MethodCall extends Call
 					$classTypes = $variableVariable->getClassTypes();
 
 					if (count($classTypes)) {
+						
 						$numberImplemented = 0;
-						$compiler = &$compilationContext->compiler;
-
+						$compiler = $compilationContext->compiler;
 						foreach($classTypes as $classType) {
 
 							if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||

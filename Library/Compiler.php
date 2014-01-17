@@ -103,6 +103,10 @@ class Compiler
 	 */
 	protected function _recursivePreCompile($path)
 	{
+		if (!is_string($path)) {
+			throw new CompilerException('Invalid compilation path' . var_export($path, true));
+		}
+
 		/**
 		 * Pre compile all files
 		 */
@@ -333,6 +337,10 @@ class Compiler
 		$namespace = $this->_config->get('namespace');
 		if (!$namespace) {
 			throw new Exception("Extension namespace cannot be loaded");
+		}
+
+		if (!is_string($namespace)) {
+			throw new Exception("Extension namespace is invalid");	
 		}
 
 		if (!is_dir('.temp')) {
