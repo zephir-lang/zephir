@@ -176,7 +176,7 @@ class MethodCall extends Call
 					$classTypes = $variableVariable->getClassTypes();
 
 					if (count($classTypes)) {
-						
+
 						$numberImplemented = 0;
 						$compiler = $compilationContext->compiler;
 						foreach($classTypes as $classType) {
@@ -377,7 +377,7 @@ class MethodCall extends Call
 										//echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
 									}
 								} else {
-									if ($parameter[0]['data-type'] != 'variable')	 {
+									if ($parameter[0]['data-type'] != 'variable') {
 										//echo '2: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
 									}
 								}
@@ -402,7 +402,7 @@ class MethodCall extends Call
 			$privateCall = false;
 			if ($compilationContext->config->get('private-internal-methods', 'optimizations')) {
 				if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-					if ($method->isPrivate() && false) {
+					if ($method->isPrivate()) {
 						if ($method->getClassDefinition() == $classDefinition) {
 							$privateCall = true;
 						}

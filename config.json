@@ -5,7 +5,7 @@
 		"local-context-pass": true,
 		"constant-folding": true,
 		"static-constant-class-folding": true,
-		"private-internal-methods": true
+		"private-internal-methods": false
 	},
 	"namespace":   "test",
 	"version":     "1.0.0",

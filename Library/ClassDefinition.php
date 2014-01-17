@@ -718,15 +718,7 @@ class ClassDefinition
 
 			if ($this->getType() == 'class') {
 
-				if ($method->isPrivate() == false || true) {
-					$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
-				} else {
-					if ($method->hasParameters() == false) {
-						$codePrinter->output('ZEPHIR_INTERNAL_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
-					} else {
-						$codePrinter->output('ZEPHIR_INTERNAL_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', ' . $method->getInternalParameters() . ') {');
-					}
-				}
+				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
 				$codePrinter->outputBlankLine();
 
 				$method->compile($compilationContext);

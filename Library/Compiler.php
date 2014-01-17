@@ -340,7 +340,7 @@ class Compiler
 		}
 
 		if (!is_string($namespace)) {
-			throw new Exception("Extension namespace is invalid");	
+			throw new Exception("Extension namespace is invalid");
 		}
 
 		if (!is_dir('.temp')) {
@@ -629,7 +629,7 @@ class Compiler
 	 */
 	public function build(CommandInterface $command)
 	{
-		$this->compile($command);
+		$this->generate($command);
 		$this->install($command);
 	}
 
