@@ -955,6 +955,7 @@ class LetStatement
 								$symbolVariable->setIdle(true);
 								break;
 							case 'variable':
+							case 'string':
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $exprVariable->getName() . ', PH_SEPARATE);');
 								break;
 							default:
