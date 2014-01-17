@@ -53,6 +53,7 @@ class Config
 			if (!is_array($config)) {
 				throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");
 			}
+			/* @todo merge options properly */
 			$this->_config = array_merge($this->_config, $config);
 		}
 		register_shutdown_function(array($this, '_saveOnExit'));

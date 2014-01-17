@@ -4,11 +4,12 @@
 		"static-type-inference-second-pass": true,
 		"local-context-pass": true,
 		"constant-folding": true,
-		"static-constant-class-folding":true,
+		"static-constant-class-folding": true,
+		"private-internal-methods": true
 	},
-	"namespace":"test",
-	"version":"1.0.0",
-	"name":"Test Extension",
-	"description":"",
-	"author":""
+	"namespace": "test",
+	"version": "1.0.0",
+	"name": "Test Extension",
+	"description": "",
+	"author": ""
 }
