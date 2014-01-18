@@ -1066,6 +1066,7 @@ class ClassMethod
 					$params[] = '&' . $parameter['name'] . '_param';
 				}
 
+
 				if (isset($parameter['default'])) {
 					$optionalParams[] = $parameter;
 					$numberOptionalParams++;
@@ -1081,7 +1082,6 @@ class ClassMethod
 			 */
 			$parametersToSeparate = array();
 			if (is_object($this->_statements)) {
-
 				/**
 				 * If local context is available
 				 */
@@ -1099,6 +1099,7 @@ class ClassMethod
 
 					if ($dataType == 'variable' || $dataType == 'string') {
 						$name = $parameter['name'];
+
 						if (!$localContext) {
 							if ($writeDetector->detect($name, $this->_statements->getStatements())) {
 								$parametersToSeparate[$name] = true;
@@ -1130,7 +1131,6 @@ class ClassMethod
 				}
 
 				if ($dataType != 'variable') {
-
 					/**
 					 * Assign value from zval to low level type
 					 */
@@ -1153,7 +1153,6 @@ class ClassMethod
 			 * Initialize optional parameters
 			 */
 			foreach ($optionalParams as $parameter) {
-
 				if (isset($parameter['data-type'])) {
 					$dataType = $parameter['data-type'];
 				} else {
@@ -1169,20 +1168,13 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
-				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 				if ($dataType == 'variable' || $dataType == 'string') {
+					$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 					if (isset($parametersToSeparate[$name])) {
-						$initCode .= "\t" . '} else {' . PHP_EOL;
 						$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
-						$initCode .= "\t" . '}' . PHP_EOL;
-					} else {
-						$initCode .= "\t" . '}' . PHP_EOL;
 					}
 				} else {
-					$initCode .= "\t" . '} else {' . PHP_EOL;
 					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
-					$initCode .= "\t" . '}' . PHP_EOL;
 				}
 			}
 

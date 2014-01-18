@@ -45,26 +45,25 @@ class VarExportOptimizer
 		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
-                if ($symbolVariable) {
-                    if ($symbolVariable->getType() != 'variable') {
-                            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-                    }
-                    if ($call->mustInitSymbolVariable()) {
-                            $symbolVariable->initVariant($context);
-                    }
-                }
+		if ($symbolVariable) {
+			if ($symbolVariable->getType() != 'variable') {
+					throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			}
+			if ($call->mustInitSymbolVariable()) {
+					$symbolVariable->initVariant($context);
+			}
+		}
 
 		$context->headersManager->add('kernel/variables');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                if ($symbolVariable) {
-                    $context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . ') TSRMLS_CC);');
-                    return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-                } else {
-                    $context->codePrinter->output('zephir_var_export(&(' . $resolvedParams[0] . ') TSRMLS_CC);');
-                    return new CompiledExpression('null', 'null' , $expression);
-                }
+		if ($symbolVariable) {
+			$context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . ') TSRMLS_CC);');
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
 
+		$context->codePrinter->output('zephir_var_export(&(' . $resolvedParams[0] . ') TSRMLS_CC);');
+		return new CompiledExpression('null', 'null' , $expression);
 	}
 }
