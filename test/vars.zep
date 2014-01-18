@@ -44,4 +44,12 @@ class Vars
      {
           var_export(param2);
      }
+
+    public function testVarDump2param(var p1, var p2) {
+        var_dump(p1, p2);
+    }
+
+    public function testVarDump3param(var p1, var p2, var p3) {
+        var_dump(p1, p2, p3);
+    }
 }
