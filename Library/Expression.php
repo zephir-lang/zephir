@@ -794,9 +794,6 @@ class Expression
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-						if ($symbolVariable->isTemporal()) {
-							$symbolVariable->setIdle(true);
-						}
 						switch ($symbolVariable->getType()) {
 							case 'int':
 								return new CompiledExpression('int', $symbolVariable->getName(), $expression);
@@ -804,6 +801,31 @@ class Expression
 								return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
 							case 'variable':
 								return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+							default:
+								throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+						}
+					default:
+						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+				}
+				break;
+			case 'long':
+				switch ($resolved->getType()) {
+					case 'int':
+						return new CompiledExpression('long', $resolved->getCode(), $expression);
+					case 'double':
+						return new CompiledExpression('long', '(long) ' . $resolved->getCode(), $expression);
+					case 'bool':
+						return new CompiledExpression('long', $resolved->getBooleanCode(), $expression);
+					case 'variable':
+						$compilationContext->headersManager->add('kernel/operators');
+						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+						switch ($symbolVariable->getType()) {
+							case 'int':
+								return new CompiledExpression('long', $symbolVariable->getName(), $expression);
+							case 'double':
+								return new CompiledExpression('long', '(long) (' . $symbolVariable->getName() . ')', $expression);
+							case 'variable':
+								return new CompiledExpression('long', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
 							default:
 								throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
 						}
