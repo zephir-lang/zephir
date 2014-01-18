@@ -399,22 +399,25 @@ class MethodCall extends Call
 				$symbolVariable->initVariant($compilationContext);
 			}
 
-			$privateCall = false;
+			$internalCall = false;
 			if ($compilationContext->config->get('private-internal-methods', 'optimizations')) {
 				if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
 					if ($method->isPrivate()) {
 						if ($method->getClassDefinition() == $classDefinition) {
-							$privateCall = true;
+							$internalCall = true;
 						}
 					}
 				}
 			}
 
-			if (!$privateCall) {
+			if (!$internalCall) {
 
 				if (!isset($expression['parameters']) || !count($params)) {
 
-					if ($compilationContext->insideCycle) {
+					/**
+					 * Only use the method cache when we know the method
+					 */
+					if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
 
 						$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
 						$functionCache->setMustInitNull(true);
@@ -432,9 +435,10 @@ class MethodCall extends Call
 							$codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
 						}
 					}
+
 				} else {
 
-					if ($compilationContext->insideCycle) {
+					if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
 
 						$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
 						$functionCache->setMustInitNull(true);

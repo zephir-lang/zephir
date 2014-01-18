@@ -55,7 +55,7 @@
 
 #include "kernel/extended/array.h"
 
-void zephir_array_keys(zval *input TSRMLS_DC) {
+void zephir_array_keys(zval *return_value, zval *input TSRMLS_DC) {
 
 	zval *search_value = NULL,  /* Value to search for */
 	**entry,               /* An entry in the input array */
