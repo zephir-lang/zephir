@@ -37,58 +37,64 @@ class IssetOperator extends BaseOperator
 
 		$compilationContext->headersManager->add('kernel/array');
 
-		switch ($expression['left']['type']) {
+		if ($expression['left']['type'] == 'list') {
+			$left = $expression['left']['left'];
+		} else {
+			$left = $expression['left'];
+		}
+
+		switch ($left['type']) {
 			case 'array-access':
 
-				$exprVariable = new Expression($expression['left']['left']);
+				$exprVariable = new Expression($left['left']);
 				$exprVariable->setReadOnly(true);
 
 				$exprCompiledVariable = $exprVariable->compile($compilationContext);
 				if ($exprCompiledVariable->getType() != 'variable') {
-					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $expression['left']['left']);
+					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $left['left']);
 				}
 
-				$variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['left']['left']);
+				$variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
 				if ($variable->getType() != 'variable') {
-					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['left']['left']);
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $left['left']);
 				}
 
 				if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
 					$compilationContext->logger->warning('Possible attempt to use non array/object in isset operator', 'non-valid-isset', $expression);
 				}
 
-				$expr = new Expression($expression['left']['right']);
+				$expr = new Expression($left['right']);
 				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType())	{
 					case 'int':
 					case 'long':
-						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $expression['left']['right']);
+						return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $left['right']);
 					case 'string':
-						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $expression['left']['right']);
+						return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $left['right']);
 					case 'variable':
-						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['left']['right']);
+						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
 						switch ($indexVariable->getType()) {
 							case 'int':
 							case 'long':
-								return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+								return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $left['right']);
 							case 'variable':
 							case 'string':
-								return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $expression['left']['right']);
+								return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $left['right']);
 							default:
 								throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
 						}
 						break;
 					default:
-						throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
+						throw new CompilerException('[' . $left['right']['type'] . ']', $expression);
 				}
 				break;
 			case 'property-access':
-				return new CompiledExpression('bool', '0 == 0', $expression['left']['right']);
+				return new CompiledExpression('bool', '0 == 0', $left['right']);
 				//return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $expression['left']['right']['value'] . '") TSRMLS_CC)', $expression['left']['right']);
 				break;
 			case 'property-dynamic-access':
-				return new CompiledExpression('bool', '0 == 0', $expression['left']['right']);
+				return new CompiledExpression('bool', '0 == 0', $left['right']);
 				/*$expr = new Expression($expression['left']['right']);
 				$expr->setReadOnly(true);
 				$resolvedExpr = $expr->compile($compilationContext);

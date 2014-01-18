@@ -162,6 +162,25 @@ class ComparisonBaseOperator extends BaseOperator
 						return new CompiledExpression('bool', '(\'\\0\' ' . $this->_operator . ' \'' . $right->getCode() . '\')', $expression);
 					case 'double':
 						return new CompiledExpression('bool', '(0 ' . $this->_operator . ' (int) ' . $right->getCode() . ')', $expression);
+					case 'variable':
+						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
+						switch ($variableRight->getType()) {
+							case 'int':
+							case 'uint':
+							case 'long':
+							case 'ulong':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', '(0 ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'double':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', '(0 ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+							case 'variable':
+								$compilationContext->headersManager->add('kernel/operators');
+								return new CompiledExpression('bool', 'ZEPHIR_IS_NULL(' . $variableRight->getName() . ')', $expression);
+							default:
+								throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+						}
+						break;
 					default:
 						throw new CompilerException("Unknown type: " . $right->getType(), $expression);
 				}

@@ -1171,7 +1171,7 @@ class ClassMethod
 				 */
 				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
 				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
-				if ($dataType == 'variable'  || $dataType == 'string') {
+				if ($dataType == 'variable' || $dataType == 'string') {
 					if (isset($parametersToSeparate[$name])) {
 						$initCode .= "\t" . '} else {' . PHP_EOL;
 						$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
