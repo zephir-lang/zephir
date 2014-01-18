@@ -137,3 +137,30 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 
 }
 
+PHP_METHOD(Test_Vars, testVarDump2param) {
+
+	zval *p1, *p2;
+
+	zephir_fetch_params(0, 2, 0, &p1, &p2);
+
+
+
+	zephir_var_dump(&(p1) TSRMLS_CC);
+	zephir_var_dump(&(p2) TSRMLS_CC);
+
+}
+
+PHP_METHOD(Test_Vars, testVarDump3param) {
+
+	zval *p1, *p2, *p3;
+
+	zephir_fetch_params(0, 3, 0, &p1, &p2, &p3);
+
+
+
+	zephir_var_dump(&(p1) TSRMLS_CC);
+	zephir_var_dump(&(p2) TSRMLS_CC);
+	zephir_var_dump(&(p3) TSRMLS_CC);
+
+}
+
