@@ -44,7 +44,7 @@ Additional notes on Ubuntu
 --------------------------
 The following packages are needed in Ubuntu:
 
-* apt-get install re2c
+* apt-get install re2c libpcre3-dev
 
 Usage
 -----
