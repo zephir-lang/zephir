@@ -34,7 +34,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(obj);
-	array_init_size(obj, 5);
+	array_init_size(obj, 4);
 	add_assoc_stringl_ex(obj, SS("a"), SL("hello"), 1);
 	add_assoc_stringl_ex(obj, SS("b"), SL("world"), 1);
 	add_assoc_long_ex(obj, SS("c"), 128);
@@ -50,7 +50,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(arr);
-	array_init_size(arr, 5);
+	array_init_size(arr, 4);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(arr, _0);

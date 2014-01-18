@@ -31,4 +31,17 @@ class Vars
             return ret;
 	}
 
+     public function test88Issue(string! param1, string param2 = null)
+     {
+          var_dump(param1);
+          var_dump(param2);
+
+          var_export(param1);
+          var_export(param2);
+     }
+
+     public function test88IssueParam2InitString(string! param1, string param2 = "test string")
+     {
+          var_export(param2);
+     }
 }
