@@ -7,11 +7,13 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches);
 PHP_METHOD(Test_Pregmatch, testWithoutReturns);
 PHP_METHOD(Test_Pregmatch, testWithoutMatches);
 PHP_METHOD(Test_Pregmatch, testPregMatchAll);
+PHP_METHOD(Test_Pregmatch, testPregMatchFallback);
 
 ZEPHIR_INIT_FUNCS(test_pregmatch_method_entry) {
 	PHP_ME(Test_Pregmatch, testWithoutReturnAndMatches, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testWithoutReturns, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testWithoutMatches, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testPregMatchAll, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Pregmatch, testPregMatchFallback, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

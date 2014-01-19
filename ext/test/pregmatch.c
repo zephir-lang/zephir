@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 #include "kernel/fcall.h"
 
 
@@ -27,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 
-	zval *pattern, *subject;
+	zval *pattern, *subject, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
 
@@ -35,15 +36,18 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	zephir_call_func_p2_noret("preg_match", pattern, subject);
-	zephir_call_func_p2(return_value, "preg_match", pattern, subject);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_preg_match(_1, &(_1), pattern, subject, _0, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	zephir_preg_match(return_value, &(return_value), pattern, subject, _2, 0 TSRMLS_CC);
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
-	zval *pattern, *subject, *matches;
+	zval *pattern, *subject, *matches, *_0;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(matches);
@@ -53,16 +57,15 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	Z_SET_ISREF_P(matches);
-	zephir_call_func_p3_noret("preg_match", pattern, subject, matches);
-	Z_UNSET_ISREF_P(matches);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(_0, &(_0), pattern, subject, matches, 0 TSRMLS_CC);
 	RETURN_CCTOR(matches);
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
-	zval *pattern, *subject, *matched;
+	zval *pattern, *subject, *matched, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -70,15 +73,16 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
+	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_INIT_VAR(matched);
-	zephir_call_func_p2(matched, "preg_match", pattern, subject);
+	zephir_preg_match(matched, &(matched), pattern, subject, _0, 0 TSRMLS_CC);
 	RETURN_CCTOR(matched);
 
 }
 
 PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 
-	zval *pattern, *subject;
+	zval *pattern, *subject, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -86,7 +90,31 @@ PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	zephir_call_func_p2(return_value, "preg_match_all", pattern, subject);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(return_value, &(return_value), pattern, subject, _0, 1 TSRMLS_CC);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
+
+	zval *pattern, *subject, *matches, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(matches);
+	array_init(matches);
+	ZEPHIR_INIT_VAR(pattern);
+	ZVAL_STRING(pattern, "/def$/", 1);
+	ZEPHIR_INIT_VAR(subject);
+	ZVAL_STRING(subject, "abcdef", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 0);
+	Z_SET_ISREF_P(matches);
+	zephir_call_func_p5(return_value, "preg_match", pattern, subject, matches, _0, _1);
+	Z_UNSET_ISREF_P(matches);
 	RETURN_MM();
 
 }

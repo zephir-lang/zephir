@@ -10,4 +10,5 @@ assert($t->testWithoutMatches());
 
 assert($t->testPregMatchAll());
 
+assert($t->testPregMatchFallback());
 

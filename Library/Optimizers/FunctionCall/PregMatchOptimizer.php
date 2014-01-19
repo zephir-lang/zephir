@@ -38,7 +38,6 @@ class PregMatchOptimizer
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
-		return false;
 
 		if (!isset($expression['parameters'])) {
 			return false;
@@ -48,10 +47,17 @@ class PregMatchOptimizer
 			return false;
 		}
 
+                /*
+                 * NOT supports flags and offset now, fallback to PHP userland function.
+                 */
+		if (count($expression['parameters']) > 3) {
+			return false;
+		}
+
 		/**
 		 * Process the matches result
 		 */
-		if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'variable') {
+		if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'variable') {
 			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
 			if (!$matchesVariable->isInitialized()) {
 				$matchesVariable->initVariant($context);
