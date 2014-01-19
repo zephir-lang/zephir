@@ -15,6 +15,8 @@
 #include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 
 
 /**
@@ -278,6 +280,120 @@ PHP_METHOD(Test_Mcall, testCall15) {
 
 	zephir_call_method_p2(return_value, this_ptr, "testmethod6", a, b);
 	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, optionalRequereString) {
+
+	zval *param_param = NULL;
+	zval *param = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &param_param);
+
+	if (Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(param_param) == IS_STRING) {
+		param = param_param;
+	} else {
+		ZEPHIR_INIT_VAR(param);
+		ZVAL_EMPTY_STRING(param);
+	}
+
+
+	RETURN_CTOR(param);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterString) {
+
+	zval *param_param = NULL;
+	zval *param = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &param_param);
+
+	if (!param_param) {
+		ZEPHIR_INIT_VAR(param);
+		ZVAL_STRING(param, "test string", 1);
+	} else {
+		zephir_get_strval(param, param_param);
+	}
+
+
+	RETURN_CTOR(param);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterInt) {
+
+	zval *param_param = NULL;
+	int param;
+
+	zephir_fetch_params(0, 0, 1, &param_param);
+
+	if (!param_param) {
+		param = 2;
+	} else {
+		param = zephir_get_intval(param_param);
+	}
+
+
+	RETURN_LONG(param);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterVar) {
+
+	zval *param = NULL;
+
+	zephir_fetch_params(0, 0, 1, &param);
+
+	if (!param) {
+		param = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	RETURN_CCTORW(param);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterBoolTrue) {
+
+	zval *param_param = NULL;
+	zend_bool param;
+
+	zephir_fetch_params(0, 0, 1, &param_param);
+
+	if (!param_param) {
+		param = 1;
+	} else {
+		param = zephir_get_boolval(param_param);
+	}
+
+
+	RETURN_BOOL(param);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterBoolFalse) {
+
+	zval *param_param = NULL;
+	zend_bool param;
+
+	zephir_fetch_params(0, 0, 1, &param_param);
+
+	if (!param_param) {
+		param = 0;
+	} else {
+		param = zephir_get_boolval(param_param);
+	}
+
+
+	RETURN_BOOL(param);
 
 }
 
