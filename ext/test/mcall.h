@@ -30,6 +30,7 @@ PHP_METHOD(Test_Mcall, optionalParameterInt);
 PHP_METHOD(Test_Mcall, optionalParameterVar);
 PHP_METHOD(Test_Mcall, optionalParameterBoolTrue);
 PHP_METHOD(Test_Mcall, optionalParameterBoolFalse);
+PHP_METHOD(Test_Mcall, optionalParameterBoolean);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod4, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -115,6 +116,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterboolfalse, 0, 0, 0)
 	ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterboolean, 0, 0, 0)
+	ZEND_ARG_INFO(0, start)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testMethod1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testMethod2, NULL, ZEND_ACC_PROTECTED)
@@ -143,5 +148,6 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, optionalParameterVar, arginfo_test_mcall_optionalparametervar, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, optionalParameterBoolTrue, arginfo_test_mcall_optionalparameterbooltrue, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, optionalParameterBoolFalse, arginfo_test_mcall_optionalparameterboolfalse, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, optionalParameterBoolean, arginfo_test_mcall_optionalparameterboolean, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

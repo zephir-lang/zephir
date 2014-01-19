@@ -397,3 +397,27 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolFalse) {
 
 }
 
+PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
+
+	zval *start_param = NULL;
+	zend_bool start;
+
+	zephir_fetch_params(0, 0, 1, &start_param);
+
+	if (!start_param) {
+		start = 1;
+	} else {
+		if (Z_TYPE_P(start_param) != IS_BOOL) {
+			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be a bool") TSRMLS_CC);
+			RETURN_NULL();
+		}
+
+		start = Z_BVAL_P(start_param);
+
+	}
+
+
+	RETURN_BOOL(start);
+
+}
+

@@ -1155,6 +1155,11 @@ class ClassMethod
 			 * Initialize optional parameters
 			 */
 			foreach ($optionalParams as $parameter) {
+				if (isset($parameter['mandatory'])) {
+					$mandatory = $parameter['mandatory'];
+				} else {
+					$mandatory = 0;
+				}
 
 				if (isset($parameter['data-type'])) {
 					$dataType = $parameter['data-type'];
@@ -1179,7 +1184,11 @@ class ClassMethod
 						if (isset($parametersToSeparate[$name])) {
 							$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
 						} else {
-							$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+							if ($mandatory) {
+								$initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
+							} else {
+								$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+							}
 						}
 				}
 				$initCode .= "\t" . '}' . PHP_EOL;

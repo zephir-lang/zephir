@@ -32,4 +32,14 @@ assert($t->optionalParameterVar("testtesttesttest") === "testtesttesttest");
 assert($t->optionalParameterVar() === NULL);
 
 assert($t->optionalParameterBoolFalse() === false);
-assert($t->optionalParameterBoolTrue()) == true;
+assert($t->optionalParameterBoolTrue() === true);
+
+assert($t->optionalParameterBoolean() === true);
+assert($t->optionalParameterBoolean(false) === false);
+
+try {
+	$t->optionalParameterBoolean('test');
+	assert(false);
+} catch (InvalidArgumentException $e) {
+	assert(true);
+}

@@ -141,4 +141,9 @@ class Mcall
     {
         return param;
     }
+
+    public function optionalParameterBoolean(boolean! start = true)
+    {
+        return start;
+    }
 }
