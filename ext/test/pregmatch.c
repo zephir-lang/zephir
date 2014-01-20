@@ -119,3 +119,63 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 }
 
+PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
+
+	zval *pattern, *subject, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &pattern, &subject);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(return_value, &(return_value), pattern, subject, _0, 0 TSRMLS_CC);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
+
+	zval *pattern, *subject, *matches;
+
+	zephir_fetch_params(0, 3, 0, &pattern, &subject, &matches);
+
+
+
+	zephir_preg_match(return_value, &(return_value), pattern, subject, matches, 0 TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
+
+	zval *pattern, *subject, *matches, *flags;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 4, 0, &pattern, &subject, &matches, &flags);
+
+
+
+	Z_SET_ISREF_P(matches);
+	zephir_call_func_p4(return_value, "preg_match", pattern, subject, matches, flags);
+	Z_UNSET_ISREF_P(matches);
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
+
+	zval *pattern, *subject, *matches, *flags, *offset;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 5, 0, &pattern, &subject, &matches, &flags, &offset);
+
+
+
+	Z_SET_ISREF_P(matches);
+	zephir_call_func_p5(return_value, "preg_match", pattern, subject, matches, flags, offset);
+	Z_UNSET_ISREF_P(matches);
+	RETURN_MM();
+
+}
+
