@@ -558,10 +558,10 @@ class ClassMethod
 					case 'uint':
 					case 'long':
 					case 'ulong':
-						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';';
+						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
 						break;
 					case 'double':
-						$code .= "\t\t" . $parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';';
+						$code .= "\t\t" . $parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';' . PHP_EOL;
 						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
@@ -696,7 +696,6 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-				$code .= PHP_EOL;
 				return $code;
 			case 'bool':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
@@ -705,7 +704,6 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-				$code .= PHP_EOL;
 				return $code;
 			case 'double':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
@@ -764,6 +762,8 @@ class ClassMethod
 			case 'string':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+			case 'variable';
+				break;
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
 		}
@@ -1066,7 +1066,6 @@ class ClassMethod
 					$params[] = '&' . $parameter['name'] . '_param';
 				}
 
-
 				if (isset($parameter['default'])) {
 					$optionalParams[] = $parameter;
 					$numberOptionalParams++;
@@ -1082,6 +1081,7 @@ class ClassMethod
 			 */
 			$parametersToSeparate = array();
 			if (is_object($this->_statements)) {
+
 				/**
 				 * If local context is available
 				 */
@@ -1099,7 +1099,6 @@ class ClassMethod
 
 					if ($dataType == 'variable' || $dataType == 'string') {
 						$name = $parameter['name'];
-
 						if (!$localContext) {
 							if ($writeDetector->detect($name, $this->_statements->getStatements())) {
 								$parametersToSeparate[$name] = true;
@@ -1131,6 +1130,7 @@ class ClassMethod
 				}
 
 				if ($dataType != 'variable') {
+
 					/**
 					 * Assign value from zval to low level type
 					 */
@@ -1153,6 +1153,12 @@ class ClassMethod
 			 * Initialize optional parameters
 			 */
 			foreach ($optionalParams as $parameter) {
+				if (isset($parameter['mandatory'])) {
+					$mandatory = $parameter['mandatory'];
+				} else {
+					$mandatory = 0;
+				}
+
 				if (isset($parameter['data-type'])) {
 					$dataType = $parameter['data-type'];
 				} else {
@@ -1168,14 +1174,22 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				if ($dataType == 'variable' || $dataType == 'string') {
-					$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
-					if (isset($parametersToSeparate[$name])) {
-						$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
-					}
-				} else {
-					$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+				$initCode .= "\t" . 'if (!'.$name.') {' . PHP_EOL;
+				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
+
+				if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
+					$initCode .= "\t" . '} else {' . PHP_EOL;
+						if (isset($parametersToSeparate[$name])) {
+							$initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+						} else {
+							if ($mandatory) {
+								$initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
+							} else {
+								$initCode .= $this->assignZvalValue($parameter, $compilationContext);
+							}
+						}
 				}
+				$initCode .= "\t" . '}' . PHP_EOL;
 			}
 
 			/**

@@ -102,7 +102,6 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 		age = Z_LVAL_P(age_param);
 
 
-
 	RETURN_LONG(age);
 
 }

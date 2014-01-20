@@ -17,6 +17,7 @@
 #include "kernel/variables.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Vars) {
@@ -97,8 +98,12 @@ PHP_METHOD(Test_Vars, test88Issue) {
 		ZEPHIR_INIT_VAR(param1);
 		ZVAL_EMPTY_STRING(param1);
 	}
+	if (!param2_param) {
 		ZEPHIR_INIT_VAR(param2);
 		ZVAL_EMPTY_STRING(param2);
+	} else {
+		zephir_get_strval(param2, param2_param);
+	}
 
 
 	zephir_var_dump(&(param1) TSRMLS_CC);
@@ -128,8 +133,12 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 		ZEPHIR_INIT_VAR(param1);
 		ZVAL_EMPTY_STRING(param1);
 	}
+	if (!param2_param) {
 		ZEPHIR_INIT_VAR(param2);
 		ZVAL_STRING(param2, "test string", 1);
+	} else {
+		zephir_get_strval(param2, param2_param);
+	}
 
 
 	zephir_var_export(&(param2) TSRMLS_CC);

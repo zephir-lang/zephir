@@ -112,4 +112,48 @@ class Mcall
 		return this->{"testMethod6"}(a, b);
 	}
 
+    public function optionalRequereString(string! param)
+    {
+        return param;
+    }
+
+    public function optionalParameterString(string param = "test string")
+    {
+        return param;
+    }
+
+    public function optionalParameterStringNull(string param = null)
+    {
+        return param;
+    }
+
+    public function optionalParameterInt(int param = 2)
+    {
+        return param;
+    }
+
+    public function optionalParameterVar(var param = null)
+    {
+        return param;
+    }
+
+    public function optionalParameterBoolTrue(bool param = true)
+    {
+        return param;
+    }
+
+    public function optionalParameterBoolFalse(bool param = false)
+    {
+        return param;
+    }
+
+    public function optionalParameterBoolean(boolean! start = true)
+    {
+        return start;
+    }
+
+    public function optionalParameterBooleanNull(bool! value = null)
+    {
+        return value;
+    }
 }

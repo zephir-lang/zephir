@@ -34,7 +34,11 @@ PHP_METHOD(Test_Exists, testClassExists) {
 
 	zephir_fetch_params(0, 1, 1, &className, &autoload_param);
 
+	if (!autoload_param) {
+		autoload = 1;
+	} else {
 		autoload = zephir_get_boolval(autoload_param);
+	}
 
 
 	RETURN_BOOL(zephir_class_exists(className, ZEPHIR_IS_TRUE((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
@@ -48,7 +52,11 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 
 	zephir_fetch_params(0, 1, 1, &interfaceName, &autoload_param);
 
+	if (!autoload_param) {
+		autoload = 1;
+	} else {
 		autoload = zephir_get_boolval(autoload_param);
+	}
 
 
 	RETURN_BOOL(zephir_interface_exists(interfaceName, ZEPHIR_IS_TRUE((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
