@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
+
 /**
  * LtrimOptimizer
  *
