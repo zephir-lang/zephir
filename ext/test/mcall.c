@@ -328,6 +328,26 @@ PHP_METHOD(Test_Mcall, optionalParameterString) {
 
 }
 
+PHP_METHOD(Test_Mcall, optionalParameterStringNull) {
+
+	zval *param_param = NULL;
+	zval *param = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &param_param);
+
+	if (!param_param) {
+		ZEPHIR_INIT_VAR(param);
+		ZVAL_EMPTY_STRING(param);
+	} else {
+		zephir_get_strval(param, param_param);
+	}
+
+
+	RETURN_CTOR(param);
+
+}
+
 PHP_METHOD(Test_Mcall, optionalParameterInt) {
 
 	zval *param_param = NULL;
@@ -413,11 +433,33 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
 		}
 
 		start = Z_BVAL_P(start_param);
-
 	}
 
 
 	RETURN_BOOL(start);
+
+}
+
+PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
+
+	zval *value_param = NULL;
+	zend_bool value;
+
+	zephir_fetch_params(0, 0, 1, &value_param);
+
+	if (!value_param) {
+		value = 0;
+	} else {
+		if (Z_TYPE_P(value_param) != IS_BOOL) {
+			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be a bool") TSRMLS_CC);
+			RETURN_NULL();
+		}
+
+		value = Z_BVAL_P(value_param);
+	}
+
+
+	RETURN_BOOL(value);
 
 }
 

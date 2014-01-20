@@ -122,6 +122,11 @@ class Mcall
         return param;
     }
 
+    public function optionalParameterStringNull(string param = null)
+    {
+        return param;
+    }
+
     public function optionalParameterInt(int param = 2)
     {
         return param;
@@ -145,5 +150,10 @@ class Mcall
     public function optionalParameterBoolean(boolean! start = true)
     {
         return start;
+    }
+
+    public function optionalParameterBooleanNull(bool! value = null)
+    {
+        return value;
     }
 }

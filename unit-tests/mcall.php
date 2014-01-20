@@ -24,6 +24,8 @@ assert($t->testCall15(4, 5) === 9);
 
 assert($t->optionalParameterString("test") == 'test');
 assert($t->optionalParameterString() == "test string");
+assert($t->optionalParameterStringNull() == "");
+
 assert($t->optionalParameterInt(1) == 1);
 assert($t->optionalParameterInt() == 2);
 
@@ -33,6 +35,9 @@ assert($t->optionalParameterVar() === NULL);
 
 assert($t->optionalParameterBoolFalse() === false);
 assert($t->optionalParameterBoolTrue() === true);
+
+assert($t->optionalParameterBooleanNull() == false);
+assert($t->optionalParameterBooleanNull(true) == true);
 
 assert($t->optionalParameterBoolean() === true);
 assert($t->optionalParameterBoolean(false) === false);

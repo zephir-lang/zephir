@@ -696,7 +696,6 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-				$code .= PHP_EOL;
 				return $code;
 			case 'bool':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
@@ -705,7 +704,6 @@ class ClassMethod
 				$code .= "\t\t" . '}' . PHP_EOL;
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-				$code .= PHP_EOL;
 				return $code;
 			case 'double':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
