@@ -19,6 +19,8 @@
  +--------------------------------------------------------------------------+
 */
 
+require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/PregMatchOptimizer.php';
+
 /**
  * PregMatchAllOptimizer
  *

@@ -190,7 +190,7 @@ class FunctionCall extends Call
 				$path =  $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
 				if (file_exists($path)) {
 
-					require $path;
+					require_once $path;
 
 					$className = $camelizeFunctionName . 'Optimizer';
 					$optimizer = new $className();

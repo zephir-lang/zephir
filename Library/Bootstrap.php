@@ -96,11 +96,7 @@ class Bootstrap
 			if (isset($_SERVER['argv'][1])) {
 				$action = $_SERVER['argv'][1];
 			} else {
-				if (!file_exists('config.json')) {
-					$action = 'help';
-				}else {
-					$action = 'compile';
-				}
+				$action = 'help';
 			}
 
 			/**
