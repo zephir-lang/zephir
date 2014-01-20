@@ -169,12 +169,10 @@ PHP_METHOD(Test_RegexDNA, process) {
 		ZEPHIR_GET_HVALUE(regex, _5);
 		zend_print_zval(regex, 0);
 		php_printf(" ");
+		ZEPHIR_INIT_NVAR(_0);
 		ZEPHIR_INIT_LNVAR(_6);
 		ZEPHIR_CONCAT_SVS(_6, "/", regex, "/iS");
-		Z_SET_ISREF_P(discard);
-		ZEPHIR_INIT_NVAR(_0);
-		zephir_call_func_p3(_0, "preg_match_all", _6, contents, discard);
-		Z_UNSET_ISREF_P(discard);
+		zephir_preg_match(_0, &(_0), _6, contents, discard, 1 TSRMLS_CC);
 		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}

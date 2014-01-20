@@ -41,4 +41,41 @@ class Pregmatch
             return matched;
 	}
 
+        public function testPregMatchAll() {
+
+            var pattern, subject, matched;
+
+            let pattern = "/def$/";
+            let subject = "abcdef";
+
+            return preg_match_all(pattern, subject);
+        }
+
+        public function testPregMatchFallback() {
+
+            var pattern, subject, matched, matches;
+            let matches = [];
+
+            let pattern = "/def$/";
+            let subject = "abcdef";
+
+            return preg_match(pattern, subject, matches, 0, 0);
+        }
+
+
+        public function testPregMatch2Params(var pattern, var subject) {
+            return preg_match(pattern, subject);
+        }
+
+        public function testPregMatch3Params(var pattern, var subject, var matches) {
+            return preg_match(pattern, subject, matches);
+        }
+
+        public function testPregMatch4Params(var pattern, var subject, var matches, var flags) {
+            return preg_match(pattern, subject, matches, flags);
+        }
+
+        public function testPregMatch5Params(var pattern, var subject, var matches, var flags, var offset) {
+            return preg_match(pattern, subject, matches, flags, offset);
+        }
 }
