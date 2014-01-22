@@ -100,6 +100,7 @@ void zephir_htmlentities(zval *return_value, zval *string, zval *quoting, zval *
 void zephir_strval(zval *return_value, zval *v);
 void zephir_date(zval *return_value, zval *format, zval *timestamp TSRMLS_DC);
 void zephir_addslashes(zval *return_value, zval *str TSRMLS_DC);
+void zephir_stripslashes(zval *return_value, zval *str TSRMLS_DC);
 
 #if PHP_VERSION_ID < 50400
 

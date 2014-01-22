@@ -1483,6 +1483,26 @@ void zephir_addslashes(zval *return_value, zval *str TSRMLS_DC)
 	}
 }
 
+void zephir_stripslashes(zval *return_value, zval *str TSRMLS_DC)
+{
+	zval copy;
+	int use_copy = 0;
+
+	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
+		zend_make_printable_zval(str, &copy, &use_copy);
+		if (use_copy) {
+			str = &copy;
+		}
+	}
+
+	ZVAL_STRINGL(return_value, Z_STRVAL_P(str), Z_STRLEN_P(str), 1);
+	php_stripslashes(Z_STRVAL_P(return_value), &Z_STRLEN_P(return_value) TSRMLS_CC);
+
+	if (unlikely(use_copy)) {
+		zval_dtor(&copy);
+	}
+}
+
 #if PHP_VERSION_ID < 50400
 
 const char* zend_new_interned_string(const char *arKey, int nKeyLength, int free_src TSRMLS_DC)
