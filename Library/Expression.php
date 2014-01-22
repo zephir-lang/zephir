@@ -902,19 +902,18 @@ class Expression
 	/**
 	 * Resolves an expression
 	 *
-	 * @param \CompilationContext $compilationContext
+	 * @param CompilationContext $compilationContext
+	 * @return bool|CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
-		$expression = $this->_expression;
-
+		$expression = &$this->_expression;
 		$type = $expression['type'];
-		switch ($type) {
 
+		switch ($type) {
 			case 'null':
 				return new CompiledExpression('null', null, $expression);
-
 			case 'int':
 			case 'integer':
 				return new CompiledExpression('int', $expression['value'], $expression);

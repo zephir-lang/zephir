@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
 
@@ -575,8 +576,64 @@ PHP_METHOD(Test_Flow, testWhile11) {
 PHP_METHOD(Test_Flow, testDoWhile1) {
 
 
+	do {
+	} while (1);
+
+}
+
+PHP_METHOD(Test_Flow, testWhileNextTest) {
+
+	zval *variable, *returnValue, *_0 = NULL, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &variable);
+
+
+
+	ZEPHIR_INIT_VAR(returnValue);
+	array_init(returnValue);
 	while (1) {
+		Z_SET_ISREF_P(variable);
+		ZEPHIR_INIT_NVAR(_0);
+		zephir_call_func_p1(_0, "next", variable);
+		Z_UNSET_ISREF_P(variable);
+		if (!(zephir_is_true(_0))) {
+			break;
+		}
+		Z_SET_ISREF_P(variable);
+		ZEPHIR_INIT_NVAR(_1);
+		zephir_call_func_p1(_1, "current", variable);
+		Z_UNSET_ISREF_P(variable);
+		zephir_array_append(&returnValue, _1, PH_SEPARATE);
 	}
+	//missing empty
+	RETURN_CCTOR(returnValue);
+
+}
+
+PHP_METHOD(Test_Flow, testWhileDoNextTest) {
+
+	zval *variable, *returnValue, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &variable);
+
+
+
+	ZEPHIR_INIT_VAR(returnValue);
+	array_init(returnValue);
+	do {
+		Z_SET_ISREF_P(variable);
+		ZEPHIR_INIT_NVAR(_0);
+		zephir_call_func_p1(_0, "current", variable);
+		Z_UNSET_ISREF_P(variable);
+		zephir_array_append(&returnValue, _0, PH_SEPARATE);
+		Z_SET_ISREF_P(variable);
+		ZEPHIR_INIT_NVAR(_0);
+		zephir_call_func_p1(_0, "next", variable);
+		Z_UNSET_ISREF_P(variable);
+	} while (zephir_is_true(_0));
+	RETURN_CCTOR(returnValue);
 
 }
 
@@ -1159,7 +1216,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 564);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 589);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1363,7 +1420,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = Z_STRVAL_P(b)[_0]; 
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 634);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 659);
 	}
 	RETURN_CCTOR(a);
 

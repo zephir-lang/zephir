@@ -30,24 +30,10 @@ class DoWhileStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$exprRaw = $this->_statement['expr'];
+		$exprRaw = &$this->_statement['expr'];
+		$codePrinter = &$compilationContext->codePrinter;
 
-		$codePrinter = $compilationContext->codePrinter;
-
-		$numberPrints = $codePrinter->getNumberPrints();
-
-		$expr = new EvalExpression();
-		$condition = $expr->optimize($exprRaw, $compilationContext);
-
-		/**
-		 * Compound conditions can be evaluated in a single line of the C-code
-		 */
-		if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
-			$codePrinter->output('while (' . $condition . ') {');
-		} else {
-			$codePrinter->output('while (1) {');
-			$codePrinter->outputLineBreak();
-		}
+		$codePrinter->output('do {');
 
 		/**
 		 * Variables are initialized in a different way inside cycle
@@ -62,13 +48,25 @@ class DoWhileStatement
 			$st->compile($compilationContext);
 		}
 
+		$compilationContext->codePrinter->increaseLevel();
+		$expr = new EvalExpression();
+		$condition = $expr->optimize($exprRaw, $compilationContext);
+		$compilationContext->codePrinter->decreaseLevel();
+
 		/**
 		 * Restore the cycle counter
 		 */
 		$compilationContext->insideCycle--;
 
-		$codePrinter->output('}');
-
+		/**
+		 * Compound conditions can be evaluated in a single line of the C-code
+		 */
+		$numberPrints = $codePrinter->getNumberPrints();
+		if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
+			$codePrinter->output('} while (' . $condition . ');');
+		} else {
+			$codePrinter->output('} while (1);');
+		}
 	}
 
 }
