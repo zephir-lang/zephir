@@ -782,5 +782,4 @@ class Flow
 		}
 		return 2;
 	}
-
 }

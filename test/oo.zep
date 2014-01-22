@@ -73,17 +73,17 @@ class Oo
 		return o;
 	}
 
-  public function testInstance9()
-  {
-    var o;
-    let o = Test\Oo\OoDynamicA::getNew();
-    return o;
-  }
+	public function testInstance9()
+	{
+		var o;
+		let o = Test\Oo\OoDynamicA::getNew();
+		return o;
+	}
 
-  public function testInstance10()
-  {
-    var o;
-    let o = Test\Oo\OoDynamicB::getNew();
-    return o;
-  }
+	public function testInstance10()
+	{
+		var o;
+		let o = Test\Oo\OoDynamicB::getNew();
+		return o;
+	}
 }

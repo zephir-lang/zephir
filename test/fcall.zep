@@ -20,4 +20,13 @@ class Fcall
 		return {funcName}("hello", "l");
 	}
 
+	public function testStrtokFalse()
+	{
+		return strtok("/");
+	}
+
+	public function testStrtokVarBySlash(var value)
+	{
+		return strtok(value, "/");
+	}
 }
