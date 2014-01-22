@@ -490,7 +490,7 @@ class FunctionCall extends Call
 
 			$codePrinter->output('if (Z_TYPE_P('.$variable->getName().') != IS_STRING) {');
 				$codePrinter->increaseLevel();
-				$codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Variable '.$variable->getName().' must be a string") TSRMLS_DC);');
+				$codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Variable '.$variable->getName().' must be a string") TSRMLS_CC);');
 				$codePrinter->output('RETURN_MM_NULL();');
 				$codePrinter->decreaseLevel();
 			$codePrinter->output('}');
