@@ -25,6 +25,29 @@
 class Config
 {
 	protected $_config = array(
+		'warnings' => array(
+			'unused-variable'                    => true,
+			'unused-variable-external'           => false,
+			'possible-wrong-parameter'           => true,
+			'possible-wrong-parameter-undefined' => false,
+			'nonexistent-function'               => true,
+			'nonexistent-class'                  => true,
+			'non-valid-isset'                    => true,
+			'non-array-update'                   => true,
+			'non-valid-objectupdate'             => true,
+			'non-valid-fetch'                    => true,
+			'invalid-array-index'                => true,
+			'non-array-append'                   => true,
+			'invalid-return-type'                => true,
+			'unrecheable-code'                   => true,
+			'nonexistant-constant'               => true,
+			'not-supported-magic-constant'		 => true,
+			'non-valid-decrement'                => true,
+			'non-valid-increment'                => true,
+			'non-valid-clone'                    => true,
+			'non-array-access'                   => true,
+			'invalid-reference'                  => true
+		),
 		'optimizations' => array(
 			'static-type-inference'             => true,
 			'static-type-inference-second-pass' => true,
@@ -69,10 +92,14 @@ class Config
 		if ($namespace !== null) {
 			if (isset($this->_config[$namespace][$key])) {
 				return $this->_config[$namespace][$key];
+			} else {
+				new \Exception('Option ['.$namespace.']['.$key.'] not exists');
 			}
 		} else {
 			if (isset($this->_config[$key])) {
 				return $this->_config[$key];
+			} else {
+				new \Exception('Option ['.$key.'] not exists');
 			}
 		}
 
@@ -80,13 +107,18 @@ class Config
 	}
 
 	/**
-	 *
-	 * @param string $key
-	 * @param mixed $value
+	 * @param $key
+	 * @param $value
+	 * @param null $namespace
 	 */
-	public function set($key, $value)
+	public function set($key, $value, $namespace=null)
 	{
-		$this->_config[$key] = $value;
+		if ($namespace !== null) {
+			$this->_config[$namespace][$key] = $value;
+		} else {
+			$this->_config[$key] = $value;
+		}
+
 		$this->_changed = true;
 	}
 
@@ -104,6 +136,7 @@ class Config
 			} else {
 				$config = json_encode($this->_config);
 			}
+
 			file_put_contents('config.json', $config);
 		}
 	}
