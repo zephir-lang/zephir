@@ -46,12 +46,13 @@ class EvalExpression
 	/**
 	 * Optimizes expressions
 	 *
-	 * @param array $exprRaw
-	 * @param \CompilationContext $compilationContext
+	 * @param $exprRaw
+	 * @param CompilationContext $compilationContext
+	 * @return bool|string
+	 * @throws CompilerException
 	 */
 	public function optimize($exprRaw, CompilationContext $compilationContext)
 	{
-
 		$conditions = $this->optimizeNot($exprRaw, $compilationContext);
 
 		if ($conditions !== false) {

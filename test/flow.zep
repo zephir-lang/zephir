@@ -383,6 +383,31 @@ class Flow
 		} while(1);
 	}
 
+	public function testWhileNextTest(var variable)
+	{
+		var returnValue;
+		let returnValue = [];
+
+	    while (next(variable)) {
+            let returnValue[] = current(variable);
+        };
+
+        return returnValue;
+	}
+
+	public function testWhileDoNextTest(var variable)
+	{
+		var returnValue;
+		let returnValue = [];
+
+		do {
+			let returnValue[] = current(variable);
+		} while (next(variable));
+
+		return returnValue;
+    }
+
+
 	public function testFor1()
 	{
 		var v, b; int c;
@@ -757,5 +782,4 @@ class Flow
 		}
 		return 2;
 	}
-
 }

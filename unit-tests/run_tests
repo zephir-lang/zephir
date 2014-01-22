@@ -5,6 +5,7 @@ valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv whic
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/flow.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/fibonacci.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/oo.php
+valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/fcall.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/mcall.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/mcallchained.php
 valgrind --read-var-info=yes --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/scall.php

@@ -18,16 +18,14 @@
 */
 
 /**
- * NextOptimizer
+ * Class StrtokOptimizer
  *
- * Optimizes calls to 'next' using internal function
+ * Optimizes calls to 'strtok' using internal function
  */
-class NextOptimizer
+class StrtokOptimizer
 	extends OptimizerAbstract
 {
 	/**
-	 * @todo This optimizer doesn`t work at while and etc statements
-	 *
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
@@ -36,8 +34,6 @@ class NextOptimizer
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
-		return false;
-
 		if (!isset($expression['parameters'])) {
 			return false;
 		}
@@ -46,9 +42,10 @@ class NextOptimizer
 			return false;
 		}
 
-		//$context->headersManager->add('kernel/array');
-		//$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		//return new CompiledExpression('fcall', 'zephir_array_next(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
-	}
+		if (count($expression['parameters']) == 1) {
+			return new CompiledExpression('bool', 'false', $expression);
+		}
 
-}
+		return false;
+	}
+} 

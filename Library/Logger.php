@@ -31,30 +31,6 @@ class Logger
 	 */
 	protected $_config;
 
-	protected $_warnings = array(
-		'unused-variable'                    => true,
-		'unused-variable-external'           => false,
-		'possible-wrong-parameter'           => true,
-		'possible-wrong-parameter-undefined' => false,
-		'nonexistent-function'               => true,
-		'nonexistent-class'                  => true,
-		'non-valid-isset'                    => true,
-		'non-array-update'                   => true,
-		'non-valid-objectupdate'             => true,
-		'non-valid-fetch'                    => true,
-		'invalid-array-index'                => true,
-		'non-array-append'                   => true,
-		'invalid-return-type'                => true,
-		'unrecheable-code'                   => true,
-		'nonexistant-constant'               => true,
-		'not-supported-magic-constant'		 => true,
-		'non-valid-decrement'                => true,
-		'non-valid-increment'                => true,
-		'non-valid-clone'                    => true,
-		'non-array-access'                   => true,
-		'invalid-reference'                  => true
-	);
-
 	/**
 	 * Logger constructor
 	 *
@@ -73,7 +49,7 @@ class Logger
 	 */
 	public function set($type, $value)
 	{
-		$this->_warnings[$type] = $value;
+		$this->_config->set($type, $value, 'warnings');
 	}
 
 	/**
@@ -86,11 +62,7 @@ class Logger
 	public function warning($message, $type, $node)
 	{
 		if (!$this->_config->get('silent')) {
-			if (!isset($this->_warnings[$type])) {
-				throw new CompilerException("Unknown warning type: " . $type, $node);
-			}
-
-			if (!$this->_warnings[$type]) {
+			if (!$this->_config->get($type, 'warnings')) {
 				return false;
 			}
 

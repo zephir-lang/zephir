@@ -88,9 +88,7 @@ class FunctionCall extends Call
 
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
-
 			if (isset($expression['parameters'])) {
-
 				/**
 				 * Check if the number of parameters
 				 */
@@ -267,7 +265,6 @@ class FunctionCall extends Call
 	 */
 	protected function _callNormal($expression, $compilationContext)
 	{
-
 		$funcName = strtolower($expression['name']);
 
 		if ($funcName == 'array') {
@@ -316,11 +313,7 @@ class FunctionCall extends Call
 		 * We mark those parameters temporary as references to properly pass them
 		 */
 		$this->markReferences($funcName, $params, $compilationContext, $references, $expression);
-		//if (count($references)) {
-			//var_dump($references);
-		//}
-
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		/**
 		 * Process the expected symbol to be returned
@@ -405,13 +398,12 @@ class FunctionCall extends Call
 	 */
 	protected function _callDynamic($expression, $compilationContext)
 	{
-
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 		switch ($variable->getType()) {
 			case 'variable':
 				break;
 			default:
-				throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $propertyAccess['left']);
+				throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $expression['left']);
 		}
 
 		/**
@@ -423,7 +415,7 @@ class FunctionCall extends Call
 			$params = array();
 		}
 
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		/**
 		 * Process the expected symbol to be returned
@@ -461,11 +453,11 @@ class FunctionCall extends Call
          * Find last value of variable
          * @todo rewrite this
          */
-        /*$methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
-        $varName          = $expression['name'];
-        $lastValue        = null;
-        foreach ($methodStatements as $statement) {
+		$lastValue        = false;
+		/*$methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
+		$varName          = $expression['name'];
 
+        foreach ($methodStatements as $statement) {
             if (isset($statement['line'])
                 && $statement['line'] <= $expression['line']
                 && isset($statement['type'])
@@ -480,40 +472,55 @@ class FunctionCall extends Call
                         && $assignment['variable'] === $varName
                         && isset($assignment['expr']['value'])
                     ) {
+						var_dump($assignment['expr']['value']);
                         $lastValue = $assignment['expr']['value'];
                     }
                 }
             }
-        }
+        }*/
 
         if ($lastValue) {
+			$functionName = '"'.$lastValue.'"';
+        } else {
+			/**
+			 * @todo Rewrite type checks and exceptions to class and createMethod getExceptionClass for classDefinition
+			 */
+			$compilationContext->headersManager->add('ext/spl/spl_exceptions');
+			$compilationContext->headersManager->add('kernel/exception');
 
-            $funcName = $lastValue;
+			$codePrinter->output('if (Z_TYPE_P('.$variable->getName().') != IS_STRING) {');
+				$codePrinter->increaseLevel();
+				$codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Variable '.$variable->getName().' must be a string") TSRMLS_CC);');
+				$codePrinter->output('RETURN_MM_NULL();');
+				$codePrinter->decreaseLevel();
+			$codePrinter->output('}');
 
-            if (!isset($expression['parameters'])) {
-                if ($this->isExpectingReturn()) {
-                    if ($this->mustInitSymbolVariable()) {
-                        $symbolVariable->initVariant($compilationContext);
-                    }
-                    $codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
-                } else {
-                    $codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
-                }
-            } else {
-                if (count($params)) {
-                    if ($this->isExpectingReturn()) {
-                        if ($this->mustInitSymbolVariable()) {
-                            $symbolVariable->initVariant($compilationContext);
-                        }
-                        $codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
-                    } else {
-                        $codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
-                    }
-                } else {
-                    $codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
-                }
-            }
-        }*/
+			$functionName = 'Z_STRVAL_P('.$variable->getName().')';
+		}
+
+		if (!isset($expression['parameters'])) {
+			if ($this->isExpectingReturn()) {
+				if ($this->mustInitSymbolVariable()) {
+					$symbolVariable->initVariant($compilationContext);
+				}
+				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', ' . $functionName . ');');
+			} else {
+				$codePrinter->output('zephir_call_func_noret(' . $functionName . ');');
+			}
+		} else {
+			if (count($params)) {
+				if ($this->isExpectingReturn()) {
+					if ($this->mustInitSymbolVariable()) {
+						$symbolVariable->initVariant($compilationContext);
+					}
+					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', '.$functionName.', ' . join(', ', $params) . ');');
+				} else {
+					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret('.$functionName.', ' . join(', ', $params) . ');');
+				}
+			} else {
+				$codePrinter->output('zephir_call_func_noret('.$functionName.');');
+			}
+		}
 
 		/**
 		 * We can mark temporary variables generated as idle

@@ -1,5 +1,4 @@
 <?php
-
 $t = new Test\Flow();
 
 assert($t->testIf1() === 1);
@@ -34,6 +33,9 @@ assert($t->testWhile6() == 0.0);
 assert($t->testWhile7() == 0.0);
 assert($t->testWhile8() == 0.0);
 assert($t->testWhile9() == 0.0);
+
+assert($t->testWhileNextTest(array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)) == array(1, 2, 3, 4, 5, 6, 7, 8, 9));
+assert($t->testWhileDoNextTest(array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)) == array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
 assert($t->testFor1() === 10);
 assert($t->testFor2() === 6.0);
