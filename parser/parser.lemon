@@ -36,7 +36,7 @@
 %right QUESTION .
 %right LIKELY UNLIKELY .
 %left INSTANCEOF .
-%left AND OR BITWISE_OR BITWISE_AND .
+%left AND OR BITWISE_OR BITWISE_AND BITWISE_XOR BITWISE_SHIFTLEFT BITWISE_SHIFTRIGHT .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
@@ -2169,6 +2169,31 @@ xx_common_expr(R) ::= xx_common_expr(O1) AND xx_common_expr(O2) . {
 /* y = a || b */
 xx_common_expr(R) ::= xx_common_expr(O1) OR xx_common_expr(O2) . {
 	R = xx_ret_expr("or", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a & b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_AND xx_common_expr(O2) . {
+	R = xx_ret_expr("bitwise_and", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a | b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_OR xx_common_expr(O2) . {
+	R = xx_ret_expr("bitwise_or", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a ^ b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_XOR xx_common_expr(O2) . {
+	R = xx_ret_expr("bitwise_xor", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a << b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_SHIFTLEFT xx_common_expr(O2) . {
+	R = xx_ret_expr("bitwise_shiftleft", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a >> b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_SHIFTRIGHT xx_common_expr(O2) . {
+	R = xx_ret_expr("bitwise_shiftright", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a instanceof b */
