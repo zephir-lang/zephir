@@ -253,3 +253,29 @@ PHP_METHOD(Test_Strings, testSubstr4) {
 
 }
 
+PHP_METHOD(Test_Strings, testAddslashes) {
+
+	zval *str;
+
+	zephir_fetch_params(0, 1, 0, &str);
+
+
+
+	zephir_addslashes(return_value, str TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Strings, testStripslashes) {
+
+	zval *str;
+
+	zephir_fetch_params(0, 1, 0, &str);
+
+
+
+	zephir_stripslashes(return_value, str TSRMLS_CC);
+	return;
+
+}
+

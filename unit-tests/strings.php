@@ -56,3 +56,12 @@ assert($t->testSubstr2('abcdef', 2) == "cdef");
 
 assert($t->testSubstr3('abcdef') == "f");
 assert($t->testSubstr4('abcdef') == "abcde");
+
+assert($t->testAddslashes("How's everybody") == addslashes("How's everybody"));
+assert($t->testAddslashes('Are you "JOHN"?') == addslashes('Are you "JOHN"?'));
+assert($t->testAddslashes("hello\0world") == addslashes("hello\0world"));
+
+assert($t->testStripslashes(addslashes("How's everybody")) == "How's everybody");
+assert($t->testStripslashes(addslashes('Are you "JOHN"?')) == 'Are you "JOHN"?');
+assert($t->testStripslashes(addslashes("hello\0world")) == "hello\0world");
+

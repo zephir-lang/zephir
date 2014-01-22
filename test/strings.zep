@@ -81,4 +81,12 @@ class Strings
 	{
 		return substr(str, 0, -1);
 	}
+
+        public function testAddslashes(var str) {
+                return addslashes(str);
+        }
+
+        public function testStripslashes(var str) {
+                return stripslashes(str);
+        }
 }
