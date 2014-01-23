@@ -270,6 +270,11 @@ class StaticTypeInference
 			case 'sub':
 			case 'add':
 			case 'mul':
+			case 'bitwise_and':
+			case 'bitwise_or':
+			case 'bitwise_xor':
+			case 'bitwise_shiftleft':
+			case 'bitwise_shiftright':
 				$left = $this->passExpression($expression['left']);
 				$right = $this->passExpression($expression['right']);
 				if ($left == 'int' && $right == 'int') {

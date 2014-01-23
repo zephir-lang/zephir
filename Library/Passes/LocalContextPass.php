@@ -261,6 +261,11 @@ class LocalContextPass
 			case 'greater':
 			case 'greater-equal':
 			case 'less-equal':
+			case 'bitwise_and':
+			case 'bitwise_or':
+			case 'bitwise_xor':
+			case 'bitwise_shiftleft':
+			case 'bitwise_shiftright':
 				$this->passExpression($expression['left']);
 				$this->passExpression($expression['right']);
 				break;

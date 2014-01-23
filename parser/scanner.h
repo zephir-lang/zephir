@@ -109,6 +109,7 @@
 #define XX_T_PARENTHESES_CLOSE ')'
 #define XX_T_BITWISE_OR '|'
 #define XX_T_BITWISE_AND '&'
+#define XX_T_BITWISE_XOR '^'
 #define XX_T_ARROW 400
 #define XX_T_EQUALS 401
 #define XX_T_IDENTICAL 402
@@ -133,6 +134,8 @@
 #define XX_T_OR 416
 #define XX_T_DOUBLECOLON 417
 #define XX_T_MODASSIGN 418
+#define XX_T_BITWISE_SHIFTLEFT 419
+#define XX_T_BITWISE_SHIFTRIGHT 420
 
 #define XX_T_CBLOCK 451
 

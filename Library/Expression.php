@@ -47,6 +47,14 @@ require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/LessEqualOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
 
+/* Bitwise operators */
+require ZEPHIRPATH . 'Library/Operators/Bitwise/BaseOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseAndOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseOrOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseXorOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Bitwise/ShiftLeftOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Bitwise/ShiftRightOperator.php';
+
 /* Other operators */
 require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
@@ -1110,6 +1118,36 @@ class Expression
 
 			case 'or':
 				$expr = new OrOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'bitwise_and':
+				$expr = new BitwiseAndOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'bitwise_or':
+				$expr = new BitwiseOrOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'bitwise_xor':
+				$expr = new BitwiseXorOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'bitwise_shiftleft':
+				$expr = new ShiftLeftOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
+			case 'bitwise_shiftright':
+				$expr = new ShiftRightOperator();
 				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
