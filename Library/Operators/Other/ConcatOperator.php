@@ -25,9 +25,11 @@
 class ConcatOperator extends BaseOperator
 {
 
-	private function _getOptimizedConcat($expression, CompilationContext $compilationContext)
+	private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)
 	{
 		$originalExpr = $expression;
+
+		$isFullString = true;
 
 		$parts = array();
 		while ($expression && isset($expression['left'])){
@@ -51,6 +53,7 @@ class ConcatOperator extends BaseOperator
 
 			$expr = new Expression($part);
 			switch ($part['type']) {
+
 				case 'array-access':
 				case 'property-access':
 					$expr->setReadOnly(true);
@@ -66,6 +69,10 @@ class ConcatOperator extends BaseOperator
 					$variable = $compilationContext->symbolTable->getVariableForRead($compiledExpr->getCode(), $compilationContext, $originalExpr);
 					switch ($variable->getType()) {
 						case 'variable':
+							$key .= 'v';
+							$concatParts[] = $variable->getName();
+							$isFullString = false;
+							break;
 						case 'string':
 							$key .= 'v';
 							$concatParts[] = $variable->getName();
@@ -86,8 +93,7 @@ class ConcatOperator extends BaseOperator
 					$concatParts[] = '"' . $compiledExpr->getCode() . '"';
 					break;
 				default:
-					echo $compiledExpr->getType();
-					break;
+					throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
 			}
 
 		}
@@ -96,6 +102,12 @@ class ConcatOperator extends BaseOperator
 		return array($key, join(', ', $concatParts));
 	}
 
+	/**
+	 * Performs concat compilation
+	 *
+	 * @param Expression $expression
+	 * @param CompilationContext $compilationContext
+	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 
@@ -109,18 +121,32 @@ class ConcatOperator extends BaseOperator
 
 		$compilationContext->headersManager->add('kernel/concat');
 
-		$optimized = $this->_getOptimizedConcat($expression, $compilationContext);
+		/**
+		 * Try to optimize the concatenation
+		 */
+		$optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
 		if (is_array($optimized)) {
 
-			$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+			if (!$isFullString) {
 
-			$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
+				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+				$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
 
-			$expected->setDynamicTypes('string');
+				$expected->setDynamicTypes('string');
+				return new CompiledExpression('variable', $expected->getName(), $expression);
 
-			return new CompiledExpression('variable', $expected->getName(), $expression);
+			} else {
+
+				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
+				$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
+
+				return new CompiledExpression('string', $expected->getName(), $expression);
+			}
 		}
 
+		/**
+		 * If the expression cannot be optimized, fall back to the standard compilation
+		 */
 		$leftExpr = new Expression($expression['left']);
 		switch ($expression['left']['type']) {
 			case 'array-access':

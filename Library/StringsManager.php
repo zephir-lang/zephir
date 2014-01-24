@@ -112,6 +112,9 @@ class StringsManager
 			if (count($zvalCopy)) {
 				$code .= "\t" . 'zval result_copy, ' . join(', ', $zvalCopy) . ';' . PHP_EOL;
 				$code .= "\t" . 'int use_copy = 0, ' . join(', ', $useCopy) . ';' . PHP_EOL;
+			} else {
+				$code .= "\t" . 'zval result_copy;' . PHP_EOL;
+				$code .= "\t" . 'int use_copy = 0;' . PHP_EOL;
 			}
 			$code .= "\t" . 'uint offset = 0, length;' . PHP_EOL . PHP_EOL;
 

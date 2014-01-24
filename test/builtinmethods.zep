@@ -1,0 +1,35 @@
+
+/**
+ * OO operations
+ */
+
+namespace Test;
+
+class BuiltInMethods
+{
+    public function stringMethodLength1()
+    {
+    	return "hello"->length();
+    }
+
+    public function stringMethodLength2()
+    {
+    	return ("hello")->length();
+    }
+
+    public function stringMethodLength3()
+    {
+    	return ("hello" . "hello")->length();
+    }
+
+    public function stringMethodLength4(string a)
+    {
+    	return a->length();
+    }
+
+    public function stringMethodLength5(string a)
+    {
+    	return ("hello" . a)->length();
+    }
+
+}

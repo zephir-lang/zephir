@@ -377,7 +377,7 @@ class SymbolTable
 		if (is_object($variable)) {
 			$variable->increaseUses();
 			$variable->increaseMutates();
-			if ($type == 'variable') {
+			if ($type == 'variable' || $type == 'string') {
 				$variable->initComplexLiteralVariant($context);
 			}
 			return $variable;
@@ -389,7 +389,7 @@ class SymbolTable
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->setTemporal(true);
-		if ($type == 'variable') {
+		if ($type == 'variable' || $type == 'string') {
 			$variable->initComplexLiteralVariant($context);
 		}
 

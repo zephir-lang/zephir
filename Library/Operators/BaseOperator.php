@@ -90,28 +90,30 @@ class BaseOperator
 	 *
 	 * @param CompilationContext $compilationContext
 	 * @param array $expression
+	 * @param string $type
+	 * @return \Variable
 	 */
-	public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression)
+	public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression, $type='variable')
 	{
 		$isExpecting = $this->_expecting;
 		$symbolVariable = $this->_expectingVariable;
 
 		if ($isExpecting) {
 			if (is_object($symbolVariable)) {
-				if ($symbolVariable->getType() == 'variable') {
+				if ($symbolVariable->getType() == $type) {
 					$symbolVariable->initVariant($compilationContext);
 				} else {
 					if (!$this->_readOnly) {
-						$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+						$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
 					} else {
-						$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+						$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
 					}
 				}
 			} else {
 				if (!$this->_readOnly) {
-					$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext, $expression);
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
 				}
 			}
 		}
