@@ -43,7 +43,7 @@ class Pregmatch
 
         public function testPregMatchAll() {
 
-            var pattern, subject, matched;
+            var pattern, subject;
 
             let pattern = "/def$/";
             let subject = "abcdef";
@@ -53,7 +53,7 @@ class Pregmatch
 
         public function testPregMatchFallback() {
 
-            var pattern, subject, matched, matches;
+            var pattern, subject, matches;
             let matches = [];
 
             let pattern = "/def$/";
