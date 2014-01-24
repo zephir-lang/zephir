@@ -79,8 +79,8 @@ int zephir_and_function(zval *result, zval *left, zval *right);
 int zephir_bitwise_and_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 int zephir_bitwise_xor_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
-int zephir_shiftleft_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
-int zephir_shiftright_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+int zephir_shift_left_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+int zephir_shift_right_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 
 void zephir_concat_self(zval **left, zval *right TSRMLS_DC);
 void zephir_concat_self_str(zval **left, const char *right, int right_length TSRMLS_DC);

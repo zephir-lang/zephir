@@ -19,11 +19,9 @@
 
 class ShiftLeftOperator extends BitwiseBaseOperator
 {
-
 	protected $_operator = '<<';
 
 	protected $_bitOperator = '<<';
 
-	protected $_zvalOperator = 'zephir_shiftleft_function';
-
+	protected $_zvalOperator = 'zephir_shift_left_function';
 }

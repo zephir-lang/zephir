@@ -588,11 +588,11 @@ int zephir_bitwise_xor_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
 /**
  * Do shiftleft function keeping ref_count and is_ref
  */
-int zephir_shiftleft_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
+int zephir_shift_left_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
 	int status;
 	int ref_count = Z_REFCOUNT_P(result);
 	int is_ref = Z_ISREF_P(result);
-	status = shiftleft_function(result, op1, op2 TSRMLS_CC);
+	status = shift_left_function(result, op1, op2 TSRMLS_CC);
 	Z_SET_REFCOUNT_P(result, ref_count);
 	Z_SET_ISREF_TO_P(result, is_ref);
 	return status;
@@ -601,11 +601,11 @@ int zephir_shiftleft_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
 /**
  * Do shiftright function keeping ref_count and is_ref
  */
-int zephir_shiftright_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
+int zephir_shift_right_function(zval *result, zval *op1, zval *op2 TSRMLS_DC){
 	int status;
 	int ref_count = Z_REFCOUNT_P(result);
 	int is_ref = Z_ISREF_P(result);
-	status = shiftright_function(result, op1, op2 TSRMLS_CC);
+	status = shift_right_function(result, op1, op2 TSRMLS_CC);
 	Z_SET_REFCOUNT_P(result, ref_count);
 	Z_SET_ISREF_TO_P(result, is_ref);
 	return status;

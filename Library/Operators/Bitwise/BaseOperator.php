@@ -121,7 +121,7 @@ class BitwiseBaseOperator extends BaseOperator
 		$rightExpr = new Expression($expression['right']);
 		$rightExpr->setReadOnly(true);
 		$right = $rightExpr->compile($compilationContext);
-
+	
 		switch ($left->getType()) {
 			case 'int':
 			case 'uint':
