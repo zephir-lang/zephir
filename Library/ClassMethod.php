@@ -768,6 +768,9 @@ class ClassMethod
 			case 'string':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+			case 'array':
+				$compilationContext->symbolTable->mustGrownStack(true);
+				return "\t\t" . 'zephir_get_arrval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 			case 'variable';
 				break;
 			default:
@@ -1282,6 +1285,7 @@ class ClassMethod
 					break;
 				case 'string':
 				case 'variable':
+				case 'array':
 					$pointer = '*';
 					$code = 'zval ';
 					break;
@@ -1307,7 +1311,7 @@ class ClassMethod
 			$groupVariables = array();
 			$defaultValues = array();
 			foreach ($variables as $variable) {
-				if (($type == 'variable' || $type == 'string') && $variable->mustInitNull()) {
+				if (($type == 'variable' || $type == 'string' || $type == 'array') && $variable->mustInitNull()) {
 					if ($variable->isLocalOnly()) {
 						$groupVariables[] = $variable->getName() . ' = zval_used_for_init';
 					} else {
@@ -1330,7 +1334,7 @@ class ClassMethod
 						} else {
 							$defaultValue = $variable->getDefaultInitValue();
 							if ($defaultValue !== null) {
-								if ($type == 'variable' || $type == 'string') {
+								if ($type == 'variable' || $type == 'string' || $type == 'array') {
 									$groupVariables[] = $pointer . $variable->getName();
 								} else {
 									$groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;

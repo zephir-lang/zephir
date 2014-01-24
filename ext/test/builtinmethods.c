@@ -139,3 +139,17 @@ PHP_METHOD(Test_BuiltInMethods, intMethodAbs2) {
 
 }
 
+PHP_METHOD(Test_BuiltInMethods, arrayMethodJoin1) {
+
+	zval *a_param = NULL;
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a_param);
+
+		zephir_get_arrval(a, a_param);
+
+
+
+}
+

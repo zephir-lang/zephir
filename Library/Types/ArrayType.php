@@ -30,7 +30,14 @@ class ArrayType
 	 */
 	public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
 	{
-		$builder = new FunctionCallBuilder('join', array($caller), FunctionCall::CALL_NORMAL, $expression['file'], $expression['line'], $expression['char']);
+		$builder = new FunctionCallBuilder(
+			'join',
+			array($caller),
+			FunctionCall::CALL_NORMAL,
+			$expression['file'],
+			$expression['line'],
+			$expression['char']
+		);
 
 		$expression = new Expression($builder->get());
 

@@ -184,6 +184,7 @@ class ReturnStatement
 							$codePrinter->output('RETURN_MM_DOUBLE(' . $symbolVariable->getName() . ');');
 							break;
 						case 'string':
+						case 'array':
 							$codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
 							break;
 						case 'bool':

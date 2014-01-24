@@ -87,6 +87,21 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 }
 
+PHP_METHOD(Test_Oo_OoParams, setHobbies) {
+
+	zval *hobbies_param = NULL;
+	zval *hobbies;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &hobbies_param);
+
+		zephir_get_arrval(hobbies, hobbies_param);
+
+
+	RETURN_CTOR(hobbies);
+
+}
+
 PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	zval *age_param = NULL;
@@ -133,7 +148,17 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name_param);
 
-		zephir_get_strval(name, name_param);
+	if (Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(name_param) == IS_STRING) {
+		name = name_param;
+	} else {
+		ZEPHIR_INIT_VAR(name);
+		ZVAL_EMPTY_STRING(name);
+	}
 
 
 	RETURN_CTOR(name);
@@ -147,7 +172,12 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
-		enabled = zephir_get_boolval(enabled_param);
+		if (Z_TYPE_P(enabled_param) != IS_BOOL) {
+			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'enabled' must be a bool") TSRMLS_CC);
+			RETURN_NULL();
+		}
+
+		enabled = Z_BVAL_P(enabled_param);
 
 
 	RETURN_BOOL(enabled);
