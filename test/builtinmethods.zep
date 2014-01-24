@@ -32,4 +32,9 @@ class BuiltInMethods
     	return ("hello" . a)->length();
     }
 
+    public function stringMethodTrim1()
+    {
+        return " hello \t\n"->trim();
+    }
+
 }

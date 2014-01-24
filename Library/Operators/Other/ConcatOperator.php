@@ -128,20 +128,14 @@ class ConcatOperator extends BaseOperator
 		if (is_array($optimized)) {
 
 			if (!$isFullString) {
-
 				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
-				$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
-
 				$expected->setDynamicTypes('string');
-				return new CompiledExpression('variable', $expected->getName(), $expression);
-
 			} else {
-
 				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
-				$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
-
-				return new CompiledExpression('string', $expected->getName(), $expression);
 			}
+
+			$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
+			return new CompiledExpression('variable', $expected->getName(), $expression);
 		}
 
 		/**
