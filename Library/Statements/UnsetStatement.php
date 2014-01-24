@@ -18,33 +18,47 @@
 */
 
 /**
- * UnsetStatement
- *
- * Unset statement
+ * Class UnsetStatement
  */
 class UnsetStatement
 	extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		$compilationContext->headersManager->add('kernel/array');
-
 		$expression = $this->_statement['expr'];
 
+		$flags = 0;
+
 		switch ($expression['type']) {
+			case 'list':
+				$expr = new Expression($expression['left']['left']);
+				$expr->setReadOnly(true);
+				$exprVar = $expr->compile($compilationContext);
+
+				$expr = new Expression($expression['left']['right']);
+				$expr->setReadOnly(true);
+				$exprIndex = $expr->compile($compilationContext);
+
+				break;
 			case 'array-access':
+				$expr = new Expression($expression['left']);
+				$expr->setReadOnly(true);
+				$exprVar = $expr->compile($compilationContext);
+
+				$expr = new Expression($expression);
+				$expr->setReadOnly(true);
+				$exprIndex = $expr->compile($compilationContext);
+
+				$flags = 'PH_SEPARATE';
 				break;
 			default:
 				throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
 		}
-
-		$expr = new Expression($expression['left']);
-		$expr->setReadOnly(true);
-		$exprVar = $expr->compile($compilationContext);
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
 		if ($variable->getType() != 'variable') {
@@ -54,12 +68,6 @@ class UnsetStatement
 		if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'object', 'null'))) {
 			$compilationContext->logger->warning('Possible attempt to use non array/object in unset operator', 'non-valid-unset', $expression['left']);
 		}
-
-		$expr = new Expression($expression['right']);
-		$expr->setReadOnly(true);
-		$exprIndex = $expr->compile($compilationContext);
-
-		$flags = 'PH_SEPARATE';
 
 		switch ($exprIndex->getType()) {
 			case 'int':
@@ -71,10 +79,8 @@ class UnsetStatement
 			case 'string':
 				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
 				break;
-			case 'long':
-				break;
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression['right']);
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $exprIndex);
 				switch ($variableIndex->getType()) {
 					case 'int':
 					case 'uint':

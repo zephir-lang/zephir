@@ -170,7 +170,6 @@ class CompilerFile
 	 */
 	public function preCompileInterface($namespace, $topStatement)
 	{
-
 		$classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
 		if (isset($topStatement['extends'])) {
@@ -181,6 +180,7 @@ class CompilerFile
 
 		if (isset($topStatement['definition'])) {
 			$definition = $topStatement['definition'];
+
 			/**
 			 * Register constants
 			 */
@@ -193,6 +193,7 @@ class CompilerFile
 					));
 				}
 			}
+
 			/**
 			 * Register methods
 			 */
