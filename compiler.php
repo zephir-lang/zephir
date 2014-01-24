@@ -23,8 +23,11 @@ define('ZEPHIRPATH', __DIR__ . '/');
 define('T', "\t");
 define('2T', "\t\t");
 
+/* exceptions */
 require ZEPHIRPATH . 'Library/ParseException.php';
 require ZEPHIRPATH . 'Library/CompilerException.php';
+
+/* compiler base */
 require ZEPHIRPATH . 'Library/CompilationContext.php';
 require ZEPHIRPATH . 'Library/HeadersManager.php';
 require ZEPHIRPATH . 'Library/StringsManager.php';
@@ -44,8 +47,15 @@ require ZEPHIRPATH . 'Library/CompiledExpression.php';
 require ZEPHIRPATH . 'Library/CodePrinter.php';
 require ZEPHIRPATH . 'Library/ClassMethodParameters.php';
 require ZEPHIRPATH . 'Library/StatementsBlock.php';
+
+/* built-in types */
+require ZEPHIRPATH . 'Library/Types/StringType.php';
+
+/* detectors */
 require ZEPHIRPATH . 'Library/Detectors/ReadDetector.php';
 require ZEPHIRPATH . 'Library/Detectors/WriteDetector.php';
+
+/* statements */
 require ZEPHIRPATH . 'Library/Statements/Abstract.php';
 require ZEPHIRPATH . 'Library/Statements/ThrowStatement.php';
 require ZEPHIRPATH . 'Library/Statements/EchoStatement.php';
@@ -62,17 +72,28 @@ require ZEPHIRPATH . 'Library/Statements/ForStatement.php';
 require ZEPHIRPATH . 'Library/Statements/BreakStatement.php';
 require ZEPHIRPATH . 'Library/Statements/ContinueStatement.php';
 require ZEPHIRPATH . 'Library/Statements/UnsetStatement.php';
+
+/* optimizers */
 require ZEPHIRPATH . 'Library/Optimizers/EvalExpression.php';
+
+/* builders */
 require ZEPHIRPATH . 'Library/Builder/Operators/BinaryOperatorBuilder.php';
+require ZEPHIRPATH . 'Library/Builder/FunctionCallBuilder.php';
 require ZEPHIRPATH . 'Library/Builder/VariableBuilder.php';
+
+/* calls */
 require ZEPHIRPATH . 'Library/Call.php';
 require ZEPHIRPATH . 'Library/FunctionCall.php';
 require ZEPHIRPATH . 'Library/MethodCall.php';
 require ZEPHIRPATH . 'Library/StaticCall.php';
+
+/* passes */
 require ZEPHIRPATH . 'Library/Passes/LocalContextPass.php';
 require ZEPHIRPATH . 'Library/Passes/LoopBreakPass.php';
 require ZEPHIRPATH . 'Library/Passes/SkipVariantInit.php';
 require ZEPHIRPATH . 'Library/Passes/StaticTypeInference.php';
+
+/* utils/auxiliar */
 require ZEPHIRPATH . 'Library/Config.php';
 require ZEPHIRPATH . 'Library/Logger.php';
 require ZEPHIRPATH . 'Library/Color.php';

@@ -55,18 +55,38 @@ class MethodCall extends Call
 		$exprVariable->setReadOnly(true);
 		$exprCompiledVariable = $exprVariable->compile($compilationContext);
 
+		$builtInType = false;
 		switch ($exprCompiledVariable->getType()) {
+
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
 					case 'variable':
+						$caller = $variableVariable;
 						break;
 					default:
-						throw new CompilerException("Methods cannot be called on variable type: " . $variableVariable->getType(), $expression);
+
+						/* Check if there is a built-in type optimizer available */
+						$builtInTypeClass = $variableVariable->getType() . 'Type';
+						if (class_exists($builtInTypeClass)) {
+							$builtInType = new $builtInTypeClass;
+							$caller = $exprCompiledVariable;
+						} else {
+							throw new CompilerException("Methods cannot be called on variable type: " . $variableVariable->getType(), $expression);
+						}
 				}
 				break;
+
 			default:
-				throw new CompilerException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
+
+				/* Check if there is a built-in type optimizer available */
+				$builtInTypeClass = $exprCompiledVariable->getType() . 'Type';
+				if (class_exists($builtInTypeClass)) {
+					$builtInType = new $builtInTypeClass;
+					$caller = $exprCompiledVariable;
+				} else {
+					throw new CompilerException("Cannot use expression: " . $exprCompiledVariable->getType() . " as method caller", $expression['variable']);
+				}
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -79,6 +99,11 @@ class MethodCall extends Call
 		if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 			$methodName = strtolower($expression['name']);
 		} else {
+
+			if (is_object($builtInType)) {
+				throw new CompilerException("Dynamic method invokation for type: " . $variableMethod->getType() . " is not supported", $expression);
+			}
+
 			$variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 			if ($variableMethod->isNotVariableAndString()) {
 				throw new CompilerException("Cannot use variable type: " . $variableMethod->getType() . " as dynamic method name", $expression);
@@ -109,16 +134,29 @@ class MethodCall extends Call
 		/**
 		 * Method calls only return zvals so we need to validate the target variable is also a zval
 		 */
-		if ($isExpecting) {
+		if (!$builtInType) {
 
-			if ($symbolVariable->getType() != 'variable') {
-				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+			if ($isExpecting) {
+
+				if ($symbolVariable->getType() != 'variable') {
+					throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+				}
+
+				/**
+				 * At this point, we don't know the exact dynamic type returned by the method call
+				 */
+				$symbolVariable->setDynamicTypes('undefined');
 			}
 
+		} else {
+
 			/**
-			 * At this point, we don't know the exact dynamic type returned by the method call
+			 * Invoke method on built-in type
 			 */
-			$symbolVariable->setDynamicTypes('undefined');
+			if ($type == self::CALL_NORMAL) {
+				return $builtInType->invokeMethod($methodName, $caller, $compilationContext, $this, $expression);
+			}
+
 		}
 
 		/**
@@ -529,6 +567,7 @@ class MethodCall extends Call
 		if ($isExpecting) {
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
+
 		return new CompiledExpression('null', null, $expression);
 	}
 

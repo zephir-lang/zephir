@@ -56,12 +56,14 @@ class EchoStatement
 				case 'string':
 					$compilationContext->codePrinter->output('php_printf("' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
 					break;
+				case 'null':
+					break;
 				case 'variable':
 					$variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
 					switch ($variable->getType()) {
 						case 'int':
 							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
-							break;						
+							break;
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
 							break;
@@ -74,6 +76,8 @@ class EchoStatement
 						case 'string':
 						case 'variable':
 							$compilationContext->codePrinter->output('zend_print_zval(' . $variable->getName() . ', 0);');
+							break;
+						case 'null':
 							break;
 						default:
 							throw new CompilerException("Unknown type: " . $variable->getType(), $expr);

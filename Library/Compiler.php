@@ -477,10 +477,18 @@ class Compiler
 
 		$hash = "";
 		foreach ($this->_files as $compileFile) {
+
 			$compileFile->compile($this, $this->_stringManager);
 			$compiledFile = $compileFile->getCompiledFile();
+
+			$methods = array();
+			foreach ($compileFile->getClassDefinition()->getMethods() as $method) {
+				$methods[] = $method->getName();
+			}
+
 			$files[] = $compiledFile;
-			$hash .= '|' . $compiledFile;
+
+			$hash .= '|' . $compiledFile . '[' . join('|', $methods) . ']';
 		}
 		$hash = md5($hash);
 

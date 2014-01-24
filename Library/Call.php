@@ -157,18 +157,29 @@ class Call
 		if (!$this->_resolvedParams) {
 			$params = array();
 			foreach ($parameters as $parameter) {
-				$paramExpr = new Expression($parameter);
-				switch ($parameter['type']) {
-					case 'property-access':
-					case 'array-access':
-					case 'static-property-access':
-						$paramExpr->setReadOnly(true);
-						break;
-					default:
-						$paramExpr->setReadOnly($readOnly);
-						break;
+
+				if (is_array($parameter)) {
+					$paramExpr = new Expression($parameter);
+					switch ($parameter['type']) {
+						case 'property-access':
+						case 'array-access':
+						case 'static-property-access':
+							$paramExpr->setReadOnly(true);
+							break;
+						default:
+							$paramExpr->setReadOnly($readOnly);
+							break;
+					}
+					$params[] = $paramExpr->compile($compilationContext);
+					continue;
 				}
-				$params[] = $paramExpr->compile($compilationContext);
+
+				if ($parameter instanceof CompiledExpression) {
+					$params[] = $parameter;
+					continue;
+				}
+
+				throw new CompilerException("Invalid expression", $expression);
 			}
 			$this->_resolvedParams = $params;
 		}
