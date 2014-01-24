@@ -249,6 +249,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'array' {
+			s->active_char += sizeof("array")-1;
+			token->opcode = XX_T_TYPE_ARRAY;
+			return 0;
+		}
+
 		'var' {
 			s->active_char += sizeof("var")-1;
 			token->opcode = XX_T_TYPE_VAR;

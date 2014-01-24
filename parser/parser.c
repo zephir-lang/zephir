@@ -6877,6 +6877,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_TYPE_BOOL:
 				xx_(xx_parser, XX_TYPE_BOOL, NULL, parser_status);
 				break;
+			case XX_T_TYPE_ARRAY:
+				xx_(xx_parser, XX_TYPE_ARRAY, NULL, parser_status);
+				break;
 			case XX_T_TYPE_VAR:
 				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
 				break;

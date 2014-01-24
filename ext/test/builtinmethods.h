@@ -9,6 +9,8 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodLength3);
 PHP_METHOD(Test_BuiltInMethods, stringMethodLength4);
 PHP_METHOD(Test_BuiltInMethods, stringMethodLength5);
 PHP_METHOD(Test_BuiltInMethods, stringMethodTrim1);
+PHP_METHOD(Test_BuiltInMethods, intMethodAbs1);
+PHP_METHOD(Test_BuiltInMethods, intMethodAbs2);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtinmethods_stringmethodlength4, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
@@ -25,5 +27,7 @@ ZEPHIR_INIT_FUNCS(test_builtinmethods_method_entry) {
 	PHP_ME(Test_BuiltInMethods, stringMethodLength4, arginfo_test_builtinmethods_stringmethodlength4, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltInMethods, stringMethodLength5, arginfo_test_builtinmethods_stringmethodlength5, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltInMethods, stringMethodTrim1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_BuiltInMethods, intMethodAbs1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_BuiltInMethods, intMethodAbs2, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

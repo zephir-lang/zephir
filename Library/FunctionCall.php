@@ -94,12 +94,12 @@ class FunctionCall extends Call
 				 */
 				$numberParameters = count($expression['parameters']);
 				if ($numberParameters < $reflector->getNumberOfRequiredParameters()) {
-					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
+					throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
 				}
 			} else {
 				$numberParameters = 0;
 				if ($reflector->getNumberOfRequiredParameters() > 0) {
-					throw new CompilerException("The number of parameters passed is less than the number of requiered parameters by '" . $funcName . "'", $expression);
+					throw new CompilerException("The number of parameters passed is lesser than the number of required parameters by '" . $funcName . "'", $expression);
 				}
 			}
 

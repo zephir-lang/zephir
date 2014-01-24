@@ -272,6 +272,11 @@ class Call
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getType();
 							break;
+						case 'array':
+							$params[] = $parameterVariable->getName();
+							$types[] = $parameterVariable->getType();
+							$dynamicTypes[] = $parameterVariable->getType();
+							break;
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							$types[] = $parameterVariable->getType();
@@ -358,6 +363,7 @@ class Call
 							break;
 						case 'string':
 						case 'variable':
+						case 'array':
 							$params[] = $parameterVariable->getName();
 							break;
 						default:

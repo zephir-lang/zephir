@@ -49,7 +49,9 @@ require ZEPHIRPATH . 'Library/ClassMethodParameters.php';
 require ZEPHIRPATH . 'Library/StatementsBlock.php';
 
 /* built-in types */
+require ZEPHIRPATH . 'Library/Types/IntType.php';
 require ZEPHIRPATH . 'Library/Types/StringType.php';
+require ZEPHIRPATH . 'Library/Types/ArrayType.php';
 
 /* detectors */
 require ZEPHIRPATH . 'Library/Detectors/ReadDetector.php';

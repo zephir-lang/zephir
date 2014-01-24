@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/concat.h"
 #include "kernel/operators.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -107,6 +108,34 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodTrim1) {
 	ZVAL_STRING(&_1, " hello \t\n", 0);
 	zephir_fast_trim(_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_BuiltInMethods, intMethodAbs1) {
+
+	zval _0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, -100);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "abs", &_0);
+	RETURN_CCTOR(_1);
+
+}
+
+PHP_METHOD(Test_BuiltInMethods, intMethodAbs2) {
+
+	zval _0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 50);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "abs", &_0);
+	RETURN_CCTOR(_1);
 
 }
 

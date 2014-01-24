@@ -44,6 +44,7 @@
 #define XX_T_TYPE_CHAR 317
 #define XX_T_TYPE_UCHAR 318
 #define XX_T_TYPE_UINTEGER 319
+#define XX_T_TYPE_ARRAY 320
 
 #define XX_T_NAMESPACE 350
 #define XX_T_CLASS 351

@@ -17,20 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
-class StringType
+class ArrayType
 {
 
 	/**
-	 * Transforms calls to method "length" to function calls to "strlen"
+	 * Transforms calls to method "join" to function calls to "join"
 	 *
 	 * @param object $caller
 	 * @param CompilationContext $compilationContext
 	 * @param Call $call
 	 * @param array $expression
 	 */
-	public function length($caller, CompilationContext $compilationContext, Call $call, array $expression)
+	public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
 	{
-		$builder = new FunctionCallBuilder('strlen', array($caller));
+		$builder = new FunctionCallBuilder('join', array($caller), FunctionCall::CALL_NORMAL, $expression['file'], $expression['line'], $expression['char']);
 
 		$expression = new Expression($builder->get());
 
@@ -38,41 +38,7 @@ class StringType
 	}
 
 	/**
-	 * Transforms calls to method "trim" to function calls to "trim"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function trim($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('trim', array($caller));
-
-		$expression = new Expression($builder->get());
-
-		return $expression->compile($compilationContext);
-	}
-
-	/**
-	 * Transforms calls to method "index" to function calls to "strpos"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('strpos', array($caller));
-
-		$expression = new Expression($builder->get());
-
-		return $expression->compile($compilationContext);
-	}
-
-	/**
-	 * Intercepts calls to built-in methods on the string type
+	 * Intercepts calls to built-in methods on the "int" type
 	 *
 	 * @param string $methodName
 	 * @param object $caller
@@ -86,7 +52,7 @@ class StringType
 			return $this->{$methodName}($caller, $compilationContext, $call, $expression);
 		}
 
-		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "string"', $expression);
+		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
 	}
 
 }

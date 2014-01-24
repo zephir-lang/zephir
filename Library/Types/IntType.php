@@ -17,54 +17,42 @@
  +--------------------------------------------------------------------------+
 */
 
-/**
- * FunctionCallBuilder
- *
- * Allows to manually build a function call AST node
- */
-class FunctionCallBuilder
+class IntType
 {
 
-	protected $_name;
-
-	protected $_parameters;
-
-	protected $_type;
-
-	protected $_file;
-
-	protected $_line;
-
-	protected $_char;
-
 	/**
-	 * FunctionCallBuilder construct
+	 * Transforms calls to method "abs" to function calls to "abs"
 	 *
-	 * @param string $name
-	 * @param array $name
-	 * @param int $name
+	 * @param object $caller
+	 * @param CompilationContext $compilationContext
+	 * @param Call $call
+	 * @param array $expression
 	 */
-	public function __construct($name, $parameters, $type=1, $file=null, $line=0, $char=0)
+	public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
 	{
-		$this->_name = $name;
-		$this->_parameters = $parameters;
-		$this->_type = $type;
-		$this->_file = $file;
-		$this->_line = $line;
-		$this->_char = $char;
+		$builder = new FunctionCallBuilder('abs', array($caller));
+
+		$expression = new Expression($builder->get());
+
+		return $expression->compile($compilationContext);
 	}
 
-	public function get()
+	/**
+	 * Intercepts calls to built-in methods on the "int" type
+	 *
+	 * @param string $methodName
+	 * @param object $caller
+	 * @param CompilationContext $compilationContext
+	 * @param Call $call
+	 * @param array $expression
+	 */
+	public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
 	{
-		return array(
-			'type'       => 'fcall',
-			'name'       => $this->_name,
-			'call-type'  => $this->_type,
-			'parameters' => $this->_parameters,
-			'file'       => $this->_file,
-			'line'       => $this->_line,
-			'char'       => $this->_char
-		);
+		if (method_exists($this, $methodName)) {
+			return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+		}
+
+		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "int"', $expression);
 	}
 
 }
