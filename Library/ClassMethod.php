@@ -42,6 +42,8 @@ class ClassMethod
 
 	protected $_void = false;
 
+	protected $_expression;
+
 	/**
 	 * ClassMethod constructor
 	 *
@@ -53,7 +55,7 @@ class ClassMethod
 	 * @param string $returnType
 	 */
 	public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters,
-		StatementsBlock $statements=null, $docblock=null, $returnType=null, $original=null)
+		StatementsBlock $statements=null, $docblock=null, $returnType=null, array $original = null)
 	{
 
 		$this->checkVisibility($visibility, $name, $original);
@@ -64,6 +66,8 @@ class ClassMethod
 		$this->_parameters = $parameters;
 		$this->_statements = $statements;
 		$this->_docblock = $docblock;
+
+		$this->_expression = $original;
 
 		if ($returnType['void']) {
 			$this->_void = true;
@@ -188,10 +192,12 @@ class ClassMethod
 		if (count($this->_returnTypes)) {
 			return true;
 		}
+
 		if (count($this->_returnClassTypes)) {
 			return true;
 		}
 
+		return false;
 	}
 
 	/**
@@ -1348,8 +1354,6 @@ class ClassMethod
 		 * Finalize the method compilation
 		 */
 		if (is_object($this->_statements)) {
-
-
 			/**
 			 * If the last statement is not a 'return' or 'throw' we need to
 			 * restore the memory stack if needed
@@ -1357,7 +1361,6 @@ class ClassMethod
 			$lastType = $this->_statements->getLastStatementType();
 
 			if ($lastType != 'return' && $lastType != 'throw') {
-
 				if ($symbolTable->getMustGrownStack()) {
 					$compilationContext->headersManager->add('kernel/memory');
 					$codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
@@ -1367,10 +1370,7 @@ class ClassMethod
 				 * If a method has return-type hints we need to ensure the last statement is a 'return' statement
 				 */
 				if ($this->hasReturnTypes()) {
-					if (is_object($parameters)) {
-						throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $parameters[0]);
-					}
-					throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints');
+					throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $this->_expression['return-type']);
 				}
 			}
 		}
