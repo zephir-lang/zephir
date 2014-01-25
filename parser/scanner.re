@@ -37,7 +37,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		re2c:indent:top = 2;
 		re2c:yyfill:enable = 0;
 
-		INTEGER = [\-]?[0-9]+;
+		INTEGER = ([\-]?[0-9]+)|([\-]?[0][x][0-9A-Fa-f]+);
 		INTEGER {
 			token->opcode = XX_T_INTEGER;
 			token->value = strndup(start, YYCURSOR - start);

@@ -25,6 +25,11 @@
 class ConcatOperator extends BaseOperator
 {
 
+	/**
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @param boolean $isFullString
+	 */
 	private function _getOptimizedConcat($expression, CompilationContext $compilationContext, &$isFullString)
 	{
 		$originalExpr = $expression;
@@ -129,11 +134,11 @@ class ConcatOperator extends BaseOperator
 
 			if (!$isFullString) {
 				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
-				$expected->setDynamicTypes('string');
 			} else {
 				$expected = $this->getExpectedComplexLiteral($compilationContext, $expression, 'string');
 			}
 
+			$expected->setDynamicTypes('string');
 			$compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
 			return new CompiledExpression('variable', $expected->getName(), $expression);
 		}

@@ -140,7 +140,6 @@ class Constants
 					return new CompiledExpression('string', Utils::addSlashes($constantName), $expression);
 				default:
 					return new CompiledExpression($type, $constantName, $expression);
-					break;
 			}
 		}
 
@@ -150,7 +149,7 @@ class Constants
 		}
 
 		if (in_array($constantName, $this->magickConstants)) {
-			switch($constantName) {
+			switch ($constantName) {
 				case '__CLASS__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getName(), $expression);
 					break;

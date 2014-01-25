@@ -54,45 +54,58 @@ class NativeArrayAccess
 	}
 
 	/**
-	 * Compiles foo[x] = {expr}
-	 *
 	 * @param array $expression
+	 * @param Variable $variableVariable
 	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
 	 */
-	public function compile($expression, CompilationContext $compilationContext)
+	protected function _accessStringOffset($expression, Variable $variableVariable, CompilationContext $compilationContext)
 	{
+
+		if ($this->_expecting) {
+			if ($this->_expectingVariable) {
+				$symbolVariable = $this->_expectingVariable;
+				if ($symbolVariable->getType() != 'char') {
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext, $expression);
+				}
+			} else {
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext, $expression);
+			}
+		}
+
+		/**
+		 * Right part of expression is the index
+		 */
+		$expr = new Expression($expression['right']);
+		$exprIndex = $expr->compile($compilationContext);
+
+		switch ($exprIndex->getType()) {
+			case 'int':
+			case 'uint':
+			case 'long':
+				break;
+			default:
+				throw new CompilerException("Cannot use index type " . $exprIndex->getType() . " as offset", $expression['right']);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
 
+		$compilationContext->headersManager->add('kernel/operators');
+		$codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ');');
+
+		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+	}
+
+	/**
+	 * @param array $expression
+	 * @param Variable $variableVariable
+	 * @param CompilationContext $compilationContext
+	 */
+	protected function _accessDimensionArray($expression, Variable $variableVariable, CompilationContext $compilationContext)
+	{
 		$arrayAccess = $expression;
 
-		/**
-		 * Resolve the left part of the expression
-		 */
-		$expr = new Expression($arrayAccess['left']);
-		$expr->setReadOnly(true);
-		$exprVariable = $expr->compile($compilationContext);
-
-		/**
-		 * Only dynamic variables can be used as arrays
-		 */
-		switch ($exprVariable->getType()) {
-			case 'variable':
-				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
-				switch ($variableVariable->getType()) {
-					case 'variable':
-						break;
-					default:
-						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $arrayAccess['left']);
-				}
-				break;
-			default:
-				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an array", $arrayAccess['left']);
-		}
-
 		if ($variableVariable->hasAnyDynamicType('unknown')) {
-			throw new CompilerException("Cannot use non-initialized variable as an array", $statement);
+			throw new CompilerException("Cannot use non-initialized variable as an array", $arrayAccess['left']);
 		}
 
 		/**
@@ -101,6 +114,8 @@ class NativeArrayAccess
 		if ($variableVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
 			$compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $arrayAccess['left']);
 		}
+
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * Resolves the symbol that expects the value
@@ -242,6 +257,56 @@ class NativeArrayAccess
 		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+	}
+
+	/**
+	 * Compiles foo[x] = {expr}
+	 *
+	 * @param array $expression
+	 * @param CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
+	public function compile($expression, CompilationContext $compilationContext)
+	{
+
+		/**
+		 * Resolve the left part of the expression
+		 */
+		$expr = new Expression($expression['left']);
+		$expr->setReadOnly(true);
+		$exprVariable = $expr->compile($compilationContext);
+
+		/**
+		 * Only dynamic variables can be used as arrays
+		 */
+		switch ($exprVariable->getType()) {
+			case 'variable':
+				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
+				switch ($variableVariable->getType()) {
+					case 'variable':
+					case 'array':
+					case 'string':
+						break;
+					default:
+						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $expression['left']);
+				}
+				break;
+			default:
+				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an array", $expression['left']);
+		}
+
+		/**
+		 * Resolve the dimension according to variable's type
+		 */
+		switch ($variableVariable->getType()) {
+			case 'variable':
+				return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
+			case 'array':
+				break;
+			case 'string':
+				return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
+		}
+
 	}
 
 }

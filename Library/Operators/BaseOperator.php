@@ -100,7 +100,7 @@ class BaseOperator
 
 		if ($isExpecting) {
 			if (is_object($symbolVariable)) {
-				if ($symbolVariable->getType() == $type) {
+				if ($symbolVariable->getType() == $type || $symbolVariable->getName() == 'return_value') {
 					$symbolVariable->initVariant($compilationContext);
 				} else {
 					if (!$this->_readOnly) {

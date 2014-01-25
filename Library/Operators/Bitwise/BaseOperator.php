@@ -121,17 +121,21 @@ class BitwiseBaseOperator extends BaseOperator
 		$rightExpr = new Expression($expression['right']);
 		$rightExpr->setReadOnly(true);
 		$right = $rightExpr->compile($compilationContext);
-	
+
 		switch ($left->getType()) {
 			case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
+			case 'char':
+			case 'uchar':
 				switch ($right->getType()) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 					case 'double':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' (int) (' . $right->getCode() . '))', $expression);
@@ -229,19 +233,23 @@ class BitwiseBaseOperator extends BaseOperator
 			case 'variable':
 
 				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
-
 				switch ($variableLeft->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
+					case 'char':
+					case 'uchar':
 						switch ($right->getType()) {
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
 							case 'double':
-								return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' (int) (' . $right->getCode() . '))', $expression);
+							case 'char':
+							case 'uchar':
+								return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {

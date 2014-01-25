@@ -48,6 +48,7 @@ class EchoStatement
 					$compilationContext->codePrinter->output('php_printf("%f", ' . $resolvedExpr->getCode() . ');');
 					break;
 				case 'char':
+				case 'uchar':
 					$compilationContext->codePrinter->output('php_printf("%c", \'' . $resolvedExpr->getCode() . '\');');
 					break;
 				case 'long':
@@ -67,6 +68,7 @@ class EchoStatement
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
 							break;
+						case 'uchar':
 						case 'char':
 							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');
 							break;

@@ -108,8 +108,9 @@ class PropertyAccess
 			 * is defined on that class
 			 */
 			if ($variableVariable->hasAnyDynamicType('object')) {
+
 				$classType = current($variableVariable->getClassTypes());
-				$compiler = &$compilationContext->compiler;
+				$compiler = $compilationContext->compiler;
 
 				if ($compiler->isClass($classType)) {
 					$classDefinition = $compiler->getClassDefinition($classType);
