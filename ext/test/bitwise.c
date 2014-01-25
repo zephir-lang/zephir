@@ -46,7 +46,7 @@ PHP_METHOD(Test_Bitwise, int2And) {
 
 
 	a = 1;
-	c = (a & (int) (2));
+	c = (a & 2);
 	RETURN_LONG(c);
 
 }
@@ -581,7 +581,7 @@ PHP_METHOD(Test_Bitwise, int2Or) {
 
 
 	a = 1;
-	c = (a | (int) (2));
+	c = (a | 2);
 	RETURN_LONG(c);
 
 }
@@ -1127,7 +1127,7 @@ PHP_METHOD(Test_Bitwise, int2ShiftLeft) {
 
 
 	a = 1;
-	c = (a << (int) (2));
+	c = (a << 2);
 	RETURN_LONG(c);
 
 }
@@ -1161,7 +1161,7 @@ PHP_METHOD(Test_Bitwise, int2ShiftRight) {
 
 
 	a = 1;
-	c = (a >> (int) (2));
+	c = (a >> 2);
 	RETURN_LONG(c);
 
 }
