@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
+#include "kernel/string.h"
 
 
 /**
@@ -1122,6 +1123,63 @@ PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 	object_init(_0);
 	zephir_array_update_zval(&x, y, &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_NativeArray, testArrayKeys) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	zephir_array_keys(return_value, param);
+	return;
+
+}
+
+PHP_METHOD(Test_NativeArray, testImplodeArray) {
+
+	zval *param, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &param);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_array_keys(_0, param);
+	zephir_fast_join_str(return_value, SL("|"), _0 TSRMLS_CC);
+	RETURN_MM();
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/110
+ */
+PHP_METHOD(Test_NativeArray, issue110) {
+
+	zval *byteUnits, *tmp, *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(byteUnits);
+	array_init_size(byteUnits, 10);
+	add_assoc_long_ex(byteUnits, SS("B"), 0);
+	add_assoc_long_ex(byteUnits, SS("K"), 10);
+	add_assoc_long_ex(byteUnits, SS("M"), 20);
+	add_assoc_long_ex(byteUnits, SS("G"), 30);
+	add_assoc_long_ex(byteUnits, SS("T"), 40);
+	add_assoc_long_ex(byteUnits, SS("KB"), 10);
+	add_assoc_long_ex(byteUnits, SS("MB"), 20);
+	add_assoc_long_ex(byteUnits, SS("GB"), 30);
+	add_assoc_long_ex(byteUnits, SS("TB"), 40);
+	ZEPHIR_INIT_VAR(tmp);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_array_keys(_0, byteUnits);
+	zephir_fast_join_str(tmp, SL("|"), _0 TSRMLS_CC);
+	RETURN_CCTOR(tmp);
 
 }
 

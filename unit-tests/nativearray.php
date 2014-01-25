@@ -56,3 +56,8 @@ assert($t->testMultipleArrayUpdate9() == array('a' => array(0 => NULL, 1 => fals
 assert($t->testMultipleArrayUpdate10() == array('a' => array(0 => NULL, 1 => array('c' => false))));
 assert($t->testMultipleArrayUpdate11() == array('y' => array('x' => NULL)));
 assert($t->testMultipleArrayUpdate12() == array('y' => array('x' => array('z' => NULL))));
+
+assert($t->testArrayKeys(array('test1' => 1, 'test2' => 2, 'test3' => 3)) === array('test1', 'test2', 'test3'));
+assert($t->testArrayKeys(array(1, 2, 3, 4, 5, 6)) === array(0, 1, 2, 3, 4, 5));
+assert($t->testImplodeArray(array('test1' => 1, 'test2' => 2, 'test3' => 3)) === 'test1|test2|test3');
+assert($t->issue110() === 'B|K|M|G|T|KB|MB|GB|TB');
