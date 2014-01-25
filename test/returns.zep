@@ -7,7 +7,6 @@ namespace Test;
 
 class Returns
 {
-
 	public function testReturnCast1() -> int
 	{
 		return (int) 5.0;
@@ -22,5 +21,4 @@ class Returns
 	{
 		return (int) false;
 	}
-
 }

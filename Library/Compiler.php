@@ -554,7 +554,7 @@ class Compiler
 			exec('cd ext && phpize', $output, $exit);
 			$this->_logger->output('Preparing configuration file...');
 
-			exec('export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses-equality" && cd ext && ./configure --enable-' . $namespace);
+			exec('cd ext && export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses" && ./configure --enable-' . $namespace);
 		}
 
 		$this->_logger->output('Compiling...');
@@ -584,7 +584,7 @@ class Compiler
 		$this->compile($command);
 
 		$this->_logger->output('Installing...');
-		exec('(export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses-equality" && cd ext && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
+		exec('(cd ext && export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses" && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
 
 		$this->_logger->output('Extension installed!');
 		if (!extension_loaded($namespace)) {
