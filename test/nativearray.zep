@@ -515,4 +515,26 @@ class NativeArray
 		let x[y] = new stdClass;
 	}
 
+	public function testArrayKeys(var param)
+	{
+        return array_keys(param);
+	}
+
+	public function testImplodeArray(var param)
+	{
+	    return implode("|", array_keys(param));
+	}
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/110
+     */
+	public function issue110()
+	{
+	    var byteUnits, tmp;
+
+        let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
+        let tmp = implode("|", array_keys(byteUnits));
+
+        return tmp;
+	}
 }
