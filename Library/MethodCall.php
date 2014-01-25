@@ -149,14 +149,7 @@ class MethodCall extends Call
 			}
 
 		} else {
-
-			/**
-			 * Invoke method on built-in type
-			 */
-			if ($type == self::CALL_NORMAL) {
-				return $builtInType->invokeMethod($methodName, $caller, $compilationContext, $this, $expression);
-			}
-
+			return $builtInType->invokeMethod($methodName, $caller, $compilationContext, $this, $expression);
 		}
 
 		/**
@@ -217,7 +210,7 @@ class MethodCall extends Call
 
 						$numberImplemented = 0;
 						$compiler = $compilationContext->compiler;
-						foreach($classTypes as $classType) {
+						foreach ($classTypes as $classType) {
 
 							if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
 								$compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {

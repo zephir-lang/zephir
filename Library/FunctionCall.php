@@ -313,7 +313,7 @@ class FunctionCall extends Call
 		 * We mark those parameters temporary as references to properly pass them
 		 */
 		$this->markReferences($funcName, $params, $compilationContext, $references, $expression);
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * Process the expected symbol to be returned

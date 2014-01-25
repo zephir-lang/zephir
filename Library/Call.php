@@ -179,7 +179,7 @@ class Call
 					continue;
 				}
 
-				throw new CompilerException("Invalid expression", $expression);
+				throw new CompilerException("Invalid expression ", $expression);
 			}
 			$this->_resolvedParams = $params;
 		}
@@ -321,7 +321,7 @@ class Call
 				case 'int':
 				case 'uint':
 				case 'long':
-				case 'ulong':
+				case 'char':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
@@ -341,6 +341,7 @@ class Call
 					}
 					break;
 				case 'string':
+				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
 					$this->_temporalVariables[] = $parameterVariable;
@@ -353,6 +354,7 @@ class Call
 						case 'uint':
 						case 'long':
 						case 'ulong':
+						case 'char':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();

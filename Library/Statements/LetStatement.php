@@ -469,6 +469,7 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->setMustInitNull(true);
+										$compilationContext->symbolTable->mustGrownStack(true);
 										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'concat-assign':
@@ -483,7 +484,9 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->setMustInitNull(true);
-										$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+										$compilationContext->symbolTable->mustGrownStack(true);
+										$compilationContext->headersManager->add('kernel/operators');
+										$codePrinter->output('zephir_get_strval(' . $variable . ', ' . $itemVariable->getName() . ');');
 										break;
 									case 'concat-assign':
 										$compilationContext->headersManager->add('kernel/operators');

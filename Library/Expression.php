@@ -85,6 +85,8 @@ class Expression
 
 	protected $_readOnly = false;
 
+	protected $_stringOperation = false;
+
 	protected $_expectingVariable;
 
 	/**
@@ -163,6 +165,28 @@ class Expression
 	}
 
 	/**
+	 * Sets if current operation is a string operation like "concat"
+	 * thus avoiding promote numeric strings to longs
+	 *
+	 * @param boolean $stringOperation
+	 */
+	public function setStringOperation($stringOperation)
+	{
+		$this->_stringOperation = $stringOperation;
+	}
+
+	/**
+	 * Checks if the result of the evaluated expression is intended to be used
+	 * in a string operation like "concat"
+	 *
+	 * @return boolean
+	 */
+	public function isStringOperation()
+	{
+		return $this->_stringOperation;
+	}
+
+	/**
 	 * Compiles foo = []
 	 *
 	 * @param array $expression
@@ -218,7 +242,7 @@ class Expression
 		 */
 		if ($this->_expecting) {
 			if ($this->_expectingVariable) {
-				$symbolVariable = &$this->_expectingVariable;
+				$symbolVariable = $this->_expectingVariable;
 				$symbolVariable->initVariant($compilationContext);
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -373,7 +397,7 @@ class Expression
 	 */
 	public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
 	{
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 
 		switch ($exprCompiled->getType()) {
 			case 'int':
@@ -933,8 +957,10 @@ class Expression
 				return new CompiledExpression('bool', $expression['value'], $expression);
 
 			case 'string':
-				if (ctype_digit($expression['value'])) {
-					return new CompiledExpression('int', $expression['value'], $expression);
+				if (!$this->_stringOperation) {
+					if (ctype_digit($expression['value'])) {
+						return new CompiledExpression('int', $expression['value'], $expression);
+					}
 				}
 				return new CompiledExpression('string', Utils::addSlashes($expression['value']), $expression);
 

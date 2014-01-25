@@ -57,6 +57,7 @@ class ConcatOperator extends BaseOperator
 		foreach ($parts as $n => $part) {
 
 			$expr = new Expression($part);
+			$expr->setStringOperation(true);
 			switch ($part['type']) {
 
 				case 'array-access':
