@@ -64,6 +64,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/TypeOfOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/InstanceOfOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/RequireOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
@@ -1024,7 +1025,10 @@ class Expression
 				return $expr->compile($expression, $compilationContext);
 
 			case 'require':
-				return new CompiledExpression('bool', '(0 == 1)', $expression);
+				$expr = new RequireOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			default:
 				throw new CompilerException("Unknown expression: " . $type, $expression);

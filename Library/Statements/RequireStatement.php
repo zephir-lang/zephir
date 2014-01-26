@@ -31,22 +31,17 @@ class RequireStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$compilationContext->headersManager->add('kernel/require');
 
-		$statement = $this->_statement;
+		$expression = array(
+			'type' => 'require',
+			'left' => $this->_statement['expr'],
+			'file' => $this->_statement['file'],
+			'line' => $this->_statement['line'],
+			'char' => $this->_statement['char']
+		);
 
-		$codePrinter = $compilationContext->codePrinter;
-
-		/**
-		 * Resolve path
-		 */
-		$expr = new Expression($statement['expr']);
-		$expr->setReadOnly(true);
-		$resolvedExpr = $expr->compile($compilationContext);
-
-		$codePrinter->output('if (zephir_require(' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE) {');
-		$codePrinter->output("\t" . 'RETURN_MM_NULL();');
-		$codePrinter->output('}');
+		$expr = new Expression($expression);
+		$expr->compile($compilationContext);
 
 	}
 

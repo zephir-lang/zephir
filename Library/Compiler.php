@@ -482,13 +482,14 @@ class Compiler
 			$compiledFile = $compileFile->getCompiledFile();
 
 			$methods = array();
-			foreach ($compileFile->getClassDefinition()->getMethods() as $method) {
+			$classDefinition = $compileFile->getClassDefinition();
+			foreach ($classDefinition->getMethods() as $method) {
 				$methods[] = $method->getName();
 			}
 
 			$files[] = $compiledFile;
 
-			$hash .= '|' . $compiledFile . '[' . join('|', $methods) . ']';
+			$hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
 		}
 		$hash = md5($hash);
 
@@ -534,7 +535,7 @@ class Compiler
 
 	/**
 	 *
-	 * @param CommandCompile $command
+	 * @param CommandInterface $command
 	 */
 	public function compile(CommandInterface $command)
 	{
@@ -625,6 +626,7 @@ class Compiler
 	 */
 	public function fullClean(CommandInterface $command)
 	{
+		system('rm -fr .temp');
 		system('cd ext && sudo make clean 1> /dev/null');
 		system('cd ext && phpize --clean 1> /dev/null');
 	}

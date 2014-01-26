@@ -15,21 +15,16 @@
  | to obtain it through the world-wide-web, please send a note to           |
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
- | Authors: Rack Lin <racklin@gmail.com>                                    |
- +--------------------------------------------------------------------------+
 */
 
 /**
- * PregMatchOptimizer
+ * CallUserFuncArrayOptimizer
  *
- * Optimizes calls to 'preg_match' using internal function
+ * Optimizer for 'call_user_func_array'
  */
-class PregMatchOptimizer
+class CallUserFuncArrayOptimizer
 	extends OptimizerAbstract
 {
-
-		protected static $GLOBAL_MATCH = 0;
-
 	/**
 	 * @param array $expression
 	 * @param Call $call
@@ -38,47 +33,18 @@ class PregMatchOptimizer
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
-
 		if (!isset($expression['parameters'])) {
 			return false;
 		}
 
-		if (count($expression['parameters']) < 2) {
+		if (count($expression['parameters']) != 2) {
 			return false;
 		}
-
-		/*
-		 * NOT support for flags and offset now, fallback to PHP userland function.
-		 */
-		if (count($expression['parameters']) > 3) {
-			return false;
-		}
-
-		/**
-		 * Process the matches result
-		 */
-		if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'variable') {
-			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
-			if (!$matchesVariable->isInitialized()) {
-				$matchesVariable->initVariant($context);
-				$matchesVariable->setIsInitialized(true);
-			}
-		} else {
-			$matchesVariable = $context->symbolTable->addTemp('variable', $context);
-			$matchesVariable->initVariant($context);
-		}
-
-		$matchesVariable->setDynamicTypes('array');
-
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
 
 		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable) {
 			if ($symbolVariable->getType() != 'variable') {
-					throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
 			}
 			if ($call->mustInitSymbolVariable()) {
 				$symbolVariable->initVariant($context);
@@ -88,10 +54,12 @@ class PregMatchOptimizer
 			$symbolVariable->initVariant($context);
 		}
 
-		$context->headersManager->add('kernel/string');
-
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . static::$GLOBAL_MATCH .' TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+
+		$context->headersManager->add('kernel/fcall');
+
+		$context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 	}
+
 }
