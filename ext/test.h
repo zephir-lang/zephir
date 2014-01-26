@@ -5,6 +5,7 @@
 #include "test/arithmetic.h"
 #include "test/assign.h"
 #include "test/bitwise.h"
+#include "test/branchprediction.h"
 #include "test/builtinmethods.h"
 #include "test/cast.h"
 #include "test/cblock.h"

@@ -67,7 +67,9 @@ class EvalExpression
 		} else {
 			$expr = new Expression($exprRaw);
 		}
+
 		$expr->setReadOnly(true);
+		$expr->setEvalMode(true);
 		$compiledExpression = $expr->compile($compilationContext);
 
 		/**
@@ -81,9 +83,11 @@ class EvalExpression
 		 * Generate the condition according to the value returned by the evaluted expression
 		 */
 		switch ($compiledExpression->getType()) {
+
 			case 'null':
 				$this->_unrecheable = true;
 				return '0';
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -97,11 +101,12 @@ class EvalExpression
 						$this->_unrecheable = true;
 					}
 				}
-
 				return $code;
+
 			case 'char':
 			case 'uchar':
 				return $compiledExpression->getCode();
+
 			case 'bool':
 				$code = $compiledExpression->getBooleanCode();
 				if ($code == '1') {
@@ -112,17 +117,24 @@ class EvalExpression
 					}
 				}
 				return $code;
+
 			case 'variable':
+
 				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
 				switch ($variableRight->getType()) {
+
 					case 'int':
 						return $variableRight->getName();
+
 					case 'string':
 						return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
+
 					case 'bool':
 						return $variableRight->getName();
+
 					case 'double':
 						return $variableRight->getName();
+
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 						if ($variableRight->isLocalOnly()) {
@@ -130,10 +142,12 @@ class EvalExpression
 						} else {
 							return 'zephir_is_true(' . $variableRight->getName() . ')';
 						}
+
 					default:
 						throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
 		}

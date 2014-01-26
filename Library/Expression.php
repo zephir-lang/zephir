@@ -65,6 +65,8 @@ require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/TypeOfOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/InstanceOfOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/RequireOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/LikelyOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/UnlikelyOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
@@ -77,8 +79,7 @@ require ZEPHIRPATH . 'Library/Expression/StaticPropertyAccess.php';
 /**
  * Expressions
  *
- * Represents an expression
- * Most language constructions in a language are expressions
+ * Represents an expression. Most language constructions in a language are expressions
  */
 class Expression
 {
@@ -90,6 +91,8 @@ class Expression
 	protected $_readOnly = false;
 
 	protected $_stringOperation = false;
+
+	protected $_setEvalMode = false;
 
 	protected $_expectingVariable;
 
@@ -188,6 +191,16 @@ class Expression
 	public function isStringOperation()
 	{
 		return $this->_stringOperation;
+	}
+
+	/**
+	 * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements
+	 *
+	 * @param boolean $evalMode
+	 */
+	public function setEvalMode($evalMode)
+	{
+		$this->_evalMode = $evalMode;
 	}
 
 	/**
@@ -1013,10 +1026,24 @@ class Expression
 			/**
 			 * @TODO implement this
 			 */
-			case 'unlikely':
-			case 'likely':
 			case 'ternary':
 				return new CompiledExpression('int', '(0 == 1)', $expression);
+
+			case 'likely':
+				if (!$this->_evalMode) {
+					throw new CompilerException("'likely' operator can only be used in evaluation expressions", $expression);
+				}
+				$expr = new LikelyOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				return $expr->compile($expression, $compilationContext);
+
+			case 'unlikely':
+				if (!$this->_evalMode) {
+					throw new CompilerException("'unlikely' operator can only be used in evaluation expressions", $expression);
+				}
+				$expr = new UnlikelyOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				return $expr->compile($expression, $compilationContext);
 
 			case 'typeof':
 				$expr = new TypeOfOperator();

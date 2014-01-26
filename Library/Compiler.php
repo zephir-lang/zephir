@@ -1029,4 +1029,5 @@ class Compiler
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}
+
 }
