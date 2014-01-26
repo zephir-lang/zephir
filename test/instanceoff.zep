@@ -7,11 +7,25 @@ namespace Test;
 
 class Instanceoff
 {
-    public function testInstanceOf()
-    {
-    	var a;
-    	let a = new stdClass();
-    	return a instanceof stdClass;
-    }
+	public function testInstanceOf1()
+	{
+		var a;
+		let a = new stdClass();
+		return a instanceof stdClass;
+	}
+
+	public function testInstanceOf2()
+	{
+		var a;
+		let a = new self();
+		return a instanceof Test\Instanceoff;
+	}
+
+	public function testInstanceOf3()
+	{
+		var a;
+		let a = new stdClass();
+		return a instanceof UnknownClass;
+	}
 
 }

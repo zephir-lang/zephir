@@ -639,7 +639,6 @@ class Compiler
 	 */
 	public function build(CommandInterface $command)
 	{
-		$this->generate($command);
 		$this->install($command);
 	}
 

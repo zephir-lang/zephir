@@ -76,6 +76,7 @@ class InstanceOfOperator extends BaseOperator
 				}
 		}
 
+		/* @TODO, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
 		$compilationContext->headersManager->add('kernel/object');
 		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
 	}
