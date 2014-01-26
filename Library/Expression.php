@@ -62,6 +62,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/IssetOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/TypeOfOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
