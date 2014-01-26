@@ -46,8 +46,8 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZVAL_STRING(_0, "world", 1);
 	zephir_array_fast_append(ar, _0);
 	zephir_array_fast_append(ar, ZEPHIR_GLOBAL(global_false));
-	zephir_var_dump(&(ar) TSRMLS_CC);
-	zephir_var_dump(&(a) TSRMLS_CC);
+	zephir_var_dump(&ar TSRMLS_CC);
+	zephir_var_dump(&a TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -69,10 +69,10 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZVAL_STRING(_0, "world", 1);
 	zephir_array_fast_append(ar, _0);
 	zephir_array_fast_append(ar, ZEPHIR_GLOBAL(global_false));
-	zephir_var_export(&(ar) TSRMLS_CC);
+	zephir_var_export(&ar TSRMLS_CC);
 	ZEPHIR_INIT_VAR(ret);
 	zephir_var_export_ex(ret, &(ar) TSRMLS_CC);
-	zephir_var_export(&(a) TSRMLS_CC);
+	zephir_var_export(&a TSRMLS_CC);
 	ZEPHIR_INIT_BNVAR(ret);
 	zephir_var_export_ex(ret, &(a) TSRMLS_CC);
 	RETURN_CCTOR(ret);
@@ -106,10 +106,10 @@ PHP_METHOD(Test_Vars, test88Issue) {
 	}
 
 
-	zephir_var_dump(&(param1) TSRMLS_CC);
-	zephir_var_dump(&(param2) TSRMLS_CC);
-	zephir_var_export(&(param1) TSRMLS_CC);
-	zephir_var_export(&(param2) TSRMLS_CC);
+	zephir_var_dump(&param1 TSRMLS_CC);
+	zephir_var_dump(&param2 TSRMLS_CC);
+	zephir_var_export(&param1 TSRMLS_CC);
+	zephir_var_export(&param2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -141,7 +141,7 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString) {
 	}
 
 
-	zephir_var_export(&(param2) TSRMLS_CC);
+	zephir_var_export(&param2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -154,8 +154,8 @@ PHP_METHOD(Test_Vars, testVarDump2param) {
 
 
 
-	zephir_var_dump(&(p1) TSRMLS_CC);
-	zephir_var_dump(&(p2) TSRMLS_CC);
+	zephir_var_dump(&p1 TSRMLS_CC);
+	zephir_var_dump(&p2 TSRMLS_CC);
 
 }
 
@@ -167,9 +167,28 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 
 
 
-	zephir_var_dump(&(p1) TSRMLS_CC);
-	zephir_var_dump(&(p2) TSRMLS_CC);
-	zephir_var_dump(&(p3) TSRMLS_CC);
+	zephir_var_dump(&p1 TSRMLS_CC);
+	zephir_var_dump(&p2 TSRMLS_CC);
+	zephir_var_dump(&p3 TSRMLS_CC);
+
+}
+
+PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
+
+	zval *testVar, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &testVar);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, zephir_fast_count_int(testVar TSRMLS_CC));
+	zephir_var_dump(&_0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, zephir_fast_count_int(testVar TSRMLS_CC));
+	zephir_var_export(&_1 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 
 }
 
