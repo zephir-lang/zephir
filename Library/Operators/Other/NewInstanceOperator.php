@@ -189,7 +189,7 @@ class NewInstanceOperator extends BaseOperator
 
 			$compilationContext->headersManager->add('kernel/fcall');
 
-			$codePrinter->output('if (zephir_has_constructor(' . $symbolVariable->getName() . ' TSRMLS_CC) {');
+			$codePrinter->output('if (zephir_has_constructor(' . $symbolVariable->getName() . ' TSRMLS_CC)) {');
 			$codePrinter->increaseLevel();
 
 			$methodCall = new MethodCall();

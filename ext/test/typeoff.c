@@ -142,3 +142,15 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 
 }
 
+PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
+
+	zval *u;
+
+	zephir_fetch_params(0, 1, 0, &u);
+
+
+
+	RETURN_BOOL((0 == 1));
+
+}
+

@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/object.h"
 
@@ -39,6 +40,9 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 
 	ZEPHIR_INIT_VAR(test);
 	object_init(test);
+	if (zephir_has_constructor(test TSRMLS_CC)) {
+		zephir_call_method_noret(test, "__construct");
+	}
 	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 6);
 	ZEPHIR_INIT_VAR(_1);

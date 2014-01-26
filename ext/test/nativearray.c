@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
+#include "kernel/fcall.h"
 #include "kernel/string.h"
 
 
@@ -1121,6 +1122,9 @@ PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 	ZVAL_STRING(y, "hello", 1);
 	ZEPHIR_INIT_VAR(_0);
 	object_init(_0);
+	if (zephir_has_constructor(_0 TSRMLS_CC)) {
+		zephir_call_method_noret(_0, "__construct");
+	}
 	zephir_array_update_zval(&x, y, &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 
@@ -1134,7 +1138,7 @@ PHP_METHOD(Test_NativeArray, testArrayKeys) {
 
 
 
-	zephir_array_keys(return_value, param);
+	zephir_array_keys(return_value, param TSRMLS_CC);
 	return;
 
 }
@@ -1149,7 +1153,7 @@ PHP_METHOD(Test_NativeArray, testImplodeArray) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	zephir_array_keys(_0, param);
+	zephir_array_keys(_0, param TSRMLS_CC);
 	zephir_fast_join_str(return_value, SL("|"), _0 TSRMLS_CC);
 	RETURN_MM();
 
@@ -1177,7 +1181,7 @@ PHP_METHOD(Test_NativeArray, issue110) {
 	add_assoc_long_ex(byteUnits, SS("TB"), 40);
 	ZEPHIR_INIT_VAR(tmp);
 	ZEPHIR_INIT_VAR(_0);
-	zephir_array_keys(_0, byteUnits);
+	zephir_array_keys(_0, byteUnits TSRMLS_CC);
 	zephir_fast_join_str(tmp, SL("|"), _0 TSRMLS_CC);
 	RETURN_CCTOR(tmp);
 

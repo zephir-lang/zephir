@@ -61,7 +61,7 @@ class ArrayKeysOptimizer
 		$symbolVariable->setDynamicTypes('array');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_array_keys(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+		$context->codePrinter->output('zephir_array_keys(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 
