@@ -15,7 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/operators.h"
-#include "kernel/fcall.h"
 #include "kernel/string.h"
 
 
@@ -1122,9 +1121,6 @@ PHP_METHOD(Test_NativeArray, testArrayWrongUpdate1) {
 	ZVAL_STRING(y, "hello", 1);
 	ZEPHIR_INIT_VAR(_0);
 	object_init(_0);
-	if (zephir_has_constructor(_0 TSRMLS_CC)) {
-		zephir_call_method_noret(_0, "__construct");
-	}
 	zephir_array_update_zval(&x, y, &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_MM_RESTORE();
 

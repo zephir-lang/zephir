@@ -150,6 +150,8 @@ PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &u);
 
+
+
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_func_p1(_0, "gettype", u);
 	RETURN_CCTOR(_0);

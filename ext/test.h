@@ -22,6 +22,7 @@
 #include "test/fibonnaci.h"
 #include "test/flow.h"
 #include "test/fortytwo.h"
+#include "test/instanceoff.h"
 #include "test/json.h"
 #include "test/mcall.h"
 #include "test/mcallchained.h"

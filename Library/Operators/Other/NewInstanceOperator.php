@@ -131,6 +131,13 @@ class NewInstanceOperator extends BaseOperator
 		$symbolVariable->setIsInitialized(true);
 
 		/**
+		 * Don't check the constructor for stdclass instances
+		 */
+		if (strtolower($className) == 'stdclass') {
+			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+		}
+
+		/**
 		 * Call the constructor
 		 * For classes in the same extension we check if the class does implement a constructor
 		 * For external classes we always assume the class does implement a constructor

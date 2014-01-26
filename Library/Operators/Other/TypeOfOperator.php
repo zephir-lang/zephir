@@ -35,7 +35,7 @@ class TypeOfOperator extends BaseOperator
 	{
 
 		if (!isset($expression['left'])) {
-			throw new CompilerException("Invalid 'left' operand for 'empty' expression", $expression['left']);
+			throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
 		}
 
 		$builder = new FunctionCallBuilder('gettype', array($expression['left']));

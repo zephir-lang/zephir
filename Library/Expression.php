@@ -63,6 +63,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/TypeOfOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/InstanceOfOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
@@ -589,59 +590,6 @@ class Expression
 	}
 
 	/**
-	 * @param $expression
-	 * @param CompilationContext $compilationContext
-	 * @return CompiledExpression
-	 * @throws CompilerException
-	 */
-	public function compileInstanceOf($expression, CompilationContext $compilationContext)
-	{
-		$left = new Expression($expression['left']);
-		$resolved = $left->compile($compilationContext);
-
-		if ($resolved->getType() != 'variable') {
-			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
-		}
-
-		$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
-		}
-
-		$right = new Expression($expression['right']);
-		$resolved = $right->compile($compilationContext);
-		$resolvedVariable = $resolved->getCode();
-
-		switch ($resolved->getType()) {
-			case 'string':
-				$code = 'SL("' . trim($resolvedVariable, "\\") . '")';
-				break;
-			default:
-				switch ($resolved->getType()) {
-					case 'variable':
-						if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
-							$code = 'SL("' . Utils::addSlashes(trim($resolvedVariable, "\\"), true) . '")';
-						}
-						break;
-					case 'property-access':
-					case 'array-access':
-						$compilationContext->headersManager->add('kernel/operators');
-						$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
-						$tempVariable->setMustInitNull(true);
-						$tempVariableName = $tempVariable->getName();
-						$compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
-						$code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
-						break;
-					default:
-						throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
-				}
-		}
-
-		$compilationContext->headersManager->add('kernel/object');
-		return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
-	}
-
-	/**
 	 * Converts a value into another
 	 *
 	 * @param array $expression
@@ -1050,7 +998,10 @@ class Expression
 				return $this->compileTypeHint($expression, $compilationContext);
 
 			case 'instanceof':
-				return $this->compileInstanceOf($expression, $compilationContext);
+				$expr = new InstanceOfOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'clone':
 				$expr = new CloneOperator();
