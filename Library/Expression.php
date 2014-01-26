@@ -61,6 +61,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/IssetOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
@@ -222,168 +223,6 @@ class Expression
 		$symbolVariable->setDynamicTypes('array');
 
 		$compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
-
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
-	/**
-	 * Creates a new instance
-	 *
-	 * @param array $expression
-	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function newInstance($expression, CompilationContext $compilationContext)
-	{
-		$codePrinter = &$compilationContext->codePrinter;
-
-		/**
-		 * Resolves the symbol that expects the value
-		 */
-		if ($this->_expecting) {
-			if ($this->_expectingVariable) {
-				$symbolVariable = $this->_expectingVariable;
-				$symbolVariable->initVariant($compilationContext);
-			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-			}
-		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-		}
-
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Objects can only be instantiated in dynamical variables", $expression);
-		}
-
-		/**
-		 * Mark variables as dynamic objects
-		 */
-		$symbolVariable->setDynamicTypes('object');
-
-		$dynamic = false;
-		if ($expression['class'] == 'self') {
-			$className = $compilationContext->classDefinition->getCompleteName();
-		} else {
-			if (substr($expression['class'], 0, 1) == '\\') {
-				$className = substr($expression['class'], 1);
-			} else {
-				$className = $expression['class'];
-				$dynamic = $expression['dynamic'];
-			}
-		}
-
-		if (!$className) {
-			throw new CompilerException("A class name is required to instantiate the object", $expression);
-		}
-
-		/**
-		 * stdclass don't have constructors
-		 */
-		if (strtolower($className) == 'stdclass') {
-			if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
-				throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
-			}
-
-			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
-			$symbolVariable->setClassTypes('stdclass');
-		} else {
-			/**
-			 * Classes inside the same extension
-			 */
-			if ($compilationContext->compiler->isClass($className)) {
-
-				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-
-				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
-				$symbolVariable->setClassTypes($className);
-			} else {
-
-				/**
-				 * Classes inside the same extension
-				 */
-				if (!class_exists($className, false)) {
-					if ($compilationContext->symbolTable->hasVariable($className)) {
-						$classNameVariable = $compilationContext->symbolTable->getVariableForRead($className);
-
-						if ($classNameVariable->isNotVariableAndString()) {
-							throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
-						}
-
-						unset($classNameVariable);
-					} else {
-						$compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
-					}
-				}
-
-				/**
-				 * @TODO, check if the variable is really internal
-				 */
-				$zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-				$classNameToFetch = $dynamic ? 'Z_STRVAL_P('.$className.'), Z_STRLEN_P('.$className.')' : 'SL("' . Utils::addSlashes($className, true) . '")';
-				$codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class('.$classNameToFetch.', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
-				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
-				$symbolVariable->setClassTypes($expression['class']);
-			}
-		}
-
-		/**
-		 * Mark variable initialized
-		 */
-		$params = array();
-		$symbolVariable->setIsInitialized(true);
-
-		/**
-		 * Call the constructor
-		 * For classes in the same extension we check if the class does implement a constructor
-		 * For external classes we always assume the class does implement a constructor
-		 */
-		$callConstructor = false;
-		if ($compilationContext->compiler->isClass($className)) {
-			$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-
-			if ($classDefinition->getType() != 'class') {
-				throw new CompilerException("Only classes can be instantiated", $expression);
-			}
-
-			if ($classDefinition->hasMethod("__construct")) {
-				$callConstructor = true;
-			}
-		} else {
-			if ($compilationContext->compiler->isInternalClass($className)) {
-				$classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
-				if ($classDefinition->hasMethod("__construct")) {
-					$callConstructor = true;
-				}
-			}
-		}
-
-		if ($callConstructor) {
-
-			if (isset($expression['parameters'])) {
-				$callExpr = new Expression(array(
-					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
-					'name' => '__construct',
-					'parameters' => $expression['parameters'],
-					'call-type' => MethodCall::CALL_NORMAL,
-					'file' => $expression['file'],
-					'line' => $expression['line'],
-					'char' => $expression['char'],
-				));
-			} else {
-				$callExpr = new Expression(array(
-					'variable' => array('type' => 'variable', 'value' => $symbolVariable->getRealName()),
-					'name' => '__construct',
-					'call-type' => MethodCall::CALL_NORMAL,
-					'file' => $expression['file'],
-					'line' => $expression['line'],
-					'char' => $expression['char'],
-				));
-			}
-
-			$methodCall = new MethodCall();
-			$callExpr->setExpectReturn(false);
-			$methodCall->compile($callExpr, $compilationContext);
-		}
 
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
@@ -1050,7 +889,10 @@ class Expression
 				return $this->compileArray($expression, $compilationContext);
 
 			case 'new':
-				return $this->newInstance($expression, $compilationContext);
+				$expr = new NewInstanceOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'not':
 				$expr = new NotOperator();

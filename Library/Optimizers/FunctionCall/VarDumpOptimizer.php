@@ -43,10 +43,9 @@ class VarDumpOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                foreach ($resolvedParams as $resolvedParam) {
-                    $symbolVariable = $context->symbolTable->getVariable($resolvedParam);
-                    $context->codePrinter->output('zephir_var_dump(&(' . $resolvedParam . ') TSRMLS_CC);');
-                }
+		foreach ($resolvedParams as $resolvedParam) {
+			$context->codePrinter->output('zephir_var_dump(&(' . $resolvedParam . ') TSRMLS_CC);');
+		}
 
 		return new CompiledExpression('null', 'null' , $expression);
 	}

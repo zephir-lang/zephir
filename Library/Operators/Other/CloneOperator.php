@@ -51,10 +51,13 @@ class CloneOperator extends BaseOperator
 		}
 
 		if ($clonedVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
-			$compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-clone', $expression);
+			$compilationContext->logger->warning('Possible attempt to use non array in "clone" operator', 'non-valid-clone', $expression);
 		}
 
 		$symbolVariable = $this->getExpected($compilationContext, $expression);
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
+		}
 
 		$symbolVariable->setDynamicTypes('object');
 

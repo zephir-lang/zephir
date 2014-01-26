@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+/**
+ * StringType
+ *
+ * Encapsulates built-in methods for the "string" type
+ */
 class StringType
 {
 
@@ -65,6 +70,40 @@ class StringType
 	public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
 	{
 		$builder = new FunctionCallBuilder('strpos', array($caller));
+
+		$expression = new Expression($builder->get());
+
+		return $expression->compile($compilationContext);
+	}
+
+	/**
+	 * Transforms calls to method "lower" to function calls to "strtolower"
+	 *
+	 * @param object $caller
+	 * @param CompilationContext $compilationContext
+	 * @param Call $call
+	 * @param array $expression
+	 */
+	public function lower($caller, CompilationContext $compilationContext, Call $call, array $expression)
+	{
+		$builder = new FunctionCallBuilder('strtolower', array($caller));
+
+		$expression = new Expression($builder->get());
+
+		return $expression->compile($compilationContext);
+	}
+
+	/**
+	 * Transforms calls to method "upper" to function calls to "upper"
+	 *
+	 * @param object $caller
+	 * @param CompilationContext $compilationContext
+	 * @param Call $call
+	 * @param array $expression
+	 */
+	public function upper($caller, CompilationContext $compilationContext, Call $call, array $expression)
+	{
+		$builder = new FunctionCallBuilder('strotoupper', array($caller));
 
 		$expression = new Expression($builder->get());
 

@@ -152,6 +152,11 @@ class MethodCall extends Call
 			return $builtInType->invokeMethod($methodName, $caller, $compilationContext, $this, $expression);
 		}
 
+		$check = true;
+		if (isset($expression['check'])) {
+			$check = $expression['check'];
+		}
+
 		/**
 		 * Try to check if the method exist in the callee, only when method call is self::CALL_NORMAL
 		 */
@@ -161,49 +166,56 @@ class MethodCall extends Call
 
 				$classDefinition = $compilationContext->classDefinition;
 				if (!$classDefinition->hasMethod($methodName)) {
-					throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
-				}
-
-				$method = $classDefinition->getMethod($methodName);
-
-				/**
-				 * Private methods must be called in their declaration scope
-				 */
-				if ($method->isPrivate()) {
-					if ($method->getClassDefinition() != $classDefinition) {
-						throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
+					if ($check) {
+						throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
 					}
 				}
 
-				/**
-				 * Try to produce an exception if method is called with a wrong number
-				 * of parameters
-				 */
-				if (isset($expression['parameters'])) {
-					$callNumberParameters = count($expression['parameters']);
-				} else {
-					$callNumberParameters = 0;
-				}
+				if ($check) {
 
-				$classMethod = $classDefinition->getMethod($methodName);
-				$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+					$method = $classDefinition->getMethod($methodName);
 
-				if (!$expectedNumberParameters && $callNumberParameters > 0) {
-					$numberParameters = $classMethod->getNumberOfParameters();
-					if ($callNumberParameters > $numberParameters) {
+					/**
+					 * Private methods must be called in their declaration scope
+					 */
+					if ($method->isPrivate()) {
+						if ($method->getClassDefinition() != $classDefinition) {
+							throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
+						}
+					}
+
+					/**
+					 * Try to produce an exception if method is called with a wrong number of parameters
+					 */
+					if (isset($expression['parameters'])) {
+						$callNumberParameters = count($expression['parameters']);
+					} else {
+						$callNumberParameters = 0;
+					}
+
+					$classMethod = $classDefinition->getMethod($methodName);
+					$expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+					if (!$expectedNumberParameters && $callNumberParameters > 0) {
+						$numberParameters = $classMethod->getNumberOfParameters();
+						if ($callNumberParameters > $numberParameters) {
+							throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+						}
+					}
+
+					if ($callNumberParameters < $expectedNumberParameters) {
 						throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
 					}
 				}
 
-				if ($callNumberParameters < $expectedNumberParameters) {
-					throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
-				}
 			} else {
+
 				/**
 				 * Variables whose dynamic type is 'object' can be used
 				 * to determine method existance in compile time
 				 */
-				if ($variableVariable->hasAnyDynamicType('object')) {
+				if ($check && $variableVariable->hasAnyDynamicType('object')) {
+
 					$classTypes = $variableVariable->getClassTypes();
 
 					if (count($classTypes)) {
@@ -379,7 +391,7 @@ class MethodCall extends Call
 			}
 
 			/**
-			 * We check here if the correct type of parameter is passed to the called method
+			 * We check here if a correct parameter type is passed to the called method
 			 */
 			if ($type == self::CALL_NORMAL) {
 
