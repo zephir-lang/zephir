@@ -780,12 +780,14 @@ class Expression
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$expression = &$this->_expression;
+		$expression = $this->_expression;
 		$type = $expression['type'];
 
 		switch ($type) {
+
 			case 'null':
 				return new CompiledExpression('null', null, $expression);
+
 			case 'int':
 			case 'integer':
 				return new CompiledExpression('int', $expression['value'], $expression);
@@ -1065,6 +1067,11 @@ class Expression
 				return new CompiledExpression('int', '(0 == 1)', $expression);
 
 			case 'typeof':
+				$expr = new TypeOfOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			case 'require':
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
 

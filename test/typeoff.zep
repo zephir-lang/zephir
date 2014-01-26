@@ -86,4 +86,10 @@ class Typeoff
 	    let this->property = "test string";
 		return typeof this->property == "string";
 	}
+
+	public function testUnknownTypeOf(var u)
+	{
+		return typeof u;
+	}
+
 }

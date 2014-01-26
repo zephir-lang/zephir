@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -144,13 +145,14 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 
 PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
-	zval *u;
+	zval *u, *_0;
 
-	zephir_fetch_params(0, 1, 0, &u);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &u);
 
-
-
-	RETURN_BOOL((0 == 1));
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "gettype", u);
+	RETURN_CCTOR(_0);
 
 }
 

@@ -33,28 +33,16 @@ class TypeOfOperator extends BaseOperator
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-		//$compilationContext->headersManager->add('kernel/operators');
 
-		print_r($expression);
-
-		/*if (!isset($expression['left'])) {
+		if (!isset($expression['left'])) {
 			throw new CompilerException("Invalid 'left' operand for 'empty' expression", $expression['left']);
 		}
 
-		$leftExpr = new Expression($expression['left']);
-		$leftExpr->setReadOnly(true);
-		$left = $leftExpr->compile($compilationContext);
+		$builder = new FunctionCallBuilder('gettype', array($expression['left']));
 
-		if ($left->getType() != 'variable') {
-			throw new CompilerException("'empty' operand only can be a variable", $expression['left']);
-		}
+		$expression = new Expression($builder->get());
 
-		$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-		if ($variableLeft->isNotVariableAndString()) {
-			throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
-		}
-
-		return new CompiledExpression('bool', 'ZEPHIR_IS_EMPTY(' . $variableLeft->getName() . ')', $expression);*/
+		return $expression->compile($compilationContext);
 	}
 
 }
