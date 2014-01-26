@@ -388,6 +388,16 @@ class ClassMethod
 	}
 
 	/**
+	 * Returns method visibility modifiers
+	 *
+	 * @return array
+	 */
+	public function getVisibility()
+	{
+		return $this->_visibility;
+	}
+
+	/**
 	 * Returns the C-modifier flags
 	 *
 	 * @return string

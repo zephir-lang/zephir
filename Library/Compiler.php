@@ -484,7 +484,7 @@ class Compiler
 			$methods = array();
 			$classDefinition = $compileFile->getClassDefinition();
 			foreach ($classDefinition->getMethods() as $method) {
-				$methods[] = $method->getName();
+				$methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
 			}
 
 			$files[] = $compiledFile;

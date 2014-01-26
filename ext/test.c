@@ -66,6 +66,7 @@ zend_class_entry *test_scall_ce;
 zend_class_entry *test_scallexternal_ce;
 zend_class_entry *test_spectralnorm_ce;
 zend_class_entry *test_strings_ce;
+zend_class_entry *test_trie_ce;
 zend_class_entry *test_typeoff_ce;
 zend_class_entry *test_unsettest_ce;
 zend_class_entry *test_vars_ce;
@@ -124,6 +125,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_ScallExternal);
 	ZEPHIR_INIT(Test_SpectralNorm);
 	ZEPHIR_INIT(Test_Strings);
+	ZEPHIR_INIT(Test_Trie);
 	ZEPHIR_INIT(Test_Typeoff);
 	ZEPHIR_INIT(Test_Unsettest);
 	ZEPHIR_INIT(Test_Vars);

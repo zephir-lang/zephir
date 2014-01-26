@@ -28,6 +28,10 @@ class LessOperator extends ComparisonBaseOperator
 
 	protected $_zvalLongOperator = 'ZEPHIR_LT_LONG';
 
+	protected $_zvalLongNegOperator = 'ZEPHIR_GE_LONG';
+
 	protected $_zvalDoubleOperator = 'ZEPHIR_LT_DOUBLE';
+
+	protected $_zvalDoubleNegOperator = 'ZEPHIR_GE_DOUBLE';
 
 }

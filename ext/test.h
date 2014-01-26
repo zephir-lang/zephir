@@ -52,6 +52,7 @@
 #include "test/spectralnorm.h"
 #include "test/strings.h"
 #include "test/testinterface.h"
+#include "test/trie.h"
 #include "test/typeoff.h"
 #include "test/unsettest.h"
 #include "test/vars.h"
