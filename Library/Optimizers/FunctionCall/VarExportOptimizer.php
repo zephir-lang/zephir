@@ -55,15 +55,14 @@ class VarExportOptimizer
 		}
 
 		$context->headersManager->add('kernel/variables');
-
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
 
 		if ($symbolVariable) {
 			$context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . ') TSRMLS_CC);');
 			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 		}
 
-		$context->codePrinter->output('zephir_var_export(&(' . $resolvedParams[0] . ') TSRMLS_CC);');
+		$context->codePrinter->output('zephir_var_export(&' . $resolvedParams[0] . ' TSRMLS_CC);');
 		return new CompiledExpression('null', 'null' , $expression);
 	}
 }

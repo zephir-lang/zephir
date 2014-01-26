@@ -325,6 +325,7 @@ class Call
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
+
 					$params[] = '&' . $parameterVariable->getName();
 					break;
 				case 'double':

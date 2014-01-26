@@ -2,48 +2,46 @@ namespace Test;
 
 class Vars
 {
-	public function testVarDump()
-	{
-            var a, ar;
+    public function testVarDump()
+    {
+        var a, ar;
 
-            let a = "hello";
-            let ar = [1, "world", false];
+        let a = "hello";
+        let ar = [1, "world", false];
 
-            var_dump(ar);
+        var_dump(ar);
+        var_dump(a);
+    }
 
-            var_dump(a);
+    public function testVarExport()
+    {
+        var a, ar, ret;
 
-	}
+        let a = "hello";
+        let ar = [1, "world", false];
 
-	public function testVarExport()
-	{
-            var a, ar, ret;
+        var_export(ar);
+        let ret = var_export(ar);
 
-            let a = "hello";
-            let ar = [1, "world", false];
+        var_export(a);
+        let ret = var_export(a);
 
-            var_export(ar);
-            let ret = var_export(ar);
+        return ret;
+    }
 
-            var_export(a);
-            let ret = var_export(a);
+    public function test88Issue(string! param1, string param2 = null)
+    {
+        var_dump(param1);
+        var_dump(param2);
 
-            return ret;
-	}
+        var_export(param1);
+        var_export(param2);
+    }
 
-     public function test88Issue(string! param1, string param2 = null)
-     {
-          var_dump(param1);
-          var_dump(param2);
-
-          var_export(param1);
-          var_export(param2);
-     }
-
-     public function test88IssueParam2InitString(string! param1, string param2 = "test string")
-     {
-          var_export(param2);
-     }
+    public function test88IssueParam2InitString(string! param1, string param2 = "test string")
+    {
+        var_export(param2);
+    }
 
     public function testVarDump2param(var p1, var p2) {
         var_dump(p1, p2);
@@ -51,5 +49,11 @@ class Vars
 
     public function testVarDump3param(var p1, var p2, var p3) {
         var_dump(p1, p2, p3);
+    }
+
+    public function testCountOptimizerVarDumpAndExport(var testVar)
+    {
+        var_dump(count(testVar));
+        var_export(count(testVar));
     }
 }
