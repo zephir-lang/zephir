@@ -703,6 +703,7 @@ class ClassMethod
 		$compilationContext->headersManager->add('kernel/exception');
 
 		switch ($dataType) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -713,6 +714,7 @@ class ClassMethod
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
 				return $code;
+
 			case 'bool':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
 				$code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
@@ -721,6 +723,7 @@ class ClassMethod
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
 				return $code;
+
 			case 'double':
 				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
 				$code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
@@ -729,6 +732,7 @@ class ClassMethod
 				$code .= PHP_EOL;
 				$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
 				return $code;
+
 			case 'string':
 			case 'ulong':
 				$compilationContext->symbolTable->mustGrownStack(true);
@@ -744,6 +748,16 @@ class ClassMethod
 				$code .= "\t\tZVAL_EMPTY_STRING(" . $parameter['name'] . ');' . PHP_EOL;
 				$code .= "\t" . '}' . PHP_EOL;
 				return $code;
+
+			case 'array':
+				$code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_ARRAY) {' . PHP_EOL;
+				$code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an array") TSRMLS_CC);' . PHP_EOL;
+				$code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+				$code .= "\t" . '}' . PHP_EOL;
+				$code .= PHP_EOL;
+				//$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+				return $code;
+
 			default:
 				throw new CompilerException("Parameter type: " . $dataType, $parameter);
 		}
@@ -899,12 +913,20 @@ class ClassMethod
 					} else {
 						$symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
 						$symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
-						if ($parameter['data-type'] == 'string') {
+						if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
 							$symbol->setMustInitNull(true);
 						}
 					}
 				} else {
 					$symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
+				}
+
+				/**
+				 * Some parameters can be read-only
+				 */
+				if ($parameter['const']) {
+					$symbol->setReadOnly(true);
+					$symbolParam->setReadOnly(true);
 				}
 
 				if (is_object($symbolParam)) {
@@ -1053,7 +1075,29 @@ class ClassMethod
 						}
 					}
 				}
+				continue;
 			}
+
+			/**
+			 * Initialize 'array' variables with default values
+			 */
+			if ($variable->getType() == 'array') {
+				if ($variable->getNumberUses() > 0) {
+					$defaultValue = $variable->getDefaultInitValue();
+					if (is_array($defaultValue)) {
+						$symbolTable->mustGrownStack(true);
+						switch ($defaultValue['type']) {
+							case 'null':
+								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+								$initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+								break;
+							default:
+								throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
+						}
+					}
+				}
+			}
+
 		}
 
 		/**
@@ -1116,7 +1160,7 @@ class ClassMethod
 						$dataType = 'variable';
 					}
 
-					if ($dataType == 'variable' || $dataType == 'string') {
+					if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
 						$name = $parameter['name'];
 						if (!$localContext) {
 							if ($writeDetector->detect($name, $this->_statements->getStatements())) {
@@ -1160,7 +1204,7 @@ class ClassMethod
 					}
 				}
 
-				if ($dataType == 'variable' || $dataType == 'string') {
+				if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
 					if (isset($parametersToSeparate[$parameter['name']])) {
 						$initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
 					}

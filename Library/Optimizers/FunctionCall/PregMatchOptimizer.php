@@ -28,7 +28,7 @@ class PregMatchOptimizer
 	extends OptimizerAbstract
 {
 
-		protected static $GLOBAL_MATCH = 0;
+	protected static $GLOBAL_MATCH = 0;
 
 	/**
 	 * @param array $expression

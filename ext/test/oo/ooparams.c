@@ -87,6 +87,21 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 }
 
+PHP_METHOD(Test_Oo_OoParams, setList) {
+
+	zval *someList_param = NULL;
+	zval *someList = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &someList_param);
+
+		zephir_get_arrval(someList, someList_param);
+
+
+	RETURN_CTOR(someList);
+
+}
+
 PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	zval *age_param = NULL;
@@ -151,6 +166,52 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 
 	RETURN_BOOL(enabled);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setStrictList) {
+
+	zval *someList_param = NULL;
+	zval *someList = NULL;
+
+	zephir_fetch_params(0, 1, 0, &someList_param);
+
+		if (Z_TYPE_P(someList_param) != IS_ARRAY) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'someList' must be an array") TSRMLS_CC);
+		RETURN_NULL();
+	}
+
+
+
+	RETURN_CTORW(someList);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setConstAge) {
+
+	zval *age_param = NULL;
+	int age;
+
+	zephir_fetch_params(0, 1, 0, &age_param);
+
+		age = zephir_get_intval(age_param);
+
+
+	RETURN_LONG(age);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
+
+	zval *average_param = NULL;
+	double average;
+
+	zephir_fetch_params(0, 1, 0, &average_param);
+
+		average = zephir_get_doubleval(average_param);
+
+
+	RETURN_DOUBLE(average);
 
 }
 

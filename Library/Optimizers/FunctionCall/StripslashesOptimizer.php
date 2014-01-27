@@ -39,9 +39,8 @@ class StripslashesOptimizer
 			return false;
 		}
 
-
 		if (count($expression['parameters']) > 1) {
-                    return false;
+			return false;
 		}
 
 		/**

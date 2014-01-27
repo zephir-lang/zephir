@@ -221,7 +221,7 @@ class SymbolTable
 		}
 
 		if (!$this->hasVariable($name)) {
-			throw new CompilerException("Cannot write variable '" . $name . "' because it wasn't defined", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $name . "' because it wasn't defined", $statement);
 		}
 
 		$variable = $this->getVariable($name);

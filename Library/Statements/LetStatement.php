@@ -38,7 +38,7 @@ class LetStatement
 	{
 
 		if ($symbolVariable->isReadOnly())  {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -50,7 +50,7 @@ class LetStatement
 			$symbolVariable->setIsInitialized(true);
 		} else {
 			if (!$symbolVariable->isInitialized()) {
-				throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+				throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 			}
 		}
 
@@ -901,15 +901,15 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->isReadOnly())  {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		if ($symbolVariable->isLocalOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1222,19 +1222,19 @@ class LetStatement
 		 * Arrays must be stored in the HEAP
 		 */
 		if ($symbolVariable->isLocalOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
 		}
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->isReadOnly())  {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		if ($symbolVariable->isLocalOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is local only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
 		}
 
 		/**
@@ -1278,14 +1278,14 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->isReadOnly()) {
 			/**
 			 * @TODO implement increment of objects members
 			 */
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1334,11 +1334,11 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->isReadOnly()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is read only", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -1396,7 +1396,7 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1406,7 +1406,7 @@ class LetStatement
 		$propertyName = $statement['property'];
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1544,7 +1544,7 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1559,7 +1559,7 @@ class LetStatement
 		}
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1685,7 +1685,7 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1889,7 +1889,7 @@ class LetStatement
 	{
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot write variable '" . $variable . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -2089,9 +2089,11 @@ class LetStatement
 			if (isset($assignment['expr'])) {
 
 				$readDetector = new ReadDetector($assignment['expr']);
+
 				$expr = new Expression($assignment['expr']);
 				switch ($assignment['assign-type']) {
 					case 'variable':
+
 						if (isset($assignment['operator'])) {
 							if ($assignment['operator'] == 'assign') {
 								$expr->setExpectReturn(true, $symbolVariable);
@@ -2109,6 +2111,7 @@ class LetStatement
 						$expr->setReadOnly(true);
 						break;
 				}
+
 				$resolvedExpr = $expr->compile($compilationContext);
 
 				/**

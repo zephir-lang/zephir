@@ -41,6 +41,11 @@ class CallUserFuncArrayOptimizer
 			return false;
 		}
 
+		/**
+		 * Process the expected symbol to be returned
+		 */
+		$call->processExpectedReturn($context);
+
 		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable) {
 			if ($symbolVariable->getType() != 'variable') {

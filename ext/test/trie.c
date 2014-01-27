@@ -32,17 +32,20 @@ ZEPHIR_INIT_CLASS(Test_Trie) {
 
 PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 
-	zend_class_entry *_7;
+	zend_class_entry *_3;
 	int i;
-	zval *key_param = NULL, *create = NULL, *trieNode = NULL, *keyLen, *character = NULL, *_0, *_1, *_2, *_3 = NULL, _4 = zval_used_for_init, *_5 = NULL, *_6 = NULL, *_8 = NULL;
+	zend_bool create;
+	zval *key_param = NULL, *create_param = NULL, *trieNode = NULL, *keyLen, *character = NULL, _0 = zval_used_for_init, *_1 = NULL, *_2 = NULL, *_4 = NULL;
 	zval *key = NULL;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 1, &key_param, &create);
+	zephir_fetch_params(1, 1, 1, &key_param, &create_param);
 
 		zephir_get_strval(key, key_param);
-	if (!create) {
-		create = ZEPHIR_GLOBAL(global_false);
+	if (!create_param) {
+		create = 0;
+	} else {
+		create = zephir_get_boolval(create_param);
 	}
 
 
@@ -51,55 +54,33 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 	ZEPHIR_INIT_VAR(keyLen);
 	ZVAL_LONG(keyLen, zephir_fast_strlen_ev(key));
 	i = 0;
-	php_printf("key = [");
-	zend_print_zval(key, 0);
-	php_printf("]");
-	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_GET_CONSTANT(_0, "PHP_EOL");
-	zend_print_zval(_0, 0);
-	php_printf("keyLen = [");
-	zend_print_zval(keyLen, 0);
-	php_printf("]");
-	ZEPHIR_INIT_VAR(_1);
-	ZEPHIR_GET_CONSTANT(_1, "PHP_EOL");
-	zend_print_zval(_1, 0);
-	php_printf("i = [");
-	php_printf("%d", i);
-	php_printf("]");
-	ZEPHIR_INIT_VAR(_2);
-	ZEPHIR_GET_CONSTANT(_2, "PHP_EOL");
-	zend_print_zval(_2, 0);
 	while (1) {
 		if (!(ZEPHIR_GE_LONG(keyLen, i))) {
 			break;
 		}
-		php_printf("In while loop");
-		ZEPHIR_INIT_NVAR(_3);
-		ZEPHIR_GET_CONSTANT(_3, "PHP_EOL");
-		zend_print_zval(_3, 0);
-		ZEPHIR_SINIT_NVAR(_4);
-		ZVAL_LONG(&_4, i);
+		ZEPHIR_SINIT_NVAR(_0);
+		ZVAL_LONG(&_0, i);
 		ZEPHIR_INIT_NVAR(character);
-		zephir_substr(character, key, zephir_get_intval(&_4) , 1 );
-		ZEPHIR_OBS_NVAR(_5);
-		zephir_read_property(&_5, trieNode, SL("children"), PH_NOISY_CC);
-		if (!zephir_array_isset(_5, character)) {
-			if (zephir_is_true(create)) {
-				ZEPHIR_INIT_LNVAR(_6);
-				_7 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
-				object_init_ex(_6, _7);
-				if (zephir_has_constructor(_6 TSRMLS_CC)) {
-					zephir_call_method_noret(_6, "__construct");
+		zephir_substr(character, key, zephir_get_intval(&_0) , 1 );
+		ZEPHIR_OBS_NVAR(_1);
+		zephir_read_property(&_1, trieNode, SL("children"), PH_NOISY_CC);
+		if (!(zephir_array_isset(_1, character))) {
+			if (create) {
+				ZEPHIR_INIT_LNVAR(_2);
+				_3 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+				object_init_ex(_2, _3);
+				if (zephir_has_constructor(_2 TSRMLS_CC)) {
+					zephir_call_method_noret(_2, "__construct");
 				}
-				zephir_update_property_array(trieNode, SL("children"), character, _6 TSRMLS_CC);
+				zephir_update_property_array(trieNode, SL("children"), character, _2 TSRMLS_CC);
 			} else {
 				RETURN_MM_BOOL(0);
 			}
 		}
-		ZEPHIR_OBS_NVAR(_8);
-		zephir_read_property(&_8, trieNode, SL("children"), PH_NOISY_CC);
+		ZEPHIR_OBS_NVAR(_4);
+		zephir_read_property(&_4, trieNode, SL("children"), PH_NOISY_CC);
 		ZEPHIR_OBS_NVAR(trieNode);
-		zephir_array_fetch(&trieNode, _8, character, PH_NOISY TSRMLS_CC);
+		zephir_array_fetch(&trieNode, _4, character, PH_NOISY TSRMLS_CC);
 		i += 1;
 	}
 	RETURN_CCTOR(trieNode);

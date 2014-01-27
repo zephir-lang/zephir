@@ -444,6 +444,7 @@ class Expression
 								throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
 						}
 						break;
+
 					case 'variable':
 						$variableVariable = $compilationContext->symbolTable->getVariableForRead($item['key']['value'], $compilationContext, $item['key']);
 						switch ($variableVariable->getType()) {

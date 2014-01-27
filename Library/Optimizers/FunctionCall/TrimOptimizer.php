@@ -26,7 +26,7 @@ class TrimOptimizer
 	extends OptimizerAbstract
 {
 
-        protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
+	protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
 
 	/**
 	 * @param array $expression
@@ -41,12 +41,11 @@ class TrimOptimizer
 			return false;
 		}
 
-
-                $charlist = 'NULL ';
+		$charlist = 'NULL ';
 		if (count($expression['parameters']) == 2) {
-                    if ($expression['parameters'][1]['type'] == 'null') {
-                        unset($expression['parameters'][1]);
-                    }
+			if ($expression['parameters'][1]['type'] == 'null') {
+				unset($expression['parameters'][1]);
+			}
 		}
 
 		/**
@@ -69,9 +68,9 @@ class TrimOptimizer
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                if (isset($resolvedParams[1])) {
-                    $charlist = $resolvedParams[1];
-                }
+		if (isset($resolvedParams[1])) {
+			$charlist = $resolvedParams[1];
+		}
 
 		$context->codePrinter->output('zephir_fast_trim(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $charlist . ', ' . static::$TRIM_WHERE . ' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
