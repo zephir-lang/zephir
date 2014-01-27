@@ -20,6 +20,9 @@ assert($t->getSomeInteger() === 10);
 assert($t->getSomeDouble() === 10.25);
 assert($t->getSomeString() === "test");
 
+$t->setSomeVar(($rand = rand(1, 1000)*100));
+assert($t->getSomeVar() === $rand);
+
 $t = new Test\Properties\PrivateProperties();
 
 assert($t->getSomeNull() === null);

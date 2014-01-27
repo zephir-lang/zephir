@@ -717,7 +717,6 @@ class ClassDefinition
 			}
 
 			if ($this->getType() == 'class') {
-
 				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
 				$codePrinter->outputBlankLine();
 
@@ -801,5 +800,4 @@ class ClassDefinition
 
 		$compilationContext->headerPrinter = $codePrinter;
 	}
-
 }

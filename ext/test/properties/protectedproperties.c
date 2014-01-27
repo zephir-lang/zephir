@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Properties_ProtectedProperties) {
@@ -47,8 +48,28 @@ ZEPHIR_INIT_CLASS(Test_Properties_ProtectedProperties) {
 	 * This is a protected property with an initial string value
 	 */
 	zend_declare_property_string(test_properties_protectedproperties_ce, SL("someString"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_properties_protectedproperties_ce, SL("someVar"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Properties_ProtectedProperties, setSomeVar) {
+
+	zval *someVar;
+
+	zephir_fetch_params(0, 1, 0, &someVar);
+
+
+
+	zephir_update_property_this(this_ptr, SL("someVar"), someVar TSRMLS_CC);
+
+}
+
+PHP_METHOD(Test_Properties_ProtectedProperties, getSomeVar) {
+
+
+	RETURN_MEMBER(this_ptr, "someVar");
 
 }
 
@@ -56,6 +77,18 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeNull) {
 
 
 	RETURN_MEMBER(this_ptr, "someNull");
+
+}
+
+PHP_METHOD(Test_Properties_ProtectedProperties, setSomeNull) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	zephir_update_property_this(this_ptr, SL("someNull"), param TSRMLS_CC);
 
 }
 
