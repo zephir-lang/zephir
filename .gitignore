@@ -41,3 +41,5 @@ parser/lemon.dSYM/
 bin/zephir-parser.dSYM/
 bin/zephir-parser
 bin/zephir55
+parser/parser.c
+parser/scanner.c
