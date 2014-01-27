@@ -7,7 +7,6 @@ namespace Test;
 
 class Fcall
 {
-
 	public function testCall1()
 	{
 		return strpos("hello", "h");
@@ -28,5 +27,10 @@ class Fcall
 	public function testStrtokVarBySlash(var value)
 	{
 		return strtok(value, "/");
+	}
+
+	public function testFunctionGetArgs(var param1, var param2)
+	{
+		return func_get_args();
 	}
 }

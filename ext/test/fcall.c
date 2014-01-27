@@ -83,3 +83,17 @@ PHP_METHOD(Test_Fcall, testStrtokVarBySlash) {
 
 }
 
+PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
+
+	zval *param1, *param2;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &param1, &param2);
+
+
+
+	zephir_call_func(return_value, "func_get_args");
+	RETURN_MM();
+
+}
+
