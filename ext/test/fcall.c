@@ -15,8 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
-#include "ext/spl/spl_exceptions.h"
-#include "kernel/exception.h"
 
 
 /**
@@ -57,11 +55,7 @@ PHP_METHOD(Test_Fcall, testCall1FromVar) {
 	ZVAL_STRING(_0, "hello", 1);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "l", 1);
-	if (Z_TYPE_P(funcName) != IS_STRING) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Variable funcName must be a string") TSRMLS_CC);
-		RETURN_MM_NULL();
-	}
-	zephir_call_func_p2(return_value, Z_STRVAL_P(funcName), _0, _1);
+	zephir_call_func_p2(return_value, (Z_TYPE_P(funcName) == IS_STRING ? Z_STRVAL_P(funcName) : ""), _0, _1);
 	RETURN_MM();
 
 }

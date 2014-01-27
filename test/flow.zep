@@ -376,6 +376,26 @@ class Flow
 		return c;
 	}
 
+	public function testWhile12()
+	{
+		var b;
+		let b = "+" . "10";
+		while 5 < b {
+			let b--;
+		}
+		return b;
+	}
+
+	public function testWhile13()
+	{
+		var b; int a = 5;
+		let b = "+" . "10";
+		while a < b {
+			let b--;
+		}
+		return b;
+	}
+
 	public function testDoWhile1()
 	{
 		do {
@@ -388,9 +408,9 @@ class Flow
 		var returnValue;
 		let returnValue = [];
 
-	    while (next(variable)) {
+	    while next(variable) {
             let returnValue[] = current(variable);
-        };
+        }
 
         return returnValue;
 	}
@@ -402,7 +422,7 @@ class Flow
 
 		do {
 			let returnValue[] = current(variable);
-		} while (next(variable));
+		} while next(variable);
 
 		return returnValue;
     }

@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013 Zephir Team and contributors                          |
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -66,7 +66,7 @@ class Color
 	/**
 	 * @var array Map of supported foreground colors
 	 */
-	private static $_fg = array (
+	private static $_fg = array(
 		self::FG_BLACK        => '0;30',
 		self::FG_DARK_GRAY    => '1;30',
 		self::FG_RED          => '0;31',

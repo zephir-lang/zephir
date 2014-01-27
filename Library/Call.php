@@ -206,13 +206,16 @@ class Call
 		$types = array();
 		$dynamicTypes = array();
 		foreach ($exprParams as $compiledExpression) {
+
 			$expression = $compiledExpression->getOriginal();
 			switch ($compiledExpression->getType()) {
+
 				case 'null':
 					$params[] = 'ZEPHIR_GLOBAL(global_null)';
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
+
 				case 'int':
 				case 'uint':
 				case 'long':
@@ -223,6 +226,7 @@ class Call
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
+
 				case 'double':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_DOUBLE(' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
@@ -230,6 +234,7 @@ class Call
 					$params[] = $parameterVariable->getName();
 					$types[] = $compiledExpression->getType();
 					break;
+
 				case 'bool':
 					if ($compiledExpression->getCode() == 'true') {
 						$params[] = 'ZEPHIR_GLOBAL(global_true)';
@@ -239,6 +244,7 @@ class Call
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
+
 				case 'ulong':
 				case 'string':
 					$parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -248,9 +254,11 @@ class Call
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
+
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {
+
 						case 'int':
 						case 'uint':
 						case 'long':
@@ -262,26 +270,31 @@ class Call
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getType();
 							break;
+
 						case 'bool':
 							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getType();
 							break;
+
 						case 'string':
 							$params[] = $parameterVariable->getName();
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getType();
 							break;
+
 						case 'array':
 							$params[] = $parameterVariable->getName();
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getType();
 							break;
+
 						case 'variable':
 							$params[] = $parameterVariable->getName();
 							$types[] = $parameterVariable->getType();
 							$dynamicTypes[] = $parameterVariable->getDynamicTypes();
 							break;
+
 						default:
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
@@ -315,9 +328,11 @@ class Call
 		foreach ($exprParams as $compiledExpression) {
 			$expression = $compiledExpression->getOriginal();
 			switch ($compiledExpression->getType()) {
+
 				case 'null':
 					$params[] = 'ZEPHIR_GLOBAL(global_null)';
 					break;
+
 				case 'int':
 				case 'uint':
 				case 'long':
@@ -325,15 +340,16 @@ class Call
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
-
 					$params[] = '&' . $parameterVariable->getName();
 					break;
+
 				case 'double':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
+
 				case 'bool':
 					if ($compiledExpression->getCode() == 'true') {
 						$params[] = 'ZEPHIR_GLOBAL(global_true)';
@@ -341,6 +357,7 @@ class Call
 						$params[] = 'ZEPHIR_GLOBAL(global_false)';
 					}
 					break;
+
 				case 'string':
 				case 'ulong':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
@@ -348,6 +365,7 @@ class Call
 					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
+
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {

@@ -88,6 +88,7 @@ class FunctionCall extends Call
 
 		$reflector = $this->getReflector($funcName);
 		if ($reflector) {
+
 			if (isset($expression['parameters'])) {
 				/**
 				 * Check if the number of parameters
@@ -398,9 +399,11 @@ class FunctionCall extends Call
 	 */
 	protected function _callDynamic($expression, $compilationContext)
 	{
+
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 		switch ($variable->getType()) {
 			case 'variable':
+			case 'string':
 				break;
 			default:
 				throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $expression['left']);
@@ -415,7 +418,7 @@ class FunctionCall extends Call
 			$params = array();
 		}
 
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * Process the expected symbol to be returned
@@ -444,59 +447,12 @@ class FunctionCall extends Call
 		 */
 		$compilationContext->headersManager->add('kernel/fcall');
 
+		$functionName = '(Z_TYPE_P(' . $variable->getName() . ') == IS_STRING ? Z_STRVAL_P(' . $variable->getName() . ') : "")';
+
 		/**
 		 * Call functions must grown the stack
 		 */
 		$compilationContext->symbolTable->mustGrownStack(true);
-
-        /**
-         * Find last value of variable
-         * @todo rewrite this
-         */
-		$lastValue        = false;
-		/*$methodStatements = $compilationContext->currentMethod->getStatementsBlock()->getStatements();
-		$varName          = $expression['name'];
-
-        foreach ($methodStatements as $statement) {
-            if (isset($statement['line'])
-                && $statement['line'] <= $expression['line']
-                && isset($statement['type'])
-                && $statement['type'] === 'let'
-                && isset($statement['assignments'])
-                && is_array($statement['assignments'])
-            ) {
-
-                foreach ($statement['assignments'] as $assignment) {
-
-                    if (isset($assignment['variable'])
-                        && $assignment['variable'] === $varName
-                        && isset($assignment['expr']['value'])
-                    ) {
-						var_dump($assignment['expr']['value']);
-                        $lastValue = $assignment['expr']['value'];
-                    }
-                }
-            }
-        }*/
-
-        if ($lastValue) {
-			$functionName = '"'.$lastValue.'"';
-        } else {
-			/**
-			 * @todo Rewrite type checks and exceptions to class and createMethod getExceptionClass for classDefinition
-			 */
-			$compilationContext->headersManager->add('ext/spl/spl_exceptions');
-			$compilationContext->headersManager->add('kernel/exception');
-
-			$codePrinter->output('if (Z_TYPE_P('.$variable->getName().') != IS_STRING) {');
-				$codePrinter->increaseLevel();
-				$codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Variable '.$variable->getName().' must be a string") TSRMLS_CC);');
-				$codePrinter->output('RETURN_MM_NULL();');
-				$codePrinter->decreaseLevel();
-			$codePrinter->output('}');
-
-			$functionName = 'Z_STRVAL_P('.$variable->getName().')';
-		}
 
 		if (!isset($expression['parameters'])) {
 			if ($this->isExpectingReturn()) {
@@ -513,9 +469,9 @@ class FunctionCall extends Call
 					if ($this->mustInitSymbolVariable()) {
 						$symbolVariable->initVariant($compilationContext);
 					}
-					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', '.$functionName.', ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $functionName . ', ' . join(', ', $params) . ');');
 				} else {
-					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret('.$functionName.', ' . join(', ', $params) . ');');
+					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret(' . $functionName . ', ' . join(', ', $params) . ');');
 				}
 			} else {
 				$codePrinter->output('zephir_call_func_noret('.$functionName.');');

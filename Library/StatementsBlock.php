@@ -93,96 +93,117 @@ class StatementsBlock
 			}
 
 			switch ($statement['type']) {
+
 				case 'let':
 					$letStatement = new LetStatement($statement);
 					$letStatement->compile($compilationContext);
 					break;
+
 				case 'echo':
 					$echoStatement = new EchoStatement($statement);
 					$echoStatement->compile($compilationContext);
 					break;
+
 				case 'declare':
 					$declareStatement = new DeclareStatement($statement);
 					$declareStatement->compile($compilationContext);
 					break;
+
 				case 'if':
 					$ifStatement = new IfStatement($statement);
 					$ifStatement->compile($compilationContext);
 					break;
+
 				case 'while':
 					$whileStatement = new WhileStatement($statement);
 					$whileStatement->compile($compilationContext);
 					break;
+
 				case 'do-while':
 					$whileStatement = new DoWhileStatement($statement);
 					$whileStatement->compile($compilationContext);
 					break;
+
 				case 'switch':
 					$switchStatement = new SwitchStatement($statement);
 					$switchStatement->compile($compilationContext);
 					break;
+
 				case 'for':
 					$forStatement = new ForStatement($statement);
 					$forStatement->compile($compilationContext);
 					break;
+
 				case 'return':
 					$returnStatement = new ReturnStatement($statement);
 					$returnStatement->compile($compilationContext);
 					$this->_unrecheable = true;
 					break;
+
 				case 'require':
 					$requireStatement = new RequireStatement($statement);
 					$requireStatement->compile($compilationContext);
 					break;
+
 				case 'loop':
 					$loopStatement = new LoopStatement($statement);
 					$loopStatement->compile($compilationContext);
 					break;
+
 				case 'break':
 					$breakStatement = new BreakStatement($statement);
 					$breakStatement->compile($compilationContext);
 					$this->_unrecheable = true;
 					break;
+
 				case 'continue':
 					$continueStatement = new ContinueStatement($statement);
 					$continueStatement->compile($compilationContext);
 					$this->_unrecheable = true;
 					break;
+
 				case 'unset':
 					$unsetStatement = new UnsetStatement($statement);
 					$unsetStatement->compile($compilationContext);
 					break;
+
 				case 'throw':
 					$throwStatement = new ThrowStatement($statement);
 					$throwStatement->compile($compilationContext);
 					$this->_unrecheable = true;
 					break;
+
 				case 'fetch':
 					$expr = new Expression($statement['expr']);
 					$expr->setExpectReturn(false);
 					$expr->compile($compilationContext);
 					break;
+
 				case 'mcall':
 					$methodCall = new MethodCall();
 					$expr = new Expression($statement['expr']);
 					$expr->setExpectReturn(false);
 					$methodCall->compile($expr, $compilationContext);
 					break;
+
 				case 'fcall':
 					$functionCall = new FunctionCall();
 					$expr = new Expression($statement['expr']);
 					$expr->setExpectReturn(false);
 					$functionCall->compile($expr, $compilationContext);
 					break;
+
 				case 'scall':
 					$methodCall = new StaticCall();
 					$expr = new Expression($statement['expr']);
 					$expr->setExpectReturn(false);
 					$methodCall->compile($expr, $compilationContext);
 					break;
+
 				case 'cblock':
 					$compilationContext->codePrinter->output($statement['value']);
 					break;
+
 				default:
 					$compilationContext->codePrinter->output('//missing ' . $statement['type']);
 			}

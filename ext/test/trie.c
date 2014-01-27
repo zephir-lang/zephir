@@ -55,7 +55,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 	ZVAL_LONG(keyLen, zephir_fast_strlen_ev(key));
 	i = 0;
 	while (1) {
-		if (!(ZEPHIR_GE_LONG(keyLen, i))) {
+		if (!(ZEPHIR_GT_LONG(keyLen, i))) {
 			break;
 		}
 		ZEPHIR_SINIT_NVAR(_0);

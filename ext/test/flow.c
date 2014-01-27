@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/concat.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
@@ -573,6 +574,49 @@ PHP_METHOD(Test_Flow, testWhile11) {
 
 }
 
+PHP_METHOD(Test_Flow, testWhile12) {
+
+	zval *_0;
+	zval *b = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CONCAT_SS(_0, "+", "10");
+	ZEPHIR_CPY_WRT(b, _0);
+	while (1) {
+		if (!(ZEPHIR_GT_LONG(b, 5))) {
+			break;
+		}
+		ZEPHIR_SEPARATE(b);
+		zephir_decrement(b);
+	}
+	RETURN_CCTOR(b);
+
+}
+
+PHP_METHOD(Test_Flow, testWhile13) {
+
+	zval *_0;
+	int a = 5;
+	zval *b = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CONCAT_SS(_0, "+", "10");
+	ZEPHIR_CPY_WRT(b, _0);
+	while (1) {
+		if (!(ZEPHIR_GT_LONG(b, a))) {
+			break;
+		}
+		ZEPHIR_SEPARATE(b);
+		zephir_decrement(b);
+	}
+	RETURN_CCTOR(b);
+
+}
+
 PHP_METHOD(Test_Flow, testDoWhile1) {
 
 
@@ -606,7 +650,6 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 		Z_UNSET_ISREF_P(variable);
 		zephir_array_append(&returnValue, _1, PH_SEPARATE);
 	}
-	//missing empty
 	RETURN_CCTOR(returnValue);
 
 }
@@ -1216,7 +1259,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 589);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 609);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1420,7 +1463,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = Z_STRVAL_P(b)[_0]; 
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 659);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 679);
 	}
 	RETURN_CCTOR(a);
 

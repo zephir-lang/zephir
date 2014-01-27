@@ -926,7 +926,9 @@ class ClassMethod
 				 */
 				if ($parameter['const']) {
 					$symbol->setReadOnly(true);
-					$symbolParam->setReadOnly(true);
+					if (is_object($symbolParam)) {
+						$symbolParam->setReadOnly(true);
+					}
 				}
 
 				if (is_object($symbolParam)) {
