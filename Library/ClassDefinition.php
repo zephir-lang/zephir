@@ -167,9 +167,9 @@ class ClassDefinition
 	/**
 	 * Sets the implemented interfaces
 	 *
-	 * @param string $implementedInterfaces
+	 * @param array $implementedInterfaces
 	 */
-	public function setImplementsInterfaces($implementedInterfaces)
+	public function setImplementsInterfaces(array $implementedInterfaces)
 	{
 		$interfaces = array();
 		foreach ($implementedInterfaces as $implementedInterface) {

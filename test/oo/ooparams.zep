@@ -43,7 +43,7 @@ class OoParams
 		return average;
 	}
 
-	public function setStrictName(string name)
+	public function setStrictName(string! name)
 	{
 		return name;
 	}
