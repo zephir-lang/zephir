@@ -941,6 +941,31 @@ PHP_METHOD(Test_NativeArray, testArrayUpdate4) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testArrayAppend1) {
+
+	zval *a, *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "hello", 1);
+	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), PH_SEPARATE);
+	ZEPHIR_INIT_BNVAR(_0);
+	ZVAL_BOOL(_0, 0);
+	zephir_array_append(&a, _0, PH_SEPARATE);
+	ZEPHIR_INIT_BNVAR(_0);
+	ZVAL_DOUBLE(_0, 1.10);
+	zephir_array_append(&a, _0, PH_SEPARATE);
+	ZEPHIR_INIT_BNVAR(_0);
+	ZVAL_LONG(_0, 5);
+	zephir_array_append(&a, _0, PH_SEPARATE);
+	RETURN_CCTOR(a);
+
+}
+
 PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate1) {
 
 	zval *a;
@@ -1165,7 +1190,7 @@ PHP_METHOD(Test_NativeArray, testImplodeArray) {
  */
 PHP_METHOD(Test_NativeArray, issue110) {
 
-	zval *byteUnits, *tmp, *_0;
+	zval *byteUnits, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -1180,11 +1205,10 @@ PHP_METHOD(Test_NativeArray, issue110) {
 	add_assoc_long_ex(byteUnits, SS("MB"), 20);
 	add_assoc_long_ex(byteUnits, SS("GB"), 30);
 	add_assoc_long_ex(byteUnits, SS("TB"), 40);
-	ZEPHIR_INIT_VAR(tmp);
 	ZEPHIR_INIT_VAR(_0);
 	zephir_array_keys(_0, byteUnits TSRMLS_CC);
-	zephir_fast_join_str(tmp, SL("|"), _0 TSRMLS_CC);
-	RETURN_CCTOR(tmp);
+	zephir_fast_join_str(return_value, SL("|"), _0 TSRMLS_CC);
+	RETURN_MM();
 
 }
 

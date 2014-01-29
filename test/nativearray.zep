@@ -389,6 +389,13 @@ class NativeArray
 		return a;
 	}
 
+	public function testArrayAppend1()
+	{
+		var a;
+		let a = [], a[] = "hello", a[] = null, a[] = false, a[] = 1.10, a[] = 5;
+		return a;
+	}
+
 	public function testMultipleArrayUpdate1()
 	{
 		var a;
@@ -517,24 +524,22 @@ class NativeArray
 
 	public function testArrayKeys(var param)
 	{
-        return array_keys(param);
+		return array_keys(param);
 	}
 
 	public function testImplodeArray(var param)
 	{
-	    return implode("|", array_keys(param));
+		return implode("|", array_keys(param));
 	}
 
-    /**
-     * @link https://github.com/phalcon/zephir/issues/110
-     */
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/110
+	 */
 	public function issue110()
 	{
-	    var byteUnits, tmp;
+		var byteUnits, tmp;
 
-        let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
-        let tmp = implode("|", array_keys(byteUnits));
-
-        return tmp;
+		let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
+		return implode("|", array_keys(byteUnits));
 	}
 }

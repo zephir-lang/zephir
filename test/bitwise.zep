@@ -908,7 +908,7 @@ class Bitwise
 		return c;
 	}
 
-        /* ------- shift right -------- */
+	/* ------- shift right -------- */
 	public function intShiftRight()
 	{
 		int a, b, c;

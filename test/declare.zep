@@ -93,8 +93,8 @@ class Declare
 
 	public function testDeclare15()
 	{
-		//var a = null;
-		//return a;
+		var a = null;
+		return a;
 	}
 
 }

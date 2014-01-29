@@ -158,7 +158,13 @@ PHP_METHOD(Test_Declare, testDeclare14) {
 
 PHP_METHOD(Test_Declare, testDeclare15) {
 
+	zval a;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_NULL(a);
+
+	RETURN_LCTOR(a);
 
 }
 

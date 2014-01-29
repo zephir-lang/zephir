@@ -954,28 +954,49 @@ class LetStatement
 
 		$type = $symbolVariable->getType();
 		switch ($type) {
-			/*case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
-				$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
-				break;*/
+
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						$codePrinter->output('zephir_array_append(&' . $variable . ', ZEPHIR_GLOBAL(global_null), PH_SEPARATE);');
 						break;
+
+					case 'bool':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+						$symbolVariable->setIdle(true);
+						break;
+
+					case 'int':
+					case 'uint':
+					case 'long':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+						$symbolVariable->setIdle(true);
+						break;
+
+					case 'double':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+						$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+						$symbolVariable->setIdle(true);
+						break;
+
+					case 'ulong':
 					case 'string':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 						$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . Utils::addSlashes($resolvedExpr->getCode()) . '", 1);');
 						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 						$symbolVariable->setIdle(true);
 						break;
+
 					case 'variable':
 						$exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($exprVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -985,14 +1006,17 @@ class LetStatement
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 								$symbolVariable->setIdle(true);
 								break;
+
 							case 'variable':
 							case 'string':
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $exprVariable->getName() . ', PH_SEPARATE);');
 								break;
+
 							default:
 								throw new CompilerException("Unknown type " . $exprVariable->getType(), $statement);
 						}
 						break;
+
 					default:
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
