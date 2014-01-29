@@ -3,6 +3,7 @@
 $t = new Test\Fcall();
 
 assert($t->testCall1() === 0);
+assert($t->testCall2() > -1);
 assert($t->testCall1FromVar() === 2);
 
 assert($t->testStrtokFalse() === false);

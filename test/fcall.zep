@@ -14,28 +14,9 @@ class Fcall
 
 	public function testCall2()
 	{
-		var result, row; int debitos = 0, creditos = 0;
-
-		mysql_connect("localhost", "root", "hea101");
-
-		mysql_select_db("ramocol");
-
-		let result = mysql_query("SELECT deb_cre, cuenta FROM movi");
 		loop {
-
-			let row = mysql_fetch_array(result);
-			if typeof row != "array" {
-				break;
-			}
-
-			if row["deb_cre"] == "D" {
-				let debitos++;
-			} else {
-				let creditos++;
-			}
+			return mt_rand(0, 100);
 		}
-
-		return [debitos, creditos];
 	}
 
 	public function testCall1FromVar()
