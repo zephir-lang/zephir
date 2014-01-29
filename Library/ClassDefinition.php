@@ -167,9 +167,9 @@ class ClassDefinition
 	/**
 	 * Sets the implemented interfaces
 	 *
-	 * @param string $implementedInterfaces
+	 * @param array $implementedInterfaces
 	 */
-	public function setImplementsInterfaces($implementedInterfaces)
+	public function setImplementsInterfaces(array $implementedInterfaces)
 	{
 		$interfaces = array();
 		foreach ($implementedInterfaces as $implementedInterface) {
@@ -717,7 +717,6 @@ class ClassDefinition
 			}
 
 			if ($this->getType() == 'class') {
-
 				$codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
 				$codePrinter->outputBlankLine();
 
@@ -801,5 +800,4 @@ class ClassDefinition
 
 		$compilationContext->headerPrinter = $codePrinter;
 	}
-
 }

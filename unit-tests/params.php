@@ -21,6 +21,9 @@ assert($t->setEnabled(0) === false);
 assert($t->setEnabled("1") === true);
 assert($t->setEnabled("0") === false);
 
+assert($t->setList(array(1, 2, 3, 4, 5)) === array(1, 2, 3, 4, 5));
+assert($t->setList(null) == array());
+
 assert($t->setStrictAge(17) === 17);
 try { $t->setStrictAge(17.0); assert(false); } catch (InvalidArgumentException $e) { assert(true); }
 try { $t->setStrictAge("17"); assert(false); } catch (InvalidArgumentException $e) { assert(true); }

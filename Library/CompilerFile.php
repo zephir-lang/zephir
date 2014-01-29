@@ -221,6 +221,7 @@ class CompilerFile
 	 *
 	 * @param array $property
 	 * @param ClassDefinition $classDefinition
+	 * @throws CompilerException
 	 */
 	protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
 	{
@@ -239,7 +240,22 @@ class CompilerFile
 						array('public'),
 						'get' . ucfirst($name),
 						null,
-						null,
+						new StatementsBlock(array(
+							array(
+								'type' => 'return',
+								'expr' => array(
+									'type' => 'property-access',
+									'left' => array(
+										'type' => 'variable',
+										'value' => 'this'
+									),
+									'right' => array(
+										'type' => 'variable',
+										'value' => $name
+									)
+								)
+							)
+						)),
 						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
 						null,
 						$shortcut
@@ -250,14 +266,32 @@ class CompilerFile
 						$classDefinition,
 						array('public'),
 						'set' . ucfirst($name),
-						new ClassMethodParameters(array(array(
-							'type' => 'parameter',
-							'name' => $name,
-							'file' => $shortcut['file'],
-							'line' => $shortcut['line'],
-							'char' => $shortcut['char'],
-						))),
-						null,
+						new ClassMethodParameters(array(
+							array(
+								'type' => 'parameter',
+								'name' => $name,
+								'const' => 0,
+								'data-type' => 'variable',
+								'mandatory' => 0
+							)
+						)),
+						new StatementsBlock(array(
+							array(
+								'type' => 'let',
+								'assignments' => array(
+									array(
+										'assign-type' => 'object-property',
+										'operator' => 'assign',
+										'variable' => 'this',
+										'property' => $name,
+										'expr' => array(
+											'type' => 'variable',
+											'value' => $name,
+										)
+									)
+								)
+							)
+						)),
 						isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
 						null,
 						$shortcut

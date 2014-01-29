@@ -39,9 +39,16 @@ class ProtectedProperties
 	 */
 	protected someString = "test";
 
+	protected someVar {set, get};
+
 	public function getSomeNull()
 	{
 		return this->someNull;
+	}
+
+	public function setSomeNull(var param)
+	{
+		let this->someNull = param;
 	}
 
 	public function getSomeNullInitial()

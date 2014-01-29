@@ -80,7 +80,6 @@ class ClassMethod
 			foreach ($returnType['list'] as $returnTypeItem) {
 				if (isset($returnTypeItem['cast'])) {
 					if (isset($returnTypeItem['cast']['collection'])) {
-						//var_dump($returnTypeItem);
 						continue;
 					}
 					$castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
@@ -809,14 +808,12 @@ class ClassMethod
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		/**
 		 * Set the method currently being compiled
 		 */
 		$compilationContext->currentMethod = $this;
 
 		if (is_object($this->_statements)) {
-
 			/**
 			 * This pass checks for zval variables than can be potentally
 			 * used without allocate memory and memory tracking
@@ -924,7 +921,7 @@ class ClassMethod
 				/**
 				 * Some parameters can be read-only
 				 */
-				if ($parameter['const']) {
+				if (isset($parameter['const']) && $parameter['const']) {
 					$symbol->setReadOnly(true);
 					if (is_object($symbolParam)) {
 						$symbolParam->setReadOnly(true);
@@ -1448,5 +1445,4 @@ class ClassMethod
 
 		return null;
 	}
-
 }
