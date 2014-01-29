@@ -47,6 +47,5 @@ class FcloseOptimizer
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
 		return new CompiledExpression('bool', 'zephir_fclose(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
-
 	}
 }

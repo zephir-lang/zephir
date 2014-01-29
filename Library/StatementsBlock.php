@@ -190,7 +190,19 @@ class StatementsBlock
 					$functionCall = new FunctionCall();
 					$expr = new Expression($statement['expr']);
 					$expr->setExpectReturn(false);
-					$functionCall->compile($expr, $compilationContext);
+					$compiledExpression = $functionCall->compile($expr, $compilationContext);
+					switch ($compiledExpression->getType()) {
+						case 'int':
+						case 'double':
+						case 'uint':
+						case 'long':
+						case 'ulong':
+						case 'char':
+						case 'uchar':
+						case 'bool':
+							$compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
+							break;
+					}
 					break;
 
 				case 'scall':
