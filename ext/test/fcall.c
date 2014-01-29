@@ -15,6 +15,8 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
+#include "kernel/file.h"
 
 
 /**
@@ -57,6 +59,41 @@ PHP_METHOD(Test_Fcall, testCall2) {
 		ZVAL_LONG(&_1, 100);
 		ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, &return_value, "mt_rand", &_2, 2, &_0, &_1);
 		RETURN_MM();
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Fcall, testCall3) {
+
+	zend_function *_2 = NULL;
+	zval *handle, *handle2, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "inputfile.txt", 0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_STRING(&_1, "r", 0);
+	ZEPHIR_INIT_VAR(handle);
+	zephir_call_func_p2(handle, "fopen", &_0, &_1);
+	ZEPHIR_SINIT_NVAR(_0);
+	ZVAL_STRING(&_0, "outputfile.txt", 0);
+	ZEPHIR_SINIT_NVAR(_1);
+	ZVAL_STRING(&_1, "w", 0);
+	ZEPHIR_INIT_VAR(handle2);
+	zephir_call_func_p2(handle2, "fopen", &_0, &_1);
+	if (zephir_is_true(handle)) {
+		while (1) {
+			ZEPHIR_SINIT_NVAR(_0);
+			ZVAL_LONG(&_0, 4096);
+			ZEPHIR_INIT_NVAR(buffer);
+			ZEPHIR_CALL_INTERNAL_FUNCTION(buffer, &buffer, "fgets", &_2, 2, handle, &_0);
+			if (ZEPHIR_IS_FALSE(buffer)) {
+				break;
+			}
+			zephir_fwrite(NULL, handle2, buffer TSRMLS_CC);
+		}
 	}
 	ZEPHIR_MM_RESTORE();
 

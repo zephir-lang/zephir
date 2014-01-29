@@ -234,6 +234,7 @@ class CompilerFile
 			}
 
 			switch ($shortcut['name']) {
+
 				case 'get':
 					$classDefinition->addMethod(new ClassMethod(
 						$classDefinition,
@@ -251,7 +252,7 @@ class CompilerFile
 									),
 									'right' => array(
 										'type' => 'variable',
-										'value' => $name
+										'value' => $property['name']
 									)
 								)
 							)
@@ -261,6 +262,7 @@ class CompilerFile
 						$shortcut
 					), $shortcut);
 					break;
+
 				case 'set':
 					$classDefinition->addMethod(new ClassMethod(
 						$classDefinition,
@@ -283,7 +285,7 @@ class CompilerFile
 										'assign-type' => 'object-property',
 										'operator' => 'assign',
 										'variable' => 'this',
-										'property' => $name,
+										'property' => $property['name'],
 										'expr' => array(
 											'type' => 'variable',
 											'value' => $name,
@@ -297,6 +299,7 @@ class CompilerFile
 						$shortcut
 					), $shortcut);
 					break;
+
 				case '__toString':
 					$classDefinition->addMethod(new ClassMethod(
 						$classDefinition,
@@ -309,6 +312,7 @@ class CompilerFile
 						$shortcut
 					), $shortcut);
 					break;
+
 				default:
 					throw new CompilerException("Unknown shortcut '" . $shortcut['name'] . "'", $shortcut);
 			}

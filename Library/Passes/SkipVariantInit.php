@@ -21,7 +21,7 @@
  * SkipVariantInit
  *
  * In 'if'/'else' statements somtimes dynamical variables are initialized in every branch
- * Same case in
+ * Same case in 'switch' statements
  */
 class SkipVariantInit
 {

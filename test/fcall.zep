@@ -19,6 +19,24 @@ class Fcall
 		}
 	}
 
+	public function testCall3()
+	{
+		var handle, handle2, buffer;
+
+		let handle = fopen("inputfile.txt", "r"), handle2 = fopen("outputfile.txt", "w");
+		if handle {
+			loop {
+				let buffer = fgets(handle, 4096);
+				if buffer === false {
+					break;
+				}
+				fwrite(handle2, buffer);
+			}
+			fclose(handle);
+			fclose(handle2);
+		}
+    }
+
 	public function testCall1FromVar()
 	{
 		var funcName;

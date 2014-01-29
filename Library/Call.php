@@ -239,7 +239,11 @@ class Call
 					if ($compiledExpression->getCode() == 'true') {
 						$params[] = 'ZEPHIR_GLOBAL(global_true)';
 					} else {
-						$params[] = 'ZEPHIR_GLOBAL(global_false)';
+						if ($compiledExpression->getCode() == 'false') {
+							$params[] = 'ZEPHIR_GLOBAL(global_false)';
+						} else {
+							$params[] = '(' . $compiledExpression->getCode() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
+						}
 					}
 					$types[] = $compiledExpression->getType();
 					$dynamicTypes[] = $compiledExpression->getType();

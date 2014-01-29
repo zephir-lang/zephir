@@ -21,9 +21,9 @@ require ZEPHIRPATH . 'Library/Commands/Interface.php';
 require ZEPHIRPATH . 'Library/Commands/Abstract.php';
 
 /**
- * Compiler
+ * Bootstrap
  *
- * Main compiler
+ * Main compiler bootstrap
  */
 class Bootstrap
 {
