@@ -172,7 +172,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 		ZEPHIR_INIT_NVAR(_0);
 		ZEPHIR_INIT_LNVAR(_6);
 		ZEPHIR_CONCAT_SVS(_6, "/", regex, "/iS");
-		zephir_preg_match(_0, &(_0), _6, contents, discard, 1 TSRMLS_CC);
+		zephir_preg_match(_0, &(_0), _6, contents, discard, 1, 0 , 0  TSRMLS_CC);
 		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}
