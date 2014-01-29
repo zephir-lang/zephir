@@ -85,7 +85,8 @@ ZEPHIR_INIT_CLASS(Test_Router) {
  */
 PHP_METHOD(Test_Router, __construct) {
 
-	zval *defaultRoutes_param = NULL, *routes, *_0, *_1 = NULL, *_2 = NULL, *_3, *_4;
+	zval *_1, *_4;
+	zval *defaultRoutes_param = NULL, *routes, *_0, *_2 = NULL, *_3;
 	zend_bool defaultRoutes;
 
 	ZEPHIR_MM_GROW();
@@ -103,7 +104,6 @@ PHP_METHOD(Test_Router, __construct) {
 	if ((defaultRoutes == 1)) {
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
-		ZEPHIR_INIT_VAR(_1);
 		array_init_size(_1, 2);
 		add_assoc_long_ex(_1, SS("controller"), 1);
 		ZEPHIR_INIT_VAR(_2);
@@ -112,19 +112,18 @@ PHP_METHOD(Test_Router, __construct) {
 		zephir_array_append(&routes, _0, PH_SEPARATE);
 		ZEPHIR_INIT_VAR(_3);
 		object_init_ex(_3, test_router_route_ce);
+		array_init_size(_4, 5);
+		add_assoc_long_ex(_4, SS("controller"), 1);
+		add_assoc_long_ex(_4, SS("action"), 2);
+		add_assoc_long_ex(_4, SS("params"), 3);
 		ZEPHIR_INIT_NVAR(_2);
-		array_init_size(_2, 4);
-		add_assoc_long_ex(_2, SS("controller"), 1);
-		add_assoc_long_ex(_2, SS("action"), 2);
-		add_assoc_long_ex(_2, SS("params"), 3);
-		ZEPHIR_INIT_VAR(_4);
-		ZVAL_STRING(_4, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
-		zephir_call_method_p2_noret(_3, "__construct", _4, _2);
+		ZVAL_STRING(_2, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", 1);
+		zephir_call_method_p2_noret(_3, "__construct", _2, _4);
 		zephir_array_append(&routes, _3, PH_SEPARATE);
 	}
-	ZEPHIR_INIT_NVAR(_1);
-	array_init(_1);
-	zephir_update_property_this(this_ptr, SL("_params"), _1 TSRMLS_CC);
+	ZEPHIR_INIT_NVAR(_2);
+	array_init(_2);
+	zephir_update_property_this(this_ptr, SL("_params"), _2 TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("_routes"), routes TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 

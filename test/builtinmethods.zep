@@ -37,4 +37,9 @@ class BuiltInMethods
         return " hello \t\n"->trim();
     }
 
+    public function arrayMethodJoin1(array a)
+    {
+	return a->join("|");	
+    }
+
 }

@@ -259,6 +259,13 @@ class Call
 					$dynamicTypes[] = $compiledExpression->getType();
 					break;
 
+				case 'array':
+					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
+					$params[] = $parameterVariable->getName();
+					$types[] = $parameterVariable->getType();
+					$dynamicTypes[] = $parameterVariable->getType();
+					break;
+
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {

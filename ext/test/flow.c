@@ -1424,6 +1424,43 @@ PHP_METHOD(Test_Flow, testFor23) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor24) {
+
+	HashTable *_3;
+	HashPosition _2;
+	zval *_0;
+	zval *b;
+	zval *a = NULL, *_1, **_4;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_EMPTY_STRING(b);
+	array_init_size(_0, 5);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 'a');
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 'b');
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 'c');
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 'd');
+	zephir_array_fast_append(_0, _1);
+	zephir_is_iterable(_0, &_3, &_2, 0, 0);
+	for (
+		; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+		; zend_hash_move_forward_ex(_3, &_2)
+	) {
+		ZEPHIR_GET_HVALUE(a, _4);
+		zephir_concat_self(&b, a TSRMLS_CC);
+	}
+	RETURN_CTOR(b);
+
+}
+
 PHP_METHOD(Test_Flow, testFor30) {
 
 	int v, _0;
@@ -1463,7 +1500,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = Z_STRVAL_P(b)[_0]; 
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 679);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 689);
 	}
 	RETURN_CCTOR(a);
 

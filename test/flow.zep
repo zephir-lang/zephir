@@ -661,6 +661,16 @@ class Flow
 		return b;
 	}
 
+	public function testFor24()
+	{
+		var a; string b;
+		let b = "";
+		for a in ['a', 'b', 'c', 'd'] {
+			let b .= a;
+		}
+		return b;
+	}
+
 	public function testFor30()
 	{
 		var a; string b; int v;

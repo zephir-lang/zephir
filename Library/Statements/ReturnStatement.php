@@ -85,11 +85,13 @@ class ReturnStatement
 			 */
 			if ($currentMethod->hasReturnTypes()) {
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						if (!$currentMethod->areReturnTypesNullCompatible()) {
 							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -99,24 +101,29 @@ class ReturnStatement
 							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
 						break;
+
 					case 'bool':
 						if (!$currentMethod->areReturnTypesBoolCompatible()) {
 							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
 						break;
+
 					case 'double':
 						if (!$currentMethod->areReturnTypesDoubleCompatible()) {
 							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
 						break;
+
 					case 'string':
 						if (!$currentMethod->areReturnTypesStringCompatible()) {
 							throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 						}
 						break;
+
 					case 'variable':
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
 						switch ($symbolVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -126,21 +133,25 @@ class ReturnStatement
 									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 								}
 								break;
+
 							case 'double':
 								if (!$currentMethod->areReturnTypesDoubleCompatible()) {
 									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 								}
 								break;
+
 							case 'string':
 								if (!$currentMethod->areReturnTypesStringCompatible()) {
 									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 								}
 								break;
+
 							case 'bool':
 								if (!$currentMethod->areReturnTypesBoolCompatible()) {
 									throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
 								}
 								break;
+
 							case 'variable':
 								break;
 						}
@@ -149,9 +160,11 @@ class ReturnStatement
 			}
 
 			switch ($resolvedExpr->getType()) {
+
 				case 'null':
 					$codePrinter->output('RETURN_MM_NULL();');
 					break;
+
 				case 'int':
 				case 'uint':
 				case 'long':
@@ -159,19 +172,28 @@ class ReturnStatement
 				case 'uchar':
 					$codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
 					break;
+
 				case 'bool':
 					$codePrinter->output('RETURN_MM_BOOL(' . $resolvedExpr->getBooleanCode() . ');');
 					break;
+
 				case 'double':
 					$codePrinter->output('RETURN_MM_DOUBLE(' . $resolvedExpr->getCode() . ');');
 					break;
+
 				case 'string':
 					$codePrinter->output('RETURN_MM_STRING("' . $resolvedExpr->getCode() . '", 1);');
 					break;
+
+				case 'array':
+					$codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
+					break;
+
 				case 'variable':
 					if (!isset($symbolVariable)) {
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
 					}
+
 					switch ($symbolVariable->getType()) {
 						case 'int':
 						case 'uint':
@@ -180,16 +202,20 @@ class ReturnStatement
 						case 'uchar':
 							$codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');
 							break;
+
 						case 'double':
 							$codePrinter->output('RETURN_MM_DOUBLE(' . $symbolVariable->getName() . ');');
 							break;
+
 						case 'string':
 						case 'array':
 							$codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
 							break;
+
 						case 'bool':
 							$codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');
 							break;
+
 						case 'variable':
 							if ($symbolVariable->getName() == 'this_ptr') {
 								$codePrinter->output('RETURN_THIS();');

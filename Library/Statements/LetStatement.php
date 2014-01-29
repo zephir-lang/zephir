@@ -581,6 +581,7 @@ class LetStatement
 				break;
 
 			case 'variable':
+
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						switch ($statement['operator']) {
@@ -595,6 +596,7 @@ class LetStatement
 								break;
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -633,6 +635,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
 					case 'char':
 					case 'uchar':
 						if ($symbolVariable->isLocalOnly()) {
@@ -657,6 +660,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
 					case 'double':
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
@@ -680,6 +684,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
 					case 'bool':
 						if ($symbolVariable->isLocalOnly()) {
 							$symbol = '&' . $variable;
@@ -713,6 +718,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
 					case 'string':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -732,6 +738,28 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
+					case 'array':
+						switch ($statement['operator']) {
+							case 'assign':
+
+								if ($variable != $resolvedExpr->getCode()) {
+
+									$symbolVariable->setMustInitNull(true);
+									$compilationContext->symbolTable->mustGrownStack(true);
+
+									/* Inherit the dynamic type data from the assigned value */
+									$symbolVariable->setDynamicTypes('array');
+
+									$codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+								}
+								break;
+
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+						}
+						break;
+
 					case 'variable':
 
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
@@ -1446,6 +1474,7 @@ class LetStatement
 		$compilationContext->headersManager->add('kernel/object');
 
 		switch ($resolvedExpr->getType()) {
+
 			case 'null':
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
@@ -1453,6 +1482,7 @@ class LetStatement
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
 				}
 				break;
+
 			case 'int':
 			case 'long':
 			case 'uint':
@@ -1466,6 +1496,7 @@ class LetStatement
 				}
 				$tempVariable->setIdle(true);
 				break;
+
 			case 'string':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
@@ -1477,6 +1508,15 @@ class LetStatement
 				}
 				$tempVariable->setIdle(true);
 				break;
+
+			case 'array':
+				if ($variable == 'this') {
+					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+				} else {
+					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');
+				}
+				break;
+
 			case 'bool':
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
@@ -1484,6 +1524,7 @@ class LetStatement
 					$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 				}
 				break;
+
 			case 'empty-array': /* unrecheable code */
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
@@ -1495,6 +1536,7 @@ class LetStatement
 				}
 				$tempVariable->setIdle(true);
 				break;
+
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 				switch ($variableVariable->getType()) {
@@ -1510,6 +1552,7 @@ class LetStatement
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						$tempVariable->setIdle(true);
 						break;
+
 					case 'bool':
 						if ($variable == 'this') {
 							$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
@@ -1517,6 +1560,8 @@ class LetStatement
 							$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
 						}
 						break;
+
+					case 'array':
 					case 'string':
 					case 'variable':
 						if ($variable == 'this') {

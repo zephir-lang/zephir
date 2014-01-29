@@ -601,13 +601,14 @@ class ForStatement
 		$expr->setReadOnly(true);
 		$expression = $expr->compile($compilationContext);
 
-		if ($expression->getType() != 'variable') {
-			throw new CompilerException("Unknown type: " . $variable->getType(), $exprRaw);
+		if ($expression->getType() != 'variable' && $expression->getType() != 'array') {
+			throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
 		}
 
 		$exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
 		switch ($exprVariable->getType()) {
 			case 'variable':
+			case 'array':
 				$this->compileHashTraverse($expression, $compilationContext);
 				break;
 			case 'string':

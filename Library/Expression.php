@@ -255,29 +255,44 @@ class Expression
 		$codePrinter = $compilationContext->codePrinter;
 
 		switch ($exprCompiled->getType()) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
-			case 'ulong':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
+
+			case 'char':
+			case 'uchar':
+				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+				$codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', \'' . $exprCompiled->getCode() . '\');');
+				return $tempVar;
+
 			case 'double':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
 				return $tempVar;
+
 			case 'bool':
 				if ($exprCompiled->getCode() == 'true') {
 					return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
 				} else {
 					return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
 				}
+
 			case 'null':
 				return new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
+
 			case 'string':
+			case 'ulong':
 				$tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
 				return $tempVar;
+
+			case 'array':
+				return $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $exprCompiled->getOriginal());
+
 			case 'variable':
 				$itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $exprCompiled->getOriginal());
 				switch ($itemVariable->getType()) {
@@ -298,6 +313,7 @@ class Expression
 						return $tempVar;
 					case 'string':
 					case 'variable':
+					case 'array':
 						return $itemVariable;
 					default:
 						throw new CompilerException("Unknown " . $itemVariable->getType(), $itemVariable);
@@ -325,18 +341,14 @@ class Expression
 			if ($this->_expectingVariable) {
 				$symbolVariable = $this->_expectingVariable;
 				$symbolVariable->initVariant($compilationContext);
+				if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'array') {
+					throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an array", $expression);
+				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('array', $compilationContext, $expression);
 			}
 		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-		}
-
-		/**
-		 * Arrays can only be variables
-		 */
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an array", $expression);
+			$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('array', $compilationContext, $expression);
 		}
 
 		/*+
@@ -344,7 +356,7 @@ class Expression
 		 */
 		$symbolVariable->setDynamicTypes('array');
 
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 
 		/**
 		 * This calculates a prime number bigger than the current array size to possibly
@@ -364,15 +376,18 @@ class Expression
 						$expr = new Expression($item['value']);
 						$resolvedExpr = $expr->compile($compilationContext);
 						switch ($resolvedExpr->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'ulong':
 								$codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
+
 							case 'double':
 								$codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), ' . $resolvedExpr->getCode() . ');');
 								break;
+
 							case 'bool':
 								$compilationContext->headersManager->add('kernel/array');
 								if ($resolvedExpr->getCode() == 'true') {
@@ -381,13 +396,25 @@ class Expression
 									$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
 								}
 								break;
+
 							case 'string':
 								$codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $item['key']['value'] . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
 								break;
+
 							case 'null':
 								$compilationContext->headersManager->add('kernel/array');
 								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &ZEPHIR_GLOBAL(global_null), PH_COPY | PH_SEPARATE);');
 								break;
+
+							case 'array':
+								$compilationContext->headersManager->add('kernel/array');
+								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+								$codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $item['key']['value'] . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+								if ($valueVariable->isTemporal()) {
+									$valueVariable->setIdle(true);
+								}
+								break;
+
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/array');
 								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
@@ -396,6 +423,7 @@ class Expression
 									$valueVariable->setIdle(true);
 								}
 								break;
+
 							default:
 								throw new CompilerException("Invalid value type: " . $resolvedExpr->getType(), $item['value']);
 						}
@@ -431,6 +459,14 @@ class Expression
 								break;
 							case 'string':
 								$codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
+								break;
+							case 'array':
+								$compilationContext->headersManager->add('kernel/array');
+								$valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+								$codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+								if ($valueVariable->isTemporal()) {
+									$valueVariable->setIdle(true);
+								}
 								break;
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/array');
@@ -572,6 +608,7 @@ class Expression
 			}
 		}
 
+		//return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 

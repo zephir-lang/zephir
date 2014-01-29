@@ -285,6 +285,7 @@ class ClassDefinition
 	 * Checks if a class definition has a property
 	 *
 	 * @param string $name
+	 * @return boolean
 	 */
 	public function hasProperty($name)
 	{
@@ -645,6 +646,9 @@ class ClassDefinition
 								break;
 							case 'serializable':
 								$classEntry = 'zend_ce_serializable';
+								break;
+							case 'iteratoraggregate':
+								$classEntry = 'zend_ce_IteratorAggregate';
 								break;
 							default:
 								throw new CompilerException($classInterfaceDefinition->getName());

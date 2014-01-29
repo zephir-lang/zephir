@@ -110,3 +110,20 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodTrim1) {
 
 }
 
+PHP_METHOD(Test_BuiltInMethods, arrayMethodJoin1) {
+
+	zval *a_param = NULL, *_0;
+	zval *a = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a_param);
+
+		zephir_get_arrval(a, a_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_fast_join_str(_0, SL("|"), a TSRMLS_CC);
+	RETURN_CCTOR(_0);
+
+}
+

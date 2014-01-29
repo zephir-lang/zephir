@@ -33,14 +33,14 @@ ZEPHIR_INIT_CLASS(Test_Oo_PropertyAccess) {
 
 PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 
-	zval *test, *test1, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7 = NULL, *_8, *_9;
+	zval *_0, *_6;
+	zval *test, *test1, *_1, *_2, *_3, *_4, *_5, *_7, *_8 = NULL, *_9;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(test);
 	object_init(test);
-	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 6);
+	array_init_size(_0, 7);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
@@ -65,28 +65,27 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_read_property(&_4, test, SL("test"), PH_NOISY_CC);
 	zephir_array_fetch_long(&_5, _4, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
 	zephir_update_property_zval(test, SL("test3"), _5 TSRMLS_CC);
-	ZEPHIR_INIT_BNVAR(_1);
-	array_init_size(_1, 5);
-	ZEPHIR_OBS_VAR(_6);
-	zephir_read_property(&_6, test, SL("test"), PH_NOISY_CC);
+	array_init_size(_6, 5);
 	ZEPHIR_OBS_VAR(_7);
-	zephir_array_fetch_long(&_7, _6, 1, PH_NOISY TSRMLS_CC);
-	zephir_array_fast_append(_1, _7);
-	ZEPHIR_INIT_VAR(_8);
-	ZVAL_LONG(_8, 1);
-	zephir_array_fast_append(_1, _8);
-	ZEPHIR_INIT_BNVAR(_8);
-	ZVAL_LONG(_8, 2);
-	zephir_array_fast_append(_1, _8);
-	ZEPHIR_INIT_BNVAR(_8);
-	ZVAL_LONG(_8, 3);
-	zephir_array_fast_append(_1, _8);
-	zephir_update_property_zval(test, SL("test3"), _1 TSRMLS_CC);
+	zephir_read_property(&_7, test, SL("test"), PH_NOISY_CC);
+	ZEPHIR_OBS_VAR(_8);
+	zephir_array_fetch_long(&_8, _7, 1, PH_NOISY TSRMLS_CC);
+	zephir_array_fast_append(_6, _8);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 1);
+	zephir_array_fast_append(_6, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_array_fast_append(_6, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 3);
+	zephir_array_fast_append(_6, _1);
+	zephir_update_property_zval(test, SL("test3"), _6 TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("a"), test TSRMLS_CC);
 	_9 = zephir_fetch_nproperty_this(this_ptr, SL("a"), PH_NOISY_CC);
-	ZEPHIR_OBS_NVAR(_7);
-	zephir_read_property(&_7, _9, SL("test2"), PH_NOISY_CC);
-	zephir_update_property_this(this_ptr, SL("b"), _7 TSRMLS_CC);
+	ZEPHIR_OBS_NVAR(_8);
+	zephir_read_property(&_8, _9, SL("test2"), PH_NOISY_CC);
+	zephir_update_property_this(this_ptr, SL("b"), _8 TSRMLS_CC);
 	test1 = zephir_fetch_nproperty_this(this_ptr, SL("a"), PH_NOISY_CC);
 	ZEPHIR_MM_RESTORE();
 
