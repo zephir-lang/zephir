@@ -41,7 +41,7 @@ PHP_METHOD(Test_Exists, testClassExists) {
 	}
 
 
-	RETURN_BOOL(zephir_class_exists(className, ZEPHIR_IS_TRUE((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
+	RETURN_BOOL(zephir_class_exists(className, zephir_is_true((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
 
 }
 

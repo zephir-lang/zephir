@@ -40,7 +40,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	ZEPHIR_INIT_VAR(test);
 	object_init(test);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 6);
+	array_init_size(_0, 7);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
