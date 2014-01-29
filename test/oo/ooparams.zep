@@ -7,6 +7,15 @@ namespace Test\Oo;
 
 class OoParams
 {
+	public function createThisClassWithoutWriteCurrentNamespace()
+	{
+		return new OoParams();
+	}
+
+	public function createOtherClassWithoutWriteCurrentNamespace()
+	{
+		return new OoDynamicA();
+	}
 
 	public function setAge(int age)
 	{

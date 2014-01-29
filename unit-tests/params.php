@@ -2,6 +2,9 @@
 
 $t = new Test\Oo\OoParams();
 
+assert($t->createThisClassWithoutWriteCurrentNamespace() instanceof Test\Oo\OoParams);
+assert($t->createOtherClassWithoutWriteCurrentNamespace() instanceof Test\Oo\OoDynamicA);
+
 assert($t->setAge(17) === 17);
 assert($t->setAge("17") === 17);
 assert($t->setAge(17.0) === 17);

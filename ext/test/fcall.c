@@ -94,6 +94,8 @@ PHP_METHOD(Test_Fcall, testCall3) {
 			}
 			zephir_fwrite(NULL, handle2, buffer TSRMLS_CC);
 		}
+		zephir_fclose(handle TSRMLS_CC);
+		zephir_fclose(handle2 TSRMLS_CC);
 	}
 	ZEPHIR_MM_RESTORE();
 

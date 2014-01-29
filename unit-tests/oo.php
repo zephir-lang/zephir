@@ -38,3 +38,7 @@ assert($obj9 instanceOf Test\Oo\OoDynamicA);
 $obj10 = $t->testInstance10();
 assert(is_object($obj10));
 assert($obj10 instanceOf Test\Oo\OoDynamicB);
+
+$obj = $t->testInstance11();
+assert(is_object($obj));
+assert($obj instanceof Test\Oo\OoConstructParams);

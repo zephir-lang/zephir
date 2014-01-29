@@ -33,8 +33,7 @@ ZEPHIR_INIT_CLASS(Test_FortyTwo) {
 
 PHP_METHOD(Test_FortyTwo, proof) {
 
-	zend_function *_11 = NULL;
-	zend_class_entry *_10;
+	zend_function *_10 = NULL;
 	zend_bool _5;
 	HashTable *_3;
 	HashPosition _2;
@@ -44,9 +43,9 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(box);
-	array_init_size(box, 17);
+	array_init_size(box, 16);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 10);
 	zephir_array_fast_append(_0, _1);
@@ -58,7 +57,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 8);
 	zephir_array_fast_append(_0, _1);
@@ -70,7 +69,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 19);
 	zephir_array_fast_append(_0, _1);
@@ -82,7 +81,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 6);
 	zephir_array_fast_append(_0, _1);
@@ -94,7 +93,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 20);
 	zephir_array_fast_append(_0, _1);
@@ -106,7 +105,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 9);
 	zephir_array_fast_append(_0, _1);
@@ -118,7 +117,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 22);
 	zephir_array_fast_append(_0, _1);
@@ -130,7 +129,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 18);
 	zephir_array_fast_append(_0, _1);
@@ -142,7 +141,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 5);
 	zephir_array_fast_append(_0, _1);
@@ -154,7 +153,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 16);
 	zephir_array_fast_append(_0, _1);
@@ -166,7 +165,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 23);
 	zephir_array_fast_append(_0, _1);
@@ -178,7 +177,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 12);
 	zephir_array_fast_append(_0, _1);
@@ -190,7 +189,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 24);
 	zephir_array_fast_append(_0, _1);
@@ -202,7 +201,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 11);
 	zephir_array_fast_append(_0, _1);
@@ -214,7 +213,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zephir_array_fast_append(_0, _1);
 	zephir_array_fast_append(box, _0);
 	ZEPHIR_INIT_BNVAR(_0);
-	array_init_size(_0, 5);
+	array_init_size(_0, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 11);
 	zephir_array_fast_append(_0, _1);
@@ -252,11 +251,10 @@ PHP_METHOD(Test_FortyTwo, proof) {
 		}
 		if ((j != 42)) {
 			ZEPHIR_INIT_LNVAR(_9);
-			_10 = zend_fetch_class(SL("Exception"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
-			object_init_ex(_9, _10);
+			object_init_ex(_9, test_exception_ce);
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_STRING(_0, "not true", 1);
-			zephir_call_method_p1_cache_noret(_9, "__construct", &_11, _0);
+			zephir_call_method_p1_cache_noret(_9, "__construct", &_10, _0);
 			zephir_throw_exception(_9 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
 			return;

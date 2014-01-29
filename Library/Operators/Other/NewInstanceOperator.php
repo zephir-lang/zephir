@@ -24,13 +24,13 @@
  */
 class NewInstanceOperator extends BaseOperator
 {
-
 	/**
 	 * Creates a new instance
 	 *
-	 * @param array $expression
+	 * @param $expression
 	 * @param CompilationContext $compilationContext
-	 * @return \CompiledExpression
+	 * @return CompiledExpression
+	 * @throws CompilerException
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
@@ -75,7 +75,6 @@ class NewInstanceOperator extends BaseOperator
 		 * stdclass doesn't have constructors
 		 */
 		if (strtolower($className) == 'stdclass') {
-
 			if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
 				throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
 			}
@@ -83,18 +82,23 @@ class NewInstanceOperator extends BaseOperator
 			$codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
 			$symbolVariable->setClassTypes('stdclass');
 		} else {
+			$classDefinition = false;
+
+			if ($compilationContext->compiler->isClass($className)) {
+				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+			} else if ($expression['class'][0] != '\\' && $compilationContext->compiler->isClass($compilationContext->classDefinition->getNamespace().'\\'.$className)) {
+				$className = $compilationContext->classDefinition->getNamespace().'\\'.$className;
+				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+			}
+
 
 			/**
 			 * Classes inside the same extension
 			 */
-			if ($compilationContext->compiler->isClass($className)) {
-
-				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-
+			if ($classDefinition) {
 				$codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
 				$symbolVariable->setClassTypes($className);
 			} else {
-
 				/**
 				 * Classes inside the same extension
 				 */
