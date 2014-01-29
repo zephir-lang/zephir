@@ -47,17 +47,11 @@ class PregMatchOptimizer
 			return false;
 		}
 
-		/*
-		 * NOT support for flags and offset now, fallback to PHP userland function.
-		 */
-		if (count($expression['parameters']) > 3) {
-			return false;
-		}
 
 		/**
 		 * Process the matches result
 		 */
-		if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'variable') {
+		if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'variable') {
 			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
 			if (!$matchesVariable->isInitialized()) {
 				$matchesVariable->initVariant($context);
@@ -69,6 +63,21 @@ class PregMatchOptimizer
 		}
 
 		$matchesVariable->setDynamicTypes('array');
+
+		/**
+		 * Process optional parameters
+		 */
+		$offsetParamOffset = 4;
+		if (isset($expression['parameters'][4]) && $expression['parameters'][4]['type'] == 'int') {
+			$offset = $expression['parameters'][4]['value'] . ' ';
+			unset($expression['parameters'][4]);
+		}
+
+		if (isset($expression['parameters'][3]) && $expression['parameters'][3]['type'] == 'int') {
+			$flags = $expression['parameters'][3]['value'] . ' ';
+			unset($expression['parameters'][3]);
+			$offsetParamOffset = 3;
+		}
 
 		/**
 		 * Process the expected symbol to be returned
@@ -91,7 +100,26 @@ class PregMatchOptimizer
 		$context->headersManager->add('kernel/string');
 
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . static::$GLOBAL_MATCH .' TSRMLS_CC);');
+
+		if (!isset($offset) && isset($resolvedParams[$offsetParamOffset])) {
+			$context->headersManager->add('kernel/operators');
+			$offset = 'zephir_get_intval(' . $resolvedParams[$offsetParamOffset] . ') ';
+		}
+
+		if (!isset($flags) && isset($resolvedParams[3])) {
+			$context->headersManager->add('kernel/operators');
+			$flags = 'zephir_get_intval(' . $resolvedParams[3] . ') ';
+		}
+
+		if (!isset($flags)) {
+			$flags = '0 ';
+		}
+		if (!isset($offset)) {
+			$offset = '0 ';
+		}
+
+
+		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . static::$GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }
