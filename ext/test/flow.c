@@ -1436,6 +1436,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_EMPTY_STRING(b);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 5);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 'a');

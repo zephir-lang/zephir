@@ -313,7 +313,7 @@ class SymbolTable
 		if (is_object($variable)) {
 			$variable->increaseUses();
 			$variable->increaseMutates();
-			if ($type == 'variable' || $type == 'string') {
+			if ($type == 'variable' || $type == 'string' || $type == 'array') {
 				$variable->initVariant($context);
 			}
 			return $variable;
@@ -325,7 +325,7 @@ class SymbolTable
 		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
-		if ($type == 'variable' || $type == 'string') {
+		if ($type == 'variable' || $type == 'string' || $type == 'array') {
 			$variable->initVariant($context);
 		}
 
@@ -377,7 +377,7 @@ class SymbolTable
 		if (is_object($variable)) {
 			$variable->increaseUses();
 			$variable->increaseMutates();
-			if ($type == 'variable' || $type == 'string') {
+			if ($type == 'variable' || $type == 'string' || $type == 'array') {
 				$variable->initComplexLiteralVariant($context);
 			}
 			return $variable;
@@ -389,7 +389,7 @@ class SymbolTable
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->setTemporal(true);
-		if ($type == 'variable' || $type == 'string') {
+		if ($type == 'variable' || $type == 'string' || $type == 'array') {
 			$variable->initComplexLiteralVariant($context);
 		}
 
@@ -411,7 +411,7 @@ class SymbolTable
 			$variable->increaseUses();
 			$variable->increaseMutates();
 			$variable->setLocalOnly(true);
-			if ($type == 'variable' || $type == 'string') {
+			if ($type == 'variable' || $type == 'string' || $type == 'array') {
 				$variable->initVariant($context);
 			}
 			return $variable;
@@ -424,7 +424,7 @@ class SymbolTable
 		$variable->increaseMutates();
 		$variable->setLocalOnly(true);
 		$variable->setTemporal(true);
-		if ($type == 'variable' || $type == 'string') {
+		if ($type == 'variable' || $type == 'string' || $type == 'array') {
 			$variable->initVariant($context);
 		}
 

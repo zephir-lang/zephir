@@ -104,6 +104,7 @@ PHP_METHOD(Test_Router, __construct) {
 	if ((defaultRoutes == 1)) {
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
+		ZEPHIR_INIT_VAR(_1);
 		array_init_size(_1, 2);
 		add_assoc_long_ex(_1, SS("controller"), 1);
 		ZEPHIR_INIT_VAR(_2);
@@ -112,6 +113,7 @@ PHP_METHOD(Test_Router, __construct) {
 		zephir_array_append(&routes, _0, PH_SEPARATE);
 		ZEPHIR_INIT_VAR(_3);
 		object_init_ex(_3, test_router_route_ce);
+		ZEPHIR_INIT_VAR(_4);
 		array_init_size(_4, 5);
 		add_assoc_long_ex(_4, SS("controller"), 1);
 		add_assoc_long_ex(_4, SS("action"), 2);

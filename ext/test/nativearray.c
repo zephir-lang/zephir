@@ -728,6 +728,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess1) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 2);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 3);
 	add_index_stringl(_0, 0, SL("a"), 1);
 	add_index_stringl(_0, 1, SL("b"), 1);
@@ -747,6 +748,7 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess2) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 2);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 3);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "a", 1);
@@ -770,7 +772,9 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess3) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 2);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 2);
+	ZEPHIR_INIT_VAR(_1);
 	array_init_size(_1, 3);
 	ZEPHIR_INIT_VAR(_2);
 	ZVAL_STRING(_2, "a", 1);
@@ -796,7 +800,9 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess4) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 2);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 2);
+	ZEPHIR_INIT_VAR(_1);
 	array_init_size(_1, 3);
 	ZEPHIR_INIT_VAR(_2);
 	ZVAL_STRING(_2, "a", 1);
@@ -822,7 +828,9 @@ PHP_METHOD(Test_NativeArray, testArrayMultipleAccess5) {
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 2);
+	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 2);
+	ZEPHIR_INIT_VAR(_1);
 	array_init_size(_1, 3);
 	add_assoc_long_ex(_1, SS("c"), 0);
 	add_assoc_long_ex(_1, SS("d"), 1);
