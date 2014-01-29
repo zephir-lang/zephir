@@ -55,6 +55,7 @@ class FunctionCall extends Call
 	 * Process the ReflectionFunction for the specified function name
 	 *
 	 * @param string $funcName
+	 * @return ReflectionFunction
 	 */
 	protected function getReflector($funcName)
 	{
@@ -247,9 +248,33 @@ class FunctionCall extends Call
 	}
 
 	/**
+	 * Checks if a function can be promoted to a function call
+	 *
+	 * @param string $functionName
+	 * @return boolean
+	 */
+	public function canBeInternal($functionName)
+	{
+		$reflector = $this->getReflector($functionName);
+		if ($reflector) {
+			if ($reflector->isInternal()) {
+				switch ($reflector->getExtensionName()) {
+					case 'standard':
+					case 'mysql':
+						return true;
+					default:
+						break;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if a function exists or is a built-in Zephir function
 	 *
 	 * @param string $functionName
+	 * @return boolean
 	 */
 	public function functionExists($functionName)
 	{
@@ -350,23 +375,25 @@ class FunctionCall extends Call
 		 */
 		$compilationContext->symbolTable->mustGrownStack(true);
 
-		if ($funcName == 'rand') {
-			$internalCall = true;
-			$compilationContext->headersManager->add('ext/standard/php_var');
-		} else {
-			$internalCall = false;
+		$internalCall = false;
+		if (!count($references)) {
+			if ($compilationContext->insideCycle) {
+				if ($this->canBeInternal($funcName)) {
+					$internalCall = true;
+				}
+			}
 		}
 
 		if ($internalCall) {
 
-			if (!self::$_functionCache) {
-				$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
-				$functionCache->setMustInitNull(true);
-				$functionCache->setReusable(false);
-				self::$_functionCache = $functionCache;
-			} else {
-				$functionCache = self::$_functionCache;
+			/**
+			 * Create a function cache if there is no any
+			 */
+			if (!$compilationContext->functionCache) {
+				$compilationContext->functionCache = new FunctionCache();
 			}
+
+			$functionCache = $compilationContext->functionCache->get($funcName, $compilationContext);
 
 			if (!isset($expression['parameters'])) {
 				if ($this->isExpectingReturn()) {
@@ -375,7 +402,7 @@ class FunctionCall extends Call
 					}
 					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(' . $symbolVariable->getName() . ', &' . $symbolVariable->getName() . ', "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
 				} else {
-					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . '0, NULL);');
+					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
 				}
 			} else {
 				if (count($params)) {
@@ -383,12 +410,12 @@ class FunctionCall extends Call
 						if ($this->mustInitSymbolVariable()) {
 							$symbolVariable->initVariant($compilationContext);
 						}
-						$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+						$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(' . $symbolVariable->getName() . ', &' . $symbolVariable->getName() . ', "' . $funcName . '", &' . $functionCache->getName() . ', ' . count($params) . ', ' . join(', ', $params) . ');');
 					} else {
-						$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+						$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', ' . count($params) . ', ' . join(', ', $params) . ');');
 					}
 				} else {
-					$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
 				}
 			}
 		} else {

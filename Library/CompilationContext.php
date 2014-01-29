@@ -116,6 +116,13 @@ class CompilationContext
 	public $currentBranch = 0;
 
 	/**
+	 * Function Cache
+	 *
+	 * @var \FunctionCache
+	 */
+	public $functionCache;
+
+	/**
 	 * Global config
 	 *
 	 * @var \Config

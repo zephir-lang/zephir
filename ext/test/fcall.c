@@ -15,7 +15,8 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
-#include "ext/standard/php_var.h"
+#include "kernel/array.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -46,11 +47,46 @@ PHP_METHOD(Test_Fcall, testCall1) {
 
 PHP_METHOD(Test_Fcall, testCall2) {
 
-	zend_function *_0 = NULL;
+	zend_function *_3 = NULL;
+	int debitos = 0, creditos = 0;
+	zval *result, *row = NULL, _0 = zval_used_for_init, _1, _2, *_4, *_5;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, &return_value, "rand", &_0, 0, NULL);
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "localhost", 0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_STRING(&_1, "root", 0);
+	ZEPHIR_SINIT_VAR(_2);
+	ZVAL_STRING(&_2, "hea101", 0);
+	zephir_call_func_p3_noret("mysql_connect", &_0, &_1, &_2);
+	ZEPHIR_SINIT_NVAR(_0);
+	ZVAL_STRING(&_0, "ramocol", 0);
+	zephir_call_func_p1_noret("mysql_select_db", &_0);
+	ZEPHIR_SINIT_NVAR(_0);
+	ZVAL_STRING(&_0, "SELECT deb_cre, cuenta FROM movi", 0);
+	ZEPHIR_INIT_VAR(result);
+	zephir_call_func_p1(result, "mysql_query", &_0);
+	while (1) {
+		ZEPHIR_INIT_NVAR(row);
+		ZEPHIR_CALL_INTERNAL_FUNCTION(row, &row, "mysql_fetch_array", &_3, 1, result);
+		if ((Z_TYPE_P(row) != IS_ARRAY)) {
+			break;
+		}
+		zephir_array_fetch_string(&_4, row, SL("deb_cre"), PH_NOISY | PH_READONLY TSRMLS_CC);
+		if (ZEPHIR_IS_STRING(_4, "D")) {
+			debitos++;
+		} else {
+			creditos++;
+		}
+	}
+	array_init_size(return_value, 3);
+	ZEPHIR_INIT_VAR(_5);
+	ZVAL_LONG(_5, debitos);
+	zephir_array_fast_append(return_value, _5);
+	ZEPHIR_INIT_BNVAR(_5);
+	ZVAL_LONG(_5, creditos);
+	zephir_array_fast_append(return_value, _5);
 	RETURN_MM();
 
 }

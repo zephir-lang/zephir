@@ -877,6 +877,11 @@ class ClassMethod
 		$codePrinter = new CodePrinter();
 		$compilationContext->codePrinter = $codePrinter;
 
+		/**
+		 * Set an empty function cache
+		 */
+		$compilationContext->functionCache = null;
+
 		if (is_object($parameters)) {
 
 			/**
