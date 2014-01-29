@@ -44,14 +44,18 @@ class LogicalBaseOperator extends BaseOperator
 		$right = $rightExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
+
 			case 'int':
 				switch ($right->getType()) {
 					case 'int':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
 					case 'double':
 						return new CompiledExpression('double', '((double) ' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
 					case 'bool':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
+
 					case 'variable':
 						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 						switch ($variableRight->getType()) {
@@ -75,13 +79,16 @@ class LogicalBaseOperator extends BaseOperator
 						throw new Exception("Cannot compare 'int' with '" . $right->getType() . "'");
 				}
 				break;
+
 			case 'bool':
 				switch ($right->getType()) {
 					case 'int':
 					case 'double':
 						return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ((' . $right->getCode() . ') ? 1 : 0))', $expression);
+
 					case 'bool':
 						return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+
 					case 'variable':
 						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 						switch ($variableRight->getType()) {
@@ -117,12 +124,14 @@ class LogicalBaseOperator extends BaseOperator
 						throw new CompilerException("Cannot compare 'double' with '" . $right->getType() . "'", $expression);
 				}
 				break;
+
 			case 'string':
 				switch ($right->getType()) {
 					default:
 						throw new CompilerException("Operation is not supported between strings", $expression);
 				}
 				break;
+
 			case 'variable':
 
 				$variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -154,6 +163,7 @@ class LogicalBaseOperator extends BaseOperator
 								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
+
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
@@ -180,6 +190,7 @@ class LogicalBaseOperator extends BaseOperator
 							default:
 								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
+
 					case 'double':
 						switch ($right->getType()) {
 							case 'int':
@@ -211,14 +222,18 @@ class LogicalBaseOperator extends BaseOperator
 								throw new CompilerException("Cannot compare variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
+
 					case 'string':
 						switch ($right->getType()) {
 							case 'int':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+
 							case 'double':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $right->getCode(), $expression);
+
 							case 'bool':
 								return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_bitOperator . '' . $right->getBooleanCode(), $expression);
+
 							case 'variable':
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
 								switch ($variableRight->getType()) {

@@ -123,6 +123,7 @@ class BitwiseBaseOperator extends BaseOperator
 		$right = $rightExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -276,6 +277,7 @@ class BitwiseBaseOperator extends BaseOperator
 								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
 						break;
+
 					case 'bool':
 						switch ($right->getType()) {
 							case 'int':
@@ -310,6 +312,7 @@ class BitwiseBaseOperator extends BaseOperator
 							default:
 								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
+
 					case 'double':
 						switch ($right->getType()) {
 							case 'int':
@@ -346,8 +349,10 @@ class BitwiseBaseOperator extends BaseOperator
 							default:
 								throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
 						}
+
 					case 'string':
 						throw new CompilerException("Cannot operate string variables'", $expression);
+
 					case 'variable':
 						switch ($right->getType()) {
 							/* a + 1 */
@@ -386,6 +391,7 @@ class BitwiseBaseOperator extends BaseOperator
 											return new CompiledExpression('int', '((int) (zephir_get_numberval(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 										}
 										break;
+
 									/* a(var) + a(bool) */
 									case 'bool':
 										$compilationContext->headersManager->add('kernel/operators');
@@ -395,6 +401,7 @@ class BitwiseBaseOperator extends BaseOperator
 											return new CompiledExpression('int', '((int) (zephir_get_numberval(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 										}
 										break;
+
 									/* a(var) + a(var) */
 									case 'variable':
 
@@ -434,6 +441,7 @@ class BitwiseBaseOperator extends BaseOperator
 							default:
 								throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
 						}
+
 					case 'variable':
 						switch ($right->getType()) {
 							case 'int':
@@ -450,6 +458,7 @@ class BitwiseBaseOperator extends BaseOperator
 								}
 								$op2 = $right->getCode();
 								return new CompiledExpression('int', '(int) (zephir_get_numberval(' . $op1 . ')) ' . $op . ' (int) (' . $op2 .')', $expression);
+
 							case 'variable':
 
 								$variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -498,10 +507,12 @@ class BitwiseBaseOperator extends BaseOperator
 												$expected = $this->getExpected($compilationContext, $expression);
 												$compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ');');
 												return new CompiledExpression('variable', $expected->getName(), $expression);
+
 											default:
 												throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
 										}
 										break;
+
 									default:
 										throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
 								}

@@ -1,12 +1,15 @@
 <?php
 
-class TestExClass {
+class TestExClass
+{
 }
 
-interface TestExInterface {
+interface TestExInterface
+{
 }
 
-function TestExFunction() {
+function TestExFunction()
+{
 }
 
 $t = new Test\Exists();

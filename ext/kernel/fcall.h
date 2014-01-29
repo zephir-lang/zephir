@@ -42,6 +42,14 @@
 		} \
 	} while (0)
 
+#define ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, return_value_ptr, object, func_name, function_ptr, nparams, ...) \
+	do { \
+		if (zephir_call_internal_func_params(return_value, return_value_ptr, func_name, sizeof(func_name)-1, function_ptr TSRMLS_CC, nparams, __VA_ARGS__) == FAILURE) { \
+			ZEPHIR_MM_RESTORE(); \
+			return; \
+		} \
+	} while (0)
+
 #define ZEPHIR_CALL_METHOD(return_value, return_value_ptr, object, method, key, nparams, ...) \
 	do { \
 		register ulong _key = key; \
@@ -78,9 +86,16 @@
 
 #define ZEPHIR_CALL_INTERNAL_METHOD(return_value, return_value_ptr, object, method, function_ptr, nparams, ...) \
 	do { \
-		if (zephir_call_internal_method_params(return_value, return_value_ptr, object, method, strlen(method), function_ptr TSRMLS_CC, nparams, __VA_ARGS__) == FAILURE) { \
-			ZEPHIR_MM_RESTORE(); \
-			return; \
+		if (__builtin_constant_p(method)) { \
+			if (zephir_call_internal_method_params(return_value, return_value_ptr, object, method, sizeof(method)-1, function_ptr TSRMLS_CC, nparams, __VA_ARGS__) == FAILURE) { \
+				ZEPHIR_MM_RESTORE(); \
+				return; \
+			} \
+		} else { \
+			if (zephir_call_internal_method_params(return_value, return_value_ptr, object, method, strlen(method), function_ptr TSRMLS_CC, nparams, __VA_ARGS__) == FAILURE) { \
+				ZEPHIR_MM_RESTORE(); \
+				return; \
+			} \
 		} \
 	} while (0)
 
@@ -959,13 +974,13 @@
 #define zephir_call_static_p4_noret(class_name, method_name, p1, p2, p3, p4)                                                ZEPHIR_CALL_STATIC(NULL, NULL, class_name, method_name, 4, p1, p2, p3, p4)
 #define zephir_call_static_p5_noret(class_name, method_name, p1, p2, p3, p4, p5)                                            ZEPHIR_CALL_STATIC(NULL, NULL, class_name, method_name, 5, p1, p2, p3, p4, p5)
 
-
 #define zephir_call_zval_static(return_value, class_zval, method)                                                           ZEPHIR_CALL_ZSTATIC(return_value, NULL, class_zval, method, 0, NULL)
 #define zephir_call_zval_static_p1(return_value, class_zval, method, p1)                                                    ZEPHIR_CALL_ZSTATIC(return_value, NULL, class_zval, method, 1, p1)
 
 #define zephir_call_zval_str_static_p1(return_value, class_zval, method, p1) ZEPHIR_CALL_ZSTATIC_STR(return_value, NULL, class_zval, method, 1, p1)
 
 int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...);
+int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, void (* function_ptr)(INTERNAL_FUNCTION_PARAMETERS) TSRMLS_DC, int param_count, ...);
 int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...);
 int zephir_call_internal_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, void (* function_ptr)(INTERNAL_FUNCTION_PARAMETERS) TSRMLS_DC, int param_count, ...);
 int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_function **fcc TSRMLS_DC, int param_count, ...);

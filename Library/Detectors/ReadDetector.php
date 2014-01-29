@@ -22,7 +22,7 @@
  *
  * Detects if a variable is used in a given expression context
  * Since zvals are collected between executions to the same section of code
- * We need to ensure that a variable is not contained in the right expression
+ * We need to ensure that a variable is not contained in the "right-side" expression
  * used to assign the variable, avoiding premature initializations
  */
 class ReadDetector

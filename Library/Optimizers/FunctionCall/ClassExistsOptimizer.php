@@ -49,7 +49,7 @@ class ClassExistsOptimizer
 		 */
 		if (count($resolvedParams) == 2) {
 			$context->headersManager->add('kernel/operators');
-			$autoload = 'ZEPHIR_IS_TRUE(' . $resolvedParams[1] . ') ';
+			$autoload = 'zephir_is_true(' . $resolvedParams[1] . ') ';
 		} else {
 			$autoload = '1';
 		}
