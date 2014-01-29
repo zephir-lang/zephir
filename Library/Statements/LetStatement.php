@@ -995,6 +995,10 @@ class LetStatement
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
+			case 'double':
+				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
+				$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+				break;
 			case 'bool':
 				if ($resolvedExpr->getBooleanCode() == '1') {
 					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
@@ -1020,6 +1024,10 @@ class LetStatement
 					case 'ulong':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+						break;
+					case 'double':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
+						$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
 					case 'bool':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
