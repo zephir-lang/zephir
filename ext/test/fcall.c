@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/string.h"
 #include "kernel/fcall.h"
+#include "ext/standard/php_var.h"
 
 
 /**
@@ -40,6 +41,17 @@ PHP_METHOD(Test_Fcall, testCall1) {
 	ZVAL_STRING(&_1, "h", 0);
 	zephir_fast_strpos(return_value, &_0, &_1, 0 );
 	return;
+
+}
+
+PHP_METHOD(Test_Fcall, testCall2) {
+
+	zend_function *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, &return_value, "rand", &_0, 0, NULL);
+	RETURN_MM();
 
 }
 

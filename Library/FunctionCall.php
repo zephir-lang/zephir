@@ -49,6 +49,8 @@ class FunctionCall extends Call
 
 	static protected $_optimizerDirectories = array();
 
+	private static $_functionCache = null;
+
 	/**
 	 * Process the ReflectionFunction for the specified function name
 	 *
@@ -348,27 +350,70 @@ class FunctionCall extends Call
 		 */
 		$compilationContext->symbolTable->mustGrownStack(true);
 
-		if (!isset($expression['parameters'])) {
-			if ($this->isExpectingReturn()) {
-				if ($this->mustInitSymbolVariable()) {
-					$symbolVariable->initVariant($compilationContext);
-				}
-				$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
-			} else {
-				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
-			}
+		if ($funcName == 'rand') {
+			$internalCall = true;
+			$compilationContext->headersManager->add('ext/standard/php_var');
 		} else {
-			if (count($params)) {
+			$internalCall = false;
+		}
+
+		if ($internalCall) {
+
+			if (!self::$_functionCache) {
+				$functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
+				$functionCache->setMustInitNull(true);
+				$functionCache->setReusable(false);
+				self::$_functionCache = $functionCache;
+			} else {
+				$functionCache = self::$_functionCache;
+			}
+
+			if (!isset($expression['parameters'])) {
 				if ($this->isExpectingReturn()) {
 					if ($this->mustInitSymbolVariable()) {
 						$symbolVariable->initVariant($compilationContext);
 					}
-					$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(' . $symbolVariable->getName() . ', &' . $symbolVariable->getName() . ', "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
 				} else {
-					$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+					$codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . '0, NULL);');
 				}
 			} else {
-				$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+				if (count($params)) {
+					if ($this->isExpectingReturn()) {
+						if ($this->mustInitSymbolVariable()) {
+							$symbolVariable->initVariant($compilationContext);
+						}
+						$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+					}
+				} else {
+					$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+				}
+			}
+		} else {
+			if (!isset($expression['parameters'])) {
+				if ($this->isExpectingReturn()) {
+					if ($this->mustInitSymbolVariable()) {
+						$symbolVariable->initVariant($compilationContext);
+					}
+					$codePrinter->output('zephir_call_func(' . $symbolVariable->getName() . ', "' . $funcName . '");');
+				} else {
+					$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+				}
+			} else {
+				if (count($params)) {
+					if ($this->isExpectingReturn()) {
+						if ($this->mustInitSymbolVariable()) {
+							$symbolVariable->initVariant($compilationContext);
+						}
+						$codePrinter->output('zephir_call_func_p' . count($params) . '(' . $symbolVariable->getName() . ', "' . $funcName . '", ' . join(', ', $params) . ');');
+					} else {
+						$codePrinter->output('zephir_call_func_p' . count($params) . '_noret("' . $funcName . '", ' . join(', ', $params) . ');');
+					}
+				} else {
+					$codePrinter->output('zephir_call_func_noret("' . $funcName . '");');
+				}
 			}
 		}
 

@@ -12,6 +12,11 @@ class Fcall
 		return strpos("hello", "h");
 	}
 
+	public function testCall2()
+	{
+		return rand();
+	}
+
 	public function testCall1FromVar()
 	{
 		var funcName;

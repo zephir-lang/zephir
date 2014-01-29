@@ -26,6 +26,7 @@
 #include "Zend/zend.h"
 
 #ifdef __GNUC__
+
 #define ZEPHIR_CALL_FUNCTION(return_value, return_value_ptr, func_name, nparams, ...) \
 	do { \
 		if (__builtin_constant_p(func_name)) { \
@@ -42,7 +43,7 @@
 		} \
 	} while (0)
 
-#define ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, return_value_ptr, object, func_name, function_ptr, nparams, ...) \
+#define ZEPHIR_CALL_INTERNAL_FUNCTION(return_value, return_value_ptr, func_name, function_ptr, nparams, ...) \
 	do { \
 		if (zephir_call_internal_func_params(return_value, return_value_ptr, func_name, sizeof(func_name)-1, function_ptr TSRMLS_CC, nparams, __VA_ARGS__) == FAILURE) { \
 			ZEPHIR_MM_RESTORE(); \
@@ -980,7 +981,7 @@
 #define zephir_call_zval_str_static_p1(return_value, class_zval, method, p1) ZEPHIR_CALL_ZSTATIC_STR(return_value, NULL, class_zval, method, 1, p1)
 
 int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...);
-int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, void (* function_ptr)(INTERNAL_FUNCTION_PARAMETERS) TSRMLS_DC, int param_count, ...);
+int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, zend_function **function_ptr TSRMLS_DC, int param_count, ...);
 int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...);
 int zephir_call_internal_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, void (* function_ptr)(INTERNAL_FUNCTION_PARAMETERS) TSRMLS_DC, int param_count, ...);
 int zephir_call_method_cache_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key, zend_function **fcc TSRMLS_DC, int param_count, ...);

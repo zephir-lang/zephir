@@ -50,6 +50,12 @@ int zephir_has_constructor_ce(zend_class_entry *ce) {
 	return 0;
 }
 
+zend_function *zephir_get_function_ptr(const char *func_name, int func_length) {
+
+
+
+}
+
 /**
  * Check if an object has a constructor
  */
@@ -401,16 +407,24 @@ int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const c
  * @retval @c SUCCESS
  * @retval @c FAILURE
  */
-int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, void (* function_ptr)(INTERNAL_FUNCTION_PARAMETERS) TSRMLS_DC, int param_count, ...) {
+int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, zend_function **function_ptr TSRMLS_DC, int param_count, ...) {
 
 	va_list va;
-	int i;
+	int i, caller_wants_result = 1;
+	zend_function *function_handler = NULL;
 
 	if (!return_value) {
 		ALLOC_INIT_ZVAL(return_value);
-		//caller_wants_result = 0;
+		caller_wants_result = 0;
 	} else {
 		zephir_check_return_value(return_value);
+	}
+
+	if (!*function_ptr) {
+		if (zend_hash_find(EG(function_table), func_name, func_length + 1, (void**)&function_handler) == FAILURE) {
+			return FAILURE;
+		}
+		*function_ptr = function_handler;
 	}
 
 	ZEND_VM_STACK_GROW_IF_NEEDED(param_count + 1);
@@ -436,13 +450,17 @@ int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr
 	zend_vm_stack_push((void*)(zend_uintptr_t) param_count TSRMLS_CC);
 	#endif
 
-	function_ptr(param_count, return_value, &return_value, NULL, 1 TSRMLS_CC);
+	(*function_ptr)->internal_function.handler(param_count, return_value, &return_value, NULL, 1 TSRMLS_CC);
 
 	#if PHP_VERSION_ID < 50500
 	zend_vm_stack_clear_multiple(TSRMLS_C);
 	#else
 	zend_vm_stack_clear_multiple(0 TSRMLS_CC);
 	#endif
+
+	if (!caller_wants_result) {
+		zval_ptr_dtor(&return_value);
+	}
 
 	if (EG(exception)) {
 		zephir_throw_exception_internal(NULL TSRMLS_CC);
