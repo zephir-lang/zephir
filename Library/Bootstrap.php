@@ -156,7 +156,14 @@ class Bootstrap
 			}
 
 			if (!isset(self::$_commands[$action])) {
-				throw new Exception('Unrecognized action "' . $action . '"');
+				$message = 'Unrecognized action "' . $action . '"';
+				$metaphone = metaphone($action);
+				foreach (self::$_commands as $key => $command) {
+					if (metaphone($key) == $metaphone) {
+						$message .= PHP_EOL . PHP_EOL . 'Did you mean "' . $key . '"?';
+					}
+				}
+				throw new Exception($message);
 			}
 
 			/**

@@ -34,6 +34,8 @@ class CompiledExpression
 	/**
 	 *
 	 * @param string $type
+	 * @param string $code
+	 * @param array $originalExpr
 	 */
 	public function __construct($type, $code, $originalExpr)
 	{
