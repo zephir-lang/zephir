@@ -3,6 +3,8 @@ extern zend_class_entry *test_oo_ooparams_ce;
 
 ZEPHIR_INIT_CLASS(Test_Oo_OoParams);
 
+PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace);
+PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace);
 PHP_METHOD(Test_Oo_OoParams, setAge);
 PHP_METHOD(Test_Oo_OoParams, setAverage);
 PHP_METHOD(Test_Oo_OoParams, setName);
@@ -65,6 +67,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setconstaverage, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
+	PHP_ME(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setAge, arginfo_test_oo_ooparams_setage, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setAverage, arginfo_test_oo_ooparams_setaverage, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setName, arginfo_test_oo_ooparams_setname, ZEND_ACC_PUBLIC)

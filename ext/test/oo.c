@@ -173,3 +173,20 @@ PHP_METHOD(Test_Oo, testInstance10) {
 
 }
 
+PHP_METHOD(Test_Oo, testInstance11) {
+
+	zval *o, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(o);
+	object_init_ex(o, test_oo_ooconstructparams_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	RETURN_CCTOR(o);
+
+}
+

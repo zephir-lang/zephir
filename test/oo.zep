@@ -86,4 +86,11 @@ class Oo
 		let o = Test\Oo\OoDynamicB::getNew();
 		return o;
 	}
+
+	public function testInstance11()
+	{
+		var o;
+		let o = new Oo\OoConstructParams(1, 2);
+		return o;
+	}
 }

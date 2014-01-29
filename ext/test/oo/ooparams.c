@@ -12,8 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
+#include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
 
@@ -27,6 +28,30 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoParams) {
 
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
+
+	ZEPHIR_MM_GROW();
+
+	object_init_ex(return_value, test_oo_ooparams_ce);
+	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+		zephir_call_method_noret(return_value, "__construct");
+	}
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
+
+	ZEPHIR_MM_GROW();
+
+	object_init_ex(return_value, test_oo_oodynamica_ce);
+	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+		zephir_call_method_noret(return_value, "__construct");
+	}
+	RETURN_MM();
 
 }
 
