@@ -41,7 +41,7 @@ class ThrowStatement
 		 * This optimizes throw new Exception("hello")
 		 */
 		if (isset($expr['class'])) {
-			if (count($expr['parameters']) == 1) {
+			if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
 				$className = $expr['class'];
 				if ($compilationContext->compiler->isClass($className)) {
 					if ($expr['parameters'][0]['type'] == 'string') {
