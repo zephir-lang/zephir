@@ -114,7 +114,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_INIT_VAR(_3);
 		object_init_ex(_3, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_4);
-		array_init_size(_4, 5);
+		array_init_size(_4, 4);
 		add_assoc_long_ex(_4, SS("controller"), 1);
 		add_assoc_long_ex(_4, SS("action"), 2);
 		add_assoc_long_ex(_4, SS("params"), 3);

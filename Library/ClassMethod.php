@@ -1316,6 +1316,7 @@ class ClassMethod
 		 */
 		foreach ($usedVariables as $type => $variables) {
 			$pointer = null;
+
 			switch ($type) {
 				case 'int':
 					$code = 'int ';
@@ -1344,6 +1345,7 @@ class ClassMethod
 				case 'string':
 				case 'variable':
 				case 'array':
+				case 'null':
 					$pointer = '*';
 					$code = 'zval ';
 					break;
@@ -1368,6 +1370,10 @@ class ClassMethod
 
 			$groupVariables = array();
 			$defaultValues = array();
+
+			/**
+			 * @var $variables \Variable[]
+			 */
 			foreach ($variables as $variable) {
 				if (($type == 'variable' || $type == 'string' || $type == 'array') && $variable->mustInitNull()) {
 					if ($variable->isLocalOnly()) {

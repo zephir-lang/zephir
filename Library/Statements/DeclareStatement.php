@@ -91,7 +91,6 @@ class DeclareStatement
 			 * Variables with a default value are initialized by default
 			 */
 			if ($defaultValue !== null || $defaultType !== null) {
-
 				switch ($currentType) {
 					case 'int':
 					case 'uint':
@@ -101,7 +100,6 @@ class DeclareStatement
 							case 'int':
 							case 'uint':
 							case 'ulong':
-							case 'int':
 								break;
 							case 'null':
 								$defaultValue = 0;
@@ -185,6 +183,8 @@ class DeclareStatement
 								break;
 							case 'null':
 								$symbolVariable->setDynamicTypes('null');
+								$symbolVariable->setMustInitNull(true);
+								$symbolVariable->setLocalOnly(false);
 								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $statement['data-type'], $variable);

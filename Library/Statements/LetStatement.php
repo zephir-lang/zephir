@@ -29,14 +29,17 @@ class LetStatement
 	 * Compiles foo = {expr}
 	 * Changes the value of a mutable variable
 	 *
-	 * @param string $variable
-	 * @param \Variable $symbolVariable
-	 * @param \CompiledExpression $resolvedExpr
+	 * @param $variable
+	 * @param Variable $symbolVariable
+	 * @param CompiledExpression $resolvedExpr
+	 * @param ReadDetector $readDetector
+	 * @param CompilationContext $compilationContext
+	 * @param $statement
+	 * @throws CompilerException
 	 */
 	public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 			ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
 	{
-
 		if ($symbolVariable->isReadOnly())  {
 			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
@@ -581,13 +584,13 @@ class LetStatement
 				break;
 
 			case 'variable':
-
 				switch ($resolvedExpr->getType()) {
 					case 'null':
 						switch ($statement['operator']) {
 							case 'assign':
 								$symbolVariable->initVariant($compilationContext);
 								$symbolVariable->setDynamicTypes('null');
+
 								if ($symbolVariable->isLocalOnly()) {
 									$codePrinter->output('ZVAL_NULL(&' . $variable . ');');
 								} else {
@@ -596,7 +599,6 @@ class LetStatement
 								break;
 						}
 						break;
-
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -880,7 +882,6 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										if ($itemVariable->getName() != $variable) {
-
 											$symbolVariable->setMustInitNull(true);
 											$compilationContext->symbolTable->mustGrownStack(true);
 
@@ -918,11 +919,12 @@ class LetStatement
 	/**
 	 * Compiles foo[] = {expr}
 	 *
-	 * @param string $variable
+	 * @param $variable
 	 * @param Variable $symbolVariable
 	 * @param CompiledExpression $resolvedExpr
 	 * @param CompilationContext $compilationContext
-	 * @param array $statement
+	 * @param $statement
+	 * @throws CompilerException
 	 */
 	public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
 		CompilationContext $compilationContext, $statement)
@@ -954,14 +956,11 @@ class LetStatement
 
 		$type = $symbolVariable->getType();
 		switch ($type) {
-
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
-
 					case 'null':
 						$codePrinter->output('zephir_array_append(&' . $variable . ', ZEPHIR_GLOBAL(global_null), PH_SEPARATE);');
 						break;
-
 					case 'bool':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
