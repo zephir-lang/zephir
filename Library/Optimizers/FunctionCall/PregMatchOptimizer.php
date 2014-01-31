@@ -27,14 +27,14 @@
 class PregMatchOptimizer
 	extends OptimizerAbstract
 {
-
-	protected static $GLOBAL_MATCH = 0;
+	const GLOBAL_MATCH = 0;
 
 	/**
 	 * @param array $expression
 	 * @param Call $call
 	 * @param CompilationContext $context
 	 * @return bool|CompiledExpression|mixed
+	 * @throws CompilerException
 	 */
 	public function optimize(array $expression, Call $call, CompilationContext $context)
 	{
@@ -46,7 +46,6 @@ class PregMatchOptimizer
 		if (count($expression['parameters']) < 2) {
 			return false;
 		}
-
 
 		/**
 		 * Process the matches result
@@ -118,8 +117,7 @@ class PregMatchOptimizer
 			$offset = '0 ';
 		}
 
-
-		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . static::$GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
+		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . $this::GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
 }

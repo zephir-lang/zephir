@@ -29,7 +29,5 @@ require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/PregMatchOptimizer.ph
 class PregMatchAllOptimizer
 	extends PregMatchOptimizer
 {
-
-    protected static $GLOBAL_MATCH = 1;
-
+    const GLOBAL_MATCH = 1;
 }
