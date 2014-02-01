@@ -101,6 +101,7 @@ PHP_METHOD(Test_McallChained, testChained4) {
 	ZEPHIR_MM_GROW();
 
 	zephir_update_property_this(this_ptr, SL("temp"), this_ptr TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("temp"), PH_NOISY_CC);
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method(_1, _0, "testmethod1");

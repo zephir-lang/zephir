@@ -246,6 +246,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 					_5 = 1;
 				}
 				i = _6;
+				ZEPHIR_INIT_ZVAL_NREF(_8);
 				zephir_array_fetch_long(&_8, side, i, PH_NOISY | PH_READONLY TSRMLS_CC);
 				j += zephir_get_numberval(_8);
 			}

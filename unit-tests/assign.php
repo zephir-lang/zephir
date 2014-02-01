@@ -47,3 +47,4 @@ assert($t->testPropertyAssignValuePlus1() === 2);
 assert($t->testPropertyDecr() === 1);
 assert($t->testPropertySubAssign1() === -2);
 assert($t->testPropertySubAssign2() === -1);
+assert($t->testPropertyAssignStringConcat() === "test string");

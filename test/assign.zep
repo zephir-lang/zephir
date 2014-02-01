@@ -334,4 +334,11 @@ class Assign
 		let this->testVar -= 2;
 		return this->testVar;
 	}
+
+	public function testPropertyAssignStringConcat()
+	{
+		let this->testVar = "test";
+		let this->testVar .= " string";
+		return this->testVar;
+	}
 }

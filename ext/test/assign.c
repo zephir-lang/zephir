@@ -530,3 +530,17 @@ PHP_METHOD(Test_Assign, testPropertySubAssign2) {
 
 }
 
+PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
+
+	zval *_0;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_STRING(_0, "test", 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	zephir_concat_self_str(&_0, " string", sizeof(" string")-1 TSRMLS_CC);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
