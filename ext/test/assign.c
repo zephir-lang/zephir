@@ -530,6 +530,38 @@ PHP_METHOD(Test_Assign, testPropertySubAssign2) {
 
 }
 
+PHP_METHOD(Test_Assign, testPropertyMulAssign1) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 2);
+	ZEPHIR_MUL_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyMulAssign2) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 3);
+	ZEPHIR_MUL_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
 PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 
 	zval *_0;

@@ -164,6 +164,28 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 		}  \
 	}
 
+#define ZEPHIR_MUL_ASSIGN(z, v)  \
+	{  \
+		zval tmp;  \
+		ZEPHIR_SEPARATE(z);  \
+		if (Z_TYPE_P(z) == IS_LONG && Z_TYPE_P(v) == IS_LONG) {  \
+			Z_LVAL_P(z) *= Z_LVAL_P(v);  \
+		} else {  \
+			if (Z_TYPE_P(z) == IS_LONG && Z_TYPE_P(v) == IS_DOUBLE) {  \
+				Z_LVAL_P(z) *= Z_DVAL_P(v);  \
+			} else {  \
+				sub_function(&tmp, z, v TSRMLS_CC);  \
+				if (Z_TYPE(tmp) == IS_LONG) {  \
+					Z_LVAL_P(z) = Z_LVAL(tmp);  \
+				} else {  \
+					if (Z_TYPE(tmp) == IS_DOUBLE) {  \
+						Z_DVAL_P(z) = Z_DVAL(tmp);  \
+					}  \
+				}  \
+			}  \
+		}  \
+	}
+
 #define zephir_get_strval(left, right) \
 	{ \
 		int use_copy_right; \

@@ -1543,12 +1543,23 @@ class LetStatement
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 
 				switch($statement['operator']) {
+					case 'mul-assign':
 					case 'sub-assign':
 					case 'add-assign':
+						switch($statement['operator']) {
+							case 'mul-assign':
+								$functionName = 'ZEPHIR_MUL_ASSIGN';
+								break;
+							case 'sub-assign':
+								$functionName = 'ZEPHIR_SUB_ASSIGN';
+								break;
+							case 'add-assign':
+								$functionName = 'ZEPHIR_ADD_ASSIGN';
+								break;
+						}
+
 						$resolvedVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
-
-						$functionName = $statement['operator'] == 'add-assign' ? 'ZEPHIR_ADD_ASSIGN' : 'ZEPHIR_SUB_ASSIGN';
 						$codePrinter->output($functionName.'('.$tempVariable->getName().', '.$resolvedVariable->getName().')');
 						break;
 					case 'assign':

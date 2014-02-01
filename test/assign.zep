@@ -335,6 +335,20 @@ class Assign
 		return this->testVar;
 	}
 
+	public function testPropertyMulAssign1()
+	{
+		let this->testVar = 1;
+		let this->testVar *= 2;
+		return this->testVar;
+	}
+
+	public function testPropertyMulAssign2()
+	{
+		let this->testVar = 1;
+		let this->testVar *= 3;
+		return this->testVar;
+	}
+
 	public function testPropertyAssignStringConcat()
 	{
 		let this->testVar = "test";
