@@ -39,3 +39,11 @@ assert($t->testAssign34() === false);
 assert($t->testAssign35() === false);
 assert($t->testAssign36() === false);
 
+assert($t->testPropertyIncr1() === 2);
+assert($t->testPropertyAddAssign1() === 2);
+assert($t->testPropertyAddAssign2() === 3);
+assert($t->testPropertyAssignValuePlus1() === 2);
+
+assert($t->testPropertyDecr() === 1);
+assert($t->testPropertySubAssign1() === -2);
+assert($t->testPropertySubAssign2() === -1);

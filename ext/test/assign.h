@@ -3,6 +3,7 @@ extern zend_class_entry *test_assign_ce;
 
 ZEPHIR_INIT_CLASS(Test_Assign);
 
+PHP_METHOD(Test_Assign, getTestVar);
 PHP_METHOD(Test_Assign, testAssign1);
 PHP_METHOD(Test_Assign, testAssign2);
 PHP_METHOD(Test_Assign, testAssign3);
@@ -39,8 +40,16 @@ PHP_METHOD(Test_Assign, testAssign33);
 PHP_METHOD(Test_Assign, testAssign34);
 PHP_METHOD(Test_Assign, testAssign35);
 PHP_METHOD(Test_Assign, testAssign36);
+PHP_METHOD(Test_Assign, testPropertyIncr1);
+PHP_METHOD(Test_Assign, testPropertyAddAssign1);
+PHP_METHOD(Test_Assign, testPropertyAddAssign2);
+PHP_METHOD(Test_Assign, testPropertyAssignValuePlus1);
+PHP_METHOD(Test_Assign, testPropertyDecr);
+PHP_METHOD(Test_Assign, testPropertySubAssign1);
+PHP_METHOD(Test_Assign, testPropertySubAssign2);
 
 ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
+	PHP_ME(Test_Assign, getTestVar, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign3, NULL, ZEND_ACC_PUBLIC)
@@ -77,5 +86,12 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testAssign34, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign35, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssign36, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertyIncr1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertyAddAssign1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertyAddAssign2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertyAssignValuePlus1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertyDecr, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertySubAssign1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testPropertySubAssign2, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

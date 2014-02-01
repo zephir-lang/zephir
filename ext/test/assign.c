@@ -12,7 +12,9 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -22,8 +24,16 @@ ZEPHIR_INIT_CLASS(Test_Assign) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Assign, test, assign, test_assign_method_entry, 0);
 
+	zend_declare_property_null(test_assign_ce, SL("testVar"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Assign, getTestVar) {
+
+
+	RETURN_MEMBER(this_ptr, "testVar");
 
 }
 
@@ -411,6 +421,112 @@ PHP_METHOD(Test_Assign, testAssign36) {
 	b = 0;
 	a = b;
 	RETURN_BOOL(a);
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyIncr1) {
+
+	zval *_0;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	zephir_increment(_0);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyAddAssign1) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 0);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 2);
+	ZEPHIR_ADD_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyAddAssign2) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 2);
+	ZEPHIR_ADD_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyAssignValuePlus1) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("testVar"), PH_NOISY_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, (zephir_get_numberval(_0) + 1));
+	zephir_update_property_this(this_ptr, SL("testVar"), _1 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyDecr) {
+
+	zval *_0;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 2);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	zephir_decrement(_0);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertySubAssign1) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 0);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 2);
+	ZEPHIR_SUB_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertySubAssign2) {
+
+	zval *_0, *_1;
+
+
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 2);
+	ZEPHIR_SUB_ASSIGN(_0, _1)
+	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "testVar");
 
 }
 
