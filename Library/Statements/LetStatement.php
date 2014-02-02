@@ -1028,12 +1028,12 @@ class LetStatement
 	/**
 	 * Resolves an item that will be assigned to an array offset
 	 *
-	 * @param CompiledExpr $resolvedExpr
+	 * @param CompiledExpression $resolvedExpr
 	 * @param CompilationContext $compilationContext
 	 */
 	protected function _getResolvedArrayItem($resolvedExpr, $compilationContext)
 	{
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		switch ($resolvedExpr->getType()) {
 			case 'null':
@@ -1335,7 +1335,6 @@ class LetStatement
 	 */
 	public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
-
 		if (!$symbolVariable->isInitialized()) {
 			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
@@ -1347,7 +1346,7 @@ class LetStatement
 			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
 		}
 
-		$codePrinter = $compilationContext->codePrinter;
+		$codePrinter = &$compilationContext->codePrinter;
 
 		switch ($symbolVariable->getType()) {
 			case 'int':
@@ -1360,7 +1359,6 @@ class LetStatement
 				$codePrinter->output($variable . '++;');
 				break;
 			case 'variable':
-
 				/**
 				 * Update non-numeric dynamic variables could be expensive
 				 */
@@ -1379,6 +1377,40 @@ class LetStatement
 			default:
 				throw new CompilerException("Cannot increment: " . $symbolVariable->getType(), $statement);
 		}
+	}
+
+	/**
+	 * Compiles x++
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompilationContext $compilationContext
+	 * @param array $statement
+	 */
+	public function assignObjectPropertyIncr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
+	{
+		$property = $compilationContext->classDefinition->getProperty($property);
+
+		$codePrinter = &$compilationContext->codePrinter;
+		$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+		$codePrinter->output('zephir_increment(' . $tempVariable->getName() . ');');
+	}
+
+	/**
+	 * Compiles x--
+	 *
+	 * @param string $variable
+	 * @param \Variable $symbolVariable
+	 * @param \CompilationContext $compilationContext
+	 * @param array $statement
+	 */
+	public function assignObjectPropertyDecr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
+	{
+		$property = $compilationContext->classDefinition->getProperty($property);
+
+		$codePrinter = &$compilationContext->codePrinter;
+		$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+		$codePrinter->output('zephir_decrement(' . $tempVariable->getName() . ');');
 	}
 
 	/**
@@ -1497,7 +1529,6 @@ class LetStatement
 		$compilationContext->headersManager->add('kernel/object');
 
 		switch ($resolvedExpr->getType()) {
-
 			case 'null':
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
@@ -1510,8 +1541,34 @@ class LetStatement
 			case 'long':
 			case 'uint':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
-				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+
+				switch($statement['operator']) {
+					case 'mul-assign':
+					case 'sub-assign':
+					case 'add-assign':
+						switch($statement['operator']) {
+							case 'mul-assign':
+								$functionName = 'ZEPHIR_MUL_ASSIGN';
+								break;
+							case 'sub-assign':
+								$functionName = 'ZEPHIR_SUB_ASSIGN';
+								break;
+							case 'add-assign':
+								$functionName = 'ZEPHIR_ADD_ASSIGN';
+								break;
+						}
+
+						$resolvedVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						$codePrinter->output('ZVAL_LONG(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+						$codePrinter->output($functionName.'('.$tempVariable->getName().', '.$resolvedVariable->getName().')');
+						break;
+					case 'assign':
+						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+						break;
+					default:
+						throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+				}
+
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				} else {
@@ -1522,8 +1579,16 @@ class LetStatement
 
 			case 'string':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
-				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+
+				switch($statement['operator']) {
+					case 'concat-assign':
+						$codePrinter->output('zephir_concat_self_str(&' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+						break;
+					case 'assign':
+						$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+						break;
+				}
+
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				} else {
@@ -1550,7 +1615,7 @@ class LetStatement
 
 			case 'empty-array': /* unrecheable code */
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 				$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
@@ -1570,7 +1635,7 @@ class LetStatement
 					case 'char':
 					case 'uchar':
 						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						$tempVariable->setIdle(true);
@@ -1832,7 +1897,6 @@ class LetStatement
 		}
 
 		if ($resolvedIndex->getType() == 'variable') {
-
 			$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
 			switch ($indexVariable->getType()) {
 				case 'string':
@@ -1851,7 +1915,6 @@ class LetStatement
 					$compilationContext->logger->warning('Possible attempt to use non string/long dynamic variable as array index', 'invalid-array-offset', $statement);
 				}
 			}
-
 		}
 
 		switch ($resolvedIndex->getType()) {
@@ -2055,13 +2118,13 @@ class LetStatement
 			case 'int':
 			case 'long':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 				$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				break;
 			case 'string':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 				$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
 				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				break;
@@ -2074,7 +2137,7 @@ class LetStatement
 				break;
 			case 'empty-array':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-				$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 				$codePrinter->output('array_init(' . $tempVariable->getName() . ');');
 				$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 				break;
@@ -2088,13 +2151,13 @@ class LetStatement
 					case 'char':
 					case 'uchar':
 						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
 					case 'bool':
 						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
+
 						$codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						break;
@@ -2242,10 +2305,10 @@ class LetStatement
 					$this->assignDecr($variable, $symbolVariable, $compilationContext, $assignment);
 					break;
 				case 'object-property-incr':
-					/* @todo, implement this */
+					$this->assignObjectPropertyIncr($variable, $assignment['property'], $symbolVariable, $compilationContext, $assignment);
 					break;
 				case 'object-property-decr':
-					/* @todo, implement this */
+					$this->assignObjectPropertyDecr($variable, $assignment['property'], $symbolVariable, $compilationContext, $assignment);
 					break;
 				case 'dynamic-variable':
 					$this->_exportSymbol($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);

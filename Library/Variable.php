@@ -609,6 +609,7 @@ class Variable
 			}
 
 			$compilationContext->headersManager->add('kernel/memory');
+
 			if (!$this->isLocalOnly()) {
 				$compilationContext->symbolTable->mustGrownStack(true);
 				if ($compilationContext->insideCycle) {

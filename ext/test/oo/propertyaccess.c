@@ -60,10 +60,12 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_update_property_zval(test, SL("test"), _0 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(_2);
 	zephir_read_property(&_2, test, SL("test"), PH_NOISY_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_3);
 	zephir_array_fetch_long(&_3, _2, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 	zephir_update_property_zval(test, SL("test2"), _3 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(_4);
 	zephir_read_property(&_4, test, SL("test"), PH_NOISY_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_5);
 	zephir_array_fetch_long(&_5, _4, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
 	zephir_update_property_zval(test, SL("test3"), _5 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_6);
@@ -84,6 +86,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_array_fast_append(_6, _1);
 	zephir_update_property_zval(test, SL("test3"), _6 TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("a"), test TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_9);
 	_9 = zephir_fetch_nproperty_this(this_ptr, SL("a"), PH_NOISY_CC);
 	ZEPHIR_OBS_NVAR(_8);
 	zephir_read_property(&_8, _9, SL("test2"), PH_NOISY_CC);

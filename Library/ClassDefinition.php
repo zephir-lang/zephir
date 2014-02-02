@@ -41,6 +41,9 @@ class ClassDefinition
 
 	protected $_extendsClassDefinition;
 
+	/**
+	 * @var ClassProperty[]
+	 */
 	protected $_properties = array();
 
 	protected $_constants = array();
@@ -307,11 +310,10 @@ class ClassDefinition
 	 * Returns a method definition by its name
 	 *
 	 * @param string string
-	 * @return boolean
+	 * @return boolean|ClassProperty
 	 */
 	public function getProperty($propertyName)
 	{
-
 		if (isset($this->_properties[$propertyName])) {
 			return $this->_properties[$propertyName];
 		}

@@ -7,6 +7,7 @@ namespace Test;
 
 class Assign
 {
+	protected testVar {get};
 
 	public function testAssign1()
 	{
@@ -285,4 +286,73 @@ class Assign
 		return a;
 	}
 
+	public function testPropertyIncr1()
+	{
+		let this->testVar = 1;
+		let this->testVar++;
+		return this->testVar;
+	}
+
+	public function testPropertyAddAssign1()
+	{
+		let this->testVar = 0;
+		let this->testVar += 2;
+		return this->testVar;
+	}
+
+	public function testPropertyAddAssign2()
+	{
+		let this->testVar = 1;
+		let this->testVar += 2;
+		return this->testVar;
+	}
+
+	public function testPropertyAssignValuePlus1()
+	{
+		let this->testVar = 1;
+		let this->testVar = this->testVar + 1;
+		return this->testVar;
+	}
+
+	public function testPropertyDecr()
+	{
+		let this->testVar = 2;
+		let this->testVar--;
+		return this->testVar;
+	}
+
+	public function testPropertySubAssign1()
+	{
+		let this->testVar = 0;
+		let this->testVar -= 2;
+		return this->testVar;
+	}
+
+	public function testPropertySubAssign2()
+	{
+		let this->testVar = 1;
+		let this->testVar -= 2;
+		return this->testVar;
+	}
+
+	public function testPropertyMulAssign1()
+	{
+		let this->testVar = 1;
+		let this->testVar *= 2;
+		return this->testVar;
+	}
+
+	public function testPropertyMulAssign2()
+	{
+		let this->testVar = 1;
+		let this->testVar *= 3;
+		return this->testVar;
+	}
+
+	public function testPropertyAssignStringConcat()
+	{
+		let this->testVar = "test";
+		let this->testVar .= " string";
+		return this->testVar;
+	}
 }
