@@ -1833,7 +1833,7 @@ xx_assignment_operator(R) ::= SUBASSIGN . {
 }
 
 xx_assignment_operator(R) ::= MULASSIGN . {
-	R = json_object_new_string("mult-assign");
+	R = json_object_new_string("mul-assign");
 }
 
 xx_assignment_operator(R) ::= DIVASSIGN . {
