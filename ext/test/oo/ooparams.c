@@ -222,6 +222,100 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 }
 
+PHP_METHOD(Test_Oo_OoParams, setAgeDefault) {
+
+	zval *age_param = NULL;
+	int age;
+
+	zephir_fetch_params(0, 0, 1, &age_param);
+
+	if (!age_param) {
+		age = 25;
+	} else {
+		age = zephir_get_intval(age_param);
+	}
+
+
+	RETURN_LONG(age);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setAverageDefault) {
+
+	zval *average_param = NULL;
+	double average;
+
+	zephir_fetch_params(0, 0, 1, &average_param);
+
+	if (!average_param) {
+		average = (double) 25;
+	} else {
+		average = zephir_get_doubleval(average_param);
+	}
+
+
+	RETURN_DOUBLE(average);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setNameDefault) {
+
+	zval *name_param = NULL;
+	zval *name = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &name_param);
+
+	if (!name_param) {
+		ZEPHIR_INIT_VAR(name);
+		ZVAL_STRING(name, "peter", 1);
+	} else {
+		zephir_get_strval(name, name_param);
+	}
+
+
+	RETURN_CTOR(name);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setEnabledDefault) {
+
+	zval *enabled_param = NULL;
+	zend_bool enabled;
+
+	zephir_fetch_params(0, 0, 1, &enabled_param);
+
+	if (!enabled_param) {
+		enabled = 0;
+	} else {
+		enabled = zephir_get_boolval(enabled_param);
+	}
+
+
+	RETURN_BOOL(enabled);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setListDefault) {
+
+	zval *someList_param = NULL;
+	zval *someList = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &someList_param);
+
+	if (!someList_param) {
+		ZEPHIR_INIT_VAR(someList);
+		array_init(someList);
+	} else {
+		zephir_get_arrval(someList, someList_param);
+	}
+
+
+	RETURN_CTOR(someList);
+
+}
+
 PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 
 	zval *age_param = NULL;

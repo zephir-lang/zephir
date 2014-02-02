@@ -67,6 +67,31 @@ class OoParams
 		return someList;
 	}
 
+	public function setAgeDefault(int age=25)
+	{
+		return age;
+	}
+
+	public function setAverageDefault(double average=25)
+	{
+		return average;
+	}
+
+	public function setNameDefault(string name="peter")
+	{
+		return name;
+	}
+
+	public function setEnabledDefault(boolean enabled=false)
+	{
+		return enabled;
+	}
+
+	public function setListDefault(array someList=[1, 2, 3])
+	{
+		return someList;
+	}
+
 	public function setConstAge(const int age)
 	{
 		return age;

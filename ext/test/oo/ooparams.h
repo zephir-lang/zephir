@@ -15,6 +15,11 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage);
 PHP_METHOD(Test_Oo_OoParams, setStrictName);
 PHP_METHOD(Test_Oo_OoParams, setStrictEnabled);
 PHP_METHOD(Test_Oo_OoParams, setStrictList);
+PHP_METHOD(Test_Oo_OoParams, setAgeDefault);
+PHP_METHOD(Test_Oo_OoParams, setAverageDefault);
+PHP_METHOD(Test_Oo_OoParams, setNameDefault);
+PHP_METHOD(Test_Oo_OoParams, setEnabledDefault);
+PHP_METHOD(Test_Oo_OoParams, setListDefault);
 PHP_METHOD(Test_Oo_OoParams, setConstAge);
 PHP_METHOD(Test_Oo_OoParams, setConstAverage);
 
@@ -58,6 +63,26 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setstrictlist, 0, 0, 1)
 	ZEND_ARG_INFO(0, someList)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setagedefault, 0, 0, 0)
+	ZEND_ARG_INFO(0, age)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setaveragedefault, 0, 0, 0)
+	ZEND_ARG_INFO(0, average)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setnamedefault, 0, 0, 0)
+	ZEND_ARG_INFO(0, name)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setenableddefault, 0, 0, 0)
+	ZEND_ARG_INFO(0, enabled)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setlistdefault, 0, 0, 0)
+	ZEND_ARG_INFO(0, someList)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setconstage, 0, 0, 1)
 	ZEND_ARG_INFO(0, age)
 ZEND_END_ARG_INFO()
@@ -79,6 +104,11 @@ ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
 	PHP_ME(Test_Oo_OoParams, setStrictName, arginfo_test_oo_ooparams_setstrictname, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setStrictEnabled, arginfo_test_oo_ooparams_setstrictenabled, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setStrictList, arginfo_test_oo_ooparams_setstrictlist, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setAgeDefault, arginfo_test_oo_ooparams_setagedefault, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setAverageDefault, arginfo_test_oo_ooparams_setaveragedefault, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setNameDefault, arginfo_test_oo_ooparams_setnamedefault, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setEnabledDefault, arginfo_test_oo_ooparams_setenableddefault, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setListDefault, arginfo_test_oo_ooparams_setlistdefault, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setConstAge, arginfo_test_oo_ooparams_setconstage, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setConstAverage, arginfo_test_oo_ooparams_setconstaverage, ZEND_ACC_PUBLIC)
 	PHP_FE_END

@@ -44,7 +44,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(box);
-	array_init_size(box, 16);
+	array_init_size(box, 19);
 	ZEPHIR_INIT_VAR(_0);
 	array_init_size(_0, 4);
 	ZEPHIR_INIT_VAR(_1);

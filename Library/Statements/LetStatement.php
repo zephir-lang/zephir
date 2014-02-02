@@ -382,8 +382,10 @@ class LetStatement
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
+
 			case 'string':
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -394,6 +396,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 						}
 						break;
+
 					case 'string':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -411,6 +414,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 						}
 						break;
+
 					case 'char':
 					case 'uchar':
 						switch ($statement['operator']) {
@@ -812,6 +816,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							case 'double':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -827,6 +832,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							case 'bool':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -842,6 +848,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							case 'variable':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -1096,6 +1103,7 @@ class LetStatement
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
 				switch ($variableExpr->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -1103,23 +1111,28 @@ class LetStatement
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 						$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
+
 					case 'double':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 						$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
+
 					case 'bool':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
 						break;
+
 					case 'variable':
 					case 'string':
+					case 'array':
 						$symbolVariable = $variableExpr;
 						break;
+						
 					default:
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 				}
 				break;
-				
+
 			default:
 				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 		}
@@ -1419,7 +1432,7 @@ class LetStatement
 	{
 		$property = $compilationContext->classDefinition->getProperty($property);
 
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 		$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 		$codePrinter->output('zephir_increment(' . $tempVariable->getName() . ');');
 	}

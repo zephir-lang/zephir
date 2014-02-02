@@ -564,16 +564,15 @@ class ClassMethod
 
 			case 'int':
 			case 'uint':
-			case 'long':
-			case 'ulong':
+			case 'long':		
+			case 'ulong':	
 				switch ($parameter['default']['type']) {
 					case 'null':
 						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
 						break;
 					case 'int':
 					case 'uint':
-					case 'long':
-					case 'ulong':
+					case 'long':					
 						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
 						break;
 					case 'double':
@@ -581,6 +580,24 @@ class ClassMethod
 						break;
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+				}
+				break;
+
+			case 'double':			
+				switch ($parameter['default']['type']) {
+					case 'null':
+						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
+						break;
+					case 'int':
+					case 'uint':
+					case 'long':					
+						$code .= "\t\t" . $parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';' . PHP_EOL;
+						break;
+					case 'double':
+						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
 				}
 				break;
 
@@ -601,7 +618,7 @@ class ClassMethod
 				}
 				break;
 
-			case 'string':
+			case 'string':			
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
@@ -619,8 +636,27 @@ class ClassMethod
 				}
 				break;
 
+			case 'array':			
+				$compilationContext->symbolTable->mustGrownStack(true);
+				$compilationContext->headersManager->add('kernel/memory');
+				switch ($parameter['default']['type']) {
+					case 'null':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
+						break;
+					case 'array':
+						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+						$code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
+						break;
+						break;
+					default:
+						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(array)", $parameter);
+				}
+				break;
+
 			case 'variable':
 				switch ($parameter['default']['type']) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -630,18 +666,21 @@ class ClassMethod
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
+
 					case 'double':
 						$compilationContext->symbolTable->mustGrownStack(true);
 						$compilationContext->headersManager->add('kernel/memory');
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');' . PHP_EOL;
 						break;
+
 					case 'string':
 						$compilationContext->symbolTable->mustGrownStack(true);
 						$compilationContext->headersManager->add('kernel/memory');
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'ZVAL_STRING(' . $parameter['name'] . ', "' . Utils::addSlashes($parameter['default']['value']) . '", 1);' . PHP_EOL;
 						break;
+
 					case 'bool':
 						$expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
 						if ($expectedMutations < 2) {
@@ -660,6 +699,7 @@ class ClassMethod
 							}
 						}
 						break;
+
 					case 'null':
 						$expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
 						if ($expectedMutations < 2) {
@@ -670,16 +710,19 @@ class ClassMethod
 							$code .= "\t\t" . 'ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ZEPHIR_GLOBAL(global_null));' . PHP_EOL;
 						}
 						break;
+
 					case 'empty-array':
 						$compilationContext->symbolTable->mustGrownStack(true);
 						$compilationContext->headersManager->add('kernel/memory');
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
 						break;
+						
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Default parameter type: " . $dataType, $parameter);
 		}
