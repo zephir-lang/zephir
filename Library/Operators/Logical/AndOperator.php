@@ -24,4 +24,118 @@ class AndOperator extends LogicalBaseOperator
 
 	protected $_bitOperator = '&&';
 
+	public function compile($expression, CompilationContext $compilationContext)
+	{
+		if (!isset($expression['left'])) {
+			throw new Exception("Missing left part of the expression");
+		}
+
+		if (!isset($expression['right'])) {
+			throw new Exception("Missing right part of the expression");
+		}
+
+		$leftExpr = new Expression($expression['left']);
+		$leftExpr->setReadOnly($this->_readOnly);
+		$left = $leftExpr->compile($compilationContext);
+
+		/**
+		 * This variable is used to check if the compound and expression is evaluated as true or false
+		 */
+		$flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
+
+		switch ($left->getType()) {
+			case 'int':
+			case 'bool':
+			case 'char':
+			case 'double':
+			case 'uint':
+			case 'uchar':
+				$assignExprLeft = array(
+					'type'  => $left->getType(),
+					'value' => $left->getCode(),
+				);					
+				break;
+			case 'variable':
+				$assignExprLeft = array(
+					'type'  => 'variable',
+					'value' => $left->getCode(),
+				);					
+				break;	
+		}
+
+		if (!isset($assignExprLeft)) {
+			throw new CompilerException($left->getType(), $expression['left']);			
+		}
+
+		/**
+		 * Create an implicit 'let' operation to update the evaluated left operator
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable' => $flagVariable->getName(),
+					'operator' => 'assign',
+					'expr' => $assignExprLeft,
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
+		$compilationContext->codePrinter->output('if (' . $flagVariable->getName() . ') {');
+
+		$compilationContext->codePrinter->increaseLevel();
+
+		$rightExpr = new Expression($expression['right']);
+		$rightExpr->setReadOnly($this->_readOnly);
+		$right = $rightExpr->compile($compilationContext);		
+
+		switch ($right->getType()) {
+			case 'int':
+			case 'bool':
+			case 'char':
+			case 'double':
+			case 'uint':
+			case 'uchar':
+				$assignExprRight = array(
+					'type'  => $right->getType(),
+					'value' => $right->getCode(),
+				);					
+				break;
+			case 'variable':
+				$assignExprRight = array(
+					'type'  => 'variable',
+					'value' => $right->getCode(),
+				);					
+				break;
+		}
+
+		if (!isset($assignExprRight)) {
+			throw new CompilerException($right->getType(), $expression['right']);			
+		}
+
+		/**
+		 * Create an implicit 'let' operation to update the evaluated right operator
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable' => $flagVariable->getName(),
+					'operator' => 'assign',
+					'expr' => $assignExprRight,
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
+		$compilationContext->codePrinter->decreaseLevel();
+
+		$compilationContext->codePrinter->output('}');
+
+		return new CompiledExpression('bool', $flagVariable->getName(), $expression);
+	}
+
 }

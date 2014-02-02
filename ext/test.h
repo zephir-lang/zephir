@@ -25,6 +25,7 @@
 #include "test/fortytwo.h"
 #include "test/instanceoff.h"
 #include "test/json.h"
+#include "test/logical.h"
 #include "test/mcall.h"
 #include "test/mcallchained.h"
 #include "test/nativearray.h"

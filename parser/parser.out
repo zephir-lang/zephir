@@ -9778,6 +9778,13 @@ State 302:
           xx_mcall_expr ::= xx_common_expr * ARROW BRACKET_OPEN STRING BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE
           xx_common_expr ::= xx_common_expr * QUESTION xx_common_expr COLON xx_common_expr
 
+                           AND shift  301
+                            OR shift  303
+                    BITWISE_OR shift  307
+                   BITWISE_AND shift  305
+                   BITWISE_XOR shift  309
+             BITWISE_SHIFTLEFT shift  311
+            BITWISE_SHIFTRIGHT shift  313
                         EQUALS shift  260
                      IDENTICAL shift  266
                           LESS shift  272
@@ -9942,6 +9949,13 @@ State 304:
           xx_mcall_expr ::= xx_common_expr * ARROW BRACKET_OPEN STRING BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE
           xx_common_expr ::= xx_common_expr * QUESTION xx_common_expr COLON xx_common_expr
 
+                           AND shift  301
+                            OR shift  303
+                    BITWISE_OR shift  307
+                   BITWISE_AND shift  305
+                   BITWISE_XOR shift  309
+             BITWISE_SHIFTLEFT shift  311
+            BITWISE_SHIFTRIGHT shift  313
                         EQUALS shift  260
                      IDENTICAL shift  266
                           LESS shift  272

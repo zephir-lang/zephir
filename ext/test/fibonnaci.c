@@ -124,9 +124,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 		if (!((i < n))) {
 			break;
 		}
-		ZEPHIR_INIT_ZVAL_NREF(_1);
 		zephir_array_fetch_long(&_1, fib, (i - 1), PH_NOISY | PH_READONLY TSRMLS_CC);
-		ZEPHIR_INIT_ZVAL_NREF(_2);
 		zephir_array_fetch_long(&_2, fib, (i - 2), PH_NOISY | PH_READONLY TSRMLS_CC);
 		ZEPHIR_INIT_LNVAR(_3);
 		zephir_add_function(_3, _1, _2 TSRMLS_CC);

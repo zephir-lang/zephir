@@ -183,11 +183,11 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
-	zend_bool notValid;
-	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _0, _5, _12;
+	zend_bool notValid, _6, _7, _8, _9, _10, _11;
+	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _0, _5, _18;
 	char ch;
-	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3 = NULL, _6 = zval_used_for_init, *_7 = NULL, _9 = zval_used_for_init, *_10 = NULL;
-	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_8 = NULL, *_11 = NULL;
+	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3 = NULL, _12 = zval_used_for_init, *_13 = NULL, _15 = zval_used_for_init, *_16 = NULL;
+	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_14 = NULL, *_17 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -237,24 +237,48 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 								if ((ch == '\0')) {
 									break;
 								}
-								if (((cursorVar == 0) && !(((((ch >= 'a') && (ch <= 'z'))) || (((ch >= 'A') && (ch <= 'Z'))))))) {
+								_6 = (cursorVar == 0);
+								if (_6) {
+									_7 = (ch >= 'a');
+									if (_7) {
+										_7 = (ch <= 'z');
+									}
+									_8 = (ch >= 'A');
+									if (_8) {
+										_8 = (ch <= 'Z');
+									}
+									_6 = !(_7 || _8);
+								}
+								if (_6) {
 									notValid = 1;
 									break;
 								}
-								if (((((((((ch >= 'a') && (ch <= 'z'))) || (((ch >= 'A') && (ch <= 'Z')))) || (((ch >= '0') && (ch <= '9')))) || (ch == '-')) || (ch == '_')) || (ch == ':'))) {
+								_9 = (ch >= 'a');
+								if (_9) {
+									_9 = (ch <= 'z');
+								}
+								_10 = (ch >= 'A');
+								if (_10) {
+									_10 = (ch <= 'Z');
+								}
+								_11 = (ch >= '0');
+								if (_11) {
+									_11 = (ch <= '9');
+								}
+								if ((_9 || (_10 || (_11 || ((ch == '-') || ((ch == '_') || (ch == ':'))))))) {
 									if ((ch == ':')) {
-										ZEPHIR_SINIT_NVAR(_6);
-										ZVAL_LONG(&_6, cursorVar);
-										ZEPHIR_INIT_NVAR(_7);
-										zephir_substr(_7, item, 0 , zephir_get_intval(&_6) );
-										zephir_get_strval(_8, _7);
-										ZEPHIR_CPY_WRT(variable, _8);
-										ZEPHIR_SINIT_NVAR(_9);
-										ZVAL_LONG(&_9, (cursorVar + 1));
-										ZEPHIR_INIT_NVAR(_10);
-										zephir_substr(_10, item, zephir_get_intval(&_9) , 0 );
-										zephir_get_strval(_11, _10);
-										ZEPHIR_CPY_WRT(regexp, _11);
+										ZEPHIR_SINIT_NVAR(_12);
+										ZVAL_LONG(&_12, cursorVar);
+										ZEPHIR_INIT_NVAR(_13);
+										zephir_substr(_13, item, 0 , zephir_get_intval(&_12) );
+										zephir_get_strval(_14, _13);
+										ZEPHIR_CPY_WRT(variable, _14);
+										ZEPHIR_SINIT_NVAR(_15);
+										ZVAL_LONG(&_15, (cursorVar + 1));
+										ZEPHIR_INIT_NVAR(_16);
+										zephir_substr(_16, item, zephir_get_intval(&_15) , 0 );
+										zephir_get_strval(_17, _16);
+										ZEPHIR_CPY_WRT(regexp, _17);
 										break;
 									}
 								} else {
@@ -264,10 +288,14 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 							}
 							if (!(notValid)) {
 								tmp = numberMatches;
-								if ((variable && Z_STRLEN_P(variable)) && (regexp && Z_STRLEN_P(regexp))) {
+								_6 = zephir_is_true(variable);
+								if (_6) {
+									_6 = zephir_is_true(regexp);
+								}
+								if (_6) {
 									foundPattern = 0;
-									for (_12 = 0; _12 < Z_STRLEN_P(regexp); _12++) {
-										ch = Z_STRVAL_P(regexp)[_12]; 
+									for (_18 = 0; _18 < Z_STRLEN_P(regexp); _18++) {
+										ch = Z_STRVAL_P(regexp)[_18]; 
 										if ((ch == '\0')) {
 											break;
 										}
@@ -289,14 +317,14 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									} else {
 										zephir_concat_self(&route, regexp TSRMLS_CC);
 									}
-									ZEPHIR_INIT_NVAR(_7);
-									ZVAL_LONG(_7, tmp);
-									zephir_array_update_zval(&matches, variable, &_7, PH_COPY | PH_SEPARATE);
+									ZEPHIR_INIT_NVAR(_13);
+									ZVAL_LONG(_13, tmp);
+									zephir_array_update_zval(&matches, variable, &_13, PH_COPY | PH_SEPARATE);
 								} else {
 									zephir_concat_self_str(&route, "([^/]*)", sizeof("([^/]*)")-1 TSRMLS_CC);
-									ZEPHIR_INIT_NVAR(_10);
-									ZVAL_LONG(_10, tmp);
-									zephir_array_update_zval(&matches, item, &_10, PH_COPY | PH_SEPARATE);
+									ZEPHIR_INIT_NVAR(_16);
+									ZVAL_LONG(_16, tmp);
+									zephir_array_update_zval(&matches, item, &_16, PH_COPY | PH_SEPARATE);
 								}
 							} else {
 								zephir_concat_self_str(&route, "{", sizeof("{")-1 TSRMLS_CC);
@@ -434,7 +462,6 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_1);
-			ZEPHIR_INIT_ZVAL_NREF(_2);
 			zephir_array_fetch_long(&_2, extracted, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
 			zephir_fast_array_merge(_1, &(routePaths), &(_2) TSRMLS_CC);
 			ZEPHIR_CPY_WRT(routePaths, _1);

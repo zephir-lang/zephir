@@ -46,6 +46,23 @@ class ArrayType
 	}
 
 	/**
+	 * Transforms calls to method "reverse" to function calls to "array_reverse"
+	 *
+	 * @param object $caller
+	 * @param CompilationContext $compilationContext
+	 * @param Call $call
+	 * @param array $expression
+	 */
+	public function reverse($caller, CompilationContext $compilationContext, Call $call, array $expression)
+	{
+		$builder = new FunctionCallBuilder('array_reverse', array($caller));
+
+		$expression = new Expression($builder->get());
+
+		return $expression->compile($compilationContext);
+	}
+
+	/**
 	 * Intercepts calls to built-in methods on the "int" type
 	 *
 	 * @param string $methodName

@@ -160,16 +160,17 @@ class NativeArrayAccess
 							$symbolVariable->observeVariant($compilationContext);
 							$this->_readOnly = false;
 						} else {
-							$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+							$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
 						}
 					}
 
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
 			}
+			
 		} else {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {

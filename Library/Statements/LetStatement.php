@@ -235,8 +235,10 @@ class LetStatement
 						throw new CompilerException("Value type '" . $resolvedExpr->getType() . "' cannot be assigned to variable: int", $statement);
 				}
 				break;
+
 			case 'double':
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -255,6 +257,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -276,6 +279,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 						}
 						break;
+
 					case 'double':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -294,6 +298,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 						}
 						break;
+
 					case 'bool':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -312,6 +317,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 						}
 						break;
+
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
@@ -337,6 +343,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 								}
 								break;
+
 							case 'double':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -355,6 +362,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 								}
 								break;
+
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/operators');
 								switch ($statement['operator']) {
@@ -434,9 +442,11 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 						}
 						break;
+
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -456,6 +466,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}
 								break;
+
 							case 'char':
 							case 'uchar':
 								switch ($statement['operator']) {
@@ -472,6 +483,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}
 								break;
+
 							case 'string':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -487,6 +499,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
 								}
 								break;
+
 							case 'variable':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -503,6 +516,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
@@ -511,6 +525,7 @@ class LetStatement
 						throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 				}
 				break;
+
 			case 'bool':
 				switch ($resolvedExpr->getType()) {
 					case 'null':
@@ -522,11 +537,12 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: null", $statement);
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
-					case 'double':
+					case 'double':					
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
@@ -535,6 +551,18 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
+
+					case 'char':
+					case 'uchar':
+						switch ($statement['operator']) {
+							case 'assign':
+								$codePrinter->output($variable . ' = (\'' . $resolvedExpr->getCode() . '\') ? 1 : 0;');
+								break;
+							default:
+								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
+						}
+						break;
+
 					case 'bool':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -544,6 +572,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
 						}
 						break;
+
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
@@ -560,6 +589,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							case 'bool':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -569,19 +599,24 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
-							case 'variable':
+
+							case 'variable':								
+							case 'string':
+							case 'array':							
 								switch ($statement['operator']) {
 									case 'assign':
-										$codePrinter->output($variable . ' = zephir_get_boolval(' . $itemVariable->getName() . ');');
+										$codePrinter->output($variable . ' = zephir_is_true(' . $itemVariable->getName() . ');');
 										break;
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							default:
-								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
+								throw new CompilerException("Cannot assign variable: " . $itemVariable->getType(), $statement);
 						}
 						break;
+
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
 				}
@@ -1570,6 +1605,7 @@ class LetStatement
 		$compilationContext->headersManager->add('kernel/object');
 
 		switch ($resolvedExpr->getType()) {
+
 			case 'null':
 				if ($variable == 'this') {
 					$codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');

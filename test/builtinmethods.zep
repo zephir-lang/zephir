@@ -42,4 +42,9 @@ class BuiltInMethods
 		return a->join("|");
 	}
 
+	public function arrayMethodReverse1(array a)
+	{
+		return a->$reverse();
+	}
+
 }

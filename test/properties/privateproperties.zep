@@ -32,7 +32,7 @@ class PrivateProperties
 	/**
 	 * This is a private property with an initial double value
 	 */
-	private someDouble = 10.25;
+	private someDouble = 10.25;	
 
 	/**
 	 * This is a private property with an initial string value
