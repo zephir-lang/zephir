@@ -8,6 +8,11 @@ if [ ! -f lemon ]; then
 	gcc -w lemon.c -o lemon
 fi
 
+TEST=`re2c -v > /dev/null`
+if [ ? == "0" ]; then
+  echo "hello"
+fi
+
 re2c -o scanner.c scanner.re && ./lemon -s parser.lemon && cat base.c >> parser.c
 sed s/"\#line"/"\/\/"/g scanner.c > xx && mv -f xx scanner.c
 sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c

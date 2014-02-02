@@ -38,6 +38,19 @@ const xx_token_names xx_tokens[] =
 	{  0, NULL }
 };
 
+char *strndup(const char *s, size_t len)
+{
+    if (s) {
+        char *ns = malloc(len + 1);
+        if (ns) {
+            ns[len] = 0;
+            return strncpy(ns, s, len);
+        }
+    }
+
+    return NULL;
+}
+
 /**
  * Wrapper to alloc memory within the parser
  */
