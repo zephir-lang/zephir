@@ -25,7 +25,7 @@ const xx_token_names xx_tokens[] =
 	{ XX_T_DOUBLE,        		"DOUBLE" },
 	{ XX_T_STRING,        		"STRING" },
 	{ XX_T_IDENTIFIER,    		"IDENTIFIER" },
-	{ XX_T_AT,	   	    		"@" },
+	{ XX_T_AT,	       		"@" },
 	{ XX_T_COMMA,	   	    	"," },
 	{ XX_T_ASSIGN,       		"=" },
 	{ XX_T_COLON,            	":" },

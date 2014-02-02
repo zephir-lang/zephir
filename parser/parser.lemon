@@ -2480,6 +2480,7 @@ xx_array_value(R) ::= xx_common_expr(E) . {
 	R = E;
 }
 
+/** xx_literal_expr */
 xx_literal_expr(R) ::= INTEGER(I) . {
 	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
 }
@@ -2517,7 +2518,43 @@ xx_literal_expr(R) ::= CONSTANT(I) . {
 }
 
 xx_literal_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
-  R = xx_ret_expr("empty-array", NULL, NULL, NULL, status->scanner_state);
+	R = xx_ret_expr("empty-array", NULL, NULL, NULL, status->scanner_state);
+}
+
+xx_literal_expr(R) ::= SBRACKET_OPEN xx_literal_array_list(L) SBRACKET_CLOSE . {
+	R = xx_ret_expr("array", L, NULL, NULL, status->scanner_state);
+}
+
+xx_literal_array_list(R) ::= xx_literal_array_list(L) COMMA xx_literal_array_item(I) . {
+	R = xx_ret_list(L, I);
+}
+
+xx_literal_array_list(R) ::= xx_literal_array_item(I) . {
+	R = xx_ret_list(NULL, I);
+}
+
+xx_literal_array_item(R) ::= xx_literal_array_key(K) COLON xx_literal_array_value(V) . {
+	R = xx_ret_array_item(K, V, status->scanner_state);
+}
+
+xx_literal_array_item(R) ::= xx_literal_array_value(V) . {
+	R = xx_ret_array_item(NULL, V, status->scanner_state);
+}
+
+xx_literal_array_key(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
+}
+
+xx_literal_array_key(R) ::= STRING(S) . {
+	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
+}
+
+xx_literal_array_key(R) ::= INTEGER(I) . {
+	R = xx_ret_literal(XX_T_INTEGER, I, status->scanner_state);
+}
+
+xx_literal_array_value(R) ::= xx_literal_expr(E) . {
+	R = E;
 }
 
 xx_eval_expr(R) ::= xx_common_expr(E) . {

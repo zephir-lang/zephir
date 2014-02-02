@@ -392,7 +392,14 @@ class NativeArray
 	public function testArrayAppend1()
 	{
 		var a;
-		let a = [], a[] = "hello", a[] = null, a[] = false, a[] = 1.10, a[] = 5;
+		let a = [], a[] = "hello", a[] = null, a[] = false, a[] = 1.10, a[] = 5, a[] = [1, 2, 3];
+		return a;
+	}
+
+	public function testArrayAppend2()
+	{
+		var a; string b = "hello"; var c = null; boolean d = false; double e = 1.10; int f = 5; var g = [1, 2, 3];
+		let a = [], a[] = b, a[] = c, a[] = d, a[] = e, a[] = f, a[] = g;
 		return a;
 	}
 
@@ -537,8 +544,7 @@ class NativeArray
 	 */
 	public function issue110()
 	{
-		var byteUnits, tmp;
-
+		var byteUnits;
 		let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
 		return implode("|", array_keys(byteUnits));
 	}

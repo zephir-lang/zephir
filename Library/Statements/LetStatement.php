@@ -984,6 +984,13 @@ class LetStatement
 						$symbolVariable->setIdle(true);
 						break;
 
+					case 'bool':
+						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+						$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+						$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+						$symbolVariable->setIdle(true);
+						break;
+
 					case 'ulong':
 					case 'string':
 						$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
@@ -998,16 +1005,30 @@ class LetStatement
 
 							case 'int':
 							case 'uint':
-							case 'long':
-							case 'ulong':
+							case 'long':							
 								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 								$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 								$symbolVariable->setIdle(true);
 								break;
 
+							case 'double':							
+								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+								$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
+								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+								$symbolVariable->setIdle(true);
+								break;
+
+							case 'bool':							
+								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+								$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
+								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
+								$symbolVariable->setIdle(true);
+								break;
+
 							case 'variable':
 							case 'string':
+							case 'array':
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $exprVariable->getName() . ', PH_SEPARATE);');
 								break;
 
@@ -1036,9 +1057,11 @@ class LetStatement
 		$codePrinter = &$compilationContext->codePrinter;
 
 		switch ($resolvedExpr->getType()) {
+
 			case 'null':
 				$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
 				break;
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -1046,10 +1069,12 @@ class LetStatement
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 				$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
+
 			case 'double':
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 				$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
 				break;
+
 			case 'bool':
 				if ($resolvedExpr->getBooleanCode() == '1') {
 					$symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
@@ -1062,10 +1087,12 @@ class LetStatement
 					}
 				}
 				break;
+
 			case 'string':
 				$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
 				$codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
 				break;
+
 			case 'variable':
 				$variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
 				switch ($variableExpr->getType()) {
@@ -1092,6 +1119,7 @@ class LetStatement
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 				}
 				break;
+				
 			default:
 				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 		}

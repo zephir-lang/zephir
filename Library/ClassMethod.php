@@ -561,6 +561,7 @@ class ClassMethod
 		$code = '';
 
 		switch ($dataType) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -582,6 +583,7 @@ class ClassMethod
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
 				}
 				break;
+
 			case 'bool':
 				switch ($parameter['default']['type']) {
 					case 'null':
@@ -598,6 +600,7 @@ class ClassMethod
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
 				}
 				break;
+
 			case 'string':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');
@@ -615,6 +618,7 @@ class ClassMethod
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
 				}
 				break;
+
 			case 'variable':
 				switch ($parameter['default']['type']) {
 					case 'int':
@@ -814,6 +818,7 @@ class ClassMethod
 		$compilationContext->currentMethod = $this;
 
 		if (is_object($this->_statements)) {
+
 			/**
 			 * This pass checks for zval variables than can be potentally
 			 * used without allocate memory and memory tracking
@@ -1095,6 +1100,10 @@ class ClassMethod
 								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 								$initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
 								break;
+							case 'array':
+								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+								$initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+								break;
 							default:
 								throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 						}
@@ -1241,7 +1250,7 @@ class ClassMethod
 				/**
 				 * Assign the default value according to the variable's type
 				 */
-				$initCode .= "\t" . 'if (!'.$name.') {' . PHP_EOL;
+				$initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
 				$initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
 				if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
