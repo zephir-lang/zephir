@@ -68,6 +68,9 @@ class EchoStatement
 						case 'long':
 							$compilationContext->codePrinter->output('php_printf("%ld", ' . $variable->getName() . ');');
 							break;
+						case 'double':
+							$compilationContext->codePrinter->output('php_printf("%f", ' . $variable->getName() . ');');
+							break;
 						case 'uchar':
 						case 'char':
 							$compilationContext->codePrinter->output('php_printf("%c", ' . $variable->getName() . ');');

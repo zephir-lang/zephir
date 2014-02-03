@@ -56,7 +56,7 @@ class Config
 			'local-context-pass'                => true,
 			'constant-folding'                  => true,
 			'static-constant-class-folding'     => true,
-			'private-internal-methods'          => true
+			'private-internal-methods'          => false
 		),
 		'namespace'   => '',
 		'name'        => '',
@@ -87,8 +87,7 @@ class Config
 					}
 				}
 			}
-		}
-		register_shutdown_function(array($this, '_saveOnExit'));
+		}		
 	}
 
 	/**
@@ -128,6 +127,9 @@ class Config
 			$this->_config[$key] = $value;
 		}
 
+		if (!$this->_changed) {
+			register_shutdown_function(array($this, '_saveOnExit'));
+		}
 		$this->_changed = true;
 	}
 

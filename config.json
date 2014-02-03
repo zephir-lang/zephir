@@ -1,35 +1,4 @@
-{
-    "warnings": {
-        "unused-variable": true,
-        "unused-variable-external": false,
-        "possible-wrong-parameter": true,
-        "possible-wrong-parameter-undefined": false,
-        "nonexistent-function": true,
-        "nonexistent-class": true,
-        "non-valid-isset": true,
-        "non-array-update": true,
-        "non-valid-objectupdate": true,
-        "non-valid-fetch": true,
-        "invalid-array-index": true,
-        "non-array-append": true,
-        "invalid-return-type": true,
-        "unrecheable-code": true,
-        "nonexistant-constant": true,
-        "not-supported-magic-constant": true,
-        "non-valid-decrement": true,
-        "non-valid-increment": true,
-        "non-valid-clone": true,
-        "non-array-access": true,
-        "invalid-reference": true
-    },
-    "optimizations": {
-        "static-type-inference": true,
-        "static-type-inference-second-pass": true,
-        "local-context-pass": true,
-        "constant-folding": true,
-        "static-constant-class-folding": true,
-        "private-internal-methods": false
-    },
+{    
     "namespace": "test",
     "name": "Test Extension",
     "description": "",

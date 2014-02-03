@@ -139,3 +139,27 @@ PHP_METHOD(Test_Logical, testOr2) {
 
 }
 
+PHP_METHOD(Test_Logical, testMixed) {
+
+	zend_bool _0, _1;
+	int first, second;
+
+
+	first = 0;
+	second = 1;
+	_0 = (first) ? 1 : 0;
+	if (_0) {
+		_1 = (second) ? 1 : 0;
+		if (!(_1)) {
+			_1 = (second) ? 1 : 0;
+		}
+		_0 = _1;
+	}
+	if (_0) {
+		php_printf("ok");
+	} else {
+		php_printf("wrong");
+	}
+
+}
+

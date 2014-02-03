@@ -389,6 +389,18 @@ class ForStatement
 	}
 
 	/**
+	 * Compiles a 'for' statement that use an 'iterator' as expression
+	 *
+	 * @param array $exprRaw
+	 * @param \CompilationContext $compilationContext
+	 * @return boolean
+	 */
+	public function compileIterator($exprRaw, $compilationContext)
+	{
+
+	}
+
+	/**
 	 * Compiles traversing of string values
 	 * - Evaluated expression must be a string
 	 * - Every key must be an integer or compatible
@@ -590,8 +602,16 @@ class ForStatement
 		 * @TODO implement optimizers here
 		 */
 		if ($exprRaw['type'] == 'fcall') {
+
 			if ($exprRaw['name'] == 'range') {
 				$status = $this->compileRange($exprRaw, $compilationContext);
+				if ($status !== false) {
+					return;
+				}
+			}
+
+			if ($exprRaw['name'] == 'iterator') {
+				$status = $this->compileIterator($exprRaw, $compilationContext);
 				if ($status !== false) {
 					return;
 				}

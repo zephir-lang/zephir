@@ -10,6 +10,7 @@ PHP_METHOD(Test_Logical, testAnd4);
 PHP_METHOD(Test_Logical, testAnd9);
 PHP_METHOD(Test_Logical, testOr1);
 PHP_METHOD(Test_Logical, testOr2);
+PHP_METHOD(Test_Logical, testMixed);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testand9, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -24,5 +25,6 @@ ZEPHIR_INIT_FUNCS(test_logical_method_entry) {
 	PHP_ME(Test_Logical, testAnd9, arginfo_test_logical_testand9, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Logical, testOr1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Logical, testOr2, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Logical, testMixed, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

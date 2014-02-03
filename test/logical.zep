@@ -47,5 +47,19 @@ class Logical
 		return 0 || true;
 	}
 
+	public function testMixed()
+	{
+		var first, second;
+
+		let first = 0;
+let second = 1;
+// Should pass but does not pass
+if first && second || second {
+    echo "ok";
+} else {
+    echo "wrong";
+}
+	}
+
 	
 }
