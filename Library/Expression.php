@@ -287,6 +287,7 @@ class Expression
 		$resolved = $expr->compile($compilationContext);
 
 		switch ($expression['left']) {
+
 			case 'int':
 				switch ($resolved->getType()) {
 					case 'int':
@@ -312,6 +313,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			case 'long':
 				switch ($resolved->getType()) {
 					case 'int':
@@ -337,6 +339,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			case 'double':
 				switch ($resolved->getType()) {
 					case 'double':
@@ -349,6 +352,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			case 'bool':
 				switch ($resolved->getType()) {
 					case 'bool':
@@ -369,6 +373,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			case 'string':
 				switch ($resolved->getType()) {
 					case 'variable':
@@ -385,6 +390,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			case 'char':
 				switch ($resolved->getType()) {
 					case 'variable':
@@ -397,6 +403,7 @@ class Expression
 						throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
 		}
@@ -439,6 +446,9 @@ class Expression
 				return new CompiledExpression('string', Utils::addSlashes($expression['value']), $expression);
 
 			case 'char':
+				if (!strlen($expression['value'])) {
+					throw new CompilerException("Invalid empty char literal", $expression);
+				}
 				if (strlen($expression['value']) > 2) {
 					if (strlen($expression['value']) > 10) {
 						throw new CompilerException("Invalid char literal: '" . substr($expression['value'], 0, 10) . "...'", $expression);

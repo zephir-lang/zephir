@@ -346,10 +346,17 @@ class Call
 
 				case 'int':
 				case 'uint':
-				case 'long':
-				case 'char':
+				case 'long':				
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+					$this->_temporalVariables[] = $parameterVariable;
+					$params[] = '&' . $parameterVariable->getName();
+					break;
+
+				case 'char':
+				case 'uchar':
+					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', \'' . $compiledExpression->getCode() . '\');');
 					$this->_temporalVariables[] = $parameterVariable;
 					$params[] = '&' . $parameterVariable->getName();
 					break;
@@ -380,30 +387,42 @@ class Call
 				case 'variable':
 					$parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
 					switch ($parameterVariable->getType()) {
+
 						case 'int':
 						case 'uint':
 						case 'long':
 						case 'ulong':
-						case 'char':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
+
+						case 'char':
+						case 'uchar':
+							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+							$params[] = '&' . $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
+							break;
+
 						case 'double':
 							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 							$codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;	
+
 						case 'bool':
 							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;
+
 						case 'string':
 						case 'variable':
 						case 'array':
 							$params[] = $parameterVariable->getName();
 							break;
+
 						default:
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
