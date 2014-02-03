@@ -89,7 +89,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 	ZVAL_LONG(&_0, testVar);
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_func_p1(_1, "gettype", &_0);
-	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "int"));
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "integer"));
 
 }
 
@@ -119,7 +119,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 	testVar = 1;
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_func_p1(_0, "gettype", (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)));
-	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "bool"));
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "boolean"));
 
 }
 

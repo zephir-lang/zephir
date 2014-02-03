@@ -38,7 +38,7 @@ class Typeoff
 		int testVar;
 		let testVar = 12345;
 
-		return typeof testVar == "int";
+		return typeof testVar == "integer";
 	}
 
 	public function testNativeDoubleTrue()
@@ -54,7 +54,7 @@ class Typeoff
 		bool testVar;
 		let testVar = true;
 
-		return typeof testVar == "bool";
+		return typeof testVar == "boolean";
 	}
 
 	public function testNativeBoolFalse()
