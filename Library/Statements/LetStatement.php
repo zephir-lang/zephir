@@ -1643,6 +1643,7 @@ class LetStatement
 					case 'mul-assign':
 					case 'sub-assign':
 					case 'add-assign':
+
 						switch($statement['operator']) {
 							case 'mul-assign':
 								$functionName = 'ZEPHIR_MUL_ASSIGN';
@@ -1654,15 +1655,17 @@ class LetStatement
 								$functionName = 'ZEPHIR_ADD_ASSIGN';
 								break;
 						}
-
-						$resolvedVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+						
+						$resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
-						$codePrinter->output($functionName.'('.$tempVariable->getName().', '.$resolvedVariable->getName().')');
+						$codePrinter->output($functionName . '(' . $tempVariable->getName() . ', ' . $resolvedVariable->getName() . ')');
 						break;
+
 					case 'assign':
 						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 						break;
+
 					default:
 						throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
 				}
