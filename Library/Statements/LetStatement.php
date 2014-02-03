@@ -479,7 +479,8 @@ class LetStatement
 								switch ($statement['operator']) {
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
-										$codePrinter->output('Z_STRLEN_P(' . $variable . ') = zend_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%c", ' . $itemVariable->getName() . ');');
+										$compilationContext->headersManager->add('kernel/string');
+										$codePrinter->output('Z_STRLEN_P(' . $variable . ') = zephir_spprintf(&Z_STRVAL_P(' . $variable . '), 0, "%c", ' . $itemVariable->getName() . ');');
 										$codePrinter->output('Z_TYPE_P(' . $variable . ') = IS_STRING;');
 										break;
 									case 'concat-assign':
