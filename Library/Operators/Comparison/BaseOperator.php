@@ -67,18 +67,12 @@ class ComparisonBaseOperator extends BaseOperator
 			$variableVariable = $compilationContext->symbolTable->getVariable($condition->getCode());
 
 			if ($expr['right']['type'] != 'string') {
-				throw new CompilerException('TypeOf right expr must be `string` type', $expr['right']);
+				throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
 			}
 
 			$value = strtolower($expr['right']['value']);
 
-			switch ($variableVariable->getType()) {
-
-				case 'bool':
-				case 'double':
-				case 'string':
-				case 'int':
-					return new CompiledExpression('bool', $variableVariable->getType() == $value, $expr);
+			switch ($variableVariable->getType()) {				
 
 				case 'variable':
 					switch ($value) {
@@ -107,11 +101,12 @@ class ComparisonBaseOperator extends BaseOperator
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
 							break;
 						default:
-							throw new CompilerException('Unsupported variable type: '.$variableVariable->getType().'', $expr['right']);
+							throw new CompilerException('Unsupported variable type: ' . $variableVariable->getType() . '', $expr['right']);
 					}
 					break;
+
 				default:
-					throw new CompilerException('Unsupported variable type: `'.$variableVariable->getType().'`', $expr['left']);
+					return false;
 			}
 
 			return new CompiledExpression('bool', $condition, $expr);

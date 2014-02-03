@@ -13,8 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
+#include "kernel/object.h"
 
 
 /**
@@ -32,75 +33,107 @@ ZEPHIR_INIT_CLASS(Test_Typeoff) {
 
 PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
+	zval *_0;
 	zval *testVar;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
-	RETURN_MM_BOOL(0);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "gettype", testVar);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "object"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
+	zval *_0;
 	zval *testVar;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
-	RETURN_MM_BOOL(1);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "gettype", testVar);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "string"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
+	zval _0, *_1;
 	int testVar;
 
+	ZEPHIR_MM_GROW();
 
 	testVar = 12345;
-	RETURN_BOOL(0);
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, testVar);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "gettype", &_0);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "object"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
+	zval _0, *_1;
 	int testVar;
 
+	ZEPHIR_MM_GROW();
 
 	testVar = 12345;
-	RETURN_BOOL(1);
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, testVar);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "gettype", &_0);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "int"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
+	zval _0, *_1;
 	double testVar;
 
+	ZEPHIR_MM_GROW();
 
 	testVar = (double) (12345);
-	RETURN_BOOL(1);
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_DOUBLE(&_0, testVar);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_call_func_p1(_1, "gettype", &_0);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "double"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
+	zval *_0;
 	zend_bool testVar;
 
+	ZEPHIR_MM_GROW();
 
 	testVar = 1;
-	RETURN_BOOL(1);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "gettype", (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)));
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "bool"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
+	zval *_0;
 	zend_bool testVar;
 
+	ZEPHIR_MM_GROW();
 
 	testVar = 0;
-	RETURN_BOOL(0);
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "gettype", (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)));
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "double"));
 
 }
 

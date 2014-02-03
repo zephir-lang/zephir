@@ -390,6 +390,12 @@ class Call
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
 							break;
+						case 'double':
+							$parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+							$codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+							$params[] = '&' . $parameterTempVariable->getName();
+							$this->_temporalVariables[] = $parameterTempVariable;
+							break;	
 						case 'bool':
 							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
 							break;

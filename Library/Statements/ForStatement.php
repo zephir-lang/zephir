@@ -457,6 +457,7 @@ class ForStatement
 			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
 		}
 		
+		$compilationContext->headersManager->add('kernel/operators');
 		$codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $expression->getCode() . ', ' . $tempVariable->getName() . ');');
 
 		/**
