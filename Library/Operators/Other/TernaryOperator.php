@@ -1,0 +1,92 @@
+<?php
+
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir Language                                                          |
+ +--------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
+ +--------------------------------------------------------------------------+
+ | This source file is subject the MIT license, that is bundled with        |
+ | this package in the file LICENSE, and is available through the           |
+ | world-wide-web at the following url:                                     |
+ | http://zephir-lang.com/license.html                                      |
+ |                                                                          |
+ | If you did not receive a copy of the MIT license and are unable          |
+ | to obtain it through the world-wide-web, please send a note to           |
+ | license@zephir-lang.com so we can mail you a copy immediately.           |
+ +--------------------------------------------------------------------------+
+*/
+
+/**
+ * Ternary
+ *
+ * Compiles ternary expressions
+ */
+class TernaryOperator extends BaseOperator
+{
+
+	/**
+	 *
+	 * @param array $expression
+	 * @param \CompilationContext $compilationContext
+	 * @return \CompiledExpression
+	 */
+	public function compile($expression, CompilationContext $compilationContext)
+	{
+		/**
+		 * This variable is used to check if the compound and expression is evaluated as true or false
+		 */
+		$returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+
+		$expr = new EvalExpression();
+		$condition = $expr->optimize($expression['left'], $compilationContext);
+		$compilationContext->codePrinter->output('if (' . $condition . ') {');		
+
+		$compilationContext->codePrinter->increaseLevel();
+
+		/**
+		 * Create an implicit 'let' operation to update the evaluated left operator
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable'    => $returnVariable->getName(),
+					'operator'    => 'assign',
+					'expr'        => $expression['right']
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
+		$compilationContext->codePrinter->decreaseLevel();
+
+		$compilationContext->codePrinter->output('} else {');
+
+		$compilationContext->codePrinter->increaseLevel();
+
+		/**
+		 * Create an implicit 'let' operation to update the evaluated left operator
+		 */
+		$statement = new LetStatement(array(
+			'type' => 'let',
+			'assignments' => array(
+				array(
+					'assign-type' => 'variable',
+					'variable'    => $returnVariable->getName(),
+					'operator'    => 'assign',
+					'expr'        => $expression['extra']
+				)
+			)
+		));
+		$statement->compile($compilationContext);
+
+		$compilationContext->codePrinter->decreaseLevel();
+
+		$compilationContext->codePrinter->output('}');
+
+		return new CompiledExpression('variable', $returnVariable->getName(), $expression);
+	}
+
+}

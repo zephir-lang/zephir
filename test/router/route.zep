@@ -223,9 +223,7 @@ class Route
 											matches[item] = tmp;
 									}
 								} else {
-									let route .= '{',
-										route .= item,
-										route .= '}';
+									let route .= "{" . item ."}";										
 								}
 								continue;
 							}

@@ -67,6 +67,7 @@ require ZEPHIRPATH . 'Library/Operators/Other/InstanceOfOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/RequireOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/LikelyOperator.php';
 require ZEPHIRPATH . 'Library/Operators/Other/UnlikelyOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Other/TernaryOperator.php';
 
 /* Expression Resolving */
 require ZEPHIRPATH . 'Library/Expression/Constants.php';
@@ -705,12 +706,12 @@ class Expression
 				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
-
-			/**
-			 * @TODO implement this
-			 */
+			
 			case 'ternary':
-				return new CompiledExpression('int', '(0 == 1)', $expression);
+				$expr = new TernaryOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
 
 			case 'likely':
 				if (!$this->_evalMode) {

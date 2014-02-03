@@ -96,4 +96,5 @@ class Declare
 		var a = null;
 		return a;
 	}
+	
 }

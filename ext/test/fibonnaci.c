@@ -168,3 +168,36 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
 }
 
+PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
+
+	zval *n_param = NULL, *_0, *_1 = NULL, *_2;
+	int n;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &n_param);
+
+		n = zephir_get_intval(n_param);
+
+
+	if ((n == 0)) {
+		RETURN_MM_LONG(0);
+	} else {
+		if ((n == 1)) {
+			RETURN_MM_LONG(1);
+		} else {
+			ZEPHIR_INIT_VAR(_0);
+			ZEPHIR_INIT_VAR(_1);
+			ZVAL_LONG(_1, (n - 1));
+			zephir_call_method_p1(_0, this_ptr, "fibonaccifinalrecursive", _1);
+			ZEPHIR_INIT_NVAR(_1);
+			ZEPHIR_INIT_VAR(_2);
+			ZVAL_LONG(_2, (n - 2));
+			zephir_call_method_p1(_1, this_ptr, "fibonaccifinalrecursive", _2);
+			zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+			RETURN_MM();
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+

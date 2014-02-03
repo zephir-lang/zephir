@@ -7,7 +7,7 @@ namespace Test;
 
 class Logical
 {
-    /* ---------- And ----------------*/
+	/* ---------- And ----------------*/
 
 	public function testAnd1()
 	{
@@ -47,19 +47,25 @@ class Logical
 		return 0 || true;
 	}
 
-	public function testMixed()
+	public function testMixed1()
 	{
 		var first, second;
 
 		let first = 0;
-let second = 1;
-// Should pass but does not pass
-if first && second || second {
-    echo "ok";
-} else {
-    echo "wrong";
-}
+		let second = 1;		
+		if first && second || second {
+			echo "ok";
+		} else {
+			echo "wrong";
+		}
 	}
 
+	public function testMixed2(var match, var minLength)
+	{
+		if is_array(match) && count(match) == 2 && strlen(match[0]) >= minLength {
+			return true;
+		}
+		return false;
+	}
 	
 }

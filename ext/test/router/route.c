@@ -187,7 +187,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _0, _5, _24;
 	char ch;
 	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3 = NULL, _18 = zval_used_for_init, *_19 = NULL, _21 = zval_used_for_init, *_22 = NULL;
-	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_20 = NULL, *_23 = NULL;
+	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_20 = NULL, *_23 = NULL, *_25 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &pattern_param);
@@ -351,9 +351,9 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 									zephir_array_update_zval(&matches, item, &_22, PH_COPY | PH_SEPARATE);
 								}
 							} else {
-								zephir_concat_self_str(&route, "{", sizeof("{")-1 TSRMLS_CC);
-								zephir_concat_self(&route, item TSRMLS_CC);
-								zephir_concat_self_str(&route, "}", sizeof("}")-1 TSRMLS_CC);
+								ZEPHIR_INIT_LNVAR(_25);
+								ZEPHIR_CONCAT_SVS(_25, "{", item, "}");
+								zephir_concat_self(&route, _25 TSRMLS_CC);
 							}
 							continue;
 						}
@@ -450,7 +450,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				zephir_array_update_string(&routePaths, SL("module"), &moduleName, PH_COPY | PH_SEPARATE);
 			}
 			if ((Z_TYPE_P(controllerName) != IS_NULL)) {
-				if (zephir_memnstr_str(controllerName, SL("\\"), "test/router/route.zep", 313)) {
+				if (zephir_memnstr_str(controllerName, SL("\\"), "test/router/route.zep", 311)) {
 					ZEPHIR_INIT_VAR(realClassName);
 					zephir_get_class_ns(realClassName, controllerName, 0 TSRMLS_CC);
 					ZEPHIR_INIT_VAR(namespaceName);
@@ -480,7 +480,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		return;
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
-		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 351)) {
+		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 349)) {
 			ZEPHIR_INIT_VAR(extracted);
 			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
 			ZEPHIR_OBS_VAR(pcrePattern);

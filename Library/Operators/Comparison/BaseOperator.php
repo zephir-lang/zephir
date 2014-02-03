@@ -82,32 +82,40 @@ class ComparisonBaseOperator extends BaseOperator
 
 				case 'variable':
 					switch ($value) {
+
 						case 'array':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY)';
 							break;
+
 						case 'object':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT)';
 							break;
+
 						case 'null':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL)';
 							break;
+
 						case 'string':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING)';
 							break;
+
 						case 'int':
 						case 'integer':
 						case 'long':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG)';
 							break;
+
 						case 'boolean':
 						case 'bool':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
 							break;
+
 						case 'resource':
 							$condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
 							break;
+							
 						default:
-							throw new CompilerException('Unsupported variable type: ' . $variableVariable->getType() . '', $expr['right']);
+							throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
 					}
 					break;
 

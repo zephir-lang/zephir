@@ -15,6 +15,7 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 
 
 /**
@@ -139,7 +140,7 @@ PHP_METHOD(Test_Logical, testOr2) {
 
 }
 
-PHP_METHOD(Test_Logical, testMixed) {
+PHP_METHOD(Test_Logical, testMixed1) {
 
 	zend_bool _0, _1;
 	int first, second;
@@ -160,6 +161,31 @@ PHP_METHOD(Test_Logical, testMixed) {
 	} else {
 		php_printf("wrong");
 	}
+
+}
+
+PHP_METHOD(Test_Logical, testMixed2) {
+
+	zend_bool _0, _1;
+	zval *match, *minLength, *_2;
+
+	zephir_fetch_params(0, 2, 0, &match, &minLength);
+
+
+
+	_0 = (Z_TYPE_P(match) == IS_ARRAY);
+	if (_0) {
+		_1 = (zephir_fast_count_int(match TSRMLS_CC) == 2);
+		if (_1) {
+			zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+			_1 = ZEPHIR_LT_LONG(minLength, zephir_fast_strlen_ev(_2));
+		}
+		_0 = _1;
+	}
+	if (_0) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
 
 }
 
