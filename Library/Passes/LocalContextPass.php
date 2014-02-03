@@ -297,20 +297,25 @@ class LocalContextPass
 			case 'clone':
 			case 'likely':
 			case 'unlikely':
+			case 'ternary': /* do special pass later */
 				$this->passExpression($expression['left']);
 				break;
+
 			case 'fetch':
 				$this->increaseMutations($expression['left']['value']);
 				$this->markVariableNoLocal($expression['left']['value']);
 				$this->passExpression($expression['right']);
 				break;
+
 			case 'list':
 				$this->passExpression($expression['left']);
 				break;
+
 			case 'cast':
 			case 'type-hint':
 				$this->passExpression($expression['right']);
 				break;
+				
 			default:
 				echo 'Type=', $expression['type'], PHP_EOL;
 				break;

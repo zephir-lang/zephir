@@ -554,7 +554,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				token->opcode = XX_T_IDENTIFIER;
 			}
 			return 0;
-		}
+		}		
 
 		"(" {
 			s->active_char++;

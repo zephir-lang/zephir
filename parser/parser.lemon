@@ -36,6 +36,7 @@
 %right QUESTION .
 %right LIKELY UNLIKELY .
 %left INSTANCEOF .
+%right NOT .
 %right AND OR .
 %left BITWISE_OR BITWISE_AND BITWISE_XOR BITWISE_SHIFTLEFT BITWISE_SHIFTRIGHT .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
@@ -45,7 +46,6 @@
 %right ISSET FETCH .
 %right TYPEOF .
 %right NEW .
-%right NOT .
 %right PARENTHESES_CLOSE .
 %right SBRACKET_OPEN .
 %right ARROW .
@@ -2068,6 +2068,10 @@ xx_assign_expr(R) ::= xx_common_expr(E) . {
 
 xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= SUB xx_common_expr(O1) . {
+	R = xx_ret_expr("minus", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= ISSET xx_common_expr(O1) . {

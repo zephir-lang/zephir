@@ -35,6 +35,7 @@ require ZEPHIRPATH . 'Library/Operators/Logical/OrOperator.php';
 
 /** Unary Operator */
 require ZEPHIRPATH . 'Library/Operators/Unary/NotOperator.php';
+require ZEPHIRPATH . 'Library/Operators/Unary/MinusOperator.php';
 
 /* Comparison operators */
 require ZEPHIRPATH . 'Library/Operators/Comparison/BaseOperator.php';
