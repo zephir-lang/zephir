@@ -86,9 +86,13 @@ class NewInstanceOperator extends BaseOperator
 
 			if ($compilationContext->compiler->isClass($className)) {
 				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-			} else if ($expression['class'][0] != '\\' && $compilationContext->compiler->isClass($compilationContext->classDefinition->getNamespace().'\\'.$className)) {
-				$className = $compilationContext->classDefinition->getNamespace().'\\'.$className;
-				$classDefinition = $compilationContext->compiler->getClassDefinition($className);
+			} else {
+				if ($expression['class'][0] != '\\') {
+					$nsClassName = $compilationContext->classDefinition->getNamespace().'\\'.$className;
+					if ($compilationContext->compiler->isClass($nsClassName)) {						
+						$classDefinition = $compilationContext->compiler->getClassDefinition($nsClassName);
+					}
+				}
 			}
 
 

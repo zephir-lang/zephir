@@ -35,7 +35,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 	zend_class_entry *_3;
 	int i;
 	zend_bool create;
-	zval *key_param = NULL, *create_param = NULL, *trieNode = NULL, *keyLen, *character = NULL, _0 = zval_used_for_init, *_1 = NULL, *_2 = NULL, *_4 = NULL;
+	zval *key_param = NULL, *create_param = NULL, *trieNode = NULL, *keyLen, *character = NULL, _0 = zval_used_for_init, *_1 = NULL, *_2 = NULL, *_4 = NULL, *_5;
 	zval *key = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -79,8 +79,8 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 		}
 		ZEPHIR_OBS_NVAR(_4);
 		zephir_read_property(&_4, trieNode, SL("children"), PH_NOISY_CC);
-		ZEPHIR_OBS_NVAR(trieNode);
-		zephir_array_fetch(&trieNode, _4, character, PH_NOISY TSRMLS_CC);
+		zephir_array_fetch(&_5, _4, character, PH_NOISY | PH_READONLY TSRMLS_CC);
+		ZEPHIR_CPY_WRT(trieNode, _5);
 		i += 1;
 	}
 	RETURN_CCTOR(trieNode);

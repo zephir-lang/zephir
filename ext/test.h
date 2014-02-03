@@ -9,6 +9,7 @@
 #include "test/builtinmethods.h"
 #include "test/cast.h"
 #include "test/cblock.h"
+#include "test/concat.h"
 #include "test/constants.h"
 #include "test/constantsinterface.h"
 #include "test/constantsparent.h"

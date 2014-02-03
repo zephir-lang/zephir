@@ -59,6 +59,7 @@ class LetStatement
 
 		$type = $symbolVariable->getType();
 		switch ($type) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
@@ -66,6 +67,7 @@ class LetStatement
 			case 'char':
 			case 'uchar':
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -84,6 +86,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -111,6 +114,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
+
 					case 'char':
 					case 'uchar':
 						switch ($statement['operator']) {
@@ -130,6 +134,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
+
 					case 'double':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -148,6 +153,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
+
 					case 'bool':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -163,6 +169,7 @@ class LetStatement
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
 						break;
+
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
@@ -638,6 +645,7 @@ class LetStatement
 								break;
 						}
 						break;
+
 					case 'int':
 					case 'uint':
 					case 'long':
@@ -812,6 +820,7 @@ class LetStatement
 							case 'char':
 							case 'uchar':
 								switch ($statement['operator']) {
+
 									case 'assign':
 										$symbolVariable->initVariant($compilationContext);
 										$symbolVariable->setDynamicTypes('long');
@@ -821,6 +830,7 @@ class LetStatement
 											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $itemVariable->getName() . ');');
 										}
 										break;
+
 									case 'add-assign':
 										$compilationContext->headersManager->add('kernel/operators');
 										$symbolVariable->initVariant($compilationContext);
@@ -834,6 +844,7 @@ class LetStatement
 											$codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $tempVariable->getName() . ' + ' . $itemVariable->getName() . ');');
 										}
 										break;
+
 									case 'sub-assign':
 										$compilationContext->headersManager->add('kernel/operators');
 										$symbolVariable->initVariant($compilationContext);
@@ -902,26 +913,32 @@ class LetStatement
 											}
 										}
 										break;
+
 									case 'concat-assign':
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
+
 									case 'add-assign':
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
+
 									case 'sub-assign':
 										$compilationContext->symbolTable->mustGrownStack(true);
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
+
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
-								break;
+								break;								
+
 							case 'string':
 								switch ($statement['operator']) {
+
 									case 'assign':
 										if ($itemVariable->getName() != $variable) {
 											$symbolVariable->setMustInitNull(true);
@@ -937,14 +954,17 @@ class LetStatement
 											}
 										}
 										break;
+
 									case 'concat-assign':
 										$compilationContext->headersManager->add('kernel/operators');
 										$codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
 										break;
+
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
 								break;
+
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $resolvedExpr->getOriginal());
 						}
@@ -1619,7 +1639,7 @@ class LetStatement
 			case 'uint':
 				$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 
-				switch($statement['operator']) {
+				switch ($statement['operator']) {
 					case 'mul-assign':
 					case 'sub-assign':
 					case 'add-assign':
@@ -1640,6 +1660,7 @@ class LetStatement
 						$codePrinter->output($functionName.'('.$tempVariable->getName().', '.$resolvedVariable->getName().')');
 						break;
 					case 'assign':
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 						break;
 					default:
@@ -1662,6 +1683,7 @@ class LetStatement
 						$codePrinter->output('zephir_concat_self_str(&' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
 						break;
 					case 'assign':
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
 						break;
 				}
@@ -1712,7 +1734,7 @@ class LetStatement
 					case 'char':
 					case 'uchar':
 						$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
+						$codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $tempVariable->getName() . ');');
 						$codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
 						$codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
 						$tempVariable->setIdle(true);
@@ -1738,10 +1760,12 @@ class LetStatement
 							$symbolVariable->setIdle(true);
 						}
 						break;
+
 					default:
 						throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
 		}
@@ -1923,17 +1947,18 @@ class LetStatement
 				switch ($variableExpr->getType()) {
 					case 'variable':
 					case 'string':
+					case 'array':
 						$codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
 						if ($variableExpr->isTemporal()) {
 							$variableExpr->setIdle(true);
 						}
 						break;
 					default:
-						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to property array", $statement);
+						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to array property", $statement);
 				}
 				break;
 			default:
-				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to property", $statement);
+				throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to array property", $statement);
 		}
 	}
 
@@ -2280,6 +2305,8 @@ class LetStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
+		$readDetector = new ReadDetector();
+
 		$statement = $this->_statement;
 		foreach ($statement['assignments'] as $assignment) {
 
@@ -2302,20 +2329,28 @@ class LetStatement
 			/**
 			 * Incr/Decr assignments don't require an expression
 			 */
-			if (isset($assignment['expr'])) {
-
-				$readDetector = new ReadDetector($assignment['expr']);
+			if (isset($assignment['expr'])) {				
 
 				$expr = new Expression($assignment['expr']);
+
 				switch ($assignment['assign-type']) {
 					case 'variable':
-
-						if (isset($assignment['operator'])) {
-							if ($assignment['operator'] == 'assign') {
+						if (!$readDetector->detect($variable, $assignment['expr'])) {
+							if (isset($assignment['operator'])) {
+								if ($assignment['operator'] == 'assign') {
+									$expr->setExpectReturn(true, $symbolVariable);
+								}
+							} else {
 								$expr->setExpectReturn(true, $symbolVariable);
 							}
 						} else {
-							$expr->setExpectReturn(true, $symbolVariable);
+							if (isset($assignment['operator'])) {
+								if ($assignment['operator'] == 'assign') {
+									$expr->setExpectReturn(true);
+								}
+							} else {
+								$expr->setExpectReturn(true);
+							}
 						}
 						break;
 				}
@@ -2342,54 +2377,71 @@ class LetStatement
 			 * There are four types of assignments
 			 */
 			switch ($assignment['assign-type']) {
+
 				case 'variable':
 					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
 					break;
+
 				case 'variable-append':
 					$this->assignVariableAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'object-property':
 					$this->assignObjectProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'variable-dynamic-object-property':
 					$this->assignObjectDynamicProperty($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'string-dynamic-object-property':
 					/* @todo, implement this */
 					break;
+
 				case 'static-property':
 					$this->assignStaticProperty($variable, $assignment['property'], $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'static-property-append':
 					/* @todo, implement this */
 					break;
+
 				case 'static-property-array-index':
 					/* @todo, implement this */
 					break;
+
 				case 'array-index':
 					$this->assignArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'object-property-append':
 					$this->assignPropertyAppend($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'object-property-array-index':
 					$this->assignPropertyArrayIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				case 'incr':
 					$this->assignIncr($variable, $symbolVariable, $compilationContext, $assignment);
 					break;
+
 				case 'decr':
 					$this->assignDecr($variable, $symbolVariable, $compilationContext, $assignment);
 					break;
+
 				case 'object-property-incr':
 					$this->assignObjectPropertyIncr($variable, $assignment['property'], $symbolVariable, $compilationContext, $assignment);
 					break;
+
 				case 'object-property-decr':
 					$this->assignObjectPropertyDecr($variable, $assignment['property'], $symbolVariable, $compilationContext, $assignment);
 					break;
+
 				case 'dynamic-variable':
 					$this->_exportSymbol($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
 					break;
+
 				default:
 					throw new CompilerException("Unknown assignment: " . $assignment['assign-type'], $assignment);
 			}

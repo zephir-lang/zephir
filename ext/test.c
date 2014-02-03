@@ -27,6 +27,7 @@ zend_class_entry *test_branchprediction_ce;
 zend_class_entry *test_builtinmethods_ce;
 zend_class_entry *test_cast_ce;
 zend_class_entry *test_cblock_ce;
+zend_class_entry *test_concat_ce;
 zend_class_entry *test_constants_ce;
 zend_class_entry *test_constantsinterface_ce;
 zend_class_entry *test_declare_ce;
@@ -87,6 +88,7 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_BuiltInMethods);
 	ZEPHIR_INIT(Test_Cast);
 	ZEPHIR_INIT(Test_Cblock);
+	ZEPHIR_INIT(Test_Concat);
 	ZEPHIR_INIT(Test_Constants);
 	ZEPHIR_INIT(Test_ConstantsInterface);
 	ZEPHIR_INIT(Test_Declare);

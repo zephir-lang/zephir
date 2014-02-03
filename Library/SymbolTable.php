@@ -356,12 +356,7 @@ class SymbolTable
 		$variable->setTemporal(true);
 		$variable->setMemoryTracked(false);
 		$variable->increaseUses();
-		$variable->increaseMutates();
-
-		/**
-		 * In this variable type we don`t run initVariant and now i write init zval for variable in this place
-		 */
-		$context->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $variable->getName() . ');');
+		$variable->increaseMutates();		
 
 		$this->_registerTempVariable($type, 'non-tracked', $variable);
 

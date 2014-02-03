@@ -24,12 +24,27 @@ class Logical
 		return 0 && 1.5 && 'A';
 	}
 
-	public function testAnd4(var a, int b)
+	public function testAnd4()
+	{
+		return 1 && 0 && null;
+	}
+
+	public function testAnd9(var a, int b)
 	{
 		if typeof a == "array" && isset a[b] {
 			return a[b];
 		}
 		return null;
+	}
+
+	public function testOr1()
+	{
+		return 0 || 1;
+	}
+
+	public function testOr2()
+	{
+		return 0 || true;
 	}
 
 	

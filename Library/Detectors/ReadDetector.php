@@ -27,8 +27,12 @@
  */
 class ReadDetector
 {
-	public function detect($variable, $expression)
+	public function detect($variable, array $expression)
 	{
+		if (!isset($expression['type'])) {
+			return false;
+		}
+
 		if ($expression['type'] == 'variable') {
 			if ($variable == $expression['value']) {
 				return true;
@@ -48,14 +52,18 @@ class ReadDetector
 		}
 
 		if (isset($expression['left'])) {
-			if ($this->detect($variable, $expression['left']) === true) {
-				return true;
+			if (is_array($expression['left'])) {
+				if ($this->detect($variable, $expression['left']) === true) {
+					return true;
+				}
 			}
 		}
 
 		if (isset($expression['right'])) {
-			if ($this->detect($variable, $expression['right']) === true) {
-				return true;
+			if (is_array($expression['right'])) {
+				if ($this->detect($variable, $expression['right']) === true) {
+					return true;
+				}
 			}
 		}
 

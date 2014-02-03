@@ -75,13 +75,31 @@ PHP_METHOD(Test_Logical, testAnd3) {
 
 PHP_METHOD(Test_Logical, testAnd4) {
 
+	zend_bool _0, _1;
+
+
+	_0 = (1) ? 1 : 0;
+	if (_0) {
+		_1 = (0) ? 1 : 0;
+		if (_1) {
+			_1 = 0;
+		}
+		_0 = _1;
+	}
+	RETURN_BOOL(_0);
+
+}
+
+PHP_METHOD(Test_Logical, testAnd9) {
+
 	zend_bool _0;
 	int b;
 	zval *a, *b_param = NULL, *_1;
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
 
-	b = zephir_get_intval(b_param);
+		b = zephir_get_intval(b_param);
+
 
 	_0 = (Z_TYPE_P(a) == IS_ARRAY);
 	if (_0) {
@@ -92,6 +110,32 @@ PHP_METHOD(Test_Logical, testAnd4) {
 		RETURN_CTORW(_1);
 	}
 	RETURN_NULL();
+
+}
+
+PHP_METHOD(Test_Logical, testOr1) {
+
+	zend_bool _0;
+
+
+	_0 = (0) ? 1 : 0;
+	if (!(_0)) {
+		_0 = (1) ? 1 : 0;
+	}
+	RETURN_BOOL(_0);
+
+}
+
+PHP_METHOD(Test_Logical, testOr2) {
+
+	zend_bool _0;
+
+
+	_0 = (0) ? 1 : 0;
+	if (!(_0)) {
+		_0 = 1;
+	}
+	RETURN_BOOL(_0);
 
 }
 

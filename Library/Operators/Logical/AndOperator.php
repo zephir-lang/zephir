@@ -60,6 +60,12 @@ class AndOperator extends LogicalBaseOperator
 					'type'  => 'variable',
 					'value' => $left->getCode(),
 				);					
+				break;
+			case 'null':
+				$assignExprLeft = array(
+					'type'  => 'null',
+					'value' => null
+				);					
 				break;	
 		}
 
@@ -109,6 +115,12 @@ class AndOperator extends LogicalBaseOperator
 					'value' => $right->getCode(),
 				);					
 				break;
+			case 'null':
+				$assignExprRight = array(
+					'type'  => 'null',
+					'value' => null
+				);					
+				break;	
 		}
 
 		if (!isset($assignExprRight)) {
