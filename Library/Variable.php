@@ -112,15 +112,26 @@ class Variable
 	protected $_node;
 
 	/**
-	 * @param string $type
-	 * @param string $name
-	 * @param int $branch
+	 * @param $type
+	 * @param $name
+	 * @param $branch
+	 * @param null $defaultInitValue
 	 */
 	public function __construct($type, $name, $branch, $defaultInitValue=null)
 	{
 		$this->_type = $type;
 		$this->_name = $name;
 		$this->_branch = $branch;
+	}
+
+	/**
+	 * Get init branch
+	 *
+	 * @return bool|int
+	 */
+	public function getInitBranch()
+	{
+		return $this->_initBranch;
 	}
 
 	/**

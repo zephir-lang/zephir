@@ -548,11 +548,7 @@ class ForStatement
 		$tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
 		$tempVariable->setIsDoublePointer(true);
 
-		if ($this->_statement['reverse']) {
-			$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 1);');
-		} else {
-			$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, 0);');
-		}
+		$codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, '.$this->_statement['reverse'].');');
 
 		$codePrinter->output('for (');
 		$codePrinter->output('	; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
