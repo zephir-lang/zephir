@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/object.h"
 
@@ -41,7 +40,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "gettype", testVar);
+	zephir_gettype(_0, testVar TSRMLS_CC);
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "object"));
 
 }
@@ -56,56 +55,56 @@ PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "gettype", testVar);
+	zephir_gettype(_0, testVar TSRMLS_CC);
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "string"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
-	zval _0, *_1;
+	zval *_0, _1;
 	int testVar;
 
 	ZEPHIR_MM_GROW();
 
 	testVar = 12345;
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, testVar);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_call_func_p1(_1, "gettype", &_0);
-	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "object"));
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_LONG(&_1, testVar);
+	zephir_gettype(_0, &_1 TSRMLS_CC);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "object"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
-	zval _0, *_1;
+	zval *_0, _1;
 	int testVar;
 
 	ZEPHIR_MM_GROW();
 
 	testVar = 12345;
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, testVar);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_call_func_p1(_1, "gettype", &_0);
-	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "integer"));
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_LONG(&_1, testVar);
+	zephir_gettype(_0, &_1 TSRMLS_CC);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "integer"));
 
 }
 
 PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
-	zval _0, *_1;
+	zval *_0, _1;
 	double testVar;
 
 	ZEPHIR_MM_GROW();
 
 	testVar = (double) (12345);
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_DOUBLE(&_0, testVar);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_call_func_p1(_1, "gettype", &_0);
-	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_1, "double"));
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_DOUBLE(&_1, testVar);
+	zephir_gettype(_0, &_1 TSRMLS_CC);
+	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "double"));
 
 }
 
@@ -118,7 +117,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 	testVar = 1;
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "gettype", (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)));
+	zephir_gettype(_0, (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)) TSRMLS_CC);
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "boolean"));
 
 }
@@ -132,7 +131,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 	testVar = 0;
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "gettype", (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)));
+	zephir_gettype(_0, (testVar ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)) TSRMLS_CC);
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "double"));
 
 }
@@ -186,7 +185,7 @@ PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "gettype", u);
+	zephir_gettype(_0, u TSRMLS_CC);
 	RETURN_CCTOR(_0);
 
 }
