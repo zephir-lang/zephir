@@ -310,6 +310,7 @@ class Call
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
 					break;
+					
 				default:
 					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
 			}

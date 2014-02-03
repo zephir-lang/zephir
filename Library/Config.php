@@ -45,8 +45,10 @@ class Config
 			'non-valid-decrement'                => true,
 			'non-valid-increment'                => true,
 			'non-valid-clone'                    => true,
+			'non-valid-new'                      => true,
 			'non-array-access'                   => true,
-			'invalid-reference'                  => true
+			'invalid-reference'                  => true,
+			'invalid-typeof-comparison'          => true
 		),
 		'optimizations' => array(
 			'static-type-inference'             => true,
@@ -75,9 +77,16 @@ class Config
 			$config = json_decode(file_get_contents('config.json'), true);
 			if (!is_array($config)) {
 				throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");
+			}			
+			foreach ($config as $key => $configSection) {
+				if (!is_array($configSection)) {
+					$this->_config[$key] = $configSection;
+				} else {
+					foreach ($configSection as $subKey => $subValue) {
+						$this->_config[$key][$subKey] = $subValue;
+					}
+				}
 			}
-			/* @todo merge options properly */
-			$this->_config = array_merge($this->_config, $config);
 		}
 		register_shutdown_function(array($this, '_saveOnExit'));
 	}
@@ -93,13 +102,13 @@ class Config
 			if (isset($this->_config[$namespace][$key])) {
 				return $this->_config[$namespace][$key];
 			} else {
-				new \Exception('Option ['.$namespace.']['.$key.'] not exists');
+				//new \Exception('Option [' . $namespace . '][' . $key . '] not exists');
 			}
 		} else {
 			if (isset($this->_config[$key])) {
 				return $this->_config[$key];
 			} else {
-				new \Exception('Option ['.$key.'] not exists');
+				//new \Exception('Option [' . $key . '] not exists');
 			}
 		}
 

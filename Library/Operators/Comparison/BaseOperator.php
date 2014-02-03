@@ -45,7 +45,13 @@ class ComparisonBaseOperator extends BaseOperator
 			return false;
 		}
 
-		if ($expr['left']['type'] == 'typeof' && $expr['right']['type'] == 'string') {
+		if ($expr['left']['type'] == 'typeof') {
+
+			if ($expr['right']['type'] != 'string') {				
+				echo $expr['right']['type'];
+				$compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
+				return false;
+			}
 
 			if (isset($expr['type'])) {
 				switch ($expr['type']) {
