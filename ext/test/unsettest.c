@@ -38,7 +38,6 @@ PHP_METHOD(Test_Unsettest, has) {
 
 
 
-	ZEPHIR_INIT_ZVAL_NREF(_0);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("property"), PH_NOISY_CC);
 	RETURN_BOOL(zephir_array_isset(_0, key));
 
@@ -64,7 +63,6 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 
 
 
-	ZEPHIR_INIT_ZVAL_NREF(_0);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("property"), PH_NOISY_CC);
 	zephir_array_unset(&_0, key, 0);
 

@@ -84,7 +84,6 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_array_fast_append(_6, _1);
 	zephir_update_property_zval(test, SL("test3"), _6 TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("a"), test TSRMLS_CC);
-	ZEPHIR_INIT_ZVAL_NREF(_9);
 	_9 = zephir_fetch_nproperty_this(this_ptr, SL("a"), PH_NOISY_CC);
 	ZEPHIR_OBS_NVAR(_8);
 	zephir_read_property(&_8, _9, SL("test2"), PH_NOISY_CC);

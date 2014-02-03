@@ -1475,7 +1475,7 @@ PHP_METHOD(Test_Flow, testFor30) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_STRING(b, "hello", 1);
 	for (_0 = 0; _0 < Z_STRLEN_P(b); _0++) {
-		v = Z_STRVAL_P(b)[_0]; 
+		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
 		zephir_array_append(&a, _1, PH_SEPARATE);
@@ -1498,7 +1498,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 	ZVAL_STRING(b, "hello", 1);
 	for (_0 = 0; _0 < Z_STRLEN_P(b); _0++) {
 		k = _0; 
-		v = Z_STRVAL_P(b)[_0]; 
+		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
 		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 689);

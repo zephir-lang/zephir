@@ -456,8 +456,8 @@ class ForStatement
 		if (isset($this->_statement['key'])) {
 			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
 		}
-
-		$codePrinter->output("\t" . $variable->getName() . ' = Z_STRVAL_P(' . $expression->getCode() . ')[' . $tempVariable->getName() . ']; ');
+		
+		$codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $expression->getCode() . ', ' . $tempVariable->getName() . ');');
 
 		/**
 		 * Variables are initialized in a different way inside cycle
