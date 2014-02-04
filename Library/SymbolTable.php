@@ -183,6 +183,12 @@ class SymbolTable
 			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized ", $statement);
 		}
 
+		/*foreach ($variable->getMarkInitBranch() as $branch) {
+			if ($branch == 0) {
+				break;
+			}
+		}*/
+
 		/*if (!$variable->isTemporal()) {
 			if ($variable->getMarkInitBranch() > $compilationContext->currentBranch) {
 				throw new CompilerException('Variable "' . $name . '" was assigned for the first time in conditional branch', $statement);

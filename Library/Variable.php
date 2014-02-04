@@ -83,7 +83,7 @@ class Variable
 	 */
 	protected $_initialized = false;
 
-	protected $_initMarkBranch = null;
+	protected $_initMarkBranch = array();
 
 	protected $_isExternal = false;
 
@@ -517,9 +517,13 @@ class Variable
 	public function setIsInitialized($initialized, CompilationContext $compilationContext, array $expression)
 	{
 		if ($initialized) {
-			if (!$this->_initialized) {
-				$this->_initMarkBranch = $compilationContext->currentBranch;
+			//if (!$this->_initialized) {
+			if (!$compilationContext->currentBranch) {
+				$this->_initMarkBranch = array(0);
+			} else {
+				$this->_initMarkBranch[] = $compilationContext->currentBranch;
 			}
+			//}
 		}
 		$this->_initialized = $initialized;
 	}

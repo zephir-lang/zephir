@@ -49,6 +49,10 @@ require ZEPHIRPATH . 'Library/CodePrinter.php';
 require ZEPHIRPATH . 'Library/ClassMethodParameters.php';
 require ZEPHIRPATH . 'Library/StatementsBlock.php';
 
+/* branches */
+require ZEPHIRPATH . 'Library/Branch.php';
+require ZEPHIRPATH . 'Library/BranchManager.php';
+
 /* built-in types */
 require ZEPHIRPATH . 'Library/Types/CharType.php';
 require ZEPHIRPATH . 'Library/Types/IntType.php';
