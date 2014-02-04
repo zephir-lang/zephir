@@ -76,6 +76,7 @@ void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy);
 /** Operator functions */
 int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 int zephir_and_function(zval *result, zval *left, zval *right);
+void zephir_negate(zval *z TSRMLS_DC);
 
 /** Bitwise functions */
 int zephir_bitwise_and_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
@@ -162,19 +163,6 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 				}  \
 			}  \
 		}  \
-	}
-
-#define ZEPHIR_MINUS(z)  \
-	{  \
-		if (Z_TYPE_P(z) == IS_LONG) {  \
-			Z_LVAL_P(z) = -Z_LVAL_P(z);  \
-		} else if (Z_TYPE_P(z) == IS_LONG) {  \
-			Z_LVAL_P(z) = -Z_DVAL_P(z);  \
-		} else if (Z_TYPE_P(z) == IS_BOOL) {\
-			Z_LVAL_P(z) = -Z_BVAL_P(z); \
-		} else { \
-			Z_LVAL_P(z) = 0; \
-		}\
 	}
 
 #define ZEPHIR_MUL_ASSIGN(z, v)  \

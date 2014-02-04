@@ -1702,7 +1702,7 @@ PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 
 
 
-	ZEPHIR_MINUS(b);
+	zephir_negate(b);
 	ZEPHIR_CPY_WRT(a, b);
 	RETURN_CCTOR(a);
 

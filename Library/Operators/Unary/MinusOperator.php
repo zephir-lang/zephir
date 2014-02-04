@@ -60,7 +60,7 @@ class MinusOperator extends BaseOperator
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 
-						$compilationContext->codePrinter->output('ZEPHIR_MINUS('.$variable->getName().');');
+						$compilationContext->codePrinter->output('zephir_negate('.$variable->getName().' TSRMLS_CC);');
 						return new CompiledExpression('variable', $variable->getName(), $expression);
 						break;
 					default:
