@@ -1693,6 +1693,33 @@ PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, declaredIntMinus) {
+
+	int a = -1;
+
+
+	RETURN_LONG(a);
+
+}
+
+/**
+ * Boolean var can`t be -1 when we set -1
+ */
+PHP_METHOD(Test_Arithmetic, letStatementBoolMinus) {
+
+	zend_bool a;
+	zval *b;
+
+	zephir_fetch_params(0, 1, 0, &b);
+
+
+
+	zephir_negate(b TSRMLS_CC);
+	a = zephir_is_true(b);
+	RETURN_BOOL(a);
+
+}
+
 PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 
 	zval *b, *a = NULL;
@@ -1702,7 +1729,7 @@ PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 
 
 
-	zephir_negate(b);
+	zephir_negate(b TSRMLS_CC);
 	ZEPHIR_CPY_WRT(a, b);
 	RETURN_CCTOR(a);
 
