@@ -164,6 +164,17 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 		}  \
 	}
 
+#define ZEPHIR_MINUS(z)  \
+	{  \
+		ZEPHIR_SEPARATE(z);  \
+		if (Z_TYPE_P(z) == IS_LONG) {  \
+			Z_LVAL_P(z) -= Z_LVAL_P(z);  \
+		} else if (Z_TYPE_P(z) == IS_LONG) {  \
+			Z_LVAL_P(z) -= Z_DVAL_P(z);  \
+		} else {\
+		}\
+	}
+
 #define ZEPHIR_MUL_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \

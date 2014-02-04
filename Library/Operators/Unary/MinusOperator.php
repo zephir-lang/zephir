@@ -19,12 +19,14 @@
 
 class MinusOperator extends BaseOperator
 {
-
 	/**
 	 * Compile expression
 	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
+	 * @param $expression
+	 * @param CompilationContext $compilationContext
+	 * @return CompiledExpression
+	 * @throws CompilerException
+	 * @throws Exception
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
@@ -36,7 +38,40 @@ class MinusOperator extends BaseOperator
 		$leftExpr->setReadOnly($this->_readOnly);
 		$left = $leftExpr->compile($compilationContext);
 
-		return new CompiledExpression('bool', '!0', $expression);
+
+		switch($left->getType()) {
+			case 'int':
+			case 'uint':
+			case 'long':
+			case 'ulong':
+			case 'double':
+				return new CompiledExpression($left->getType(), '-'.$left->getCode(), $expression);
+				break;
+			case 'variable':
+				$variable = $compilationContext->symbolTable->getVariable($left->getCode());
+
+				switch($variable->getType()) {
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'ulong':
+					case 'double':
+						return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
+						break;
+					case 'variable':
+						/**
+						 * @todo We have macros ZEPHIR_MINUS
+						 */
+						return new CompiledExpression('bool', '!0', $expression);
+						break;
+					default:
+						throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
+				}
+
+				break;
+			default:
+				throw new CompilerException("Cannot operate minus with '" . $left->getType() . "'");
+		}
 	}
 
 }

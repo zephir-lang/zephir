@@ -1283,4 +1283,10 @@ class Arithmetic
 		return a;
 	}
 
+	public function letStatementIntMinus()
+	{
+		int a;
+		let a = -1;
+		return a;
+	}
 }

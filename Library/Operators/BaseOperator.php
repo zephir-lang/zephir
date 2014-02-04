@@ -26,6 +26,9 @@ class BaseOperator
 
 	protected $_literalOnly = true;
 
+	/**
+	 * @var \Variable|null
+	 */
 	protected $_expectingVariable;
 
 	/**
@@ -35,7 +38,7 @@ class BaseOperator
 	 * @param boolean $expecting
 	 * @param Variable $expectingVariable
 	 */
-	public function setExpectReturn($expecting, Variable $expectingVariable=null)
+	public function setExpectReturn($expecting, Variable $expectingVariable = null)
 	{
 		$this->_expecting = $expecting;
 		$this->_expectingVariable = $expectingVariable;

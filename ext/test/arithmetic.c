@@ -1683,3 +1683,13 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
+
+	int a;
+
+
+	a = -1;
+	RETURN_LONG(a);
+
+}
+

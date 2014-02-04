@@ -604,6 +604,12 @@ class Expression
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
 
+			case 'minus':
+				$expr = new MinusOperator();
+				$expr->setReadOnly($this->isReadOnly());
+				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+				return $expr->compile($expression, $compilationContext);
+
 			case 'sub':
 				$expr = new SubOperator();
 				$expr->setReadOnly($this->isReadOnly());
