@@ -141,6 +141,11 @@ PHP_METHOD(Test_Arithmetic, sub20);
 PHP_METHOD(Test_Arithmetic, sub21);
 PHP_METHOD(Test_Arithmetic, sub22);
 PHP_METHOD(Test_Arithmetic, letStatementIntMinus);
+PHP_METHOD(Test_Arithmetic, letStatementVarMinus);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementvarminus, 0, 0, 1)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, intSum, NULL, ZEND_ACC_PUBLIC)
@@ -281,5 +286,6 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, sub21, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, sub22, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, letStatementIntMinus, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, letStatementVarMinus, arginfo_test_arithmetic_letstatementvarminus, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

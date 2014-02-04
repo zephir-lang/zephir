@@ -144,3 +144,5 @@ assert($t->sub21() === -1.0);
 assert($t->sub22() === -1);
 
 assert($t->letStatementIntMinus() === -1);
+assert($t->letStatementVarMinus(1) === -1);
+assert($t->letStatementVarMinus(-1) === 1);

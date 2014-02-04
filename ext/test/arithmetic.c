@@ -1693,3 +1693,18 @@ PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
+
+	zval *b, *a = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &b);
+
+
+
+	ZEPHIR_MINUS(b);
+	ZEPHIR_CPY_WRT(a, b);
+	RETURN_CCTOR(a);
+
+}
+

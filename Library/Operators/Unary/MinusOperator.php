@@ -38,7 +38,6 @@ class MinusOperator extends BaseOperator
 		$leftExpr->setReadOnly($this->_readOnly);
 		$left = $leftExpr->compile($compilationContext);
 
-
 		switch($left->getType()) {
 			case 'int':
 			case 'uint':
@@ -59,10 +58,10 @@ class MinusOperator extends BaseOperator
 						return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
 						break;
 					case 'variable':
-						/**
-						 * @todo We have macros ZEPHIR_MINUS
-						 */
-						return new CompiledExpression('bool', '!0', $expression);
+						$compilationContext->headersManager->add('kernel/operators');
+
+						$compilationContext->codePrinter->output('ZEPHIR_MINUS('.$variable->getName().');');
+						return new CompiledExpression('variable', $variable->getName(), $expression);
 						break;
 					default:
 						throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
@@ -70,7 +69,7 @@ class MinusOperator extends BaseOperator
 
 				break;
 			default:
-				throw new CompilerException("Cannot operate minus with '" . $left->getType() . "'");
+				throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
 		}
 	}
 

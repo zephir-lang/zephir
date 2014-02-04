@@ -166,12 +166,14 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 
 #define ZEPHIR_MINUS(z)  \
 	{  \
-		ZEPHIR_SEPARATE(z);  \
 		if (Z_TYPE_P(z) == IS_LONG) {  \
-			Z_LVAL_P(z) -= Z_LVAL_P(z);  \
+			Z_LVAL_P(z) = -Z_LVAL_P(z);  \
 		} else if (Z_TYPE_P(z) == IS_LONG) {  \
-			Z_LVAL_P(z) -= Z_DVAL_P(z);  \
-		} else {\
+			Z_LVAL_P(z) = -Z_DVAL_P(z);  \
+		} else if (Z_TYPE_P(z) == IS_BOOL) {\
+			Z_LVAL_P(z) = -Z_BVAL_P(z); \
+		} else { \
+			Z_LVAL_P(z) = 0; \
 		}\
 	}
 
@@ -226,10 +228,10 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 #define zephir_is_numeric(value) (Z_TYPE_P(value) == IS_LONG || Z_TYPE_P(value) == IS_DOUBLE || zephir_is_numeric_ex(value))
 
 #define zephir_is_true(value) \
-	(Z_TYPE_P((value)) == IS_NULL ? 0 : \
-		(Z_TYPE_P((value)) == IS_BOOL ? Z_BVAL_P((value)) : \
-			(Z_TYPE_P((value)) == IS_LONG ? Z_LVAL_P((value)) : \
-				zend_is_true((value)) \
+	(Z_TYPE_P(value) == IS_NULL ? 0 : \
+		(Z_TYPE_P(value) == IS_BOOL ? Z_BVAL_P(value) : \
+			(Z_TYPE_P(value) == IS_LONG ? Z_LVAL_P(value) : \
+				zend_is_true(value) \
 			) \
 		) \
 	)

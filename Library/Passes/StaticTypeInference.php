@@ -359,6 +359,10 @@ class StaticTypeInference
 				$this->passExpression($expression['left']);
 				return 'string';
 
+			case 'minus':
+				$this->passExpression($expression['left']);
+				return 'variable';
+
 			case 'not':
 				$this->passExpression($expression['left']);
 				return 'bool';
