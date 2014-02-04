@@ -95,7 +95,6 @@ class NewInstanceOperator extends BaseOperator
 				}
 			}
 
-
 			/**
 			 * Classes inside the same extension
 			 */
@@ -109,8 +108,8 @@ class NewInstanceOperator extends BaseOperator
 				if (!class_exists($className, false)) {
 
 					if ($compilationContext->symbolTable->hasVariable($className)) {
-						$classNameVariable = $compilationContext->symbolTable->getVariableForRead($className);
 
+						$classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
 						if ($classNameVariable->isNotVariableAndString()) {
 							throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
 						}
@@ -136,7 +135,7 @@ class NewInstanceOperator extends BaseOperator
 		 * Mark variable initialized
 		 */
 		$params = array();
-		$symbolVariable->setIsInitialized(true);
+		$symbolVariable->setIsInitialized(true, $compilationContext, $expression);
 
 		/**
 		 * Don't check the constructor for stdclass instances

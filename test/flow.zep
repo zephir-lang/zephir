@@ -266,7 +266,7 @@ class Flow
 	public function testWhile3()
 	{
 		int a; var b; double c;
-		let a = 5;
+		let a = 5, b = 0;
 		while a {
 			let b = 5;
 			while b {
@@ -281,7 +281,7 @@ class Flow
 	public function testWhile4()
 	{
 		int a; var b; double c;
-		let a = 5;
+		let a = 5, b = 0;
 		while a {
 			let b = 5;
 			while b {
@@ -336,7 +336,7 @@ class Flow
 	public function testWhile9()
 	{
 		int a; var b; double c;
-		let a = 5;
+		let a = 5, b = 0;
 		while a {
 			let b = 5;
 			while b {
@@ -351,6 +351,7 @@ class Flow
 	public function testWhile10(var a)
 	{
 		var b; double c;
+		let b = 0;
 		while a {
 			let b = 5;
 			while b {
@@ -365,6 +366,7 @@ class Flow
 	public function testWhile11(var a, var d)
 	{
 		var b; double c;
+		let b = 0;
 		while a {
 			let b = d;
 			while b {

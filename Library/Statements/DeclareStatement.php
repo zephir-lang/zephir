@@ -216,7 +216,7 @@ class DeclareStatement
 				}
 
 				$symbolVariable->setDefaultInitValue($defaultValue);
-				$symbolVariable->setIsInitialized(true);
+				$symbolVariable->setIsInitialized(true, $compilationContext, $variable);
 				$symbolVariable->increaseMutates();
 			}
 		}

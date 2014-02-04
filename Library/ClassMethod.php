@@ -991,7 +991,7 @@ class ClassMethod
 					/**
 					 * Assuming they're initialized
 					 */
-					$symbolParam->setIsInitialized(true);
+					$symbolParam->setIsInitialized(true, $compilationContext, $parameter);
 
 					/**
 					 * Initialize auxiliar parameter zvals to null
@@ -1028,7 +1028,7 @@ class ClassMethod
 				/**
 				 * Assuming they're initialized
 				 */
-				$symbol->setIsInitialized(true);
+				$symbol->setIsInitialized(true, $compilationContext, $parameter);
 
 				/**
 				 * Variables with class/type must be objects across the execution

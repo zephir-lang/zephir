@@ -54,7 +54,7 @@ class PregMatchOptimizer
 			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
 			if (!$matchesVariable->isInitialized()) {
 				$matchesVariable->initVariant($context);
-				$matchesVariable->setIsInitialized(true);
+				$matchesVariable->setIsInitialized(true, $compilationContext);
 			}
 		} else {
 			$matchesVariable = $context->symbolTable->addTemp('variable', $context);

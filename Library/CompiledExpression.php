@@ -141,7 +141,7 @@ class CompiledExpression
 			if (!$result) {
 				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 				$compilationContext->codePrinter->output($code($tempVariable->getName()));
-				$tempVariable->setIsInitialized(true);
+				$tempVariable->setIsInitialized(true, $compilationContext);
 				return $tempVariable->getName();
 			} else {
 				return $code($result);

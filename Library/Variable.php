@@ -78,7 +78,12 @@ class Variable
 	 */
 	protected $_numberMutates = 0;
 
+	/**
+	 * Whether the variable has received any assignment
+	 */
 	protected $_initialized = false;
+
+	protected $_initMarkBranch = null;
 
 	protected $_isExternal = false;
 
@@ -132,6 +137,16 @@ class Variable
 	public function getInitBranch()
 	{
 		return $this->_initBranch;
+	}
+
+	/**
+	 * Get init marked branch
+	 *
+	 * @return bool|int
+	 */
+	public function getMarkInitBranch()
+	{
+		return $this->_initMarkBranch;
 	}
 
 	/**
@@ -493,12 +508,19 @@ class Variable
 
 	/**
 	 * Sets if the variable is initialized
-	 * This allow to throw an exception if the variable is read without initialization
+	 * This allow to throw an exception if the variable is being read without prior initialization
 	 *
 	 * @param boolean $initialized
+	 * @param CompilationContext $compilationContext
+	 * @param array $expression
 	 */
-	public function setIsInitialized($initialized)
+	public function setIsInitialized($initialized, CompilationContext $compilationContext, array $expression)
 	{
+		if ($initialized) {
+			if (!$this->_initialized) {
+				$this->_initMarkBranch = $compilationContext->currentBranch;
+			}
+		}
 		$this->_initialized = $initialized;
 	}
 

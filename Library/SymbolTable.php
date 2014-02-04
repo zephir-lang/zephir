@@ -47,7 +47,7 @@ class SymbolTable
 	{
 		/* this_ptr */
 		$thisVar = new Variable('variable', 'this', $compilationContext->currentBranch);
-		$thisVar->setIsInitialized(true);
+		$thisVar->setIsInitialized(true, $compilationContext, array());
 		$thisVar->increaseUses();
 		$thisVar->setReadOnly(true);
 		$thisVar->setLowName('this_ptr');
@@ -55,7 +55,7 @@ class SymbolTable
 		$this->_variables['this'] = $thisVar;
 
 		$returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
-		$returnValue->setIsInitialized(true);
+		$returnValue->setIsInitialized(true, $compilationContext, array());
 		$returnValue->increaseUses();
 		$this->_variables['return_value'] = $returnValue;
 	}
@@ -168,7 +168,7 @@ class SymbolTable
 				$compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
 
 				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
-				$superVar->setIsInitialized(true);
+				$superVar->setIsInitialized(true, $compilationContext, $statement);
 				$superVar->setDynamicTypes('array');
 				$this->_variables[$name] = $superVar;
 			}
@@ -182,6 +182,12 @@ class SymbolTable
 		if (!$variable->isInitialized()) {
 			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized ", $statement);
 		}
+
+		/*if (!$variable->isTemporal()) {
+			if ($variable->getMarkInitBranch() > $compilationContext->currentBranch) {
+				throw new CompilerException('Variable "' . $name . '" was assigned for the first time in conditional branch', $statement);
+			}
+		}*/
 
 		$variable->increaseUses();
 		return $variable;
@@ -321,7 +327,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
@@ -352,7 +358,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->setTemporal(true);
 		$variable->setMemoryTracked(false);
 		$variable->increaseUses();
@@ -382,7 +388,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->setTemporal(true);
 		$variable->setMemoryTracked(false);
 		$variable->increaseUses();
@@ -416,7 +422,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->setTemporal(true);
@@ -450,7 +456,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->increaseUses();
 		$variable->increaseMutates();
 		$variable->setLocalOnly(true);
@@ -480,7 +486,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();
@@ -510,7 +516,7 @@ class SymbolTable
 
 		$tempVar = $this->_tempVariable++;
 		$variable = $this->addVariable($type, '_' . $tempVar, $context);
-		$variable->setIsInitialized(true);
+		$variable->setIsInitialized(true, $context, array());
 		$variable->setTemporal(true);
 		$variable->increaseUses();
 		$variable->increaseMutates();

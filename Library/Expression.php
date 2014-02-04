@@ -382,7 +382,7 @@ class Expression
 						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
 						$symbolVariable->setMustInitNull(true);
-						$symbolVariable->setIsInitialized(true);
+						$symbolVariable->setIsInitialized(true, $compilationContext, $expression);
 						$compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
 						if ($symbolVariable->isTemporal()) {
 							$symbolVariable->setIdle(true);

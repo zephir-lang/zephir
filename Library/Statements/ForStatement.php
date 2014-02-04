@@ -79,7 +79,7 @@ class ForStatement
 		if ($parameters[0]->getType() != 'variable') {
 			$tempVariable = $compilationContext->symbolTable->addTemp($parameters[0]->getType(), $compilationContext);
 		} else {
-			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode());
+			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode(), $compilationContext, $this->_statement);
 			$tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
 		}
 
@@ -90,7 +90,7 @@ class ForStatement
 		if ($parameters[1]->getType() != 'variable') {
 			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
 		} else {
-			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode());
+			$rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode(), $compilationContext, $this->_statement);
 			$upperBoundVariable = $compilationContext->symbolTable->getTempVariable($rangeVariable->getType(), $compilationContext);
 		}
 
@@ -430,7 +430,7 @@ class ForStatement
 					throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in string traversal", $this->_statement['expr']);
 			}
 			$keyVariable->setMustInitNull(true);
-			$keyVariable->setIsInitialized(true);
+			$keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
 		}
 
 		/**
@@ -450,7 +450,7 @@ class ForStatement
 					throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in string traversal", $this->_statement['expr']);
 			}
 			$variable->setMustInitNull(true);
-			$variable->setIsInitialized(true);
+			$variable->setIsInitialized(true, $compilationContext, $this->_statement);
 		}
 
 		$tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
@@ -514,7 +514,7 @@ class ForStatement
 				throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
 			}
 			$keyVariable->setMustInitNull(true);
-			$keyVariable->setIsInitialized(true);
+			$keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
 			$keyVariable->setDynamicTypes('undefined');
 		}
 
@@ -527,7 +527,7 @@ class ForStatement
 				throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
 			}
 			$variable->setMustInitNull(true);
-			$variable->setIsInitialized(true);
+			$variable->setIsInitialized(true, $compilationContext, $this->_statement);
 			$variable->setDynamicTypes('undefined');
 		}
 
