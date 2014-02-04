@@ -19,12 +19,12 @@
 
 class NotOperator extends BaseOperator
 {
-
 	/**
-	 * Compile expression
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
+	 * @param $expression
+	 * @param CompilationContext $compilationContext
+	 * @return CompiledExpression
+	 * @throws CompilerException
+	 * @throws Exception
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
