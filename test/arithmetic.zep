@@ -1290,6 +1290,22 @@ class Arithmetic
 		return a;
 	}
 
+	public function declaredIntMinus()
+	{
+		int a = -1;
+		return a;
+	}
+
+	/**
+	 * Boolean var can`t be -1 when we set -1
+	 */
+	public function letStatementBoolMinus(var b)
+	{
+		boolean a;
+		let a = -b;
+		return a;
+	}
+
 	public function letStatementVarMinus(var b)
 	{
 		var a;

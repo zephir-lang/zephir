@@ -149,3 +149,10 @@ assert($t->letStatementVarMinus(-1) === 1);
 assert($t->letStatementVarMinus(true) === -true);
 assert($t->letStatementVarMinus(false) === -false);
 assert($t->letStatementVarMinus("") === -"");
+
+assert($t->letStatementBoolMinus(-1) === true); // it is zend_bool not zend_var
+assert($t->letStatementBoolMinus(1) === true);
+assert($t->letStatementBoolMinus(true) === true);
+
+assert($t->letStatementBoolMinus(false) === false);
+assert($t->letStatementBoolMinus(0) === false);
