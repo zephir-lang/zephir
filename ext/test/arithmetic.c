@@ -1683,3 +1683,28 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
+
+	int a;
+
+
+	a = -1;
+	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
+
+	zval *b, *a = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &b);
+
+
+
+	zephir_negate(b);
+	ZEPHIR_CPY_WRT(a, b);
+	RETURN_CCTOR(a);
+
+}
+

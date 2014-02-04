@@ -2389,7 +2389,6 @@ class LetStatement
 			 * There are four types of assignments
 			 */
 			switch ($assignment['assign-type']) {
-
 				case 'variable':
 					$this->assignVariable($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
 					break;

@@ -146,6 +146,7 @@ class LocalContextPass
 						case 'clone':
 						case 'require':
 						case 'type-hint':
+						case 'minus':
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
 						case 'constant':
@@ -307,6 +308,10 @@ class LocalContextPass
 				$this->passExpression($expression['right']);
 				break;
 
+			case 'minus':
+				$this->passExpression($expression['left']);
+				break;
+
 			case 'list':
 				$this->passExpression($expression['left']);
 				break;
@@ -317,7 +322,7 @@ class LocalContextPass
 				break;
 				
 			default:
-				echo 'Type=', $expression['type'], PHP_EOL;
+				echo 'LocalContextPassType=', $expression['type'], PHP_EOL;
 				break;
 		}
 	}
