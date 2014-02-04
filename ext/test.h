@@ -26,6 +26,7 @@
 #include "test/flow.h"
 #include "test/fortytwo.h"
 #include "test/instanceoff.h"
+#include "test/issettest.h"
 #include "test/json.h"
 #include "test/logical.h"
 #include "test/mcall.h"

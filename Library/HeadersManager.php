@@ -58,12 +58,15 @@ class HeadersManager
 			$this->_headers[$path] = $path;
 		} else {
 			switch ($position) {
+
 				case self::POSITION_FIRST:
 					$this->_headersFirst[$path] = $path;
 					break;
+
 				case self::POSITION_LAST:
 					$this->_headersLast[$path] = $path;
 					break;
+					
 				default:
 					break;
 			}

@@ -245,6 +245,7 @@ class LocalContextPass
 			case 'constant':
 			case 'static-constant-access':
 				break;
+
 			case 'sub':
 			case 'add':
 			case 'div':
@@ -269,27 +270,34 @@ class LocalContextPass
 				$this->passExpression($expression['left']);
 				$this->passExpression($expression['right']);
 				break;
+
 			case 'typeof':
 			case 'not':
 				$this->passExpression($expression['left']);
 				break;
+
 			case 'mcall':
 			case 'fcall':
 			case 'scall':
 				$this->passCall($expression);
 				break;
+
 			case 'array':
 				$this->passArray($expression);
 				break;
+
 			case 'new':
 				$this->passNew($expression);
 				break;
+
 			case 'property-access':
 			case 'property-dynamic-access':
+			case 'property-string-access':
 			case 'static-property-access':
 			case 'array-access':
 				$this->passExpression($expression['left']);
 				break;
+
 			case 'isset':
 			case 'empty':
 			case 'instanceof':
@@ -327,9 +335,11 @@ class LocalContextPass
 		foreach ($statements as $statement) {
 
 			switch ($statement['type']) {
+				
 				case 'let':
 					$this->passLetStatement($statement);
 					break;
+
 				case 'echo':
 					if (isset($statement['expressions'])) {
 						foreach ($statement['expressions'] as $expr) {
@@ -337,9 +347,11 @@ class LocalContextPass
 						}
 					}
 					break;
+
 				case 'declare':
 					$this->declareVariables($statement);
 					break;
+
 				case 'if':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
@@ -351,6 +363,7 @@ class LocalContextPass
 						$this->passStatementBlock($statement['else_statements']);
 					}
 					break;
+
 				case 'switch':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
@@ -366,6 +379,7 @@ class LocalContextPass
 						}
 					}
 					break;
+
 				case 'while':
 				case 'do-while':
 					if (isset($statement['expr'])) {
@@ -375,6 +389,7 @@ class LocalContextPass
 						$this->passStatementBlock($statement['statements']);
 					}
 					break;
+
 				case 'for':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
@@ -391,40 +406,48 @@ class LocalContextPass
 						$this->passStatementBlock($statement['statements']);
 					}
 					break;
+
 				case 'return':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
 					}
 					break;
+
 				case 'loop':
 					if (isset($statement['statements'])) {
 						$this->passStatementBlock($statement['statements']);
 					}
 					break;
+
 				case 'throw':
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
 					}
 					break;
+
 				case 'fetch':
 					$this->passExpression($statement['expr']);
 					break;
+
 				case 'mcall':
 				case 'scall':
 				case 'fcall':
 				case 'require':
 					$this->passCall($statement['expr']);
 					break;
+
 				case 'unset':
 					if ($statement['expr']['left']['type'] == 'variable') {
 						$this->increaseMutations($statement['expr']['left']['value']);
 					}
 					break;
+
 				case 'break':
 				case 'continue':
 				case 'empty':
 				case 'cblock':
 					break;
+
 				default:
 					echo 'Statement=', $statement['type'], PHP_EOL;
 			}

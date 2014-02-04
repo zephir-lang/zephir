@@ -204,7 +204,7 @@ class StaticTypeInference
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
-				case 'static-property-access':
+				case 'static-property-access':				
 					$this->markVariable($assigment['variable'], 'variable');
 					break;
 				case 'variable-append':
@@ -360,6 +360,7 @@ class StaticTypeInference
 				return 'string';
 
 			case 'not':
+			case 'minus':
 				$this->passExpression($expression['left']);
 				return 'bool';
 
@@ -379,10 +380,12 @@ class StaticTypeInference
 
 			case 'property-access':
 			case 'property-dynamic-access':
+			case 'property-string-access':
 			case 'array-access':
 			case 'static-property-access':
 				$this->passExpression($expression['left']);
 				return 'variable';
+
 			case 'fetch':
 				$this->markVariable($expression['left']['value'], 'variable');
 				$this->passExpression($expression['right']);

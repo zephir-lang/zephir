@@ -34,7 +34,7 @@ class StatementsBlock
 	protected $_lastStatement;
 
 	/**
-	 *
+	 * StatementsBlock constructor
 	 */
 	public function __construct(array $statements)
 	{
@@ -55,8 +55,10 @@ class StatementsBlock
 			 * Generate GDB hints
 			 */
 			if ($this->_debug) {
-				if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
-					$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
+				if (isset($statement['file'])) {
+					if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
+						$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
+					}
 				}
 			}
 
