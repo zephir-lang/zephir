@@ -463,3 +463,26 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/142
+ */
+PHP_METHOD(Test_Mcall, arrayParamWithDefaultEmptyArray) {
+
+	zval *driverOptions_param = NULL;
+	zval *driverOptions = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &driverOptions_param);
+
+	if (!driverOptions_param) {
+		ZEPHIR_INIT_VAR(driverOptions);
+		array_init(driverOptions);
+	} else {
+		zephir_get_arrval(driverOptions, driverOptions_param);
+	}
+
+
+	RETURN_CTOR(driverOptions);
+
+}
+

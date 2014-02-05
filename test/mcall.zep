@@ -156,4 +156,12 @@ class Mcall
     {
         return value;
     }
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/142
+	 */
+    public function arrayParamWithDefaultEmptyArray(array driverOptions = [])
+    {
+		return driverOptions;
+    }
 }
