@@ -121,9 +121,53 @@ class EvalExpression
 			case 'variable':
 
 				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
+
+				$possibleValue = $variableRight->getPossibleValue();
+				if (is_object($possibleValue)) {
+
+					$possibleValueBranch = $variableRight->getPossibleValueBranch();
+					if ($possibleValueBranch instanceof Branch) {
+
+						/**
+						 * Check if the possible value was assigned in the root branch
+						 */
+						if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
+
+							if ($possibleValue instanceof LiteralCompiledExpression) {
+
+								switch ($possibleValue->getType()) {
+
+									case 'null':
+										$this->_unrecheable = true;
+										break;
+
+									case 'bool':
+										if ($possibleValue->getBooleanCode() == '0') {
+											$this->_unrecheable = true;
+										}
+										break;
+
+									case 'int':
+										if (!intval($possibleValue->getCode())) {
+											$this->_unrecheable = true;
+										}
+										break;
+
+								}
+							}
+						}
+					}
+
+				}
+
 				switch ($variableRight->getType()) {
 
 					case 'int':
+					case 'uint':
+					case 'char':
+					case 'uchar':
+					case 'long':
+					case 'ulong':
 						return $variableRight->getName();
 
 					case 'string':

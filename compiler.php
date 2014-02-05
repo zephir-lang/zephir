@@ -45,6 +45,7 @@ require ZEPHIRPATH . 'Library/GlobalConstant.php';
 require ZEPHIRPATH . 'Library/FunctionCache.php';
 require ZEPHIRPATH . 'Library/Expression.php';
 require ZEPHIRPATH . 'Library/CompiledExpression.php';
+require ZEPHIRPATH . 'Library/LiteralCompiledExpression.php';
 require ZEPHIRPATH . 'Library/CodePrinter.php';
 require ZEPHIRPATH . 'Library/ClassMethodParameters.php';
 require ZEPHIRPATH . 'Library/StatementsBlock.php';

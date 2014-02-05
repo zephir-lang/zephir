@@ -20,8 +20,7 @@
 /**
  * StatementsBlock
  *
- * This represent a list of statements like the one in a method
- * or a if/else/while
+ * This represents a single basic block in Zephir. A statements block is simply a container of instructions that execute sequentially.
  */
 class StatementsBlock
 {
@@ -41,10 +40,27 @@ class StatementsBlock
 		$this->_statements = $statements;
 	}
 
-	public function compile(CompilationContext $compilationContext, $unrecheable=false)
+	/**
+	 * @param CompilationContext $compilationContext
+	 * @param boolean $unrecheable
+	 * @param int $branchType
+	 */
+	public function compile(CompilationContext $compilationContext, $unrecheable=false, $branchType=Branch::TYPE_UNKNOWN)
 	{
 		$compilationContext->codePrinter->increaseLevel();
 		$compilationContext->currentBranch++;
+
+		/**
+		 * Create a new branch
+		 */
+		$currentBranch = new Branch();
+		$currentBranch->setType($branchType);
+		$currentBranch->setUnrecheable($unrecheable);
+
+		/**
+		 * Activate branch in the branch manager
+		 */
+		$compilationContext->branchManager->addBranch($currentBranch);
 
 		$this->_unrecheable = $unrecheable;
 
@@ -57,7 +73,7 @@ class StatementsBlock
 			if ($this->_debug) {
 				if (isset($statement['file'])) {
 					if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
-						$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "'. $statement['file'] . '"');
+						$compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "' . $statement['file'] . '"');
 					}
 				}
 			}
@@ -67,12 +83,15 @@ class StatementsBlock
 			 */
 			if ($this->_unrecheable) {
 				switch ($statement['type']) {
+
 					case 'echo':
 						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expressions'][0]);
 						break;
+
 					case 'let':
 						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['assignments'][0]);
 						break;
+
 					case 'fetch':
 					case 'fcall':
 					case 'mcall':
@@ -83,12 +102,14 @@ class StatementsBlock
 					case 'switch':
 					case 'for':
 					case 'return':
+					case 'c-block':
 						if (isset($statement['expr'])) {
 							$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expr']);
 						} else {
 							$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
 						}
 						break;
+
 					default:
 						$compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
 				}
@@ -232,6 +253,8 @@ class StatementsBlock
 		 * marking them as idle
 		 */
 		$compilationContext->symbolTable->markTemporalVariablesIdle($compilationContext);
+
+		$compilationContext->branchManager->removeBranch($currentBranch);
 
 		$compilationContext->currentBranch--;
 		$compilationContext->codePrinter->decreaseLevel();

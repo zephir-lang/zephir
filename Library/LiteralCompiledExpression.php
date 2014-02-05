@@ -18,49 +18,12 @@
 */
 
 /**
- * CommandVersion
+ * LiteralCompiledExpression
  *
- * Shows Zephir version
+ * This represent a compiled expression as CompiledExpression, but the contents of
+ * the resolved code is potentially a simple literal expression
  */
-class CommandVersion extends CommandAbstract
+class LiteralCompiledExpression extends CompiledExpression
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'version';
-	}
-
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'version';
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Shows Zephir version';
-	}
-
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		echo Compiler::VERSION, PHP_EOL;
-	}
 }

@@ -116,6 +116,11 @@ class CompilationContext
 	public $currentBranch = 0;
 
 	/**
+	 * Helps to create graphs of conditional/jump branches in a specific method
+	 */
+	public $branchManager;
+
+	/**
 	 * Function Cache
 	 *
 	 * @var \FunctionCache

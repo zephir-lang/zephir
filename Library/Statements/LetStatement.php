@@ -57,6 +57,12 @@ class LetStatement
 			}
 		}
 
+		/**
+		 * Set the assigned value to the variable as a CompiledExpression
+		 * We could use this expression for further analysis
+		 */
+		$symbolVariable->setPossibleValue($resolvedExpr, $compilationContext);
+
 		$type = $symbolVariable->getType();
 		switch ($type) {
 
@@ -550,7 +556,7 @@ class LetStatement
 					case 'uint':
 					case 'long':
 					case 'ulong':
-					case 'double':					
+					case 'double':
 						switch ($statement['operator']) {
 							case 'assign':
 								$codePrinter->output($variable . ' = (' . $resolvedExpr->getCode() . ') ? 1 : 0;');
@@ -608,9 +614,9 @@ class LetStatement
 								}
 								break;
 
-							case 'variable':								
+							case 'variable':
 							case 'string':
-							case 'array':							
+							case 'array':
 								switch ($statement['operator']) {
 									case 'assign':
 										$codePrinter->output($variable . ' = zephir_is_true(' . $itemVariable->getName() . ');');
@@ -935,7 +941,7 @@ class LetStatement
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
 								}
-								break;								
+								break;
 
 							case 'string':
 								switch ($statement['operator']) {
@@ -1068,21 +1074,21 @@ class LetStatement
 
 							case 'int':
 							case 'uint':
-							case 'long':							
+							case 'long':
 								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 								$codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 								$symbolVariable->setIdle(true);
 								break;
 
-							case 'double':							
+							case 'double':
 								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 								$codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
 								$symbolVariable->setIdle(true);
 								break;
 
-							case 'bool':							
+							case 'bool':
 								$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
 								$codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $exprVariable->getName() . ');');
 								$codePrinter->output('zephir_array_append(&' . $variable . ', ' . $symbolVariable->getName() . ', PH_SEPARATE);');
@@ -1183,7 +1189,7 @@ class LetStatement
 					case 'array':
 						$symbolVariable = $variableExpr;
 						break;
-						
+
 					default:
 						throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be assigned to array offset", $resolvedExpr->getOriginal());
 				}
@@ -1656,7 +1662,7 @@ class LetStatement
 								$functionName = 'ZEPHIR_ADD_ASSIGN';
 								break;
 						}
-						
+
 						$resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
 						$codePrinter->output('ZVAL_LONG(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
 						$codePrinter->output($functionName . '(' . $tempVariable->getName() . ', ' . $resolvedVariable->getName() . ')');
@@ -2341,7 +2347,7 @@ class LetStatement
 			/**
 			 * Incr/Decr assignments don't require an expression
 			 */
-			if (isset($assignment['expr'])) {				
+			if (isset($assignment['expr'])) {
 
 				$expr = new Expression($assignment['expr']);
 

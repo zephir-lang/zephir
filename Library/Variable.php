@@ -117,6 +117,16 @@ class Variable
 	protected $_node;
 
 	/**
+	 * Possible constant value assigned to the variable
+	 */
+	protected $_possibleValue;
+
+	/**
+	 * Branch where the variable got its last possible value
+	 */
+	protected $_possibleValueBranch;
+
+	/**
 	 * @param $type
 	 * @param $name
 	 * @param $branch
@@ -784,4 +794,28 @@ class Variable
 	{
 		return !$this->isVariable() && !$this->isString();
 	}
+
+	/**
+	 * @param CompiledExpression $possibleValue
+	 * @param CompilationContext $compilationContext
+	 */
+	public function setPossibleValue(CompiledExpression $possibleValue, CompilationContext $compilationContext)
+	{
+		$this->_possibleValue = $possibleValue;
+		$this->_possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getPossibleValue()
+	{
+		return $this->_possibleValue;
+	}
+
+	public function getPossibleValueBranch()
+	{
+		return $this->_possibleValueBranch;
+	}
+
 }

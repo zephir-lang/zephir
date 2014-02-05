@@ -218,4 +218,14 @@ class CodePrinter
 		return $this->_currentPrints;
 	}
 
+	/**
+	 * Frees memory used within the code
+	 */
+	public function clear()
+	{
+		$this->_code = null;
+		$this->_lastLine = null;
+		$this->_level = 0;
+	}
+
 }

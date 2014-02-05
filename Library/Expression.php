@@ -359,6 +359,7 @@ class Expression
 				switch ($resolved->getType()) {
 					case 'bool':
 						return new CompiledExpression('bool', $resolved->getCode(), $expression);
+
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/operators');
 						$symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -427,17 +428,17 @@ class Expression
 		switch ($type) {
 
 			case 'null':
-				return new CompiledExpression('null', null, $expression);
+				return new LiteralCompiledExpression('null', null, $expression);
 
 			case 'int':
 			case 'integer':
-				return new CompiledExpression('int', $expression['value'], $expression);
+				return new LiteralCompiledExpression('int', $expression['value'], $expression);
 
 			case 'double':
-				return new CompiledExpression('double', $expression['value'], $expression);
+				return new LiteralCompiledExpression('double', $expression['value'], $expression);
 
 			case 'bool':
-				return new CompiledExpression('bool', $expression['value'], $expression);
+				return new LiteralCompiledExpression('bool', $expression['value'], $expression);
 
 			case 'string':
 				if (!$this->_stringOperation) {
@@ -445,7 +446,7 @@ class Expression
 						return new CompiledExpression('int', $expression['value'], $expression);
 					}
 				}
-				return new CompiledExpression('string', Utils::addSlashes($expression['value']), $expression);
+				return new LiteralCompiledExpression('string', Utils::addSlashes($expression['value']), $expression);
 
 			case 'char':
 				if (!strlen($expression['value'])) {
@@ -458,7 +459,7 @@ class Expression
 						throw new CompilerException("Invalid char literal: '" . $expression['value'] . "'", $expression);
 					}
 				}
-				return new CompiledExpression('char', $expression['value'], $expression);
+				return new LiteralCompiledExpression('char', $expression['value'], $expression);
 
 			case 'variable':
 				return new CompiledExpression('variable', $expression['value'], $expression);
@@ -713,7 +714,7 @@ class Expression
 				$expr->setReadOnly($this->isReadOnly());
 				$expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
 				return $expr->compile($expression, $compilationContext);
-			
+
 			case 'ternary':
 				$expr = new TernaryOperator();
 				$expr->setReadOnly($this->isReadOnly());

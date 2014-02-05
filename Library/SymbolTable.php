@@ -20,8 +20,7 @@
 /**
  * SymbolTable
  *
- * A symbol table stores all the variables defined in a method, their data types
- * default values
+ * A symbol table stores all the variables defined in a method, their data types and default values
  */
 class SymbolTable
 {
@@ -368,7 +367,7 @@ class SymbolTable
 		$variable->setTemporal(true);
 		$variable->setMemoryTracked(false);
 		$variable->increaseUses();
-		$variable->increaseMutates();		
+		$variable->increaseMutates();
 
 		$this->_registerTempVariable($type, 'non-tracked', $variable);
 

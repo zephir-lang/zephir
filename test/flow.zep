@@ -814,4 +814,13 @@ class Flow
 		}
 		return 2;
 	}
+
+	public function testUn()
+	{
+		var a = 0;
+		if a {
+			echo "hello";
+		}
+	}
+
 }

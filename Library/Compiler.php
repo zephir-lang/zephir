@@ -24,6 +24,8 @@
  */
 class Compiler
 {
+	const VERSION = '0.3.1a';
+
 	/**
 	 * @var CompilerFile[]
 	 */
@@ -68,6 +70,12 @@ class Compiler
 	 */
 	protected static $_loadedPrototypes = false;
 
+	/**
+	 * Compiler constructor
+	 *
+	 * @param Config $config
+	 * @param Logger $logger
+	 */
 	public function __construct(Config $config, Logger $logger)
 	{
 		$this->_config = $config;
@@ -345,6 +353,10 @@ class Compiler
 
 		if (!is_dir('.temp')) {
 			mkdir('.temp');
+		}
+
+		if (!file_exists('.temp/' . self::VERSION)) {
+			mkdir('.temp/' . self::VERSION);
 		}
 
 		return $namespace;

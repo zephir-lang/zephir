@@ -116,12 +116,12 @@ class Constants
 		$isPhpConstant = false;
 		$isZephirConstant = false;
 
-		$constantName = &$expression['value'];
+		$constantName    = $expression['value'];
 		$mergedConstants = array_merge($this->envConstans, $this->magickConstants);
 
 		if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
 			if (!$compilationContext->compiler->isConstant($constantName)) {
-				$compilationContext->logger->warning("Constant '".$constantName."' does not exist at compile time", 'nonexistant-constant', $expression);
+				$compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistant-constant', $expression);
 			} else {
 				$isZephirConstant = true;
 			}
@@ -134,38 +134,41 @@ class Constants
 			$type = strtolower(gettype($constantName));
 
 			switch ($type) {
+
 				case 'integer':
-					return new CompiledExpression('int', $constantName, $expression);
+					return new LiteralCompiledExpression('int', $constantName, $expression);
+
 				case 'string':
-					return new CompiledExpression('string', Utils::addSlashes($constantName), $expression);
+					return new LiteralCompiledExpression('string', Utils::addSlashes($constantName), $expression);
+
 				default:
-					return new CompiledExpression($type, $constantName, $expression);
+					return new LiteralCompiledExpression($type, $constantName, $expression);
 			}
 		}
 
 		if ($isZephirConstant) {
 			$constant = $compilationContext->compiler->getConstant($constantName);
-			return new CompiledExpression($constant[0], $constant[1], $expression);
+			return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
 		}
 
 		if (in_array($constantName, $this->magickConstants)) {
 			switch ($constantName) {
+
 				case '__CLASS__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getName(), $expression);
-					break;
+
 				case '__NAMESPACE__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getCNamespace(), $expression);
-					break;
+
 				case '__METHOD__':
 					return new CompiledExpression('string', $compilationContext->classDefinition->getName().':'.$compilationContext->currentMethod->getName(), $expression);
-					break;
+
 				case '__FUNCTION__':
 					return new CompiledExpression('string', $compilationContext->currentMethod->getName(), $expression);
-					break;
 			}
 
 			$compilationContext->logger->warning("Magic constant '".$constantName."' is not supported", 'not-supported-magic-constant', $expression);
-			return new CompiledExpression('null', null, $expression);
+			return new LiteralCompiledExpression('null', null, $expression);
 		}
 
 		if ($this->_expecting && $this->_expectingVariable) {
@@ -179,7 +182,7 @@ class Constants
 			throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
 		}
 
-		$compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$symbolVariable->getName().', "'.$expression['value'].'");');
+		$compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT(' . $symbolVariable->getName() . ', "' . $expression['value'] . '");');
 		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 	}
 }

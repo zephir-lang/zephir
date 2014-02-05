@@ -564,15 +564,15 @@ class ClassMethod
 
 			case 'int':
 			case 'uint':
-			case 'long':		
-			case 'ulong':	
+			case 'long':
+			case 'ulong':
 				switch ($parameter['default']['type']) {
 					case 'null':
 						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
 						break;
 					case 'int':
 					case 'uint':
-					case 'long':					
+					case 'long':
 						$code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
 						break;
 					case 'double':
@@ -583,14 +583,14 @@ class ClassMethod
 				}
 				break;
 
-			case 'double':			
+			case 'double':
 				switch ($parameter['default']['type']) {
 					case 'null':
 						$code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
 						break;
 					case 'int':
 					case 'uint':
-					case 'long':					
+					case 'long':
 						$code .= "\t\t" . $parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';' . PHP_EOL;
 						break;
 					case 'double':
@@ -618,7 +618,7 @@ class ClassMethod
 				}
 				break;
 
-			case 'string':			
+			case 'string':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
@@ -636,7 +636,7 @@ class ClassMethod
 				}
 				break;
 
-			case 'array':			
+			case 'array':
 				$compilationContext->symbolTable->mustGrownStack(true);
 				$compilationContext->headersManager->add('kernel/memory');
 				switch ($parameter['default']['type']) {
@@ -715,7 +715,7 @@ class ClassMethod
 						$code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
 						$code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
 						break;
-						
+
 					default:
 						throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(variable)", $parameter);
 				}
@@ -861,8 +861,8 @@ class ClassMethod
 		if (is_object($this->_statements)) {
 
 			/**
-			 * This pass checks for zval variables than can be potentally
-			 * used without allocate memory and memory tracking
+			 * This pass checks for zval variables than can be potentially
+			 * used without allocating memory and track it
 			 * these variables are stored in the stack
 			 */
 			if ($compilationContext->config->get('local-context-pass', 'optimizations')) {
@@ -912,8 +912,14 @@ class ClassMethod
 			}
 		}
 
+		/**
+		 * BranchManager helps to create graphs of conditional/loop/root/jump branches
+		 */
+		$branchManager = new BranchManager();
+
+		$compilationContext->branchManager = $branchManager;
 		$compilationContext->typeInference = $typeInference;
-		$compilationContext->symbolTable = $symbolTable;
+		$compilationContext->symbolTable   = $symbolTable;
 
 		$oldCodePrinter = $compilationContext->codePrinter;
 
@@ -1050,12 +1056,17 @@ class ClassMethod
 		 * Compile the block of statements if any
 		 */
 		if (is_object($this->_statements)) {
+
 			if ($this->hasModifier('static')) {
 				$compilationContext->staticContext = true;
 			} else {
 				$compilationContext->staticContext = false;
 			}
-			$this->_statements->compile($compilationContext);
+
+			/**
+			 * Compile the statements block as a 'root' branch
+			 */
+			$this->_statements->compile($compilationContext, false, Branch::TYPE_ROOT);
 		}
 
 		/**
@@ -1074,6 +1085,7 @@ class ClassMethod
 						if (is_array($defaultValue)) {
 							$symbolTable->mustGrownStack(true);
 							switch ($defaultValue['type']) {
+
 								case 'int':
 								case 'uint':
 								case 'long':
@@ -1082,18 +1094,22 @@ class ClassMethod
 									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 									$initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
 									break;
+
 								case 'null':
 									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 									$initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
 									break;
+
 								case 'double':
 									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 									$initVarCode .= "\t" . 'ZVAL_DOUBLE(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
 									break;
+
 								case 'string':
 									$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 									$initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . $defaultValue['value'] . '", 1);' . PHP_EOL;
 									break;
+
 								default:
 									throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 							}
@@ -1112,14 +1128,17 @@ class ClassMethod
 					if (is_array($defaultValue)) {
 						$symbolTable->mustGrownStack(true);
 						switch ($defaultValue['type']) {
+
 							case 'string':
 								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 								$initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . $defaultValue['value'] . '", 1);' . PHP_EOL;
 								break;
+
 							case 'null':
 								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 								$initVarCode .= "\t" . 'ZVAL_EMPTY_STRING(' . $variable->getName() . ');' . PHP_EOL;
 								break;
+
 							default:
 								throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 						}
@@ -1137,14 +1156,17 @@ class ClassMethod
 					if (is_array($defaultValue)) {
 						$symbolTable->mustGrownStack(true);
 						switch ($defaultValue['type']) {
+
 							case 'null':
 								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 								$initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
 								break;
+
 							case 'array':
 								$initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
 								$initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
 								break;
+
 							default:
 								throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
 						}
@@ -1472,6 +1494,7 @@ class ClassMethod
 		 * Finalize the method compilation
 		 */
 		if (is_object($this->_statements)) {
+
 			/**
 			 * If the last statement is not a 'return' or 'throw' we need to
 			 * restore the memory stack if needed
@@ -1503,6 +1526,8 @@ class ClassMethod
 		 */
 		$oldCodePrinter->output($code);
 		$compilationContext->codePrinter = $oldCodePrinter;
+
+		$codePrinter->clear();
 
 		return null;
 	}
