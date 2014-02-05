@@ -142,7 +142,7 @@ class SymbolTable
 	 * @param \CompilationContext $compilationContext
 	 * @return \Variable
 	 */
-	public function getVariableForRead($name, CompilationContext $compilationContext=null, $statement=null)
+	public function getVariableForRead($name, CompilationContext $compilationContext=null, array $statement=null)
 	{
 
 		/**
@@ -182,17 +182,51 @@ class SymbolTable
 			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized ", $statement);
 		}
 
-		/*foreach ($variable->getMarkInitBranch() as $branch) {
-			if ($branch == 0) {
-				break;
-			}
-		}*/
+		/**
+		 * Analize branches to detect possible initialization of variables in conditional branches
+		 */
+		if (!$variable->isTemporal()) {
 
-		/*if (!$variable->isTemporal()) {
-			if ($variable->getMarkInitBranch() > $compilationContext->currentBranch) {
-				throw new CompilerException('Variable "' . $name . '" was assigned for the first time in conditional branch', $statement);
+			$currentBranch = $compilationContext->branchManager->getCurrentBranch();
+			$branches = array_reverse($variable->getInitBranches());
+			foreach ($branches as $branch) {
+				if ($branch->getType() != Branch::TYPE_ROOT && $branch->getType() != Branch::TYPE_EXTERNAL) {
+					if ($currentBranch->getLevel() < $branch->getLevel()) {
+
+						$coefficient = 0;
+						foreach ($branches as $subBranch) {
+
+							if (Branch::TYPE_ROOT == $subBranch->getType() || Branch::TYPE_EXTERNAL == $subBranch->getType()) {
+								$coefficient = 0;
+								break;
+							}
+
+							if ($currentBranch->getLevel() < $subBranch->getLevel()) {
+								$coefficient = 0;
+								break;
+							}
+
+							if (Branch::TYPE_CONDITIONAL_TRUE == $subBranch->getType()) {
+								$coefficient += (1024 - $branch->getLevel()) * 10;
+								continue;
+							}
+
+							if (Branch::TYPE_CONDITIONAL_FALSE == $subBranch->getType()) {
+								$coefficient += (1024 - $branch->getLevel()) * -10;
+								continue;
+							}
+
+							$coefficient += (1024 - $branch->getLevel()) * 10;
+						}
+
+						if ($coefficient != 0) {
+							throw new CompilerException('Variable "' . $name . '" could be used without initialization (' . $coefficient . ')', $statement);
+						}
+
+					}
+				}
 			}
-		}*/
+		}
 
 		$variable->increaseUses();
 		return $variable;

@@ -913,9 +913,16 @@ class ClassMethod
 		}
 
 		/**
+		 * Initialization of parameters happens in a fictitious external branch
+		 */
+		$branch = new Branch();
+		$branch->setType(Branch::TYPE_EXTERNAL);
+
+		/**
 		 * BranchManager helps to create graphs of conditional/loop/root/jump branches
 		 */
 		$branchManager = new BranchManager();
+		$branchManager->addBranch($branch);
 
 		$compilationContext->branchManager = $branchManager;
 		$compilationContext->typeInference = $typeInference;

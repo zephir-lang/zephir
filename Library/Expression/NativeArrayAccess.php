@@ -81,24 +81,29 @@ class NativeArrayAccess
 		$codePrinter = $compilationContext->codePrinter;
 
 		switch ($exprIndex->getType()) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/operators');
 				$codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ');');
 				break;
+
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
 				switch ($variableIndex->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
 						$codePrinter->output($symbolVariable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ');');
 						break;
+
 					default:
 						throw new CompilerException("Cannot use index type " . $variableIndex->getType() . " as offset", $expression['right']);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Cannot use index type " . $exprIndex->getType() . " as offset", $expression['right']);
 		}
@@ -170,7 +175,7 @@ class NativeArrayAccess
 			} else {
 				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
 			}
-			
+
 		} else {
 			if ($this->_expecting) {
 				if ($this->_expectingVariable) {

@@ -31,9 +31,9 @@ class EchoStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		foreach ($this->_statement['expressions'] as $expr) {
+		foreach ($this->_statement['expressions'] as $echoExpr) {
 
-			$expr = new Expression($expr);
+			$expr = new Expression($echoExpr);
 			$expr->setReadOnly(true);
 			$resolvedExpr = $expr->compile($compilationContext);
 
@@ -60,7 +60,7 @@ class EchoStatement
 				case 'null':
 					break;
 				case 'variable':
-					$variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
+					$variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $echoExpr);
 					switch ($variable->getType()) {
 						case 'int':
 							$compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
@@ -85,11 +85,11 @@ class EchoStatement
 						case 'null':
 							break;
 						default:
-							throw new CompilerException("Unknown type: " . $variable->getType(), $expr);
+							throw new CompilerException("Unknown type: " . $variable->getType(), $echoExpr);
 					}
 					break;
 				default:
-					throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $expr);
+					throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $echoExpr);
 			}
 		}
 	}

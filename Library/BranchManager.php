@@ -4,7 +4,7 @@ class BranchManager
 {
 	protected $_currentBranch;
 
-	protected $_level = 0;
+	protected $_level = -1;
 
 	public function addBranch(Branch $branch)
 	{

@@ -83,7 +83,7 @@ class Variable
 	 */
 	protected $_initialized = false;
 
-	protected $_initMarkBranch = array();
+	protected $_initBranches = array();
 
 	protected $_isExternal = false;
 
@@ -127,10 +127,12 @@ class Variable
 	protected $_possibleValueBranch;
 
 	/**
-	 * @param $type
-	 * @param $name
-	 * @param $branch
-	 * @param null $defaultInitValue
+	 *
+	 *
+	 * @param string $type
+	 * @param string $name
+	 * @param Branch $branch
+	 * @param mixed $defaultInitValue
 	 */
 	public function __construct($type, $name, $branch, $defaultInitValue=null)
 	{
@@ -154,9 +156,9 @@ class Variable
 	 *
 	 * @return bool|int
 	 */
-	public function getMarkInitBranch()
+	public function getInitBranches()
 	{
-		return $this->_initMarkBranch;
+		return $this->_initBranches;
 	}
 
 	/**
@@ -527,13 +529,12 @@ class Variable
 	public function setIsInitialized($initialized, CompilationContext $compilationContext, array $expression)
 	{
 		if ($initialized) {
-			//if (!$this->_initialized) {
-			if (!$compilationContext->currentBranch) {
-				$this->_initMarkBranch = array(0);
-			} else {
-				$this->_initMarkBranch[] = $compilationContext->currentBranch;
+			if ($compilationContext->branchManager) {
+				$currentBranch = $compilationContext->branchManager->getCurrentBranch();
+				if ($currentBranch) {
+					$this->_initBranches[] = $currentBranch;
+				}
 			}
-			//}
 		}
 		$this->_initialized = $initialized;
 	}

@@ -130,7 +130,7 @@ class Route
 
 		char ch;
 		var tmp, matches;
-		boolean notValid;
+		boolean notValid = false;
 		int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0;
 		int intermediate = 0, numberMatches = 0;
 		string route, item, variable, regexp;

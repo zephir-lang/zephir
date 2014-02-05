@@ -12,9 +12,13 @@ class Branch
 
 	const TYPE_CONDITIONAL_FALSE = 2;
 
-	const TYPE_LOOP              = 3;
+	const TYPE_LOOP_INFINITE     = 3;
 
-	const TYPE_UNKNOWN           = 4;
+	const TYPE_LOOP_CONDITIONAL  = 4;
+
+	const TYPE_EXTERNAL          = 5;
+
+	const TYPE_UNKNOWN           = 6;
 
 	public function setParentBranch(Branch $parentBranch)
 	{

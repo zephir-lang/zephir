@@ -35,6 +35,7 @@ class UnsetStatement
 		$flags = 0;
 
 		switch ($expression['type']) {
+
 			case 'list':
 				$expr = new Expression($expression['left']['left']);
 				$expr->setReadOnly(true);
@@ -45,6 +46,7 @@ class UnsetStatement
 				$exprIndex = $expr->compile($compilationContext);
 
 				break;
+
 			case 'array-access':
 				$expr = new Expression($expression['left']);
 				$expr->setReadOnly(true);
@@ -70,29 +72,35 @@ class UnsetStatement
 		}
 
 		switch ($exprIndex->getType()) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
 				$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
 				break;
+
 			case 'string':
 				$compilationContext->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
 				break;
+
 			case 'variable':
-				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $exprIndex);
+				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $exprIndex->getOriginal());
 				switch ($variableIndex->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
 						$compilationContext->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
+
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
 						$compilationContext->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
 						break;
+
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
 				}

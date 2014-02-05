@@ -53,24 +53,24 @@ class AndOperator extends LogicalBaseOperator
 				$assignExprLeft = array(
 					'type'  => $left->getType(),
 					'value' => $left->getCode(),
-				);					
+				);
 				break;
 			case 'variable':
 				$assignExprLeft = array(
 					'type'  => 'variable',
 					'value' => $left->getCode(),
-				);					
+				);
 				break;
 			case 'null':
 				$assignExprLeft = array(
 					'type'  => 'null',
 					'value' => null
-				);					
-				break;	
+				);
+				break;
 		}
 
 		if (!isset($assignExprLeft)) {
-			throw new CompilerException($left->getType(), $expression['left']);			
+			throw new CompilerException($left->getType(), $expression['left']);
 		}
 
 		/**
@@ -84,6 +84,9 @@ class AndOperator extends LogicalBaseOperator
 					'variable' => $flagVariable->getName(),
 					'operator' => 'assign',
 					'expr' => $assignExprLeft,
+					'file' => $expression['file'],
+					'line' => $expression['line'],
+					'char' => $expression['char']
 				)
 			)
 		));
@@ -95,7 +98,7 @@ class AndOperator extends LogicalBaseOperator
 
 		$rightExpr = new Expression($expression['right']);
 		$rightExpr->setReadOnly($this->_readOnly);
-		$right = $rightExpr->compile($compilationContext);		
+		$right = $rightExpr->compile($compilationContext);
 
 		switch ($right->getType()) {
 			case 'int':
@@ -107,24 +110,24 @@ class AndOperator extends LogicalBaseOperator
 				$assignExprRight = array(
 					'type'  => $right->getType(),
 					'value' => $right->getCode(),
-				);					
+				);
 				break;
 			case 'variable':
 				$assignExprRight = array(
 					'type'  => 'variable',
 					'value' => $right->getCode(),
-				);					
+				);
 				break;
 			case 'null':
 				$assignExprRight = array(
 					'type'  => 'null',
 					'value' => null
-				);					
-				break;	
+				);
+				break;
 		}
 
 		if (!isset($assignExprRight)) {
-			throw new CompilerException($right->getType(), $expression['right']);			
+			throw new CompilerException($right->getType(), $expression['right']);
 		}
 
 		/**
@@ -138,6 +141,9 @@ class AndOperator extends LogicalBaseOperator
 					'variable' => $flagVariable->getName(),
 					'operator' => 'assign',
 					'expr' => $assignExprRight,
+					'file' => $expression['file'],
+					'line' => $expression['line'],
+					'char' => $expression['char']
 				)
 			)
 		));
