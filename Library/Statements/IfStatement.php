@@ -33,8 +33,7 @@ class IfStatement
 		$condition = false;
 
 		/**
-		 * This pass tries to move dynamic variable initialization out
-		 * of the if/else branch
+		 * This pass tries to move dynamic variable initialization out of the if/else branch
 		 */
 		if (isset($this->_statement['statements']) && isset($this->_statement['else_statements'])) {
 
@@ -66,7 +65,7 @@ class IfStatement
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext, $expr->isUnrecheable());
+			$st->compile($compilationContext, $expr->isUnrecheable(), Branch::TYPE_CONDITIONAL_TRUE);
 		}
 
 		/**
@@ -74,8 +73,8 @@ class IfStatement
 		 */
 		if (isset($this->_statement['else_statements'])) {
 			$compilationContext->codePrinter->output('} else {');
-			$st = new StatementsBlock($this->_statement['else_statements'], $expr->isUnrecheableElse());
-			$st->compile($compilationContext);
+			$st = new StatementsBlock($this->_statement['else_statements']);
+			$st->compile($compilationContext, $expr->isUnrecheableElse(), Branch::TYPE_CONDITIONAL_FALSE);
 		}
 
 		$compilationContext->codePrinter->output('}');

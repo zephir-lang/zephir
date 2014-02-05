@@ -815,12 +815,66 @@ class Flow
 		return 2;
 	}
 
-	public function testUn()
+	public function testUnrechable1()
 	{
-		var a = 0;
+		var a = 0, b = 0.0, c = false, d = "", e = '\0';
+
 		if a {
-			echo "hello";
+			echo "hello true";
 		}
+
+		if b {
+			echo "hello true";
+		}
+
+		if c {
+			echo "hello true";
+		}
+
+		if d {
+			echo "hello true";
+		}
+
+		if e {
+			echo "hello true";
+		}
+
+	}
+
+	public function testUnrechable2()
+	{
+		var a = 1, b = 1.0, c = true, d = "hello", e = 'A';
+
+		if a {
+			echo "hello true";
+		} else {
+			echo "hello false";
+		}
+
+		if b {
+			echo "hello true";
+		} else {
+			echo "hello false";
+		}
+
+		if c {
+			echo "hello true";
+		} else {
+			echo "hello false";
+		}
+
+		if d {
+			echo "hello true";
+		} else {
+			echo "hello false";
+		}
+
+		if e {
+			echo "hello true";
+		} else {
+			echo "hello false";
+		}
+
 	}
 
 }

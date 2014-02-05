@@ -1671,14 +1671,75 @@ PHP_METHOD(Test_Flow, testSwitch10) {
 
 }
 
-PHP_METHOD(Test_Flow, testUn) {
+PHP_METHOD(Test_Flow, testUnrechable1) {
 
+	char e = '\0';
+	zval *d;
+	zend_bool c = 0;
+	double b = 0.0;
 	int a = 0;
 
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(d);
+	ZVAL_STRING(d, "", 1);
 
 	if (a) {
-		php_printf("hello");
+		php_printf("hello true");
 	}
+	if (b) {
+		php_printf("hello true");
+	}
+	if (c) {
+		php_printf("hello true");
+	}
+	if (zephir_is_true(d)) {
+		php_printf("hello true");
+	}
+	if (e) {
+		php_printf("hello true");
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Flow, testUnrechable2) {
+
+	char e = 'A';
+	zval *d;
+	zend_bool c = 1;
+	double b = 1.0;
+	int a = 1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(d);
+	ZVAL_STRING(d, "hello", 1);
+
+	if (a) {
+		php_printf("hello true");
+	} else {
+		php_printf("hello false");
+	}
+	if (b) {
+		php_printf("hello true");
+	} else {
+		php_printf("hello false");
+	}
+	if (c) {
+		php_printf("hello true");
+	} else {
+		php_printf("hello false");
+	}
+	if (zephir_is_true(d)) {
+		php_printf("hello true");
+	} else {
+		php_printf("hello false");
+	}
+	if (e) {
+		php_printf("hello true");
+	} else {
+		php_printf("hello false");
+	}
+	ZEPHIR_MM_RESTORE();
 
 }
 

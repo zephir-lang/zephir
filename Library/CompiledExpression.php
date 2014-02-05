@@ -81,10 +81,12 @@ class CompiledExpression
 	 */
 	public function getBooleanCode()
 	{
-		if ($this->_code == 'true' || $this->_code === true) {
+		if ($this->_code && ($this->_code == 'true' || $this->_code === true)) {
 			return '1';
-		} else if ($this->_code == 'false' || $this->_code === false) {
-			return '0';
+		} else {
+			if ($this->_code == 'false' || $this->_code === false) {
+				return '0';
+			}
 		}
 
 		return $this->_code;

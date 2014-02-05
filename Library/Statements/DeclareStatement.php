@@ -41,7 +41,7 @@ class DeclareStatement
 		$symbolTable = $compilationContext->symbolTable;
 
 		$variables = array();
-		foreach ($statement['variables'] as $variable) {			
+		foreach ($statement['variables'] as $variable) {
 
 			if ($symbolTable->hasVariable($variable['variable'])) {
 				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
@@ -85,7 +85,7 @@ class DeclareStatement
 				$defaultValue = $variable['expr']['value'];
 			} else {
 				$defaultValue = null;
-			}			
+			}
 
 			/**
 			 * Variables with a default value are initialized by default
@@ -218,6 +218,7 @@ class DeclareStatement
 				$symbolVariable->setDefaultInitValue($defaultValue);
 				$symbolVariable->setIsInitialized(true, $compilationContext, $variable);
 				$symbolVariable->increaseMutates();
+				$symbolVariable->setPossibleValue(new LiteralCompiledExpression($defaultType, $defaultValue, $variable['expr']), $compilationContext);
 			}
 		}
 

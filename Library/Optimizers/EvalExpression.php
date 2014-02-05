@@ -144,14 +144,29 @@ class EvalExpression
 									case 'bool':
 										if ($possibleValue->getBooleanCode() == '0') {
 											$this->_unrecheable = true;
+										} else {
+											$this->_unrecheableElse = true;
 										}
 										break;
 
 									case 'int':
 										if (!intval($possibleValue->getCode())) {
 											$this->_unrecheable = true;
+										} else {
+											$this->_unrecheableElse = true;
 										}
 										break;
+
+									case 'double':
+										if (!floatval($possibleValue->getCode())) {
+											$this->_unrecheable = true;
+										} else {
+											$this->_unrecheableElse = true;
+										}
+										break;
+
+									default:
+										//echo $possibleValue->getType();
 
 								}
 							}
