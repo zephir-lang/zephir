@@ -48,3 +48,6 @@ try {
 } catch (InvalidArgumentException $e) {
 	assert(true);
 }
+
+assert($t->arrayParamWithDefaultEmptyArray() === array());
+assert($t->arrayParamWithDefaultEmptyArray(array(1)) === array(1));
