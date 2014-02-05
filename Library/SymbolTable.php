@@ -179,7 +179,7 @@ class SymbolTable
 
 		$variable = $this->getVariable($name);
 		if (!$variable->isInitialized()) {
-			throw new CompilerException("Variable '" . $name . "' can't be used because is not initialized ", $statement);
+			throw new CompilerException("Variable '" . $name . "' cannot be read because it's not initialized ", $statement);
 		}
 
 		/**
@@ -189,42 +189,53 @@ class SymbolTable
 
 			$currentBranch = $compilationContext->branchManager->getCurrentBranch();
 			$branches = array_reverse($variable->getInitBranches());
+
+			if (count($branches) == 1) {
+				if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType() || Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
+					if ($branches[0]->isUnrecheable()) {
+						throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+					}
+				}
+			}
+
+			$found = false;
 			foreach ($branches as $branch) {
-				if ($branch->getType() != Branch::TYPE_ROOT && $branch->getType() != Branch::TYPE_EXTERNAL) {
+
+				/*+
+				 * Variable was initialized in the same current branch
+				 */
+				if ($branch == $currentBranch) {
+					$found = true;
+					break;
+				}
+
+				/**
+				 * 'root' and 'external' branches are safe branches
+				 */
+				if ($branch->getType() == Branch::TYPE_ROOT || $branch->getType() == Branch::TYPE_EXTERNAL) {
+					$found = true;
+					break;
+				}
+
+			}
+
+			if (!$found) {
+
+				foreach ($branches as $branch) {
+
+					/*+
+					 * Variable was initialized in a sub-branch and it's beign used in a parent branch
+					 */
 					if ($currentBranch->getLevel() < $branch->getLevel()) {
 
-						$coefficient = 0;
+						$graph = array();
 						foreach ($branches as $subBranch) {
 
-							if (Branch::TYPE_ROOT == $subBranch->getType() || Branch::TYPE_EXTERNAL == $subBranch->getType()) {
-								$coefficient = 0;
-								break;
-							}
-
-							if ($currentBranch->getLevel() < $subBranch->getLevel()) {
-								$coefficient = 0;
-								break;
-							}
-
-							if (Branch::TYPE_CONDITIONAL_TRUE == $subBranch->getType()) {
-								$coefficient += (1024 - $branch->getLevel()) * 10;
-								continue;
-							}
-
-							if (Branch::TYPE_CONDITIONAL_FALSE == $subBranch->getType()) {
-								$coefficient += (1024 - $branch->getLevel()) * -10;
-								continue;
-							}
-
-							$coefficient += (1024 - $branch->getLevel()) * 10;
-						}
-
-						if ($coefficient != 0) {
-							throw new CompilerException('Variable "' . $name . '" could be used without initialization (' . $coefficient . ')', $statement);
 						}
 
 					}
 				}
+
 			}
 		}
 
