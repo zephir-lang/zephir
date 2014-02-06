@@ -199,16 +199,16 @@ class PropertyAccess
 							$symbolVariable->observeVariant($compilationContext);
 							$this->_readOnly = false;
 						} else {
-							$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+							$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 						}
 					}
 
 					$this->_readOnly = false;
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 			}
 
 		} else {
