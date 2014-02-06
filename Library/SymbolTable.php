@@ -453,15 +453,18 @@ class SymbolTable
 	 *
 	 * @param $type
 	 * @param CompilationContext $context
-	 * @param bool $initHref
+	 * @param bool $initNonReferenced
 	 * @return Variable
 	 */
-	public function getTempNonTrackedVariable($type, CompilationContext $context, $intHref = false)
+	public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced=false)
 	{
 		$variable = $this->_reuseTempVariable($type, 'non-tracked');
 		if (is_object($variable)) {
 			$variable->increaseUses();
 			$variable->increaseMutates();
+			if ($initNonReferenced) {
+				$variable->initNonReferenced($context);
+			}
 			return $variable;
 		}
 
@@ -475,7 +478,7 @@ class SymbolTable
 
 		$this->_registerTempVariable($type, 'non-tracked', $variable);
 
-		if ($intHref) {
+		if ($initNonReferenced) {
 			$variable->initNonReferenced($context);
 		}
 
