@@ -204,7 +204,7 @@ class StaticTypeInference
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
-				case 'static-property-access':				
+				case 'static-property-access':
 					$this->markVariable($assigment['variable'], 'variable');
 					break;
 				case 'variable-append':
@@ -423,8 +423,15 @@ class StaticTypeInference
 
 			case 'clone':
 			case 'require':
-			case 'ternary': /* special ternary pass? */
 				return 'variable';
+
+			case 'ternary':
+				$right = $this->passExpression($expression['right']);
+				$extra = $this->passExpression($expression['extra']);
+				if ($right == $extra) {
+					return $right;
+				}
+				return null;
 
 			default:
 				echo 'STI=', $expression['type'], PHP_EOL;
@@ -542,7 +549,7 @@ class StaticTypeInference
 				case 'cblock':
 				case 'empty': // empty statement != empty operator
 					break;
-					
+
 				default:
 					echo 'SSTI=', $statement['type'];
 			}

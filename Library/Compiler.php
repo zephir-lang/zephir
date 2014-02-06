@@ -24,7 +24,7 @@
  */
 class Compiler
 {
-	const VERSION = '0.3.1a';
+	const VERSION = '0.3.2a';
 
 	/**
 	 * @var CompilerFile[]

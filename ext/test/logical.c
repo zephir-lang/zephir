@@ -64,13 +64,13 @@ PHP_METHOD(Test_Logical, testAnd3) {
 
 	_0 = (0) ? 1 : 0;
 	if (_0) {
-		_1 = (1.5) ? 1 : 0;
-		if (_1) {
-			_1 = ('A') ? 1 : 0;
-		}
-		_0 = _1;
+		_0 = (1.5) ? 1 : 0;
 	}
-	RETURN_BOOL(_0);
+	_1 = _0;
+	if (_1) {
+		_1 = ('A') ? 1 : 0;
+	}
+	RETURN_BOOL(_1);
 
 }
 
@@ -81,13 +81,13 @@ PHP_METHOD(Test_Logical, testAnd4) {
 
 	_0 = (1) ? 1 : 0;
 	if (_0) {
-		_1 = (0) ? 1 : 0;
-		if (_1) {
-			_1 = 0;
-		}
-		_0 = _1;
+		_0 = (0) ? 1 : 0;
 	}
-	RETURN_BOOL(_0);
+	_1 = _0;
+	if (_1) {
+		_1 = 0;
+	}
+	RETURN_BOOL(_1);
 
 }
 
@@ -150,13 +150,13 @@ PHP_METHOD(Test_Logical, testMixed1) {
 	second = 1;
 	_0 = (first) ? 1 : 0;
 	if (_0) {
-		_1 = (second) ? 1 : 0;
-		if (!(_1)) {
-			_1 = (second) ? 1 : 0;
-		}
-		_0 = _1;
+		_0 = (second) ? 1 : 0;
 	}
-	if (_0) {
+	_1 = _0;
+	if (!(_1)) {
+		_1 = (second) ? 1 : 0;
+	}
+	if (_1) {
 		php_printf("ok");
 	} else {
 		php_printf("wrong");
@@ -175,17 +175,44 @@ PHP_METHOD(Test_Logical, testMixed2) {
 
 	_0 = (Z_TYPE_P(match) == IS_ARRAY);
 	if (_0) {
-		_1 = (zephir_fast_count_int(match TSRMLS_CC) == 2);
-		if (_1) {
-			zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
-			_1 = ZEPHIR_LT_LONG(minLength, zephir_fast_strlen_ev(_2));
-		}
-		_0 = _1;
+		_0 = (zephir_fast_count_int(match TSRMLS_CC) == 2);
 	}
-	if (_0) {
+	_1 = _0;
+	if (_1) {
+		zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+		_1 = ZEPHIR_LT_LONG(minLength, zephir_fast_strlen_ev(_2));
+	}
+	if (_1) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
+
+}
+
+PHP_METHOD(Test_Logical, testMixed3) {
+
+	zend_bool a, b, _0, _1, _2, _3;
+
+
+	_0 = (0) ? 1 : 0;
+	if (_0) {
+		_0 = (1) ? 1 : 0;
+	}
+	_1 = _0;
+	if (!(_1)) {
+		_1 = (1) ? 1 : 0;
+	}
+	a = _1;
+	_2 = (0) ? 1 : 0;
+	if (_2) {
+		_2 = (1) ? 1 : 0;
+	}
+	_3 = _2;
+	if (!(_3)) {
+		_3 = (1) ? 1 : 0;
+	}
+	b = _3;
+	RETURN_BOOL((a == b));
 
 }
 

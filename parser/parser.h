@@ -10,8 +10,8 @@
 #define XX_UNLIKELY                       10
 #define XX_INSTANCEOF                     11
 #define XX_NOT                            12
-#define XX_AND                            13
-#define XX_OR                             14
+#define XX_OR                             13
+#define XX_AND                            14
 #define XX_BITWISE_OR                     15
 #define XX_BITWISE_AND                    16
 #define XX_BITWISE_XOR                    17

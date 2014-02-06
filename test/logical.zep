@@ -52,7 +52,7 @@ class Logical
 		var first, second;
 
 		let first = 0;
-		let second = 1;		
+		let second = 1;
 		if first && second || second {
 			echo "ok";
 		} else {
@@ -67,5 +67,12 @@ class Logical
 		}
 		return false;
 	}
-	
+
+	public function testMixed3()
+	{
+		boolean a, b;
+		let a = 0 && 1 || 1, b = (0 && 1) || 1;
+		return a == b;
+	}
+
 }
