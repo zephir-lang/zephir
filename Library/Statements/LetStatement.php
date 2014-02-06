@@ -1545,6 +1545,35 @@ class LetStatement
 			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
 		}
 
+		/**
+		 * Arrays must be stored in the HEAP
+		 */
+		if ($symbolVariable->isLocalOnly()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
+		}
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
+		/**
+		 * Only dynamic variables can be used as arrays
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+		}
+
+		if ($symbolVariable->hasAnyDynamicType('unknown')) {
+			throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+		}
+
+		/**
+		 * Trying to use a non-object dynamic variable as object
+		 */
+		if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+			$compilationContext->logger->warning('Possible attempt to increment non-object dynamic variable', 'non-object-update', $statement);
+		}
+
 		$codePrinter = $compilationContext->codePrinter;
 		$compilationContext->headersManager->add('kernel/object');
 		$compilationContext->codePrinter->output('zephir_property_incr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_DC);');
@@ -1562,6 +1591,35 @@ class LetStatement
 	{
 		if (!$symbolVariable->isInitialized()) {
 			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
+		/**
+		 * Arrays must be stored in the HEAP
+		 */
+		if ($symbolVariable->isLocalOnly()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
+		}
+
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+		}
+
+		/**
+		 * Only dynamic variables can be used as arrays
+		 */
+		if ($symbolVariable->getType() != 'variable') {
+			throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+		}
+
+		if ($symbolVariable->hasAnyDynamicType('unknown')) {
+			throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+		}
+
+		/**
+		 * Trying to use a non-object dynamic variable as object
+		 */
+		if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+			$compilationContext->logger->warning('Possible attempt to increment non-object dynamic variable', 'non-object-update', $statement);
 		}
 
 		$codePrinter = $compilationContext->codePrinter;

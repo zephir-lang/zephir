@@ -44,6 +44,8 @@
 #include "test/properties/privateproperties.h"
 #include "test/properties/protectedproperties.h"
 #include "test/properties/publicproperties.h"
+#include "test/properties/staticprotectedproperties.h"
+#include "test/properties/staticpublicproperties.h"
 #include "test/regexdna.h"
 #include "test/requires.h"
 #include "test/returns.h"

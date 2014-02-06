@@ -133,13 +133,13 @@ class StaticPropertyAccess
 				if ($symbolVariable->getName() != 'return_value') {
 					//$symbolVariable->initVariant($compilationContext);
 				} else {
-					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 			}
 		} else {
-			$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, $expression);
+			$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 		}
 
 		/**
