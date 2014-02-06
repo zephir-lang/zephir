@@ -142,7 +142,8 @@ class SwitchStatement
 
 				if (isset($block['block'])) {
 					$st = new StatementsBlock($block['block']);
-					$st->compile($compilationContext);
+					$branch = $st->compile($compilationContext, false, Branch::TYPE_SWITCH);
+					$branch->setRelatedStatement($this);
 				}
 
 				$codePrinter->output('}');

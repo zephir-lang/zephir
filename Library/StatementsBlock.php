@@ -44,6 +44,7 @@ class StatementsBlock
 	 * @param CompilationContext $compilationContext
 	 * @param boolean $unrecheable
 	 * @param int $branchType
+	 * @return Branch
 	 */
 	public function compile(CompilationContext $compilationContext, $unrecheable=false, $branchType=Branch::TYPE_UNKNOWN)
 	{
@@ -258,6 +259,8 @@ class StatementsBlock
 
 		$compilationContext->currentBranch--;
 		$compilationContext->codePrinter->decreaseLevel();
+
+		return $currentBranch;
 	}
 
 	/**

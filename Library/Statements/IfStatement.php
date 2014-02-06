@@ -59,13 +59,15 @@ class IfStatement
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($exprRaw, $compilationContext);
 		$compilationContext->codePrinter->output('if (' . $condition . ') {');
+		$this->_evalExpression = $expr;
 
 		/**
 		 * Compile statements in the 'if' block
 		 */
 		if (isset($this->_statement['statements'])) {
 			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext, $expr->isUnrecheable(), Branch::TYPE_CONDITIONAL_TRUE);
+			$branch = $st->compile($compilationContext, $expr->isUnrecheable(), Branch::TYPE_CONDITIONAL_TRUE);
+			$branch->setRelatedStatement($this);
 		}
 
 		/**
@@ -74,7 +76,8 @@ class IfStatement
 		if (isset($this->_statement['else_statements'])) {
 			$compilationContext->codePrinter->output('} else {');
 			$st = new StatementsBlock($this->_statement['else_statements']);
-			$st->compile($compilationContext, $expr->isUnrecheableElse(), Branch::TYPE_CONDITIONAL_FALSE);
+			$branch = $st->compile($compilationContext, $expr->isUnrecheableElse(), Branch::TYPE_CONDITIONAL_FALSE);
+			$branch->setRelatedStatement($this);
 		}
 
 		$compilationContext->codePrinter->output('}');

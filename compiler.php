@@ -53,6 +53,7 @@ require ZEPHIRPATH . 'Library/StatementsBlock.php';
 /* branches */
 require ZEPHIRPATH . 'Library/Branch.php';
 require ZEPHIRPATH . 'Library/BranchManager.php';
+require ZEPHIRPATH . 'Library/BranchGraph.php';
 
 /* built-in types */
 require ZEPHIRPATH . 'Library/Types/CharType.php';

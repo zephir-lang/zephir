@@ -24,9 +24,38 @@ abstract class StatementAbstract
 {
 	protected $_statement;
 
-	public function __construct($statement)
+	protected $_uniqueId;
+
+	protected $_evalExpression;
+
+	protected static $_uniqueGenerator;
+
+	/**
+	 * StatementAbstract construct
+	 *
+	 * @param array $statement
+	 */
+	public function __construct(array $statement)
 	{
 		$this->_statement = $statement;
+	}
+
+	/**
+	 * Generates a uniqueId for those instructions that need it
+	 *
+	 * @return int
+	 */
+	public function getUniqueId()
+	{
+		if (!$this->_uniqueId) {
+			$this->_uniqueId = self::$_uniqueGenerator++;
+		}
+		return $this->_uniqueId;
+	}
+
+	public function getEvalExpression()
+	{
+		return $this->_evalExpression;
 	}
 
 	/**
@@ -35,4 +64,5 @@ abstract class StatementAbstract
 	 * @param CompilationContext $compilationContext
 	 */
 	abstract public function compile(CompilationContext $compilationContext);
-} 
+
+}

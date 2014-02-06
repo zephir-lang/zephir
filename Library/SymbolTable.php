@@ -187,55 +187,88 @@ class SymbolTable
 		 */
 		if (!$variable->isTemporal()) {
 
-			$currentBranch = $compilationContext->branchManager->getCurrentBranch();
-			$branches = array_reverse($variable->getInitBranches());
+			if ($name != 'return_value' && $name != 'this') {
 
-			if (count($branches) == 1) {
-				if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType() || Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
-					if ($branches[0]->isUnrecheable()) {
-						throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+				$initBranches = $variable->getInitBranches();
+
+				$currentBranch = $compilationContext->branchManager->getCurrentBranch();
+				$branches = array_reverse($initBranches);
+
+				if (count($branches) == 1) {
+					if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType() || Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
+						if ($branches[0]->isUnrecheable()) {
+							throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+						}
 					}
 				}
-			}
 
-			$found = false;
-			foreach ($branches as $branch) {
-
-				/*+
-				 * Variable was initialized in the same current branch
-				 */
-				if ($branch == $currentBranch) {
-					$found = true;
-					break;
-				}
-
-				/**
-				 * 'root' and 'external' branches are safe branches
-				 */
-				if ($branch->getType() == Branch::TYPE_ROOT || $branch->getType() == Branch::TYPE_EXTERNAL) {
-					$found = true;
-					break;
-				}
-
-			}
-
-			if (!$found) {
-
+				$found = false;
 				foreach ($branches as $branch) {
 
 					/*+
+					 * Variable was initialized in the same current branch
+					 */
+					if ($branch == $currentBranch) {
+						$found = true;
+						break;
+					}
+
+					/**
+					 * 'root' and 'external' branches are safe branches
+					 */
+					if ($branch->getType() == Branch::TYPE_ROOT || $branch->getType() == Branch::TYPE_EXTERNAL) {
+						$found = true;
+						break;
+					}
+
+				}
+
+				if (!$found) {
+
+					/*+
+					 * Check if last assignment
 					 * Variable was initialized in a sub-branch and it's beign used in a parent branch
 					 */
-					if ($currentBranch->getLevel() < $branch->getLevel()) {
+					$possibleBadAssignment = false;
 
-						$graph = array();
-						foreach ($branches as $subBranch) {
+					if ($currentBranch->getLevel() < $branches[0]->getLevel()) {
+						$possibleBadAssignment = true;
+					}
+
+					if ($possibleBadAssignment) {
+
+						if (count($branches) > 1) {
+
+							$graph = new BranchGraph();
+							foreach ($branches as $branch) {
+								$graph->addLeaf($branch);
+							}
+							//echo $graph->getRoot()->show();
+
+						} else {
+
+							/**
+							 * Variable is assigned just once and it's assigned in a conditional branch
+							 */
+							if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
+								$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
+								if ($evalExpression->isUnrecheable()) {
+									throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
+								}
+							} else {
+								if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
+									$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
+									if ($evalExpression->isUnrecheableElse()) {
+										throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
+									}
+								}
+							}
 
 						}
 
 					}
-				}
 
+				}
 			}
 		}
 

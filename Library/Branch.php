@@ -6,6 +6,8 @@ class Branch
 
 	protected $_level = -1;
 
+	protected $_relatedStatement;
+
 	const TYPE_ROOT              = 0;
 
 	const TYPE_CONDITIONAL_TRUE  = 1;
@@ -16,9 +18,11 @@ class Branch
 
 	const TYPE_LOOP_CONDITIONAL  = 4;
 
-	const TYPE_EXTERNAL          = 5;
+	const TYPE_SWITCH            = 5;
 
-	const TYPE_UNKNOWN           = 6;
+	const TYPE_EXTERNAL          = 6;
+
+	const TYPE_UNKNOWN           = 7;
 
 	public function setParentBranch(Branch $parentBranch)
 	{
@@ -58,6 +62,26 @@ class Branch
 	public function getLevel()
 	{
 		return $this->_level;
+	}
+
+	public function setUniqueId($uniqueId)
+	{
+		$this->_uniqueId = $uniqueId;
+	}
+
+	public function getUniqueId()
+	{
+		return $this->_uniqueId;
+	}
+
+	public function setRelatedStatement($relatedStatement)
+	{
+		$this->_relatedStatement = $relatedStatement;
+	}
+
+	public function getRelatedStatement()
+	{
+		return $this->_relatedStatement;
 	}
 
 }

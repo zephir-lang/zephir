@@ -6,6 +6,8 @@ class BranchManager
 
 	protected $_level = -1;
 
+	protected $_uniqueId = 1;
+
 	public function addBranch(Branch $branch)
 	{
 		if ($this->_currentBranch) {
@@ -14,8 +16,12 @@ class BranchManager
 		} else {
 			$this->_currentBranch = $branch;
 		}
+
+		$branch->setUniqueId($this->_uniqueId);
 		$branch->setLevel($this->_level);
+
 		$this->_level++;
+		$this->_uniqueId++;
 	}
 
 	public function getCurrentBranch()
