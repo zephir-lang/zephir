@@ -444,11 +444,12 @@ class SymbolTable
 	 * Creates a temporary variable to be used to point to a heap variable
 	 * These kind of variables MUST not be tracked by the Zephir memory manager
 	 *
-	 * @param string $type
-	 * @param \CompilationContext $context
-	 * @return \Variable
+	 * @param $type
+	 * @param CompilationContext $context
+	 * @param bool $initHref
+	 * @return Variable
 	 */
-	public function getTempNonTrackedVariable($type, CompilationContext $context)
+	public function getTempNonTrackedVariable($type, CompilationContext $context, $intHref = false)
 	{
 		$variable = $this->_reuseTempVariable($type, 'non-tracked');
 		if (is_object($variable)) {
@@ -466,6 +467,10 @@ class SymbolTable
 		$variable->increaseMutates();
 
 		$this->_registerTempVariable($type, 'non-tracked', $variable);
+
+		if ($intHref) {
+			$variable->initNonReferenced($context);
+		}
 
 		return $variable;
 	}

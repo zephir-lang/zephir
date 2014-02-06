@@ -634,6 +634,16 @@ class Variable
 	}
 
 	/**
+	 * Allocate memory for variable and init it null val
+	 *
+	 * @param CompilationContext $compilationContext
+	 */
+	public function initNonReferenced(CompilationContext $compilationContext)
+	{
+		$compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->_name . ');');
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext

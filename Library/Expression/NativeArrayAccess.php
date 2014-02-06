@@ -65,10 +65,10 @@ class NativeArrayAccess
 			if ($this->_expectingVariable) {
 				$symbolVariable = $this->_expectingVariable;
 				if ($symbolVariable->getType() != 'char') {
-					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext, $expression);
+					$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext);
 				}
 			} else {
-				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext, $expression);
+				$symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('char', $compilationContext);
 			}
 		}
 
