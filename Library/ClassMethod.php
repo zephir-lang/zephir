@@ -97,15 +97,15 @@ class ClassMethod
 		}
 	}
 
-    /**
-     * Getter for statements block
-     *
-     * @return StatementsBlock $statements Statements block
-     */
-    public function getStatementsBlock()
-    {
-        return $this->_statements;
-    }
+	/**
+	 * Getter for statements block
+	 *
+	 * @return StatementsBlock $statements Statements block
+	 */
+	public function getStatementsBlock()
+	{
+		return $this->_statements;
+	}
 
 	/**
 	 * Checks for visibility congruence

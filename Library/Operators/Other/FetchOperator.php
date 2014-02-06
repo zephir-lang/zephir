@@ -65,6 +65,7 @@ class FetchOperator extends BaseOperator
 				$variable->setIsInitialized(true, $compilationContext, $expression);
 				$variable->observeVariant($compilationContext);
 				$variable->setDynamicTypes('undefined');
+				$variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
 			}
 
 		} else {

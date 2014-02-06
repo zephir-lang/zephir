@@ -201,12 +201,12 @@ class SymbolTable
 
 					if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
 						if ($branches[0]->isUnrecheable() === true) {
-							//throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+							throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
 						}
 					} else {
 						if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
 							if ($branches[0]->isUnrecheable() === false) {
-								//throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+								throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
 							}
 						}
 					}
@@ -308,7 +308,7 @@ class SymbolTable
 	 *
 	 * @param string $name
 	 * @param CompilationContext $compilationContext
-     * @param array $statement
+	 * @param array $statement
 	 * @return \Variable
 	 */
 	public function getVariableForWrite($name, $compilationContext, $statement=null)

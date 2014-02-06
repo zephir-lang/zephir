@@ -395,9 +395,9 @@ class ForStatement
 	 * @param \CompilationContext $compilationContext
 	 * @return boolean
 	 */
-	public function compileIterator($exprRaw, $compilationContext)
+	public function compileIterator($expression, $compilationContext)
 	{
-
+		$this->compileHashTraverse($expression, $compilationContext);
 	}
 
 	/**
@@ -606,12 +606,12 @@ class ForStatement
 				}
 			}
 
-			if ($exprRaw['name'] == 'iterator') {
+			/*if ($exprRaw['name'] == 'iterator') {
 				$status = $this->compileIterator($exprRaw, $compilationContext);
 				if ($status !== false) {
 					return;
 				}
-			}
+			}*/
 		}
 
 		$expr = new Expression($exprRaw);

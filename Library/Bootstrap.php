@@ -153,8 +153,8 @@ class Bootstrap
 						 */
 						$command = new $className();
 
-						if (!$command instanceof CommandAbstract) {
-							throw new Exception('Class '.$class->name.' must be instance of CommandAbstract');
+						if (!($command instanceof CommandAbstract)) {
+							throw new Exception('Class ' . $class->name . ' must be instance of CommandAbstract');
 						}
 
 						self::$_commands[$command->getCommand()] = $command;
