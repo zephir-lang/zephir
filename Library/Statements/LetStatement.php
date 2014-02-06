@@ -1532,7 +1532,7 @@ class LetStatement
 	}
 
 	/**
-	 * Compiles x++
+	 * Compiles obj->x++
 	 *
 	 * @param string $variable
 	 * @param \Variable $symbolVariable
@@ -1541,15 +1541,17 @@ class LetStatement
 	 */
 	public function assignObjectPropertyIncr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
-		$property = $compilationContext->classDefinition->getProperty($property);
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
 		$codePrinter = $compilationContext->codePrinter;
-		$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-		$codePrinter->output('zephir_increment(' . $tempVariable->getName() . ');');
+		$compilationContext->headersManager->add('kernel/object');
+		$compilationContext->codePrinter->output('zephir_property_incr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_DC);');
 	}
 
 	/**
-	 * Compiles x--
+	 * Compiles obj->x--
 	 *
 	 * @param string $variable
 	 * @param \Variable $symbolVariable
@@ -1558,11 +1560,13 @@ class LetStatement
 	 */
 	public function assignObjectPropertyDecr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
 	{
-		$property = $compilationContext->classDefinition->getProperty($property);
+		if (!$symbolVariable->isInitialized()) {
+			throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+		}
 
-		$codePrinter = &$compilationContext->codePrinter;
-		$tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-		$codePrinter->output('zephir_decrement(' . $tempVariable->getName() . ');');
+		$codePrinter = $compilationContext->codePrinter;
+		$compilationContext->headersManager->add('kernel/object');
+		$compilationContext->codePrinter->output('zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_DC);');
 	}
 
 	/**

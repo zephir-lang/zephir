@@ -432,7 +432,7 @@ PHP_METHOD(Test_Assign, testPropertyIncr1) {
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
-	zephir_increment(_0);
+	zephir_property_incr(this_ptr, SL("testVar") TSRMLS_DC);
 	RETURN_MEMBER(this_ptr, "testVar");
 
 }
@@ -495,7 +495,7 @@ PHP_METHOD(Test_Assign, testPropertyDecr) {
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(_0, 2);
 	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
-	zephir_decrement(_0);
+	zephir_property_decr(this_ptr, SL("testVar") TSRMLS_DC);
 	RETURN_MEMBER(this_ptr, "testVar");
 
 }
