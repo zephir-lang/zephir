@@ -25,10 +25,14 @@
 class EvalExpression
 {
 
-	protected $_unrecheable = false;
+	protected $_unrecheable = null;
 
-	protected $_unrecheableElse = false;
+	protected $_unrecheableElse = null;
 
+	/**
+	 * @param array $expr
+	 * @param CompilationContext $compilationContext
+	 */
 	public function optimizeNot($expr, $compilationContext)
 	{
 		/**

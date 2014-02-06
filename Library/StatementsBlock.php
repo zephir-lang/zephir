@@ -82,7 +82,7 @@ class StatementsBlock
 			/**
 			 * Show warnings if code is generated when the 'unrecheable state' is 'on'
 			 */
-			if ($this->_unrecheable) {
+			if ($this->_unrecheable === true) {
 				switch ($statement['type']) {
 
 					case 'echo':

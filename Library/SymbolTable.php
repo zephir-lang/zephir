@@ -129,6 +129,7 @@ class SymbolTable
 	 * Checks if a variable is a superglobal
 	 *
 	 * @param string $name
+	 * @return boolean
 	 */
 	public function isSuperGlobal($name)
 	{
@@ -195,11 +196,25 @@ class SymbolTable
 				$branches = array_reverse($initBranches);
 
 				if (count($branches) == 1) {
+
 					if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType() || Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
 						if ($branches[0]->isUnrecheable()) {
 							throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
 						}
 					}
+
+					$tempBranch = $branches[0]->getParentBranch();
+					while ($tempBranch) {
+
+						if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
+							if ($tempBranch->isUnrecheable() === true) {
+								throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+							}
+						}
+
+						$tempBranch = $tempBranch->getParentBranch();
+					}
+
 				}
 
 				$found = false;
@@ -252,13 +267,13 @@ class SymbolTable
 							 */
 							if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
 								$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-								if ($evalExpression->isUnrecheable()) {
+								if ($evalExpression->isUnrecheable() === false) {
 									throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
 								}
 							} else {
 								if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
 									$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-									if ($evalExpression->isUnrecheableElse()) {
+									if ($evalExpression->isUnrecheableElse() === false) {
 										throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
 									}
 								}
@@ -323,7 +338,6 @@ class SymbolTable
 	/**
 	 * Return a variable in the symbol table, it will be used for a write operation
 	 *
-	 * @return \Variable
 	 */
 	public function mustGrownStack($mustGrownStack)
 	{

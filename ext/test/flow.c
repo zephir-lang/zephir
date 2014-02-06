@@ -1743,3 +1743,15 @@ PHP_METHOD(Test_Flow, testUnrechable2) {
 
 }
 
+PHP_METHOD(Test_Flow, testUnrechable3) {
+
+	int a;
+
+
+	if (1) {
+		a = 0;
+	}
+	RETURN_LONG(a);
+
+}
+
