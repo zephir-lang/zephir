@@ -47,6 +47,7 @@ class WhileStatement
 
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($exprRaw, $compilationContext);
+		$this->_evalExpression = $expr;
 
 		$codePrinter->output('if (!(' . $condition . ')) {');
 		$codePrinter->output("\t" . 'break;');

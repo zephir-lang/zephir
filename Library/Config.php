@@ -48,7 +48,8 @@ class Config
 			'non-valid-new'                      => true,
 			'non-array-access'                   => true,
 			'invalid-reference'                  => true,
-			'invalid-typeof-comparison'          => true
+			'invalid-typeof-comparison'          => true,
+			'conditional-initialization'         => true
 		),
 		'optimizations' => array(
 			'static-type-inference'             => true,
@@ -77,7 +78,7 @@ class Config
 			$config = json_decode(file_get_contents('config.json'), true);
 			if (!is_array($config)) {
 				throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");
-			}			
+			}
 			foreach ($config as $key => $configSection) {
 				if (!is_array($configSection)) {
 					$this->_config[$key] = $configSection;
@@ -87,7 +88,7 @@ class Config
 					}
 				}
 			}
-		}		
+		}
 	}
 
 	/**

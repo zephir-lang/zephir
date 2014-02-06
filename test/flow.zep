@@ -877,4 +877,17 @@ class Flow
 
 	}
 
+	public function testUnrechable3()
+	{
+		var a;
+		if 3 < 1 {
+			if 1 > 2 {
+				let a = 0;
+			}
+		} else {
+
+		}
+		return a;
+	}
+
 }

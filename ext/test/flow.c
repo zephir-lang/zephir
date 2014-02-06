@@ -1748,8 +1748,10 @@ PHP_METHOD(Test_Flow, testUnrechable3) {
 	int a;
 
 
-	if (1) {
-		a = 0;
+	if ((3 < 1)) {
+		if ((1 > 2)) {
+			a = 0;
+		}
 	}
 	RETURN_LONG(a);
 

@@ -267,14 +267,18 @@ class SymbolTable
 							 */
 							if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
 								$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-								if ($evalExpression->isUnrecheable() === false) {
-									throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
+								if ($evalExpression->isUnrecheable() === true) {
+									throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
+								} else {
+									$compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
 								}
 							} else {
 								if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
 									$evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-									if ($evalExpression->isUnrecheableElse() === false) {
-										throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its decleration", $statement);
+									if ($evalExpression->isUnrecheableElse() === true) {
+										throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
+									} else {
+										$compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
 									}
 								}
 							}
