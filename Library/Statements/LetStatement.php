@@ -72,22 +72,28 @@ class LetStatement
 			case 'ulong':
 			case 'char':
 			case 'uchar':
+
 				switch ($resolvedExpr->getType()) {
 
 					case 'null':
 						switch ($statement['operator']) {
+
 							case 'assign':
 								$codePrinter->output($variable . ' = 0;');
 								break;
+
 							case 'add-assign':
 								$codePrinter->output($variable . ' += 0;');
 								break;
+
 							case 'sub-assign':
 								$codePrinter->output($variable . ' -= 0;');
 								break;
+
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= 0;');
 								break;
+
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
@@ -98,24 +104,31 @@ class LetStatement
 					case 'long':
 					case 'ulong':
 						switch ($statement['operator']) {
+
 							case 'assign':
 								$codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							case 'add-assign':
 								$codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							case 'sub-assign':
 								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							case 'div-assign':
 								$codePrinter->output($variable . ' /= ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							case 'mod-assign':
 								$codePrinter->output($variable . ' %= ' . $resolvedExpr->getCode() . ';');
 								break;
+
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
@@ -124,18 +137,23 @@ class LetStatement
 					case 'char':
 					case 'uchar':
 						switch ($statement['operator']) {
+
 							case 'assign':
 								$codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
 								break;
+
 							case 'add-assign':
 								$codePrinter->output($variable . ' += \'' . $resolvedExpr->getCode() . '\';');
 								break;
+
 							case 'sub-assign':
 								$codePrinter->output($variable . ' -= \'' . $resolvedExpr->getCode() . '\';');
 								break;
+
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= \'' . $resolvedExpr->getCode() . '\';');
 								break;
+
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
@@ -143,18 +161,23 @@ class LetStatement
 
 					case 'double':
 						switch ($statement['operator']) {
+
 							case 'assign':
 								$codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
 								break;
+
 							case 'add-assign':
 								$codePrinter->output($variable . ' += (long) (' . $resolvedExpr->getCode() . ');');
 								break;
+
 							case 'sub-assign':
 								$codePrinter->output($variable . ' -= (long) (' . $resolvedExpr->getCode() . ');');
 								break;
+
 							case 'mul-assign':
 								$codePrinter->output($variable . ' *= (long) (' . $resolvedExpr->getCode() . ');');
 								break;
+
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
@@ -162,15 +185,19 @@ class LetStatement
 
 					case 'bool':
 						switch ($statement['operator']) {
+
 							case 'assign':
 								$codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
 								break;
+
 							case 'add-assign':
 								$codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
 								break;
+
 							case 'sub-assign':
 								$codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
 								break;
+
 							default:
 								throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 						}
@@ -179,6 +206,7 @@ class LetStatement
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -186,23 +214,30 @@ class LetStatement
 							case 'bool':
 							case 'char':
 							case 'uchar':
+
 								switch ($statement['operator']) {
+
 									case 'assign':
 										$codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
 										break;
+
 									case 'add-assign':
 										$codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
 										break;
+
 									case 'sub-assign':
 										$codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
 										break;
+
 									case 'mul-assign':
 										$codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
 										break;
+
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 								}
 								break;
+
 							case 'double':
 								switch ($statement['operator']) {
 									case 'assign':
@@ -221,25 +256,32 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 								}
 								break;
+
 							case 'variable':
 								$compilationContext->headersManager->add('kernel/operators');
 								switch ($statement['operator']) {
+
 									case 'assign':
 										$codePrinter->output($variable . ' = zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
+
 									case 'add-assign':
 										$codePrinter->output($variable . ' += zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
+
 									case 'sub-assign':
 										$codePrinter->output($variable . ' -= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
+
 									case 'mul-assign':
 										$codePrinter->output($variable . ' *= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
 										break;
+
 									default:
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
 								}
 								break;
+
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
@@ -334,6 +376,7 @@ class LetStatement
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -395,6 +438,7 @@ class LetStatement
 										throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
 								}
 								break;
+
 							default:
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $statement);
 						}
@@ -590,6 +634,7 @@ class LetStatement
 					case 'variable':
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
 						switch ($itemVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -638,6 +683,7 @@ class LetStatement
 
 			case 'variable':
 				switch ($resolvedExpr->getType()) {
+
 					case 'null':
 						switch ($statement['operator']) {
 							case 'assign':
@@ -820,6 +866,7 @@ class LetStatement
 
 						$itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
 						switch ($itemVariable->getType()) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -976,10 +1023,12 @@ class LetStatement
 								throw new CompilerException("Unknown type: " . $itemVariable->getType(), $resolvedExpr->getOriginal());
 						}
 						break;
+
 					default:
 						throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
 				}
 				break;
+
 			default:
 				throw new CompilerException("Unknown type: " . $type, $statement);
 		}

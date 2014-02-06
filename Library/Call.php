@@ -310,7 +310,7 @@ class Call
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
 					break;
-					
+
 				default:
 					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
 			}
@@ -347,7 +347,7 @@ class Call
 
 				case 'int':
 				case 'uint':
-				case 'long':				
+				case 'long':
 					$parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
 					$codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 					$this->_temporalVariables[] = $parameterVariable;
@@ -412,7 +412,7 @@ class Call
 							$codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
 							$params[] = '&' . $parameterTempVariable->getName();
 							$this->_temporalVariables[] = $parameterTempVariable;
-							break;	
+							break;
 
 						case 'bool':
 							$params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
@@ -428,6 +428,7 @@ class Call
 							throw new CompilerException("Cannot use variable type: " . $parameterVariable->getType() . " as parameter", $expression);
 					}
 					break;
+
 				default:
 					throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
 			}

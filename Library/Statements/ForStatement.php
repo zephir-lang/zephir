@@ -468,7 +468,7 @@ class ForStatement
 		if (isset($this->_statement['key'])) {
 			$codePrinter->output("\t" . $keyVariable->getName() . ' = ' . $tempVariable->getName() . '; ');
 		}
-		
+
 		$compilationContext->headersManager->add('kernel/operators');
 		$codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $expression->getCode() . ', ' . $tempVariable->getName() . ');');
 
@@ -624,13 +624,16 @@ class ForStatement
 
 		$exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
 		switch ($exprVariable->getType()) {
+
 			case 'variable':
 			case 'array':
 				$this->compileHashTraverse($expression, $compilationContext);
 				break;
+
 			case 'string':
 				$this->compileStringTraverse($expression, $compilationContext);
 				break;
+
 			default:
 				throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
 		}

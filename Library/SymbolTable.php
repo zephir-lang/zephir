@@ -183,10 +183,12 @@ class SymbolTable
 			throw new CompilerException("Variable '" . $name . "' cannot be read because it's not initialized ", $statement);
 		}
 
+		$variable->increaseUses();
+
 		/**
 		 * Analize branches to detect possible initialization of variables in conditional branches
 		 */
-		if (!$variable->isTemporal()) {
+		if (!$variable->isTemporal() && !$variable->getSkipVariant()) {
 
 			if ($name != 'return_value' && $name != 'this') {
 
@@ -197,9 +199,15 @@ class SymbolTable
 
 				if (count($branches) == 1) {
 
-					if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType() || Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
-						if ($branches[0]->isUnrecheable()) {
-							throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+					if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+						if ($branches[0]->isUnrecheable() === true) {
+							//throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+						}
+					} else {
+						if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
+							if ($branches[0]->isUnrecheable() === false) {
+								//throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+							}
 						}
 					}
 
@@ -291,7 +299,6 @@ class SymbolTable
 			}
 		}
 
-		$variable->increaseUses();
 		return $variable;
 	}
 
@@ -319,7 +326,7 @@ class SymbolTable
 				$compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
 
 				$superVar = new Variable('variable', $name, $compilationContext->currentBranch);
-				$superVar->setIsInitialized(true);
+				$superVar->setIsInitialized(true, $compilationContext, $statement);
 				$superVar->setDynamicTypes('array');
 				$superVar->increaseMutates();
 				$superVar->increaseUses();

@@ -634,6 +634,16 @@ class Variable
 	}
 
 	/**
+	 * Get the number of initializations remaining to skip
+	 *
+	 * @return int
+	 */
+	public function getSkipVariant()
+	{
+		return $this->_numberSkips;
+	}
+
+	/**
 	 * Initializes a variant variable
 	 *
 	 * @param CompilationContext $compilationContext
