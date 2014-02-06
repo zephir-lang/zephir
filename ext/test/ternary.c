@@ -38,10 +38,8 @@ PHP_METHOD(Test_Ternary, testTernary1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
 	} else {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_BOOL(_0, 0);
 	}
 	RETURN_CCTOR(_0);
@@ -59,17 +57,14 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
 		zephir_call_method(_2, a, "y");
 		if (zephir_is_true(_2)) {
-			ZEPHIR_INIT_BNVAR(_1);
 			zephir_call_method(_1, a, "x");
 		} else {
-			ZEPHIR_INIT_BNVAR(_1);
 			ZVAL_BOOL(_1, zephir_array_isset(a, y));
 		}
 		ZEPHIR_CPY_WRT(_0, _1);
@@ -89,17 +84,14 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
 		zephir_call_method(_2, a, "y");
 		if (zephir_is_true(_2)) {
-			ZEPHIR_INIT_BNVAR(_1);
 			zephir_call_method(_1, a, "x");
 		} else {
-			ZEPHIR_INIT_BNVAR(_1);
 			ZVAL_BOOL(_1, zephir_array_isset(a, y));
 		}
 		ZEPHIR_CPY_WRT(_0, _1);
@@ -119,10 +111,8 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if ((Z_TYPE_P(a) == IS_RESOURCE)) {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_STRING(_0, "unknown", 1);
 	} else {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_BOOL(_0, 0);
 	}
 	zephir_gettype(return_value, _0 TSRMLS_CC);

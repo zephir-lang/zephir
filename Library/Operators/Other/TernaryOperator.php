@@ -37,10 +37,13 @@ class TernaryOperator extends BaseOperator
 		 * This variable is used to check if the compound and expression is evaluated as true or false
 		 */
 		$returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+		if ($returnVariable->isTemporal()) {
+			$returnVariable->skipInitVariant(2);
+		}
 
 		$expr = new EvalExpression();
 		$condition = $expr->optimize($expression['left'], $compilationContext);
-		$compilationContext->codePrinter->output('if (' . $condition . ') {');		
+		$compilationContext->codePrinter->output('if (' . $condition . ') {');
 
 		$compilationContext->codePrinter->increaseLevel();
 

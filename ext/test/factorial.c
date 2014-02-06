@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Factorial) {
@@ -25,7 +26,7 @@ ZEPHIR_INIT_CLASS(Test_Factorial) {
 
 }
 
-PHP_METHOD(Test_Factorial, intFactorial) {
+PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 
 	zend_bool _0;
 	long result = 1, i;
@@ -55,6 +56,31 @@ PHP_METHOD(Test_Factorial, intFactorial) {
 		}
 	}
 	RETURN_LONG(result);
+
+}
+
+PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
+
+	zval *num_param = NULL, *_0, *_1, *_2;
+	int num;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &num_param);
+
+		num = zephir_get_intval(num_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	if ((num == 0)) {
+		ZVAL_LONG(_0, 1);
+	} else {
+		ZEPHIR_INIT_VAR(_1);
+		ZEPHIR_INIT_VAR(_2);
+		ZVAL_LONG(_2, (num - 1));
+		zephir_call_method_p1(_1, this_ptr, "intrecursivefactorial", _2);
+		ZVAL_LONG(_0, (num * zephir_get_numberval(_1)));
+	}
+	RETURN_CCTOR(_0);
 
 }
 

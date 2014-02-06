@@ -234,7 +234,11 @@ class ReturnStatement
 									$codePrinter->output('RETURN_MM();');
 								}
 							}
+							if ($symbolVariable->isTemporal()) {
+								$symbolVariable->setIdle(true);
+							}
 							break;
+
 						default:
 							throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 					}
