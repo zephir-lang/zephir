@@ -911,6 +911,7 @@ class Compiler
 
 		$globalCode = '';
 		$globalStruct = '';
+		$globalsDefault = '';
 
 		/**
 		 * Generate the extensions globals declaration
@@ -935,7 +936,7 @@ class Compiler
 					throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
 				}
 
-				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName);
+				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName, $structureName);
 				foreach ($internalStructure as $field => $global) {
 
 					if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
@@ -944,7 +945,7 @@ class Compiler
 
 					$structBuilder->addProperty($field, $global);
 
-					//$globalsDefault .= $structBuilder->getDefault($structureName, $global);
+					$globalsDefault .= $structBuilder->getCDefault($field, $global) . PHP_EOL;
 				}
 
 				$globalStruct .= $structBuilder . PHP_EOL;
@@ -992,6 +993,7 @@ class Compiler
 			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
 			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
 			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
+			'%INIT_GLOBALS%'        => $globalsDefault
 		);
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);

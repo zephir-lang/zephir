@@ -54,6 +54,7 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
+%INIT_GLOBALS%
 }
 
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%){

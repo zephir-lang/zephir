@@ -107,7 +107,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define RETURN_MM_ON_FAILURE(what) \
 	do { \
 		if (what == FAILURE) { \
-			PHALCON_MM_RESTORE(); \
+			ZEPHIR_MM_RESTORE(); \
 			return; \
 		} \
 	} while (0)

@@ -176,6 +176,10 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
+	zephir_globals->test.my_setting_1 = 1;
+	zephir_globals->test.my_setting_2 = 100;
+	zephir_globals->test.my_setting_3 = 7.5;
+
 }
 
 static PHP_RINIT_FUNCTION(test){

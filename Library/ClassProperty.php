@@ -113,19 +113,25 @@ class ClassProperty
 		$modifiers = array();
 
 		foreach ($this->_visibility as $visibility) {
+
 			switch ($visibility) {
+
 				case 'protected':
 					$modifiers['ZEND_ACC_PROTECTED'] = true;
 					break;
+
 				case 'private':
 					$modifiers['ZEND_ACC_PRIVATE'] = true;
 					break;
+
 				case 'public':
 					$modifiers['ZEND_ACC_PUBLIC'] = true;
 					break;
+
 				case 'static':
 					$modifiers['ZEND_ACC_STATIC'] = true;
 					break;
+
 				default:
 					throw new Exception("Unknown modifier " . $visibility);
 
@@ -229,7 +235,7 @@ class ClassProperty
 	 */
 	protected function declareProperty(\CompilationContext $compilationContext, $type, $value)
 	{
-		$codePrinter = &$compilationContext->codePrinter;
+		$codePrinter = $compilationContext->codePrinter;
 
 		switch ($type) {
 			case 'long':
@@ -239,12 +245,14 @@ class ClassProperty
 					", SL(\"" . $this->getName() . "\"), " . $value . ", " .
 					$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				break;
+
 			case 'double':
 				$codePrinter->output("zend_declare_property_double(" .
 					$compilationContext->classDefinition->getClassEntry() .
 					", SL(\"" . $this->getName() . "\"), " . $value . ", " .
 					$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				break;
+
 			case 'bool':
 				if ($value == 'false') {
 					$codePrinter->output("zend_declare_property_bool(" .
@@ -258,18 +266,21 @@ class ClassProperty
 						$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				}
 				break;
+
 			case 'string':
 				$codePrinter->output("zend_declare_property_string(" .
 					$compilationContext->classDefinition->getClassEntry() .
 					", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value) . "\", " .
 					$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				break;
+
 			case 'null':
 				$codePrinter->output("zend_declare_property_null(" .
 					$compilationContext->classDefinition->getClassEntry() .
 					", SL(\"" . $this->getName() . "\"), " .
 					$this->getVisibilityAccesor() . " TSRMLS_CC);");
 				break;
+
 			default:
 				throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
 		}

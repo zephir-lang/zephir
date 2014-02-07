@@ -31,28 +31,39 @@ class Struct
 	/**
 	 * @var string
 	 */
-	protected $name;
+	protected $_name;
+
+	/**
+	 * @var string
+	 */
+	protected $_simpleName;
 
 	/**
 	 * @var array
 	 */
-	protected $properties = array();
+	protected $_properties = array();
 
 	/**
 	 * @param string $name
+	 * @param string $simpleName
 	 * @throws \InvalidArgumentException
 	 */
-	public function __construct($name)
+	public function __construct($name, $simpleName)
 	{
 		if (!is_string($name)) {
-			throw new \InvalidArgumentException('Struct name must be string!');
+			throw new \InvalidArgumentException('Struct name must be string');
+		}
+
+		if (!is_string($simpleName)) {
+			throw new \InvalidArgumentException('Struct name must be string');
 		}
 
 		if (empty($name)) {
 			throw new \InvalidArgumentException('Struct name must not be empty');
 		}
 
-		$this->name = $name;
+		$this->_name = $name;
+		$this->_simpleName = $simpleName;
 	}
 
 	/**
@@ -74,11 +85,11 @@ class Struct
 			throw new \InvalidArgumentException('Property name must be string');
 		}
 
-		if (isset($this->properties[$field])) {
+		if (isset($this->_properties[$field])) {
 			throw new \InvalidArgumentException('Property was defined more than once');
 		}
 
-		$this->properties[$field] = $this->convertToCType($global['type']);
+		$this->_properties[$field] = $this->convertToCType($global['type']);
 	}
 
 	/**
@@ -86,13 +97,13 @@ class Struct
 	 */
 	public function __toString()
 	{
-		$code = 'typedef struct '. $this->name .' { '.PHP_EOL;
+		$code = 'typedef struct '. $this->_name .' { '.PHP_EOL;
 
-		foreach ($this->properties as $name => $type) {
+		foreach ($this->_properties as $name => $type) {
 			$code .= T . $type . ' ' . $name . ';' . PHP_EOL;
 		}
 
-		return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
+		return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;
 	}
 
 	/**
@@ -121,21 +132,32 @@ class Struct
 		}
 	}
 
-	public function getCDefault($type)
+	public function getCDefault($name, $global)
 	{
-		switch ($type) {
+		if (!isset($global['default'])) {
+			throw new \Exception('Field "' . $name . '" does not have a default value');
+		}
+
+		switch ($global['type']) {
 
 			case 'boolean':
 			case 'bool':
-				return 'zend_bool';
+				if ($global['default'] === true) {
+					return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = 1;';
+				} else {
+					if ($global['default'] === false) {
+						return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = 0;';
+					} else {
+						throw new \Exception('Invalid default type for boolean field "' . $name . '", it must be false/true');
+					}
+				}
+				break;
 
 			case 'int':
 			case 'uint':
 			case 'long':
-			case 'char':
-			case 'uchar':
 			case 'double':
-				return $type;
+				return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
 			default:
 				throw new \Exception('Unknown global type: ' . $type);
