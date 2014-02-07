@@ -106,7 +106,7 @@ class DeclareStatement
 								$defaultValue = 0;
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -121,7 +121,7 @@ class DeclareStatement
 								$defaultValue = 0;
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -138,7 +138,7 @@ class DeclareStatement
 								$defaultValue = 0;
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -155,7 +155,7 @@ class DeclareStatement
 								$defaultValue = 0;
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -166,7 +166,7 @@ class DeclareStatement
 							case 'null':
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -177,7 +177,7 @@ class DeclareStatement
 							case 'null':
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $variable['expr']['type'] . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
 						break;
 
@@ -207,7 +207,7 @@ class DeclareStatement
 								$symbolVariable->setLocalOnly(false);
 								break;
 							default:
-								throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $statement['data-type'], $variable);
+								self::invalidDefaultTypeException($defaultType, $statement['data-type'], $variable);
 						}
 						break;
 
@@ -221,6 +221,14 @@ class DeclareStatement
 				$symbolVariable->setPossibleValue(new LiteralCompiledExpression($defaultType, $defaultValue, $variable['expr']), $compilationContext);
 			}
 		}
+	}
 
+	/**
+	 * throw exception for invalid default type
+	 * @throws CompilerException
+	 */
+	static public function invalidDefaultTypeException($defaultType, $dateType, $variable)
+	{
+		throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $dateType, $variable);
 	}
 }

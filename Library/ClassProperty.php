@@ -111,6 +111,7 @@ class ClassProperty
 	public function getVisibilityAccesor()
 	{
 		$modifiers = array();
+
 		foreach ($this->_visibility as $visibility) {
 			switch ($visibility) {
 				case 'protected':
@@ -187,54 +188,30 @@ class ClassProperty
 	 * Produce the code to register a property
 	 *
 	 * @param CompilationContext $compilationContext
+	 * @throws CompilerException
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		if (!is_array($this->_defaultValue)) {
-			$compilationContext->codePrinter->output("zend_declare_property_null(" .
-				$compilationContext->classDefinition->getClassEntry() .
-				", SL(\"" . $this->getName() . "\"), " .
-				$this->getVisibilityAccesor() . " TSRMLS_CC);");
+			$this->declareProperty($compilationContext, 'null', null);
 		} else {
 			switch ($this->_defaultValue['type']) {
 				case 'long':
 				case 'int':
-					$compilationContext->codePrinter->output("zend_declare_property_long(" .
-						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), " . $this->_defaultValue['value'] . ", " .
-						$this->getVisibilityAccesor() . " TSRMLS_CC);");
-					break;
-				case 'double':
-					$compilationContext->codePrinter->output("zend_declare_property_double(" .
-						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), " . $this->_defaultValue['value'] . ", " .
-						$this->getVisibilityAccesor() . " TSRMLS_CC);");
-					break;
-				case 'bool':
-					if ($this->_defaultValue['value'] == 'false') {
-						$compilationContext->codePrinter->output("zend_declare_property_bool(" .
-							$compilationContext->classDefinition->getClassEntry() .
-							", SL(\"" . $this->getName() . "\"), 0, " .
-							$this->getVisibilityAccesor() . " TSRMLS_CC);");
-					} else {
-						$compilationContext->codePrinter->output("zend_declare_property_bool(" .
-							$compilationContext->classDefinition->getClassEntry() .
-							", SL(\"" . $this->getName() . "\"), 1, " .
-							$this->getVisibilityAccesor() . " TSRMLS_CC);");
-					}
-					break;
 				case 'string':
-					$compilationContext->codePrinter->output("zend_declare_property_string(" .
-						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->_defaultValue['value']) . "\", " .
-						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				case 'double':
+				case 'bool':
+					$this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
 					break;
 				case 'null':
-					$compilationContext->codePrinter->output("zend_declare_property_null(" .
-						$compilationContext->classDefinition->getClassEntry() .
-						", SL(\"" . $this->getName() . "\"), " .
-						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+					$this->declareProperty($compilationContext, $this->_defaultValue['type'], null);
+					break;
+				case 'static-constant-access':
+					$expression = new \Expression($this->_defaultValue);
+					$compiledExpression = $expression->compile($compilationContext);
+
+					$constant = $compilationContext->classDefinition->getConstant($this->_defaultValue['right']['value']);
+					$this->declareProperty($compilationContext, $constant->getType(), $compiledExpression->getCode());
 					break;
 				default:
 					throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
@@ -242,4 +219,60 @@ class ClassProperty
 		}
 	}
 
+	/**
+	 * Declare class property with default value
+	 *
+	 * @param CompilationContext $compilationContext
+	 * @param $type
+	 * @param $value
+	 * @throws CompilerException
+	 */
+	protected function declareProperty(\CompilationContext $compilationContext, $type, $value)
+	{
+		$codePrinter = &$compilationContext->codePrinter;
+
+		switch ($type) {
+			case 'long':
+			case 'int':
+				$codePrinter->output("zend_declare_property_long(" .
+					$compilationContext->classDefinition->getClassEntry() .
+					", SL(\"" . $this->getName() . "\"), " . $value . ", " .
+					$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				break;
+			case 'double':
+				$codePrinter->output("zend_declare_property_double(" .
+					$compilationContext->classDefinition->getClassEntry() .
+					", SL(\"" . $this->getName() . "\"), " . $value . ", " .
+					$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				break;
+			case 'bool':
+				if ($value == 'false') {
+					$codePrinter->output("zend_declare_property_bool(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), 0, " .
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				} else {
+					$codePrinter->output("zend_declare_property_bool(" .
+						$compilationContext->classDefinition->getClassEntry() .
+						", SL(\"" . $this->getName() . "\"), 1, " .
+						$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				}
+				break;
+			case 'string':
+				$codePrinter->output("zend_declare_property_string(" .
+					$compilationContext->classDefinition->getClassEntry() .
+					", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value) . "\", " .
+					$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				break;
+			case 'null':
+				$codePrinter->output("zend_declare_property_null(" .
+					$compilationContext->classDefinition->getClassEntry() .
+					", SL(\"" . $this->getName() . "\"), " .
+					$this->getVisibilityAccesor() . " TSRMLS_CC);");
+				break;
+			default:
+				throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
+		}
+
+	}
 }

@@ -69,6 +69,16 @@ class ClassConstant
 	}
 
 	/**
+	 * Get type of class constant
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return $this->_value['type'];
+	}
+
+	/**
 	 * Produce the code to register a class constant
 	 *
 	 * @param CompilationContext $compilationContext

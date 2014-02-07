@@ -15,6 +15,13 @@ class Constants extends Test\ConstantsParent
 
 	const C6 = "test";
 
+	protected propertyC1 = self::C1 {get};
+	protected propertyC2 = self::C2 {get};
+	protected propertyC3 = self::C3 {get};
+	protected propertyC4 = self::C4 {get};
+	protected propertyC5 = self::C5 {get};
+	protected propertyC6 = self::C6 {get};
+
 	public function testReadConstant()
 	{
 		return ENT_QUOTES;
