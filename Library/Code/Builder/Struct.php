@@ -107,7 +107,9 @@ class Struct
 	}
 
 	/**
-	 * @param $type
+	 * Generates the internal c-type according to the php's type
+	 *
+	 * @param string $type
 	 * @return string
 	 * @throws \Exception
 	 */
