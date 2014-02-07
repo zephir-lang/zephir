@@ -192,12 +192,8 @@ class ClassProperty
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-
 		if (!is_array($this->_defaultValue)) {
-			$compilationContext->codePrinter->output("zend_declare_property_null(" .
-				$compilationContext->classDefinition->getClassEntry() .
-				", SL(\"" . $this->getName() . "\"), " .
-				$this->getVisibilityAccesor() . " TSRMLS_CC);");
+			$this->declareProperty($compilationContext, 'null', null);
 		} else {
 			switch ($this->_defaultValue['type']) {
 				case 'long':
