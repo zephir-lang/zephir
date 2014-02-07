@@ -1,8 +1,68 @@
-{    
-    "namespace": "test",
-    "name": "Test Extension",
-    "description": "",
-    "author": "",
-    "version": "1.0.0",
-    "verbose": false
+{
+	"warnings": {
+		"unused-variable": true,
+		"unused-variable-external": false,
+		"possible-wrong-parameter": true,
+		"possible-wrong-parameter-undefined": false,
+		"nonexistent-function": true,
+		"nonexistent-class": true,
+		"non-valid-isset": true,
+		"non-array-update": true,
+		"non-valid-objectupdate": true,
+		"non-valid-fetch": true,
+		"invalid-array-index": true,
+		"non-array-append": true,
+		"invalid-return-type": true,
+		"unrecheable-code": true,
+		"nonexistant-constant": true,
+		"not-supported-magic-constant": true,
+		"non-valid-decrement": true,
+		"non-valid-increment": true,
+		"non-valid-clone": true,
+		"non-valid-new": true,
+		"non-array-access": true,
+		"invalid-reference": true,
+		"invalid-typeof-comparison": true,
+		"conditional-initialization": true
+	},
+	"optimizations": {
+		"static-type-inference": true,
+		"static-type-inference-second-pass": true,
+		"local-context-pass": true,
+		"constant-folding": true,
+		"static-constant-class-folding": true,
+		"private-internal-methods": false
+	},
+	"globals": {
+		"my_setting_1": {
+			"type": "bool",
+			"default": true
+		},
+		"my_setting_2": {
+			"type": "int",
+			"default": 10
+		},
+		"my_setting_3": {
+			"type": "double",
+			"default": 15.2
+		},
+		"test.my_setting_1": {
+			"type": "bool",
+			"default": true
+		},
+		"test.my_setting_2": {
+			"type": "int",
+			"default": 100
+		},
+		"test.my_setting_3": {
+			"type": "double",
+			"default": 7.5
+		}
+	},
+	"namespace": "test",
+	"name": "Test Extension",
+	"description": "",
+	"author": "",
+	"version": "1.0.0",
+	"verbose": true
 }

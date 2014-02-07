@@ -21,6 +21,9 @@ namespace Code\Builder;
 
 /**
  * Class Struct
+ *
+ * Represents an internal extension global structure
+ *
  * @package Code\Builder
  */
 class Struct
@@ -36,7 +39,7 @@ class Struct
 	protected $properties = array();
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($name)
@@ -53,21 +56,29 @@ class Struct
 	}
 
 	/**
-	 * @param $type
-	 * @param $name
+	 * @param string $field
+	 * @param array $global
 	 * @throws \InvalidArgumentException
 	 */
-	public function addProperty($type, $name)
+	public function addProperty($field, $global)
 	{
-		if (!is_string($type)) {
-			throw new \InvalidArgumentException('Property type must be string!');
+		if (!isset($global['type'])) {
+			throw new \InvalidArgumentException('Property type must be string');
 		}
 
-		if (!is_string($name)) {
-			throw new \InvalidArgumentException('Property name must be string!');
+		if (!is_string($global['type'])) {
+			throw new \InvalidArgumentException('Property type must be string');
 		}
 
-		$this->properties[$name] = $this->convertToCType($type);
+		if (!is_string($field)) {
+			throw new \InvalidArgumentException('Property name must be string');
+		}
+
+		if (isset($this->properties[$field])) {
+			throw new \InvalidArgumentException('Property was defined more than once');
+		}
+
+		$this->properties[$field] = $this->convertToCType($global['type']);
 	}
 
 	/**
@@ -77,7 +88,7 @@ class Struct
 	{
 		$code = 'typedef struct '. $this->name .' { '.PHP_EOL;
 
-		foreach($this->properties as $name => $type) {
+		foreach ($this->properties as $name => $type) {
 			$code .= T . $type . ' ' . $name . ';' . PHP_EOL;
 		}
 
@@ -91,16 +102,43 @@ class Struct
 	 */
 	protected function convertToCType($type)
 	{
-		switch($type) {
+		switch ($type) {
+
 			case 'boolean':
 			case 'bool':
 				return 'zend_bool';
+
 			case 'int':
-			case 'float':
+			case 'uint':
+			case 'long':
+			case 'char':
+			case 'uchar':
+			case 'double':
 				return $type;
+
 			default:
 				throw new \Exception('Unknown global type: ' . $type);
-				break;
 		}
 	}
-} 
+
+	public function getCDefault($type)
+	{
+		switch ($type) {
+
+			case 'boolean':
+			case 'bool':
+				return 'zend_bool';
+
+			case 'int':
+			case 'uint':
+			case 'long':
+			case 'char':
+			case 'uchar':
+			case 'double':
+				return $type;
+
+			default:
+				throw new \Exception('Unknown global type: ' . $type);
+		}
+	}
+}

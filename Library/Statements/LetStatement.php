@@ -1576,7 +1576,7 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output('zephir_property_incr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_DC);');
+		$compilationContext->codePrinter->output('zephir_property_incr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_CC);');
 	}
 
 	/**
@@ -1624,7 +1624,7 @@ class LetStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 		$compilationContext->headersManager->add('kernel/object');
-		$compilationContext->codePrinter->output('zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_DC);');
+		$compilationContext->codePrinter->output('zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_CC);');
 	}
 
 	/**

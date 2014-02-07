@@ -9,6 +9,12 @@
 #define PHP_TEST_VERSION "1.0.0"
 #define PHP_TEST_EXTNAME "test"
 
+typedef struct _zephir_struct_test { 
+	zend_bool my_setting_1;
+	int my_setting_2;
+	double my_setting_3;
+} zephir_struct_test;
+
 
 
 ZEND_BEGIN_MODULE_GLOBALS(test)
@@ -31,6 +37,15 @@ ZEND_BEGIN_MODULE_GLOBALS(test)
 	zval *global_false;
 	zval *global_null;
 	
+	zephir_struct_test test;
+
+	zend_bool my_setting_1;
+
+	int my_setting_2;
+
+	double my_setting_3;
+
+
 ZEND_END_MODULE_GLOBALS(test)
 
 #ifdef ZTS

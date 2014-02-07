@@ -25,6 +25,7 @@
 #include "test/fibonnaci.h"
 #include "test/flow.h"
 #include "test/fortytwo.h"
+#include "test/globals.h"
 #include "test/instanceoff.h"
 #include "test/issettest.h"
 #include "test/json.h"

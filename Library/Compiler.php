@@ -526,13 +526,13 @@ class Compiler
 		 * When a new file is added or removed we need to run configure again
 		 */
 		if (!($command instanceof CommandGenerate)) {
-			if (!file_exists('.temp/compiled-files-sum')) {
+			if (!file_exists('.temp/' . self::VERSION . '/compiled-files-sum')) {
 				$needConfigure = true;
-				file_put_contents('.temp/compiled-files-sum', $hash);
+				file_put_contents('.temp/' . self::VERSION . '/compiled-files-sum', $hash);
 			} else {
-				if (file_get_contents('.temp/compiled-files-sum') != $hash) {
+				if (file_get_contents('.temp/' . self::VERSION . '/compiled-files-sum') != $hash) {
 					$needConfigure = true;
-					file_put_contents('.temp/compiled-files-sum', $hash);
+					file_put_contents('.temp/' . self::VERSION . '/compiled-files-sum', $hash);
 				}
 			}
 		}
@@ -909,6 +909,83 @@ class Compiler
 			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
 
+		$globalCode = '';
+		$globalStruct = '';
+
+		/**
+		 * Generate the extensions globals declaration
+		 */
+		$globals = $this->_config->get('globals');
+		if (is_array($globals)) {
+
+			$structures = array();
+			$variables = array();
+			foreach ($globals as $name => $global) {
+				$parts = explode('.', $name);
+				if (isset($parts[1])) {
+					$structures[$parts[0]][$parts[1]] = $global;
+				} else {
+					$variables[$parts[0]] = $global;
+				}
+			}
+
+			foreach ($structures as $structureName => $internalStructure) {
+
+				if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
+					throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
+				}
+
+				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName);
+				foreach ($internalStructure as $field => $global) {
+
+					if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
+						throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
+					}
+
+					$structBuilder->addProperty($field, $global);
+
+					//$globalsDefault .= $structBuilder->getDefault($structureName, $global);
+				}
+
+				$globalStruct .= $structBuilder . PHP_EOL;
+			}
+
+			$globalCode = PHP_EOL;
+			foreach ($structures as $structureName => $internalStructure) {
+				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
+			}
+
+			foreach ($variables as $name => $global) {
+
+				switch ($global['type']) {
+
+					case 'boolean':
+					case 'bool':
+						$type = 'zend_bool';
+						break;
+
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'char':
+					case 'uchar':
+					case 'double':
+						$type = $global['type'];
+						break;
+
+					default:
+						throw new Exception("Unknown type '" . $global['type'] . "'");
+				}
+
+				if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
+					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+				}
+
+				$globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
+			}
+
+		}
+
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		=> strtolower($project),
 			'%PROJECT_UPPER%' 		=> strtoupper($project),
@@ -962,36 +1039,6 @@ class Compiler
 			throw new Exception('Template php_project.h doesn`t exist');
 		}
 
-		$globalCode = '';
-		$globalStruct = '';
-
-		/**
-		 * Generate the globals declaration
-		 */
-		$globals = $this->_config->get('globals');
-		if (is_array($globals)) {
-			$structures = array();
-			foreach ($globals as $name => $global) {
-				$parts = explode('.', $name);
-				$structures[$parts[0]][$parts[1]] = $global;
-			}
-
-			foreach ($structures as $structureName => $internalStructure) {
-				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName);
-				foreach ($internalStructure as $field => $global) {
-					$structBuilder->addProperty($global['type'], $field);
-				}
-
-				$globalStruct .= $structBuilder . PHP_EOL;
-			}
-
-			$globalCode = PHP_EOL;
-			foreach ($structures as $structureName => $internalStructure) {
-				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
-			}
-
-		}
-
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		     => strtolower($project),
 			'%PROJECT_UPPER%' 		     => strtoupper($project),
@@ -1026,6 +1073,7 @@ class Compiler
 	 * Returns a short path
 	 *
 	 * @param string $path
+	 * @return string
 	 */
 	public static function getShortPath($path)
 	{
@@ -1036,6 +1084,7 @@ class Compiler
 	 * Returns a short user path
 	 *
 	 * @param string $path
+	 * @return string
 	 */
 	public static function getShortUserPath($path)
 	{

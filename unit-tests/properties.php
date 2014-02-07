@@ -32,3 +32,11 @@ assert($t->getSomeTrue() === true);
 assert($t->getSomeInteger() === 10);
 assert($t->getSomeDouble() === 10.25);
 assert($t->getSomeString() === "test");
+
+assert(Test\Properties\StaticPublicProperties::$someNull === null);
+assert(Test\Properties\StaticPublicProperties::$someNullInitial === null);
+assert(Test\Properties\StaticPublicProperties::$someFalse === false);
+assert(Test\Properties\StaticPublicProperties::$someTrue === true);
+assert(Test\Properties\StaticPublicProperties::$someInteger === 10);
+assert(Test\Properties\StaticPublicProperties::$someDouble === 10.25);
+assert(Test\Properties\StaticPublicProperties::$someString === "test");
