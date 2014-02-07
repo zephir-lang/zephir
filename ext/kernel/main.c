@@ -198,6 +198,9 @@ int zephir_fast_count_ev(zval *value TSRMLS_DC) {
  * Makes fast count on implicit array types without creating a return zval value
  */
 int zephir_fast_count_int(zval *value TSRMLS_DC) {
+	if (!value) {
+		return 0;
+	}
 
 	long count = 0;
 
