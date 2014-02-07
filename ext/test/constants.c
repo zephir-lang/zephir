@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 #include "kernel/memory.h"
 
 
@@ -19,6 +20,12 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	ZEPHIR_REGISTER_CLASS_EX(Test, Constants, test, constants, test_constantsparent_ce, test_constants_method_entry, 0);
 
+	zend_declare_property_null(test_constants_ce, SL("propertyC1"), ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_bool(test_constants_ce, SL("propertyC2"), 0, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_bool(test_constants_ce, SL("propertyC3"), 1, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_long(test_constants_ce, SL("propertyC4"), 10, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_double(test_constants_ce, SL("propertyC5"), 10.25, ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
 	zend_declare_class_constant_null(test_constants_ce, SL("C1") TSRMLS_CC);
 	zend_declare_class_constant_bool(test_constants_ce, SL("C2"), 0 TSRMLS_CC);
 	zend_declare_class_constant_bool(test_constants_ce, SL("C3"), 1 TSRMLS_CC);
@@ -27,6 +34,48 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC1) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC1");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC2) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC2");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC3) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC3");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC4) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC4");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC5) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC5");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC6) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC6");
 
 }
 

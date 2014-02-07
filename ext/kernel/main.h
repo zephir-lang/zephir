@@ -97,6 +97,21 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 		ZVAL_NULL(var); \
 	}
 
+#define RETURN_ON_FAILURE(what) \
+	do { \
+		if (what == FAILURE) { \
+			return; \
+		} \
+	} while (0)
+
+#define RETURN_MM_ON_FAILURE(what) \
+	do { \
+		if (what == FAILURE) { \
+			PHALCON_MM_RESTORE(); \
+			return; \
+		} \
+	} while (0)
+
 /**
  * Return zval checking if it's needed to ctor
  */
@@ -421,12 +436,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 	} while (0)
 
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) \
-	do { \
-		if (FAILURE == zend_get_constant(SL(const_name), return_value TSRMLS_CC)) { \
-			ZEPHIR_MM_RESTORE(); \
-			return; \
-		} \
-	} while (0)
+	RETURN_MM_ON_FAILURE(zend_get_constant(SL(const_name), return_value TSRMLS_CC));
 
 #ifndef ZEPHIR_RELEASE
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line

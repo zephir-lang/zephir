@@ -46,6 +46,9 @@ class ClassDefinition
 	 */
 	protected $_properties = array();
 
+	/**
+	 * @var ClassConstant[]
+	 */
 	protected $_constants = array();
 
 	protected $_methods = array();
@@ -347,14 +350,23 @@ class ClassDefinition
 	/**
 	 * Returns a constant definition by its name
 	 *
-	 * @param string string
-	 * @return boolean
+	 * @param string $constantName
+	 * @return bool|ClassConstant
 	 */
 	public function getConstant($constantName)
 	{
+		if (!is_string($constantName)) {
+			throw new \InvalidArgumentException('$constantName must be string type');
+		}
+
+		if (empty($constantName)) {
+			throw new \InvalidArgumentException('$constantName must not be empty: '.$constantName);
+		}
+
 		if (isset($this->_constants[$constantName])) {
 			return $this->_constants[$constantName];
 		}
+
 		/**
 		 * @todo add code to get constant from interfaces
 		 */
