@@ -30,8 +30,6 @@ PHP_MINIT_FUNCTION(%PROJECT_LOWER%){
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
-	//assert(ZEPHIR_GLOBAL(orm).parser_cache == NULL);
-	//assert(ZEPHIR_GLOBAL(orm).ast_cache == NULL);
 
 	return SUCCESS;
 }
@@ -86,6 +84,8 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 	php_info_print_table_header(2, PHP_%PROJECT_UPPER%_NAME, "enabled");
 	php_info_print_table_row(2, "Version", PHP_%PROJECT_UPPER%_VERSION);
 	php_info_print_table_end();
+
+%EXTENSION_INFO%
 }
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)

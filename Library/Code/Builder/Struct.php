@@ -93,20 +93,6 @@ class Struct
 	}
 
 	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$code = 'typedef struct '. $this->_name .' { '.PHP_EOL;
-
-		foreach ($this->_properties as $name => $type) {
-			$code .= T . $type . ' ' . $name . ';' . PHP_EOL;
-		}
-
-		return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;
-	}
-
-	/**
 	 * Generates the internal c-type according to the php's type
 	 *
 	 * @param string $type
@@ -134,6 +120,12 @@ class Struct
 		}
 	}
 
+	/**
+	 * Returns the C code that initializes the extension global
+	 *
+	 * @param string $name
+	 * @param array $global
+	 */
 	public function getCDefault($name, $global)
 	{
 		if (!isset($global['default'])) {
@@ -165,4 +157,19 @@ class Struct
 				throw new \Exception('Unknown global type: ' . $type);
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$code = 'typedef struct '. $this->_name .' { '.PHP_EOL;
+
+		foreach ($this->_properties as $name => $type) {
+			$code .= T . $type . ' ' . $name . ';' . PHP_EOL;
+		}
+
+		return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;
+	}
+
 }

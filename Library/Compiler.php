@@ -806,6 +806,138 @@ class Compiler
 	}
 
 	/**
+	 * Process extension globals
+	 *
+	 * @return array
+	 */
+	public function processExtensionGlobals()
+	{
+		$globalCode = '';
+		$globalStruct = '';
+		$globalsDefault = '';
+
+		/**
+		 * Generate the extensions globals declaration
+		 */
+		$globals = $this->_config->get('globals');
+		if (is_array($globals)) {
+
+			$structures = array();
+			$variables = array();
+			foreach ($globals as $name => $global) {
+				$parts = explode('.', $name);
+				if (isset($parts[1])) {
+					$structures[$parts[0]][$parts[1]] = $global;
+				} else {
+					$variables[$parts[0]] = $global;
+				}
+			}
+
+			foreach ($structures as $structureName => $internalStructure) {
+
+				if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
+					throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
+				}
+
+				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName, $structureName);
+				foreach ($internalStructure as $field => $global) {
+
+					if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
+						throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
+					}
+
+					$structBuilder->addProperty($field, $global);
+
+					$globalsDefault .= $structBuilder->getCDefault($field, $global) . PHP_EOL;
+				}
+
+				$globalStruct .= $structBuilder . PHP_EOL;
+			}
+
+			$globalCode = PHP_EOL;
+			foreach ($structures as $structureName => $internalStructure) {
+				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
+			}
+
+			foreach ($variables as $name => $global) {
+
+				if (!isset($global['default'])) {
+					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+				}
+
+				switch ($global['type']) {
+
+					case 'boolean':
+					case 'bool':
+						$type = 'zend_bool';
+						if ($global['default'] === true) {
+							$globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = 1;' . PHP_EOL;
+						} else {
+							$globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = 0;' . PHP_EOL;
+						}
+						break;
+
+					case 'int':
+					case 'uint':
+					case 'long':
+					case 'char':
+					case 'uchar':
+					case 'double':
+						$type = $global['type'];
+						$globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = ' . $global['default'] . ';' . PHP_EOL;
+						break;
+
+					default:
+						throw new Exception("Unknown type '" . $global['type'] . "'");
+				}
+
+				if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
+					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+				}
+
+				$globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
+			}
+
+		}
+
+		return array($globalCode, $globalStruct, $globalsDefault);
+	}
+
+	/**
+	 *
+	 */
+	public function processExtensionInfo()
+	{
+		$phpinfo = '';
+
+		$info = $this->_config->get('info');
+		if (is_array($info)) {
+			foreach ($info as $table) {
+				$phpinfo .= 'php_info_print_table_start();' . PHP_EOL;
+				if (isset($table['header'])) {
+					$headerArray = array();
+					foreach ($table['header'] as $header) {
+						$headerArray[] = '"' . htmlentities($header) . '"';
+					}
+					$phpinfo .= 'php_info_print_table_header(' . count($headerArray) . ', ' . join(', ', $headerArray) . ');' . PHP_EOL;
+				}
+				if (isset($table['rows'])) {
+					foreach ($table['rows'] as $row) {
+						$rowArray = array();
+						foreach ($row as $field) {
+							$rowArray[] = '"' . htmlentities($field) . '"';
+						}
+						$phpinfo .= 'php_info_print_table_row(' . count($rowArray) . ', ' . join(', ', $rowArray) . ');';
+					}
+				}
+				$phpinfo .= 'php_info_print_table_end();' . PHP_EOL;
+			}
+		}
+
+		return $phpinfo;
+	}
+
+	/**
 	 * Create project.c and project.h by compiled files to test extension
 	 *
 	 * @param string $project
@@ -909,83 +1041,16 @@ class Compiler
 			$completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
 		}
 
-		$globalCode = '';
-		$globalStruct = '';
-		$globalsDefault = '';
+		/**
+		 * Round 3. Process extension globals
+		 */
+		list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals();
+
 
 		/**
-		 * Generate the extensions globals declaration
+		 * Round 4. Process extension info
 		 */
-		$globals = $this->_config->get('globals');
-		if (is_array($globals)) {
-
-			$structures = array();
-			$variables = array();
-			foreach ($globals as $name => $global) {
-				$parts = explode('.', $name);
-				if (isset($parts[1])) {
-					$structures[$parts[0]][$parts[1]] = $global;
-				} else {
-					$variables[$parts[0]] = $global;
-				}
-			}
-
-			foreach ($structures as $structureName => $internalStructure) {
-
-				if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
-					throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
-				}
-
-				$structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName, $structureName);
-				foreach ($internalStructure as $field => $global) {
-
-					if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
-						throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
-					}
-
-					$structBuilder->addProperty($field, $global);
-
-					$globalsDefault .= $structBuilder->getCDefault($field, $global) . PHP_EOL;
-				}
-
-				$globalStruct .= $structBuilder . PHP_EOL;
-			}
-
-			$globalCode = PHP_EOL;
-			foreach ($structures as $structureName => $internalStructure) {
-				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
-			}
-
-			foreach ($variables as $name => $global) {
-
-				switch ($global['type']) {
-
-					case 'boolean':
-					case 'bool':
-						$type = 'zend_bool';
-						break;
-
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'char':
-					case 'uchar':
-					case 'double':
-						$type = $global['type'];
-						break;
-
-					default:
-						throw new Exception("Unknown type '" . $global['type'] . "'");
-				}
-
-				if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
-					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
-				}
-
-				$globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
-			}
-
-		}
+		$phpInfo = $this->processExtensionInfo();
 
 		$toReplace = array(
 			'%PROJECT_LOWER%' 		=> strtolower($project),
@@ -993,20 +1058,21 @@ class Compiler
 			'%PROJECT_CAMELIZE%' 	=> ucfirst($project),
 			'%CLASS_ENTRIES%' 		=> implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
 			'%CLASS_INITS%'			=> implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
-			'%INIT_GLOBALS%'        => $globalsDefault
+			'%INIT_GLOBALS%'        => $globalsDefault,
+			'%EXTENSION_INFO%'      => $phpInfo
 		);
 		foreach ($toReplace as $mark => $replace) {
 			$content = str_replace($mark, $replace, $content);
 		}
 
 		/**
-		 * Round 3. Generate and place the entry point of the project
+		 * Round 5. Generate and place the entry point of the project
 		 */
 		Utils::checkAndWriteIfNeeded($content, 'ext/' . $project . '.c');
 		unset($content);
 
 		/**
-		 * Round 4. Generate the project main header
+		 * Round 6. Generate the project main header
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/project.h');
 		if (empty($content)) {
@@ -1034,7 +1100,7 @@ class Compiler
 		unset($content);
 
 		/**
-		 * Round 5. Create php_project.h
+		 * Round 7. Create php_project.h
 		 */
 		$content = file_get_contents(__DIR__ . '/../templates/php_project.h');
 		if (empty($content)) {

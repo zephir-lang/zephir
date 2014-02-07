@@ -47,3 +47,24 @@ PHP_METHOD(Test_Globals, getDefaultGlobals3) {
 
 }
 
+PHP_METHOD(Test_Globals, getDefaultGlobals4) {
+
+
+	RETURN_BOOL(ZEPHIR_GLOBAL(my_setting_1));
+
+}
+
+PHP_METHOD(Test_Globals, getDefaultGlobals5) {
+
+
+	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_2));
+
+}
+
+PHP_METHOD(Test_Globals, getDefaultGlobals6) {
+
+
+	RETURN_DOUBLE(ZEPHIR_GLOBAL(my_setting_3));
+
+}
+

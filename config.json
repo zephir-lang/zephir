@@ -1,4 +1,10 @@
 {
+	"namespace": "test",
+	"name": "Test Extension",
+	"description": "",
+	"author": "",
+	"version": "1.0.0",
+	"verbose": true,
 	"warnings": {
 		"unused-variable": true,
 		"unused-variable-external": false,
@@ -59,10 +65,13 @@
 			"default": 7.5
 		}
 	},
-	"namespace": "test",
-	"name": "Test Extension",
-	"description": "",
-	"author": "",
-	"version": "1.0.0",
-	"verbose": true
+	"info": [
+		{
+			"header": ["Directive", "Value"],
+			"rows": [
+				["setting1", "value1"],
+				["setting2", "value2"]
+			]
+		}
+	]
 }

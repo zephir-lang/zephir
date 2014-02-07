@@ -152,8 +152,6 @@ PHP_MINIT_FUNCTION(test){
 static PHP_MSHUTDOWN_FUNCTION(test){
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
-	//assert(ZEPHIR_GLOBAL(orm).parser_cache == NULL);
-	//assert(ZEPHIR_GLOBAL(orm).ast_cache == NULL);
 
 	return SUCCESS;
 }
@@ -179,6 +177,9 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 	zephir_globals->test.my_setting_1 = 1;
 	zephir_globals->test.my_setting_2 = 100;
 	zephir_globals->test.my_setting_3 = 7.5;
+	zephir_globals->my_setting_1 = 1;
+	zephir_globals->my_setting_2 = 10;
+	zephir_globals->my_setting_3 = 15.2;
 
 }
 
@@ -211,6 +212,11 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_header(2, PHP_TEST_NAME, "enabled");
 	php_info_print_table_row(2, "Version", PHP_TEST_VERSION);
 	php_info_print_table_end();
+
+php_info_print_table_start();
+php_info_print_table_header(2, "Directive", "Value");
+php_info_print_table_row(2, "setting1", "value1");php_info_print_table_row(2, "setting1", "value2");php_info_print_table_end();
+
 }
 
 static PHP_GINIT_FUNCTION(test)

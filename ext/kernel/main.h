@@ -324,7 +324,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 /** Check if an array is iterable or not */
 #define zephir_is_iterable(var, array_hash, hash_pointer, duplicate, reverse) \
 	if (!var || !zephir_is_iterable_ex(var, array_hash, hash_pointer, duplicate, reverse)) { \
-		ZEPHIR_THROW_EXCEPTION_STRW(zend_exception_get_default(TSRMLS_C), "The argument is not init or iterable()"); \
+		ZEPHIR_THROW_EXCEPTION_STRW(zend_exception_get_default(TSRMLS_C), "The argument is not initialized or iterable()"); \
 		ZEPHIR_MM_RESTORE(); \
 		return; \
 	}
