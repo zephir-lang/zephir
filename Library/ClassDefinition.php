@@ -662,7 +662,7 @@ class ClassDefinition
 								$classEntry = 'zend_ce_serializable';
 								break;
 							case 'iteratoraggregate':
-								$classEntry = 'zend_ce_IteratorAggregate';
+								$classEntry = 'zend_ce_aggregate';
 								break;
 							default:
 								throw new CompilerException($classInterfaceDefinition->getName());
