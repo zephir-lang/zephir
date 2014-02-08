@@ -71,15 +71,19 @@ class PropertyAccess
 		$exprVariable = $expr->compile($compilationContext);
 
 		switch ($exprVariable->getType()) {
+
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
+
 					case 'variable':
 						break;
+
 					default:
 						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
 		}
@@ -182,11 +186,14 @@ class PropertyAccess
 					 * to a read only variable
 					 */
 					if ($symbolVariable->getName() != 'return_value') {
-						$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-						if ($numberMutations == 1) {
-							if ($symbolVariable->getNumberMutations() == $numberMutations) {
-								$symbolVariable->setMemoryTracked(false);
-								$readOnly = true;
+						$line = $compilationContext->symbolTable->getLastCallLine();
+						if ($line === false || ($line > 0 && $line < $expression['line'])) {
+							$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+							if ($numberMutations == 1) {
+								if ($symbolVariable->getNumberMutations() == $numberMutations) {
+									$symbolVariable->setMemoryTracked(false);
+									$readOnly = true;
+								}
 							}
 						}
 					}

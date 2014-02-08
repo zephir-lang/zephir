@@ -769,7 +769,7 @@ class ClassDefinition
 		}
 
 		/**
-		 * Create arg. info
+		 * Create argument info
 		 */
 		foreach ($methods as $method) {
 

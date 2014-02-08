@@ -148,11 +148,14 @@ class NativeArrayAccess
 					 * to a read only variable
 					 */
 					if ($symbolVariable->getName() != 'return_value') {
-						$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-						if ($numberMutations == 1) {
-							if ($symbolVariable->getNumberMutations() == $numberMutations) {
-								$symbolVariable->setMemoryTracked(false);
-								$readOnly = true;
+						$line = $compilationContext->symbolTable->getLastCallLine();
+						if ($line === false || ($line > 0 && $line < $expression['line'])) {
+							$numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+							if ($numberMutations == 1) {
+								if ($symbolVariable->getNumberMutations() == $numberMutations) {
+									$symbolVariable->setMemoryTracked(false);
+									$readOnly = true;
+								}
 							}
 						}
 					}
@@ -241,34 +244,41 @@ class NativeArrayAccess
 		$exprIndex = $expr->compile($compilationContext);
 
 		switch ($exprIndex->getType()) {
+
 			case 'int':
 			case 'uint':
 			case 'long':
 				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ' TSRMLS_CC);');
 				break;
+
 			case 'string':
 				$compilationContext->headersManager->add('kernel/array');
 				$codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ' TSRMLS_CC);');
 				break;
+
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
 				switch ($variableIndex->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
+
 					case 'string':
 					case 'variable':
 						$compilationContext->headersManager->add('kernel/array');
 						$codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
 						break;
+
 					default:
 						throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
 		}
@@ -297,17 +307,21 @@ class NativeArrayAccess
 		 * Only dynamic variables can be used as arrays
 		 */
 		switch ($exprVariable->getType()) {
+
 			case 'variable':
 				$variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
 				switch ($variableVariable->getType()) {
+
 					case 'variable':
 					case 'array':
 					case 'string':
 						break;
+
 					default:
 						throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as array", $expression['left']);
 				}
 				break;
+
 			default:
 				throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an array", $expression['left']);
 		}
@@ -316,10 +330,13 @@ class NativeArrayAccess
 		 * Resolve the dimension according to variable's type
 		 */
 		switch ($variableVariable->getType()) {
+
 			case 'variable':
 				return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
+
 			case 'array':
 				break;
+
 			case 'string':
 				return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
 		}

@@ -686,4 +686,19 @@ class SymbolTable
 		return 0;
 	}
 
+	/**
+	 * Returns the last line where a any kind of call is performed within the method
+	 * This is not necessary related to the symbol table but this information is gathered
+	 * by the LocalContextPass
+	 *
+	 * @return int
+	 */
+	public function getLastCallLine()
+	{
+		if ($this->_localContext) {
+			return $this->_localContext->getLastCallLine();
+		}
+		return 0;
+	}
+
 }

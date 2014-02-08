@@ -1,4 +1,5 @@
 
+/* This file was generated automatically by Zephir do not modify it! */
 
 #ifndef PHP_TEST_H
 #define PHP_TEST_H 1

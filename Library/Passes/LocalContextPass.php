@@ -34,6 +34,8 @@ class LocalContextPass
 
 	protected $_mutations = array();
 
+	protected $_lastCallLine = false;
+
 	/**
 	 * Do the compilation pass
 	 *
@@ -120,6 +122,16 @@ class LocalContextPass
 		return 0;
 	}
 
+	/**
+	 * Returns the line where the latest call in the method was made
+	 *
+	 * @return int
+	 */
+	public function getLastCallLine()
+	{
+		return $this->_lastCallLine;
+	}
+
 	public function passLetStatement(array $statement)
 	{
 		foreach ($statement['assignments'] as $assigment) {
@@ -130,8 +142,10 @@ class LocalContextPass
 			$this->increaseMutations($assigment['variable']);
 
 			switch ($assigment['assign-type']) {
+
 				case 'variable':
 					switch ($assigment['expr']['type']) {
+
 						case 'property-access':
 						case 'array-access':
 						case 'static-property-access':
@@ -149,6 +163,7 @@ class LocalContextPass
 						case 'minus':
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
+
 						case 'constant':
 							if (defined($assigment['expr']['value'])) {
 								if (gettype(constant($assigment['expr']['value'])) == 'string') {
@@ -156,18 +171,22 @@ class LocalContextPass
 								}
 							}
 							break;
+
 						case 'variable':
 							$this->markVariableNoLocal($assigment['expr']['value']);
 							$this->markVariableNoLocal($assigment['variable']);
 							break;
+
 						default:
 							//echo '[', $assigment['expr']['type'], ']';
 					}
 					break;
+
 				case 'object-property':
 				case 'array-index':
 				case 'object-property-array-index':
 				case 'object-property-append':
+
 					switch ($assigment['expr']['type']) {
 						case 'variable':
 							$this->markVariableNoLocal($assigment['expr']['value']);
@@ -175,6 +194,7 @@ class LocalContextPass
 					}
 					$this->markVariableNoLocal($assigment['variable']);
 					break;
+
 				case 'variable-append':
 					$this->markVariableNoLocal($assigment['variable']);
 					switch ($assigment['expr']['type']) {
@@ -185,6 +205,7 @@ class LocalContextPass
 							//echo '[', $assigment['assign-type'], ']';
 					}
 					break;
+
 				default:
 					//echo $assigment['assign-type'];
 			}
@@ -231,6 +252,7 @@ class LocalContextPass
 	public function passExpression(array $expression)
 	{
 		switch ($expression['type']) {
+
 			case 'bool':
 			case 'double':
 			case 'int':
@@ -281,6 +303,7 @@ class LocalContextPass
 			case 'fcall':
 			case 'scall':
 				$this->passCall($expression);
+				$this->_lastCallLine = $expression['line'];
 				break;
 
 			case 'array':
@@ -328,7 +351,7 @@ class LocalContextPass
 			case 'type-hint':
 				$this->passExpression($expression['right']);
 				break;
-				
+
 			default:
 				echo 'LocalContextPassType=', $expression['type'], PHP_EOL;
 				break;
@@ -340,7 +363,7 @@ class LocalContextPass
 		foreach ($statements as $statement) {
 
 			switch ($statement['type']) {
-				
+
 				case 'let':
 					$this->passLetStatement($statement);
 					break;
@@ -428,6 +451,7 @@ class LocalContextPass
 					if (isset($statement['expr'])) {
 						$this->passExpression($statement['expr']);
 					}
+					$this->_lastCallLine = $statement['line'];
 					break;
 
 				case 'fetch':
@@ -439,6 +463,7 @@ class LocalContextPass
 				case 'fcall':
 				case 'require':
 					$this->passCall($statement['expr']);
+					$this->_lastCallLine = $statement['line'];
 					break;
 
 				case 'unset':

@@ -18,56 +18,62 @@
 */
 
 /**
- * BranchGraph
+ * BranchGraphNode
  *
- * Represents a group of branch nodes
+ * Allows to visualize assignments for a specific variable in every branch used
  */
-class BranchGraph
+class BranchGraphNode
 {
-	protected $_root;
+	protected $_increase = 0;
 
-	protected $_branchMap;
+	protected $_branches = array();
 
 	/**
-	 * Adds a leaf to the branch tree
+	 * BranchGraphNode
 	 *
 	 * @param Branch $branch
 	 */
-	public function addLeaf(Branch $branch)
+	public function __construct($branch)
 	{
+		$this->_branch = $branch;
+	}
 
-		if (isset($this->_branchMap[$branch->getUniqueId()])) {
-			$branchNode = $this->_branchMap[$branch->getUniqueId()];
-		} else {
-			$branchNode = new BranchGraphNode($branch);
-		}
-		$branchNode->increase();
-
-		$tempBranch = $branch->getParentBranch();
-		while ($tempBranch) {
-			if (isset($this->_branchMap[$tempBranch->getUniqueId()])) {
-				$parentBranchNode = $this->_branchMap[$tempBranch->getUniqueId()];
-			} else {
-				$parentBranchNode = new BranchGraphNode($tempBranch);
-				$this->_branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
-			}
-			$parentBranchNode->insert($branchNode);
-			$branchNode = $parentBranchNode;
-			$tempBranch = $tempBranch->getParentBranch();
-			if (!$tempBranch) {
-				$this->_root = $parentBranchNode;
-			}
+	/**
+	 * Inserts a node in the branch graph
+	 *
+	 * @param Branch $branch
+	 */
+	public function insert(BranchGraphNode $branch)
+	{
+		if (!in_array($branch, $this->_branches)) {
+			$this->_branches[] = $branch;
 		}
 	}
 
 	/**
-	 * Returns the tree's root node
-	 *
-	 * @return BranchGraphNode
+	 * Increases the branch graph level
 	 */
-	public function getRoot()
+	public function increase()
 	{
-		return $this->_root;
+		$this->_increase++;
+	}
+
+	/**
+	 * Generates an ASCII visualization of the branch
+	 *
+	 * @param int $padding
+	 */
+	public function show($padding=0)
+	{
+		echo str_repeat("    ", $padding), $this->_branch->getUniqueId(), ':' , $this->_increase;
+		if (count($this->_branches)) {
+			echo ':', PHP_EOL;
+			foreach ($this->_branches as $node) {
+				$node->show($padding + 1);
+			}
+		} else {
+			echo PHP_EOL;
+		}
 	}
 
 }

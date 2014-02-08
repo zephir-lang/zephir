@@ -54,6 +54,7 @@ require ZEPHIRPATH . 'Library/StatementsBlock.php';
 require ZEPHIRPATH . 'Library/Branch.php';
 require ZEPHIRPATH . 'Library/BranchManager.php';
 require ZEPHIRPATH . 'Library/BranchGraph.php';
+require ZEPHIRPATH . 'Library/BranchGraphNode.php';
 
 /* built-in types */
 require ZEPHIRPATH . 'Library/Types/CharType.php';

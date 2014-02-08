@@ -39,9 +39,8 @@ class AddslashesOptimizer
 			return false;
 		}
 
-
 		if (count($expression['parameters']) > 1) {
-                    return false;
+			return false;
 		}
 
 		/**

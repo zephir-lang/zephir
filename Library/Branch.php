@@ -1,5 +1,27 @@
 <?php
 
+/*
+ +--------------------------------------------------------------------------+
+ | Zephir Language                                                          |
+ +--------------------------------------------------------------------------+
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
+ +--------------------------------------------------------------------------+
+ | This source file is subject the MIT license, that is bundled with        |
+ | this package in the file LICENSE, and is available through the           |
+ | world-wide-web at the following url:                                     |
+ | http://zephir-lang.com/license.html                                      |
+ |                                                                          |
+ | If you did not receive a copy of the MIT license and are unable          |
+ | to obtain it through the world-wide-web, please send a note to           |
+ | license@zephir-lang.com so we can mail you a copy immediately.           |
+ +--------------------------------------------------------------------------+
+*/
+
+/**
+ * Branch
+ *
+ * Represents every branch within a method
+ */
 class Branch
 {
 	protected $_parentBranch;
@@ -24,26 +46,51 @@ class Branch
 
 	const TYPE_UNKNOWN           = 7;
 
+	/**
+	 * Set the branch's parent
+	 *
+	 * @param Branch $parentBranch
+	 */
 	public function setParentBranch(Branch $parentBranch)
 	{
 		$this->_parentBranch = $parentBranch;
 	}
 
+	/**
+	 * Returns the branch's parent
+	 *
+	 * @return Branch
+	 */
 	public function getParentBranch()
 	{
 		return $this->_parentBranch;
 	}
 
+	/**
+	 * Set the type of branch. One of the TYPE_* constants
+	 *
+	 * @param int $type
+	 */
 	public function setType($type)
 	{
 		$this->_type = $type;
 	}
 
+	/**
+	 * Returns the branch type
+	 *
+	 * @return int
+	 */
 	public function getType()
 	{
 		return $this->_type;
 	}
 
+	/**
+	 * Sets if the branch is unrechable
+	 *
+	 * @param boolean $unrecheable
+	 */
 	public function setUnrecheable($unrecheable)
 	{
 		$this->_unrecheable = $unrecheable;

@@ -1,4 +1,5 @@
 
+/* This file was generated automatically by Zephir do not modify it! */
 
 #ifndef PHP_%PROJECT_UPPER%_H
 #define PHP_%PROJECT_UPPER%_H 1

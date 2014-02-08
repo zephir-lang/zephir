@@ -16,6 +16,7 @@
  | license@zephir-lang.com so we can mail you a copy immediately.           |
  +--------------------------------------------------------------------------+
 */
+
 /**
  * Variable
  *
@@ -642,7 +643,7 @@ class Variable
 	{
 		return $this->_numberSkips;
 	}
-	
+
 	/*
 	 * Allocate memory for variable and init it null val
 	 *
@@ -817,6 +818,8 @@ class Variable
 	}
 
 	/**
+	 * Sets the lastest CompiledExpression assigned to a variable
+	 *
 	 * @param CompiledExpression $possibleValue
 	 * @param CompilationContext $compilationContext
 	 */
@@ -827,6 +830,8 @@ class Variable
 	}
 
 	/**
+	 * Returns the lastest CompiledExpression assigned to a variable
+	 *
 	 * @return mixed
 	 */
 	public function getPossibleValue()
@@ -834,6 +839,11 @@ class Variable
 		return $this->_possibleValue;
 	}
 
+	/**
+	 * Returns the branch where the variable was assigned for the last time
+	 *
+	 * @return Branch
+	 */
 	public function getPossibleValueBranch()
 	{
 		return $this->_possibleValueBranch;
