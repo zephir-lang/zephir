@@ -355,4 +355,13 @@ class Assign
 		let this->testVar .= " string";
 		return this->testVar;
 	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/159
+	 */
+	public function testGlobalVarAssign(var index, var value)
+	{
+		let _POST[index] = value;
+		return _POST[index];
+	}
 }

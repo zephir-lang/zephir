@@ -51,4 +51,5 @@ assert($t->testPropertySubAssign2() === -1);
 assert($t->testPropertyMulAssign1() === 2);
 assert($t->testPropertyMulAssign2() === 3);
 
-assert($t->testPropertyAssignStringConcat() === "test string");
+assert($t->testPropertyAssignStringConcat() === 'test string');
+assert($t->testGlobalVarAssign('test_index', 'value') === 'value');
