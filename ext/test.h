@@ -24,6 +24,7 @@
 #include "test/factorial.h"
 #include "test/fannkuch.h"
 #include "test/fcall.h"
+#include "test/fetchtest.h"
 #include "test/fibonnaci.h"
 #include "test/flow.h"
 #include "test/fortytwo.h"

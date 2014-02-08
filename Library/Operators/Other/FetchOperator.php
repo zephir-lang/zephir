@@ -64,7 +64,7 @@ class FetchOperator extends BaseOperator
 				}
 			}
 
-			if (!$readOnly) {
+			if (!$readOnly || $expression['right']['type'] != 'array-access') {
 				$variable->setIsInitialized(true, $compilationContext, $expression);
 				$variable->observeVariant($compilationContext);
 				$variable->setDynamicTypes('undefined');
@@ -138,9 +138,72 @@ class FetchOperator extends BaseOperator
 				break;
 
 			case 'property-access':
-			case 'property-dynamic-access':
-				/* @todo, implement this */
+
+				$exprVariable = new Expression($expression['right']['left']);
+				$exprVariable->setReadOnly(true);
+
+				$exprCompiledVariable = $exprVariable->compile($compilationContext);
+				if ($exprCompiledVariable->getType() != 'variable') {
+					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $expression['right']['left']);
+				}
+
+				$evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+				if ($evalVariable->getType() != 'variable') {
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $expression['right']['left']);
+				}
+
+				if ($evalVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+					$compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
+				}
+
+				$compilationContext->headersManager->add('kernel/object');
+				if ($classDefinition == $currentClassDefinition) {
+					if ($this->_readOnly || $readOnly) {
+						$codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_nproperty_this(' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+					} else {
+						$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+					}
+				} else {
+					$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+				}
+
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
+
+			case 'property-dynamic-access':
+
+				$exprVariable = new Expression($expression['right']['left']);
+				$exprVariable->setReadOnly(true);
+
+				$exprCompiledVariable = $exprVariable->compile($compilationContext);
+				if ($exprCompiledVariable->getType() != 'variable') {
+					throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $expression['right']['left']);
+				}
+
+				$evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+				if ($evalVariable->getType() != 'variable') {
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $expression['right']['left']);
+				}
+
+				if ($evalVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
+					$compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
+				}
+
+				$exprVariableProperty = new Expression($expression['right']['right']);
+				$exprVariableProperty->setReadOnly(true);
+
+				$exprCompiledVariableProperty = $exprVariableProperty->compile($compilationContext);
+				if ($exprCompiledVariableProperty->getType() != 'variable') {
+					throw new CompilerException("Expression type: " . $exprCompiledVariableProperty->getType() . " cannot be used in property-dynamic-acces", $expression['right']['right']);
+				}
+
+				$evalVariableProperty = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariableProperty->getCode(), $compilationContext, $expression['right']['right']);
+				if ($evalVariableProperty->getType() != 'variable') {
+					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
+				}
+
+				$compilationContext->headersManager->add('kernel/object');
+
+				return new CompiledExpression('bool', 'zephir_read_property_zval(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $evalVariableProperty->getName() . ', PH_SILENT_CC)', $expression);
 
 			default:
 				throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);

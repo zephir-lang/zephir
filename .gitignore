@@ -8,6 +8,7 @@ ext/autom4te.cache/
 ext/build/
 ext/config.guess
 ext/config.h.in
+ext/config.h.in~
 ext/config.sub
 ext/configure
 ext/configure.in
