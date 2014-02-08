@@ -351,8 +351,6 @@ class StaticTypeInference
 			case 'greater':
 			case 'greater-equal':
 			case 'less-equal':
-				$left = $this->passExpression($expression['left']);
-				$right = $this->passExpression($expression['right']);
 				return 'bool';
 
 			case 'typeof':

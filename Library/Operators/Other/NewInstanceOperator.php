@@ -134,7 +134,6 @@ class NewInstanceOperator extends BaseOperator
 		/**
 		 * Mark variable initialized
 		 */
-		$params = array();
 		$symbolVariable->setIsInitialized(true, $compilationContext, $expression);
 
 		/**

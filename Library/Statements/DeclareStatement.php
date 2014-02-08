@@ -40,7 +40,6 @@ class DeclareStatement
 		$typeInference = $compilationContext->typeInference;
 		$symbolTable = $compilationContext->symbolTable;
 
-		$variables = array();
 		foreach ($statement['variables'] as $variable) {
 
 			if ($symbolTable->hasVariable($variable['variable'])) {

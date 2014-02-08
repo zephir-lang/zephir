@@ -390,7 +390,7 @@ class ComparisonBaseOperator extends BaseOperator
 
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', 'ZEPHIR_IS_DOUBLE(' . $variableRight->getName() . ', ' . $variableLeft->getName() . ')', $expression);
+										return new CompiledExpression('bool', 'ZEPHIR_IS_DOUBLE(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
 
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
@@ -431,7 +431,7 @@ class ComparisonBaseOperator extends BaseOperator
 
 									case 'variable':
 										$compilationContext->headersManager->add('kernel/operators');
-										return new CompiledExpression('bool', $this->_zvalBoolOperator . '(' . $variableRight->getName() . ', ' . $variableLeft->getName() . ')', $expression);
+										return new CompiledExpression('bool', $this->_zvalBoolOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
 
 									default:
 										throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);

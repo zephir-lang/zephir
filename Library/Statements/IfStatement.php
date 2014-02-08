@@ -30,8 +30,6 @@ class IfStatement
 	 */
 	public function compile(CompilationContext $compilationContext)
 	{
-		$condition = false;
-
 		/**
 		 * This pass tries to move dynamic variable initialization out of the if/else branch
 		 */

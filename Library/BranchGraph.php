@@ -54,7 +54,6 @@ class BranchGraph
 		}
 		$branchNode->increase();
 
-		$oldBranchNode = $branch;
 		$tempBranch = $branch->getParentBranch();
 		while ($tempBranch) {
 			if (isset($this->_branchMap[$tempBranch->getUniqueId()])) {

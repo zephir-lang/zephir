@@ -65,6 +65,7 @@ class StaticConstantAccess
 	{
 		$compiler = &$compilationContext->compiler;
 		$className = $expression['left']['value'];
+		$constant = $expression['right']['value'];
 
 		/**
 		 * Fetch the class definition according to the class where the constant
@@ -88,7 +89,7 @@ class StaticConstantAccess
 					$classDefinition = $compilationContext->classDefinition;
 					$extendsClass = $classDefinition->getExtendsClass();
 					if (!$extendsClass) {
-						throw new CompilerException('Cannot call method "' . $methodName . '" on parent because class ' .
+						throw new CompilerException('Cannot find constant called "' . $constant . '" on parent because class ' .
 							$classDefinition->getCompleteName() . ' does not extend any class', $expression);
 					} else {
 						$classDefinition = $classDefinition->getExtendsClassDefinition();
@@ -101,7 +102,6 @@ class StaticConstantAccess
 		 * Constants are resolved to their values at compile time
 		 * so we need to check that they effectively do exist
 		 */
-		$constant = $expression['right']['value'];
 		if (!$classDefinition->hasConstant($constant)) {
 			throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a constant called: '" . $constant . "'", $expression);
 		}

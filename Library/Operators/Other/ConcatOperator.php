@@ -54,7 +54,7 @@ class ConcatOperator extends BaseOperator
 		$key = '';
 		$concatParts = array();
 		$parts = array_reverse($parts);
-		foreach ($parts as $n => $part) {
+		foreach ($parts as $part) {
 
 			$expr = new Expression($part);
 			$expr->setStringOperation(true);

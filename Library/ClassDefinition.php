@@ -517,10 +517,10 @@ class ClassDefinition
 	{
 		foreach ($interfaceDefinition->getMethods() as $method) {
 			if (!$classDefinition->hasMethod($method->getName())) {
-				if (method_exists($classDefinition, 'getCompleteName')) {
+				if ($interfaceDefinition instanceof ClassDefinition) {
 					throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
 				} else {
-					throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interface);
+					throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getName());
 				}
 			}
 		}
@@ -634,7 +634,6 @@ class ClassDefinition
 
 		if (is_array($interfaces)) {
 
-			$interfacesEntries = array();
 			$codePrinter->outputBlankLine(true);
 
 			foreach ($interfaces as $interface) {
@@ -662,7 +661,7 @@ class ClassDefinition
 								$classEntry = 'zend_ce_serializable';
 								break;
 							case 'iteratoraggregate':
-								$classEntry = 'zend_ce_IteratorAggregate';
+								$classEntry = 'zend_ce_aggregate';
 								break;
 							default:
 								throw new CompilerException($classInterfaceDefinition->getName());

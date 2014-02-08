@@ -1574,7 +1574,6 @@ class LetStatement
 			$compilationContext->logger->warning('Possible attempt to increment non-object dynamic variable', 'non-object-update', $statement);
 		}
 
-		$codePrinter = $compilationContext->codePrinter;
 		$compilationContext->headersManager->add('kernel/object');
 		$compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_incr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_CC));');
 	}
@@ -1622,7 +1621,6 @@ class LetStatement
 			$compilationContext->logger->warning('Possible attempt to increment non-object dynamic variable', 'non-object-update', $statement);
 		}
 
-		$codePrinter = $compilationContext->codePrinter;
 		$compilationContext->headersManager->add('kernel/object');
 		$compilationContext->codePrinter->output('RETURN_ON_FAILURE(zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '") TSRMLS_CC));');
 	}
@@ -1711,7 +1709,7 @@ class LetStatement
 		$propertyName = $statement['property'];
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot mutate static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1928,7 +1926,7 @@ class LetStatement
 		}
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot mutate static property '" . $classDefinition->getCompleteName() . "::" . $property . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
