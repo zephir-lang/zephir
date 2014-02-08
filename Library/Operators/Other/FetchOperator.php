@@ -51,13 +51,16 @@ class FetchOperator extends BaseOperator
 			 * @todo use a read detector here
 			 */
 			$readOnly = false;
-			$numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
-			if ($numberMutations == 1) {
-				if ($variable->getNumberMutations() == 1) {
-					$variable->setIsInitialized(true, $compilationContext, $expression);
-					$variable->setMemoryTracked(false);
-					$variable->setDynamicTypes('undefined');
-					$readOnly = true;
+			$line = $compilationContext->symbolTable->getLastCallLine();
+			if ($line === false || ($line > 0 && $line < $expression['line'])) {
+				$numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
+				if ($numberMutations == 1) {
+					if ($variable->getNumberMutations() == 1) {
+						$variable->setIsInitialized(true, $compilationContext, $expression);
+						$variable->setMemoryTracked(false);
+						$variable->setDynamicTypes('undefined');
+						$readOnly = true;
+					}
 				}
 			}
 
