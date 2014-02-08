@@ -808,13 +808,15 @@ class Compiler
 	/**
 	 * Process extension globals
 	 *
+	 * @param string $namespace
 	 * @return array
 	 */
-	public function processExtensionGlobals()
+	public function processExtensionGlobals($namespace)
 	{
 		$globalCode = '';
 		$globalStruct = '';
 		$globalsDefault = '';
+		$initEntries = '';
 
 		/**
 		 * Generate the extensions globals declaration
@@ -833,6 +835,9 @@ class Compiler
 				}
 			}
 
+			/**
+			 * Process compound structures
+			 */
 			foreach ($structures as $structureName => $internalStructure) {
 
 				if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
@@ -859,7 +864,14 @@ class Compiler
 				$globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
 			}
 
+			/**
+			 * Process single variables
+			 */
 			foreach ($variables as $name => $global) {
+
+				if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
+					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+				}
 
 				if (!isset($global['default'])) {
 					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
@@ -891,11 +903,38 @@ class Compiler
 						throw new Exception("Unknown type '" . $global['type'] . "'");
 				}
 
-				if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
-					throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
+				$globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
+
+				if (isset($global['ini-entry'])) {
+
+					$iniEntry = $global['ini-entry'];
+
+					if (!isset($iniEntry['name'])) {
+						$iniName = $iniEntry['name'];
+					} else {
+						$iniName = $iniEntry['name'];
+					}
+
+					if (!isset($iniEntry['scope'])) {
+						$scope = $iniEntry['scope'];
+					} else {
+						$scope = $iniEntry['scope'];
+					}
+
+					switch ($global['type']) {
+
+						case 'boolean':
+						case 'bool':
+							if ($global['default'] === true) {
+								$initEntries .= 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+							} else {
+								$initEntries .= 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+							}
+							break;
+
+					}
 				}
 
-				$globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
 			}
 
 		}
@@ -904,7 +943,7 @@ class Compiler
 	}
 
 	/**
-	 *
+	 * Generates phpinfo() sections showing information about the extension
 	 */
 	public function processExtensionInfo()
 	{
@@ -913,13 +952,13 @@ class Compiler
 		$info = $this->_config->get('info');
 		if (is_array($info)) {
 			foreach ($info as $table) {
-				$phpinfo .= 'php_info_print_table_start();' . PHP_EOL;
+				$phpinfo .= "\t" . 'php_info_print_table_start();' . PHP_EOL;
 				if (isset($table['header'])) {
 					$headerArray = array();
 					foreach ($table['header'] as $header) {
 						$headerArray[] = '"' . htmlentities($header) . '"';
 					}
-					$phpinfo .= 'php_info_print_table_header(' . count($headerArray) . ', ' . join(', ', $headerArray) . ');' . PHP_EOL;
+					$phpinfo .= "\t" . 'php_info_print_table_header(' . count($headerArray) . ', ' . join(', ', $headerArray) . ');' . PHP_EOL;
 				}
 				if (isset($table['rows'])) {
 					foreach ($table['rows'] as $row) {
@@ -927,10 +966,10 @@ class Compiler
 						foreach ($row as $field) {
 							$rowArray[] = '"' . htmlentities($field) . '"';
 						}
-						$phpinfo .= 'php_info_print_table_row(' . count($rowArray) . ', ' . join(', ', $rowArray) . ');';
+						$phpinfo .= "\t" . 'php_info_print_table_row(' . count($rowArray) . ', ' . join(', ', $rowArray) . ');' . PHP_EOL;
 					}
 				}
-				$phpinfo .= 'php_info_print_table_end();' . PHP_EOL;
+				$phpinfo .= "\t" . 'php_info_print_table_end();' . PHP_EOL;
 			}
 		}
 
@@ -1044,7 +1083,7 @@ class Compiler
 		/**
 		 * Round 3. Process extension globals
 		 */
-		list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals();
+		list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals($project);
 
 
 		/**

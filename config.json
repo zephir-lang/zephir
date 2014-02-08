@@ -41,27 +41,31 @@
 	},
 	"globals": {
 		"my_setting_1": {
-			"type": "bool",
-			"default": true
+			"type":    "bool",
+			"default": true,
+			"ini-entry": {
+				"name": "test.my_setting_1",
+				"scope": "PHP_INI_ALL"
+			}
 		},
 		"my_setting_2": {
-			"type": "int",
+			"type":    "int",
 			"default": 10
 		},
 		"my_setting_3": {
-			"type": "double",
+			"type":    "double",
 			"default": 15.2
 		},
 		"test.my_setting_1": {
-			"type": "bool",
+			"type":    "bool",
 			"default": true
 		},
 		"test.my_setting_2": {
-			"type": "int",
+			"type":    "int",
 			"default": 100
 		},
 		"test.my_setting_3": {
-			"type": "double",
+			"type":    "double",
 			"default": 7.5
 		}
 	},
@@ -72,6 +76,14 @@
 				["setting1", "value1"],
 				["setting2", "value2"]
 			]
+		},
+		{
+			"header": ["Directive", "Value"],
+			"rows": [
+				["setting3", "value3"],
+				["setting4", "value4"]
+			]
 		}
 	]
+
 }

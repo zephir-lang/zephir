@@ -1,4 +1,6 @@
 
+/* This file was generated automatically by Zephir do not modify it! */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -20,14 +22,24 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
 
-PHP_MINIT_FUNCTION(%PROJECT_LOWER%){
+static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
+{
+#if PHP_VERSION_ID < 50500
+	const char* old_lc_all = setlocale(LC_ALL, NULL);
+	setlocale(LC_ALL, "C");
+#endif
 
 	%CLASS_INITS%
+
+#if PHP_VERSION_ID < 50500
+	setlocale(LC_ALL, old_lc_all);
+#endif
 	return SUCCESS;
 }
 
 #ifndef ZEPHIR_RELEASE
-static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
+static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
+{
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
 
@@ -38,7 +50,8 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC) {
+static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC)
+{
 
 	/* Memory options */
 	zephir_globals->active_memory = NULL;
@@ -55,7 +68,8 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 %INIT_GLOBALS%
 }
 
-static PHP_RINIT_FUNCTION(%PROJECT_LOWER%){
+static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
+{
 
 	php_zephir_init_globals(ZEPHIR_VGLOBAL TSRMLS_CC);
 	//%PROJECT_LOWER%_init_interned_strings(TSRMLS_C);
@@ -63,7 +77,8 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%){
 	return SUCCESS;
 }
 
-static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%){
+static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
+{
 
 	if (ZEPHIR_GLOBAL(start_memory) != NULL) {
 		zephir_clean_restore_stack(TSRMLS_C);

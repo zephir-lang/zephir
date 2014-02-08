@@ -1,4 +1,6 @@
 
+/* This file was generated automatically by Zephir do not modify it! */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -81,7 +83,12 @@ zend_class_entry *test_vars_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
-PHP_MINIT_FUNCTION(test){
+static PHP_MINIT_FUNCTION(test)
+{
+#if PHP_VERSION_ID < 50500
+	const char* old_lc_all = setlocale(LC_ALL, NULL);
+	setlocale(LC_ALL, "C");
+#endif
 
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
@@ -145,11 +152,16 @@ PHP_MINIT_FUNCTION(test){
 	ZEPHIR_INIT(Test_Typeoff);
 	ZEPHIR_INIT(Test_Unsettest);
 	ZEPHIR_INIT(Test_Vars);
+
+#if PHP_VERSION_ID < 50500
+	setlocale(LC_ALL, old_lc_all);
+#endif
 	return SUCCESS;
 }
 
 #ifndef ZEPHIR_RELEASE
-static PHP_MSHUTDOWN_FUNCTION(test){
+static PHP_MSHUTDOWN_FUNCTION(test)
+{
 
 	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
 
@@ -160,7 +172,8 @@ static PHP_MSHUTDOWN_FUNCTION(test){
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC) {
+static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC)
+{
 
 	/* Memory options */
 	zephir_globals->active_memory = NULL;
@@ -183,7 +196,8 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 
 }
 
-static PHP_RINIT_FUNCTION(test){
+static PHP_RINIT_FUNCTION(test)
+{
 
 	php_zephir_init_globals(ZEPHIR_VGLOBAL TSRMLS_CC);
 	//test_init_interned_strings(TSRMLS_C);
@@ -191,7 +205,8 @@ static PHP_RINIT_FUNCTION(test){
 	return SUCCESS;
 }
 
-static PHP_RSHUTDOWN_FUNCTION(test){
+static PHP_RSHUTDOWN_FUNCTION(test)
+{
 
 	if (ZEPHIR_GLOBAL(start_memory) != NULL) {
 		zephir_clean_restore_stack(TSRMLS_C);
@@ -213,9 +228,16 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_row(2, "Version", PHP_TEST_VERSION);
 	php_info_print_table_end();
 
-php_info_print_table_start();
-php_info_print_table_header(2, "Directive", "Value");
-php_info_print_table_row(2, "setting1", "value1");php_info_print_table_row(2, "setting2", "value2");php_info_print_table_end();
+	php_info_print_table_start();
+	php_info_print_table_header(2, "Directive", "Value");
+	php_info_print_table_row(2, "setting1", "value1");
+	php_info_print_table_row(2, "setting2", "value2");
+	php_info_print_table_end();
+	php_info_print_table_start();
+	php_info_print_table_header(2, "Directive", "Value");
+	php_info_print_table_row(2, "setting3", "value3");
+	php_info_print_table_row(2, "setting4", "value4");
+	php_info_print_table_end();
 
 }
 
