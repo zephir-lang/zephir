@@ -393,6 +393,7 @@ class LogicalBaseOperator extends BaseOperator
 												} else {
 													$op2 = $variableRight->getName();
 												}
+												$expected = $this->getExpected($compilationContext, $expression);
 												return new CompiledExpression('bool', '(zephir_is_true(' . $expected->getName() . ') ' . $this->_operator . ' zephir_is_true(' . $op2 . '))', $expression);
 											default:
 												throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);

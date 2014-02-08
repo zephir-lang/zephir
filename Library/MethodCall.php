@@ -102,11 +102,12 @@ class MethodCall extends Call
 			$methodName = strtolower($expression['name']);
 		} else {
 
-			if (is_object($builtInType)) {
+			$variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
+
+            if (is_object($builtInType)) {
 				throw new CompilerException("Dynamic method invokation for type: " . $variableMethod->getType() . " is not supported", $expression);
 			}
 
-			$variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 			if ($variableMethod->isNotVariableAndString()) {
 				throw new CompilerException("Cannot use variable type: " . $variableMethod->getType() . " as dynamic method name", $expression);
 			}

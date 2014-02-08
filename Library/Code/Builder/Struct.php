@@ -154,7 +154,7 @@ class Struct
 				return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
 			default:
-				throw new \Exception('Unknown global type: ' . $type);
+				throw new \Exception('Unknown global type: ' . $global['type']);
 		}
 	}
 

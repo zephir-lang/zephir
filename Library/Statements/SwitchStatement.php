@@ -34,8 +34,6 @@ class SwitchStatement
 
 		$codePrinter = $compilationContext->codePrinter;
 
-		$numberPrints = $codePrinter->getNumberPrints();
-
 		$compilationContext->insideSwitch++;
 
 		$exprEval = new Expression($exprRaw);

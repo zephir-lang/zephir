@@ -39,7 +39,6 @@ class ExplodeOptimizer
 		}
 		if (count($expression['parameters']) < 2) {
 			throw new CompilerException("'explode' require two parameter");
-			return false;
 		}
 
 		/**

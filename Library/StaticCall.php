@@ -41,7 +41,7 @@ class StaticCall extends Call
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
-		$classCe = $classDefinition->getClassEntry();
+		$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
 
 		/**
 		 * Call static methods must grown the stack
@@ -100,6 +100,7 @@ class StaticCall extends Call
 
 		$codePrinter = $compilationContext->codePrinter;
 		$classCe = $classDefinition->getClassEntry();
+		$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
 
 		/**
 		 * Call static methods must grown the stack
