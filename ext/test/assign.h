@@ -50,6 +50,12 @@ PHP_METHOD(Test_Assign, testPropertySubAssign2);
 PHP_METHOD(Test_Assign, testPropertyMulAssign1);
 PHP_METHOD(Test_Assign, testPropertyMulAssign2);
 PHP_METHOD(Test_Assign, testPropertyAssignStringConcat);
+PHP_METHOD(Test_Assign, testGlobalVarAssign);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testglobalvarassign, 0, 0, 2)
+	ZEND_ARG_INFO(0, index)
+	ZEND_ARG_INFO(0, value)
+ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, getTestVar, NULL, ZEND_ACC_PUBLIC)
@@ -99,5 +105,6 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testPropertyMulAssign1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testPropertyMulAssign2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testPropertyAssignStringConcat, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testGlobalVarAssign, arginfo_test_assign_testglobalvarassign, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

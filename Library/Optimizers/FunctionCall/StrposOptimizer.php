@@ -42,19 +42,20 @@ class StrposOptimizer
 			throw new CompilerException("'strpos' require two or three parameters");
 		}
 
-                /**
-                 * Process offset
-                 */
-                $offset = '0 ';
-                if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'int') {
-                    $offset = $expression['parameters'][2]['value'] . ' ';
-                    unset($expression['parameters'][2]);
-                }
+		/**
+		 * Process offset
+		 */
+		$offset = '0 ';
+		if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'int') {
+			$offset = $expression['parameters'][2]['value'] . ' ';
+			unset($expression['parameters'][2]);
+		}
+
 		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-                if (count($resolvedParams) >= 3) {
-                    $context->headersManager->add('kernel/operators');
-                    $offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
-                }
+		if (count($resolvedParams) >= 3) {
+			$context->headersManager->add('kernel/operators');
+			$offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
+		}
 
 		/**
 		 * Process the expected symbol to be returned
@@ -77,5 +78,4 @@ class StrposOptimizer
 		$context->codePrinter->output('zephir_fast_strpos(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset .');');
 		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
 	}
-
 }

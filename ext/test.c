@@ -215,7 +215,7 @@ static PHP_MINFO_FUNCTION(test)
 
 php_info_print_table_start();
 php_info_print_table_header(2, "Directive", "Value");
-php_info_print_table_row(2, "setting1", "value1");php_info_print_table_row(2, "setting1", "value2");php_info_print_table_end();
+php_info_print_table_row(2, "setting1", "value1");php_info_print_table_row(2, "setting2", "value2");php_info_print_table_end();
 
 }
 

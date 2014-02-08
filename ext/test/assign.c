@@ -15,6 +15,7 @@
 #include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/array.h"
 
 
 /**
@@ -579,6 +580,24 @@ PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 	zephir_concat_self_str(&_0, " string", sizeof(" string")-1 TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("testVar"), _0 TSRMLS_CC);
 	RETURN_MEMBER(this_ptr, "testVar");
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/159
+ */
+PHP_METHOD(Test_Assign, testGlobalVarAssign) {
+
+	zval *index, *value, *_POST, *_0;
+
+	zephir_fetch_params(0, 2, 0, &index, &value);
+
+
+
+	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
+	zephir_array_update_zval(&_POST, index, &value, PH_COPY | PH_SEPARATE);
+	zephir_array_fetch(&_0, _POST, index, PH_NOISY | PH_READONLY TSRMLS_CC);
+	RETURN_CTORW(_0);
 
 }
 
