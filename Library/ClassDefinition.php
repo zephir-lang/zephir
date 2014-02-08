@@ -572,16 +572,7 @@ class ClassDefinition
 			if ($classExtendsDefinition instanceof ClassDefinition) {
 				$classEntry = $classExtendsDefinition->getClassEntry();
 			} else {
-				switch (strtolower($classExtendsDefinition->getName())) {
-					case 'arrayaccess':
-						$classEntry = 'zend_ce_arrayaccess';
-						break;
-					case 'exception':
-						$classEntry = 'zend_exception_get_default(TSRMLS_C)';
-						break;
-					default:
-						throw new Exception(get_class($classExtendsDefinition) . '-' . $classExtendsDefinition->getName());
-				}
+				$classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName());
 			}
 
 			if ($this->getType() == 'class') {
@@ -644,28 +635,7 @@ class ClassDefinition
 				} else {
 					if ($compiler->isInternalInterface($interface)) {
 						$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-						switch (strtolower($classInterfaceDefinition->getName())) {
-							case 'iterator':
-								$classEntry = 'zend_ce_iterator';
-								break;
-							case 'countable':
-								$classEntry = 'spl_ce_Countable';
-								break;
-							case 'arrayaccess':
-								$classEntry = 'zend_ce_arrayaccess';
-								break;
-							case 'seekableiterator':
-								$classEntry = 'spl_ce_SeekableIterator';
-								break;
-							case 'serializable':
-								$classEntry = 'zend_ce_serializable';
-								break;
-							case 'iteratoraggregate':
-								$classEntry = 'zend_ce_aggregate';
-								break;
-							default:
-								throw new CompilerException($classInterfaceDefinition->getName());
-						}
+						$classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
 					} else {
 						throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
 					}
@@ -816,5 +786,153 @@ class ClassDefinition
 		}
 
 		$compilationContext->headerPrinter = $codePrinter;
+	}
+
+	/**
+	 * Convert Class/Interface name to C ClassEntry
+	 *
+	 * @param string $className
+	 * @return string
+	 * @throws Exception
+	 */
+	protected static function getClassEntryByClassName($className)
+	{
+		switch (strtolower($className)) {
+			/**
+			 * Zend classes
+			 */
+			case 'exception':
+				$classEntry = 'zend_exception_get_default(TSRMLS_C)';
+				break;
+
+			/**
+			 * Zend interfaces (Zend/zend_interfaces.h)
+			 */
+			case 'iterator':
+				$classEntry = 'zend_ce_iterator';
+				break;
+			case 'arrayaccess':
+				$classEntry = 'zend_ce_arrayaccess';
+				break;
+			case 'serializable':
+				$classEntry = 'zend_ce_serializable';
+				break;
+			case 'iteratoraggregate':
+				$classEntry = 'zend_ce_aggregate';
+				break;
+
+			/**
+			 * SPL Exceptions
+			 */
+			case 'logicexception':
+				$classEntry = 'spl_ce_LogicException';
+				break;
+			case 'badfunctioncallexception':
+				$classEntry = 'spl_ce_BadFunctionCallException';
+				break;
+			case 'badmethodcallexception':
+				$classEntry = 'spl_ce_BadMethodCallException';
+				break;
+			case 'domainexception':
+				$classEntry = 'spl_ce_DomainException';
+				break;
+			case 'invalidargumentexception':
+				$classEntry = 'spl_ce_InvalidArgumentException';
+				break;
+			case 'lengthexception':
+				$classEntry = 'spl_ce_LengthException';
+				break;
+			case 'outofrangeexception':
+				$classEntry = 'spl_ce_OutOfRangeException';
+				break;
+			case 'runtimeexception':
+				$classEntry = 'spl_ce_RuntimeException';
+				break;
+			case 'outofboundsexception':
+				$classEntry = 'spl_ce_OutOfBoundsException';
+				break;
+			case 'overflowexception':
+				$classEntry = 'spl_ce_OverflowException';
+				break;
+			case 'rangeexception':
+				$classEntry = 'spl_ce_RangeException';
+				break;
+			case 'underflowexception':
+				$classEntry = 'spl_ce_UnderflowException';
+				break;
+			case 'unexpectedvalueexception':
+				$classEntry = 'spl_ce_UnexpectedValueException';
+				break;
+
+			/**
+			 * SPL Iterators Interfaces (spl/spl_iterators.h)
+			 */
+			case 'recursiveiterator':
+				$classEntry = 'spl_ce_RecursiveIterator';
+				break;
+			case 'recursiveiteratoriterator':
+				$classEntry = 'spl_ce_RecursiveIteratorIterator';
+				break;
+			case 'recursivetreeiterator':
+				$classEntry = 'spl_ce_RecursiveTreeIterator';
+				break;
+			case 'filteriterator':
+				$classEntry = 'spl_ce_FilterIterator';
+				break;
+			case 'recursivefilteriterator':
+				$classEntry = 'spl_ce_RecursiveFilterIterator';
+				break;
+			case 'parentiterator':
+				$classEntry = 'spl_ce_ParentIterator';
+				break;
+			case 'seekableiterator':
+				$classEntry = 'spl_ce_SeekableIterator';
+				break;
+			case 'limititerator':
+				$classEntry = 'spl_ce_LimitIterator';
+				break;
+			case 'cachingiterator':
+				$classEntry = 'spl_ce_CachingIterator';
+				break;
+			case 'recursivecachingiterator':
+				$classEntry = 'spl_ce_RecursiveCachingIterator';
+				break;
+			case 'outeriterator':
+				$classEntry = 'spl_ce_OuterIterator';
+				break;
+			case 'iteratoriterator':
+				$classEntry = 'spl_ce_IteratorIterator';
+				break;
+			case 'norewinditerator':
+				$classEntry = 'spl_ce_NoRewindIterator';
+				break;
+			case 'infiniteiterator':
+				$classEntry = 'spl_ce_InfiniteIterator';
+				break;
+			case 'emptyiterator':
+				$classEntry = 'spl_ce_EmptyIterator';
+				break;
+			case 'appenditerator':
+				$classEntry = 'spl_ce_AppendIterator';
+				break;
+			case 'regexiterator':
+				$classEntry = 'spl_ce_RegexIterator';
+				break;
+			case 'recursiveregexiterator':
+				$classEntry = 'spl_ce_RecursiveRegexIterator';
+				break;
+			case 'countable':
+				$classEntry = 'spl_ce_Countable';
+				break;
+			case 'callbackfilteriterator':
+				$classEntry = 'spl_ce_CallbackFilterIterator';
+				break;
+			case 'recursivecallbackfilteriterator':
+				$classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
+				break;
+			default:
+				throw new CompilerException('Unknown class entry for "' . $className . '"');
+		}
+		return $classEntry;
 	}
 }
