@@ -46,6 +46,19 @@
 #include "Zend/zend_constants.h"
 #include "kernel/exception.h"
 
+/* Compatibility with PHP 5.3 */
+#ifndef ZVAL_COPY_VALUE
+ #define ZVAL_COPY_VALUE(z, v)\
+  (z)->value = (v)->value;\
+  Z_TYPE_P(z) = Z_TYPE_P(v);
+#endif
+
+#ifndef INIT_PZVAL_COPY
+ #define INIT_PZVAL_COPY(z, v) ZVAL_COPY_VALUE(z, v);\
+  Z_SET_REFCOUNT_P(z, 1);\
+  Z_UNSET_ISREF_P(z);
+#endif
+
 /* Startup functions */
 zend_class_entry *zephir_register_internal_interface_ex(zend_class_entry *orig_ce, zend_class_entry *parent_ce TSRMLS_DC);
 
@@ -88,19 +101,6 @@ void zephir_safe_zval_ptr_dtor(zval *pzval);
 
 /* Fetch Parameters */
 int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optional_args, ...);
-
-/* Compatibility with PHP 5.3 */
-#ifndef ZVAL_COPY_VALUE
- #define ZVAL_COPY_VALUE(z, v)\
-  (z)->value = (v)->value;\
-  Z_TYPE_P(z) = Z_TYPE_P(v);
-#endif
-
-#ifndef INIT_PZVAL_COPY
- #define INIT_PZVAL_COPY(z, v) ZVAL_COPY_VALUE(z, v);\
-  Z_SET_REFCOUNT_P(z, 1);\
-  Z_UNSET_ISREF_P(z);
-#endif
 
 /** Symbols */
 #define ZEPHIR_READ_SYMBOL(var, auxarr, name) if (EG(active_symbol_table)){ \
