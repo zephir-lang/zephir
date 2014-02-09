@@ -6,6 +6,11 @@
 #endif
 
 #include <php.h>
+
+#if PHP_VERSION_ID < 50500
+#include <locale.h>
+#endif
+
 #include "php_ext.h"
 #include "%PROJECT_LOWER%.h"
 
