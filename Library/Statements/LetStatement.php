@@ -1707,9 +1707,10 @@ class LetStatement
 		}
 
 		$propertyName = $statement['property'];
+		$className = $compilationContext->classDefinition->getCompleteName();
 
 		if (!$symbolVariable->isInitialized()) {
-			throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
+			throw new CompilerException("Cannot mutate static property '" . $className . "::" . $propertyName . "' because it is not initialized", $statement);
 		}
 
 		if ($symbolVariable->getType() != 'variable') {
@@ -1732,7 +1733,7 @@ class LetStatement
 		 */
 		if ($variable == 'this') {
 			if (!$compilationContext->classDefinition->hasProperty($propertyName)) {
-				throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $propertyName . "'", $statement);
+				throw new CompilerException("Property '" . $propertyName . "' is not defined on class '" . $className . "'", $statement);
 			}
 		}
 
