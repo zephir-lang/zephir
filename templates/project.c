@@ -31,6 +31,12 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
 #if PHP_VERSION_ID < 50500
 	const char* old_lc_all = setlocale(LC_ALL, NULL);
+	if (old_lc_all) {
+		char *tmp = calloc(strlen(old_lc_all)+1, 1);
+		memcpy(tmp, old_lc_all, strlen(old_lc_all));
+		old_lc_all = tmp;
+	}
+
 	setlocale(LC_ALL, "C");
 #endif
 
@@ -38,6 +44,7 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);
+	free(old_lc_all);
 #endif
 	return SUCCESS;
 }
