@@ -583,21 +583,61 @@ PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 
 }
 
+PHP_METHOD(Test_Assign, testArrayVarAssign1) {
+
+	zval *index, *value, *a;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &index, &value);
+
+
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	zephir_array_update_zval(&a, index, &value, PH_COPY | PH_SEPARATE);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_Assign, testArrayVarAssign2) {
+
+	int _0;
+	zval *index, *value, *_POST;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &index, &value);
+
+
+
+	ZEPHIR_INIT_VAR(_POST);
+	array_init(_POST);
+	_0 = zephir_maybe_separate_zval(&_POST);
+	zephir_array_update_zval(&_POST, index, &value, PH_COPY | PH_SEPARATE);
+	if (_0) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_POST", _POST);
+	}
+	RETURN_CCTOR(_POST);
+
+}
+
 /**
  * @link https://github.com/phalcon/zephir/issues/159
  */
 PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 
-	zval *index, *value, *_POST, *_0;
+	int _0;
+	zval *index, *value, *_POST;
 
 	zephir_fetch_params(0, 2, 0, &index, &value);
 
 
 
 	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
+	_0 = zephir_maybe_separate_zval(&_POST);
 	zephir_array_update_zval(&_POST, index, &value, PH_COPY | PH_SEPARATE);
-	zephir_array_fetch(&_0, _POST, index, PH_NOISY | PH_READONLY TSRMLS_CC);
-	RETURN_CTORW(_0);
+	if (_0) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_POST", _POST);
+	}
 
 }
 

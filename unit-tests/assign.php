@@ -52,4 +52,12 @@ assert($t->testPropertyMulAssign1() === 2);
 assert($t->testPropertyMulAssign2() === 3);
 
 assert($t->testPropertyAssignStringConcat() === 'test string');
-assert($t->testGlobalVarAssign('test_index', 'value') === 'value');
+assert($t->testArrayVarAssign1('test_index', 'value') == array('test_index' => 'value'));
+assert($t->testArrayVarAssign2('test_index', 'value') == array('test_index' => 'value'));
+
+/**
+ * @see LetStatement::_assignArrayIndexSingle();
+ */
+assert(!isset($_POST['test_index']));
+$t->testGlobalVarAssign('test_index', 'value');
+assert($_POST['test_index'] == 'value');

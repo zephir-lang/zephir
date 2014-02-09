@@ -356,12 +356,29 @@ class Assign
 		return this->testVar;
 	}
 
+	public function testArrayVarAssign1(var index, var value)
+	{
+		var a;
+		let a = [];
+		let a[index] = value;
+
+		return a;
+	}
+
+	public function testArrayVarAssign2(var index, var value)
+	{
+		var _POST;
+		let _POST = [];
+		let _POST[index] = value;
+
+		return _POST;
+	}
+
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/159
 	 */
 	public function testGlobalVarAssign(var index, var value)
 	{
 		let _POST[index] = value;
-		return _POST[index];
 	}
 }

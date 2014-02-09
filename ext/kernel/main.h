@@ -67,6 +67,22 @@ int zephir_fast_count_ev(zval *array TSRMLS_DC);
 int zephir_fast_count_int(zval *value TSRMLS_DC);
 
 /* Utils functions */
+static inline int zephir_maybe_separate_zval(zval** z)
+{
+	if (Z_REFCOUNT_PP(z) > 1 && !Z_ISREF_PP(z)) {
+		zval *new_zv;
+
+		ALLOC_ZVAL(new_zv);
+		INIT_PZVAL_COPY(new_zv, *z);
+		*z = new_zv;
+		zval_copy_ctor(new_zv);
+
+		return 1;
+	}
+
+	return 0;
+}
+
 int zephir_is_iterable_ex(zval *arr, HashTable **arr_hash, HashPosition *hash_position, int duplicate, int reverse);
 void zephir_safe_zval_ptr_dtor(zval *pzval);
 
