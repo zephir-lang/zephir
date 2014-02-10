@@ -10,26 +10,26 @@ class ConstantsInterface implements TestInterface
 
 	public function testReadInterfaceConstant2()
 	{
-    return Test\TestInterface::C2;
+		return Test\TestInterface::C2;
 	}
 
 	public function testReadInterfaceConstant3()
 	{
-    return Test\TestInterface::C3;
+		return Test\TestInterface::C3;
 	}
 
-  public function testReadInterfaceConstant4()
-  {
-    return Test\TestInterface::C4;
-  }
+	public function testReadInterfaceConstant4()
+	{
+		return Test\TestInterface::C4;
+	}
 
-  public function testReadInterfaceConstant5()
-  {
-    return Test\TestInterface::C5;
-  }
+	public function testReadInterfaceConstant5()
+	{
+		return Test\TestInterface::C5;
+	}
 
-  public function testReadInterfaceConstant6()
-  {
-    return Test\TestInterface::C6;
-  }
+	public function testReadInterfaceConstant6()
+	{
+		return Test\TestInterface::C6;
+	}
 }
