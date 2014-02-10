@@ -52,6 +52,7 @@ zend_class_entry *test_flow_ce;
 zend_class_entry *test_fortytwo_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_instanceoff_ce;
+zend_class_entry *test_internalinterfaces_ce;
 zend_class_entry *test_issettest_ce;
 zend_class_entry *test_json_ce;
 zend_class_entry *test_logical_ce;
@@ -131,6 +132,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_FortyTwo);
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Instanceoff);
+	ZEPHIR_INIT(Test_InternalInterfaces);
 	ZEPHIR_INIT(Test_IssetTest);
 	ZEPHIR_INIT(Test_Json);
 	ZEPHIR_INIT(Test_Logical);
