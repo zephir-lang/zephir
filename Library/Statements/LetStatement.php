@@ -1286,35 +1286,52 @@ class LetStatement
 		 */
 		$symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
+		$flags = 'PH_COPY | PH_SEPARATE';
+		$isGlobalVariable = $compilationContext->symbolTable->isSuperGlobal($variable);
+
 		$compilationContext->headersManager->add('kernel/array');
+
 		switch ($exprIndex->getType()) {
 			case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
-				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE, "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
+				$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', '.$flags.', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
 				break;
 			case 'string':
-				$codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+				$codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', '.$flags.');');
 				break;
 			case 'variable':
 				$variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
+
+				if ($isGlobalVariable) {
+					$variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
+					$codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&'.$variable.');');
+				}
+
 				switch ($variableIndex->getType()) {
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
-						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE, "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
+						$codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', '.$flags.', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
 						break;
 					case 'string':
-						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', '.$flags.');');
 						break;
 					case 'variable':
-						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+						$codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', '.$flags.');');
 						break;
 					default:
 						throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
 				}
+
+				if ($isGlobalVariable) {
+					$codePrinter->output('if ('.$variableTempSeparated->getName().') {');
+						$codePrinter->output("\t".'ZEND_SET_SYMBOL(&EG(symbol_table), "'.$variable.'", '.$variable.');');
+					$codePrinter->output('}');
+				}
+
 				break;
 			default:
 				throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
