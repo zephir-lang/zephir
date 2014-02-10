@@ -17,6 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Expression;
+
+use Zephir\Variable;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\LiteralCompiledExpression;
+use Zephir\Utils;
+
 /**
  * Constants
  *
@@ -141,6 +151,9 @@ class Constants
 				case 'string':
 					return new LiteralCompiledExpression('string', Utils::addSlashes($constantName), $expression);
 
+				case 'object':
+					throw new CompilerException('?');
+
 				default:
 					return new LiteralCompiledExpression($type, $constantName, $expression);
 			}
@@ -161,13 +174,13 @@ class Constants
 					return new CompiledExpression('string', $compilationContext->classDefinition->getCNamespace(), $expression);
 
 				case '__METHOD__':
-					return new CompiledExpression('string', $compilationContext->classDefinition->getName().':'.$compilationContext->currentMethod->getName(), $expression);
+					return new CompiledExpression('string', $compilationContext->classDefinition->getName() . ':' . $compilationContext->currentMethod->getName(), $expression);
 
 				case '__FUNCTION__':
 					return new CompiledExpression('string', $compilationContext->currentMethod->getName(), $expression);
 			}
 
-			$compilationContext->logger->warning("Magic constant '".$constantName."' is not supported", 'not-supported-magic-constant', $expression);
+			$compilationContext->logger->warning("Magic constant '" . $constantName . "' is not supported", 'not-supported-magic-constant', $expression);
 			return new LiteralCompiledExpression('null', null, $expression);
 		}
 

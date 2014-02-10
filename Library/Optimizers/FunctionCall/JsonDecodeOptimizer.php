@@ -19,13 +19,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * JsonDecodeOptimizer
  *
  * Optimizes calls to 'json_decode' using internal function
  */
-class JsonDecodeOptimizer
-	extends OptimizerAbstract
+class JsonDecodeOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

@@ -17,6 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Expression;
+
+use Zephir\Variable;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\GlobalConstant;
+use Zephir\Compiler;
+
 /**
  * NativeArray
  *
@@ -323,7 +333,7 @@ class NativeArray
 									case 'ulong':
 										$codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getCode() . ');');
 										break;
-										
+
 									case 'bool':
 										$codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $item['key']['value'] . ', ' . $resolvedExpr->getBooleanCode() . ');');
 										break;

@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FeofOptimizer
  *
  * Optimizes calls to 'feof' using internal function
  */
-class FeofOptimizer
-	extends OptimizerAbstract
+class FeofOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

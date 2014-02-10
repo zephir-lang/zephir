@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * CallUserFuncArrayOptimizer
  *
  * Optimizer for 'call_user_func_array'
  */
-class CallUserFuncArrayOptimizer
-	extends OptimizerAbstract
+class CallUserFuncArrayOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

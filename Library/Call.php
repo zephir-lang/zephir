@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Detectors\ReadDetector;
+
 /**
  * Call
  *

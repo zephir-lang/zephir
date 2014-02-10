@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+
 /**
  * CommandInitialize
  *
@@ -24,40 +29,40 @@
  */
 class CommandInitialize extends CommandAbstract
 {
-	
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'init';
-	}
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'init [namespace]';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand()
+    {
+        return 'init';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Initializes a Zephir extension';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'init [namespace]';
+    }
 
-	public function execute(Config $config, Logger $logger)
-	{
-		if (isset($_SERVER['argv'][2])) {
-			$this->setParameter('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
-		}
-		parent::execute($config, $logger);
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Initializes a Zephir extension';
+    }
+
+    public function execute(Config $config, Logger $logger)
+    {
+        if (isset($_SERVER['argv'][2])) {
+            $this->setParameter('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
+        }
+        parent::execute($config, $logger);
+    }
 }

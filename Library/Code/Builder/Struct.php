@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Code\Builder;
+namespace Zephir\Code\Builder;
 
 /**
  * Class Struct

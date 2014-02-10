@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Commands\CommandAbstract;
+
 require ZEPHIRPATH . 'Library/Commands/Interface.php';
 require ZEPHIRPATH . 'Library/Commands/Abstract.php';
 
@@ -38,7 +42,7 @@ class Bootstrap
 	 * @param Exception $e
 	 * @param Config $config
 	 */
-	protected static function showException(Exception $e, Config $config=null)
+	protected static function showException(\Exception $e, Config $config=null)
 	{
 		echo get_class($e), ': ', $e->getMessage(), PHP_EOL;
 		if (method_exists($e, 'getExtra')) {
@@ -140,12 +144,12 @@ class Bootstrap
 			 * Register built-in commands
 			 * @var $item DirectoryIterator
 			 */
-			foreach (new DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
+			foreach (new \DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
 				if (!$item->isDir()) {
 					require_once $item->getRealPath();
 
-					$className = 'Command' . str_replace('.php', '', $item->getBaseName());
-					$class = new ReflectionClass($className);
+					$className = 'Zephir\Commands\Command' . str_replace('.php', '', $item->getBaseName());
+					$class = new \ReflectionClass($className);
 
 					if (!$class->isAbstract() && !$class->isInterface()) {
 						/**
@@ -154,7 +158,7 @@ class Bootstrap
 						$command = new $className();
 
 						if (!($command instanceof CommandAbstract)) {
-							throw new Exception('Class ' . $class->name . ' must be instance of CommandAbstract');
+							throw new \Exception('Class ' . $class->name . ' must be instance of CommandAbstract');
 						}
 
 						self::$_commands[$command->getCommand()] = $command;
@@ -170,7 +174,7 @@ class Bootstrap
 						$message .= PHP_EOL . PHP_EOL . 'Did you mean "' . $key . '"?';
 					}
 				}
-				throw new Exception($message);
+				throw new \Exception($message);
 			}
 
 			/**
@@ -178,7 +182,7 @@ class Bootstrap
 			 */
 			self::$_commands[$action]->execute($config, $logger);
 
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			self::showException($e, isset($config) ? $config : null);
 		}
 	}

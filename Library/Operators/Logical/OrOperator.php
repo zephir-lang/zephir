@@ -17,6 +17,13 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Logical;
+
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\Statements\LetStatement;
+use Zephir\CompiledExpression;
+
 class OrOperator extends LogicalBaseOperator
 {
 
@@ -27,11 +34,11 @@ class OrOperator extends LogicalBaseOperator
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
+			throw new \Exception("Missing left part of the expression");
 		}
 
 		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
+			throw new \Exception("Missing right part of the expression");
 		}
 
 		$leftExpr = new Expression($expression['left']);
@@ -53,24 +60,24 @@ class OrOperator extends LogicalBaseOperator
 				$assignExprLeft = array(
 					'type'  => $left->getType(),
 					'value' => $left->getCode(),
-				);					
+				);
 				break;
 			case 'variable':
 				$assignExprLeft = array(
 					'type'  => 'variable',
 					'value' => $left->getCode(),
-				);					
+				);
 				break;
 			case 'null':
 				$assignExprLeft = array(
 					'type'  => 'null',
 					'value' => null
-				);					
-				break;		
+				);
+				break;
 		}
 
 		if (!isset($assignExprLeft)) {
-			throw new CompilerException($left->getType(), $expression['left']);			
+			throw new CompilerException($left->getType(), $expression['left']);
 		}
 
 		/**
@@ -95,7 +102,7 @@ class OrOperator extends LogicalBaseOperator
 
 		$rightExpr = new Expression($expression['right']);
 		$rightExpr->setReadOnly($this->_readOnly);
-		$right = $rightExpr->compile($compilationContext);		
+		$right = $rightExpr->compile($compilationContext);
 
 		switch ($right->getType()) {
 			case 'int':
@@ -107,24 +114,24 @@ class OrOperator extends LogicalBaseOperator
 				$assignExprRight = array(
 					'type'  => $right->getType(),
 					'value' => $right->getCode(),
-				);					
+				);
 				break;
 			case 'variable':
 				$assignExprRight = array(
 					'type'  => 'variable',
 					'value' => $right->getCode(),
-				);					
+				);
 				break;
 			case 'null':
 				$assignExprRight = array(
 					'type'  => 'null',
 					'value' => null
-				);					
-				break;	
+				);
+				break;
 		}
 
 		if (!isset($assignExprRight)) {
-			throw new CompilerException($right->getType(), $expression['right']);			
+			throw new CompilerException($right->getType(), $expression['right']);
 		}
 
 		/**

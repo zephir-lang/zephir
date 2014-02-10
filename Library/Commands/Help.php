@@ -17,6 +17,13 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+use Zephir\Compiler;
+use Zephir\Bootstrap;
+
 /**
  * CommandHelp
  *
@@ -24,7 +31,7 @@
  */
 class CommandHelp extends CommandAbstract
 {
-	const LOGO ='
+    const LOGO ='
  _____              __    _
 /__  /  ___  ____  / /_  (_)____
   / /  / _ \/ __ \/ __ \/ / ___/
@@ -33,55 +40,55 @@ class CommandHelp extends CommandAbstract
          /_/
 ';
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'help';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand()
+    {
+        return 'help';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'help';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'help';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Displays this help';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Displays this help';
+    }
 
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		echo self::LOGO, PHP_EOL;
-		echo "Zephir version " , Compiler::VERSION,  PHP_EOL, PHP_EOL;
-		echo "Usage: ", PHP_EOL;
-		echo "\tcommand [options]", PHP_EOL;
-		echo PHP_EOL;
-		echo "Available commands:", PHP_EOL;
-		foreach (Bootstrap::getCommands() as $command) {
-			echo sprintf("\t%-20s%s\n", $command->getUsage(), $command->getDescription());
-		}
-		echo PHP_EOL;
-		echo "Options:", PHP_EOL;
-		echo sprintf("\t%-20s%s\n", "-fno-([a-z0-9\-]+)", "Setting options to Compiler");
-		echo sprintf("\t%-20s%s\n", "-W([a-z0-9\-]+)", "Setting warning options to Compiler");
-		echo PHP_EOL;
-	}
+    /**
+     * Executes the command
+     *
+     * Config $config
+     * Logger $logger
+     */
+    public function execute(Config $config, Logger $logger)
+    {
+        echo self::LOGO, PHP_EOL;
+        echo "Zephir version " , Compiler::VERSION,  PHP_EOL, PHP_EOL;
+        echo "Usage: ", PHP_EOL;
+        echo "\tcommand [options]", PHP_EOL;
+        echo PHP_EOL;
+        echo "Available commands:", PHP_EOL;
+        foreach (Bootstrap::getCommands() as $command) {
+            echo sprintf("\t%-20s%s\n", $command->getUsage(), $command->getDescription());
+        }
+        echo PHP_EOL;
+        echo "Options:", PHP_EOL;
+        echo sprintf("\t%-20s%s\n", "-fno-([a-z0-9\-]+)", "Setting options to Compiler");
+        echo sprintf("\t%-20s%s\n", "-W([a-z0-9\-]+)", "Setting warning options to Compiler");
+        echo PHP_EOL;
+    }
 }

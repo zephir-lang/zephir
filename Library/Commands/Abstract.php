@@ -17,6 +17,12 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+use Zephir\Compiler;
+
 /**
  * CommandAbstract
  *
@@ -24,65 +30,65 @@
  */
 abstract class CommandAbstract implements CommandInterface
 {
-	private $_parameters = null;
+    private $_parameters = null;
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	abstract public function getCommand();
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    abstract public function getCommand();
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	abstract public function getUsage();
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    abstract public function getUsage();
 
-	/**
-	 * @return string
-	 */
-	abstract public function getDescription();
+    /**
+     * @return string
+     */
+    abstract public function getDescription();
 
-	/**
-	 * Returns parameter named $name if specified
-	 * on the commmand line else null
-	 *
-	 * @param string $name
-	 * @param string $value
-	 * @return void
-	 */
-	protected function setParameter($name, $value)
-	{
-		if (!isset($this->_parameters)) {
-			$this->_parameters = array();
-		}
-		$this->_parameters[$name] = $value;
-	}
-	
-	/**
-	 * Returns parameter named $name if specified
-	 * on the commmand line else null
-	 * @param string $parameterName
-	 * @return string
-	 */
-	public function getParameter($name)
-	{
-		return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
-	}
-	
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		$compiler = new Compiler($config, $logger);
-		$command = $this->getCommand();
-		$compiler->$command($this);
-	}
+    /**
+     * Returns parameter named $name if specified
+     * on the commmand line else null
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    protected function setParameter($name, $value)
+    {
+        if (!isset($this->_parameters)) {
+            $this->_parameters = array();
+        }
+        $this->_parameters[$name] = $value;
+    }
+
+    /**
+     * Returns parameter named $name if specified
+     * on the commmand line else null
+     * @param string $parameterName
+     * @return string
+     */
+    public function getParameter($name)
+    {
+        return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
+    }
+
+    /**
+     * Executes the command
+     *
+     * Config $config
+     * Logger $logger
+     */
+    public function execute(Config $config, Logger $logger)
+    {
+        $compiler = new Compiler($config, $logger);
+        $command = $this->getCommand();
+        $compiler->$command($this);
+    }
 
 }

@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+
 /**
  * CommandFullClean
  *
@@ -25,32 +30,32 @@
 class CommandFullClean extends CommandAbstract
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'fullclean';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand()
+    {
+        return 'fullclean';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'fullclean';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'fullclean';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Cleans the generated object files in compilation';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Cleans the generated object files in compilation';
+    }
 
 }

@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Arithmetical;
+
 class ModOperator extends ArithmeticalBaseOperator
 {
 

@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Comparison;
+
 class IdenticalOperator extends ComparisonBaseOperator
 {
 	protected $_commutative = true;

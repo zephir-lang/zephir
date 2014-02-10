@@ -17,13 +17,22 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\StatementsBlock;
+use Zephir\Optimizers\EvalExpression;
+use Zephir\Branch;
+
+
 /**
  * SwitchStatement
  *
  * Switch statement, the same as in PHP/C
  */
-class SwitchStatement
-	extends StatementAbstract
+class SwitchStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

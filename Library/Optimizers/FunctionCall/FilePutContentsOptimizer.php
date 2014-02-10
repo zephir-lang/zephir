@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FilePutContentsOptimizer
  *
  * Optimizes calls to 'file_put_contents' using internal function
  */
-class FilePutContentsOptimizer
-	extends OptimizerAbstract
+class FilePutContentsOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

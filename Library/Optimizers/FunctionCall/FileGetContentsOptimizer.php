@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FileGetContentsOptimizer
  *
  * Optimizes calls to 'file_get_contents' using internal function
  */
-class FileGetContentsOptimizer
-	extends OptimizerAbstract
+class FileGetContentsOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

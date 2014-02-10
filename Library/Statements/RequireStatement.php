@@ -17,13 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+
 /**
  * RequireStatement
  *
  * Require statement is used to execute PHP scripts in a given path
  */
-class RequireStatement
-	extends StatementAbstract
+class RequireStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

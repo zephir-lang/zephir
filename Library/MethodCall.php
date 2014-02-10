@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Detectors\ReadDetector;
+
 /**
  * MethodCall
  *
@@ -69,7 +73,7 @@ class MethodCall extends Call
 					default:
 
 						/* Check if there is a built-in type optimizer available */
-						$builtInTypeClass = $variableVariable->getType() . 'Type';
+						$builtInTypeClass = 'Zephir\Types\\' . $variableVariable->getType() . 'Type';
 						if (class_exists($builtInTypeClass)) {
 							$builtInType = new $builtInTypeClass;
 							$caller = $exprCompiledVariable;
@@ -82,7 +86,7 @@ class MethodCall extends Call
 			default:
 
 				/* Check if there is a built-in type optimizer available */
-				$builtInTypeClass = $exprCompiledVariable->getType() . 'Type';
+				$builtInTypeClass = 'Zephir\Types\\' . $exprCompiledVariable->getType() . 'Type';
 				if (class_exists($builtInTypeClass)) {
 					$builtInType = new $builtInTypeClass;
 					$caller = $exprCompiledVariable;

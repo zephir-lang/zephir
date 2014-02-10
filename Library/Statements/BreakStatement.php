@@ -17,13 +17,17 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+
 /**
  * BreakStatement
  *
  * Break statement
  */
-class BreakStatement
-	extends StatementAbstract
+class BreakStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

@@ -19,13 +19,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * PregMatchOptimizer
  *
  * Optimizes calls to 'preg_match' using internal function
  */
-class PregMatchOptimizer
-	extends OptimizerAbstract
+class PregMatchOptimizer extends OptimizerAbstract
 {
 	const GLOBAL_MATCH = 0;
 

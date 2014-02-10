@@ -17,6 +17,13 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Logical;
+
+use Zephir\Expression;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Statements\LetStatement;
+
 class AndOperator extends LogicalBaseOperator
 {
 
@@ -27,11 +34,11 @@ class AndOperator extends LogicalBaseOperator
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
+			throw new \Exception("Missing left part of the expression");
 		}
 
 		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
+			throw new \Exception("Missing right part of the expression");
 		}
 
 		$leftExpr = new Expression($expression['left']);

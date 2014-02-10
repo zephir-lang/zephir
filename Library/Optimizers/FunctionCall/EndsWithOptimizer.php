@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * EndsWithOptimizer
  *
  * Like 'strpos' but it returns a boolean value
  */
-class EndsWithOptimizer
-	extends OptimizerAbstract
+class EndsWithOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

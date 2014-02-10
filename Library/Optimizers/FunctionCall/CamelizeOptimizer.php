@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * CamelizeOptimizer
  *
  * Optimizes calls to 'camelize' using internal function
  */
-class CamelizeOptimizer
-	extends OptimizerAbstract
+class CamelizeOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

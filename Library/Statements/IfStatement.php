@@ -17,13 +17,21 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Passes\SkipVariantInit;
+use Zephir\StatementsBlock;
+use Zephir\Optimizers\EvalExpression;
+use Zephir\Branch;
+
 /**
  * IfStatement
  *
  * If statement, the same as in PHP/C
  */
-class IfStatement
-	extends StatementAbstract
+class IfStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

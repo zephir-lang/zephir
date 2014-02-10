@@ -17,6 +17,12 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Logical;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+
 /**
  * LogicalBaseOperator
  *

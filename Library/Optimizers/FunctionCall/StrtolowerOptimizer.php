@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * StrtolowerOptimizer
  *
  * Optimizes calls to 'strtolower' using internal function
  */
-class StrtolowerOptimizer
-	extends OptimizerAbstract
+class StrtolowerOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

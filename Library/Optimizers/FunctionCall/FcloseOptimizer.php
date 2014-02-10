@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FcloseOptimizer
  *
  * Optimizes calls to 'fclose' using internal function
  */
-class FcloseOptimizer
-	extends OptimizerAbstract
+class FcloseOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

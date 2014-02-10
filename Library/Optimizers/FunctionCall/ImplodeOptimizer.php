@@ -17,13 +17,21 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Utils;
+
 /**
  * ImplodeOptimizer
  *
  * Optimizes calls to 'implode' using internal function
  */
-class ImplodeOptimizer
-	extends OptimizerAbstract
+class ImplodeOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

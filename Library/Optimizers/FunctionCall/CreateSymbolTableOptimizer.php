@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * CreateSymbolTableOptimizer
  *
  * Built-in function that creates a virtual symbol table
  */
-class CreateSymbolTableOptimizer
-	extends OptimizerAbstract
+class CreateSymbolTableOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

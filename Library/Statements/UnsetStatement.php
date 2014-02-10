@@ -17,11 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+
 /**
  * Class UnsetStatement
  */
-class UnsetStatement
-	extends StatementAbstract
+class UnsetStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Comparison;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\CompiledExpression;
+use Zephir\CompilerException;
+
 /**
  * BaseOperator
  *

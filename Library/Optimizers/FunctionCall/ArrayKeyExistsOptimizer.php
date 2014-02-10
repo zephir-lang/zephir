@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * ArrayKeysExistsOptimizer
  *
  * Optimizes calls to 'array_key_exists' using internal function
  */
-class ArrayKeyExistsOptimizer
-	extends OptimizerAbstract
+class ArrayKeyExistsOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

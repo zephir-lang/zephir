@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * IsBoolOptimizer
  *
  * Optimizes calls to 'is_bool' using internal function
  */
-class IsBoolOptimizer
-	extends OptimizerAbstract
+class IsBoolOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

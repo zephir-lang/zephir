@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+
 /**
  * CompileCommand
  *
@@ -25,31 +30,31 @@
 class CommandCompile extends CommandAbstract
 {
 
-	/**
-	 * Commands provided by this command
-	 *
-	 * @return array|string
-	 */
-	public function getCommand()
-	{
-		return 'compile';
-	}
+    /**
+     * Commands provided by this command
+     *
+     * @return array|string
+     */
+    public function getCommand()
+    {
+        return 'compile';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'compile';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'compile';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Compile a Zephir extension';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Compile a Zephir extension';
+    }
 }

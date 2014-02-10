@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
 /**
  * Class HeadersManager
  *
@@ -66,7 +68,7 @@ class HeadersManager
 				case self::POSITION_LAST:
 					$this->_headersLast[$path] = $path;
 					break;
-					
+
 				default:
 					break;
 			}

@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FileExistsOptimizer
  *
  * Optimizes calls to 'file_exists' using internal function
  */
-class FileExistsOptimizer
-	extends OptimizerAbstract
+class FileExistsOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

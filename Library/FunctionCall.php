@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Utils;
+use Zephir\Optimizers\OptimizerAbstract;
+
 require ZEPHIRPATH . 'Library/Optimizers/OptimizerAbstract.php';
 
 /**
@@ -64,7 +69,7 @@ class FunctionCall extends Call
 		 */
 		if (!isset(self::$_functionReflection[$funcName])) {
 			try {
-				$reflectionFunction = new ReflectionFunction($funcName);
+				$reflectionFunction = new \ReflectionFunction($funcName);
 			} catch (Exception $e) {
 				$reflectionFunction = null;
 			}
@@ -153,7 +158,7 @@ class FunctionCall extends Call
 								$compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
 								continue;
 							}
-							
+
 							$variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
 							if ($variable) {
 								$variable->setDynamicTypes('undefined');
@@ -196,11 +201,11 @@ class FunctionCall extends Call
 
 					require_once $path;
 
-					$className = $camelizeFunctionName . 'Optimizer';
+					$className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
 					$optimizer = new $className();
 
 					if (!($optimizer instanceof OptimizerAbstract)) {
-						throw new Exception('Class ' . $className . ' must be instance of OptimizerAbstract');
+						throw new \Exception('Class ' . $className . ' must be instance of OptimizerAbstract');
 					}
 
 					break;
@@ -579,8 +584,10 @@ class FunctionCall extends Call
 		$expression = $expr->getExpression();
 
 		switch ($expression['call-type']) {
+
 			case self::CALL_NORMAL:
 				return $this->_callNormal($expression, $compilationContext);
+
 			case self::CALL_DYNAMIC:
 				return $this->_callDynamic($expression, $compilationContext);
 		}

@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Passes\LocalContextPass;
+use Zephir\Passes\StaticTypeInference;
+
 /**
  * SymbolTable
  *

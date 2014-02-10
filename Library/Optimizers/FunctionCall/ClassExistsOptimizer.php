@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * ClassExistsOptimizer
  *
  * Optimizes calls to 'class_exists' using internal function
  */
-class ClassExistsOptimizer
-	extends OptimizerAbstract
+class ClassExistsOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression
@@ -57,7 +64,6 @@ class ClassExistsOptimizer
 		$context->headersManager->add('kernel/object');
 
 		return new CompiledExpression('bool', 'zephir_class_exists(' . $resolvedParams[0] . ', ' . $autoload . ' TSRMLS_CC)', $expression);
-
 	}
 
 }

@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Bitwise;
+
 class BitwiseAndOperator extends BitwiseBaseOperator
 {
 

@@ -17,10 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+
 /**
  * Class OptimizerAbstract
  */
-abstract class OptimizerAbstract {
+abstract class OptimizerAbstract
+{
 
 	/**
 	 * @param array $expression
@@ -29,4 +35,4 @@ abstract class OptimizerAbstract {
 	 * @return mixed
 	 */
 	abstract public function optimize(array $expression, Call $call, CompilationContext $context);
-} 
+}

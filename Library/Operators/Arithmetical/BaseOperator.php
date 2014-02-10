@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Arithmetical;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+
 /**
  * BaseOperator
  *
@@ -81,11 +89,11 @@ class ArithmeticalBaseOperator extends BaseOperator
 	public function compile($expression, CompilationContext $compilationContext)
 	{
 		if (!isset($expression['left'])) {
-			throw new Exception("Missing left part of the expression");
+			throw new \Exception("Missing left part of the expression");
 		}
 
 		if (!isset($expression['right'])) {
-			throw new Exception("Missing right part of the expression");
+			throw new \Exception("Missing right part of the expression");
 		}
 
 		/**
@@ -116,15 +124,19 @@ class ArithmeticalBaseOperator extends BaseOperator
 			case 'long':
 			case 'ulong':
 				switch ($right->getType()) {
+
 					case 'int':
 					case 'uint':
 					case 'long':
 					case 'ulong':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
 					case 'double':
 						return new CompiledExpression('double', '((double) ' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
 					case 'bool':
 						return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
+
 					case 'variable':
 						$variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
 						switch ($variableRight->getType()) {

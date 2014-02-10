@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * IsNumericOptimizer
  *
  * Optimizes calls to 'is_numeric' using internal function
  */
-class IsNumericOptimizer
-	extends OptimizerAbstract
+class IsNumericOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

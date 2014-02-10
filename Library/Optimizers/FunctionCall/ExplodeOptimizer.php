@@ -17,13 +17,21 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Utils;
+
 /**
  * ExplodeOptimizer
  *
  * Optimizes calls to 'explode' using internal function
  */
-class ExplodeOptimizer
-	extends OptimizerAbstract
+class ExplodeOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression
@@ -49,7 +57,7 @@ class ExplodeOptimizer
 		$symbolVariable = $call->getSymbolVariable();
 		if ($symbolVariable->isNotVariableAndString()) {
 			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}		
+		}
 
 		/**
 		 * Process limit

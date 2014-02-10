@@ -17,6 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Expression;
+
+use Zephir\Variable;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\ClassConstant;
+
+
 /**
  * StaticConstantAccess
  *

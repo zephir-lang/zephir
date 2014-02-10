@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
 
 /**
@@ -24,10 +32,9 @@ require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
  *
  * Optimizes calls to 'ltrim' using internal function
  */
-class LtrimOptimizer
-	extends TrimOptimizer
+class LtrimOptimizer extends TrimOptimizer
 {
 
-        protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
+	protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
 
 }

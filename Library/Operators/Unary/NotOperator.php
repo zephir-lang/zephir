@@ -17,6 +17,13 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Unary;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\CompiledExpression;
+
 class NotOperator extends BaseOperator
 {
 	/**
@@ -37,12 +44,14 @@ class NotOperator extends BaseOperator
 		$left = $leftExpr->compile($compilationContext);
 
 		switch ($left->getType()) {
+
 			case 'bool':
 			case 'int':
 			case 'uint':
 			case 'long':
 			case 'ulong':
 				return new CompiledExpression('bool', '!' . $left->getCode(), $expression);
+
 			case 'variable':
 				$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
 				switch ($variable->getType()) {
@@ -56,6 +65,7 @@ class NotOperator extends BaseOperator
 					default:
 						throw new CompilerException("Unknown type: " . $variable->getType(), $expression);
 				}
+
 			default:
 				throw new CompilerException("Unknown type: " . $left->getType(), $expression);
 		}

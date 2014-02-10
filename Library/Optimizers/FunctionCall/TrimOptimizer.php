@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * TrimOptimizer
  *
  * Optimizes calls to 'trim' using internal function
  */
-class TrimOptimizer
-	extends OptimizerAbstract
+class TrimOptimizer extends OptimizerAbstract
 {
 
 	protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';

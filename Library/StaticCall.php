@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Detectors\ReadDetector;
+
 /**
  * StaticCall
  *
@@ -36,8 +40,7 @@ class StaticCall extends Call
 	 * @param ClassDefinition $classDefinition
 	 * @param CompilationContext $compilationContext
 	 */
-	protected function callSelf($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
-		ClassDefinition $classDefinition, CompilationContext $compilationContext)
+	protected function callSelf($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -94,8 +97,7 @@ class StaticCall extends Call
 	 * @param ClassDefinition $classDefinition
 	 * @param CompilationContext $compilationContext
 	 */
-	protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
-		ClassDefinition $classDefinition, CompilationContext $compilationContext)
+	protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;
@@ -153,8 +155,7 @@ class StaticCall extends Call
 	 * @param ClassDefinition $classDefinition
 	 * @param CompilationContext $compilationContext
 	 */
-	protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting,
-		ClassDefinition $classDefinition, CompilationContext $compilationContext)
+	protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext)
 	{
 
 		$codePrinter = $compilationContext->codePrinter;

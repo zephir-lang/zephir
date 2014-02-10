@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * StrReplaceOptimizer
  *
  * Optimizes calls to 'str_replace' using internal function
  */
-class StrReplaceOptimizer
-	extends OptimizerAbstract
+class StrReplaceOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * GetCalledClassOptimizer
  *
  * Optimizes calls to 'get_called_class' using internal function
  */
-class GetCalledClassOptimizer
-	extends OptimizerAbstract
+class GetCalledClassOptimizer extends OptimizerAbstract
 {
 
 	/**

@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * GetClassNsOptimizer
  *
  * Optimizes calls to 'get_class_ns' using internal function
  */
-class GetClassNsOptimizer
-	extends OptimizerAbstract
+class GetClassNsOptimizer extends OptimizerAbstract
 {
 
 	/**

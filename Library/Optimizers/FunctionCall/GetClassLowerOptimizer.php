@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * GetClassLowerOptimizer
  *
  * Optimizes calls to 'get_class_lower' using internal function
  */
-class GetClassLowerOptimizer
-	extends OptimizerAbstract
+class GetClassLowerOptimizer extends OptimizerAbstract
 {
 
 	/**

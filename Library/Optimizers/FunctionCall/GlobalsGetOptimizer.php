@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * GlobalsGetOptimizer
  *
  * Reads values from extensions globals
  */
-class GlobalsGetOptimizer
-	extends OptimizerAbstract
+class GlobalsGetOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

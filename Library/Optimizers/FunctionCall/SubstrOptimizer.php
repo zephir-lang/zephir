@@ -19,13 +19,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * SubstrOptimizer
  *
  * Optimizes calls to 'strpos' using internal function
  */
-class SubstrOptimizer
-	extends OptimizerAbstract
+class SubstrOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

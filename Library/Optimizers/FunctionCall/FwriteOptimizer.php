@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * FwriteOptimizer
  *
  * Optimizes calls to 'fwrite' using internal function
  */
-class FwriteOptimizer
-	extends OptimizerAbstract
+class FwriteOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

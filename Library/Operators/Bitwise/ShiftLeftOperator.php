@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Bitwise;
+
 class ShiftLeftOperator extends BitwiseBaseOperator
 {
 	protected $_operator = '<<';

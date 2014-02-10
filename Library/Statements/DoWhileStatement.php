@@ -17,13 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Optimizers\EvalExpression;
+use Zephir\StatementsBlock;
+
 /**
  * DoWhileStatement
  *
  * DoWhile statement, the same as in PHP/C
  */
-class DoWhileStatement
-	extends StatementAbstract
+class DoWhileStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

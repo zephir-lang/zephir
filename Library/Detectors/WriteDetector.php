@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Detectors;
+
 /**
  * WriteDetector
  *
@@ -43,11 +45,13 @@ class WriteDetector
 	{
 		foreach ($statements as $statement) {
 			switch ($statement['type']) {
+
 				case 'let':
 					if ($this->passLetStatement($variable, $statement) === true) {
 						return true;
 					}
 					break;
+
 				case 'do-while':
 				case 'while':
 				case 'loop':
@@ -57,11 +61,13 @@ class WriteDetector
 						}
 					}
 					break;
+
 				case 'unset':
 					if ($statement['domain']['value'] == $variable) {
 						return true;
 					}
 					break;
+
 				case 'if':
 					if (isset($statement['statements'])) {
 						if ($this->detect($variable, $statement['statements']) === true) {
@@ -74,6 +80,7 @@ class WriteDetector
 						}
 					}
 					break;
+
 				case 'switch':
 					foreach ($statement['clauses'] as $clause) {
 						if (isset($clause['statements'])) {
@@ -83,6 +90,7 @@ class WriteDetector
 						}
 					}
 					break;
+
 				case 'for':
 					if (isset($statement['key'])) {
 						if ($statement['key'] == $variable) {

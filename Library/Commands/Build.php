@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
 /**
  * BuildCommand
  *
@@ -25,31 +27,31 @@
 class CommandBuild extends CommandAbstract
 {
 
-	/**
-	 * Commands provided by this command
-	 *
-	 * @return array|string
-	 */
-	public function getCommand()
-	{
-		return 'build';
-	}
+    /**
+     * Commands provided by this command
+     *
+     * @return array|string
+     */
+    public function getCommand()
+    {
+        return 'build';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'build';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'build';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Generate/Compile/Install a Zephir extension';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Generate/Compile/Install a Zephir extension';
+    }
 }

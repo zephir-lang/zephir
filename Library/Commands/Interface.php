@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+
 /**
  * CommandInterface
  *
@@ -25,39 +30,39 @@
 interface CommandInterface
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand();
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand();
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage();
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage();
 
-	/**
-	 * @return string
-	 */
-	public function getDescription();
+    /**
+     * @return string
+     */
+    public function getDescription();
 
-	/**
-	 * Returns parameter named parameterName if specified
-	 * on the commmand line else null
-	 * @param string $parameterName
-	 * @return string
-	 */
-	public function getParameter($parameterName);
+    /**
+     * Returns parameter named parameterName if specified
+     * on the commmand line else null
+     * @param string $parameterName
+     * @return string
+     */
+    public function getParameter($parameterName);
 
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger);
+    /**
+     * Executes the command
+     *
+     * Config $config
+     * Logger $logger
+     */
+    public function execute(Config $config, Logger $logger);
 
 }

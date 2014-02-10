@@ -17,6 +17,54 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Operators\Arithmetical\AddOperator;
+use Zephir\Operators\Arithmetical\SubOperator;
+use Zephir\Operators\Arithmetical\MulOperator;
+use Zephir\Operators\Arithmetical\DivOperator;
+use Zephir\Operators\Arithmetical\ModOperator;
+
+use Zephir\Operators\Unary\MinusOperator;
+use Zephir\Operators\Unary\NotOperator;
+
+use Zephir\Operators\Logical\AndOperator;
+use Zephir\Operators\Logical\OrOperator;
+
+use Zephir\Operators\Comparison\EqualsOperator;
+use Zephir\Operators\Comparison\NotEqualsOperator;
+use Zephir\Operators\Comparison\IdenticalOperator;
+use Zephir\Operators\Comparison\NotIdenticalOperator;
+use Zephir\Operators\Comparison\LessEqualOperator;
+use Zephir\Operators\Comparison\LessOperator;
+use Zephir\Operators\Comparison\GreaterOperator;
+use Zephir\Operators\Comparison\GreaterEqualOperator;
+
+use Zephir\Operators\Bitwise\BitwiseAndOperator;
+use Zephir\Operators\Bitwise\BitwiseOrOperator;
+use Zephir\Operators\Bitwise\ShiftLeftOperator;
+use Zephir\Operators\Bitwise\ShiftRightOperator;
+
+use Zephir\Operators\Other\NewInstanceOperator;
+use Zephir\Operators\Other\CloneOperator;
+use Zephir\Operators\Other\ConcatOperator;
+use Zephir\Operators\Other\EmptyOperator;
+use Zephir\Operators\Other\IssetOperator;
+use Zephir\Operators\Other\FetchOperator;
+use Zephir\Operators\Other\LikelyOperator;
+use Zephir\Operators\Other\UnlikelyOperator;
+use Zephir\Operators\Other\TernaryOperator;
+use Zephir\Operators\Other\InstanceOfOperator;
+use Zephir\Operators\Other\RequireOperator;
+use Zephir\Operators\Other\TypeOfOperator;
+
+use Zephir\Expression\Constants;
+use Zephir\Expression\NativeArray;
+use Zephir\Expression\NativeArrayAccess;
+use Zephir\Expression\PropertyAccess;
+use Zephir\Expression\StaticConstantAccess;
+use Zephir\Expression\StaticPropertyAccess;
+
 /* Base Operator */
 require ZEPHIRPATH . 'Library/Operators/BaseOperator.php';
 

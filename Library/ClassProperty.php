@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
 /**
  * ClassProperty
  *
@@ -202,6 +204,7 @@ class ClassProperty
 			$this->declareProperty($compilationContext, 'null', null);
 		} else {
 			switch ($this->_defaultValue['type']) {
+
 				case 'long':
 				case 'int':
 				case 'string':
@@ -209,16 +212,18 @@ class ClassProperty
 				case 'bool':
 					$this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
 					break;
+
 				case 'null':
 					$this->declareProperty($compilationContext, $this->_defaultValue['type'], null);
 					break;
-				case 'static-constant-access':
-					$expression = new \Expression($this->_defaultValue);
-					$compiledExpression = $expression->compile($compilationContext);
 
+				case 'static-constant-access':
+					$expression = new Expression($this->_defaultValue);
+					$compiledExpression = $expression->compile($compilationContext);
 					$constant = $compilationContext->classDefinition->getConstant($this->_defaultValue['right']['value']);
 					$this->declareProperty($compilationContext, $constant->getType(), $compiledExpression->getCode());
 					break;
+
 				default:
 					throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
 			}
@@ -233,9 +238,14 @@ class ClassProperty
 	 * @param $value
 	 * @throws CompilerException
 	 */
-	protected function declareProperty(\CompilationContext $compilationContext, $type, $value)
+	protected function declareProperty(CompilationContext $compilationContext, $type, $value)
 	{
 		$codePrinter = $compilationContext->codePrinter;
+
+		if (is_object($value)) {
+			//fix this
+			return;
+		}
 
 		switch ($type) {
 			case 'long':

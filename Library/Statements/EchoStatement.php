@@ -17,13 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\Utils;
+
 /**
  * EchoStatement
  *
  * Produce output according to the type
  */
-class EchoStatement
-	extends StatementAbstract
+class EchoStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

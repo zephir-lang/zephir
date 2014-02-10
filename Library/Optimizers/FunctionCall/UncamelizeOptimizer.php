@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * UncamelizeOptimizer
  *
  * Optimizes calls to 'uncamelize' using internal function
  */
-class UncamelizeOptimizer
-	extends OptimizerAbstract
+class UncamelizeOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

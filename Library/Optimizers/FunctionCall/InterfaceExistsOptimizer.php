@@ -17,51 +17,58 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * InterfaceExistsOptimizer
  *
  * Optimizes calls to 'interface_exists' using internal function
  */
-class InterfaceExistsOptimizer
-	extends OptimizerAbstract
+class InterfaceExistsOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) < 1) {
-			throw new CompilerException("'class_exists' require one or two parameters");
-		}
+        if (count($expression['parameters']) < 1) {
+            throw new CompilerException("'class_exists' require one or two parameters");
+        }
 
-                /**
-                 * Process autoload
-                 */
-                $autoload = '1 ';
-                if (count($expression['parameters']) == 2 && ($expression['parameters'][1]['type'] == 'int' || $expression['parameters'][1]['type'] == 'bool' )) {
-                    $autoload = $expression['parameters'][1]['value'] . ' ';
-                    unset($expression['parameters'][1]);
-                }
+        /**
+         * Process autoload
+         */
+        $autoload = '1 ';
+        if (count($expression['parameters']) == 2 && ($expression['parameters'][1]['type'] == 'int' || $expression['parameters'][1]['type'] == 'bool' )) {
+            $autoload = $expression['parameters'][1]['value'] . ' ';
+            unset($expression['parameters'][1]);
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-                if (count($resolvedParams) == 2) {
-                    $context->headersManager->add('kernel/operators');
-                    $autoload = 'ZEPHIR_IS_TRUE(' . $resolvedParams[1] . ') ';
-                }
+        if (count($resolvedParams) == 2) {
+            $context->headersManager->add('kernel/operators');
+            $autoload = 'zephir_is_true(' . $resolvedParams[1] . ') ';
+        }
 
-                $context->headersManager->add('kernel/object');
+        $context->headersManager->add('kernel/object');
 
-		return new CompiledExpression('bool', 'zephir_interface_exists(' . $resolvedParams[0] . ', ' . $autoload . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_interface_exists(' . $resolvedParams[0] . ', ' . $autoload . ' TSRMLS_CC)', $expression);
 
-	}
+    }
 
 }

@@ -17,13 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\Utils;
+use Zephir\Expression;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+
 /**
  * ThrowStatement
  *
  * Throws exceptions
  */
-class ThrowStatement
-	extends StatementAbstract
+class ThrowStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

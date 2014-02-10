@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * StrlenOptimizer
  *
  * Optimizes calls to 'strlen' using internal function
  */
-class StrlenOptimizer
-	extends OptimizerAbstract
+class StrlenOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

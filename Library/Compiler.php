@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
+use Zephir\Commands\CommandInterface;
+
 /**
  * Compiler
  *
@@ -119,7 +123,7 @@ class Compiler
 		 * Pre compile all files
 		 */
 		$files = array();
-		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
 
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
@@ -216,7 +220,7 @@ class Compiler
 	public function getInternalClassDefinition($className)
 	{
 		if (!isset(self::$_reflections[$className])) {
-			self::$_reflections[$className] = new ReflectionClass($className);
+			self::$_reflections[$className] = new \ReflectionClass($className);
 		}
 
 		return self::$_reflections[$className];
@@ -231,7 +235,7 @@ class Compiler
 	protected function _recursiveProcess($src, $dest, $pattern=null, $callback="copy")
 	{
 		$success = true;
-		$iterator = new DirectoryIterator($src);
+		$iterator = new \DirectoryIterator($src);
 		foreach ($iterator as $item) {
 			$pathName = $item->getPathname();
 			if (!is_readable($pathName)) {
@@ -469,7 +473,7 @@ class Compiler
 				/**
 				 * Load additional extension prototypes
 				 */
-				foreach (new DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
+				foreach (new \DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
 					if (!$file->isDir()) {
 						$extension = str_replace('.php', '', $file);
 						if (!extension_loaded($extension)) {
@@ -1197,5 +1201,4 @@ class Compiler
 	{
 		return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
 	}
-
 }

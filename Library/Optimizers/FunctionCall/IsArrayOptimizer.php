@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * IsArrayOptimizer
  *
  * Optimizes calls to 'is_array' using internal function
  */
-class IsArrayOptimizer
-	extends OptimizerAbstract
+class IsArrayOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

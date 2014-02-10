@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * StartsWithOptimizer
  *
  * Checks if a string starts with another
  */
-class StartsWithOptimizer
-	extends OptimizerAbstract
+class StartsWithOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

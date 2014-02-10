@@ -17,13 +17,21 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Utils;
+
 /**
  * JoinOptimizer
  *
  * Optimizes calls to 'join' using internal function
  */
-class JoinOptimizer
-	extends OptimizerAbstract
+class JoinOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

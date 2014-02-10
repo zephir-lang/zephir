@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\StatementsBlock;
+use Zephir\Passes\LoopBreakPass;
+use Zephir\Branch;
+
 /**
  * LoopStatement
  *
  * Loop statement, infinite loop
  */
-class LoopStatement
-	extends StatementAbstract
+class LoopStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

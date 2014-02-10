@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
 /**
  * CommandInstall
  *
@@ -25,32 +27,32 @@
 class CommandInstall extends CommandAbstract
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'install';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand()
+    {
+        return 'install';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'install';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'install';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Installs the extension (requires root password)';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Installs the extension (requires root password)';
+    }
 
 }

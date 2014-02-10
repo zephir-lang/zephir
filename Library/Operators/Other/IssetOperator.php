@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Other;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+
 /**
  * IssetOperator
  *
@@ -33,13 +41,13 @@ class IssetOperator extends BaseOperator
 	 * @return \CompiledExpression
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
-	{		
+	{
 
 		if ($expression['left']['type'] == 'list') {
 			$left = $expression['left']['left'];
 		} else {
 			$left = $expression['left'];
-		}		
+		}
 
 		switch ($left['type']) {
 
@@ -119,10 +127,10 @@ class IssetOperator extends BaseOperator
 					$compilationContext->logger->warning('Possible attempt to use non object in isset operator', 'non-valid-isset', $expression);
 				}
 
-				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $left['right']['value'] . '") TSRMLS_CC)', $left);				
+				return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $left['right']['value'] . '") TSRMLS_CC)', $left);
 
 			case 'property-dynamic-access':
-				
+
 				$compilationContext->headersManager->add('kernel/object');
 
 				$exprVariable = new Expression($left['left']);
@@ -163,7 +171,7 @@ class IssetOperator extends BaseOperator
 				break;
 
 			case 'property-string-access':
-				return new CompiledExpression('bool', '(0 == 0)', $left);					
+				return new CompiledExpression('bool', '(0 == 0)', $left);
 
 			default:
 				throw new CompilerException('This expression is not valid for "isset" operator', $expression);

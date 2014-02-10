@@ -17,6 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Other;
+
+use Zephir\Operators\BaseOperator;
+use Zephir\CompilationContext;
+use Zephir\Expression;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\MethodCall;
+use Zephir\Utils;
+
 /**
  * NewInstance
  *
@@ -89,7 +99,7 @@ class NewInstanceOperator extends BaseOperator
 			} else {
 				if ($expression['class'][0] != '\\') {
 					$nsClassName = $compilationContext->classDefinition->getNamespace().'\\'.$className;
-					if ($compilationContext->compiler->isClass($nsClassName)) {						
+					if ($compilationContext->compiler->isClass($nsClassName)) {
 						$classDefinition = $compilationContext->compiler->getClassDefinition($nsClassName);
 					}
 				}

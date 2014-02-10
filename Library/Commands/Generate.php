@@ -17,6 +17,11 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+
 /**
  * CommandGenerate
  *
@@ -25,31 +30,31 @@
 class CommandGenerate extends CommandAbstract
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return array|string
-	 */
-	public function getCommand()
-	{
-		return 'generate';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return array|string
+     */
+    public function getCommand()
+    {
+        return 'generate';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'generate';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'generate';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Generates C code from the Zephir code';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Generates C code from the Zephir code';
+    }
 }

@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+use Zephir\LiteralCompiledExpression;
+use Zephir\Branch;
+
 /**
  * EvalExpression
  *

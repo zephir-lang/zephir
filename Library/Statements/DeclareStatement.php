@@ -17,13 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\LiteralCompiledExpression;
+
 /**
  * DeclareStatement
  *
  * This creates variables in the current symbol table
  */
-class DeclareStatement
-	extends StatementAbstract
+class DeclareStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Arithmetical;
+
 class SubOperator extends ArithmeticalBaseOperator
 {
 

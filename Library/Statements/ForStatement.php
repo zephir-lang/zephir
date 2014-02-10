@@ -17,13 +17,21 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\FunctionCall;
+use Zephir\Optimizers\EvalExpression;
+use Zephir\StatementsBlock;
+use Zephir\Expression;
+
 /**
  * ForStatement
  *
  * For statement
  */
-class ForStatement
-	extends StatementAbstract
+class ForStatement extends StatementAbstract
 {
 	/**
 	 * Compiles a for statement that use a 'range' as expression

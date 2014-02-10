@@ -17,13 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Optimizers\EvalExpression;
+use Zephir\StatementsBlock;
+
 /**
  * WhileStatement
  *
  * While statement, the same as in PHP/C
  */
-class WhileStatement
-	extends StatementAbstract
+class WhileStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

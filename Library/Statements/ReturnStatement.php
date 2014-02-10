@@ -17,13 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\Expression;
+
 /**
  * ReturnStatement
  *
  * Return statement is used to assign variables
  */
-class ReturnStatement
-	extends StatementAbstract
+class ReturnStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext
@@ -243,6 +248,7 @@ class ReturnStatement
 							throw new CompilerException("Cannot return variable '" . $symbolVariable->getType() . "'", $statement['expr']);
 					}
 					break;
+
 				default:
 					throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);
 			}

@@ -17,13 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 /**
  * IsCallableOptimizer
  *
  * Optimizes calls to 'is_callable' using internal function
  */
-class IsCallableOptimizer
-	extends OptimizerAbstract
+class IsCallableOptimizer extends OptimizerAbstract
 {
 	/**
 	 * @param array $expression

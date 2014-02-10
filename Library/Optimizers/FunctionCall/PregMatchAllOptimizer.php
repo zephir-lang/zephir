@@ -19,6 +19,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/PregMatchOptimizer.php';
 
 /**
@@ -26,8 +34,7 @@ require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/PregMatchOptimizer.ph
  *
  * Optimizes calls to 'preg_match_all' using internal function
  */
-class PregMatchAllOptimizer
-	extends PregMatchOptimizer
+class PregMatchAllOptimizer extends PregMatchOptimizer
 {
     const GLOBAL_MATCH = 1;
 }

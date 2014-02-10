@@ -17,6 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
 require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
 
 /**
@@ -24,9 +32,8 @@ require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
  *
  * Optimizes calls to 'rtrim' using internal function
  */
-class RtrimOptimizer
-	extends TrimOptimizer
+class RtrimOptimizer extends TrimOptimizer
 {
 
-        protected static $TRIM_WHERE = 'ZEPHIR_TRIM_RIGHT';
+    protected static $TRIM_WHERE = 'ZEPHIR_TRIM_RIGHT';
 }

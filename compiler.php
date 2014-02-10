@@ -110,4 +110,5 @@ require ZEPHIRPATH . 'Library/Logger.php';
 require ZEPHIRPATH . 'Library/Color.php';
 require ZEPHIRPATH . 'Library/Utils.php';
 
-Bootstrap::boot();
+Zephir\Bootstrap::boot();
+

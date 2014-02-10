@@ -17,13 +17,17 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Statements;
+
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+
 /**
  * ContinueStatement
  *
  * Continue statement
  */
-class ContinueStatement
-	extends StatementAbstract
+class ContinueStatement extends StatementAbstract
 {
 	/**
 	 * @param CompilationContext $compilationContext

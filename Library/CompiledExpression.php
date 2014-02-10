@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
 /**
  * CompiledExpression
  *
@@ -138,7 +140,7 @@ class CompiledExpression
 	 */
 	public function resolve($result, CompilationContext $compilationContext)
 	{
-		if ($this->_code instanceof Closure) {
+		if ($this->_code instanceof \Closure) {
 			$code = $this->_code;
 			if (!$result) {
 				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);

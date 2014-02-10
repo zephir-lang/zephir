@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
 /**
  * Logger
  *
@@ -24,91 +26,91 @@
  */
 class Logger
 {
-	private static $_files = array();
+    private static $_files = array();
 
-	/**
-	 * @var Config
-	 */
-	protected $_config;
+    /**
+     * @var Config
+     */
+    protected $_config;
 
-	/**
-	 * Logger constructor
-	 *
-	 * @param Config $config
-	 */
-	public function __construct(Config $config)
-	{
-		$this->_config = $config;
-	}
+    /**
+     * Logger constructor
+     *
+     * @param Config $config
+     */
+    public function __construct(Config $config)
+    {
+        $this->_config = $config;
+    }
 
-	/**
-	 * Changes a warning status on/off
-	 *
-	 * @param string $type
-	 * @param boolean $value
-	 */
-	public function set($type, $value)
-	{
-		$this->_config->set($type, $value, 'warnings');
-	}
+    /**
+     * Changes a warning status on/off
+     *
+     * @param string $type
+     * @param boolean $value
+     */
+    public function set($type, $value)
+    {
+        $this->_config->set($type, $value, 'warnings');
+    }
 
-	/**
-	 * @param $message
-	 * @param $type
-	 * @param $node
-	 * @return bool
-	 * @throws CompilerException
-	 */
-	public function warning($message, $type, $node)
-	{
-		if (!$this->_config->get('silent')) {
-			if (!$this->_config->get($type, 'warnings')) {
-				return false;
-			}
+    /**
+     * @param $message
+     * @param $type
+     * @param $node
+     * @return bool
+     * @throws CompilerException
+     */
+    public function warning($message, $type, $node)
+    {
+        if (!$this->_config->get('silent')) {
+            if (!$this->_config->get($type, 'warnings')) {
+                return false;
+            }
 
-			$warning  = 'Warning: ' . $message;
-			$warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
-			$warning .= ' [' . $type . ']' . PHP_EOL;
-			$warning .= PHP_EOL;
-			if (!isset($_files[$node['file']])) {
-				if (file_exists($node['file'])) {
-					$lines = file($node['file']);
-				} else {
-					$lines = array();
-				}
-				$_files[$node['file']] = $lines;
-			} else {
-				$lines = $_files[$node['file']];
-			}
-			if (isset($lines[$node['line'] - 1])) {
-				$line = $lines[$node['line'] - 1];
-				$warning .= "\t" . str_replace("\t", " ", $line);
-				if (($node['char'] - 1) > 0) {
-					$warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
-				}
-			}
-			$warning .= PHP_EOL;
+            $warning  = 'Warning: ' . $message;
+            $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
+            $warning .= ' [' . $type . ']' . PHP_EOL;
+            $warning .= PHP_EOL;
+            if (!isset($_files[$node['file']])) {
+                if (file_exists($node['file'])) {
+                    $lines = file($node['file']);
+                } else {
+                    $lines = array();
+                }
+                $_files[$node['file']] = $lines;
+            } else {
+                $lines = $_files[$node['file']];
+            }
+            if (isset($lines[$node['line'] - 1])) {
+                $line = $lines[$node['line'] - 1];
+                $warning .= "\t" . str_replace("\t", " ", $line);
+                if (($node['char'] - 1) > 0) {
+                    $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
+                }
+            }
+            $warning .= PHP_EOL;
 
-			echo Color::warning($warning);
+            echo Color::warning($warning);
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * @param $message
-	 * @return bool
-	 */
-	public function output($message)
-	{
-		if (!$this->_config->get('silent')) {
-			echo $message . PHP_EOL;
+    /**
+     * @param $message
+     * @return bool
+     */
+    public function output($message)
+    {
+        if (!$this->_config->get('silent')) {
+            echo $message . PHP_EOL;
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

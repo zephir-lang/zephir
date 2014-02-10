@@ -17,6 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Passes;
+
+use Zephir\StatementsBlock;
+
 /**
  * LocalContextPass
  *

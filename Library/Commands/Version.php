@@ -17,6 +17,12 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Commands;
+
+use Zephir\Config;
+use Zephir\Logger;
+use Zephir\Compiler;
+
 /**
  * CommandVersion
  *
@@ -25,42 +31,42 @@
 class CommandVersion extends CommandAbstract
 {
 
-	/**
-	 * Command provided by this command
-	 *
-	 * @return string
-	 */
-	public function getCommand()
-	{
-		return 'version';
-	}
+    /**
+     * Command provided by this command
+     *
+     * @return string
+     */
+    public function getCommand()
+    {
+        return 'version';
+    }
 
-	/**
-	 * Command usage
-	 *
-	 * @return string
-	 */
-	public function getUsage()
-	{
-		return 'version';
-	}
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'version';
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return 'Shows Zephir version';
-	}
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Shows Zephir version';
+    }
 
-	/**
-	 * Executes the command
-	 *
-	 * Config $config
-	 * Logger $logger
-	 */
-	public function execute(Config $config, Logger $logger)
-	{
-		echo Compiler::VERSION, PHP_EOL;
-	}
+    /**
+     * Executes the command
+     *
+     * Config $config
+     * Logger $logger
+     */
+    public function execute(Config $config, Logger $logger)
+    {
+        echo Compiler::VERSION, PHP_EOL;
+    }
 }

@@ -17,12 +17,14 @@
  +----------------------------------------------------------------------+
 */
 
+namespace Zephir;
+
 /**
  * ClassMethodParameters
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements Countable
+class ClassMethodParameters implements \Countable
 {
 	private $_parameters = array();
 

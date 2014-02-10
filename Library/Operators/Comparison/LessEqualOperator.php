@@ -17,6 +17,8 @@
  +--------------------------------------------------------------------------+
 */
 
+namespace Zephir\Operators\Comparison;
+
 class LessEqualOperator extends ComparisonBaseOperator
 {
 
