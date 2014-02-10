@@ -628,17 +628,22 @@ class ClassDefinition
 			$codePrinter->outputBlankLine(true);
 
 			foreach ($interfaces as $interface) {
+				$classEntry = false;
 
-				if ($compiler->isInterface($interface)) {
-					$classInterfaceDefinition = $compiler->getClassDefinition($interface);
-					$classEntry = $classInterfaceDefinition->getClassEntry();
-				} else {
-					if ($compiler->isInternalInterface($interface)) {
-						$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-						$classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
-					} else {
-						throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
+				if ($interface[0] != '\\') {
+					if ($compiler->isInterface($compilationContext->classDefinition->getNamespace().'\\'.$interface)) {
+						$interface = $compilationContext->classDefinition->getNamespace().'\\'.$interface;
+
+						$classInterfaceDefinition = $compiler->getClassDefinition($interface);
+						$classEntry = $classInterfaceDefinition->getClassEntry();
 					}
+				} else if ($compiler->isInternalInterface($interface)) {
+					$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+					$classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+				}
+
+				if (!$classEntry) {
+					throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
 				}
 
 				/**
