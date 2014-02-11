@@ -29,17 +29,16 @@ use Zephir\CompilerException;
  */
 class ContinueStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 * @throws CompilerException
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		if ($compilationContext->insideCycle) {
-			$compilationContext->codePrinter->output('continue;');
-		} else {
-			throw new CompilerException("Cannot use 'continue' outside of a loop", $this->_statement);
-		}
-	}
-
+    /**
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        if ($compilationContext->insideCycle) {
+            $compilationContext->codePrinter->output('continue;');
+        } else {
+            throw new CompilerException("Cannot use 'continue' outside of a loop", $this->_statement);
+        }
+    }
 }

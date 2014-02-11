@@ -31,51 +31,50 @@ use Zephir\StatementsBlock;
  */
 class WhileStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		$exprRaw = $this->_statement['expr'];
-		$codePrinter = $compilationContext->codePrinter;
+    /**
+     * @param CompilationContext $compilationContext
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        $exprRaw = $this->_statement['expr'];
+        $codePrinter = $compilationContext->codePrinter;
 
-		/**
-		 * Compound conditions can be evaluated in a single line of the C-code
-		 */
-		$codePrinter->output('while (1) {');
+        /**
+         * Compound conditions can be evaluated in a single line of the C-code
+         */
+        $codePrinter->output('while (1) {');
 
-		$codePrinter->increaseLevel();
+        $codePrinter->increaseLevel();
 
-		/**
-		 * Variables are initialized in a different way inside loops
-		 */
-		$compilationContext->insideCycle++;
+        /**
+         * Variables are initialized in a different way inside loops
+         */
+        $compilationContext->insideCycle++;
 
-		$expr = new EvalExpression();
-		$condition = $expr->optimize($exprRaw, $compilationContext);
-		$this->_evalExpression = $expr;
+        $expr = new EvalExpression();
+        $condition = $expr->optimize($exprRaw, $compilationContext);
+        $this->_evalExpression = $expr;
 
-		$codePrinter->output('if (!(' . $condition . ')) {');
-		$codePrinter->output("\t" . 'break;');
-		$codePrinter->output('}');
+        $codePrinter->output('if (!(' . $condition . ')) {');
+        $codePrinter->output("\t" . 'break;');
+        $codePrinter->output('}');
 
-		$codePrinter->decreaseLevel();
+        $codePrinter->decreaseLevel();
 
-		/**
-		 * Compile statements in the 'while' block
-		 */
-		if (isset($this->_statement['statements'])) {
-			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext);
-		}
+        /**
+         * Compile statements in the 'while' block
+         */
+        if (isset($this->_statement['statements'])) {
+            $st = new StatementsBlock($this->_statement['statements']);
+            $st->compile($compilationContext);
+        }
 
-		/**
-		 * Restore the cycle counter
-		 */
-		$compilationContext->insideCycle--;
+        /**
+         * Restore the cycle counter
+         */
+        $compilationContext->insideCycle--;
 
-		$codePrinter->output('}');
+        $codePrinter->output('}');
 
-	}
-
+    }
 }

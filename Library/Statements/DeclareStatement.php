@@ -30,232 +30,232 @@ use Zephir\LiteralCompiledExpression;
  */
 class DeclareStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 * @throws CompilerException
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		$statement = $this->_statement;
+    /**
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        $statement = $this->_statement;
 
-		if (!isset($statement['data-type'])) {
-			throw new CompilerException("Data type is required", $this->_statement);
-		}
+        if (!isset($statement['data-type'])) {
+            throw new CompilerException("Data type is required", $this->_statement);
+        }
 
-		$typeInference = $compilationContext->typeInference;
-		$symbolTable = $compilationContext->symbolTable;
+        $typeInference = $compilationContext->typeInference;
+        $symbolTable = $compilationContext->symbolTable;
 
-		foreach ($statement['variables'] as $variable) {
+        foreach ($statement['variables'] as $variable) {
 
-			if ($symbolTable->hasVariable($variable['variable'])) {
-				throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
-			}
+            if ($symbolTable->hasVariable($variable['variable'])) {
+                throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
+            }
 
-			$currentType = $statement['data-type'];
+            $currentType = $statement['data-type'];
 
-			/**
-			 * Replace original data type by the pre-processed infered type
-			 */
-			if ($typeInference) {
-				if ($currentType == 'variable') {
-					$type = $typeInference->getInferedType($variable['variable']);
-					if (is_string($type)) {
-						$currentType = $type;
-					}
-				}
-			}
+            /**
+             * Replace original data type by the pre-processed infered type
+             */
+            if ($typeInference) {
+                if ($currentType == 'variable') {
+                    $type = $typeInference->getInferedType($variable['variable']);
+                    if (is_string($type)) {
+                        $currentType = $type;
+                    }
+                }
+            }
 
-			/**
-			 * Variables are added to the symbol table
-			 */
-			if (isset($variable['expr'])) {
-				$symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext, $variable['expr']);
-			} else {
-				$symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext);
-			}
+            /**
+             * Variables are added to the symbol table
+             */
+            if (isset($variable['expr'])) {
+                $symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext, $variable['expr']);
+            } else {
+                $symbolVariable = $symbolTable->addVariable($currentType, $variable['variable'], $compilationContext);
+            }
 
-			/**
-			 * Set the node where the variable is declared
-			 */
-			$symbolVariable->setOriginal($variable);
+            /**
+             * Set the node where the variable is declared
+             */
+            $symbolVariable->setOriginal($variable);
 
-			if (isset($variable['expr']['type'])) {
-				$defaultType = $variable['expr']['type'];
-			} else {
-				$defaultType = null;
-			}
+            if (isset($variable['expr']['type'])) {
+                $defaultType = $variable['expr']['type'];
+            } else {
+                $defaultType = null;
+            }
 
-			if (isset($variable['expr']['value'])) {
-				$defaultValue = $variable['expr']['value'];
-			} else {
-				$defaultValue = null;
-			}
+            if (isset($variable['expr']['value'])) {
+                $defaultValue = $variable['expr']['value'];
+            } else {
+                $defaultValue = null;
+            }
 
-			/**
-			 * Variables with a default value are initialized by default
-			 */
-			if ($defaultValue !== null || $defaultType !== null) {
-				switch ($currentType) {
+            /**
+             * Variables with a default value are initialized by default
+             */
+            if ($defaultValue !== null || $defaultType !== null) {
+                switch ($currentType) {
 
-					case 'int':
-					case 'uint':
-					case 'ulong':
-					case 'long':
-						switch ($defaultType) {
+                    case 'int':
+                    case 'uint':
+                    case 'ulong':
+                    case 'long':
+                        switch ($defaultType) {
 
-							case 'int':
-							case 'uint':
-							case 'ulong':
-								break;
+                            case 'int':
+                            case 'uint':
+                            case 'ulong':
+                                break;
 
-							case 'null':
-								$defaultValue = 0;
-								break;
+                            case 'null':
+                                $defaultValue = 0;
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'double':
-						switch ($defaultType) {
+                    case 'double':
+                        switch ($defaultType) {
 
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'double':
-								break;
+                            case 'int':
+                            case 'uint':
+                            case 'long':
+                            case 'double':
+                                break;
 
-							case 'null':
-								$defaultValue = 0;
-								break;
+                            case 'null':
+                                $defaultValue = 0;
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'bool':
-						switch ($defaultType) {
+                    case 'bool':
+                        switch ($defaultType) {
 
-							case 'bool':
-								if ($variable['expr']['value'] == 'true') {
-									$defaultValue = 1;
-								} else {
-									$defaultValue = 0;
-								}
-								break;
+                            case 'bool':
+                                if ($variable['expr']['value'] == 'true') {
+                                    $defaultValue = 1;
+                                } else {
+                                    $defaultValue = 0;
+                                }
+                                break;
 
-							case 'null':
-								$defaultValue = 0;
-								break;
+                            case 'null':
+                                $defaultValue = 0;
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'char':
-					case 'uchar':
-						switch ($defaultType) {
+                    case 'char':
+                    case 'uchar':
+                        switch ($defaultType) {
 
-							case 'char':
-							case 'uchar':
-								$defaultValue = '\'' . $defaultValue . '\'';
-								break;
+                            case 'char':
+                            case 'uchar':
+                                $defaultValue = '\'' . $defaultValue . '\'';
+                                break;
 
-							case 'int':
-								break;
+                            case 'int':
+                                break;
 
-							case 'null':
-								$defaultValue = 0;
-								break;
+                            case 'null':
+                                $defaultValue = 0;
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'string':
-						$defaultValue = $variable['expr'];
-						switch ($defaultType) {
+                    case 'string':
+                        $defaultValue = $variable['expr'];
+                        switch ($defaultType) {
 
-							case 'string':
-							case 'null':
-								break;
+                            case 'string':
+                            case 'null':
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'array':
-						$defaultValue = $variable['expr'];
-						switch ($defaultType) {
+                    case 'array':
+                        $defaultValue = $variable['expr'];
+                        switch ($defaultType) {
 
-							case 'array':
-							case 'null':
-								break;
+                            case 'array':
+                            case 'null':
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
+                        }
+                        break;
 
-					case 'variable':
-						$defaultValue = $variable['expr'];
-						switch ($defaultType) {
+                    case 'variable':
+                        $defaultValue = $variable['expr'];
+                        switch ($defaultType) {
 
-							case 'int':
-							case 'uint':
-							case 'long':
-							case 'char':
-							case 'uchar':
-								$symbolVariable->setDynamicTypes('long');
-								break;
+                            case 'int':
+                            case 'uint':
+                            case 'long':
+                            case 'char':
+                            case 'uchar':
+                                $symbolVariable->setDynamicTypes('long');
+                                break;
 
-							case 'double':
-								$symbolVariable->setDynamicTypes('double');
-								break;
+                            case 'double':
+                                $symbolVariable->setDynamicTypes('double');
+                                break;
 
-							case 'string':
-							case 'ulong':
-								$symbolVariable->setDynamicTypes('string');
-								break;
+                            case 'string':
+                            case 'ulong':
+                                $symbolVariable->setDynamicTypes('string');
+                                break;
 
-							case 'array':
-								$symbolVariable->setDynamicTypes('array');
-								break;
+                            case 'array':
+                                $symbolVariable->setDynamicTypes('array');
+                                break;
 
-							case 'null':
-								$symbolVariable->setDynamicTypes('null');
-								$symbolVariable->setMustInitNull(true);
-								$symbolVariable->setLocalOnly(false);
-								break;
+                            case 'null':
+                                $symbolVariable->setDynamicTypes('null');
+                                $symbolVariable->setMustInitNull(true);
+                                $symbolVariable->setLocalOnly(false);
+                                break;
 
-							default:
-								self::invalidDefaultTypeException($defaultType, $statement['data-type'], $variable);
-						}
-						break;
+                            default:
+                                self::invalidDefaultTypeException($defaultType, $statement['data-type'], $variable);
+                        }
+                        break;
 
-					default:
-						throw new CompilerException('Invalid data type: ' . $currentType, $variable);
-				}
+                    default:
+                        throw new CompilerException('Invalid data type: ' . $currentType, $variable);
+                }
 
-				$symbolVariable->setDefaultInitValue($defaultValue);
-				$symbolVariable->setIsInitialized(true, $compilationContext, $variable);
-				$symbolVariable->increaseMutates();
-				$symbolVariable->setPossibleValue(new LiteralCompiledExpression($defaultType, $defaultValue, $variable['expr']), $compilationContext);
-			}
-		}
-	}
+                $symbolVariable->setDefaultInitValue($defaultValue);
+                $symbolVariable->setIsInitialized(true, $compilationContext, $variable);
+                $symbolVariable->increaseMutates();
+                $symbolVariable->setPossibleValue(new LiteralCompiledExpression($defaultType, $defaultValue, $variable['expr']), $compilationContext);
+            }
+        }
+    }
 
-	/**
-	 * throw exception for invalid default type
-	 * @throws CompilerException
-	 */
-	static public function invalidDefaultTypeException($defaultType, $dateType, $variable)
-	{
-		throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $dateType, $variable);
-	}
+    /**
+     * throw exception for invalid default type
+     * @throws CompilerException
+     */
+    static public function invalidDefaultTypeException($defaultType, $dateType, $variable)
+    {
+        throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $dateType, $variable);
+    }
 }

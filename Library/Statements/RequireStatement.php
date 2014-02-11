@@ -30,24 +30,22 @@ use Zephir\Expression;
  */
 class RequireStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 * @throws CompilerException
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
+    /**
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
 
-		$expression = array(
-			'type' => 'require',
-			'left' => $this->_statement['expr'],
-			'file' => $this->_statement['file'],
-			'line' => $this->_statement['line'],
-			'char' => $this->_statement['char']
-		);
+        $expression = array(
+            'type' => 'require',
+            'left' => $this->_statement['expr'],
+            'file' => $this->_statement['file'],
+            'line' => $this->_statement['line'],
+            'char' => $this->_statement['char']
+        );
 
-		$expr = new Expression($expression);
-		$expr->compile($compilationContext);
-
-	}
-
+        $expr = new Expression($expression);
+        $expr->compile($compilationContext);
+    }
 }

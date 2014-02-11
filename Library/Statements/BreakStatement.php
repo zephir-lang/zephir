@@ -29,17 +29,16 @@ use Zephir\CompilerException;
  */
 class BreakStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 * @throws CompilerException
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
-			$compilationContext->codePrinter->output('break;');
-		} else {
-			throw new CompilerException("Cannot use 'break' outside of a loop", $this->_statement);
-		}
-	}
-
+    /**
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
+            $compilationContext->codePrinter->output('break;');
+        } else {
+            throw new CompilerException("Cannot use 'break' outside of a loop", $this->_statement);
+        }
+    }
 }

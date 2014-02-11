@@ -31,54 +31,53 @@ use Zephir\CompilerException;
  */
 class ThrowStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 * @throws CompilerException
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		$compilationContext->headersManager->add('kernel/exception');
+    /**
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        $compilationContext->headersManager->add('kernel/exception');
 
-		$codePrinter = $compilationContext->codePrinter;
-		$statement = $this->_statement;
-		$expr = $statement['expr'];
+        $codePrinter = $compilationContext->codePrinter;
+        $statement = $this->_statement;
+        $expr = $statement['expr'];
 
-		/**
-		 * This optimizes throw new Exception("hello")
-		 */
-		if (isset($expr['class'])) {
-			if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
-				$className = $expr['class'];
-				if ($compilationContext->compiler->isClass($className)) {
-					if ($expr['parameters'][0]['type'] == 'string') {
-						$classDefinition = $compilationContext->compiler->getClassDefinition($className);
-						$codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['value']) . '");');
-						$codePrinter->output('return;');
-						return;
-					}
-				}
-			}
-		}
+        /**
+         * This optimizes throw new Exception("hello")
+         */
+        if (isset($expr['class'])) {
+            if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
+                $className = $expr['class'];
+                if ($compilationContext->compiler->isClass($className)) {
+                    if ($expr['parameters'][0]['type'] == 'string') {
+                        $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                        $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['value']) . '");');
+                        $codePrinter->output('return;');
+                        return;
+                    }
+                }
+            }
+        }
 
-		$throwExpr = new Expression($expr);
-		$resolvedExpr = $throwExpr->compile($compilationContext);
+        $throwExpr = new Expression($expr);
+        $resolvedExpr = $throwExpr->compile($compilationContext);
 
-		if ($resolvedExpr->getType() != 'variable') {
-			throw new CompilerException("Expression '" . $resolvedExpr->getType . '" cannot be used as exception');
-		}
+        if ($resolvedExpr->getType() != 'variable') {
+            throw new CompilerException("Expression '" . $resolvedExpr->getType . '" cannot be used as exception');
+        }
 
-		$variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
-		if ($variableVariable->getType() != 'variable') {
-			throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
-		}
+        $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);
+        if ($variableVariable->getType() != 'variable') {
+            throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
+        }
 
-		$codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
-		$codePrinter->output('ZEPHIR_MM_RESTORE();');
-		$codePrinter->output('return;');
+        $codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output('ZEPHIR_MM_RESTORE();');
+        $codePrinter->output('return;');
 
-		if ($variableVariable->isTemporal()) {
-			$variableVariable->setIdle(true);
-		}
-	}
-
+        if ($variableVariable->isTemporal()) {
+            $variableVariable->setIdle(true);
+        }
+    }
 }

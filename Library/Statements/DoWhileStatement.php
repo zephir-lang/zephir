@@ -31,48 +31,47 @@ use Zephir\StatementsBlock;
  */
 class DoWhileStatement extends StatementAbstract
 {
-	/**
-	 * @param CompilationContext $compilationContext
-	 */
-	public function compile(CompilationContext $compilationContext)
-	{
-		$exprRaw = &$this->_statement['expr'];
-		$codePrinter = &$compilationContext->codePrinter;
+    /**
+     * @param CompilationContext $compilationContext
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        $exprRaw = &$this->_statement['expr'];
+        $codePrinter = &$compilationContext->codePrinter;
 
-		$codePrinter->output('do {');
+        $codePrinter->output('do {');
 
-		/**
-		 * Variables are initialized in a different way inside cycle
-		 */
-		$compilationContext->insideCycle++;
+        /**
+         * Variables are initialized in a different way inside cycle
+         */
+        $compilationContext->insideCycle++;
 
-		/**
-		 * Compile statements in the 'while' block
-		 */
-		if (isset($this->_statement['statements'])) {
-			$st = new StatementsBlock($this->_statement['statements']);
-			$st->compile($compilationContext);
-		}
+        /**
+         * Compile statements in the 'while' block
+         */
+        if (isset($this->_statement['statements'])) {
+            $st = new StatementsBlock($this->_statement['statements']);
+            $st->compile($compilationContext);
+        }
 
-		$compilationContext->codePrinter->increaseLevel();
-		$expr = new EvalExpression();
-		$condition = $expr->optimize($exprRaw, $compilationContext);
-		$compilationContext->codePrinter->decreaseLevel();
+        $compilationContext->codePrinter->increaseLevel();
+        $expr = new EvalExpression();
+        $condition = $expr->optimize($exprRaw, $compilationContext);
+        $compilationContext->codePrinter->decreaseLevel();
 
-		/**
-		 * Restore the cycle counter
-		 */
-		$compilationContext->insideCycle--;
+        /**
+         * Restore the cycle counter
+         */
+        $compilationContext->insideCycle--;
 
-		/**
-		 * Compound conditions can be evaluated in a single line of the C-code
-		 */
-		$numberPrints = $codePrinter->getNumberPrints();
-		if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
-			$codePrinter->output('} while (' . $condition . ');');
-		} else {
-			$codePrinter->output('} while (1);');
-		}
-	}
-
+        /**
+         * Compound conditions can be evaluated in a single line of the C-code
+         */
+        $numberPrints = $codePrinter->getNumberPrints();
+        if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
+            $codePrinter->output('} while (' . $condition . ');');
+        } else {
+            $codePrinter->output('} while (1);');
+        }
+    }
 }

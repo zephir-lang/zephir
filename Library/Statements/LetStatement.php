@@ -50,7 +50,7 @@ class LetStatement extends StatementAbstract
      */
     public function assignVariable($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
     {
-        if ($symbolVariable->isReadOnly())  {
+        if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
         }
 
@@ -1066,15 +1066,14 @@ class LetStatement extends StatementAbstract
      * @param $statement
      * @throws CompilerException
      */
-    public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignVariableAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->isReadOnly())  {
+        if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
         }
 
@@ -1282,8 +1281,7 @@ class LetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    protected function _assignArrayIndexSingle($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    protected function _assignArrayIndexSingle($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         $expression = new Expression($statement['index-expr'][0]);
@@ -1370,8 +1368,7 @@ class LetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    protected function _assignArrayIndexMultiple($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    protected function _assignArrayIndexMultiple($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         $codePrinter = $compilationContext->codePrinter;
@@ -1448,11 +1445,7 @@ class LetStatement extends StatementAbstract
             }
         }
 
-        $codePrinter->output('zephir_array_update_multi(&' .
-            $variable .
-            ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' .
-            $numberParams . ', ' . join(', ', $offsetItems) .
-        ');');
+        $codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
     }
 
     /**
@@ -1464,8 +1457,7 @@ class LetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         /**
@@ -1479,7 +1471,7 @@ class LetStatement extends StatementAbstract
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->isReadOnly())  {
+        if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);
         }
 
@@ -1733,8 +1725,7 @@ class LetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignObjectProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         if (!$symbolVariable->isInitialized()) {
@@ -1946,8 +1937,7 @@ class LetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    public function assignObjectDynamicProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignObjectDynamicProperty($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         if (!$symbolVariable->isInitialized()) {
@@ -2087,8 +2077,7 @@ class LetStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext,
      * @param array $statement
      */
-    public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         if (!$symbolVariable->isInitialized()) {
@@ -2136,8 +2125,7 @@ class LetStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext,
      * @param array $statement
      */
-    protected function _assignPropertyArraySingleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    protected function _assignPropertyArraySingleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         $codePrinter = $compilationContext->codePrinter;
@@ -2245,8 +2233,7 @@ class LetStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext,
      * @param array $statement
      */
-    protected function _assignPropertyArrayMultipleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    protected function _assignPropertyArrayMultipleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         /**
@@ -2290,8 +2277,7 @@ class LetStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext,
      * @param array $statement
      */
-    public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         if (!$symbolVariable->isInitialized()) {
@@ -2326,8 +2312,7 @@ class LetStatement extends StatementAbstract
      * @throws CompilerException
      * @internal param string $variable
      */
-    public function assignStaticProperty($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext, $statement)
+    public function assignStaticProperty($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = &$compilationContext->compiler;
         if ($className != 'self' && $className != 'parent') {
@@ -2348,8 +2333,7 @@ class LetStatement extends StatementAbstract
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' .
-                            $classDefinition->getCompleteName() . ' does not extend any class', $statement);
+                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $statement);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -2379,22 +2363,24 @@ class LetStatement extends StatementAbstract
         $classEntry = $classDefinition->getClassEntry();
 
         switch ($resolvedExpr->getType()) {
+
             case 'null':
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
                 break;
+
             case 'int':
             case 'long':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                 $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
+
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                 $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
+
             case 'bool':
                 if ($resolvedExpr->getBooleanCode() == '1') {
                     $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
@@ -2402,15 +2388,17 @@ class LetStatement extends StatementAbstract
                     $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
                 }
                 break;
+
             case 'empty-array':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                 $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
+
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableVariable->getType()) {
+
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -2418,16 +2406,16 @@ class LetStatement extends StatementAbstract
                     case 'char':
                     case 'uchar':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                         $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         break;
+
                     case 'bool':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                         $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         break;
+
                     case 'string':
                     case 'variable':
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
@@ -2435,10 +2423,12 @@ class LetStatement extends StatementAbstract
                             $variableVariable->setIdle(true);
                         }
                         break;
+
                     default:
                         throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
                 }
                 break;
+
             default:
                 throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
         }
