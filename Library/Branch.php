@@ -132,5 +132,4 @@ class Branch
     {
         return $this->_relatedStatement;
     }
-
 }

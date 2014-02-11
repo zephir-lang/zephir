@@ -26,50 +26,49 @@ namespace Zephir;
  */
 class BranchGraph
 {
-	protected $_root;
+    protected $_root;
 
-	protected $_branchMap;
+    protected $_branchMap;
 
-	/**
-	 * Adds a leaf to the branch tree
-	 *
-	 * @param Branch $branch
-	 */
-	public function addLeaf(Branch $branch)
-	{
+    /**
+     * Adds a leaf to the branch tree
+     *
+     * @param Branch $branch
+     */
+    public function addLeaf(Branch $branch)
+    {
 
-		if (isset($this->_branchMap[$branch->getUniqueId()])) {
-			$branchNode = $this->_branchMap[$branch->getUniqueId()];
-		} else {
-			$branchNode = new BranchGraphNode($branch);
-		}
-		$branchNode->increase();
+        if (isset($this->_branchMap[$branch->getUniqueId()])) {
+            $branchNode = $this->_branchMap[$branch->getUniqueId()];
+        } else {
+            $branchNode = new BranchGraphNode($branch);
+        }
+        $branchNode->increase();
 
-		$tempBranch = $branch->getParentBranch();
-		while ($tempBranch) {
-			if (isset($this->_branchMap[$tempBranch->getUniqueId()])) {
-				$parentBranchNode = $this->_branchMap[$tempBranch->getUniqueId()];
-			} else {
-				$parentBranchNode = new BranchGraphNode($tempBranch);
-				$this->_branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
-			}
-			$parentBranchNode->insert($branchNode);
-			$branchNode = $parentBranchNode;
-			$tempBranch = $tempBranch->getParentBranch();
-			if (!$tempBranch) {
-				$this->_root = $parentBranchNode;
-			}
-		}
-	}
+        $tempBranch = $branch->getParentBranch();
+        while ($tempBranch) {
+            if (isset($this->_branchMap[$tempBranch->getUniqueId()])) {
+                $parentBranchNode = $this->_branchMap[$tempBranch->getUniqueId()];
+            } else {
+                $parentBranchNode = new BranchGraphNode($tempBranch);
+                $this->_branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
+            }
+            $parentBranchNode->insert($branchNode);
+            $branchNode = $parentBranchNode;
+            $tempBranch = $tempBranch->getParentBranch();
+            if (!$tempBranch) {
+                $this->_root = $parentBranchNode;
+            }
+        }
+    }
 
-	/**
-	 * Returns the tree's root node
-	 *
-	 * @return BranchGraphNode
-	 */
-	public function getRoot()
-	{
-		return $this->_root;
-	}
-
+    /**
+     * Returns the tree's root node
+     *
+     * @return BranchGraphNode
+     */
+    public function getRoot()
+    {
+        return $this->_root;
+    }
 }

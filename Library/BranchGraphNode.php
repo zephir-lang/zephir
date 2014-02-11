@@ -26,56 +26,55 @@ namespace Zephir;
  */
 class BranchGraphNode
 {
-	protected $_increase = 0;
+    protected $_increase = 0;
 
-	protected $_branches = array();
+    protected $_branches = array();
 
-	/**
-	 * BranchGraphNode
-	 *
-	 * @param Branch $branch
-	 */
-	public function __construct($branch)
-	{
-		$this->_branch = $branch;
-	}
+    /**
+     * BranchGraphNode
+     *
+     * @param Branch $branch
+     */
+    public function __construct($branch)
+    {
+        $this->_branch = $branch;
+    }
 
-	/**
-	 * Inserts a node in the branch graph
-	 *
-	 * @param Branch $branch
-	 */
-	public function insert(BranchGraphNode $branch)
-	{
-		if (!in_array($branch, $this->_branches)) {
-			$this->_branches[] = $branch;
-		}
-	}
+    /**
+     * Inserts a node in the branch graph
+     *
+     * @param Branch $branch
+     */
+    public function insert(BranchGraphNode $branch)
+    {
+        if (!in_array($branch, $this->_branches)) {
+            $this->_branches[] = $branch;
+        }
+    }
 
-	/**
-	 * Increases the branch graph level
-	 */
-	public function increase()
-	{
-		$this->_increase++;
-	}
+    /**
+     * Increases the branch graph level
+     */
+    public function increase()
+    {
+        $this->_increase++;
+    }
 
-	/**
-	 * Generates an ASCII visualization of the branch
-	 *
-	 * @param int $padding
-	 */
-	public function show($padding=0)
-	{
-		echo str_repeat("    ", $padding), $this->_branch->getUniqueId(), ':' , $this->_increase;
-		if (count($this->_branches)) {
-			echo ':', PHP_EOL;
-			foreach ($this->_branches as $node) {
-				$node->show($padding + 1);
-			}
-		} else {
-			echo PHP_EOL;
-		}
-	}
-
+    /**
+     * Generates an ASCII visualization of the branch
+     *
+     * @param int $padding
+     */
+    public function show($padding = 0)
+    {
+        echo str_repeat("    ", $padding), $this->_branch->getUniqueId(), ':' , $this->_increase;
+        if (count($this->_branches)) {
+            echo ':', PHP_EOL;
+            foreach ($this->_branches as $node) {
+                $node->show($padding + 1);
+            }
+        } else {
+            echo PHP_EOL;
+        }
+    }
 }
