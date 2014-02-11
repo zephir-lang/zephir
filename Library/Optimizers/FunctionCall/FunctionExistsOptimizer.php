@@ -33,35 +33,35 @@ use Zephir\Utils;
  */
 class FunctionExistsOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		if ($expression['parameters'][0]['type'] == 'string') {
-			$str = Utils::addSlashes($expression['parameters'][0]['value']);
-			unset($expression['parameters'][0]);
-		}
+        if ($expression['parameters'][0]['type'] == 'string') {
+            $str = Utils::addSlashes($expression['parameters'][0]['value']);
+            unset($expression['parameters'][0]);
+        }
 
-		$context->headersManager->add('kernel/object');
+        $context->headersManager->add('kernel/object');
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		if (isset($str)) {
-			return new CompiledExpression('bool', '(zephir_function_exists_ex(' . 'SS("' . strtolower($str) . '") TSRMLS_CC) == SUCCESS)', $expression);
-		}
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        if (isset($str)) {
+            return new CompiledExpression('bool', '(zephir_function_exists_ex(' . 'SS("' . strtolower($str) . '") TSRMLS_CC) == SUCCESS)', $expression);
+        }
 
-		return new CompiledExpression('bool', '(zephir_function_exists(' . $resolvedParams[0] . ' TSRMLS_CC)  == SUCCESS)', $expression);
-	}
+        return new CompiledExpression('bool', '(zephir_function_exists(' . $resolvedParams[0] . ' TSRMLS_CC)  == SUCCESS)', $expression);
+    }
 
 }

@@ -30,41 +30,41 @@ use Zephir\StatementsBlock;
 class LoopBreakPass
 {
 
-	protected $_hasBreak = false;
+    protected $_hasBreak = false;
 
-	/**
-	 * Do the compilation pass
-	 *
-	 * @param StatementsBlock $block
-	 */
-	public function pass(StatementsBlock $block)
-	{
-		$this->passStatementBlock($block->getStatements());
-	}
+    /**
+     * Do the compilation pass
+     *
+     * @param StatementsBlock $block
+     */
+    public function pass(StatementsBlock $block)
+    {
+        $this->passStatementBlock($block->getStatements());
+    }
 
-	public function passStatementBlock(array $statements)
-	{
-		foreach ($statements as $statement) {
-			switch ($statement['type']) {
-				case 'if':
-					if (isset($statement['statements'])) {
-						$this->passStatementBlock($statement['statements']);
-					}
-					if (isset($statement['else_statements'])) {
-						$this->passStatementBlock($statement['else_statements']);
-					}
-					break;
-				case 'break':
-				case 'return':
-				case 'throw':
-					$this->_hasBreak = true;
-					break;
-			}
-		}
-	}
-	public function hasBreak()
-	{
-		return $this->_hasBreak;
-	}
+    public function passStatementBlock(array $statements)
+    {
+        foreach ($statements as $statement) {
+            switch ($statement['type']) {
+                case 'if':
+                    if (isset($statement['statements'])) {
+                        $this->passStatementBlock($statement['statements']);
+                    }
+                    if (isset($statement['else_statements'])) {
+                        $this->passStatementBlock($statement['else_statements']);
+                    }
+                    break;
+                case 'break':
+                case 'return':
+                case 'throw':
+                    $this->_hasBreak = true;
+                    break;
+            }
+        }
+    }
+    public function hasBreak()
+    {
+        return $this->_hasBreak;
+    }
 
 }
