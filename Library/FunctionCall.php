@@ -32,7 +32,6 @@ require ZEPHIRPATH . 'Library/Optimizers/OptimizerAbstract.php';
  */
 class FunctionCall extends Call
 {
-
 	/**
 	 * Function is called using a normal method name
 	 */
@@ -194,16 +193,19 @@ class FunctionCall extends Call
 			/**
 			 * Check every optimizer directory for an optimizer
 			 */
-			foreach (self::$_optimizerDirectories as $directory) {
-
+			foreach (self::$_optimizerDirectories as $key => $directory) {
 				$path =  $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
 				if (file_exists($path)) {
 
 					require_once $path;
 
-					$className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
-					$optimizer = new $className();
+					if ($key == 0) {
+						$className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+					} else {
+						$className = ucfirst($compilationContext->config->get('namespace')).'\Optimizers\\' . $camelizeFunctionName . 'Optimizer';
+					}
 
+					$optimizer = new $className();
 					if (!($optimizer instanceof OptimizerAbstract)) {
 						throw new \Exception('Class ' . $className . ' must be instance of OptimizerAbstract');
 					}
