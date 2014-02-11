@@ -27,59 +27,59 @@ namespace Zephir;
 class HeadersManager
 {
 
-	const POSITION_FIRST = 1;
-	const POSITION_LAST = 2;
+    const POSITION_FIRST = 1;
+    const POSITION_LAST = 2;
 
-	/**
-	 * List of headers
-	 * @var array
-	 */
-	protected $_headers = array();
+    /**
+     * List of headers
+     * @var array
+     */
+    protected $_headers = array();
 
-	/**
-	 * List of headers
-	 * @var array
-	 */
-	protected $_headersFirst = array();
+    /**
+     * List of headers
+     * @var array
+     */
+    protected $_headersFirst = array();
 
-	/**
-	 * List of headers
-	 * @var array
-	 */
-	protected $_headersLast = array();
+    /**
+     * List of headers
+     * @var array
+     */
+    protected $_headersLast = array();
 
-	/**
-	 * @param string $path
-	 */
-	public function add($path, $position=0)
-	{
-		if (!is_string($path)) {
-			throw new \InvalidArgumentException('$path must be only string type');
-		}
-		if (!$position) {
-			$this->_headers[$path] = $path;
-		} else {
-			switch ($position) {
+    /**
+     * @param string $path
+     */
+    public function add($path, $position = 0)
+    {
+        if (!is_string($path)) {
+            throw new \InvalidArgumentException('$path must be only string type');
+        }
+        if (!$position) {
+            $this->_headers[$path] = $path;
+        } else {
+            switch ($position) {
 
-				case self::POSITION_FIRST:
-					$this->_headersFirst[$path] = $path;
-					break;
+                case self::POSITION_FIRST:
+                    $this->_headersFirst[$path] = $path;
+                    break;
 
-				case self::POSITION_LAST:
-					$this->_headersLast[$path] = $path;
-					break;
+                case self::POSITION_LAST:
+                    $this->_headersLast[$path] = $path;
+                    break;
 
-				default:
-					break;
-			}
-		}
-	}
+                default:
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * @return array
-	 */
-	public function get()
-	{
-		return array_merge($this->_headersFirst, $this->_headers, $this->_headersLast);
-	}
+    /**
+     * @return array
+     */
+    public function get()
+    {
+        return array_merge($this->_headersFirst, $this->_headers, $this->_headersLast);
+    }
 }

@@ -27,21 +27,20 @@ namespace Zephir;
  */
 class GlobalConstant
 {
-	private $_name;
+    private $_name;
 
-	public function __construct($name)
-	{
-		$this->_name = $name;
-	}
+    public function __construct($name)
+    {
+        $this->_name = $name;
+    }
 
-	public function getName()
-	{
-		return $this->_name;
-	}
+    public function getName()
+    {
+        return $this->_name;
+    }
 
-	public function isTemporal()
-	{
-		return false;
-	}
-
+    public function isTemporal()
+    {
+        return false;
+    }
 }

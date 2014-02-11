@@ -175,7 +175,7 @@ class Expression
      * @param boolean $expecting
      * @param Variable $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable=null)
+    public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
         $this->_expecting = $expecting;
         $this->_expectingVariable = $expectingVariable;
@@ -341,12 +341,16 @@ class Expression
 
             case 'int':
                 switch ($resolved->getType()) {
+
                     case 'int':
                         return new CompiledExpression('int', $resolved->getCode(), $expression);
+
                     case 'double':
                         return new CompiledExpression('int', '(int) ' . $resolved->getCode(), $expression);
+
                     case 'bool':
                         return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -360,6 +364,8 @@ class Expression
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
+                        break;
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
@@ -367,12 +373,16 @@ class Expression
 
             case 'long':
                 switch ($resolved->getType()) {
+
                     case 'int':
                         return new CompiledExpression('long', $resolved->getCode(), $expression);
+
                     case 'double':
                         return new CompiledExpression('long', '(long) ' . $resolved->getCode(), $expression);
+
                     case 'bool':
                         return new CompiledExpression('long', $resolved->getBooleanCode(), $expression);
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -386,6 +396,8 @@ class Expression
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
+                        break;
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
@@ -393,12 +405,15 @@ class Expression
 
             case 'double':
                 switch ($resolved->getType()) {
+
                     case 'double':
                         return new CompiledExpression('int', $resolved->getCode(), $expression);
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
                         return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbolVariable->getName() . ')', $expression);
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
@@ -421,6 +436,8 @@ class Expression
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
+                        break;
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
@@ -802,5 +819,4 @@ class Expression
                 throw new CompilerException("Unknown expression: " . $type, $expression);
         }
     }
-
 }

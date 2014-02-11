@@ -879,6 +879,4 @@ class Variable
     {
         return $this->_possibleValueBranch;
     }
-
-
 }
