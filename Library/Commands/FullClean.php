@@ -57,5 +57,4 @@ class CommandFullClean extends CommandAbstract
     {
         return 'Cleans the generated object files in compilation';
     }
-
 }

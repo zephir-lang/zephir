@@ -27,46 +27,45 @@ namespace Zephir\Builder;
 class FunctionCallBuilder
 {
 
-	protected $_name;
+    protected $_name;
 
-	protected $_parameters;
+    protected $_parameters;
 
-	protected $_type;
+    protected $_type;
 
-	protected $_file;
+    protected $_file;
 
-	protected $_line;
+    protected $_line;
 
-	protected $_char;
+    protected $_char;
 
-	/**
-	 * FunctionCallBuilder construct
-	 *
-	 * @param string $name
-	 * @param array $name
-	 * @param int $name
-	 */
-	public function __construct($name, $parameters, $type=1, $file=null, $line=0, $char=0)
-	{
-		$this->_name = $name;
-		$this->_parameters = $parameters;
-		$this->_type = $type;
-		$this->_file = $file;
-		$this->_line = $line;
-		$this->_char = $char;
-	}
+    /**
+     * FunctionCallBuilder construct
+     *
+     * @param string $name
+     * @param array $name
+     * @param int $name
+     */
+    public function __construct($name, $parameters, $type = 1, $file = null, $line = 0, $char = 0)
+    {
+        $this->_name = $name;
+        $this->_parameters = $parameters;
+        $this->_type = $type;
+        $this->_file = $file;
+        $this->_line = $line;
+        $this->_char = $char;
+    }
 
-	public function get()
-	{
-		return array(
-			'type'       => 'fcall',
-			'name'       => $this->_name,
-			'call-type'  => $this->_type,
-			'parameters' => $this->_parameters,
-			'file'       => $this->_file,
-			'line'       => $this->_line,
-			'char'       => $this->_char
-		);
-	}
-
+    public function get()
+    {
+        return array(
+            'type'       => 'fcall',
+            'name'       => $this->_name,
+            'call-type'  => $this->_type,
+            'parameters' => $this->_parameters,
+            'file'       => $this->_file,
+            'line'       => $this->_line,
+            'char'       => $this->_char
+        );
+    }
 }

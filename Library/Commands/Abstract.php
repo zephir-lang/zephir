@@ -90,5 +90,4 @@ abstract class CommandAbstract implements CommandInterface
         $command = $this->getCommand();
         $compiler->$command($this);
     }
-
 }
