@@ -7,6 +7,7 @@ namespace Test;
 
 class ScallExternal
 {
+	public static sproperty;
 
 	public function testCall1()
 	{
