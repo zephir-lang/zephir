@@ -30,14 +30,14 @@ class CompilationContext
 	/**
 	 * Compiler
 	 *
-	 * @var \Compiler
+	 * @var Compiler
 	 */
 	public $compiler;
 
 	/**
 	 * Current code printer
 	 *
-	 * @var \CodePrinter
+	 * @var CodePrinter
 	 */
 	public $codePrinter;
 
@@ -51,14 +51,14 @@ class CompilationContext
 	/**
 	 * Code printer for the header
 	 *
-	 * @var \CodePrinter
+	 * @var CodePrinter
 	 */
 	public $headerPrinter;
 
 	/**
 	 * Current symbol table
 	 *
-	 * @var \SymbolTable
+	 * @var SymbolTable
 	 */
 	public $symbolTable;
 
@@ -72,28 +72,28 @@ class CompilationContext
 	/**
 	 * Represents the class currently being compiled
 	 *
-	 * @var \ClassDefinition
+	 * @var ClassDefinition
 	 */
 	public $classDefinition;
 
 	/**
 	 * Current method being compiled
 	 *
-	 * @var \ClassMethod
+	 * @var ClassMethod
 	 */
 	public $currentMethod;
 
 	/**
 	 * Represents the c-headers added to the file
 	 *
-	 * @var \HeadersManager
+	 * @var HeadersManager
 	 */
 	public $headersManager;
 
 	/**
 	 * Represents the c-headers added to the file
 	 *
-	 * @var \HeadersManager
+	 * @var HeadersManager
 	 */
 	public $stringsManager;
 
@@ -125,22 +125,21 @@ class CompilationContext
 	/**
 	 * Function Cache
 	 *
-	 * @var \FunctionCache
+	 * @var FunctionCache
 	 */
 	public $functionCache;
 
 	/**
 	 * Global config
 	 *
-	 * @var \Config
+	 * @var Config
 	 */
 	public $config;
 
 	/**
 	 * Global logger
 	 *
-	 * @var \Logger
+	 * @var Logger
 	 */
 	public $logger;
-
 }

@@ -26,7 +26,6 @@ namespace Zephir;
  */
 class ClassConstant
 {
-
     protected $_name;
 
     protected $value;

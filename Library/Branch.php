@@ -26,11 +26,13 @@ namespace Zephir;
  */
 class Branch
 {
-    protected $_parentBranch;
+    protected $parentBranch;
 
-    protected $_level = -1;
+    protected $level = -1;
 
-    protected $_relatedStatement;
+    protected $relatedStatement;
+
+    protected $type;
 
     const TYPE_ROOT              = 0;
 
@@ -55,7 +57,7 @@ class Branch
      */
     public function setParentBranch(Branch $parentBranch)
     {
-        $this->_parentBranch = $parentBranch;
+        $this->parentBranch = $parentBranch;
     }
 
     /**
@@ -65,7 +67,7 @@ class Branch
      */
     public function getParentBranch()
     {
-        return $this->_parentBranch;
+        return $this->parentBranch;
     }
 
     /**
@@ -75,7 +77,7 @@ class Branch
      */
     public function setType($type)
     {
-        $this->_type = $type;
+        $this->type = $type;
     }
 
     /**
@@ -85,7 +87,7 @@ class Branch
      */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -95,41 +97,62 @@ class Branch
      */
     public function setUnrecheable($unrecheable)
     {
-        $this->_unrecheable = $unrecheable;
+        $this->unrecheable = $unrecheable;
     }
 
+    /**
+     * @return mixed
+     */
     public function isUnrecheable()
     {
-        return $this->_unrecheable;
+        return $this->unrecheable;
     }
 
+    /**
+     * @param $level
+     */
     public function setLevel($level)
     {
         $this->_level = $level;
     }
 
+    /**
+     * @return int
+     */
     public function getLevel()
     {
-        return $this->_level;
+        return $this->level;
     }
 
+    /**
+     * @param $uniqueId
+     */
     public function setUniqueId($uniqueId)
     {
         $this->_uniqueId = $uniqueId;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUniqueId()
     {
-        return $this->_uniqueId;
+        return $this->uniqueId;
     }
 
+    /**
+     * @param $relatedStatement
+     */
     public function setRelatedStatement($relatedStatement)
     {
         $this->_relatedStatement = $relatedStatement;
     }
 
+    /**
+     * @return mixed
+     */
     public function getRelatedStatement()
     {
-        return $this->_relatedStatement;
+        return $this->relatedStatement;
     }
 }

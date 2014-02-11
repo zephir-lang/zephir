@@ -26,9 +26,9 @@ namespace Zephir;
  */
 class BranchGraph
 {
-    protected $_root;
+    protected $root;
 
-    protected $_branchMap;
+    protected $branchMap;
 
     /**
      * Adds a leaf to the branch tree
@@ -38,8 +38,8 @@ class BranchGraph
     public function addLeaf(Branch $branch)
     {
 
-        if (isset($this->_branchMap[$branch->getUniqueId()])) {
-            $branchNode = $this->_branchMap[$branch->getUniqueId()];
+        if (isset($this->branchMap[$branch->getUniqueId()])) {
+            $branchNode = $this->branchMap[$branch->getUniqueId()];
         } else {
             $branchNode = new BranchGraphNode($branch);
         }
@@ -47,11 +47,11 @@ class BranchGraph
 
         $tempBranch = $branch->getParentBranch();
         while ($tempBranch) {
-            if (isset($this->_branchMap[$tempBranch->getUniqueId()])) {
-                $parentBranchNode = $this->_branchMap[$tempBranch->getUniqueId()];
+            if (isset($this->branchMap[$tempBranch->getUniqueId()])) {
+                $parentBranchNode = $this->branchMap[$tempBranch->getUniqueId()];
             } else {
                 $parentBranchNode = new BranchGraphNode($tempBranch);
-                $this->_branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
+                $this->branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
             }
             $parentBranchNode->insert($branchNode);
             $branchNode = $parentBranchNode;
@@ -69,6 +69,6 @@ class BranchGraph
      */
     public function getRoot()
     {
-        return $this->_root;
+        return $this->root;
     }
 }
