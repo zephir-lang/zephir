@@ -627,14 +627,17 @@ class ClassDefinition
             foreach ($interfaces as $interface) {
                 $classEntry = false;
 
-                if ($compiler->isInterface($interface)) {
+                if ($interface[0] != '\\' && $compiler->isInterface($compilationContext->classDefinition->getNamespace().'\\'.$interface)) {
+                    $interface = $compilationContext->classDefinition->getNamespace().'\\'.$interface;
+
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                     $classEntry = $classInterfaceDefinition->getClassEntry();
-                } else {
-                    if ($compiler->isInternalInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                        $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
-                    }
+                } else if ($compiler->isInterface($interface)) {
+                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+                    $classEntry = $classInterfaceDefinition->getClassEntry();
+                } else if ($compiler->isInternalInterface($interface)) {
+                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                    $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
                 }
 
                 if (!$classEntry) {
