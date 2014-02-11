@@ -69,19 +69,19 @@ class OoNativeImplements implements
 	}
 
 	/* ArrayAccess*/
-    public function offsetExists (offset) -> boolean
+	public function offsetExists (offset) -> boolean
 	{
 	}
 
-    public function offsetGet (offset)
+	public function offsetGet (offset)
 	{
 	}
 
-    public function offsetSet (offset, value)
+	public function offsetSet (offset, value)
 	{
 	}
 
-    public function offsetUnset (offset)
+	public function offsetUnset (offset)
 	{
 	}
 
@@ -90,7 +90,7 @@ class OoNativeImplements implements
 	{
 	}
 
-    public function unserialize(string serialized)
+	public function unserialize(string serialized)
 	{
 	}
 }
