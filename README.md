@@ -64,6 +64,10 @@ License
 -------
 Zephir is open-sourced software licensed under the MIT License. See the LICENSE file for more information.
 
+Contributing
+------------
+See CONTRIBUTING.md for details about contributions to this repository
+
 Donate & Sponsor
 ----------------
 Zephir is available to the public without charge, under the permissive MIT License.

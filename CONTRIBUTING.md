@@ -1,8 +1,39 @@
-Zephir is an open source project and a volunteer effort.
+Zephir is an open source project and a volunteer effort. Contributions are welcome!
+
+## General
 
 *We only accept bug reports, new feature requests and pull requests in GitHub*.
 
 If you have a change or new feature in mind, please fill an [NFR](https://github.com/phalcon/zephir/wiki/NFR).
+
+## Pull request procedure
+
+Pull requests should be targeted at Zephir's `master` branch.
+Before pushing to your Github repo and issuing the pull request,
+please do two things:
+
+1. [Rebase](http://git-scm.com/book/en/Git-Branching-Rebasing) your
+   local changes against the `master` branch. Resolve any conflicts
+   that arise.
+
+2. Run the full Zephir test suite with the `./unit-tests/run_tests` command.  You're
+   not off the hook even if you just stick to documentation; code
+   examples in the docs are tested as well!
+
+Pull requests will be treated as "review requests", and we will give
+feedback we expect to see corrected on
+[coding style](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) and
+substance before pulling.  Changes contributed via pull request should
+focus on a single issue at a time, like any other.  We will not accept
+pull-requests that try to "sneak" unrelated changes in.
+
+Normally, all pull requests must include regression tests
+that test your change.  Occasionally, a change will be very difficult
+to test for.  In those cases, please include a note in your commit
+message explaining why.
+
+In the licensing header at the beginning of any files you change,
+please make sure the listed date range includes the current year.
 
 Thanks! <br />
 Zephir Team
