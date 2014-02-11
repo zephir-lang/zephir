@@ -153,5 +153,4 @@ class CompiledExpression
         }
         return $this->_code;
     }
-
 }

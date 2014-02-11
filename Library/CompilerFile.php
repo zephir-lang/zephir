@@ -189,11 +189,7 @@ class CompilerFile
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
-                    $classDefinition->addConstant(new ClassConstant(
-                            $constant['name'],
-                            isset($constant['default']) ? $constant['default'] : null,
-                            isset($constant['docblock']) ? $constant['docblock'] : null
-                    ));
+                    $classDefinition->addConstant(new ClassConstant($constant['name'], isset($constant['default']) ? $constant['default'] : null, isset($constant['docblock']) ? $constant['docblock'] : null));
                 }
             }
 
@@ -202,16 +198,8 @@ class CompilerFile
              */
             if (isset($definition['methods'])) {
                 foreach ($definition['methods'] as $method) {
-                    $classDefinition->addMethod(new ClassMethod(
-                        $classDefinition,
-                        $method['visibility'],
-                        $method['name'],
-                        isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
-                        null,
-                        isset($method['docblock']) ? $method['docblock'] : null,
-                        isset($method['return-type']) ? $method['return-type'] : null,
-                        $method
-                    ), $method);
+                    $classMethod = new ClassMethod($classDefinition, $method['visibility'], $method['name'], isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null, null, isset($method['docblock']) ? $method['docblock'] : null, isset($method['return-type']) ? $method['return-type'] : null, $method);
+                    $classDefinition->addMethod($classMethod, $method);
                 }
             }
         }
@@ -676,5 +664,4 @@ class CompilerFile
         $this->_compiledFile = $path . '.c';
         $this->_ir = null;
     }
-
 }

@@ -98,7 +98,7 @@ class Config
      * @param null $namespace
      * @return mixed
      */
-    public function get($key, $namespace=null)
+    public function get($key, $namespace = null)
     {
         if ($namespace !== null) {
             if (isset($this->_config[$namespace][$key])) {
@@ -122,7 +122,7 @@ class Config
      * @param $value
      * @param null $namespace
      */
-    public function set($key, $value, $namespace=null)
+    public function set($key, $value, $namespace = null)
     {
         if ($namespace !== null) {
             $this->_config[$namespace][$key] = $value;

@@ -28,7 +28,7 @@ use Zephir\Commands\CommandInterface;
  */
 class Compiler
 {
-    const VERSION = '0.3.2a';
+    const VERSION = '0.3.3a';
 
     /**
      * @var CompilerFile[]
