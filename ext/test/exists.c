@@ -59,7 +59,7 @@ PHP_METHOD(Test_Exists, testInterfaceExists) {
 	}
 
 
-	RETURN_BOOL(zephir_interface_exists(interfaceName, ZEPHIR_IS_TRUE((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
+	RETURN_BOOL(zephir_interface_exists(interfaceName, zephir_is_true((autoload ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false)))  TSRMLS_CC));
 
 }
 

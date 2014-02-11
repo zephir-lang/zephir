@@ -1,7 +1,7 @@
 
 namespace Test;
 
-class ConstantsInterface implements TestInterface
+class ConstantsInterface implements Test\TestInterface
 {
 	public function testReadInterfaceConstant1()
 	{
