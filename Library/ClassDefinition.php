@@ -632,14 +632,14 @@ class ClassDefinition
 			foreach ($interfaces as $interface) {
 				$classEntry = false;
 
-				if ($interface[0] != '\\' && $compiler->isInterface($compilationContext->classDefinition->getNamespace().'\\'.$interface)) {
-					$interface = $compilationContext->classDefinition->getNamespace().'\\'.$interface;
-
+				if ($compiler->isInterface($interface)) {
 					$classInterfaceDefinition = $compiler->getClassDefinition($interface);
 					$classEntry = $classInterfaceDefinition->getClassEntry();
-				} else if ($compiler->isInternalInterface($interface)) {
-					$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-					$classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+				} else {
+					if ($compiler->isInternalInterface($interface)) {
+						$classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+						$classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+					}
 				}
 
 				if (!$classEntry) {
@@ -832,39 +832,51 @@ class ClassDefinition
 			case 'logicexception':
 				$classEntry = 'spl_ce_LogicException';
 				break;
+
 			case 'badfunctioncallexception':
 				$classEntry = 'spl_ce_BadFunctionCallException';
 				break;
+
 			case 'badmethodcallexception':
 				$classEntry = 'spl_ce_BadMethodCallException';
 				break;
+
 			case 'domainexception':
 				$classEntry = 'spl_ce_DomainException';
 				break;
+
 			case 'invalidargumentexception':
 				$classEntry = 'spl_ce_InvalidArgumentException';
 				break;
+
 			case 'lengthexception':
 				$classEntry = 'spl_ce_LengthException';
 				break;
+
 			case 'outofrangeexception':
 				$classEntry = 'spl_ce_OutOfRangeException';
 				break;
+
 			case 'runtimeexception':
 				$classEntry = 'spl_ce_RuntimeException';
 				break;
+
 			case 'outofboundsexception':
 				$classEntry = 'spl_ce_OutOfBoundsException';
 				break;
+
 			case 'overflowexception':
 				$classEntry = 'spl_ce_OverflowException';
 				break;
+
 			case 'rangeexception':
 				$classEntry = 'spl_ce_RangeException';
 				break;
+
 			case 'underflowexception':
 				$classEntry = 'spl_ce_UnderflowException';
 				break;
+
 			case 'unexpectedvalueexception':
 				$classEntry = 'spl_ce_UnexpectedValueException';
 				break;
@@ -875,66 +887,87 @@ class ClassDefinition
 			case 'recursiveiterator':
 				$classEntry = 'spl_ce_RecursiveIterator';
 				break;
+
 			case 'recursiveiteratoriterator':
 				$classEntry = 'spl_ce_RecursiveIteratorIterator';
 				break;
+
 			case 'recursivetreeiterator':
 				$classEntry = 'spl_ce_RecursiveTreeIterator';
 				break;
+
 			case 'filteriterator':
 				$classEntry = 'spl_ce_FilterIterator';
 				break;
+
 			case 'recursivefilteriterator':
 				$classEntry = 'spl_ce_RecursiveFilterIterator';
 				break;
+
 			case 'parentiterator':
 				$classEntry = 'spl_ce_ParentIterator';
 				break;
+
 			case 'seekableiterator':
 				$classEntry = 'spl_ce_SeekableIterator';
 				break;
+
 			case 'limititerator':
 				$classEntry = 'spl_ce_LimitIterator';
 				break;
+
 			case 'cachingiterator':
 				$classEntry = 'spl_ce_CachingIterator';
 				break;
+
 			case 'recursivecachingiterator':
 				$classEntry = 'spl_ce_RecursiveCachingIterator';
 				break;
+
 			case 'outeriterator':
 				$classEntry = 'spl_ce_OuterIterator';
 				break;
+
 			case 'iteratoriterator':
 				$classEntry = 'spl_ce_IteratorIterator';
 				break;
+
 			case 'norewinditerator':
 				$classEntry = 'spl_ce_NoRewindIterator';
 				break;
+
 			case 'infiniteiterator':
 				$classEntry = 'spl_ce_InfiniteIterator';
 				break;
+
 			case 'emptyiterator':
 				$classEntry = 'spl_ce_EmptyIterator';
 				break;
+
 			case 'appenditerator':
 				$classEntry = 'spl_ce_AppendIterator';
 				break;
+
 			case 'regexiterator':
 				$classEntry = 'spl_ce_RegexIterator';
 				break;
+
 			case 'recursiveregexiterator':
 				$classEntry = 'spl_ce_RecursiveRegexIterator';
 				break;
+
 			case 'countable':
 				$classEntry = 'spl_ce_Countable';
 				break;
+
 			case 'callbackfilteriterator':
 				$classEntry = 'spl_ce_CallbackFilterIterator';
 				break;
+
 			case 'recursivecallbackfilteriterator':
 				$classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
 				break;
+
 			default:
 				throw new CompilerException('Unknown class entry for "' . $className . '"');
 		}

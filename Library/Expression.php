@@ -62,6 +62,7 @@ use Zephir\Expression\Constants;
 use Zephir\Expression\NativeArray;
 use Zephir\Expression\NativeArrayAccess;
 use Zephir\Expression\PropertyAccess;
+use Zephir\Expression\PropertyDynamicAccess;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Expression\StaticPropertyAccess;
 

@@ -360,7 +360,7 @@ class MethodCall extends Call
 			$references = array();
 			if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 				if (isset($method)) {
-					if ($method instanceof ReflectionMethod) {
+					if ($method instanceof \ReflectionMethod) {
 						$position = 0;
 						foreach ($method->getParameters() as $parameter) {
 							if ($parameter->isPassedByReference()) {

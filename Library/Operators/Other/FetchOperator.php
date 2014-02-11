@@ -165,15 +165,7 @@ class FetchOperator extends BaseOperator
 				}
 
 				$compilationContext->headersManager->add('kernel/object');
-				if ($classDefinition == $currentClassDefinition) {
-					if ($this->_readOnly || $readOnly) {
-						$codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_nproperty_this(' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-					} else {
-						$codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-					}
-				} else {
-					$codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
-				}
+				$compilationContext->codePrinter->output('zephir_read_property(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
 
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
 
@@ -189,7 +181,7 @@ class FetchOperator extends BaseOperator
 
 				$evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
 				if ($evalVariable->getType() != 'variable') {
-					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $expression['right']['left']);
+					throw new CompilerException("Variable type: " . $evalVariable->getType() . " cannot be used as object", $expression['right']['left']);
 				}
 
 				if ($evalVariable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
@@ -205,8 +197,8 @@ class FetchOperator extends BaseOperator
 				}
 
 				$evalVariableProperty = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariableProperty->getCode(), $compilationContext, $expression['right']['right']);
-				if ($evalVariableProperty->getType() != 'variable') {
-					throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
+				if ($evalVariableProperty->getType() != 'variable' && $evalVariableProperty->getType() != 'string') {
+					throw new CompilerException("Variable type: " . $evalVariableProperty->getType() . " cannot be used in property-dynamic-access", $expression['right']['right']);
 				}
 
 				$compilationContext->headersManager->add('kernel/object');

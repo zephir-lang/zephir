@@ -227,5 +227,4 @@ class Color
     {
         return static::colorize($msg, Color::FG_GREEN) . PHP_EOL;
     }
-
 }

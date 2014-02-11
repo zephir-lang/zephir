@@ -70,7 +70,7 @@ class FunctionCall extends Call
 		if (!isset(self::$_functionReflection[$funcName])) {
 			try {
 				$reflectionFunction = new \ReflectionFunction($funcName);
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$reflectionFunction = null;
 			}
 			self::$_functionReflection[$funcName] = $reflectionFunction;

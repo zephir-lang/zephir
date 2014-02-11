@@ -26,7 +26,6 @@ use Zephir\StatementsBlock;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Branch;
 
-
 /**
  * SwitchStatement
  *

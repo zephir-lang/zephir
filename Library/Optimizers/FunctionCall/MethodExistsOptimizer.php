@@ -24,6 +24,7 @@ use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Utils;
 
 /**
  * MethodExistsOptimizer
