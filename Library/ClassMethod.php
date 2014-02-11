@@ -59,8 +59,7 @@ class ClassMethod
      * @param string $docblock
      * @param string $returnType
      */
-    public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters,
-        StatementsBlock $statements=null, $docblock=null, $returnType=null, array $original = null)
+    public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
     {
 
         $this->checkVisibility($visibility, $name, $original);
@@ -209,7 +208,7 @@ class ClassMethod
      *
      * @param string $type
      */
-    public function areReturnTypesNullCompatible($type=null)
+    public function areReturnTypesNullCompatible($type = null)
     {
         return false;
     }
@@ -219,7 +218,7 @@ class ClassMethod
      *
      * @param string $type
      */
-    public function areReturnTypesIntCompatible($type=null)
+    public function areReturnTypesIntCompatible($type = null)
     {
         if (count($this->_returnTypes)) {
             foreach ($this->_returnTypes as $returnType => $definition) {
@@ -242,7 +241,7 @@ class ClassMethod
      *
      * @param string $type
      */
-    public function areReturnTypesDoubleCompatible($type=null)
+    public function areReturnTypesDoubleCompatible($type = null)
     {
         if (count($this->_returnTypes)) {
             foreach ($this->_returnTypes as $returnType => $definition) {
@@ -260,7 +259,7 @@ class ClassMethod
      *
      * @param string $type
      */
-    public function areReturnTypesBoolCompatible($type=null)
+    public function areReturnTypesBoolCompatible($type = null)
     {
         if (count($this->_returnTypes)) {
             foreach ($this->_returnTypes as $returnType => $definition) {
@@ -278,7 +277,7 @@ class ClassMethod
      *
      * @param string $type
      */
-    public function areReturnTypesStringCompatible($type=null)
+    public function areReturnTypesStringCompatible($type = null)
     {
         if (count($this->_returnTypes)) {
             foreach ($this->_returnTypes as $returnType => $definition) {
@@ -829,25 +828,33 @@ class ClassMethod
 
         $compilationContext->headersManager->add('kernel/operators');
         switch ($dataType) {
+
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
                 return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+
             case 'bool':
                 return "\t\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
+
             case 'double':
                 return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
                 return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+
             case 'array':
                 $compilationContext->symbolTable->mustGrownStack(true);
                 return "\t\t" . 'zephir_get_arrval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
-            case 'variable';
+
+            case 'variable':
                 break;
+
             default:
                 throw new CompilerException("Parameter type: " . $dataType, $parameter);
+
         }
     }
 
@@ -1330,15 +1337,15 @@ class ClassMethod
 
                 if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
                     $initCode .= "\t" . '} else {' . PHP_EOL;
-                        if (isset($parametersToSeparate[$name])) {
-                            $initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+                    if (isset($parametersToSeparate[$name])) {
+                        $initCode .= "\t\t" . "ZEPHIR_SEPARATE_PARAM(" . $name . ");" . PHP_EOL;
+                    } else {
+                        if ($mandatory) {
+                            $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
                         } else {
-                            if ($mandatory) {
-                                $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
-                            } else {
-                                $initCode .= $this->assignZvalValue($parameter, $compilationContext);
-                            }
+                            $initCode .= $this->assignZvalValue($parameter, $compilationContext);
                         }
+                    }
                 }
                 $initCode .= "\t" . '}' . PHP_EOL;
             }

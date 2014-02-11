@@ -147,9 +147,10 @@ class SymbolTable
      *
      * @param string $name
      * @param \CompilationContext $compilationContext
+     * @param array $statement
      * @return \Variable
      */
-    public function getVariableForRead($name, CompilationContext $compilationContext=null, array $statement=null)
+    public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
 
         /**
@@ -319,7 +320,7 @@ class SymbolTable
      * @param array $statement
      * @return \Variable
      */
-    public function getVariableForWrite($name, $compilationContext, $statement=null)
+    public function getVariableForWrite($name, $compilationContext, $statement = null)
     {
         /**
          * Create superglobals just in time
@@ -464,7 +465,7 @@ class SymbolTable
      * @param bool $initNonReferenced
      * @return Variable
      */
-    public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced=false)
+    public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced = false)
     {
         $variable = $this->_reuseTempVariable($type, 'non-tracked');
         if (is_object($variable)) {
@@ -708,5 +709,4 @@ class SymbolTable
         }
         return 0;
     }
-
 }

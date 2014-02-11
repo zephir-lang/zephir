@@ -26,33 +26,32 @@ namespace Zephir;
  */
 class ClassMethodParameters implements \Countable
 {
-	private $_parameters = array();
+    private $_parameters = array();
 
-	/**
-	 *
-	 * @param array $parameters
-	 */
-	public function __construct(array $parameters)
-	{
-		$this->_parameters = $parameters;
-	}
+    /**
+     *
+     * @param array $parameters
+     */
+    public function __construct(array $parameters)
+    {
+        $this->_parameters = $parameters;
+    }
 
-	/**
-	 * Return internal parameters
-	 *
-	 * @return array
-	 */
-	public function getParameters()
-	{
-		return $this->_parameters;
-	}
+    /**
+     * Return internal parameters
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->_parameters;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function count()
-	{
-		return count($this->_parameters);
-	}
-
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->_parameters);
+    }
 }
