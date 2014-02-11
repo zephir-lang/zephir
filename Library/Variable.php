@@ -605,6 +605,35 @@ class Variable
     }
 
     /**
+     * Sets an automatic safe default init value according to its type
+     *
+     */
+    public function enableDefaultAutoInitValue()
+    {
+        switch ($this->_type) {
+
+            case 'boolean':
+            case 'bool':
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                $this->_defaultInitValue = 0;
+                break;
+
+            case 'variable':
+                $this->_defaultInitValue = null;
+                $this->setDynamicTypes('null');
+                $this->setMustInitNull(true);
+                $this->setLocalOnly(false);
+                break;
+
+            default:
+                throw new CompilerException('Cannot create an automatic safe default value for variable type: ' . $this->_type);
+        }
+    }
+
+    /**
      * Returns the default init value
      *
      * @return mixed

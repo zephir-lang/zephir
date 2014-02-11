@@ -69,11 +69,11 @@ PHP_METHOD(Test_NativeArray, testImplodeArray);
 PHP_METHOD(Test_NativeArray, issue110);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_testarraykeys, 0, 0, 1)
-	ZEND_ARG_INFO(0, param)
+  ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_testimplodearray, 0, 0, 1)
-	ZEND_ARG_INFO(0, param)
+  ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
@@ -141,5 +141,5 @@ ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testArrayKeys, arginfo_test_nativearray_testarraykeys, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, testImplodeArray, arginfo_test_nativearray_testimplodearray, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, issue110, NULL, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

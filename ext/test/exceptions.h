@@ -15,5 +15,5 @@ ZEPHIR_INIT_FUNCS(test_exceptions_method_entry) {
 	PHP_ME(Test_Exceptions, testException3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, getException, NULL, ZEND_ACC_PROTECTED)
 	PHP_ME(Test_Exceptions, testException4, NULL, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

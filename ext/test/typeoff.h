@@ -16,7 +16,7 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess);
 PHP_METHOD(Test_Typeoff, testUnknownTypeOf);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_typeoff_testunknowntypeof, 0, 0, 1)
-	ZEND_ARG_INFO(0, u)
+  ZEND_ARG_INFO(0, u)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_typeoff_method_entry) {
@@ -31,5 +31,5 @@ ZEPHIR_INIT_FUNCS(test_typeoff_method_entry) {
 	PHP_ME(Test_Typeoff, testArrayTrue, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testClassPropertyAccess, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testUnknownTypeOf, arginfo_test_typeoff_testunknowntypeof, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

@@ -27,131 +27,131 @@ namespace Zephir;
  */
 class CompiledExpression
 {
-	protected $_type;
+    protected $_type;
 
-	protected $_code;
+    protected $_code;
 
-	protected $_originalExpr;
+    protected $_originalExpr;
 
-	/**
-	 *
-	 * @param string $type
-	 * @param string $code
-	 * @param array $originalExpr
-	 */
-	public function __construct($type, $code, $originalExpr)
-	{
-		$this->_type = $type;
-		$this->_code = $code;
-		$this->_originalExpr = $originalExpr;
-	}
+    /**
+     *
+     * @param string $type
+     * @param string $code
+     * @param array $originalExpr
+     */
+    public function __construct($type, $code, $originalExpr)
+    {
+        $this->_type = $type;
+        $this->_code = $code;
+        $this->_originalExpr = $originalExpr;
+    }
 
-	/**
-	 * Returns the type of the compiled expression
-	 *
-	 * @return string
-	 */
-	public function getType()
-	{
-		return $this->_type;
-	}
+    /**
+     * Returns the type of the compiled expression
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
 
-	/**
-	 * Returns the code produced by the compiled expression
-	 *
-	 * @return string
-	 */
-	public function getCode()
-	{
-		return $this->_code;
-	}
+    /**
+     * Returns the code produced by the compiled expression
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->_code;
+    }
 
-	/**
-	 * Original AST code that produced the code
-	 *
-	 * @return array
-	 */
-	public function getOriginal()
-	{
-		return $this->_originalExpr;
-	}
+    /**
+     * Original AST code that produced the code
+     *
+     * @return array
+     */
+    public function getOriginal()
+    {
+        return $this->_originalExpr;
+    }
 
-	/**
-	 * Returns a C representation for a boolean constant
-	 *
-	 * @return string
-	 */
-	public function getBooleanCode()
-	{
-		if ($this->_code && ($this->_code == 'true' || $this->_code === true)) {
-			return '1';
-		} else {
-			if ($this->_code == 'false' || $this->_code === false) {
-				return '0';
-			}
-		}
+    /**
+     * Returns a C representation for a boolean constant
+     *
+     * @return string
+     */
+    public function getBooleanCode()
+    {
+        if ($this->_code && ($this->_code == 'true' || $this->_code === true)) {
+            return '1';
+        } else {
+            if ($this->_code == 'false' || $this->_code === false) {
+                return '0';
+            }
+        }
 
-		return $this->_code;
-	}
+        return $this->_code;
+    }
 
-	/**
-	 * Checks if the compiled expression is an integer or compatible type
-	 *
-	 * @return boolean
-	 */
-	public function isIntCompatibleType()
-	{
-		switch ($this->_type) {
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-			case 'char':
-			case 'uchar':
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Checks if the compiled expression is an integer or compatible type
+     *
+     * @return boolean
+     */
+    public function isIntCompatibleType()
+    {
+        switch ($this->_type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'char':
+            case 'uchar':
+                return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Checks if the compiled expression is a char or compatible type
-	 *
-	 * @return boolean
-	 */
-	public function isCharCompatibleType()
-	{
-		switch ($this->_type) {
-			case 'char':
-			case 'uchar':
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Checks if the compiled expression is a char or compatible type
+     *
+     * @return boolean
+     */
+    public function isCharCompatibleType()
+    {
+        switch ($this->_type) {
+            case 'char':
+            case 'uchar':
+                return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Resolves an expression
-	 * Some code cannot be directly pushed into the generated source
-	 * because it's missing some bound parts, this method resolves the missing parts
-	 * returning the generated code
-	 *
-	 * @param string $result
-	 * @param CompilationContext $compilationContext
-	 * @return string
-	 */
-	public function resolve($result, CompilationContext $compilationContext)
-	{
-		if ($this->_code instanceof \Closure) {
-			$code = $this->_code;
-			if (!$result) {
-				$tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-				$compilationContext->codePrinter->output($code($tempVariable->getName()));
-				$tempVariable->setIsInitialized(true, $compilationContext);
-				return $tempVariable->getName();
-			} else {
-				return $code($result);
-			}
-		}
-		return $this->_code;
-	}
+    /**
+     * Resolves an expression
+     * Some code cannot be directly pushed into the generated source
+     * because it's missing some bound parts, this method resolves the missing parts
+     * returning the generated code
+     *
+     * @param string $result
+     * @param CompilationContext $compilationContext
+     * @return string
+     */
+    public function resolve($result, CompilationContext $compilationContext)
+    {
+        if ($this->_code instanceof \Closure) {
+            $code = $this->_code;
+            if (!$result) {
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $compilationContext->codePrinter->output($code($tempVariable->getName()));
+                $tempVariable->setIsInitialized(true, $compilationContext);
+                return $tempVariable->getName();
+            } else {
+                return $code($result);
+            }
+        }
+        return $this->_code;
+    }
 
 }

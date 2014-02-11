@@ -481,9 +481,11 @@ class FunctionCall extends Call
 
 		$variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 		switch ($variable->getType()) {
+
 			case 'variable':
 			case 'string':
 				break;
+
 			default:
 				throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as dynamic caller", $expression['left']);
 		}

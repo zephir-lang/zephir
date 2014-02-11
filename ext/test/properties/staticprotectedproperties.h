@@ -15,11 +15,11 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, getSomeDouble);
 PHP_METHOD(Test_Properties_StaticProtectedProperties, getSomeString);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_staticprotectedproperties_setsomevar, 0, 0, 1)
-	ZEND_ARG_INFO(0, someVar)
+  ZEND_ARG_INFO(0, someVar)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_staticprotectedproperties_setsomenull, 0, 0, 1)
-	ZEND_ARG_INFO(0, param)
+  ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_properties_staticprotectedproperties_method_entry) {
@@ -33,5 +33,5 @@ ZEPHIR_INIT_FUNCS(test_properties_staticprotectedproperties_method_entry) {
 	PHP_ME(Test_Properties_StaticProtectedProperties, getSomeInteger, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Properties_StaticProtectedProperties, getSomeDouble, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Properties_StaticProtectedProperties, getSomeString, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_FE_END
+  PHP_FE_END
 };

@@ -102,13 +102,16 @@ class DeclareStatement extends StatementAbstract
 					case 'ulong':
 					case 'long':
 						switch ($defaultType) {
+
 							case 'int':
 							case 'uint':
 							case 'ulong':
 								break;
+
 							case 'null':
 								$defaultValue = 0;
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -116,14 +119,17 @@ class DeclareStatement extends StatementAbstract
 
 					case 'double':
 						switch ($defaultType) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
 							case 'double':
 								break;
+
 							case 'null':
 								$defaultValue = 0;
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -131,6 +137,7 @@ class DeclareStatement extends StatementAbstract
 
 					case 'bool':
 						switch ($defaultType) {
+
 							case 'bool':
 								if ($variable['expr']['value'] == 'true') {
 									$defaultValue = 1;
@@ -138,9 +145,11 @@ class DeclareStatement extends StatementAbstract
 									$defaultValue = 0;
 								}
 								break;
+
 							case 'null':
 								$defaultValue = 0;
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -149,15 +158,19 @@ class DeclareStatement extends StatementAbstract
 					case 'char':
 					case 'uchar':
 						switch ($defaultType) {
+
 							case 'char':
 							case 'uchar':
 								$defaultValue = '\'' . $defaultValue . '\'';
 								break;
+
 							case 'int':
 								break;
+
 							case 'null':
 								$defaultValue = 0;
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -166,9 +179,11 @@ class DeclareStatement extends StatementAbstract
 					case 'string':
 						$defaultValue = $variable['expr'];
 						switch ($defaultType) {
+
 							case 'string':
 							case 'null':
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -177,9 +192,11 @@ class DeclareStatement extends StatementAbstract
 					case 'array':
 						$defaultValue = $variable['expr'];
 						switch ($defaultType) {
+
 							case 'array':
 							case 'null':
 								break;
+
 							default:
 								self::invalidDefaultTypeException($variable['expr']['type'], $statement['data-type'], $variable);
 						}
@@ -188,6 +205,7 @@ class DeclareStatement extends StatementAbstract
 					case 'variable':
 						$defaultValue = $variable['expr'];
 						switch ($defaultType) {
+
 							case 'int':
 							case 'uint':
 							case 'long':
@@ -195,21 +213,26 @@ class DeclareStatement extends StatementAbstract
 							case 'uchar':
 								$symbolVariable->setDynamicTypes('long');
 								break;
+
 							case 'double':
 								$symbolVariable->setDynamicTypes('double');
 								break;
+
 							case 'string':
 							case 'ulong':
 								$symbolVariable->setDynamicTypes('string');
 								break;
+
 							case 'array':
 								$symbolVariable->setDynamicTypes('array');
 								break;
+
 							case 'null':
 								$symbolVariable->setDynamicTypes('null');
 								$symbolVariable->setMustInitNull(true);
 								$symbolVariable->setLocalOnly(false);
 								break;
+
 							default:
 								self::invalidDefaultTypeException($defaultType, $statement['data-type'], $variable);
 						}

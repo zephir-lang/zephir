@@ -146,11 +146,11 @@ PHP_METHOD(Test_Arithmetic, letStatementBoolMinus);
 PHP_METHOD(Test_Arithmetic, letStatementVarMinus);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementboolminus, 0, 0, 1)
-	ZEND_ARG_INFO(0, b)
+  ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementvarminus, 0, 0, 1)
-	ZEND_ARG_INFO(0, b)
+  ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
@@ -295,5 +295,5 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, declaredIntMinus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, letStatementBoolMinus, arginfo_test_arithmetic_letstatementboolminus, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, letStatementVarMinus, arginfo_test_arithmetic_letstatementvarminus, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

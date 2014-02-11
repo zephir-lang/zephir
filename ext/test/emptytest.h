@@ -13,5 +13,5 @@ ZEPHIR_INIT_FUNCS(test_emptytest_method_entry) {
 	PHP_ME(Test_EmptyTest, testDynamicVarArrayNotEmpty, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_EmptyTest, testEmptyString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_EmptyTest, testNotEmptyString, NULL, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

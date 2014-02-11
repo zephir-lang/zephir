@@ -27,5 +27,5 @@ ZEPHIR_INIT_FUNCS(test_oo_method_entry) {
 	PHP_ME(Test_Oo, testInstance9, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo, testInstance10, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo, testInstance11, NULL, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

@@ -17,5 +17,5 @@ ZEPHIR_INIT_FUNCS(test_json_method_entry) {
 	PHP_ME(Test_Json, testDecodeObject, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Json, testDecodeObject2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Json, testDecodeArray, NULL, ZEND_ACC_PUBLIC)
-	PHP_FE_END
+  PHP_FE_END
 };

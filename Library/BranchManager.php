@@ -26,52 +26,52 @@ namespace Zephir;
  */
 class BranchManager
 {
-	protected $_currentBranch;
+    protected $_currentBranch;
 
-	protected $_level = -1;
+    protected $_level = -1;
 
-	protected $_uniqueId = 1;
+    protected $_uniqueId = 1;
 
-	/**
-	 * Sets the current active branch in the manager
-	 *
-	 * @param Branch $branch
-	 */
-	public function addBranch(Branch $branch)
-	{
-		if ($this->_currentBranch) {
-			$branch->setParentBranch($this->_currentBranch);
-			$this->_currentBranch = $branch;
-		} else {
-			$this->_currentBranch = $branch;
-		}
+    /**
+     * Sets the current active branch in the manager
+     *
+     * @param Branch $branch
+     */
+    public function addBranch(Branch $branch)
+    {
+        if ($this->_currentBranch) {
+            $branch->setParentBranch($this->_currentBranch);
+            $this->_currentBranch = $branch;
+        } else {
+            $this->_currentBranch = $branch;
+        }
 
-		$branch->setUniqueId($this->_uniqueId);
-		$branch->setLevel($this->_level);
+        $branch->setUniqueId($this->_uniqueId);
+        $branch->setLevel($this->_level);
 
-		$this->_level++;
-		$this->_uniqueId++;
-	}
+        $this->_level++;
+        $this->_uniqueId++;
+    }
 
-	/**
-	 * Removes a branch from the branch manager
-	 *
-	 * @param Branch $branch
-	 */
-	public function removeBranch(Branch $branch)
-	{
-		$parentBranch = $branch->getParentBranch();
-		$this->_currentBranch = $parentBranch;
-		$this->_level--;
-	}
+    /**
+     * Removes a branch from the branch manager
+     *
+     * @param Branch $branch
+     */
+    public function removeBranch(Branch $branch)
+    {
+        $parentBranch = $branch->getParentBranch();
+        $this->_currentBranch = $parentBranch;
+        $this->_level--;
+    }
 
-	/**
-	 * Returns the active branch in the manager
-	 *
-	 * @return Branch
-	 */
-	public function getCurrentBranch()
-	{
-		return $this->_currentBranch;
-	}
+    /**
+     * Returns the active branch in the manager
+     *
+     * @return Branch
+     */
+    public function getCurrentBranch()
+    {
+        return $this->_currentBranch;
+    }
 }
