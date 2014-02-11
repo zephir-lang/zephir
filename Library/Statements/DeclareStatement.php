@@ -254,7 +254,7 @@ class DeclareStatement extends StatementAbstract
      * throw exception for invalid default type
      * @throws CompilerException
      */
-    static public function invalidDefaultTypeException($defaultType, $dateType, $variable)
+    public static function invalidDefaultTypeException($defaultType, $dateType, $variable)
     {
         throw new CompilerException('Invalid default type: ' . $defaultType . ' for data type: ' . $dateType, $variable);
     }

@@ -464,13 +464,9 @@ class ForStatement extends StatementAbstract
         $tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
 
         if ($this->_statement['reverse']) {
-            $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $expression->getCode() . '); ' .
-                $tempVariable->getName() . ' >= 0; ' .
-                $tempVariable->getName() . '--) {');
+            $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $expression->getCode() . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');
         } else {
-            $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' .
-                $tempVariable->getName() . ' < Z_STRLEN_P(' . $expression->getCode() . '); ' .
-                $tempVariable->getName() . '++) {');
+            $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' . $tempVariable->getName() . ' < Z_STRLEN_P(' . $expression->getCode() . '); ' . $tempVariable->getName() . '++) {');
         }
 
         if (isset($this->_statement['key'])) {

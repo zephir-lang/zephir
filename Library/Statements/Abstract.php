@@ -69,5 +69,4 @@ abstract class StatementAbstract
      * @param CompilationContext $compilationContext
      */
     abstract public function compile(CompilationContext $compilationContext);
-
 }
