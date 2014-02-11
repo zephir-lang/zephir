@@ -26,7 +26,6 @@ namespace Zephir;
  */
 class CompilationContext
 {
-
 	/**
 	 * Compiler
 	 *
@@ -86,7 +85,7 @@ class CompilationContext
 	/**
 	 * Represents the c-headers added to the file
 	 *
-	 * @var \HeadersManager
+	 * @var HeadersManager
 	 */
 	public $headersManager;
 

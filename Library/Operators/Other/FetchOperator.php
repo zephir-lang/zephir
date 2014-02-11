@@ -19,11 +19,11 @@
 
 namespace Zephir\Operators\Other;
 
-use Zephir\Operators\BaseOperator;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\CompilerException;
-use Zephir\CompiledExpression;
+use Zephir\Operators\BaseOperator,
+	Zephir\CompilationContext,
+	Zephir\Expression,
+	Zephir\CompilerException as CompilerException,
+	Zephir\CompiledExpression;
 
 /**
  * FetchOperator
@@ -33,16 +33,16 @@ use Zephir\CompiledExpression;
  */
 class FetchOperator extends BaseOperator
 {
-
 	/**
+	 * Compile fetch operator
 	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
+	 * @param $expression
+	 * @param CompilationContext $compilationContext
+	 * @return CompiledExpression
+	 * @throws \Zephir\CompilerException
 	 */
 	public function compile($expression, CompilationContext $compilationContext)
 	{
-
 		$compilationContext->headersManager->add('kernel/array');
 
 		$variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
@@ -54,7 +54,6 @@ class FetchOperator extends BaseOperator
 		 * return_value must not be observed
 		 */
 		if ($variable->getName() != 'return_value') {
-
 			/*
 			 * @todo use a read detector here
 			 */
@@ -90,7 +89,6 @@ class FetchOperator extends BaseOperator
 		}
 
 		switch ($expression['right']['type']) {
-
 			case 'array-access':
 				$exprVariable = new Expression($expression['right']['left']);
 				$exprVariable->setReadOnly(true);
@@ -111,17 +109,15 @@ class FetchOperator extends BaseOperator
 
 				$expr = new Expression($expression['right']['right']);
 				$expr->setReadOnly(true);
+
 				$resolvedExpr = $expr->compile($compilationContext);
 				switch ($resolvedExpr->getType()) {
-
 					case 'int':
 					case 'long':
 					case 'uint':
 						return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
 					case 'string':
 						return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"), ' . $flags . ' TSRMLS_CC)', $expression);
-
 					case 'variable':
 						$indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
 						switch ($indexVariable->getType()) {
@@ -144,9 +140,7 @@ class FetchOperator extends BaseOperator
 						throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
 				}
 				break;
-
 			case 'property-access':
-
 				$exprVariable = new Expression($expression['right']['left']);
 				$exprVariable->setReadOnly(true);
 
@@ -168,9 +162,7 @@ class FetchOperator extends BaseOperator
 				$compilationContext->codePrinter->output('zephir_read_property(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
 
 				return new CompiledExpression('bool', '(0 == 1)', $expression);
-
 			case 'property-dynamic-access':
-
 				$exprVariable = new Expression($expression['right']['left']);
 				$exprVariable->setReadOnly(true);
 
@@ -204,11 +196,8 @@ class FetchOperator extends BaseOperator
 				$compilationContext->headersManager->add('kernel/object');
 
 				return new CompiledExpression('bool', 'zephir_read_property_zval(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $evalVariableProperty->getName() . ', PH_SILENT_CC)', $expression);
-
 			default:
 				throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);
 		}
-
 	}
-
 }
