@@ -26,36 +26,35 @@ namespace Zephir;
  */
 class ClassDefinition
 {
+    protected $namespace;
 
-    protected $_namespace;
+    protected $name;
 
-    protected $_name;
+    protected $type = 'class';
 
-    protected $_type = 'class';
+    protected $extendsClass;
 
-    protected $_extendsClass;
+    protected $interfaces;
 
-    protected $_interfaces;
+    protected $final;
 
-    protected $_final;
+    protected $abstract;
 
-    protected $_abstract;
-
-    protected $_extendsClassDefinition;
+    protected $extendsClassDefinition;
 
     /**
      * @var ClassProperty[]
      */
-    protected $_properties = array();
+    protected $properties = array();
 
     /**
      * @var ClassConstant[]
      */
-    protected $_constants = array();
+    protected $constants = array();
 
-    protected $_methods = array();
+    protected $methods = array();
 
-    protected $_dependencyRank = 0;
+    protected $dependencyRank = 0;
 
     /**
      * ClassDefinition
@@ -65,8 +64,8 @@ class ClassDefinition
      */
     public function __construct($namespace, $name)
     {
-        $this->_namespace = $namespace;
-        $this->_name = $name;
+        $this->namespace = $namespace;
+        $this->name = $name;
     }
 
     /**
@@ -76,7 +75,7 @@ class ClassDefinition
      */
     public function setType($type)
     {
-        $this->_type = $type;
+        $this->type = $type;
     }
 
     /**
@@ -86,7 +85,7 @@ class ClassDefinition
      */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -96,7 +95,7 @@ class ClassDefinition
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -106,7 +105,7 @@ class ClassDefinition
      */
     public function setIsFinal($final)
     {
-        $this->_final = $final;
+        $this->final = $final;
     }
 
     /**
@@ -116,7 +115,7 @@ class ClassDefinition
      */
     public function setIsAbstract($abstract)
     {
-        $this->_abstract = $abstract;
+        $this->abstract = $abstract;
     }
 
     /**
@@ -126,7 +125,7 @@ class ClassDefinition
      */
     public function isAbstract()
     {
-        return $this->_abstract;
+        return $this->abstract;
     }
 
     /**
@@ -136,7 +135,7 @@ class ClassDefinition
      */
     public function isFinal()
     {
-        return $this->_final;
+        return $this->final;
     }
 
     /**
@@ -146,7 +145,7 @@ class ClassDefinition
      */
     public function getCompleteName()
     {
-        return $this->_namespace . '\\' . $this->_name;
+        return $this->namespace . '\\' . $this->name;
     }
 
     /**
@@ -156,7 +155,7 @@ class ClassDefinition
      */
     public function getNamespace()
     {
-        return $this->_namespace;
+        return $this->namespace;
     }
 
     /**
@@ -169,7 +168,8 @@ class ClassDefinition
         if (substr($extendsClass, 0, 1) == '\\') {
             $extendsClass = substr($extendsClass, 1);
         }
-        $this->_extendsClass = $extendsClass;
+
+        $this->extendsClass = $extendsClass;
     }
 
     /**
@@ -186,7 +186,8 @@ class ClassDefinition
             }
             $interfaces[] = $implementedInterface['value'];
         }
-        $this->_interfaces = $interfaces;
+
+        $this->interfaces = $interfaces;
     }
 
     /**
@@ -196,7 +197,7 @@ class ClassDefinition
      */
     public function getExtendsClass()
     {
-        return $this->_extendsClass;
+        return $this->extendsClass;
     }
 
     /**
@@ -206,27 +207,27 @@ class ClassDefinition
      */
     public function getImplementedInterfaces()
     {
-        return $this->_interfaces;
+        return $this->interfaces;
     }
 
     /**
      * Sets the class definition for the extended class
      *
-     * @param \ClassDefinition $classDefinition
+     * @param $classDefinition
      */
     public function setExtendsClassDefinition($classDefinition)
     {
-        $this->_extendsClassDefinition = $classDefinition;
+        $this->extendsClassDefinition = $classDefinition;
     }
 
     /**
      * Returns the class definition related to the extended class
      *
-     * @return \ClassDefinition
+     * @return ClassDefinition
      */
     public function getExtendsClassDefinition()
     {
-        return $this->_extendsClassDefinition;
+        return $this->extendsClassDefinition;
     }
 
     /**
@@ -235,10 +236,10 @@ class ClassDefinition
      */
     public function calculateDependencyRank()
     {
-        if ($this->_extendsClassDefinition) {
-            $classDefinition = $this->_extendsClassDefinition;
+        if ($this->extendsClassDefinition) {
+            $classDefinition = $this->extendsClassDefinition;
             if (method_exists($classDefinition, 'increaseDependencyRank')) {
-                $classDefinition->increaseDependencyRank($this->_dependencyRank * 2);
+                $classDefinition->increaseDependencyRank($this->dependencyRank * 2);
             }
         }
     }
@@ -250,7 +251,7 @@ class ClassDefinition
      */
     public function increaseDependencyRank($rank)
     {
-        $this->_dependencyRank += ($rank + 1);
+        $this->dependencyRank += ($rank + 1);
     }
 
     /**
@@ -260,33 +261,37 @@ class ClassDefinition
      */
     public function getDependencyRank()
     {
-        return $this->_dependencyRank;
+        return $this->dependencyRank;
     }
 
     /**
      * Adds a property to the definition
      *
      * @param ClassProperty $property
+     * @throws CompilerException
      */
     public function addProperty(ClassProperty $property)
     {
-        if (isset($this->_properties[$property->getName()])) {
+        if (isset($this->properties[$property->getName()])) {
             throw new CompilerException("Property '" . $property->getName() . "' was defined more than one time", $property->getOriginal());
         }
-        $this->_properties[$property->getName()] = $property;
+
+        $this->properties[$property->getName()] = $property;
     }
 
     /**
      * Adds a constant to the definition
      *
      * @param ClassConstant $constant
+     * @throws CompilerException
      */
     public function addConstant(ClassConstant $constant)
     {
-        if (isset($this->_constants[$constant->getName()])) {
-            throw new Exception("Constant '" . $constant->getName() . "' was defined more than one time");
+        if (isset($this->constants[$constant->getName()])) {
+            throw new CompilerException("Constant '" . $constant->getName() . "' was defined more than one time");
         }
-        $this->_constants[$constant->getName()] = $constant;
+
+        $this->constants[$constant->getName()] = $constant;
     }
 
     /**
@@ -297,11 +302,10 @@ class ClassDefinition
      */
     public function hasProperty($name)
     {
-        $exists = isset($this->_properties[$name]);
-        if ($exists) {
+        if (isset($this->properties[$name])) {
             return true;
         } else {
-            $extendsClassDefinition = $this->_extendsClassDefinition;
+            $extendsClassDefinition = $this->extendsClassDefinition;
             if ($extendsClassDefinition) {
                 if ($extendsClassDefinition->hasProperty($name)) {
                     return true;
@@ -319,11 +323,11 @@ class ClassDefinition
      */
     public function getProperty($propertyName)
     {
-        if (isset($this->_properties[$propertyName])) {
-            return $this->_properties[$propertyName];
+        if (isset($this->properties[$propertyName])) {
+            return $this->properties[$propertyName];
         }
 
-        $extendsClassDefinition = $this->_extendsClassDefinition;
+        $extendsClassDefinition = $this->extendsClassDefinition;
         if ($extendsClassDefinition) {
             if ($extendsClassDefinition->hasProperty($propertyName)) {
                 return $extendsClassDefinition->getProperty($propertyName);
@@ -339,7 +343,7 @@ class ClassDefinition
      */
     public function hasConstant($name)
     {
-        if (isset($this->_constants[$name])) {
+        if (isset($this->constants[$name])) {
             return true;
         }
         /**
@@ -364,8 +368,8 @@ class ClassDefinition
             throw new \InvalidArgumentException('$constantName must not be empty: '.$constantName);
         }
 
-        if (isset($this->_constants[$constantName])) {
-            return $this->_constants[$constantName];
+        if (isset($this->constants[$constantName])) {
+            return $this->constants[$constantName];
         }
 
         /**
@@ -377,36 +381,37 @@ class ClassDefinition
     /**
      * Adds a method to the class definition
      *
-     * @param \ClassMethod $method
+     * @param ClassMethod $method
      * @param array $statement
      */
     public function addMethod(ClassMethod $method, $statement = null)
     {
         $methodName = strtolower($method->getName());
-        if (isset($this->_methods[$methodName])) {
+        if (isset($this->methods[$methodName])) {
             throw new CompilerException("Method '" . $method->getName() . "' was defined more than one time", $statement);
         }
-        $this->_methods[$methodName] = $method;
+
+        $this->methods[$methodName] = $method;
     }
 
     /**
      * Returns all properties defined in the class
      *
-     * @return \ClassProperties[]
+     * @return ClassProperty[]
      */
     public function getProperties()
     {
-        return $this->_properties;
+        return $this->properties;
     }
 
     /**
      * Returns all constants defined in the class
      *
-     * @return \ClassConstant[]
+     * @return ClassConstant[]
      */
     public function getConstants()
     {
-        return $this->_constants;
+        return $this->constants;
     }
 
     /**
@@ -416,7 +421,7 @@ class ClassDefinition
      */
     public function getMethods()
     {
-        return $this->_methods;
+        return $this->methods;
     }
 
     /**
@@ -428,13 +433,13 @@ class ClassDefinition
     public function hasMethod($methodName)
     {
         $methodNameLower = strtolower($methodName);
-        foreach ($this->_methods as $name => $method) {
+        foreach ($this->methods as $name => $method) {
             if ($methodNameLower == $name) {
                 return true;
             }
         }
 
-        $extendsClassDefinition = $this->_extendsClassDefinition;
+        $extendsClassDefinition = $this->extendsClassDefinition;
         if ($extendsClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return true;
@@ -452,13 +457,13 @@ class ClassDefinition
     public function getMethod($methodName)
     {
         $methodNameLower = strtolower($methodName);
-        foreach ($this->_methods as $name => $method) {
+        foreach ($this->methods as $name => $method) {
             if ($methodNameLower == $name) {
                 return $method;
             }
         }
 
-        $extendsClassDefinition = $this->_extendsClassDefinition;
+        $extendsClassDefinition = $this->extendsClassDefinition;
         if ($extendsClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return $extendsClassDefinition->getMethod($methodName);
@@ -474,7 +479,7 @@ class ClassDefinition
      */
     public function getClassEntry()
     {
-        return strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name) . '_ce';
+        return strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name) . '_ce';
     }
 
     /**
@@ -484,7 +489,7 @@ class ClassDefinition
      */
     public function getCNamespace()
     {
-        return str_replace('\\', '_', $this->_namespace);
+        return str_replace('\\', '_', $this->namespace);
     }
 
     /**
@@ -494,7 +499,7 @@ class ClassDefinition
      */
     public function getNCNamespace()
     {
-        return str_replace('\\', '\\\\', $this->_namespace);
+        return str_replace('\\', '\\\\', $this->namespace);
     }
 
     /**
@@ -505,7 +510,7 @@ class ClassDefinition
      */
     public function getSCName($namespace)
     {
-        return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->_namespace) . '_' . $this->_name));
+        return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name));
     }
 
     /**
@@ -549,7 +554,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = $this->_methods;
+        $methods = $this->methods;
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
         } else {
@@ -567,9 +572,9 @@ class ClassDefinition
          * Register the class with extends + interfaces
          */
         $classExtendsDefinition = null;
-        if ($this->_extendsClass) {
+        if ($this->extendsClass) {
 
-            $classExtendsDefinition = $this->_extendsClassDefinition;
+            $classExtendsDefinition = $this->extendsClassDefinition;
             if ($classExtendsDefinition instanceof ClassDefinition) {
                 $classEntry = $classExtendsDefinition->getClassEntry();
             } else {
@@ -617,7 +622,7 @@ class ClassDefinition
         /**
          * Implemented interfaces
          */
-        $interfaces = $this->_interfaces;
+        $interfaces = $this->interfaces;
         $compiler = &$compilationContext->compiler;
 
         if (is_array($interfaces)) {
@@ -793,7 +798,7 @@ class ClassDefinition
      *
      * @param string $className
      * @return string
-     * @throws Exception
+     * @throws CompilerException
      */
     protected static function getClassEntryByClassName($className)
     {
@@ -827,51 +832,39 @@ class ClassDefinition
             case 'logicexception':
                 $classEntry = 'spl_ce_LogicException';
                 break;
-
             case 'badfunctioncallexception':
                 $classEntry = 'spl_ce_BadFunctionCallException';
                 break;
-
             case 'badmethodcallexception':
                 $classEntry = 'spl_ce_BadMethodCallException';
                 break;
-
             case 'domainexception':
                 $classEntry = 'spl_ce_DomainException';
                 break;
-
             case 'invalidargumentexception':
                 $classEntry = 'spl_ce_InvalidArgumentException';
                 break;
-
             case 'lengthexception':
                 $classEntry = 'spl_ce_LengthException';
                 break;
-
             case 'outofrangeexception':
                 $classEntry = 'spl_ce_OutOfRangeException';
                 break;
-
             case 'runtimeexception':
                 $classEntry = 'spl_ce_RuntimeException';
                 break;
-
             case 'outofboundsexception':
                 $classEntry = 'spl_ce_OutOfBoundsException';
                 break;
-
             case 'overflowexception':
                 $classEntry = 'spl_ce_OverflowException';
                 break;
-
             case 'rangeexception':
                 $classEntry = 'spl_ce_RangeException';
                 break;
-
             case 'underflowexception':
                 $classEntry = 'spl_ce_UnderflowException';
                 break;
-
             case 'unexpectedvalueexception':
                 $classEntry = 'spl_ce_UnexpectedValueException';
                 break;
@@ -882,87 +875,66 @@ class ClassDefinition
             case 'recursiveiterator':
                 $classEntry = 'spl_ce_RecursiveIterator';
                 break;
-
             case 'recursiveiteratoriterator':
                 $classEntry = 'spl_ce_RecursiveIteratorIterator';
                 break;
-
             case 'recursivetreeiterator':
                 $classEntry = 'spl_ce_RecursiveTreeIterator';
                 break;
-
             case 'filteriterator':
                 $classEntry = 'spl_ce_FilterIterator';
                 break;
-
             case 'recursivefilteriterator':
                 $classEntry = 'spl_ce_RecursiveFilterIterator';
                 break;
-
             case 'parentiterator':
                 $classEntry = 'spl_ce_ParentIterator';
                 break;
-
             case 'seekableiterator':
                 $classEntry = 'spl_ce_SeekableIterator';
                 break;
-
             case 'limititerator':
                 $classEntry = 'spl_ce_LimitIterator';
                 break;
-
             case 'cachingiterator':
                 $classEntry = 'spl_ce_CachingIterator';
                 break;
-
             case 'recursivecachingiterator':
                 $classEntry = 'spl_ce_RecursiveCachingIterator';
                 break;
-
             case 'outeriterator':
                 $classEntry = 'spl_ce_OuterIterator';
                 break;
-
             case 'iteratoriterator':
                 $classEntry = 'spl_ce_IteratorIterator';
                 break;
-
             case 'norewinditerator':
                 $classEntry = 'spl_ce_NoRewindIterator';
                 break;
-
             case 'infiniteiterator':
                 $classEntry = 'spl_ce_InfiniteIterator';
                 break;
-
             case 'emptyiterator':
                 $classEntry = 'spl_ce_EmptyIterator';
                 break;
-
             case 'appenditerator':
                 $classEntry = 'spl_ce_AppendIterator';
                 break;
-
             case 'regexiterator':
                 $classEntry = 'spl_ce_RegexIterator';
                 break;
-
             case 'recursiveregexiterator':
                 $classEntry = 'spl_ce_RecursiveRegexIterator';
                 break;
-
             case 'countable':
                 $classEntry = 'spl_ce_Countable';
                 break;
-
             case 'callbackfilteriterator':
                 $classEntry = 'spl_ce_CallbackFilterIterator';
                 break;
-
             case 'recursivecallbackfilteriterator':
                 $classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
                 break;
-
             default:
                 throw new CompilerException('Unknown class entry for "' . $className . '"');
         }
