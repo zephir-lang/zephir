@@ -28,9 +28,9 @@ use Zephir\Detectors\ReadDetector;
  */
 class Call
 {
-
     /**
      * Call expression
+	 * @var Expression
      */
     protected $_expression;
 
@@ -52,11 +52,10 @@ class Call
      * Processes the symbol variable that will be used to return
      * the result of the symbol call
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      */
-    public function processExpectedReturn($compilationContext)
+    public function processExpectedReturn(CompilationContext $compilationContext)
     {
-
         $expr = $this->_expression;
         $expression = $expr->getExpression();
 
@@ -90,9 +89,9 @@ class Call
      * the result of the symbol call. If a temporal variable is used
      * as returned value only the body is freed between calls
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      */
-    public function processExpectedComplexLiteralReturn($compilationContext)
+    public function processExpectedComplexLiteralReturn(CompilationContext $compilationContext)
     {
 
         $expr = $this->_expression;
@@ -140,7 +139,7 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call
      *
-     * @return \Variable
+     * @return Variable
      */
     public function getSymbolVariable()
     {
@@ -154,9 +153,9 @@ class Call
      * @param CompilationContext $compilationContext
      * @param array $expression
      * @param boolean $readOnly
-     * @return array
+     * @return array|null|CompiledExpression[]
      */
-    public function getResolvedParamsAsExpr($parameters, $compilationContext, $expression, $readOnly = false)
+    public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
         if (!$this->_resolvedParams) {
             $params = array();
@@ -187,6 +186,7 @@ class Call
             }
             $this->_resolvedParams = $params;
         }
+
         return $this->_resolvedParams;
     }
 
@@ -195,15 +195,13 @@ class Call
      * the parameters
      *
      * @param array $parameters
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @param array $expression
      * @return array
      */
-    public function getResolvedParams($parameters, $compilationContext, $expression)
+    public function getResolvedParams($parameters, CompilationContext $compilationContext, $expression)
     {
-
-        $codePrinter = $compilationContext->codePrinter;
-
+        $codePrinter = &$compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
 
         $params = array();
@@ -333,11 +331,9 @@ class Call
      * @param array $expression
      * @return array
      */
-    public function getReadOnlyResolvedParams($parameters, $compilationContext, $expression)
+    public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, $expression)
     {
-
-        $codePrinter = $compilationContext->codePrinter;
-
+        $codePrinter = &$compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
         $params = array();
