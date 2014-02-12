@@ -24,6 +24,7 @@ define('T', "\t");
 define('2T', "\t\t");
 
 /* exceptions */
+require ZEPHIRPATH . 'Library/Exception.php';
 require ZEPHIRPATH . 'Library/ParseException.php';
 require ZEPHIRPATH . 'Library/CompilerException.php';
 
