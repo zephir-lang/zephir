@@ -75,6 +75,5 @@ class FilePutContentsOptimizer extends OptimizerAbstract
         }
 
         return new CompiledExpression('null', 'null', $expression);
-
     }
 }

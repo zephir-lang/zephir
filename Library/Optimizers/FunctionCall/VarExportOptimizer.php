@@ -73,4 +73,3 @@ class VarExportOptimizer extends OptimizerAbstract
         return new CompiledExpression('null', 'null', $expression);
     }
 }
-

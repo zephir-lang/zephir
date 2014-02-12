@@ -53,7 +53,6 @@ class VarDumpOptimizer extends OptimizerAbstract
             $context->codePrinter->output('zephir_var_dump(&'. $resolvedParam . ' TSRMLS_CC);');
         }
 
-        return new CompiledExpression('null', 'null' , $expression);
+        return new CompiledExpression('null', 'null', $expression);
     }
 }
-

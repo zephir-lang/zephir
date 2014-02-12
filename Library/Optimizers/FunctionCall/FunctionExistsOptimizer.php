@@ -63,5 +63,4 @@ class FunctionExistsOptimizer extends OptimizerAbstract
 
         return new CompiledExpression('bool', '(zephir_function_exists(' . $resolvedParams[0] . ' TSRMLS_CC)  == SUCCESS)', $expression);
     }
-
 }

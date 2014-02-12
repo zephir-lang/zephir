@@ -213,6 +213,7 @@ class EvalExpression
                         } else {
                             return 'zephir_is_true(' . $variableRight->getName() . ')';
                         }
+                        break;
 
                     default:
                         throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
@@ -243,5 +244,4 @@ class EvalExpression
     {
         return $this->_unrecheableElse;
     }
-
 }
