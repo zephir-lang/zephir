@@ -459,6 +459,16 @@ class MethodCall extends Call
                 }
             }
 
+            if ($compilationContext->config->get('public-internal-methods', 'optimizations')) {
+                if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
+                    if ($method->isPublic() && $method->isFinal()) {
+                        if ($method->getClassDefinition() == $classDefinition) {
+                            $internalCall = true;
+                        }
+                    }
+                }
+            }
+
             if (!$internalCall) {
 
                 if (!isset($expression['parameters']) || !count($params)) {

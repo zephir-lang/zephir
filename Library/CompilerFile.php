@@ -87,7 +87,7 @@ class CompilerFile
         $compilePath = '.temp' . DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', realpath($this->_filePath)) . ".js";
         $zepRealPath = realpath($this->_filePath);
 
-        if (!file_exists((ZEPHIRPATH . '/bin/zephir-parser')) {
+        if (!file_exists(ZEPHIRPATH . '/bin/zephir-parser')) {
             throw new Exception('zephir-parser was not found');
         }
 
@@ -148,7 +148,7 @@ class CompilerFile
             }
         }
 
-        if (count($this->_headerCBlocks) >0) {
+        if (count($this->_headerCBlocks) > 0) {
             $code .= implode($this->_headerCBlocks, PHP_EOL) . PHP_EOL;
         }
 
@@ -428,13 +428,18 @@ class CompilerFile
         $namespace = null;
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
+
                 case 'namespace':
                     if ($namespace !== null) {
                         throw new CompilerException("The namespace must be defined just one time", $topStatement);
                     }
                     $namespace = $topStatement['name'];
                     $this->_namespace = $namespace;
+                    if (!preg_match('/^[A-Z]/', $namespace)) {
+                        throw new CompilerException("Namespace '" . $namespace . "' must be in camelized-form", $topStatement);
+                    }
                     break;
+
                 case 'cblock':
                     $this->_headerCBlocks[] = $topStatement['value'];
                     break;

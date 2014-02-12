@@ -492,6 +492,19 @@ class ClassMethod
         return false;
     }
 
+     /**
+     * Checks if the method is public
+     *
+     * @return boolean
+     */
+    public function isPublic()
+    {
+        if (is_array($this->_visibility)) {
+            return in_array('public', $this->_visibility);
+        }
+        return false;
+    }
+
     /**
      * Checks if the method is static
      *
@@ -501,6 +514,19 @@ class ClassMethod
     {
         if (is_array($this->_visibility)) {
             return in_array('static', $this->_visibility);
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the method is final
+     *
+     * @return boolean
+     */
+    public function isFinal()
+    {
+        if (is_array($this->_visibility)) {
+            return in_array('final', $this->_visibility);
         }
         return false;
     }

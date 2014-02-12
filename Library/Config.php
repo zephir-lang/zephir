@@ -59,7 +59,8 @@ class Config
             'local-context-pass'                => true,
             'constant-folding'                  => true,
             'static-constant-class-folding'     => true,
-            'private-internal-methods'          => false
+            'private-internal-methods'          => false,
+            'public-internal-methods'           => false
         ),
         'namespace'   => '',
         'name'        => '',
