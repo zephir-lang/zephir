@@ -46,6 +46,7 @@ class LoopBreakPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
+
                 case 'if':
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
@@ -54,6 +55,7 @@ class LoopBreakPass
                         $this->passStatementBlock($statement['else_statements']);
                     }
                     break;
+
                 case 'break':
                 case 'return':
                 case 'throw':
@@ -62,9 +64,9 @@ class LoopBreakPass
             }
         }
     }
+
     public function hasBreak()
     {
         return $this->_hasBreak;
     }
-
 }

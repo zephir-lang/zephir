@@ -260,7 +260,7 @@ class LocalContextPass
             case 'bool':
             case 'double':
             case 'int':
-            case 'uint';
+            case 'uint':
             case 'long':
             case 'ulong':
             case 'string':
@@ -487,5 +487,4 @@ class LocalContextPass
             }
         }
     }
-
 }

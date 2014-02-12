@@ -29,46 +29,46 @@ namespace Zephir\Detectors;
  */
 class ReadDetector
 {
-	public function detect($variable, array $expression)
-	{
-		if (!isset($expression['type'])) {
-			return false;
-		}
+    public function detect($variable, array $expression)
+    {
+        if (!isset($expression['type'])) {
+            return false;
+        }
 
-		if ($expression['type'] == 'variable') {
-			if ($variable == $expression['value']) {
-				return true;
-			}
-		}
+        if ($expression['type'] == 'variable') {
+            if ($variable == $expression['value']) {
+                return true;
+            }
+        }
 
-		if ($expression['type'] == 'fcall' || $expression['type'] == 'mcall' || $expression['type'] == 'scall') {
-			if (isset($expression['parameters'])) {
-				foreach ($expression['parameters'] as $parameter) {
-					if ($parameter['type'] == 'variable') {
-						if ($variable == $parameter['value']) {
-							return true;
-						}
-					}
-				}
-			}
-		}
+        if ($expression['type'] == 'fcall' || $expression['type'] == 'mcall' || $expression['type'] == 'scall') {
+            if (isset($expression['parameters'])) {
+                foreach ($expression['parameters'] as $parameter) {
+                    if ($parameter['type'] == 'variable') {
+                        if ($variable == $parameter['value']) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
 
-		if (isset($expression['left'])) {
-			if (is_array($expression['left'])) {
-				if ($this->detect($variable, $expression['left']) === true) {
-					return true;
-				}
-			}
-		}
+        if (isset($expression['left'])) {
+            if (is_array($expression['left'])) {
+                if ($this->detect($variable, $expression['left']) === true) {
+                    return true;
+                }
+            }
+        }
 
-		if (isset($expression['right'])) {
-			if (is_array($expression['right'])) {
-				if ($this->detect($variable, $expression['right']) === true) {
-					return true;
-				}
-			}
-		}
+        if (isset($expression['right'])) {
+            if (is_array($expression['right'])) {
+                if ($this->detect($variable, $expression['right']) === true) {
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

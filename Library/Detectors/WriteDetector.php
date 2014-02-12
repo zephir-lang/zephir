@@ -31,85 +31,85 @@ namespace Zephir\Detectors;
 class WriteDetector
 {
 
-	public function passLetStatement($variable, array $statement)
-	{
-		foreach ($statement['assignments'] as $assigment) {
-			if ($assigment['variable'] == $variable) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public function passLetStatement($variable, array $statement)
+    {
+        foreach ($statement['assignments'] as $assigment) {
+            if ($assigment['variable'] == $variable) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public function detect($variable, $statements)
-	{
-		foreach ($statements as $statement) {
-			switch ($statement['type']) {
+    public function detect($variable, $statements)
+    {
+        foreach ($statements as $statement) {
+            switch ($statement['type']) {
 
-				case 'let':
-					if ($this->passLetStatement($variable, $statement) === true) {
-						return true;
-					}
-					break;
+                case 'let':
+                    if ($this->passLetStatement($variable, $statement) === true) {
+                        return true;
+                    }
+                    break;
 
-				case 'do-while':
-				case 'while':
-				case 'loop':
-					if (isset($statement['statements'])) {
-						if ($this->detect($variable, $statement['statements']) === true) {
-							return true;
-						}
-					}
-					break;
+                case 'do-while':
+                case 'while':
+                case 'loop':
+                    if (isset($statement['statements'])) {
+                        if ($this->detect($variable, $statement['statements']) === true) {
+                            return true;
+                        }
+                    }
+                    break;
 
-				case 'unset':
-					if ($statement['domain']['value'] == $variable) {
-						return true;
-					}
-					break;
+                case 'unset':
+                    if ($statement['domain']['value'] == $variable) {
+                        return true;
+                    }
+                    break;
 
-				case 'if':
-					if (isset($statement['statements'])) {
-						if ($this->detect($variable, $statement['statements']) === true) {
-							return true;
-						}
-					}
-					if (isset($statement['else_statements'])) {
-						if ($this->detect($variable, $statement['else_statements']) === true) {
-							return true;
-						}
-					}
-					break;
+                case 'if':
+                    if (isset($statement['statements'])) {
+                        if ($this->detect($variable, $statement['statements']) === true) {
+                            return true;
+                        }
+                    }
+                    if (isset($statement['else_statements'])) {
+                        if ($this->detect($variable, $statement['else_statements']) === true) {
+                            return true;
+                        }
+                    }
+                    break;
 
-				case 'switch':
-					foreach ($statement['clauses'] as $clause) {
-						if (isset($clause['statements'])) {
-							if ($this->detect($variable, $clause['statements']) === true) {
-								return true;
-							}
-						}
-					}
-					break;
+                case 'switch':
+                    foreach ($statement['clauses'] as $clause) {
+                        if (isset($clause['statements'])) {
+                            if ($this->detect($variable, $clause['statements']) === true) {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
 
-				case 'for':
-					if (isset($statement['key'])) {
-						if ($statement['key'] == $variable) {
-							return true;
-						}
-					}
-					if (isset($statement['value'])) {
-						if ($statement['value'] == $variable) {
-							return true;
-						}
-					}
-					if (isset($statement['statements'])) {
-						if ($this->detect($variable, $statement['statements']) === true) {
-							return true;
-						}
-					}
-					break;
-			}
-		}
-		return false;
-	}
+                case 'for':
+                    if (isset($statement['key'])) {
+                        if ($statement['key'] == $variable) {
+                            return true;
+                        }
+                    }
+                    if (isset($statement['value'])) {
+                        if ($statement['value'] == $variable) {
+                            return true;
+                        }
+                    }
+                    if (isset($statement['statements'])) {
+                        if ($this->detect($variable, $statement['statements']) === true) {
+                            return true;
+                        }
+                    }
+                    break;
+            }
+        }
+        return false;
+    }
 }

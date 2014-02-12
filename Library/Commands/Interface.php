@@ -64,5 +64,4 @@ interface CommandInterface
      * Logger $logger
      */
     public function execute(Config $config, Logger $logger);
-
 }

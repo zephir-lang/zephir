@@ -263,7 +263,7 @@ class StaticTypeInference
             case 'bool':
             case 'double':
             case 'int':
-            case 'uint';
+            case 'uint':
             case 'long':
             case 'ulong':
             case 'null':
@@ -557,5 +557,4 @@ class StaticTypeInference
             }
         }
     }
-
 }

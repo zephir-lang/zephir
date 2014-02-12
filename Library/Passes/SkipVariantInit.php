@@ -99,5 +99,4 @@ class SkipVariantInit
         }
         return $variables;
     }
-
 }
