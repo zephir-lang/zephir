@@ -17,7 +17,7 @@ re2c -o scanner.c scanner.re && ./lemon -s parser.lemon && cat base.c >> parser.
 sed s/"\#line"/"\/\/"/g scanner.c > xx && mv -f xx scanner.c
 sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c
 export CFLAGS="-O2 -g"
-gcc -Wl,-rpath /usr/local/lib -I/usr/local/lib -L/usr/local/lib -L/opt/local/lib -g3 -w parser.c scanner.c -ljson -ljson-c -o ../bin/zephir-parser
+gcc -Wl,-rpath /usr/local/lib -I/usr/local/include -I/usr/local/lib -L/usr/local/lib -L/opt/local/lib -g3 -w parser.c scanner.c -ljson -ljson-c -o ../bin/zephir-parser
 
 # Using the -c option will copy zephir in /usr/local/bin
 options='c'
