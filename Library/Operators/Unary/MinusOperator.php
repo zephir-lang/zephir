@@ -53,7 +53,6 @@ class MinusOperator extends BaseOperator
             case 'ulong':
             case 'double':
                 return new CompiledExpression($left->getType(), '-'.$left->getCode(), $expression);
-                break;
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariable($left->getCode());
@@ -66,7 +65,6 @@ class MinusOperator extends BaseOperator
                     case 'ulong':
                     case 'double':
                         return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
-                        break;
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -82,5 +80,4 @@ class MinusOperator extends BaseOperator
                 throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
         }
     }
-
 }

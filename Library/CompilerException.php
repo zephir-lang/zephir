@@ -33,7 +33,7 @@ class CompilerException extends \Exception
      * @param string $message
      * @param array $extra
      */
-    public function __construct($message, $extra=null)
+    public function __construct($message, $extra = null)
     {
         if (is_array($extra)) {
             if (isset($extra['file'])) {

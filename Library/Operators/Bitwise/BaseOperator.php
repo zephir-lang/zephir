@@ -55,14 +55,19 @@ class BitwiseBaseOperator extends BaseOperator
 
             if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
                 switch ($this->_operator) {
+
                     case '&':
                         return new CompiledExpression('int', $expression['left']['value'] & $expression['right']['value'], $expression);
+
                     case '|':
                         return new CompiledExpression('int', $expression['left']['value'] | $expression['right']['value'], $expression);
+
                     case '^':
                         return new CompiledExpression('int', $expression['left']['value'] ^ $expression['right']['value'], $expression);
+
                     case '<<':
                         return new CompiledExpression('int', $expression['left']['value'] << $expression['right']['value'], $expression);
+
                     case '>>':
                         return new CompiledExpression('int', $expression['left']['value'] >> $expression['right']['value'], $expression);
                 }
@@ -139,6 +144,7 @@ class BitwiseBaseOperator extends BaseOperator
             case 'char':
             case 'uchar':
                 switch ($right->getType()) {
+
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -146,22 +152,29 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'char':
                     case 'uchar':
                         return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
                     case 'double':
                         return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' (int) (' . $right->getCode() . '))', $expression);
+
                     case 'bool':
                         return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
+
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
                             case 'ulong':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                             case 'bool':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                             case 'double':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variableRight->isLocalOnly()) {
@@ -169,6 +182,8 @@ class BitwiseBaseOperator extends BaseOperator
                                 } else {
                                     return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
                                 }
+                                break;
+
                             default:
                                 throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
                         }
@@ -180,14 +195,17 @@ class BitwiseBaseOperator extends BaseOperator
 
             case 'bool':
                 switch ($right->getType()) {
+
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                     case 'double':
                         return new CompiledExpression('int', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . '((' . $right->getCode() . ') ? 1 : 0))', $expression);
+
                     case 'bool':
                         return new CompiledExpression('int', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+
                     default:
                         throw new Exception("Cannot operate 'bool' with '" . $right->getType() . "'");
                 }
@@ -195,27 +213,35 @@ class BitwiseBaseOperator extends BaseOperator
 
             case 'double':
                 switch ($right->getType()) {
+
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                         return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
                     case 'double':
                         return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' (int) (' . $right->getCode() . '))', $expression);
+
                     case 'bool':
                         return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' ' . $right->getBooleanCode() . ')', $expression);
+
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
                         switch ($variableRight->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
                             case 'ulong':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                             case 'bool':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                             case 'double':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variableRight->isLocalOnly()) {
@@ -223,10 +249,13 @@ class BitwiseBaseOperator extends BaseOperator
                                 } else {
                                     return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
                                 }
+                                break;
+
                             default:
                                 throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
                         }
                         break;
+
                     default:
                         throw new CompilerException("Cannot operate 'double' with '" . $right->getType() . "'", $expression);
                 }
@@ -251,6 +280,7 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'char':
                     case 'uchar':
                         switch ($right->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -259,18 +289,23 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'char':
                             case 'uchar':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
+
                                     case 'int':
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                                     case 'bool':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                                     case 'double':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         if ($variableRight->isLocalOnly()) {
@@ -278,9 +313,13 @@ class BitwiseBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' (int) (zephir_get_numberval(' . $variableRight->getName() . ')))', $expression);
                                         }
+                                        break;
+
                                     default:
                                         throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
+                                break;
+
                             default:
                                 throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
                         }
@@ -288,25 +327,32 @@ class BitwiseBaseOperator extends BaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
                             case 'ulong':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
                             case 'bool':
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
+
                                     case 'int':
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
                                     case 'double':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
                                     case 'bool':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
+
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         if ($variableRight->isLocalOnly()) {
@@ -314,27 +360,37 @@ class BitwiseBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
                                         }
+                                        break;
+
                                     default:
                                         throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
+                                break;
+
                             default:
                                 throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
                         }
+                        break;
 
                     case 'double':
                         switch ($right->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
                             case 'ulong':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
+
                             case 'double':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_operator . ' (int) (' . $right->getCode() . '))', $expression);
+
                             case 'bool':
                                 return new CompiledExpression('int', '((int) (' . $left->getCode() . ') ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
+
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
+
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -342,8 +398,10 @@ class BitwiseBaseOperator extends BaseOperator
                                         return new CompiledExpression('int', '((int) (' . $variableLeft->getName() . ') ' . $this->_operator . '  ' . $variableRight->getName() . ')', $expression);
                                     case 'double':
                                         return new CompiledExpression('int', '((int) (' . $variableLeft->getName() . ') ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
                                     case 'bool':
                                         return new CompiledExpression('int', '((int) (' . $variableLeft->getName() . ') ' . $this->_bitOperator . ' ' . $variableRight->getName() . ')', $expression);
+
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         if ($variableRight->isLocalOnly()) {
@@ -351,18 +409,24 @@ class BitwiseBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('int', '((int) (' . $variableLeft->getName() . ') ' . $this->_operator . ' (int) (zephir_get_numberval(' . $variableRight->getName() . ')))', $expression);
                                         }
+                                        break;
+
                                     default:
                                         throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
                                 }
+                                break;
+
                             default:
                                 throw new CompilerException("Cannot operate variable('int') with '" . $right->getType() . "'", $expression);
                         }
+                        break;
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
 
                     case 'variable':
                         switch ($right->getType()) {
+
                             /* a + 1 */
                             case 'int':
                             case 'uint':
@@ -383,6 +447,7 @@ class BitwiseBaseOperator extends BaseOperator
                                     return new CompiledExpression('int', '((int) (zephir_get_numberval(' . $op1 . ')) ' . $op . ' ' . $op2 . ')', $expression);
                                 }
                                 break;
+
                             /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -446,12 +511,16 @@ class BitwiseBaseOperator extends BaseOperator
                                     default:
                                         throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
                                 }
+                                break;
+
                             default:
                                 throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
                         }
+                        break;
 
                     case 'variable':
                         switch ($right->getType()) {
+
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -472,6 +541,7 @@ class BitwiseBaseOperator extends BaseOperator
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
 
                                 switch ($variableRight->getType()) {
+
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -482,6 +552,8 @@ class BitwiseBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('int', '(int) (zephir_get_numberval(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
                                         }
+                                        break;
+
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         if ($variableLeft->isLocalOnly()) {
@@ -489,6 +561,8 @@ class BitwiseBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('int', '(int) (zephir_get_numberval(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
                                         }
+                                        break;
+
                                     case 'variable':
                                         $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
                                         switch ($variableRight->getType()) {
@@ -524,14 +598,18 @@ class BitwiseBaseOperator extends BaseOperator
                                     default:
                                         throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
                                 }
+                                break;
+
                             default:
                                 throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
                         }
                         break;
+
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
                 break;
+
             default:
                 throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
         }
