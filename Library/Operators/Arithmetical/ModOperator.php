@@ -22,10 +22,10 @@ namespace Zephir\Operators\Arithmetical;
 class ModOperator extends ArithmeticalBaseOperator
 {
 
-	protected $_operator = '%';
+    protected $_operator = '%';
 
-	protected $_bitOperator = '-';
+    protected $_bitOperator = '-';
 
-	protected $_zvalOperator = 'mod_function';
+    protected $_zvalOperator = 'mod_function';
 
 }

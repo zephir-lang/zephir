@@ -33,38 +33,37 @@ use Zephir\CompiledExpression;
 class UnlikelyOperator extends BaseOperator
 {
 
-	/**
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compile($expression, CompilationContext $compilationContext)
-	{
+    /**
+     *
+     * @param array $expression
+     * @param \CompilationContext $compilationContext
+     * @return \CompiledExpression
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
 
-		if (!isset($expression['left'])) {
-			throw new CompilerException("Invalid 'left' operand for 'unlikely' expression", $expression['left']);
-		}
+        if (!isset($expression['left'])) {
+            throw new CompilerException("Invalid 'left' operand for 'unlikely' expression", $expression['left']);
+        }
 
-		$leftExpr = new Expression($expression['left']);
-		$leftExpr->setReadOnly(true);
-		$left = $leftExpr->compile($compilationContext);
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly(true);
+        $left = $leftExpr->compile($compilationContext);
 
-		if ($left->getType() == 'bool') {
-			return new CompiledExpression('bool', 'unlikely(' . $left->getCode() . ')', $expression);
-		}
+        if ($left->getType() == 'bool') {
+            return new CompiledExpression('bool', 'unlikely(' . $left->getCode() . ')', $expression);
+        }
 
-		if ($left->getType() == 'variable') {
-			$variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-			switch ($variable->getType()) {
-				case 'bool':
-					return new CompiledExpression('bool', 'unlikely(' . $variable->getName() . ')', $expression);
-				default:
-					throw new CompilerException("Cannot use expression variable type: '" . $variable->getType() . "' in 'unlikely' operator", $expression['left']);
-			}
-		}
+        if ($left->getType() == 'variable') {
+            $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+            switch ($variable->getType()) {
+                case 'bool':
+                    return new CompiledExpression('bool', 'unlikely(' . $variable->getName() . ')', $expression);
+                default:
+                    throw new CompilerException("Cannot use expression variable type: '" . $variable->getType() . "' in 'unlikely' operator", $expression['left']);
+            }
+        }
 
-		throw new CompilerException("Cannot use expression type: '" . $left->getType() . "' in 'unlikely' operator", $expression['left']);
-	}
-
+        throw new CompilerException("Cannot use expression type: '" . $left->getType() . "' in 'unlikely' operator", $expression['left']);
+    }
 }

@@ -21,9 +21,9 @@ namespace Zephir\Operators\Bitwise;
 
 class ShiftLeftOperator extends BitwiseBaseOperator
 {
-	protected $_operator = '<<';
+    protected $_operator = '<<';
 
-	protected $_bitOperator = '<<';
+    protected $_bitOperator = '<<';
 
-	protected $_zvalOperator = 'zephir_shift_left_function';
+    protected $_zvalOperator = 'zephir_shift_left_function';
 }

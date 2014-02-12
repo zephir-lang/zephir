@@ -33,55 +33,54 @@ use Zephir\CompiledExpression;
 class RequireOperator extends BaseOperator
 {
 
-	/**
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compile($expression, CompilationContext $compilationContext)
-	{
+    /**
+     *
+     * @param array $expression
+     * @param \CompilationContext $compilationContext
+     * @return \CompiledExpression
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
 
-		$expr = new Expression($expression['left']);
-		$expr->setReadOnly(true);
-		$expr->setExpectReturn(true);
+        $expr = new Expression($expression['left']);
+        $expr->setReadOnly(true);
+        $expr->setExpectReturn(true);
 
-		$exprPath = $expr->compile($compilationContext);
-		if ($exprPath->getType() == 'variable') {
+        $exprPath = $expr->compile($compilationContext);
+        if ($exprPath->getType() == 'variable') {
 
-			$exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
-			if ($exprVariable->getType() == 'variable') {
-				if ($exprVariable->hasDifferentDynamicType(array('undefined', 'string'))) {
-					$compilationContext->logger->warning('Possible attempt to use invalid type as path in "require" operator', 'non-valid-require', $expression);
-				}
-			}
+            $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
+            if ($exprVariable->getType() == 'variable') {
+                if ($exprVariable->hasDifferentDynamicType(array('undefined', 'string'))) {
+                    $compilationContext->logger->warning('Possible attempt to use invalid type as path in "require" operator', 'non-valid-require', $expression);
+                }
+            }
 
-		}
+        }
 
-		$symbolVariable = $this->getExpected($compilationContext, $expression);
-		if ($symbolVariable) {
-			if ($symbolVariable->getType() != 'variable') {
-				throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
-			}
-		}
+        $symbolVariable = $this->getExpected($compilationContext, $expression);
+        if ($symbolVariable) {
+            if ($symbolVariable->getType() != 'variable') {
+                throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
+            }
+        }
 
-		$compilationContext->headersManager->add('kernel/require');
+        $compilationContext->headersManager->add('kernel/require');
 
-		$codePrinter = $compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
 
-		if ($symbolVariable) {
-			$codePrinter->output('if (zephir_require_ret(' . $symbolVariable->getName() . ', ' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
-		} else {
-			$codePrinter->output('if (zephir_require(' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
-		}
-		$codePrinter->output("\t" . 'RETURN_MM_NULL();');
-		$codePrinter->output('}');
+        if ($symbolVariable) {
+            $codePrinter->output('if (zephir_require_ret(' . $symbolVariable->getName() . ', ' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
+        } else {
+            $codePrinter->output('if (zephir_require(' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
+        }
+        $codePrinter->output("\t" . 'RETURN_MM_NULL();');
+        $codePrinter->output('}');
 
-		if ($symbolVariable) {
-			return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
-		}
+        if ($symbolVariable) {
+            return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+        }
 
-		return new CompiledExpression('null', null, $expression);
-	}
-
+        return new CompiledExpression('null', null, $expression);
+    }
 }

@@ -420,5 +420,4 @@ class LogicalBaseOperator extends BaseOperator
 				throw new CompilerException("Unsupported type: " . $left->getType(), $expression);
 		}
 	}
-
 }

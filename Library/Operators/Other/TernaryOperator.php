@@ -35,71 +35,70 @@ use Zephir\Statements\LetStatement;
 class TernaryOperator extends BaseOperator
 {
 
-	/**
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compile($expression, CompilationContext $compilationContext)
-	{
-		/**
-		 * This variable is used to check if the compound and expression is evaluated as true or false
-		 */
-		$returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-		if ($returnVariable->isTemporal()) {
-			$returnVariable->skipInitVariant(2);
-		}
+    /**
+     *
+     * @param array $expression
+     * @param \CompilationContext $compilationContext
+     * @return \CompiledExpression
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
+        /**
+         * This variable is used to check if the compound and expression is evaluated as true or false
+         */
+        $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+        if ($returnVariable->isTemporal()) {
+            $returnVariable->skipInitVariant(2);
+        }
 
-		$expr = new EvalExpression();
-		$condition = $expr->optimize($expression['left'], $compilationContext);
-		$compilationContext->codePrinter->output('if (' . $condition . ') {');
+        $expr = new EvalExpression();
+        $condition = $expr->optimize($expression['left'], $compilationContext);
+        $compilationContext->codePrinter->output('if (' . $condition . ') {');
 
-		$compilationContext->codePrinter->increaseLevel();
+        $compilationContext->codePrinter->increaseLevel();
 
-		/**
-		 * Create an implicit 'let' operation to update the evaluated left operator
-		 */
-		$statement = new LetStatement(array(
-			'type' => 'let',
-			'assignments' => array(
-				array(
-					'assign-type' => 'variable',
-					'variable'    => $returnVariable->getName(),
-					'operator'    => 'assign',
-					'expr'        => $expression['right']
-				)
-			)
-		));
-		$statement->compile($compilationContext);
+        /**
+         * Create an implicit 'let' operation to update the evaluated left operator
+         */
+        $statement = new LetStatement(array(
+            'type' => 'let',
+            'assignments' => array(
+                array(
+                    'assign-type' => 'variable',
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['right']
+                )
+            )
+        ));
+        $statement->compile($compilationContext);
 
-		$compilationContext->codePrinter->decreaseLevel();
+        $compilationContext->codePrinter->decreaseLevel();
 
-		$compilationContext->codePrinter->output('} else {');
+        $compilationContext->codePrinter->output('} else {');
 
-		$compilationContext->codePrinter->increaseLevel();
+        $compilationContext->codePrinter->increaseLevel();
 
-		/**
-		 * Create an implicit 'let' operation to update the evaluated left operator
-		 */
-		$statement = new LetStatement(array(
-			'type' => 'let',
-			'assignments' => array(
-				array(
-					'assign-type' => 'variable',
-					'variable'    => $returnVariable->getName(),
-					'operator'    => 'assign',
-					'expr'        => $expression['extra']
-				)
-			)
-		));
-		$statement->compile($compilationContext);
+        /**
+         * Create an implicit 'let' operation to update the evaluated left operator
+         */
+        $statement = new LetStatement(array(
+            'type' => 'let',
+            'assignments' => array(
+                array(
+                    'assign-type' => 'variable',
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['extra']
+                )
+            )
+        ));
+        $statement->compile($compilationContext);
 
-		$compilationContext->codePrinter->decreaseLevel();
+        $compilationContext->codePrinter->decreaseLevel();
 
-		$compilationContext->codePrinter->output('}');
+        $compilationContext->codePrinter->output('}');
 
-		return new CompiledExpression('variable', $returnVariable->getName(), $expression);
-	}
-
+        return new CompiledExpression('variable', $returnVariable->getName(), $expression);
+    }
 }

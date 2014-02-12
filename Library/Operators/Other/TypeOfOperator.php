@@ -34,24 +34,23 @@ use Zephir\Builder\FunctionCallBuilder;
 class TypeOfOperator extends BaseOperator
 {
 
-	/**
-	 *
-	 * @param array $expression
-	 * @param \CompilationContext $compilationContext
-	 * @return \CompiledExpression
-	 */
-	public function compile($expression, CompilationContext $compilationContext)
-	{
+    /**
+     *
+     * @param array $expression
+     * @param \CompilationContext $compilationContext
+     * @return \CompiledExpression
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
 
-		if (!isset($expression['left'])) {
-			throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
-		}
+        if (!isset($expression['left'])) {
+            throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
+        }
 
-		$builder = new FunctionCallBuilder('gettype', array($expression['left']));
+        $builder = new FunctionCallBuilder('gettype', array($expression['left']));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
-
+        return $expression->compile($compilationContext);
+    }
 }

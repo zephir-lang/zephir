@@ -22,10 +22,10 @@ namespace Zephir\Operators\Arithmetical;
 class DivOperator extends ArithmeticalBaseOperator
 {
 
-	protected $_operator = '/';
+    protected $_operator = '/';
 
-	protected $_bitOperator = '-';
+    protected $_bitOperator = '-';
 
-	protected $_zvalOperator = 'div_function';
+    protected $_zvalOperator = 'div_function';
 
 }
