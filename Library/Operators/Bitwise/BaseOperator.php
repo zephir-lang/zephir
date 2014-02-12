@@ -452,6 +452,7 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
+
                                     /* a(var) + a(int) */
                                     case 'int':
                                     case 'uint':
@@ -566,12 +567,16 @@ class BitwiseBaseOperator extends BaseOperator
                                     case 'variable':
                                         $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
                                         switch ($variableRight->getType()) {
+
                                             case 'int':
                                                 return new CompiledExpression('int', '(int) (' . $variableLeft->getName() . ') ' . $this->_operator . ' (int) (' . $variableRight->getName() .')', $expression);
+
                                             case 'double':
                                                 return new CompiledExpression('int', '(int) (' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
+
                                             case 'bool':
                                                 return new CompiledExpression('int', '(int) (' . $variableLeft->getName() . ') ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
+
                                             case 'variable':
                                                 $compilationContext->headersManager->add('kernel/operators');
 

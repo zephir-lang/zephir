@@ -23,7 +23,6 @@ namespace Zephir;
  * Class Exception for backward compatibility after migrating to namespaces
  * @package Zephir
  */
-class Exception
-    extends \Exception
+class Exception extends \Exception
 {
 }
