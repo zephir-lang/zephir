@@ -87,6 +87,10 @@ class CompilerFile
         $compilePath = '.temp' . DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', realpath($this->_filePath)) . ".js";
         $zepRealPath = realpath($this->_filePath);
 
+        if (!file_exists((ZEPHIRPATH . '/bin/zephir-parser')) {
+            throw new Exception('zephir-parser was not found');
+        }
+
         if (file_exists($compilePath)) {
             if (filemtime($compilePath) < filemtime($zepRealPath) || filemtime($compilePath) < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
                 system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
@@ -189,7 +193,8 @@ class CompilerFile
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
-                    $classDefinition->addConstant(new ClassConstant($constant['name'], isset($constant['default']) ? $constant['default'] : null, isset($constant['docblock']) ? $constant['docblock'] : null));
+                    $classConstant = new ClassConstant($constant['name'], isset($constant['default']) ? $constant['default'] : null, isset($constant['docblock']) ? $constant['docblock'] : null);
+                    $classDefinition->addConstant($classConstant);
                 }
             }
 
