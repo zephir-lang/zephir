@@ -66,7 +66,7 @@ Zephir is open-sourced software licensed under the MIT License. See the LICENSE 
 
 Contributing
 ------------
-See CONTRIBUTING.md for details about contributions to this repository
+[See `CONTRIBUTING.md`](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
 
 Donate & Sponsor
 ----------------
@@ -85,4 +85,3 @@ Current Build Status
 Zephir is built under Travis CI service. Every commit pushed to this repository will queue a build into the continuous integration service and will run all PHPUnit tests to ensure that everything is going well and the project is stable. The current build status is:
 
 [![Build Status](https://secure.travis-ci.org/phalcon/zephir.png?branch=master)](http://travis-ci.org/phalcon/zephir)
-
