@@ -33,215 +33,215 @@ use Zephir\Branch;
 class EvalExpression
 {
 
-	protected $_unrecheable = null;
+    protected $_unrecheable = null;
 
-	protected $_unrecheableElse = null;
+    protected $_unrecheableElse = null;
 
-	/**
-	 * @param array $expr
-	 * @param CompilationContext $compilationContext
-	 */
-	public function optimizeNot($expr, $compilationContext)
-	{
-		/**
-		 * Compile the expression negating the evaluted expression
-		 */
-		if ($expr['type'] == 'not') {
-			$conditions = $this->optimize($expr['left'], $compilationContext);
-			if ($conditions !== false) {
-				return '!(' . $conditions . ')';
-			}
-		}
-		return false;
-	}
+    /**
+     * @param array $expr
+     * @param CompilationContext $compilationContext
+     */
+    public function optimizeNot($expr, $compilationContext)
+    {
+        /**
+         * Compile the expression negating the evaluted expression
+         */
+        if ($expr['type'] == 'not') {
+            $conditions = $this->optimize($expr['left'], $compilationContext);
+            if ($conditions !== false) {
+                return '!(' . $conditions . ')';
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Optimizes expressions
-	 *
-	 * @param $exprRaw
-	 * @param CompilationContext $compilationContext
-	 * @return bool|string
-	 * @throws CompilerException
-	 */
-	public function optimize($exprRaw, CompilationContext $compilationContext)
-	{
-		$conditions = $this->optimizeNot($exprRaw, $compilationContext);
+    /**
+     * Optimizes expressions
+     *
+     * @param $exprRaw
+     * @param CompilationContext $compilationContext
+     * @return bool|string
+     * @throws CompilerException
+     */
+    public function optimize($exprRaw, CompilationContext $compilationContext)
+    {
+        $conditions = $this->optimizeNot($exprRaw, $compilationContext);
 
-		if ($conditions !== false) {
-			return $conditions;
-		}
+        if ($conditions !== false) {
+            return $conditions;
+        }
 
-		/**
-		 * Discard first level parentheses
-		 */
-		if ($exprRaw['type'] == 'list') {
-			$expr = new Expression($exprRaw['left']);
-		} else {
-			$expr = new Expression($exprRaw);
-		}
+        /**
+         * Discard first level parentheses
+         */
+        if ($exprRaw['type'] == 'list') {
+            $expr = new Expression($exprRaw['left']);
+        } else {
+            $expr = new Expression($exprRaw);
+        }
 
-		$expr->setReadOnly(true);
-		$expr->setEvalMode(true);
-		$compiledExpression = $expr->compile($compilationContext);
+        $expr->setReadOnly(true);
+        $expr->setEvalMode(true);
+        $compiledExpression = $expr->compile($compilationContext);
 
-		/**
-		 * Possible corrupted expression?
-		 */
-		if (!is_object($compiledExpression)) {
-			throw new CompilerException('Corrupted expression: ' . $exprRaw['type'], $exprRaw);
-		}
+        /**
+         * Possible corrupted expression?
+         */
+        if (!is_object($compiledExpression)) {
+            throw new CompilerException('Corrupted expression: ' . $exprRaw['type'], $exprRaw);
+        }
 
-		/**
-		 * Generate the condition according to the value returned by the evaluted expression
-		 */
-		switch ($compiledExpression->getType()) {
+        /**
+         * Generate the condition according to the value returned by the evaluted expression
+         */
+        switch ($compiledExpression->getType()) {
 
-			case 'null':
-				$this->_unrecheable = true;
-				return '0';
+            case 'null':
+                $this->_unrecheable = true;
+                return '0';
 
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-			case 'double':
-				$code = $compiledExpression->getCode();
-				if (is_numeric($code)) {
-					if ($code == '1') {
-						$this->_unrecheableElse = true;
-					} else {
-						$this->_unrecheable = true;
-					}
-				}
-				return $code;
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'double':
+                $code = $compiledExpression->getCode();
+                if (is_numeric($code)) {
+                    if ($code == '1') {
+                        $this->_unrecheableElse = true;
+                    } else {
+                        $this->_unrecheable = true;
+                    }
+                }
+                return $code;
 
-			case 'char':
-			case 'uchar':
-				return $compiledExpression->getCode();
+            case 'char':
+            case 'uchar':
+                return $compiledExpression->getCode();
 
-			case 'bool':
-				$code = $compiledExpression->getBooleanCode();
-				if ($code == '1') {
-					$this->_unrecheableElse = true;
-				} else {
-					if ($code == '0') {
-						$this->_unrecheable = true;
-					}
-				}
-				return $code;
+            case 'bool':
+                $code = $compiledExpression->getBooleanCode();
+                if ($code == '1') {
+                    $this->_unrecheableElse = true;
+                } else {
+                    if ($code == '0') {
+                        $this->_unrecheable = true;
+                    }
+                }
+                return $code;
 
-			case 'variable':
+            case 'variable':
 
-				$variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
+                $variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
 
-				$possibleValue = $variableRight->getPossibleValue();
-				if (is_object($possibleValue)) {
+                $possibleValue = $variableRight->getPossibleValue();
+                if (is_object($possibleValue)) {
 
-					$possibleValueBranch = $variableRight->getPossibleValueBranch();
-					if ($possibleValueBranch instanceof Branch) {
+                    $possibleValueBranch = $variableRight->getPossibleValueBranch();
+                    if ($possibleValueBranch instanceof Branch) {
 
-						/**
-						 * Check if the possible value was assigned in the root branch
-						 */
-						if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
+                        /**
+                         * Check if the possible value was assigned in the root branch
+                         */
+                        if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
 
-							if ($possibleValue instanceof LiteralCompiledExpression) {
+                            if ($possibleValue instanceof LiteralCompiledExpression) {
 
-								switch ($possibleValue->getType()) {
+                                switch ($possibleValue->getType()) {
 
-									case 'null':
-										$this->_unrecheable = true;
-										break;
+                                    case 'null':
+                                        $this->_unrecheable = true;
+                                        break;
 
-									case 'bool':
-										if ($possibleValue->getBooleanCode() == '0') {
-											$this->_unrecheable = true;
-										} else {
-											$this->_unrecheableElse = true;
-										}
-										break;
+                                    case 'bool':
+                                        if ($possibleValue->getBooleanCode() == '0') {
+                                            $this->_unrecheable = true;
+                                        } else {
+                                            $this->_unrecheableElse = true;
+                                        }
+                                        break;
 
-									case 'int':
-										if (!intval($possibleValue->getCode())) {
-											$this->_unrecheable = true;
-										} else {
-											$this->_unrecheableElse = true;
-										}
-										break;
+                                    case 'int':
+                                        if (!intval($possibleValue->getCode())) {
+                                            $this->_unrecheable = true;
+                                        } else {
+                                            $this->_unrecheableElse = true;
+                                        }
+                                        break;
 
-									case 'double':
-										if (!floatval($possibleValue->getCode())) {
-											$this->_unrecheable = true;
-										} else {
-											$this->_unrecheableElse = true;
-										}
-										break;
+                                    case 'double':
+                                        if (!floatval($possibleValue->getCode())) {
+                                            $this->_unrecheable = true;
+                                        } else {
+                                            $this->_unrecheableElse = true;
+                                        }
+                                        break;
 
-									default:
-										//echo $possibleValue->getType();
+                                    default:
+                                        //echo $possibleValue->getType();
 
-								}
-							}
-						}
-					}
+                                }
+                            }
+                        }
+                    }
 
-				}
+                }
 
-				switch ($variableRight->getType()) {
+                switch ($variableRight->getType()) {
 
-					case 'int':
-					case 'uint':
-					case 'char':
-					case 'uchar':
-					case 'long':
-					case 'ulong':
-						return $variableRight->getName();
+                    case 'int':
+                    case 'uint':
+                    case 'char':
+                    case 'uchar':
+                    case 'long':
+                    case 'ulong':
+                        return $variableRight->getName();
 
-					case 'string':
-						return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
+                    case 'string':
+                        return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
 
-					case 'bool':
-						return $variableRight->getName();
+                    case 'bool':
+                        return $variableRight->getName();
 
-					case 'double':
-						return $variableRight->getName();
+                    case 'double':
+                        return $variableRight->getName();
 
-					case 'variable':
-						$compilationContext->headersManager->add('kernel/operators');
-						if ($variableRight->isLocalOnly()) {
-							return 'zephir_is_true(&' . $variableRight->getName() . ')';
-						} else {
-							return 'zephir_is_true(' . $variableRight->getName() . ')';
-						}
+                    case 'variable':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        if ($variableRight->isLocalOnly()) {
+                            return 'zephir_is_true(&' . $variableRight->getName() . ')';
+                        } else {
+                            return 'zephir_is_true(' . $variableRight->getName() . ')';
+                        }
 
-					default:
-						throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
-				}
-				break;
+                    default:
+                        throw new CompilerException("Variable can't be evaluated " . $variableRight->getType(), $exprRaw);
+                }
+                break;
 
-			default:
-				throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
-		}
-	}
+            default:
+                throw new CompilerException("Expression " . $compiledExpression->getType() . " can't be evaluated", $exprRaw);
+        }
+    }
 
-	/**
-	 * Checks if the evaluation produce unrecheable code
-	 *
-	 * @return boolean
-	 */
-	public function isUnrecheable()
-	{
-		return $this->_unrecheable;
-	}
+    /**
+     * Checks if the evaluation produce unrecheable code
+     *
+     * @return boolean
+     */
+    public function isUnrecheable()
+    {
+        return $this->_unrecheable;
+    }
 
-	/**
-	 * Checks if the evaluation not produce unrecheable code
-	 *
-	 * @return boolean
-	 */
-	public function isUnrecheableElse()
-	{
-		return $this->_unrecheableElse;
-	}
+    /**
+     * Checks if the evaluation not produce unrecheable code
+     *
+     * @return boolean
+     */
+    public function isUnrecheableElse()
+    {
+        return $this->_unrecheableElse;
+    }
 
 }

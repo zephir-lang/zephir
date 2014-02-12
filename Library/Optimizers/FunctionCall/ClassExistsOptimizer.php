@@ -32,38 +32,37 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class ClassExistsOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) < 1) {
-			throw new CompilerException("'class_exists' require one or two parameters");
-		}
+        if (count($expression['parameters']) < 1) {
+            throw new CompilerException("'class_exists' require one or two parameters");
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		/**
-		 * Process autoload
-		 */
-		if (count($resolvedParams) == 2) {
-			$context->headersManager->add('kernel/operators');
-			$autoload = 'zephir_is_true(' . $resolvedParams[1] . ') ';
-		} else {
-			$autoload = '1';
-		}
+        /**
+         * Process autoload
+         */
+        if (count($resolvedParams) == 2) {
+            $context->headersManager->add('kernel/operators');
+            $autoload = 'zephir_is_true(' . $resolvedParams[1] . ') ';
+        } else {
+            $autoload = '1';
+        }
 
-		$context->headersManager->add('kernel/object');
+        $context->headersManager->add('kernel/object');
 
-		return new CompiledExpression('bool', 'zephir_class_exists(' . $resolvedParams[0] . ', ' . $autoload . ' TSRMLS_CC)', $expression);
-	}
-
+        return new CompiledExpression('bool', 'zephir_class_exists(' . $resolvedParams[0] . ', ' . $autoload . ' TSRMLS_CC)', $expression);
+    }
 }

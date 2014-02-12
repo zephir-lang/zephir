@@ -27,5 +27,4 @@ class BitwiseXorOperator extends BitwiseBaseOperator
     protected $_bitOperator = '^';
 
     protected $_zvalOperator = 'zephir_bitwise_xor_function';
-
 }

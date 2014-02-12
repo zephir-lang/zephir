@@ -32,27 +32,27 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class FileExistsOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		$context->headersManager->add('kernel/file');
+        $context->headersManager->add('kernel/file');
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('bool', '(zephir_file_exists(' . $resolvedParams[0] . ' TSRMLS_CC) == SUCCESS)', $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', '(zephir_file_exists(' . $resolvedParams[0] . ' TSRMLS_CC) == SUCCESS)', $expression);
 
-	}
+    }
 }

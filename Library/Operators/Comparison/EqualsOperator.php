@@ -22,19 +22,19 @@ namespace Zephir\Operators\Comparison;
 class EqualsOperator extends ComparisonBaseOperator
 {
 
-	protected $_commutative = true;
+    protected $_commutative = true;
 
-	protected $_operator = '==';
+    protected $_operator = '==';
 
-	protected $_bitOperator = '==';
+    protected $_bitOperator = '==';
 
-	protected $_zvalOperator = 'ZEPHIR_IS_EQUAL';
+    protected $_zvalOperator = 'ZEPHIR_IS_EQUAL';
 
-	protected $_zvalLongOperator = 'ZEPHIR_IS_LONG';
+    protected $_zvalLongOperator = 'ZEPHIR_IS_LONG';
 
-	protected $_zvalStringOperator = 'ZEPHIR_IS_STRING';
+    protected $_zvalStringOperator = 'ZEPHIR_IS_STRING';
 
-	protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
+    protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
 
-	protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
+    protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
 }

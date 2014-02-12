@@ -26,61 +26,61 @@ use Zephir\CompiledExpression;
 
 class MinusOperator extends BaseOperator
 {
-	/**
-	 * Compile expression
-	 *
-	 * @param $expression
-	 * @param CompilationContext $compilationContext
-	 * @return CompiledExpression
-	 * @throws CompilerException
-	 * @throws Exception
-	 */
-	public function compile($expression, CompilationContext $compilationContext)
-	{
-		if (!isset($expression['left'])) {
-			throw new \Exception("Missing left part of the expression");
-		}
+    /**
+     * Compile expression
+     *
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
+     * @throws Exception
+     */
+    public function compile($expression, CompilationContext $compilationContext)
+    {
+        if (!isset($expression['left'])) {
+            throw new \Exception("Missing left part of the expression");
+        }
 
-		$leftExpr = new Expression($expression['left']);
-		$leftExpr->setReadOnly($this->_readOnly);
-		$left = $leftExpr->compile($compilationContext);
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly($this->_readOnly);
+        $left = $leftExpr->compile($compilationContext);
 
-		switch ($left->getType()) {
+        switch ($left->getType()) {
 
-			case 'int':
-			case 'uint':
-			case 'long':
-			case 'ulong':
-			case 'double':
-				return new CompiledExpression($left->getType(), '-'.$left->getCode(), $expression);
-				break;
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'double':
+                return new CompiledExpression($left->getType(), '-'.$left->getCode(), $expression);
+                break;
 
-			case 'variable':
-				$variable = $compilationContext->symbolTable->getVariable($left->getCode());
+            case 'variable':
+                $variable = $compilationContext->symbolTable->getVariable($left->getCode());
 
-				switch ($variable->getType()) {
+                switch ($variable->getType()) {
 
-					case 'int':
-					case 'uint':
-					case 'long':
-					case 'ulong':
-					case 'double':
-						return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
-						break;
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'double':
+                        return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
+                        break;
 
-					case 'variable':
-						$compilationContext->headersManager->add('kernel/operators');
-						$compilationContext->codePrinter->output('zephir_negate(' . $variable->getName() . ' TSRMLS_CC);');
-						return new CompiledExpression('variable', $variable->getName(), $expression);
+                    case 'variable':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $compilationContext->codePrinter->output('zephir_negate(' . $variable->getName() . ' TSRMLS_CC);');
+                        return new CompiledExpression('variable', $variable->getName(), $expression);
 
-					default:
-						throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
-				}
-				break;
+                    default:
+                        throw new CompilerException("Cannot operate minus with variable of '" . $left->getType() . "' type");
+                }
+                break;
 
-			default:
-				throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
-		}
-	}
+            default:
+                throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
+        }
+    }
 
 }

@@ -32,57 +32,57 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class StrposOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) < 2) {
-			throw new CompilerException("'strpos' require two or three parameters");
-		}
+        if (count($expression['parameters']) < 2) {
+            throw new CompilerException("'strpos' require two or three parameters");
+        }
 
-		/**
-		 * Process offset
-		 */
-		$offset = '0 ';
-		if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'int') {
-			$offset = $expression['parameters'][2]['value'] . ' ';
-			unset($expression['parameters'][2]);
-		}
+        /**
+         * Process offset
+         */
+        $offset = '0 ';
+        if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'int') {
+            $offset = $expression['parameters'][2]['value'] . ' ';
+            unset($expression['parameters'][2]);
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		if (count($resolvedParams) >= 3) {
-			$context->headersManager->add('kernel/operators');
-			$offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
-		}
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        if (count($resolvedParams) >= 3) {
+            $context->headersManager->add('kernel/operators');
+            $offset = 'zephir_get_intval(' . $resolvedParams[2] . ') ';
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->isNotVariableAndString()) {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable->isNotVariableAndString()) {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
 
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
-		$context->headersManager->add('kernel/string');
+        $context->headersManager->add('kernel/string');
 
-		$symbolVariable->setDynamicTypes('int');
+        $symbolVariable->setDynamicTypes('int');
 
-		$context->codePrinter->output('zephir_fast_strpos(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset .');');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
+        $context->codePrinter->output('zephir_fast_strpos(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset .');');
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }

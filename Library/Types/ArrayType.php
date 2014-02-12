@@ -29,64 +29,63 @@ use Zephir\FunctionCall;
 class ArrayType
 {
 
-	/**
-	 * Transforms calls to method "join" to function calls to "join"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
+    /**
+     * Transforms calls to method "join" to function calls to "join"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
 
-		$builder = new FunctionCallBuilder(
-			'join',
-			array_merge($expression['parameters'], array($caller)),
-			FunctionCall::CALL_NORMAL,
-			$expression['file'],
-			$expression['line'],
-			$expression['char']
-		);
+        $builder = new FunctionCallBuilder(
+            'join',
+            array_merge($expression['parameters'], array($caller)),
+            FunctionCall::CALL_NORMAL,
+            $expression['file'],
+            $expression['line'],
+            $expression['char']
+        );
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Transforms calls to method "reverse" to function calls to "array_reverse"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function reverse($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('array_reverse', array($caller));
+    /**
+     * Transforms calls to method "reverse" to function calls to "array_reverse"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function reverse($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('array_reverse', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Intercepts calls to built-in methods on the "int" type
-	 *
-	 * @param string $methodName
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		if (method_exists($this, $methodName)) {
-			return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-		}
+    /**
+     * Intercepts calls to built-in methods on the "int" type
+     *
+     * @param string $methodName
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        if (method_exists($this, $methodName)) {
+            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+        }
 
-		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
-	}
-
+        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
+    }
 }

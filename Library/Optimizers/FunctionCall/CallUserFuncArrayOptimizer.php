@@ -32,46 +32,45 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class CallUserFuncArrayOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 2) {
-			return false;
-		}
+        if (count($expression['parameters']) != 2) {
+            return false;
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable) {
-			if ($symbolVariable->getType() != 'variable') {
-				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-			}
-			if ($call->mustInitSymbolVariable()) {
-				$symbolVariable->initVariant($context);
-			}
-		} else {
-			$symbolVariable = $context->symbolTable->addTemp('variable', $context);
-			$symbolVariable->initVariant($context);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable) {
+            if ($symbolVariable->getType() != 'variable') {
+                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            }
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
+        } else {
+            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
+            $symbolVariable->initVariant($context);
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		$context->headersManager->add('kernel/fcall');
+        $context->headersManager->add('kernel/fcall');
 
-		$context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
-		return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
-	}
-
+        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    }
 }

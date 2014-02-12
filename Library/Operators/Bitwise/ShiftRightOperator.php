@@ -27,5 +27,4 @@ class ShiftRightOperator extends BitwiseBaseOperator
     protected $_bitOperator = '>>';
 
     protected $_zvalOperator = 'zephir_shift_right_function';
-
 }

@@ -33,71 +33,70 @@ use Zephir\Utils;
  */
 class ExplodeOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
-		if (count($expression['parameters']) < 2) {
-			throw new CompilerException("'explode' require two parameter");
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
+        if (count($expression['parameters']) < 2) {
+            throw new CompilerException("'explode' require two parameter");
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->isNotVariableAndString()) {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable->isNotVariableAndString()) {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
 
-		/**
-		 * Process limit
-		 */
-		$limit = 'LONG_MAX' ;
-		$limitOffset = 2;
-		if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'int') {
-			$limit = $expression['parameters'][2]['value'] . ' ';
-			unset($expression['parameters'][2]);
-		}
+        /**
+         * Process limit
+         */
+        $limit = 'LONG_MAX' ;
+        $limitOffset = 2;
+        if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'int') {
+            $limit = $expression['parameters'][2]['value'] . ' ';
+            unset($expression['parameters'][2]);
+        }
 
-		if ($expression['parameters'][0]['type'] == 'string') {
-			$str = Utils::addSlashes($expression['parameters'][0]['value']);
-			unset($expression['parameters'][0]);
-			if (count($expression['parameters']) == 2) {
-				$limitOffset = 1;
-			}
-		}
+        if ($expression['parameters'][0]['type'] == 'string') {
+            $str = Utils::addSlashes($expression['parameters'][0]['value']);
+            unset($expression['parameters'][0]);
+            if (count($expression['parameters']) == 2) {
+                $limitOffset = 1;
+            }
+        }
 
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		if (isset($resolvedParams[$limitOffset])) {
-			$context->headersManager->add('kernel/operators');
-			$limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
-		}
+        if (isset($resolvedParams[$limitOffset])) {
+            $context->headersManager->add('kernel/operators');
+            $limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
+        }
 
-		$context->headersManager->add('kernel/string');
-		$symbolVariable->setDynamicTypes('array');
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('array');
 
-		if (isset($str)) {
-			$context->codePrinter->output('zephir_fast_explode_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ', ' . $limit . ' TSRMLS_CC);');
-			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		}
+        if (isset($str)) {
+            $context->codePrinter->output('zephir_fast_explode_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ', ' . $limit . ' TSRMLS_CC);');
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        }
 
-		$context->codePrinter->output('zephir_fast_explode(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $limit . ' TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
+        $context->codePrinter->output('zephir_fast_explode(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $limit . ' TSRMLS_CC);');
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }

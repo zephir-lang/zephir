@@ -33,54 +33,53 @@ use Zephir\Utils;
  */
 class JoinOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 2) {
-			return false;
-		}
+        if (count($expression['parameters']) != 2) {
+            return false;
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->isNotVariableAndString()) {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable->isNotVariableAndString()) {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
 
-		if ($expression['parameters'][0]['type'] == 'string') {
-			$str = Utils::addSlashes($expression['parameters'][0]['value']);
-			unset($expression['parameters'][0]);
-		}
+        if ($expression['parameters'][0]['type'] == 'string') {
+            $str = Utils::addSlashes($expression['parameters'][0]['value']);
+            unset($expression['parameters'][0]);
+        }
 
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		$context->headersManager->add('kernel/string');
-		$symbolVariable->setDynamicTypes('string');
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('string');
 
-		if (isset($str)) {
-			$context->codePrinter->output('zephir_fast_join_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
-			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		}
+        if (isset($str)) {
+            $context->codePrinter->output('zephir_fast_join_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        }
 
-		$context->codePrinter->output('zephir_fast_join(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
+        $context->codePrinter->output('zephir_fast_join(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }

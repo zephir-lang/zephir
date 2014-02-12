@@ -32,24 +32,23 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class IsCallableOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
-	}
-
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', 'zephir_is_callable(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+    }
 }

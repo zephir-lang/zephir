@@ -32,30 +32,30 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class NextOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @todo This optimizer doesn`t work at while and etc statements
-	 *
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		return false;
+    /**
+     * @todo This optimizer doesn`t work at while and etc statements
+     *
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        return false;
 
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		//$context->headersManager->add('kernel/array');
-		//$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		//return new CompiledExpression('fcall', 'zephir_array_next(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
-	}
+        //$context->headersManager->add('kernel/array');
+        //$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        //return new CompiledExpression('fcall', 'zephir_array_next(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+    }
 
 }

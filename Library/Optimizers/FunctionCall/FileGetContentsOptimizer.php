@@ -32,49 +32,48 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class FileGetContentsOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		$context->headersManager->add('kernel/file');
+        $context->headersManager->add('kernel/file');
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable) {
-			if ($symbolVariable->isNotVariableAndString()) {
-				throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-			}
-			if ($call->mustInitSymbolVariable()) {
-				$symbolVariable->initVariant($context);
-			}
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable) {
+            if ($symbolVariable->isNotVariableAndString()) {
+                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            }
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		if ($symbolVariable) {
-			$context->codePrinter->output('zephir_file_get_contents(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
-			return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-		} else {
-			$context->codePrinter->output('zephir_file_get_contents(NULL, ' . $resolvedParams[0] . ' TSRMLS_CC);');
-		}
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        if ($symbolVariable) {
+            $context->codePrinter->output('zephir_file_get_contents(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+            return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        } else {
+            $context->codePrinter->output('zephir_file_get_contents(NULL, ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        }
 
-		return new CompiledExpression('null', 'null', $expression);
-
-	}
+        return new CompiledExpression('null', 'null', $expression);
+    }
 }

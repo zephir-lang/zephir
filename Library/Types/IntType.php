@@ -28,39 +28,38 @@ use Zephir\Builder\FunctionCallBuilder;
 class IntType
 {
 
-	/**
-	 * Transforms calls to method "abs" to function calls to "abs"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('abs', array($caller));
+    /**
+     * Transforms calls to method "abs" to function calls to "abs"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('abs', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Intercepts calls to built-in methods on the "int" type
-	 *
-	 * @param string $methodName
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		if (method_exists($this, $methodName)) {
-			return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-		}
+    /**
+     * Intercepts calls to built-in methods on the "int" type
+     *
+     * @param string $methodName
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        if (method_exists($this, $methodName)) {
+            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+        }
 
-		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "int"', $expression);
-	}
-
+        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "int"', $expression);
+    }
 }

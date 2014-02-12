@@ -33,107 +33,106 @@ use Zephir\Builder\FunctionCallBuilder;
 class StringType
 {
 
-	/**
-	 * Transforms calls to method "length" to function calls to "strlen"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function length($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('strlen', array($caller));
+    /**
+     * Transforms calls to method "length" to function calls to "strlen"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function length($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('strlen', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Transforms calls to method "trim" to function calls to "trim"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function trim($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('trim', array($caller));
+    /**
+     * Transforms calls to method "trim" to function calls to "trim"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function trim($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('trim', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Transforms calls to method "index" to function calls to "strpos"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('strpos', array($caller));
+    /**
+     * Transforms calls to method "index" to function calls to "strpos"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('strpos', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Transforms calls to method "lower" to function calls to "strtolower"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function lower($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('strtolower', array($caller));
+    /**
+     * Transforms calls to method "lower" to function calls to "strtolower"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function lower($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('strtolower', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Transforms calls to method "upper" to function calls to "upper"
-	 *
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function upper($caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		$builder = new FunctionCallBuilder('strotoupper', array($caller));
+    /**
+     * Transforms calls to method "upper" to function calls to "upper"
+     *
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function upper($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        $builder = new FunctionCallBuilder('strotoupper', array($caller));
 
-		$expression = new Expression($builder->get());
+        $expression = new Expression($builder->get());
 
-		return $expression->compile($compilationContext);
-	}
+        return $expression->compile($compilationContext);
+    }
 
-	/**
-	 * Intercepts calls to built-in methods on the string type
-	 *
-	 * @param string $methodName
-	 * @param object $caller
-	 * @param CompilationContext $compilationContext
-	 * @param Call $call
-	 * @param array $expression
-	 */
-	public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-	{
-		if (method_exists($this, $methodName)) {
-			return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-		}
+    /**
+     * Intercepts calls to built-in methods on the string type
+     *
+     * @param string $methodName
+     * @param object $caller
+     * @param CompilationContext $compilationContext
+     * @param Call $call
+     * @param array $expression
+     */
+    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
+    {
+        if (method_exists($this, $methodName)) {
+            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+        }
 
-		throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "string"', $expression);
-	}
-
+        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "string"', $expression);
+    }
 }

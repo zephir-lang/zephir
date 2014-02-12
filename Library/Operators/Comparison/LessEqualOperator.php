@@ -22,14 +22,13 @@ namespace Zephir\Operators\Comparison;
 class LessEqualOperator extends ComparisonBaseOperator
 {
 
-	protected $_operator = '<=';
+    protected $_operator = '<=';
 
-	protected $_bitOperator = '<=';
+    protected $_bitOperator = '<=';
 
-	protected $_zvalOperator = 'ZEPHIR_LE';
+    protected $_zvalOperator = 'ZEPHIR_LE';
 
-	protected $_zvalLongOperator = 'ZEPHIR_LE_LONG';
+    protected $_zvalLongOperator = 'ZEPHIR_LE_LONG';
 
-	protected $_zvalLongNegOperator = 'ZEPHIR_GE_LONG';
-
+    protected $_zvalLongNegOperator = 'ZEPHIR_GE_LONG';
 }

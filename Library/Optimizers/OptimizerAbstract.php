@@ -28,11 +28,11 @@ use Zephir\CompilationContext;
 abstract class OptimizerAbstract
 {
 
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return mixed
-	 */
-	abstract public function optimize(array $expression, Call $call, CompilationContext $context);
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return mixed
+     */
+    abstract public function optimize(array $expression, Call $call, CompilationContext $context);
 }

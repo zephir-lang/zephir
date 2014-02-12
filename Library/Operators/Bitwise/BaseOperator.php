@@ -68,20 +68,21 @@ class BitwiseBaseOperator extends BaseOperator
                 }
             }
 
-            if (
-                ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') ||
-                ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') ||
-                ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')
-            ) {
+            if (($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') || ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') || ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')) {
                 switch ($this->_operator) {
+
                     case '&':
                         return new CompiledExpression('int', $expression['left']['value'] & $expression['right']['value'], $expression);
+
                     case '|':
                         return new CompiledExpression('int', $expression['left']['value'] | $expression['right']['value'], $expression);
+
                     case '^':
                         return new CompiledExpression('int', $expression['left']['value'] ^ $expression['right']['value'], $expression);
+
                     case '<<':
                         return new CompiledExpression('int', $expression['left']['value'] << $expression['right']['value'], $expression);
+
                     case '>>':
                         return new CompiledExpression('int', $expression['left']['value'] >> $expression['right']['value'], $expression);
                 }

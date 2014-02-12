@@ -35,6 +35,5 @@ require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
 class LtrimOptimizer extends TrimOptimizer
 {
 
-	protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
-
+    protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
 }

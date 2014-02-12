@@ -34,25 +34,26 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class VarDumpOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		$context->headersManager->add('kernel/variables');
-		$resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+        $context->headersManager->add('kernel/variables');
+        $resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
 
-		foreach ($resolvedParams as $resolvedParam) {
-			$context->codePrinter->output('zephir_var_dump(&'. $resolvedParam . ' TSRMLS_CC);');
-		}
+        foreach ($resolvedParams as $resolvedParam) {
+            $context->codePrinter->output('zephir_var_dump(&'. $resolvedParam . ' TSRMLS_CC);');
+        }
 
-		return new CompiledExpression('null', 'null' , $expression);
-	}
+        return new CompiledExpression('null', 'null' , $expression);
+    }
 }
+

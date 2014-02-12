@@ -32,25 +32,24 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class IsNullOptimizer extends OptimizerAbstract
 {
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) != 1) {
-			return false;
-		}
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-		return new CompiledExpression('bool', '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_NULL)', $expression);
-	}
-
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_NULL)', $expression);
+    }
 }

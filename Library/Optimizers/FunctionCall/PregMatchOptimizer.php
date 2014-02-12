@@ -34,97 +34,97 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class PregMatchOptimizer extends OptimizerAbstract
 {
-	const GLOBAL_MATCH = 0;
+    const GLOBAL_MATCH = 0;
 
-	/**
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 * @return bool|CompiledExpression|mixed
-	 * @throws CompilerException
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
 
-		if (!isset($expression['parameters'])) {
-			return false;
-		}
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-		if (count($expression['parameters']) < 2) {
-			return false;
-		}
+        if (count($expression['parameters']) < 2) {
+            return false;
+        }
 
-		/**
-		 * Process the matches result
-		 */
-		if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'variable') {
-			$matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
-			if (!$matchesVariable->isInitialized()) {
-				$matchesVariable->initVariant($context);
-				$matchesVariable->setIsInitialized(true, $context, array());
-			}
-		} else {
-			$matchesVariable = $context->symbolTable->addTemp('variable', $context);
-			$matchesVariable->initVariant($context);
-		}
+        /**
+         * Process the matches result
+         */
+        if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'variable') {
+            $matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
+            if (!$matchesVariable->isInitialized()) {
+                $matchesVariable->initVariant($context);
+                $matchesVariable->setIsInitialized(true, $context, array());
+            }
+        } else {
+            $matchesVariable = $context->symbolTable->addTemp('variable', $context);
+            $matchesVariable->initVariant($context);
+        }
 
-		$matchesVariable->setDynamicTypes('array');
+        $matchesVariable->setDynamicTypes('array');
 
-		/**
-		 * Process optional parameters
-		 */
-		$offsetParamOffset = 4;
-		if (isset($expression['parameters'][4]) && $expression['parameters'][4]['type'] == 'int') {
-			$offset = $expression['parameters'][4]['value'] . ' ';
-			unset($expression['parameters'][4]);
-		}
+        /**
+         * Process optional parameters
+         */
+        $offsetParamOffset = 4;
+        if (isset($expression['parameters'][4]) && $expression['parameters'][4]['type'] == 'int') {
+            $offset = $expression['parameters'][4]['value'] . ' ';
+            unset($expression['parameters'][4]);
+        }
 
-		if (isset($expression['parameters'][3]) && $expression['parameters'][3]['type'] == 'int') {
-			$flags = $expression['parameters'][3]['value'] . ' ';
-			unset($expression['parameters'][3]);
-			$offsetParamOffset = 3;
-		}
+        if (isset($expression['parameters'][3]) && $expression['parameters'][3]['type'] == 'int') {
+            $flags = $expression['parameters'][3]['value'] . ' ';
+            unset($expression['parameters'][3]);
+            $offsetParamOffset = 3;
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable) {
-			if ($symbolVariable->getType() != 'variable') {
-					throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-			}
-			if ($call->mustInitSymbolVariable()) {
-				$symbolVariable->initVariant($context);
-			}
-		} else {
-			$symbolVariable = $context->symbolTable->addTemp('variable', $context);
-			$symbolVariable->initVariant($context);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable) {
+            if ($symbolVariable->getType() != 'variable') {
+                    throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            }
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
+        } else {
+            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
+            $symbolVariable->initVariant($context);
+        }
 
-		$context->headersManager->add('kernel/string');
+        $context->headersManager->add('kernel/string');
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		if (!isset($offset) && isset($resolvedParams[$offsetParamOffset])) {
-			$context->headersManager->add('kernel/operators');
-			$offset = 'zephir_get_intval(' . $resolvedParams[$offsetParamOffset] . ') ';
-		}
+        if (!isset($offset) && isset($resolvedParams[$offsetParamOffset])) {
+            $context->headersManager->add('kernel/operators');
+            $offset = 'zephir_get_intval(' . $resolvedParams[$offsetParamOffset] . ') ';
+        }
 
-		if (!isset($flags) && isset($resolvedParams[3])) {
-			$context->headersManager->add('kernel/operators');
-			$flags = 'zephir_get_intval(' . $resolvedParams[3] . ') ';
-		}
+        if (!isset($flags) && isset($resolvedParams[3])) {
+            $context->headersManager->add('kernel/operators');
+            $flags = 'zephir_get_intval(' . $resolvedParams[3] . ') ';
+        }
 
-		if (!isset($flags)) {
-			$flags = '0 ';
-		}
-		if (!isset($offset)) {
-			$offset = '0 ';
-		}
+        if (!isset($flags)) {
+            $flags = '0 ';
+        }
+        if (!isset($offset)) {
+            $offset = '0 ';
+        }
 
-		$context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . $this::GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
+        $context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . $this::GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }

@@ -31,47 +31,46 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class CreateInstanceParamsOptimizer extends OptimizerAbstract
 {
-	/**
-	 *
-	 * @param array $expression
-	 * @param Call $call
-	 * @param CompilationContext $context
-	 */
-	public function optimize(array $expression, Call $call, CompilationContext $context)
-	{
-		if (!isset($expression['parameters'])) {
-			throw new CompilerException("This function requires parameters", $expression);
-		}
+    /**
+     *
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            throw new CompilerException("This function requires parameters", $expression);
+        }
 
-		if (count($expression['parameters']) != 2) {
-			throw new CompilerException("This function only requires two parameter", $expression);
-		}
+        if (count($expression['parameters']) != 2) {
+            throw new CompilerException("This function only requires two parameter", $expression);
+        }
 
-		/**
-		 * Process the expected symbol to be returned
-		 */
-		$call->processExpectedReturn($context);
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
-		$symbolVariable = $call->getSymbolVariable();
-		if ($symbolVariable->getType() != 'variable') {
-			throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-		}
+        $symbolVariable = $call->getSymbolVariable();
+        if ($symbolVariable->getType() != 'variable') {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
 
-		if ($call->mustInitSymbolVariable()) {
-			$symbolVariable->initVariant($context);
-		}
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
-		$context->headersManager->add('kernel/object');
+        $context->headersManager->add('kernel/object');
 
-		$symbolVariable->setDynamicTypes('object');
+        $symbolVariable->setDynamicTypes('object');
 
-		$resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-		$context->codePrinter->output('if (zephir_create_instance_params(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC) == FAILURE) {');
-		$context->codePrinter->output("\t" . 'RETURN_MM();');
-		$context->codePrinter->output('}');
+        $context->codePrinter->output('if (zephir_create_instance_params(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC) == FAILURE) {');
+        $context->codePrinter->output("\t" . 'RETURN_MM();');
+        $context->codePrinter->output('}');
 
-		return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-	}
-
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }
