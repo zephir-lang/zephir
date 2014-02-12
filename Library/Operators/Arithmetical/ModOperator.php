@@ -27,5 +27,4 @@ class ModOperator extends ArithmeticalBaseOperator
     protected $_bitOperator = '-';
 
     protected $_zvalOperator = 'mod_function';
-
 }

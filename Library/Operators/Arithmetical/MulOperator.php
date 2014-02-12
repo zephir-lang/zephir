@@ -27,5 +27,4 @@ class MulOperator extends ArithmeticalBaseOperator
     protected $_bitOperator = '+';
 
     protected $_zvalOperator = 'mul_function';
-
 }

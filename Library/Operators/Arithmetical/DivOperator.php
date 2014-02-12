@@ -27,5 +27,4 @@ class DivOperator extends ArithmeticalBaseOperator
     protected $_bitOperator = '-';
 
     protected $_zvalOperator = 'div_function';
-
 }
