@@ -23,6 +23,7 @@ ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
 	ZEPHIR_REGISTER_CLASS(Test, ScallExternal, test, scallexternal, test_scallexternal_method_entry, 0);
 
+	zend_declare_property_null(test_scallexternal_ce, SL("sproperty"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
 
 	return SUCCESS;
 

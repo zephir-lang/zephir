@@ -38,14 +38,14 @@ class SymbolTable
     protected $_tempVariables = array();
 
     /**
-     * @var \LocalContextPass
+     * @var LocalContextPass
      */
     protected $_localContext;
 
     /**
      * Variable
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      */
     public function __construct($compilationContext)
     {
@@ -92,7 +92,7 @@ class SymbolTable
      * @param string $name
      * @param CompilationContext $compilationContext
      * @param mixed $defaultValue
-     * @return \Variable
+     * @return Variable
      */
     public function addVariable($type, $name, CompilationContext $compilationContext, $defaultValue = null)
     {
@@ -114,7 +114,7 @@ class SymbolTable
     /**
      * Returns a variable in the symbol table
      *
-     * @return \Variable
+     * @return Variable
      */
     public function getVariable($name)
     {
@@ -124,7 +124,7 @@ class SymbolTable
     /**
      * Returns all the variables defined in the symbol table
      *
-     * @return \Variable[]
+     * @return Variable[]
      */
     public function getVariables()
     {
@@ -146,9 +146,9 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a read operation
      *
      * @param string $name
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @param array $statement
-     * @return \Variable
+     * @return Variable
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -318,7 +318,7 @@ class SymbolTable
      * @param string $name
      * @param CompilationContext $compilationContext
      * @param array $statement
-     * @return \Variable
+     * @return Variable
      */
     public function getVariableForWrite($name, $compilationContext, $statement = null)
     {
@@ -379,7 +379,7 @@ class SymbolTable
      *
      * @param string $type
      * @param string $location
-     * @param \Variable $variable
+     * @param Variable $variable
      */
     protected function _registerTempVariable($type, $location, Variable $variable)
     {
@@ -394,7 +394,7 @@ class SymbolTable
      *
      * @param string $type
      * @param string $location
-     * @return \Variable
+     * @return Variable
      */
     protected function _reuseTempVariable($type, $location)
     {
@@ -427,8 +427,8 @@ class SymbolTable
      * Creates a temporary variable to be used in a write operation
      *
      * @param string $type
-     * @param \CompilationContext $context
-     * @return \Variable
+     * @param CompilationContext $context
+     * @return Variable
      */
     public function getTempVariableForWrite($type, CompilationContext $context)
     {
@@ -499,8 +499,8 @@ class SymbolTable
      * These kind of variables MUST not be tracked by the Zephir memory manager
      *
      * @param string $type
-     * @param \CompilationContext $context
-     * @return \Variable
+     * @param CompilationContext $context
+     * @return Variable
      */
     public function getTempNonTrackedUninitializedVariable($type, CompilationContext $context)
     {
@@ -530,8 +530,8 @@ class SymbolTable
      * request a new full zval variable
      *
      * @param string $type
-     * @param \CompilationContext $context
-     * @return \Variable
+     * @param CompilationContext $context
+     * @return Variable
      */
     public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
     {
@@ -563,8 +563,8 @@ class SymbolTable
      * Creates a temporary variable to be used in a write operation
      *
      * @param string $type
-     * @param \CompilationContext $context
-     * @return \Variable
+     * @param CompilationContext $context
+     * @return Variable
      */
     public function getTempLocalVariableForWrite($type, CompilationContext $context)
     {
@@ -598,7 +598,7 @@ class SymbolTable
      * Creates a temporary variable
      *
      * @param string $type
-     * @param \CompilationContext $context
+     * @param CompilationContext $context
      */
     public function addTemp($type, CompilationContext $context)
     {
@@ -625,8 +625,8 @@ class SymbolTable
      * Variables are automatically tracked by the memory manager
      *
      * @param string $type
-     * @param \CompilationContext $context
-     * @return \Variable
+     * @param CompilationContext $context
+     * @return Variable
      */
     public function getTempVariableForObserve($type, CompilationContext $context)
     {
@@ -665,7 +665,7 @@ class SymbolTable
      * Traverses temporal variables created in a specific branch
      * marking them as idle
      *
-     * @param \CompilationContext $context
+     * @param CompilationContext $compilationContext
      */
     public function markTemporalVariablesIdle(CompilationContext $compilationContext)
     {

@@ -32,7 +32,6 @@ require ZEPHIRPATH . 'Library/Optimizers/OptimizerAbstract.php';
  */
 class FunctionCall extends Call
 {
-
     /**
      * Function is called using a normal method name
      */
@@ -60,7 +59,7 @@ class FunctionCall extends Call
      * Process the ReflectionFunction for the specified function name
      *
      * @param string $funcName
-     * @return ReflectionFunction
+     * @return \ReflectionFunction
      */
     protected function getReflector($funcName)
     {
