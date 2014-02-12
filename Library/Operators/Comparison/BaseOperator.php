@@ -151,11 +151,11 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if (!isset($expression['left'])) {
-            throw new Exception("Missing left part of the expression");
+            throw new CompilerException("Missing left part of the expression", $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new Exception("Missing right part of the expression");
+            throw new CompilerException("Missing right part of the expression", $expression);
         }
 
         $leftExpr = new Expression($expression['left']);

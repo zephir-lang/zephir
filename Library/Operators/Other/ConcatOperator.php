@@ -79,18 +79,22 @@ class ConcatOperator extends BaseOperator
 
             $compiledExpr = $expr->compile($compilationContext);
             switch ($compiledExpr->getType()) {
+
                 case 'variable':
                     $variable = $compilationContext->symbolTable->getVariableForRead($compiledExpr->getCode(), $compilationContext, $originalExpr);
                     switch ($variable->getType()) {
+
                         case 'variable':
                             $key .= 'v';
                             $concatParts[] = $variable->getName();
                             $isFullString = false;
                             break;
+
                         case 'string':
                             $key .= 'v';
                             $concatParts[] = $variable->getName();
                             break;
+
                         case 'int':
                         case 'long':
                             $key .= 'v';
@@ -98,14 +102,17 @@ class ConcatOperator extends BaseOperator
                             $compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
                             $concatParts[] = '&' . $tempVariable->getName();
                             break;
+
                         default:
                             throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
                     }
                     break;
+
                 case 'string':
                     $key .= 's';
                     $concatParts[] = '"' . $compiledExpr->getCode() . '"';
                     break;
+
                 default:
                     throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
             }
@@ -126,11 +133,11 @@ class ConcatOperator extends BaseOperator
     {
 
         if (!isset($expression['left'])) {
-            throw new Exception("Missing left part of the expression");
+            throw new CompilerException("Missing left part of the expression", $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new Exception("Missing right part of the expression");
+            throw new CompilerException("Missing right part of the expression", $expression);
         }
 
         $compilationContext->headersManager->add('kernel/concat');
@@ -157,10 +164,12 @@ class ConcatOperator extends BaseOperator
          */
         $leftExpr = new Expression($expression['left']);
         switch ($expression['left']['type']) {
+
             case 'array-access':
             case 'property-access':
                 $leftExpr->setReadOnly(true);
                 break;
+
             default:
                 $leftExpr->setReadOnly($this->_readOnly);
                 break;
@@ -173,10 +182,12 @@ class ConcatOperator extends BaseOperator
 
         $rightExpr = new Expression($expression['right']);
         switch ($expression['left']['type']) {
+
             case 'array-access':
             case 'property-access':
                 $rightExpr->setReadOnly(true);
                 break;
+
             default:
                 $rightExpr->setReadOnly($this->_readOnly);
                 break;

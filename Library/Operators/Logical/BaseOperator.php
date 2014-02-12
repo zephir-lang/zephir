@@ -34,11 +34,11 @@ class LogicalBaseOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new Exception("Missing left part of the expression");
+            throw new CompilerException("Missing left part of the expression", $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new Exception("Missing right part of the expression");
+            throw new CompilerException("Missing right part of the expression", $expression);
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -85,12 +85,12 @@ class LogicalBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot compare variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
 
                     default:
-                        throw new Exception("Cannot compare 'int' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot compare 'int' with '" . $right->getType() . "'", $expression);
                 }
                 break;
 
@@ -126,12 +126,12 @@ class LogicalBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot add variable('int') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot add variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
 
                     default:
-                        throw new Exception("Cannot compare 'bool' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot compare 'bool' with '" . $right->getType() . "'", $expression);
                 }
                 break;
             case 'double':
@@ -273,7 +273,7 @@ class LogicalBaseOperator extends BaseOperator
                                         break;
 
                                     default:
-                                        throw new Exception("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')");
+                                        throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
                                 break;
 
@@ -319,7 +319,7 @@ class LogicalBaseOperator extends BaseOperator
                                         break;
 
                                     default:
-                                        throw new Exception("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')");
+                                        throw new CompilerException("Cannot compare variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
                                 break;
 

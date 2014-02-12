@@ -104,11 +104,11 @@ class BitwiseBaseOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
-            throw new Exception("Missing left part of the expression");
+            throw new CompilerException("Missing left part of the expression", $expression);
         }
 
         if (!isset($expression['right'])) {
-            throw new Exception("Missing right part of the expression");
+            throw new CompilerException("Missing right part of the expression", $expression);
         }
 
         /**
@@ -185,11 +185,11 @@ class BitwiseBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
                     default:
-                        throw new Exception("Cannot operate 'int' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot operate 'int' with '" . $right->getType() . "'", $expression);
                 }
                 break;
 
@@ -207,7 +207,7 @@ class BitwiseBaseOperator extends BaseOperator
                         return new CompiledExpression('int', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                     default:
-                        throw new Exception("Cannot operate 'bool' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot operate 'bool' with '" . $right->getType() . "'", $expression);
                 }
                 break;
 
@@ -252,7 +252,7 @@ class BitwiseBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
 
@@ -412,7 +412,7 @@ class BitwiseBaseOperator extends BaseOperator
                                         break;
 
                                     default:
-                                        throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
+                                        throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
                                 break;
 

@@ -54,10 +54,13 @@ class ArithmeticalBaseOperator extends BaseOperator
 
             if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
                 switch ($this->_operator) {
+
                     case '+':
                         return new CompiledExpression('int', $expression['left']['value'] + $expression['right']['value'], $expression);
+
                     case '-':
                         return new CompiledExpression('int', $expression['left']['value'] - $expression['right']['value'], $expression);
+
                     case '*':
                         return new CompiledExpression('int', $expression['left']['value'] * $expression['right']['value'], $expression);
                 }
@@ -65,10 +68,13 @@ class ArithmeticalBaseOperator extends BaseOperator
 
             if (($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') || ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') || ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')) {
                 switch ($this->_operator) {
+
                     case '+':
                         return new CompiledExpression('double', $expression['left']['value'] + $expression['right']['value'], $expression);
+
                     case '-':
                         return new CompiledExpression('double', $expression['left']['value'] - $expression['right']['value'], $expression);
+
                     case '*':
                         return new CompiledExpression('double', $expression['left']['value'] * $expression['right']['value'], $expression);
                 }
@@ -159,11 +165,12 @@ class ArithmeticalBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot operate variable('int') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
+
                     default:
-                        throw new Exception("Cannot operate 'int' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot operate 'int' with '" . $right->getType() . "'", $expression);
                 }
                 break;
 
@@ -181,7 +188,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                         return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                     default:
-                        throw new Exception("Cannot operate 'bool' with '" . $right->getType() . "'");
+                        throw new CompilerException("Cannot operate 'bool' with '" . $right->getType() . "'", $expression);
                 }
                 break;
 
@@ -225,7 +232,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                 break;
 
                             default:
-                                throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
+                                throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                         }
                         break;
 
@@ -382,7 +389,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         break;
 
                                     default:
-                                        throw new Exception("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')");
+                                        throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
                                 }
                                 break;
 
