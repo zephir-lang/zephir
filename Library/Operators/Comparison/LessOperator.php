@@ -35,5 +35,4 @@ class LessOperator extends ComparisonBaseOperator
 	protected $_zvalDoubleOperator = 'ZEPHIR_LT_DOUBLE';
 
 	protected $_zvalDoubleNegOperator = 'ZEPHIR_GT_DOUBLE';
-
 }

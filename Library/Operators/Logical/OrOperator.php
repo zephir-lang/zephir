@@ -156,5 +156,4 @@ class OrOperator extends LogicalBaseOperator
 
         return new CompiledExpression('bool', $flagVariable->getName(), $expression);
     }
-
 }

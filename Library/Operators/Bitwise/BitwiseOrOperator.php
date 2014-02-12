@@ -27,5 +27,4 @@ class BitwiseOrOperator extends BitwiseBaseOperator
     protected $_bitOperator = '|';
 
     protected $_zvalOperator = 'zephir_bitwise_or_function';
-
 }

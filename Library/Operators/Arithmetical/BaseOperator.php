@@ -534,7 +534,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         break;
 
                                     case 'variable':
-                                        $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+                                        $variableRight = $compilationContext->symbolTable->getVariableForRead($variableRight->getCode(), $compilationContext, $expression);
                                         switch ($variableRight->getType()) {
 
                                             case 'int':
