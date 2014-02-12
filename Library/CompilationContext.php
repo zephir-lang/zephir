@@ -26,7 +26,6 @@ namespace Zephir;
  */
 class CompilationContext
 {
-
     /**
      * Compiler
      *

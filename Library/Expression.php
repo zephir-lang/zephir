@@ -42,6 +42,7 @@ use Zephir\Operators\Comparison\GreaterEqualOperator;
 
 use Zephir\Operators\Bitwise\BitwiseAndOperator;
 use Zephir\Operators\Bitwise\BitwiseOrOperator;
+use Zephir\Operators\Bitwise\BitwiseXorOperator;
 use Zephir\Operators\Bitwise\ShiftLeftOperator;
 use Zephir\Operators\Bitwise\ShiftRightOperator;
 
@@ -135,7 +136,6 @@ require ZEPHIRPATH . 'Library/Expression/StaticPropertyAccess.php';
  */
 class Expression
 {
-
     protected $_expression;
 
     protected $_expecting = true;
@@ -144,9 +144,9 @@ class Expression
 
     protected $_stringOperation = false;
 
-    protected $_setEvalMode = false;
-
     protected $_expectingVariable;
+
+    protected $_evalMode = false;
 
     /**
      * Expression constructor
@@ -216,7 +216,7 @@ class Expression
      * Returns the variable which is expected to return the
      * result of the expression evaluation
      *
-     * @return \Variable
+     * @return Variable
      */
     public function getExpectingVariable()
     {
@@ -260,7 +260,7 @@ class Expression
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
      */
     public function emptyArray($expression, CompilationContext $compilationContext)
     {
@@ -299,8 +299,8 @@ class Expression
      * Converts a value into another
      *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      */
     public function compileTypeHint($expression, CompilationContext $compilationContext)
     {
@@ -328,8 +328,8 @@ class Expression
      * Converts a value into another
      *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      */
     public function compileCast($expression, CompilationContext $compilationContext)
     {

@@ -43,7 +43,7 @@ class BranchGraphNode
     /**
      * Inserts a node in the branch graph
      *
-     * @param Branch $branch
+     * @param BranchGraphNode $branch
      */
     public function insert(BranchGraphNode $branch)
     {
