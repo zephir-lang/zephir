@@ -73,9 +73,12 @@ class FunctionCall extends Call
                 $reflectionFunction = null;
             }
             self::$_functionReflection[$funcName] = $reflectionFunction;
+            $this->_reflection = $reflectionFunction;
             return $reflectionFunction;
         }
-        return self::$_functionReflection[$funcName];
+        $reflectionFunction = self::$_functionReflection[$funcName];
+        $this->_reflection = $reflectionFunction;
+        return $reflectionFunction;
     }
 
     /**
@@ -134,6 +137,7 @@ class FunctionCall extends Call
      *
      * @param string $funcName
      * @param array $expression
+     * @param CompilationContext $compilationContext
      * @param array $references
      * @return boolean
      */
@@ -178,6 +182,8 @@ class FunctionCall extends Call
      *
      * @param string $funcName
      * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $compilationContext
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
@@ -267,6 +273,7 @@ class FunctionCall extends Call
                 switch ($reflector->getExtensionName()) {
                     case 'standard':
                     case 'mysql':
+                    case 'bcmath':
                         return true;
                     default:
                         break;

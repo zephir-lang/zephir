@@ -35,7 +35,26 @@ class Fcall
 			fclose(handle);
 			fclose(handle2);
 		}
-    }
+	}
+
+	public function testCall4()
+	{
+		var handle, handle2, buffer;
+
+		let handle = fopen(mode: "r", filename: "inputfile.txt"), 
+			handle2 = fopen(filename: "outputfile.txt", mode: "w");
+		if handle {
+			loop {
+				let buffer = fgets(handle, 4096);
+				if buffer === false {
+					break;
+				}
+				fwrite(handle2, buffer);
+			}
+			fclose(handle);
+			fclose(handle2);
+		}
+	}
 
 	public function testCall1FromVar()
 	{

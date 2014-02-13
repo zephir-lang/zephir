@@ -42,6 +42,8 @@ class Call
 
     protected $_resolvedParams;
 
+    protected $_reflection;
+
     protected $_resolvedTypes = array();
 
     protected $_resolvedDynamicTypes = array();
@@ -158,6 +160,49 @@ class Call
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
         if (!$this->_resolvedParams) {
+
+            $hasParametersByName = false;
+            foreach ($parameters as $parameter) {
+                if (isset($parameter['name'])) {
+                    $hasParametersByName = true;
+                    break;
+                }
+            }
+
+            /**
+             * All parameters must be passed by name
+             */
+            if ($hasParametersByName) {
+                foreach ($parameters as $parameter) {
+                    if (!isset($parameter['name'])) {
+                        throw new CompilerException('All parameters must use named', $parameter);
+                    }
+                }
+            }
+
+            if ($hasParametersByName) {
+                if ($this->_reflection) {
+                    $positionalParameters = array();
+                    foreach ($this->_reflection->getParameters() as $position => $reflectionParameter) {
+                        $positionalParameters[$reflectionParameter->getName()] = $position;
+                    }
+                    $orderedParameters = array();
+                    foreach ($parameters as $parameter) {
+                        if (isset($positionalParameters[$parameter['name']])) {
+                            $orderedParameters[$positionalParameters[$parameter['name']]] = $parameter;
+                        } else {
+                            throw new CompilerException('Named parameter "' . $parameter['name'] . '" is not a valid parameter name, available: ' . join(', ', array_keys($positionalParameters)), $parameter['parameter']);
+                        }
+                    }
+                    for ($i = 0; $i < count($parameters); $i++) {
+                        if (!isset($orderedParameters[$i])) {
+                            $orderedParameters[$i] = array('parameter' => array('type' => 'null'));
+                        }
+                    }
+                    $parameters = $orderedParameters;
+                }
+            }
+
             $params = array();
             foreach ($parameters as $parameter) {
 
