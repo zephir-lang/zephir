@@ -402,7 +402,7 @@ class MethodCall extends Call
              */
             if ($type == self::CALL_NORMAL) {
 
-                if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) { 
+                if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
                     foreach ($method->getParameters() as $n => $parameter) {

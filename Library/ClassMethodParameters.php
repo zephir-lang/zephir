@@ -70,7 +70,7 @@ class ClassMethodParameters implements \Countable, \Iterator
     public function valid()
     {
         return isset($this->_parameters[$this->_position]);
-    } 
+    }
 
     public function current()
     {
