@@ -611,7 +611,6 @@ class Variable
     public function enableDefaultAutoInitValue()
     {
         switch ($this->_type) {
-
             case 'boolean':
             case 'bool':
             case 'int':
@@ -620,14 +619,12 @@ class Variable
             case 'ulong':
                 $this->_defaultInitValue = 0;
                 break;
-
             case 'variable':
                 $this->_defaultInitValue = null;
                 $this->setDynamicTypes('null');
                 $this->setMustInitNull(true);
                 $this->setLocalOnly(false);
                 break;
-
             default:
                 throw new CompilerException('Cannot create an automatic safe default value for variable type: ' . $this->_type);
         }

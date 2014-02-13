@@ -128,19 +128,15 @@ class Bootstrap
                     }
 
                     switch ($parameter) {
-
                         case '-w':
                             $config->set('silent', true);
                             break;
-
                         case '-v':
                             $config->set('verbose', true);
                             break;
-
                         case '-V':
                             $config->set('verbose', false);
                             break;
-
                         default:
                             break;
                     }
