@@ -125,7 +125,7 @@ class ClassMethod
         }
 
         if (in_array('public', $visibility) && in_array('private', $visibility)) {
-            throw new CompilerException("Method'$name' cannot be 'public' and 'private' at the same time", $original);
+            throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
         }
 
         if (in_array('private', $visibility) && in_array('protected', $visibility)) {
