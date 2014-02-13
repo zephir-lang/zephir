@@ -402,37 +402,35 @@ class MethodCall extends Call
              */
             if ($type == self::CALL_NORMAL) {
 
-                if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
-                    $n = 0;
+                if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) { 
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
-                    foreach ($method->getParameters() as $parameter) {
-                        if (isset($parameter[0]['data-type'])) {
+                    foreach ($method->getParameters() as $n => $parameter) {
+                        if (isset($parameter['data-type'])) {
 
                             /**
                              * If the passed parameter is different to the expected type we show a warning
                              */
-                            if ($resolvedTypes[$n] != $parameter[0]['data-type']) {
+                            if ($resolvedTypes[$n] != $parameter['data-type']) {
 
                                 /**
                                  * Passing polymorphic variables to static typed parameters
                                  * could lead to potential transformations
                                  */
                                 if ($resolvedTypes[$n] == 'variable') {
-                                    if ($resolvedDynamicTypes[$n] != $parameter[0]['data-type']) {
+                                    if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
                                         if ($resolvedDynamicTypes[$n] == 'undefined') {
                                             $compilationContext->logger->warning("Passing possible incorrect type to parameter: " . $classDefinition->getCompleteName() . '::' . $parameter[0]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter[0]['data-type'], "possible-wrong-parameter-undefined", $expression);
                                         }
                                         //echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
                                     }
                                 } else {
-                                    if ($parameter[0]['data-type'] != 'variable') {
+                                    if ($parameter['data-type'] != 'variable') {
                                         //echo '2: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
                                     }
                                 }
                             }
                         }
-                        $n++;
                     }
                 }
             }

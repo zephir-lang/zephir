@@ -200,7 +200,7 @@ class Call
      * @param array $calleeDefinition
      * @return array
      */
-    public function getResolvedParams($parameters, CompilationContext $compilationContext, $expression, $calleeDefinition=null)
+    public function getResolvedParams($parameters, CompilationContext $compilationContext, $expression, $calleeDefinition = null)
     {
         $codePrinter = &$compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
@@ -222,7 +222,7 @@ class Call
                                 $readOnlyParameters[$position] = true;
                                 break;
                         }
-                    }                  
+                    }
                 }
             }
         }
