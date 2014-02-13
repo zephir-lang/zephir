@@ -269,7 +269,6 @@ class Call
                         $params[] = $parameterVariable->getName();
                     }
                     $this->_temporalVariables[] = $parameterVariable;
-                    $params[] = $parameterVariable->getName();
                     $types[] = $compiledExpression->getType();
                     break;
 

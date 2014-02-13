@@ -65,27 +65,35 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 	json_object *ret = json_object_new_object();
 
 	switch (type) {
+
 		case XX_T_CONSTANT:
 			json_object_object_add(ret, "type", json_object_new_string("constant"));
 			break;
+
 		case XX_T_IDENTIFIER:
 			json_object_object_add(ret, "type", json_object_new_string("variable"));
 			break;
+
 		case XX_T_INTEGER:
 			json_object_object_add(ret, "type", json_object_new_string("int"));
 			break;
+
 		case XX_T_DOUBLE:
 			json_object_object_add(ret, "type", json_object_new_string("double"));
 			break;
+
 		case XX_T_NULL:
 			json_object_object_add(ret, "type", json_object_new_string("null"));
 			break;
+
 		case XX_T_STRING:
 			json_object_object_add(ret, "type", json_object_new_string("string"));
 			break;
+
 		case XX_T_CHAR:
 			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
+
 		default:
 			if (type == XX_T_TRUE) {
 				json_object_object_add(ret, "type", json_object_new_string("bool"));

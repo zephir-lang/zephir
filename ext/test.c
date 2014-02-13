@@ -91,6 +91,7 @@ zend_class_entry *test_ternary_ce;
 zend_class_entry *test_trie_ce;
 zend_class_entry *test_typeoff_ce;
 zend_class_entry *test_unsettest_ce;
+zend_class_entry *test_usetest_ce;
 zend_class_entry *test_vars_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
@@ -176,6 +177,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Trie);
 	ZEPHIR_INIT(Test_Typeoff);
 	ZEPHIR_INIT(Test_Unsettest);
+	ZEPHIR_INIT(Test_UseTest);
 	ZEPHIR_INIT(Test_Vars);
 
 #if PHP_VERSION_ID < 50500
