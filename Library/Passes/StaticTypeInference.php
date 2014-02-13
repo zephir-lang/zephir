@@ -224,10 +224,10 @@ class StaticTypeInference
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['type'] == 'variable') {
+                if ($parameter['parameter']['type'] == 'variable') {
                     //$this->markVariable($parameter['value']);
                 } else {
-                    $this->passExpression($parameter);
+                    $this->passExpression($parameter['parameter']);
                 }
             }
         }
@@ -248,10 +248,10 @@ class StaticTypeInference
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['type'] == 'variable') {
+                if ($parameter['parameter']['type'] == 'variable') {
                     //$this->markVariable($parameter['value'], 'dynamical');
                 } else {
-                    $this->passExpression($parameter);
+                    $this->passExpression($parameter['parameter']);
                 }
             }
         }

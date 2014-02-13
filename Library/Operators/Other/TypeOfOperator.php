@@ -47,7 +47,7 @@ class TypeOfOperator extends BaseOperator
             throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
         }
 
-        $builder = new FunctionCallBuilder('gettype', array($expression['left']));
+        $builder = new FunctionCallBuilder('gettype', array(array('parameter' => $expression['left'])));
 
         $expression = new Expression($builder->get());
 

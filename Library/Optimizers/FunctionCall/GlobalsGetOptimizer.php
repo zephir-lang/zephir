@@ -49,11 +49,11 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             throw new CompilerException("'globals_get' only accepts one parameter", $expression);
         }
 
-        if ($expression['parameters'][0]['type'] != 'string') {
+        if ($expression['parameters'][0]['parameter']['type'] != 'string') {
             throw new CompilerException("A string parameter is required for 'globals_get'", $expression);
         }
 
-        $globalName = $expression['parameters'][0]['value'];
+        $globalName = $expression['parameters'][0]['parameter']['value'];
 
         if (!$context->compiler->isExtensionGlobal($globalName)) {
             throw new CompilerException("Global '" . $globalName . "' cannot be read because it isn't defined", $expression);

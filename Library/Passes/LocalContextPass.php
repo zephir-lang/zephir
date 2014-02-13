@@ -220,10 +220,10 @@ class LocalContextPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['type'] == 'variable') {
-                    $this->markVariableNoLocal($parameter['value']);
+                if ($parameter['parameter']['type'] == 'variable') {
+                    $this->markVariableNoLocal($parameter['parameter']['value']);
                 } else {
-                    $this->passExpression($parameter);
+                    $this->passExpression($parameter['parameter']);
                 }
             }
         }
@@ -244,10 +244,10 @@ class LocalContextPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['type'] == 'variable') {
-                    $this->markVariableNoLocal($parameter['value']);
+                if ($parameter['parameter']['type'] == 'variable') {
+                    $this->markVariableNoLocal($parameter['parameter']['value']);
                 } else {
-                    $this->passExpression($parameter);
+                    $this->passExpression($parameter['parameter']);
                 }
             }
         }

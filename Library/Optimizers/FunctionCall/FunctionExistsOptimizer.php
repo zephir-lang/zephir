@@ -49,8 +49,8 @@ class FunctionExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if ($expression['parameters'][0]['type'] == 'string') {
-            $str = Utils::addSlashes($expression['parameters'][0]['value']);
+        if ($expression['parameters'][0]['parameter']['type'] == 'string') {
+            $str = Utils::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
 

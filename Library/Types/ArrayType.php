@@ -42,7 +42,7 @@ class ArrayType
 
         $builder = new FunctionCallBuilder(
             'join',
-            array_merge($expression['parameters'], array($caller)),
+            array_merge($expression['parameters'], array(array('parameter' => $caller))),
             FunctionCall::CALL_NORMAL,
             $expression['file'],
             $expression['line'],
@@ -64,7 +64,7 @@ class ArrayType
      */
     public function reverse($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('array_reverse', array($caller));
+        $builder = new FunctionCallBuilder('array_reverse', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 

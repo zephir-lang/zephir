@@ -41,8 +41,8 @@ class CharType
         $builder = new FunctionCallBuilder(
             'sprintf',
             array(
-                array('type' => 'string', 'value' => '%X'),
-                $caller
+                array('parameter' => array('type' => 'string', 'value' => '%X')),
+                array('parameter' => $caller)
             ),
             FunctionCall::CALL_NORMAL,
             $expression['file'],

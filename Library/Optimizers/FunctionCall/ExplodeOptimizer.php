@@ -64,13 +64,13 @@ class ExplodeOptimizer extends OptimizerAbstract
          */
         $limit = 'LONG_MAX' ;
         $limitOffset = 2;
-        if (count($expression['parameters']) == 3 && $expression['parameters'][2]['type'] == 'int') {
-            $limit = $expression['parameters'][2]['value'] . ' ';
+        if (count($expression['parameters']) == 3 && $expression['parameters'][2]['parameter']['type'] == 'int') {
+            $limit = $expression['parameters'][2]['parameter']['value'] . ' ';
             unset($expression['parameters'][2]);
         }
 
-        if ($expression['parameters'][0]['type'] == 'string') {
-            $str = Utils::addSlashes($expression['parameters'][0]['value']);
+        if ($expression['parameters'][0]['parameter']['type'] == 'string') {
+            $str = Utils::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
             if (count($expression['parameters']) == 2) {
                 $limitOffset = 1;

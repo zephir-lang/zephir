@@ -50,7 +50,7 @@ class TrimOptimizer extends OptimizerAbstract
 
         $charlist = 'NULL ';
         if (count($expression['parameters']) == 2) {
-            if ($expression['parameters'][1]['type'] == 'null') {
+            if ($expression['parameters'][1]['parameter']['type'] == 'null') {
                 unset($expression['parameters'][1]);
             }
         }

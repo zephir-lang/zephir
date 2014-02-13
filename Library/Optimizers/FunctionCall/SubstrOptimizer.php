@@ -55,13 +55,13 @@ class SubstrOptimizer extends OptimizerAbstract
          * Process parameters
          */
         $lengthOffset = 2;
-        if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'int') {
-            $length = $expression['parameters'][2]['value'] . ' ';
+        if (isset($expression['parameters'][2]) && $expression['parameters'][2]['parameter']['type'] == 'int') {
+            $length = $expression['parameters'][2]['parameter']['value'] . ' ';
             unset($expression['parameters'][2]);
         }
 
-        if (isset($expression['parameters'][1]) && $expression['parameters'][1]['type'] == 'int') {
-            $from = $expression['parameters'][1]['value'] . ' ';
+        if (isset($expression['parameters'][1]) && $expression['parameters'][1]['parameter']['type'] == 'int') {
+            $from = $expression['parameters'][1]['parameter']['value'] . ' ';
             unset($expression['parameters'][1]);
             $lengthOffset = 1;
         }

@@ -153,7 +153,7 @@ class FunctionCall extends Call
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
 
-                            if (!preg_match('/^[a-zA-Z0-9]+$/', $parameters[$n - 1])) {
+                            if (!preg_match('/^[a-zA-Z0-9\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
                                 continue;
                             }

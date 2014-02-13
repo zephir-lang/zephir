@@ -48,8 +48,8 @@ class EndsWithOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if ($expression['parameters'][1]['type'] == 'string') {
-            $str = $expression['parameters'][1]['value'];
+        if ($expression['parameters'][1]['parameter']['type'] == 'string') {
+            $str = $expression['parameters'][1]['parameter']['value'];
             unset($expression['parameters'][1]);
         }
 

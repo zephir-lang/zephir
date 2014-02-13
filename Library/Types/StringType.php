@@ -43,7 +43,7 @@ class StringType
      */
     public function length($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('strlen', array($caller));
+        $builder = new FunctionCallBuilder('strlen', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 
@@ -60,7 +60,7 @@ class StringType
      */
     public function trim($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('trim', array($caller));
+        $builder = new FunctionCallBuilder('trim', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 
@@ -77,7 +77,7 @@ class StringType
      */
     public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('strpos', array($caller));
+        $builder = new FunctionCallBuilder('strpos', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 
@@ -94,7 +94,7 @@ class StringType
      */
     public function lower($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('strtolower', array($caller));
+        $builder = new FunctionCallBuilder('strtolower', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 
@@ -111,7 +111,7 @@ class StringType
      */
     public function upper($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('strotoupper', array($caller));
+        $builder = new FunctionCallBuilder('strotoupper', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 

@@ -19,7 +19,7 @@
 /**
  * Zephir parser
  *
- * This parser is intended to produce a better code generation
+ * This parser is intended to produce a better and safe code generation
  * rather than full expresiveness
  */
 
@@ -1002,6 +1002,22 @@ static json_object *xx_ret_scall(int dynamic_class, xx_parser_token *O, xx_parse
 	if (parameters) {
 		json_object_object_add(ret, "parameters", parameters);
 	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_call_parameter(xx_parser_token *N, json_object *parameter, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	if (N) {
+		json_object_object_add(ret, "name", json_object_new_string(N->token));
+	}
+	json_object_object_add(ret, "parameter", parameter);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -2512,7 +2528,11 @@ xx_call_parameters(R) ::= xx_call_parameter(P) . {
 }
 
 xx_call_parameter(R) ::= xx_common_expr(E) . {
-	R = E;
+	R = xx_ret_call_parameter(NULL, E, status->scanner_state);
+}
+
+xx_call_parameter(R) ::= IDENTIFIER(I) COLON xx_common_expr(E) . {
+	R = xx_ret_call_parameter(I, E, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {

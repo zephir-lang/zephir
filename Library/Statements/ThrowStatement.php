@@ -50,9 +50,9 @@ class ThrowStatement extends StatementAbstract
             if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
                 $className = $expr['class'];
                 if ($compilationContext->compiler->isClass($className)) {
-                    if ($expr['parameters'][0]['type'] == 'string') {
+                    if ($expr['parameters'][0]['parameter']['type'] == 'string') {
                         $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                        $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['value']) . '");');
+                        $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
                         $codePrinter->output('return;');
                         return;
                     }

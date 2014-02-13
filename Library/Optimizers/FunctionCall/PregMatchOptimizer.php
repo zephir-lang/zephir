@@ -57,8 +57,8 @@ class PregMatchOptimizer extends OptimizerAbstract
         /**
          * Process the matches result
          */
-        if (isset($expression['parameters'][2]) && $expression['parameters'][2]['type'] == 'variable') {
-            $matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['value']);
+        if (isset($expression['parameters'][2]) && $expression['parameters'][2]['parameter']['type'] == 'variable') {
+            $matchesVariable = $context->symbolTable->getVariable($expression['parameters'][2]['parameter']['value']);
             if (!$matchesVariable->isInitialized()) {
                 $matchesVariable->initVariant($context);
                 $matchesVariable->setIsInitialized(true, $context, array());
@@ -74,13 +74,13 @@ class PregMatchOptimizer extends OptimizerAbstract
          * Process optional parameters
          */
         $offsetParamOffset = 4;
-        if (isset($expression['parameters'][4]) && $expression['parameters'][4]['type'] == 'int') {
-            $offset = $expression['parameters'][4]['value'] . ' ';
+        if (isset($expression['parameters'][4]) && $expression['parameters'][4]['parameter']['type'] == 'int') {
+            $offset = $expression['parameters'][4]['parameter']['value'] . ' ';
             unset($expression['parameters'][4]);
         }
 
-        if (isset($expression['parameters'][3]) && $expression['parameters'][3]['type'] == 'int') {
-            $flags = $expression['parameters'][3]['value'] . ' ';
+        if (isset($expression['parameters'][3]) && $expression['parameters'][3]['parameter']['type'] == 'int') {
+            $flags = $expression['parameters'][3]['parameter']['value'] . ' ';
             unset($expression['parameters'][3]);
             $offsetParamOffset = 3;
         }

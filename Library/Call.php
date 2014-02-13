@@ -161,9 +161,9 @@ class Call
             $params = array();
             foreach ($parameters as $parameter) {
 
-                if (is_array($parameter)) {
-                    $paramExpr = new Expression($parameter);
-                    switch ($parameter['type']) {
+                if (is_array($parameter['parameter'])) {
+                    $paramExpr = new Expression($parameter['parameter']);
+                    switch ($parameter['parameter']['type']) {
                         case 'property-access':
                         case 'array-access':
                         case 'static-property-access':
@@ -177,8 +177,8 @@ class Call
                     continue;
                 }
 
-                if ($parameter instanceof CompiledExpression) {
-                    $params[] = $parameter;
+                if ($parameter['parameter'] instanceof CompiledExpression) {
+                    $params[] = $parameter['parameter'];
                     continue;
                 }
 

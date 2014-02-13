@@ -38,7 +38,7 @@ class IntType
      */
     public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('abs', array($caller));
+        $builder = new FunctionCallBuilder('abs', array(array('parameter' => $caller)));
 
         $expression = new Expression($builder->get());
 

@@ -53,8 +53,8 @@ class StrposOptimizer extends OptimizerAbstract
          * Process offset
          */
         $offset = '0 ';
-        if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['type'] == 'int') {
-            $offset = $expression['parameters'][2]['value'] . ' ';
+        if (count($expression['parameters']) >= 3 && $expression['parameters'][2]['parameter']['type'] == 'int') {
+            $offset = $expression['parameters'][2]['parameter']['value'] . ' ';
             unset($expression['parameters'][2]);
         }
 
