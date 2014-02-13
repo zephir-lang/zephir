@@ -24,9 +24,11 @@ namespace Zephir;
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements \Countable
+class ClassMethodParameters implements \Countable, \Iterator
 {
     private $_parameters = array();
+
+    private $_position = 0;
 
     /**
      *
@@ -53,5 +55,30 @@ class ClassMethodParameters implements \Countable
     public function count()
     {
         return count($this->_parameters);
+    }
+
+    public function rewind()
+    {
+        $this->_position = 0;
+    }
+
+    public function key()
+    {
+        return $this->_position;
+    }
+
+    public function valid()
+    {
+        return isset($this->_parameters[$this->_position]);
+    } 
+
+    public function current()
+    {
+        return $this->_parameters[$this->_position];
+    }
+
+    public function next()
+    {
+        $this->_position++;
     }
 }

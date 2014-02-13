@@ -144,7 +144,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 	ZVAL_DOUBLE(_0, 1.2);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_DOUBLE(_1, 7.30);
-	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_call_method_p4_noret(o, "__construct", _0, _0, _1, _1);
 	RETURN_CCTOR(o);
 
 }

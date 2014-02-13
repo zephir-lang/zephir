@@ -388,7 +388,7 @@ class MethodCall extends Call
          */
         if (isset($expression['parameters'])) {
 
-            $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+            $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression, isset($method) ? $method : null);
             if (count($references)) {
                 foreach ($params as $position => $param) {
                     if (isset($references[$position])) {
