@@ -24,6 +24,7 @@
     },
     "bin": ["bin/zephir"],
     "scripts": {
-        "post-package-install": ["install -c"]
+        "post-install-cmd": ["./install"],
+        "post-update-cmd": ["./install"]
     }
 }
