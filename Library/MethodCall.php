@@ -324,6 +324,10 @@ class MethodCall extends Call
             }
         }
 
+        if (isset($method)) {
+            $this->_reflection = $method;
+        }
+
         /**
          * Transfer the return type-hint to the returned variable
          */

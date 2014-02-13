@@ -109,9 +109,9 @@ PHP_METHOD(Test_Fcall, testCall4) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_STRING(&_0, "inputfile.txt", 0);
+	ZVAL_STRING(&_0, "r", 0);
 	ZEPHIR_SINIT_VAR(_1);
-	ZVAL_STRING(&_1, "r", 0);
+	ZVAL_STRING(&_1, "inputfile.txt", 0);
 	ZEPHIR_INIT_VAR(handle);
 	zephir_call_func_p2(handle, "fopen", &_0, &_1);
 	ZEPHIR_SINIT_NVAR(_0);

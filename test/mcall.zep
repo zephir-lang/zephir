@@ -112,6 +112,16 @@ class Mcall
 		return this->{"testMethod6"}(a, b);
 	}
 
+	public function testCall16(var c, var d)
+	{
+		return this->testMethod4(a: c, b: d);
+	}
+
+	public function testCall17(var c, var d)
+	{
+		return this->testMethod4(b: c, a: d);
+	}
+
     public function optionalRequereString(string! param)
     {
         return param;

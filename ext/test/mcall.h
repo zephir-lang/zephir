@@ -24,6 +24,8 @@ PHP_METHOD(Test_Mcall, testCall12);
 PHP_METHOD(Test_Mcall, testCall13);
 PHP_METHOD(Test_Mcall, testCall14);
 PHP_METHOD(Test_Mcall, testCall15);
+PHP_METHOD(Test_Mcall, testCall16);
+PHP_METHOD(Test_Mcall, testCall17);
 PHP_METHOD(Test_Mcall, optionalRequereString);
 PHP_METHOD(Test_Mcall, optionalParameterString);
 PHP_METHOD(Test_Mcall, optionalParameterStringNull);
@@ -95,6 +97,16 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall15, 0, 0, 2)
   ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall16, 0, 0, 2)
+  ZEND_ARG_INFO(0, c)
+  ZEND_ARG_INFO(0, d)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testcall17, 0, 0, 2)
+  ZEND_ARG_INFO(0, c)
+  ZEND_ARG_INFO(0, d)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalrequerestring, 0, 0, 1)
   ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
@@ -157,6 +169,8 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testCall13, arginfo_test_mcall_testcall13, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testCall14, arginfo_test_mcall_testcall14, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testCall15, arginfo_test_mcall_testcall15, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall16, arginfo_test_mcall_testcall16, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCall17, arginfo_test_mcall_testcall17, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, optionalRequereString, arginfo_test_mcall_optionalrequerestring, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, optionalParameterString, arginfo_test_mcall_optionalparameterstring, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, optionalParameterStringNull, arginfo_test_mcall_optionalparameterstringnull, ZEND_ACC_PUBLIC)

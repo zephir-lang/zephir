@@ -184,7 +184,11 @@ class Call
                 if ($this->_reflection) {
                     $positionalParameters = array();
                     foreach ($this->_reflection->getParameters() as $position => $reflectionParameter) {
-                        $positionalParameters[$reflectionParameter->getName()] = $position;
+                        if (is_object($reflectionParameter)) {
+                            $positionalParameters[$reflectionParameter->getName()] = $position;
+                        } else {
+                            $positionalParameters[$reflectionParameter['name']] = $position;
+                        }
                     }
                     $orderedParameters = array();
                     foreach ($parameters as $parameter) {
