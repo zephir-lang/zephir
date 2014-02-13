@@ -36,7 +36,6 @@
 %right QUESTION .
 %right LIKELY UNLIKELY .
 %right ISSET FETCH EMPTY .
-%right TYPEOF .
 %left INSTANCEOF .
 %left OR .
 %left AND .
@@ -44,6 +43,7 @@
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
+%right TYPEOF .
 %right CLONE .
 %right NEW .
 %right NOT .
