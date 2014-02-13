@@ -26,7 +26,6 @@ namespace Zephir;
  */
 class HeadersManager
 {
-
     const POSITION_FIRST = 1;
     const POSITION_LAST = 2;
 
@@ -50,6 +49,8 @@ class HeadersManager
 
     /**
      * @param string $path
+     * @param int $position
+     * @throws \InvalidArgumentException
      */
     public function add($path, $position = 0)
     {
@@ -60,15 +61,12 @@ class HeadersManager
             $this->_headers[$path] = $path;
         } else {
             switch ($position) {
-
                 case self::POSITION_FIRST:
                     $this->_headersFirst[$path] = $path;
                     break;
-
                 case self::POSITION_LAST:
                     $this->_headersLast[$path] = $path;
                     break;
-
                 default:
                     break;
             }
@@ -76,8 +74,8 @@ class HeadersManager
     }
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function get()
     {
         return array_merge($this->_headersFirst, $this->_headers, $this->_headersLast);
