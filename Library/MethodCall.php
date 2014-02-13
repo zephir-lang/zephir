@@ -86,7 +86,7 @@ class MethodCall extends Call
             default:
 
                 /* Check if there is a built-in type optimizer available */
-                $builtInTypeClass = 'Zephir\Types\\' . ucfirst($variableVariable->getType()) . 'Type';
+                $builtInTypeClass = 'Zephir\Types\\' . ucfirst($exprCompiledVariable->getType()) . 'Type';
                 if (class_exists($builtInTypeClass)) {
                     $builtInType = new $builtInTypeClass;
                     $caller = $exprCompiledVariable;
