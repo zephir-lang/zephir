@@ -91,6 +91,8 @@
 #define XX_T_VOID 392
 #define XX_T_LIKELY 393
 #define XX_T_UNLIKELY 394
+#define XX_T_USE 395
+#define XX_T_AS 396
 
 /* Operators */
 #define XX_T_AT '@'

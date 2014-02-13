@@ -281,6 +281,12 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_REVERSE:
 				xx_(xx_parser, XX_REVERSE, NULL, parser_status);
 				break;
+			case XX_T_USE:
+				xx_(xx_parser, XX_USE, NULL, parser_status);
+				break;
+			case XX_T_AS:
+				xx_(xx_parser, XX_AS, NULL, parser_status);
+				break;
 
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);
@@ -347,7 +353,7 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_NOT:
 				xx_(xx_parser, XX_NOT, NULL, parser_status);
-				break;			
+				break;
 			case XX_T_FETCH:
 				xx_(xx_parser, XX_FETCH, NULL, parser_status);
 				break;

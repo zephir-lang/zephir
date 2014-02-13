@@ -164,6 +164,36 @@ static json_object *xx_ret_namespace(xx_parser_token *T, xx_scanner_state *state
 	return ret;
 }
 
+static json_object *xx_ret_use_aliases(json_object *use_aliases_list, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("use"));
+	json_object_object_add(ret, "name", use_aliases_list);
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_use_aliases_item(xx_parser_token *T, xx_parser_token *A, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+	if (A) {
+		json_object_object_add(ret, "alias", json_object_new_string(A->token));
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definition, int is_abstract, int is_final,
 	xx_parser_token *E, json_object *I, xx_scanner_state *state)
 {
@@ -1067,6 +1097,10 @@ xx_top_statement(R) ::= xx_namespace_def(T) . {
 	R = T;
 }
 
+xx_top_statement(R) ::= xx_use_aliases(T) . {
+	R = T;
+}
+
 xx_top_statement(R) ::= xx_class_def(T) . {
 	R = T;
 }
@@ -1083,9 +1117,28 @@ xx_top_statement(R) ::= xx_cblock(T) . {
 	R = T;
 }
 
-
 xx_namespace_def(R) ::= NAMESPACE IDENTIFIER(I) DOTCOMMA . {
 	R = xx_ret_namespace(I, status->scanner_state);
+}
+
+xx_namespace_def(R) ::= USE xx_use_aliases_list(L) DOTCOMMA . {
+	R = xx_ret_use_aliases(L, status->scanner_state);
+}
+
+xx_use_aliases_list(R) ::= xx_use_aliases_list(L) COMMA xx_use_aliases(U) . {
+	R = xx_ret_list(L, U);
+}
+
+xx_use_aliases_list(R) ::= xx_use_aliases(U) . {
+	R = xx_ret_list(U, NULL);
+}
+
+xx_use_aliases(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_use_aliases_item(I, NULL, status->scanner_state);
+}
+
+xx_use_aliases(R) ::= IDENTIFIER(I) AS IDENTIFIER(A) . {
+	R = xx_ret_use_aliases_item(I, A, status->scanner_state);
 }
 
 xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) xx_interface_body(B) . {

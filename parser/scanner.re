@@ -81,6 +81,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'use' {
+			s->active_char += sizeof("use")-1;
+			token->opcode = XX_T_USE;
+			return 0;
+		}
+
+		'as' {
+			s->active_char += sizeof("as")-1;
+			token->opcode = XX_T_AS;
+			return 0;
+		}
+
 		'abstract' {
 			s->active_char += sizeof("abstract")-1;
 			token->opcode = XX_T_ABSTRACT;
@@ -554,7 +566,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				token->opcode = XX_T_IDENTIFIER;
 			}
 			return 0;
-		}		
+		}
 
 		"(" {
 			s->active_char++;
