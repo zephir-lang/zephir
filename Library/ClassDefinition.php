@@ -273,7 +273,10 @@ class ClassDefinition
     public function addProperty(ClassProperty $property)
     {
         if (isset($this->properties[$property->getName()])) {
-            throw new CompilerException("Property '" . $property->getName() . "' was defined more than one time", $property->getOriginal());
+            throw new CompilerException(
+                "Property '" . $property->getName() . "' was defined more than one time",
+                $property->getOriginal()
+            );
         }
 
         $this->properties[$property->getName()] = $property;
@@ -388,7 +391,10 @@ class ClassDefinition
     {
         $methodName = strtolower($method->getName());
         if (isset($this->methods[$methodName])) {
-            throw new CompilerException("Method '" . $method->getName() . "' was defined more than one time", $statement);
+            throw new CompilerException(
+                "Method '" . $method->getName() . "' was defined more than one time",
+                $statement
+            );
         }
 
         $this->methods[$methodName] = $method;
@@ -510,7 +516,11 @@ class ClassDefinition
      */
     public function getSCName($namespace)
     {
-        return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name));
+        return str_replace(
+            $namespace . "_",
+            "",
+            strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name)
+        );
     }
 
     /**
@@ -524,9 +534,15 @@ class ClassDefinition
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
                 if ($interfaceDefinition instanceof ClassDefinition) {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
+                    throw new CompilerException(
+                        "Class " . $classDefinition->getCompleteName() . " must implement method: " .
+                        $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName()
+                    );
                 } else {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getName());
+                    throw new CompilerException(
+                        "Class " . $classDefinition->getCompleteName() . " must implement method: " .
+                        $method->getName() . " defined on interface: " . $interfaceDefinition->getName()
+                    );
                 }
             }
         }
@@ -637,10 +653,10 @@ class ClassDefinition
 
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                     $classEntry = $classInterfaceDefinition->getClassEntry();
-                } else if ($compiler->isInterface($interface)) {
+                } elseif ($compiler->isInterface($interface)) {
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                     $classEntry = $classInterfaceDefinition->getClassEntry();
-                } else if ($compiler->isInternalInterface($interface)) {
+                } elseif ($compiler->isInternalInterface($interface)) {
                     $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                     $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
                 }
