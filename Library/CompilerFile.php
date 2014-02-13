@@ -583,7 +583,7 @@ class CompilerFile
         /**
          * Main code-printer for the file
          */
-        $codePrinter = new codePrinter();
+        $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
 
         $codePrinter->outputBlankLine();

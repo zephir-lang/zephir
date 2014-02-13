@@ -22,8 +22,6 @@ namespace Zephir;
 use Zephir\Utils;
 use Zephir\Optimizers\OptimizerAbstract;
 
-require ZEPHIRPATH . 'Library/Optimizers/OptimizerAbstract.php';
-
 /**
  * FunctionCall
  *

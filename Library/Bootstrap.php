@@ -149,9 +149,8 @@ class Bootstrap
              */
             foreach (new \DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
                 if (!$item->isDir()) {
-                    require_once $item->getRealPath();
 
-                    $className = 'Zephir\Commands\Command' . str_replace('.php', '', $item->getBaseName());
+                    $className = 'Zephir\\Commands\\' . str_replace('.php', '', $item->getBaseName());
                     $class = new \ReflectionClass($className);
 
                     if (!$class->isAbstract() && !$class->isInterface()) {
