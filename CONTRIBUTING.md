@@ -16,7 +16,7 @@ please do two things:
    local changes against the `master` branch. Resolve any conflicts
    that arise.
 
-2. Run the full Zephir test suite with the `./unit-tests/run_tests` command.  You're
+2. Run the full Zephir test suite with the `php ./unit-tests/run_tests.php` command.  You're
    not off the hook even if you just stick to documentation; code
    examples in the docs are tested as well!
 
@@ -37,4 +37,3 @@ please make sure the listed date range includes the current year.
 
 Thanks! <br />
 Zephir Team
-
