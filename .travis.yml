@@ -9,7 +9,6 @@ before_install:
  - ./unit-tests/ci/install_prereqs.sh
 
 before_script:
- - phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/
  - git submodule --quiet update --init --recursive
  - sudo apt-get -qq install valgrind
  - ./install
@@ -19,6 +18,7 @@ before_script:
  - ulimit -c unlimited || true
 
 script:
+ - phpcs --standard=PSR2 --report=emacs --extensions=php Library
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/run_tests.php
 
 after_failure:
