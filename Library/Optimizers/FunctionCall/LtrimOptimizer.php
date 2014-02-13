@@ -25,8 +25,6 @@ use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
-require_once ZEPHIRPATH . 'Library/Optimizers/FunctionCall/TrimOptimizer.php';
-
 /**
  * LtrimOptimizer
  *

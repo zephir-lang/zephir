@@ -67,68 +67,6 @@ use Zephir\Expression\PropertyDynamicAccess;
 use Zephir\Expression\StaticConstantAccess;
 use Zephir\Expression\StaticPropertyAccess;
 
-/* Base Operator */
-require ZEPHIRPATH . 'Library/Operators/BaseOperator.php';
-
-/* Arithmetical operators */
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/BaseOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/AddOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/SubOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/MulOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/DivOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Arithmetical/ModOperator.php';
-
-/* Logical operators */
-require ZEPHIRPATH . 'Library/Operators/Logical/BaseOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Logical/AndOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Logical/OrOperator.php';
-
-/** Unary Operator */
-require ZEPHIRPATH . 'Library/Operators/Unary/NotOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Unary/MinusOperator.php';
-
-/* Comparison operators */
-require ZEPHIRPATH . 'Library/Operators/Comparison/BaseOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/IdenticalOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/NotIdenticalOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/EqualsOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/NotEqualsOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/LessOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/LessEqualOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Comparison/GreaterEqualOperator.php';
-
-/* Bitwise operators */
-require ZEPHIRPATH . 'Library/Operators/Bitwise/BaseOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseAndOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseOrOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Bitwise/BitwiseXorOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Bitwise/ShiftLeftOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Bitwise/ShiftRightOperator.php';
-
-/* Other operators */
-require ZEPHIRPATH . 'Library/Operators/Other/ConcatOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/FetchOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/IssetOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/EmptyOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/CloneOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/NewInstanceOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/TypeOfOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/InstanceOfOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/RequireOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/LikelyOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/UnlikelyOperator.php';
-require ZEPHIRPATH . 'Library/Operators/Other/TernaryOperator.php';
-
-/* Expression Resolving */
-require ZEPHIRPATH . 'Library/Expression/Constants.php';
-require ZEPHIRPATH . 'Library/Expression/PropertyAccess.php';
-require ZEPHIRPATH . 'Library/Expression/PropertyDynamicAccess.php';
-require ZEPHIRPATH . 'Library/Expression/StaticConstantAccess.php';
-require ZEPHIRPATH . 'Library/Expression/NativeArray.php';
-require ZEPHIRPATH . 'Library/Expression/NativeArrayAccess.php';
-require ZEPHIRPATH . 'Library/Expression/StaticPropertyAccess.php';
-
 /**
  * Expressions
  *
