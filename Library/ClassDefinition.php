@@ -52,6 +52,9 @@ class ClassDefinition
      */
     protected $constants = array();
 
+    /**
+     * @var ClassMethod[]
+     */
     protected $methods = array();
 
     protected $dependencyRank = 0;
@@ -416,8 +419,7 @@ class ClassDefinition
 
     /**
      * Returns all methods defined in the class
-     *
-     * @param string
+     * @return ClassMethod[]
      */
     public function getMethods()
     {

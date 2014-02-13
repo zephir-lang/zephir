@@ -17,17 +17,40 @@
  +--------------------------------------------------------------------------+
 */
 
-error_reporting(E_ALL);
+namespace Zephir\Commands;
 
-define('ZEPHIRPATH', __DIR__ . '/');
-define('T', "\t");
-define('2T', "\t\t");
+/**
+ * CommandGenerate
+ *
+ * Generate the code without compiling it
+ */
+class CommandStubs extends CommandAbstract
+{
+    /**
+     * Command provided by this command
+     *
+     * @return array|string
+     */
+    public function getCommand()
+    {
+        return 'stubs';
+    }
 
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require __DIR__ . '/vendor/autoload.php';
-} else {
-    require __DIR__ . '/Library/Loader.php';
-    spl_autoload_register(array(new Zephir\Loader, 'autoload'));
+    /**
+     * Command usage
+     *
+     * @return string
+     */
+    public function getUsage()
+    {
+        return 'stubs';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Generates stubs';
+    }
 }
-
-Zephir\Bootstrap::boot();

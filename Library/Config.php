@@ -27,6 +27,10 @@ namespace Zephir;
 class Config
 {
     protected $_config = array(
+        'stubs' => array(
+            'path' => 'ide/%version%/%namespace%/',
+            'stubs-run-after-generate' => false,
+        ),
         'warnings' => array(
             'unused-variable'                    => true,
             'unused-variable-external'           => false,

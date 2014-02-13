@@ -52,11 +52,27 @@ class ClassConstant
     /**
      * Returns the constant's value
      *
+     * @todo Rewrite name
+     *
      * @return array
      */
     public function getValue()
     {
         return $this->_value;
+    }
+
+    /**
+     * Get value of constant
+     *
+     * @return mixed
+     */
+    public function getValueValue()
+    {
+        if (isset($this->_value['value'])) {
+            return $this->_value['value'];
+        }
+
+        return false;
     }
 
     /**

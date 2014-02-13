@@ -69,7 +69,7 @@ class CompilerFile
     /**
      * Returns the class definition related to the compiled file
      *
-     * @return \ClassDefinition
+     * @return ClassDefinition
      */
     public function getClassDefinition()
     {
