@@ -216,3 +216,30 @@ PHP_METHOD(Test_Logical, testMixed3) {
 
 }
 
+PHP_METHOD(Test_Logical, testMixed4) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	zend_bool a, b, _0, _1, _2;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+		a = zephir_get_boolval(a_param);
+		b = zephir_get_boolval(b_param);
+
+
+	_0 = !a;
+	if (_0) {
+		_0 = !b;
+	}
+	_1 = _0;
+	if (!(_1)) {
+		_2 = a;
+		if (_2) {
+			_2 = b;
+		}
+		_1 = _2;
+	}
+	RETURN_BOOL(_1);
+
+}
+

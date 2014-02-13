@@ -75,4 +75,9 @@ class Logical
 		return a == b;
 	}
 
+	public function testMixed4(boolean a, boolean b)
+	{
+		return !a && !b || a && b;
+	}
+
 }
