@@ -27,7 +27,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require __DIR__ . '/vendor/autoload.php';
 } else {
     require __DIR__ . '/Library/Loader.php';
-    spl_autoload_register(array(new Zephir\Loader, 'autoload'));
+    Zephir\Loader::register();
 }
 
 Zephir\Bootstrap::boot();
