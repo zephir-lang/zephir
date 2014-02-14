@@ -1872,6 +1872,10 @@ xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN xx_s
 	R = xx_ret_for_statement(E, NULL, V, 0, L, status->scanner_state);
 }
 
+xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_for_statement(E, NULL, V, 0, NULL, status->scanner_state);
+}
+
 xx_for_statement(R) ::= FOR IDENTIFIER(V) IN REVERSE xx_common_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_for_statement(E, NULL, V, 1, L, status->scanner_state);
 }

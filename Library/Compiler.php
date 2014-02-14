@@ -28,7 +28,7 @@ use Zephir\Commands\CommandInterface;
  */
 class Compiler
 {
-    const VERSION = '0.3.4a';
+    const VERSION = '0.3.5a';
 
     /**
      * @var CompilerFile[]
@@ -572,6 +572,7 @@ class Compiler
     }
 
     /**
+     * Compiles the extension without installing it
      *
      * @param CommandInterface $command
      */
@@ -584,9 +585,6 @@ class Compiler
         $namespace = $this->_checkDirectory();
 
         $needConfigure = $this->generate($command);
-
-        $needConfigure = true;
-
         if ($needConfigure) {
 
             exec('cd ext && make clean && phpize --clean', $output, $exit);
