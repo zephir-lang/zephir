@@ -20,6 +20,7 @@ before_script:
 
 script:
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes $(phpenv which php) ./unit-tests/run_tests.php
+ - $(phpenv which php) compiler.php stubs
 
 after_failure:
  - sudo apt-get -qq install gdb
