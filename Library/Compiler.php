@@ -369,6 +369,26 @@ class Compiler
     }
 
     /**
+     * Returns current GCC version
+     *
+     * @return string
+     */
+    protected function getGccVersion()
+    {
+        if (file_exists('.temp/' . self::VERSION . '/gcc-version')) {
+            return file_get_contents('.temp/' . self::VERSION . '/gcc-version');
+        }
+        system('gcc -v 2> .temp/' . self::VERSION . '/gcc-version-temp');
+        $lines = file('.temp/' . self::VERSION . '/gcc-version-temp');
+        $lastLine = $lines[count($lines) - 1];
+        if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
+            file_put_contents('.temp/' . self::VERSION . '/gcc-version', $matches[0]);
+            return $matches[0];
+        }
+        return '0.0.0';
+    }
+
+    /**
      * Initializes a Zephir extension
      *
      * @param CommandInitialize $command
@@ -565,6 +585,8 @@ class Compiler
 
         $needConfigure = $this->generate($command);
 
+        $needConfigure = true;
+
         if ($needConfigure) {
 
             exec('cd ext && make clean && phpize --clean', $output, $exit);
@@ -573,7 +595,13 @@ class Compiler
             exec('cd ext && phpize', $output, $exit);
             $this->_logger->output('Preparing configuration file...');
 
-            exec('cd ext && export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses" && ./configure --enable-' . $namespace);
+            $gccVersion = $this->getGccVersion();
+            if (version_compare($gccVersion, '4.6.0', '>=')) {
+                $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto';
+            } else {
+                $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
+            }
+            exec('cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace);
         }
 
         $this->_logger->output('Compiling...');
@@ -603,7 +631,13 @@ class Compiler
         $this->compile($command);
 
         $this->_logger->output('Installing...');
-        exec('(cd ext && export CC="gcc" && export CFLAGS="-O2 -fvisibility=hidden -Wparentheses" && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
+        $gccVersion = $this->getGccVersion();
+        if (version_compare($gccVersion, '4.6.0', '>=')) {
+            $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto';
+        } else {
+            $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
+        }
+        exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
 
         $this->_logger->output('Extension installed!');
         if (!extension_loaded($namespace)) {

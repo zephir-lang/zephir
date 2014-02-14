@@ -471,6 +471,14 @@ class MethodCall extends Call
                 }
             }
 
+            if ($compilationContext->config->get('recursive-internal-methods', 'optimizations')) {
+                if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
+                    if ($method == $compilationContext->currentMethod) {
+                        $internalCall = true;
+                    }
+                }
+            }
+
             if (!$internalCall) {
 
                 if (!isset($expression['parameters']) || !count($params)) {

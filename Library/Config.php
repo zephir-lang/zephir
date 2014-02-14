@@ -60,7 +60,8 @@ class Config
             'constant-folding'                  => true,
             'static-constant-class-folding'     => true,
             'private-internal-methods'          => false,
-            'public-internal-methods'           => false
+            'public-internal-methods'           => false,
+            'recursive-internal-methods'        => true
         ),
         'namespace'   => '',
         'name'        => '',

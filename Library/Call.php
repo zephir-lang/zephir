@@ -256,12 +256,13 @@ class Call
 
         /**
          * Static typed parameters in final methods are promotable to read only parameters
+         * Recursive calls with static typed methods also also promotable
          */
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal()) {
+                if ($calleeDefinition->isFinal() || $compilationContext->currentMethod = $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         switch ($parameter['data-type']) {
