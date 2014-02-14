@@ -62,7 +62,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 
 	zend_bool _1;
-	zval *num_param = NULL, *_0, *_2, *_3;
+	zval *num_param = NULL, *_0, *_2, _3;
 	int num;
 
 	ZEPHIR_MM_GROW();
@@ -80,9 +80,9 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 		ZVAL_LONG(_0, 1);
 	} else {
 		ZEPHIR_INIT_VAR(_2);
-		ZEPHIR_INIT_VAR(_3);
-		ZVAL_LONG(_3, (num - 1));
-		zephir_call_method_p1(_2, this_ptr, "intrecursivefactorial", _3);
+		ZEPHIR_SINIT_VAR(_3);
+		ZVAL_LONG(&_3, (num - 1));
+		zephir_call_internal_method_p1(_2, this_ptr, "intrecursivefactorial", ZEND_MN(Test_Factorial_intRecursiveFactorial), &_3);
 		ZVAL_LONG(_0, (num * zephir_get_numberval(_2)));
 	}
 	RETURN_CCTOR(_0);

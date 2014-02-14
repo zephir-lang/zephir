@@ -262,15 +262,20 @@ class Call
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal() || $compilationContext->currentMethod = $calleeDefinition) {
+                if ($calleeDefinition->isFinal() || $compilationContext->currentMethod == $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
-                        switch ($parameter['data-type']) {
-                            case 'int':
-                            case 'double':
-                            case 'long':
-                                $readOnlyParameters[$position] = true;
-                                break;
+                        if (isset($parameter['data-type'])) {
+                            switch ($parameter['data-type']) {
+                                case 'int':
+                                case 'uint':
+                                case 'double':
+                                case 'long':
+                                case 'char':
+                                case 'uchar':
+                                    $readOnlyParameters[$position] = true;
+                                    break;
+                            }
                         }
                     }
                 }
@@ -361,9 +366,15 @@ class Call
                         case 'uint':
                         case 'long':
                         case 'ulong': /* ulong must be stored in string */
-                            $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                            $codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
-                            $params[] = $parameterTempVariable->getName();
+                            if (isset($readOnlyParameters[$position])) {
+                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
+                                $params[] = $parameterTempVariable->getName();
+                            } else {
+                                $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
+                                $params[] = $parameterTempVariable->getName();
+                            }
                             $this->_temporalVariables[] = $parameterTempVariable;
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
