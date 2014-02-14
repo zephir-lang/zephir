@@ -23,6 +23,11 @@ define('ZEPHIRPATH', __DIR__ . '/');
 define('T', "\t");
 define('2T', "\t\t");
 
-require __DIR__ . '/vendor/autoload.php';
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+	require __DIR__ . '/vendor/autoload.php';
+} else {
+	require __DIR__ . '/Library/Loader.php';
+	spl_autoload_register(array(new Zephir\Loader, 'autoload'));
+}
 
 Zephir\Bootstrap::boot();
