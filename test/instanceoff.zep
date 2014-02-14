@@ -10,7 +10,7 @@ class Instanceoff
 	public function testInstanceOf1()
 	{
 		var a;
-		let a = new stdClass();
+		let a = new \stdClass();
 		return a instanceof stdClass;
 	}
 
@@ -24,7 +24,7 @@ class Instanceoff
 	public function testInstanceOf3()
 	{
 		var a;
-		let a = new stdClass();
+		let a = new \stdClass();
 		return a instanceof UnknownClass;
 	}
 

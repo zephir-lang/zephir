@@ -267,11 +267,19 @@ class StaticCall extends Call
         $className = $expression['class'];
 
         if ($className != 'self' && $className != 'parent') {
+
+            if (substr($className, 0, 1) == '\\') {
+                $className = substr($className, 1);
+            } else {
+                $className = $compilationContext->classDefinition->getNamespace() . '\\' . $className;
+            }
+
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {
-                throw new CompilerException("Incorrect class name: " . $expression['class'], $expression);
+                throw new CompilerException("Class name: " . $expression['class'] . " does not exist", $expression);
             }
+
         } else {
             if ($className == 'self') {
                 $classDefinition = $compilationContext->classDefinition;

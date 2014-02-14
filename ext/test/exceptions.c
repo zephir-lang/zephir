@@ -28,8 +28,17 @@ ZEPHIR_INIT_CLASS(Test_Exceptions) {
 
 PHP_METHOD(Test_Exceptions, testException1) {
 
+	zval *_0, *_1;
 
-	ZEPHIR_THROW_EXCEPTION_STRW(test_exception_ce, "hello1");
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	object_init_ex(_0, test_exception_ce);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "hello1", 1);
+	zephir_call_method_p1_noret(_0, "__construct", _1);
+	zephir_throw_exception(_0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 	return;
 
 }

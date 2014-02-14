@@ -72,7 +72,11 @@ class NewInstanceOperator extends BaseOperator
             if (substr($expression['class'], 0, 1) == '\\') {
                 $className = substr($expression['class'], 1);
             } else {
-                $className = $expression['class'];
+                if ($expression['dynamic']) {
+                    $className = $expression['class'];
+                } else {
+                    $className = $compilationContext->classDefinition->getNamespace() . '\\' . $expression['class'];
+                }
                 $dynamic = $expression['dynamic'];
             }
         }

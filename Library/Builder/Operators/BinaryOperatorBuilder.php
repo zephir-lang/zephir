@@ -27,33 +27,33 @@ namespace Zephir\Builder\Operators;
 class BinaryOperatorBuilder
 {
 
-    protected $_operator;
+    protected $operator;
 
-    protected $_file;
+    protected $file;
 
-    protected $_line;
+    protected $line;
 
-    protected $_char;
+    protected $char;
 
     public function __construct($operator, $leftExpression, $rightExpression, $file = null, $line = 0, $char = 0)
     {
-        $this->_operator = $operator;
-        $this->_leftExpression = $leftExpression;
-        $this->_rightExpression = $rightExpression;
-        $this->_file = $file;
-        $this->_line = $line;
-        $this->_char = $char;
+        $this->operator = $operator;
+        $this->leftExpression = $leftExpression;
+        $this->rightExpression = $rightExpression;
+        $this->file = $file;
+        $this->line = $line;
+        $this->char = $char;
     }
 
     public function get()
     {
         return array(
-            'type'       => $this->_operator,
-            'left'       => $this->_leftExpression->get(),
-            'right'      => $this->_rightExpression->get(),
-            'file'       => $this->_file,
-            'line'       => $this->_line,
-            'char'       => $this->_char
+            'type'       => $this->operator,
+            'left'       => $this->leftExpression->get(),
+            'right'      => $this->rightExpression->get(),
+            'file'       => $this->file,
+            'line'       => $this->line,
+            'char'       => $this->char
         );
     }
 }

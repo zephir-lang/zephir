@@ -48,7 +48,7 @@ class SpectralNorm
 		int i, vv = 0, vBv = 0;
   		var u, v, w;
 
-  		let u = new SplFixedArray(n), v = new SplFixedArray(n), w = new SplFixedArray(n);
+  		let u = new \SplFixedArray(n), v = new \SplFixedArray(n), w = new \SplFixedArray(n);
 
   		for i in range(0, n - 1) {
 			u->offsetSet(i, 1);

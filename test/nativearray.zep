@@ -536,7 +536,7 @@ class NativeArray
 	{
 		var x, y;
 		let x = [], y = "hello";
-		let x[y] = new stdClass;
+		let x[y] = new \stdClass;
 	}
 
 	public function testArrayKeys(var param)

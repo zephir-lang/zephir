@@ -85,11 +85,11 @@ class Router
 			// Two routes are added by default to match /:controller/:action and
 			// /:controller/:action/:params
 
-			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", [
+			let routes[] = new Router\Route("#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", [
 				"controller": 1
 			]);
 
-			let routes[] = new Test\Router\Route("#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", [
+			let routes[] = new Router\Route("#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", [
 				"controller": 1,
 				"action": 2,
 				"params": 3
@@ -574,7 +574,7 @@ class Router
 		var route;
 
 		// Every route is internally stored as a Test\Router\Route
-		let route = new Test\Router\Route(pattern, paths, httpMethods),
+		let route = new Router\Route(pattern, paths, httpMethods),
 			this->_routes[] = route;
 		return route;
 	}

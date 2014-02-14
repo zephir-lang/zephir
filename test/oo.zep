@@ -11,7 +11,7 @@ class Oo
 	{
 		var o;
 
-		let o = new stdClass;
+		let o = new \stdClass;
 
 		return o;
 	}
@@ -20,7 +20,7 @@ class Oo
 	{
 		var o;
 
-		let o = new Test\Oo\OoConstruct;
+		let o = new Oo\OoConstruct;
 
 		return o;
 	}
@@ -29,7 +29,7 @@ class Oo
 	{
 		var o;
 
-		let o = new Test\Oo\OoNoConstruct;
+		let o = new Oo\OoNoConstruct;
 
 		return o;
 	}
@@ -40,7 +40,7 @@ class Oo
 
 		let a = "a",
 			b = "b",
-			o = new Test\Oo\OoConstructParams(a, b);
+			o = new Oo\OoConstructParams(a, b);
 
 		return o;
 	}
@@ -48,42 +48,42 @@ class Oo
 	public function testInstance5()
 	{
 		var o;
-		let o = new Test\Oo\OoConstructParams("a", "b");
+		let o = new Oo\OoConstructParams("a", "b");
 		return o;
 	}
 
 	public function testInstance6()
 	{
 		var o;
-		let o = new Test\Oo\OoConstructParams(1, 2);
+		let o = new Oo\OoConstructParams(1, 2);
 		return o;
 	}
 
 	public function testInstance7()
 	{
 		var o;
-		let o = new Test\Oo\OoConstructParams(false, true);
+		let o = new Oo\OoConstructParams(false, true);
 		return o;
 	}
 
 	public function testInstance8()
 	{
 		var o;
-		let o = new Test\Oo\OoConstructParams(1.2, 7.30);
+		let o = new Oo\OoConstructParams(1.2, 7.30);
 		return o;
 	}
 
 	public function testInstance9()
 	{
 		var o;
-		let o = Test\Oo\OoDynamicA::getNew();
+		let o = Oo\OoDynamicA::getNew();
 		return o;
 	}
 
 	public function testInstance10()
 	{
 		var o;
-		let o = Test\Oo\OoDynamicB::getNew();
+		let o = Oo\OoDynamicB::getNew();
 		return o;
 	}
 

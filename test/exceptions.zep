@@ -5,27 +5,27 @@ class Exceptions
 {
 	public function testException1()
 	{
-		throw new Test\Exception("hello1");
+		throw new Exception("hello1");
 	}
 
 	public function testException2()
 	{
 		var msg;
 		let msg = "hello2";
-		throw new Test\Exception(msg);
+		throw new Exception(msg);
 	}
 
 	public function testException3()
 	{
 		var ex, msg;
 		let msg = "hello3";
-		let ex = new Test\Exception(msg);
+		let ex = new Exception(msg);
 		throw ex;
 	}
 
 	protected function getException()
 	{
-		return new Test\Exception("hello4");
+		return new Exception("hello4");
 	}
 
 	public function testException4()
