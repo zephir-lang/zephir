@@ -31,6 +31,11 @@ class Loader
      */
     public function autoload($className)
     {
-        require __DIR__ . str_replace('Zephir' . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.php';
+        require __DIR__ .
+            str_replace(
+                'Zephir' . DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR,
+                str_replace('\\', DIRECTORY_SEPARATOR, $className)
+            ) . '.php';
     }
 }
