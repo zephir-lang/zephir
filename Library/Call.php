@@ -556,7 +556,7 @@ class Call
     /**
      * Returns the temporal variables generated during the parameter resolving
      *
-     * @return \Variable[]
+     * @return Variable[]
      */
     public function getTemporalVariables()
     {

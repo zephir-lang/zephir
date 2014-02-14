@@ -126,6 +126,9 @@ class Compiler
         $files = array();
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
 
+        /**
+         * @var $item \SplFileInfo
+         */
         foreach ($iterator as $item) {
             if (!$item->isDir()) {
                 $files[] = $item->getPathname();
@@ -495,6 +498,7 @@ class Compiler
 
                 /**
                  * Load additional extension prototypes
+                 * @var $file \DirectoryIterator
                  */
                 foreach (new \DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
                     if (!$file->isDir()) {

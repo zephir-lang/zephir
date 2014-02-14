@@ -105,7 +105,7 @@ class CompilerFile
     /**
      * Compiles the class/interface contained in the file
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @param string $namespace
      * @param string $topStatement
      */

@@ -852,7 +852,7 @@ class ClassMethod
      * Assigns a zval value to a static low-level type
      *
      * @param array $parameter
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return string
      */
     public function assignZvalValue($parameter, $compilationContext)
@@ -1500,7 +1500,7 @@ class ClassMethod
             $defaultValues = array();
 
             /**
-             * @var $variables \Variable[]
+             * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
                 if (($type == 'variable' || $type == 'string' || $type == 'array') && $variable->mustInitNull()) {
