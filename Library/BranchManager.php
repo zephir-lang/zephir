@@ -28,7 +28,7 @@ class BranchManager
 {
     protected $_currentBranch;
 
-    protected $_level = -1;
+    protected $_level = 0;
 
     protected $_uniqueId = 1;
 

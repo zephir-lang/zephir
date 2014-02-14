@@ -255,7 +255,7 @@ class SymbolTable
 
                 if (!$found) {
 
-                    /*+
+                    /**
                      * Check if last assignment
                      * Variable was initialized in a sub-branch and it's beign used in a parent branch
                      */

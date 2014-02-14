@@ -113,7 +113,7 @@ class Branch
      */
     public function setLevel($level)
     {
-        $this->_level = $level;
+        $this->level = $level;
     }
 
     /**
@@ -129,7 +129,7 @@ class Branch
      */
     public function setUniqueId($uniqueId)
     {
-        $this->_uniqueId = $uniqueId;
+        $this->uniqueId = $uniqueId;
     }
 
     /**
@@ -145,7 +145,7 @@ class Branch
      */
     public function setRelatedStatement($relatedStatement)
     {
-        $this->_relatedStatement = $relatedStatement;
+        $this->relatedStatement = $relatedStatement;
     }
 
     /**

@@ -620,6 +620,8 @@ class Variable
                 $this->_defaultInitValue = 0;
                 break;
             case 'variable':
+            case 'string':
+            case 'array':
                 $this->_defaultInitValue = null;
                 $this->setDynamicTypes('null');
                 $this->setMustInitNull(true);

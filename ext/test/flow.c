@@ -1745,7 +1745,7 @@ PHP_METHOD(Test_Flow, testUnrechable2) {
 
 PHP_METHOD(Test_Flow, testUnrechable3) {
 
-	int a;
+	int a = 0;
 
 
 	if ((3 < 1)) {
