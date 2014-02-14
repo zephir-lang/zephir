@@ -39,7 +39,7 @@ zend_class_entry *test_constants_ce;
 zend_class_entry *test_constantsinterface_ce;
 zend_class_entry *test_constantsinterfacea_ce;
 zend_class_entry *test_constantsinterfaceb_ce;
-zend_class_entry *test_declare_ce;
+zend_class_entry *test_declaretest_ce;
 zend_class_entry *test_echoes_ce;
 zend_class_entry *test_emptytest_ce;
 zend_class_entry *test_exception_ce;
@@ -125,7 +125,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_ConstantsInterface);
 	ZEPHIR_INIT(Test_ConstantsInterfaceA);
 	ZEPHIR_INIT(Test_ConstantsInterfaceB);
-	ZEPHIR_INIT(Test_Declare);
+	ZEPHIR_INIT(Test_DeclareTest);
 	ZEPHIR_INIT(Test_Echoes);
 	ZEPHIR_INIT(Test_EmptyTest);
 	ZEPHIR_INIT(Test_Exception);

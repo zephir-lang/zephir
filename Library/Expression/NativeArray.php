@@ -66,9 +66,9 @@ class NativeArray
     /**
      * Resolves an item to be added in an array
      *
-     * @param \CompiledExpression $exprCompiled
-     * @param \CompilationContext $compilationContext
-     * @return \Variable
+     * @param CompiledExpression $exprCompiled
+     * @param CompilationContext $compilationContext
+     * @return Variable
      */
     public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
     {
@@ -155,8 +155,8 @@ class NativeArray
      * Compiles an array initialization
      *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

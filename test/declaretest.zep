@@ -5,7 +5,7 @@
 
 namespace Test;
 
-class Declare
+class DeclareTest
 {
 	public function testDeclare1()
 	{
