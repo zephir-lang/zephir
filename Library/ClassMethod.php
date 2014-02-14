@@ -29,12 +29,21 @@ use Zephir\Passes\StaticTypeInference;
  */
 class ClassMethod
 {
+    /**
+     * @var ClassDefinition
+     */
     protected $_classDefinition;
 
+    /**
+     * @var string
+     */
     protected $_visibility;
 
     protected $_name;
 
+    /**
+     * @var ClassMethodParameters
+     */
     protected $_parameters;
 
     protected $_statements;
@@ -47,6 +56,9 @@ class ClassMethod
 
     protected $_void = false;
 
+    /**
+     * @var array|null
+     */
     protected $_expression;
 
     /**
@@ -70,7 +82,6 @@ class ClassMethod
         $this->_parameters = $parameters;
         $this->_statements = $statements;
         $this->_docblock = $docblock;
-
         $this->_expression = $original;
 
         if ($returnType['void']) {
@@ -178,7 +189,7 @@ class ClassMethod
     /**
      * Returns the parameters
      *
-     * @return \ClassMethodParameters
+     * @return ClassMethodParameters
      */
     public function getParameters()
     {
@@ -762,7 +773,7 @@ class ClassMethod
      * Assigns a zval value to a static low-level type
      *
      * @param array $parameter
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return string
      */
     public function checkStrictType($parameter, $compilationContext)
@@ -841,7 +852,7 @@ class ClassMethod
      * Assigns a zval value to a static low-level type
      *
      * @param array $parameter
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return string
      */
     public function assignZvalValue($parameter, $compilationContext)
@@ -1489,7 +1500,7 @@ class ClassMethod
             $defaultValues = array();
 
             /**
-             * @var $variables \Variable[]
+             * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
                 if (($type == 'variable' || $type == 'string' || $type == 'array') && $variable->mustInitNull()) {

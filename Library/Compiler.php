@@ -20,6 +20,7 @@
 namespace Zephir;
 
 use Zephir\Commands\CommandInterface;
+use Zephir\Commands\CommandGenerate;
 
 /**
  * Compiler
@@ -65,7 +66,7 @@ class Compiler
     protected $_logger;
 
     /**
-     * @var array|ReflectionClass[]
+     * @var \ReflectionClass[]
      */
     protected static $_reflections = array();
 
@@ -125,6 +126,9 @@ class Compiler
         $files = array();
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
 
+        /**
+         * @var $item \SplFileInfo
+         */
         foreach ($iterator as $item) {
             if (!$item->isDir()) {
                 $files[] = $item->getPathname();
@@ -391,7 +395,7 @@ class Compiler
     /**
      * Initializes a Zephir extension
      *
-     * @param CommandInitialize $command
+     * @param CommandInterface $command
      */
     public function init(CommandInterface $command)
     {
@@ -434,8 +438,8 @@ class Compiler
     }
 
     /**
-     *
-     * @param CommandGenerate $command
+     * @param CommandInterface $command
+     * @return bool
      * @throws Exception
      */
     public function generate(CommandInterface $command)
@@ -494,6 +498,7 @@ class Compiler
 
                 /**
                  * Load additional extension prototypes
+                 * @var $file \DirectoryIterator
                  */
                 foreach (new \DirectoryIterator(ZEPHIRPATH . 'prototypes') as $file) {
                     if (!$file->isDir()) {
@@ -568,6 +573,10 @@ class Compiler
          */
         $this->_stringManager->genConcatCode();
 
+        if ($this->_config->get('stubs-run-after-generate', 'stubs')) {
+            $this->stubs($command, true);
+        }
+
         return $needConfigure;
     }
 
@@ -578,7 +587,6 @@ class Compiler
      */
     public function compile(CommandInterface $command)
     {
-
         /**
          * Get global namespace
          */
@@ -610,13 +618,34 @@ class Compiler
         } else {
             exec('cd ext && make --silent -j2', $output, $exit);
         }
+    }
 
+    /**
+     * Generate ide stubs
+     *
+     * @param CommandInterface $command
+     * @param bool $fromGenerate
+     */
+    public function stubs(CommandInterface $command, $fromGenerate = false)
+    {
+        if (!$fromGenerate) {
+            $this->generate($command);
+        }
+
+        $this->_logger->output('Generating stubs...');
+
+        $stubsGenerator = new Stubs\Generator($this->_files, $this->_config);
+        $path = $this->_config->get('path', 'stubs');
+        $path = str_replace('%version%', $this->_config->get('version'), $path);
+        $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
+        
+        $stubsGenerator->generate($path);
     }
 
     /**
      * Compiles and installs the extension
      *
-     * @param CommandInstall $command
+     * @param CommandInterface $command
      * @throws Exception
      */
     public function install(CommandInterface $command)

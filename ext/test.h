@@ -17,7 +17,7 @@
 #include "test/constantsinterfacea.h"
 #include "test/constantsinterfaceb.h"
 #include "test/constantsparent.h"
-#include "test/declare.h"
+#include "test/declaretest.h"
 #include "test/echoes.h"
 #include "test/emptytest.h"
 #include "test/exception.h"

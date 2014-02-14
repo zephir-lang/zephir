@@ -32,7 +32,7 @@ class BaseOperator
     protected $_literalOnly = true;
 
     /**
-     * @var \Variable|null
+     * @var Variable|null
      */
     protected $_expectingVariable;
 
@@ -99,7 +99,7 @@ class BaseOperator
      * @param CompilationContext $compilationContext
      * @param array $expression
      * @param string $type
-     * @return \Variable
+     * @return Variable
      */
     public function getExpectedComplexLiteral(CompilationContext $compilationContext, $expression, $type = 'variable')
     {

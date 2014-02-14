@@ -1512,8 +1512,8 @@ class LetStatement extends StatementAbstract
      * Compiles x++
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompilationContext $compilationContext
+     * @param Variable $symbolVariable
+     * @param CompilationContext $compilationContext
      * @param array $statement
      */
     public function assignIncr($variable, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
@@ -1566,8 +1566,8 @@ class LetStatement extends StatementAbstract
      * Compiles obj->x++
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompilationContext $compilationContext
+     * @param Variable $symbolVariable
+     * @param CompilationContext $compilationContext
      * @param array $statement
      */
     public function assignObjectPropertyIncr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
@@ -1613,8 +1613,8 @@ class LetStatement extends StatementAbstract
      * Compiles obj->x--
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompilationContext $compilationContext
+     * @param Variable $symbolVariable
+     * @param CompilationContext $compilationContext
      * @param array $statement
      */
     public function assignObjectPropertyDecr($variable, $property, Variable $symbolVariable, CompilationContext $compilationContext, $statement)
@@ -2072,9 +2072,9 @@ class LetStatement extends StatementAbstract
      * Compiles x->y[] = foo
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompiledExpression $resolvedExpr
-     * @param \CompilationContext $compilationContext,
+     * @param Variable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
      * @param array $statement
      */
     public function assignPropertyAppend($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
@@ -2120,9 +2120,9 @@ class LetStatement extends StatementAbstract
      * Compiles x->y[z] = {expr} (single offset assignment)
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompiledExpression $resolvedExpr
-     * @param \CompilationContext $compilationContext,
+     * @param Variable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
      * @param array $statement
      */
     protected function _assignPropertyArraySingleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
@@ -2228,9 +2228,9 @@ class LetStatement extends StatementAbstract
      * Compiles x->y[a][b] = {expr} (multiple offset assignment)
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompiledExpression $resolvedExpr
-     * @param \CompilationContext $compilationContext,
+     * @param Variable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
      * @param array $statement
      */
     protected function _assignPropertyArrayMultipleIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
@@ -2272,9 +2272,9 @@ class LetStatement extends StatementAbstract
      * Compiles x->y[z] = foo
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompiledExpression $resolvedExpr
-     * @param \CompilationContext $compilationContext,
+     * @param Variable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
      * @param array $statement
      */
     public function assignPropertyArrayIndex($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
@@ -2439,9 +2439,9 @@ class LetStatement extends StatementAbstract
      * Compiles {var} = {expr}
      *
      * @param string $variable
-     * @param \Variable $symbolVariable
-     * @param \CompiledExpression $resolvedExpr
-     * @param \CompilationContext $compilationContext,
+     * @param Variable $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext,
      * @param array $statement
      */
     protected function _exportSymbol($variable, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)

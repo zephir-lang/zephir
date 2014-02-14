@@ -643,7 +643,7 @@ class Variable
     /**
      * Separates variables before being updated
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      */
     public function separate(CompilationContext $compilationContext)
     {

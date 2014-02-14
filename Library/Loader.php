@@ -20,17 +20,31 @@
 namespace Zephir;
 
 /**
- * Loader
- *
+ * Class Loader
  * Loads classes when the composer autoloader is not installed
+ *
+ * @package Zephir
  */
 class Loader
 {
     /**
+     * Register autoload
+     */
+    public static function register()
+    {
+        spl_autoload_register(array(__CLASS__, 'autoload'));
+    }
+
+    /**
      * @param string $className
      */
-    public function autoload($className)
+    public static function autoload($className)
     {
-        require __DIR__ . str_replace('Zephir' . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.php';
+        require __DIR__ .
+            str_replace(
+                'Zephir' . DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR,
+                str_replace('\\', DIRECTORY_SEPARATOR, $className)
+            ) . '.php';
     }
 }

@@ -69,7 +69,7 @@ class CompilerFile
     /**
      * Returns the class definition related to the compiled file
      *
-     * @return \ClassDefinition
+     * @return ClassDefinition
      */
     public function getClassDefinition()
     {
@@ -105,7 +105,7 @@ class CompilerFile
     /**
      * Compiles the class/interface contained in the file
      *
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @param string $namespace
      * @param string $topStatement
      */

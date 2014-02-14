@@ -118,8 +118,8 @@ class Constants
      * Resolves a PHP constant value into C-code
      *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
