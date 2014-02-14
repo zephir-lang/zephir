@@ -20,6 +20,7 @@
 namespace Zephir;
 
 use Zephir\Commands\CommandInterface;
+use Zephir\Commands\CommandGenerate;
 
 /**
  * Compiler
