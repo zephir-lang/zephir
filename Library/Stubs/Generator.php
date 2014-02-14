@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Stubs;
+namespace Zephir\Stubs;
 
 use Zephir\CompilerFile;
 use Zephir\Config;

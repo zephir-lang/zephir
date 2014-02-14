@@ -391,7 +391,7 @@ class Compiler
     /**
      * Initializes a Zephir extension
      *
-     * @param CommandInitialize $command
+     * @param CommandInterface $command
      */
     public function init(CommandInterface $command)
     {
@@ -631,7 +631,7 @@ class Compiler
 
         $this->_logger->output('Generating stubs...');
 
-        $stubsGenerator = new \Stubs\Generator($this->_files, $this->_config);
+        $stubsGenerator = new Stubs\Generator($this->_files, $this->_config);
         $path = $this->_config->get('path', 'stubs');
         $path = str_replace('%version%', $this->_config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
