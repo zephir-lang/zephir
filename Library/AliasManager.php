@@ -27,35 +27,35 @@ namespace Zephir;
 class AliasManager
 {
 
-	protected $aliases = array();
+    protected $aliases = array();
 
-	public function add(array $useStatement)
-	{
-		foreach ($useStatement['aliases'] as $alias) {
-			if (isset($alias['alias'])) {
-				$this->aliases[$alias['alias']] = $alias['name'];
-			} else {
-				$parts = explode("\\", $alias['name']);
-				$implicitAlias = $parts[count($parts) - 1];
-				$this->aliases[$implicitAlias] = $alias['name'];
-			}
-		}
-	}
+    public function add(array $useStatement)
+    {
+        foreach ($useStatement['aliases'] as $alias) {
+            if (isset($alias['alias'])) {
+                $this->aliases[$alias['alias']] = $alias['name'];
+            } else {
+                $parts = explode("\\", $alias['name']);
+                $implicitAlias = $parts[count($parts) - 1];
+                $this->aliases[$implicitAlias] = $alias['name'];
+            }
+        }
+    }
 
-	/**
-	 * Checks if a class name is an existing alias
-	 *
-	 * @param string $alias
-	 * @return boolean
-	 */
-	public function isAlias($alias)
-	{
-		return isset($this->aliases[$alias]);
-	}
+    /**
+     * Checks if a class name is an existing alias
+     *
+     * @param string $alias
+     * @return boolean
+     */
+    public function isAlias($alias)
+    {
+        return isset($this->aliases[$alias]);
+    }
 
-	public function getAlias($alias)
-	{
-		return $this->aliases[$alias];
-	}
+    public function getAlias($alias)
+    {
+        return $this->aliases[$alias];
+    }
 
 }
