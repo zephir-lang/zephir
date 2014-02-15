@@ -97,15 +97,16 @@ class NewInstanceOperator extends BaseOperator
             if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
             }
-            
+
             $codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
             $symbolVariable->setClassTypes('stdclass');
+
         } else {
 
             $classDefinition = false;
             if ($compilationContext->compiler->isClass($className)) {
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-            } 
+            }
 
             /**
              * Classes inside the same extension

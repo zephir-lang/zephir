@@ -183,7 +183,7 @@ class ClassDefinition
     public function setImplementsInterfaces(array $implementedInterfaces)
     {
         $interfaces = array();
-        foreach ($implementedInterfaces as $implementedInterface) {            
+        foreach ($implementedInterfaces as $implementedInterface) {
             $interfaces[] = $implementedInterface['value'];
         }
 
@@ -546,7 +546,7 @@ class ClassDefinition
         /**
          * Get the global codePrinter
          */
-        $codePrinter = $compilationContext->codePrinter;        
+        $codePrinter = $compilationContext->codePrinter;
 
         /**
          * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class
@@ -647,13 +647,13 @@ class ClassDefinition
                     } else {
                         $interface = $compilationContext->classDefinition->getNamespace() . '\\' . $interface;
                     }
-                    
+
                     if ($compiler->isInterface($interface)) {
                         $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                         $classEntry = $classInterfaceDefinition->getClassEntry();
                     } else {
                         if ($compiler->isInternalInterface($interface)) {
-                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);                            
+                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                             $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
                         }
                     }
@@ -671,7 +671,7 @@ class ClassDefinition
                     }
                 }
 
-                if (!$classEntry) {                    
+                if (!$classEntry) {
                     throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
                 }
 

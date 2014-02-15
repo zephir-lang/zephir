@@ -448,7 +448,7 @@ class CompilerFile
 
                 case 'cblock':
                     $this->_headerCBlocks[] = $topStatement['value'];
-                    break;               
+                    break;
             }
         }
 
@@ -628,7 +628,7 @@ class CompilerFile
                 case 'use':
                     if ($interface || $class) {
                         throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
-                    }                    
+                    }
                     $compilationContext->aliasManager->add($topStatement);
                     break;
             }

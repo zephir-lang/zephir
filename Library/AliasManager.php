@@ -30,11 +30,11 @@ class AliasManager
 	protected $aliases = array();
 
 	public function add(array $useStatement)
-	{		
+	{
 		foreach ($useStatement['aliases'] as $alias) {
 			if (isset($alias['alias'])) {
 				$this->aliases[$alias['alias']] = $alias['name'];
-			} else {				
+			} else {
 				$parts = explode("\\", $alias['name']);
 				$implicitAlias = $parts[count($parts) - 1];
 				$this->aliases[$implicitAlias] = $alias['name'];
