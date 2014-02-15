@@ -13,6 +13,11 @@ class Ternary
 		return 100 ? true + 100 : false;
 	}
 
+    public function testTernary2(boolean b)
+    {
+        return b ? "foo" : "bar";
+    }
+
 	public function testTernaryComplex1(var a, var y)
 	{
 		return 100 ? true + 100 : a->y() ? a->x() : isset a[y];
@@ -27,5 +32,5 @@ class Ternary
 	{
 		return gettype(typeof a == "resource" ? "unknown": false);
 	}
-	
+
 }
