@@ -182,7 +182,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                     case 'long':
                     case 'ulong':
                     case 'double':
-                        return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . '((' . $right->getCode() . ') ? 1 : 0))', $expression);
+                        return new CompiledExpression('long', '(' . $left->getBooleanCode() . ' + ' . $right->getCode() . ')', $expression);
 
                     case 'bool':
                         return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);

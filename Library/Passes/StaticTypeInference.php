@@ -400,7 +400,7 @@ class StaticTypeInference
                 if ($right == $extra) {
                     return $right;
                 }
-                return null;
+                return 'variable';
             default:
                 echo 'STI=', $expression['type'], PHP_EOL;
                 break;

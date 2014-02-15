@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/fcall.h"
 #include "kernel/array.h"
 
 
@@ -38,9 +38,30 @@ PHP_METHOD(Test_Ternary, testTernary1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZVAL_BOOL(_0, 0);
+	}
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Ternary, testTernary2) {
+
+	zval *b_param = NULL, *_0;
+	zend_bool b;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &b_param);
+
+		b = zephir_get_boolval(b_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	if (b) {
+		ZVAL_STRING(_0, "foo", 1);
+	} else {
+		ZVAL_STRING(_0, "bar", 1);
 	}
 	RETURN_CCTOR(_0);
 
@@ -57,7 +78,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
@@ -84,7 +105,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);

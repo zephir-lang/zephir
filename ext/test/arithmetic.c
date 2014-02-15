@@ -291,7 +291,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sum) {
 	zend_bool c;
 
 
-	c = (1 |((1.0) ? 1 : 0));
+	c = ((1 + 1.0)) ? 1 : 0;
 	RETURN_BOOL(c);
 
 }
@@ -322,7 +322,7 @@ PHP_METHOD(Test_Arithmetic, complex6Sum) {
 	zend_bool c;
 
 
-	c = (1 |((1) ? 1 : 0));
+	c = ((1 + 1)) ? 1 : 0;
 	RETURN_BOOL(c);
 
 }
@@ -1124,7 +1124,7 @@ PHP_METHOD(Test_Arithmetic, complex3Sub) {
 	zend_bool c;
 
 
-	c = (1 &((1.0) ? 1 : 0));
+	c = ((1 + 1.0)) ? 1 : 0;
 	RETURN_BOOL(c);
 
 }
@@ -1155,7 +1155,7 @@ PHP_METHOD(Test_Arithmetic, complex6Sub) {
 	zend_bool c;
 
 
-	c = (1 &((1) ? 1 : 0));
+	c = ((1 + 1)) ? 1 : 0;
 	RETURN_BOOL(c);
 
 }
