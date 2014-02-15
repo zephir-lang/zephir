@@ -559,7 +559,7 @@ class ForStatement extends StatementAbstract
         if ($this->_statement['reverse']) {
             $codePrinter->output('  ; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         } else {
-            $codePrinter->output('  ; zend_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         }
         $codePrinter->output(') {');
 

@@ -451,6 +451,9 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 		} \
 	} while (0)
 
+#define zephir_hash_move_forward_ex(ht, pos) *pos = (*pos ? (*pos)->pListNext : NULL)
+
+
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) \
 	RETURN_MM_ON_FAILURE(zend_get_constant(SL(const_name), return_value TSRMLS_CC));
 

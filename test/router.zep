@@ -244,7 +244,7 @@ class Router
 		var namespaceName, module, controller, action, params;
 
 		if typeof defaults == "array" {
-			throw new Test\Router\Exception("Defaults must be an array");
+			throw new Router\Exception("Defaults must be an array");
 		}
 
 		// Set a default namespace
@@ -340,7 +340,7 @@ class Router
 
 					let dependencyInjector = <Test\DiInterface> this->_dependencyInjector;
 					if typeof dependencyInjector != "object" {
-						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
+						throw new Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
 					let request = dependencyInjector->getShared("request");
@@ -361,7 +361,7 @@ class Router
 
 					let dependencyInjector = this->_dependencyInjector;
 					if typeof dependencyInjector != "object" {
-						throw new Test\Router\Exception("A dependency injection container is required to access the 'request' service");
+						throw new Router\Exception("A dependency injection container is required to access the 'request' service");
 					}
 
 					let request = dependencyInjector->getShared("request");
@@ -411,7 +411,7 @@ class Router
 
 					// Check first if the callback is callable
 					if is_callable(beforeMatch) {
-						throw new Test\Router\Exception("Before-Match callback is not callable in matched route");
+						throw new Router\Exception("Before-Match callback is not callable in matched route");
 					}
 
 					// Call the function in the PHP userland
@@ -675,12 +675,12 @@ class Router
 		var groupRoutes, beforeMatch, hostname, routes, route;
 
 		if typeof group != "object" {
-			throw new Test\Router\Exception("The group of routes is not valid");
+			throw new Router\Exception("The group of routes is not valid");
 		}
 
 		let groupRoutes = group->getRoutes();
 		if !count(groupRoutes) {
-			throw new Test\Router\Exception("The group of routes does not contain any routes");
+			throw new Router\Exception("The group of routes does not contain any routes");
 		}
 
 		// Get the before-match condition
@@ -722,7 +722,7 @@ class Router
 	{
 		if typeof paths != "array" {
 			if typeof paths != "string" {
-				throw new Test\Router\Exception("The not-found paths must be an array or string");
+				throw new Router\Exception("The not-found paths must be an array or string");
 			}
 		}
 		let this->_notFoundPaths = paths;

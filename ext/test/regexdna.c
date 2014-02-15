@@ -164,7 +164,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	zephir_is_iterable(variants, &_4, &_3, 0, 0);
 	for (
 	  ; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
-	  ; zend_hash_move_forward_ex(_4, &_3)
+	  ; zephir_hash_move_forward_ex(_4, &_3)
 	) {
 		ZEPHIR_GET_HVALUE(regex, _5);
 		zend_print_zval(regex, 0);

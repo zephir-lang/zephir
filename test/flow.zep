@@ -693,6 +693,15 @@ class Flow
 		return a;
 	}
 
+	public function testFor32(var e)
+	{
+		var v; long sum = 0;
+		for v in e {
+			let sum += v;
+		}
+		return sum;
+	}
+
 	public function testSwitch1()
 	{
 		var a;
