@@ -850,6 +850,34 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, addSum23) {
+
+	int a;
+
+
+	a = 1;
+	a += 1024;
+	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, addSum24) {
+
+	zval *a, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
+
+	ZEPHIR_SEPARATE_PARAM(a);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1024);
+	ZEPHIR_ADD_ASSIGN(a, _0);
+	RETURN_CCTOR(a);
+
+}
+
 /* --------------- SUB ----------------*/
 PHP_METHOD(Test_Arithmetic, intSub) {
 
@@ -1680,6 +1708,71 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 	_0 = zephir_get_numberval(a);
 	ZVAL_LONG(a, _0 - b);
 	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, sub23) {
+
+	int a;
+
+
+	a = 1;
+	a -= 1024;
+	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, sub24) {
+
+	zval *a, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
+
+	ZEPHIR_SEPARATE_PARAM(a);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1024);
+	ZEPHIR_SUB_ASSIGN(a, _0);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, mul1) {
+
+	int a = 1;
+
+
+	a *= 5;
+	RETURN_LONG(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, mul2) {
+
+	zval *a, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
+
+	ZEPHIR_SEPARATE_PARAM(a);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 5);
+	ZEPHIR_MUL_ASSIGN(a, _0);
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, mul3) {
+
+	int a = 1;
+
+
+	a *= 1024;
+	RETURN_LONG(a);
 
 }
 

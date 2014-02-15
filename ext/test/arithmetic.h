@@ -71,6 +71,8 @@ PHP_METHOD(Test_Arithmetic, addSum19);
 PHP_METHOD(Test_Arithmetic, addSum20);
 PHP_METHOD(Test_Arithmetic, addSum21);
 PHP_METHOD(Test_Arithmetic, addSum22);
+PHP_METHOD(Test_Arithmetic, addSum23);
+PHP_METHOD(Test_Arithmetic, addSum24);
 PHP_METHOD(Test_Arithmetic, intSub);
 PHP_METHOD(Test_Arithmetic, int2Sub);
 PHP_METHOD(Test_Arithmetic, intSubSimple);
@@ -140,10 +142,27 @@ PHP_METHOD(Test_Arithmetic, sub19);
 PHP_METHOD(Test_Arithmetic, sub20);
 PHP_METHOD(Test_Arithmetic, sub21);
 PHP_METHOD(Test_Arithmetic, sub22);
+PHP_METHOD(Test_Arithmetic, sub23);
+PHP_METHOD(Test_Arithmetic, sub24);
+PHP_METHOD(Test_Arithmetic, mul1);
+PHP_METHOD(Test_Arithmetic, mul2);
+PHP_METHOD(Test_Arithmetic, mul3);
 PHP_METHOD(Test_Arithmetic, letStatementIntMinus);
 PHP_METHOD(Test_Arithmetic, declaredIntMinus);
 PHP_METHOD(Test_Arithmetic, letStatementBoolMinus);
 PHP_METHOD(Test_Arithmetic, letStatementVarMinus);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_addsum24, 0, 0, 1)
+  ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_sub24, 0, 0, 1)
+  ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_mul2, 0, 0, 1)
+  ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementboolminus, 0, 0, 1)
   ZEND_ARG_INFO(0, b)
@@ -222,6 +241,8 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, addSum20, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, addSum21, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, addSum22, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum23, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, addSum24, arginfo_test_arithmetic_addsum24, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, intSub, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, int2Sub, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, intSubSimple, NULL, ZEND_ACC_PUBLIC)
@@ -291,6 +312,11 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, sub20, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, sub21, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, sub22, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, sub23, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, sub24, arginfo_test_arithmetic_sub24, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, mul1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, mul2, arginfo_test_arithmetic_mul2, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, mul3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, letStatementIntMinus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, declaredIntMinus, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, letStatementBoolMinus, arginfo_test_arithmetic_letstatementboolminus, ZEND_ACC_PUBLIC)
