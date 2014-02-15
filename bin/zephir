@@ -12,4 +12,16 @@ if [ -z "$ZEPHIRDIR" ]; then
     fi
   fi
 fi
+
+if [ ! -r $ZEPHIRDIR/bin/zephir-parser ]; then
+    echo "You didn't install. Install?"
+    read ch
+    case "$ch" in
+        n|N|no ) return -1;
+            ;;
+        * ) bash $ZEPHIRDIR/install
+            ;;
+    esac
+fi
+
 php $ZEPHIRDIR/compiler.php $*
