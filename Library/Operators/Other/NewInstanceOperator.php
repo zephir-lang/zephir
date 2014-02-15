@@ -75,7 +75,11 @@ class NewInstanceOperator extends BaseOperator
                 if ($expression['dynamic']) {
                     $className = $expression['class'];
                 } else {
-                    $className = $compilationContext->classDefinition->getNamespace() . '\\' . $expression['class'];
+                    if ($compilationContext->aliasManager->isAlias($expression['class'])) {
+                        $className = $compilationContext->aliasManager->getAlias($expression['class']);
+                    } else {
+                        $className = $compilationContext->classDefinition->getNamespace() . '\\' . $expression['class'];
+                    }
                 }
                 $dynamic = $expression['dynamic'];
             }
@@ -89,25 +93,19 @@ class NewInstanceOperator extends BaseOperator
          * stdclass doesn't have constructors
          */
         if (strtolower($className) == 'stdclass') {
+
             if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
             }
-
+            
             $codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
             $symbolVariable->setClassTypes('stdclass');
         } else {
-            $classDefinition = false;
 
+            $classDefinition = false;
             if ($compilationContext->compiler->isClass($className)) {
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-            } else {
-                if ($expression['class'][0] != '\\') {
-                    $nsClassName = $compilationContext->classDefinition->getNamespace().'\\'.$className;
-                    if ($compilationContext->compiler->isClass($nsClassName)) {
-                        $classDefinition = $compilationContext->compiler->getClassDefinition($nsClassName);
-                    }
-                }
-            }
+            } 
 
             /**
              * Classes inside the same extension
@@ -116,6 +114,7 @@ class NewInstanceOperator extends BaseOperator
                 $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
                 $symbolVariable->setClassTypes($className);
             } else {
+
                 /**
                  * Classes inside the same extension
                  */

@@ -107,10 +107,8 @@ class Logger
     {
         if (!$this->_config->get('silent')) {
             echo $message . PHP_EOL;
-
             return true;
         }
-
         return false;
     }
 }

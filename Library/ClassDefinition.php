@@ -183,10 +183,7 @@ class ClassDefinition
     public function setImplementsInterfaces(array $implementedInterfaces)
     {
         $interfaces = array();
-        foreach ($implementedInterfaces as $implementedInterface) {
-            if (substr($implementedInterface['value'], 0, 1) == '\\') {
-                $implementedInterface['value'] = substr($implementedInterface['value'], 1);
-            }
+        foreach ($implementedInterfaces as $implementedInterface) {            
             $interfaces[] = $implementedInterface['value'];
         }
 
@@ -541,9 +538,15 @@ class ClassDefinition
      */
     public function compile(CompilationContext $compilationContext)
     {
+        /**
+         * Sets the current object as global class definition
+         */
         $compilationContext->classDefinition = $this;
 
-        $codePrinter = $compilationContext->codePrinter;
+        /**
+         * Get the global codePrinter
+         */
+        $codePrinter = $compilationContext->codePrinter;        
 
         /**
          * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class
@@ -625,34 +628,55 @@ class ClassDefinition
          * Implemented interfaces
          */
         $interfaces = $this->interfaces;
-        $compiler = &$compilationContext->compiler;
+        $compiler = $compilationContext->compiler;
 
         if (is_array($interfaces)) {
 
             $codePrinter->outputBlankLine(true);
 
             foreach ($interfaces as $interface) {
+
+                /**
+                 * Try to find the interface
+                 */
                 $classEntry = false;
+                if ($interface[0] != '\\') {
 
-                if ($interface[0] != '\\' && $compiler->isInterface($compilationContext->classDefinition->getNamespace().'\\'.$interface)) {
-                    $interface = $compilationContext->classDefinition->getNamespace().'\\'.$interface;
+                    if ($compilationContext->aliasManager->isAlias($interface)) {
+                        $interface = $compilationContext->aliasManager->getAlias($interface);
+                    } else {
+                        $interface = $compilationContext->classDefinition->getNamespace() . '\\' . $interface;
+                    }
+                    
+                    if ($compiler->isInterface($interface)) {
+                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+                        $classEntry = $classInterfaceDefinition->getClassEntry();
+                    } else {
+                        if ($compiler->isInternalInterface($interface)) {
+                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);                            
+                            $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                        }
+                    }
+                } else {
 
-                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    $classEntry = $classInterfaceDefinition->getClassEntry();
-                } else if ($compiler->isInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    $classEntry = $classInterfaceDefinition->getClassEntry();
-                } else if ($compiler->isInternalInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                    $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                    $interface = substr($interface, 1);
+                    if ($compiler->isInterface($interface)) {
+                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+                        $classEntry = $classInterfaceDefinition->getClassEntry();
+                    } else {
+                        if ($compiler->isInternalInterface($interface)) {
+                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                            $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                        }
+                    }
                 }
 
-                if (!$classEntry) {
+                if (!$classEntry) {                    
                     throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
                 }
 
                 /**
-                 * We dont' check if abstract classes implement the methods in their interfaces
+                 * We don't check if abstract classes implement the methods in their interfaces
                  */
                 if (!$this->isAbstract()) {
                     $this->checkInterfaceImplements($this, $classInterfaceDefinition);

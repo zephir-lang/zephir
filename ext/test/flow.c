@@ -1519,6 +1519,8 @@ PHP_METHOD(Test_Flow, testFor32) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
 
+
+
 	zephir_is_iterable(e, &_1, &_0, 0, 0);
 	for (
 	  ; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS

@@ -177,7 +177,7 @@ static json_object *xx_ret_use_aliases(json_object *use_aliases_list, xx_scanner
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("use"));
-	json_object_object_add(ret, "name", use_aliases_list);
+	json_object_object_add(ret, "aliases", use_aliases_list);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1154,7 +1154,7 @@ xx_use_aliases_list(R) ::= xx_use_aliases_list(L) COMMA xx_use_aliases(U) . {
 }
 
 xx_use_aliases_list(R) ::= xx_use_aliases(U) . {
-	R = xx_ret_list(U, NULL);
+	R = xx_ret_list(NULL, U);
 }
 
 xx_use_aliases(R) ::= IDENTIFIER(I) . {

@@ -1,10 +1,19 @@
 
 namespace Test;
 
-use a;
-use b, c, d;
-use a as b, d as x, p as r;
+use stdClass as StandardClass;
+use Countable;
 
-class UseTest
+class UseTest implements Countable
 {
+	public function createInstance()
+	{
+		return new StandardClass();
+	}
+
+	public function count()
+	{
+
+	}
+	
 }

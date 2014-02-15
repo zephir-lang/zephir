@@ -39,14 +39,20 @@ class CompilerFile
     protected $_compiledFile;
 
     /**
-     * @var \ClassDefinition
+     * @var ClassDefinition
      */
     protected $_classDefinition;
 
     protected $_headerCBlocks;
 
+    /**
+     * @var Config
+     */
     protected $_config = null;
 
+    /**
+     * @var Logger
+     */
     protected $_logger = null;
 
     /**
@@ -442,7 +448,7 @@ class CompilerFile
 
                 case 'cblock':
                     $this->_headerCBlocks[] = $topStatement['value'];
-                    break;
+                    break;               
             }
         }
 
@@ -586,6 +592,11 @@ class CompilerFile
         $codePrinter = new CodePrinter();
         $compilationContext->codePrinter = $codePrinter;
 
+        /**
+         * Alias manager
+         */
+        $compilationContext->aliasManager = new AliasManager();
+
         $codePrinter->outputBlankLine();
 
         $class = false;
@@ -612,6 +623,13 @@ class CompilerFile
 
                 case 'comment':
                     $this->compileComment($compilationContext, $topStatement);
+                    break;
+
+                case 'use':
+                    if ($interface || $class) {
+                        throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
+                    }                    
+                    $compilationContext->aliasManager->add($topStatement);
                     break;
             }
         }

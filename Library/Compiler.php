@@ -29,7 +29,7 @@ use Zephir\Commands\CommandGenerate;
  */
 class Compiler
 {
-    const VERSION = '0.3.5a';
+    const VERSION = '0.3.6a';
 
     /**
      * @var CompilerFile[]

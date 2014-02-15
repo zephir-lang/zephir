@@ -20,23 +20,42 @@
 namespace Zephir;
 
 /**
- * MethodCache
+ * AliasManager
  *
- * Adds a local zend_function pointer to avoid relocate functions in every call
+ * Manage aliases in a file
  */
-class MethodCache
+class AliasManager
 {
-    private $_cache = array();
 
-    public function get($functionName, $compilationContext)
-    {
-        if (isset($this->_cache[$functionName])) {
-            return $this->_cache[$functionName];
-        }
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
-        $functionCache->setMustInitNull(true);
-        $functionCache->setReusable(false);
-        $this->_cache[$functionName] = $functionCache;
-        return $functionCache;
-    }
+	protected $aliases = array();
+
+	public function add(array $useStatement)
+	{		
+		foreach ($useStatement['aliases'] as $alias) {
+			if (isset($alias['alias'])) {
+				$this->aliases[$alias['alias']] = $alias['name'];
+			} else {				
+				$parts = explode("\\", $alias['name']);
+				$implicitAlias = $parts[count($parts) - 1];
+				$this->aliases[$implicitAlias] = $alias['name'];
+			}
+		}
+	}
+
+	/**
+	 * Checks if a class name is an existing alias
+	 *
+	 * @param string $alias
+	 * @return boolean
+	 */
+	public function isAlias($alias)
+	{
+		return isset($this->aliases[$alias]);
+	}
+
+	public function getAlias($alias)
+	{
+		return $this->aliases[$alias];
+	}
+
 }

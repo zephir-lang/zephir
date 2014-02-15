@@ -64,7 +64,7 @@ class CompilationContext
     /**
      * Type inference data
      *
-     * @param \StaticTypeInference
+     * @param \Zephir\Passes\StaticTypeInference
      */
     public $typeInference;
 
@@ -90,9 +90,9 @@ class CompilationContext
     public $headersManager;
 
     /**
-     * Represents the c-headers added to the file
+     * Represents interned strings and concatenations made in the project
      *
-     * @var HeadersManager
+     * @var StringsManager
      */
     public $stringsManager;
 
@@ -118,8 +118,17 @@ class CompilationContext
 
     /**
      * Helps to create graphs of conditional/jump branches in a specific method
+     *
+     * @var BranchManager
      */
     public $branchManager;
+
+    /**
+     * Manages class renamings using keyword 'use'
+     *
+     * @var AliasManager
+     */
+    public $aliasManager;
 
     /**
      * Function Cache
