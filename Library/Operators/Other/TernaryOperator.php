@@ -34,12 +34,12 @@ use Zephir\Statements\LetStatement;
  */
 class TernaryOperator extends BaseOperator
 {
-
     /**
+     * Compile ternary operator
      *
-     * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -74,9 +74,7 @@ class TernaryOperator extends BaseOperator
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();
-
         $compilationContext->codePrinter->output('} else {');
-
         $compilationContext->codePrinter->increaseLevel();
 
         /**
@@ -96,7 +94,6 @@ class TernaryOperator extends BaseOperator
         $statement->compile($compilationContext);
 
         $compilationContext->codePrinter->decreaseLevel();
-
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('variable', $returnVariable->getName(), $expression);

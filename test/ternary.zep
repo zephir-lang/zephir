@@ -7,7 +7,6 @@ namespace Test;
 
 class Ternary
 {
-
 	public function testTernary1()
 	{
 		return 100 ? true + 100 : false;
@@ -32,5 +31,4 @@ class Ternary
 	{
 		return gettype(typeof a == "resource" ? "unknown": false);
 	}
-
 }

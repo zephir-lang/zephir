@@ -38,7 +38,7 @@ PHP_METHOD(Test_Ternary, testTernary1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZVAL_BOOL(_0, 0);
 	}
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
@@ -105,7 +105,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_BOOL(_0, (1 |((100) ? 1 : 0)));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
