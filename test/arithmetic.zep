@@ -640,6 +640,23 @@ class Arithmetic
 		return a;
 	}
 
+	public function addSum23()
+	{
+		var a;
+
+		let a = 1;
+		let a += 1 << 10;
+
+		return a;
+	}
+
+	public function addSum24(var a)
+	{
+		let a += 1 << 10;
+
+		return a;
+	}
+
 	/* --------------- SUB ----------------*/
 
 	public function intSub()
@@ -1280,6 +1297,46 @@ class Arithmetic
 		let a = 0.0,
 			b = 1,
 			a -= b;
+		return a;
+	}
+
+	public function sub23()
+	{
+		var a;
+
+		let a = 1;
+		let a -= 1 << 10;
+
+		return a;
+	}
+
+	public function sub24(var a)
+	{
+		let a -= 1 << 10;
+
+		return a;
+	}
+
+	public function mul1()
+	{
+		var a = 1;
+		let a *= 5;
+
+		return a;
+	}
+
+	public function mul2(var a)
+	{
+		let a *= 5;
+
+		return a;
+	}
+
+	public function mul3()
+	{
+		var a = 1;
+		let a *= 1 << 10;
+
 		return a;
 	}
 

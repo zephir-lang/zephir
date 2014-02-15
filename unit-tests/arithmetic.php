@@ -71,6 +71,8 @@ assert($t->addSum19() === 1.0);
 assert($t->addSum20() === 1);
 assert($t->addSum21() === 1.0);
 assert($t->addSum22() === 1);
+assert($t->addSum23() === 1 + (1 << 10));
+assert($t->addSum24(1) === 1 + (1 << 10));
 
 // SUB TESTS
 
@@ -142,6 +144,13 @@ assert($t->sub19() === -1.0);
 assert($t->sub20() === -1);
 assert($t->sub21() === -1.0);
 assert($t->sub22() === -1);
+assert($t->sub23() === 1 - (1 << 10));
+assert($t->sub24(1) === 1 - (1 << 10));
+
+assert($t->mul1() == 5);
+assert($t->mul2(5) == 25);
+assert($t->mul3() == 1 * (1 << 10));
+
 
 assert($t->letStatementIntMinus() === -1);
 assert($t->letStatementVarMinus(1) === -1);

@@ -75,7 +75,6 @@ class LetStatement extends StatementAbstract
 
         $type = $symbolVariable->getType();
         switch ($type) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -215,6 +214,7 @@ class LetStatement extends StatementAbstract
 
                     case 'variable':
                         $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+
                         switch ($itemVariable->getType()) {
 
                             case 'int':
@@ -730,7 +730,30 @@ class LetStatement extends StatementAbstract
                         } else {
                             $symbol = $variable;
                         }
+
                         switch ($statement['operator']) {
+                            case 'mul-assign':
+                            case 'sub-assign':
+                            case 'add-assign':
+                                switch($statement['operator']) {
+                                    case 'mul-assign':
+                                        $functionName = 'ZEPHIR_MUL_ASSIGN';
+                                        break;
+                                    case 'sub-assign':
+                                        $functionName = 'ZEPHIR_SUB_ASSIGN';
+                                        break;
+                                    case 'add-assign':
+                                        $functionName = 'ZEPHIR_ADD_ASSIGN';
+                                        break;
+                                }
+
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName(). ', ' . $resolvedExpr->getCode() . ');');
+
+                                $compilationContext->symbolTable->mustGrownStack(true);
+                                $compilationContext->headersManager->add('kernel/operators');
+                                $codePrinter->output($functionName.'(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                                break;
                             case 'assign':
                                 $symbolVariable->setDynamicTypes('long');
                                 if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
