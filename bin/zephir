@@ -2,8 +2,14 @@
 if [ -z "$ZEPHIRDIR" ]; then
   ZEPHIRDIR="%ZEPHIRDIR%"
   if [[ "$ZEPHIRDIR" == "%""ZEPHIRDIR""%" ]]; then
-    CURDIR=`dirname $0`
+    if [ -h $0 ]; then
+        REALPATH="`dirname $0`/`readlink $0`"
+        CURDIR=`dirname $REALPATH`
+    else
+        CURDIR=`dirname $0`
+    fi
     PARENTDIR=`cd $CURDIR/..; pwd`
+
     if [ -f $PARENTDIR/compiler.php ]; then
       export ZEPHIRDIR=$PARENTDIR
     else
@@ -12,4 +18,18 @@ if [ -z "$ZEPHIRDIR" ]; then
     fi
   fi
 fi
+
+if [ ! -r $ZEPHIRDIR/bin/zephir-parser ]; then
+    echo "You didn't install zephir. Install?"
+    read ch
+    case "$ch" in
+        n|N|no ) "You have to install zephir at first"
+            exit 1
+            ;;
+        * ) cd $ZEPHIRDIR
+            ./install
+            ;;
+    esac
+fi
+
 php $ZEPHIRDIR/compiler.php $*

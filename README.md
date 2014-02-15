@@ -34,11 +34,17 @@ To build the PHP extension:
 
 Installation
 ------------
-Once you have the required packages installed, you can generate the parser as follows:
+You can install zephir using composer.
+Run `composer require phalcon/zephir`, then run `zephir`
+from your `bin-dir`. By default it is `./vendor/bin/zephir`.
+You can read more about composer binaries
+in it's [documentation](https://getcomposer.org/doc/articles/vendor-binaries.md).
 
-```bash
-./install
-```
+For global installation via composer you can use `composer global require`.
+Do not forget add `~/.composer/bin` into your `$PATH`.
+
+Also you can just clone zephir repository and run `./install`.
+For global installation add `-c` flag.
 
 Additional notes on Ubuntu
 --------------------------
