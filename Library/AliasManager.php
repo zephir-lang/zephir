@@ -57,5 +57,4 @@ class AliasManager
     {
         return $this->aliases[$alias];
     }
-
 }
