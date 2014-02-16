@@ -36,3 +36,4 @@ include_once __DIR__ . '/instanceof.php';
 include_once __DIR__ . '/require.php';
 include_once __DIR__ . '/globals.php';
 include_once __DIR__ . '/ternary.php';
+include_once __DIR__ . '/cast.php';
