@@ -18,6 +18,7 @@
 #include "test/constantsinterfaceb.h"
 #include "test/constantsparent.h"
 #include "test/declaretest.h"
+#include "test/diinterface.h"
 #include "test/echoes.h"
 #include "test/emptytest.h"
 #include "test/exception.h"

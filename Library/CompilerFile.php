@@ -333,10 +333,13 @@ class CompilerFile
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
-            $classDefinition->setExtendsClass($topStatement['extends']);
+            $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
         }
 
         if (isset($topStatement['implements'])) {
+            foreach ($topStatement['implements'] as &$implement) {
+                $implement['value'] = $this->getFullName($implement['value']);
+            }
             $classDefinition->setImplementsInterfaces($topStatement['implements']);
         }
 
@@ -429,6 +432,11 @@ class CompilerFile
         }
 
         /**
+         * Alias Manager
+         */
+        $this->_aliasManager = new AliasManager();
+
+        /**
          * Traverse the top level statements looking for the namespace
          */
         $namespace = null;
@@ -478,6 +486,16 @@ class CompilerFile
                     $interface = true;
                     $name = $topStatement['name'];
                     $this->preCompileInterface($namespace, $topStatement);
+                    break;
+
+                case 'use':
+                    if ($interface || $class) {
+                        throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
+                    }
+                    foreach ($topStatement['aliases'] as &$alias) {
+                        $alias['name'] = $this->getFullName($alias['name']);
+                    }
+                    $this->_aliasManager->add($topStatement);
                     break;
             }
         }
@@ -595,7 +613,7 @@ class CompilerFile
         /**
          * Alias manager
          */
-        $compilationContext->aliasManager = new AliasManager();
+        $compilationContext->aliasManager = $this->_aliasManager;
 
         $codePrinter->outputBlankLine();
 
@@ -625,12 +643,6 @@ class CompilerFile
                     $this->compileComment($compilationContext, $topStatement);
                     break;
 
-                case 'use':
-                    if ($interface || $class) {
-                        throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
-                    }
-                    $compilationContext->aliasManager->add($topStatement);
-                    break;
             }
         }
 
@@ -691,5 +703,16 @@ class CompilerFile
          */
         $this->_compiledFile = $path . '.c';
         $this->_ir = null;
+    }
+
+    /**
+     * Transform class/interface name to FQN format
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function getFullName($name)
+    {
+        return Utils::getFullName($name, $this->_namespace, $this->_aliasManager);
     }
 }

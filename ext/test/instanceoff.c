@@ -64,7 +64,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf3) {
 
 	ZEPHIR_INIT_VAR(a);
 	object_init(a);
-	RETURN_MM_BOOL(zephir_is_instance_of(a, SL("UnknownClass") TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_is_instance_of(a, SL("Test\\UnknownClass") TSRMLS_CC));
 
 }
 

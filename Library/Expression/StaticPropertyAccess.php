@@ -72,10 +72,6 @@ class StaticPropertyAccess
     public function compile($expression, CompilationContext $compilationContext)
     {
         $className = $expression['left']['value'];
-        if (substr($className, 0, 1) == '\\') {
-            $className = substr($className, 1);
-        }
-
         $compiler = &$compilationContext->compiler;
         $property = $expression['right']['value'];
 
@@ -84,6 +80,7 @@ class StaticPropertyAccess
          * is supposed to be declared
          */
         if ($className != 'self' && $className != 'parent') {
+            $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {

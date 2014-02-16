@@ -394,8 +394,8 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	int _0;
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_1 = NULL, *_2;
+	int _2;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_0 = NULL, *_1 = NULL, *_3;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -406,7 +406,13 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 
 	if ((Z_TYPE_P(pattern) != IS_STRING)) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The pattern must be string");
+		ZEPHIR_INIT_VAR(_0);
+		object_init_ex(_0, test_router_exception_ce);
+		ZEPHIR_INIT_VAR(_1);
+		ZVAL_STRING(_1, "The pattern must be string", 1);
+		zephir_call_method_p1_noret(_0, "__construct", _1);
+		zephir_throw_exception(_0 TSRMLS_CC);
+		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	if ((Z_TYPE_P(paths) != IS_NULL)) {
@@ -420,8 +426,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_INIT_VAR(parts);
 			zephir_fast_explode_str(parts, SL("::"), paths, LONG_MAX TSRMLS_CC);
 			do {
-				_0 = zephir_fast_count_int(parts TSRMLS_CC);
-				if ((_0 == 3)) {
+				_2 = zephir_fast_count_int(parts TSRMLS_CC);
+				if ((_2 == 3)) {
 					ZEPHIR_OBS_NVAR(moduleName);
 					zephir_array_fetch_long(&moduleName, parts, 0, PH_NOISY TSRMLS_CC);
 					ZEPHIR_OBS_NVAR(controllerName);
@@ -430,14 +436,14 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 					zephir_array_fetch_long(&actionName, parts, 2, PH_NOISY TSRMLS_CC);
 					break;
 				}
-				if ((_0 == 2)) {
+				if ((_2 == 2)) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY TSRMLS_CC);
 					ZEPHIR_OBS_NVAR(actionName);
 					zephir_array_fetch_long(&actionName, parts, 1, PH_NOISY TSRMLS_CC);
 					break;
 				}
-				if ((_0 == 1)) {
+				if ((_2 == 1)) {
 					ZEPHIR_OBS_NVAR(controllerName);
 					zephir_array_fetch_long(&controllerName, parts, 0, PH_NOISY TSRMLS_CC);
 					break;
@@ -461,7 +467,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				} else {
 					ZEPHIR_CPY_WRT(realClassName, controllerName);
 				}
-				ZEPHIR_INIT_VAR(_1);
+				ZEPHIR_INIT_NVAR(_1);
 				zephir_uncamelize(_1, realClassName);
 				zephir_array_update_string(&routePaths, SL("controller"), &_1, PH_COPY | PH_SEPARATE);
 			}
@@ -476,7 +482,13 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		array_init(routePaths);
 	}
 	if ((Z_TYPE_P(routePaths) != IS_ARRAY)) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The route contains invalid paths");
+		ZEPHIR_INIT_LNVAR(_0);
+		object_init_ex(_0, test_router_exception_ce);
+		ZEPHIR_INIT_NVAR(_1);
+		ZVAL_STRING(_1, "The route contains invalid paths", 1);
+		zephir_call_method_p1_noret(_0, "__construct", _1);
+		zephir_throw_exception(_0 TSRMLS_CC);
+		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
@@ -486,8 +498,8 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_1);
-			zephir_array_fetch_long(&_2, extracted, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
-			zephir_fast_array_merge(_1, &(routePaths), &(_2) TSRMLS_CC);
+			zephir_array_fetch_long(&_3, extracted, 1, PH_NOISY | PH_READONLY TSRMLS_CC);
+			zephir_fast_array_merge(_1, &(routePaths), &(_3) TSRMLS_CC);
 			ZEPHIR_CPY_WRT(routePaths, _1);
 		} else {
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);
@@ -526,7 +538,7 @@ PHP_METHOD(Test_Router_Route, getName) {
  *</code>
  *
  * @param string name
- * @return Test\Router\Route
+ * @return Route
  */
 PHP_METHOD(Test_Router_Route, setName) {
 

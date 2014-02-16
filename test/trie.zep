@@ -16,7 +16,7 @@ class Trie
 			let character = substr(key, i, 1);
 			if !isset trieNode->children[character] {
 				if create {
-					let trieNode->children[character] = new tries\trienode();
+					let trieNode->children[character] = new \tries\trienode();
 				} else {
 					return false;
 				}

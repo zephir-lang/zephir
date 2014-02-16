@@ -82,4 +82,33 @@ class Utils
 
         return false;
     }
+
+    /**
+     * Transform class/interface name to FQN format
+     *
+     * @param string $className
+     * @return string
+     */
+    public static function getFullName($className, $currentNamespace, AliasManager $aliasManager = null)
+    {
+        if ($className[0] !== '\\') {
+
+            // If class/interface name not begin with \ maybe a alias or a sub-namespace
+            $firstSepPos = strpos($className, '\\');
+            if (false !== $firstSepPos) {
+                $baseName = substr($className, 0, $firstSepPos);
+                if ($aliasManager->isAlias($baseName)) {
+                    return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
+                }
+            } elseif ($aliasManager->isAlias($className)) {
+                return $aliasManager->getAlias($className);
+            }
+
+            // Relative class/interface name
+            return $currentNamespace . '\\' . $className;
+        } else {
+            // Absolute class/interface name
+            return substr($className, 1);
+        }
+    }
 }

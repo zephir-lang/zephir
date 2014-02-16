@@ -23,6 +23,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 
+zend_class_entry *test_diinterface_ce;
 zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
@@ -109,6 +110,7 @@ static PHP_MINIT_FUNCTION(test)
 	setlocale(LC_ALL, "C");
 #endif
 
+	ZEPHIR_INIT(Test_DiInterface);
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_Oo_OoDynamicA);

@@ -343,6 +343,9 @@ class MethodCall extends Call
 
                     if ($returnClassTypes !== null) {
                         $symbolVariable->setDynamicTypes('object');
+                        foreach ($returnClassTypes as &$returnClassType) {
+                            $returnClassType = $compilationContext->getFullName($returnClassType);
+                        }
                         $symbolVariable->setClassTypes($returnClassTypes);
                     }
 

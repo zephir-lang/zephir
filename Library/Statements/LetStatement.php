@@ -1371,7 +1371,7 @@ class LetStatement extends StatementAbstract
 
                 if ($isGlobalVariable) {
                     $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
-                        $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
+                    $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
                     $codePrinter->output('}');
                 }
 
@@ -2339,6 +2339,7 @@ class LetStatement extends StatementAbstract
     {
         $compiler = &$compilationContext->compiler;
         if ($className != 'self' && $className != 'parent') {
+            $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {
