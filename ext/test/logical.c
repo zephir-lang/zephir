@@ -99,7 +99,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
 
-		b = zephir_get_intval(b_param);
+	b = zephir_get_intval(b_param);
 
 
 	_0 = (Z_TYPE_P(a) == IS_ARRAY);
@@ -223,8 +223,8 @@ PHP_METHOD(Test_Logical, testMixed4) {
 
 	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
 
-		a = zephir_get_boolval(a_param);
-		b = zephir_get_boolval(b_param);
+	a = zephir_get_boolval(a_param);
+	b = zephir_get_boolval(b_param);
 
 
 	_0 = !a;

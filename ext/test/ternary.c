@@ -54,7 +54,7 @@ PHP_METHOD(Test_Ternary, testTernary2) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &b_param);
 
-		b = zephir_get_boolval(b_param);
+	b = zephir_get_boolval(b_param);
 
 
 	ZEPHIR_INIT_VAR(_0);

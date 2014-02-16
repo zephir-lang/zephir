@@ -73,7 +73,7 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodLength4) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
 
-		zephir_get_strval(a, a_param);
+	zephir_get_strval(a, a_param);
 
 
 	RETURN_MM_LONG(zephir_fast_strlen_ev(a));
@@ -88,7 +88,7 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodLength5) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
 
-		zephir_get_strval(a, a_param);
+	zephir_get_strval(a, a_param);
 
 
 	ZEPHIR_INIT_VAR(_0);
@@ -119,7 +119,7 @@ PHP_METHOD(Test_BuiltInMethods, arrayMethodJoin1) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
 
-		zephir_get_arrval(a, a_param);
+	zephir_get_arrval(a, a_param);
 
 
 	ZEPHIR_INIT_VAR(_0);
@@ -136,7 +136,7 @@ PHP_METHOD(Test_BuiltInMethods, arrayMethodReverse1) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
 
-		zephir_get_arrval(a, a_param);
+	zephir_get_arrval(a, a_param);
 
 
 	ZEPHIR_INIT_VAR(_0);

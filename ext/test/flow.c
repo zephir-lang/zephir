@@ -1134,8 +1134,8 @@ PHP_METHOD(Test_Flow, testFor15) {
 
 	zephir_fetch_params(0, 2, 0, &c_param, &d_param);
 
-		c = zephir_get_intval(c_param);
-		d = zephir_get_intval(d_param);
+	c = zephir_get_intval(c_param);
+	d = zephir_get_intval(d_param);
 
 
 	b = 0;

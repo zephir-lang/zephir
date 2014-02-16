@@ -62,7 +62,7 @@ PHP_METHOD(Test_Oo_OoParams, setAge) {
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
-		age = zephir_get_intval(age_param);
+	age = zephir_get_intval(age_param);
 
 
 	RETURN_LONG(age);
@@ -76,7 +76,7 @@ PHP_METHOD(Test_Oo_OoParams, setAverage) {
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
-		average = zephir_get_doubleval(average_param);
+	average = zephir_get_doubleval(average_param);
 
 
 	RETURN_DOUBLE(average);
@@ -91,7 +91,7 @@ PHP_METHOD(Test_Oo_OoParams, setName) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name_param);
 
-		zephir_get_strval(name, name_param);
+	zephir_get_strval(name, name_param);
 
 
 	RETURN_CTOR(name);
@@ -105,7 +105,7 @@ PHP_METHOD(Test_Oo_OoParams, setEnabled) {
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
-		enabled = zephir_get_boolval(enabled_param);
+	enabled = zephir_get_boolval(enabled_param);
 
 
 	RETURN_BOOL(enabled);
@@ -120,7 +120,7 @@ PHP_METHOD(Test_Oo_OoParams, setList) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &someList_param);
 
-		zephir_get_arrval(someList, someList_param);
+	zephir_get_arrval(someList, someList_param);
 
 
 	RETURN_CTOR(someList);
@@ -197,7 +197,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictEnabled) {
 
 	zephir_fetch_params(0, 1, 0, &enabled_param);
 
-		enabled = zephir_get_boolval(enabled_param);
+	enabled = zephir_get_boolval(enabled_param);
 
 
 	RETURN_BOOL(enabled);
@@ -323,7 +323,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAge) {
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
-		age = zephir_get_intval(age_param);
+	age = zephir_get_intval(age_param);
 
 
 	RETURN_LONG(age);
@@ -337,7 +337,7 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
-		average = zephir_get_doubleval(average_param);
+	average = zephir_get_doubleval(average_param);
 
 
 	RETURN_DOUBLE(average);

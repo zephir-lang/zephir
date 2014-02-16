@@ -100,7 +100,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 
 	zephir_fetch_params(0, 1, 0, &position_param);
 
-		position = zephir_get_intval(position_param);
+	position = zephir_get_intval(position_param);
 
 
 
@@ -173,7 +173,7 @@ PHP_METHOD(Test_Oo_OoNativeImplements, unserialize) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &serialized_param);
 
-		zephir_get_strval(serialized, serialized_param);
+	zephir_get_strval(serialized, serialized_param);
 
 
 
