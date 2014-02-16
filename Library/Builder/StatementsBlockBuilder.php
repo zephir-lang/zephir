@@ -17,50 +17,25 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Zephir\Builder;
 
 /**
- * AliasManager
+ * StatementsBlockBuilder
  *
- * Manage aliases in a file
+ * Allows to manually build a statements block AST node
  */
-class AliasManager
+class StatementsBlockBuilder
 {
 
-    protected $aliases = array();
+    protected $statements;
 
-    public function add(array $useStatement)
+    public function __construct($statements)
     {
-        foreach ($useStatement['aliases'] as $alias) {
-            if (isset($alias['alias'])) {
-                $this->aliases[$alias['alias']] = $alias['name'];
-            } else {
-                $parts = explode("\\", $alias['name']);
-                $implicitAlias = $parts[count($parts) - 1];
-                $this->aliases[$implicitAlias] = $alias['name'];
-            }
-        }
+        $this->statements = $statements;
     }
 
-    /**
-     * Checks if a class name is an existing alias
-     *
-     * @param string $alias
-     * @return boolean
-     */
-    public function isAlias($alias)
+    public function get()
     {
-        return isset($this->aliases[$alias]);
-    }
-
-    /**
-     * Returns the class name according to an existing alias
-     *
-     * @param string $alias
-     * @return string
-     */
-    public function getAlias($alias)
-    {
-        return $this->aliases[$alias];
+        return $this->statements;
     }
 }

@@ -21,6 +21,10 @@ namespace Zephir;
 
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
+use Zephir\Builder\VariableBuilder;
+use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Operators\BinaryOperatorBuilder;
+use Zephir\Builder\Statements\IfStatementBuilder;
 
 /**
  * ClassMethod
@@ -995,6 +999,7 @@ class ClassMethod
             /**
              * Round 1. Create variables in parameters in the symbol table
              */
+            $classCastChecks = array();
             foreach ($parameters->getParameters() as $parameter) {
 
                 /**
@@ -1096,6 +1101,7 @@ class ClassMethod
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
+                    $classCastChecks[] = $symbol;
                 } else {
                     if (isset($parameter['data-type'])) {
                         if ($parameter['data-type'] == 'variable') {
@@ -1104,6 +1110,24 @@ class ClassMethod
                     } else {
                         $symbol->setDynamicTypes('undefined');
                     }
+                }
+            }
+
+            foreach ($classCastChecks as $classCastCheck) {
+                foreach ($classCastCheck->getClassTypes() as $className) {
+
+                    $evalCheckExpr = new BinaryOperatorBuilder(
+                        'instanceof',
+                        new VariableBuilder($classCastCheck->getName()),
+                        new VariableBuilder($className)
+                    );
+
+                    $ifBlock = new StatementsBlockBuilder(
+                        new ThrowStatementBuilder()
+                    );
+
+                    $ifCheck = new IfStatementBuilder($evalCheckExpr->get(), $ifBlock->get());
+
                 }
             }
         }

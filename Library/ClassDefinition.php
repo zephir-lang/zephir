@@ -640,9 +640,11 @@ class ClassDefinition
                 if ($compiler->isInterface($interface)) {
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                     $classEntry = $classInterfaceDefinition->getClassEntry();
-                } elseif ($compiler->isInternalInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                    $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                } else {
+                    if ($compiler->isInternalInterface($interface)) {
+                        $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                        $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                    }
                 }
 
                 if (!$classEntry) {

@@ -27,18 +27,18 @@ namespace Zephir\Builder;
 class VariableBuilder
 {
 
-    protected $_name;
+    protected $name;
 
     public function __construct($name)
     {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
     public function get()
     {
         return array(
             'type' => 'variable',
-            'value' => $this->_name
+            'value' => $this->name
         );
     }
 }
