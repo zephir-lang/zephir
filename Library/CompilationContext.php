@@ -150,4 +150,15 @@ class CompilationContext
      * @var Logger
      */
     public $logger;
+
+    /**
+     * Transform class/interface name to FQN format
+     *
+     * @param string $className
+     * @return string
+     */
+    public function getFullName($className)
+    {
+        return Utils::getFullName($className, $this->classDefinition->getNamespace(), $this->aliasManager);
+    }
 }

@@ -105,7 +105,7 @@ class Router
 	 *
 	 * @param Test\DiInterface dependencyInjector
 	 */
-	public function setDI(<Test\DiInterface> dependencyInjector)
+	public function setDI(<DiInterface> dependencyInjector)
 	{
 		let this->_dependencyInjector = dependencyInjector;
 	}
@@ -338,7 +338,7 @@ class Router
 				// Retrieve the request service from the container
 				if request === null {
 
-					let dependencyInjector = <Test\DiInterface> this->_dependencyInjector;
+					let dependencyInjector = <DiInterface> this->_dependencyInjector;
 					if typeof dependencyInjector != "object" {
 						throw new Router\Exception("A dependency injection container is required to access the 'request' service");
 					}

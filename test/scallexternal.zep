@@ -1,4 +1,3 @@
-
 /**
  * Call external static functions
  */

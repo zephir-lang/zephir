@@ -12,6 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_UseTest) {
@@ -35,6 +37,38 @@ PHP_METHOD(Test_UseTest, createInstance) {
 PHP_METHOD(Test_UseTest, count) {
 
 
+
+}
+
+PHP_METHOD(Test_UseTest, testUseClass1) {
+
+	ZEPHIR_MM_GROW();
+
+	object_init_ex(return_value, test_oo_ooconstruct_ce);
+	zephir_call_method_noret(return_value, "__construct");
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_UseTest, testUseClass2) {
+
+	ZEPHIR_MM_GROW();
+
+	object_init_ex(return_value, test_strings_ce);
+	if (zephir_has_constructor(return_value TSRMLS_CC)) {
+		zephir_call_method_noret(return_value, "__construct");
+	}
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
+
+	ZEPHIR_MM_GROW();
+
+	object_init_ex(return_value, test_oo_ooconstruct_ce);
+	zephir_call_method_noret(return_value, "__construct");
+	RETURN_MM();
 
 }
 

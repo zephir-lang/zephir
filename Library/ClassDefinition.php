@@ -168,10 +168,6 @@ class ClassDefinition
      */
     public function setExtendsClass($extendsClass)
     {
-        if (substr($extendsClass, 0, 1) == '\\') {
-            $extendsClass = substr($extendsClass, 1);
-        }
-
         $this->extendsClass = $extendsClass;
     }
 
@@ -640,35 +636,13 @@ class ClassDefinition
                  * Try to find the interface
                  */
                 $classEntry = false;
-                if ($interface[0] != '\\') {
 
-                    if ($compilationContext->aliasManager->isAlias($interface)) {
-                        $interface = $compilationContext->aliasManager->getAlias($interface);
-                    } else {
-                        $interface = $compilationContext->classDefinition->getNamespace() . '\\' . $interface;
-                    }
-
-                    if ($compiler->isInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                        $classEntry = $classInterfaceDefinition->getClassEntry();
-                    } else {
-                        if ($compiler->isInternalInterface($interface)) {
-                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                            $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
-                        }
-                    }
-                } else {
-
-                    $interface = substr($interface, 1);
-                    if ($compiler->isInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                        $classEntry = $classInterfaceDefinition->getClassEntry();
-                    } else {
-                        if ($compiler->isInternalInterface($interface)) {
-                            $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                            $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
-                        }
-                    }
+                if ($compiler->isInterface($interface)) {
+                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+                    $classEntry = $classInterfaceDefinition->getClassEntry();
+                } elseif ($compiler->isInternalInterface($interface)) {
+                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                    $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
                 }
 
                 if (!$classEntry) {

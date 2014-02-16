@@ -1,7 +1,6 @@
-
 namespace Test;
 
-class Constants extends Test\ConstantsParent
+class Constants extends ConstantsParent
 {
 	const C1 = null;
 
@@ -29,7 +28,7 @@ class Constants extends Test\ConstantsParent
 
 	public function testReadClassConstant1()
 	{
-		return Test\Constants::C4;
+		return Constants::C4;
 	}
 
 	public function testReadClassConstant2()

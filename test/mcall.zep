@@ -37,6 +37,11 @@ class Mcall
 		return a + b;
 	}
 
+    private function testMethod7() -> <\stdClass>
+    {
+        return new \stdClass();
+    }
+
 	public function testCall1()
 	{
 		return this->testMethod1();
@@ -120,6 +125,11 @@ class Mcall
 	public function testCall17(var c, var d)
 	{
 		return this->testMethod4(b: c, a: d);
+	}
+
+	public function testCall18()
+	{
+	    return this->testMethod7();
 	}
 
     public function optionalRequereString(string! param)

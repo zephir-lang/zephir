@@ -68,7 +68,7 @@ class InstanceOfOperator extends BaseOperator
                 switch ($resolved->getType()) {
                     case 'variable':
                         if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
-                            $code = 'SL("' . Utils::addSlashes(trim($resolvedVariable, "\\"), true) . '")';
+                            $code = 'SL("' . Utils::addSlashes(trim($compilationContext->getFullName($resolvedVariable), "\\"), true) . '")';
                         }
                         break;
                     case 'property-access':

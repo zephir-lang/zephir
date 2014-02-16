@@ -67,7 +67,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 		if (!(zephir_array_isset(_1, character))) {
 			if (create) {
 				ZEPHIR_INIT_LNVAR(_2);
-				_3 = zend_fetch_class(SL("Test\\tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+				_3 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 				object_init_ex(_2, _3);
 				if (zephir_has_constructor(_2 TSRMLS_CC)) {
 					zephir_call_method_noret(_2, "__construct");

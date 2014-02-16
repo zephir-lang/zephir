@@ -267,13 +267,7 @@ class StaticCall extends Call
         $className = $expression['class'];
 
         if ($className != 'self' && $className != 'parent') {
-
-            if (substr($className, 0, 1) == '\\') {
-                $className = substr($className, 1);
-            } else {
-                $className = $compilationContext->classDefinition->getNamespace() . '\\' . $className;
-            }
-
+            $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {
@@ -372,7 +366,7 @@ class StaticCall extends Call
                     $returnClassTypes = $method->getReturnClassTypes();
                     if ($returnClassTypes !== null) {
                         $symbolVariable->setDynamicTypes('object');
-                        $symbolVariable->setClassTypes($returnClassTypes);
+                        $symbolVariable->setClassTypes($compilationContext->getFullName($returnClassTypes));
                     }
 
                     $returnTypes = $method->getReturnTypes();

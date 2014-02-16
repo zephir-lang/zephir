@@ -11,14 +11,14 @@ class Instanceoff
 	{
 		var a;
 		let a = new \stdClass();
-		return a instanceof stdClass;
+		return a instanceof \stdClass;
 	}
 
 	public function testInstanceOf2()
 	{
 		var a;
 		let a = new self();
-		return a instanceof Test\Instanceoff;
+		return a instanceof Instanceoff;
 	}
 
 	public function testInstanceOf3()

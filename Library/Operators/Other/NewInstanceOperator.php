@@ -69,19 +69,10 @@ class NewInstanceOperator extends BaseOperator
         if ($expression['class'] == 'self') {
             $className = $compilationContext->classDefinition->getCompleteName();
         } else {
-            if (substr($expression['class'], 0, 1) == '\\') {
-                $className = substr($expression['class'], 1);
-            } else {
-                if ($expression['dynamic']) {
-                    $className = $expression['class'];
-                } else {
-                    if ($compilationContext->aliasManager->isAlias($expression['class'])) {
-                        $className = $compilationContext->aliasManager->getAlias($expression['class']);
-                    } else {
-                        $className = $compilationContext->classDefinition->getNamespace() . '\\' . $expression['class'];
-                    }
-                }
-                $dynamic = $expression['dynamic'];
+            $className = $expression['class'];
+            $dynamic = $expression['dynamic'];
+            if (!$dynamic) {
+                $className = $compilationContext->getFullName($expression['class']);
             }
         }
 
@@ -92,7 +83,7 @@ class NewInstanceOperator extends BaseOperator
         /**
          * stdclass doesn't have constructors
          */
-        if (strtolower($className) == 'stdclass') {
+        if (strtolower($className) === 'stdclass') {
 
             if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);

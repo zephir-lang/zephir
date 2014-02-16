@@ -1,4 +1,3 @@
-
 /**
  * Class with constructor + params
  */
@@ -14,7 +13,7 @@ class SPropertyAccess
 	{
 		let self::a = "abc";
 		let self::b = self::a[0];
-		let Test\ScallExternal::sproperty = self::b;
-		let self::b = Test\ScallExternal::sproperty;
+		let ScallExternal::sproperty = self::b;
+		let self::b = ScallExternal::sproperty;
 	}
 }

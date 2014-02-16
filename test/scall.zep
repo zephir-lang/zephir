@@ -1,11 +1,10 @@
-
 /**
  * Static Function calls
  */
 
 namespace Test;
 
-class Scall extends Test\ScallParent
+class Scall extends ScallParent
 {
 
 	static public function testMethod1()
@@ -37,6 +36,11 @@ class Scall extends Test\ScallParent
 	{
 		return a + b;
 	}
+
+    static public function testMethod7() -> <\stdClass>
+    {
+        return new \stdClass();
+    }
 
 	public function testCall1()
 	{
@@ -108,4 +112,8 @@ class Scall extends Test\ScallParent
 		return parent::testMethod2();
 	}
 
+    public function testCall15()
+    {
+        return self::testMethod7();
+    }
 }

@@ -257,7 +257,7 @@ class Expression
         }
 
         $symbolVariable->setDynamicTypes('object');
-        $symbolVariable->setClassTypes($expression['left']['value']);
+        $symbolVariable->setClassTypes($compilationContext->getFullName($expression['left']['value']));
 
         return $resolved;
     }

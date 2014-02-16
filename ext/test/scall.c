@@ -89,6 +89,14 @@ PHP_METHOD(Test_Scall, testMethod6) {
 
 }
 
+PHP_METHOD(Test_Scall, testMethod7) {
+
+
+	object_init(return_value);
+	return;
+
+}
+
 PHP_METHOD(Test_Scall, testCall1) {
 
 	ZEPHIR_MM_GROW();
@@ -241,6 +249,15 @@ PHP_METHOD(Test_Scall, testCall14) {
 	ZEPHIR_MM_GROW();
 
 	zephir_call_parent(return_value, this_ptr, test_scall_ce, "testmethod2");
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Scall, testCall15) {
+
+	ZEPHIR_MM_GROW();
+
+	zephir_call_self(return_value, this_ptr, "testmethod7");
 	RETURN_MM();
 
 }

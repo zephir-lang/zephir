@@ -268,7 +268,7 @@ class Route
 			pcrePattern, compiledPattern, extracted;
 
 		if typeof pattern != "string" {
-			throw new Test\Router\Exception("The pattern must be string");
+			throw new Exception("The pattern must be string");
 		}
 
 		if paths !== null {
@@ -340,7 +340,7 @@ class Route
 		}
 
 		if typeof routePaths !== "array" {
-			throw new Test\Router\Exception("The route contains invalid paths");
+			throw new Exception("The route contains invalid paths");
 		}
 
 		// If the route starts with '#' we assume that it is a regular expression
@@ -391,7 +391,7 @@ class Route
 	 *</code>
 	 *
 	 * @param string name
-	 * @return Test\Router\Route
+	 * @return Route
 	 */
 	public function setName(name)
 	{
