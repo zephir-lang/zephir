@@ -49,7 +49,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray2) {
 
 	zephir_fetch_params(0, 2, 0, &a, &b_param);
 
-		b = zephir_get_intval(b_param);
+	b = zephir_get_intval(b_param);
 
 
 	RETURN_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1 TSRMLS_CC));
@@ -64,7 +64,7 @@ PHP_METHOD(Test_FetchTest, testFetchArray3) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b_param);
 
-		zephir_get_strval(b, b_param);
+	zephir_get_strval(b, b_param);
 
 
 	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, b, 1 TSRMLS_CC));

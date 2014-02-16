@@ -41,7 +41,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &key_param, &create_param);
 
-		zephir_get_strval(key, key_param);
+	zephir_get_strval(key, key_param);
 	if (!create_param) {
 		create = 0;
 	} else {

@@ -58,7 +58,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	_2 = (n - 1);
@@ -126,7 +126,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	_2 = (n - 1);
@@ -210,7 +210,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	ZEPHIR_INIT_VAR(u);

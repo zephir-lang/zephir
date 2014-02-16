@@ -42,7 +42,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	ZEPHIR_INIT_VAR(perm);

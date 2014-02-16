@@ -143,7 +143,7 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	if ((n == 0)) {
@@ -176,7 +176,7 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
 
-		n = zephir_get_intval(n_param);
+	n = zephir_get_intval(n_param);
 
 
 	if ((n == 0)) {
