@@ -24,6 +24,7 @@ namespace Zephir\Operators\Bitwise;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 
 /**
