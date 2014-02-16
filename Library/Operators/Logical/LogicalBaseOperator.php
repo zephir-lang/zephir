@@ -21,6 +21,7 @@ namespace Zephir\Operators\Logical;
 
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
+use Zephir\CompilerException;
 use Zephir\Expression;
 
 /**

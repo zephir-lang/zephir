@@ -32,14 +32,13 @@ use Zephir\CompiledExpression;
  */
 class LikelyOperator extends BaseOperator
 {
-
     /**
-     *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws \Zephir\CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
 
         if (!isset($expression['left'])) {
