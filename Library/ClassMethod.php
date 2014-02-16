@@ -25,6 +25,7 @@ use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
+use Zephir\Detectors\WriteDetector;
 
 /**
  * ClassMethod
@@ -594,8 +595,10 @@ class ClassMethod
      *
      * @param array $parameter
      * @param CompilationContext $compilationContext
+     * @return string
+     * @throws CompilerException
      */
-    public function assignDefaultValue($parameter, $compilationContext)
+    public function assignDefaultValue(array $parameter, CompilationContext $compilationContext)
     {
         if (isset($parameter['data-type'])) {
             $dataType = $parameter['data-type'];
@@ -779,8 +782,9 @@ class ClassMethod
      * @param array $parameter
      * @param CompilationContext $compilationContext
      * @return string
+     * @throws CompilerException
      */
-    public function checkStrictType($parameter, $compilationContext)
+    public function checkStrictType(array $parameter, CompilationContext $compilationContext)
     {
         if (isset($parameter['data-type'])) {
             $dataType = $parameter['data-type'];
@@ -858,8 +862,9 @@ class ClassMethod
      * @param array $parameter
      * @param CompilationContext $compilationContext
      * @return string
+     * @throws CompilerException
      */
-    public function assignZvalValue($parameter, $compilationContext)
+    public function assignZvalValue(array $parameter, CompilationContext $compilationContext)
     {
         if (isset($parameter['data-type'])) {
             $dataType = $parameter['data-type'];
@@ -874,21 +879,21 @@ class ClassMethod
             case 'uint':
             case 'long':
             case 'ulong':
-                return "\t\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'bool':
-                return "\t\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'double':
-                return "\t\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                return "\t\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'array':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                return "\t\t" . 'zephir_get_arrval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . 'zephir_get_arrval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'variable':
                 break;
@@ -903,6 +908,8 @@ class ClassMethod
      * Compiles the method
      *
      * @param CompilationContext $compilationContext
+     * @return null
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -1128,6 +1135,8 @@ class ClassMethod
 
                     $ifCheck = new IfStatementBuilder($evalCheckExpr->get(), $ifBlock->get());
 
+                    $ifStatement = new IfStatement($ifCheck->get());
+
                 }
             }
         }
@@ -1302,7 +1311,7 @@ class ClassMethod
             if (is_object($this->_statements)) {
 
                 /**
-                 * If local context is available
+                 * If local context is not available
                  */
                 if (!$localContext) {
                     $writeDetector = new WriteDetector();
@@ -1404,7 +1413,7 @@ class ClassMethod
                         if ($mandatory) {
                             $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
                         } else {
-                            $initCode .= $this->assignZvalValue($parameter, $compilationContext);
+                            $initCode .= "\t".$this->assignZvalValue($parameter, $compilationContext);
                         }
                     }
                 }

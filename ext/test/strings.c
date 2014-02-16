@@ -137,7 +137,7 @@ PHP_METHOD(Test_Strings, testStrposOffset) {
 
 	zephir_fetch_params(0, 3, 0, &haystack, &needle, &offset_param);
 
-		offset = zephir_get_intval(offset_param);
+	offset = zephir_get_intval(offset_param);
 
 
 	ZEPHIR_SINIT_VAR(_0);
@@ -180,7 +180,7 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 	zephir_fetch_params(0, 2, 0, &str, &limit_param);
 
-		limit = zephir_get_intval(limit_param);
+	limit = zephir_get_intval(limit_param);
 
 
 	ZEPHIR_SINIT_VAR(_0);
@@ -197,8 +197,8 @@ PHP_METHOD(Test_Strings, testSubstr) {
 
 	zephir_fetch_params(0, 3, 0, &str, &from_param, &len_param);
 
-		from = zephir_get_intval(from_param);
-		len = zephir_get_intval(len_param);
+	from = zephir_get_intval(from_param);
+	len = zephir_get_intval(len_param);
 
 
 	ZEPHIR_SINIT_VAR(_0);
@@ -217,7 +217,7 @@ PHP_METHOD(Test_Strings, testSubstr2) {
 
 	zephir_fetch_params(0, 2, 0, &str, &from_param);
 
-		from = zephir_get_intval(from_param);
+	from = zephir_get_intval(from_param);
 
 
 	ZEPHIR_SINIT_VAR(_0);

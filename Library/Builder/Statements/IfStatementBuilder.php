@@ -45,4 +45,13 @@ class IfStatementBuilder
         $this->ifBlock = $ifBlock;
         $this->elseBlock = $elseBlock;
     }
+
+    public function get()
+    {
+        return array(
+            'type' => 'if',
+            'expr' => $this->evalExpr,
+            'statements' => $this->ifBlock
+        );
+    }
 }
