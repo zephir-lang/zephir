@@ -9,7 +9,6 @@ use Oo as NsAlias;
 use Strings as TestStrings;
 use \Test\Echoes as Echoes;
 
-
 class UseTest implements Countable
 {
 	public function createInstance()
@@ -24,16 +23,16 @@ class UseTest implements Countable
 
 	public function testUseClass1()
 	{
-	    return new OoConstruct();
+		return new OoConstruct();
 	}
 
 	public function testUseClass2()
 	{
-	    return new TestStrings();
+		return new TestStrings();
 	}
 
 	public function testUseNamespaceAlias()
-    {
-        return new NsAlias\OoConstruct();
-    }
+	{
+		return new NsAlias\OoConstruct();
+	}
 }

@@ -69,27 +69,33 @@ class Logger
             }
 
             $warning  = 'Warning: ' . $message;
-            $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
+            if (!isset($node['file'])) {
+                $warning .= ' in unknown on 0';
+            } else {
+                $warning .= ' in ' . $node['file'] . ' on ' . $node['line'];
+            }
             $warning .= ' [' . $type . ']' . PHP_EOL;
             $warning .= PHP_EOL;
-            if (!isset($_files[$node['file']])) {
-                if (file_exists($node['file'])) {
-                    $lines = file($node['file']);
+            if (isset($node['file'])) {
+                if (!isset($_files[$node['file']])) {
+                    if (file_exists($node['file'])) {
+                        $lines = file($node['file']);
+                    } else {
+                        $lines = array();
+                    }
+                    $_files[$node['file']] = $lines;
                 } else {
-                    $lines = array();
+                    $lines = $_files[$node['file']];
                 }
-                $_files[$node['file']] = $lines;
-            } else {
-                $lines = $_files[$node['file']];
-            }
-            if (isset($lines[$node['line'] - 1])) {
-                $line = $lines[$node['line'] - 1];
-                $warning .= "\t" . str_replace("\t", " ", $line);
-                if (($node['char'] - 1) > 0) {
-                    $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
+                if (isset($lines[$node['line'] - 1])) {
+                    $line = $lines[$node['line'] - 1];
+                    $warning .= "\t" . str_replace("\t", " ", $line);
+                    if (($node['char'] - 1) > 0) {
+                        $warning .= "\t" . str_repeat("-", $node['char'] - 1) . "^" . PHP_EOL;
+                    }
                 }
+                $warning .= PHP_EOL;
             }
-            $warning .= PHP_EOL;
 
             echo Color::warning($warning);
 

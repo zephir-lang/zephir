@@ -59,6 +59,8 @@ class ClassDefinition
 
     protected $dependencyRank = 0;
 
+    protected $originalNode;
+
     /**
      * ClassDefinition
      *
@@ -159,6 +161,16 @@ class ClassDefinition
     public function getNamespace()
     {
         return $this->namespace;
+    }
+
+    /**
+     * Set the original node where the class was declared
+     *
+     * @param array $originalNode
+     */
+    public function setOriginalNode(array $originalNode)
+    {
+        $this->originalNode = $originalNode;
     }
 
     /**
@@ -648,7 +660,7 @@ class ClassDefinition
                 }
 
                 if (!$classEntry) {
-                    throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName());
+                    throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
                 }
 
                 /**

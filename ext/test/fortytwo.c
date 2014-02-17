@@ -16,7 +16,6 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"
-#include "kernel/fcall.h"
 
 
 /**
@@ -33,13 +32,12 @@ ZEPHIR_INIT_CLASS(Test_FortyTwo) {
 
 PHP_METHOD(Test_FortyTwo, proof) {
 
-	zend_function *_10 = NULL;
 	zend_bool _5;
 	HashTable *_3;
 	HashPosition _2;
 	zval *_0;
 	int i, j, _6, _7;
-	zval *box, *side = NULL, *_1 = NULL, **_4, *_8, *_9 = NULL;
+	zval *box, *side = NULL, *_1, **_4, *_8;
 
 	ZEPHIR_MM_GROW();
 
@@ -251,13 +249,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 			}
 		}
 		if ((j != 42)) {
-			ZEPHIR_INIT_LNVAR(_9);
-			object_init_ex(_9, test_exception_ce);
-			ZEPHIR_INIT_NVAR(_1);
-			ZVAL_STRING(_1, "not true", 1);
-			zephir_call_method_p1_cache_noret(_9, "__construct", &_10, _1);
-			zephir_throw_exception(_9 TSRMLS_CC);
-			ZEPHIR_MM_RESTORE();
+			ZEPHIR_THROW_EXCEPTION_STR(test_exception_ce, "not true");
 			return;
 		}
 	}

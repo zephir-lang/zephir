@@ -1138,7 +1138,7 @@ class ClassMethod
                         ),
                         new StatementsBlockBuilder(array(
                             new ThrowStatementBuilder(
-                                new NewInstanceOperatorBuilder('\BadMethodCallException', array(
+                                new NewInstanceOperatorBuilder('\InvalidArgumentException', array(
                                     new ParameterBuilder(
                                         new LiteralBuilder(
                                             "string",

@@ -415,6 +415,10 @@ class MethodCall extends Call
                     foreach ($method->getParameters() as $n => $parameter) {
                         if (isset($parameter['data-type'])) {
 
+                            if (!isset($resolvedTypes[$n])) {
+                                continue;
+                            }
+
                             /**
                              * If the passed parameter is different to the expected type we show a warning
                              */

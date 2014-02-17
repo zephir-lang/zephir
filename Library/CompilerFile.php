@@ -36,6 +36,8 @@ class CompilerFile
 
     protected $_ir;
 
+    protected $_originalNode;
+
     protected $_compiledFile;
 
     /**
@@ -186,7 +188,7 @@ class CompilerFile
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
-            $classDefinition->setExtendsClass($topStatement['extends']);
+            $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
         }
 
         $classDefinition->setType('interface');
@@ -477,6 +479,7 @@ class CompilerFile
                     $class = true;
                     $name = $topStatement['name'];
                     $this->preCompileClass($namespace, $topStatement);
+                    $this->_originalNode = $topStatement;
                     break;
 
                 case 'interface':
@@ -486,14 +489,12 @@ class CompilerFile
                     $interface = true;
                     $name = $topStatement['name'];
                     $this->preCompileInterface($namespace, $topStatement);
+                    $this->_originalNode = $topStatement;
                     break;
 
                 case 'use':
                     if ($interface || $class) {
                         throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
-                    }
-                    foreach ($topStatement['aliases'] as &$alias) {
-                        $alias['name'] = $this->getFullName($alias['name']);
                     }
                     $this->_aliasManager->add($topStatement);
                     break;
@@ -541,7 +542,7 @@ class CompilerFile
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"');
+                        throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
                     }
                 }
             } else {
@@ -553,7 +554,7 @@ class CompilerFile
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"');
+                        throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
                     }
                 }
             }
@@ -651,6 +652,8 @@ class CompilerFile
             $this->_ir = null;
             return;
         }
+
+        $classDefinition->setOriginalNode($this->_originalNode);
 
         $completeName = $classDefinition->getCompleteName();
 
