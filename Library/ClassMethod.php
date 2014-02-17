@@ -25,6 +25,7 @@ use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\LiteralBuilder;
 use Zephir\Builder\ParameterBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Operators\UnaryOperatorBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
 use Zephir\Builder\Operators\NewInstanceOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
@@ -1131,10 +1132,13 @@ class ClassMethod
                 foreach ($classCastCheck->getClassTypes() as $className) {
 
                     $ifCheck = new IfStatementBuilder(
-                        new BinaryOperatorBuilder(
-                            'instanceof',
-                            new VariableBuilder($classCastCheck->getName()),
-                            new VariableBuilder('\\'. $className)
+                        new UnaryOperatorBuilder(
+                            'not',
+                            new BinaryOperatorBuilder(
+                                'instanceof',
+                                new VariableBuilder($classCastCheck->getName()),
+                                new VariableBuilder('\\'. $className)
+                            )
                         ),
                         new StatementsBlockBuilder(array(
                             new ThrowStatementBuilder(

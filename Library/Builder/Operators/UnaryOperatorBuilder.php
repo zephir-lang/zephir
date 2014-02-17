@@ -29,16 +29,18 @@ class UnaryOperatorBuilder
 
     protected $operator;
 
+    protected $leftExpression;
+
     protected $file;
 
     protected $line;
 
     protected $char;
 
-    public function __construct($operator, $rightExpression, $file = null, $line = 0, $char = 0)
+    public function __construct($operator, $leftExpression, $file = null, $line = 0, $char = 0)
     {
         $this->operator = $operator;
-        $this->rightExpression = $rightExpression;
+        $this->leftExpression = $leftExpression;
         $this->file = $file;
         $this->line = $line;
         $this->char = $char;
@@ -48,7 +50,7 @@ class UnaryOperatorBuilder
     {
         return array(
             'type'       => $this->operator,
-            'right'      => $this->rightExpression->get(),
+            'left'       => $this->leftExpression->get(),
             'file'       => $this->file,
             'line'       => $this->line,
             'char'       => $this->char

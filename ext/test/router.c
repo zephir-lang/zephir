@@ -144,7 +144,7 @@ PHP_METHOD(Test_Router, setDI) {
 
 
 
-	if (zephir_is_instance_of(dependencyInjector, SL("Test\\DiInterface") TSRMLS_CC)) {
+	if (!(zephir_is_instance_of(dependencyInjector, SL("Test\\DiInterface") TSRMLS_CC))) {
 		ZEPHIR_THROW_EXCEPTION_STRW(spl_ce_InvalidArgumentException, "Parameter 'dependencyInjector' must be an instance of 'Test\\DiInterface'");
 		return;
 	}
