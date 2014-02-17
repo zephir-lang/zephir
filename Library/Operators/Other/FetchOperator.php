@@ -164,7 +164,7 @@ class FetchOperator extends BaseOperator
                     $compilationContext->logger->warning('Possible attempt to use non object in fetch operator', 'non-valid-fetch', $expression['right']);
                 }
 
-                $property = $expression['right']['right'];
+                $property = $expression['right']['right']['value'];
 
                 $compilationContext->headersManager->add('kernel/object');
                 $compilationContext->codePrinter->output('zephir_read_property(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
