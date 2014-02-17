@@ -42,7 +42,7 @@ class NewInstanceOperator extends BaseOperator
      * @return CompiledExpression
      * @throws CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
 
         $codePrinter = $compilationContext->codePrinter;
@@ -108,31 +108,48 @@ class NewInstanceOperator extends BaseOperator
             } else {
 
                 /**
-                 * Classes inside the same extension
+                 * Classes outside the extension
                  */
-                if (!class_exists($className, false)) {
+                if ($dynamic) {
+                    $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+                    $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
+                    if ($classNameVariable->isNotVariableAndString()) {
+                        throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
+                    }
+                    $classNameToFetch = 'Z_STRVAL_P(' . $className . '), Z_STRLEN_P(' . $className . ')';
+                    $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+                    $classEntry = $zendClassEntry->getName();
+                } else {
+                    if (!class_exists($className, false)) {
+                        $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
+                        $classNameToFetch = 'SL("' . Utils::addSlashes($className, true) . '")';
+                        $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+                        $classEntry = $zendClassEntry->getName();
+                    } else {
 
-                    if ($compilationContext->symbolTable->hasVariable($className)) {
-
-                        $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
-                        if ($classNameVariable->isNotVariableAndString()) {
-                            throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
+                        $reflectionClass = new \ReflectionClass($className);
+                        if ($reflectionClass->isInterface()) {
+                            throw new CompilerException('Interfaces cannot be instantiated', $expression);
+                        } else {
+                            if ($reflectionClass->isTrait()) {
+                                throw new CompilerException('Traits cannot be instantiated', $expression);
+                            }
                         }
 
-                        unset($classNameVariable);
-                    } else {
-                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                        if (!$classEntry) {
+                            $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+                            $classNameToFetch = 'SL("' . Utils::addSlashes($className, true) . '")';
+                            $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+                            $classEntry = $zendClassEntry->getName();
+                        }
                     }
-                }
 
-                /**
-                 * @TODO, check if the variable is really internal
-                 */
-                $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-                $classNameToFetch = $dynamic ? 'Z_STRVAL_P(' . $className . '), Z_STRLEN_P(' . $className . ')' : 'SL("' . Utils::addSlashes($className, true) . '")';
-                $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
-                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $zendClassEntry->getName() . ');');
-                //$symbolVariable->setClassTypes($expression['class']);
+                    $symbolVariable->setClassTypes($className);
+
+                }
+                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classEntry . ');');
             }
         }
 
@@ -207,6 +224,7 @@ class NewInstanceOperator extends BaseOperator
 
             $compilationContext->headersManager->add('kernel/fcall');
 
+            /* @todo, generate the code using builders */
             $codePrinter->output('if (zephir_has_constructor(' . $symbolVariable->getName() . ' TSRMLS_CC)) {');
             $codePrinter->increaseLevel();
 

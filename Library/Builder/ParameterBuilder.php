@@ -17,41 +17,27 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Builder\Statements;
+namespace Zephir\Builder;
 
 /**
- * IfStatementBuilder
+ * ParameterBuilder
  *
- * Allows to manually build a 'if' statement AST node
+ * Allows to manually build a call parameters AST nodes
  */
-class IfStatementBuilder
+class ParameterBuilder
 {
-    private $evalExpr;
 
-    private $ifBlock;
+    protected $value;
 
-    private $elseBlock;
-
-    /**
-     * IfStatementBuilder constructor
-     *
-     * @param array $evalExpr
-     * @param array $ifBlock
-     * @param array $elseBlock
-     */
-    public function __construct($evalExpr, $ifBlock, $elseBlock = null)
+    public function __construct($value)
     {
-        $this->evalExpr = $evalExpr;
-        $this->ifBlock = $ifBlock;
-        $this->elseBlock = $elseBlock;
+        $this->value = $value;
     }
 
     public function get()
     {
         return array(
-            'type' => 'if',
-            'expr' => $this->evalExpr->get(),
-            'statements' => $this->ifBlock->get()
+            'parameter' => $this->value->get()
         );
     }
 }

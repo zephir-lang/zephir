@@ -61,16 +61,21 @@ class InstanceOfOperator extends BaseOperator
         $resolvedVariable = $resolved->getCode();
 
         switch ($resolved->getType()) {
+
             case 'string':
-                $code = 'SL("' . trim($resolvedVariable, "\\") . '")';
+                $className = Utils::getFullName($resolvedVariable, $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                $code = 'SL("' . $resolvedVariable . '")';
                 break;
+
             default:
                 switch ($resolved->getType()) {
+
                     case 'variable':
                         if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
                             $code = 'SL("' . Utils::addSlashes(trim($compilationContext->getFullName($resolvedVariable), "\\"), true) . '")';
                         }
                         break;
+
                     case 'property-access':
                     case 'array-access':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -80,6 +85,7 @@ class InstanceOfOperator extends BaseOperator
                         $compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
                         $code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
                         break;
+
                     default:
                         throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
                 }

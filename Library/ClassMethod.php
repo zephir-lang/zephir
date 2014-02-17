@@ -22,9 +22,14 @@ namespace Zephir;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\Builder\VariableBuilder;
+use Zephir\Builder\LiteralBuilder;
+use Zephir\Builder\ParameterBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
+use Zephir\Builder\Operators\NewInstanceOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
+use Zephir\Builder\Statements\ThrowStatementBuilder;
+use Zephir\Statements\IfStatement;
 use Zephir\Detectors\WriteDetector;
 
 /**
@@ -1120,25 +1125,37 @@ class ClassMethod
                 }
             }
 
+            $compilationContext->codePrinter->increaseLevel();
+
             foreach ($classCastChecks as $classCastCheck) {
                 foreach ($classCastCheck->getClassTypes() as $className) {
 
-                    $evalCheckExpr = new BinaryOperatorBuilder(
-                        'instanceof',
-                        new VariableBuilder($classCastCheck->getName()),
-                        new VariableBuilder($className)
+                    $ifCheck = new IfStatementBuilder(
+                        new BinaryOperatorBuilder(
+                            'instanceof',
+                            new VariableBuilder($classCastCheck->getName()),
+                            new VariableBuilder('\\'. $className)
+                        ),
+                        new StatementsBlockBuilder(array(
+                            new ThrowStatementBuilder(
+                                new NewInstanceOperatorBuilder('\BadMethodCallException', array(
+                                    new ParameterBuilder(
+                                        new LiteralBuilder(
+                                            "string",
+                                            "Parameter '" . $classCastCheck->getName() . "' must be an instance of '" . Utils::addSlashes($className, true) . "'"
+                                        )
+                                    )
+                                ))
+                            )
+                        ))
                     );
-
-                    $ifBlock = new StatementsBlockBuilder(
-                        new ThrowStatementBuilder()
-                    );
-
-                    $ifCheck = new IfStatementBuilder($evalCheckExpr->get(), $ifBlock->get());
 
                     $ifStatement = new IfStatement($ifCheck->get());
-
+                    $ifStatement->compile($compilationContext);
                 }
             }
+
+            $compilationContext->codePrinter->decreaseLevel();
         }
 
         /**
@@ -1591,7 +1608,7 @@ class ClassMethod
             $lastType = $this->_statements->getLastStatementType();
 
             if ($lastType != 'return' && $lastType != 'throw') {
-                
+
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');

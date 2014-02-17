@@ -64,7 +64,7 @@ class ThrowStatement extends StatementAbstract
         $resolvedExpr = $throwExpr->compile($compilationContext);
 
         if ($resolvedExpr->getType() != 'variable') {
-            throw new CompilerException("Expression '" . $resolvedExpr->getType . '" cannot be used as exception');
+            throw new CompilerException("Expression '" . $resolvedExpr->getType() . '" cannot be used as exception', $expr);
         }
 
         $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expr);

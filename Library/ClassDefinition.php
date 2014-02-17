@@ -579,7 +579,7 @@ class ClassDefinition
             if ($classExtendsDefinition instanceof ClassDefinition) {
                 $classEntry = $classExtendsDefinition->getClassEntry();
             } else {
-                $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName());
+                $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
             }
 
             if ($this->getType() == 'class') {
@@ -643,7 +643,7 @@ class ClassDefinition
                 } else {
                     if ($compiler->isInternalInterface($interface)) {
                         $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                        $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName());
+                        $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName(), $compilationContext);
                     }
                 }
 
@@ -801,11 +801,13 @@ class ClassDefinition
     /**
      * Convert Class/Interface name to C ClassEntry
      *
-     * @param string $className
+     * @param  string $className
+     * @param  CompilationContext $compilationContext
+     * @param  boolean $check
      * @return string
      * @throws CompilerException
      */
-    protected static function getClassEntryByClassName($className)
+    public function getClassEntryByClassName($className, $compilationContext, $check = false)
     {
         switch (strtolower($className)) {
             /**
@@ -940,8 +942,21 @@ class ClassDefinition
             case 'recursivecallbackfilteriterator':
                 $classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
                 break;
+
+            case 'splfixedarray':
+                $compilationContext->headersManager->add('ext/spl/spl_fixedarray');
+                $classEntry = 'spl_ce_SplFixedArray';
+                break;
+            case 'splpriorityqueue':
+                $classEntry = 'spl_ce_SplPriorityQueue';
+                break;
+
             default:
-                throw new CompilerException('Unknown class entry for "' . $className . '"');
+                if (!$check) {
+                    throw new CompilerException('Unknown class entry for "' . $className . '"');
+                } else {
+                    return false;
+                }
         }
         return $classEntry;
     }

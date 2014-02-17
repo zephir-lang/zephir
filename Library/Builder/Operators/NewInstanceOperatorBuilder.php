@@ -17,41 +17,52 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Builder\Statements;
+namespace Zephir\Builder\Operators;
 
 /**
- * IfStatementBuilder
+ * NewInstanceOperatorBuilder
  *
- * Allows to manually build a 'if' statement AST node
+ * Allows to manually build a 'new instance' operator AST node
  */
-class IfStatementBuilder
+class NewInstanceOperatorBuilder
 {
-    private $evalExpr;
 
-    private $ifBlock;
+    protected $type;
 
-    private $elseBlock;
+    protected $className;
 
-    /**
-     * IfStatementBuilder constructor
-     *
-     * @param array $evalExpr
-     * @param array $ifBlock
-     * @param array $elseBlock
-     */
-    public function __construct($evalExpr, $ifBlock, $elseBlock = null)
+    protected $dynamic;
+
+    protected $file;
+
+    protected $line;
+
+    protected $char;
+
+    public function __construct($className, array $parameters, $dynamic = false, $file = null, $line = 0, $char = 0)
     {
-        $this->evalExpr = $evalExpr;
-        $this->ifBlock = $ifBlock;
-        $this->elseBlock = $elseBlock;
+        $this->className = $className;
+        $this->parameters = $parameters;
+        $this->dynamic = $dynamic;
+        $this->file = $file;
+        $this->line = $line;
+        $this->char = $char;
     }
 
     public function get()
     {
+        $parameters = array();
+        foreach ($this->parameters as $parameter) {
+            $parameters[] = $parameter->get();
+        }
         return array(
-            'type' => 'if',
-            'expr' => $this->evalExpr->get(),
-            'statements' => $this->ifBlock->get()
+            'type'       => 'new',
+            'class'      => $this->className,
+            'parameters' => $parameters,
+            'dynamic'    => $this->dynamic,
+            'file'       => $this->file,
+            'line'       => $this->line,
+            'char'       => $this->char
         );
     }
 }

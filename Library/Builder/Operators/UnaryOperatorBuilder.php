@@ -17,41 +17,41 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Builder\Statements;
+namespace Zephir\Builder\Operators;
 
 /**
- * IfStatementBuilder
+ * UnaryOperatorBuilder
  *
- * Allows to manually build a 'if' statement AST node
+ * Allows to manually build a unary operator AST node
  */
-class IfStatementBuilder
+class UnaryOperatorBuilder
 {
-    private $evalExpr;
 
-    private $ifBlock;
+    protected $operator;
 
-    private $elseBlock;
+    protected $file;
 
-    /**
-     * IfStatementBuilder constructor
-     *
-     * @param array $evalExpr
-     * @param array $ifBlock
-     * @param array $elseBlock
-     */
-    public function __construct($evalExpr, $ifBlock, $elseBlock = null)
+    protected $line;
+
+    protected $char;
+
+    public function __construct($operator, $rightExpression, $file = null, $line = 0, $char = 0)
     {
-        $this->evalExpr = $evalExpr;
-        $this->ifBlock = $ifBlock;
-        $this->elseBlock = $elseBlock;
+        $this->operator = $operator;
+        $this->rightExpression = $rightExpression;
+        $this->file = $file;
+        $this->line = $line;
+        $this->char = $char;
     }
 
     public function get()
     {
         return array(
-            'type' => 'if',
-            'expr' => $this->evalExpr->get(),
-            'statements' => $this->ifBlock->get()
+            'type'       => $this->operator,
+            'right'      => $this->rightExpression->get(),
+            'file'       => $this->file,
+            'line'       => $this->line,
+            'char'       => $this->char
         );
     }
 }

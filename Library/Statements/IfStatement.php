@@ -29,7 +29,7 @@ use Zephir\Branch;
 /**
  * IfStatement
  *
- * If statement, the same as in PHP/C
+ * 'If' statement, the same as in PHP/C
  */
 class IfStatement extends StatementAbstract
 {

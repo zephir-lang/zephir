@@ -20,38 +20,32 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * IfStatementBuilder
+ * ThrowStatementBuilder
  *
- * Allows to manually build a 'if' statement AST node
+ * Allows to manually build a 'throw' statement AST node
  */
-class IfStatementBuilder
+class ThrowStatementBuilder
 {
-    private $evalExpr;
-
-    private $ifBlock;
-
-    private $elseBlock;
+    private $expr;
 
     /**
-     * IfStatementBuilder constructor
+     * ThrowStatementBuilder constructor
      *
-     * @param array $evalExpr
-     * @param array $ifBlock
-     * @param array $elseBlock
+     * @param mixed $expr
      */
-    public function __construct($evalExpr, $ifBlock, $elseBlock = null)
+    public function __construct($expr)
     {
-        $this->evalExpr = $evalExpr;
-        $this->ifBlock = $ifBlock;
-        $this->elseBlock = $elseBlock;
+        $this->expr = $expr;
     }
 
+    /**
+     *
+     */
     public function get()
     {
         return array(
-            'type' => 'if',
-            'expr' => $this->evalExpr->get(),
-            'statements' => $this->ifBlock->get()
+            'type' => 'throw',
+            'expr' => $this->expr->get()
         );
     }
 }
