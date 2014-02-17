@@ -55,18 +55,18 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2);
 PHP_METHOD(Test_Assign, testGlobalVarAssign);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testarrayvarassign1, 0, 0, 2)
-  ZEND_ARG_INFO(0, index)
-  ZEND_ARG_INFO(0, value)
+	ZEND_ARG_INFO(0, index)
+	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testarrayvarassign2, 0, 0, 2)
-  ZEND_ARG_INFO(0, index)
-  ZEND_ARG_INFO(0, value)
+	ZEND_ARG_INFO(0, index)
+	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testglobalvarassign, 0, 0, 2)
-  ZEND_ARG_INFO(0, index)
-  ZEND_ARG_INFO(0, value)
+	ZEND_ARG_INFO(0, index)
+	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_assign_method_entry) {

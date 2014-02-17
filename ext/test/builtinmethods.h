@@ -13,19 +13,19 @@ PHP_METHOD(Test_BuiltInMethods, arrayMethodJoin1);
 PHP_METHOD(Test_BuiltInMethods, arrayMethodReverse1);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtinmethods_stringmethodlength4, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtinmethods_stringmethodlength5, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtinmethods_arraymethodjoin1, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtinmethods_arraymethodreverse1, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_builtinmethods_method_entry) {

@@ -13,39 +13,39 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2);
 PHP_METHOD(Test_IssetTest, testIssetProperty3);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray1, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray2, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray3, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray4, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray5, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetproperty1, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetproperty2, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetproperty3, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_issettest_method_entry) {

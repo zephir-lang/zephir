@@ -14,29 +14,29 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params);
 PHP_METHOD(Test_Pregmatch, testPregMatch5Params);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch2params, 0, 0, 2)
-  ZEND_ARG_INFO(0, pattern)
-  ZEND_ARG_INFO(0, subject)
+	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, subject)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch3params, 0, 0, 3)
-  ZEND_ARG_INFO(0, pattern)
-  ZEND_ARG_INFO(0, subject)
-  ZEND_ARG_INFO(0, matches)
+	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, subject)
+	ZEND_ARG_INFO(0, matches)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch4params, 0, 0, 4)
-  ZEND_ARG_INFO(0, pattern)
-  ZEND_ARG_INFO(0, subject)
-  ZEND_ARG_INFO(0, matches)
-  ZEND_ARG_INFO(0, flags)
+	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, subject)
+	ZEND_ARG_INFO(0, matches)
+	ZEND_ARG_INFO(0, flags)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch5params, 0, 0, 5)
-  ZEND_ARG_INFO(0, pattern)
-  ZEND_ARG_INFO(0, subject)
-  ZEND_ARG_INFO(0, matches)
-  ZEND_ARG_INFO(0, flags)
-  ZEND_ARG_INFO(0, offset)
+	ZEND_ARG_INFO(0, pattern)
+	ZEND_ARG_INFO(0, subject)
+	ZEND_ARG_INFO(0, matches)
+	ZEND_ARG_INFO(0, flags)
+	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_pregmatch_method_entry) {

@@ -770,7 +770,7 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    $codePrinter->output('  ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                    $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                 }
                 $codePrinter->output('ZEND_END_ARG_INFO()');
                 $codePrinter->outputBlankLine();

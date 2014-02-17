@@ -11,11 +11,11 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive);
 PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fibonnaci_fibonaccirecursive, 0, 0, 1)
-  ZEND_ARG_INFO(0, n)
+	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fibonnaci_fibonaccifinalrecursive, 0, 0, 1)
-  ZEND_ARG_INFO(0, n)
+	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_fibonnaci_method_entry) {

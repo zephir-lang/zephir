@@ -22,28 +22,28 @@ PHP_METHOD(Test_Oo_OoNativeImplements, serialize);
 PHP_METHOD(Test_Oo_OoNativeImplements, unserialize);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_seek, 0, 0, 1)
-  ZEND_ARG_INFO(0, position)
+	ZEND_ARG_INFO(0, position)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_offsetexists, 0, 0, 1)
-  ZEND_ARG_INFO(0, offset)
+	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_offsetget, 0, 0, 1)
-  ZEND_ARG_INFO(0, offset)
+	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_offsetset, 0, 0, 2)
-  ZEND_ARG_INFO(0, offset)
-  ZEND_ARG_INFO(0, value)
+	ZEND_ARG_INFO(0, offset)
+	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_offsetunset, 0, 0, 1)
-  ZEND_ARG_INFO(0, offset)
+	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_oonativeimplements_unserialize, 0, 0, 1)
-  ZEND_ARG_INFO(0, serialized)
+	ZEND_ARG_INFO(0, serialized)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_oo_oonativeimplements_method_entry) {

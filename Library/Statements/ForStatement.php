@@ -566,7 +566,7 @@ class ForStatement extends StatementAbstract
         $codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {
-            $compilationContext->symbolTable->mustGrownStack(true);            
+            $compilationContext->symbolTable->mustGrownStack(true);
             $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
         }
 

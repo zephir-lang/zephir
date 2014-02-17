@@ -15,11 +15,11 @@ PHP_METHOD(Test_Properties_ProtectedProperties, getSomeDouble);
 PHP_METHOD(Test_Properties_ProtectedProperties, getSomeString);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_protectedproperties_setsomevar, 0, 0, 1)
-  ZEND_ARG_INFO(0, someVar)
+	ZEND_ARG_INFO(0, someVar)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_protectedproperties_setsomenull, 0, 0, 1)
-  ZEND_ARG_INFO(0, param)
+	ZEND_ARG_INFO(0, param)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_properties_protectedproperties_method_entry) {
