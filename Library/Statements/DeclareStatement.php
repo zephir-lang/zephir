@@ -60,7 +60,7 @@ class DeclareStatement extends StatementAbstract
                 if ($currentType == 'variable') {
                     $type = $typeInference->getInferedType($variable['variable']);
                     if (is_string($type)) {
-                        $currentType = $type;                        
+                        $currentType = $type;
                     }
                 }
             }

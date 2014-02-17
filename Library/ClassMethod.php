@@ -1503,7 +1503,7 @@ class ClassMethod
          * Generate the variable definition for variables used
          */
         foreach ($usedVariables as $type => $variables) {
-            
+
             $pointer = null;
             switch ($type) {
 
@@ -1569,7 +1569,7 @@ class ClassMethod
                 case 'zend_object_iterator':
                     $pointer = '*';
                     $code = 'zend_object_iterator ';
-                    break;                    
+                    break;
 
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);

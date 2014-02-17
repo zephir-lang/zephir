@@ -281,7 +281,7 @@ class StaticTypeInference
                     return 'int';
                 }
                 return 'string';
-            
+
             case 'static-constant-access':
                 return 'variable';
 
@@ -384,7 +384,7 @@ class StaticTypeInference
                 return 'variable';
 
             case 'empty-array':
-                return 'variable';                
+                return 'variable';
 
             case 'new':
                 $this->passNew($expression);
@@ -452,9 +452,11 @@ class StaticTypeInference
         foreach ($statements as $statement) {
 
             switch ($statement['type']) {
+
                 case 'let':
                     $this->passLetStatement($statement);
                     break;
+
                 case 'echo':
                     if (isset($statement['expressions'])) {
                         foreach ($statement['expressions'] as $expr) {
@@ -462,9 +464,11 @@ class StaticTypeInference
                         }
                     }
                     break;
+
                 case 'declare':
                     $this->declareVariables($statement);
                     break;
+
                 case 'if':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -476,6 +480,7 @@ class StaticTypeInference
                         $this->passStatementBlock($statement['else_statements']);
                     }
                     break;
+
                 case 'switch':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -491,6 +496,7 @@ class StaticTypeInference
                         }
                     }
                     break;
+
                 case 'while':
                 case 'do-while':
                     if (isset($statement['expr'])) {
@@ -500,6 +506,7 @@ class StaticTypeInference
                         $this->passStatementBlock($statement['statements']);
                     }
                     break;
+
                 case 'for':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -514,36 +521,43 @@ class StaticTypeInference
                         $this->passStatementBlock($statement['statements']);
                     }
                     break;
+
                 case 'return':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }
                     break;
+
                 case 'loop':
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
                     }
                     break;
+
                 case 'throw':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }
                     break;
+
                 case 'fetch':
                     $this->passExpression($statement['expr']);
                     break;
+
                 case 'mcall':
                 case 'scall':
                 case 'fcall':
                 case 'require':
                     $this->passCall($statement['expr']);
                     break;
+
                 case 'break':
                 case 'continue':
                 case 'unset':
                 case 'cblock':
                 case 'empty': // empty statement != empty operator
                     break;
+
                 default:
                     echo 'SSTI=', $statement['type'];
             }
