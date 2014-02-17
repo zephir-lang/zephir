@@ -17,8 +17,8 @@
 #include "kernel/array.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
-#include "kernel/string.h"
 #include "kernel/exception.h"
+#include "kernel/string.h"
 #include "kernel/concat.h"
 #include "kernel/hash.h"
 
@@ -138,13 +138,25 @@ PHP_METHOD(Test_Router, __construct) {
  */
 PHP_METHOD(Test_Router, setDI) {
 
-	zval *dependencyInjector;
+	zval *dependencyInjector, *_0, *_1;
 
-	zephir_fetch_params(0, 1, 0, &dependencyInjector);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &dependencyInjector);
 
 
 
+	if (zephir_is_instance_of(dependencyInjector, SL("Test\\DiInterface") TSRMLS_CC)) {
+		ZEPHIR_INIT_VAR(_0);
+		object_init_ex(_0, spl_ce_BadMethodCallException);
+		ZEPHIR_INIT_VAR(_1);
+		ZVAL_STRING(_1, "Parameter 'dependencyInjector' must be an instance of 'Test\\DiInterface'", 1);
+		zephir_call_method_p1_noret(_0, "__construct", _1);
+		zephir_throw_exception(_0 TSRMLS_CC);
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	zephir_update_property_this(this_ptr, SL("_dependencyInjector"), dependencyInjector TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 
 }
 

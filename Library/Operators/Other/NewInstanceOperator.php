@@ -132,8 +132,10 @@ class NewInstanceOperator extends BaseOperator
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
                         } else {
-                            if ($reflectionClass->isTrait()) {
-                                throw new CompilerException('Traits cannot be instantiated', $expression);
+                            if (method_exists($reflectionClass, 'isTrait')) {
+                                if ($reflectionClass->isTrait()) {
+                                    throw new CompilerException('Traits cannot be instantiated', $expression);
+                                }
                             }
                         }
 
