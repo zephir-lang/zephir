@@ -23,7 +23,6 @@ ZEPHIR_INIT_CLASS(Test_Oo) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Oo, test, oo, test_oo_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

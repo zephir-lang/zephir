@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_Globals) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Globals, test, globals, test_globals_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

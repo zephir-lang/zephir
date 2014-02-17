@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_Logical) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Logical, test, logical, test_logical_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

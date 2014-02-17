@@ -26,7 +26,6 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoParams) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoParams, test, oo_ooparams, test_oo_ooparams_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

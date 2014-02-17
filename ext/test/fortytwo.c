@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_FortyTwo) {
 
 	ZEPHIR_REGISTER_CLASS(Test, FortyTwo, test, fortytwo, test_fortytwo_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

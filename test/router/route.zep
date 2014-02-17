@@ -8,7 +8,6 @@ namespace Test\Router;
  */
 class Route
 {
-
 	protected _pattern;
 
 	protected _compiledPattern;

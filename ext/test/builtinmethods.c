@@ -26,7 +26,6 @@ ZEPHIR_INIT_CLASS(Test_BuiltInMethods) {
 
 	ZEPHIR_REGISTER_CLASS(Test, BuiltInMethods, test, builtinmethods, test_builtinmethods_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

@@ -29,7 +29,6 @@ ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 	ZEPHIR_REGISTER_CLASS(Test, RegexDNA, test, regexdna, test_regexdna_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

@@ -26,6 +26,9 @@ namespace Zephir;
  */
 class ClassProperty
 {
+    /**
+     * @var ClassDefinition
+     */
     protected $_classDefinition;
 
     protected $_visibility;
