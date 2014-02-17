@@ -707,7 +707,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
@@ -743,7 +743,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HMKEY(k, _2, _1);
@@ -780,8 +780,8 @@ PHP_METHOD(Test_Flow, testFor3) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 1);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zend_hash_move_backwards_ex(_2, &_1)
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_move_backwards_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
 		zephir_array_append(&c, v, PH_SEPARATE);
@@ -1453,7 +1453,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	zephir_array_fast_append(_0, _1);
 	zephir_is_iterable(_0, &_3, &_2, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_3, &_2)
 	) {
 		ZEPHIR_GET_HVALUE(a, _4);
@@ -1522,7 +1522,7 @@ PHP_METHOD(Test_Flow, testFor32) {
 
 	zephir_is_iterable(e, &_1, &_0, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_1, &_0)
 	) {
 		ZEPHIR_GET_HVALUE(v, _2);

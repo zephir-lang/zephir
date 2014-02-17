@@ -552,20 +552,21 @@ class ForStatement extends StatementAbstract
         $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
         $tempVariable->setIsDoublePointer(true);
 
+        $compilationContext->headersManager->add('kernel/hash');
+
         $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, '.$this->_statement['reverse'].');');
 
         $codePrinter->output('for (');
-        $codePrinter->output('  ; zend_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
+        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
         if ($this->_statement['reverse']) {
-            $codePrinter->output('  ; zend_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         } else {
             $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
         }
         $codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {
-            $compilationContext->symbolTable->mustGrownStack(true);
-            $compilationContext->headersManager->add('kernel/hash');
+            $compilationContext->symbolTable->mustGrownStack(true);            
             $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
         }
 

@@ -3,8 +3,6 @@
 .temp/
 ext/Makefile.global
 ext/acinclude.m4
-ext/aclocal.m4
-ext/autom4te.cache/
 ext/build/
 ext/config.guess
 ext/config.h.in
@@ -31,6 +29,7 @@ ext/modules/
 *.lo
 *.la
 *.o
+*.loT
 ext/kernel/.libs/
 ext/kernel/alternative/.libs/
 ext/test/.libs/
