@@ -961,6 +961,7 @@ class ClassDefinition
                 $classEntry = 'spl_ce_SplFixedArray';
                 break;
             case 'splpriorityqueue':
+                $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
 
