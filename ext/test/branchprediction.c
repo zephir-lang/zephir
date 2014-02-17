@@ -23,7 +23,6 @@ ZEPHIR_INIT_CLASS(Test_BranchPrediction) {
 
 	ZEPHIR_REGISTER_CLASS(Test, BranchPrediction, test, branchprediction, test_branchprediction_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

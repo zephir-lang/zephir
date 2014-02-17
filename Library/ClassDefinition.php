@@ -616,9 +616,10 @@ class ClassDefinition
         foreach ($this->getProperties() as $property) {
             $docBlock = $property->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock, false);
+                $codePrinter->outputDocBlock($docBlock, true);
             }
             $property->compile($compilationContext);
+            $codePrinter->outputBlankLine();
         }
 
         /**
@@ -627,9 +628,10 @@ class ClassDefinition
         foreach ($this->getConstants() as $constant) {
             $docBlock = $constant->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock);
+                $codePrinter->outputDocBlock($docBlock, true);
             }
             $constant->compile($compilationContext);
+            $codePrinter->outputBlankLine();
         }
 
         /**
@@ -706,7 +708,6 @@ class ClassDefinition
             }
         }
 
-        $codePrinter->outputBlankLine();
         $codePrinter->output('return SUCCESS;');
 
         $codePrinter->outputBlankLine();

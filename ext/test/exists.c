@@ -22,7 +22,6 @@ ZEPHIR_INIT_CLASS(Test_Exists) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Exists, test, exists, test_exists_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

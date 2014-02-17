@@ -25,6 +25,7 @@ ZEPHIR_INIT_CLASS(Test_Oo_PropertyAccess) {
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, PropertyAccess, test, oo_propertyaccess, test_oo_propertyaccess_method_entry, 0);
 
 	zend_declare_property_null(test_oo_propertyaccess_ce, SL("a"), ZEND_ACC_PROTECTED TSRMLS_CC);
+
 	zend_declare_property_null(test_oo_propertyaccess_ce, SL("b"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;

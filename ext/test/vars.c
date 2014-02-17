@@ -24,7 +24,6 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Vars, test, vars, test_vars_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

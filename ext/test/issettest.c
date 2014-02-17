@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, IssetTest, test, issettest, test_issettest_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

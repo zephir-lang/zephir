@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_Factorial) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Factorial, test, factorial, test_factorial_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

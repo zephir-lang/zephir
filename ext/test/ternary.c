@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_Ternary) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Ternary, test, ternary, test_ternary_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

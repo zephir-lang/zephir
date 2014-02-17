@@ -22,7 +22,6 @@ ZEPHIR_INIT_CLASS(Test_Json) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Json, test, json, test_json_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

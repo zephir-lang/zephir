@@ -24,7 +24,6 @@ ZEPHIR_INIT_CLASS(Test_Instanceoff) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Instanceoff, test, instanceoff, test_instanceoff_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

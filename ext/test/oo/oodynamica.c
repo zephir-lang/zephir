@@ -24,7 +24,6 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoDynamicA) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Oo, OoDynamicA, test, oo_oodynamica, test_oo_oodynamica_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

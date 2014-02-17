@@ -29,7 +29,6 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoNativeImplements) {
 	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_RecursiveIterator);
 	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, spl_ce_SeekableIterator);
 	zend_class_implements(test_oo_oonativeimplements_ce TSRMLS_CC, 1, zend_ce_aggregate);
-
 	return SUCCESS;
 
 }
