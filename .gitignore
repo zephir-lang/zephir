@@ -45,3 +45,7 @@ parser/parser.c
 parser/scanner.c
 composer.lock
 vendor
+ext/aclocal.m4
+ext/autom4te.cache/output.0
+ext/autom4te.cache/requests
+ext/autom4te.cache/traces.0
