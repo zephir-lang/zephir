@@ -1220,6 +1220,12 @@ class ClassMethod
                                     $initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . $defaultValue['value'] . '", 1);' . PHP_EOL;
                                     break;
 
+                                case 'array':
+                                case 'empty-array':
+                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+                                    $initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+                                    break;
+
                                 default:
                                     throw new CompilerException('Invalid default type: ' . $defaultValue['type'] . ' for data type: ' . $variable->getType(), $variable->getOriginal());
                             }
@@ -1497,33 +1503,42 @@ class ClassMethod
          * Generate the variable definition for variables used
          */
         foreach ($usedVariables as $type => $variables) {
+            
             $pointer = null;
-
             switch ($type) {
+
                 case 'int':
                     $code = 'int ';
                     break;
+
                 case 'uint':
                     $code = 'unsigned int ';
                     break;
+
                 case 'char':
                     $code = 'char ';
                     break;
+
                 case 'uchar':
                     $code = 'unsigned char ';
                     break;
+
                 case 'long':
                     $code = 'long ';
                     break;
+
                 case 'ulong':
                     $code = 'unsigned long ';
                     break;
+
                 case 'bool':
                     $code = 'zend_bool ';
                     break;
+
                 case 'double':
                     $code = 'double ';
                     break;
+
                 case 'string':
                 case 'variable':
                 case 'array':
@@ -1531,21 +1546,31 @@ class ClassMethod
                     $pointer = '*';
                     $code = 'zval ';
                     break;
+
                 case 'HashTable':
                     $pointer = '*';
                     $code = 'HashTable ';
                     break;
+
                 case 'HashPosition':
                     $code = 'HashPosition ';
                     break;
+
                 case 'zend_class_entry':
                     $pointer = '*';
                     $code = 'zend_class_entry ';
                     break;
+
                 case 'zend_function':
                     $pointer = '*';
                     $code = 'zend_function ';
                     break;
+
+                case 'zend_object_iterator':
+                    $pointer = '*';
+                    $code = 'zend_object_iterator ';
+                    break;                    
+
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);
             }

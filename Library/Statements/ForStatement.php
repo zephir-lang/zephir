@@ -399,13 +399,15 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a 'for' statement that use an 'iterator' as expression
      *
-     * @param array $exprRaw
+     * @param array $expression
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
     public function compileIterator($expression, $compilationContext)
     {
-        $this->compileHashTraverse($expression, $compilationContext);
+        
+        $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
+
     }
 
     /**

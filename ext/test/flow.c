@@ -18,6 +18,8 @@
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
+#include "kernel/object.h"
+#include "kernel/exception.h"
 
 
 /**
@@ -1529,6 +1531,37 @@ PHP_METHOD(Test_Flow, testFor32) {
 		sum += zephir_get_numberval(v);
 	}
 	RETURN_MM_LONG(sum);
+
+}
+
+PHP_METHOD(Test_Flow, testFor33) {
+
+	HashTable *_2;
+	HashPosition _1;
+	zval *e, *v = NULL, *result, *_0, **_3;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &e);
+
+	ZEPHIR_INIT_VAR(result);
+	array_init(result);
+
+
+	if (!(zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'");
+		return;
+	}
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "iterator", e);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0);
+	for (
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_move_forward_ex(_2, &_1)
+	) {
+		ZEPHIR_GET_HVALUE(v, _3);
+		zephir_array_append(&result, v, PH_SEPARATE);
+	}
+	RETURN_CCTOR(result);
 
 }
 
