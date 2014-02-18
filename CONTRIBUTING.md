@@ -16,7 +16,7 @@ please do two things:
    local changes against the `master` branch. Resolve any conflicts
    that arise.
 
-2. Run the full Zephir test suite with the `php ./unit-tests/run_tests.php` command.  You're
+2. Run the full Zephir test suite with the `./vendor/bin/phpunit` command.  You're
    not off the hook even if you just stick to documentation; code
    examples in the docs are tested as well!
 
@@ -34,6 +34,13 @@ message explaining why.
 
 In the licensing header at the beginning of any files you change,
 please make sure the listed date range includes the current year.
+
+## Bugs
+
+Submit bugs into issue tracker. Your issue should include:
+ - Code that produce a bug.
+ - Your environment: OS, compiler.
+ - Zephir version, if your version is outdated - try to get last version.
 
 Thanks! <br />
 Zephir Team
