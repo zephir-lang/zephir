@@ -27,6 +27,7 @@ use Zephir\Builder\ParameterBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Operators\UnaryOperatorBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
+use Zephir\Builder\Operators\TypeOfOperatorBuilder;
 use Zephir\Builder\Operators\NewInstanceOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
 use Zephir\Builder\Statements\ThrowStatementBuilder;
@@ -134,7 +135,7 @@ class ClassMethod
     }
 
     /**
-     * Checks for visibility congruence
+     * Check the consistency of the parameters
      *
      * @param array $visibility
      * @param string $name
@@ -142,16 +143,18 @@ class ClassMethod
      */
     public function checkVisibility($visibility, $name, $original)
     {
-        if (in_array('public', $visibility) && in_array('protected', $visibility)) {
-            throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
-        }
+        if (count($visibility) > 1) {
+            if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
+            }
 
-        if (in_array('public', $visibility) && in_array('private', $visibility)) {
-            throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
-        }
+            if (in_array('public', $visibility) && in_array('private', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
+            }
 
-        if (in_array('private', $visibility) && in_array('protected', $visibility)) {
-            throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
+            if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
+            }
         }
 
         if ($name == '__construct') {
@@ -612,8 +615,16 @@ class ClassMethod
             $dataType = 'variable';
         }
 
-        $code = '';
+        /**
+         * Class-Hinted parameters only can be null?
+         */
+        if (isset($parameter['cast'])) {
+            if ($parameter['default']['type'] != 'null') {
+                throw new CompilerException('Class-Hinted parameters only can have "null" as default parameter', $parameter);
+            }
+        }
 
+        $code = '';
         switch ($dataType) {
 
             case 'int':
@@ -684,7 +695,6 @@ class ClassMethod
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t\t" . 'ZVAL_STRING(' . $parameter['name'] . ', "' . $parameter['default']['value'] . '", 1);' . PHP_EOL;
                         break;
-                        break;
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
                 }
@@ -699,7 +709,6 @@ class ClassMethod
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
-                        break;
                         break;
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(array)", $parameter);
@@ -1016,7 +1025,7 @@ class ClassMethod
             foreach ($parameters->getParameters() as $parameter) {
 
                 /**
-                 * Change dynamic variables by low level types
+                 * Change dynamic variables to low level types
                  */
                 if ($typeInference) {
                     if (isset($parameter['data-type'])) {
@@ -1114,7 +1123,7 @@ class ClassMethod
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                    $classCastChecks[] = $symbol;
+                    $classCastChecks[] = array($symbol, $parameter);
                 } else {
                     if (isset($parameter['data-type'])) {
                         if ($parameter['data-type'] == 'variable') {
@@ -1128,25 +1137,52 @@ class ClassMethod
 
             $compilationContext->codePrinter->increaseLevel();
 
+            /**
+             * Checks that a class-hinted variable meets its declaration
+             */
             foreach ($classCastChecks as $classCastCheck) {
-                foreach ($classCastCheck->getClassTypes() as $className) {
+                foreach ($classCastCheck[0]->getClassTypes() as $className) {
 
-                    $ifCheck = new IfStatementBuilder(
-                        new UnaryOperatorBuilder(
+                    /**
+                     * If the parameter is nullable check it must pass the 'instanceof' validation
+                     */
+                    if (!isset($classCastCheck[1]['default'])) {
+                        $evalExpr = new UnaryOperatorBuilder(
                             'not',
                             new BinaryOperatorBuilder(
                                 'instanceof',
-                                new VariableBuilder($classCastCheck->getName()),
-                                new VariableBuilder('\\'. $className)
+                                new VariableBuilder($classCastCheck[0]->getName()),
+                                new VariableBuilder('\\' . $className)
                             )
-                        ),
+                        );
+                    } else {
+                        $evalExpr = new BinaryOperatorBuilder(
+                            'and',
+                            new BinaryOperatorBuilder(
+                                'not-equals',
+                                new TypeOfOperatorBuilder(new VariableBuilder($classCastCheck[0]->getName())),
+                                new LiteralBuilder("string", "null")
+                            ),
+                            new UnaryOperatorBuilder(
+                                'not',
+                                new BinaryOperatorBuilder(
+                                    'instanceof',
+                                    new VariableBuilder($classCastCheck[0]->getName()),
+                                    new VariableBuilder('\\' . $className)
+                                )
+                            )
+                        );
+                    }
+
+                    $ifCheck = new IfStatementBuilder(
+                        $evalExpr,
                         new StatementsBlockBuilder(array(
                             new ThrowStatementBuilder(
                                 new NewInstanceOperatorBuilder('\InvalidArgumentException', array(
                                     new ParameterBuilder(
                                         new LiteralBuilder(
                                             "string",
-                                            "Parameter '" . $classCastCheck->getName() . "' must be an instance of '" . Utils::addSlashes($className, true) . "'"
+                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::addSlashes($className, true) . "'"
                                         )
                                     )
                                 ))

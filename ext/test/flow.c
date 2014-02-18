@@ -1262,7 +1262,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 611);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 609);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1504,7 +1504,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 691);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 689);
 	}
 	RETURN_CCTOR(a);
 
@@ -1562,6 +1562,48 @@ PHP_METHOD(Test_Flow, testFor33) {
 		zephir_array_append(&result, v, PH_SEPARATE);
 	}
 	RETURN_CCTOR(result);
+
+}
+
+PHP_METHOD(Test_Flow, testFor34) {
+
+	HashTable *_3;
+	HashPosition _2;
+	zend_bool _0;
+	zval *e = NULL, *v = NULL, *result, *_1, **_4;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &e);
+
+	if (!e) {
+		e = ZEPHIR_GLOBAL(global_null);
+	}
+	ZEPHIR_INIT_VAR(result);
+	array_init(result);
+
+
+	_0 = (Z_TYPE_P(e) != IS_NULL);
+	if (_0) {
+		_0 = !zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC);
+	}
+	if (_0) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'");
+		return;
+	}
+	if ((Z_TYPE_P(e) == IS_OBJECT)) {
+		ZEPHIR_INIT_VAR(_1);
+		zephir_call_func_p1(_1, "iterator", e);
+		zephir_is_iterable(_1, &_3, &_2, 0, 0);
+		for (
+		  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+		  ; zephir_hash_move_forward_ex(_3, &_2)
+		) {
+			ZEPHIR_GET_HVALUE(v, _4);
+			zephir_array_append(&result, v, PH_SEPARATE);
+		}
+		RETURN_CCTOR(result);
+	}
+	ZEPHIR_MM_RESTORE();
 
 }
 

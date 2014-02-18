@@ -20,7 +20,7 @@ class Json
 	public function testEncodeOptions()
 	{
 		var arr;
-		let arr = ["<foo>","'bar'","&blong&", "\xc3\xa9"];
+		let arr = ["<foo>", "'bar'", "&blong&", "\xc3\xa9"];
 		return json_encode(arr, JSON_HEX_TAG);
 	}
 
