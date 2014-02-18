@@ -72,6 +72,7 @@
 #include "test/testinterface.h"
 #include "test/trie.h"
 #include "test/typeoff.h"
+#include "test/unknownclass.h"
 #include "test/unsettest.h"
 #include "test/usetest.h"
 #include "test/vars.h"

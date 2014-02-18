@@ -1,0 +1,6 @@
+
+namespace Test;
+
+class UnknownClass
+{
+}
