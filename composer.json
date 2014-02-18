@@ -10,12 +10,21 @@
             "homepage": "http://zephir-lang.com/"
         },
         {
-            "name": "contributors",
+            "name": "Contributors",
             "homepage": "https://github.com/phalcon/zephir/graphs/contributors"
         }
     ],
+    "support": {
+        "issues": "https://github.com/phalcon/zephir/issues?state=open"
+    },
     "require": {
-        "php": "~5.3"
+        "php": "~5.3",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.31",
+        "satooshi/php-coveralls": "dev-master",
+        "ext-gmp": "*"
     },
     "autoload": {
         "psr-4": {
