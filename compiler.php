@@ -17,17 +17,6 @@
  +--------------------------------------------------------------------------+
 */
 
-error_reporting(E_ALL);
-
-define('ZEPHIRPATH', __DIR__ . '/');
-define('T', "\t");
-define('2T', "\t\t");
-
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require __DIR__ . '/vendor/autoload.php';
-} else {
-    require __DIR__ . '/Library/Loader.php';
-    Zephir\Loader::register();
-}
+require __DIR__ . '/bootstrap.php';
 
 Zephir\Bootstrap::boot();

@@ -17,16 +17,15 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . '/../bootstrap.php';
+error_reporting(E_ALL);
 
-class TestExClass
-{
-}
+define('ZEPHIRPATH', __DIR__ . '/');
+define('T', "\t");
+define('2T', "\t\t");
 
-interface TestExInterface
-{
-}
-
-function TestExFunction()
-{
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+} else {
+    require __DIR__ . '/Library/Loader.php';
+    Zephir\Loader::register();
 }
