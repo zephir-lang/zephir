@@ -19,8 +19,7 @@
 
 namespace Extension\Oo;
 
-class OoParamsTest
-    extends \PHPUnit_Framework_TestCase
+class OoParamsTest extends \PHPUnit_Framework_TestCase
 {
     public function testOoParams()
     {
@@ -101,4 +100,4 @@ class OoParamsTest
         $this->setExpectedException('\InvalidArgumentException');
         $t->setStrictName(1234);
     }
-} 
+}

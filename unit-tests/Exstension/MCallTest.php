@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class MCallTest
-    extends \PHPUnit_Framework_TestCase
+class MCallTest extends \PHPUnit_Framework_TestCase
 {
     public function testCall()
     {
@@ -67,7 +66,7 @@ class MCallTest
         $t = new \Test\Mcall();
         $this->assertTrue($t->optionalParameterVar(1) === 1);
         $this->assertTrue($t->optionalParameterVar("testtesttesttest") === "testtesttesttest");
-        $this->assertTrue($t->optionalParameterVar() === NULL);
+        $this->assertTrue($t->optionalParameterVar() === null);
     }
 
     public function testOptionalParameterBoolean()
@@ -96,4 +95,4 @@ class MCallTest
         $this->assertTrue($t->arrayParamWithDefaultEmptyArray() === array());
         $this->assertTrue($t->arrayParamWithDefaultEmptyArray(array(1)) === array(1));
     }
-} 
+}

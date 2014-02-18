@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class ConstantsInterfaceTest
-    extends \PHPUnit_Framework_TestCase
+class ConstantsInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstants()
     {

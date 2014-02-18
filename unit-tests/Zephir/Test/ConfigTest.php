@@ -21,12 +21,11 @@ namespace Zephir\Test;
 
 use Zephir\Config;
 
-class ConfigTest
-    extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testExample()
     {
         $config = new Config();
-        $this->assertTrue($config->get('warnings', 'unused-variable'));
+        $this->assertTrue($config->get('unused-variable', 'warnings'));
     }
-} 
+}

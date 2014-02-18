@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class RegexDNATest
-    extends \PHPUnit_Framework_TestCase
+class RegexDNATest extends \PHPUnit_Framework_TestCase
 {
     public function testProcess()
     {
@@ -32,4 +31,4 @@ class RegexDNATest
 
         $this->assertTrue($content == file_get_contents(__DIR__ . "/regexdna-output.txt"));
     }
-} 
+}

@@ -20,8 +20,7 @@
 namespace Extension;
 
 
-class CblockTest
-    extends \PHPUnit_Framework_TestCase
+class CblockTest extends \PHPUnit_Framework_TestCase
 {
     public function testBlock()
     {
@@ -29,4 +28,4 @@ class CblockTest
         $this->assertTrue($t->testCblock1() == 40);
         $this->assertTrue($t->testCblock2() == 102334155);
     }
-} 
+}

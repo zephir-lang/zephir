@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class ScallExternalTest
-    extends \PHPUnit_Framework_TestCase
+class ScallExternalTest extends \PHPUnit_Framework_TestCase
 {
     public function testCall1()
     {

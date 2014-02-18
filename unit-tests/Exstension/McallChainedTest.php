@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class McallChainedTest
-    extends \PHPUnit_Framework_TestCase
+class McallChainedTest extends \PHPUnit_Framework_TestCase
 {
     public function testChained1()
     {
@@ -39,4 +38,4 @@ class McallChainedTest
         $t = new \Test\McallChained();
         $this->assertTrue($t->testChained3() === $t);
     }
-} 
+}

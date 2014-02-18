@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class EmptyTest
-    extends \PHPUnit_Framework_TestCase
+class EmptyTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmpty()
     {
@@ -31,4 +30,4 @@ class EmptyTest
         assert($t->testEmptyString() == true);
         assert($t->testNotEmptyString() == false);
     }
-} 
+}

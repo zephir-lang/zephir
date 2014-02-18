@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class JsonTest
-    extends \PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
     public function testEncode()
     {
@@ -44,4 +43,4 @@ class JsonTest
         $obj2 = $t->testDecodeObject2();
         $this->assertTrue($obj2['a'] == 'hello');
     }
-} 
+}

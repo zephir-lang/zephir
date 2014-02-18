@@ -19,7 +19,8 @@
 
 namespace Extension\Properties;
 
-class PublicPropertiesTest {
+class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
+{
     public function testAssertations()
     {
         $t = new \Test\Properties\PublicProperties();
@@ -32,4 +33,4 @@ class PublicPropertiesTest {
         $this->assertTrue($t->someDouble === 10.25);
         $this->assertTrue($t->someString === "test");
     }
-} 
+}

@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class FlowTest
-    extends \PHPUnit_Framework_TestCase
+class FlowTest extends \PHPUnit_Framework_TestCase
 {
     public function testIf()
     {
@@ -116,4 +115,4 @@ class FlowTest
         $this->assertTrue($t->testSwitch8() === 2);
         $this->assertTrue($t->testSwitch9() === 2);
     }
-} 
+}

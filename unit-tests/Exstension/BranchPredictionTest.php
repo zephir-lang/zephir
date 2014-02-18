@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class BranchPredictionTest
-    extends \PHPUnit_Framework_TestCase
+class BranchPredictionTest extends \PHPUnit_Framework_TestCase
 {
     public function testVariants()
     {

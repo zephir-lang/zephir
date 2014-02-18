@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class ExceptionsTest
-    extends \PHPUnit_Framework_TestCase
+class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \Exception
@@ -57,4 +56,4 @@ class ExceptionsTest
         $t = new \Test\Exceptions();
         $t->testException4();
     }
-} 
+}

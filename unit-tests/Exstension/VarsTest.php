@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class VarsTest
-    extends \PHPUnit_Framework_TestCase
+class VarsTest extends \PHPUnit_Framework_TestCase
 {
     public function testVarDump()
     {

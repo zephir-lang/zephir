@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class StringTest
-    extends \PHPUnit_Framework_TestCase
+class StringTest extends \PHPUnit_Framework_TestCase
 {
     public function testTrim()
     {
@@ -95,7 +94,7 @@ class StringTest
         $t = new \Test\Strings();
 
         $this->assertTrue($t->testSubstr('abcdef', 1, 3) == "bcd");
-        $this->assertTrue($t->testSubstr('abcdef', 0, 4) == "abcd" );
+        $this->assertTrue($t->testSubstr('abcdef', 0, 4) == "abcd");
         $this->assertTrue($t->testSubstr('abcdef', 0, 8) == "abcdef");
         $this->assertTrue($t->testSubstr('abcdef', -1, 1) == "f");
         $this->assertTrue($t->testSubstr('abcdef', -3, -1) == "de");
@@ -126,4 +125,4 @@ class StringTest
         $this->assertTrue($t->testStripslashes(addslashes('Are you "JOHN"?')) == 'Are you "JOHN"?');
         $this->assertTrue($t->testStripslashes(addslashes("hello\0world")) == "hello\0world");
     }
-} 
+}

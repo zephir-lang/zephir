@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class BitwiseTest
-    extends \PHPUnit_Framework_TestCase
+class BitwiseTest extends \PHPUnit_Framework_TestCase
 {
     public function testBitwise()
     {
@@ -126,4 +125,4 @@ class BitwiseTest
         $this->assertTrue($t->int2ShiftRight() === 0);
         $this->assertTrue($t->intShiftRightSimple() === 0);
     }
-} 
+}

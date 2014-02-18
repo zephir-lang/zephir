@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class OoTest
-    extends \PHPUnit_Framework_TestCase
+class OoTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
@@ -57,11 +56,11 @@ class OoTest
 
         $obj9 = $t->testInstance9();
         $this->assertTrue(is_object($obj9));
-        $this->assertTrue($obj9 instanceOf \Test\Oo\OoDynamicA);
+        $this->assertTrue($obj9 instanceof \Test\Oo\OoDynamicA);
 
         $obj10 = $t->testInstance10();
         $this->assertTrue(is_object($obj10));
-        $this->assertTrue($obj10 instanceOf \Test\Oo\OoDynamicB);
+        $this->assertTrue($obj10 instanceof \Test\Oo\OoDynamicB);
 
         $obj = $t->testInstance11();
         $this->assertTrue(is_object($obj));

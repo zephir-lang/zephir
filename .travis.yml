@@ -10,7 +10,7 @@ before_install:
 
 before_script:
  - mkdir -p build/coverage
- - phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/
+ - phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Exstension/ unit-tests/Zephir/
  - git submodule --quiet update --init --recursive
  - sudo apt-get -qq install valgrind
  - composer --prefer-source --dev install

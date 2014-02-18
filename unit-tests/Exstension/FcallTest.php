@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class FcallTest
-    extends \PHPUnit_Framework_TestCase
+class FcallTest extends \PHPUnit_Framework_TestCase
 {
     public function testCall()
     {
@@ -45,4 +44,4 @@ class FcallTest
         $this->assertTrue($t->testFunctionGetArgs(false, 1234) === array(false, 1234));
         $this->assertTrue($t->testFunctionGetArgs(array(1, 2, 3), false) === array(array(1, 2, 3), false));
     }
-} 
+}

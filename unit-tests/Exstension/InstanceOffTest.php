@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class InstanceOffTest
-    extends \PHPUnit_Framework_TestCase
+class InstanceOffTest extends \PHPUnit_Framework_TestCase
 {
     public function testInstanceOf1()
     {
@@ -39,4 +38,4 @@ class InstanceOffTest
         $t = new \Test\InstanceOff();
         $this->assertTrue($t->testInstanceOf3() === false);
     }
-} 
+}

@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class TernaryTest
-    extends \PHPUnit_Framework_TestCase
+class TernaryTest extends \PHPUnit_Framework_TestCase
 {
     public function testTernary()
     {
@@ -37,4 +36,4 @@ class TernaryTest
         $this->assertTrue($t->testTernaryComplex2(array(), "") === 106);
         $this->assertTrue($t->testTernaryComplex3("") === "boolean");
     }
-} 
+}

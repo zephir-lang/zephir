@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class BuiltInMethodsTest
-    extends \PHPUnit_Framework_TestCase
+class BuiltInMethodsTest extends \PHPUnit_Framework_TestCase
 {
     public function testStringMethodLength()
     {

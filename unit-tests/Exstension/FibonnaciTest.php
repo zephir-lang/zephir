@@ -20,8 +20,7 @@
 namespace Extension;
 
 
-class FibonnaciTest
-    extends \PHPUnit_Framework_TestCase
+class FibonnaciTest extends \PHPUnit_Framework_TestCase
 {
     public function testMethods()
     {
@@ -36,4 +35,4 @@ class FibonnaciTest
             0, 1, 1, 2, 3, 5, 8, 13, 21, 34
         ));
     }
-} 
+}

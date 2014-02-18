@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class UnsetTest
-    extends \PHPUnit_Framework_TestCase
+class UnsetTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnsetFromArray()
     {

@@ -20,8 +20,7 @@
 namespace Extension;
 
 
-class CastTest
-    extends \PHPUnit_Framework_TestCase
+class CastTest extends \PHPUnit_Framework_TestCase
 {
     public function testCast()
     {

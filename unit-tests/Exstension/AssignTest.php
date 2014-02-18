@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class AssignTest
-    extends \PHPUnit_Framework_TestCase
+class AssignTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssign()
     {

@@ -19,12 +19,11 @@
 
 namespace Extension;
 
-class ArithmeticTest
-    extends \PHPUnit_Framework_TestCase
+class ArithmeticTest extends \PHPUnit_Framework_TestCase
 {
     protected $class;
 
-    function setUp()
+    public function setUp()
     {
         $this->class = new \Test\Arithmetic();
     }

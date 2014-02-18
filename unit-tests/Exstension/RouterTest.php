@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class RouterTest
-    extends \PHPUnit_Framework_TestCase
+class RouterTest extends \PHPUnit_Framework_TestCase
 {
     public function testRouter()
     {
@@ -194,4 +193,4 @@ class RouterTest
             $this->assertTrue($router->getActionName() === $test['action']);
         }
     }
-} 
+}

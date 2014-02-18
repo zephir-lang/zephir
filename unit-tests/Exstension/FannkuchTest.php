@@ -19,13 +19,11 @@
 
 namespace Extension;
 
-
-class FannkuchTest
-    extends \PHPUnit_Framework_TestCase
+class FannkuchTest extends \PHPUnit_Framework_TestCase
 {
     public function testFannkuch()
     {
         $t = new \Test\Fannkuch();
         $this->assertTrue($t->process(5) === array(11, 5, 7));
     }
-} 
+}

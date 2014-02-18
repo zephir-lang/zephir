@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class GlobalsTest
-    extends \PHPUnit_Framework_TestCase
+class GlobalsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGlobals()
     {
@@ -33,4 +32,4 @@ class GlobalsTest
         $this->assertTrue($t->getDefaultGlobals5() === 10);
         $this->assertTrue($t->getDefaultGlobals6() === 15.2);
     }
-} 
+}

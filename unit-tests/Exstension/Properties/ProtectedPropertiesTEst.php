@@ -19,8 +19,7 @@
 
 namespace Extension\Properties;
 
-class ProtectedPropertiesTEst
-    extends \PHPUnit_Framework_TestCase
+class ProtectedPropertiesTEst extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {

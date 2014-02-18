@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class PregmatchTest
-    extends \PHPUnit_Framework_TestCase
+class PregmatchTest extends \PHPUnit_Framework_TestCase
 {
     public function testPregMatch()
     {
@@ -52,7 +51,7 @@ class PregmatchTest
         /**
          * @todo didn`t pass at local machine
          */
-//        $this->assertTrue($match4[0][0] == 'this is \ a string');
+        $this->assertTrue($match4[0][0] == 'this is \ a string');
 
         $match5 = null;
         $this->assertTrue($t->testPregMatch3Params('/hello world/', $string, $match5) == false); //tries to find "hello world" (should be Hello, world)
@@ -63,4 +62,4 @@ class PregmatchTest
         $this->assertTrue($t->testPregMatch3Params("/M(.*)/", $string2, $match6) === 1);
         $this->assertTrue(count($match6) == 2);
     }
-} 
+}

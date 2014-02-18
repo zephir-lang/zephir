@@ -19,8 +19,7 @@
 
 namespace Extension;
 
-class ExistsTest
-    extends \PHPUnit_Framework_TestCase
+class ExistsTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
@@ -42,4 +41,4 @@ class ExistsTest
         $this->assertTrue($t->testFileExists(__DIR__ . "/php/exists.php") == true);
         $this->assertTrue($t->testFileExists(__DIR__ . "/php/existsxxxx.php") == false);
     }
-} 
+}
