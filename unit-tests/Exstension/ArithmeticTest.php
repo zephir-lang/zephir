@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension;
+namespace Extension;
 
 class ArithmeticTest
     extends \PHPUnit_Framework_TestCase

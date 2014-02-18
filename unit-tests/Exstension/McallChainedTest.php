@@ -17,8 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension;
-
+namespace Extension;
 
 class McallChainedTest
     extends \PHPUnit_Framework_TestCase

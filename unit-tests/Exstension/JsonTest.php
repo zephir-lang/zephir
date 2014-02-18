@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension;
+namespace Extension;
 
 class JsonTest
     extends \PHPUnit_Framework_TestCase

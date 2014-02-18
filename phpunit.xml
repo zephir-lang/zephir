@@ -1,7 +1,25 @@
 <phpunit bootstrap="./unit-tests/Bootstrap.php" colors="true">
 	<testsuites>
-		<testsuite name="Zend Framework Test Suite">
+		<testsuite name="Exstension Test Suite">
 			<directory>./unit-tests/Exstension</directory>
 		</testsuite>
+		<testsuite name="Zephir Test Suite">
+			<directory>./unit-tests/Zephir</directory>
+		</testsuite>
 	</testsuites>
+
+	<filter>
+		<whitelist>
+			<exclude>
+				<directory>./build</directory>
+				<directory>./vendor</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
+	<logging>
+		<log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+		<log type="coverage-html" target="build/coverage" title="PHP Coveralls" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70"/>
+		<log type="coverage-clover" target="build/logs/clover.xml"/>
+	</logging>
 </phpunit>

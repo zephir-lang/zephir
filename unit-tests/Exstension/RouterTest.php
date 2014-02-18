@@ -17,8 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension;
-
+namespace Extension;
 
 class RouterTest
     extends \PHPUnit_Framework_TestCase

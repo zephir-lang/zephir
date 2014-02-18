@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension\Properties;
+namespace Extension\Properties;
 
 class StaticPublicPropertiesTest
     extends \PHPUnit_Framework_TestCase

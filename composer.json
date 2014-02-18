@@ -17,9 +17,10 @@
     "require": {
         "php": "~5.3"
     },
-	"require-dev": {
-		"phpunit/phpunit": "3.7.31"
-	},
+    "require-dev": {
+        "phpunit/phpunit": "3.7.31",
+        "satooshi/php-coveralls": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Zephir\\": "Library"

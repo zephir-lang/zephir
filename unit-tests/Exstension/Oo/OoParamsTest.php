@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension\Oo;
+namespace Extension\Oo;
 
 class OoParamsTest
     extends \PHPUnit_Framework_TestCase

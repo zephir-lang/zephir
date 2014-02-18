@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension\Properties;
+namespace Extension\Properties;
 
 class PublicPropertiesTest {
     public function testAssertations()

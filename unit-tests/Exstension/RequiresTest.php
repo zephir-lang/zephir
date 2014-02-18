@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Exstension;
+namespace Extension;
 
 class RequiresTest
     extends \PHPUnit_Framework_TestCase

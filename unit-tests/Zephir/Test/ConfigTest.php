@@ -17,19 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Zephir\Test;
 
-class RegexDNATest
+use Zephir\Config;
+
+class ConfigTest
     extends \PHPUnit_Framework_TestCase
 {
-    public function testProcess()
+    public function testExample()
     {
-        $t = new \Test\RegexDNA();
-
-        ob_start();
-        $t->process(__DIR__ . "/regexdna-input.txt");
-        $content = ob_get_clean();
-
-        $this->assertTrue($content == file_get_contents(__DIR__ . "/regexdna-output.txt"));
+        $config = new Config();
+        $this->assertTrue($config->get('warnings', 'unused-variable'));
     }
 } 
