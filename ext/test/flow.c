@@ -18,6 +18,8 @@
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
+#include "kernel/object.h"
+#include "kernel/exception.h"
 
 
 /**
@@ -26,7 +28,6 @@
 ZEPHIR_INIT_CLASS(Test_Flow) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Flow, test, flow, test_flow_method_entry, 0);
-
 
 	return SUCCESS;
 
@@ -708,7 +709,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
@@ -744,7 +745,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HMKEY(k, _2, _1);
@@ -781,8 +782,8 @@ PHP_METHOD(Test_Flow, testFor3) {
 	zephir_array_fast_append(b, _0);
 	zephir_is_iterable(b, &_2, &_1, 0, 1);
 	for (
-	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zend_hash_move_backwards_ex(_2, &_1)
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_move_backwards_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(v, _3);
 		zephir_array_append(&c, v, PH_SEPARATE);
@@ -1454,7 +1455,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	zephir_array_fast_append(_0, _1);
 	zephir_is_iterable(_0, &_3, &_2, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_3, &_2)
 	) {
 		ZEPHIR_GET_HVALUE(a, _4);
@@ -1523,13 +1524,44 @@ PHP_METHOD(Test_Flow, testFor32) {
 
 	zephir_is_iterable(e, &_1, &_0, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_1, &_0)
 	) {
 		ZEPHIR_GET_HVALUE(v, _2);
 		sum += zephir_get_numberval(v);
 	}
 	RETURN_MM_LONG(sum);
+
+}
+
+PHP_METHOD(Test_Flow, testFor33) {
+
+	HashTable *_2;
+	HashPosition _1;
+	zval *e, *v = NULL, *result, *_0, **_3;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &e);
+
+	ZEPHIR_INIT_VAR(result);
+	array_init(result);
+
+
+	if (!(zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'");
+		return;
+	}
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "iterator", e);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0);
+	for (
+	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
+	  ; zephir_hash_move_forward_ex(_2, &_1)
+	) {
+		ZEPHIR_GET_HVALUE(v, _3);
+		zephir_array_append(&result, v, PH_SEPARATE);
+	}
+	RETURN_CCTOR(result);
 
 }
 

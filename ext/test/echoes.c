@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_Echoes) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Echoes, test, echoes, test_echoes_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

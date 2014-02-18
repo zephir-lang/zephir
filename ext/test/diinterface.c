@@ -16,7 +16,6 @@ ZEPHIR_INIT_CLASS(Test_DiInterface) {
 
 	ZEPHIR_REGISTER_INTERFACE(Test, DiInterface, test, diinterface, test_diinterface_method_entry);
 
-
 	return SUCCESS;
 
 }

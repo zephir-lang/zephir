@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Pregmatch, test, pregmatch, test_pregmatch_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

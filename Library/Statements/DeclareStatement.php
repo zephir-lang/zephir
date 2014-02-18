@@ -224,6 +224,7 @@ class DeclareStatement extends StatementAbstract
                                 break;
 
                             case 'array':
+                            case 'empty-array':
                                 $symbolVariable->setDynamicTypes('array');
                                 break;
 
@@ -239,7 +240,7 @@ class DeclareStatement extends StatementAbstract
                         break;
 
                     default:
-                        throw new CompilerException('Invalid data type: ' . $currentType, $variable);
+                        throw new CompilerException('Invalid variable type: ' . $currentType, $variable);
                 }
 
                 $symbolVariable->setDefaultInitValue($defaultValue);

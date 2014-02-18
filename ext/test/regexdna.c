@@ -18,6 +18,7 @@
 #include "kernel/string.h"
 #include "kernel/concat.h"
 #include "kernel/fcall.h"
+#include "kernel/hash.h"
 
 
 /**
@@ -28,7 +29,6 @@
 ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 	ZEPHIR_REGISTER_CLASS(Test, RegexDNA, test, regexdna, test_regexdna_method_entry, 0);
-
 
 	return SUCCESS;
 
@@ -163,7 +163,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
 	zephir_is_iterable(variants, &_4, &_3, 0, 0);
 	for (
-	  ; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
+	  ; zephir_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_4, &_3)
 	) {
 		ZEPHIR_GET_HVALUE(regex, _5);

@@ -321,10 +321,12 @@ int zephir_hash_unset(HashTable *ht, zval *key)
 			return (zend_hash_index_del(ht, (Z_TYPE_P(key) == IS_DOUBLE) ? ((long int)Z_DVAL_P(key)) : Z_LVAL_P(key)) == SUCCESS);
 
 		case IS_STRING:
-			return (zend_symtable_del(ht, Z_STRVAL_P(key), Z_STRLEN_P(key)+1) == SUCCESS);
+			return (zend_symtable_del(ht, Z_STRVAL_P(key), Z_STRLEN_P(key) + 1) == SUCCESS);
 
 		default:
 			zend_error(E_WARNING, "Illegal offset type");
 			return 0;
 	}
 }
+
+

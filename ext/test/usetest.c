@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_UseTest) {
 	ZEPHIR_REGISTER_CLASS(Test, UseTest, test, usetest, test_usetest_method_entry, 0);
 
 	zend_class_implements(test_usetest_ce TSRMLS_CC, 1, spl_ce_Countable);
-
 	return SUCCESS;
 
 }

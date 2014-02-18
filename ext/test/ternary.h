@@ -10,21 +10,21 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2);
 PHP_METHOD(Test_Ternary, testTernaryComplex3);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternary2, 0, 0, 1)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternarycomplex1, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternarycomplex2, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, y)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, y)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternarycomplex3, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_ternary_method_entry) {

@@ -117,7 +117,7 @@ class CodePrinter
 
         foreach (explode("\n", $docblock) as $line) {
             if ($replaceTab) {
-                $code .= preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+                $code .= str_repeat("\t", $this->_level) . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
             } else {
                 $code .= $line . PHP_EOL;
             }

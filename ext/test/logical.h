@@ -16,18 +16,18 @@ PHP_METHOD(Test_Logical, testMixed3);
 PHP_METHOD(Test_Logical, testMixed4);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testand9, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testmixed2, 0, 0, 2)
-  ZEND_ARG_INFO(0, match)
-  ZEND_ARG_INFO(0, minLength)
+	ZEND_ARG_INFO(0, match)
+	ZEND_ARG_INFO(0, minLength)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_logical_testmixed4, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_logical_method_entry) {

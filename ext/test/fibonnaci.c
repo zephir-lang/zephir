@@ -22,7 +22,6 @@ ZEPHIR_INIT_CLASS(Test_Fibonnaci) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Fibonnaci, test, fibonnaci, test_fibonnaci_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

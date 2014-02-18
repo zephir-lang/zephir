@@ -22,7 +22,6 @@ ZEPHIR_INIT_CLASS(Test_Bitwise) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Bitwise, test, bitwise, test_bitwise_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

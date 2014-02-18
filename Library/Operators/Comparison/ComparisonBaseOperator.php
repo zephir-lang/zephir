@@ -63,14 +63,17 @@ class ComparisonBaseOperator extends BaseOperator
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
+
                     case 'identical':
                     case 'equals':
                         $operator = '==';
                         break;
+
                     case 'not-identical':
                     case 'not-equals':
                         $operator = '!=';
                         break;
+                        
                     default:
                         return false;
                 }

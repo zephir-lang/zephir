@@ -13,12 +13,12 @@ PHP_METHOD(Test_Fcall, testStrtokVarBySlash);
 PHP_METHOD(Test_Fcall, testFunctionGetArgs);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fcall_teststrtokvarbyslash, 0, 0, 1)
-  ZEND_ARG_INFO(0, value)
+	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fcall_testfunctiongetargs, 0, 0, 2)
-  ZEND_ARG_INFO(0, param1)
-  ZEND_ARG_INFO(0, param2)
+	ZEND_ARG_INFO(0, param1)
+	ZEND_ARG_INFO(0, param2)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_fcall_method_entry) {

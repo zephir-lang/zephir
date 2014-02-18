@@ -8,8 +8,8 @@ PHP_METHOD(Test_Oo_OoConstructParams, getA);
 PHP_METHOD(Test_Oo_OoConstructParams, getB);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooconstructparams___construct, 0, 0, 2)
-  ZEND_ARG_INFO(0, a)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_oo_ooconstructparams_method_entry) {

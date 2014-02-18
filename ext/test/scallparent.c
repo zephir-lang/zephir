@@ -21,7 +21,6 @@ ZEPHIR_INIT_CLASS(Test_ScallParent) {
 
 	ZEPHIR_REGISTER_CLASS(Test, ScallParent, test, scallparent, test_scallparent_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

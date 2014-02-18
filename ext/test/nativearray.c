@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_NativeArray) {
 
 	ZEPHIR_REGISTER_CLASS(Test, NativeArray, test, nativearray, test_nativearray_method_entry, 0);
 
-
 	return SUCCESS;
 
 }
@@ -1039,12 +1038,11 @@ PHP_METHOD(Test_NativeArray, testArrayAppend1) {
 
 PHP_METHOD(Test_NativeArray, testArrayAppend2) {
 
-	zval *g;
 	int f = 5;
 	double e = 1.10;
 	zend_bool d = 0;
 	zval *b;
-	zval *a, *c = NULL, *_0;
+	zval *a, *c = NULL, *g, *_0;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(b);

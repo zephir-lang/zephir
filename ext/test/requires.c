@@ -20,7 +20,6 @@ ZEPHIR_INIT_CLASS(Test_Requires) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Requires, test, requires, test_requires_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

@@ -153,23 +153,23 @@ PHP_METHOD(Test_Arithmetic, letStatementBoolMinus);
 PHP_METHOD(Test_Arithmetic, letStatementVarMinus);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_addsum24, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_sub24, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_mul2, 0, 0, 1)
-  ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementboolminus, 0, 0, 1)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_arithmetic_letstatementvarminus, 0, 0, 1)
-  ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {

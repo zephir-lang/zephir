@@ -22,7 +22,6 @@ ZEPHIR_INIT_CLASS(Test_DeclareTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, DeclareTest, test, declaretest, test_declaretest_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

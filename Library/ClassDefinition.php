@@ -616,9 +616,10 @@ class ClassDefinition
         foreach ($this->getProperties() as $property) {
             $docBlock = $property->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock, false);
+                $codePrinter->outputDocBlock($docBlock, true);
             }
             $property->compile($compilationContext);
+            $codePrinter->outputBlankLine();
         }
 
         /**
@@ -627,9 +628,10 @@ class ClassDefinition
         foreach ($this->getConstants() as $constant) {
             $docBlock = $constant->getDocBlock();
             if ($docBlock) {
-                $codePrinter->outputDocBlock($docBlock);
+                $codePrinter->outputDocBlock($docBlock, true);
             }
             $constant->compile($compilationContext);
+            $codePrinter->outputBlankLine();
         }
 
         /**
@@ -706,7 +708,6 @@ class ClassDefinition
             }
         }
 
-        $codePrinter->outputBlankLine();
         $codePrinter->output('return SUCCESS;');
 
         $codePrinter->outputBlankLine();
@@ -769,7 +770,7 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    $codePrinter->output('  ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                    $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                 }
                 $codePrinter->output('ZEND_END_ARG_INFO()');
                 $codePrinter->outputBlankLine();
@@ -960,6 +961,7 @@ class ClassDefinition
                 $classEntry = 'spl_ce_SplFixedArray';
                 break;
             case 'splpriorityqueue':
+                $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
 

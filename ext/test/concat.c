@@ -20,7 +20,6 @@ ZEPHIR_INIT_CLASS(Test_Concat) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Concat, test, concat, test_concat_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

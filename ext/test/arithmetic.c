@@ -23,7 +23,6 @@ ZEPHIR_INIT_CLASS(Test_Arithmetic) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Arithmetic, test, arithmetic, test_arithmetic_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

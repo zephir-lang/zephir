@@ -40,7 +40,6 @@ ZEPHIR_INIT_CLASS(Test_Cblock) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Cblock, test, cblock, test_cblock_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

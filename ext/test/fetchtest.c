@@ -25,7 +25,6 @@ ZEPHIR_INIT_CLASS(Test_FetchTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, FetchTest, test, fetchtest, test_fetchtest_method_entry, 0);
 
-
 	return SUCCESS;
 
 }

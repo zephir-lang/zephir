@@ -702,6 +702,15 @@ class Flow
 		return sum;
 	}
 
+	public function testFor33(<\Iterator> e)
+	{
+		var v, result = [];
+		for v in iterator(e) {
+			let result[] = v;
+		}
+		return result;
+	}
+
 	public function testSwitch1()
 	{
 		var a;
