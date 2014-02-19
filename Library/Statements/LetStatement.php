@@ -1400,6 +1400,7 @@ class LetStatement extends StatementAbstract
         foreach ($statement['index-expr'] as $indexExpr) {
 
             $expression = new Expression($indexExpr);
+            $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
 
             switch ($exprIndex->getType()) {
