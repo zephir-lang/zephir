@@ -39,4 +39,5 @@ class PublicProperties
 	 */
 	public someString = "test";
 
+	public someEmptyArray = [];
 }

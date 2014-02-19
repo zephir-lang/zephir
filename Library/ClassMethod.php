@@ -85,7 +85,6 @@ class ClassMethod
      */
     public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
     {
-
         $this->checkVisibility($visibility, $name, $original);
 
         $this->_classDefinition = $classDefinition;
@@ -135,13 +134,24 @@ class ClassMethod
     }
 
     /**
-     * Check the consistency of the parameters
+     * Setter for statements block
+     *
+     * @param StatementsBlock $statementsBlock
+     */
+    public function setStatementsBlock(StatementsBlock $statementsBlock)
+    {
+        $this->_statements = $statementsBlock;
+    }
+
+    /**
+     * Checks for visibility congruence
      *
      * @param array $visibility
      * @param string $name
      * @param array $original
+     * @throws CompilerException
      */
-    public function checkVisibility($visibility, $name, $original)
+    public function checkVisibility(array $visibility, $name, array $original = null)
     {
         if (count($visibility) > 1) {
             if (in_array('public', $visibility) && in_array('protected', $visibility)) {
