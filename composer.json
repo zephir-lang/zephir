@@ -35,5 +35,10 @@
     "scripts": {
         "post-install-cmd": ["./install"],
         "post-update-cmd": ["./install"]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
