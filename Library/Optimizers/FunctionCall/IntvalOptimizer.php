@@ -17,53 +17,41 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Zephir\Optimizers\FunctionCall;
+
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * AliasManager
+ * IntvalOptimizer
  *
- * Manage aliases in a file
+ * Optimizes calls to 'intval' using internal function
  */
-class AliasManager
+class IntvalOptimizer extends OptimizerAbstract
 {
-
-    protected $aliases = array();
-
     /**
-     *
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
      */
-    public function add(array $useStatement)
+    public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        foreach ($useStatement['aliases'] as $alias) {
-            if (isset($alias['alias'])) {
-                $this->aliases[$alias['alias']] = $alias['name'];
-            } else {
-                $parts = explode("\\", $alias['name']);
-                $implicitAlias = $parts[count($parts) - 1];
-                $this->aliases[$implicitAlias] = $alias['name'];
-            }
+        if (!isset($expression['parameters'])) {
+            return false;
         }
-    }
 
-    /**
-     * Checks if a class name is an existing alias
-     *
-     * @param string $alias
-     * @return boolean
-     */
-    public function isAlias($alias)
-    {
-        return isset($this->aliases[$alias]);
-    }
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-    /**
-     * Returns the class name according to an existing alias
-     *
-     * @param string $alias
-     * @return string
-     */
-    public function getAlias($alias)
-    {
-        return $this->aliases[$alias];
+        $context->headersManager->add('kernel/operators');
+
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('long', 'zephir_get_intval(' . $resolvedParams[0] . ')', $expression);
     }
 }

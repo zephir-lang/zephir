@@ -127,8 +127,8 @@ class Constants
         $isZephirConstant = false;
 
         $constantName    = $expression['value'];
-        $mergedConstants = array_merge($this->envConstans, $this->magickConstants);
 
+        $mergedConstants = array_merge($this->envConstans, $this->magickConstants);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistant-constant', $expression);
@@ -136,10 +136,20 @@ class Constants
                 $isZephirConstant = true;
             }
         } else {
-            $isPhpConstant = true;
+            if (strpos($constantName, 'VERSION') !== false) {
+                $isPhpConstant = false;
+            } else {
+                $isPhpConstant = true;
+            }
+        }
+
+        if ($isZephirConstant) {
+            $constant = $compilationContext->compiler->getConstant($constantName);
+            return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
         }
 
         if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
+
             $constantName = constant($constantName);
             $type = strtolower(gettype($constantName));
 
@@ -147,6 +157,9 @@ class Constants
 
                 case 'integer':
                     return new LiteralCompiledExpression('int', $constantName, $expression);
+
+                case 'double':
+                    return new LiteralCompiledExpression('double', $constantName, $expression);
 
                 case 'string':
                     return new LiteralCompiledExpression('string', Utils::addSlashes($constantName), $expression);
@@ -159,12 +172,8 @@ class Constants
             }
         }
 
-        if ($isZephirConstant) {
-            $constant = $compilationContext->compiler->getConstant($constantName);
-            return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
-        }
-
         if (in_array($constantName, $this->magickConstants)) {
+
             switch ($constantName) {
 
                 case '__CLASS__':
