@@ -64,7 +64,19 @@ class InstanceOfOperator extends BaseOperator
 
             case 'string':
                 $className = Utils::getFullName($resolvedVariable, $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
-                $code = 'SL("' . $resolvedVariable . '")';
+                if ($compilationContext->compiler->isClass($className)) {
+                    $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                    $classEntry = $classDefinition->getClassEntry();
+                } else {
+                    if (!class_exists($className, false)) {
+                        $code = 'SL("' . $resolvedVariable . '")';
+                    } else {
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                        if (!$classEntry) {
+                            $code = 'SL("' . $resolvedVariable . '")';
+                        }
+                    }
+                }
                 break;
 
             default:
@@ -72,7 +84,22 @@ class InstanceOfOperator extends BaseOperator
 
                     case 'variable':
                         if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
-                            $code = 'SL("' . Utils::addSlashes(trim($compilationContext->getFullName($resolvedVariable), "\\"), true) . '")';
+                            $className = $compilationContext->getFullName($resolvedVariable);
+                            if ($compilationContext->compiler->isClass($className)) {
+                                $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                                $classEntry = $classDefinition->getClassEntry();
+                            } else {
+                                if (!class_exists($className, false)) {
+                                    $code = 'SL("' . trim(Utils::addSlashes($className, true), "\\") . '")';
+                                } else {
+                                    $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                                    if (!$classEntry) {
+                                        $code = 'SL("' . trim(Utils::addSlashes($className, true), "\\") . '")';
+                                    }
+                                }
+                            }
+                        } else {
+                            $code = 'Z_STRVAL_P(' . $resolvedVariable . '), Z_STRLEN_P(' . $resolvedVariable . ')';
                         }
                         break;
 
@@ -93,6 +120,10 @@ class InstanceOfOperator extends BaseOperator
 
         /* @TODO, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
         $compilationContext->headersManager->add('kernel/object');
-        return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
+        if (isset($code)) {
+            return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
+        }
+
+        return new CompiledExpression('bool', 'zephir_instance_of_ev(' . $symbolVariable->getName() . ', ' . $classEntry . ' TSRMLS_CC)', $expression);
     }
 }

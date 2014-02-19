@@ -36,7 +36,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 
 	ZEPHIR_INIT_VAR(a);
 	object_init(a);
-	RETURN_MM_BOOL(zephir_is_instance_of(a, SL("stdClass") TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(a, zend_standard_class_def TSRMLS_CC));
 
 }
 
@@ -51,7 +51,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 	if (zephir_has_constructor(a TSRMLS_CC)) {
 		zephir_call_method_noret(a, "__construct");
 	}
-	RETURN_MM_BOOL(zephir_is_instance_of(a, SL("Test\\Instanceoff") TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(a, test_instanceoff_ce TSRMLS_CC));
 
 }
 
@@ -63,7 +63,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf3) {
 
 	ZEPHIR_INIT_VAR(a);
 	object_init(a);
-	RETURN_MM_BOOL(zephir_is_instance_of(a, SL("Test\\UnknownClass") TSRMLS_CC));
+	RETURN_MM_BOOL(zephir_instance_of_ev(a, test_unknownclass_ce TSRMLS_CC));
 
 }
 

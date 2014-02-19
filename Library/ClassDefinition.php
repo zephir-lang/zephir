@@ -965,6 +965,14 @@ class ClassDefinition
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
 
+            case 'stdclass':
+                $classEntry = 'zend_standard_class_def';
+                break;
+            case 'closure':
+                $compilationContext->headersManager->add('Zend/zend_closures');
+                $classEntry = 'zend_ce_closure';
+                break;
+
             default:
                 if (!$check) {
                     throw new CompilerException('Unknown class entry for "' . $className . '"');
