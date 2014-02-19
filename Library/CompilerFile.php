@@ -310,7 +310,22 @@ class CompilerFile
                         array('public'),
                         '__toString',
                         null,
-                        null,
+                        new StatementsBlock(array(
+                            array(
+                                'type' => 'return',
+                                'expr' => array(
+                                    'type' => 'property-access',
+                                    'left' => array(
+                                        'type' => 'variable',
+                                        'value' => 'this'
+                                    ),
+                                    'right' => array(
+                                        'type' => 'variable',
+                                        'value' => $property['name']
+                                    )
+                                )
+                            )
+                        )),
                         isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
                         null,
                         $shortcut
