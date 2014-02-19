@@ -19,10 +19,21 @@
 
 namespace Zephir;
 
+/**
+ * Class EventsManager
+ * @package Zephir
+ */
 class EventsManager
 {
+    /**
+     * @var array
+     */
     private $listeners = array();
 
+    /**
+     * @param $event
+     * @param $callback
+     */
     public function listen($event, $callback)
     {
         if (!isset($this->listeners[$event])) {
@@ -32,7 +43,11 @@ class EventsManager
         $this->listeners[$event][] = $callback;
     }
 
-    public function dispatch($event, $param)
+    /**
+     * @param $event
+     * @param array $param
+     */
+    public function dispatch($event, array $param = array())
     {
         foreach ($this->listeners[$event] as $listener) {
             call_user_func_array($listener, $param);

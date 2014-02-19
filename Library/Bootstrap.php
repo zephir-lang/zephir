@@ -88,6 +88,7 @@ class Bootstrap
              * Global config
              */
             $config = new Config();
+            register_shutdown_function(array($config, 'saveOnExit'));
 
             /**
              * Global logger

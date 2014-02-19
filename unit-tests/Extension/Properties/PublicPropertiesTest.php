@@ -32,6 +32,6 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->someInteger === 10);
         $this->assertTrue($t->someDouble === 10.25);
         $this->assertTrue($t->someString === "test");
-        $this->assertTrue($t->someEmptyArray === array());
+        $this->assertInternalType('array', $t->someEmptyArray);
     }
 }

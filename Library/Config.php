@@ -136,16 +136,13 @@ class Config
             $this->_config[$key] = $value;
         }
 
-        if (!$this->_changed) {
-            register_shutdown_function(array($this, '_saveOnExit'));
-        }
         $this->_changed = true;
     }
 
     /**
      * Writes the configuration if it has been changed
      */
-    public function _saveOnExit()
+    public function saveOnExit()
     {
         if ($this->_changed) {
             /**
