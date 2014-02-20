@@ -19,14 +19,15 @@
 
 namespace Zephir\Builder\Operators;
 
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
+
 /**
  * BinaryOperatorBuilder
  *
  * Allows to manually build a binary operator AST node
  */
-class BinaryOperatorBuilder
+class BinaryOperatorBuilder extends AbstractOperatorBuilder
 {
-
     protected $operator;
 
     protected $file;

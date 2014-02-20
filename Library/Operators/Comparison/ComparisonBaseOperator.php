@@ -44,7 +44,6 @@ class ComparisonBaseOperator extends BaseOperator
      */
     public function optimizeTypeOf($expr, CompilationContext $compilationContext)
     {
-
         if (!isset($expr['left'])) {
             return false;
         }
@@ -54,7 +53,6 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if ($expr['left']['type'] == 'typeof') {
-
             if ($expr['right']['type'] != 'string') {
                 echo $expr['right']['type'];
                 $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
@@ -63,7 +61,6 @@ class ComparisonBaseOperator extends BaseOperator
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
-
                     case 'identical':
                     case 'equals':
                         $operator = '==';
@@ -90,7 +87,6 @@ class ComparisonBaseOperator extends BaseOperator
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
-
                 case 'variable':
                     switch ($value) {
 

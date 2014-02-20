@@ -19,14 +19,15 @@
 
 namespace Zephir\Builder\Operators;
 
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
+
 /**
  * UnaryOperatorBuilder
  *
  * Allows to manually build a unary operator AST node
  */
-class UnaryOperatorBuilder
+class UnaryOperatorBuilder extends AbstractOperatorBuilder
 {
-
     protected $operator;
 
     protected $leftExpression;
