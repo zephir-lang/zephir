@@ -1715,6 +1715,8 @@ class ClassMethod
         $oldCodePrinter->output($code);
         $compilationContext->codePrinter = $oldCodePrinter;
 
+        $compilationContext->branchManager = null;
+
         $codePrinter->clear();
 
         return null;

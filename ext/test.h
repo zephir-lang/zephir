@@ -72,6 +72,7 @@
 #include "test/ternary.h"
 #include "test/testinterface.h"
 #include "test/trie.h"
+#include "test/trytest.h"
 #include "test/typeoff.h"
 #include "test/unknownclass.h"
 #include "test/unsettest.h"

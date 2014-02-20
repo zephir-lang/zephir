@@ -451,6 +451,12 @@ class LocalContextPass
                     }
                     break;
 
+                case 'try-catch':
+                    if (isset($statement['statements'])) {
+                        $this->passStatementBlock($statement['statements']);
+                    }
+                    break;
+
                 case 'throw':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
