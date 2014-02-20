@@ -1939,7 +1939,7 @@ xx_catch_statement(R) ::= CATCH xx_catch_classes_list(E) BRACKET_OPEN xx_stateme
 	R = xx_ret_catch_statement(E, L, status->scanner_state);
 }
 
-xx_catch_classes_list(R) ::= xx_catch_classes_list(L) PIPE xx_catch_class(C) . {
+xx_catch_classes_list(R) ::= xx_catch_classes_list(L) BITWISE_OR xx_catch_class(C) . {
 	R = xx_ret_list(L, C);
 }
 

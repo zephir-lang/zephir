@@ -59,3 +59,17 @@ PHP_METHOD(Test_TryTest, testTry4) {
 
 }
 
+PHP_METHOD(Test_TryTest, testTry5) {
+
+	zval *a_param = NULL;
+	zend_bool a;
+
+	zephir_fetch_params(0, 1, 0, &a_param);
+
+	a = zephir_get_boolval(a_param);
+
+
+	//missing try-catch
+
+}
+

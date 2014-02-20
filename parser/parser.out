@@ -15759,7 +15759,7 @@ State 456:
 
 State 457:
           xx_catch_statement ::= CATCH * xx_catch_classes_list BRACKET_OPEN xx_statement_list BRACKET_CLOSE
-          xx_catch_classes_list ::= * xx_catch_classes_list PIPE xx_catch_class
+          xx_catch_classes_list ::= * xx_catch_classes_list BITWISE_OR xx_catch_class
           xx_catch_classes_list ::= * xx_catch_class
           xx_catch_class ::= * IDENTIFIER
 
@@ -15769,10 +15769,10 @@ State 457:
 
 State 458:
           xx_catch_statement ::= CATCH xx_catch_classes_list * BRACKET_OPEN xx_statement_list BRACKET_CLOSE
-          xx_catch_classes_list ::= xx_catch_classes_list * PIPE xx_catch_class
+          xx_catch_classes_list ::= xx_catch_classes_list * BITWISE_OR xx_catch_class
 
+                    BITWISE_OR shift  626
                   BRACKET_OPEN shift  459
-                          PIPE shift  626
 
 State 459:
           xx_statement_list ::= * xx_statement_list xx_statement
@@ -22879,14 +22879,14 @@ State 625:
                      {default} reduce 205
 
 State 626:
-          xx_catch_classes_list ::= xx_catch_classes_list PIPE * xx_catch_class
+          xx_catch_classes_list ::= xx_catch_classes_list BITWISE_OR * xx_catch_class
           xx_catch_class ::= * IDENTIFIER
 
                     IDENTIFIER shift  628
                 xx_catch_class shift  627
 
 State 627:
-    (197) xx_catch_classes_list ::= xx_catch_classes_list PIPE xx_catch_class *
+    (197) xx_catch_classes_list ::= xx_catch_classes_list BITWISE_OR xx_catch_class *
 
                      {default} reduce 197
 

@@ -39,4 +39,17 @@ class TryTest
 		}
 	}
 
+	public function testTry5(boolean a)
+	{
+		try {
+			if a {
+				throw new \Exception("error!");
+			} else {
+				throw new \RuntimeException("error!");
+			}
+		} catch \Exception|\RuntimeException  {
+			return "any error";
+		}
+	}
+
 }
