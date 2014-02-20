@@ -42,4 +42,12 @@ class Resource
 
         return is_resource(a);
     }
+
+    public function testFunctionsForSTDIN()
+    {
+        var a;
+        let a = STDIN;
+
+        stream_set_blocking(a, 1);
+    }
 }
