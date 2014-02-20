@@ -649,15 +649,15 @@ class ClassDefinition
             $codePrinter->outputBlankLine();
         }
 
-        $needBrake = true;
+        $needBreak = true;
 
         /**
          * @todo Remove after removing support for php 5.3
          */
         $currentClassHref = &$this;
 
-        $this->eventsManager->listen('addMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBrake) {
-            $needBrake = false;
+        $this->eventsManager->listen('addMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
+            $needBreak = false;
 
             $methods[$method->getName()] = $method;
             $compilationContext->classDefinition->setMethods($methods);
@@ -675,13 +675,13 @@ class ClassDefinition
                 $codePrinter->outputDocBlock($docBlock, true);
             }
             $property->compile($compilationContext);
-            if (!$needBrake) {
+            if (!$needBreak) {
                 break;
             }
             $codePrinter->outputBlankLine();
         }
 
-        if (!$needBrake) {
+        if (!$needBreak) {
             return;
         }
 
