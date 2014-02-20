@@ -27,6 +27,11 @@ namespace Zephir;
 class CompilationContext
 {
     /**
+     * @var EventsManager
+     */
+    public $eventsManager;
+
+    /**
      * Compiler
      *
      * @var Compiler

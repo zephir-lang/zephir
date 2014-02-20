@@ -346,7 +346,6 @@ class CompilerFile
      */
     public function preCompileClass($namespace, $topStatement)
     {
-
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
@@ -374,7 +373,6 @@ class CompilerFile
 
             if (isset($definition['properties'])) {
                 foreach ($definition['properties'] as $property) {
-
                     /**
                      * Add property to the definition
                      */

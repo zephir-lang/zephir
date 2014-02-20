@@ -58,6 +58,7 @@
 #include "test/properties/staticpublicproperties.h"
 #include "test/regexdna.h"
 #include "test/requires.h"
+#include "test/resource.h"
 #include "test/returns.h"
 #include "test/router.h"
 #include "test/router/exception.h"

@@ -17,37 +17,27 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Test;
+namespace Extension;
 
-use Zephir\Config;
-
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetWithoutNamespace()
+    public function testLetStatementAssign()
     {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
+        $t = new \Test\Resource();
+        $this->assertInternalType('resource', $t->testLetStatementSTDIN());
+        $this->assertInternalType('resource', $t->testLetStatementSTDOUT());
+        $this->assertInternalType('resource', $t->testLetStatementSTDERR());
     }
 
-    public function testGetWithNamespace()
+    public function testTypeOffResource()
     {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
+        $t = new \Test\Resource();
+        $this->assertEquals('resource', $t->testTypeOffResource());
     }
 
-    public function testSetWithoutNamespace()
+    public function testIsResource()
     {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
+        $t = new \Test\Resource();
+        $this->assertTrue($t->testIsResource());
     }
 }

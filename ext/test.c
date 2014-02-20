@@ -79,6 +79,7 @@ zend_class_entry *test_properties_staticprotectedproperties_ce;
 zend_class_entry *test_properties_staticpublicproperties_ce;
 zend_class_entry *test_regexdna_ce;
 zend_class_entry *test_requires_ce;
+zend_class_entry *test_resource_ce;
 zend_class_entry *test_returns_ce;
 zend_class_entry *test_router_ce;
 zend_class_entry *test_router_exception_ce;
@@ -167,6 +168,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Properties_StaticPublicProperties);
 	ZEPHIR_INIT(Test_RegexDNA);
 	ZEPHIR_INIT(Test_Requires);
+	ZEPHIR_INIT(Test_Resource);
 	ZEPHIR_INIT(Test_Returns);
 	ZEPHIR_INIT(Test_Router);
 	ZEPHIR_INIT(Test_Router_Exception);

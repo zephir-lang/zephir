@@ -367,7 +367,7 @@ class Compiler
 
         if (!file_exists('.temp/' . self::VERSION)) {
             if (file_exists('ext/Makefile')) {
-                echo 'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project', PHP_EOL;
+                $this->_logger->output('Zephir version has changed, use "zephir fullclean" to perform a full clean of the project');
             }
             mkdir('.temp/' . self::VERSION);
         }
@@ -414,7 +414,7 @@ class Compiler
          * Tell the user the name could be reserved by another extension
          */
         if (extension_loaded($namespace)) {
-            echo 'This extension can have conflicts with an existing loaded extension', PHP_EOL;
+            $this->_logger->output('This extension can have conflicts with an existing loaded extension');
         }
 
         $this->_config->set('namespace', $namespace);

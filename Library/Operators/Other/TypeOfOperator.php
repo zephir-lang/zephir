@@ -33,12 +33,11 @@ use Zephir\Builder\FunctionCallBuilder;
  */
 class TypeOfOperator extends BaseOperator
 {
-
     /**
-     *
-     * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return bool|CompiledExpression
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -48,9 +47,7 @@ class TypeOfOperator extends BaseOperator
         }
 
         $builder = new FunctionCallBuilder('gettype', array(array('parameter' => $expression['left'])));
-
         $expression = new Expression($builder->get());
-
         return $expression->compile($compilationContext);
     }
 }

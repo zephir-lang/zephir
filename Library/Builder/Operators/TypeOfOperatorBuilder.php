@@ -19,18 +19,22 @@
 
 namespace Zephir\Builder\Operators;
 
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
+
 /**
  * TypeOfOperatorBuilder
  *
  * Allows to manually build a 'typeof' operator AST node
  */
-class TypeOfOperatorBuilder
+class TypeOfOperatorBuilder extends AbstractOperatorBuilder
 {
-
     protected $leftOperand;
 
     /**
-     * @param object $right
+     * @param $left
+     * @param null $file
+     * @param int $line
+     * @param int $char
      */
     public function __construct($left, $file = null, $line = 0, $char = 0)
     {

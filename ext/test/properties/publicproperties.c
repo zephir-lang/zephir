@@ -12,11 +12,12 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-
+#include "kernel/memory.h"
+#include "kernel/object.h"
 
 ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
-	ZEPHIR_REGISTER_CLASS(Test\\Properties, PublicProperties, test, properties_publicproperties, NULL, 0);
+	ZEPHIR_REGISTER_CLASS(Test\\Properties, PublicProperties, test, properties_publicproperties, test_properties_publicproperties_method_entry, 0);
 
 	/**
 	 * This is a public property with no initial value
@@ -53,7 +54,22 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	 */
 	zend_declare_property_string(test_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC TSRMLS_CC);
 
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Properties_PublicProperties, __construct) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("someEmptyArray"), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 
 }
 

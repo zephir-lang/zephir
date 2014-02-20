@@ -17,37 +17,9 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Test;
+namespace Zephir\Builder\Operators;
 
-use Zephir\Config;
-
-class ConfigTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractOperatorBuilder
 {
-    public function testGetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
-    }
-
-    public function testGetWithNamespace()
-    {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
-    }
-
-    public function testSetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
-    }
+    abstract public function get();
 }
