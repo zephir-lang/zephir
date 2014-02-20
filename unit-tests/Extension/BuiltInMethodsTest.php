@@ -29,6 +29,8 @@ class BuiltInMethodsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->stringMethodLength3() == 10);
         $this->assertTrue($t->stringMethodLength4("hello") == 5);
         $this->assertTrue($t->stringMethodLength5("hello") == 10);
+        $this->assertEquals($t->stringMethodIndex('test', 't'), 0);
+        $this->assertEquals($t->stringMethodIndexWithPosition('test', 't', 1), 3);
     }
 
     public function testStringTrim()
