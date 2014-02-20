@@ -77,7 +77,9 @@ class StringType
      */
     public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder('strpos', array(array('parameter' => $caller)));
+        $parameters = $expression['parameters'];
+        array_unshift($parameters, array('parameter' => $caller));
+        $builder = new FunctionCallBuilder('strpos', $parameters);
 
         $expression = new Expression($builder->get());
 

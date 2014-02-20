@@ -32,6 +32,16 @@ class BuiltInMethods
 		return ("hello" . a)->length();
 	}
 
+    public function stringMethodIndex(string str, string needle)
+    {
+        return str->index(needle);
+    }
+
+    public function stringMethodIndexWithPosition(string str, string needle, int position)
+    {
+        return str->index(needle, position);
+    }
+
 	public function stringMethodTrim1()
 	{
 		return " hello \t\n"->trim();

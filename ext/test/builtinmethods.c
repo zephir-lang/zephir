@@ -96,6 +96,46 @@ PHP_METHOD(Test_BuiltInMethods, stringMethodLength5) {
 
 }
 
+PHP_METHOD(Test_BuiltInMethods, stringMethodIndex) {
+
+	zval *str_param = NULL, *needle_param = NULL, *_0;
+	zval *str = NULL, *needle = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str_param, &needle_param);
+
+	zephir_get_strval(str, str_param);
+	zephir_get_strval(needle, needle_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_fast_strpos(_0, str, needle, 0 );
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_BuiltInMethods, stringMethodIndexWithPosition) {
+
+	int position;
+	zval *str_param = NULL, *needle_param = NULL, *position_param = NULL, _0, *_1;
+	zval *str = NULL, *needle = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 3, 0, &str_param, &needle_param, &position_param);
+
+	zephir_get_strval(str, str_param);
+	zephir_get_strval(needle, needle_param);
+	position = zephir_get_intval(position_param);
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, position);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_fast_strpos(_1, str, needle, zephir_get_intval(&_0) );
+	RETURN_CCTOR(_1);
+
+}
+
 PHP_METHOD(Test_BuiltInMethods, stringMethodTrim1) {
 
 	zval *_0, _1;
