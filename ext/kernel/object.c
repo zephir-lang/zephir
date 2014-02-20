@@ -524,16 +524,61 @@ int zephir_read_property_this(zval **result, zval *object, char *property_name, 
  */
 int zephir_read_property_this_quick(zval **result, zval *object, char *property_name, unsigned int property_length, unsigned long key, int flags TSRMLS_DC) {
 
-	zval *tmp = zephir_fetch_property_this_quick(object, property_name, property_length, key, flags TSRMLS_CC);
-	if (likely(tmp != NULL)) {
-		*result = tmp;
-		Z_ADDREF_PP(result);
-		return SUCCESS;
+	zval *property;
+	zend_class_entry *ce, *old_scope;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+
+		if ((flags & PH_NOISY) == PH_NOISY) {
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Trying to get property of non-object");
+		}
+
+		*result = ZEPHIR_GLOBAL(global_null);
+		Z_ADDREF_P(*result);
+		return FAILURE;
 	}
 
-	*result = ZEPHIR_GLOBAL(global_null);
-	Z_ADDREF_P(*result);
-	return FAILURE;
+	ce = Z_OBJCE_P(object);
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length TSRMLS_CC);
+	}
+
+	old_scope = EG(scope);
+	EG(scope) = ce;
+
+	if (!Z_OBJ_HT_P(object)->read_property) {
+#if PHP_VERSION_ID < 50400
+		char *class_name;
+#else
+		const char *class_name;
+#endif
+		zend_uint class_name_len;
+
+		zend_get_object_classname(object, &class_name, &class_name_len TSRMLS_CC);
+		zend_error(E_CORE_ERROR, "Property %s of class %s cannot be read", property_name, class_name);
+	}
+
+	MAKE_STD_ZVAL(property);
+	ZVAL_STRINGL(property, property_name, property_length, 0);
+
+#if PHP_VERSION_ID < 50400
+	*result = Z_OBJ_HT_P(object)->read_property(object, property, (flags & PH_NOISY) == PH_NOISY ? BP_VAR_IS : BP_VAR_R TSRMLS_CC);
+#else
+	*result = Z_OBJ_HT_P(object)->read_property(object, property, (flags & PH_NOISY) == PH_NOISY ? BP_VAR_IS : BP_VAR_R, 0 TSRMLS_CC);
+#endif
+
+	Z_ADDREF_PP(result);
+
+	if (Z_REFCOUNT_P(property) > 1) {
+		ZVAL_STRINGL(property, property_name, property_length, 1);
+	} else {
+		ZVAL_NULL(property);
+	}
+
+	zval_ptr_dtor(&property);
+
+	EG(scope) = old_scope;
+	return SUCCESS;
 }
 
 zval* zephir_fetch_nproperty_this(zval *object, char *property_name, unsigned int property_length, int flags TSRMLS_DC) {
@@ -874,86 +919,7 @@ int zephir_update_property_this_quick(zval *object, char *property_name, unsigne
 		ce = zephir_lookup_class_ce_quick(ce, property_name, property_length, key TSRMLS_CC);
 	}
 
-	old_scope = EG(scope);
-	EG(scope) = ce;
-
-	#if PHP_VERSION_ID < 50400
-
-	{
-		zval *property;
-
-		if (!Z_OBJ_HT_P(object)->write_property) {
-			EG(scope) = old_scope;
-			php_error_docref(NULL TSRMLS_CC, E_WARNING, "Property %s of class %s cannot be updated", property_name, ce->name);
-			return FAILURE;
-		}
-
-		MAKE_STD_ZVAL(property);
-		ZVAL_STRINGL(property, property_name, property_length, 0);
-
-		Z_OBJ_HT_P(object)->write_property(object, property, value TSRMLS_CC);
-
-		if (Z_REFCOUNT_P(property) > 1) {
-			ZVAL_STRINGL(property, property_name, property_length, 1);
-		} else {
-			ZVAL_NULL(property);
-		}
-
-		zval_ptr_dtor(&property);
-	}
-
-	#else
-
-	{
-		zend_object *zobj;
-		zval **variable_ptr;
-		zend_property_info *property_info;
-
-		zobj = zend_objects_get_address(object TSRMLS_CC);
-
-		if (zephir_hash_quick_find(&ce->properties_info, property_name, property_length + 1, key, (void **) &property_info) == SUCCESS) {
-			assert(property_info != NULL);
-
-			/** This is as zend_std_write_property, but we're not interesed in validate properties visibility */
-			if (property_info->offset >= 0 ? (zobj->properties ? ((variable_ptr = (zval**) zobj->properties_table[property_info->offset]) != NULL) : (*(variable_ptr = &zobj->properties_table[property_info->offset]) != NULL)) : (EXPECTED(zobj->properties != NULL) && EXPECTED(zephir_hash_quick_find(zobj->properties, property_info->name, property_info->name_length + 1, property_info->h, (void **) &variable_ptr) == SUCCESS))) {
-
-				if (EXPECTED(*variable_ptr != value)) {
-
-					/* if we are assigning reference, we shouldn't move it, but instead assign variable to the same pointer */
-					if (PZVAL_IS_REF(*variable_ptr)) {
-
-						zval garbage = **variable_ptr; /* old value should be destroyed */
-
-						/* To check: can't *variable_ptr be some system variable like error_zval here? */
-						Z_TYPE_PP(variable_ptr) = Z_TYPE_P(value);
-						(*variable_ptr)->value = value->value;
-						if (Z_REFCOUNT_P(value) > 0) {
-							zval_copy_ctor(*variable_ptr);
-						} else {
-							efree(value);
-						}
-						zval_dtor(&garbage);
-
-					} else {
-						zval *garbage = *variable_ptr;
-
-						/* if we assign referenced variable, we should separate it */
-						Z_ADDREF_P(value);
-						if (PZVAL_IS_REF(value)) {
-							SEPARATE_ZVAL(&value);
-						}
-						*variable_ptr = value;
-						zval_ptr_dtor(&garbage);
-					}
-				}
-
-			}
-		}
-	}
-
-	#endif
-
-	EG(scope) = old_scope;
+    zend_update_property(ce, object, property_name, property_length, value TSRMLS_CC);
 
 	return SUCCESS;
 }

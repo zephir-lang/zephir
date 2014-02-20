@@ -33,6 +33,7 @@ class Variable
 
     /**
      * Current dynamic type of the variable
+     * @var array
      */
     protected $_dynamicTypes = array('unknown' => true);
 

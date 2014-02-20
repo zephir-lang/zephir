@@ -293,6 +293,16 @@ class StatementsBlock
     }
 
     /**
+     * Setter for statements
+     *
+     * @param array $statements
+     */
+    public function setStatements(array $statements)
+    {
+        $this->_statements = $statements;
+    }
+
+    /**
      * Returns the type of the last statement executed
      *
      * @return string

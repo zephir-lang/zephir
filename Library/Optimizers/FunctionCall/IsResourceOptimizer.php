@@ -17,37 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Test;
+namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Config;
+use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ * IsStringOptimizer
+ *
+ * Optimizes calls to 'is_string' using internal function
+ */
+class IsResourceOptimizer extends IsTypeOptimizerAbstract
 {
-    public function testGetWithoutNamespace()
+    protected function getType()
     {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
-    }
-
-    public function testGetWithNamespace()
-    {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
-    }
-
-    public function testSetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
+        return 'IS_RESOURCE';
     }
 }

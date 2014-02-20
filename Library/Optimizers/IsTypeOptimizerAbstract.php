@@ -17,37 +17,35 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Test;
+namespace Zephir\Optimizers;
 
-use Zephir\Config;
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\CompilerException;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
-    public function testGetWithoutNamespace()
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
+
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
+
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', '(Z_TYPE_P(' . $resolvedParams[0] . ') == '.$this->getType().')', $expression);
     }
 
-    public function testGetWithNamespace()
-    {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
-    }
-
-    public function testSetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
-    }
+    abstract protected function getType();
 }

@@ -163,7 +163,7 @@ PHP_METHOD(Test_Constants, testDirConstant) {
 
 PHP_METHOD(Test_Constants, testPHPVersionEnvConstantInExpValue) {
 
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 

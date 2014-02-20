@@ -114,6 +114,12 @@ class Constants
         '__NAMESPACE__'
     );
 
+    protected $resources = array(
+        'STDIN',
+        'STDOUT',
+        'STDERR'
+    );
+
     /**
      * Resolves a PHP constant value into C-code
      *
@@ -128,7 +134,7 @@ class Constants
 
         $constantName    = $expression['value'];
 
-        $mergedConstants = array_merge($this->envConstans, $this->magickConstants);
+        $mergedConstants = array_merge($this->envConstans, $this->magickConstants, $this->resources);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistant-constant', $expression);
@@ -143,13 +149,12 @@ class Constants
             }
         }
 
-        if ($isZephirConstant) {
+        if ($isZephirConstant && !in_array($constantName, $this->resources)) {
             $constant = $compilationContext->compiler->getConstant($constantName);
             return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
         }
 
         if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
-
             $constantName = constant($constantName);
             $type = strtolower(gettype($constantName));
 
@@ -195,6 +200,9 @@ class Constants
 
         if ($this->_expecting && $this->_expectingVariable) {
             $symbolVariable = $this->_expectingVariable;
+
+            $symbolVariable->setLocalOnly(false);
+            $symbolVariable->setMustInitNull(true);
             $symbolVariable->initVariant($compilationContext);
         } else {
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);

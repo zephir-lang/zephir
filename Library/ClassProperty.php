@@ -216,6 +216,91 @@ class ClassProperty
                     $this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
                     break;
 
+                case 'empty-array':
+                    if ($this->isStatic()) {
+                        throw new CompilerException('Cannot define static property with default value: ' . $this->_defaultValue['type'], $this->_original);
+                    }
+
+                    $constructMethod = $compilationContext->classDefinition->getMethod('__construct');
+                    if ($constructMethod) {
+                        $statementsBlock = $constructMethod->getStatementsBlock();
+                        if ($statementsBlock) {
+                            $statements = $statementsBlock->getStatements();
+
+                            $letStatement = array(
+                                'type' => 'let',
+                                'assignments' => array(
+                                    array(
+                                        'assign-type' => 'object-property',
+                                        'operator' => 'assign',
+                                        'variable' => 'this',
+                                        'property' => $this->getName(),
+                                        'expr' => array(
+                                            'type' => 'empty-array',
+                                        )
+                                    )
+                                )
+                            );
+
+                            $needLetStatementAdded = true;
+                            foreach ($statements as $statement) {
+                                if ($statement === $statement) {
+                                    $needLetStatementAdded = false;
+                                    break;
+                                }
+                            }
+
+                            if ($needLetStatementAdded) {
+                                $statements[] = $letStatement;
+                                $statementsBlock->setStatements($statements);
+                            }
+                        } else {
+                            $statementsBlock = new StatementsBlock(array(
+                                array(
+                                    'type' => 'let',
+                                    'assignments' => array(
+                                        array(
+                                            'assign-type' => 'object-property',
+                                            'operator' => 'assign',
+                                            'variable' => 'this',
+                                            'property' => $this->getName(),
+                                            'expr' => array(
+                                                'type' => 'empty-array',
+                                            )
+                                        )
+                                    )
+                                )
+                            ));
+                            $constructMethod->setStatementsBlock($statementsBlock);
+                        }
+                    } else {
+                        $statementsBlock = new StatementsBlock(array(
+                            array(
+                                'type' => 'let',
+                                'assignments' => array(
+                                    array(
+                                        'assign-type' => 'object-property',
+                                        'operator' => 'assign',
+                                        'variable' => 'this',
+                                        'property' => $this->getName(),
+                                        'expr' => array(
+                                            'type' => 'empty-array',
+                                        )
+                                    )
+                                )
+                            )
+                        ));
+
+                        $compilationContext->classDefinition->getEventsManager()->dispatch('addMethod', array(new ClassMethod(
+                            $compilationContext->classDefinition,
+                            array('public'),
+                            '__construct',
+                            null,
+                            $statementsBlock
+                        ), null));
+                        return false;
+                    }
+                    //continue
                 case 'null':
                     $this->declareProperty($compilationContext, $this->_defaultValue['type'], null);
                     break;
@@ -251,16 +336,13 @@ class ClassProperty
         }
 
         switch ($type) {
-
             case 'long':
             case 'int':
                 $codePrinter->output("zend_declare_property_long(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
-
             case 'double':
                 $codePrinter->output("zend_declare_property_double(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
-
             case 'bool':
                 if ($value == 'false') {
                     $codePrinter->output("zend_declare_property_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), 0, " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
@@ -268,15 +350,15 @@ class ClassProperty
                     $codePrinter->output("zend_declare_property_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), 1, " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 }
                 break;
-
             case 'string':
                 $codePrinter->output("zend_declare_property_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
-
+            case 'empty-array':
+                $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+                break;
             case 'null':
                 $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
-
             default:
                 throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
         }

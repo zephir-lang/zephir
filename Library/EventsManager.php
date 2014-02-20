@@ -17,37 +17,40 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Test;
+namespace Zephir;
 
-use Zephir\Config;
-
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class EventsManager
+ * @package Zephir
+ */
+class EventsManager
 {
-    public function testGetWithoutNamespace()
+    /**
+     * @var array
+     */
+    private $listeners = array();
+
+    /**
+     * @param $event
+     * @param $callback
+     */
+    public function listen($event, $callback)
     {
-        $config = new Config();
-        $config->set('verbose', false);
-        $this->assertFalse($config->get('verbose'));
+        if (!isset($this->listeners[$event])) {
+            $this->listeners[$event] = array();
+        }
+
+        $this->listeners[$event][] = $callback;
     }
 
-    public function testGetWithNamespace()
+    /**
+     * @param $event
+     * @param array $param
+     */
+    public function dispatch($event, array $param = array())
     {
-        $config = new Config();
-        $config->get('unused-variable', true, 'warnings');
-        $this->assertTrue($config->get('unused-variable', 'warnings'));
-    }
-
-    public function testSetWithoutNamespace()
-    {
-        $config = new Config();
-        $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
-    }
-
-    public function testSetWithNamespace()
-    {
-        $config = new Config();
-        $config->set('unused-variable', false, 'warnings');
-        $this->assertFalse($config->get('unused-variable', 'warnings'));
+        foreach ($this->listeners[$event] as $listener) {
+            call_user_func_array($listener, $param);
+        }
     }
 }
