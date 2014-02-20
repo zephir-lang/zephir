@@ -71,7 +71,7 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 	INIT_PZVAL(&z); \
 	ZVAL_NULL(&z);
 
-#define ZEPHIR_SINIT_NVAR(z)
+#define ZEPHIR_SINIT_NVAR(z) Z_SET_REFCOUNT_P(&z, 1)
 
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	ALLOC_ZVAL(z); \

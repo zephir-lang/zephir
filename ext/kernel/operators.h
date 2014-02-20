@@ -208,7 +208,7 @@ int zephir_greater_equal_long(zval *op1, long op2 TSRMLS_DC);
 		if (Z_TYPE_P(passValue) == IS_ARRAY) { \
 			ZEPHIR_CPY_WRT(returnValue, passValue); \
 		} else { \
-			ZEPHIR_INIT_VAR(returnValue); \
+			ZEPHIR_INIT_NVAR(returnValue); \
 			array_init_size(returnValue, 0); \
 		} \
 	}
