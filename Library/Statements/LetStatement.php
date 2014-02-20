@@ -2439,7 +2439,7 @@ class LetStatement extends StatementAbstract
                             $propertyCache->setReusable(false);
                             $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
                         } else {
-                            $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);'); 
+                            $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         }
                         break;
 
