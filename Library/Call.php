@@ -369,7 +369,7 @@ class Call
                             if (isset($readOnlyParameters[$position])) {
                                 $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
-                                $params[] = $parameterTempVariable->getName();
+                                $params[] = '&' . $parameterTempVariable->getName();
                             } else {
                                 $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');

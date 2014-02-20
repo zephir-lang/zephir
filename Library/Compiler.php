@@ -366,6 +366,9 @@ class Compiler
         }
 
         if (!file_exists('.temp/' . self::VERSION)) {
+            if (file_exists('ext/Makefile')) {
+                echo 'Zephir version has changed, use "zephir fullclean" to perform a full clean of the project', PHP_EOL;
+            }
             mkdir('.temp/' . self::VERSION);
         }
 
@@ -607,6 +610,8 @@ class Compiler
             } else {
                 $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
             }
+
+            //$gccFlags = '-O0 -g -fvisibility=hidden -Wparentheses';
             exec('cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace);
         }
 
@@ -638,7 +643,7 @@ class Compiler
         $path = $this->_config->get('path', 'stubs');
         $path = str_replace('%version%', $this->_config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
-        
+
         $stubsGenerator->generate($path);
     }
 
