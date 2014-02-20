@@ -1607,6 +1607,12 @@ class ClassMethod
                     $code = 'zend_object_iterator ';
                     break;
 
+                case 'zend_property_info':
+                    $pointer = '*';
+                    $code = 'zend_property_info ';
+                    break;
+
+
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);
             }

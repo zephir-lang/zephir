@@ -1263,21 +1263,118 @@ int zephir_read_static_property_ce(zval **result, zend_class_entry *ce, char *pr
 	return FAILURE;
 }
 
+static zval **zephir_std_get_static_property(zend_class_entry *ce, const char *property_name, int property_name_len, zend_bool silent, ulong hash_value, zend_property_info **
+	property_info TSRMLS_DC)
+{	
+	zend_property_info *temp_property_info;
+
+	if (!hash_value) {
+		hash_value = zend_hash_func(property_name, property_name_len + 1);
+	}
+
+	if (!property_info || !*property_info) {
+
+		if (UNEXPECTED(zend_hash_quick_find(&ce->properties_info, property_name, property_name_len+1, hash_value, (void **) &temp_property_info)==FAILURE)) {
+			if (!silent) {
+				zend_error_noreturn(E_ERROR, "Access to undeclared static property: %s::$%s", ce->name, property_name);
+			}
+			return NULL;
+		}
+
+		#ifndef ZEPHIR_RELEASE
+		if (UNEXPECTED(!zend_verify_property_access(temp_property_info, ce TSRMLS_CC))) {
+			if (!silent) {
+				zend_error_noreturn(E_ERROR, "Cannot access %s property %s::$%s", zend_visibility_string(temp_property_info->flags), ce->name, property_name);
+			}
+			return NULL;
+		}
+
+		if (UNEXPECTED((temp_property_info->flags & ZEND_ACC_STATIC) == 0)) {
+			if (!silent) {
+				zend_error_noreturn(E_ERROR, "Access to undeclared static property: %s::$%s", ce->name, property_name);
+			}
+			return NULL;
+		}
+		#endif
+
+		zend_update_class_constants(ce TSRMLS_CC);
+
+		if (property_info) {
+			*property_info = temp_property_info;
+		}
+		
+	} else {
+		temp_property_info = *property_info;
+	}
+
+	if (UNEXPECTED(CE_STATIC_MEMBERS(ce) == NULL) || UNEXPECTED(CE_STATIC_MEMBERS(ce)[temp_property_info->offset] == NULL)) {
+		if (!silent) {
+			zend_error_noreturn(E_ERROR, "Access to undeclared static property: %s::$%s", ce->name, property_name);
+		}
+		return NULL;
+	}
+	
+	return &CE_STATIC_MEMBERS(ce)[temp_property_info->offset];
+}
+
+static int zephir_update_static_property_ex(zend_class_entry *scope, const char *name, int name_length, 
+	zval *value, zend_property_info **property_info TSRMLS_DC)
+{
+	zval **property;
+	zend_class_entry *old_scope = EG(scope);
+
+	EG(scope) = scope;
+	property = zephir_std_get_static_property(scope, name, name_length, zend_inline_hash_func(name, name_length), 0, property_info TSRMLS_CC);
+	EG(scope) = old_scope;
+
+	if (!property) {
+		return FAILURE;
+	} else {
+		if (*property != value) {
+			if (PZVAL_IS_REF(*property)) {
+				zval_dtor(*property);
+				Z_TYPE_PP(property) = Z_TYPE_P(value);
+				(*property)->value = value->value;
+				if (Z_REFCOUNT_P(value) > 0) {
+					zval_copy_ctor(*property);
+				} else {
+					efree(value);
+				}
+			} else {
+				zval *garbage = *property;
+
+				Z_ADDREF_P(value);
+				if (PZVAL_IS_REF(value)) {
+					SEPARATE_ZVAL(&value);
+				}
+				*property = value;
+				zval_ptr_dtor(&garbage);
+			}
+		}
+		return SUCCESS;
+	}
+}
+
 /**
  * Query a static property value from a zend_class_entry
  */
-int zephir_read_static_property(zval **result, const char *class_name, unsigned int class_length, char *property_name, unsigned int property_length TSRMLS_DC){
+int zephir_read_static_property(zval **result, const char *class_name, unsigned int class_length, char *property_name, 
+	unsigned int property_length TSRMLS_DC){
 	zend_class_entry **ce;
 	if (zend_lookup_class(class_name, class_length, &ce TSRMLS_CC) == SUCCESS) {
 		return zephir_read_static_property_ce(result, *ce, property_name, property_length TSRMLS_CC);
 	}
-
 	return FAILURE;
 }
 
 int zephir_update_static_property_ce(zend_class_entry *ce, char *name, int len, zval *value TSRMLS_DC) {
-	assert(ce != NULL);
-	return zend_update_static_property(ce, name, len, value TSRMLS_CC);
+	//assert(ce != NULL);
+	return zephir_update_static_property_ex(ce, name, len, value, NULL TSRMLS_CC);
+}
+
+int zephir_update_static_property_ce_cache(zend_class_entry *ce, char *name, int len, zval *value, zend_property_info **property_info TSRMLS_DC) {
+	//assert(ce != NULL);
+	return zephir_update_static_property_ex(ce, name, len, value, property_info TSRMLS_CC);
 }
 
 /**
@@ -1286,7 +1383,7 @@ int zephir_update_static_property_ce(zend_class_entry *ce, char *name, int len, 
 int zephir_update_static_property(const char *class_name, unsigned int class_length, char *name, unsigned int name_length, zval *value TSRMLS_DC){
 	zend_class_entry **ce;
 	if (zend_lookup_class(class_name, class_length, &ce TSRMLS_CC) == SUCCESS) {
-		return zephir_update_static_property_ce(*ce, name, name_length, value TSRMLS_CC);
+		return zend_update_static_property(*ce, name, name_length, value TSRMLS_CC);
 	}
 
 	return FAILURE;

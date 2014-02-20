@@ -611,7 +611,7 @@ class Compiler
                 $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
             }
 
-            //$gccFlags = '-O0 -g -fvisibility=hidden -Wparentheses';
+            $gccFlags = '-O0 -g -fvisibility=hidden -Wparentheses';
             exec('cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace);
         }
 
