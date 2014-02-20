@@ -23,6 +23,7 @@ use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Expression;
+use Zephir\CompiledExpression;
 
 /**
  * LogicalBaseOperator
