@@ -30,8 +30,15 @@ use Zephir\Builder\FunctionCallBuilder;
  *
  * Encapsulates built-in methods for the "string" type
  */
-class StringType
+class StringType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeName()
+    {
+        return 'string';
+    }
 
     /**
      * Transforms calls to method "length" to function calls to "strlen"
@@ -118,23 +125,5 @@ class StringType
         $expression = new Expression($builder->get());
 
         return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Intercepts calls to built-in methods on the string type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "string"', $expression);
     }
 }

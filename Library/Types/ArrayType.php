@@ -26,8 +26,15 @@ use Zephir\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
 
-class ArrayType
+class ArrayType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeName()
+    {
+        return 'array';
+    }
 
     /**
      * Transforms calls to method "join" to function calls to "join"
@@ -69,23 +76,5 @@ class ArrayType
         $expression = new Expression($builder->get());
 
         return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Intercepts calls to built-in methods on the "int" type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
     }
 }

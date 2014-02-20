@@ -25,8 +25,15 @@ use Zephir\Expression;
 use Zephir\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 
-class IntType
+class IntType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeName()
+    {
+        return 'int';
+    }
 
     /**
      * Transforms calls to method "abs" to function calls to "abs"
@@ -43,23 +50,5 @@ class IntType
         $expression = new Expression($builder->get());
 
         return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Intercepts calls to built-in methods on the "int" type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "int"', $expression);
     }
 }

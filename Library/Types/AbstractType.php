@@ -23,42 +23,31 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
-use Zephir\Builder\FunctionCallBuilder;
 
-class CharType extends AbstractType
+abstract class AbstractType
 {
     /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
-    {
-        return 'char';
-    }
-
-    /**
-     * Transforms calls to method "join" to function calls to "join"
+     * Intercepts calls to built-in methods
      *
+     * @param string $methodName
      * @param object $caller
      * @param CompilationContext $compilationContext
      * @param Call $call
      * @param array $expression
+     * @throws CompilerException
+     * @return
      */
-    public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder(
-            'sprintf',
-            array(
-                array('parameter' => array('type' => 'string', 'value' => '%X')),
-                array('parameter' => $caller)
-            ),
-            FunctionCall::CALL_NORMAL,
-            $expression['file'],
-            $expression['line'],
-            $expression['char']
-        );
+        if (method_exists($this, $methodName)) {
+            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+        }
 
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
+        throw new CompilerException(sprintf('Method "%s" is not a built-in method of type "%s"', $methodName, $this->getTypeName()), $expression);
     }
+
+    /**
+     * @return string The name of the type
+     */
+    abstract public function getTypeName();
 }
