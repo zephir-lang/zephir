@@ -29,7 +29,7 @@ use Zephir\Commands\CommandAbstract;
 class Bootstrap
 {
     /**
-     * @var array|CommandAbstract[]
+     * @var CommandAbstract[]
      */
     protected static $commands = array();
 
@@ -70,7 +70,7 @@ class Bootstrap
     /**
      * Returns the commands registered in the compiler
      *
-     * @return array
+     * @return CommandAbstract[]
      */
     public static function getCommands()
     {
