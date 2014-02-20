@@ -17,27 +17,39 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Zephir\Optimizers\FunctionCall;
 
-class ResourceTest extends \PHPUnit_Framework_TestCase
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
+/**
+ * IsStringOptimizer
+ *
+ * Optimizes calls to 'is_string' using internal function
+ */
+class IsResourceOptimizer extends OptimizerAbstract
 {
-    public function testLetStatementAssign()
+    /**
+     * @param array $expression
+     * @param Call $call
+     * @param CompilationContext $context
+     * @return bool|CompiledExpression|mixed
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        $t = new \Test\Resource();
-        $this->assertInternalType('resource', $t->testLetStatementSTDIN());
-        $this->assertInternalType('resource', $t->testLetStatementSTDOUT());
-        $this->assertInternalType('resource', $t->testLetStatementSTDERR());
-    }
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
 
-    public function testTypeOffResource()
-    {
-        $t = new \Test\Resource();
-        $this->assertEquals('resource', $t->testTypeOffResource());
-    }
+        if (count($expression['parameters']) != 1) {
+            return false;
+        }
 
-    public function testIsResource()
-    {
-        $t = new \Test\Resource();
-        $this->assertTrue($t->testIsResource());
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        return new CompiledExpression('bool', '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_RESOURCE)', $expression);
     }
 }

@@ -34,4 +34,12 @@ class Resource
 
         return typeof a;
     }
+
+    public function testIsResource()
+    {
+        var a;
+        let a = STDIN;
+
+        return is_resource(a);
+    }
 }

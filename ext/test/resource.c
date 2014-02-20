@@ -73,3 +73,15 @@ PHP_METHOD(Test_Resource, testTypeOffResource) {
 
 }
 
+PHP_METHOD(Test_Resource, testIsResource) {
+
+	zval *a = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_GET_CONSTANT(a, "STDIN");
+	RETURN_MM_BOOL((Z_TYPE_P(a) == IS_RESOURCE));
+
+}
+
