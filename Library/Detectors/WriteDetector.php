@@ -55,6 +55,7 @@ class WriteDetector
                 case 'do-while':
                 case 'while':
                 case 'loop':
+                case 'try-catch':
                     if (isset($statement['statements'])) {
                         if ($this->detect($variable, $statement['statements']) === true) {
                             return true;
