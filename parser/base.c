@@ -290,9 +290,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_TRY:
 				xx_(xx_parser, XX_TRY, NULL, parser_status);
 				break;
-			//case XX_T_CATCH:
-			//	xx_(xx_parser, XX_CATCH, NULL, parser_status);
-			//	break;
+			case XX_T_CATCH:
+				xx_(xx_parser, XX_CATCH, NULL, parser_status);
+				break;
 
 			case XX_T_DOTCOMMA:
 				xx_(xx_parser, XX_DOTCOMMA, NULL, parser_status);

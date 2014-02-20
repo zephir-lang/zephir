@@ -649,11 +649,33 @@ static json_object *xx_ret_do_while_statement(json_object *expr, json_object *st
 	return ret;
 }
 
-static json_object *xx_ret_try_catch_statement(json_object *statements, xx_scanner_state *state)
+static json_object *xx_ret_try_catch_statement(json_object *statements, json_object *catches, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("try-catch"));
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+	if (catches) {
+		json_object_object_add(ret, "catches", catches);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_catch_statement(json_object *classes, json_object *statements, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	if (classes) {
+		json_object_object_add(ret, "classes", classes);
+	}
 
 	if (statements) {
 		json_object_object_add(ret, "statements", statements);
@@ -1216,6 +1238,10 @@ xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_
 
 xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
 	R = xx_ret_class(I, B, 1, 0, NULL, L, status->scanner_state);
+}
+
+xx_class_def(R) ::= ABSTRACT CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 1, 0, E, L, status->scanner_state);
 }
 
 xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) xx_class_body(B) . {
@@ -1890,11 +1916,39 @@ xx_do_while_statement(R) ::= DO BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE 
 }
 
 xx_try_catch_statement(R) ::= TRY BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_try_catch_statement(NULL, status->scanner_state);
+	R = xx_ret_try_catch_statement(NULL, NULL, status->scanner_state);
 }
 
 xx_try_catch_statement(R) ::= TRY BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_try_catch_statement(L, status->scanner_state);
+	R = xx_ret_try_catch_statement(L, NULL, status->scanner_state);
+}
+
+xx_try_catch_statement(R) ::= TRY BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_catch_statement_list(C) . {
+	R = xx_ret_try_catch_statement(L, C, status->scanner_state);
+}
+
+xx_catch_statement_list(R) ::= xx_catch_statement_list(L) xx_catch_statement(C) . {
+	R = xx_ret_list(L, C);
+}
+
+xx_catch_statement_list(R) ::= xx_catch_statement(C) . {
+	R = xx_ret_list(NULL, C);
+}
+
+xx_catch_statement(R) ::= CATCH xx_catch_classes_list(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+	R = xx_ret_catch_statement(E, L, status->scanner_state);
+}
+
+xx_catch_classes_list(R) ::= xx_catch_classes_list(L) PIPE xx_catch_class(C) . {
+	R = xx_ret_list(L, C);
+}
+
+xx_catch_classes_list(R) ::= xx_catch_class(C) . {
+	R = xx_ret_list(NULL, C);
+}
+
+xx_catch_class(R) ::= IDENTIFIER(C) . {
+	R = xx_ret_literal(XX_T_IDENTIFIER, C, status->scanner_state);
 }
 
 xx_for_statement(R) ::= FOR IDENTIFIER(V) IN xx_common_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {

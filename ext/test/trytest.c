@@ -12,6 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/operators.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Test_TryTest) {
@@ -23,6 +25,34 @@ ZEPHIR_INIT_CLASS(Test_TryTest) {
 }
 
 PHP_METHOD(Test_TryTest, testTry1) {
+
+
+	//missing try-catch
+
+}
+
+PHP_METHOD(Test_TryTest, testTry2) {
+
+
+	//missing try-catch
+
+}
+
+PHP_METHOD(Test_TryTest, testTry3) {
+
+
+	//missing try-catch
+
+}
+
+PHP_METHOD(Test_TryTest, testTry4) {
+
+	zval *a_param = NULL;
+	zend_bool a;
+
+	zephir_fetch_params(0, 1, 0, &a_param);
+
+	a = zephir_get_boolval(a_param);
 
 
 	//missing try-catch
