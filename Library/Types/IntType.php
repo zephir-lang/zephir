@@ -19,12 +19,6 @@
 
 namespace Zephir\Types;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\CompilerException;
-use Zephir\Builder\FunctionCallBuilder;
-
 class IntType extends AbstractType
 {
     /**
@@ -36,19 +30,12 @@ class IntType extends AbstractType
     }
 
     /**
-     * Transforms calls to method "abs" to function calls to "abs"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * {@inheritdoc}
      */
-    public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    protected function getMethodMap()
     {
-        $builder = new FunctionCallBuilder('abs', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
+        return array(
+            'abs' => 'abs'
+        );
     }
 }

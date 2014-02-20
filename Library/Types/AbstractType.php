@@ -23,9 +23,18 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
+use Zephir\Builder\FunctionCallBuilder;
+use Zephir\FunctionCall;
 
 abstract class AbstractType
 {
+    protected $methodMap;
+
+    public function __construct()
+    {
+        $this->methodMap = $this->getMethodMap();
+    }
+
     /**
      * Intercepts calls to built-in methods
      *
@@ -35,12 +44,32 @@ abstract class AbstractType
      * @param Call $call
      * @param array $expression
      * @throws CompilerException
-     * @return
+     * @return bool|\Zephir\CompiledExpression
      */
     public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
         if (method_exists($this, $methodName)) {
             return $this->{$methodName}($caller, $compilationContext, $call, $expression);
+        }
+        if (isset($this->methodMap[$methodName])) {
+            if (isset($expression['parameters'])) {
+                $parameters = $expression['parameters'];
+                array_unshift($parameters, array('parameter' => $caller));
+            } else {
+                $parameters = array(array('parameter' => $caller));
+            }
+
+            $builder = new FunctionCallBuilder(
+                $this->methodMap[$methodName],
+                $parameters,
+                FunctionCall::CALL_NORMAL,
+                $expression['file'],
+                $expression['line'],
+                $expression['char']
+            );
+            $expression = new Expression($builder->get());
+
+            return $expression->compile($compilationContext);
         }
 
         throw new CompilerException(sprintf('Method "%s" is not a built-in method of type "%s"', $methodName, $this->getTypeName()), $expression);
@@ -50,4 +79,12 @@ abstract class AbstractType
      * @return string The name of the type
      */
     abstract public function getTypeName();
+
+    /**
+     * @return array The array of methods in zephir mapped to PHP internal methods
+     */
+    protected function getMethodMap()
+    {
+        return array();
+    }
 }

@@ -41,89 +41,16 @@ class StringType extends AbstractType
     }
 
     /**
-     * Transforms calls to method "length" to function calls to "strlen"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * {@inheritdoc}
      */
-    public function length($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    protected function getMethodMap()
     {
-        $builder = new FunctionCallBuilder('strlen', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Transforms calls to method "trim" to function calls to "trim"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function trim($caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        $builder = new FunctionCallBuilder('trim', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Transforms calls to method "index" to function calls to "strpos"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function index($caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        $parameters = $expression['parameters'];
-        array_unshift($parameters, array('parameter' => $caller));
-        $builder = new FunctionCallBuilder('strpos', $parameters);
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Transforms calls to method "lower" to function calls to "strtolower"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function lower($caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        $builder = new FunctionCallBuilder('strtolower', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Transforms calls to method "upper" to function calls to "upper"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function upper($caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        $builder = new FunctionCallBuilder('strotoupper', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
+        return array(
+            'index' => 'strpos',
+            'trim' => 'trim',
+            'length' => 'strlen',
+            'lower' => 'strtolower',
+            'upper' => 'strtoupper'
+        );
     }
 }
