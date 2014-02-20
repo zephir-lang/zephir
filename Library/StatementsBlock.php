@@ -34,6 +34,7 @@ use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
 use Zephir\Statements\DoWhileStatement;
 use Zephir\Statements\SwitchStatement;
+use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 
 /**
@@ -212,6 +213,12 @@ class StatementsBlock
 
                 case 'throw':
                     $throwStatement = new ThrowStatement($statement);
+                    $throwStatement->compile($compilationContext);
+                    $this->_unrecheable = true;
+                    break;
+
+                case 'try-catch':
+                    $throwStatement = new TryCatchStatement($statement);
                     $throwStatement->compile($compilationContext);
                     $this->_unrecheable = true;
                     break;

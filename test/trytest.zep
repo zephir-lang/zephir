@@ -56,6 +56,8 @@ class TryTest
 
 	public function testTry6(boolean a)
 	{
+		var e;
+
 		try {
 			if a {
 				throw new Exception("error!");
@@ -71,6 +73,8 @@ class TryTest
 
 	public function testTry7(boolean a)
 	{
+		var e;
+
 		try {
 			if a {
 				throw new Exception("error!");
@@ -80,6 +84,14 @@ class TryTest
 		} catch Exception|RuntimeException, e  {
 			return "any error";
 		}
+	}
+
+	public function testTry8()
+	{
+		try {
+			throw new Exception("error 1!");
+		}
+		throw new Exception("error 2!");
 	}
 
 }

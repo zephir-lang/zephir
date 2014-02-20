@@ -1026,6 +1026,12 @@ class ClassMethod
          */
         $compilationContext->functionCache = null;
 
+        /**
+         * Reset try/catch and loop counter
+         */
+        $compilationContext->insideCycle = 0;
+        $compilationContext->insideTryCatch = 0;
+
         if (is_object($parameters)) {
 
             /**

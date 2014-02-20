@@ -160,11 +160,11 @@ class ForStatement extends StatementAbstract
                         'variable' => $tempVariable->getName(),
                         'operator' => 'assign',
                         'expr' => array(
-                            'type' => $parameters[0]->getType(),
+                            'type'  => $parameters[0]->getType(),
                             'value' => $parameters[0]->getCode(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file'  => $this->_statement['file'],
+                            'line'  => $this->_statement['line'],
+                            'char'  => $this->_statement['char']
                         ),
                         'file' => $this->_statement['file'],
                         'line' => $this->_statement['line'],
@@ -405,7 +405,7 @@ class ForStatement extends StatementAbstract
      */
     public function compileIterator($expression, $compilationContext)
     {
-        
+
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
     }

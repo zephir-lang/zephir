@@ -102,11 +102,18 @@ class CompilationContext
     public $stringsManager;
 
     /**
-     * Tells if the the compilation is being made inside a cycle
+     * Tells if the the compilation is being made inside a cycle/loop
      *
      * @var int
      */
     public $insideCycle = 0;
+
+    /**
+     * Tells if the the compilation is being made inside a try/catch block
+     *
+     * @var int
+     */
+    public $insideTryCatch = 0;
 
     /**
      * Tells if the the compilation is being made inside a switch
