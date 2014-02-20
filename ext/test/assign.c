@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -617,6 +618,31 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 		ZEND_SET_SYMBOL(&EG(symbol_table), "_POST", _POST);
 	}
 	RETURN_CCTOR(_POST);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/170
+ */
+PHP_METHOD(Test_Assign, testArrayVarAssign4) {
+
+	zval *value, *a, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value);
+
+
+
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_fetch_long(&_1, a, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	Z_SET_ISREF_P(_1);
+	zephir_call_func_p2_noret("array_push", _1, value);
+	Z_UNSET_ISREF_P(_1);
+	RETURN_CCTOR(a);
 
 }
 

@@ -374,6 +374,19 @@ class Assign
 		return _POST;
 	}
 
+    /**
+     * @link https://github.com/phalcon/zephir/issues/170
+     */
+    public function testArrayVarAssign4(var value)
+    {
+        var a;
+        let a = [];
+        let a[] = [];
+        array_push(a[0], value);
+
+        return a;
+    }
+
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/159
 	 */
