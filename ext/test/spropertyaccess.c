@@ -36,6 +36,7 @@ PHP_METHOD(Test_SPropertyAccess, __construct) {
 	zval *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
 
 
+	ZEPHIR_INIT_ZVAL_NREF(_1);
 	ZVAL_STRING(_1, "abc", 1);
 	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("a"), _1 TSRMLS_CC);
 	_3 = zephir_fetch_static_property_ce(test_spropertyaccess_ce, SL("a") TSRMLS_CC);
