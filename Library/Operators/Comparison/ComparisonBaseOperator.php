@@ -78,7 +78,7 @@ class ComparisonBaseOperator extends BaseOperator
 
             $expression = new Expression($expr['left']['left']);
             $condition = $expression->compile($compilationContext);
-            $variableVariable = $compilationContext->symbolTable->getVariable($condition->getCode());
+            $variableVariable = $compilationContext->symbolTable->getVariableForRead($condition->getCode());
 
             if ($expr['right']['type'] != 'string') {
                 throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
