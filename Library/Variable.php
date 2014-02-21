@@ -682,6 +682,7 @@ class Variable
      */
     public function initNonReferenced(CompilationContext $compilationContext)
     {
+        $compilationContext->headersManager->add('kernel/memory');
         $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->_name . ');');
     }
 
