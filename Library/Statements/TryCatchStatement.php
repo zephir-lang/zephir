@@ -95,7 +95,7 @@ class TryCatchStatement extends StatementAbstract
                             new VariableBuilder('\\' . $class['value'])
                         ),
                         new StatementsBlockBuilder(array_merge(
-                            array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_CC);')),
+                            array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_C);')),
                             $catch['statements']
                         ), true)
                     );
@@ -111,7 +111,7 @@ class TryCatchStatement extends StatementAbstract
             }
 
         } else {
-            $codePrinter->output('zend_clear_exception(TSRMLS_CC);');
+            $codePrinter->output('zend_clear_exception(TSRMLS_C);');
         }
     }
 }
