@@ -200,17 +200,15 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 #define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(&z)
 
 #define ZEPHIR_SEPARATE_PARAM(z) \
-	{\
+	do { \
 		zval *orig_ptr = z;\
-		if (Z_REFCOUNT_P(orig_ptr) > 1) {\
-			zephir_memory_observe(&z TSRMLS_CC);\
-			ALLOC_ZVAL(z);\
-			*z = *orig_ptr;\
-			zval_copy_ctor(z);\
-			Z_SET_REFCOUNT_P(z, 1);\
-			Z_UNSET_ISREF_P(z);\
-		}\
-	}
+		phalcon_memory_observe(&z TSRMLS_CC);\
+		ALLOC_ZVAL(z);\
+		*z = *orig_ptr;\
+		zval_copy_ctor(z);\
+		Z_SET_REFCOUNT_P(z, 1);\
+		Z_UNSET_ISREF_P(z);\
+	} while (0)
 
 #define ZEPHIR_SEPARATE_PARAM_NMO(z) { \
 		zval *orig_ptr = z; \
