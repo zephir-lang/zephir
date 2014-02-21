@@ -17,38 +17,23 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Types;
+namespace Extension;
 
-class IntType extends AbstractType
+class TryTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function testThrow1()
     {
-        return 'int';
+        $this->setExpectedException('\Exception', 'error');
+
+        $t = new \Test\TryTest();
+        $t->testThrow1();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getMethodMap()
+    public function testThrow2()
     {
-        return array(
-            'abs' => 'abs',
-            'tobinary' => 'decbin',
-            'tohex' => 'dechex',
-            'tooctal' => 'decoct',
-            'pow' => 'pow',
-            'sqrt' => 'sqrt',
-            'exp' => 'exp',
-            'sin' => 'sin',
-            'cos' => 'cos',
-            'tan' => 'tan',
-            'asin' => 'asin',
-            'acos' => 'acos',
-            'atan' => 'atan',
-            'log' => 'log'
-        );
+        $this->setExpectedException('\Exception', 'error');
+
+        $t = new \Test\TryTest();
+        $t->testThrow2();
     }
 }
