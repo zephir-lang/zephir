@@ -489,8 +489,10 @@ class LocalContextPass
 
                 case 'unset':
                     if ($statement['expr']['type'] == "array-access") {
-                        $this->markVariableNoLocal($statement['expr']['left']['value']);
-                        $this->increaseMutations($statement['expr']['left']['value']);
+                        if ($statement['expr']['left']['type'] == 'variable') {
+                            $this->markVariableNoLocal($statement['expr']['left']['value']);
+                            $this->increaseMutations($statement['expr']['left']['value']);
+                        }
                     } else {
                         if ($statement['expr']['type'] == "list") {
                             if ($statement['expr']['left']['type'] == 'array-access') {

@@ -57,7 +57,7 @@ class UnsetStatement extends StatementAbstract
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
 
-                $expr = new Expression($expression);
+                $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
                 break;
