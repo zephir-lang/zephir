@@ -32,6 +32,7 @@ zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_assign_ce;
 zend_class_entry *test_bitwise_ce;
 zend_class_entry *test_branchprediction_ce;
+zend_class_entry *test_builtin_intmethods_ce;
 zend_class_entry *test_builtin_stringmethods_ce;
 zend_class_entry *test_builtinmethods_ce;
 zend_class_entry *test_cast_ce;
@@ -124,6 +125,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Bitwise);
 	ZEPHIR_INIT(Test_BranchPrediction);
 	ZEPHIR_INIT(Test_BuiltInMethods);
+	ZEPHIR_INIT(Test_BuiltIn_IntMethods);
 	ZEPHIR_INIT(Test_BuiltIn_StringMethods);
 	ZEPHIR_INIT(Test_Cast);
 	ZEPHIR_INIT(Test_Cblock);

@@ -8,6 +8,7 @@
 #include "test/assign.h"
 #include "test/bitwise.h"
 #include "test/branchprediction.h"
+#include "test/builtin/intmethods.h"
 #include "test/builtin/stringmethods.h"
 #include "test/builtinmethods.h"
 #include "test/cast.h"
