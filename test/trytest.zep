@@ -47,10 +47,10 @@ class TryTest
 			} else {
 				throw new RuntimeException("error!");
 			}
-		} catch Exception {
-			return "error";
 		} catch RuntimeException {
 			return "domain error";
+		} catch Exception {
+			return "error";
 		}
 
 		return false;
@@ -64,7 +64,7 @@ class TryTest
 			} else {
 				throw new RuntimeException("error!");
 			}
-		} catch Exception|RuntimeException  {
+		} catch RuntimeException|Exception  {
 			return "any error";
 		}
 
@@ -81,10 +81,10 @@ class TryTest
 			} else {
 				throw new RuntimeException("error!");
 			}
-		} catch Exception, e {
-			return "error";
 		} catch RuntimeException, e {
 			return "domain error";
+		} catch Exception, e {
+			return "error";
 		}
 
 		return false;
@@ -100,7 +100,7 @@ class TryTest
 			} else {
 				throw new RuntimeException("error!");
 			}
-		} catch Exception|RuntimeException, e  {
+		} catch RuntimeException|Exception, e  {
 			return "any error";
 		}
 	}

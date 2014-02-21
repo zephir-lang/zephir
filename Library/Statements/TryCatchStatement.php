@@ -60,9 +60,6 @@ class TryCatchStatement extends StatementAbstract
         /**
          * If 'try' is the latest statement add a 'dummy' statement to avoid compilation errors
          */
-        if (!isset($this->_statement['catches'])) {
-            $codePrinter->output('zephir_empty_statement();');
-        }
         $codePrinter->outputBlankLine();
 
         $compilationContext->insideTryCatch--;
@@ -97,13 +94,24 @@ class TryCatchStatement extends StatementAbstract
                             new VariableBuilder($variable->getName()),
                             new VariableBuilder('\\' . $class['value'])
                         ),
-                        new StatementsBlockBuilder($catch['statements'], true)
+                        new StatementsBlockBuilder(array_merge(
+                            array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_CC);')),
+                            $catch['statements']
+                        ), true)
                     );
 
                     $ifStatement = new IfStatement($ifCheck->get());
                     $ifStatement->compile($compilationContext);
                 }
+
+                if ($variable->isTemporal()) {
+                    $variable->setIdle(true);
+                }
+
             }
+
+        } else {
+            $codePrinter->output('zend_clear_exception(TSRMLS_CC);');
         }
     }
 }

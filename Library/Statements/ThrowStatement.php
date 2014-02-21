@@ -83,8 +83,8 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
         }
 
+        $codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
         if (!$compilationContext->insideTryCatch) {
-            $codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
             $codePrinter->output('ZEPHIR_MM_RESTORE();');
             $codePrinter->output('return;');
         } else {

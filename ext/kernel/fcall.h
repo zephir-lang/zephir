@@ -904,6 +904,16 @@
 		} \
 	while(0)
 
+#define zephir_check_call_status_or_jump(label)	\
+	if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
+		if (EG(exception)) { \
+			goto label; \
+		} else { \
+			ZEPHIR_MM_RESTORE(); \
+			return; \
+		} \
+	}
+
 int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...);
 int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, zend_function **function_ptr TSRMLS_DC, int param_count, ...);
 int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...);
