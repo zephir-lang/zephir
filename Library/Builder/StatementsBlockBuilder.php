@@ -31,7 +31,7 @@ class StatementsBlockBuilder
 
     protected $raw;
 
-    public function __construct(array $statements, $raw=false)
+    public function __construct(array $statements, $raw = false)
     {
         $this->statements = $statements;
         $this->raw = $raw;
