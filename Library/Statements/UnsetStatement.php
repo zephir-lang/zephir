@@ -39,18 +39,11 @@ class UnsetStatement extends StatementAbstract
 
         $flags = 'PH_SEPARATE';
 
+        if ($expression['type'] == 'list') {
+            $expression = $expression['left'];
+        }
+
         switch ($expression['type']) {
-
-            case 'list':
-                $expr = new Expression($expression['left']['left']);
-                $expr->setReadOnly(true);
-                $exprVar = $expr->compile($compilationContext);
-
-                $expr = new Expression($expression['left']['right']);
-                $expr->setReadOnly(true);
-                $exprIndex = $expr->compile($compilationContext);
-
-                break;
 
             case 'array-access':
                 $expr = new Expression($expression['left']);

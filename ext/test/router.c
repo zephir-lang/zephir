@@ -166,7 +166,7 @@ PHP_METHOD(Test_Router, setDI) {
 
 
 
-	if (!(zephir_is_instance_of(dependencyInjector, SL("Test\\DiInterface") TSRMLS_CC))) {
+	if (!(zephir_instance_of_ev(dependencyInjector, test_diinterface_ce TSRMLS_CC))) {
 		ZEPHIR_THROW_EXCEPTION_STRW(spl_ce_InvalidArgumentException, "Parameter 'dependencyInjector' must be an instance of 'Test\\DiInterface'");
 		return;
 	}
@@ -816,7 +816,6 @@ PHP_METHOD(Test_Router, addPatch) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
-
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "PATCH", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
@@ -843,7 +842,6 @@ PHP_METHOD(Test_Router, addDelete) {
 	if (!paths) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
-
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "DELETE", 1);
@@ -900,7 +898,6 @@ PHP_METHOD(Test_Router, addHead) {
 		paths = ZEPHIR_GLOBAL(global_null);
 	}
 
-
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "HEAD", 1);
 	zephir_call_method_p3(return_value, this_ptr, "add", pattern, paths, _0);
@@ -924,8 +921,6 @@ PHP_METHOD(Test_Router, mount) {
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &group);
-
-
 
 	if ((Z_TYPE_P(group) != IS_OBJECT)) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes is not valid");
@@ -990,8 +985,6 @@ PHP_METHOD(Test_Router, notFound) {
 	zval *paths;
 
 	zephir_fetch_params(0, 1, 0, &paths);
-
-
 
 	if ((Z_TYPE_P(paths) != IS_ARRAY)) {
 		if ((Z_TYPE_P(paths) != IS_STRING)) {

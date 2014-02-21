@@ -503,6 +503,7 @@ class LocalContextPass
                             }
                         }
                     }
+                    break;
 
                 case 'break':
                 case 'continue':
