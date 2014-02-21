@@ -120,6 +120,7 @@ class NewInstanceOperator extends BaseOperator
                     $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
                     $classEntry = $zendClassEntry->getName();
                 } else {
+
                     if (!class_exists($className, false)) {
                         $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
                         $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);

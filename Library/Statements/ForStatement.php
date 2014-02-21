@@ -160,11 +160,11 @@ class ForStatement extends StatementAbstract
                         'variable' => $tempVariable->getName(),
                         'operator' => 'assign',
                         'expr' => array(
-                            'type' => $parameters[0]->getType(),
+                            'type'  => $parameters[0]->getType(),
                             'value' => $parameters[0]->getCode(),
-                            'file' => $this->_statement['file'],
-                            'line' => $this->_statement['line'],
-                            'char' => $this->_statement['char']
+                            'file'  => $this->_statement['file'],
+                            'line'  => $this->_statement['line'],
+                            'char'  => $this->_statement['char']
                         ),
                         'file' => $this->_statement['file'],
                         'line' => $this->_statement['line'],
@@ -405,7 +405,7 @@ class ForStatement extends StatementAbstract
      */
     public function compileIterator($expression, $compilationContext)
     {
-        
+
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
     }
@@ -427,7 +427,7 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-            $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $compilationContext, $this->_statement['expr']);
+            $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
             switch ($keyVariable->getType()) {
                 case 'int':
                 case 'uint':
@@ -447,7 +447,7 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-            $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $compilationContext, $this->_statement['expr']);
+            $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
             switch ($variable->getType()) {
                 case 'int':
                 case 'uint':

@@ -44,7 +44,6 @@ class ComparisonBaseOperator extends BaseOperator
      */
     public function optimizeTypeOf($expr, CompilationContext $compilationContext)
     {
-
         if (!isset($expr['left'])) {
             return false;
         }
@@ -54,7 +53,6 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if ($expr['left']['type'] == 'typeof') {
-
             if ($expr['right']['type'] != 'string') {
                 echo $expr['right']['type'];
                 $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
@@ -63,7 +61,6 @@ class ComparisonBaseOperator extends BaseOperator
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
-
                     case 'identical':
                     case 'equals':
                         $operator = '==';
@@ -73,7 +70,7 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'not-equals':
                         $operator = '!=';
                         break;
-                        
+
                     default:
                         return false;
                 }
@@ -81,7 +78,7 @@ class ComparisonBaseOperator extends BaseOperator
 
             $expression = new Expression($expr['left']['left']);
             $condition = $expression->compile($compilationContext);
-            $variableVariable = $compilationContext->symbolTable->getVariable($condition->getCode());
+            $variableVariable = $compilationContext->symbolTable->getVariableForRead($condition->getCode(), $compilationContext, $expr);
 
             if ($expr['right']['type'] != 'string') {
                 throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
@@ -90,7 +87,6 @@ class ComparisonBaseOperator extends BaseOperator
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
-
                 case 'variable':
                     switch ($value) {
 

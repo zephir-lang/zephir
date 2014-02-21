@@ -27,5 +27,4 @@ class Instanceoff
 		let a = new \stdClass();
 		return a instanceof UnknownClass;
 	}
-
 }

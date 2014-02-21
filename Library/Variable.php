@@ -33,6 +33,7 @@ class Variable
 
     /**
      * Current dynamic type of the variable
+     * @var array
      */
     protected $_dynamicTypes = array('unknown' => true);
 
@@ -681,6 +682,7 @@ class Variable
      */
     public function initNonReferenced(CompilationContext $compilationContext)
     {
+        $compilationContext->headersManager->add('kernel/memory');
         $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->_name . ');');
     }
 

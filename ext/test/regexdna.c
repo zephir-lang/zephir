@@ -38,6 +38,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 
 	HashTable *_4;
 	HashPosition _3;
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0 = NULL, *_1, _2, **_5, *_6 = NULL, *_7;
 
 	ZEPHIR_MM_GROW();
@@ -158,6 +159,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZVAL_STRING(&_2, "", 0);
 	ZEPHIR_INIT_BNVAR(_0);
 	zephir_call_func_p3(_0, "preg_replace", _1, &_2, contents);
+	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(contents, _0);
 	ZEPHIR_INIT_VAR(codeLength);
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
@@ -178,6 +180,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	}
 	ZEPHIR_INIT_VAR(_7);
 	zephir_call_func_p3(_7, "preg_replace", vIUB, vIUBnew, contents);
+	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(contents, _7);
 	php_printf("%c", '\n');
 	zend_print_zval(initialLength, 0);

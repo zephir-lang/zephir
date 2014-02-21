@@ -34,6 +34,7 @@ use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
 use Zephir\Statements\DoWhileStatement;
 use Zephir\Statements\SwitchStatement;
+use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 
 /**
@@ -216,6 +217,12 @@ class StatementsBlock
                     $this->_unrecheable = true;
                     break;
 
+                case 'try-catch':
+                    $throwStatement = new TryCatchStatement($statement);
+                    $throwStatement->compile($compilationContext);
+                    $this->_unrecheable = true;
+                    break;
+
                 case 'fetch':
                     $expr = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
@@ -290,6 +297,16 @@ class StatementsBlock
     public function getStatements()
     {
         return $this->_statements;
+    }
+
+    /**
+     * Setter for statements
+     *
+     * @param array $statements
+     */
+    public function setStatements(array $statements)
+    {
+        $this->_statements = $statements;
     }
 
     /**

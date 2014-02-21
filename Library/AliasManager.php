@@ -29,6 +29,9 @@ class AliasManager
 
     protected $aliases = array();
 
+    /**
+     *
+     */
     public function add(array $useStatement)
     {
         foreach ($useStatement['aliases'] as $alias) {

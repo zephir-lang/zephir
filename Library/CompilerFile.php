@@ -310,7 +310,22 @@ class CompilerFile
                         array('public'),
                         '__toString',
                         null,
-                        null,
+                        new StatementsBlock(array(
+                            array(
+                                'type' => 'return',
+                                'expr' => array(
+                                    'type' => 'property-access',
+                                    'left' => array(
+                                        'type' => 'variable',
+                                        'value' => 'this'
+                                    ),
+                                    'right' => array(
+                                        'type' => 'variable',
+                                        'value' => $property['name']
+                                    )
+                                )
+                            )
+                        )),
                         isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
                         null,
                         $shortcut
@@ -331,7 +346,6 @@ class CompilerFile
      */
     public function preCompileClass($namespace, $topStatement)
     {
-
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
@@ -359,7 +373,6 @@ class CompilerFile
 
             if (isset($definition['properties'])) {
                 foreach ($definition['properties'] as $property) {
-
                     /**
                      * Add property to the definition
                      */

@@ -31,15 +31,19 @@ ZEPHIR_INIT_CLASS(Test_ScallExternal) {
 
 PHP_METHOD(Test_ScallExternal, testCall1) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
+
 	ZEPHIR_MM_GROW();
 
 	zephir_call_static(return_value, "Test\\Scall", "testmethod1");
+	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_ScallExternal, testCall2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, *b;
 
 	ZEPHIR_MM_GROW();
@@ -48,6 +52,7 @@ PHP_METHOD(Test_ScallExternal, testCall2) {
 
 
 	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod4", a, b);
+	zephir_check_call_status();
 	RETURN_MM();
 
 }

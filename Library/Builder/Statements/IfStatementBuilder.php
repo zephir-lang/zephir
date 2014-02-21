@@ -19,6 +19,9 @@
 
 namespace Zephir\Builder\Statements;
 
+use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
+
 /**
  * IfStatementBuilder
  *
@@ -35,11 +38,11 @@ class IfStatementBuilder
     /**
      * IfStatementBuilder constructor
      *
-     * @param array $evalExpr
-     * @param array $ifBlock
-     * @param array $elseBlock
+     * @param AbstractOperatorBuilder $evalExpr
+     * @param StatementsBlockBuilder $ifBlock
+     * @param StatementsBlockBuilder $elseBlock
      */
-    public function __construct($evalExpr, $ifBlock, $elseBlock = null)
+    public function __construct(AbstractOperatorBuilder $evalExpr, StatementsBlockBuilder $ifBlock, StatementsBlockBuilder $elseBlock = null)
     {
         $this->evalExpr = $evalExpr;
         $this->ifBlock = $ifBlock;

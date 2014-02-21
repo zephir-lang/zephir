@@ -410,11 +410,11 @@ class Flow
 		var returnValue;
 		let returnValue = [];
 
-	    while next(variable) {
-            let returnValue[] = current(variable);
-        }
+		while next(variable) {
+			let returnValue[] = current(variable);
+		}
 
-        return returnValue;
+		return returnValue;
 	}
 
 	public function testWhileDoNextTest(var variable)
@@ -427,14 +427,13 @@ class Flow
 		} while next(variable);
 
 		return returnValue;
-    }
+	}
 
 
 	public function testFor1()
 	{
 		var v, b; int c;
-		let c = 0,
-			b = [1, 2, 3, 4];
+		let c = 0, b = [1, 2, 3, 4];
 		for v in b {
 			let c += v;
 		}
@@ -444,8 +443,7 @@ class Flow
 	public function testFor2()
 	{
 		var v, k, b; double c;
-		let c = 0,
-			b = [1, 2, 3, 4];
+		let c = 0, b = [1, 2, 3, 4];
 		for k, v in b {
 			let c += k;
 		}
@@ -711,6 +709,17 @@ class Flow
 		return result;
 	}
 
+	public function testFor34(<\Iterator> e = null)
+	{
+		var v, result = [];
+		if typeof e == "object" {
+			for v in iterator(e) {
+				let result[] = v;
+			}
+			return result;
+		}
+	}
+
 	public function testSwitch1()
 	{
 		var a;
@@ -823,9 +832,11 @@ class Flow
 		var a;
 		let a = 5;
 		switch a {
+
 			case 3:
 			case 4:
 				return 0;
+
 			case 10:
 			case 4:
 				return 1;

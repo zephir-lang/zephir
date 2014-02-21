@@ -19,14 +19,15 @@
 
 namespace Zephir\Builder\Operators;
 
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
+
 /**
  * NewInstanceOperatorBuilder
  *
  * Allows to manually build a 'new instance' operator AST node
  */
-class NewInstanceOperatorBuilder
+class NewInstanceOperatorBuilder extends AbstractOperatorBuilder
 {
-
     protected $type;
 
     protected $className;

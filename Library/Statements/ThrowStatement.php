@@ -46,22 +46,24 @@ class ThrowStatement extends StatementAbstract
         /**
          * This optimizes throw new Exception("hello")
          */
-        if (isset($expr['class'])) {
-            if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
-                if ($expr['parameters'][0]['parameter']['type'] == 'string') {
-                    $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
-                    if ($compilationContext->compiler->isClass($className)) {
-                        $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                        $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
-                        $codePrinter->output('return;');
-                        return;
-                    } else {
-                        if ($compilationContext->compiler->isInternalClass($className)) {
-                            $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
-                            if ($classEntry) {
-                                $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classEntry . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
-                                $codePrinter->output('return;');
-                                return;
+        if (!$compilationContext->insideTryCatch) {
+            if (isset($expr['class'])) {
+                if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
+                    if ($expr['parameters'][0]['parameter']['type'] == 'string') {
+                        $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                        if ($compilationContext->compiler->isClass($className)) {
+                            $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
+                            $codePrinter->output('return;');
+                            return;
+                        } else {
+                            if ($compilationContext->compiler->isInternalClass($className)) {
+                                $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
+                                if ($classEntry) {
+                                    $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classEntry . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
+                                    $codePrinter->output('return;');
+                                    return;
+                                }
                             }
                         }
                     }
@@ -82,8 +84,13 @@ class ThrowStatement extends StatementAbstract
         }
 
         $codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
-        $codePrinter->output('ZEPHIR_MM_RESTORE();');
-        $codePrinter->output('return;');
+        if (!$compilationContext->insideTryCatch) {
+            $codePrinter->output('ZEPHIR_MM_RESTORE();');
+            $codePrinter->output('return;');
+        } else {
+            $codePrinter->output('goto try_end_' . $compilationContext->insideTryCatch . ';');
+            $codePrinter->outputBlankLine();
+        }
 
         if ($variableVariable->isTemporal()) {
             $variableVariable->setIdle(true);

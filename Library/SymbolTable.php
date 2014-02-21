@@ -112,6 +112,18 @@ class SymbolTable
     }
 
     /**
+     * Adds a raw variable to the symbol table
+     *
+     * @param Variable $variable
+     * @return Variable
+     */
+    public function addRawVariable(Variable $variable)
+    {
+        $this->_variables[$variable->getName()] = $variable;
+        return $variable;
+    }
+
+    /**
      * Returns a variable in the symbol table
      *
      * @return Variable
@@ -199,111 +211,114 @@ class SymbolTable
 
             if ($name != 'return_value' && $name != 'this') {
 
-                $initBranches = $variable->getInitBranches();
+                if (is_object($compilationContext) && is_object($compilationContext->branchManager)) {
 
-                $currentBranch = $compilationContext->branchManager->getCurrentBranch();
-                $branches = array_reverse($initBranches);
+                    $initBranches = $variable->getInitBranches();
 
-                if (count($branches) == 1) {
+                    $currentBranch = $compilationContext->branchManager->getCurrentBranch();
+                    $branches = array_reverse($initBranches);
 
-                    if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
-                        if ($branches[0]->isUnrecheable() === true) {
-                            throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
-                        }
-                    } else {
-                        if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
-                            if ($branches[0]->isUnrecheable() === false) {
+                    if (count($branches) == 1) {
+
+                        if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+                            if ($branches[0]->isUnrecheable() === true) {
                                 throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
                             }
-                        }
-                    }
-
-                    $tempBranch = $branches[0]->getParentBranch();
-                    while ($tempBranch) {
-
-                        if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
-                            if ($tempBranch->isUnrecheable() === true) {
-                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
-                            }
-                        }
-
-                        $tempBranch = $tempBranch->getParentBranch();
-                    }
-
-                }
-
-                $found = false;
-                foreach ($branches as $branch) {
-
-                    /*+
-                     * Variable was initialized in the same current branch
-                     */
-                    if ($branch == $currentBranch) {
-                        $found = true;
-                        break;
-                    }
-
-                    /**
-                     * 'root' and 'external' branches are safe branches
-                     */
-                    if ($branch->getType() == Branch::TYPE_ROOT || $branch->getType() == Branch::TYPE_EXTERNAL) {
-                        $found = true;
-                        break;
-                    }
-
-                }
-
-                if (!$found) {
-
-                    /**
-                     * Check if last assignment
-                     * Variable was initialized in a sub-branch and it's beign used in a parent branch
-                     */
-                    $possibleBadAssignment = false;
-
-                    if ($currentBranch->getLevel() < $branches[0]->getLevel()) {
-                        $possibleBadAssignment = true;
-                    }
-
-                    if ($possibleBadAssignment) {
-
-                        if (count($branches) > 1) {
-
-                            $graph = new BranchGraph();
-                            foreach ($branches as $branch) {
-                                $graph->addLeaf($branch);
-                            }
-                            //echo $graph->getRoot()->show();
-
                         } else {
-
-                            /**
-                             * Variable is assigned just once and it's assigned in a conditional branch
-                             */
-                            if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
-                                $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-                                if ($evalExpression->isUnrecheable() === true) {
-                                    throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
-                                } else {
-                                    $variable->enableDefaultAutoInitValue();
-                                    $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
+                            if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
+                                if ($branches[0]->isUnrecheable() === false) {
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
                                 }
+                            }
+                        }
+
+                        $tempBranch = $branches[0]->getParentBranch();
+                        while ($tempBranch) {
+
+                            if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
+                                if ($tempBranch->isUnrecheable() === true) {
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+                                }
+                            }
+
+                            $tempBranch = $tempBranch->getParentBranch();
+                        }
+
+                    }
+
+                    $found = false;
+                    foreach ($branches as $branch) {
+
+                        /*+
+                         * Variable was initialized in the same current branch
+                         */
+                        if ($branch == $currentBranch) {
+                            $found = true;
+                            break;
+                        }
+
+                        /**
+                         * 'root' and 'external' branches are safe branches
+                         */
+                        if ($branch->getType() == Branch::TYPE_ROOT || $branch->getType() == Branch::TYPE_EXTERNAL) {
+                            $found = true;
+                            break;
+                        }
+
+                    }
+
+                    if (!$found) {
+
+                        /**
+                         * Check if last assignment
+                         * Variable was initialized in a sub-branch and it's beign used in a parent branch
+                         */
+                        $possibleBadAssignment = false;
+
+                        if ($currentBranch->getLevel() < $branches[0]->getLevel()) {
+                            $possibleBadAssignment = true;
+                        }
+
+                        if ($possibleBadAssignment) {
+
+                            if (count($branches) > 1) {
+
+                                $graph = new BranchGraph();
+                                foreach ($branches as $branch) {
+                                    $graph->addLeaf($branch);
+                                }
+                                //echo $graph->getRoot()->show();
+
                             } else {
-                                if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
+
+                                /**
+                                 * Variable is assigned just once and it's assigned in a conditional branch
+                                 */
+                                if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                     $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-                                    if ($evalExpression->isUnrecheableElse() === true) {
+                                    if ($evalExpression->isUnrecheable() === true) {
                                         throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
                                         $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
                                     }
+                                } else {
+                                    if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
+                                        $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
+                                        if ($evalExpression->isUnrecheableElse() === true) {
+                                            throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
+                                        } else {
+                                            $variable->enableDefaultAutoInitValue();
+                                            $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
+                                        }
+                                    }
                                 }
+
                             }
 
                         }
 
                     }
-
                 }
             }
         }

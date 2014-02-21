@@ -29,7 +29,7 @@ use Zephir\Commands\CommandGenerate;
  */
 class Compiler
 {
-    const VERSION = '0.3.7a';
+    const VERSION = '0.3.8a';
 
     /**
      * @var CompilerFile[]
@@ -111,8 +111,8 @@ class Compiler
     }
 
     /**
-     *
      * @param string $path
+     * @throws CompilerException
      */
     protected function _recursivePreCompile($path)
     {
@@ -233,10 +233,11 @@ class Compiler
     /**
      * Copies the base kernel to the extension destination
      *
-     * @param string $path
-     * @param string $destination
+     * @param $src
+     * @param $dest
      * @param string $pattern
      * @param mixed $callback
+     * @return bool
      */
     protected function _recursiveProcess($src, $dest, $pattern = null, $callback = "copy")
     {
@@ -272,6 +273,7 @@ class Compiler
      * Registers C-constants as PHP constants from a C-file
      *
      * @param array $constantsSources
+     * @throws Exception
      */
     protected function _loadConstantsSources($constantsSources)
     {
@@ -366,6 +368,9 @@ class Compiler
         }
 
         if (!file_exists('.temp/' . self::VERSION)) {
+            if (file_exists('ext/Makefile')) {
+                $this->_logger->output('Zephir version has changed, use "zephir fullclean" to perform a full clean of the project');
+            }
             mkdir('.temp/' . self::VERSION);
         }
 
@@ -396,6 +401,7 @@ class Compiler
      * Initializes a Zephir extension
      *
      * @param CommandInterface $command
+     * @throws Exception
      */
     public function init(CommandInterface $command)
     {
@@ -411,7 +417,7 @@ class Compiler
          * Tell the user the name could be reserved by another extension
          */
         if (extension_loaded($namespace)) {
-            echo 'This extension can have conflicts with an existing loaded extension', PHP_EOL;
+            $this->_logger->output('This extension can have conflicts with an existing loaded extension');
         }
 
         $this->_config->set('namespace', $namespace);
@@ -591,27 +597,23 @@ class Compiler
          * Get global namespace
          */
         $namespace = $this->_checkDirectory();
-
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
-
             exec('cd ext && make clean && phpize --clean', $output, $exit);
             $this->_logger->output('Preparing for PHP compilation...');
-
             exec('cd ext && phpize', $output, $exit);
             $this->_logger->output('Preparing configuration file...');
-
             $gccVersion = $this->getGccVersion();
             if (version_compare($gccVersion, '4.6.0', '>=')) {
                 $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto';
             } else {
                 $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
             }
-            exec('cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace);
+            exec(
+                'cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
+            );
         }
-
         $this->_logger->output('Compiling...');
-
         $verbose = ($this->_config->get('verbose') ? true : false);
         if ($verbose) {
             passthru('cd ext && make -j2', $exit);
@@ -631,14 +633,12 @@ class Compiler
         if (!$fromGenerate) {
             $this->generate($command);
         }
-
         $this->_logger->output('Generating stubs...');
-
         $stubsGenerator = new Stubs\Generator($this->_files, $this->_config);
         $path = $this->_config->get('path', 'stubs');
         $path = str_replace('%version%', $this->_config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
-        
+
         $stubsGenerator->generate($path);
     }
 
@@ -711,10 +711,9 @@ class Compiler
     }
 
     /**
-     *
      * Compiles and installs the extension
-     * @param CommandInstall $command
-     * @throws Exception
+     *
+     * @param \Zephir\CommandInstall|CommandInterface $command
      */
     public function build(CommandInterface $command)
     {
@@ -759,6 +758,7 @@ class Compiler
      * Create config.m4 and config.w32 by compiled files to test extension
      *
      * @param string $project
+     * @throws Exception
      * @return bool true if need to run configure
      */
     public function createConfigFiles($project)
@@ -876,6 +876,7 @@ class Compiler
      * Process extension globals
      *
      * @param string $namespace
+     * @throws Exception
      * @return array
      */
     public function processExtensionGlobals($namespace)
@@ -935,17 +936,14 @@ class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-
                 if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
-
                 if (!isset($global['default'])) {
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
-
+                $type = $global['type'];
                 switch ($global['type']) {
-
                     case 'boolean':
                     case 'bool':
                         $type = 'zend_bool';
@@ -955,17 +953,18 @@ class Compiler
                             $globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = 0;' . PHP_EOL;
                         }
                         break;
-
                     case 'int':
                     case 'uint':
                     case 'long':
+                    case 'double':
+                        $globalsDefault
+                            .= "\t" . 'zephir_globals->' . $name . ' = ' . $global['default'] . ';' . PHP_EOL;
+                        break;
                     case 'char':
                     case 'uchar':
-                    case 'double':
-                        $type = $global['type'];
-                        $globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = ' . $global['default'] . ';' . PHP_EOL;
+                        $globalsDefault
+                            .= "\t" . 'zephir_globals->' . $name . ' = \'' . $global['default'] . '\'";' . PHP_EOL;
                         break;
-
                     default:
                         throw new Exception("Unknown type '" . $global['type'] . "'");
                 }
@@ -1047,6 +1046,7 @@ class Compiler
      * Create project.c and project.h by compiled files to test extension
      *
      * @param string $project
+     * @throws Exception
      * @return boolean
      */
     public function createProjectFiles($project)
@@ -1124,25 +1124,25 @@ class Compiler
         krsort($interfaceEntries);
 
         $completeInterfaceInits = array();
-        foreach ($interfaceInits as $dependencyRank => $rankInterfaceInits) {
+        foreach ($interfaceInits as $rankInterfaceInits) {
             asort($rankInterfaceInits, SORT_STRING);
             $completeInterfaceInits = array_merge($completeInterfaceInits, $rankInterfaceInits);
         }
 
         $completeInterfaceEntries = array();
-        foreach ($interfaceEntries as $dependencyRank => $rankInterfaceEntries) {
+        foreach ($interfaceEntries as $rankInterfaceEntries) {
             asort($rankInterfaceEntries, SORT_STRING);
             $completeInterfaceEntries = array_merge($completeInterfaceEntries, $rankInterfaceEntries);
         }
 
         $completeClassInits = array();
-        foreach ($classInits as $dependencyRank => $rankClassInits) {
+        foreach ($classInits as $rankClassInits) {
             asort($rankClassInits, SORT_STRING);
             $completeClassInits = array_merge($completeClassInits, $rankClassInits);
         }
 
         $completeClassEntries = array();
-        foreach ($classEntries as $dependencyRank => $rankClassEntries) {
+        foreach ($classEntries as $rankClassEntries) {
             asort($rankClassEntries, SORT_STRING);
             $completeClassEntries = array_merge($completeClassEntries, $rankClassEntries);
         }

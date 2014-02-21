@@ -1400,6 +1400,7 @@ class LetStatement extends StatementAbstract
         foreach ($statement['index-expr'] as $indexExpr) {
 
             $expression = new Expression($indexExpr);
+            $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
 
             switch ($exprIndex->getType()) {
@@ -2393,14 +2394,15 @@ class LetStatement extends StatementAbstract
                 break;
 
             case 'int':
+            case 'uint':
             case 'long':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
 
             case 'string':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
@@ -2414,7 +2416,7 @@ class LetStatement extends StatementAbstract
                 break;
 
             case 'empty-array':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
@@ -2429,13 +2431,20 @@ class LetStatement extends StatementAbstract
                     case 'ulong':
                     case 'char':
                     case 'uchar':
-                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                         $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
-                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        if ($compilationContext->insideCycle) {
+                            $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
+                            $propertyCache->setMustInitNull(true);
+                            $propertyCache->setReusable(false);
+                            $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
+                        } else {
+                            $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        }
                         break;
 
                     case 'bool':
-                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                         $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         break;

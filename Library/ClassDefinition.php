@@ -30,6 +30,9 @@ class ClassDefinition
 
     protected $name;
 
+    /**
+     * @var string
+     */
     protected $type = 'class';
 
     protected $extendsClass;
@@ -57,9 +60,17 @@ class ClassDefinition
      */
     protected $methods = array();
 
+    /**
+     * @var int
+     */
     protected $dependencyRank = 0;
 
     protected $originalNode;
+
+    /**
+     * @var EventsManager
+     */
+    protected $eventsManager;
 
     /**
      * ClassDefinition
@@ -71,6 +82,18 @@ class ClassDefinition
     {
         $this->namespace = $namespace;
         $this->name = $name;
+
+        $this->eventsManager = new EventsManager();
+    }
+
+    /**
+     * Get eventsManager for class definition
+     *
+     * @return EventsManager
+     */
+    public function getEventsManager()
+    {
+        return $this->eventsManager;
     }
 
     /**
@@ -459,7 +482,7 @@ class ClassDefinition
      * Returns a method by its name
      *
      * @param string string
-     * @return boolean
+     * @return boolean|ClassMethod
      */
     public function getMethod($methodName)
     {
@@ -477,6 +500,20 @@ class ClassDefinition
             }
         }
         return false;
+    }
+
+    /**
+     * @param $methodName
+     * @param ClassMethod $method
+     */
+    public function setMethod($methodName, ClassMethod $method)
+    {
+        $this->methods[$methodName] = $method;
+    }
+
+    public function setMethods($methods)
+    {
+        $this->methods = $methods;
     }
 
     /**
@@ -543,6 +580,7 @@ class ClassDefinition
      * Compiles a class/interface
      *
      * @param CompilationContext $compilationContext
+     * @throws CompilerException
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -568,6 +606,7 @@ class ClassDefinition
          * Method entry
          */
         $methods = $this->methods;
+
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
         } else {
@@ -610,8 +649,25 @@ class ClassDefinition
             $codePrinter->outputBlankLine();
         }
 
+        $needBreak = true;
+
+        /**
+         * @todo Remove after removing support for php 5.3
+         */
+        $currentClassHref = &$this;
+
+        $this->eventsManager->listen('addMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
+            $needBreak = false;
+
+            $methods[$method->getName()] = $method;
+            $compilationContext->classDefinition->setMethods($methods);
+            $compilationContext->codePrinter->clear();
+            $currentClassHref->compile($compilationContext);
+        });
+
         /**
          * Compile properties
+         * @var $property ClassProperty
          */
         foreach ($this->getProperties() as $property) {
             $docBlock = $property->getDocBlock();
@@ -619,11 +675,19 @@ class ClassDefinition
                 $codePrinter->outputDocBlock($docBlock, true);
             }
             $property->compile($compilationContext);
+            if (!$needBreak) {
+                break;
+            }
             $codePrinter->outputBlankLine();
+        }
+
+        if (!$needBreak) {
+            return;
         }
 
         /**
          * Compile constants
+         * @var $constant ClassConstant
          */
         foreach ($this->getConstants() as $constant) {
             $docBlock = $constant->getDocBlock();
@@ -641,11 +705,9 @@ class ClassDefinition
         $compiler = $compilationContext->compiler;
 
         if (is_array($interfaces)) {
-
             $codePrinter->outputBlankLine(true);
 
             foreach ($interfaces as $interface) {
-
                 /**
                  * Try to find the interface
                  */
@@ -963,6 +1025,14 @@ class ClassDefinition
             case 'splpriorityqueue':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
+                break;
+
+            case 'stdclass':
+                $classEntry = 'zend_standard_class_def';
+                break;
+            case 'closure':
+                $compilationContext->headersManager->add('Zend/zend_closures');
+                $classEntry = 'zend_ce_closure';
                 break;
 
             default:

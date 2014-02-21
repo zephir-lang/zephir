@@ -84,6 +84,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**
@@ -142,6 +143,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**
@@ -199,6 +201,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**
@@ -355,6 +358,11 @@ class StaticCall extends Call
                 $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext);
             }
         }
+
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $this->addCallStatusFlag($compilationContext);
 
         /**
          * Transfer the return type-hint to the returned variable

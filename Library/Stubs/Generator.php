@@ -123,7 +123,7 @@ class Generator
             $source .= '}';
 
             $filename = ucfirst($class->getName()).'.php';
-            $filePath = $path . str_replace($this->config->get('namespace'), '', str_replace($this->config->get('namespace').'\\', '', strtolower($class->getNamespace())));
+            $filePath = $path . str_replace($this->config->get('namespace'), '', str_replace($this->config->get('namespace') . '\\', '', strtolower($class->getNamespace())));
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);

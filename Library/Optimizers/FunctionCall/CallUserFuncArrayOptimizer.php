@@ -66,6 +66,11 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $call->addCallStatusFlag($context);
+
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         $context->headersManager->add('kernel/fcall');

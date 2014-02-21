@@ -32,12 +32,13 @@ use Zephir\CompiledExpression;
  */
 class UnlikelyOperator extends BaseOperator
 {
-
-    /**
+    /***
+     * Compile unlikely operator
      *
-     * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

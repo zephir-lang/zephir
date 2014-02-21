@@ -367,14 +367,15 @@ class Call
                         case 'long':
                         case 'ulong': /* ulong must be stored in string */
                             if (isset($readOnlyParameters[$position])) {
-                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
-                                $params[] = $parameterTempVariable->getName();
+                                $params[] = '&' . $parameterTempVariable->getName();
                             } else {
                                 $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
                                 $params[] = $parameterTempVariable->getName();
                             }
+
                             $this->_temporalVariables[] = $parameterTempVariable;
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
@@ -531,6 +532,36 @@ class Call
         }
 
         return $params;
+    }
+
+    /**
+     * Add the last-call-status flag to the current symbol table
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function addCallStatusFlag(CompilationContext $compilationContext)
+    {
+        if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
+            $callStatus->setIsInitialized(true, $compilationContext, array());
+            $callStatus->increaseUses();
+            $callStatus->setReadOnly(true);
+            $compilationContext->symbolTable->addRawVariable($callStatus);
+        }
+    }
+
+    /**
+     * Checks the last call status or make a label jump to the next catch block
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function addCallStatusOrJump(CompilationContext $compilationContext)
+    {
+        if (!$compilationContext->insideTryCatch) {
+            $compilationContext->codePrinter->output('zephir_check_call_status();');
+        } else {
+            $compilationContext->codePrinter->output('zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');');
+        }
     }
 
     /**

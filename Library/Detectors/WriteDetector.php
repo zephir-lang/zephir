@@ -62,6 +62,28 @@ class WriteDetector
                     }
                     break;
 
+                case 'try-catch':
+                    if (isset($statement['statements'])) {
+                        if ($this->detect($variable, $statement['statements']) === true) {
+                            return true;
+                        }
+                    }
+                    if (isset($statement['catches'])) {
+                        foreach ($statement['catches'] as $catch) {
+                            if (isset($catch['variable'])) {
+                                if ($catch['variable']['value'] == $variable) {
+                                    return true;
+                                }
+                            }
+                            if (isset($catch['statements'])) {
+                                if ($this->detect($variable, $catch['statements']) === true) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+
                 case 'unset':
                     if ($statement['domain']['value'] == $variable) {
                         return true;

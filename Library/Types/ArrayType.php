@@ -22,12 +22,64 @@ namespace Zephir\Types;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
 
-class ArrayType
+class ArrayType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeName()
+    {
+        return 'array';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getMethodMap()
+    {
+        return array(
+            'join' => 'join',
+            'reverse' => 'array_reverse',
+            'diff' => 'array_diff',
+            'flip' => 'array_flip',
+            'haskey' => 'array_key_exists',
+            'keys' => 'array_keys',
+            'values' => 'array_values',
+            'split' => 'array_chunk',
+            'combine' => 'array_combine',
+            'intersect' => 'array_intersect',
+            'merge' => 'array_merge',
+            'mergerecursive' => 'array_merge_recursive',
+            'pad' => 'array_pad',
+            'pop' => 'array_pop',
+            'push' => 'array_push',
+            'rand' => 'array_rand',
+            'replace' => 'array_replace',
+            'replacerecursive' => 'array_replace_recursive',
+            'shift' => 'array_shift',
+            'slice' => 'array_slice',
+            'splice' => 'array_splice',
+            'sum' => 'array_sum',
+            'unique' => 'array_unique',
+            'prepend' => 'array_unshift',
+            'count' => 'count',
+            'current' => 'current',
+            'each' => 'each',
+            'end' => 'end',
+            'key' => 'key',
+            'next' => 'next',
+            'prev' => 'prev',
+            'reset' => 'reset',
+            'sort' => 'sort',
+            'sortbykey' => 'ksort',
+            'reversesort' => 'rsort',
+            'reversesortbykey' => 'krsort',
+            'shuffle' => 'shuffle'
+        );
+    }
 
     /**
      * Transforms calls to method "join" to function calls to "join"
@@ -36,6 +88,7 @@ class ArrayType
      * @param CompilationContext $compilationContext
      * @param Call $call
      * @param array $expression
+     * @return bool|\Zephir\CompiledExpression
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
@@ -52,40 +105,5 @@ class ArrayType
         $expression = new Expression($builder->get());
 
         return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Transforms calls to method "reverse" to function calls to "array_reverse"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function reverse($caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        $builder = new FunctionCallBuilder('array_reverse', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Intercepts calls to built-in methods on the "int" type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
     }
 }

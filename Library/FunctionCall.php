@@ -395,6 +395,11 @@ class FunctionCall extends Call
             }
         }
 
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $this->addCallStatusFlag($compilationContext);
+
         if ($internalCall) {
 
             /**
@@ -454,6 +459,7 @@ class FunctionCall extends Call
                 }
             }
         }
+        $this->addCallStatusOrJump($compilationContext);
 
         if (is_array($references)) {
             foreach ($references as $reference) {
@@ -535,6 +541,11 @@ class FunctionCall extends Call
         $functionName = '(Z_TYPE_P(' . $variable->getName() . ') == IS_STRING ? Z_STRVAL_P(' . $variable->getName() . ') : "")';
 
         /**
+         * Add the last call status to the current symbol table
+         */
+        $this->addCallStatusFlag($compilationContext);
+
+        /**
          * Call functions must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -562,6 +573,7 @@ class FunctionCall extends Call
                 $codePrinter->output('zephir_call_func_noret('.$functionName.');');
             }
         }
+        $this->addCallStatusOrJump($compilationContext);
 
         /**
          * We can mark temporary variables generated as idle
