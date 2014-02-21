@@ -86,6 +86,8 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
         $shuffled = $t->getShuffled('hello world');
         $this->assertNotEquals('hello world', $shuffled);
         $this->assertEquals(strlen('hello world'), strlen($shuffled));
+
+        $this->assertEquals('olleh', $t->getReversed('hello'));
     }
 
     public function testParsers()

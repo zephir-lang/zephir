@@ -29,6 +29,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getShuffled);
 PHP_METHOD(Test_BuiltIn_StringMethods, getSplited);
 PHP_METHOD(Test_BuiltIn_StringMethods, getCompare);
 PHP_METHOD(Test_BuiltIn_StringMethods, getCompareLocale);
+PHP_METHOD(Test_BuiltIn_StringMethods, getReversed);
 PHP_METHOD(Test_BuiltIn_StringMethods, getHtmlSpecialChars);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getlength4, 0, 0, 1)
@@ -127,6 +128,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getcomparelocale, 0, 0
 	ZEND_ARG_INFO(0, right)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getreversed, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_gethtmlspecialchars, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
@@ -158,6 +163,7 @@ ZEPHIR_INIT_FUNCS(test_builtin_stringmethods_method_entry) {
 	PHP_ME(Test_BuiltIn_StringMethods, getSplited, arginfo_test_builtin_stringmethods_getsplited, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getCompare, arginfo_test_builtin_stringmethods_getcompare, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getCompareLocale, arginfo_test_builtin_stringmethods_getcomparelocale, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_BuiltIn_StringMethods, getReversed, arginfo_test_builtin_stringmethods_getreversed, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getHtmlSpecialChars, arginfo_test_builtin_stringmethods_gethtmlspecialchars, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

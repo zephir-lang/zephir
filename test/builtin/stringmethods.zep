@@ -132,10 +132,10 @@ class StringMethods
         return left->compareLocale(right);
     }
 
-    // public function getReversed(string str)
-    // {
-    //     return str->reverse();
-    // }
+    public function getReversed(string str)
+    {
+        return str->rev();
+    }
 
     public function getHtmlSpecialChars(string str)
     {

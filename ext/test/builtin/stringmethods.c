@@ -468,6 +468,23 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getCompareLocale) {
 
 }
 
+PHP_METHOD(Test_BuiltIn_StringMethods, getReversed) {
+
+	zval *str_param = NULL, *_0;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &str_param);
+
+	zephir_get_strval(str, str_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	zephir_call_func_p1(_0, "strrev", str);
+	RETURN_CCTOR(_0);
+
+}
+
 PHP_METHOD(Test_BuiltIn_StringMethods, getHtmlSpecialChars) {
 
 	zval *str_param = NULL, *_0;
