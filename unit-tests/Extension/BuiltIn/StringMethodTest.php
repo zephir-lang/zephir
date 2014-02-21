@@ -19,11 +19,13 @@
 
 namespace Extension\BuiltIn;
 
+use Test\BuiltIn\StringMethods;
+
 class StringMethodTest extends \PHPUnit_Framework_TestCase
 {
     public function testLength()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
 
         $this->assertEquals(5, $t->getLength1());
         $this->assertEquals(5, $t->getLength2());
@@ -34,7 +36,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testIndex()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
 
         $this->assertEquals(0, $t->getIndex('test', 't'));
         $this->assertEquals(3, $t->getIndexWithPosition('test', 't', 1));
@@ -42,7 +44,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testTrim()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
 
         $this->assertEquals('hello', $t->getTrimmed());
         $this->assertEquals('foo bar', $t->getTrimmed1(' foo bar  '));
@@ -52,7 +54,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeCase()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
 
         $this->assertEquals('FOO', $t->getUpper('foo'));
         $this->assertEquals('foo', $t->getLower('FOO'));
@@ -63,14 +65,14 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testFormat()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
 
         $this->assertEquals('hello zephir!', $t->getFormatted('zephir'));
     }
 
     public function testHashes()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
         $str = 'hello world!';
 
         $this->assertEquals(md5($str), $t->getMd5($str));
@@ -79,7 +81,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testModifications()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
         $this->assertEquals("<br />\nfoo<br />\n", $t->getNl2br("\nfoo\n"));
         $this->assertEquals('foobarfoobar', $t->getRepeatted('foobar', 2));
 
@@ -92,7 +94,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
     public function testParsers()
     {
-        $t = new \Test\BuiltIn\StringMethods();
+        $t = new StringMethods();
         // $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
         $this->assertEquals(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
     }
