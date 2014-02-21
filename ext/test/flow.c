@@ -270,6 +270,21 @@ PHP_METHOD(Test_Flow, testIf16) {
 
 }
 
+PHP_METHOD(Test_Flow, testIf17) {
+
+	zval *b;
+
+	zephir_fetch_params(0, 1, 0, &b);
+
+
+
+	if ((Z_TYPE_P(b) != IS_NULL)) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
+
+}
+
 PHP_METHOD(Test_Flow, testLoop1) {
 
 	zend_bool a;
@@ -1268,7 +1283,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 609);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 617);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1510,7 +1525,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 689);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 697);
 	}
 	RETURN_CCTOR(a);
 

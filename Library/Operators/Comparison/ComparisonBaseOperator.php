@@ -53,14 +53,15 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if ($expr['left']['type'] == 'typeof') {
+
             if ($expr['right']['type'] != 'string') {
-                echo $expr['right']['type'];
                 $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
                 return false;
             }
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
+
                     case 'identical':
                     case 'equals':
                         $operator = '==';
@@ -203,7 +204,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(Z_TYPE_P(' . $variableRight->getName() . ') == IS_NULL)', $expression);
+                                return new CompiledExpression('bool', '(Z_TYPE_P(' . $variableRight->getName() . ') != IS_NULL)', $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);

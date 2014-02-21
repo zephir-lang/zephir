@@ -184,6 +184,14 @@ class Flow
 		return false;
 	}
 
+	public function testIf17(var b)
+	{
+		if null !== b {
+			return true;
+		}
+		return false;
+	}
+
 	public function testLoop1()
 	{
 		var a;

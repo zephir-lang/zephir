@@ -202,7 +202,7 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	do { \
 		zval *orig_ptr = z;\
-		phalcon_memory_observe(&z TSRMLS_CC);\
+		zephir_memory_observe(&z TSRMLS_CC);\
 		ALLOC_ZVAL(z);\
 		*z = *orig_ptr;\
 		zval_copy_ctor(z);\
