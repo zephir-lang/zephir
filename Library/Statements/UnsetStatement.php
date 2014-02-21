@@ -37,7 +37,7 @@ class UnsetStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/array');
         $expression = $this->_statement['expr'];
 
-        $flags = 0;
+        $flags = 'PH_SEPARATE';
 
         switch ($expression['type']) {
 
@@ -60,9 +60,8 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression);
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
-
-                $flags = 'PH_SEPARATE';
                 break;
+
             default:
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }
