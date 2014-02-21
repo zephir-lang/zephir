@@ -100,7 +100,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getparsedjson, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
-	ZEND_ARG_INFO(0, asObject)
+	ZEND_ARG_INFO(0, assoc)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_builtin_stringmethods_getrepeatted, 0, 0, 2)

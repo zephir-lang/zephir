@@ -19,7 +19,6 @@
 
 namespace Extension\BuiltIn;
 
-
 class StringMethodTest extends \PHPUnit_Framework_TestCase
 {
     public function testLength()
@@ -92,6 +91,7 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
     public function testParsers()
     {
         $t = new \Test\BuiltIn\StringMethods();
-        $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }'));
+        // $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }', true));
+        $this->assertEquals(array('foo', 'bar', 'baz'), $t->getParsedCsv('foo,bar,"baz"'));
     }
 }

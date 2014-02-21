@@ -102,9 +102,9 @@ class StringMethods
         return str->parseCsv();
     }
 
-    public function getParsedJson(string str, boolean asObject = false)
+    public function getParsedJson(string str, boolean assoc = true)
     {
-        return str->parseJson(str, asObject);
+        return str->parseJson(str, assoc);
     }
 
     public function getRepeatted(string str, int count)

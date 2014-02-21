@@ -355,18 +355,18 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getParsedCsv) {
 
 PHP_METHOD(Test_BuiltIn_StringMethods, getParsedJson) {
 
-	zend_bool asObject;
-	zval *str_param = NULL, *asObject_param = NULL, *_0;
+	zend_bool assoc;
+	zval *str_param = NULL, *assoc_param = NULL, *_0;
 	zval *str = NULL;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 1, &str_param, &asObject_param);
+	zephir_fetch_params(1, 1, 1, &str_param, &assoc_param);
 
 	zephir_get_strval(str, str_param);
-	if (!asObject_param) {
-		asObject = 0;
+	if (!assoc_param) {
+		assoc = 1;
 	} else {
-		asObject = zephir_get_boolval(asObject_param);
+		assoc = zephir_get_boolval(assoc_param);
 	}
 
 
