@@ -109,6 +109,7 @@ class UnsetStatement extends StatementAbstract
                         throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
                 }
                 break;
+
             default:
                 throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $expression['right']);
         }
