@@ -427,7 +427,7 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-            $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $compilationContext, $this->_statement['expr']);
+            $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
             switch ($keyVariable->getType()) {
                 case 'int':
                 case 'uint':
@@ -447,7 +447,7 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-            $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $compilationContext, $this->_statement['expr']);
+            $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
             switch ($variable->getType()) {
                 case 'int':
                 case 'uint':

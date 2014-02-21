@@ -29,17 +29,23 @@ class StatementsBlockBuilder
 
     protected $statements;
 
-    public function __construct(array $statements)
+    protected $raw;
+
+    public function __construct(array $statements, $raw=false)
     {
         $this->statements = $statements;
+        $this->raw = $raw;
     }
 
     public function get()
     {
-        $statements = array();
-        foreach ($this->statements as $statement) {
-            $statements[] = $statement->get();
+        if (!$this->raw) {
+            $statements = array();
+            foreach ($this->statements as $statement) {
+                $statements[] = $statement->get();
+            }
+            return $statements;
         }
-        return $statements;
+        return $this->statements;
     }
 }

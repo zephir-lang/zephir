@@ -455,6 +455,17 @@ class LocalContextPass
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
                     }
+                    if (isset($statement['catches'])) {
+                        foreach ($statement['catches'] as $catch) {
+                            if (isset($catch['variable'])) {
+                                $this->markVariableNoLocal($catch['variable']['value']);
+                                $this->increaseMutations($catch['variable']['value']);
+                            }
+                            if (isset($catch['statements'])) {
+                                $this->passStatementBlock($catch['statements']);
+                            }
+                        }
+                    }
                     break;
 
                 case 'throw':

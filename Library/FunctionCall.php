@@ -459,7 +459,7 @@ class FunctionCall extends Call
                 }
             }
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
 
         if (is_array($references)) {
             foreach ($references as $reference) {
@@ -573,7 +573,7 @@ class FunctionCall extends Call
                 $codePrinter->output('zephir_call_func_noret('.$functionName.');');
             }
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
 
         /**
          * We can mark temporary variables generated as idle

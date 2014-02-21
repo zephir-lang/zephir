@@ -586,7 +586,7 @@ class MethodCall extends Call
             }
 
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
 
         /**
          * We can mark temporary variables generated as idle

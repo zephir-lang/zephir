@@ -23,6 +23,11 @@ use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
+use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Operators\BinaryOperatorBuilder;
+use Zephir\Builder\Statements\IfStatementBuilder;
+use Zephir\Builder\VariableBuilder;
+use Zephir\Statements\IfStatement;
 
 /**
  * TryCatchStatement
@@ -51,22 +56,54 @@ class TryCatchStatement extends StatementAbstract
 
         $codePrinter->outputBlankLine();
         $codePrinter->output('try_end_' . $compilationContext->insideTryCatch . ':');
+
+        /**
+         * If 'try' is the latest statement add a 'dummy' statement to avoid compilation errors
+         */
         if (!isset($this->_statement['catches'])) {
-            $codePrinter->output('do { } while(0);');
+            $codePrinter->output('zephir_empty_statement();');
         }
         $codePrinter->outputBlankLine();
+
+        $compilationContext->insideTryCatch--;
 
         if (isset($this->_statement['catches'])) {
             foreach ($this->_statement['catches'] as $catch) {
 
                 if (isset($catch['variable'])) {
-                    $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $compilationContext, $catch['variable']);
+                    $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
+                    if ($variable->getType() != 'variable') {
+                        throw new CompilerException('Only dynamic variables can be used to catch exceptions', $catch['exception']);
+                    }
+                } else {
+                    $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $compilationContext);
                 }
 
+                /**
+                 * @TODO, use a builder here
+                 */
+                $variable->setIsInitialized(true, $compilationContext, $catch);
+                $variable->setMustInitNull(true);
+                $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable->getName() . ', EG(exception));');
+
+                /**
+                 * Check if any of the classes in the catch block match the thrown exception
+                 */
+                foreach ($catch['classes'] as $class) {
+
+                    $ifCheck = new IfStatementBuilder(
+                        new BinaryOperatorBuilder(
+                            'instanceof',
+                            new VariableBuilder($variable->getName()),
+                            new VariableBuilder('\\' . $class['value'])
+                        ),
+                        new StatementsBlockBuilder($catch['statements'], true)
+                    );
+
+                    $ifStatement = new IfStatement($ifCheck->get());
+                    $ifStatement->compile($compilationContext);
+                }
             }
         }
-
-        $compilationContext->insideTryCatch--;
-
     }
 }

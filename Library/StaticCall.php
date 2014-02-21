@@ -84,7 +84,7 @@ class StaticCall extends Call
                 }
             }
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**
@@ -143,7 +143,7 @@ class StaticCall extends Call
                 }
             }
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**
@@ -201,7 +201,7 @@ class StaticCall extends Call
                 }
             }
         }
-        $codePrinter->output('zephir_check_call_status();');
+        $this->addCallStatusOrJump($compilationContext);
     }
 
     /**

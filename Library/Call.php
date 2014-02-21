@@ -551,6 +551,20 @@ class Call
     }
 
     /**
+     * Checks the last call status or make a label jump to the next catch block
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function addCallStatusOrJump(CompilationContext $compilationContext)
+    {
+        if (!$compilationContext->insideTryCatch) {
+            $compilationContext->codePrinter->output('zephir_check_call_status();');
+        } else {
+            $compilationContext->codePrinter->output('zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');');
+        }
+    }
+
+    /**
      * Return resolved parameter types
      *
      * @return array
