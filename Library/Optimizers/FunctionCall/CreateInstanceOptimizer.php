@@ -66,7 +66,7 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         /**
          * Add the last call status to the current symbol table
          */
-        $call->addCallStatusFlag($compilationContext);
+        $call->addCallStatusFlag($context);
 
         $context->headersManager->add('kernel/object');
 
