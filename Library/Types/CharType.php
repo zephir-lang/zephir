@@ -22,7 +22,7 @@ namespace Zephir\Types;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
-use Zephir\CompilerException;
+use Zephir\FunctionCall;
 use Zephir\Builder\FunctionCallBuilder;
 
 class CharType extends AbstractType

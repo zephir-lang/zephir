@@ -35,7 +35,20 @@ class IntType extends AbstractType
     protected function getMethodMap()
     {
         return array(
-            'abs' => 'abs'
+            'abs' => 'abs',
+            'tobinary' => 'decbin',
+            'tohex' => 'dechex',
+            'tooctal' => 'decoct',
+            'pow' => 'pow',
+            'sqrt' => 'sqrt',
+            'exp' => 'exp',
+            'sin' => 'sin',
+            'cos' => 'cos',
+            'tan' => 'tan',
+            'asin' => 'asin',
+            'acos' => 'acos',
+            'atan' => 'atan',
+            'log' => 'log'
         );
     }
 }
