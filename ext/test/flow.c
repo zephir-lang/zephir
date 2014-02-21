@@ -536,7 +536,8 @@ PHP_METHOD(Test_Flow, testWhile10) {
 	int b;
 	zval *a;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 	ZEPHIR_SEPARATE_PARAM(a);
 
@@ -557,7 +558,7 @@ PHP_METHOD(Test_Flow, testWhile10) {
 		zephir_decrement(a);
 	}
 	c = (double) ((zephir_get_numberval(a) + b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 
@@ -567,7 +568,8 @@ PHP_METHOD(Test_Flow, testWhile11) {
 	int b;
 	zval *a, *d;
 
-	zephir_fetch_params(0, 2, 0, &a, &d);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &d);
 
 	ZEPHIR_SEPARATE_PARAM(a);
 
@@ -588,7 +590,7 @@ PHP_METHOD(Test_Flow, testWhile11) {
 		zephir_decrement(a);
 	}
 	c = (double) ((zephir_get_numberval(a) + b));
-	RETURN_DOUBLE(c);
+	RETURN_MM_DOUBLE(c);
 
 }
 

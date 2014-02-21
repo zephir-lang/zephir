@@ -1450,6 +1450,7 @@ class ClassMethod
 
                 if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
                     if (isset($parametersToSeparate[$parameter['name']])) {
+                        $symbolTable->mustGrownStack(true);
                         $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
                     }
                 }
