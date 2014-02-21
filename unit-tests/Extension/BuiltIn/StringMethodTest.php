@@ -68,5 +68,30 @@ class StringMethodTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('hello zephir!', $t->getFormatted('zephir'));
     }
+
+    public function testHashes()
+    {
+        $t = new \Test\BuiltIn\StringMethods();
+        $str = 'hello world!';
+
+        $this->assertEquals(md5($str), $t->getMd5($str));
+        $this->assertEquals(sha1($str), $t->getSha1($str));
+    }
+
+    public function testModifications()
+    {
+        $t = new \Test\BuiltIn\StringMethods();
+        $this->assertEquals("<br />\nfoo<br />\n", $t->getNl2br("\nfoo\n"));
+        $this->assertEquals('foobarfoobar', $t->getRepeatted('foobar', 2));
+
+        $shuffled = $t->getShuffled('hello world');
+        $this->assertNotEquals('hello world', $shuffled);
+        $this->assertEquals(strlen('hello world'), strlen($shuffled));
+    }
+
+    public function testParsers()
+    {
+        $t = new \Test\BuiltIn\StringMethods();
+        $this->assertEquals(['foo' => 'bar'], $t->getParsedJson('{ "foo" : "bar" }'));
+    }
 }
- 

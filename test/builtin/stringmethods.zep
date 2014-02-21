@@ -81,4 +81,64 @@ class StringMethods
     {
         return "hello %s!"->format(str);
     }
+
+    public function getMd5(string str)
+    {
+        return str->md5();
+    }
+
+    public function getSha1(string str)
+    {
+        return str->sha1();
+    }
+
+    public function getNl2br(string str)
+    {
+        return str->nl2br();
+    }
+
+    public function getParsedCsv(string str)
+    {
+        return str->parseCsv();
+    }
+
+    public function getParsedJson(string str, boolean asObject = false)
+    {
+        return str->parseJson(str, asObject);
+    }
+
+    public function getRepeatted(string str, int count)
+    {
+        return str->repeat(count);
+    }
+
+    public function getShuffled(string str)
+    {
+        return str->shuffle();
+    }
+
+    public function getSplited(string str, string del)
+    {
+        return str->split(del);
+    }
+
+    public function getCompare(string left, string right)
+    {
+        return left->compare(right);
+    }
+
+    public function getCompareLocale(string left, string right)
+    {
+        return left->compareLocale(right);
+    }
+
+    // public function getReversed(string str)
+    // {
+    //     return str->reverse();
+    // }
+
+    public function getHtmlSpecialChars(string str)
+    {
+        return str->htmlSpecialChars();
+    }
 }
