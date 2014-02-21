@@ -25,16 +25,24 @@ use Zephir\Expression;
 use Zephir\CompilerException;
 use Zephir\Builder\FunctionCallBuilder;
 
-class CharType
+class CharType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeName()
+    {
+        return 'char';
+    }
 
     /**
-     * Transforms calls to method "join" to function calls to "join"
+     * Transforms calls to method "toHex" to sprintf('%X') call
      *
      * @param object $caller
      * @param CompilationContext $compilationContext
      * @param Call $call
      * @param array $expression
+     * @return bool|mixed|\Zephir\CompiledExpression
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
@@ -53,23 +61,5 @@ class CharType
         $expression = new Expression($builder->get());
 
         return $expression->compile($compilationContext);
-    }
-
-    /**
-     * Intercepts calls to built-in methods on the "int" type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
-     */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
-    {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "array"', $expression);
     }
 }

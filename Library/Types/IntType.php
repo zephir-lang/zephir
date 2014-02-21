@@ -19,47 +19,23 @@
 
 namespace Zephir\Types;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\Expression;
-use Zephir\CompilerException;
-use Zephir\Builder\FunctionCallBuilder;
-
-class IntType
+class IntType extends AbstractType
 {
-
     /**
-     * Transforms calls to method "abs" to function calls to "abs"
-     *
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * {@inheritdoc}
      */
-    public function abs($caller, CompilationContext $compilationContext, Call $call, array $expression)
+    public function getTypeName()
     {
-        $builder = new FunctionCallBuilder('abs', array(array('parameter' => $caller)));
-
-        $expression = new Expression($builder->get());
-
-        return $expression->compile($compilationContext);
+        return 'int';
     }
 
     /**
-     * Intercepts calls to built-in methods on the "int" type
-     *
-     * @param string $methodName
-     * @param object $caller
-     * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * {@inheritdoc}
      */
-    public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
+    protected function getMethodMap()
     {
-        if (method_exists($this, $methodName)) {
-            return $this->{$methodName}($caller, $compilationContext, $call, $expression);
-        }
-
-        throw new CompilerException('Method "' . $methodName . '" is not a built-in method of type "int"', $expression);
+        return array(
+            'abs' => 'abs'
+        );
     }
 }
