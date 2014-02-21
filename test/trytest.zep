@@ -1,7 +1,7 @@
 
 namespace Test;
 
-use Exception, RuntimeException;
+use Exception, RuntimeException, DomainException;
 
 class TryTest
 {
@@ -111,6 +111,46 @@ class TryTest
 			throw new Exception("error 1!");
 		}
 		throw new Exception("error 2!");
+	}
+
+	private function someMethod1()
+	{
+		throw new RuntimeException("some external exception");
+	}
+
+	private function someMethod2()
+	{
+		throw new DomainException("some external exception");
+	}
+
+	public function testTry9()
+	{
+		var e;
+		try {
+
+			this->someMethod1();
+
+			return "not catched";
+
+		} catch RuntimeException, e {
+			return "domain error";
+		}
+		return false;
+	}
+
+	public function testTry10()
+	{
+		var e;
+		try {
+
+			this->someMethod2();
+
+			return "not catched";
+
+		} catch RuntimeException, e {
+			return "domain error";
+		}
+		return false;
 	}
 
 }
