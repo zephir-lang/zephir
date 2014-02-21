@@ -630,6 +630,7 @@ PHP_METHOD(Test_Flow, testDoWhile1) {
 
 PHP_METHOD(Test_Flow, testWhileNextTest) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *variable, *returnValue, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -643,6 +644,7 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_INIT_NVAR(_0);
 		zephir_call_func_p1(_0, "next", variable);
+		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		if (!(zephir_is_true(_0))) {
 			break;
@@ -650,6 +652,7 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_INIT_NVAR(_1);
 		zephir_call_func_p1(_1, "current", variable);
+		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		zephir_array_append(&returnValue, _1, PH_SEPARATE);
 	}
@@ -659,6 +662,7 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 
 PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *variable, *returnValue, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -672,11 +676,13 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_INIT_NVAR(_0);
 		zephir_call_func_p1(_0, "current", variable);
+		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		zephir_array_append(&returnValue, _0, PH_SEPARATE);
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_INIT_NVAR(_0);
 		zephir_call_func_p1(_0, "next", variable);
+		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 	} while (zephir_is_true(_0));
 	RETURN_CCTOR(returnValue);
@@ -1538,6 +1544,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 
 	HashTable *_2;
 	HashPosition _1;
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e, *v = NULL, *result, *_0, **_3;
 
 	ZEPHIR_MM_GROW();
@@ -1553,6 +1560,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 	}
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_func_p1(_0, "iterator", e);
+	zephir_check_call_status();
 	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
@@ -1569,6 +1577,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 
 	HashTable *_3;
 	HashPosition _2;
+	int ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *e = NULL, *v = NULL, *result, *_1, **_4;
 
@@ -1593,6 +1602,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 	if ((Z_TYPE_P(e) == IS_OBJECT)) {
 		ZEPHIR_INIT_VAR(_1);
 		zephir_call_func_p1(_1, "iterator", e);
+		zephir_check_call_status();
 		zephir_is_iterable(_1, &_3, &_2, 0, 0);
 		for (
 		  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS

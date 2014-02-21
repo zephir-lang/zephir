@@ -31,18 +31,21 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoDynamicA) {
 PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 
 	zend_class_entry *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *className, *fullClassName;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(className);
 	zephir_call_func(className, "get_called_class");
+	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(fullClassName);
 	ZEPHIR_CONCAT_SV(fullClassName, "\\", className);
 	_0 = zend_fetch_class(Z_STRVAL_P(fullClassName), Z_STRLEN_P(fullClassName), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 

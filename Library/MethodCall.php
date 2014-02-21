@@ -449,6 +449,11 @@ class MethodCall extends Call
         }
 
         /**
+         * Add the last call status to the current symbol table
+         */
+        $this->addCallStatusFlag($compilationContext);
+
+        /**
          * Generate the code according to the call type
          */
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
@@ -581,6 +586,7 @@ class MethodCall extends Call
             }
 
         }
+        $codePrinter->output('zephir_check_call_status();');
 
         /**
          * We can mark temporary variables generated as idle

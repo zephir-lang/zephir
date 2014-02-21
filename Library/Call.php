@@ -535,6 +535,22 @@ class Call
     }
 
     /**
+     * Add the last-call-status flag to the current symbol table
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function addCallStatusFlag(CompilationContext $compilationContext)
+    {
+        if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
+            $callStatus = new Variable('int', 'ZEPHIR_LAST_CALL_STATUS', $compilationContext->currentBranch);
+            $callStatus->setIsInitialized(true, $compilationContext, array());
+            $callStatus->increaseUses();
+            $callStatus->setReadOnly(true);
+            $compilationContext->symbolTable->addRawVariable($callStatus);
+        }
+    }
+
+    /**
      * Return resolved parameter types
      *
      * @return array

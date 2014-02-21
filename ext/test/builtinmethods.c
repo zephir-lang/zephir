@@ -169,6 +169,7 @@ PHP_METHOD(Test_BuiltInMethods, arrayMethodJoin1) {
 
 PHP_METHOD(Test_BuiltInMethods, arrayMethodReverse1) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, *_0;
 	zval *a = NULL;
 
@@ -180,6 +181,7 @@ PHP_METHOD(Test_BuiltInMethods, arrayMethodReverse1) {
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_func_p1(_0, "array_reverse", a);
+	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
 }

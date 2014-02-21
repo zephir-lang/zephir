@@ -42,6 +42,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf1) {
 
 PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a;
 
 	ZEPHIR_MM_GROW();
@@ -50,6 +51,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 	object_init_ex(a, test_instanceoff_ce);
 	if (zephir_has_constructor(a TSRMLS_CC)) {
 		zephir_call_method_noret(a, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM_BOOL(zephir_instance_of_ev(a, test_instanceoff_ce TSRMLS_CC));
 

@@ -5,6 +5,17 @@ use Exception, RuntimeException;
 
 class TryTest
 {
+	public function testThrow1()
+	{
+		throw new Exception("error");
+	}
+
+	public function testThrow2()
+	{
+		var message = "error";
+		throw new Exception(message);
+	}
+
 	public function testTry1()
 	{
 		try {}
@@ -24,6 +35,8 @@ class TryTest
 		} catch Exception {
 			return "error";
 		}
+
+		return false;
 	}
 
 	public function testTry4(boolean a)
@@ -39,6 +52,8 @@ class TryTest
 		} catch RuntimeException {
 			return "domain error";
 		}
+
+		return false;
 	}
 
 	public function testTry5(boolean a)
@@ -52,6 +67,8 @@ class TryTest
 		} catch Exception|RuntimeException  {
 			return "any error";
 		}
+
+		return false;
 	}
 
 	public function testTry6(boolean a)
@@ -69,6 +86,8 @@ class TryTest
 		} catch RuntimeException, e {
 			return "domain error";
 		}
+
+		return false;
 	}
 
 	public function testTry7(boolean a)

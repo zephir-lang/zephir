@@ -32,11 +32,14 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoParams) {
 
 PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
+
 	ZEPHIR_MM_GROW();
 
 	object_init_ex(return_value, test_oo_ooparams_ce);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 
@@ -44,11 +47,14 @@ PHP_METHOD(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace) {
 
 PHP_METHOD(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
+
 	ZEPHIR_MM_GROW();
 
 	object_init_ex(return_value, test_oo_oodynamica_ce);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 

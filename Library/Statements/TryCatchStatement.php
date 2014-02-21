@@ -51,7 +51,9 @@ class TryCatchStatement extends StatementAbstract
 
         $codePrinter->outputBlankLine();
         $codePrinter->output('try_end_' . $compilationContext->insideTryCatch . ':');
-        $codePrinter->output('do { } while(0);');
+        if (!isset($this->_statement['catches'])) {
+            $codePrinter->output('do { } while(0);');
+        }
         $codePrinter->outputBlankLine();
 
         if (isset($this->_statement['catches'])) {

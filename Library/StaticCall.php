@@ -84,6 +84,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $codePrinter->output('zephir_check_call_status();');
     }
 
     /**
@@ -142,6 +143,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $codePrinter->output('zephir_check_call_status();');
     }
 
     /**
@@ -199,6 +201,7 @@ class StaticCall extends Call
                 }
             }
         }
+        $codePrinter->output('zephir_check_call_status();');
     }
 
     /**
@@ -355,6 +358,11 @@ class StaticCall extends Call
                 $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext);
             }
         }
+
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $this->addCallStatusFlag($compilationContext);
 
         /**
          * Transfer the return type-hint to the returned variable

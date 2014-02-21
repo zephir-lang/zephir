@@ -41,6 +41,7 @@ PHP_METHOD(Test_Oo, testInstance1) {
 
 PHP_METHOD(Test_Oo, testInstance2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
 	ZEPHIR_MM_GROW();
@@ -48,12 +49,14 @@ PHP_METHOD(Test_Oo, testInstance2) {
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstruct_ce);
 	zephir_call_method_noret(o, "__construct");
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance3) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
 	ZEPHIR_MM_GROW();
@@ -62,6 +65,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 	object_init_ex(o, test_oo_oonoconstruct_ce);
 	if (zephir_has_constructor(o TSRMLS_CC)) {
 		zephir_call_method_noret(o, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_CCTOR(o);
 
@@ -69,6 +73,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 
 PHP_METHOD(Test_Oo, testInstance4) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *a, *b;
 
 	ZEPHIR_MM_GROW();
@@ -80,12 +85,14 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	zephir_call_method_p2_noret(o, "__construct", a, b);
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance5) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -97,12 +104,14 @@ PHP_METHOD(Test_Oo, testInstance5) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "b", 1);
 	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance6) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -114,12 +123,14 @@ PHP_METHOD(Test_Oo, testInstance6) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 2);
 	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance7) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
 	ZEPHIR_MM_GROW();
@@ -127,12 +138,14 @@ PHP_METHOD(Test_Oo, testInstance7) {
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
 	zephir_call_method_p2_noret(o, "__construct", ZEPHIR_GLOBAL(global_false), ZEPHIR_GLOBAL(global_true));
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance8) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -144,36 +157,42 @@ PHP_METHOD(Test_Oo, testInstance8) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_DOUBLE(_1, 7.30);
 	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance9) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(o);
 	zephir_call_static(o, "Test\\Oo\\OoDynamicA", "getnew");
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance10) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(o);
 	zephir_call_static(o, "Test\\Oo\\OoDynamicB", "getnew");
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }
 
 PHP_METHOD(Test_Oo, testInstance11) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -185,6 +204,7 @@ PHP_METHOD(Test_Oo, testInstance11) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 2);
 	zephir_call_method_p2_noret(o, "__construct", _0, _1);
+	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
 }

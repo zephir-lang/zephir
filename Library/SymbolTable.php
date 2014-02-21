@@ -112,6 +112,18 @@ class SymbolTable
     }
 
     /**
+     * Adds a raw variable to the symbol table
+     *
+     * @param Variable $variable
+     * @return Variable
+     */
+    public function addRawVariable(Variable $variable)
+    {
+        $this->_variables[$variable->getName()] = $variable;
+        return $variable;
+    }
+
+    /**
      * Returns a variable in the symbol table
      *
      * @return Variable

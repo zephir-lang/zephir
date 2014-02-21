@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Test_UseTest) {
 
 PHP_METHOD(Test_UseTest, createInstance) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zend_class_entry *_0;
 
 	ZEPHIR_MM_GROW();
@@ -35,6 +36,7 @@ PHP_METHOD(Test_UseTest, createInstance) {
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 
@@ -48,6 +50,7 @@ PHP_METHOD(Test_UseTest, count) {
 
 PHP_METHOD(Test_UseTest, testUseClass1) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zend_class_entry *_0;
 
 	ZEPHIR_MM_GROW();
@@ -56,6 +59,7 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 
@@ -63,6 +67,7 @@ PHP_METHOD(Test_UseTest, testUseClass1) {
 
 PHP_METHOD(Test_UseTest, testUseClass2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zend_class_entry *_0;
 
 	ZEPHIR_MM_GROW();
@@ -71,6 +76,7 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 
@@ -78,6 +84,7 @@ PHP_METHOD(Test_UseTest, testUseClass2) {
 
 PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zend_class_entry *_0;
 
 	ZEPHIR_MM_GROW();
@@ -86,6 +93,7 @@ PHP_METHOD(Test_UseTest, testUseNamespaceAlias) {
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
 		zephir_call_method_noret(return_value, "__construct");
+		zephir_check_call_status();
 	}
 	RETURN_MM();
 

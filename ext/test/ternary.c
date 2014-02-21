@@ -68,6 +68,7 @@ PHP_METHOD(Test_Ternary, testTernary2) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, *y, *_0 = NULL, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
@@ -82,8 +83,10 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
 		zephir_call_method(_2, a, "y");
+		zephir_check_call_status();
 		if (zephir_is_true(_2)) {
 			zephir_call_method(_1, a, "x");
+			zephir_check_call_status();
 		} else {
 			ZVAL_BOOL(_1, zephir_array_isset(a, y));
 		}
@@ -95,6 +98,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, *y, *_0 = NULL, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
@@ -109,8 +113,10 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 		ZEPHIR_INIT_VAR(_1);
 		ZEPHIR_INIT_VAR(_2);
 		zephir_call_method(_2, a, "y");
+		zephir_check_call_status();
 		if (zephir_is_true(_2)) {
 			zephir_call_method(_1, a, "x");
+			zephir_check_call_status();
 		} else {
 			ZVAL_BOOL(_1, zephir_array_isset(a, y));
 		}

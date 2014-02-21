@@ -53,49 +53,61 @@ PHP_METHOD(Test_McallChained, testMethod3) {
 
 PHP_METHOD(Test_McallChained, testChained1) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_method(_0, this_ptr, "testmethod1");
+	zephir_check_call_status();
 	zephir_call_method(return_value, _0, "testmethod2");
+	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_McallChained, testChained2) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_method(_0, this_ptr, "testmethod1");
+	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method(_1, _0, "testmethod3");
+	zephir_check_call_status();
 	zephir_call_method(return_value, _1, "testmethod2");
+	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_McallChained, testChained3) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_call_method(_0, this_ptr, "testmethod3");
+	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method(_1, _0, "testmethod2");
+	zephir_check_call_status();
 	zephir_call_method(return_value, _1, "testmethod1");
+	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_McallChained, testChained4) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0, *_1;
 
 	ZEPHIR_MM_GROW();
@@ -104,7 +116,9 @@ PHP_METHOD(Test_McallChained, testChained4) {
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("temp"), PH_NOISY_CC);
 	ZEPHIR_INIT_VAR(_1);
 	zephir_call_method(_1, _0, "testmethod1");
+	zephir_check_call_status();
 	zephir_call_method(return_value, _1, "testmethod2");
+	zephir_check_call_status();
 	RETURN_MM();
 
 }
