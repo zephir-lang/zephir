@@ -17,33 +17,17 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Extension\BuiltIn;
 
-class BuiltInMethodsTest extends \PHPUnit_Framework_TestCase
+use Test\BuiltIn\CharMethods;
+
+class CharMethodTest extends \PHPUnit_Framework_TestCase
 {
-    public function testStringMethodLength()
+    public function testModifications()
     {
-        $t = new \Test\BuiltInMethods();
-        $this->assertTrue($t->stringMethodLength1() == 5);
-        $this->assertTrue($t->stringMethodLength2() == 5);
-        $this->assertTrue($t->stringMethodLength3() == 10);
-        $this->assertTrue($t->stringMethodLength4("hello") == 5);
-        $this->assertTrue($t->stringMethodLength5("hello") == 10);
-        $this->assertEquals($t->stringMethodIndex('test', 't'), 0);
-        $this->assertEquals($t->stringMethodIndexWithPosition('test', 't', 1), 3);
-    }
+        $t = new CharMethods();
 
-    public function testStringTrim()
-    {
-        $t = new \Test\BuiltInMethods();
-        $this->assertTrue($t->stringMethodTrim1() == "hello");
+        $this->assertEquals('61', $t->getHex());
+        $this->assertEquals('68656C6C6F', $t->getHexForString('hello'));
     }
-
-    /**
-    public function testIntAbs()
-    {
-        $t = new \Test\BuiltInMethods();
-        $this->assertTrue($t->intMethodAbs1() == 100);
-        $this->assertTrue($t->intMethodAbs2() == 50);
-    }*/
 }
