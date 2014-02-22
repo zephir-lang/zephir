@@ -19,23 +19,17 @@
 
 require __DIR__ . '/../bootstrap.php';
 
-function getmicrotime()
-{
-    $t = gettimeofday();
-    return ($t['sec'] + $t['usec'] / 1000000);
-}
-
 function start_test()
 {
     ob_start();
-    return getmicrotime();
+    return microtime(true);
 }
 
 function end_test($start, $name, $overhead = null)
 {
     global $total;
     global $last_time;
-    $end = getmicrotime();
+    $end = microtime(true);
     ob_end_clean();
     $last_time = $end-$start;
     $total += $last_time;
@@ -48,7 +42,7 @@ function end_test($start, $name, $overhead = null)
         echo $name.$pad.$num."    ".$num2."\n";
     }
     ob_start();
-    return getmicrotime();
+    return microtime(true);
 }
 
 function total()
