@@ -1523,7 +1523,7 @@ void zephir_stripcslashes(zval *return_value, zval *str TSRMLS_DC)
 		}
 	}
 
-	ZVAL_STRINGL(return_value, str, str_len, 1);
+	ZVAL_STRINGL(return_value, str, Z_STRLEN_P(str), 1);
 	php_stripcslashes(Z_STRVAL_P(return_value), &Z_STRLEN_P(return_value));
 
 	if (unlikely(use_copy)) {
