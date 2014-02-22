@@ -136,7 +136,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	if ((Z_TYPE_P(a) == IS_RESOURCE)) {
+	if (Z_TYPE_P(a) == IS_RESOURCE) {
 		ZVAL_STRING(_0, "unknown", 1);
 	} else {
 		ZVAL_BOOL(_0, 0);

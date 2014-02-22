@@ -144,7 +144,7 @@ PHP_METHOD(Test_Typeoff, testArrayFalse) {
 
 	ZEPHIR_INIT_VAR(testVar);
 	array_init(testVar);
-	RETURN_MM_BOOL((Z_TYPE_P(testVar) == IS_STRING));
+	RETURN_MM_BOOL(Z_TYPE_P(testVar) == IS_STRING);
 
 }
 
@@ -156,7 +156,7 @@ PHP_METHOD(Test_Typeoff, testArrayTrue) {
 
 	ZEPHIR_INIT_VAR(testVar);
 	array_init(testVar);
-	RETURN_MM_BOOL((Z_TYPE_P(testVar) == IS_ARRAY));
+	RETURN_MM_BOOL(Z_TYPE_P(testVar) == IS_ARRAY);
 
 }
 
@@ -171,7 +171,7 @@ PHP_METHOD(Test_Typeoff, testClassPropertyAccess) {
 	zephir_update_property_this(this_ptr, SL("property"), _0 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(_1);
 	zephir_read_property_this(&_1, this_ptr, SL("property"), PH_NOISY_CC);
-	RETURN_MM_BOOL((Z_TYPE_P(_1) == IS_STRING));
+	RETURN_MM_BOOL(Z_TYPE_P(_1) == IS_STRING);
 
 }
 

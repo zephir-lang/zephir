@@ -1608,7 +1608,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 	array_init(result);
 
 
-	_0 = (Z_TYPE_P(e) != IS_NULL);
+	_0 = Z_TYPE_P(e) != IS_NULL;
 	if (_0) {
 		_0 = !zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC);
 	}
@@ -1616,7 +1616,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'");
 		return;
 	}
-	if ((Z_TYPE_P(e) == IS_OBJECT)) {
+	if (Z_TYPE_P(e) == IS_OBJECT) {
 		ZEPHIR_INIT_VAR(_1);
 		zephir_call_func_p1(_1, "iterator", e);
 		zephir_check_call_status();
