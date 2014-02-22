@@ -460,6 +460,14 @@ class FunctionCall extends Call
                 }
             }
         }
+
+        /**
+         * Temporary variables must be copied if they have more than one reference
+         */
+        foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+        }
+
         $this->addCallStatusOrJump($compilationContext);
 
         if (is_array($references)) {
@@ -574,6 +582,14 @@ class FunctionCall extends Call
                 $codePrinter->output('zephir_call_func_noret('.$functionName.');');
             }
         }
+
+        /**
+         * Temporary variables must be copied if they have more than one reference
+         */
+        foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+        }
+
         $this->addCallStatusOrJump($compilationContext);
 
         /**
