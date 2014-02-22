@@ -19,6 +19,8 @@
 
 require __DIR__ . '/../bootstrap.php';
 
+$total = 0;
+
 function start_test()
 {
     ob_start();
@@ -59,7 +61,7 @@ const N = 5000000;
 
 echo "Benchmark Zephir ".\Zephir\Compiler::VERSION." \n";
 
-$t0 = $t = start_test();
+$t = start_test();
 $x = new \Test\Bench\Foo();
 $x->empty_for_in_range(N);
 $t = end_test($t, 'empty for in range');
@@ -85,3 +87,4 @@ $x->call(N);
 $t = end_test($t, '$this->f()');
 $x->read_const(N);
 $t = end_test($t, '$x = Foo::TEST');
+total();
