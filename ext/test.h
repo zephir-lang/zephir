@@ -4,6 +4,7 @@
 #ifndef ZEPHIR_CLASS_ENTRIES_H
 #define ZEPHIR_CLASS_ENTRIES_H
 
+#include "test/bench/foo.h"
 #include "test/arithmetic.h"
 #include "test/assign.h"
 #include "test/bitwise.h"
