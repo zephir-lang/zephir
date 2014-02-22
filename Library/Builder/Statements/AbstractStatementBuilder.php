@@ -20,32 +20,13 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * ThrowStatementBuilder
- *
- * Allows to manually build a 'throw' statement AST node
+ * Class AbstractStatementBuilder
+ * @package Zephir\Builder\Statements
  */
-class ThrowStatementBuilder extends AbstractStatementBuilder
+abstract class AbstractStatementBuilder
 {
-    private $expr;
-
     /**
-     * ThrowStatementBuilder constructor
-     *
-     * @param mixed $expr
+     * @return array
      */
-    public function __construct($expr)
-    {
-        $this->expr = $expr;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get()
-    {
-        return array(
-            'type' => 'throw',
-            'expr' => $this->expr->get()
-        );
-    }
+    abstract public function get();
 }

@@ -27,7 +27,7 @@ use Zephir\Builder\Operators\AbstractOperatorBuilder;
  *
  * Allows to manually build a 'if' statement AST node
  */
-class IfStatementBuilder
+class IfStatementBuilder extends AbstractStatementBuilder
 {
     private $evalExpr;
 
@@ -49,6 +49,9 @@ class IfStatementBuilder
         $this->elseBlock = $elseBlock;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get()
     {
         return array(
