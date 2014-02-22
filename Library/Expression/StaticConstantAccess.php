@@ -68,7 +68,7 @@ class StaticConstantAccess
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -80,7 +80,7 @@ class StaticConstantAccess
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if ($className != 'self' && $className != 'parent') {
+        if ($className != 'this' && $className != 'self' && $className != 'parent') {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -92,7 +92,7 @@ class StaticConstantAccess
                 }
             }
         } else {
-            if ($className == 'self') {
+            if ($className == 'self' || $className == 'this') {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {

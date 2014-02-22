@@ -32,7 +32,6 @@ use Zephir\Expression;
  */
 class StaticPropertyAccess
 {
-
     protected $_expecting = true;
 
     protected $_readOnly = false;
@@ -67,7 +66,7 @@ class StaticPropertyAccess
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
