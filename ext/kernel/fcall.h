@@ -914,6 +914,8 @@
 		} \
 	}
 
+#define zephir_check_temp_parameter(param)	do { if (Z_REFCOUNT_P(param) > 1) zval_copy_ctor(param); else ZVAL_NULL(param); } while(0)
+
 int zephir_call_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length TSRMLS_DC, int param_count, ...);
 int zephir_call_internal_func_params(zval *return_value, zval **return_value_ptr, const char *func_name, int func_length, zend_function **function_ptr TSRMLS_DC, int param_count, ...);
 int zephir_call_method_params(zval *return_value, zval **return_value_ptr, zval *object, char *method_name, int method_len, ulong method_key TSRMLS_DC, int param_count, ...);

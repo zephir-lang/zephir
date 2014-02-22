@@ -50,6 +50,8 @@ class Call
 
     protected $_temporalVariables = array();
 
+    protected $_mustCheckForCopy = array();
+
     /**
      * Processes the symbol variable that will be used to return
      * the result of the symbol call
@@ -285,6 +287,7 @@ class Call
         $params = array();
         $types = array();
         $dynamicTypes = array();
+        $mustCheck = array();
         foreach ($exprParams as $position => $compiledExpression) {
 
             $expression = $compiledExpression->getOriginal();
@@ -344,8 +347,9 @@ class Call
                 case 'ulong':
                 case 'string':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 1);');
+                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
                     $this->_temporalVariables[] = $parameterVariable;
+                    $mustCheck[] = $parameterVariable->getName();
                     $params[] = $parameterVariable->getName();
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
@@ -417,6 +421,7 @@ class Call
 
         $this->_resolvedTypes = $types;
         $this->_resolvedDynamicTypes = $dynamicTypes;
+        $this->_mustCheckForCopy = $mustCheck;
         return $params;
     }
 
@@ -592,5 +597,15 @@ class Call
     public function getTemporalVariables()
     {
         return $this->_temporalVariables;
+    }
+
+    /**
+     * Parameters to check if they must be copied
+     *
+     * @return array
+     */
+    public function getMustCheckForCopyVariables()
+    {
+        return $this->_mustCheckForCopy;
     }
 }

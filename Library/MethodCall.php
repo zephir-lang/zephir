@@ -586,6 +586,14 @@ class MethodCall extends Call
             }
 
         }
+
+        /**
+         * Temporary variables must be copied if they have more than one reference
+         */
+        foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+        }
+
         $this->addCallStatusOrJump($compilationContext);
 
         /**

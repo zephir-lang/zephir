@@ -37,6 +37,8 @@ class EvalExpression
 
     protected $_unrecheableElse = null;
 
+    protected $_lastVariable;
+
     /**
      * @param array $expr
      * @param CompilationContext $compilationContext
@@ -187,6 +189,14 @@ class EvalExpression
 
                 }
 
+                /**
+                 * Update last variable used
+                 */
+                $this->_lastVariable = $variableRight;
+
+                /**
+                 * Evaluate the variable
+                 */
                 switch ($variableRight->getType()) {
 
                     case 'int':
@@ -243,5 +253,15 @@ class EvalExpression
     public function isUnrecheableElse()
     {
         return $this->_unrecheableElse;
+    }
+
+    /**
+     * Returns the variable evaluated by the EvalExpression
+     *
+     * @return
+     */
+    public function getEvalVariable()
+    {
+        return $this->_lastVariable;
     }
 }

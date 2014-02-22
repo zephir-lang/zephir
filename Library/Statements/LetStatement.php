@@ -564,7 +564,9 @@ class LetStatement extends StatementAbstract
                                     case 'assign':
                                         $symbolVariable->setMustInitNull(true);
                                         $compilationContext->symbolTable->mustGrownStack(true);
-                                        $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                        if ($variable != $itemVariable->getName()) {
+                                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                        }
                                         break;
 
                                     case 'concat-assign':

@@ -728,6 +728,34 @@ class Flow
 		}
 	}
 
+	public function testFor35Aux(var hello)
+	{
+		return false;
+	}
+
+	public function testFor35()
+	{
+		var i;
+		for i in range(1, 100) {
+			this->testFor35Aux("hello");
+		}
+		return true;
+	}
+
+	public function testFor36Aux(var hello)
+	{
+		return [hello];
+	}
+
+	public function testFor36()
+	{
+		var i;
+		for i in range(1, 100) {
+			this->testFor36Aux("hello");
+		}
+		return true;
+	}
+
 	public function testSwitch1()
 	{
 		var a;

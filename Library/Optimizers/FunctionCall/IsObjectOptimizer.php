@@ -17,35 +17,19 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Optimizers;
+namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\CompilerException;
+use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
-abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
+/**
+ * IsObjectOptimizer
+ *
+ * Optimizes calls to 'is_array' using internal function
+ */
+class IsObjectOptimizer extends IsTypeOptimizerAbstract
 {
-    /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
-     */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    protected function getType()
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        if (count($expression['parameters']) != 1) {
-            return false;
-        }
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('bool', 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType(), $expression);
+        return 'IS_OBJECT';
     }
-
-    abstract protected function getType();
 }

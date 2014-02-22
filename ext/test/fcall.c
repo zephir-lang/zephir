@@ -157,9 +157,9 @@ PHP_METHOD(Test_Fcall, testCall1FromVar) {
 	ZEPHIR_INIT_VAR(funcName);
 	ZVAL_STRING(funcName, "strpos", 1);
 	ZEPHIR_INIT_VAR(_0);
-	ZVAL_STRING(_0, "hello", 1);
+	ZVAL_STRING(_0, "hello", 0);
 	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "l", 1);
+	ZVAL_STRING(_1, "l", 0);
 	zephir_call_func_p2(return_value, (Z_TYPE_P(funcName) == IS_STRING ? Z_STRVAL_P(funcName) : ""), _0, _1);
 	zephir_check_call_status();
 	RETURN_MM();

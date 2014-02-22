@@ -1634,6 +1634,102 @@ PHP_METHOD(Test_Flow, testFor34) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor35Aux) {
+
+	zval *hello;
+
+	zephir_fetch_params(0, 1, 0, &hello);
+
+
+
+	RETURN_BOOL(0);
+
+}
+
+PHP_METHOD(Test_Flow, testFor35) {
+
+	zend_function *_4 = NULL;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *i = NULL, *_3 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	_2 = 100;
+	_1 = 1;
+	_0 = 0;
+	if ((_1 <= _2)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!((_1 <= _2))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(i);
+			ZVAL_LONG(i, _1);
+			ZEPHIR_INIT_NVAR(_3);
+			ZVAL_STRING(_3, "hello", 0);
+			zephir_call_method_p1_cache_noret(this_ptr, "testfor35aux", &_4, _3);
+			zephir_check_temp_parameter(_3);
+			zephir_check_call_status();
+		}
+	}
+	RETURN_MM_BOOL(1);
+
+}
+
+PHP_METHOD(Test_Flow, testFor36Aux) {
+
+	zval *hello;
+
+	zephir_fetch_params(0, 1, 0, &hello);
+
+
+
+	array_init_size(return_value, 2);
+	zephir_array_fast_append(return_value, hello);
+	return;
+
+}
+
+PHP_METHOD(Test_Flow, testFor36) {
+
+	zend_function *_4 = NULL;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *i = NULL, *_3 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	_2 = 100;
+	_1 = 1;
+	_0 = 0;
+	if ((_1 <= _2)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!((_1 <= _2))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(i);
+			ZVAL_LONG(i, _1);
+			ZEPHIR_INIT_NVAR(_3);
+			ZVAL_STRING(_3, "hello", 0);
+			zephir_call_method_p1_cache_noret(this_ptr, "testfor36aux", &_4, _3);
+			zephir_check_temp_parameter(_3);
+			zephir_check_call_status();
+		}
+	}
+	RETURN_MM_BOOL(1);
+
+}
+
 PHP_METHOD(Test_Flow, testSwitch1) {
 
 	int a;

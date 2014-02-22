@@ -272,6 +272,7 @@ class FunctionCall extends Call
                     case 'standard':
                     case 'mysql':
                     case 'bcmath':
+                    case 'Core':
                         return true;
                     default:
                         break;

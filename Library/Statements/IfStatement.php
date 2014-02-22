@@ -68,6 +68,16 @@ class IfStatement extends StatementAbstract
         $this->_evalExpression = $expr;
 
         /**
+         * Try to mark lastest temporary variable used as idle
+         */
+        $evalVariable =  $expr->getEvalVariable();
+        if (is_object($evalVariable)) {
+            if ($evalVariable->isTemporal()) {
+                $evalVariable->setIdle(true);
+            }
+        }
+
+        /**
          * Compile statements in the 'if' block
          */
         if (isset($this->_statement['statements'])) {
