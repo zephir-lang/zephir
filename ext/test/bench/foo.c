@@ -32,6 +32,38 @@ ZEPHIR_INIT_CLASS(Test_Bench_Foo) {
 
 }
 
+PHP_METHOD(Test_Bench_Foo, empty_for_in_range) {
+
+	int _1;
+	zend_bool _0;
+	zval *n, *i = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &n);
+
+
+
+	ZEPHIR_CPY_WRT(_2, n);
+	_1 = 1;
+	_0 = 0;
+	if (ZEPHIR_GE_LONG(_2, _1)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(ZEPHIR_GE_LONG(_2, _1))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(i);
+			ZVAL_LONG(i, _1);
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
 PHP_METHOD(Test_Bench_Foo, read_static) {
 
 	int _1;
@@ -126,7 +158,7 @@ PHP_METHOD(Test_Bench_Foo, isset_static) {
 			}
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
-			x = 1;
+			x = (0 == 0);
 		}
 	}
 	ZEPHIR_MM_RESTORE();

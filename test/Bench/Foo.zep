@@ -7,6 +7,15 @@ class Foo
 	public b = 0;
 	const TEST = 0;
 
+	public static function empty_for_in_range(var n)
+	{
+	    var i;
+
+        for i in range(1, n) {
+
+        }
+	}
+
 	public static function read_static(var n)
 	{
 	    var x, i;
@@ -29,8 +38,7 @@ class Foo
         var x, i;
 
 		for i in range(1, n) {
-		    let x = true;
-			//let x = isset(self::a); not work!
+			let x = isset(self::a);
 		}
 	}
 

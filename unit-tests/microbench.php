@@ -67,6 +67,8 @@ echo "Benchmark Zephir ".\Zephir\Compiler::VERSION." \n";
 
 $t0 = $t = start_test();
 $x = new \Test\Bench\Foo();
+$x->empty_for_in_range(N);
+$t = end_test($t, 'empty for in range');
 $x->read_prop(N);
 $t = end_test($t, '$x = $this->x');
 $x->write_prop(N);

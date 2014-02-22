@@ -3,6 +3,7 @@ extern zend_class_entry *test_bench_foo_ce;
 
 ZEPHIR_INIT_CLASS(Test_Bench_Foo);
 
+PHP_METHOD(Test_Bench_Foo, empty_for_in_range);
 PHP_METHOD(Test_Bench_Foo, read_static);
 PHP_METHOD(Test_Bench_Foo, write_static);
 PHP_METHOD(Test_Bench_Foo, isset_static);
@@ -19,6 +20,10 @@ PHP_METHOD(Test_Bench_Foo, empty_prop);
 PHP_METHOD(Test_Bench_Foo, g);
 PHP_METHOD(Test_Bench_Foo, call);
 PHP_METHOD(Test_Bench_Foo, read_const);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_empty_for_in_range, 0, 0, 1)
+	ZEND_ARG_INFO(0, n)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_read_static, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
@@ -77,6 +82,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_read_const, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_bench_foo_method_entry) {
+	PHP_ME(Test_Bench_Foo, empty_for_in_range, arginfo_test_bench_foo_empty_for_in_range, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Bench_Foo, read_static, arginfo_test_bench_foo_read_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Bench_Foo, write_static, arginfo_test_bench_foo_write_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Bench_Foo, isset_static, arginfo_test_bench_foo_isset_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
