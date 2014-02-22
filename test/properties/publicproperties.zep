@@ -39,5 +39,13 @@ class PublicProperties
 	 */
 	public someString = "test";
 
+	/**
+	 * This is a public property with an initial empty-array value
+	 */
 	public someEmptyArray = [];
+
+	/**
+	 * This is a public property with an initial array value
+	 */
+	public someArray = [1, 2, 3, 4];
 }

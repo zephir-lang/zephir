@@ -605,7 +605,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = $this->methods;
+        $methods = &$this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -656,13 +656,11 @@ class ClassDefinition
          */
         $currentClassHref = &$this;
 
-        $this->eventsManager->listen('addMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
+        $this->eventsManager->listen('setMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
             $needBreak = false;
 
             $methods[$method->getName()] = $method;
             $compilationContext->classDefinition->setMethods($methods);
-            $compilationContext->codePrinter->clear();
-            $currentClassHref->compile($compilationContext);
         });
 
         /**
@@ -675,13 +673,12 @@ class ClassDefinition
                 $codePrinter->outputDocBlock($docBlock, true);
             }
             $property->compile($compilationContext);
-            if (!$needBreak) {
-                break;
-            }
             $codePrinter->outputBlankLine();
         }
 
         if (!$needBreak) {
+            $compilationContext->codePrinter->clear();
+            $currentClassHref->compile($compilationContext);
             return;
         }
 
