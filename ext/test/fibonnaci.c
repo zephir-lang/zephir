@@ -136,7 +136,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
-	zval *n_param = NULL, *_0, _1 = zval_used_for_init, *_2;
+	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_2 = NULL;
 	int n, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -169,7 +169,7 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 
-	zval *n_param = NULL, *_0, _1 = zval_used_for_init, *_2;
+	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_2 = NULL;
 	int n, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();

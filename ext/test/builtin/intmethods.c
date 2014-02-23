@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Test_BuiltIn_IntMethods) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -47,7 +47,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs) {
 PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval _0, *_1;
+	zval _0, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -61,7 +61,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAbs1) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -80,7 +80,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getBinary) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -99,7 +99,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getHex) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -118,7 +118,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 
-	zval *num_param = NULL, *exp_param = NULL, _0, _1, *_2;
+	zval *num_param = NULL, *exp_param = NULL, _0, _1, *_2 = NULL;
 	int num, exp, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -140,7 +140,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -159,7 +159,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSqrt) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getExp) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -178,7 +178,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getExp) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -197,7 +197,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getSin) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -216,7 +216,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getCos) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -235,7 +235,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -254,7 +254,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -273,7 +273,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 
-	zval *num_param = NULL, _0, *_1;
+	zval *num_param = NULL, _0, *_1 = NULL;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();

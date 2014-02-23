@@ -61,7 +61,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 
 	zend_bool _0;
-	zval *num_param = NULL, *_1, _2;
+	zval *num_param = NULL, *_1 = NULL, _2;
 	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();

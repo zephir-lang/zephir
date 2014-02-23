@@ -37,10 +37,10 @@ class Scall extends ScallParent
 		return a + b;
 	}
 
-    static public function testMethod7() -> <\stdClass>
-    {
-        return new \stdClass();
-    }
+	static public function testMethod7() -> <\stdClass>
+	{
+		return new \stdClass();
+	}
 
 	public function testCall1()
 	{
@@ -112,12 +112,12 @@ class Scall extends ScallParent
 		return parent::testMethod2();
 	}
 
-    public function testCall15()
-    {
-        return self::testMethod7();
-    }
+	public function testCall15()
+	{
+		return self::testMethod7();
+	}
 
-    public static function testMethod16(long a, long b)
+	public static function testMethod16(long a, long b)
 	{
 		return a + b;
 	}

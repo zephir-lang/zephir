@@ -1564,7 +1564,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 	HashTable *_2;
 	HashPosition _1;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *e, *v = NULL, *result, *_0, **_3;
+	zval *e, *v = NULL, *result, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
@@ -1597,7 +1597,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 	HashPosition _2;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
-	zval *e = NULL, *v = NULL, *result, *_1, **_4;
+	zval *e = NULL, *v = NULL, *result, *_1 = NULL, **_4;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &e);

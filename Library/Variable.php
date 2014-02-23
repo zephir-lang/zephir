@@ -843,6 +843,8 @@ class Variable
                 //$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
             }
             $this->_variantInits++;
+
+            $this->setMustInitNull(true);
         }
     }
 

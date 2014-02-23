@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_BuiltIn_CharMethods) {
 PHP_METHOD(Test_BuiltIn_CharMethods, getHex) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval _0, _1, *_2;
+	zval _0, _1, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 

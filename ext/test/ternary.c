@@ -63,7 +63,7 @@ PHP_METHOD(Test_Ternary, testTernary2) {
 PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *y, *_0;
+	zval *a, *y, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &y);
@@ -89,7 +89,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *y, *_0, *_1;
+	zval *a, *y, *_0, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &y);

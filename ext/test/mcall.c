@@ -185,7 +185,7 @@ PHP_METHOD(Test_Mcall, testCall6) {
 PHP_METHOD(Test_Mcall, testCall7) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *b, *_0, *_1;
+	zval *a, *b, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
@@ -204,7 +204,7 @@ PHP_METHOD(Test_Mcall, testCall7) {
 PHP_METHOD(Test_Mcall, testCall8) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *b, *_0, *_1;
+	zval *a, *b, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
@@ -223,7 +223,7 @@ PHP_METHOD(Test_Mcall, testCall8) {
 PHP_METHOD(Test_Mcall, testCall9) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *b, *_0, *_1;
+	zval *a, *b, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);

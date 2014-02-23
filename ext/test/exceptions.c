@@ -91,7 +91,7 @@ PHP_METHOD(Test_Exceptions, getException) {
 PHP_METHOD(Test_Exceptions, testException4) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *_0;
+	zval *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
