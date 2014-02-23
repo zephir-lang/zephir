@@ -7,10 +7,24 @@ PHP_METHOD(Test_Fcall, testCall1);
 PHP_METHOD(Test_Fcall, testCall2);
 PHP_METHOD(Test_Fcall, testCall3);
 PHP_METHOD(Test_Fcall, testCall4);
+PHP_METHOD(Test_Fcall, testCall5);
+PHP_METHOD(Test_Fcall, testCall6);
+PHP_METHOD(Test_Fcall, testCall7);
+PHP_METHOD(Test_Fcall, testCall8);
 PHP_METHOD(Test_Fcall, testCall1FromVar);
 PHP_METHOD(Test_Fcall, testStrtokFalse);
 PHP_METHOD(Test_Fcall, testStrtokVarBySlash);
 PHP_METHOD(Test_Fcall, testFunctionGetArgs);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fcall_testcall5, 0, 0, 2)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fcall_testcall8, 0, 0, 2)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_fcall_teststrtokvarbyslash, 0, 0, 1)
 	ZEND_ARG_INFO(0, value)
@@ -26,6 +40,10 @@ ZEPHIR_INIT_FUNCS(test_fcall_method_entry) {
 	PHP_ME(Test_Fcall, testCall2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testCall3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testCall4, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Fcall, testCall5, arginfo_test_fcall_testcall5, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Fcall, testCall6, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Fcall, testCall7, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Fcall, testCall8, arginfo_test_fcall_testcall8, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testCall1FromVar, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testStrtokFalse, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testStrtokVarBySlash, arginfo_test_fcall_teststrtokvarbyslash, ZEND_ACC_PUBLIC)

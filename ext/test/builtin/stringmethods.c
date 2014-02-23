@@ -244,8 +244,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getLowerFirst) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "lcfirst", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -263,8 +262,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getUpperFirst) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "ucfirst", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "ucfirst", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -284,8 +282,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getFormatted) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "hello %s!", 0);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_call_func_p2(_1, "sprintf", &_0, str);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, &_0, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);
 
@@ -303,8 +300,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getMd5) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "md5", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "md5", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -322,8 +318,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getSha1) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "sha1", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "sha1", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -341,8 +336,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getNl2br) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "nl2br", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "nl2br", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -360,8 +354,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getParsedCsv) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "str_getcsv", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_getcsv", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -405,8 +398,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getRepeatted) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, count);
-	ZEPHIR_INIT_VAR(_1);
-	zephir_call_func_p2(_1, "str_repeat", str, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "str_repeat", NULL, str, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);
 
@@ -424,8 +416,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getShuffled) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "str_shuffle", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_shuffle", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -444,8 +435,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getSplited) {
 	zephir_get_strval(del, del_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p2(_0, "str_split", str, del);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_split", NULL, str, del);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -464,8 +454,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getCompare) {
 	zephir_get_strval(right, right_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p2(_0, "strcmp", left, right);
+	ZEPHIR_CALL_FUNCTION(&_0, "strcmp", NULL, left, right);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -484,8 +473,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getCompareLocale) {
 	zephir_get_strval(right, right_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p2(_0, "strcoll", left, right);
+	ZEPHIR_CALL_FUNCTION(&_0, "strcoll", NULL, left, right);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -503,8 +491,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getReversed) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "strrev", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "strrev", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 
@@ -522,8 +509,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getHtmlSpecialChars) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "htmlspecialchars", str);
+	ZEPHIR_CALL_FUNCTION(&_0, "htmlspecialchars", NULL, str);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
 

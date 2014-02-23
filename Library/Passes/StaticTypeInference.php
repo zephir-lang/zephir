@@ -434,11 +434,13 @@ class StaticTypeInference
                 return 'variable';
 
             case 'ternary':
-                $right = $this->passExpression($expression['right']);
-                $extra = $this->passExpression($expression['extra']);
-                if ($right == $extra) {
-                    return $right;
-                }
+                //$right = $this->passExpression($expression['right']);
+                //$extra = $this->passExpression($expression['extra']);
+                /*if ($right == $extra) {
+                    if ($right != 'string' && $right != 'array') {
+                        return $right;
+                    }
+                }*/
                 return 'variable';
 
             default:

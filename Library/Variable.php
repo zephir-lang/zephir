@@ -814,6 +814,39 @@ class Variable
     }
 
     /**
+     * Observes a variable in the memory frame without initialization or nullify
+     * an existing allocated variable
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function observeOrNullifyVariant(CompilationContext $compilationContext)
+    {
+
+        if ($this->_numberSkips) {
+            $this->_numberSkips--;
+            return;
+        }
+
+        $name = $this->getName();
+        if ($name != 'this_ptr' && $name != 'return_value') {
+
+            if ($this->_initBranch === false) {
+                $this->_initBranch = $compilationContext->currentBranch;
+            }
+
+            $compilationContext->headersManager->add('kernel/memory');
+            $compilationContext->symbolTable->mustGrownStack(true);
+            if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+                $this->_mustInitNull = true;
+                //$compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
+            } else {
+                //$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
+            }
+            $this->_variantInits++;
+        }
+    }
+
+    /**
      * Shortcut is type variable?
      * @return bool
      */

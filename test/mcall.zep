@@ -132,6 +132,20 @@ class Mcall
 	    return this->testMethod7();
 	}
 
+	public function testMethod19(long a, long b)
+	{
+		return a + b;
+	}
+
+	public function testCall20(long k, var p)
+	{
+		long i, j = 0;
+		for i in range(1, k) {
+			let j += this->testMethod19(p, p);
+		}
+		return j;
+	}
+
     public function optionalRequereString(string! param)
     {
         return param;

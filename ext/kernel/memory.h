@@ -185,6 +185,31 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 		zephir_memory_observe(&z TSRMLS_CC); \
 	}
 
+#define ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(ppzv) \
+	do { \
+		zval **tmp_ = (ppzv); \
+		if (tmp_ != NULL) { \
+			if (*((zval**)(ppzv))) { \
+				zval_ptr_dtor((ppzv)); \
+				*((zval**)(ppzv)) = NULL; \
+			} \
+			else { \
+				zephir_memory_observe((ppzv) TSRMLS_CC); \
+			} \
+		} \
+	} while (0)
+
+#define ZEPHIR_OBSERVE_OR_NULLIFY_VAR(z) \
+	do { \
+		if (z) { \
+			zval_ptr_dtor(&z); \
+			z = NULL; \
+		} \
+		else { \
+			zephir_memory_observe(&z TSRMLS_CC); \
+		} \
+	} while (0)
+
 #define ZEPHIR_SEPARATE_ARRAY(a) \
 	{ \
 		if (Z_REFCOUNT_P(a) > 1) { \

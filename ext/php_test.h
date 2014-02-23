@@ -4,6 +4,8 @@
 #ifndef PHP_TEST_H
 #define PHP_TEST_H 1
 
+#define ZEPHIR_RELEASE 1
+
 #include "kernel/globals.h"
 
 #define PHP_TEST_NAME    "Test Extension"
@@ -27,8 +29,8 @@ ZEND_BEGIN_MODULE_GLOBALS(test)
 	/* Virtual Symbol Tables */
 	zephir_symbol_table *active_symbol_table;
 
-	/* Function cache */
-	HashTable *function_cache;
+	/** Function cache */
+	HashTable *fcache;
 
 	/* Max recursion control */
 	unsigned int recursive_lock;

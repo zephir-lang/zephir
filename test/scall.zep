@@ -116,4 +116,27 @@ class Scall extends ScallParent
     {
         return self::testMethod7();
     }
+
+    public static function testMethod16(long a, long b)
+	{
+		return a + b;
+	}
+
+	public static function testCall17(long k, var p)
+	{
+		long i, j = 0;
+		for i in range(1, k) {
+			let j += \Test\ScallExternal::testMethod3(p, p);
+		}
+		return j;
+	}
+
+	public static function testCall18(long k, var p)
+	{
+		long i, j = 0;
+		for i in range(1, k) {
+			let j += self::testMethod16(p, p);
+		}
+		return j;
+	}
 }

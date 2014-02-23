@@ -1629,6 +1629,10 @@ class ClassMethod
                     $code = 'zend_property_info ';
                     break;
 
+                case 'zephir_fcall_cache_entry':
+                    $pointer = '*';
+                    $code = 'zephir_fcall_cache_entry ';
+                    break;
 
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);

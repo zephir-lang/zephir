@@ -659,16 +659,14 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 	array_init(returnValue);
 	while (1) {
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_INIT_NVAR(_0);
-		zephir_call_func_p1(_0, "next", variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
 		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		if (!(zephir_is_true(_0))) {
 			break;
 		}
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_INIT_NVAR(_1);
-		zephir_call_func_p1(_1, "current", variable);
+		ZEPHIR_CALL_FUNCTION(&_1, "current", NULL, variable);
 		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		zephir_array_append(&returnValue, _1, PH_SEPARATE);
@@ -691,14 +689,13 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 	array_init(returnValue);
 	do {
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_INIT_NVAR(_0);
-		zephir_call_func_p1(_0, "current", variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, variable);
 		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 		zephir_array_append(&returnValue, _0, PH_SEPARATE);
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_INIT_NVAR(_0);
-		zephir_call_func_p1(_0, "next", variable);
+		ZEPHIR_OBS_NVAR(_0);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
 		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
 	} while (zephir_is_true(_0));
@@ -1186,8 +1183,9 @@ PHP_METHOD(Test_Flow, testFor15) {
 
 PHP_METHOD(Test_Flow, testFor16) {
 
+	int _2, _3;
 	zend_bool _1;
-	int _0, _2, _3;
+	long _0;
 	zval *a = NULL, *b = NULL, *c;
 
 	ZEPHIR_MM_GROW();
@@ -1222,8 +1220,9 @@ PHP_METHOD(Test_Flow, testFor16) {
 
 PHP_METHOD(Test_Flow, testFor17) {
 
+	int _2, _3;
 	zend_bool _1;
-	int _0, _2, _3;
+	long _0;
 	zval *a = NULL, *b = NULL, *c;
 
 	ZEPHIR_MM_GROW();
@@ -1259,8 +1258,9 @@ PHP_METHOD(Test_Flow, testFor17) {
 PHP_METHOD(Test_Flow, testFor18) {
 
 	zend_bool _1;
+	long _0;
 	zval *c, *_4 = NULL;
-	int a, b, _0, _2, _3;
+	int a, b, _2, _3;
 
 	ZEPHIR_MM_GROW();
 
@@ -1490,7 +1490,8 @@ PHP_METHOD(Test_Flow, testFor24) {
 
 PHP_METHOD(Test_Flow, testFor30) {
 
-	int v, _0;
+	long _0;
+	int v;
 	zval *b;
 	zval *a, *_1 = NULL;
 
@@ -1512,7 +1513,8 @@ PHP_METHOD(Test_Flow, testFor30) {
 
 PHP_METHOD(Test_Flow, testFor31) {
 
-	int k, v, _0;
+	long _0;
+	int k, v;
 	zval *b;
 	zval *a, *_1 = NULL;
 
@@ -1575,8 +1577,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'");
 		return;
 	}
-	ZEPHIR_INIT_VAR(_0);
-	zephir_call_func_p1(_0, "iterator", e);
+	ZEPHIR_CALL_FUNCTION(&_0, "iterator", NULL, e);
 	zephir_check_call_status();
 	zephir_is_iterable(_0, &_2, &_1, 0, 0);
 	for (
@@ -1617,8 +1618,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 		return;
 	}
 	if (Z_TYPE_P(e) == IS_OBJECT) {
-		ZEPHIR_INIT_VAR(_1);
-		zephir_call_func_p1(_1, "iterator", e);
+		ZEPHIR_CALL_FUNCTION(&_1, "iterator", NULL, e);
 		zephir_check_call_status();
 		zephir_is_iterable(_1, &_3, &_2, 0, 0);
 		for (
@@ -1648,7 +1648,7 @@ PHP_METHOD(Test_Flow, testFor35Aux) {
 
 PHP_METHOD(Test_Flow, testFor35) {
 
-	zend_function *_4 = NULL;
+	zephir_fcall_cache_entry *_4 = NULL;
 	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *i = NULL, *_3 = NULL;
@@ -1672,7 +1672,7 @@ PHP_METHOD(Test_Flow, testFor35) {
 			ZVAL_LONG(i, _1);
 			ZEPHIR_INIT_NVAR(_3);
 			ZVAL_STRING(_3, "hello", 0);
-			zephir_call_method_p1_cache_noret(this_ptr, "testfor35aux", &_4, _3);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor35aux", &_4, _3);
 			zephir_check_temp_parameter(_3);
 			zephir_check_call_status();
 		}
@@ -1697,7 +1697,7 @@ PHP_METHOD(Test_Flow, testFor36Aux) {
 
 PHP_METHOD(Test_Flow, testFor36) {
 
-	zend_function *_4 = NULL;
+	zephir_fcall_cache_entry *_4 = NULL;
 	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *i = NULL, *_3 = NULL;
@@ -1721,7 +1721,7 @@ PHP_METHOD(Test_Flow, testFor36) {
 			ZVAL_LONG(i, _1);
 			ZEPHIR_INIT_NVAR(_3);
 			ZVAL_STRING(_3, "hello", 0);
-			zephir_call_method_p1_cache_noret(this_ptr, "testfor36aux", &_4, _3);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor36aux", &_4, _3);
 			zephir_check_temp_parameter(_3);
 			zephir_check_call_status();
 		}

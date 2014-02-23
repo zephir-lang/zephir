@@ -36,8 +36,7 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHex) {
 	ZVAL_STRING(&_0, "%X", 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, 'a');
-	ZEPHIR_INIT_VAR(_2);
-	zephir_call_func_p2(_2, "sprintf", &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "sprintf", NULL, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(_2);
 
@@ -45,8 +44,8 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHex) {
 
 PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 
-	zend_function *_5 = NULL;
-	int _0, ZEPHIR_LAST_CALL_STATUS;
+	int ZEPHIR_LAST_CALL_STATUS;
+	long _0;
 	char ch;
 	zval *str_param = NULL, *o, *_1 = NULL, _2 = zval_used_for_init, _3 = zval_used_for_init, *_4 = NULL;
 	zval *str = NULL;
@@ -61,13 +60,11 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 
 	for (_0 = 0; _0 < Z_STRLEN_P(str); _0++) {
 		ch = ZEPHIR_STRING_OFFSET(str, _0);
-		ZEPHIR_INIT_NVAR(_1);
 		ZEPHIR_SINIT_NVAR(_2);
 		ZVAL_STRING(&_2, "%X", 0);
 		ZEPHIR_SINIT_NVAR(_3);
 		ZVAL_LONG(&_3, ch);
-		ZEPHIR_INIT_NVAR(_4);
-		ZEPHIR_CALL_INTERNAL_FUNCTION(_4, &_4, "sprintf", &_5, 2, &_2, &_3);
+		ZEPHIR_CALL_FUNCTION(&_4, "sprintf", NULL, &_2, &_3);
 		zephir_check_call_status();
 		zephir_concat_self(&o, _4 TSRMLS_CC);
 	}

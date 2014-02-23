@@ -41,7 +41,7 @@ class Fcall
 	{
 		var handle, handle2, buffer;
 
-		let handle = fopen(mode: "r", filename: "inputfile.txt"), 
+		let handle = fopen(mode: "r", filename: "inputfile.txt"),
 			handle2 = fopen(filename: "outputfile.txt", mode: "w");
 		if handle {
 			loop {
@@ -54,6 +54,28 @@ class Fcall
 			fclose(handle);
 			fclose(handle2);
 		}
+	}
+
+	public function testCall5(var a, var b)
+	{
+		return str_repeat(a, b);
+	}
+
+	public function testCall6()
+	{
+		return rand();
+	}
+
+	public function testCall7()
+	{
+		memory_get_usage();
+	}
+
+	public function testCall8(var a, var b)
+	{
+		var x;
+		let x = str_repeat(a, b);
+		return x;
 	}
 
 	public function testCall1FromVar()

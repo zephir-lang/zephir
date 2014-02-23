@@ -207,6 +207,7 @@ PHP_METHOD(Test_Bench_Foo, f) {
 
 PHP_METHOD(Test_Bench_Foo, call_static) {
 
+	zephir_fcall_cache_entry *_3 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *n, *i = NULL, *_2 = NULL;
@@ -231,6 +232,7 @@ PHP_METHOD(Test_Bench_Foo, call_static) {
 			}
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
+			ZEPHIR_CALL_SELF(NULL, "f", &_3);
 			zephir_check_call_status();
 		}
 	}
@@ -500,7 +502,7 @@ PHP_METHOD(Test_Bench_Foo, g) {
 
 PHP_METHOD(Test_Bench_Foo, call) {
 
-	zend_function *_3 = NULL;
+	zephir_fcall_cache_entry *_3 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *n, *i = NULL, *_2 = NULL;
@@ -525,7 +527,7 @@ PHP_METHOD(Test_Bench_Foo, call) {
 			}
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
-			zephir_call_method_cache_noret(this_ptr, "g", &_3);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "g",  &_3);
 			zephir_check_call_status();
 		}
 	}

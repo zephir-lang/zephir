@@ -77,7 +77,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	}
 
 
-	zephir_call_method_p2_noret(this_ptr, "reconfigure", pattern, paths);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, pattern, paths);
 	zephir_check_call_status();
 	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -193,8 +193,9 @@ PHP_METHOD(Test_Router_Route, via) {
  */
 PHP_METHOD(Test_Router_Route, extractNamedParams) {
 
+	long _0, _5, _24;
 	zend_bool notValid = 0, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17;
-	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0, _0, _5, _24;
+	int tmp, cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0, intermediate = 0, numberMatches = 0;
 	char ch;
 	zval *pattern_param = NULL, *matches, _1 = zval_used_for_init, _2 = zval_used_for_init, *_3 = NULL, _18 = zval_used_for_init, *_19 = NULL, _21 = zval_used_for_init, *_22 = NULL;
 	zval *pattern = NULL, *route, *item = NULL, *variable = NULL, *regexp = NULL, *_4 = NULL, *_20 = NULL, *_23 = NULL, *_25 = NULL;
@@ -492,7 +493,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 348)) {
 			ZEPHIR_INIT_VAR(extracted);
-			zephir_call_method_p1(extracted, this_ptr, "extractnamedparams", pattern);
+			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, pattern);
 			zephir_check_call_status();
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY TSRMLS_CC);
@@ -504,7 +505,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);
 		}
 		ZEPHIR_INIT_VAR(compiledPattern);
-		zephir_call_method_p1(compiledPattern, this_ptr, "compilepattern", pcrePattern);
+		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilepattern", NULL, pcrePattern);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_CPY_WRT(compiledPattern, pattern);

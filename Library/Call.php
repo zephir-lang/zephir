@@ -90,6 +90,42 @@ class Call
 
     /**
      * Processes the symbol variable that will be used to return
+     * the result of the symbol call
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function processExpectedObservedReturn(CompilationContext $compilationContext)
+    {
+        $expr = $this->_expression;
+        $expression = $expr->getExpression();
+
+        /**
+         * Create temporary variable if needed
+         */
+        $mustInit = false;
+        $symbolVariable = null;
+        $isExpecting = $expr->isExpectingReturn();
+        if ($isExpecting) {
+            $symbolVariable = $expr->getExpectingVariable();
+            if (is_object($symbolVariable)) {
+                $readDetector = new ReadDetector($expression);
+                if ($readDetector->detect($symbolVariable->getName(), $expression)) {
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+                } else {
+                    $mustInit = true;
+                }
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+            }
+        }
+
+        $this->_mustInit = $mustInit;
+        $this->_symbolVariable = $symbolVariable;
+        $this->_isExpecting = $isExpecting;
+    }
+
+    /**
+     * Processes the symbol variable that will be used to return
      * the result of the symbol call. If a temporal variable is used
      * as returned value only the body is freed between calls
      *
@@ -379,7 +415,21 @@ class Call
                                 $codePrinter->output('ZVAL_LONG(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
                                 $params[] = $parameterTempVariable->getName();
                             }
+                            $this->_temporalVariables[] = $parameterTempVariable;
+                            $types[] = $parameterVariable->getType();
+                            $dynamicTypes[] = $parameterVariable->getType();
+                            break;
 
+                        case 'double':
+                            if (isset($readOnlyParameters[$position])) {
+                                $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
+                                $params[] = '&' . $parameterTempVariable->getName();
+                            } else {
+                                $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_DOUBLE(' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
+                                $params[] = $parameterTempVariable->getName();
+                            }
                             $this->_temporalVariables[] = $parameterTempVariable;
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();

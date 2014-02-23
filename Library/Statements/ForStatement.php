@@ -76,7 +76,8 @@ class ForStatement extends StatementAbstract
             /**
              * This variable is used to check if the loop is in its first iteration
              */
-            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
+            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext);
+            $keyVariable->increaseUses();
         }
 
         /**
@@ -463,7 +464,7 @@ class ForStatement extends StatementAbstract
             $variable->setIsInitialized(true, $compilationContext, $this->_statement);
         }
 
-        $tempVariable = $compilationContext->symbolTable->addTemp('int', $compilationContext);
+        $tempVariable = $compilationContext->symbolTable->addTemp('long', $compilationContext);
 
         if ($this->_statement['reverse']) {
             $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $expression->getCode() . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');

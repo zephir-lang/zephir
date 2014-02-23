@@ -129,12 +129,14 @@ class MethodCall extends Call
             if (is_object($symbolVariable)) {
                 $readDetector = new ReadDetector($expression);
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    //$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
                 } else {
                     $mustInit = true;
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                //$symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
             }
         }
 
@@ -491,98 +493,67 @@ class MethodCall extends Call
                 }
             }
 
-            if (!$internalCall) {
-
-                if (!isset($expression['parameters']) || !count($params)) {
-
-                    /**
-                     * Only use the method cache when we know the method
-                     */
-                    if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
-
-                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
-                        $functionCache->setMustInitNull(true);
-                        $functionCache->setReusable(false);
-
-                        if ($isExpecting) {
-                            $codePrinter->output('zephir_call_method_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
-                        } else {
-                            $codePrinter->output('zephir_call_method_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
-                        }
-                    } else {
-                        if ($isExpecting) {
-                            $codePrinter->output('zephir_call_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '");');
-                        } else {
-                            $codePrinter->output('zephir_call_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '");');
-                        }
-                    }
-
-                } else {
-
-                    if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
-
-                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
-                        $functionCache->setMustInitNull(true);
-                        $functionCache->setReusable(false);
-
-                        if ($isExpecting) {
-                            $codePrinter->output('zephir_call_method_p' . count($params) . '_cache(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
-                        } else {
-                            $codePrinter->output('zephir_call_method_p' . count($params) . '_cache_noret(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
-                        }
-                    } else {
-                        if ($isExpecting) {
-                            $codePrinter->output('zephir_call_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-                        } else {
-                            $codePrinter->output('zephir_call_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ' . join(', ', $params) . ');');
-                        }
-                    }
-
-                }
-
-            } else {
-
-                /**
-                 * Calls to internal private methods are called directly without using the PHP userland
-                 */
-                if (!isset($expression['parameters']) || !count($params)) {
-
-                    if ($isExpecting) {
-                        $codePrinter->output('zephir_call_internal_method(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . str_replace('\\\\', '_', $classDefinition->getNCNamespace()) . '_' . $classDefinition->getName() . '_' . $method->getName() . '));');
-                    } else {
-                        $codePrinter->output('zephir_call_internal_method_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . str_replace('\\\\', '_', $classDefinition->getNCNamespace()) . '_' . $classDefinition->getName() . '_' . $method->getName() . '));');
-                    }
-
-                } else {
-
-                    if ($isExpecting) {
-                        $codePrinter->output('zephir_call_internal_method_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . str_replace('\\\\', '_', $classDefinition->getNCNamespace()) . '_' . $classDefinition->getName() . '_' . $method->getName() . '), ' . join(', ', $params) . ');');
-                    } else {
-                        $codePrinter->output('zephir_call_internal_method_p' . count($params) . '_noret(' . $variableVariable->getName() . ', "' . $methodName . '", ZEND_MN(' . str_replace('\\\\', '_', $classDefinition->getNCNamespace()) . '_' . $classDefinition->getName() . '_' . $method->getName() . '), ' . join(', ', $params) . ');');
-                    }
-
-                }
-
-            }
-
-        } else {
-
-            if ($mustInit) {
-                $symbolVariable->initVariant($compilationContext);
-            }
-
             if (!isset($expression['parameters']) || !count($params)) {
-                if ($isExpecting) {
-                    $codePrinter->output('zephir_call_method_zval(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+
+                if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
+
+                    $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    $functionCache->setMustInitNull(true);
+                    $functionCache->setReusable(false);
+
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '",  &' . $functionCache->getName() . ');');
+                        }
+                    } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '",  &' . $functionCache->getName() . ');');
+                    }
+
                 } else {
-                    $codePrinter->output('zephir_call_method_zval_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ');');
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", NULL);');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", NULL);');
+                        }
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", NULL);');
+                    }
                 }
+
             } else {
-                if ($isExpecting) {
-                    $codePrinter->output('zephir_call_method_zval_p' . count($params) . '(' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
+
+                if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
+
+                    $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    $functionCache->setMustInitNull(true);
+                    $functionCache->setReusable(false);
+
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
+                        }
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", &' . $functionCache->getName() . ', ' . join(', ', $params) . ');');
+                    }
+
                 } else {
-                    $codePrinter->output('zephir_call_method_zval_p' . count($params) . '_noret(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . join(', ', $params) . ');');
+
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", NULL, ' . join(', ', $params) . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", NULL, ' . join(', ', $params) . ');');
+                        }
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", NULL, ' . join(', ', $params) . ');');
+                    }
                 }
+
             }
 
         }

@@ -1211,15 +1211,15 @@ void zephir_preg_match(zval *return_value, zval **return_value_ptr, zval *regex,
 
         if (global) {
             if (flags != 0 || offset != 0) {
-                zephir_call_func_params(return_value, return_value_ptr, SL("preg_match_all") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches, flags, offset);
+                //zephir_call_func_params(return_value, return_value_ptr, SL("preg_match_all") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches, flags, offset);
             } else {
-                zephir_call_func_params(return_value, return_value_ptr, SL("preg_match_all") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches);
+                //zephir_call_func_params(return_value, return_value_ptr, SL("preg_match_all") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches);
             }
         } else {
             if (flags != 0 || offset != 0) {
-                zephir_call_func_params(return_value, return_value_ptr, SL("preg_match") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches, flags, offset);
+                //zephir_call_func_params(return_value, return_value_ptr, SL("preg_match") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches, flags, offset);
             } else {
-                zephir_call_func_params(return_value, return_value_ptr, SL("preg_match") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches);
+                //zephir_call_func_params(return_value, return_value_ptr, SL("preg_match") TSRMLS_CC, (matches ? 3 : 2), regex, subject, matches);
             }
         }
 
@@ -1269,7 +1269,7 @@ void zephir_json_encode(zval *return_value, zval **return_value_ptr, zval *v, in
 	ALLOC_INIT_ZVAL(zopts);
 	ZVAL_LONG(zopts, opts);
 
-	zephir_call_func_params(return_value, return_value_ptr, ZEND_STRL("json_encode") TSRMLS_CC, 2, v, zopts);
+	//zephir_call_func_params(return_value, return_value_ptr, ZEND_STRL("json_encode") TSRMLS_CC, 2, v, zopts);
 	zval_ptr_dtor(&zopts);
 }
 
@@ -1280,7 +1280,7 @@ void zephir_json_decode(zval *return_value, zval **return_value_ptr, zval *v, ze
 	ALLOC_INIT_ZVAL(zassoc);
 	ZVAL_BOOL(zassoc, assoc);
 
-	zephir_call_func_params(return_value, return_value_ptr, ZEND_STRL("json_decode") TSRMLS_CC, 2, v, zassoc);
+	//zephir_call_func_params(return_value, return_value_ptr, ZEND_STRL("json_decode") TSRMLS_CC, 2, v, zassoc);
 	zval_ptr_dtor(&zassoc);
 }
 

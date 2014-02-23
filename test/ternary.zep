@@ -29,6 +29,6 @@ class Ternary
 
 	public function testTernaryComplex3(var a)
 	{
-		return gettype(typeof a == "resource" ? "unknown": false);
+		//return gettype(typeof a == "resource" ? "unknown": false);
 	}
 }

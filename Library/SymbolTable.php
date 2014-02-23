@@ -667,6 +667,37 @@ class SymbolTable
     }
 
     /**
+     * Creates a temporary variable to be used as intermediate variable in a call operation
+     * Variables are automatically tracked by the memory manager
+     *
+     * @param string $type
+     * @param CompilationContext $context
+     * @return Variable
+     */
+    public function getTempVariableForObserveOrNullify($type, CompilationContext $context)
+    {
+
+        $variable = $this->_reuseTempVariable($type, 'observe-nullify');
+        if (is_object($variable)) {
+            $variable->increaseUses();
+            $variable->increaseMutates();
+            $variable->observeVariant($context);
+            return $variable;
+        }
+
+        $tempVar = $this->_tempVariable++;
+        $variable = $this->addVariable($type, '_' . $tempVar, $context);
+        $variable->setIsInitialized(true, $context, array());
+        $variable->setTemporal(true);
+        $variable->increaseUses();
+        $variable->increaseMutates();
+        $variable->observeOrNullifyVariant($context);
+
+        $this->_registerTempVariable($type, 'observe-nullify', $variable);
+        return $variable;
+    }
+
+    /**
      * Returns the temporal variables declared in a given context
      *
      * @return array
