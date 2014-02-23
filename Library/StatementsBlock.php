@@ -46,7 +46,7 @@ class StatementsBlock
 {
     protected $_statements;
 
-    protected $_unrecheable;
+    protected $_unreachable;
 
     protected $_debug = false;
 
@@ -64,11 +64,11 @@ class StatementsBlock
 
     /**
      * @param CompilationContext $compilationContext
-     * @param boolean $unrecheable
+     * @param boolean $unreachable
      * @param int $branchType
      * @return Branch
      */
-    public function compile(CompilationContext $compilationContext, $unrecheable = false, $branchType = Branch::TYPE_UNKNOWN)
+    public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN)
     {
         $compilationContext->codePrinter->increaseLevel();
         $compilationContext->currentBranch++;
@@ -78,14 +78,14 @@ class StatementsBlock
          */
         $currentBranch = new Branch();
         $currentBranch->setType($branchType);
-        $currentBranch->setUnrecheable($unrecheable);
+        $currentBranch->setUnreachable($unreachable);
 
         /**
          * Activate branch in the branch manager
          */
         $compilationContext->branchManager->addBranch($currentBranch);
 
-        $this->_unrecheable = $unrecheable;
+        $this->_unreachable = $unreachable;
 
         $statements = $this->_statements;
         foreach ($statements as $statement) {
@@ -102,17 +102,17 @@ class StatementsBlock
             }
 
             /**
-             * Show warnings if code is generated when the 'unrecheable state' is 'on'
+             * Show warnings if code is generated when the 'unreachable state' is 'on'
              */
-            if ($this->_unrecheable === true) {
+            if ($this->_unreachable === true) {
                 switch ($statement['type']) {
 
                     case 'echo':
-                        $compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expressions'][0]);
+                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expressions'][0]);
                         break;
 
                     case 'let':
-                        $compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['assignments'][0]);
+                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['assignments'][0]);
                         break;
 
                     case 'fetch':
@@ -127,14 +127,14 @@ class StatementsBlock
                     case 'return':
                     case 'c-block':
                         if (isset($statement['expr'])) {
-                            $compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement['expr']);
+                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expr']);
                         } else {
-                            $compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
+                            $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
                         }
                         break;
 
                     default:
-                        $compilationContext->logger->warning('Unrecheable code', "unrecheable-code", $statement);
+                        $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement);
                 }
             }
 
@@ -183,7 +183,7 @@ class StatementsBlock
                 case 'return':
                     $returnStatement = new ReturnStatement($statement);
                     $returnStatement->compile($compilationContext);
-                    $this->_unrecheable = true;
+                    $this->_unreachable = true;
                     break;
 
                 case 'require':
@@ -199,13 +199,13 @@ class StatementsBlock
                 case 'break':
                     $breakStatement = new BreakStatement($statement);
                     $breakStatement->compile($compilationContext);
-                    $this->_unrecheable = true;
+                    $this->_unreachable = true;
                     break;
 
                 case 'continue':
                     $continueStatement = new ContinueStatement($statement);
                     $continueStatement->compile($compilationContext);
-                    $this->_unrecheable = true;
+                    $this->_unreachable = true;
                     break;
 
                 case 'unset':
@@ -216,13 +216,13 @@ class StatementsBlock
                 case 'throw':
                     $throwStatement = new ThrowStatement($statement);
                     $throwStatement->compile($compilationContext);
-                    $this->_unrecheable = true;
+                    $this->_unreachable = true;
                     break;
 
                 case 'try-catch':
                     $throwStatement = new TryCatchStatement($statement);
                     $throwStatement->compile($compilationContext);
-                    $this->_unrecheable = true;
+                    $this->_unreachable = true;
                     break;
 
                 case 'fetch':
