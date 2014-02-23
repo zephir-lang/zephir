@@ -24,6 +24,7 @@ use Zephir\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Branch;
+use Zephir\Variable;
 
 /**
  * EvalExpression
@@ -258,7 +259,7 @@ class EvalExpression
     /**
      * Returns the variable evaluated by the EvalExpression
      *
-     * @return
+     * @return Variable
      */
     public function getEvalVariable()
     {

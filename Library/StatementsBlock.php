@@ -54,6 +54,8 @@ class StatementsBlock
 
     /**
      * StatementsBlock constructor
+     *
+     * @param array $statements
      */
     public function __construct(array $statements)
     {

@@ -19,6 +19,9 @@
 
 namespace Zephir;
 
+use \Zephir\Builder\StatementsBlockBuilder;
+use \Zephir\Builder\Statements\LetStatementBuilder;
+
 /**
  * ClassProperty
  *
@@ -226,19 +229,7 @@ class ClassProperty
                         $statementsBlock = $constructMethod->getStatementsBlock();
                         if ($statementsBlock) {
                             $statements = $statementsBlock->getStatements();
-
-                            $letStatement = array(
-                                'type' => 'let',
-                                'assignments' => array(
-                                    array(
-                                        'assign-type' => 'object-property',
-                                        'operator' => 'assign',
-                                        'variable' => 'this',
-                                        'property' => $this->getName(),
-                                        'expr' => $this->_original['default']
-                                    )
-                                )
-                            );
+                            $letStatement = $this->getLetStatement()->get();
 
                             $needLetStatementAdded = true;
                             foreach ($statements as $statement) {
@@ -255,38 +246,13 @@ class ClassProperty
                                 $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                             }
                         } else {
-                            $statementsBlock = new StatementsBlock(array(
-                                array(
-                                    'type' => 'let',
-                                    'assignments' => array(
-                                        array(
-                                            'assign-type' => 'object-property',
-                                            'operator' => 'assign',
-                                            'variable' => 'this',
-                                            'property' => $this->getName(),
-                                            'expr' => $this->_original['default']
-                                        )
-                                    )
-                                )
-                            ));
-                            $constructMethod->setStatementsBlock($statementsBlock);
-
+                            $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
+                            $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
                             $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                         }
                     } else {
                         $statementsBlock = new StatementsBlock(array(
-                            array(
-                                'type' => 'let',
-                                'assignments' => array(
-                                    array(
-                                        'assign-type' => 'object-property',
-                                        'operator' => 'assign',
-                                        'variable' => 'this',
-                                        'property' => $this->getName(),
-                                        'expr' => $this->_original['default']
-                                    )
-                                )
-                            )
+                            $this->getLetStatement()->get()
                         ));
 
                         $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
@@ -314,6 +280,19 @@ class ClassProperty
                     throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
             }
         }
+    }
+
+    /**
+     * @return LetStatementBuilder
+     */
+    protected function getLetStatement()
+    {
+        return new LetStatementBuilder(array(
+            'assign-type' => 'object-property',
+            'operator' => 'assign',
+            'variable' => 'this',
+            'property' => $this->_name,
+        ), $this->_original['default']);
     }
 
     /**
