@@ -84,15 +84,15 @@ typedef struct _zephir_function_cache {
 
 #ifndef INIT_PZVAL_COPY
 # define INIT_PZVAL_COPY(z, v) \
-ZVAL_COPY_VALUE(z, v); \
-Z_SET_REFCOUNT_P(z, 1); \
-Z_UNSET_ISREF_P(z);
+	ZVAL_COPY_VALUE(z, v); \
+	Z_SET_REFCOUNT_P(z, 1); \
+	Z_UNSET_ISREF_P(z);
 #endif
 
 #ifndef ZVAL_COPY_VALUE
 # define ZVAL_COPY_VALUE(z, v) \
-(z)->value = (v)->value; \
-Z_TYPE_P(z) = Z_TYPE_P(v);
+	(z)->value = (v)->value; \
+	Z_TYPE_P(z) = Z_TYPE_P(v);
 #endif
 
 #ifndef HASH_KEY_NON_EXISTENT
@@ -150,6 +150,12 @@ Z_TYPE_P(z) = Z_TYPE_P(v);
 # define ZLK_CC
 # define ZLK_NULL_CC
 #endif*/
+
+#ifdef ZTS
+#define zephir_nts_static static
+#else
+#define zephir_nts_static static
+#endif
 
 #define ZEPHIR_STATIC
 
