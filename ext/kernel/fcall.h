@@ -102,14 +102,14 @@ typedef zend_function zephir_fcall_cache_entry;
  * @li if @c return_value_ptr is not @c NULL, @c *return_value_ptr is initialized with @c ALLOC_INIT_ZVAL
  * @li otherwise, if @c return_value is not @c NULL, @c return_value and @c *return_value are not changed
  */
-#define ZEPHIR_RETURN_CALL_FUNCTIONW(func_name, ...) \
+#define ZEPHIR_RETURN_CALL_FUNCTIONW(func_name, cache, ...) \
 	do { \
 		zval *params_[] = {__VA_ARGS__}; \
 		if (__builtin_constant_p(func_name)) { \
-			ZEPHIR_LAST_CALL_STATUS = zephir_return_call_function(return_value, return_value_ptr, func_name, sizeof(func_name)-1, sizeof(params_)/sizeof(zval*), params_ TSRMLS_CC); \
+			ZEPHIR_LAST_CALL_STATUS = zephir_return_call_function(return_value, return_value_ptr, func_name, sizeof(func_name)-1, cache, sizeof(params_)/sizeof(zval*), params_ TSRMLS_CC); \
 		} \
 		else { \
-			ZEPHIR_LAST_CALL_STATUS = zephir_return_call_function(return_value, return_value_ptr, func_name, strlen(func_name), sizeof(params_)/sizeof(zval*), params_ TSRMLS_CC); \
+			ZEPHIR_LAST_CALL_STATUS = zephir_return_call_function(return_value, return_value_ptr, func_name, strlen(func_name), cache, sizeof(params_)/sizeof(zval*), params_ TSRMLS_CC); \
 		} \
 	} while (0)
 

@@ -88,8 +88,8 @@ void zephir_base64_decode(zval *return_value, zval *data);
 void zephir_md5(zval *return_value, zval *str);
 
 /** JSON */
-void zephir_json_encode(zval *return_value, zval **return_value_ptr, zval *v, int opts TSRMLS_DC);
-void zephir_json_decode(zval *return_value, zval **return_value_ptr, zval *v, zend_bool assoc TSRMLS_DC);
+int zephir_json_encode(zval *return_value, zval **return_value_ptr, zval *v, int opts TSRMLS_DC);
+int zephir_json_decode(zval *return_value, zval **return_value_ptr, zval *v, zend_bool assoc TSRMLS_DC);
 
 /***/
 void zephir_lcfirst(zval *return_value, zval *s);
