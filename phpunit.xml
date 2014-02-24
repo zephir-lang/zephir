@@ -11,27 +11,28 @@
         >
     <testsuites>
         <testsuite name="Extension Test Suite">
-            <directory>./unit-tests/Extension</directory>
+            <directory>./unit-tests/Extension/</directory>
         </testsuite>
         <testsuite name="Zephir Test Suite">
-            <directory>./unit-tests/Zephir</directory>
+            <directory>./unit-tests/Zephir/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <exclude>
-                <directory>./build</directory>
-                <directory>./vendor</directory>
-                <directory>./prototypes</directory>
-            </exclude>
+            <directory>./unit-tests/Extension/</directory>
+            <directory>./unit-tests/Zephir/</directory>
         </whitelist>
+        <blacklist>
+            <directory>./build/</directory>
+            <directory>./vendor/</directory>
+            <directory>./prototypes/</directory>
+            <file>./vendor/autoload.php</file>
+        </blacklist>
     </filter>
 
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-        <log type="coverage-html" target="build/coverage" title="PHP Coveralls" charset="UTF-8" yui="true"
-             highlight="true" lowUpperBound="35" highLowerBound="70"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
 </phpunit>
