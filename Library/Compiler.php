@@ -726,7 +726,7 @@ class Compiler
     /**
      * Compiles and installs the extension
      *
-     * @param \Zephir\CommandInstall|CommandInterface $command
+     * @param CommandInterface $command
      */
     public function build(CommandInterface $command)
     {
