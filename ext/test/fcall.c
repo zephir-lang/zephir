@@ -67,7 +67,7 @@ PHP_METHOD(Test_Fcall, testCall2) {
 PHP_METHOD(Test_Fcall, testCall3) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *handle, *handle2, *buffer, _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 
@@ -104,7 +104,7 @@ PHP_METHOD(Test_Fcall, testCall3) {
 PHP_METHOD(Test_Fcall, testCall4) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *handle, *handle2, *buffer, _0 = zval_used_for_init, _1 = zval_used_for_init;
+	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 
@@ -181,7 +181,7 @@ PHP_METHOD(Test_Fcall, testCall7) {
 PHP_METHOD(Test_Fcall, testCall8) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *b, *x;
+	zval *a, *b, *x = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
