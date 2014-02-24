@@ -318,12 +318,10 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			ZEPHIR_INIT_LNVAR(_20);
 			mul_function(_20, _16, _18 TSRMLS_CC);
 			vBv += zephir_get_numberval(_20);
-			ZEPHIR_OBS_NVAR(_16);
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
 			ZEPHIR_CALL_METHOD(&_16, v, "offsetget", &_21, _0);
 			zephir_check_call_status();
-			ZEPHIR_OBS_NVAR(_18);
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
 			ZEPHIR_CALL_METHOD(&_18, v, "offsetget", &_22, _0);

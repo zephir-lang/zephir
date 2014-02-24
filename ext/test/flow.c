@@ -660,15 +660,15 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 	while (1) {
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
-		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
+		zephir_check_call_status();
 		if (!(zephir_is_true(_0))) {
 			break;
 		}
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_CALL_FUNCTION(&_1, "current", NULL, variable);
-		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
+		zephir_check_call_status();
 		zephir_array_append(&returnValue, _1, PH_SEPARATE);
 	}
 	RETURN_CCTOR(returnValue);
@@ -683,21 +683,20 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &variable);
 
-
-
 	ZEPHIR_INIT_VAR(returnValue);
 	array_init(returnValue);
+
+
 	do {
 		Z_SET_ISREF_P(variable);
 		ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, variable);
-		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
+		zephir_check_call_status();
 		zephir_array_append(&returnValue, _0, PH_SEPARATE);
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_OBS_NVAR(_0);
 		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
-		zephir_check_call_status();
 		Z_UNSET_ISREF_P(variable);
+		zephir_check_call_status();
 	} while (zephir_is_true(_0));
 	RETURN_CCTOR(returnValue);
 
@@ -1285,7 +1284,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 617);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 614);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1529,7 +1528,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 697);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 694);
 	}
 	RETURN_CCTOR(a);
 

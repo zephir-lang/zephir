@@ -177,7 +177,6 @@ PHP_METHOD(Test_RegexDNA, process) {
 		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}
-	ZEPHIR_OBS_NVAR(_3);
 	ZEPHIR_CALL_FUNCTION(&_3, "preg_replace", NULL, vIUB, vIUBnew, contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(contents, _3);

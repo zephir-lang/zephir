@@ -427,16 +427,13 @@ class Flow
 
 	public function testWhileDoNextTest(var variable)
 	{
-		var returnValue;
-		let returnValue = [];
-
+		var returnValue = [];
 		do {
 			let returnValue[] = current(variable);
 		} while next(variable);
 
 		return returnValue;
 	}
-
 
 	public function testFor1()
 	{

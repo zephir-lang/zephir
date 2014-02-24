@@ -317,7 +317,6 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_LONG(&_2, base);
-	ZEPHIR_OBS_NVAR(_1);
 	ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, &_0, &_2);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);

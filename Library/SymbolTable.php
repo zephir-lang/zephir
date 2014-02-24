@@ -681,7 +681,7 @@ class SymbolTable
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
-            $variable->observeVariant($context);
+            $variable->observeOrNullifyVariant($context);
             return $variable;
         }
 
