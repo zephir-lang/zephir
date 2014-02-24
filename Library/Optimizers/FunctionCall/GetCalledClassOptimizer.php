@@ -42,13 +42,11 @@ class GetCalledClassOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        $numberParameters = count($expression['parameters']);
-        if ($numberParameters != 1) {
-            return false;
+        if (isset($expression['parameters'])) {
+            $numberParameters = count($expression['parameters']);
+            if ($numberParameters != 0) {
+                return false;
+            }
         }
 
         /**
@@ -69,8 +67,7 @@ class GetCalledClassOptimizer extends OptimizerAbstract
 
         $symbolVariable->setDynamicTypes('string');
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_get_called_class(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_get_called_class(' . $symbolVariable->getName() . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

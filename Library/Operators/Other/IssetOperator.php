@@ -24,6 +24,7 @@ use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Optimizers\EvalExpression;
 
 /**
  * IssetOperator
@@ -32,15 +33,15 @@ use Zephir\CompiledExpression;
  */
 class IssetOperator extends BaseOperator
 {
-
     /**
      * Compiles an 'isset' operator
      *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
 
         if ($expression['left']['type'] == 'list') {
@@ -171,6 +172,9 @@ class IssetOperator extends BaseOperator
                 break;
 
             case 'property-string-access':
+                return new CompiledExpression('bool', '(0 == 0)', $left);
+
+            case 'static-property-access':
                 return new CompiledExpression('bool', '(0 == 0)', $left);
 
             default:

@@ -36,8 +36,8 @@ class DoWhileStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $exprRaw = &$this->_statement['expr'];
-        $codePrinter = &$compilationContext->codePrinter;
+        $exprRaw = $this->_statement['expr'];
+        $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('do {');
 
@@ -67,11 +67,6 @@ class DoWhileStatement extends StatementAbstract
         /**
          * Compound conditions can be evaluated in a single line of the C-code
          */
-        $numberPrints = $codePrinter->getNumberPrints();
-        if (($codePrinter->getNumberPrints() - $numberPrints) == 0) {
-            $codePrinter->output('} while (' . $condition . ');');
-        } else {
-            $codePrinter->output('} while (1);');
-        }
+        $codePrinter->output('} while (' . $condition . ');');
     }
 }

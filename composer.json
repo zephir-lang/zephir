@@ -22,8 +22,8 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.31",
-        "satooshi/php-coveralls": "dev-master",
+        "satooshi/php-coveralls": "0.6.1",
+        "squizlabs/php_codesniffer": "1.5.2",
         "ext-gmp": "*"
     },
     "autoload": {

@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/array.h"
 
 ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
@@ -54,7 +55,15 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	 */
 	zend_declare_property_string(test_properties_publicproperties_ce, SL("someString"), "test", ZEND_ACC_PUBLIC TSRMLS_CC);
 
+	/**
+	 * This is a public property with an initial empty-array value
+	 */
 	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
+
+	/**
+	 * This is a public property with an initial array value
+	 */
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -62,13 +71,29 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
 PHP_METHOD(Test_Properties_PublicProperties, __construct) {
 
-	zval *_0;
+	zval *_1;
+	zval *_0, *_2;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
 	zephir_update_property_this(this_ptr, SL("someEmptyArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	array_init_size(_1, 7);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_LONG(_2, 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_BNVAR(_2);
+	ZVAL_LONG(_2, 2);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_BNVAR(_2);
+	ZVAL_LONG(_2, 3);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_BNVAR(_2);
+	ZVAL_LONG(_2, 4);
+	zephir_array_fast_append(_1, _2);
+	zephir_update_property_this(this_ptr, SL("someArray"), _1 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }

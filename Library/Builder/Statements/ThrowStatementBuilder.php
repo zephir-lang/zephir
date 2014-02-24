@@ -24,7 +24,7 @@ namespace Zephir\Builder\Statements;
  *
  * Allows to manually build a 'throw' statement AST node
  */
-class ThrowStatementBuilder
+class ThrowStatementBuilder extends AbstractStatementBuilder
 {
     private $expr;
 
@@ -39,7 +39,7 @@ class ThrowStatementBuilder
     }
 
     /**
-     *
+     * {@inheritdoc}
      */
     public function get()
     {

@@ -53,14 +53,15 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if ($expr['left']['type'] == 'typeof') {
+
             if ($expr['right']['type'] != 'string') {
-                echo $expr['right']['type'];
                 $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
                 return false;
             }
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
+
                     case 'identical':
                     case 'equals':
                         $operator = '==';
@@ -91,34 +92,34 @@ class ComparisonBaseOperator extends BaseOperator
                     switch ($value) {
 
                         case 'array':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY';
                             break;
 
                         case 'object':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT';
                             break;
 
                         case 'null':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL';
                             break;
 
                         case 'string':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING';
                             break;
 
                         case 'int':
                         case 'integer':
                         case 'long':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG';
                             break;
 
                         case 'boolean':
                         case 'bool':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL';
                             break;
 
                         case 'resource':
-                            $condition = '(Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE)';
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE';
                             break;
 
                         default:
@@ -203,7 +204,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(Z_TYPE_P(' . $variableRight->getName() . ') == IS_NULL)', $expression);
+                                return new CompiledExpression('bool', '(Z_TYPE_P(' . $variableRight->getName() . ') != IS_NULL)', $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);

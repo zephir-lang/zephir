@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -35,7 +36,7 @@ PHP_METHOD(Test_ScallExternal, testCall1) {
 
 	ZEPHIR_MM_GROW();
 
-	zephir_call_static(return_value, "Test\\Scall", "testmethod1");
+	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod1", NULL);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -51,9 +52,24 @@ PHP_METHOD(Test_ScallExternal, testCall2) {
 
 
 
-	zephir_call_static_p2(return_value, "Test\\Scall", "testmethod4", a, b);
+	ZEPHIR_RETURN_CALL_CE_STATIC(test_scall_ce, "testmethod4", NULL, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_ScallExternal, testMethod3) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	long a, b;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
+
+
+	RETURN_LONG((a + b));
 
 }
 

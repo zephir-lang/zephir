@@ -4,6 +4,8 @@
 #ifndef PHP_%PROJECT_UPPER%_H
 #define PHP_%PROJECT_UPPER%_H 1
 
+#define ZEPHIR_RELEASE 1
+
 #include "kernel/globals.h"
 
 #define PHP_%PROJECT_UPPER%_NAME    "%PROJECT_NAME%"
@@ -21,8 +23,8 @@ ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
 	/* Virtual Symbol Tables */
 	zephir_symbol_table *active_symbol_table;
 
-	/* Function cache */
-	HashTable *function_cache;
+	/** Function cache */
+	HashTable *fcache;
 
 	/* Max recursion control */
 	unsigned int recursive_lock;

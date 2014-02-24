@@ -64,7 +64,7 @@ PHP_METHOD(Test_Unsettest, testUnsetValueFromProperty) {
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("property"), PH_NOISY_CC);
-	zephir_array_unset(&_0, key, 0);
+	zephir_array_unset(&_0, key, PH_SEPARATE);
 
 }
 
@@ -72,12 +72,14 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 
 	zval *arrayParameter;
 
-	zephir_fetch_params(0, 1, 0, &arrayParameter);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &arrayParameter);
+
+	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 
 
-
-	zephir_array_unset_long(&arrayParameter, 0, 0);
-	RETURN_CCTORW(arrayParameter);
+	zephir_array_unset_long(&arrayParameter, 0, PH_SEPARATE);
+	RETURN_CCTOR(arrayParameter);
 
 }
 
@@ -85,12 +87,14 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 	zval *arrayParameter, *index;
 
-	zephir_fetch_params(0, 2, 0, &arrayParameter, &index);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &arrayParameter, &index);
+
+	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 
 
-
-	zephir_array_unset(&arrayParameter, index, 0);
-	RETURN_CCTORW(arrayParameter);
+	zephir_array_unset(&arrayParameter, index, PH_SEPARATE);
+	RETURN_CCTOR(arrayParameter);
 
 }
 

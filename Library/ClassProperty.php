@@ -207,7 +207,6 @@ class ClassProperty
             $this->declareProperty($compilationContext, 'null', null);
         } else {
             switch ($this->_defaultValue['type']) {
-
                 case 'long':
                 case 'int':
                 case 'string':
@@ -216,6 +215,7 @@ class ClassProperty
                     $this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
                     break;
 
+                case 'array':
                 case 'empty-array':
                     if ($this->isStatic()) {
                         throw new CompilerException('Cannot define static property with default value: ' . $this->_defaultValue['type'], $this->_original);
@@ -235,16 +235,14 @@ class ClassProperty
                                         'operator' => 'assign',
                                         'variable' => 'this',
                                         'property' => $this->getName(),
-                                        'expr' => array(
-                                            'type' => 'empty-array',
-                                        )
+                                        'expr' => $this->_original['default']
                                     )
                                 )
                             );
 
                             $needLetStatementAdded = true;
                             foreach ($statements as $statement) {
-                                if ($statement === $statement) {
+                                if ($statement === $letStatement) {
                                     $needLetStatementAdded = false;
                                     break;
                                 }
@@ -253,6 +251,8 @@ class ClassProperty
                             if ($needLetStatementAdded) {
                                 $statements[] = $letStatement;
                                 $statementsBlock->setStatements($statements);
+                                $constructMethod->setStatementsBlock($statementsBlock);
+                                $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                             }
                         } else {
                             $statementsBlock = new StatementsBlock(array(
@@ -264,14 +264,14 @@ class ClassProperty
                                             'operator' => 'assign',
                                             'variable' => 'this',
                                             'property' => $this->getName(),
-                                            'expr' => array(
-                                                'type' => 'empty-array',
-                                            )
+                                            'expr' => $this->_original['default']
                                         )
                                     )
                                 )
                             ));
                             $constructMethod->setStatementsBlock($statementsBlock);
+
+                            $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                         }
                     } else {
                         $statementsBlock = new StatementsBlock(array(
@@ -283,15 +283,13 @@ class ClassProperty
                                         'operator' => 'assign',
                                         'variable' => 'this',
                                         'property' => $this->getName(),
-                                        'expr' => array(
-                                            'type' => 'empty-array',
-                                        )
+                                        'expr' => $this->_original['default']
                                     )
                                 )
                             )
                         ));
 
-                        $compilationContext->classDefinition->getEventsManager()->dispatch('addMethod', array(new ClassMethod(
+                        $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
                             $compilationContext->classDefinition,
                             array('public'),
                             '__construct',
@@ -353,9 +351,8 @@ class ClassProperty
             case 'string':
                 $codePrinter->output("zend_declare_property_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+            case 'array':
             case 'empty-array':
-                $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
-                break;
             case 'null':
                 $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;

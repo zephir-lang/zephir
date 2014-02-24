@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/require.h"
 #include "kernel/memory.h"
+#include "kernel/require.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Requires) {
@@ -26,33 +26,33 @@ ZEPHIR_INIT_CLASS(Test_Requires) {
 
 PHP_METHOD(Test_Requires, requireExternal1) {
 
-	zval *path;
-
-	zephir_fetch_params(0, 1, 0, &path);
-
-
-
-	if (zephir_require_ret(return_value, path TSRMLS_CC) == FAILURE) {
-		RETURN_NULL();
-	}
-	return;
-
-}
-
-PHP_METHOD(Test_Requires, requireExternal2) {
-
-	zval *path, *_0;
+	zval *path, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	if (zephir_require_ret(_0, path TSRMLS_CC) == FAILURE) {
+	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
+	if (zephir_require_zval_ret(&_0, path TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	RETURN_MM_BOOL(1);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Requires, requireExternal2) {
+
+	zval *path;
+
+	zephir_fetch_params(0, 1, 0, &path);
+
+
+
+	if (zephir_require_zval(path TSRMLS_CC) == FAILURE) {
+		RETURN_NULL();
+	}
+	RETURN_BOOL(1);
 
 }
 

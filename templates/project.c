@@ -21,6 +21,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
 #include "kernel/memory.h"
 
 %CLASS_ENTRIES%
@@ -53,7 +54,7 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 
-	assert(ZEPHIR_GLOBAL(function_cache) == NULL);
+	//assert(ZEPHIR_GLOBAL(function_cache) == NULL);
 
 	return SUCCESS;
 }
@@ -72,12 +73,54 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 	zephir_globals->active_symbol_table = NULL;
 
 	/* Cache options */
-	zephir_globals->function_cache = NULL;
+	//zephir_globals->function_cache = NULL;
 
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
 %INIT_GLOBALS%
+}
+
+#ifndef ZEPHIR_RELEASE
+static void zephir_fcall_cache_dtor(void *pData)
+{
+	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**)pData;
+	free(*entry);
+}
+#endif
+
+static int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
+{
+	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**)pDest;
+	zend_class_entry *scope;
+	uint len = hash_key->nKeyLength;
+
+	assert(hash_key->arKey != NULL);
+	assert(hash_key->nKeyLength > 2*sizeof(zend_class_entry**));
+
+	memcpy(&scope, &hash_key->arKey[len - 2*sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
+
+#ifndef ZEPHIR_RELEASE
+if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+	return ZEND_HASH_APPLY_REMOVE;
+}
+#else
+if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+	return ZEND_HASH_APPLY_REMOVE;
+}
+#endif
+
+#if PHP_VERSION_ID >= 50400
+if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
+	return ZEND_HASH_APPLY_REMOVE;
+}
+#else
+if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->module->type != MODULE_PERSISTENT) {
+	return ZEND_HASH_APPLY_REMOVE;
+}
+#endif
+
+	return ZEND_HASH_APPLY_KEEP;
 }
 
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
@@ -96,11 +139,13 @@ static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 		zephir_clean_restore_stack(TSRMLS_C);
 	}
 
-	if (ZEPHIR_GLOBAL(function_cache) != NULL) {
+	/*if (ZEPHIR_GLOBAL(function_cache) != NULL) {
 		zend_hash_destroy(ZEPHIR_GLOBAL(function_cache));
 		FREE_HASHTABLE(ZEPHIR_GLOBAL(function_cache));
 		ZEPHIR_GLOBAL(function_cache) = NULL;
-	}
+	}*/
+
+	zend_hash_apply_with_arguments(ZEPHIR_GLOBAL(fcache) TSRMLS_CC, zephir_cleanup_fcache, 0);
 
 	return SUCCESS;
 }
@@ -129,6 +174,13 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 	start->hash_capacity   = 4;
 
 	%PROJECT_LOWER%_globals->start_memory = start;
+
+	%PROJECT_LOWER%_globals->fcache = pemalloc(sizeof(HashTable), 1);
+#ifndef ZEPHIR_RELEASE
+	zend_hash_init(%PROJECT_LOWER%_globals->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
+#else
+	zend_hash_init(%PROJECT_LOWER%_globals->fcache, 128, NULL, NULL, 1);
+#endif
 
 	/* Global Constants */
 	ALLOC_PERMANENT_ZVAL(%PROJECT_LOWER%_globals->global_false);

@@ -18,4 +18,9 @@ class ScallExternal
 		return Scall::testMethod4(a, b);
 	}
 
+	public static function testMethod3(long a, long b)
+	{
+		return a + b;
+	}
+
 }

@@ -89,12 +89,17 @@ class InstanceOfOperator extends BaseOperator
                                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                                 $classEntry = $classDefinition->getClassEntry();
                             } else {
-                                if (!class_exists($className, false)) {
-                                    $code = 'SL("' . trim(Utils::addSlashes($className, true), "\\") . '")';
+                                if ($compilationContext->compiler->isInterface($className)) {
+                                    $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                                    $classEntry = $classDefinition->getClassEntry();
                                 } else {
-                                    $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
-                                    if (!$classEntry) {
+                                    if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Utils::addSlashes($className, true), "\\") . '")';
+                                    } else {
+                                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                                        if (!$classEntry) {
+                                            $code = 'SL("' . trim(Utils::addSlashes($className, true), "\\") . '")';
+                                        }
                                     }
                                 }
                             }

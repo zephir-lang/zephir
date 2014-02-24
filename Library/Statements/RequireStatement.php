@@ -46,6 +46,7 @@ class RequireStatement extends StatementAbstract
         );
 
         $expr = new Expression($expression);
+        $expr->setExpectReturn(false, null);
         $expr->compile($compilationContext);
     }
 }

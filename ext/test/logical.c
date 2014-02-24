@@ -101,7 +101,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 	b = zephir_get_intval(b_param);
 
 
-	_0 = (Z_TYPE_P(a) == IS_ARRAY);
+	_0 = Z_TYPE_P(a) == IS_ARRAY;
 	if (_0) {
 		_0 = zephir_array_isset_long(a, b);
 	}
@@ -172,7 +172,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 
 
 
-	_0 = (Z_TYPE_P(match) == IS_ARRAY);
+	_0 = Z_TYPE_P(match) == IS_ARRAY;
 	if (_0) {
 		_0 = (zephir_fast_count_int(match TSRMLS_CC) == 2);
 	}

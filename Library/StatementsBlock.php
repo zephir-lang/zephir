@@ -164,8 +164,8 @@ class StatementsBlock
                     break;
 
                 case 'do-while':
-                    $whileStatement = new DoWhileStatement($statement);
-                    $whileStatement->compile($compilationContext);
+                    $doWhileStatement = new DoWhileStatement($statement);
+                    $doWhileStatement->compile($compilationContext);
                     break;
 
                 case 'switch':

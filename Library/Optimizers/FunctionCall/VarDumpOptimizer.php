@@ -50,7 +50,11 @@ class VarDumpOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
 
         foreach ($resolvedParams as $resolvedParam) {
-            $context->codePrinter->output('zephir_var_dump(&'. $resolvedParam . ' TSRMLS_CC);');
+            if (substr($resolvedParam, 0, 1) == '&') {
+                $context->codePrinter->output('zephir_var_dump(&(' . $resolvedParam . ') TSRMLS_CC);');
+            } else {
+                $context->codePrinter->output('zephir_var_dump(&' . $resolvedParam . ' TSRMLS_CC);');
+            }
         }
 
         return new CompiledExpression('null', 'null', $expression);

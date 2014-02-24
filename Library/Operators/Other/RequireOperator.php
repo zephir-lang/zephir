@@ -48,7 +48,6 @@ class RequireOperator extends BaseOperator
 
         $exprPath = $expr->compile($compilationContext);
         if ($exprPath->getType() == 'variable') {
-
             $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
             if ($exprVariable->getType() == 'variable') {
                 if ($exprVariable->hasDifferentDynamicType(array('undefined', 'string'))) {
@@ -58,21 +57,21 @@ class RequireOperator extends BaseOperator
 
         }
 
-        $symbolVariable = $this->getExpected($compilationContext, $expression);
-        if ($symbolVariable) {
-            if ($symbolVariable->getType() != 'variable') {
-                throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
-            }
+        $symbolVariable = false;
+        if ($this->isExpecting()) {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
         }
 
+        $compilationContext->headersManager->add('kernel/memory');
         $compilationContext->headersManager->add('kernel/require');
 
         $codePrinter = $compilationContext->codePrinter;
 
         if ($symbolVariable) {
-            $codePrinter->output('if (zephir_require_ret(' . $symbolVariable->getName() . ', ' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
+            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&' . $symbolVariable->getName() . ');');
+            $codePrinter->output('if (zephir_require_zval_ret(&' . $symbolVariable->getName() . ', ' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
         } else {
-            $codePrinter->output('if (zephir_require(' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
+            $codePrinter->output('if (zephir_require_zval(' . $exprPath->getCode() . ' TSRMLS_CC) == FAILURE) {');
         }
         $codePrinter->output("\t" . 'RETURN_MM_NULL();');
         $codePrinter->output('}');

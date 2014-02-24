@@ -91,6 +91,10 @@ class Utils
      */
     public static function getFullName($className, $currentNamespace, AliasManager $aliasManager = null)
     {
+        if (!is_string($className)) {
+            throw new \InvalidArgumentException('Class name must be a string ' . print_r($className, true));
+        }
+
         if ($className[0] !== '\\') {
 
             // If class/interface name not begin with \ maybe a alias or a sub-namespace
@@ -100,8 +104,10 @@ class Utils
                 if ($aliasManager->isAlias($baseName)) {
                     return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
                 }
-            } elseif ($aliasManager->isAlias($className)) {
-                return $aliasManager->getAlias($className);
+            } else {
+                if ($aliasManager->isAlias($className)) {
+                    return $aliasManager->getAlias($className);
+                }
             }
 
             // Relative class/interface name

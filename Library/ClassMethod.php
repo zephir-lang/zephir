@@ -1450,6 +1450,7 @@ class ClassMethod
 
                 if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
                     if (isset($parametersToSeparate[$parameter['name']])) {
+                        $symbolTable->mustGrownStack(true);
                         $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
                     }
                 }
@@ -1628,6 +1629,10 @@ class ClassMethod
                     $code = 'zend_property_info ';
                     break;
 
+                case 'zephir_fcall_cache_entry':
+                    $pointer = '*';
+                    $code = 'zephir_fcall_cache_entry ';
+                    break;
 
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);

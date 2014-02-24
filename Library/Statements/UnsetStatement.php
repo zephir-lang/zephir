@@ -37,32 +37,24 @@ class UnsetStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/array');
         $expression = $this->_statement['expr'];
 
-        $flags = 0;
+        $flags = 'PH_SEPARATE';
+
+        if ($expression['type'] == 'list') {
+            $expression = $expression['left'];
+        }
 
         switch ($expression['type']) {
-
-            case 'list':
-                $expr = new Expression($expression['left']['left']);
-                $expr->setReadOnly(true);
-                $exprVar = $expr->compile($compilationContext);
-
-                $expr = new Expression($expression['left']['right']);
-                $expr->setReadOnly(true);
-                $exprIndex = $expr->compile($compilationContext);
-
-                break;
 
             case 'array-access':
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
 
-                $expr = new Expression($expression);
+                $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
-
-                $flags = 'PH_SEPARATE';
                 break;
+
             default:
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }
@@ -110,6 +102,7 @@ class UnsetStatement extends StatementAbstract
                         throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
                 }
                 break;
+
             default:
                 throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $expression['right']);
         }

@@ -184,6 +184,14 @@ class Flow
 		return false;
 	}
 
+	public function testIf17(var b)
+	{
+		if null !== b {
+			return true;
+		}
+		return false;
+	}
+
 	public function testLoop1()
 	{
 		var a;
@@ -400,9 +408,7 @@ class Flow
 
 	public function testDoWhile1()
 	{
-		do {
-
-		} while(1);
+		do { } while(1);
 	}
 
 	public function testWhileNextTest(var variable)
@@ -419,16 +425,13 @@ class Flow
 
 	public function testWhileDoNextTest(var variable)
 	{
-		var returnValue;
-		let returnValue = [];
-
+		var returnValue = [];
 		do {
 			let returnValue[] = current(variable);
 		} while next(variable);
 
 		return returnValue;
 	}
-
 
 	public function testFor1()
 	{
@@ -718,6 +721,34 @@ class Flow
 			}
 			return result;
 		}
+	}
+
+	public function testFor35Aux(var hello)
+	{
+		return false;
+	}
+
+	public function testFor35()
+	{
+		var i;
+		for i in range(1, 100) {
+			this->testFor35Aux("hello");
+		}
+		return true;
+	}
+
+	public function testFor36Aux(var hello)
+	{
+		return [hello];
+	}
+
+	public function testFor36()
+	{
+		var i;
+		for i in range(1, 100) {
+			this->testFor36Aux("hello");
+		}
+		return true;
 	}
 
 	public function testSwitch1()

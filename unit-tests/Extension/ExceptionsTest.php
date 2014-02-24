@@ -21,10 +21,6 @@ namespace Extension;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException \Exception
-     *
-     */
     public function testException1()
     {
         $this->setExpectedException('\Test\Exception', 'hello1');

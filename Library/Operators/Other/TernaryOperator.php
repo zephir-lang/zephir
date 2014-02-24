@@ -46,9 +46,12 @@ class TernaryOperator extends BaseOperator
         /**
          * This variable is used to check if the compound and expression is evaluated as true or false
          */
-        $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-        if ($returnVariable->isTemporal()) {
-            $returnVariable->skipInitVariant(2);
+        $returnVariable = $this->getExpected($compilationContext, $expression);
+        if ($returnVariable->getType() != 'variable') {
+            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            if ($returnVariable->isTemporal()) {
+                $returnVariable->skipInitVariant(2);
+            }
         }
 
         $expr = new EvalExpression();

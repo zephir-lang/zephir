@@ -37,10 +37,10 @@ class Mcall
 		return a + b;
 	}
 
-    private function testMethod7() -> <\stdClass>
-    {
-        return new \stdClass();
-    }
+	private function testMethod7() -> <\stdClass>
+	{
+		return new \stdClass();
+	}
 
 	public function testCall1()
 	{
@@ -129,59 +129,73 @@ class Mcall
 
 	public function testCall18()
 	{
-	    return this->testMethod7();
+		return this->testMethod7();
 	}
 
-    public function optionalRequereString(string! param)
-    {
-        return param;
-    }
+	public function testMethod19(long a, long b)
+	{
+		return a + b;
+	}
 
-    public function optionalParameterString(string param = "test string")
-    {
-        return param;
-    }
+	public function testCall20(long k, var p)
+	{
+		long i, j = 0;
+		for i in range(1, k) {
+			let j += this->testMethod19(p, p);
+		}
+		return j;
+	}
 
-    public function optionalParameterStringNull(string param = null)
-    {
-        return param;
-    }
+	public function optionalRequereString(string! param)
+	{
+		return param;
+	}
 
-    public function optionalParameterInt(int param = 2)
-    {
-        return param;
-    }
+	public function optionalParameterString(string param = "test string")
+	{
+		return param;
+	}
 
-    public function optionalParameterVar(var param = null)
-    {
-        return param;
-    }
+	public function optionalParameterStringNull(string param = null)
+	{
+		return param;
+	}
 
-    public function optionalParameterBoolTrue(bool param = true)
-    {
-        return param;
-    }
+	public function optionalParameterInt(int param = 2)
+	{
+		return param;
+	}
 
-    public function optionalParameterBoolFalse(bool param = false)
-    {
-        return param;
-    }
+	public function optionalParameterVar(var param = null)
+	{
+		return param;
+	}
 
-    public function optionalParameterBoolean(boolean! start = true)
-    {
-        return start;
-    }
+	public function optionalParameterBoolTrue(bool param = true)
+	{
+		return param;
+	}
 
-    public function optionalParameterBooleanNull(bool! value = null)
-    {
-        return value;
-    }
+	public function optionalParameterBoolFalse(bool param = false)
+	{
+		return param;
+	}
+
+	public function optionalParameterBoolean(boolean! start = true)
+	{
+		return start;
+	}
+
+	public function optionalParameterBooleanNull(bool! value = null)
+	{
+		return value;
+	}
 
 	/**
 	 * @link https://github.com/phalcon/zephir/issues/142
 	 */
-    public function arrayParamWithDefaultEmptyArray(array driverOptions = [])
-    {
+	public function arrayParamWithDefaultEmptyArray(array driverOptions = [])
+	{
 		return driverOptions;
-    }
+	}
 }

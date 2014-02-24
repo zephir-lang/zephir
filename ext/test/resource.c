@@ -82,7 +82,7 @@ PHP_METHOD(Test_Resource, testIsResource) {
 
 	ZEPHIR_INIT_VAR(a);
 	ZEPHIR_GET_CONSTANT(a, "STDIN");
-	RETURN_MM_BOOL((Z_TYPE_P(a) == IS_RESOURCE));
+	RETURN_MM_BOOL(Z_TYPE_P(a) == IS_RESOURCE);
 
 }
 
@@ -97,7 +97,7 @@ PHP_METHOD(Test_Resource, testFunctionsForSTDIN) {
 	ZEPHIR_GET_CONSTANT(a, "STDIN");
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, 1);
-	zephir_call_func_p2_noret("stream_set_blocking", a, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, a, &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

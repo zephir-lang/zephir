@@ -85,8 +85,16 @@ class WriteDetector
                     break;
 
                 case 'unset':
-                    if ($statement['domain']['value'] == $variable) {
-                        return true;
+                    if ($statement['type'] == "array-access") {
+                        if ($statement['left']['value'] == $variable) {
+                            return true;
+                        }
+                    } else {
+                        if ($statement['type'] == "list") {
+                            if ($statement['left']['left']['value'] == $variable) {
+                                return true;
+                            }
+                        }
                     }
                     break;
 
