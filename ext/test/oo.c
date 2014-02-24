@@ -167,7 +167,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 PHP_METHOD(Test_Oo, testInstance9) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o;
+	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -180,7 +180,7 @@ PHP_METHOD(Test_Oo, testInstance9) {
 PHP_METHOD(Test_Oo, testInstance10) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *o;
+	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 

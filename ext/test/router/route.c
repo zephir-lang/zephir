@@ -406,7 +406,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
 	int _0, ZEPHIR_LAST_CALL_STATUS;
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted, *_1 = NULL, *_2;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted = NULL, *_1 = NULL, *_2;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -492,7 +492,6 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 348)) {
-			ZEPHIR_INIT_VAR(extracted);
 			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, pattern);
 			zephir_check_call_status();
 			ZEPHIR_OBS_VAR(pcrePattern);
@@ -504,7 +503,6 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		} else {
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);
 		}
-		ZEPHIR_INIT_VAR(compiledPattern);
 		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilepattern", NULL, pcrePattern);
 		zephir_check_call_status();
 	} else {

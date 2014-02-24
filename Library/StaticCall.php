@@ -50,6 +50,10 @@ class StaticCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
+        if ($mustInit) {
+            $symbolVariable->setMustInitNull(true);
+        }
+
         if ($compilationContext->insideCycle) {
 
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
@@ -57,10 +61,6 @@ class StaticCall extends Call
             $functionCache->setReusable(false);
 
             if (!isset($expression['parameters'])) {
-
-                //if ($mustInit) {
-                //    $symbolVariable->initVariant($compilationContext);
-                //}
 
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
@@ -74,11 +74,6 @@ class StaticCall extends Call
             } else {
 
                 $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-                //if ($mustInit) {
-                //    $symbolVariable->initVariant($compilationContext);
-                //}
-
                 if (count($params)) {
                     if ($isExpecting) {
                         if ($symbolVariable->getName() == 'return_value') {
@@ -105,10 +100,6 @@ class StaticCall extends Call
         } else {
             if (!isset($expression['parameters'])) {
 
-                //if ($mustInit) {
-                //    $symbolVariable->initVariant($compilationContext);
-                //}
-
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_SELF("' . $methodName . '", NULL);');
@@ -121,11 +112,6 @@ class StaticCall extends Call
             } else {
 
                 $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-                //if ($mustInit) {
-                //    $symbolVariable->initVariant($compilationContext);
-                //}
-
                 if (count($params)) {
                     if ($isExpecting) {
                         if ($symbolVariable->getName() == 'return_value') {
@@ -183,11 +169,11 @@ class StaticCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        if (!isset($expression['parameters'])) {
+        if ($mustInit) {
+            $symbolVariable->setMustInitNull(true);
+        }
 
-            //if ($mustInit) {
-            //    $symbolVariable->initVariant($compilationContext);
-            //}
+        if (!isset($expression['parameters'])) {
 
             if ($isExpecting) {
                 if ($symbolVariable->getName() == 'return_value') {
@@ -202,10 +188,6 @@ class StaticCall extends Call
         } else {
 
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-            //if ($mustInit) {
-            //    $symbolVariable->initVariant($compilationContext);
-            //}
 
             if (count($params)) {
 
@@ -264,11 +246,11 @@ class StaticCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        if (!isset($expression['parameters'])) {
+        if ($mustInit) {
+            $symbolVariable->setMustInitNull(true);
+        }
 
-            //if ($mustInit) {
-            //    $symbolVariable->initVariant($compilationContext);
-            //}
+        if (!isset($expression['parameters'])) {
 
             if ($compilationContext->insideCycle) {
 
@@ -301,10 +283,6 @@ class StaticCall extends Call
         } else {
 
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-
-            //if ($mustInit) {
-            //    $symbolVariable->initVariant($compilationContext);
-            //}
 
             if ($compilationContext->insideCycle) {
 

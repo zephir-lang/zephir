@@ -461,7 +461,7 @@ class MethodCall extends Call
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 
             if ($mustInit) {
-                $symbolVariable->initVariant($compilationContext);
+                $symbolVariable->setMustInitNull(true);
             }
 
             $internalCall = false;

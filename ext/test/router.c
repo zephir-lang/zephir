@@ -432,7 +432,6 @@ PHP_METHOD(Test_Router, handle) {
 
 
 	if (!(zephir_is_true(uri))) {
-		ZEPHIR_INIT_VAR(realUri);
 		ZEPHIR_CALL_METHOD(&realUri, this_ptr, "getrewriteuri", NULL);
 		zephir_check_call_status();
 	} else {
@@ -440,7 +439,6 @@ PHP_METHOD(Test_Router, handle) {
 	}
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_removeExtraSlashes"), PH_NOISY_CC);
 	if (zephir_is_true(_0)) {
-		ZEPHIR_INIT_VAR(handledUri);
 		ZEPHIR_CALL_METHOD(&handledUri, this_ptr, "doremoveextraslashes", NULL, realUri);
 		zephir_check_call_status();
 	} else {
@@ -467,7 +465,6 @@ PHP_METHOD(Test_Router, handle) {
 	  ; zephir_hash_move_backwards_ex(_2, &_1)
 	) {
 		ZEPHIR_GET_HVALUE(route, _3);
-		ZEPHIR_INIT_NVAR(methods);
 		ZEPHIR_CALL_METHOD(&methods, route, "gethttpmethods", NULL);
 		zephir_check_call_status();
 		if ((Z_TYPE_P(methods) != IS_NULL)) {
@@ -480,7 +477,6 @@ PHP_METHOD(Test_Router, handle) {
 				}
 				ZEPHIR_INIT_NVAR(_5);
 				ZVAL_STRING(_5, "request", 0);
-				ZEPHIR_INIT_NVAR(request);
 				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", &_6, _5);
 				zephir_check_temp_parameter(_5);
 				zephir_check_call_status();
@@ -491,7 +487,6 @@ PHP_METHOD(Test_Router, handle) {
 				continue;
 			}
 		}
-		ZEPHIR_INIT_NVAR(hostname);
 		ZEPHIR_CALL_METHOD(&hostname, route, "gethostname", NULL);
 		zephir_check_call_status();
 		if ((Z_TYPE_P(hostname) != IS_NULL)) {
@@ -504,13 +499,11 @@ PHP_METHOD(Test_Router, handle) {
 				}
 				ZEPHIR_INIT_NVAR(_5);
 				ZVAL_STRING(_5, "request", 0);
-				ZEPHIR_INIT_NVAR(request);
 				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", &_8, _5);
 				zephir_check_temp_parameter(_5);
 				zephir_check_call_status();
 			}
 			if (Z_TYPE_P(currentHostName) != IS_OBJECT) {
-				ZEPHIR_INIT_NVAR(currentHostName);
 				ZEPHIR_CALL_METHOD(&currentHostName, request, "gethttphost", NULL);
 				zephir_check_call_status();
 			}
@@ -534,7 +527,6 @@ PHP_METHOD(Test_Router, handle) {
 				continue;
 			}
 		}
-		ZEPHIR_INIT_NVAR(pattern);
 		ZEPHIR_CALL_METHOD(&pattern, route, "getcompiledpattern", NULL);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(routeFound);
@@ -544,7 +536,6 @@ PHP_METHOD(Test_Router, handle) {
 			ZVAL_BOOL(routeFound, ZEPHIR_IS_EQUAL(pattern, handledUri));
 		}
 		if (zephir_is_true(routeFound)) {
-			ZEPHIR_INIT_NVAR(beforeMatch);
 			ZEPHIR_CALL_METHOD(&beforeMatch, route, "getbeforematch", NULL);
 			zephir_check_call_status();
 			if ((Z_TYPE_P(beforeMatch) != IS_NULL)) {
@@ -555,12 +546,10 @@ PHP_METHOD(Test_Router, handle) {
 			}
 		}
 		if (zephir_is_true(routeFound)) {
-			ZEPHIR_INIT_NVAR(paths);
 			ZEPHIR_CALL_METHOD(&paths, route, "getpaths", NULL);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(parts, paths);
 			if (Z_TYPE_P(matches) == IS_ARRAY) {
-				ZEPHIR_INIT_NVAR(converters);
 				ZEPHIR_CALL_METHOD(&converters, route, "getconverters", NULL);
 				zephir_check_call_status();
 				zephir_is_iterable(paths, &_11, &_10, 0, 0);
@@ -930,7 +919,7 @@ PHP_METHOD(Test_Router, mount) {
 	HashTable *_1, *_4;
 	HashPosition _0, _3;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *group, *groupRoutes, *beforeMatch, *hostname, *routes, *route = NULL, **_2, **_5, *_6;
+	zval *group, *groupRoutes = NULL, *beforeMatch = NULL, *hostname = NULL, *routes, *route = NULL, **_2, **_5, *_6;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &group);
@@ -941,14 +930,12 @@ PHP_METHOD(Test_Router, mount) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes is not valid");
 		return;
 	}
-	ZEPHIR_INIT_VAR(groupRoutes);
 	ZEPHIR_CALL_METHOD(&groupRoutes, group, "getroutes", NULL);
 	zephir_check_call_status();
 	if (!(zephir_fast_count_int(groupRoutes TSRMLS_CC))) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The group of routes does not contain any routes");
 		return;
 	}
-	ZEPHIR_INIT_VAR(beforeMatch);
 	ZEPHIR_CALL_METHOD(&beforeMatch, group, "getbeforematch", NULL);
 	zephir_check_call_status();
 	if ((Z_TYPE_P(beforeMatch) != IS_NULL)) {
@@ -962,7 +949,6 @@ PHP_METHOD(Test_Router, mount) {
 			zephir_check_call_status();
 		}
 	}
-	ZEPHIR_INIT_VAR(hostname);
 	ZEPHIR_CALL_METHOD(&hostname, group, "gethostname", NULL);
 	zephir_check_call_status();
 	if ((Z_TYPE_P(hostname) != IS_NULL)) {
