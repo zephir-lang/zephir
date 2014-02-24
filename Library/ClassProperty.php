@@ -19,8 +19,8 @@
 
 namespace Zephir;
 
-use \Zephir\Builder\StatementsBlockBuilder;
-use \Zephir\Builder\Statements\LetStatementBuilder;
+use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Statements\LetStatementBuilder;
 
 /**
  * ClassProperty
