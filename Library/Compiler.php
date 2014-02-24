@@ -1230,8 +1230,11 @@ class Compiler
             '%PROJECT_LOWER%'            => strtolower($project),
             '%PROJECT_UPPER%'            => strtoupper($project),
             '%PROJECT_EXTNAME%'          => strtolower($project),
-            '%PROJECT_NAME%'             => $this->_config->get('name'),
-            '%PROJECT_VERSION%'          => $this->_config->get('version'),
+            '%PROJECT_NAME%'             => utf8_decode($this->_config->get('name')),
+            '%PROJECT_AUTHOR%'           => utf8_decode($this->_config->get('author')),
+            '%PROJECT_VERSION%'          => utf8_decode($this->_config->get('version')),
+            '%PROJECT_DESCRIPTION%'      => utf8_decode($this->_config->get('description')),
+            '%PROJECT_ZEPVERSION%'       => self::VERSION,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         );
