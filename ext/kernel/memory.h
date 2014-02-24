@@ -189,9 +189,9 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 	do { \
 		zval **tmp_ = (ppzv); \
 		if (tmp_ != NULL) { \
-			if (*((zval**)(ppzv))) { \
-				zval_ptr_dtor((ppzv)); \
-				*((zval**)(ppzv)) = NULL; \
+			if (*tmp_) { \
+				zval_ptr_dtor(tmp_); \
+				*tmp_ = NULL; \
 			} \
 			else { \
 				zephir_memory_observe((ppzv) TSRMLS_CC); \

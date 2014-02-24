@@ -222,12 +222,12 @@ class SymbolTable
 
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if ($branches[0]->isUnrecheable() === true) {
-                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
                             }
                         } else {
                             if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
                                 if ($branches[0]->isUnrecheable() === false) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize at its declaration', $statement);
                                 }
                             }
                         }
@@ -237,7 +237,7 @@ class SymbolTable
 
                             if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                 if ($tempBranch->isUnrecheable() === true) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it in its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
                                 }
                             }
 
@@ -297,19 +297,19 @@ class SymbolTable
                                 if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                     $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
                                     if ($evalExpression->isUnrecheable() === true) {
-                                        throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
+                                        throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
-                                        $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
+                                        $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", 'conditional-initialization', $statement);
                                     }
                                 } else {
                                     if ($branches[0]->getType() == Branch::TYPE_CONDITIONAL_FALSE) {
                                         $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
                                         if ($evalExpression->isUnrecheableElse() === true) {
-                                            throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", $statement);
+                                            throw new CompilerException("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                         } else {
                                             $variable->enableDefaultAutoInitValue();
-                                            $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it in its declaration", 'conditional-initialization', $statement);
+                                            $compilationContext->logger->warning("Variable '" . $name . "' was assigned for the first time in conditional branch, consider initialize it at its declaration", 'conditional-initialization', $statement);
                                         }
                                     }
                                 }
