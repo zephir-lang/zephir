@@ -45,7 +45,7 @@ class Config
             'invalid-array-index'                => true,
             'non-array-append'                   => true,
             'invalid-return-type'                => true,
-            'unrecheable-code'                   => true,
+            'unreachable-code'                   => true,
             'nonexistant-constant'               => true,
             'not-supported-magic-constant'       => true,
             'non-valid-decrement'                => true,

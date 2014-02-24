@@ -82,7 +82,7 @@ class IfStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
-            $branch = $st->compile($compilationContext, $expr->isUnrecheable(), Branch::TYPE_CONDITIONAL_TRUE);
+            $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
             $branch->setRelatedStatement($this);
         }
 
@@ -92,7 +92,7 @@ class IfStatement extends StatementAbstract
         if (isset($this->_statement['else_statements'])) {
             $compilationContext->codePrinter->output('} else {');
             $st = new StatementsBlock($this->_statement['else_statements']);
-            $branch = $st->compile($compilationContext, $expr->isUnrecheableElse(), Branch::TYPE_CONDITIONAL_FALSE);
+            $branch = $st->compile($compilationContext, $expr->isUnreachableElse(), Branch::TYPE_CONDITIONAL_FALSE);
             $branch->setRelatedStatement($this);
         }
 

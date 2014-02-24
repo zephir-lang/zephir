@@ -69,7 +69,7 @@ class CompilationContext
     /**
      * Type inference data
      *
-     * @param \Zephir\Passes\StaticTypeInference
+     * @var \Zephir\Passes\StaticTypeInference
      */
     public $typeInference;
 

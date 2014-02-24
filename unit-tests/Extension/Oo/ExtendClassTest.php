@@ -17,37 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Builder;
+namespace Extension\Oo;
 
-/**
- * StatementsBlockBuilder
- *
- * Allows to manually build a statements block AST node
- */
-class StatementsBlockBuilder
+use Test\Oo\ExtendPdoClass;
+
+class ExtendClassTest extends \PHPUnit_Framework_TestCase
 {
-    protected $statements;
-
-    protected $raw;
-
-    public function __construct(array $statements, $raw = false)
+    public function testPDOExtending()
     {
-        $this->statements = $statements;
-        $this->raw = $raw;
-    }
-
-    public function get()
-    {
-        if (!$this->raw) {
-            $statements = array();
-
-            foreach ($this->statements as $statement) {
-                $statements[] = $statement->get();
-            }
-
-            return $statements;
+        if (!extension_loaded('pdo')) {
+            $this->markTestSkipped('The PDO extendsion is not loaded');
         }
-
-        return $this->statements;
+        $this->assertEquals(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
+        $this->assertEquals(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 }

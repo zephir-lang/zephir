@@ -34,6 +34,8 @@ class Branch
 
     protected $type;
 
+    protected $unreachable;
+
     const TYPE_ROOT              = 0;
 
     const TYPE_CONDITIONAL_TRUE  = 1;
@@ -91,21 +93,21 @@ class Branch
     }
 
     /**
-     * Sets if the branch is unrechable
+     * Sets if the branch is unreachable
      *
-     * @param boolean $unrecheable
+     * @param boolean $unreachable
      */
-    public function setUnrecheable($unrecheable)
+    public function setUnreachable($unreachable)
     {
-        $this->unrecheable = $unrecheable;
+        $this->unreachable = $unreachable;
     }
 
     /**
      * @return mixed
      */
-    public function isUnrecheable()
+    public function isUnreachable()
     {
-        return $this->unrecheable;
+        return $this->unreachable;
     }
 
     /**

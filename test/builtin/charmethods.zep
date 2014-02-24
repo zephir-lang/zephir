@@ -9,7 +9,7 @@ class CharMethods
 
     public function getHexForString(string str)
     {
-        var o = "", n;
+        var o = "";
         char ch;
 
         for ch in str {
