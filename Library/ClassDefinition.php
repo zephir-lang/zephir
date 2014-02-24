@@ -1032,6 +1032,18 @@ class ClassDefinition
                 $classEntry = 'zend_ce_closure';
                 break;
 
+            case 'pdo':
+                $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
+                $classEntry = 'php_pdo_get_dbh_ce()';
+                break;
+            case 'pdoexception':
+                $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
+                $classEntry = 'php_pdo_get_exception()';
+                break;
+            case 'pdostatement':
+                throw new CompilerException('There is no way to extends PDOStatement');
+                break;
+
             default:
                 if (!$check) {
                     throw new CompilerException('Unknown class entry for "' . $className . '"');
