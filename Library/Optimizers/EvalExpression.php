@@ -24,6 +24,7 @@ use Zephir\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Branch;
+use Zephir\Variable;
 
 /**
  * EvalExpression
@@ -33,9 +34,9 @@ use Zephir\Branch;
 class EvalExpression
 {
 
-    protected $_unrecheable = null;
+    protected $_unreachable = null;
 
-    protected $_unrecheableElse = null;
+    protected $_unreachableElse = null;
 
     protected $_lastVariable;
 
@@ -99,7 +100,7 @@ class EvalExpression
         switch ($compiledExpression->getType()) {
 
             case 'null':
-                $this->_unrecheable = true;
+                $this->_unreachable = true;
                 return '0';
 
             case 'int':
@@ -110,9 +111,9 @@ class EvalExpression
                 $code = $compiledExpression->getCode();
                 if (is_numeric($code)) {
                     if ($code == '1') {
-                        $this->_unrecheableElse = true;
+                        $this->_unreachableElse = true;
                     } else {
-                        $this->_unrecheable = true;
+                        $this->_unreachable = true;
                     }
                 }
                 return $code;
@@ -124,10 +125,10 @@ class EvalExpression
             case 'bool':
                 $code = $compiledExpression->getBooleanCode();
                 if ($code == '1') {
-                    $this->_unrecheableElse = true;
+                    $this->_unreachableElse = true;
                 } else {
                     if ($code == '0') {
-                        $this->_unrecheable = true;
+                        $this->_unreachable = true;
                     }
                 }
                 return $code;
@@ -152,30 +153,30 @@ class EvalExpression
                                 switch ($possibleValue->getType()) {
 
                                     case 'null':
-                                        $this->_unrecheable = true;
+                                        $this->_unreachable = true;
                                         break;
 
                                     case 'bool':
                                         if ($possibleValue->getBooleanCode() == '0') {
-                                            $this->_unrecheable = true;
+                                            $this->_unreachable = true;
                                         } else {
-                                            $this->_unrecheableElse = true;
+                                            $this->_unreachableElse = true;
                                         }
                                         break;
 
                                     case 'int':
                                         if (!intval($possibleValue->getCode())) {
-                                            $this->_unrecheable = true;
+                                            $this->_unreachable = true;
                                         } else {
-                                            $this->_unrecheableElse = true;
+                                            $this->_unreachableElse = true;
                                         }
                                         break;
 
                                     case 'double':
                                         if (!floatval($possibleValue->getCode())) {
-                                            $this->_unrecheable = true;
+                                            $this->_unreachable = true;
                                         } else {
-                                            $this->_unrecheableElse = true;
+                                            $this->_unreachableElse = true;
                                         }
                                         break;
 
@@ -236,29 +237,29 @@ class EvalExpression
     }
 
     /**
-     * Checks if the evaluation produce unrecheable code
+     * Checks if the evaluation produce unreachable code
      *
      * @return boolean
      */
-    public function isUnrecheable()
+    public function isUnreachable()
     {
-        return $this->_unrecheable;
+        return $this->_unreachable;
     }
 
     /**
-     * Checks if the evaluation not produce unrecheable code
+     * Checks if the evaluation not produce unreachable code
      *
      * @return boolean
      */
-    public function isUnrecheableElse()
+    public function isUnreachableElse()
     {
-        return $this->_unrecheableElse;
+        return $this->_unreachableElse;
     }
 
     /**
      * Returns the variable evaluated by the EvalExpression
      *
-     * @return
+     * @return Variable
      */
     public function getEvalVariable()
     {

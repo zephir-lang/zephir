@@ -17,37 +17,35 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Builder;
+namespace Zephir\Builder\Statements;
+
+use Zephir\Builder\Operators\AbstractOperatorBuilder;
 
 /**
- * StatementsBlockBuilder
+ * IfStatementBuilder
  *
- * Allows to manually build a statements block AST node
+ * Allows to manually build a 'let' statement AST node
  */
-class StatementsBlockBuilder
+class LetStatementBuilder extends AbstractStatementBuilder
 {
-    protected $statements;
+    private $expr;
 
-    protected $raw;
+    private $assignments;
 
-    public function __construct(array $statements, $raw = false)
+    public function __construct($assignments, $expr)
     {
-        $this->statements = $statements;
-        $this->raw = $raw;
+        $this->assignments = $assignments;
+        $this->expr = $expr;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get()
     {
-        if (!$this->raw) {
-            $statements = array();
-
-            foreach ($this->statements as $statement) {
-                $statements[] = $statement->get();
-            }
-
-            return $statements;
-        }
-
-        return $this->statements;
+        return array(
+            'type' => 'let',
+            'assignments' => array(array_merge(array('expr' => $this->expr), $this->assignments))
+        );
     }
 }

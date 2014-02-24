@@ -1888,7 +1888,7 @@ class LetStatement extends StatementAbstract
                 }
                 break;
 
-            case 'empty-array': /* unrecheable code */
+            case 'empty-array': /* unreachable code */
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 
                 $codePrinter->output('array_init(' . $tempVariable->getName() . ');');

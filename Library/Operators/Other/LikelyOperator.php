@@ -36,7 +36,7 @@ class LikelyOperator extends BaseOperator
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
-     * @throws \Zephir\CompilerException
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
