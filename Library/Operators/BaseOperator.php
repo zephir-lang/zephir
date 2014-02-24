@@ -132,6 +132,16 @@ class BaseOperator
     /**
      * Sets if the result of the evaluated expression is read only
      *
+     * @return boolean
+     */
+    public function isExpecting()
+    {
+        return $this->_expecting;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only
+     *
      * @param boolean $readOnly
      */
     public function setReadOnly($readOnly)

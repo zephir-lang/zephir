@@ -1284,7 +1284,7 @@ PHP_METHOD(Test_Flow, testFor18) {
 			b = _2;
 			ZEPHIR_INIT_NVAR(_4);
 			ZVAL_LONG(_4, b);
-			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 614);
+			zephir_array_update_long(&c, a, &_4, PH_COPY | PH_SEPARATE, "test/flow.zep", 612);
 		}
 	}
 	RETURN_CCTOR(c);
@@ -1528,7 +1528,7 @@ PHP_METHOD(Test_Flow, testFor31) {
 		v = ZEPHIR_STRING_OFFSET(b, _0);
 		ZEPHIR_INIT_NVAR(_1);
 		ZVAL_LONG(_1, v);
-		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 694);
+		zephir_array_update_long(&a, k, &_1, PH_COPY | PH_SEPARATE, "test/flow.zep", 692);
 	}
 	RETURN_CCTOR(a);
 

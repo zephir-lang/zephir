@@ -408,9 +408,7 @@ class Flow
 
 	public function testDoWhile1()
 	{
-		do {
-
-		} while(1);
+		do { } while(1);
 	}
 
 	public function testWhileNextTest(var variable)
