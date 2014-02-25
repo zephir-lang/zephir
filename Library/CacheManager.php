@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Cache\FunctionCache;
 use Zephir\Cache\MethodCache;
+use Zephir\Cache\StaticMethodCache;
 use Zephir\Passes\CallGathererPass;
 
 /**
@@ -34,6 +35,8 @@ class CacheManager
     protected $functionCache;
 
     protected $methodCache;
+
+    protected $staticMethodCache;
 
     /**
      * Sets the CallGathererPass
@@ -69,5 +72,18 @@ class CacheManager
             $this->methodCache = new MethodCache($this->gatherer);
         }
         return $this->methodCache;
+    }
+
+    /**
+     * Creates or returns an existing method cache
+     *
+     * @return StaticMethodCache
+     */
+    public function getStaticMethodCache()
+    {
+        if (!$this->staticMethodCache) {
+            $this->staticMethodCache = new StaticMethodCache($this->gatherer);
+        }
+        return $this->staticMethodCache;
     }
 }

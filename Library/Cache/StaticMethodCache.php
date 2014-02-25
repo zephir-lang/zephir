@@ -23,7 +23,7 @@ use Zephir\CompilationContext;
 use Zephir\Call;
 
 /**
- * MethodCache
+ * StaticMethodCache
  *
  * Calls in Zephir implement monomorphic and polimorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
@@ -41,7 +41,7 @@ use Zephir\Call;
  *
  * [1] http://www.cs.ucsb.edu/~urs/oocsb/papers/ecoop91.pdf
  */
-class MethodCache
+class StaticMethodCache
 {
     protected $cache = array();
 
