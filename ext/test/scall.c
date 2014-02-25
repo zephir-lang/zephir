@@ -321,6 +321,7 @@ PHP_METHOD(Test_Scall, testMethod16) {
 
 PHP_METHOD(Test_Scall, testCall17) {
 
+	zephir_fcall_cache_entry *_4 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *k_param = NULL, *p, *_3 = NULL;
@@ -346,7 +347,7 @@ PHP_METHOD(Test_Scall, testCall17) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_CE_STATIC(&_3, test_scallexternal_ce, "testmethod3", NULL, p, p);
+			ZEPHIR_CALL_CE_STATIC(&_3, test_scallexternal_ce, "testmethod3", &_4, p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(_3);
 		}
