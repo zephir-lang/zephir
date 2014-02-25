@@ -19,6 +19,8 @@
 
 namespace Zephir\Cache;
 
+use Zephir\CompilationContext;
+
 /**
  * FunctionCache
  *
@@ -45,13 +47,18 @@ class FunctionCache
     protected $gatherer;
 
     /**
-     *
+     * @param CallGathererPass $gatherer
      */
     public function __construct($gatherer)
     {
         $this->gatherer = $gatherer;
     }
 
+    /**
+     * @param string $functionName
+     * @param CompilationContext $compilationContext
+     * @param boolean $exists
+     */
     public function get($functionName, CompilationContext $compilationContext, $exists)
     {
 
