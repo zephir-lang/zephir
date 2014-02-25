@@ -20,6 +20,7 @@
 namespace Zephir\Cache;
 
 use Zephir\CompilationContext;
+use Zephir\Call;
 
 /**
  * FunctionCache
@@ -55,11 +56,36 @@ class FunctionCache
     }
 
     /**
+     * Checks if a function can be promoted to a static function call
+     *
+     * @param Call $call
      * @param string $functionName
+     * @return boolean
+     */
+    public function canBeInternal($call, $functionName)
+    {
+        $reflector = $call->getReflector($functionName);
+        if ($reflector) {
+            if ($reflector->isInternal()) {
+                switch ($reflector->getExtensionName()) {
+                    case 'standard':
+                    case 'Core':
+                        return true;
+                    default:
+                        break;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $functionName
+     * @param Call $call
      * @param CompilationContext $compilationContext
      * @param boolean $exists
      */
-    public function get($functionName, CompilationContext $compilationContext, $exists)
+    public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
     {
 
         if (isset($this->cache[$functionName])) {
@@ -71,18 +97,24 @@ class FunctionCache
         }
 
         if (!$compilationContext->insideCycle) {
-            $gatherer = $this->gatherer;
-            if ($gatherer) {
-                $number = $gatherer->getNumberOfFunctionCalls($functionName);
-                if ($number <= 1) {
+            if (!$this->canBeInternal($call, $functionName)) {
+                $gatherer = $this->gatherer;
+                if ($gatherer) {
+                    $number = $gatherer->getNumberOfFunctionCalls($functionName);
+                    if ($number <= 1) {
+                        return 'NULL';
+                    }
+                } else {
                     return 'NULL';
                 }
-            } else {
-                return 'NULL';
             }
         }
 
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+        if ($this->canBeInternal($call, $functionName)) {
+            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+        } else {
+            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+        }
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
         $this->cache[$functionName] = $functionCache;

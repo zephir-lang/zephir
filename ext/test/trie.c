@@ -70,7 +70,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 				_3 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 				object_init_ex(_2, _3);
 				if (zephir_has_constructor(_2 TSRMLS_CC)) {
-					ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL);
+					ZEPHIR_CALL_METHOD(NULL, _2, "__construct",  NULL);
 					zephir_check_call_status();
 				}
 				zephir_update_property_array(trieNode, SL("children"), character, _2 TSRMLS_CC);

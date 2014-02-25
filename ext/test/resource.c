@@ -89,6 +89,7 @@ PHP_METHOD(Test_Resource, testIsResource) {
 PHP_METHOD(Test_Resource, testFunctionsForSTDIN) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
 	zval *a = NULL, _0;
 
 	ZEPHIR_MM_GROW();
@@ -97,7 +98,7 @@ PHP_METHOD(Test_Resource, testFunctionsForSTDIN) {
 	ZEPHIR_GET_CONSTANT(a, "STDIN");
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, a, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", &_1, a, &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

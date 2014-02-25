@@ -59,7 +59,7 @@ class FunctionCall extends Call
      * @param string $funcName
      * @return \ReflectionFunction
      */
-    protected function getReflector($funcName)
+    public function getReflector($funcName)
     {
         /**
          * Check if the optimizer is already cached
@@ -258,31 +258,6 @@ class FunctionCall extends Call
     }
 
     /**
-     * Checks if a function can be promoted to a function call
-     *
-     * @param string $functionName
-     * @return boolean
-     */
-    public function canBeInternal($functionName)
-    {
-        $reflector = $this->getReflector($functionName);
-        if ($reflector) {
-            if ($reflector->isInternal()) {
-                switch ($reflector->getExtensionName()) {
-                    case 'standard':
-                    case 'mysql':
-                    case 'bcmath':
-                    case 'Core':
-                        return true;
-                    default:
-                        break;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Checks if a function exists or is a built-in Zephir function
      *
      * @param string $functionName
@@ -386,20 +361,11 @@ class FunctionCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        /*$internalCall = false;
-        if (!count($references)) {
-            if ($compilationContext->insideCycle) {
-                if ($this->canBeInternal($funcName)) {
-                    $internalCall = true;
-                }
-            }
-        }*/
-
         /**
          * Check if the function can have an inline cache
          */
         $functionCache = $compilationContext->cacheManager->getFunctionCache();
-        $cachePointer = $functionCache->get($funcName, $compilationContext, $exists);
+        $cachePointer = $functionCache->get($funcName, $compilationContext, $this, $exists);
 
         /**
          * Add the last call status to the current symbol table

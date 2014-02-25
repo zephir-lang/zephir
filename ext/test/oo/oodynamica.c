@@ -44,7 +44,7 @@ PHP_METHOD(Test_Oo_OoDynamicA, getNew) {
 	_0 = zend_fetch_class(Z_STRVAL_P(fullClassName), Z_STRLEN_P(fullClassName), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(return_value, _0);
 	if (zephir_has_constructor(return_value TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL);
+		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct",  NULL);
 		zephir_check_call_status();
 	}
 	RETURN_MM();

@@ -196,15 +196,15 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'long':
                             case 'ulong':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(0 ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '0 ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(0 ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+                                return new CompiledExpression('bool', '0 ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', '(Z_TYPE_P(' . $variableRight->getName() . ') != IS_NULL)', $expression);
+                                return new CompiledExpression('bool', 'Z_TYPE_P(' . $variableRight->getName() . ') != IS_NULL', $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
@@ -512,9 +512,9 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', '(Z_TYPE_P(&' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL)', $expression['left']);
+                                    return new CompiledExpression('bool', 'Z_TYPE_P(&' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL', $expression['left']);
                                 } else {
-                                    return new CompiledExpression('bool', '(Z_TYPE_P(' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL)', $expression['left']);
+                                    return new CompiledExpression('bool', 'Z_TYPE_P(' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL', $expression['left']);
                                 }
                                 break;
 

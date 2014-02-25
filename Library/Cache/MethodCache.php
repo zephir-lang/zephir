@@ -17,7 +17,10 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir;
+namespace Zephir\Cache;
+
+use Zephir\CompilationContext;
+use Zephir\Call;
 
 /**
  * MethodCache
@@ -40,24 +43,44 @@ namespace Zephir;
  */
 class MethodCache
 {
-    private $cache = array();
+    protected $cache = array();
 
     /**
-     * @param $functionName
+     * @param string $functionName
+     * @param Call $call
      * @param CompilationContext $compilationContext
-     * @return Variable
+     * @param boolean $exists
      */
-    public function get($functionName, CompilationContext $compilationContext)
+    public function get(CompilationContext $compilationContext, $method)
     {
-        if (isset($this->cache[$functionName])) {
-            return $this->cache[$functionName];
+        if (!is_object($method)) {
+            return 'NULL';
         }
 
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
+        if (!($method instanceof \ReflectionMethod)) {
+            if (isset($this->cache[$method->getClassDefinition()->getName()][$method->getName()])) {
+                return '&' . $this->cache[$method->getClassDefinition()->getName()][$method->getName()]->getName();
+            }
+        }
+
+        if (!$compilationContext->insideCycle) {
+            if (!$method->isPrivate() && !$method->isFinal()) {
+                return 'NULL';
+            }
+        }
+
+        if ($method->isPrivate() || $method->isFinal()) {
+            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+        } else {
+            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+        }
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
-        $this->cache[$functionName] = $functionCache;
 
-        return $functionCache;
+        if (!($method instanceof \ReflectionMethod)) {
+            $this->cache[$method->getClassDefinition()->getName()][$method->getName()] = $functionCache;
+        }
+
+        return '&' . $functionCache->getName();
     }
 }

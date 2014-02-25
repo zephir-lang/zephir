@@ -420,7 +420,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The pattern must be string");
 		return;
 	}
-	if ((Z_TYPE_P(paths) != IS_NULL)) {
+	if (Z_TYPE_P(paths) != IS_NULL) {
 		if (Z_TYPE_P(paths) == IS_STRING) {
 			ZEPHIR_INIT_VAR(moduleName);
 			ZVAL_NULL(moduleName);
@@ -457,10 +457,10 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 			ZEPHIR_INIT_VAR(routePaths);
 			array_init(routePaths);
-			if ((Z_TYPE_P(moduleName) != IS_NULL)) {
+			if (Z_TYPE_P(moduleName) != IS_NULL) {
 				zephir_array_update_string(&routePaths, SL("module"), &moduleName, PH_COPY | PH_SEPARATE);
 			}
-			if ((Z_TYPE_P(controllerName) != IS_NULL)) {
+			if (Z_TYPE_P(controllerName) != IS_NULL) {
 				if (zephir_memnstr_str(controllerName, SL("\\"), "test/router/route.zep", 310)) {
 					ZEPHIR_INIT_VAR(realClassName);
 					zephir_get_class_ns(realClassName, controllerName, 0 TSRMLS_CC);
@@ -476,7 +476,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 				zephir_uncamelize(_1, realClassName);
 				zephir_array_update_string(&routePaths, SL("controller"), &_1, PH_COPY | PH_SEPARATE);
 			}
-			if ((Z_TYPE_P(actionName) != IS_NULL)) {
+			if (Z_TYPE_P(actionName) != IS_NULL) {
 				zephir_array_update_string(&routePaths, SL("action"), &actionName, PH_COPY | PH_SEPARATE);
 			}
 		} else {

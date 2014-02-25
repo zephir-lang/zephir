@@ -48,7 +48,7 @@ PHP_METHOD(Test_Oo, testInstance2) {
 
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstruct_ce);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct",  NULL);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -64,7 +64,7 @@ PHP_METHOD(Test_Oo, testInstance3) {
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_oonoconstruct_ce);
 	if (zephir_has_constructor(o TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL);
+		ZEPHIR_CALL_METHOD(NULL, o, "__construct",  NULL);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(o);

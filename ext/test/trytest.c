@@ -396,6 +396,7 @@ PHP_METHOD(Test_TryTest, someMethod2) {
 
 PHP_METHOD(Test_TryTest, testTry9) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
 
@@ -404,7 +405,7 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", NULL);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1",  &_0);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 
@@ -421,6 +422,7 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 PHP_METHOD(Test_TryTest, testTry10) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
 
@@ -429,7 +431,7 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", NULL);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2",  &_0);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 

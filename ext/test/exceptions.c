@@ -95,7 +95,7 @@ PHP_METHOD(Test_Exceptions, testException4) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception", NULL);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception",  NULL);
 	zephir_check_call_status();
 	zephir_throw_exception(_0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
