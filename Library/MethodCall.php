@@ -245,8 +245,10 @@ class MethodCall extends Call
                                 }
 
                                 if (!$classDefinition->hasMethod($expression['name'])) {
-                                    if (count($classTypes) == 1) {
-                                        throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                                    if (!$classDefinition->isInterface()) {
+                                        if (count($classTypes) == 1) {
+                                            throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                                        }
                                     }
                                     continue;
                                 }
@@ -313,10 +315,14 @@ class MethodCall extends Call
                         }
 
                         if ($numberImplemented == 0) {
-                            if (count($classTypes) > 1) {
-                                throw new CompilerException("None of classes: '" . join(' or ', $classTypes) . "' implement method: '" . $expression['name'] . "'", $expression);
+                            if (!$classDefinition->isInterface()) {
+                                if (count($classTypes) > 1) {
+                                    throw new CompilerException("None of classes: '" . join(' or ', $classTypes) . "' implement method: '" . $expression['name'] . "'", $expression);
+                                } else {
+                                    throw new CompilerException("Class '" . $classTypes[0] . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                                }
                             } else {
-                                throw new CompilerException("Class '" . $classTypes[0] . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                                // @TODO, raise an exception here?
                             }
                         }
                     }

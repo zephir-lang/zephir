@@ -56,8 +56,13 @@ class MethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
+
             if (isset($this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()])) {
                 return '&' . $this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()]->getName();
+            }
+
+            if ($method->getClassDefinition()->isInterface()) {
+                return 'NULL';
             }
         }
 

@@ -116,6 +116,7 @@ class CallGathererPass
                 break;
 
             case 'div':
+            case 'mod':
             case 'sub':
             case 'add':
             case 'mul':
@@ -135,8 +136,8 @@ class CallGathererPass
             case 'greater':
             case 'greater-equal':
             case 'less-equal':
-                $left = $this->passExpression($expression['left']);
-                $right = $this->passExpression($expression['right']);
+                $this->passExpression($expression['left']);
+                $this->passExpression($expression['right']);
                 break;
 
             case 'typeof':

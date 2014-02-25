@@ -117,6 +117,16 @@ class ClassDefinition
     }
 
     /**
+     * Check if the class definition correspond to an interface
+     *
+     * @return boolean
+     */
+    public function isInterface()
+    {
+        return $this->type == 'interface';
+    }
+
+    /**
      * Returns the class name without namespace
      *
      * @return string
@@ -1039,9 +1049,6 @@ class ClassDefinition
             case 'pdoexception':
                 $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
                 $classEntry = 'php_pdo_get_exception()';
-                break;
-            case 'pdostatement':
-                throw new CompilerException('There is no way to extends PDOStatement');
                 break;
 
             default:
