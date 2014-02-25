@@ -86,5 +86,4 @@ class MethodCache
 
         return '&' . $functionCache->getName();
     }
-
 }

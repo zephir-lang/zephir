@@ -417,11 +417,10 @@ PHP_METHOD(Test_Router, doRemoveExtraSlashes) {
  */
 PHP_METHOD(Test_Router, handle) {
 
-	zephir_fcall_cache_entry *_6 = NULL;
-	HashTable *_2, *_10;
-	HashPosition _1, _9;
+	HashTable *_2, *_9;
+	HashPosition _1, _8;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, **_3, *_4, *_5 = NULL, *_7 = NULL, *_8 = NULL, **_11, *_12, *_13, *_14, *_15;
+	zval *uri = NULL, *realUri = NULL, *request = NULL, *currentHostName = NULL, *routeFound = NULL, *parts = NULL, *params, *matches, *notFoundPaths, *vnamespace, *module, *controller, *action, *paramsStr, *strParams, *paramsMerge = NULL, *route = NULL, *methods = NULL, *dependencyInjector = NULL, *hostname = NULL, *regexHostName = NULL, *matched = NULL, *pattern = NULL, *handledUri = NULL, *beforeMatch = NULL, *paths = NULL, *converters = NULL, *part = NULL, *position = NULL, *matchPosition = NULL, *_0, **_3, *_4, *_5 = NULL, *_6 = NULL, *_7 = NULL, **_10, *_11, *_12, *_13, *_14;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &uri);
@@ -477,13 +476,13 @@ PHP_METHOD(Test_Router, handle) {
 				}
 				ZEPHIR_INIT_NVAR(_5);
 				ZVAL_STRING(_5, "request", 0);
-				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", &_6, _5);
+				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", NULL, _5);
 				zephir_check_temp_parameter(_5);
 				zephir_check_call_status();
 			}
-			ZEPHIR_CALL_METHOD(&_7, request, "ismethod", NULL, methods);
+			ZEPHIR_CALL_METHOD(&_6, request, "ismethod", NULL, methods);
 			zephir_check_call_status();
-			if (ZEPHIR_IS_FALSE(_7)) {
+			if (ZEPHIR_IS_FALSE(_6)) {
 				continue;
 			}
 		}
@@ -499,7 +498,7 @@ PHP_METHOD(Test_Router, handle) {
 				}
 				ZEPHIR_INIT_NVAR(_5);
 				ZVAL_STRING(_5, "request", 0);
-				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", &_6, _5);
+				ZEPHIR_CALL_METHOD(&request, dependencyInjector, "getshared", NULL, _5);
 				zephir_check_temp_parameter(_5);
 				zephir_check_call_status();
 			}
@@ -518,8 +517,8 @@ PHP_METHOD(Test_Router, handle) {
 				} else {
 					ZEPHIR_CPY_WRT(regexHostName, hostname);
 				}
-				ZEPHIR_INIT_NVAR(_8);
-				zephir_preg_match(matched, &(matched), regexHostName, currentHostName, _8, 0, 0 , 0  TSRMLS_CC);
+				ZEPHIR_INIT_NVAR(_7);
+				zephir_preg_match(matched, &(matched), regexHostName, currentHostName, _7, 0, 0 , 0  TSRMLS_CC);
 			} else {
 				ZVAL_BOOL(matched, ZEPHIR_IS_EQUAL(currentHostName, hostname));
 			}
@@ -552,13 +551,13 @@ PHP_METHOD(Test_Router, handle) {
 			if (Z_TYPE_P(matches) == IS_ARRAY) {
 				ZEPHIR_CALL_METHOD(&converters, route, "getconverters",  NULL);
 				zephir_check_call_status();
-				zephir_is_iterable(paths, &_10, &_9, 0, 0);
+				zephir_is_iterable(paths, &_9, &_8, 0, 0);
 				for (
-				  ; zephir_hash_get_current_data_ex(_10, (void**) &_11, &_9) == SUCCESS
-				  ; zephir_hash_move_forward_ex(_10, &_9)
+				  ; zephir_hash_get_current_data_ex(_9, (void**) &_10, &_8) == SUCCESS
+				  ; zephir_hash_move_forward_ex(_9, &_8)
 				) {
-					ZEPHIR_GET_HMKEY(part, _10, _9);
-					ZEPHIR_GET_HVALUE(position, _11);
+					ZEPHIR_GET_HMKEY(part, _9, _8);
+					ZEPHIR_GET_HVALUE(position, _10);
 					ZEPHIR_OBS_NVAR(matchPosition);
 					if (zephir_array_isset_fetch(&matchPosition, matches, position, 0 TSRMLS_CC)) {
 						if (Z_TYPE_P(converters) == IS_ARRAY) {
@@ -655,14 +654,14 @@ PHP_METHOD(Test_Router, handle) {
 	} else {
 		_4 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultNamespace"), PH_NOISY_CC);
 		zephir_update_property_this(this_ptr, SL("_namespace"), _4 TSRMLS_CC);
-		_12 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultModule"), PH_NOISY_CC);
-		zephir_update_property_this(this_ptr, SL("_module"), _12 TSRMLS_CC);
-		_13 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultController"), PH_NOISY_CC);
-		zephir_update_property_this(this_ptr, SL("_controller"), _13 TSRMLS_CC);
-		_14 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultAction"), PH_NOISY_CC);
-		zephir_update_property_this(this_ptr, SL("_action"), _14 TSRMLS_CC);
-		_15 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultParams"), PH_NOISY_CC);
-		zephir_update_property_this(this_ptr, SL("_params"), _15 TSRMLS_CC);
+		_11 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultModule"), PH_NOISY_CC);
+		zephir_update_property_this(this_ptr, SL("_module"), _11 TSRMLS_CC);
+		_12 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultController"), PH_NOISY_CC);
+		zephir_update_property_this(this_ptr, SL("_controller"), _12 TSRMLS_CC);
+		_13 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultAction"), PH_NOISY_CC);
+		zephir_update_property_this(this_ptr, SL("_action"), _13 TSRMLS_CC);
+		_14 = zephir_fetch_nproperty_this(this_ptr, SL("_defaultParams"), PH_NOISY_CC);
+		zephir_update_property_this(this_ptr, SL("_params"), _14 TSRMLS_CC);
 	}
 	ZEPHIR_MM_RESTORE();
 

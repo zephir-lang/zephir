@@ -87,5 +87,4 @@ class StaticMethodCache
 
         return '&' . $functionCache->getName();
     }
-
 }
