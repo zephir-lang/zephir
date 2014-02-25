@@ -64,6 +64,12 @@ class ClassProperty
         $this->_defaultValue = $defaultValue;
         $this->_docblock = $docBlock;
         $this->_original = $original;
+
+        if (!is_array($this->_defaultValue)) {
+            $this->_defaultValue = array();
+            $this->_defaultValue['type'] = 'null';
+            $this->_defaultValue['value'] = null;
+        }
     }
 
     /**
@@ -86,6 +92,32 @@ class ClassProperty
         return $this->_name;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getValue()
+    {
+        if ($this->_defaultValue['type'] == 'array') {
+            $result = array();
+
+            foreach ($this->_original['default']['left'] as $key) {
+                $result[] = $key['value']['value'];
+            }
+
+            $this->_defaultValue['value'] = $result;
+        }
+
+        return $this->_defaultValue['value'];
+    }
+
+    public function getType()
+    {
+        return $this->_defaultValue['type'];
+    }
+
+    /**
+     * @return mixed
+     */
     public function getOriginal()
     {
         return $this->_original;
@@ -206,79 +238,75 @@ class ClassProperty
      */
     public function compile(CompilationContext $compilationContext)
     {
-        if (!is_array($this->_defaultValue)) {
-            $this->declareProperty($compilationContext, 'null', null);
-        } else {
-            switch ($this->_defaultValue['type']) {
-                case 'long':
-                case 'int':
-                case 'string':
-                case 'double':
-                case 'bool':
-                    $this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
-                    break;
+        switch ($this->_defaultValue['type']) {
+            case 'long':
+            case 'int':
+            case 'string':
+            case 'double':
+            case 'bool':
+                $this->declareProperty($compilationContext, $this->_defaultValue['type'], $this->_defaultValue['value']);
+                break;
 
-                case 'array':
-                case 'empty-array':
-                    if ($this->isStatic()) {
-                        throw new CompilerException('Cannot define static property with default value: ' . $this->_defaultValue['type'], $this->_original);
-                    }
+            case 'array':
+            case 'empty-array':
+                if ($this->isStatic()) {
+                    throw new CompilerException('Cannot define static property with default value: ' . $this->_defaultValue['type'], $this->_original);
+                }
 
-                    $constructMethod = $compilationContext->classDefinition->getMethod('__construct');
-                    if ($constructMethod) {
-                        $statementsBlock = $constructMethod->getStatementsBlock();
-                        if ($statementsBlock) {
-                            $statements = $statementsBlock->getStatements();
-                            $letStatement = $this->getLetStatement()->get();
+                $constructMethod = $compilationContext->classDefinition->getMethod('__construct');
+                if ($constructMethod) {
+                    $statementsBlock = $constructMethod->getStatementsBlock();
+                    if ($statementsBlock) {
+                        $statements = $statementsBlock->getStatements();
+                        $letStatement = $this->getLetStatement()->get();
 
-                            $needLetStatementAdded = true;
-                            foreach ($statements as $statement) {
-                                if ($statement === $letStatement) {
-                                    $needLetStatementAdded = false;
-                                    break;
-                                }
+                        $needLetStatementAdded = true;
+                        foreach ($statements as $statement) {
+                            if ($statement === $letStatement) {
+                                $needLetStatementAdded = false;
+                                break;
                             }
+                        }
 
-                            if ($needLetStatementAdded) {
-                                $statements[] = $letStatement;
-                                $statementsBlock->setStatements($statements);
-                                $constructMethod->setStatementsBlock($statementsBlock);
-                                $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
-                            }
-                        } else {
-                            $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
-                            $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
+                        if ($needLetStatementAdded) {
+                            $statements[] = $letStatement;
+                            $statementsBlock->setStatements($statements);
+                            $constructMethod->setStatementsBlock($statementsBlock);
                             $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                         }
                     } else {
-                        $statementsBlock = new StatementsBlock(array(
-                            $this->getLetStatement()->get()
-                        ));
-
-                        $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
-                            $compilationContext->classDefinition,
-                            array('public'),
-                            '__construct',
-                            null,
-                            $statementsBlock
-                        ), null));
-                        return false;
+                        $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
+                        $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
+                        $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                     }
-                    //continue
-                case 'null':
-                    $this->declareProperty($compilationContext, $this->_defaultValue['type'], null);
-                    break;
+                } else {
+                    $statementsBlock = new StatementsBlock(array(
+                        $this->getLetStatement()->get()
+                    ));
 
-                case 'static-constant-access':
-                    $expression = new Expression($this->_defaultValue);
-                    $compiledExpression = $expression->compile($compilationContext);
-                    $constant = $compilationContext->classDefinition->getConstant($this->_defaultValue['right']['value']);
-                    $this->declareProperty($compilationContext, $constant->getType(), $compiledExpression->getCode());
-                    break;
+                    $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
+                        $compilationContext->classDefinition,
+                        array('public'),
+                        '__construct',
+                        null,
+                        $statementsBlock
+                    ), null));
+                    return false;
+                }
+                //continue
+            case 'null':
+                $this->declareProperty($compilationContext, $this->_defaultValue['type'], null);
+                break;
 
-                default:
-                    throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
-            }
+            case 'static-constant-access':
+                $expression = new Expression($this->_defaultValue);
+                $compiledExpression = $expression->compile($compilationContext);
+                $constant = $compilationContext->classDefinition->getConstant($this->_defaultValue['right']['value']);
+                $this->declareProperty($compilationContext, $constant->getType(), $compiledExpression->getCode());
+                break;
+
+            default:
+                throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
         }
     }
 
