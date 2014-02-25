@@ -82,8 +82,54 @@ class Generator
 
             $source .= ' {' . PHP_EOL;
 
+            $i = 0;
+            $properties = $class->getProperties();
+            $countProperties = count($properties);
+
+            foreach ($properties as $property) {
+                $docBlock = $property->getDocBlock();
+                if ($docBlock) {
+                    $source .= $this->outputDocBlock($docBlock);
+                }
+
+                if ($property->isPublic()) {
+                    $source .= "\t". 'public $'.$property->getName();
+
+                    switch($property->getType()) {
+                        case 'null':
+                            break;
+                        case 'string':
+                            $source .= ' = "'.$property->getValue().'"';
+                            break;
+                        case 'empty-array':
+                            $source .= ' = array()';
+                            break;
+                        case 'array':
+                            $source .= ' = array('.implode(', ', $property->getValue()).')';
+                            break;
+                        default:
+                            $source .= ' = '.$property->getValue();
+                            break;
+                    }
+
+                    $source .= ';'.PHP_EOL;
+
+                    if (++$i != $countProperties) {
+                        $source .= PHP_EOL;
+                    }
+                }
+            }
+
+            $i = 0;
             $constants = $class->getConstants();
+            $countConstants = count($constants);
+
             foreach ($constants as $constant) {
+                $docBlock = $constant->getDocBlock();
+                if ($docBlock) {
+                    $source .= $this->outputDocBlock($docBlock);
+                }
+
                 $source .= "\t" . 'const '.$constant->getName();
 
                 $value = $constant->getValueValue();
@@ -98,10 +144,18 @@ class Generator
                 }
 
                 $source .= ' = '.$value.';'.PHP_EOL;
+
+                if (++$i != $countConstants) {
+                    $source .= PHP_EOL;
+                }
             }
 
             $methods = $class->getMethods();
             $countMethods = count($methods);
+
+            if ($countConstants > 0 || $countProperties > 0) {
+                $source .= PHP_EOL;
+            }
 
             $i = 0;
 
