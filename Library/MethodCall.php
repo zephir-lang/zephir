@@ -479,7 +479,7 @@ class MethodCall extends Call
                         $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '",  ' . $cachePointer . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '",  ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                 }
 
             } else {

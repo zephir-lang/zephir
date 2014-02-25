@@ -405,7 +405,7 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1",  &_0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", &_0);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 
@@ -431,7 +431,7 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2",  &_0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", &_0);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 

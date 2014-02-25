@@ -58,8 +58,8 @@ class MethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
-            if (isset($this->cache[$method->getClassDefinition()->getName()][$method->getName()])) {
-                return '&' . $this->cache[$method->getClassDefinition()->getName()][$method->getName()]->getName();
+            if (isset($this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()])) {
+                return '&' . $this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()]->getName();
             }
         }
 
@@ -78,9 +78,10 @@ class MethodCache
         $functionCache->setReusable(false);
 
         if (!($method instanceof \ReflectionMethod)) {
-            $this->cache[$method->getClassDefinition()->getName()][$method->getName()] = $functionCache;
+            $this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()] = $functionCache;
         }
 
         return '&' . $functionCache->getName();
     }
+
 }
