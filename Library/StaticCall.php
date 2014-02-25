@@ -463,8 +463,10 @@ class StaticCall extends Call
                 throw new CompilerException("Cannot call private method '" . $methodName . "' out of its scope", $expression);
             }
 
-            if (!$method->isStatic()) {
-                throw new CompilerException("Cannot call non-static method '" . $methodName . "' in a static way", $expression);
+            if ($className != 'parent' && $className != 'self') {
+                if (!$method->isStatic()) {
+                    throw new CompilerException("Cannot call non-static method '" . $methodName . "' in a static way", $expression);
+                }
             }
 
             if (!$classDefinition->hasMethod("__callStatic")) {
