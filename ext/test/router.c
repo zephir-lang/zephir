@@ -417,7 +417,7 @@ PHP_METHOD(Test_Router, doRemoveExtraSlashes) {
  */
 PHP_METHOD(Test_Router, handle) {
 
-	zephir_fcall_cache_entry *_6 = NULL, *_8 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_6 = NULL, *_8 = NULL;
 	HashTable *_2, *_11;
 	HashPosition _1, _10;
 	int ZEPHIR_LAST_CALL_STATUS;

@@ -161,6 +161,11 @@ class Call
         $this->_isExpecting = $isExpecting;
     }
 
+    /**
+     * Check if an external expression is expecting the call return a value
+     *
+     * @return boolean
+     */
     public function isExpectingReturn()
     {
         return $this->_isExpecting;

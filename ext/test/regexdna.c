@@ -36,10 +36,11 @@ ZEPHIR_INIT_CLASS(Test_RegexDNA) {
 
 PHP_METHOD(Test_RegexDNA, process) {
 
-	HashTable *_5;
-	HashPosition _4;
+	HashTable *_6;
+	HashPosition _5;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0 = NULL, *_1, _2, *_3 = NULL, **_6, *_7 = NULL;
+	zephir_fcall_cache_entry *_4 = NULL;
+	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0 = NULL, *_1, _2, *_3 = NULL, **_7, *_8 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
@@ -157,27 +158,27 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_CONCAT_SVS(_1, "/", stuffToRemove, "/mS");
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_STRING(&_2, "", 0);
-	ZEPHIR_CALL_FUNCTION(&_3, "preg_replace", NULL, _1, &_2, contents);
+	ZEPHIR_CALL_FUNCTION(&_3, "preg_replace", &_4, _1, &_2, contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(contents, _3);
 	ZEPHIR_INIT_VAR(codeLength);
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
-	zephir_is_iterable(variants, &_5, &_4, 0, 0);
+	zephir_is_iterable(variants, &_6, &_5, 0, 0);
 	for (
-	  ; zephir_hash_get_current_data_ex(_5, (void**) &_6, &_4) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_5, &_4)
+	  ; zephir_hash_get_current_data_ex(_6, (void**) &_7, &_5) == SUCCESS
+	  ; zephir_hash_move_forward_ex(_6, &_5)
 	) {
-		ZEPHIR_GET_HVALUE(regex, _6);
+		ZEPHIR_GET_HVALUE(regex, _7);
 		zend_print_zval(regex, 0);
 		php_printf(" ");
 		ZEPHIR_INIT_NVAR(_0);
-		ZEPHIR_INIT_LNVAR(_7);
-		ZEPHIR_CONCAT_SVS(_7, "/", regex, "/iS");
-		zephir_preg_match(_0, &(_0), _7, contents, discard, 1, 0 , 0  TSRMLS_CC);
+		ZEPHIR_INIT_LNVAR(_8);
+		ZEPHIR_CONCAT_SVS(_8, "/", regex, "/iS");
+		zephir_preg_match(_0, &(_0), _8, contents, discard, 1, 0 , 0  TSRMLS_CC);
 		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}
-	ZEPHIR_CALL_FUNCTION(&_3, "preg_replace", NULL, vIUB, vIUBnew, contents);
+	ZEPHIR_CALL_FUNCTION(&_3, "preg_replace", &_4, vIUB, vIUBnew, contents);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(contents, _3);
 	php_printf("%c", '\n');

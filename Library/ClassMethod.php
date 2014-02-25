@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
+use Zephir\Passes\CallGathererPass;
 use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\LiteralBuilder;
 use Zephir\Builder\ParameterBuilder;
@@ -972,9 +973,20 @@ class ClassMethod
                 $typeInference = null;
             }
 
+            /**
+             * This pass counts how many times a specific
+             */
+            if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
+                $callGathererPass = new CallGathererPass();
+                $callGathererPass->pass($this->_statements);
+            } else {
+                $callGathererPass = null;
+            }
+
         } else {
             $localContext = null;
             $typeInference = null;
+            $callGathererPass = null;
         }
 
         /**
@@ -1009,7 +1021,14 @@ class ClassMethod
         $branchManager = new BranchManager();
         $branchManager->addBranch($branch);
 
+        /**
+         * Cache Manager manages both function and method call caches
+         */
+        $cacheManager = new CacheManager();
+        $cacheManager->setGatherer($callGathererPass);
+
         $compilationContext->branchManager = $branchManager;
+        $compilationContext->cacheManager  = $cacheManager;
         $compilationContext->typeInference = $typeInference;
         $compilationContext->symbolTable   = $symbolTable;
 
@@ -1634,6 +1653,11 @@ class ClassMethod
                     $code = 'zephir_fcall_cache_entry ';
                     break;
 
+                case 'static_zephir_fcall_cache_entry':
+                    $pointer = '*';
+                    $code = 'zephir_nts_static zephir_fcall_cache_entry ';
+                    break;
+
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);
             }
@@ -1727,6 +1751,8 @@ class ClassMethod
         $compilationContext->codePrinter = $oldCodePrinter;
 
         $compilationContext->branchManager = null;
+        $compilationContext->cacheManager = null;
+        $compilationContext->typeInference = null;
 
         $codePrinter->clear();
 

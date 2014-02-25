@@ -384,7 +384,7 @@ PHP_METHOD(Test_Mcall, testMethod19) {
 
 PHP_METHOD(Test_Mcall, testCall20) {
 
-	zephir_fcall_cache_entry *_4 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *k_param = NULL, *p, *_3 = NULL;
@@ -411,6 +411,58 @@ PHP_METHOD(Test_Mcall, testCall20) {
 			}
 			i = _1;
 			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod19", &_4, p, p);
+			zephir_check_call_status();
+			j += zephir_get_numberval(_3);
+		}
+	}
+	RETURN_MM_LONG(j);
+
+}
+
+PHP_METHOD(Test_Mcall, testMethod21) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	long a, b;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
+
+
+	RETURN_LONG((a + b));
+
+}
+
+PHP_METHOD(Test_Mcall, testCall22) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
+	int _1, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *k_param = NULL, *p, *_3 = NULL;
+	long k, i, j = 0, _2;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &k_param, &p);
+
+	k = zephir_get_intval(k_param);
+
+
+	_2 = k;
+	_1 = 1;
+	_0 = 0;
+	if ((_1 <= _2)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!((_1 <= _2))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod21", &_4, p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(_3);
 		}

@@ -387,100 +387,51 @@ class FunctionCall extends Call
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        $internalCall = false;
+        /*$internalCall = false;
         if (!count($references)) {
             if ($compilationContext->insideCycle) {
                 if ($this->canBeInternal($funcName)) {
                     $internalCall = true;
                 }
             }
-        }
+        }*/
+
+        /**
+         * Check if the function can have an inline cache
+         */
+        $functionCache = $compilationContext->cacheManager->getFunctionCache();
+        $cachePointer = $functionCache->get($funcName, $compilationContext);
 
         /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
 
-        $internalCall = false;
-
-        if ($internalCall) {
-
-            /**
-             * Create a function cache if there is no any
-             */
-            if (!$compilationContext->functionCache) {
-                $compilationContext->functionCache = new FunctionCache();
-            }
-
-            $functionCache = $compilationContext->functionCache->get($funcName, $compilationContext);
-
-            if (!isset($expression['parameters'])) {
-                if ($this->isExpectingReturn()) {
+        if (!count($params)) {
+            if ($this->isExpectingReturn()) {
+                if ($symbolVariable->getName() == 'return_value') {
+                    $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ');');
+                } else {
                     if ($this->mustInitSymbolVariable()) {
-                        $symbolVariable->initVariant($compilationContext);
+                        $symbolVariable->setMustInitNull(true);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(' . $symbolVariable->getName() . ', &' . $symbolVariable->getName() . ', "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
-                } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ');');
                 }
             } else {
-                if (count($params)) {
-                    if ($this->isExpectingReturn()) {
-                        if ($this->mustInitSymbolVariable()) {
-                            $symbolVariable->initVariant($compilationContext);
-                        }
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(' . $symbolVariable->getName() . ', &' . $symbolVariable->getName() . ', "' . $funcName . '", &' . $functionCache->getName() . ', ' . count($params) . ', ' . join(', ', $params) . ');');
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', ' . count($params) . ', ' . join(', ', $params) . ');');
-                    }
-                } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_FUNCTION(NULL, NULL, "' . $funcName . '", &' . $functionCache->getName() . ', 0, NULL);');
-                }
+                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
             }
-
         } else {
-
-            if (!isset($expression['parameters'])) {
-                if ($this->isExpectingReturn()) {
-                    if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", NULL);');
-                    } else {
-                        if ($this->mustInitSymbolVariable()) {
-                            $symbolVariable->setMustInitNull(true);
-                        }
-                        $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", NULL);');
-                    }
+            if ($this->isExpectingReturn()) {
+                if ($symbolVariable->getName() == 'return_value') {
+                    $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", NULL);');
+                    if ($this->mustInitSymbolVariable()) {
+                        $symbolVariable->setMustInitNull(true);
+                    }
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
-                if (count($params)) {
-                    if ($this->isExpectingReturn()) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", NULL, ' . join(', ', $params) . ');');
-                        } else {
-                            if ($this->mustInitSymbolVariable()) {
-                                $symbolVariable->setMustInitNull(true);
-                            }
-                            $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", NULL, ' . join(', ', $params) . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", NULL, ' . join(', ', $params) . ');');
-                    }
-                } else {
-                    if ($this->isExpectingReturn()) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_FUNCTION("' . $funcName . '", NULL);');
-                        } else {
-                            if ($this->mustInitSymbolVariable()) {
-                                $symbolVariable->setMustInitNull(true);
-                            }
-                            $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", NULL);');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", NULL);');
-                    }
-                }
+                $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
             }
         }
 

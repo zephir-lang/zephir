@@ -464,40 +464,15 @@ class MethodCall extends Call
                 $symbolVariable->setMustInitNull(true);
             }
 
-            $internalCall = false;
-            if ($compilationContext->config->get('private-internal-methods', 'optimizations')) {
-                if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-                    if ($method->isPrivate()) {
-                        if ($method->getClassDefinition() == $classDefinition) {
-                            $internalCall = true;
-                        }
-                    }
-                }
-            }
-
-            if ($compilationContext->config->get('public-internal-methods', 'optimizations')) {
-                if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-                    if ($method->isPublic() && $method->isFinal()) {
-                        if ($method->getClassDefinition() == $classDefinition) {
-                            $internalCall = true;
-                        }
-                    }
-                }
-            }
-
-            if ($compilationContext->config->get('recursive-internal-methods', 'optimizations')) {
-                if ($type == self::CALL_NORMAL && isset($method) && is_object($method)) {
-                    if ($method == $compilationContext->currentMethod) {
-                        $internalCall = true;
-                    }
-                }
-            }
-
             if (!isset($expression['parameters']) || !count($params)) {
 
                 if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
 
-                    $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    if ($method->isFinal() || $method->isPrivate()) {
+                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+                    } else {
+                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    }
                     $functionCache->setMustInitNull(true);
                     $functionCache->setReusable(false);
 
@@ -527,7 +502,11 @@ class MethodCall extends Call
 
                 if ($compilationContext->insideCycle && isset($method) && is_object($method)) {
 
-                    $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    if ($method->isFinal() || $method->isPrivate() || $method) {
+                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+                    } else {
+                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                    }
                     $functionCache->setMustInitNull(true);
                     $functionCache->setReusable(false);
 

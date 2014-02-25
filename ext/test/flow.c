@@ -648,7 +648,8 @@ PHP_METHOD(Test_Flow, testDoWhile1) {
 PHP_METHOD(Test_Flow, testWhileNextTest) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *variable, *returnValue, *_0 = NULL, *_1 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
+	zval *variable, *returnValue, *_0 = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &variable);
@@ -659,17 +660,17 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 	array_init(returnValue);
 	while (1) {
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, variable);
 		Z_UNSET_ISREF_P(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(_0))) {
 			break;
 		}
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_CALL_FUNCTION(&_1, "current", NULL, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "current", &_3, variable);
 		Z_UNSET_ISREF_P(variable);
 		zephir_check_call_status();
-		zephir_array_append(&returnValue, _1, PH_SEPARATE);
+		zephir_array_append(&returnValue, _2, PH_SEPARATE);
 	}
 	RETURN_CCTOR(returnValue);
 
@@ -678,6 +679,7 @@ PHP_METHOD(Test_Flow, testWhileNextTest) {
 PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_1 = NULL, *_2 = NULL;
 	zval *variable, *returnValue, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -689,12 +691,12 @@ PHP_METHOD(Test_Flow, testWhileDoNextTest) {
 
 	do {
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "current", NULL, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "current", &_1, variable);
 		Z_UNSET_ISREF_P(variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, _0, PH_SEPARATE);
 		Z_SET_ISREF_P(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", NULL, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_2, variable);
 		Z_UNSET_ISREF_P(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(_0));
@@ -1647,7 +1649,7 @@ PHP_METHOD(Test_Flow, testFor35Aux) {
 
 PHP_METHOD(Test_Flow, testFor35) {
 
-	zephir_fcall_cache_entry *_4 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
 	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *i = NULL, *_3 = NULL;
@@ -1696,7 +1698,7 @@ PHP_METHOD(Test_Flow, testFor36Aux) {
 
 PHP_METHOD(Test_Flow, testFor36) {
 
-	zephir_fcall_cache_entry *_4 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
 	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *i = NULL, *_3 = NULL;

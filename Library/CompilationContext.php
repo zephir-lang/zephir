@@ -136,6 +136,13 @@ class CompilationContext
     public $branchManager;
 
     /**
+     * Manages both function and method call caches
+     *
+     * @var CacheManager
+     */
+    public $cacheManager;
+
+    /**
      * Manages class renamings using keyword 'use'
      *
      * @var AliasManager

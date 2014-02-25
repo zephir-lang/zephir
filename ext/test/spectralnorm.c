@@ -14,8 +14,10 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
-#include "kernel/fcall.h"
 #include "ext/spl/spl_fixedarray.h"
+#include "kernel/object.h"
+#include "kernel/exception.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -50,9 +52,9 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 
 PHP_METHOD(Test_SpectralNorm, Au) {
 
-	zephir_fcall_cache_entry *_9 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_13 = NULL;
 	zend_bool _0, _3;
-	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL, *_11 = NULL;
+	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL, *_12 = NULL;
 	int n, t, i, j, _1, _2, _4, _5, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -61,6 +63,14 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	n = zephir_get_intval(n_param);
 
 
+	if (!(zephir_instance_of_ev(u, spl_ce_SplFixedArray TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'u' must be an instance of 'SplFixedArray'");
+		return;
+	}
+	if (!(zephir_instance_of_ev(v, spl_ce_SplFixedArray TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'v' must be an instance of 'SplFixedArray'");
+		return;
+	}
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
@@ -98,18 +108,18 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
-					ZEPHIR_CALL_METHOD(&_10, u, "offsetge", NULL, _7);
+					ZEPHIR_CALL_METHOD(&_10, u, "offsetget", &_11, _7);
 					zephir_check_call_status();
-					ZEPHIR_INIT_LNVAR(_11);
-					mul_function(_11, _6, _10 TSRMLS_CC);
-					t += zephir_get_numberval(_11);
+					ZEPHIR_INIT_LNVAR(_12);
+					mul_function(_12, _6, _10 TSRMLS_CC);
+					t += zephir_get_numberval(_12);
 				}
 			}
 			ZEPHIR_INIT_NVAR(_7);
 			ZVAL_LONG(_7, i);
 			ZEPHIR_INIT_NVAR(_8);
 			ZVAL_LONG(_8, t);
-			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", NULL, _7, _8);
+			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", &_13, _7, _8);
 			zephir_check_call_status();
 		}
 	}
@@ -119,9 +129,9 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 
 PHP_METHOD(Test_SpectralNorm, Atu) {
 
-	zephir_fcall_cache_entry *_9 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_13 = NULL;
 	zend_bool _0, _3;
-	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL, *_11 = NULL;
+	zval *n_param = NULL, *u, *v, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_10 = NULL, *_12 = NULL;
 	int n, t, i, j, _1, _2, _4, _5, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -130,6 +140,14 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	n = zephir_get_intval(n_param);
 
 
+	if (!(zephir_instance_of_ev(u, spl_ce_SplFixedArray TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'u' must be an instance of 'SplFixedArray'");
+		return;
+	}
+	if (!(zephir_instance_of_ev(v, spl_ce_SplFixedArray TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_STR(spl_ce_InvalidArgumentException, "Parameter 'v' must be an instance of 'SplFixedArray'");
+		return;
+	}
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
@@ -167,18 +185,18 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
-					ZEPHIR_CALL_METHOD(&_10, u, "offsetget", NULL, _7);
+					ZEPHIR_CALL_METHOD(&_10, u, "offsetget", &_11, _7);
 					zephir_check_call_status();
-					ZEPHIR_INIT_LNVAR(_11);
-					mul_function(_11, _6, _10 TSRMLS_CC);
-					t += zephir_get_numberval(_11);
+					ZEPHIR_INIT_LNVAR(_12);
+					mul_function(_12, _6, _10 TSRMLS_CC);
+					t += zephir_get_numberval(_12);
 				}
 			}
 			ZEPHIR_INIT_NVAR(_7);
 			ZVAL_LONG(_7, i);
 			ZEPHIR_INIT_NVAR(_8);
 			ZVAL_LONG(_8, t);
-			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", NULL, _7, _8);
+			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", &_13, _7, _8);
 			zephir_check_call_status();
 		}
 	}
@@ -206,7 +224,7 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 PHP_METHOD(Test_SpectralNorm, process) {
 
-	zephir_fcall_cache_entry *_5 = NULL, *_6 = NULL, *_7 = NULL, *_11 = NULL, *_12 = NULL, *_17 = NULL, *_19 = NULL, *_21 = NULL, *_22 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_5 = NULL, *_6 = NULL, *_7 = NULL, *_11 = NULL, *_12 = NULL, *_17 = NULL, *_19 = NULL, *_21 = NULL, *_22 = NULL;
 	zend_bool _1, _8, _13;
 	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_4 = NULL, *_16 = NULL, *_18 = NULL, *_20 = NULL, *_23 = NULL, _24;
 	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _2, _3, _9, _10, _14, _15;

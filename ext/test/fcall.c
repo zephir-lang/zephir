@@ -47,6 +47,7 @@ PHP_METHOD(Test_Fcall, testCall1) {
 PHP_METHOD(Test_Fcall, testCall2) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_2 = NULL;
 	zval _0 = zval_used_for_init, _1 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
@@ -56,7 +57,7 @@ PHP_METHOD(Test_Fcall, testCall2) {
 		ZVAL_LONG(&_0, 0);
 		ZEPHIR_SINIT_NVAR(_1);
 		ZVAL_LONG(&_1, 100);
-		ZEPHIR_RETURN_CALL_FUNCTION("mt_rand", NULL, &_0, &_1);
+		ZEPHIR_RETURN_CALL_FUNCTION("mt_rand", &_2, &_0, &_1);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -67,6 +68,7 @@ PHP_METHOD(Test_Fcall, testCall2) {
 PHP_METHOD(Test_Fcall, testCall3) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_2 = NULL, *_3 = NULL;
 	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
@@ -75,19 +77,19 @@ PHP_METHOD(Test_Fcall, testCall3) {
 	ZVAL_STRING(&_0, "inputfile.txt", 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_STRING(&_1, "r", 0);
-	ZEPHIR_CALL_FUNCTION(&handle, "fopen", NULL, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle, "fopen", &_2, &_0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_SINIT_NVAR(_0);
 	ZVAL_STRING(&_0, "outputfile.txt", 0);
 	ZEPHIR_SINIT_NVAR(_1);
 	ZVAL_STRING(&_1, "w", 0);
-	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", NULL, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", &_2, &_0, &_1);
 	zephir_check_call_status();
 	if (zephir_is_true(handle)) {
 		while (1) {
 			ZEPHIR_SINIT_NVAR(_0);
 			ZVAL_LONG(&_0, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", NULL, handle, &_0);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, handle, &_0);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE(buffer)) {
 				break;
@@ -104,6 +106,7 @@ PHP_METHOD(Test_Fcall, testCall3) {
 PHP_METHOD(Test_Fcall, testCall4) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_2 = NULL, *_3 = NULL;
 	zval *handle = NULL, *handle2 = NULL, *buffer = NULL, _0 = zval_used_for_init, _1 = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
@@ -112,19 +115,19 @@ PHP_METHOD(Test_Fcall, testCall4) {
 	ZVAL_STRING(&_0, "r", 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_STRING(&_1, "inputfile.txt", 0);
-	ZEPHIR_CALL_FUNCTION(&handle, "fopen", NULL, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle, "fopen", &_2, &_0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_SINIT_NVAR(_0);
 	ZVAL_STRING(&_0, "outputfile.txt", 0);
 	ZEPHIR_SINIT_NVAR(_1);
 	ZVAL_STRING(&_1, "w", 0);
-	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", NULL, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&handle2, "fopen", &_2, &_0, &_1);
 	zephir_check_call_status();
 	if (zephir_is_true(handle)) {
 		while (1) {
 			ZEPHIR_SINIT_NVAR(_0);
 			ZVAL_LONG(&_0, 4096);
-			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", NULL, handle, &_0);
+			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, handle, &_0);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE(buffer)) {
 				break;

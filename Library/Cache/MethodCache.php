@@ -20,23 +20,44 @@
 namespace Zephir;
 
 /**
- * FunctionCache
+ * MethodCache
  *
- * Adds a local zend_function pointer to avoid relocate functions in every call
+ * Calls in Zephir implement monomorphic and polimorphic caches to
+ * improve performance. Method/Functions lookups are cached in a standard
+ * first-level method lookup cache.
+ *
+ * The concept of inline caching is based on the empirical observation
+ * that the objects that occur at a particular call site are often of the same type
+ * Internal functions are considered monomorphic since they do not change across execution.
+ * Final and private methods are also monomorphic because of their own nature.
+ * Due to the Ahead-Of-Time compilation approach provided by Zephir, is not possible
+ * to implement inline caches, however is possible to add barriers/guards to
+ * take advantage of profile guided optimizations (PGO) and branch prediction.
+ *
+ * This implementation is based on the work of Hölzle, Chambers and Ungar [1].
+ *
+ * [1] http://www.cs.ucsb.edu/~urs/oocsb/papers/ecoop91.pdf
  */
-class FunctionCache
+class MethodCache
 {
-    private $_cache = array();
+    private $cache = array();
 
-    public function get($functionName, $compilationContext)
+    /**
+     * @param $functionName
+     * @param CompilationContext $compilationContext
+     * @return Variable
+     */
+    public function get($functionName, CompilationContext $compilationContext)
     {
-        if (isset($this->_cache[$functionName])) {
-            return $this->_cache[$functionName];
+        if (isset($this->cache[$functionName])) {
+            return $this->cache[$functionName];
         }
+
         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
-        $this->_cache[$functionName] = $functionCache;
+        $this->cache[$functionName] = $functionCache;
+
         return $functionCache;
     }
 }

@@ -13,19 +13,19 @@ class SpectralNorm
 		return 1/(((i + j) * (i + j + 1) / 2) + i + 1);
 	}
 
-	private function Au(int n, u, v)
+	private function Au(int n, <\SplFixedArray> u, <\SplFixedArray> v)
 	{
 		int t, i, j;
 		for i in range(0, n - 1) {
 			let t = 0;
 			for j in range(0, n - 1) {
-				let t += this->Ax(i, j) * u->offsetGe(j);
+				let t += this->Ax(i, j) * u->offsetGet(j);
 			}
 			v->offsetSet(i, t);
 		}
 	}
 
-	private function Atu(int n, u, v)
+	private function Atu(int n, <\SplFixedArray> u, <\SplFixedArray> v)
 	{
 		int t, i, j;
 		for i in range(0, n - 1) {

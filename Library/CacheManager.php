@@ -19,31 +19,56 @@
 
 namespace Zephir;
 
+use Zephir\Cache\FunctionCache;
+use Zephir\Cache\MethodCache;
+use Zephir\Passes\CallGathererPass;
+
 /**
- * MethodCache
+ * CacheManager
  *
- * Adds a local zend_function pointer to avoid relocate functions in every call
+ * Creates and manages both function and method caches
  */
-class MethodCache
+class CacheManager
 {
-    private $_cache = array();
+
+    protected $functionCache;
+
+    protected $methodCache;
 
     /**
-     * @param $functionName
-     * @param CompilationContext $compilationContext
-     * @return Variable
+     * Sets the CallGathererPass
+     *
+     * @param CallGathererPass $gatherer
      */
-    public function get($functionName, CompilationContext $compilationContext)
+    public function setGatherer($gatherer)
     {
-        if (isset($this->_cache[$functionName])) {
-            return $this->_cache[$functionName];
-        }
-
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_function', $compilationContext);
-        $functionCache->setMustInitNull(true);
-        $functionCache->setReusable(false);
-        $this->_cache[$functionName] = $functionCache;
-
-        return $functionCache;
+        $this->gatherer = $gatherer;
     }
+
+    /**
+     * Creates or returns an existing function cache
+     *
+     * @return FunctionCache
+     */
+    public function getFunctionCache()
+    {
+        if (!$this->functionCache) {
+            $this->functionCache = new FunctionCache($this->gatherer);
+        }
+        return $this->functionCache;
+    }
+
+    /**
+     * Creates or returns an existing method cache
+     *
+     * @return MethodCache
+     */
+    public function getMethodCache()
+    {
+        if (!$this->methodCache) {
+            $this->methodCache = new MethodCache($this->gatherer);
+        }
+        return $this->methodCache;
+    }
+
 }
