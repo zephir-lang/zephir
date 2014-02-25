@@ -72,6 +72,7 @@ class ConcatOperator extends BaseOperator
                 case 'property-access':
                     $expr->setReadOnly(true);
                     break;
+
                 default:
                     $expr->setReadOnly($this->_readOnly);
                     break;

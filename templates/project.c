@@ -53,9 +53,6 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 #ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
-
-	assert(ZEPHIR_GLOBAL(fcache) == NULL);
-
 	return SUCCESS;
 }
 #endif
@@ -71,9 +68,6 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 
 	/* Virtual Symbol Tables */
 	zephir_globals->active_symbol_table = NULL;
-
-	/* Cache options */
-	zephir_globals->fcache = NULL;
 
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;

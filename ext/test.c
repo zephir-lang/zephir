@@ -207,9 +207,6 @@ static PHP_MINIT_FUNCTION(test)
 #ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(test)
 {
-
-	//assert(ZEPHIR_GLOBAL(function_cache) == NULL);
-
 	return SUCCESS;
 }
 #endif
@@ -225,9 +222,6 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 
 	/* Virtual Symbol Tables */
 	zephir_globals->active_symbol_table = NULL;
-
-	/* Cache options */
-	//zephir_globals->function_cache = NULL;
 
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;

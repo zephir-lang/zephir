@@ -58,6 +58,7 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 	ZEPHIR_INIT_VAR(o);
 	ZVAL_STRING(o, "", 1);
 
+
 	for (_0 = 0; _0 < Z_STRLEN_P(str); _0++) {
 		ch = ZEPHIR_STRING_OFFSET(str, _0);
 		ZEPHIR_SINIT_NVAR(_2);
