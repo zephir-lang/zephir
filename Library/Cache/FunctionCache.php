@@ -52,11 +52,15 @@ class FunctionCache
         $this->gatherer = $gatherer;
     }
 
-    public function get($functionName, $compilationContext)
+    public function get($functionName, CompilationContext $compilationContext, $exists)
     {
 
         if (isset($this->cache[$functionName])) {
             return '&' . $this->cache[$functionName]->getName();
+        }
+
+        if (!$exists) {
+            return 'NULL';
         }
 
         if (!$compilationContext->insideCycle) {

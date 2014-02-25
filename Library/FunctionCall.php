@@ -326,8 +326,7 @@ class FunctionCall extends Call
         }
 
         /**
-         * Static variables can be passed using local variables saving memory if
-         * the function is read only
+         * Static variables can be passed using local variables saving memory if the function is read only
          */
         if ($exists) {
             $readOnly = $this->isReadOnly($funcName, $expression);
@@ -400,7 +399,7 @@ class FunctionCall extends Call
          * Check if the function can have an inline cache
          */
         $functionCache = $compilationContext->cacheManager->getFunctionCache();
-        $cachePointer = $functionCache->get($funcName, $compilationContext);
+        $cachePointer = $functionCache->get($funcName, $compilationContext, $exists);
 
         /**
          * Add the last call status to the current symbol table
@@ -533,12 +532,12 @@ class FunctionCall extends Call
 
         if (!isset($expression['parameters'])) {
             if ($this->isExpectingReturn()) {
-                //if ($this->mustInitSymbolVariable()) {
-                //    $symbolVariable->initVariant($compilationContext);
-                //}
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL);');
                 } else {
+                    if ($this->mustInitSymbolVariable()) {
+                        $symbolVariable->setMustInitNull(true);
+                    }
                     $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL);');
                 }
             } else {
@@ -547,12 +546,12 @@ class FunctionCall extends Call
         } else {
             if (count($params)) {
                 if ($this->isExpectingReturn()) {
-                    //if ($this->mustInitSymbolVariable()) {
-                    //    $symbolVariable->initVariant($compilationContext);
-                    //}
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL, ' . join(', ', $params) . ');');
                     } else {
+                        if ($this->mustInitSymbolVariable()) {
+                            $symbolVariable->setMustInitNull(true);
+                        }
                         $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL, ' . join(', ', $params) . ');');
                     }
                 } else {
@@ -560,12 +559,12 @@ class FunctionCall extends Call
                 }
             } else {
                 if ($this->isExpectingReturn()) {
-                    //if ($this->mustInitSymbolVariable()) {
-                    //    $symbolVariable->initVariant($compilationContext);
-                    //}
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL);');
                     } else {
+                        if ($this->mustInitSymbolVariable()) {
+                            $symbolVariable->setMustInitNull(true);
+                        }
                         $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL);');
                     }
                 } else {

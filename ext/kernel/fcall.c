@@ -142,7 +142,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		len = 2 * ppzce_size + l;
 		buf = ecalloc(1, len);
 
-		memcpy(buf,                  c,               l - 1);
+		memcpy(buf,                  c,               l);
 		memcpy(buf + l,              &calling_scope,  ppzce_size);
 		memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
 	}
@@ -159,7 +159,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
 
-			memcpy(buf,                  c,               l - 1);
+			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
 			memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
 		}
@@ -170,7 +170,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
 
-			memcpy(buf,                  "__invoke",     l - 1);
+			memcpy(buf,                  "__invoke",     l);
 			memcpy(buf + l,              &calling_scope, ppzce_size);
 			memcpy(buf + l + ppzce_size, &obj_ce,        ppzce_size);
 		}
@@ -429,7 +429,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	#else
 			zephir_fcall_cache_entry *temp_cache_entry = fcic.function_handler;
 	#endif
-			if (FAILURE == zend_hash_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, &temp_cache_entry, sizeof(zephir_fcall_cache_entry*), NULL)) {
+			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &temp_cache_entry, sizeof(zephir_fcall_cache_entry*), NULL)) {
 	#ifndef ZEPHIR_RELEASE
 				free(temp_cache_entry);
 	#endif
@@ -559,7 +559,7 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 
 			case zephir_fcall_ce:
 				assert(ce != NULL);
-				add_next_index_stringl(&fn, ce->name, ce->name_length, 1);
+				add_next_index_stringl(&fn, ce->name, ce->name_length, !IS_INTERNED(ce->name));
 				break;
 
 			case zephir_fcall_method:
