@@ -389,6 +389,12 @@ class Compiler
         }
         system('gcc -v 2> .temp/' . self::VERSION . '/gcc-version-temp');
         $lines = file('.temp/' . self::VERSION . '/gcc-version-temp');
+        foreach ($lines as $line) {
+            if (strpos($line, 'LLVM') !== false) {
+                file_put_contents('.temp/' . self::VERSION . '/gcc-version', '4.8.0');
+                return '4.8.0';
+            }
+        }
         $lastLine = $lines[count($lines) - 1];
         if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
             file_put_contents('.temp/' . self::VERSION . '/gcc-version', $matches[0]);
