@@ -61,11 +61,11 @@ class CallGathererPass
         $this->passStatementBlock($block->getStatements());
     }
 
-	public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement)
     {
         foreach ($statement['assignments'] as $assigment) {
             if (isset($assigment['expr'])) {
-            	$this->passExpression($assigment['expr']);
+                $this->passExpression($assigment['expr']);
             }
         }
     }
@@ -74,7 +74,7 @@ class CallGathererPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-				$this->passExpression($parameter['parameter']);
+                $this->passExpression($parameter['parameter']);
             }
         }
     }
@@ -82,7 +82,7 @@ class CallGathererPass
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-			$this->passExpression($item['value']);
+            $this->passExpression($item['value']);
         }
     }
 
@@ -90,7 +90,7 @@ class CallGathererPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-				$this->passExpression($parameter['parameter']);
+                $this->passExpression($parameter['parameter']);
             }
         }
     }
