@@ -146,9 +146,15 @@ static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 {
+	php_info_print_box_start(0);
+	php_printf(PHP_%PROJECT_UPPER%_DESCRIPTION);
+	php_info_print_box_end();
+
 	php_info_print_table_start();
 	php_info_print_table_header(2, PHP_%PROJECT_UPPER%_NAME, "enabled");
+	php_info_print_table_row(2, "Author", PHP_%PROJECT_UPPER%_AUTHOR);
 	php_info_print_table_row(2, "Version", PHP_%PROJECT_UPPER%_VERSION);
+	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_%PROJECT_UPPER%_ZEPVERSION);
 	php_info_print_table_end();
 
 %EXTENSION_INFO%
