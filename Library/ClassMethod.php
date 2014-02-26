@@ -977,7 +977,7 @@ class ClassMethod
              * This pass counts how many times a specific
              */
             if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
-                $callGathererPass = new CallGathererPass();
+                $callGathererPass = new CallGathererPass($compilationContext);
                 $callGathererPass->pass($this->_statements);
             } else {
                 $callGathererPass = null;

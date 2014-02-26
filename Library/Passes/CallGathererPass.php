@@ -37,6 +37,20 @@ class CallGathererPass
 
     protected $functionCalls = array();
 
+    protected $methodCalls = array();
+
+    protected $compilationContext;
+
+    /**
+     * CallGathererPass constructor
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function __construct($compilationContext)
+    {
+        $this->compilationContext = $compilationContext;
+    }
+
     /**
      * Returns the number of calls a function had
      *
@@ -47,6 +61,21 @@ class CallGathererPass
     {
         if (isset($this->functionCalls[$funcName])) {
             return $this->functionCalls[$funcName];
+        }
+        return 0;
+    }
+
+    /**
+     * Returns the number of calls a function had
+     *
+     * @param string $className
+     * @param string $methodName
+     * @return int
+     */
+    public function getNumberOfMethodCalls($className, $methodName)
+    {
+        if (isset($this->methodCalls[$className][$methodName])) {
+            return $this->methodCalls[$className][$methodName];
         }
         return 0;
     }
@@ -88,6 +117,16 @@ class CallGathererPass
 
     public function passNew(array $expression)
     {
+
+        if (!$expression['dynamic']) {
+            $className = $this->compilationContext->getFullName($expression['class']);
+            if (!isset($this->methodCalls[$className]['__construct'])) {
+                $this->methodCalls[$className]['__construct'] = 1;
+            } else {
+                $this->methodCalls[$className]['__construct']++;
+            }
+        }
+
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
                 $this->passExpression($parameter['parameter']);

@@ -45,6 +45,16 @@ class MethodCache
 {
     protected $cache = array();
 
+    protected $gatherer;
+
+    /**
+     * @param CallGathererPass $gatherer
+     */
+    public function __construct($gatherer)
+    {
+        $this->gatherer = $gatherer;
+    }
+
     /**
      * @param CompilationContext $compilationContext
      * @param ClassMethod $call
@@ -67,12 +77,24 @@ class MethodCache
         }
 
         if (!$compilationContext->insideCycle) {
-            if (!$method->isPrivate() && !$method->isFinal()) {
+            if (!($method instanceof \ReflectionMethod)) {
+                if (!$method->isPrivate() && !$method->isFinal() && !$method->getClassDefinition()->isFinal()) {
+                    $gatherer = $this->gatherer;
+                    if (is_object($gatherer)) {
+                        $number = $gatherer->getNumberOfMethodCalls($method->getClassDefinition()->getCompleteName(), $method->getName());
+                        if ($number <= 1) {
+                            return 'NULL';
+                        }
+                    } else {
+                        return 'NULL';
+                    }
+                }
+            } else {
                 return 'NULL';
             }
         }
 
-        if ($method->isPrivate() || $method->isFinal()) {
+        if (!($method instanceof \ReflectionMethod) && ($method->isPrivate() || $method->isFinal() || $method->getClassDefinition()->isFinal())) {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);

@@ -63,9 +63,6 @@ class Config
             'local-context-pass'                => true,
             'constant-folding'                  => true,
             'static-constant-class-folding'     => true,
-            'private-internal-methods'          => false,
-            'public-internal-methods'           => false,
-            'recursive-internal-methods'        => true,
             'call-gatherer-pass'                => true
         ),
         'namespace'   => '',
