@@ -43,6 +43,10 @@ class SubstrOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
+
+        /** this optimizer has bugs */
+        return false;
+
         if (!isset($expression['parameters'])) {
             return false;
         }

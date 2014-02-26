@@ -147,7 +147,7 @@ static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 {
 	php_info_print_box_start(0);
-	php_printf(PHP_%PROJECT_UPPER%_DESCRIPTION);
+	php_printf("%s", PHP_%PROJECT_UPPER%_DESCRIPTION);
 	php_info_print_box_end();
 
 	php_info_print_table_start();
@@ -163,18 +163,37 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 {
 	zephir_memory_entry *start;
+	int num_preallocated_frames = 24;
+	size_t i;
 
 	php_zephir_init_globals(%PROJECT_LOWER%_globals TSRMLS_CC);
 
-	/* Start Memory Frame */
-	start = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 1);
-	start->addresses       = pecalloc(16, sizeof(zval*), 1);
-	start->capacity        = 16;
-	start->hash_addresses  = pecalloc(4, sizeof(zval*), 1);
-	start->hash_capacity   = 4;
+	/* pre-allocated memory frames */
+	start = (zephir_memory_entry *) pecalloc(num_preallocated_frames, sizeof(zephir_memory_entry), 1);
+
+	for (i = 0; i < num_preallocated_frames; ++i) {
+		start[i].addresses = pecalloc(16, sizeof(zval*), 1);
+		start[i].capacity = 16;
+		start[i].hash_addresses = pecalloc(4, sizeof(zval*), 1);
+		start[i].hash_capacity = 4;
+
+#ifndef ZEPHIR_RELEASE
+		start[i].permanent = 1;
+#endif
+	}
+
+	start[0].next = &start[1];
+	start[num_preallocated_frames - 1].prev = &start[num_preallocated_frames - 2];
+
+	for (i = 1; i < num_preallocated_frames - 1; ++i) {
+		start[i].next = &start[i + 1];
+		start[i].prev = &start[i - 1];
+	}
 
 	%PROJECT_LOWER%_globals->start_memory = start;
+	%PROJECT_LOWER%_globals->end_memory = start + num_preallocated_frames;
 
+	/* Function call cache */
 	%PROJECT_LOWER%_globals->fcache = pemalloc(sizeof(HashTable), 1);
 #ifndef ZEPHIR_RELEASE
 	zend_hash_init(%PROJECT_LOWER%_globals->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
@@ -202,12 +221,22 @@ static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
+	size_t i;
+	int num_preallocated_frames = 24;
+
 	assert(%PROJECT_LOWER%_globals->start_memory != NULL);
 
-	pefree(%PROJECT_LOWER%_globals->start_memory->hash_addresses, 1);
-	pefree(%PROJECT_LOWER%_globals->start_memory->addresses, 1);
+	for (i = 0; i < num_preallocated_frames; ++i) {
+		pefree(%PROJECT_LOWER%_globals->start_memory[i].hash_addresses, 1);
+		pefree(%PROJECT_LOWER%_globals->start_memory[i].addresses, 1);
+	}
+
 	pefree(%PROJECT_LOWER%_globals->start_memory, 1);
 	%PROJECT_LOWER%_globals->start_memory = NULL;
+
+	zend_hash_destroy(%PROJECT_LOWER%_globals->fcache);
+	pefree(%PROJECT_LOWER%_globals->fcache, 1);
+	%PROJECT_LOWER%_globals->fcache = NULL;
 }
 
 zend_module_entry %PROJECT_LOWER%_module_entry = {

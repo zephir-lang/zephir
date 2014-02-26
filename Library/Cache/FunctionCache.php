@@ -70,6 +70,7 @@ class FunctionCache
                 switch ($reflector->getExtensionName()) {
                     case 'standard':
                     case 'Core':
+                    case 'pcre':
                         return true;
                     default:
                         break;

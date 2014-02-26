@@ -39,7 +39,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	HashTable *_6;
 	HashPosition _5;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_4 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
 	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0 = NULL, *_1, _2, *_3 = NULL, **_7, *_8 = NULL;
 
 	ZEPHIR_MM_GROW();

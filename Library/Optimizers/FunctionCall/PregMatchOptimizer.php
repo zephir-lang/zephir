@@ -46,11 +46,12 @@ class PregMatchOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
 
+
         if (!isset($expression['parameters'])) {
             return false;
         }
 
-        if (count($expression['parameters']) < 2) {
+        if (count($expression['parameters']) < 2 || count($expression['parameters']) > 3) {
             return false;
         }
 
