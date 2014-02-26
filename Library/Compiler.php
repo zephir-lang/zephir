@@ -463,7 +463,7 @@ class Compiler
         /**
          * Round 1. pre-compile all files in memory
          */
-        $this->_recursivePreCompile($namespace);
+        $this->_recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
         if (!count($this->_files)) {
             throw new Exception("Zephir files to compile weren't found");
         }
@@ -560,7 +560,8 @@ class Compiler
         /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
          */
-        $needConfigure  = $this->createConfigFiles($namespace);
+        $namespace = str_replace('\\', '_', $namespace);
+        $needConfigure = $this->createConfigFiles($namespace);
         $needConfigure |= $this->createProjectFiles($namespace);
         $needConfigure |= $this->checkIfPhpized($namespace);
 
@@ -601,7 +602,7 @@ class Compiler
         /**
          * Get global namespace
          */
-        $namespace = $this->_checkDirectory();
+        $namespace = str_replace('\\', '_', $this->_checkDirectory());
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
 
@@ -666,7 +667,7 @@ class Compiler
         /**
          * Get global namespace
          */
-        $namespace = $this->_checkDirectory();
+        $namespace = str_replace('\\', '_', $this->_checkDirectory());
 
         $this->compile($command);
 
@@ -788,11 +789,11 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'             => strtolower($project),
-            '%PROJECT_UPPER%'             => strtoupper($project),
-            '%PROJECT_CAMELIZE%'          => ucfirst($project),
-            '%FILES_COMPILED%'            => implode(' ', $this->_compiledFiles),
-            '%EXTRA_FILES_COMPILED%'      => implode(' ', $this->_extraFiles),
+            '%PROJECT_LOWER%'        => strtolower($project),
+            '%PROJECT_UPPER%'        => strtoupper($project),
+            '%PROJECT_CAMELIZE%'     => ucfirst($project),
+            '%FILES_COMPILED%'       => implode(' ', $this->_compiledFiles),
+            '%EXTRA_FILES_COMPILED%' => implode(' ', $this->_extraFiles),
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -810,7 +811,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'       => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -828,7 +829,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'       => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -846,7 +847,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'       => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -876,7 +877,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'       => strtolower($project)
+            '%PROJECT_LOWER%' => strtolower($project)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -987,7 +988,7 @@ class Compiler
                         throw new Exception("Unknown type '" . $global['type'] . "'");
                 }
 
-                $globalCode .= "\t" .  $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
+                $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
 
                 if (isset($global['ini-entry'])) {
 
@@ -1069,7 +1070,6 @@ class Compiler
      */
     public function createProjectFiles($project)
     {
-
         $needConfigure = $this->checkKernelFiles();
 
         /**
@@ -1177,13 +1177,13 @@ class Compiler
         $phpInfo = $this->processExtensionInfo();
 
         $toReplace = array(
-            '%PROJECT_LOWER%'       => strtolower($project),
-            '%PROJECT_UPPER%'       => strtoupper($project),
-            '%PROJECT_CAMELIZE%'    => ucfirst($project),
-            '%CLASS_ENTRIES%'       => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
-            '%CLASS_INITS%'         => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
-            '%INIT_GLOBALS%'        => $globalsDefault,
-            '%EXTENSION_INFO%'      => $phpInfo
+            '%PROJECT_LOWER%'    => strtolower($project),
+            '%PROJECT_UPPER%'    => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%CLASS_ENTRIES%'    => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
+            '%CLASS_INITS%'      => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
+            '%INIT_GLOBALS%'     => $globalsDefault,
+            '%EXTENSION_INFO%'   => $phpInfo
         );
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);

@@ -406,7 +406,7 @@ class ClassDefinition
         }
 
         if (empty($constantName)) {
-            throw new \InvalidArgumentException('$constantName must not be empty: '.$constantName);
+            throw new \InvalidArgumentException('$constantName must not be empty: ' . $constantName);
         }
 
         if (isset($this->constants[$constantName])) {
@@ -615,7 +615,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = &$this->methods;
+        $methods = & $this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -623,7 +623,7 @@ class ClassDefinition
             $methodEntry = 'NULL';
         }
 
-        $namespace = $compilationContext->config->get('namespace');
+        $namespace = str_replace('\\', '_', $compilationContext->config->get('namespace'));
 
         $abstractFlag = '0';
         if ($this->isAbstract()) {
@@ -644,10 +644,10 @@ class ClassDefinition
             }
 
             if ($this->getType() == 'class') {
-                $codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace  . ', ' . strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', ' . $abstractFlag . ');');
+                $codePrinter->output('ZEPHIR_REGISTER_CLASS_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace . ', ' . strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ', ' . $abstractFlag . ');');
                 $codePrinter->outputBlankLine();
             } else {
-                $codePrinter->output('ZEPHIR_REGISTER_INTERFACE_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace  . ', ' . strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ');');
+                $codePrinter->output('ZEPHIR_REGISTER_INTERFACE_EX(' . $this->getNCNamespace() . ', ' . $this->getName() . ', ' . $namespace . ', ' . strtolower($this->getSCName($namespace)) . ', ' . $classEntry . ', ' . $methodEntry . ');');
                 $codePrinter->outputBlankLine();
             }
         } else {
@@ -664,7 +664,7 @@ class ClassDefinition
         /**
          * @todo Remove after removing support for php 5.3
          */
-        $currentClassHref = &$this;
+        $currentClassHref = & $this;
 
         $this->eventsManager->listen('setMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
             $needBreak = false;
