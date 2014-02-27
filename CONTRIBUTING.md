@@ -39,8 +39,8 @@ please make sure the listed date range includes the current year.
 
 Many bugs are raised because users are not running the latest version. Please visit the download page, download/clone the latest available version (or compile it) and confirm if the issue you are experiencing is indeed a bug. When submitting bugs to the issue tracker make sure your issue includes:
 
- - Code to reproduce the bug
- - Your environment: OS, compiler
+ - Code to reproduce the bug.
+ - Your environment: OS, compiler.
  - Zephir version, if your version is outdated - try getting the lastest version.
 
 Thanks! <br />
