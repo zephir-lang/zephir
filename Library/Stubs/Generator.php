@@ -87,12 +87,12 @@ class Generator
             $countProperties = count($properties);
 
             foreach ($properties as $property) {
-                $docBlock = $property->getDocBlock();
-                if ($docBlock) {
-                    $source .= $this->outputDocBlock($docBlock);
-                }
-
                 if ($property->isPublic()) {
+                    $docBlock = $property->getDocBlock();
+                    if ($docBlock) {
+                        $source .= $this->outputDocBlock($docBlock);
+                    }
+
                     $source .= "\t". 'public $'.$property->getName();
 
                     switch($property->getType()) {
