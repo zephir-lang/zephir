@@ -304,7 +304,7 @@ class CompilerFile
                     ), $shortcut);
                     break;
 
-                case '__toString':
+                case 'toString':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
