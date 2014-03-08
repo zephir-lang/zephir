@@ -75,7 +75,14 @@ class CallUserFuncArrayOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/fcall');
 
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $call->addCallStatusFlag($context);
+
         $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC_ARRAY(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+        $call->addCallStatusOrJump($context);
+
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }
 }

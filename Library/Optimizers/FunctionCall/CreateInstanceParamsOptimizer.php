@@ -73,9 +73,13 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        $context->codePrinter->output('if (zephir_create_instance_params(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC) == FAILURE) {');
-        $context->codePrinter->output("\t" . 'RETURN_MM();');
-        $context->codePrinter->output('}');
+        /**
+         * Add the last call status to the current symbol table
+         */
+        $call->addCallStatusFlag($context);
+
+        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

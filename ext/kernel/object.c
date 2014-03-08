@@ -441,7 +441,7 @@ static inline zend_class_entry *zephir_lookup_class_ce_quick(zend_class_entry *c
  * Lookup exact class where a property is defined
  *
  */
-static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, char *property_name, unsigned int property_length TSRMLS_DC) {
+static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, const char *property_name, unsigned int property_length TSRMLS_DC) {
 
 	return zephir_lookup_class_ce_quick(ce, property_name, property_length, zend_inline_hash_func(property_name, property_length + 1) TSRMLS_CC);
 }
@@ -848,7 +848,7 @@ int zephir_update_property_null(zval *object, char *property_name, unsigned int 
 /**
  * Checks whether obj is an object and updates property with another zval
  */
-int zephir_update_property_zval(zval *object, char *property_name, unsigned int property_length, zval *value TSRMLS_DC){
+int zephir_update_property_zval(zval *object, const char *property_name, unsigned int property_length, zval *value TSRMLS_DC){
 
 	zend_class_entry *ce, *old_scope;
 	zval *property;

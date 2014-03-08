@@ -305,6 +305,7 @@ class CompilerFile
                     break;
 
                 case 'toString':
+		case '__toString':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
                         array('public'),
