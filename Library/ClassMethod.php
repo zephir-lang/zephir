@@ -78,13 +78,15 @@ class ClassMethod
      * ClassMethod constructor
      *
      * @param ClassDefinition $classDefinition
-     * @param string $visibility
-     * @param string $name
+     * @param array $visibility
+     * @param $name
+     * @param $parameters
      * @param StatementsBlock $statements
-     * @param string $docblock
-     * @param string $returnType
+     * @param null $docblock
+     * @param null $returnType
+     * @param array $original
      */
-    public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
+    public function __construct(ClassDefinition $classDefinition, array $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
     {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -551,7 +553,7 @@ class ClassMethod
         return $this->isPublic;
     }
 
-    protected $isStatic;
+    protected $isStatic = false;
 
     /**
      * Checks if the method is static
@@ -563,7 +565,7 @@ class ClassMethod
         return $this->isStatic;
     }
 
-    protected $isFinal;
+    protected $isFinal = false;
 
     /**
      * Checks if the method is final

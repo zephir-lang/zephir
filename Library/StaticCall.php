@@ -320,8 +320,8 @@ class StaticCall extends Call
                 $className = $compilationContext->getFullName($className);
                 if ($compiler->isClass($className)) {
                     $classDefinition = $compiler->getClassDefinition($className);
-                }else if ($compiler->isInternalClass($className)) {
-                    $classDefinition = ClassDefinition::buildFromReflection($compiler->getInternalClassDefinition($className));
+                } else if ($compiler->isInternalClass($className)) {
+                    $classDefinition = ClassDefinition::buildFromReflection($compiler->getInternalClassDefinition('\\'.$className));
                 } else {
                     throw new CompilerException("Class name: " . $expression['class'] . " does not exist", $expression);
                 }

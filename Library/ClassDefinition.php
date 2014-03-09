@@ -72,6 +72,8 @@ class ClassDefinition
      */
     protected $eventsManager;
 
+    protected $isInternal = false;
+
     public static function buildFromReflection(\ReflectionClass $class)
     {
         $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
@@ -79,7 +81,7 @@ class ClassDefinition
         $methods = $class->getMethods();
         if (count($methods) > 0) {
             foreach ($methods as $method) {
-                $parameters = [];
+                $parameters = array();
 
                 foreach ($method->getParameters() as $row) {
                         $parameters[] = array(
@@ -87,15 +89,15 @@ class ClassDefinition
                         'name' => $row->getName(),
                         'const' => 0,
                         'data-type' => 'variable',
-                        'mandatory' => $row->isOptional() ? 0 : 1
+                        'mandatory' => !$row->isOptional()
                     );
                 }
 
-                $method = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
+                $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
                     $parameters
                 ));
-                $method->setIsStatic(true);
-                $classDefinition->addMethod($method);
+                $classMethod->setIsStatic($method->isStatic());
+                $classDefinition->addMethod($classMethod);
             }
         }
 
@@ -116,6 +118,22 @@ class ClassDefinition
         $this->name = $name;
 
         $this->eventsManager = new EventsManager();
+    }
+
+    /**
+     * @param $isInternal
+     */
+    public function setIsInternal($isInternal)
+    {
+        $this->isInternal = $isInternal;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInternal()
+    {
+        return $this->isInternal;
     }
 
     /**
@@ -558,17 +576,6 @@ class ClassDefinition
         $this->methods = $methods;
     }
 
-    protected $isInternal = false;
-
-    public function setIsInternal($isInternal)
-    {
-        $this->isInternal = $isInternal;
-    }
-
-    public function isInternal()
-    {
-        return $this->isInternal;
-    }
     /**
      * Returns the name of the zend_class_entry according to the class name
      *
@@ -658,7 +665,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = & $this->methods;
+        $methods = &$this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
