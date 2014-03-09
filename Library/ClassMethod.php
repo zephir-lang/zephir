@@ -48,7 +48,7 @@ class ClassMethod
     protected $_classDefinition;
 
     /**
-     * @var string
+     * @var array
      */
     protected $_visibility;
 
@@ -179,6 +179,17 @@ class ClassMethod
                 }
             }
         }
+
+        if (is_array($visibility)) {
+            $this->isStatic = in_array('static', $visibility);
+            $this->isFinal = in_array('final', $visibility);
+            $this->isPublic = in_array('public', $visibility);
+        }
+    }
+
+    public function setIsStatic($static)
+    {
+        $this->isStatic = $static;
     }
 
     /**
@@ -528,6 +539,8 @@ class ClassMethod
         return false;
     }
 
+    protected $isPublic;
+
      /**
      * Checks if the method is public
      *
@@ -535,11 +548,10 @@ class ClassMethod
      */
     public function isPublic()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('public', $this->_visibility);
-        }
-        return false;
+        return $this->isPublic;
     }
+
+    protected $isStatic;
 
     /**
      * Checks if the method is static
@@ -548,11 +560,10 @@ class ClassMethod
      */
     public function isStatic()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('static', $this->_visibility);
-        }
-        return false;
+        return $this->isStatic;
     }
+
+    protected $isFinal;
 
     /**
      * Checks if the method is final
@@ -561,10 +572,7 @@ class ClassMethod
      */
     public function isFinal()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('final', $this->_visibility);
-        }
-        return false;
+        return $this->isFinal;
     }
 
     /**

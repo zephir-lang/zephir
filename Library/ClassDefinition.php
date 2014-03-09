@@ -72,6 +72,38 @@ class ClassDefinition
      */
     protected $eventsManager;
 
+    public static function buildFromReflection(\ReflectionClass $class)
+    {
+        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
+
+        $methods = $class->getMethods();
+        if (count($methods) > 0) {
+            foreach ($methods as $method) {
+                $parameters = [];
+
+                foreach ($method->getParameters() as $row) {
+                        $parameters[] = array(
+                        'type' => 'parameter',
+                        'name' => $row->getName(),
+                        'const' => 0,
+                        'data-type' => 'variable',
+                        'mandatory' => $row->isOptional() ? 0 : 1
+                    );
+                }
+
+                $method = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
+                    $parameters
+                ));
+                $method->setIsStatic(true);
+                $classDefinition->addMethod($method);
+            }
+        }
+
+        $classDefinition->setIsInternal(true);
+
+        return $classDefinition;
+    }
+
     /**
      * ClassDefinition
      *
@@ -526,6 +558,17 @@ class ClassDefinition
         $this->methods = $methods;
     }
 
+    protected $isInternal = false;
+
+    public function setIsInternal($isInternal)
+    {
+        $this->isInternal = $isInternal;
+    }
+
+    public function isInternal()
+    {
+        return $this->isInternal;
+    }
     /**
      * Returns the name of the zend_class_entry according to the class name
      *

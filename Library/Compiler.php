@@ -225,6 +225,7 @@ class Compiler
     {
         if (!isset(self::$_reflections[$className])) {
             self::$_reflections[$className] = new \ReflectionClass($className);
+//            self::$_reflections[$className] = ClassDefinition::buildFromReflection(new \ReflectionClass($className));
         }
         return self::$_reflections[$className];
     }

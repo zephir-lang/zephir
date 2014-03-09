@@ -17,5 +17,18 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . '/bootstrap.php';
-Zephir\Bootstrap::boot();
+namespace Extension;
+
+use \Phalcon\Di;
+
+/**
+ * Class InternalClassesTest
+ * @package Extension
+ */
+class InternalClassesTest extends \PHPUnit_Framework_TestCase
+{
+    public function testStaticCall()
+    {
+        $this->assertEquals(null, Di::getDefault());
+    }
+} 
