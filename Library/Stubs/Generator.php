@@ -106,21 +106,20 @@ EOF;
         $source .= PHP_EOL . '{' . PHP_EOL;
 
         foreach ($class->getConstants() as $constant) {
-            $source .= $this->buildConstant($constant);
+            $source .= $this->buildConstant($constant) . PHP_EOL;
         }
 
         foreach ($class->getProperties() as $property) {
-            $source .= $this->buildProperty($property);
+            $source .= $this->buildProperty($property) . PHP_EOL;
         }
 
         $source .= PHP_EOL;
 
         foreach ($class->getMethods() as $method) {
-            $source .= $this->buildMethod($method);
+            $source .= $this->buildMethod($method) . PHP_EOL . PHP_EOL;
         }
 
-        $source .= '}' . PHP_EOL;
-        return $source;
+        return $source . '}' . PHP_EOL;
     }
 
     /**
@@ -146,35 +145,38 @@ EOF;
     protected function buildProperty(ClassProperty $property)
     {
         $source = '';
-        if ($property->isPublic()) {
-            $docBlock = $property->getDocBlock();
-            if ($docBlock) {
-                $source .= $this->buildDocBlock($docBlock);
-            }
-
-            $source .= "\t" . 'public $' . $property->getName();
-
-            switch ($property->getType()) {
-                case 'null':
-                    break;
-                case 'string':
-                    $source .= ' = "' . $property->getValue() . '"';
-                    break;
-                case 'empty-array':
-                    $source .= ' = array()';
-                    break;
-                case 'array':
-                    $source .= ' = array(' . implode(', ', $property->getValue()) . ')';
-                    break;
-                default:
-                    $source .= ' = ' . $property->getValue();
-                    break;
-            }
-
-            $source .= ';' . PHP_EOL;
+        $docBlock = $property->getDocBlock();
+        if ($docBlock) {
+            $source .= $this->buildDocBlock($docBlock);
         }
 
-        return $source;
+        $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
+        if ($property->isStatic()) {
+            $visibility = 'static ' . $visibility;
+        }
+
+        $source .= "\t" . $visibility . ' $' . $property->getName();
+
+        switch ($property->getType()) {
+            case 'null':
+                // @TODO: Fix getting value
+            case 'static-constant-access':
+                break;
+            case 'string':
+                $source .= ' = "' . $property->getValue() . '"';
+                break;
+            case 'empty-array':
+                $source .= ' = array()';
+                break;
+            case 'array':
+                $source .= ' = array(' . implode(', ', $property->getValue()) . ')';
+                break;
+            default:
+                $source .= ' = ' . $property->getValue();
+                break;
+        }
+
+        return $source . ';';
     }
 
     /**
@@ -202,9 +204,7 @@ EOF;
                 break;
         }
 
-        $source .= ' = ' . $value . ';' . PHP_EOL;
-
-        return $source;
+        return $source . ' = ' . $value . ';';
     }
 
     /**
@@ -213,16 +213,19 @@ EOF;
      */
     protected function buildMethod(ClassMethod $method)
     {
-        $source = '';
         $modifier = implode(' ', $method->getVisibility());
         $modifier = str_replace(' inline', '', $modifier);
 
         $docBlock = $method->getDocBlock();
         if ($docBlock) {
-            $source .= $this->buildDocBlock($docBlock);
+            $docBlock = $this->buildDocBlock($docBlock);
         }
-        $source .= "\t" . $modifier . ' function ' . $method->getName() . '() {}' . PHP_EOL;
+        $methodBody = <<<EOL
+    $modifier function {$method->getName()}()
+    {
+    }
+EOL;
 
-        return $source;
+        return $docBlock . $methodBody;
     }
 }
