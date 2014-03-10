@@ -27,12 +27,12 @@ ZEPHIR_INIT_CLASS(Test_InternalClasses) {
 PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zend_class_entry *_0;
+	zend_class_entry *phalcon_phalcon_di;
 
 	ZEPHIR_MM_GROW();
 
-	_0 = zend_fetch_class(SL("\\Phalcon\\DI"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
-	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "getdefault", NULL);
+	phalcon_phalcon_di = zend_fetch_class(SL("\\Phalcon\\DI"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+	ZEPHIR_RETURN_CALL_CE_STATIC(phalcon_phalcon_di, "getdefault", NULL);
 	zephir_check_call_status();
 	RETURN_MM();
 

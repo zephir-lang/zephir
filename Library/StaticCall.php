@@ -189,8 +189,14 @@ class StaticCall extends Call
         $codePrinter = &$compilationContext->codePrinter;
 
         if ($classDefinition->isInternal()) {
-            $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-            $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("\\\\'.str_replace('\\', '\\\\', $classDefinition->getName()).'"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            $variableName = str_replace('\\', '_', $classDefinition->getSCName('local'));
+
+            if (!$compilationContext->symbolTable->hasVariable($variableName)) {
+                $classEntryVariable = $compilationContext->symbolTable->addVariable('zend_class_entry', $variableName, $compilationContext);
+                $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("\\\\'.str_replace('\\', '\\\\', $classDefinition->getName()).'"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            }
+
+            $classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, 'zend_class_entry', $compilationContext);
             $classEntry = $classEntryVariable->getName();
         } else {
             $classEntry = &$classDefinition->getClassEntry();
