@@ -36,7 +36,7 @@ PHP_METHOD(Test_Fibonnaci, fibInt) {
 	y = 2;
 	n = 10;
 	while (1) {
-		if (!((z < n))) {
+		if (!(z < n)) {
 			break;
 		}
 		z = (x + y);
@@ -57,7 +57,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 	y = 2.0;
 	n = 10.0;
 	while (1) {
-		if (!((z < n))) {
+		if (!(z < n)) {
 			break;
 		}
 		z = (x + y);
@@ -86,7 +86,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	i = 2;
 	n = 10;
 	while (1) {
-		if (!((i < n))) {
+		if (!(i < n)) {
 			break;
 		}
 		k = (i - 1);
@@ -120,7 +120,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	i = 2;
 	n = 10;
 	while (1) {
-		if (!((i < n))) {
+		if (!(i < n)) {
 			break;
 		}
 		zephir_array_fetch_long(&_1, fib, (i - 1), PH_NOISY | PH_READONLY TSRMLS_CC);
@@ -146,10 +146,10 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 	n = zephir_get_intval(n_param);
 
 
-	if ((n == 0)) {
+	if (n == 0) {
 		RETURN_MM_LONG(0);
 	} else {
-		if ((n == 1)) {
+		if (n == 1) {
 			RETURN_MM_LONG(1);
 		} else {
 			ZEPHIR_SINIT_VAR(_1);
@@ -180,10 +180,10 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 	n = zephir_get_intval(n_param);
 
 
-	if ((n == 0)) {
+	if (n == 0) {
 		RETURN_MM_LONG(0);
 	} else {
-		if ((n == 1)) {
+		if (n == 1) {
 			RETURN_MM_LONG(1);
 		} else {
 			ZEPHIR_SINIT_VAR(_1);

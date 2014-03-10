@@ -403,11 +403,11 @@ PHP_METHOD(Test_Mcall, testCall20) {
 	_2 = k;
 	_1 = 1;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {
@@ -455,11 +455,11 @@ PHP_METHOD(Test_Mcall, testCall22) {
 	_2 = k;
 	_1 = 1;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {

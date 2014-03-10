@@ -233,11 +233,11 @@ PHP_METHOD(Test_FortyTwo, proof) {
 		_7 = 2;
 		_6 = 0;
 		_5 = 0;
-		if ((_6 <= _7)) {
+		if (_6 <= _7) {
 			while (1) {
 				if (_5) {
 					_6++;
-					if (!((_6 <= _7))) {
+					if (!(_6 <= _7)) {
 						break;
 					}
 				} else {
@@ -248,7 +248,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 				j += zephir_get_numberval(_8);
 			}
 		}
-		if ((j != 42)) {
+		if (j != 42) {
 			ZEPHIR_THROW_EXCEPTION_STR(test_exception_ce, "not true");
 			return;
 		}

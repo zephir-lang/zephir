@@ -19,7 +19,9 @@
 
 namespace Extension;
 
-use \Phalcon\Di;
+use Phalcon\Di;
+use Phalcon\Mvc\Model\Query;
+use Test\InternalClasses;
 
 /**
  * Class InternalClassesTest
@@ -27,8 +29,15 @@ use \Phalcon\Di;
  */
 class InternalClassesTest extends \PHPUnit_Framework_TestCase
 {
-    public function testStaticCall()
+    public function testStaticMethodCall()
     {
-        $this->assertEquals(null, Di::getDefault());
+        $class = new InternalClasses();
+        $this->assertEquals(Di::getDefault(), $class->testStaticCall());
+    }
+
+    public function testStaticPropertyFetch()
+    {
+        $class = new InternalClasses();
+        $this->assertEquals(Query::TYPE_DELETE, $class->testStaticPropertyFetch());
     }
 }

@@ -36,3 +36,10 @@ PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 }
 
+PHP_METHOD(Test_InternalClasses, testStaticPropertyFetch) {
+
+
+	RETURN_LONG(303);
+
+}
+

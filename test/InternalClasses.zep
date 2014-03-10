@@ -7,4 +7,12 @@ class InternalClasses
 	{
         return \Phalcon\Di::getDefault();
 	}
+
+	public function testStaticPropertyFetch()
+	{
+	    /**
+	     * @todo Rewrite code in zephir for dinamic property check
+	     */
+        return \Phalcon\Mvc\Model\Query::TYPE_DELETE;
+	}
 }

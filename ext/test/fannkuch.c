@@ -53,11 +53,11 @@ PHP_METHOD(Test_Fannkuch, process) {
 	_2 = n;
 	_1 = 0;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {
@@ -75,7 +75,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			break;
 		}
 		while (1) {
-			if (!((r != 1))) {
+			if (!(r != 1)) {
 				break;
 			}
 			ZEPHIR_INIT_NVAR(_3);
@@ -86,11 +86,11 @@ PHP_METHOD(Test_Fannkuch, process) {
 		_6 = n;
 		_5 = 0;
 		_4 = 0;
-		if ((_5 <= _6)) {
+		if (_5 <= _6) {
 			while (1) {
 				if (_4) {
 					_5++;
-					if (!((_5 <= _6))) {
+					if (!(_5 <= _6)) {
 						break;
 					}
 				} else {
@@ -115,11 +115,11 @@ PHP_METHOD(Test_Fannkuch, process) {
 			_11 = k2;
 			_10 = 0;
 			_9 = 0;
-			if ((_10 <= _11)) {
+			if (_10 <= _11) {
 				while (1) {
 					if (_9) {
 						_10++;
-						if (!((_10 <= _11))) {
+						if (!(_10 <= _11)) {
 							break;
 						}
 					} else {
@@ -134,16 +134,16 @@ PHP_METHOD(Test_Fannkuch, process) {
 			}
 			flipsCount++;
 		}
-		if ((maxFlipsCount < flipsCount)) {
+		if (maxFlipsCount < flipsCount) {
 			maxFlipsCount = flipsCount;
 		}
-		if (((permCount % 2) == 0)) {
+		if ((permCount % 2) == 0) {
 			checksum += flipsCount;
 		} else {
 			checksum -= flipsCount;
 		}
 		while (1) {
-			if ((r == n)) {
+			if (r == n) {
 				array_init_size(return_value, 5);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, checksum);
@@ -159,7 +159,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
 			i = 0;
 			while (1) {
-				if (!((i < r))) {
+				if (!(i < r)) {
 					break;
 				}
 				j = (i + 1);

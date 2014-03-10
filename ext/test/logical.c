@@ -174,7 +174,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 
 	_0 = Z_TYPE_P(match) == IS_ARRAY;
 	if (_0) {
-		_0 = (zephir_fast_count_int(match TSRMLS_CC) == 2);
+		_0 = zephir_fast_count_int(match TSRMLS_CC) == 2;
 	}
 	_1 = _0;
 	if (_1) {
@@ -211,7 +211,7 @@ PHP_METHOD(Test_Logical, testMixed3) {
 		_3 = (1) ? 1 : 0;
 	}
 	b = _3;
-	RETURN_BOOL((a == b));
+	RETURN_BOOL(a == b);
 
 }
 

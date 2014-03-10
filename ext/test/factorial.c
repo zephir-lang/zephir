@@ -40,11 +40,11 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 	_2 = n;
 	_1 = 2;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {
@@ -70,9 +70,9 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 	num = zephir_get_intval(num_param);
 
 
-	_0 = (num == 0);
+	_0 = num == 0;
 	if (!(_0)) {
-		_0 = (num == 1);
+		_0 = num == 1;
 	}
 	if (_0) {
 		ZVAL_LONG(return_value, 1);
