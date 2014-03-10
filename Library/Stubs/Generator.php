@@ -58,16 +58,13 @@ class Generator
      */
     public function generate($path)
     {
+        $namespace = $this->config->get('namespace');
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
             $source = $this->buildClass($class);
 
             $filename = ucfirst($class->getName()) . '.php';
-            $filePath = $path . str_replace(
-                    $this->config->get('namespace'),
-                    '',
-                    str_replace($this->config->get('namespace') . '\\', '', strtolower($class->getNamespace()))
-                );
+            $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\', '', strtolower($class->getNamespace())));
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);
@@ -96,11 +93,17 @@ EOF;
         $source .= $class->getType() . ' ' . $class->getName();
 
         if ($extendsClassDefinition = $class->getExtendsClassDefinition()) {
-            $source .= ' extends ' . $extendsClassDefinition->getName();
+            if ($extendsClassDefinition instanceof \ReflectionClass) {
+                $source .= ' extends \\' . $extendsClassDefinition->getName();
+            } else {
+                $source .= ' extends \\' . $extendsClassDefinition->getCompleteName();
+            }
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
-            $source .= ' implements ' . implode(', ', $implementedInterfaces);
+            $source .= ' implements ' . implode(', ', array_map(function ($val) {
+                return '\\' . $val;
+            }, $implementedInterfaces));
         }
 
         $source .= PHP_EOL . '{' . PHP_EOL;
