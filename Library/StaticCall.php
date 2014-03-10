@@ -186,9 +186,21 @@ class StaticCall extends Call
      */
     protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, $method)
     {
+        $codePrinter = &$compilationContext->codePrinter;
 
-        $codePrinter = $compilationContext->codePrinter;
-        $classEntry = $classDefinition->getClassEntry();
+        if ($classDefinition->isInternal()) {
+            $variableName = str_replace('\\', '_', $classDefinition->getSCName('local'));
+
+            if (!$compilationContext->symbolTable->hasVariable($variableName)) {
+                $classEntryVariable = $compilationContext->symbolTable->addVariable('zend_class_entry', $variableName, $compilationContext);
+                $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("\\\\'.str_replace('\\', '\\\\', $classDefinition->getName()).'"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            }
+
+            $classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, 'zend_class_entry', $compilationContext);
+            $classEntry = $classEntryVariable->getName();
+        } else {
+            $classEntry = &$classDefinition->getClassEntry();
+        }
 
         /**
          * Call static methods must grown the stack
@@ -264,7 +276,6 @@ class StaticCall extends Call
         $methodName = strtolower($expression['name']);
 
         $symbolVariable = null;
-        $type = null;
 
         /**
          * Create temporary variable if needed
@@ -309,6 +320,7 @@ class StaticCall extends Call
 
         $compiler = &$compilationContext->compiler;
         $className = $expression['class'];
+        $classDefinition = false;
 
         if ($className != 'self' && $className != 'parent') {
 
@@ -316,6 +328,8 @@ class StaticCall extends Call
                 $className = $compilationContext->getFullName($className);
                 if ($compiler->isClass($className)) {
                     $classDefinition = $compiler->getClassDefinition($className);
+                } else if ($compiler->isInternalClass($className)) {
+                    $classDefinition = ClassDefinition::buildFromReflection($compiler->getInternalClassDefinition('\\'.$className));
                 } else {
                     throw new CompilerException("Class name: " . $expression['class'] . " does not exist", $expression);
                 }
@@ -352,7 +366,6 @@ class StaticCall extends Call
         if (!$classDefinition->hasMethod($methodName)) {
             throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
         } else {
-
             $method = $classDefinition->getMethod($methodName);
 
             if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
@@ -402,22 +415,12 @@ class StaticCall extends Call
 
         /**
          * Call static methods in the same class, use the special context 'self'
-         */
-        if ($className == 'self' || $classDefinition == $compilationContext->classDefinition) {
-            $type = 'self';
-        } else {
-            if ($className == 'parent') {
-                $type = 'parent';
-            }
-        }
-
-        /**
          * Call static methods in the 'self' context
          */
-        if ($type == 'self') {
+        if ($className == 'self' || $classDefinition == $compilationContext->classDefinition) {
             $this->callSelf($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
         } else {
-            if ($type == 'parent') {
+            if ($className == 'parent') {
                 $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, isset($method) ? $method : null);
             } else {
                 $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);

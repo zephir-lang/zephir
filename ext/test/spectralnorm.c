@@ -75,11 +75,11 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {
@@ -90,11 +90,11 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 			_5 = (n - 1);
 			_4 = 0;
 			_3 = 0;
-			if ((_4 <= _5)) {
+			if (_4 <= _5) {
 				while (1) {
 					if (_3) {
 						_4++;
-						if (!((_4 <= _5))) {
+						if (!(_4 <= _5)) {
 							break;
 						}
 					} else {
@@ -153,11 +153,11 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
-	if ((_1 <= _2)) {
+	if (_1 <= _2) {
 		while (1) {
 			if (_0) {
 				_1++;
-				if (!((_1 <= _2))) {
+				if (!(_1 <= _2)) {
 					break;
 				}
 			} else {
@@ -168,11 +168,11 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 			_5 = (n - 1);
 			_4 = 0;
 			_3 = 0;
-			if ((_4 <= _5)) {
+			if (_4 <= _5) {
 				while (1) {
 					if (_3) {
 						_4++;
-						if (!((_4 <= _5))) {
+						if (!(_4 <= _5)) {
 							break;
 						}
 					} else {
@@ -260,11 +260,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	_3 = (n - 1);
 	_2 = 0;
 	_1 = 0;
-	if ((_2 <= _3)) {
+	if (_2 <= _3) {
 		while (1) {
 			if (_1) {
 				_2++;
-				if (!((_2 <= _3))) {
+				if (!(_2 <= _3)) {
 					break;
 				}
 			} else {
@@ -294,11 +294,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	_10 = 9;
 	_9 = 0;
 	_8 = 0;
-	if ((_9 <= _10)) {
+	if (_9 <= _10) {
 		while (1) {
 			if (_8) {
 				_9++;
-				if (!((_9 <= _10))) {
+				if (!(_9 <= _10)) {
 					break;
 				}
 			} else {
@@ -318,11 +318,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	_14 = (n - 1);
 	_13 = 0;
 	_12 = 0;
-	if ((_13 <= _14)) {
+	if (_13 <= _14) {
 		while (1) {
 			if (_12) {
 				_13++;
-				if (!((_13 <= _14))) {
+				if (!(_13 <= _14)) {
 					break;
 				}
 			} else {

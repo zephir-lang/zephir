@@ -30,3 +30,7 @@ interface TestExInterface
 function TestExFunction()
 {
 }
+
+if (!extension_loaded('phalcon')) {
+    include_once __DIR__ . '/../prototypes/phalcon.php';
+}

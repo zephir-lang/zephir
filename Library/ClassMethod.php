@@ -48,7 +48,7 @@ class ClassMethod
     protected $_classDefinition;
 
     /**
-     * @var string
+     * @var array
      */
     protected $_visibility;
 
@@ -78,13 +78,15 @@ class ClassMethod
      * ClassMethod constructor
      *
      * @param ClassDefinition $classDefinition
-     * @param string $visibility
-     * @param string $name
+     * @param array $visibility
+     * @param $name
+     * @param $parameters
      * @param StatementsBlock $statements
-     * @param string $docblock
-     * @param string $returnType
+     * @param null $docblock
+     * @param null $returnType
+     * @param array $original
      */
-    public function __construct(ClassDefinition $classDefinition, $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
+    public function __construct(ClassDefinition $classDefinition, array $visibility, $name, $parameters, StatementsBlock $statements = null, $docblock = null, $returnType = null, array $original = null)
     {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -179,6 +181,17 @@ class ClassMethod
                 }
             }
         }
+
+        if (is_array($visibility)) {
+            $this->isStatic = in_array('static', $visibility);
+            $this->isFinal = in_array('final', $visibility);
+            $this->isPublic = in_array('public', $visibility);
+        }
+    }
+
+    public function setIsStatic($static)
+    {
+        $this->isStatic = $static;
     }
 
     /**
@@ -528,6 +541,8 @@ class ClassMethod
         return false;
     }
 
+    protected $isPublic;
+
      /**
      * Checks if the method is public
      *
@@ -535,11 +550,10 @@ class ClassMethod
      */
     public function isPublic()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('public', $this->_visibility);
-        }
-        return false;
+        return $this->isPublic;
     }
+
+    protected $isStatic = false;
 
     /**
      * Checks if the method is static
@@ -548,11 +562,10 @@ class ClassMethod
      */
     public function isStatic()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('static', $this->_visibility);
-        }
-        return false;
+        return $this->isStatic;
     }
+
+    protected $isFinal = false;
 
     /**
      * Checks if the method is final
@@ -561,10 +574,7 @@ class ClassMethod
      */
     public function isFinal()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('final', $this->_visibility);
-        }
-        return false;
+        return $this->isFinal;
     }
 
     /**

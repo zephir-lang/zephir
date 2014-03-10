@@ -17,5 +17,27 @@
  +--------------------------------------------------------------------------+
 */
 
-require __DIR__ . '/bootstrap.php';
-Zephir\Bootstrap::boot();
+namespace Extension;
+
+use Phalcon\Di;
+use Phalcon\Mvc\Model\Query;
+use Test\InternalClasses;
+
+/**
+ * Class InternalClassesTest
+ * @package Extension
+ */
+class InternalClassesTest extends \PHPUnit_Framework_TestCase
+{
+    public function testStaticMethodCall()
+    {
+        $class = new InternalClasses();
+        $this->assertEquals(Di::getDefault(), $class->testStaticCall());
+    }
+
+    public function testStaticPropertyFetch()
+    {
+        $class = new InternalClasses();
+        $this->assertEquals(Query::TYPE_DELETE, $class->testStaticPropertyFetch());
+    }
+}

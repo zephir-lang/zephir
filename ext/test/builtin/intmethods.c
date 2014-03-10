@@ -321,7 +321,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 	}
 
 
-	if ((base == -1)) {
+	if (base == -1) {
 		ZEPHIR_SINIT_VAR(_0);
 		ZVAL_LONG(&_0, num);
 		ZEPHIR_CALL_FUNCTION(&_1, "log", &_2, &_0);

@@ -72,6 +72,40 @@ class ClassDefinition
      */
     protected $eventsManager;
 
+    protected $isInternal = false;
+
+    public static function buildFromReflection(\ReflectionClass $class)
+    {
+        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
+
+        $methods = $class->getMethods();
+        if (count($methods) > 0) {
+            foreach ($methods as $method) {
+                $parameters = array();
+
+                foreach ($method->getParameters() as $row) {
+                        $parameters[] = array(
+                        'type' => 'parameter',
+                        'name' => $row->getName(),
+                        'const' => 0,
+                        'data-type' => 'variable',
+                        'mandatory' => !$row->isOptional()
+                    );
+                }
+
+                $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
+                    $parameters
+                ));
+                $classMethod->setIsStatic($method->isStatic());
+                $classDefinition->addMethod($classMethod);
+            }
+        }
+
+        $classDefinition->setIsInternal(true);
+
+        return $classDefinition;
+    }
+
     /**
      * ClassDefinition
      *
@@ -84,6 +118,22 @@ class ClassDefinition
         $this->name = $name;
 
         $this->eventsManager = new EventsManager();
+    }
+
+    /**
+     * @param $isInternal
+     */
+    public function setIsInternal($isInternal)
+    {
+        $this->isInternal = $isInternal;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInternal()
+    {
+        return $this->isInternal;
     }
 
     /**
@@ -615,7 +665,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = & $this->methods;
+        $methods = &$this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
