@@ -19,12 +19,15 @@
 
 namespace Zephir\Stubs;
 
+use Zephir\ClassConstant;
+use Zephir\ClassDefinition;
+use Zephir\ClassMethod;
+use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Config;
 
 /**
- * Class Generator
- * @package Stubs
+ * Stubs Generator
  */
 class Generator
 {
@@ -38,6 +41,10 @@ class Generator
      */
     protected $config;
 
+    /**
+     * @param CompilerFile[] $files
+     * @param Config $config
+     */
     public function __construct(array $files, Config $config)
     {
         $this->files = $files;
@@ -47,156 +54,181 @@ class Generator
     /**
      * Generates stubs
      *
-     * @param $path
+     * @param string $path
      */
     public function generate($path)
     {
+        $namespace = $this->config->get('namespace');
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
+            $source = $this->buildClass($class);
 
-            $source = '<?php' . PHP_EOL;
-
-            $source .= PHP_EOL;
-            $source .= 'namespace '.$class->getNamespace().';'.PHP_EOL;
-            $source .= PHP_EOL;
-
-            if ($class->isFinal()) {
-                $source .= 'final ';
-            }
-
-            if ($class->isAbstract()) {
-                $source .= 'abstract ';
-            }
-
-            $source .= 'class ' . $class->getName();
-
-            $extendsClassDefinition = $class->getExtendsClassDefinition();
-            if ($extendsClassDefinition) {
-                $source .= ' extends '.$extendsClassDefinition->getName();
-            }
-
-            $implementedInterfaces = $class->getImplementedInterfaces();
-            if ($implementedInterfaces) {
-                $source .= ' implements '.implode(', ', $implementedInterfaces);
-            }
-
-            $source .= ' {' . PHP_EOL;
-
-            $i = 0;
-            $properties = $class->getProperties();
-            $countProperties = count($properties);
-
-            foreach ($properties as $property) {
-                if ($property->isPublic()) {
-                    $docBlock = $property->getDocBlock();
-                    if ($docBlock) {
-                        $source .= $this->outputDocBlock($docBlock);
-                    }
-
-                    $source .= "\t". 'public $'.$property->getName();
-
-                    switch($property->getType()) {
-                        case 'null':
-                            break;
-                        case 'string':
-                            $source .= ' = "'.$property->getValue().'"';
-                            break;
-                        case 'empty-array':
-                            $source .= ' = array()';
-                            break;
-                        case 'array':
-                            $source .= ' = array('.implode(', ', $property->getValue()).')';
-                            break;
-                        default:
-                            $source .= ' = '.$property->getValue();
-                            break;
-                    }
-
-                    $source .= ';'.PHP_EOL;
-
-                    if (++$i != $countProperties) {
-                        $source .= PHP_EOL;
-                    }
-                }
-            }
-
-            $i = 0;
-            $constants = $class->getConstants();
-            $countConstants = count($constants);
-
-            foreach ($constants as $constant) {
-                $docBlock = $constant->getDocBlock();
-                if ($docBlock) {
-                    $source .= $this->outputDocBlock($docBlock);
-                }
-
-                $source .= "\t" . 'const '.$constant->getName();
-
-                $value = $constant->getValueValue();
-
-                switch($constant->getType()) {
-                    case 'null':
-                        $value .= 'null';
-                        break;
-                    case 'string':
-                        $value = '"'.$value.'"';
-                        break;
-                }
-
-                $source .= ' = '.$value.';'.PHP_EOL;
-
-                if (++$i != $countConstants) {
-                    $source .= PHP_EOL;
-                }
-            }
-
-            $methods = $class->getMethods();
-            $countMethods = count($methods);
-
-            if ($countConstants > 0 || $countProperties > 0) {
-                $source .= PHP_EOL;
-            }
-
-            $i = 0;
-
-            foreach ($methods as $method) {
-                $modifier = implode(' ', $method->getVisibility());
-                $modifier = str_replace(' inline', '', $modifier);
-
-                $docBlock = $method->getDocBlock();
-                if ($docBlock) {
-                    $source .= $this->outputDocBlock($docBlock);
-                }
-                $source .= "\t" . $modifier .' function '.$method->getName() . '() {}' . PHP_EOL;
-
-                if (++$i != $countMethods) {
-                    $source .= PHP_EOL;
-                }
-            }
-
-            $source .= '}';
-
-            $filename = ucfirst($class->getName()).'.php';
-            $filePath = $path . str_replace($this->config->get('namespace'), '', str_replace($this->config->get('namespace') . '\\', '', strtolower($class->getNamespace())));
+            $filename = ucfirst($class->getName()) . '.php';
+            $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\', '', strtolower($class->getNamespace())));
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);
             }
 
             $filePath = realpath($filePath) . '/';
-            file_put_contents($filePath.$filename, $source);
+            file_put_contents($filePath . $filename, $source);
         }
     }
 
-    protected function outputDocBlock($docblock)
+    protected function buildClass(ClassDefinition $class)
+    {
+        $source = <<<EOF
+<?php
+
+namespace {$class->getNamespace()};
+
+
+EOF;
+        if ($class->isFinal()) {
+            $source .= 'final ';
+        } elseif ($class->isAbstract()) {
+            $source .= 'abstract ';
+        }
+
+        $source .= $class->getType() . ' ' . $class->getName();
+
+        if ($extendsClassDefinition = $class->getExtendsClassDefinition()) {
+            if ($extendsClassDefinition instanceof \ReflectionClass) {
+                $source .= ' extends \\' . $extendsClassDefinition->getName();
+            } else {
+                $source .= ' extends \\' . $extendsClassDefinition->getCompleteName();
+            }
+        }
+
+        if ($implementedInterfaces = $class->getImplementedInterfaces()) {
+            $source .= ' implements ' . implode(', ', array_map(function ($val) {
+                return '\\' . $val;
+            }, $implementedInterfaces));
+        }
+
+        $source .= PHP_EOL . '{' . PHP_EOL;
+
+        foreach ($class->getConstants() as $constant) {
+            $source .= $this->buildConstant($constant) . PHP_EOL;
+        }
+
+        foreach ($class->getProperties() as $property) {
+            $source .= $this->buildProperty($property) . PHP_EOL;
+        }
+
+        $source .= PHP_EOL;
+
+        foreach ($class->getMethods() as $method) {
+            $source .= $this->buildMethod($method) . PHP_EOL . PHP_EOL;
+        }
+
+        return $source . '}' . PHP_EOL;
+    }
+
+    /**
+     * @param string $docBlock
+     * @return string
+     */
+    protected function buildDocBlock($docBlock)
     {
         $code = '';
-        $docblock = '/' . $docblock . '/';
+        $docBlock = '/' . $docBlock . '/';
 
-        foreach (explode("\n", $docblock) as $line) {
-            $code .= "\t".preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+        foreach (explode("\n", $docBlock) as $line) {
+            $code .= "\t" . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
         }
 
         return $code;
+    }
+
+    /**
+     * @param ClassProperty $property
+     * @return string
+     */
+    protected function buildProperty(ClassProperty $property)
+    {
+        $source = '';
+        $docBlock = $property->getDocBlock();
+        if ($docBlock) {
+            $source .= $this->buildDocBlock($docBlock);
+        }
+
+        $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
+        if ($property->isStatic()) {
+            $visibility = 'static ' . $visibility;
+        }
+
+        $source .= "\t" . $visibility . ' $' . $property->getName();
+
+        switch ($property->getType()) {
+            case 'null':
+                // @TODO: Fix getting value
+            case 'static-constant-access':
+                break;
+            case 'string':
+                $source .= ' = "' . $property->getValue() . '"';
+                break;
+            case 'empty-array':
+                $source .= ' = array()';
+                break;
+            case 'array':
+                $source .= ' = array(' . implode(', ', $property->getValue()) . ')';
+                break;
+            default:
+                $source .= ' = ' . $property->getValue();
+                break;
+        }
+
+        return $source . ';';
+    }
+
+    /**
+     * @param ClassConstant $constant
+     * @return string
+     */
+    protected function buildConstant(ClassConstant $constant)
+    {
+        $source = '';
+        $docBlock = $constant->getDocBlock();
+        if ($docBlock) {
+            $source .= $this->buildDocBlock($docBlock);
+        }
+
+        $source .= "\t" . 'const ' . $constant->getName();
+
+        $value = $constant->getValueValue();
+
+        switch ($constant->getType()) {
+            case 'null':
+                $value .= 'null';
+                break;
+            case 'string':
+                $value = '"' . $value . '"';
+                break;
+        }
+
+        return $source . ' = ' . $value . ';';
+    }
+
+    /**
+     * @param ClassMethod $method
+     * @return string
+     */
+    protected function buildMethod(ClassMethod $method)
+    {
+        $modifier = implode(' ', $method->getVisibility());
+        $modifier = str_replace(' inline', '', $modifier);
+
+        $docBlock = $method->getDocBlock();
+        if ($docBlock) {
+            $docBlock = $this->buildDocBlock($docBlock);
+        }
+        $methodBody = <<<EOL
+    $modifier function {$method->getName()}()
+    {
+    }
+EOL;
+
+        return $docBlock . $methodBody;
     }
 }
