@@ -32,10 +32,19 @@ use Zephir\Expression;
  */
 class NativeArrayAccess
 {
+    /**
+     * @var bool
+     */
     protected $_expecting = true;
 
+    /**
+     * @var bool
+     */
     protected $_readOnly = false;
 
+    /**
+     * @var Variable|null
+     */
     protected $_expectingVariable;
 
     /**
@@ -145,85 +154,70 @@ class NativeArrayAccess
          * Resolves the symbol that expects the value
          */
         $readOnly = false;
+        $symbolVariable = $this->_expectingVariable;
+
         if ($this->_readOnly) {
-            if ($this->_expecting) {
-                if ($this->_expectingVariable) {
-
-                    $symbolVariable = $this->_expectingVariable;
-
-                    /**
-                     * If a variable is assigned once in the method, we try to promote it
-                     * to a read only variable
-                     */
-                    if ($symbolVariable->getName() != 'return_value') {
-                        $line = $compilationContext->symbolTable->getLastCallLine();
-                        if ($line === false || ($line > 0 && $line < $expression['line'])) {
-                            $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-                            if ($numberMutations == 1) {
-                                if ($symbolVariable->getNumberMutations() == $numberMutations) {
-                                    $symbolVariable->setMemoryTracked(false);
-                                    $readOnly = true;
-                                }
+            if ($this->_expecting && $this->_expectingVariable) {
+                /**
+                 * If a variable is assigned once in the method, we try to promote it
+                 * to a read only variable
+                 */
+                if ($symbolVariable->getName() != 'return_value') {
+                    $line = $compilationContext->symbolTable->getLastCallLine();
+                    if ($line === false || ($line > 0 && $line < $expression['line'])) {
+                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+                        if ($numberMutations == 1) {
+                            if ($symbolVariable->getNumberMutations() == $numberMutations) {
+                                $symbolVariable->setMemoryTracked(false);
+                                $readOnly = true;
                             }
                         }
                     }
+                }
 
-                    /**
-                     * Variable is not read-only or it wasn't promoted
-                     */
-                    if (!$readOnly) {
-                        if ($symbolVariable->getName() != 'return_value') {
-                            $symbolVariable->observeVariant($compilationContext);
-                            $this->_readOnly = false;
-                        } else {
-                            $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
-                        }
+                /**
+                 * Variable is not read-only or it wasn't promoted
+                 */
+                if (!$readOnly) {
+                    if ($symbolVariable->getName() != 'return_value') {
+                        $symbolVariable->observeVariant($compilationContext);
+                        $this->_readOnly = false;
+                    } else {
+                        $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
                     }
-
-                } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
             }
-
         } else {
-            if ($this->_expecting) {
-                if ($this->_expectingVariable) {
-
-                    $symbolVariable = $this->_expectingVariable;
-
-                    /**
-                     * If a variable is assigned once in the method, we try to promote it
-                     * to a read only variable
-                     */
-                    if ($symbolVariable->getName() != 'return_value') {
-                        $line = $compilationContext->symbolTable->getLastCallLine();
-                        if ($line === false || ($line > 0 && $line < $expression['line'])) {
-                            $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
-                            if ($numberMutations == 1) {
-                                if ($symbolVariable->getNumberMutations() == $numberMutations) {
-                                    $symbolVariable->setMemoryTracked(false);
-                                    $readOnly = true;
-                                }
+            if ($this->_expecting && $this->_expectingVariable) {
+                /**
+                 * If a variable is assigned once in the method, we try to promote it
+                 * to a read only variable
+                 */
+                if ($symbolVariable->getName() != 'return_value') {
+                    $line = $compilationContext->symbolTable->getLastCallLine();
+                    if ($line === false || ($line > 0 && $line < $expression['line'])) {
+                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+                        if ($numberMutations == 1) {
+                            if ($symbolVariable->getNumberMutations() == $numberMutations) {
+                                $symbolVariable->setMemoryTracked(false);
+                                $readOnly = true;
                             }
                         }
                     }
+                }
 
-                    /**
-                     * Variable is not read-only or it wasn't promoted
-                     */
-                    if (!$readOnly) {
-                        if ($symbolVariable->getName() != 'return_value') {
-                            $symbolVariable->observeVariant($compilationContext);
-                            $this->_readOnly = false;
-                        } else {
-                            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
-                        }
+                /**
+                 * Variable is not read-only or it wasn't promoted
+                 */
+                if (!$readOnly) {
+                    if ($symbolVariable->getName() != 'return_value') {
+                        $symbolVariable->observeVariant($compilationContext);
+                        $this->_readOnly = false;
+                    } else {
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
                     }
-
-                } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
                 }
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
@@ -300,9 +294,10 @@ class NativeArrayAccess
     /**
      * Compiles foo[x] = {expr}
      *
-     * @param array $expression
+     * @param $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
