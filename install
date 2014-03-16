@@ -1,7 +1,6 @@
 #!/bin/bash
 cd parser
-rm -f *.o
-rm -f *.lo
+rm -f *.o *.lo
 
 #Compile lemon
 if [ ! -f lemon ]; then
