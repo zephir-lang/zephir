@@ -294,9 +294,10 @@ class NativeArrayAccess
     /**
      * Compiles foo[x] = {expr}
      *
-     * @param array $expression
+     * @param $expression
      * @param CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
