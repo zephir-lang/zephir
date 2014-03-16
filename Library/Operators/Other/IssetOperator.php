@@ -108,28 +108,6 @@ class IssetOperator extends BaseOperator
                 break;
 
             case 'property-access':
-
-                $compilationContext->headersManager->add('kernel/object');
-
-                $exprVariable = new Expression($left['left']);
-                $exprVariable->setReadOnly(true);
-
-                $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ($exprCompiledVariable->getType() != 'variable') {
-                    throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as object", $left['left']);
-                }
-
-                $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
-                if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as object", $left['left']);
-                }
-
-                if ($variable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
-                    $compilationContext->logger->warning('Possible attempt to use non object in isset operator', 'non-valid-isset', $expression);
-                }
-
-                return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $left['right']['value'] . '") TSRMLS_CC)', $left);
-
             case 'property-dynamic-access':
 
                 $compilationContext->headersManager->add('kernel/object');
@@ -149,6 +127,10 @@ class IssetOperator extends BaseOperator
 
                 if ($variable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
                     $compilationContext->logger->warning('Possible attempt to use non object in isset operator', 'non-valid-isset', $expression);
+                }
+
+                if ($left['type'] == 'property-access') {
+                    return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $left['right']['value'] . '") TSRMLS_CC)', $left);
                 }
 
                 $expr = new Expression($left['right']);
