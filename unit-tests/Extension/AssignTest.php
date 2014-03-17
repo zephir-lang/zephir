@@ -79,6 +79,7 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testPropertyAssignStringConcat() === 'test string');
         $this->assertTrue($t->testArrayVarAssign1('test_index', 'value') == array('test_index' => 'value'));
         $this->assertTrue($t->testArrayVarAssign2('test_index', 'value') == array('test_index' => 'value'));
+        $this->assertEquals($t->testArrayVarAssign4('foo'), array(array('foo')));
     }
 
     public function testGlobalVarAssign()
