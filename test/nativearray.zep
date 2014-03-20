@@ -558,4 +558,9 @@ class NativeArray
 		let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
 		return implode("|", array_keys(byteUnits));
 	}
+
+	public function issue264(array tokens)
+	{
+	    return !isset(tokens[1]);
+	}
 }

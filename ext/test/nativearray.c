@@ -1316,3 +1316,18 @@ PHP_METHOD(Test_NativeArray, issue110) {
 
 }
 
+PHP_METHOD(Test_NativeArray, issue264) {
+
+	zval *tokens_param = NULL;
+	zval *tokens = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tokens_param);
+
+	zephir_get_arrval(tokens, tokens_param);
+
+
+	RETURN_MM_BOOL(!zephir_array_isset_long(tokens, 1));
+
+}
+
