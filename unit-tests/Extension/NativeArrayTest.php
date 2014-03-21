@@ -120,6 +120,6 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
     public function testIssue264()
     {
         $t = new NativeArray();
-        $this->assertTrue($t->issue264());
+        $this->assertFalse($t->issue264(array(1, 2, 3)));
     }
 }
