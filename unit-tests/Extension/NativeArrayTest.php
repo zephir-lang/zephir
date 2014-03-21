@@ -19,11 +19,13 @@
 
 namespace Extension;
 
+use Test\NativeArray;
+
 class NativeArrayTest extends \PHPUnit_Framework_TestCase
 {
     public function testArray()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testArray1() == array());
         $this->assertTrue($t->testArray2() == array(1, 2, 3));
         $this->assertTrue($t->testArray3() == array(1.1, 2.2, 3.3));
@@ -52,7 +54,7 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayAccess()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testArrayAccess1() == 1);
         $this->assertTrue($t->testArrayAccess2() == 1);
         $this->assertTrue($t->testArrayAccess3() == 1);
@@ -62,7 +64,7 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayMultipleAccess()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testArrayMultipleAccess1() == "a");
         $this->assertTrue($t->testArrayMultipleAccess2() == "b");
         $this->assertTrue($t->testArrayMultipleAccess3() == "b");
@@ -72,7 +74,7 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayUpdate()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testArrayUpdate1() == array(4, 2, 3));
         $this->assertTrue($t->testArrayUpdate2() == array(4, 2, 3));
         $this->assertTrue($t->testArrayUpdate3() == array(4, 5, 3));
@@ -81,7 +83,7 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleArrayUpdate()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testMultipleArrayUpdate1() == array('x' => array('y' => null)));
         $this->assertTrue($t->testMultipleArrayUpdate2() == array('x' => array('y' => array('z' => null))));
         $this->assertTrue($t->testMultipleArrayUpdate3() == array(0 => array(1 => null)));
@@ -98,20 +100,26 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayKeys()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testArrayKeys(array('test1' => 1, 'test2' => 2, 'test3' => 3)) === array('test1', 'test2', 'test3'));
         $this->assertTrue($t->testArrayKeys(array(1, 2, 3, 4, 5, 6)) === array(0, 1, 2, 3, 4, 5));
     }
 
     public function testImplodeArray()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->testImplodeArray(array('test1' => 1, 'test2' => 2, 'test3' => 3)) === 'test1|test2|test3');
     }
 
-    public function issue110()
+    public function testIssue110()
     {
-        $t = new \Test\NativeArray();
+        $t = new NativeArray();
         $this->assertTrue($t->issue110() === 'B|K|M|G|T|KB|MB|GB|TB');
+    }
+
+    public function testIssue264()
+    {
+        $t = new NativeArray();
+        $this->assertTrue($t->issue264());
     }
 }

@@ -65,8 +65,13 @@ class IssetOperator extends BaseOperator
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
-                if ($variable->getType() != 'variable') {
-                    throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $left['left']);
+                switch($variable->getType()) {
+                    case 'array':
+                    case 'variable':
+                        break;
+                    default:
+                        throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $left['left']);
+                        break;
                 }
 
                 if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
