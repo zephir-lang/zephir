@@ -46,6 +46,7 @@
 #include "test/nativearray.h"
 #include "test/oo.h"
 #include "test/oo/constantsinterface.h"
+#include "test/oo/dynamicprop.h"
 #include "test/oo/extendpdoclass.h"
 #include "test/oo/ooconstruct.h"
 #include "test/oo/ooconstructparams.h"

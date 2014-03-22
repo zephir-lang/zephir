@@ -2005,7 +2005,7 @@ class LetStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/object');
 
         switch ($resolvedExpr->getType()) {
-            /*case 'null':
+            case 'null':
                 if ($variable == 'this') {
                     $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
                 } else {
@@ -2054,11 +2054,11 @@ class LetStatement extends StatementAbstract
                 } else {
                     $codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 }
-                break;*/
+                break;
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableVariable->getType()) {
-                    /*case 'int':
+                    case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
@@ -2076,7 +2076,7 @@ class LetStatement extends StatementAbstract
                         } else {
                             $codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         }
-                        break;*/
+                        break;
                     case 'string':
                     case 'variable':
                         $codePrinter->output('zephir_update_property_zval_zval(' . $symbolVariable->getName() . ', ' . $propertyVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC);');

@@ -153,7 +153,7 @@ EOF;
             $source .= $this->buildDocBlock($docBlock);
         }
 
-        $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
+        $visibility = $property->isProtected() ? 'protected' : $property->isPublic() ? 'public' : 'private';
         if ($property->isStatic()) {
             $visibility = 'static ' . $visibility;
         }
