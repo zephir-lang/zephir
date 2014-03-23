@@ -53,6 +53,7 @@ class StaticCall extends Call
 
         if ($mustInit) {
             $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
         }
 
         /**
@@ -125,6 +126,7 @@ class StaticCall extends Call
 
         if ($mustInit) {
             $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
         }
 
         /**
@@ -209,6 +211,7 @@ class StaticCall extends Call
 
         if ($mustInit) {
             $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
         }
 
         /**

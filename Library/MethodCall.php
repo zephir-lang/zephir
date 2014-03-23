@@ -468,6 +468,7 @@ class MethodCall extends Call
 
             if ($mustInit) {
                 $symbolVariable->setMustInitNull(true);
+                $symbolVariable->trackVariant($compilationContext);
             }
 
             /**

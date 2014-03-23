@@ -742,6 +742,50 @@ class Variable
     }
 
     /**
+     * Tells the compiler a generated code will track the variable
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function trackVariant(CompilationContext $compilationContext)
+    {
+        if ($this->_numberSkips) {
+            $this->_numberSkips--;
+            return;
+        }
+
+        /**
+         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
+         * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
+         * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
+         */
+        if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
+
+            if ($this->_initBranch === false) {
+                $this->_initBranch = $compilationContext->currentBranch;
+            }            
+
+            if (!$this->isLocalOnly()) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                if ($compilationContext->insideCycle) {
+                    $this->_mustInitNull = true;                    
+                } else {
+                    if ($this->_variantInits > 0) {
+                        if ($this->_initBranch !== 1) {                            
+                            $this->_mustInitNull = true;                            
+                        }
+                    } 
+                }
+            } else {
+                if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
+                    $this->_mustInitNull = true;                    
+                }
+            }
+
+            $this->_variantInits++;
+        }
+    }
+
+    /**
      * Initializes a variant variable that is intended to have the special
      * behavior of only freed its body value instead of the full variable
      *
