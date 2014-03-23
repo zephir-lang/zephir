@@ -1,4 +1,5 @@
 .DS_Store
+json-c
 .idea/
 parser/lemon
 *.dSYM/
