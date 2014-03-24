@@ -762,22 +762,22 @@ class Variable
 
             if ($this->_initBranch === false) {
                 $this->_initBranch = $compilationContext->currentBranch;
-            }            
+            }
 
             if (!$this->isLocalOnly()) {
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;                    
+                    $this->_mustInitNull = true;
                 } else {
                     if ($this->_variantInits > 0) {
-                        if ($this->_initBranch !== 1) {                            
-                            $this->_mustInitNull = true;                            
+                        if ($this->_initBranch !== 1) {
+                            $this->_mustInitNull = true;
                         }
-                    } 
+                    }
                 }
             } else {
                 if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;                    
+                    $this->_mustInitNull = true;
                 }
             }
 
