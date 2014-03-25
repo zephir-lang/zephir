@@ -41,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $config = new Config();
         $config->set('config', true);
-        $this->assertTrue($config->get('verbose'));
+        $this->assertTrue($config->get('config'));
     }
 
     public function testSetWithNamespace()
