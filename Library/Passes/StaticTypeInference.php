@@ -59,6 +59,18 @@ class StaticTypeInference
     }
 
     /**
+     * Marks a variable to mandatory be stored in the heap if a type has not been defined for it
+     *
+     * @param string $variable
+     * @param string $type
+     */
+    public function markVariableIfUnknown($variable, $type)
+    {
+        $this->_variables[$variable] = $type;
+        $this->_infered[$variable] = $type;
+    }
+
+    /**
      * Marks a variable to mandatory be stored in the heap
      *
      * @param string $variable
@@ -514,10 +526,10 @@ class StaticTypeInference
                         $this->passExpression($statement['expr']);
                     }
                     if (isset($statement['value'])) {
-                        //$this->markVariable($statement['value']);
+                        $this->markVariableIfUnknown($statement['value'], 'undefined');
                     }
                     if (isset($statement['key'])) {
-                        //$this->markVariable($statement['key']);
+                        $this->markVariableIfUnknown($statement['key'], 'undefined');
                     }
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
