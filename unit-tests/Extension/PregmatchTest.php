@@ -61,5 +61,7 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
         $match6 = null;
         $this->assertTrue($t->testPregMatch3Params("/M(.*)/", $string2, $match6) === 1);
         $this->assertTrue(count($match6) == 2);
+
+        $this->assertSame(1, $t->testPregMatch2Params("#asd#", "asd"));
     }
 }
