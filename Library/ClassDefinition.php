@@ -1083,7 +1083,18 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
-
+            case 'splheap':
+                $compilationContext->headersManager->add('ext/spl/spl_heap');
+                $classEntry = 'spl_ce_SplHeap';
+                break;
+            case 'splminheap':
+                $compilationContext->headersManager->add('ext/spl/spl_heap');
+                $classEntry = 'spl_ce_SplMinHeap';
+                break;
+            case 'splmaxheap':
+                $compilationContext->headersManager->add('ext/spl/spl_heap');
+                $classEntry = 'spl_ce_SplMaxHeap';
+                break;
             case 'stdclass':
                 $classEntry = 'zend_standard_class_def';
                 break;
