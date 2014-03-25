@@ -228,7 +228,8 @@ class StatementsBlock
                 case 'fetch':
                     $expr = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
-                    $expr->compile($compilationContext);
+                    $compiledExpression = $expr->compile($compilationContext);
+                    $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
                     break;
 
                 case 'mcall':
