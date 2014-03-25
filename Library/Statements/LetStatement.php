@@ -1017,19 +1017,19 @@ class LetStatement extends StatementAbstract
 
                                     case 'concat-assign':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                        $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ');');
                                         break;
 
                                     case 'add-assign':
                                         $compilationContext->symbolTable->mustGrownStack(true);
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                        $codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
                                         break;
 
                                     case 'sub-assign':
                                         $compilationContext->symbolTable->mustGrownStack(true);
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                        $codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
                                         break;
 
                                     default:

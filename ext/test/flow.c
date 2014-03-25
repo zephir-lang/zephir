@@ -815,13 +815,14 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 PHP_METHOD(Test_Flow, testFor4) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
@@ -837,10 +838,10 @@ PHP_METHOD(Test_Flow, testFor4) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
@@ -874,13 +875,14 @@ PHP_METHOD(Test_Flow, testFor5) {
 
 PHP_METHOD(Test_Flow, testFor6) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 10;
 	_1 = _2;
 	_0 = 0;
@@ -896,10 +898,10 @@ PHP_METHOD(Test_Flow, testFor6) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
@@ -994,12 +996,13 @@ PHP_METHOD(Test_Flow, testFor9) {
 PHP_METHOD(Test_Flow, testFor10) {
 
 	zend_bool _0;
-	int b, c, d, _1, _2;
-	zval *a = NULL;
+	int c, d, _1, _2;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	c = 1;
 	d = 10;
 	_2 = d;
@@ -1017,10 +1020,10 @@ PHP_METHOD(Test_Flow, testFor10) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
@@ -1295,13 +1298,14 @@ PHP_METHOD(Test_Flow, testFor18) {
 
 PHP_METHOD(Test_Flow, testFor19) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
@@ -1317,22 +1321,23 @@ PHP_METHOD(Test_Flow, testFor19) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor20) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 10;
 	_1 = 1;
 	_0 = 0;
@@ -1348,22 +1353,23 @@ PHP_METHOD(Test_Flow, testFor20) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor21) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 1;
 	_1 = 10;
 	_0 = 0;
@@ -1379,22 +1385,23 @@ PHP_METHOD(Test_Flow, testFor21) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
 PHP_METHOD(Test_Flow, testFor22) {
 
+	int _1, _2;
 	zend_bool _0;
-	int b, _1, _2;
-	zval *a = NULL;
+	zval *a = NULL, *b;
 
 	ZEPHIR_MM_GROW();
 
-	b = 0;
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
 	_2 = 1;
 	_1 = _2;
 	_0 = 0;
@@ -1410,10 +1417,10 @@ PHP_METHOD(Test_Flow, testFor22) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			b += zephir_get_numberval(a);
+			ZEPHIR_ADD_ASSIGN(b, a);
 		}
 	}
-	RETURN_MM_LONG(b);
+	RETURN_CCTOR(b);
 
 }
 
