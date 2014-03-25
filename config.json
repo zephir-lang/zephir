@@ -40,7 +40,7 @@
     "description": "Description test for<br/>Test Extension",
     "author": "Zephir Team and contributors",
     "version": "1.0.0",
-    "verbose": true,
+    "verbose": false,
     "globals": {
         "my_setting_1": {
             "type": "bool",

@@ -68,7 +68,9 @@ class StringType extends AbstractType
             'compare' => 'strcmp',
             'comparelocale' => 'strcoll',
             'rev' => 'strrev',
-            'htmlspecialchars' => 'htmlspecialchars'
+            'htmlspecialchars' => 'htmlspecialchars',
+            'camelize' => 'camelize',
+            'uncamelize' => 'uncamelize',
         );
     }
 }

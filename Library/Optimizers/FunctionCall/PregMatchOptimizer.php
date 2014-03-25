@@ -46,6 +46,8 @@ class PregMatchOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
 
+        /** disabled: this optimizer has bugs or its behavior does not match the same as php */
+        return false;
 
         if (!isset($expression['parameters'])) {
             return false;
