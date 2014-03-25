@@ -47,7 +47,7 @@ class MethodCall extends Call
     /**
      *
      *
-     * @param array $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
@@ -462,17 +462,20 @@ class MethodCall extends Call
         $this->addCallStatusFlag($compilationContext);
 
         /**
+         * Initialize non-temporary variables
+         */
+        if ($mustInit) {
+            $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
+        }
+
+        /**
          * Generate the code according to the call type
          */
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
 
-            if ($mustInit) {
-                $symbolVariable->setMustInitNull(true);
-                $symbolVariable->trackVariant($compilationContext);
-            }
-
             /**
-             * Check if the  method call can have an inline cache
+             * Check if the method call can have an inline cache
              */
             $methodCache = $compilationContext->cacheManager->getMethodCache();
             $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
@@ -502,6 +505,8 @@ class MethodCall extends Call
                 }
 
             }
+
+        } else {
 
         }
 
