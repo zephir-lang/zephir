@@ -88,15 +88,19 @@ PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject;
+	zval *pattern, *subject, *results;
 
 	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(results);
+	array_init(results);
 
 	ZEPHIR_INIT_VAR(pattern);
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match_all", &_0, pattern, subject);
+	Z_SET_ISREF_P(results);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_match_all", &_0, pattern, subject, results);
+	Z_UNSET_ISREF_P(results);
 	zephir_check_call_status();
 	RETURN_MM();
 

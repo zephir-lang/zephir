@@ -1017,7 +1017,7 @@ class LetStatement extends StatementAbstract
 
                                     case 'concat-assign':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ');');
+                                        $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
                                         break;
 
                                     case 'add-assign':

@@ -40,13 +40,11 @@ PHP_METHOD(Test_RegexDNA, process) {
 	HashPosition _5;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL, *_9 = NULL;
-	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard = NULL, *_0, *_1, _2, *_3 = NULL, **_7, *_8 = NULL, *_10 = NULL;
+	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard, *_0, *_1, _2, *_3 = NULL, **_7, *_8 = NULL, *_10 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
 
-	ZEPHIR_INIT_VAR(discard);
-	ZVAL_NULL(discard);
 
 
 	ZEPHIR_INIT_VAR(variants);

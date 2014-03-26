@@ -31,7 +31,6 @@ use Zephir\Passes\CallGathererPass;
  */
 class CacheManager
 {
-
     protected $functionCache;
 
     protected $methodCache;
@@ -39,11 +38,16 @@ class CacheManager
     protected $staticMethodCache;
 
     /**
+     * @var CallGathererPass|null
+     */
+    protected $gatherer;
+
+    /**
      * Sets the CallGathererPass
      *
      * @param CallGathererPass $gatherer
      */
-    public function setGatherer($gatherer)
+    public function setGatherer(CallGathererPass $gatherer = null)
     {
         $this->gatherer = $gatherer;
     }
@@ -58,6 +62,7 @@ class CacheManager
         if (!$this->functionCache) {
             $this->functionCache = new FunctionCache($this->gatherer);
         }
+
         return $this->functionCache;
     }
 
@@ -71,6 +76,7 @@ class CacheManager
         if (!$this->methodCache) {
             $this->methodCache = new MethodCache($this->gatherer);
         }
+
         return $this->methodCache;
     }
 
@@ -84,6 +90,7 @@ class CacheManager
         if (!$this->staticMethodCache) {
             $this->staticMethodCache = new StaticMethodCache($this->gatherer);
         }
+
         return $this->staticMethodCache;
     }
 }
