@@ -68,7 +68,7 @@ PHP_METHOD(Test_BuiltIn_CharMethods, getHexForString) {
 		ZVAL_LONG(&_3, ch);
 		ZEPHIR_CALL_FUNCTION(&_4, "sprintf", &_5, &_2, &_3);
 		zephir_check_call_status();
-		zephir_concat_self(&o, _4);
+		zephir_concat_self(&o, _4 TSRMLS_CC);
 	}
 	RETURN_CCTOR(o);
 
