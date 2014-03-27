@@ -836,7 +836,7 @@ class ClassMethod
             case 'int':
             case 'uint':
             case 'long':
-                $code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
                 $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t\t" . '}' . PHP_EOL;
@@ -845,7 +845,7 @@ class ClassMethod
                 return $code;
 
             case 'bool':
-                $code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
                 $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t\t" . '}' . PHP_EOL;
@@ -854,7 +854,7 @@ class ClassMethod
                 return $code;
 
             case 'double':
-                $code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
@@ -879,12 +879,26 @@ class ClassMethod
                 return $code;
 
             case 'array':
-                $code  = "\t\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_ARRAY) {' . PHP_EOL;
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_ARRAY) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an array") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
                 //$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+                return $code;
+            case 'object':
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_OBJECT) {' . PHP_EOL;
+                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an object") TSRMLS_CC);' . PHP_EOL;
+                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+                $code .= "\t" . '}' . PHP_EOL;
+                $code .= PHP_EOL;
+                return $code;
+            case 'callable':
+                $code  = "\tif (zephir_is_callable(" . $parameter['name'] . '_param)) {' . PHP_EOL;
+                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be callable") TSRMLS_CC);' . PHP_EOL;
+                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+                $code .= "\t" . '}' . PHP_EOL;
+                $code .= PHP_EOL;
                 return $code;
 
             default:
@@ -932,6 +946,8 @@ class ClassMethod
                 return "\t" . 'zephir_get_arrval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
 
             case 'variable':
+            case 'callable':
+            case 'object':
                 break;
 
             default:
@@ -1623,6 +1639,8 @@ class ClassMethod
 
                 case 'string':
                 case 'variable':
+                case 'object':
+                case 'callable':
                 case 'array':
                 case 'null':
                     $pointer = '*';
