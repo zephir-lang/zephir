@@ -29,9 +29,9 @@ ZEPHIR_INIT_CLASS(Test_MethodArgs) {
 
 PHP_METHOD(Test_MethodArgs, setCallable) {
 
-	zval *a, *a_param = NULL;
+	zval *a;
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params(0, 1, 0, &a);
 
 
 
@@ -41,9 +41,9 @@ PHP_METHOD(Test_MethodArgs, setCallable) {
 
 PHP_METHOD(Test_MethodArgs, setObject) {
 
-	zval *a, *a_param = NULL;
+	zval *a;
 
-	zephir_fetch_params(0, 1, 0, &a_param);
+	zephir_fetch_params(0, 1, 0, &a);
 
 
 

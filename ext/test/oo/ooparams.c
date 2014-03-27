@@ -351,9 +351,9 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 
 PHP_METHOD(Test_Oo_OoParams, setObject) {
 
-	zval *obj, *obj_param = NULL;
+	zval *obj;
 
-	zephir_fetch_params(0, 1, 0, &obj_param);
+	zephir_fetch_params(0, 1, 0, &obj);
 
 
 
@@ -363,9 +363,9 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 
 PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
-	zval *obj, *obj_param = NULL;
+	zval *obj;
 
-	zephir_fetch_params(0, 1, 0, &obj_param);
+	zephir_fetch_params(0, 1, 0, &obj);
 
 
 
@@ -375,9 +375,9 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
 PHP_METHOD(Test_Oo_OoParams, setResource) {
 
-	zval *obj, *obj_param = NULL;
+	zval *obj;
 
-	zephir_fetch_params(0, 1, 0, &obj_param);
+	zephir_fetch_params(0, 1, 0, &obj);
 
 
 

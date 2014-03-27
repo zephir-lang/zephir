@@ -1104,14 +1104,20 @@ class ClassMethod
 
                 $symbolParam = null;
                 if (isset($parameter['data-type'])) {
-                    if ($parameter['data-type'] == 'variable') {
-                        $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
-                    } else {
-                        $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
-                        $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
-                        if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
-                            $symbol->setMustInitNull(true);
-                        }
+                    switch($parameter['data-type']) {
+                        case 'object':
+                        case 'callable':
+                        case 'resource':
+                        case 'variable':
+                            $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
+                            break;
+                        default:
+                            $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
+                            $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
+                            if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
+                                $symbol->setMustInitNull(true);
+                            }
+                            break;
                     }
                 } else {
                     $symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
@@ -1410,10 +1416,16 @@ class ClassMethod
                     $dataType = 'variable';
                 }
 
-                if ($dataType == 'variable') {
-                    $params[] = '&' . $parameter['name'];
-                } else {
-                    $params[] = '&' . $parameter['name'] . '_param';
+                switch($dataType) {
+                    case 'object':
+                    case 'callable':
+                    case 'resource':
+                    case 'variable':
+                        $params[] = '&' . $parameter['name'];
+                        break;
+                    default:
+                        $params[] = '&' . $parameter['name'] . '_param';
+                        break;
                 }
 
                 if (isset($parameter['default'])) {
@@ -1447,17 +1459,24 @@ class ClassMethod
                         $dataType = 'variable';
                     }
 
-                    if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
-                        $name = $parameter['name'];
-                        if (!$localContext) {
-                            if ($writeDetector->detect($name, $this->_statements->getStatements())) {
-                                $parametersToSeparate[$name] = true;
+                    switch ($dataType) {
+                        case 'variable':
+                        case 'string':
+                        case 'array':
+                        case 'resource':
+                        case 'object':
+                        case 'callable':
+                            $name = $parameter['name'];
+                            if (!$localContext) {
+                                if ($writeDetector->detect($name, $this->_statements->getStatements())) {
+                                    $parametersToSeparate[$name] = true;
+                                }
+                            } else {
+                                if ($localContext->getNumberOfMutations($name) > 1) {
+                                    $parametersToSeparate[$name] = true;
+                                }
                             }
-                        } else {
-                            if ($localContext->getNumberOfMutations($name) > 1) {
-                                $parametersToSeparate[$name] = true;
-                            }
-                        }
+                            break;
                     }
                 }
             }
@@ -1491,13 +1510,19 @@ class ClassMethod
                     }
                 }
 
-                if ($dataType == 'variable' || $dataType == 'string' || $dataType == 'array') {
-                    if (isset($parametersToSeparate[$parameter['name']])) {
-                        $symbolTable->mustGrownStack(true);
-                        $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
-                    }
+                switch ($dataType) {
+                    case 'variable':
+                    case 'string':
+                    case 'array':
+                    case 'resource':
+                    case 'object':
+                    case 'callable':
+                        if (isset($parametersToSeparate[$parameter['name']])) {
+                            $symbolTable->mustGrownStack(true);
+                            $initCode .= "\t" . "ZEPHIR_SEPARATE_PARAM(" . $parameter['name'] . ");" . PHP_EOL;
+                        }
+                        break;
                 }
-
             }
 
             /**
@@ -1516,10 +1541,16 @@ class ClassMethod
                     $dataType = 'variable';
                 }
 
-                if ($dataType == 'variable') {
-                    $name = $parameter['name'];
-                } else {
-                    $name = $parameter['name'] . '_param';
+                switch($dataType) {
+                    case 'object':
+                    case 'callable':
+                    case 'resource':
+                    case 'variable':
+                        $name = $parameter['name'];
+                        break;
+                    default:
+                        $name = $parameter['name'] . '_param';
+                        break;
                 }
 
                 /**
@@ -1693,7 +1724,7 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-                if (($type == 'variable' || $type == 'string' || $type == 'array') && $variable->mustInitNull()) {
+                if (($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object') && $variable->mustInitNull()) {
                     if ($variable->isLocalOnly()) {
                         $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
                     } else {
@@ -1716,10 +1747,18 @@ class ClassMethod
                         } else {
                             $defaultValue = $variable->getDefaultInitValue();
                             if ($defaultValue !== null) {
-                                if ($type == 'variable' || $type == 'string' || $type == 'array') {
-                                    $groupVariables[] = $pointer . $variable->getName();
-                                } else {
-                                    $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
+                                switch($type) {
+                                    case 'variable':
+                                    case 'string':
+                                    case 'array':
+                                    case 'resource':
+                                    case 'callable':
+                                    case 'object':
+                                        $groupVariables[] = $pointer . $variable->getName();
+                                        break;
+                                    default:
+                                        $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
+                                        break;
                                 }
                             } else {
                                 if ($variable->mustInitNull() && $pointer) {
