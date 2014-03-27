@@ -102,4 +102,9 @@ class OoParams
 		return average;
 	}
 
+	public function setObject(object obj)
+	{
+	    return obj;
+	}
+
 }

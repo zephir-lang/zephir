@@ -273,6 +273,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'object' {
+            s->active_char += sizeof("object")-1;
+            token->opcode = XX_T_TYPE_OBJECT;
+            return 0;
+        }
+
+        'callable' {
+            s->active_char += sizeof("callable")-1;
+            token->opcode = XX_T_TYPE_CALLABLE;
+            return 0;
+        }
+
 		'if' {
 			s->active_char += sizeof("if")-1;
 			token->opcode = XX_T_IF;

@@ -94,6 +94,14 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
 
+	    case XX_T_OBJECT:
+            json_object_object_add(ret, "type", json_object_new_string("object"));
+            break;
+
+        case XX_T_CALLABLE:
+            json_object_object_add(ret, "type", json_object_new_string("callable"));
+            break;
+
 		default:
 			if (type == XX_T_TRUE) {
 				json_object_object_add(ret, "type", json_object_new_string("bool"));
@@ -479,6 +487,10 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("array");
 		case XX_TYPE_VAR:
 			return json_object_new_string("variable");
+        case XX_TYPE_CALLABLE:
+            return json_object_new_string("callable");
+        case XX_TYPE_OBJECT:
+            return json_object_new_string("object");
 		default:
 			fprintf(stderr, "unknown type?\n");
 	}
@@ -930,6 +942,12 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables, x
 		case XX_T_TYPE_VAR:
 			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
 			break;
+	    case XX_T_TYPE_CALLABLE:
+            json_object_object_add(ret, "data-type", json_object_new_string("callable"));
+            break;
+        case XX_T_TYPE_OBJECT:
+            json_object_object_add(ret, "data-type", json_object_new_string("object"));
+            break;
 		default:
 			fprintf(stderr, "err 2?\n");
 	}
@@ -1727,6 +1745,14 @@ xx_parameter_type(R) ::= TYPE_ARRAY . {
 
 xx_parameter_type(R) ::= TYPE_VAR . {
 	R = xx_ret_type(XX_TYPE_VAR);
+}
+
+xx_parameter_type(R) ::= TYPE_CALLABLE . {
+	R = xx_ret_type(XX_TYPE_CALLABLE);
+}
+
+xx_parameter_type(R) ::= TYPE_OBJECT . {
+	R = xx_ret_type(XX_TYPE_OBJECT);
 }
 
 xx_statement_list(R) ::= xx_statement_list(L) xx_statement(S) . {
