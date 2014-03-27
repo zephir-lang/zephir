@@ -22,6 +22,9 @@ PHP_METHOD(Test_Oo_OoParams, setEnabledDefault);
 PHP_METHOD(Test_Oo_OoParams, setListDefault);
 PHP_METHOD(Test_Oo_OoParams, setConstAge);
 PHP_METHOD(Test_Oo_OoParams, setConstAverage);
+PHP_METHOD(Test_Oo_OoParams, setObject);
+PHP_METHOD(Test_Oo_OoParams, setCallable);
+PHP_METHOD(Test_Oo_OoParams, setResource);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setage, 0, 0, 1)
 	ZEND_ARG_INFO(0, age)
@@ -91,6 +94,18 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setconstaverage, 0, 0, 1)
 	ZEND_ARG_INFO(0, average)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setobject, 0, 0, 1)
+	ZEND_ARG_INFO(0, obj)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setcallable, 0, 0, 1)
+	ZEND_ARG_INFO(0, obj)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setresource, 0, 0, 1)
+	ZEND_ARG_INFO(0, obj)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
 	PHP_ME(Test_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
@@ -111,5 +126,8 @@ ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
 	PHP_ME(Test_Oo_OoParams, setListDefault, arginfo_test_oo_ooparams_setlistdefault, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setConstAge, arginfo_test_oo_ooparams_setconstage, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setConstAverage, arginfo_test_oo_ooparams_setconstaverage, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setObject, arginfo_test_oo_ooparams_setobject, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setCallable, arginfo_test_oo_ooparams_setcallable, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Oo_OoParams, setResource, arginfo_test_oo_ooparams_setresource, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

@@ -140,6 +140,14 @@ class Variable
      */
     public function __construct($type, $name, $branch, $defaultInitValue = null)
     {
+        switch($type) {
+            case 'callable':
+            case 'object':
+            case 'resource':
+                $type = 'variable';
+                break;
+        }
+
         $this->_type = $type;
         $this->_name = $name;
         $this->_branch = $branch;

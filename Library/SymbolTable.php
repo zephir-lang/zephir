@@ -164,7 +164,6 @@ class SymbolTable
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
-
         /**
          * Validate that 'this' cannot be used in a static function
          */

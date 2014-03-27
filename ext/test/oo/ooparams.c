@@ -139,7 +139,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
-		if (Z_TYPE_P(age_param) != IS_LONG) {
+	if (Z_TYPE_P(age_param) != IS_LONG) {
 			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a long/integer") TSRMLS_CC);
 			RETURN_NULL();
 		}
@@ -158,7 +158,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
-		if (Z_TYPE_P(average_param) != IS_DOUBLE) {
+	if (Z_TYPE_P(average_param) != IS_DOUBLE) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be a double") TSRMLS_CC);
 		RETURN_NULL();
 	}
@@ -216,7 +216,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
 
-		if (Z_TYPE_P(someList_param) != IS_ARRAY) {
+	if (Z_TYPE_P(someList_param) != IS_ARRAY) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'someList' must be an array") TSRMLS_CC);
 		RETURN_NULL();
 	}
@@ -346,6 +346,42 @@ PHP_METHOD(Test_Oo_OoParams, setConstAverage) {
 
 
 	RETURN_DOUBLE(average);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setObject) {
+
+	zval *obj;
+
+	zephir_fetch_params(0, 1, 0, &obj);
+
+
+
+	RETURN_CCTORW(obj);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setCallable) {
+
+	zval *obj;
+
+	zephir_fetch_params(0, 1, 0, &obj);
+
+
+
+	RETURN_CCTORW(obj);
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setResource) {
+
+	zval *obj;
+
+	zephir_fetch_params(0, 1, 0, &obj);
+
+
+
+	RETURN_CCTORW(obj);
 
 }
 

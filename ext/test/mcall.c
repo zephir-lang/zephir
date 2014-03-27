@@ -619,7 +619,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
 	if (!start_param) {
 		start = 1;
 	} else {
-		if (Z_TYPE_P(start_param) != IS_BOOL) {
+	if (Z_TYPE_P(start_param) != IS_BOOL) {
 			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be a bool") TSRMLS_CC);
 			RETURN_NULL();
 		}
@@ -642,7 +642,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
 	if (!value_param) {
 		value = 0;
 	} else {
-		if (Z_TYPE_P(value_param) != IS_BOOL) {
+	if (Z_TYPE_P(value_param) != IS_BOOL) {
 			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be a bool") TSRMLS_CC);
 			RETURN_NULL();
 		}

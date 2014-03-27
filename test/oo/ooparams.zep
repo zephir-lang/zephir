@@ -102,4 +102,18 @@ class OoParams
 		return average;
 	}
 
+	public function setObject(object obj)
+	{
+	    return obj;
+	}
+
+	public function setCallable(callable obj)
+	{
+	    return obj;
+	}
+
+	public function setResource(resource obj)
+	{
+	    return obj;
+	}
 }

@@ -1,7 +1,7 @@
 
 namespace Test;
 
-class Resource
+class ResourceTest
 {
     public function testLetStatementSTDIN()
     {
