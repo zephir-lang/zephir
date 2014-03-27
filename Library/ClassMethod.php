@@ -815,6 +815,8 @@ class ClassMethod
     /**
      * Assigns a zval value to a static low-level type
      *
+     * @todo rewrite this to build ifs and throw from builders
+     *
      * @param array $parameter
      * @param CompilationContext $compilationContext
      * @return string
@@ -879,27 +881,15 @@ class ClassMethod
                 return $code;
 
             case 'array':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_ARRAY) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an array") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                //$code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
-                return $code;
             case 'object':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_OBJECT) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an object") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                return $code;
             case 'resource':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_RESOURCE) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be resource") TSRMLS_CC);' . PHP_EOL;
+                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_'.strtoupper($dataType).') {' . PHP_EOL;
+                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an '.$dataType.'") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
                 return $code;
+
             case 'callable':
                 $code  = "\tif (zephir_is_callable(" . $parameter['name'] . '_param)) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be callable") TSRMLS_CC);' . PHP_EOL;
