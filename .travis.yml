@@ -11,7 +11,7 @@ before_install:
  - ./unit-tests/ci/before_install.sh
 
 install:
- - composer --prefer-dist install
+ - composer --prefer-source install
 
 before_script:
  - mkdir -p build/coverage
