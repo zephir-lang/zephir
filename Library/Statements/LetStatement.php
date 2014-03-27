@@ -1933,8 +1933,6 @@ class LetStatement extends StatementAbstract
                     case 'array':
                     case 'string':
                     case 'variable':
-                    case 'callable':
-                    case 'object':
                         if ($variable == 'this') {
                             $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
                         } else {

@@ -107,4 +107,13 @@ class OoParams
 	    return obj;
 	}
 
+	public function setCallable(callable obj)
+	{
+	    return obj;
+	}
+
+	public function setResource(resource obj)
+	{
+	    return obj;
+	}
 }

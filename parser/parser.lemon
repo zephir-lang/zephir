@@ -98,6 +98,10 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
             json_object_object_add(ret, "type", json_object_new_string("object"));
             break;
 
+	    case XX_T_RESOURCE:
+            json_object_object_add(ret, "type", json_object_new_string("resource"));
+            break;
+
         case XX_T_CALLABLE:
             json_object_object_add(ret, "type", json_object_new_string("callable"));
             break;
@@ -489,6 +493,8 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("variable");
         case XX_TYPE_CALLABLE:
             return json_object_new_string("callable");
+        case XX_TYPE_RESOURCE:
+            return json_object_new_string("resource");
         case XX_TYPE_OBJECT:
             return json_object_new_string("object");
 		default:
@@ -944,6 +950,9 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables, x
 			break;
 	    case XX_T_TYPE_CALLABLE:
             json_object_object_add(ret, "data-type", json_object_new_string("callable"));
+            break;
+        case XX_T_TYPE_RESOURCE:
+            json_object_object_add(ret, "data-type", json_object_new_string("resource"));
             break;
         case XX_T_TYPE_OBJECT:
             json_object_object_add(ret, "data-type", json_object_new_string("object"));
@@ -1749,6 +1758,10 @@ xx_parameter_type(R) ::= TYPE_VAR . {
 
 xx_parameter_type(R) ::= TYPE_CALLABLE . {
 	R = xx_ret_type(XX_TYPE_CALLABLE);
+}
+
+xx_parameter_type(R) ::= TYPE_RESOURCE . {
+	R = xx_ret_type(XX_TYPE_RESOURCE);
 }
 
 xx_parameter_type(R) ::= TYPE_OBJECT . {

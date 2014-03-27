@@ -285,6 +285,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
             return 0;
         }
 
+        'resource' {
+            s->active_char += sizeof("resource")-1;
+            token->opcode = XX_T_TYPE_RESOURCE;
+            return 0;
+        }
+
 		'if' {
 			s->active_char += sizeof("if")-1;
 			token->opcode = XX_T_IF;

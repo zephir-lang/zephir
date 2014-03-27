@@ -51,7 +51,7 @@ class Branch
     const TYPE_EXTERNAL          = 6;
 
     const TYPE_UNKNOWN           = 7;
-    
+
     private $uniqueId;
 
     /**

@@ -23,7 +23,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testLetStatementAssign()
     {
-        $t = new \Test\Resource();
+        $t = new \Test\ResourceTest();
         $this->assertInternalType('resource', $t->testLetStatementSTDIN());
         $this->assertInternalType('resource', $t->testLetStatementSTDOUT());
         $this->assertInternalType('resource', $t->testLetStatementSTDERR());
@@ -31,13 +31,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testTypeOffResource()
     {
-        $t = new \Test\Resource();
+        $t = new \Test\ResourceTest();
         $this->assertEquals('resource', $t->testTypeOffResource());
     }
 
     public function testIsResource()
     {
-        $t = new \Test\Resource();
+        $t = new \Test\ResourceTest();
         $this->assertTrue($t->testIsResource());
     }
 }
