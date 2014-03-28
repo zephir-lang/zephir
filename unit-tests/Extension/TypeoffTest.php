@@ -60,4 +60,13 @@ class TypeoffTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Typeoff();
         $this->assertTrue($t->testClassPropertyAccess() == true);
     }
+
+    public function testCallable()
+    {
+        $t = new \Test\Typeoff();
+        $callback = function () {
+        };
+        $this->assertTrue($t->testCallableTypeOf($callback));
+        $this->assertFalse($t->testCallableTypeOf(true));
+    }
 }

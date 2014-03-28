@@ -190,3 +190,15 @@ PHP_METHOD(Test_Typeoff, testUnknownTypeOf) {
 
 }
 
+PHP_METHOD(Test_Typeoff, testCallableTypeOf) {
+
+	zval *cb;
+
+	zephir_fetch_params(0, 1, 0, &cb);
+
+
+
+	RETURN_BOOL(zephir_is_callable(cb TSRMLS_CC) == 1);
+
+}
+
