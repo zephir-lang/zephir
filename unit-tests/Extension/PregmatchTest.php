@@ -19,48 +19,49 @@
 
 namespace Extension;
 
-class PregmatchTest extends \PHPUnit_Framework_TestCase
+use Test\Pregmatch;
+
+class PregMatchTest extends \PHPUnit_Framework_TestCase
 {
     public function testPregMatch()
     {
-        $t = new \Test\Pregmatch();
+        $t = new Pregmatch();
 
-        $this->assertTrue($t->testWithoutReturnAndMatches() === 1);
-        $this->assertTrue($t->testWithoutReturns() == array('def'));
-        $this->assertTrue($t->testWithoutMatches() === 1);
-        $this->assertTrue($t->testPregMatchAll() === 1);
-        $this->assertTrue($t->testPregMatchFallback() === 1);
-
+        $this->assertSame(1, $t->testWithoutReturnAndMatches());
+        $this->assertSame(array('def'), $t->testWithoutReturns());
+        $this->assertSame(1, $t->testWithoutMatches());
+        $this->assertSame(1, $t->testPregMatchAll());
+        $this->assertSame(1, $t->testPregMatchFallback());
 
         // more tests from php5 ext/pcre
         $string = 'Hello, world. [*], this is \ a string';
         $match1 = null;
-        $this->assertTrue($t->testPregMatch3Params('/^[hH]ello,\s/', $string, $match1) === 1); //finds "Hello, "
-        $this->assertTrue($match1[0] == "Hello, ");
+        $this->assertSame(1, $t->testPregMatch3Params('/^[hH]ello,\s/', $string, $match1)); //finds "Hello, "
+        $this->assertSame("Hello, ", $match1[0]);
 
         $match2 = null;
-        $this->assertTrue($t->testPregMatch4Params('/l^o,\s\w{5}/', $string, $match2, PREG_OFFSET_CAPTURE) == false); // tries to find "lo, world" at start of string
-        $this->assertTrue(count($match2) == 0);
+        $this->assertSame(0, $t->testPregMatch4Params('/l^o,\s\w{5}/', $string, $match2, PREG_OFFSET_CAPTURE)); // tries to find "lo, world" at start of string
+        $this->assertCount(0, $match2);
 
         $match3 = null;
-        $this->assertTrue($t->testPregMatch3Params('/\[\*\],\s(.*)/', $string, $match3) === 1); //finds "[*], this is \ a string";
-        $this->assertTrue(count($match3) == 2);
+        $this->assertSame(1, $t->testPregMatch3Params('/\[\*\],\s(.*)/', $string, $match3)); //finds "[*], this is \ a string";
+        $this->assertCount(2, $match3);
 
         $match4 = null;
-        $this->assertTrue($t->testPregMatch5Params('@\w{4}\s\w{2}\s\\\(?:\s.*)@', $string, $match4, PREG_OFFSET_CAPTURE, 14) === 1); //finds "this is \ a string" (with non-capturing parentheses)
+        $this->assertSame(1, $t->testPregMatch5Params('@\w{4}\s\w{2}\s\\\(?:\s.*)@', $string, $match4, PREG_OFFSET_CAPTURE, 14)); //finds "this is \ a string" (with non-capturing parentheses)
         /**
          * @todo didn`t pass at local machine
          */
-        $this->assertTrue($match4[0][0] == 'this is \ a string');
+        $this->assertSame('this is \ a string', $match4[0][0]);
 
         $match5 = null;
-        $this->assertTrue($t->testPregMatch3Params('/hello world/', $string, $match5) == false); //tries to find "hello world" (should be Hello, world)
-        $this->assertTrue(count($match5) == 0);
+        $this->assertSame(0, $t->testPregMatch3Params('/hello world/', $string, $match5)); //tries to find "hello world" (should be Hello, world)
+        $this->assertCount(0, $match5);
 
         $string2 = "My\nName\nIs\nStrange";
         $match6 = null;
-        $this->assertTrue($t->testPregMatch3Params("/M(.*)/", $string2, $match6) === 1);
-        $this->assertTrue(count($match6) == 2);
+        $this->assertSame(1, $t->testPregMatch3Params("/M(.*)/", $string2, $match6));
+        $this->assertCount(2, $match6);
 
         $this->assertSame(1, $t->testPregMatch2Params("#asd#", "asd"));
     }
