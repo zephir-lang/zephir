@@ -216,7 +216,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
 
-	if (Z_TYPE_P(someList_param) != IS_ARRAY) {
+	if (Z_TYPE_P(someList) != IS_ARRAY) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'someList' must be an array") TSRMLS_CC);
 		RETURN_NULL();
 	}

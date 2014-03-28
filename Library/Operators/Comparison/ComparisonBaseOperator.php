@@ -122,6 +122,10 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE';
                             break;
 
+                        case 'callable':
+                            $condition = 'zephir_is_callable(' . $variableVariable->getName() . ' TSRMLS_CC) ' . $operator . ' 1';
+                            break;
+
                         default:
                             throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
                     }

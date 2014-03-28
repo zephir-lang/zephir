@@ -92,4 +92,8 @@ class Typeoff
 		return typeof u;
 	}
 
+	public function testCallableTypeOf(var cb)
+	{
+	    return typeof cb == "callable";
+	}
 }

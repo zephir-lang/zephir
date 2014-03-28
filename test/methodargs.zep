@@ -2,7 +2,7 @@ namespace Test;
 
 class MethodArgs
 {
-    protected a;
+    public a;
 
     public function setCallable(callable a)
     {
@@ -12,5 +12,15 @@ class MethodArgs
     public function setObject(object a)
     {
         let this->a = a;
+    }
+
+    public function setCallableStrict(callable! a)
+    {
+    	let this->a = a;
+    }
+
+    public function setObjectStrict(object! a)
+    {
+    	let this->a = a;
     }
 }
