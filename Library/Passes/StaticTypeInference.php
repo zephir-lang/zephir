@@ -167,6 +167,10 @@ class StaticTypeInference
                 $this->_variables[$variable] = 'undefined';
                 break;
 
+            case 'array':
+                $this->_variables[$variable] = 'undefined';
+                break;
+
             default:
                 echo 'StaticTypeInference=', $currentType, ' ', $type, PHP_EOL;
                 break;
@@ -182,7 +186,7 @@ class StaticTypeInference
     {
         $pass = false;
         foreach ($this->_variables as $variable => $type) {
-            if ($type == 'variable' || $type == 'undefined' || $type == 'string' || $type == 'array' || $type == 'null' || $type == 'numeric') {
+            if ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'null' || $type == 'numeric') {
                 unset($this->_variables[$variable]);
             } else {
                 $pass = true;
@@ -214,12 +218,14 @@ class StaticTypeInference
     {
         foreach ($statement['assignments'] as $assigment) {
             switch ($assigment['assign-type']) {
+
                 case 'variable':
                     $type = $this->passExpression($assigment['expr']);
                     if (is_string($type)) {
                         $this->markVariable($assigment['variable'], $type);
                     }
                     break;
+
                 case 'object-property':
                 case 'array-index':
                 case 'object-property-array-index':
@@ -227,9 +233,11 @@ class StaticTypeInference
                 case 'static-property-access':
                     $this->markVariable($assigment['variable'], 'variable');
                     break;
+
                 case 'variable-append':
                     $this->markVariable($assigment['variable'], 'variable');
                     break;
+
                 default:
                     //echo $assigment['assign-type'];
             }
@@ -389,7 +397,7 @@ class StaticTypeInference
             case 'fcall':
             case 'scall':
                 $this->passCall($expression);
-                return 'variable';
+                return 'undefined';
 
             case 'array':
                 $this->passArray($expression);
@@ -400,7 +408,7 @@ class StaticTypeInference
 
             case 'new':
                 $this->passNew($expression);
-                return 'variable';
+                return 'undefined';
 
             case 'property-access':
             case 'property-dynamic-access':
@@ -408,7 +416,7 @@ class StaticTypeInference
             case 'array-access':
             case 'static-property-access':
                 $this->passExpression($expression['left']);
-                return 'variable';
+                return 'undefined';
 
             case 'fetch':
                 $this->markVariable($expression['left']['value'], 'variable');
@@ -453,7 +461,7 @@ class StaticTypeInference
                         return $right;
                     }
                 }*/
-                return 'variable';
+                return 'undefined';
 
             default:
                 echo 'STI=', $expression['type'], PHP_EOL;
