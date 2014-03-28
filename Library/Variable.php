@@ -536,9 +536,8 @@ class Variable
      *
      * @param boolean $initialized
      * @param CompilationContext $compilationContext
-     * @param array $expression
      */
-    public function setIsInitialized($initialized, CompilationContext $compilationContext, array $expression)
+    public function setIsInitialized($initialized, CompilationContext $compilationContext)
     {
         if ($initialized) {
             if ($compilationContext->branchManager) {

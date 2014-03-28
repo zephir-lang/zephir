@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Pregmatch) {
@@ -203,6 +204,32 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();
 	RETURN_MM();
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/287
+ */
+PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
+	zval *str_param = NULL, *pattern_param = NULL, *matches;
+	zval *str = NULL, *pattern = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str_param, &pattern_param);
+
+	zephir_get_strval(str, str_param);
+	zephir_get_strval(pattern, pattern_param);
+
+
+	ZEPHIR_INIT_VAR(matches);
+	Z_SET_ISREF_P(matches);
+	ZEPHIR_CALL_FUNCTION(NULL, "preg_match", &_0, pattern, str, matches);
+	Z_UNSET_ISREF_P(matches);
+	zephir_check_call_status();
+	RETURN_CCTOR(matches);
 
 }
 

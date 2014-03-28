@@ -12,6 +12,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch2Params);
 PHP_METHOD(Test_Pregmatch, testPregMatch3Params);
 PHP_METHOD(Test_Pregmatch, testPregMatch4Params);
 PHP_METHOD(Test_Pregmatch, testPregMatch5Params);
+PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch2params, 0, 0, 2)
 	ZEND_ARG_INFO(0, pattern)
@@ -39,6 +40,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatch5params, 0, 0, 5)
 	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_pregmatch_testpregmatchsavematches, 0, 0, 2)
+	ZEND_ARG_INFO(0, str)
+	ZEND_ARG_INFO(0, pattern)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_pregmatch_method_entry) {
 	PHP_ME(Test_Pregmatch, testWithoutReturnAndMatches, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testWithoutReturns, NULL, ZEND_ACC_PUBLIC)
@@ -49,5 +55,6 @@ ZEPHIR_INIT_FUNCS(test_pregmatch_method_entry) {
 	PHP_ME(Test_Pregmatch, testPregMatch3Params, arginfo_test_pregmatch_testpregmatch3params, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testPregMatch4Params, arginfo_test_pregmatch_testpregmatch4params, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testPregMatch5Params, arginfo_test_pregmatch_testpregmatch5params, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Pregmatch, testPregMatchSaveMatches, arginfo_test_pregmatch_testpregmatchsavematches, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };
