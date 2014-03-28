@@ -2178,6 +2178,7 @@ class LetStatement extends StatementAbstract
         }
 
         if ($resolvedIndex->getType() == 'variable') {
+
             $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
             switch ($indexVariable->getType()) {
                 case 'string':
@@ -2199,52 +2200,72 @@ class LetStatement extends StatementAbstract
         }
 
         switch ($resolvedIndex->getType()) {
+
             case 'string':
+                $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+                $codePrinter->output('ZVAL_STRING(' . $indexVariable->getName() . ', "' . $resolvedIndex->getCode() . '", 1);');
+                break;
+
+        }
+
+        switch ($indexVariable->getType()) {
+
+            case 'int':
                 $codePrinter->output('//missing');
                 break;
+
             case 'variable':
-                switch ($indexVariable->getType()) {
-                    case 'int':
-                        $codePrinter->output('//missing');
+            case 'string':
+
+                switch ($resolvedExpr->getType()) {
+
+                    case 'null':
+                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
                         break;
-                    case 'variable':
-                    case 'string':
-                        switch ($resolvedExpr->getType()) {
-                            case 'null':
-                                $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
-                                break;
-                            case 'bool':
-                                if ($resolvedExpr->getBooleanCode() == '1') {
-                                    $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
-                                } else {
-                                    $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-                                }
-                                break;
-                            case 'variable':
-                                $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['index-expr']);
-                                switch ($variableExpr->getType()) {
-                                    case 'bool':
-                                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                                        $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
-                                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
-                                        break;
-                                    case 'variable':
-                                    case 'string':
-                                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
-                                        if ($variableExpr->isTemporal()) {
-                                            $variableExpr->setIdle(true);
-                                        }
-                                        break;
-                                    default:
-                                        throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
-                                }
-                                break;
+
+                    case 'bool':
+                        if ($resolvedExpr->getBooleanCode() == '1') {
+                            $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+                        } else {
+                            $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
                         }
                         break;
+
+                    case 'string':
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        break;
+
+                    case 'variable':
+                        $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['index-expr']);
+                        switch ($variableExpr->getType()) {
+
+                            case 'bool':
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                                $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                                $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                                break;
+
+                            case 'variable':
+                            case 'string':
+                                $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
+                                if ($variableExpr->isTemporal()) {
+                                    $variableExpr->setIdle(true);
+                                }
+                                break;
+
+                            default:
+                                throw new CompilerException("Cannot update variable type: " . $variableExpr->getType(), $statement);
+
+                        }
+                        break;
+
                     default:
                         throw new CompilerException("Variable index: " . $indexVariable->getType() . " cannot be updated into array property", $statement);
                 }
                 break;
+
             default:
                 throw new CompilerException("Index: " . $resolvedIndex->getType() . " cannot be updated into array property", $statement);
         }
@@ -2471,6 +2492,150 @@ class LetStatement extends StatementAbstract
     }
 
     /**
+     * Compiles ClassName::foo[index] = {expr}
+     *
+     * @param                    $className
+     * @param                    $property
+     * @param Variable           $symbolVariable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     *
+     * @throws CompilerException
+     * @internal param string $variable
+     */
+    public function assignStaticPropertyArrayIndex($className, $property, Variable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    {
+        $compiler = &$compilationContext->compiler;
+        if ($className != 'self' && $className != 'parent') {
+            $className = $compilationContext->getFullName($className);
+            if ($compiler->isClass($className)) {
+                $classDefinition = $compiler->getClassDefinition($className);
+            } else {
+                if ($compiler->isInternalClass($className)) {
+                    $classDefinition = $compiler->getInternalClassDefinition($className);
+                } else {
+                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+                }
+            }
+        } else {
+            if ($className == 'self') {
+                $classDefinition = $compilationContext->classDefinition;
+            } else {
+                if ($className == 'parent') {
+                    $classDefinition = $compilationContext->classDefinition;
+                    $extendsClass = $classDefinition->getExtendsClass();
+                    if (!$extendsClass) {
+                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $statement);
+                    } else {
+                        $classDefinition = $classDefinition->getExtendsClassDefinition();
+                    }
+                }
+            }
+        }
+
+        if (!$classDefinition->hasProperty($property)) {
+            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+        }
+
+        /** @var $propertyDefinition ClassProperty */
+        $propertyDefinition = $classDefinition->getProperty($property);
+        if (!$propertyDefinition->isStatic()) {
+            throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $statement);
+        }
+
+        if ($propertyDefinition->isPrivate()) {
+            if ($classDefinition != $compilationContext->classDefinition) {
+                throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $statement);
+            }
+        }
+
+        $codePrinter = $compilationContext->codePrinter;
+
+        $compilationContext->headersManager->add('kernel/object');
+        $classEntry = $classDefinition->getClassEntry();
+
+        switch ($resolvedExpr->getType()) {
+
+            case 'null':
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+                break;
+
+            case 'int':
+            case 'uint':
+            case 'long':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                break;
+
+            case 'string':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                break;
+
+            case 'bool':
+                if ($resolvedExpr->getBooleanCode() == '1') {
+                    $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+                } else {
+                    $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                }
+                break;
+
+            case 'empty-array':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                break;
+
+            case 'variable':
+                $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+                switch ($variableVariable->getType()) {
+
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'char':
+                    case 'uchar':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+                        if ($compilationContext->insideCycle) {
+                            $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
+                            $propertyCache->setMustInitNull(true);
+                            $propertyCache->setReusable(false);
+                            $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
+                        } else {
+                            $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        }
+                        break;
+
+                    case 'bool':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        break;
+
+                    case 'string':
+                    case 'variable':
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
+                        if ($variableVariable->isTemporal()) {
+                            $variableVariable->setIdle(true);
+                        }
+                        break;
+
+                    default:
+                        throw new CompilerException("Unknown type " . $variableVariable->getType(), $statement);
+                }
+                break;
+
+            default:
+                throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+        }
+    }
+
+    /**
      * Compiles {var} = {expr}
      *
      * @param string $variable
@@ -2595,7 +2760,7 @@ class LetStatement extends StatementAbstract
                     break;
 
                 case 'static-property-array-index':
-                    /* @todo, implement this */
+                    $this->assignStaticPropertyArrayIndex($variable, $assignment['property'], $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'array-index':
