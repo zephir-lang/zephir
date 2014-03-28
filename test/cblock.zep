@@ -1,6 +1,6 @@
 /**
  * CBLOCK tests
- /* asfas
+ * asfas
  */
 
 %{
