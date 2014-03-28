@@ -39,6 +39,7 @@ zend_class_entry *test_builtin_intmethods_ce;
 zend_class_entry *test_builtin_stringmethods_ce;
 zend_class_entry *test_cast_ce;
 zend_class_entry *test_cblock_ce;
+zend_class_entry *test_compare_ce;
 zend_class_entry *test_concat_ce;
 zend_class_entry *test_constants_ce;
 zend_class_entry *test_constantsinterface_ce;
@@ -135,6 +136,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_BuiltIn_StringMethods);
 	ZEPHIR_INIT(Test_Cast);
 	ZEPHIR_INIT(Test_Cblock);
+	ZEPHIR_INIT(Test_Compare);
 	ZEPHIR_INIT(Test_Concat);
 	ZEPHIR_INIT(Test_Constants);
 	ZEPHIR_INIT(Test_ConstantsInterface);

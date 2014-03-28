@@ -219,6 +219,7 @@ class ComparisonBaseOperator extends BaseOperator
             case 'int':
             case 'uint':
             case 'long':
+            case 'double':
             case 'ulong':
             case 'int':
             case 'char':
@@ -384,6 +385,7 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
+                            case 'double':
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 
                             case 'bool':

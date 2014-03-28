@@ -15,6 +15,7 @@
 #include "test/builtin/stringmethods.h"
 #include "test/cast.h"
 #include "test/cblock.h"
+#include "test/compare.h"
 #include "test/concat.h"
 #include "test/constants.h"
 #include "test/constantsinterface.h"
