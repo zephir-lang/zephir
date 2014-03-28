@@ -64,4 +64,13 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(1, $t->testPregMatch2Params("#asd#", "asd"));
     }
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/287
+     */
+    public function testCollectMatches()
+    {
+        $t = new Pregmatch;
+        $this->assertSame(array('asd'), $t->testPregMatchSaveMatches("asd", "#asd#"));
+    }
 }

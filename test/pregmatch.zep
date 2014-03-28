@@ -90,4 +90,15 @@ class Pregmatch
 		return preg_match(pattern, subject, matches, flags, offset);
 	}
 
+    /**
+     * @link https://github.com/phalcon/zephir/issues/287
+     */
+    public function testPregMatchSaveMatches(string str, string pattern)
+    {
+        var matches;
+        preg_match(pattern, str, matches);
+
+        return matches;
+    }
+
 }
