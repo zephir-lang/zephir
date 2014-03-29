@@ -39,5 +39,6 @@ class Ternary
     {
         var s = 23;
         let s = 1===1 ? 3 : 10;
+        return s;
     }
 }

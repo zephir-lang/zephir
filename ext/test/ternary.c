@@ -144,7 +144,7 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 		ZEPHIR_INIT_BNVAR(s);
 		ZVAL_LONG(s, 10);
 	}
-	ZEPHIR_MM_RESTORE();
+	RETURN_CCTOR(s);
 
 }
 
