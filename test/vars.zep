@@ -13,6 +13,11 @@ class Vars
         var_dump(a);
     }
 
+    public function testVarDump2(ret)
+    {
+        var_dump(ret == 1);
+    }
+
     public function testVarExport()
     {
         var a, ar, ret;
@@ -56,4 +61,5 @@ class Vars
         var_dump(count(testVar));
         var_export(count(testVar));
     }
+
 }

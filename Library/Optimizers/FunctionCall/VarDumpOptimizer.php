@@ -26,6 +26,7 @@ use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Statements\LetStatement;
 
 /**
  * VarDumpOptimizer
@@ -47,14 +48,29 @@ class VarDumpOptimizer extends OptimizerAbstract
         }
 
         $context->headersManager->add('kernel/variables');
-        $resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
 
         foreach ($resolvedParams as $resolvedParam) {
-            if (substr($resolvedParam, 0, 1) == '&') {
-                $context->codePrinter->output('zephir_var_dump(&(' . $resolvedParam . ') TSRMLS_CC);');
-            } else {
-                $context->codePrinter->output('zephir_var_dump(&' . $resolvedParam . ' TSRMLS_CC);');
-            }
+
+            $tempVariable = $context->symbolTable->addTemp('variable', $context);
+
+            $statement = new LetStatement(array(
+                'type' => 'let',
+                'assignments' => array(
+                    array(
+                        'assign-type' => 'variable',
+                        'variable' => $tempVariable->getName(),
+                        'operator' => 'assign',
+                        'expr' => array(
+                            'type'  => $resolvedParam->getType(),
+                            'value' => $resolvedParam->getCode()
+                        )
+                    )
+                )
+            ));
+            $statement->compile($context);
+
+            $context->codePrinter->output('zephir_var_dump(&' . $tempVariable->getName() . ' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

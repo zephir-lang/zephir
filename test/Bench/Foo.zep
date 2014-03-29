@@ -10,7 +10,6 @@ class Foo
 	public static function empty_for_in_range(var n)
 	{
 	    var i;
-
         for i in range(1, n) {
 
         }
@@ -19,7 +18,6 @@ class Foo
 	public static function read_static(var n)
 	{
 	    var x, i;
-
         for i in range(1, n) {
 			let x = self::a;
 		}
@@ -28,48 +26,50 @@ class Foo
 	public static function write_static(var n)
 	{
         var i;
-
 	    for i in range(1, n) {
 			let self::a = 0;
 		}
 	}
 
-	public static function isset_static(var n) {
+	public static function isset_static(var n)
+	{
         var x, i;
-
 		for i in range(1, n) {
 			let x = isset(self::a);
 		}
 	}
 
-	public static function empty_static(var n) {
+	public static function empty_static(var n)
+	{
 	    var x, i;
-
 		for i in range(1, n) {
 			let x = empty(self::a);
 		}
 	}
 
-	public static function f() {
+	public static function f()
+	{
 	}
 
-	public static function call_static(var n) {
+	public static function call_static(var n)
+	{
 	    var i;
-
-		for i in range(1, n) {
+		for i in range(1, n)
+		{
 			self::f();
 		}
 	}
 
-	public function read_prop(var n) {
+	public function read_prop(var n)
+	{
 	    var x, i;
-
 		for i in range(1, n) {
 			let x = this->b;
 		}
 	}
 
-	public function write_prop(var n) {
+	public function write_prop(var n)
+	{
 	    var i;
 
 		for i in range(1, n) {
@@ -77,9 +77,9 @@ class Foo
 		}
 	}
 
-	public function assign_add_prop(var n) {
+	public function assign_add_prop(var n)
+	{
 	    var i;
-
 		for i in range(1, n) {
 			let this->b += 2;
 		}
@@ -118,7 +118,8 @@ class Foo
 		}
 	}
 
-	public function isset_prop($n) {
+	public function isset_prop($n)
+	{
 	    var i, x;
 
 		for i in range(1, n) {
@@ -126,7 +127,8 @@ class Foo
 		}
 	}
 
-	public function empty_prop($n) {
+	public function empty_prop($n)
+	{
 	    var i, x;
 
 		for i in range(1, n) {
@@ -134,19 +136,22 @@ class Foo
 		}
 	}
 
-	public function g() {}
+	public function g()
+	{
 
-	public function call($n) {
+	}
+
+	public function call($n)
+	{
 	    var i;
-
 		for i in range(1, n) {
 			this->g();
 		}
 	}
 
-	public function read_const($n) {
+	public function read_const($n)
+	{
 	    var i, x;
-
 		for i in range(1, n) {
 			let x = this::TEST;
 		}
