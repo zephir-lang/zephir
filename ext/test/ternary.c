@@ -101,7 +101,6 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 		ZEPHIR_INIT_BNVAR(_0);
 		ZVAL_LONG(_0, (1 + 100));
 	} else {
-		ZEPHIR_INIT_BNVAR(_0);
 		ZEPHIR_CALL_METHOD(&_1, a, "y",  NULL);
 		zephir_check_call_status();
 		if (zephir_is_true(_1)) {
@@ -124,6 +123,28 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
 
 
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/297
+ */
+PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
+
+	zval *s;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(s);
+	ZVAL_LONG(s, 23);
+
+	if (1 == 1) {
+		ZEPHIR_INIT_VAR(s);
+		ZVAL_LONG(s, 3);
+	} else {
+		ZEPHIR_INIT_BNVAR(s);
+		ZVAL_LONG(s, 10);
+	}
+	ZEPHIR_MM_RESTORE();
 
 }
 
