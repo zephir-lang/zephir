@@ -56,7 +56,7 @@ class BaseOperator
      * @param CompilationContext $compilationContext
      * @param array $expression
      */
-    public function getExpected(CompilationContext $compilationContext, $expression)
+    public function getExpected(CompilationContext $compilationContext, $expression, $init = true)
     {
         $isExpecting = $this->_expecting;
         $symbolVariable = $this->_expectingVariable;
@@ -64,6 +64,9 @@ class BaseOperator
         if ($isExpecting) {
             if (is_object($symbolVariable)) {
                 if ($symbolVariable->getType() == 'variable') {
+                    if (!$init) {
+                        return $symbolVariable;
+                    }
                     $symbolVariable->initVariant($compilationContext);
                 } else {
                     if (!$this->_readOnly) {

@@ -24,9 +24,10 @@ class TernaryTest extends \PHPUnit_Framework_TestCase
     public function testTernary()
     {
         $t = new \Test\Ternary();
-        $this->assertTrue($t->testTernary1() === 101);
-        $this->assertTrue($t->testTernary2(true) === "foo");
-        $this->assertTrue($t->testTernary2(false) === "bar");
+        $this->assertEquals(101, $t->testTernary1());
+        $this->assertEquals('foo', $t->testTernary2(true));
+        $this->assertEquals('bar', $t->testTernary2(false));
+        $this->assertEquals(3, $t->testTernaryAfterLetVariable());
     }
 
     /*public function testComplex()

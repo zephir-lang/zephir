@@ -31,4 +31,14 @@ class Ternary
 	{
 		//return gettype(typeof a == "resource" ? "unknown": false);
 	}
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/297
+     */
+    public function testTernaryAfterLetVariable()
+    {
+        var s = 23;
+        let s = 1===1 ? 3 : 10;
+        return s;
+    }
 }

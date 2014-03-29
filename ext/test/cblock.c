@@ -34,7 +34,7 @@ static long fibonacci(long n) {
 
 /**
  * CBLOCK tests
- /* asfas
+ * asfas
  */
 ZEPHIR_INIT_CLASS(Test_Cblock) {
 
