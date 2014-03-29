@@ -23,4 +23,9 @@ class MethodArgs
     {
     	let this->a = a;
     }
+
+    public function setResourceStrict(resource! a)
+    {
+        let this->a = a;
+    }
 }
