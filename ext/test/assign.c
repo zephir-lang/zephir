@@ -716,6 +716,70 @@ PHP_METHOD(Test_Assign, testPropertyArray4) {
 
 }
 
+PHP_METHOD(Test_Assign, testPropertyArray5) {
+
+	zval *index_param = NULL, *_0, *_1, *_2, *_3, *_4;
+	zval *index = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &index_param);
+
+	zephir_get_strval(index, index_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("myArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 1);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, _1 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_DOUBLE(_2, 1.5);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, _2 TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_LONG(_3, 'A');
+	zephir_update_property_array(this_ptr, SL("myArray"), index, _3 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_4);
+	array_init(_4);
+	zephir_update_property_array(this_ptr, SL("myArray"), index, _4 TSRMLS_CC);
+	RETURN_MM_MEMBER(this_ptr, "myArray");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyArray6) {
+
+	zval *_0, *_1, *_2, *_3, *_4, *_5;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("myArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 1);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &_1 TSRMLS_CC, SL("ll"), 2, 0, 1);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_DOUBLE(_2, 1.5);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &_2 TSRMLS_CC, SL("ll"), 2, 0, 1);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_null) TSRMLS_CC, SL("ll"), 2, 0, 1);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("ll"), 2, 0, 1);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("ll"), 2, 0, 1);
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_LONG(_3, 'A');
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &_3 TSRMLS_CC, SL("ll"), 2, 0, 1);
+	ZEPHIR_INIT_VAR(_4);
+	ZVAL_STRING(_4, "hello", 1);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &_4 TSRMLS_CC, SL("ll"), 2, 0, 1);
+	ZEPHIR_INIT_VAR(_5);
+	array_init(_5);
+	zephir_update_property_array_multi(this_ptr, SL("myArray"), &_5 TSRMLS_CC, SL("ll"), 2, 0, 1);
+	RETURN_MM_MEMBER(this_ptr, "myArray");
+
+}
+
 PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 
 	zval *index, *value, *a;

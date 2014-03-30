@@ -310,7 +310,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
     }
 
     /**
-     * Compiles self::y[z] = foo
+     * Compiles x->y[z] = foo
      *
      * @param string $variable
      * @param ZephirVariable $symbolVariable

@@ -56,9 +56,13 @@ class ArrayIndex
             case 'int':
             case 'uint':
             case 'long':
-            case 'ulong':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
                 $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                break;
+
+            case 'char':
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
+                $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
                 break;
 
             case 'double':

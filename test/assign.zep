@@ -387,6 +387,7 @@ class Assign
 		let this->myArray[] = c;
 		let this->myArray[] = d;
 		let this->myArray[] = e;
+		let this->myArray[] = f;
 		return this->myArray;
 	}
 
@@ -399,6 +400,7 @@ class Assign
 		let this->myArray[0] = false;
 		let this->myArray[0] = true;
 		let this->myArray[0] = 'A';
+		let this->myArray[0] = [];
 		return this->myArray;
 	}
 
@@ -412,6 +414,33 @@ class Assign
 		let this->myArray[index] = true;
 		let this->myArray[index] = 'A';
 		let this->myArray[index] = [];
+		return this->myArray;
+	}
+
+	public function testPropertyArray5(string index)
+	{
+		let this->myArray = [];
+		let this->myArray[index] = 1;
+		let this->myArray[index] = 1.5;
+		let this->myArray[index] = null;
+		let this->myArray[index] = false;
+		let this->myArray[index] = true;
+		let this->myArray[index] = 'A';
+		let this->myArray[index] = [];
+		return this->myArray;
+	}
+
+	public function testPropertyArray6()
+	{
+		let this->myArray = [];
+		let this->myArray[0][1] = 1;
+		let this->myArray[0][1] = 1.5;
+		let this->myArray[0][1] = null;
+		let this->myArray[0][1] = false;
+		let this->myArray[0][1] = true;
+		let this->myArray[0][1] = 'A';
+		let this->myArray[0][1] = "hello";
+		let this->myArray[0][1] = [];
 		return this->myArray;
 	}
 
