@@ -69,6 +69,14 @@ class ClassMethod
 
     protected $_void = false;
 
+    protected $isPublic;
+
+    protected $isStatic = false;
+
+    protected $isFinal = false;
+
+    protected $isAbstract = false;
+
     /**
      * @var array|null
      */
@@ -183,6 +191,7 @@ class ClassMethod
         }
 
         if (is_array($visibility)) {
+            $this->isAbstract = in_array('abstract', $visibility);
             $this->isStatic = in_array('static', $visibility);
             $this->isFinal = in_array('final', $visibility);
             $this->isPublic = in_array('public', $visibility);
@@ -474,6 +483,9 @@ class ClassMethod
                 case 'final':
                     $modifiers['ZEND_ACC_FINAL'] = $visibility;
                     break;
+                case 'abstract':
+                    $modifiers['ZEND_ACC_ABSTRACT'] = $visibility;
+                    break;
                 case 'inline':
                     break;
                 case 'scoped':
@@ -482,6 +494,7 @@ class ClassMethod
                     throw new Exception('Unknown modifier "' . $visibility . '"');
             }
         }
+
         if ($this->_name == '__construct') {
             $modifiers['ZEND_ACC_CTOR'] = true;
         } else {
@@ -489,6 +502,7 @@ class ClassMethod
                 $modifiers['ZEND_ACC_DTOR'] = true;
             }
         }
+
         return join('|', array_keys($modifiers));
     }
 
@@ -541,8 +555,6 @@ class ClassMethod
         return false;
     }
 
-    protected $isPublic;
-
      /**
      * Checks if the method is public
      *
@@ -553,7 +565,16 @@ class ClassMethod
         return $this->isPublic;
     }
 
-    protected $isStatic = false;
+
+    /**
+     * Checks is abstract method?
+     *
+     * @return bool
+     */
+    public function isAbstract()
+    {
+        return $this->isAbstract;
+    }
 
     /**
      * Checks if the method is static
@@ -564,8 +585,6 @@ class ClassMethod
     {
         return $this->isStatic;
     }
-
-    protected $isFinal = false;
 
     /**
      * Checks if the method is final
