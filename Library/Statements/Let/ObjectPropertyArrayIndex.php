@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyArrayIndex
 {
-
-	/**
+    /**
      * Compiles x->y[z] = {expr} (single offset assignment)
      *
      * @param string $variable

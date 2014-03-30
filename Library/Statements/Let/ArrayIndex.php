@@ -358,6 +358,5 @@ class ArrayIndex
         } else {
             $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
         }
-
     }
 }
