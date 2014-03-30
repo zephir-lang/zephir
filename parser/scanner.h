@@ -33,9 +33,6 @@
 #define XX_T_IDENTIFIER 307
 #define XX_T_ARRAY 308
 #define XX_T_CHAR 309
-#define XX_T_CALLABLE 310
-#define XX_T_OBJECT 311
-#define XX_T_RESOURCE 312
 
 #define XX_T_TYPE_INTEGER 320
 #define XX_T_TYPE_DOUBLE 321

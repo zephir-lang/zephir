@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class ObjectProperty
 {
-
-	/**
+    /**
      * Compiles foo->x = {expr}
      *
      * @param string $variable

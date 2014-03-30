@@ -56,4 +56,15 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception');
         $t->setObjectStrict(true);
     }
+
+    public function testResource()
+    {
+        $t = new MethodArgs;
+        $t->setResourceStrict(STDIN);
+
+        $this->assertSame(STDIN, $t->a);
+
+        $this->setExpectedException('\Exception');
+        $t->setResourceStrict(true);
+    }
 }

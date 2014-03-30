@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class Decr
 {
-
-	/**
+    /**
      * Compiles x--
      *
      * @param string $variable

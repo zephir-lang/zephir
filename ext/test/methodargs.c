@@ -87,3 +87,20 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 
 }
 
+PHP_METHOD(Test_MethodArgs, setResourceStrict) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+	if (Z_TYPE_P(a) != IS_RESOURCE) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be an resource") TSRMLS_CC);
+		RETURN_NULL();
+	}
+
+
+
+	zephir_update_property_this(this_ptr, SL("a"), a TSRMLS_CC);
+
+}
+

@@ -513,15 +513,6 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_CHAR:
 				xx_parse_with_token(xx_parser, XX_T_CHAR, XX_CHAR, &token, parser_status);
 				break;
-			case XX_T_OBJECT:
-				xx_parse_with_token(xx_parser, XX_T_OBJECT, XX_OBJECT, &token, parser_status);
-				break;
-			case XX_T_RESOURCE:
-				xx_parse_with_token(xx_parser, XX_T_RESOURCE, XX_RESOURCE, &token, parser_status);
-				break;
-			case XX_T_CALLABLE:
-				xx_parse_with_token(xx_parser, XX_T_CALLABLE, XX_CALLABLE, &token, parser_status);
-				break;
 			case XX_T_IDENTIFIER:
 				xx_parse_with_token(xx_parser, XX_T_IDENTIFIER, XX_IDENTIFIER, &token, parser_status);
 				break;

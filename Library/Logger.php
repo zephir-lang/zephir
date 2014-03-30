@@ -97,7 +97,7 @@ class Logger
                 $warning .= PHP_EOL;
             }
 
-            echo Color::warning($warning);
+            //echo Color::warning($warning);
 
             return true;
         }
