@@ -145,6 +145,69 @@ class ObjectProperty
                 $tempVariable->setIdle(true);
                 break;
 
+            case 'char':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+
+                switch ($statement['operator']) {
+
+                    case 'assign':
+                        $tempVariable->initNonReferenced($compilationContext);
+                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getBooleanCode() . '\');');
+                        break;
+
+                    default:
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+                }
+
+                if ($variable == 'this') {
+                    $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                } else {
+                    $codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                }
+                $tempVariable->setIdle(true);
+                break;
+
+            case 'double':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                switch ($statement['operator']) {
+                    case 'mul-assign':
+                    case 'sub-assign':
+                    case 'add-assign':
+
+                        switch($statement['operator']) {
+                            case 'mul-assign':
+                                $functionName = 'ZEPHIR_MUL_ASSIGN';
+                                break;
+                            case 'sub-assign':
+                                $functionName = 'ZEPHIR_SUB_ASSIGN';
+                                break;
+                            case 'add-assign':
+                                $functionName = 'ZEPHIR_ADD_ASSIGN';
+                                break;
+                        }
+
+                        $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $codePrinter->output('ZVAL_DOUBLE(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $codePrinter->output($functionName . '(' . $tempVariable->getName() . ', ' . $resolvedVariable->getName() . ')');
+                        break;
+
+                    case 'assign':
+                        $tempVariable->initNonReferenced($compilationContext);
+                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        break;
+
+                    default:
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for object property: " . $tempVariable->getType(), $statement);
+                }
+
+                if ($variable == 'this') {
+                    $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                } else {
+                    $codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                }
+                $tempVariable->setIdle(true);
+                break;
+
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 

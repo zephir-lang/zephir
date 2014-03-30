@@ -48,7 +48,7 @@ class StaticTypeInference
         foreach ($statement['variables'] as $variable) {
             if (!isset($this->_variables[$variable['variable']])) {
                 if (isset($variable['expr']['type'])) {
-                    if ($variable['expr']['type'] == 'empty-array') {
+                    if ($variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
                         $this->markVariable($variable['variable'], 'array');
                     } else {
                         $this->markVariable($variable['variable'], $variable['expr']['type']);

@@ -9,7 +9,9 @@ class Assign
 {
 	protected testVar {get};
 
-	protected myArray;
+	protected myArray {get};
+
+	protected static testVarStatic;
 
 	public function testAssign1()
 	{
@@ -288,6 +290,37 @@ class Assign
 		return a;
 	}
 
+	public function testPropertyAssign1()
+	{
+		let this->testVar = 1;
+		let this->testVar = 1.5;
+		let this->testVar = null;
+		let this->testVar = false;
+		let this->testVar = true;
+		let this->testVar = 'A';
+		let this->testVar = "hello";
+		let this->testVar = [];
+		return this->testVar;
+	}
+
+	public function testPropertyAssign2()
+	{
+		int a = 1;
+		double b = 1.5;
+		var c = null;
+		boolean d = false;
+		char e = 'A';
+		array f = [];
+
+		let this->testVar = a;
+		let this->testVar = b;
+		let this->testVar = c;
+		let this->testVar = d;
+		let this->testVar = e;
+		let this->testVar = f;
+		return this->testVar;
+	}
+
 	public function testPropertyIncr1()
 	{
 		let this->testVar = 1;
@@ -500,21 +533,7 @@ class Assign
 		return this->myArray;
 	}
 
-	public function testPropertyArray11(string index)
-	{
-		let this->myArray = [];
-		let this->myArray[index][index] = 1;
-		let this->myArray[index][index] = 1.5;
-		let this->myArray[index][index] = null;
-		let this->myArray[index][index] = false;
-		let this->myArray[index][index] = true;
-		let this->myArray[index][index] = 'A';
-		let this->myArray[index][index] = "hello";
-		let this->myArray[index][index] = [];
-		return this->myArray;
-	}
-
-	public function testPropertyArray12(index)
+	public function testPropertyArray11(index)
 	{
 		let this->myArray[index][index][] = 1;
 		let this->myArray[index][index][] = 1.5;
@@ -525,6 +544,19 @@ class Assign
 		let this->myArray[index][index][] = "hello";
 		let this->myArray[index][index][] = [];
 		return this->myArray;
+	}
+
+	public function testStaticPropertyAssign1()
+	{
+		let self::testVarStatic = 1;
+		let self::testVarStatic = 1.5;
+		let self::testVarStatic = null;
+		let self::testVarStatic = false;
+		let self::testVarStatic = true;
+		let self::testVarStatic = 'A';
+		let self::testVarStatic = "hello";
+		let self::testVarStatic = [];
+		return self::testVarStatic;
 	}
 
 	public function testArrayVarAssign1(var index, var value)
