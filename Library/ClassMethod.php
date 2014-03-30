@@ -1380,6 +1380,7 @@ class ClassMethod
                                 break;
 
                             case 'array':
+                            case 'empty-array':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
                                 break;

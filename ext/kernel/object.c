@@ -999,7 +999,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 /**
  * Multiple array-offset update
  */
-int zephir_update_property_array_multi(zval *object, const char *property, zend_uint property_length, zval **arr, zval **value TSRMLS_DC, const char *types, int types_length, int types_count, ...) {
+int zephir_update_property_array_multi(zval *object, const char *property, zend_uint property_length, zval **value TSRMLS_DC, const char *types, int types_length, int types_count, ...) {
 
 	int i, l, ll; char *s;
 	va_list ap;
