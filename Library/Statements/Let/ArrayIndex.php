@@ -168,15 +168,18 @@ class ArrayIndex
         $compilationContext->headersManager->add('kernel/array');
 
         switch ($exprIndex->getType()) {
+
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
                 $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
                 break;
+
             case 'string':
                 $codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', ' . $flags . ');');
                 break;
+
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
 
@@ -308,6 +311,10 @@ class ArrayIndex
         }
 
         $codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+
+        if ($symbolVariable->isTemporal()) {
+            $symbolVariable->setIdle(true);
+        }
     }
 
     /**

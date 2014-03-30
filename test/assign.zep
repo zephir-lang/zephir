@@ -500,6 +500,33 @@ class Assign
 		return this->myArray;
 	}
 
+	public function testPropertyArray11(string index)
+	{
+		let this->myArray = [];
+		let this->myArray[index][index] = 1;
+		let this->myArray[index][index] = 1.5;
+		let this->myArray[index][index] = null;
+		let this->myArray[index][index] = false;
+		let this->myArray[index][index] = true;
+		let this->myArray[index][index] = 'A';
+		let this->myArray[index][index] = "hello";
+		let this->myArray[index][index] = [];
+		return this->myArray;
+	}
+
+	public function testPropertyArray12(index)
+	{
+		let this->myArray[index][index][] = 1;
+		let this->myArray[index][index][] = 1.5;
+		let this->myArray[index][index][] = null;
+		let this->myArray[index][index][] = false;
+		let this->myArray[index][index][] = true;
+		let this->myArray[index][index][] = 'A';
+		let this->myArray[index][index][] = "hello";
+		let this->myArray[index][index][] = [];
+		return this->myArray;
+	}
+
 	public function testArrayVarAssign1(var index, var value)
 	{
 		var a;

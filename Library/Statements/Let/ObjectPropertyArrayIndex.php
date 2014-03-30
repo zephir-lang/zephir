@@ -255,7 +255,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         $keys = '';
-        $numberParams = 0;
+        $numberParams = 1;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
 
@@ -307,6 +307,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         $codePrinter->output('zephir_update_property_array_multi(' . $symbolVariable->getName() . ', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+
+        if ($variableExpr->isTemporal()) {
+            $variableExpr->setIdle(true);
+        }
     }
 
     /**

@@ -31,10 +31,12 @@ use Zephir\GlobalConstant;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 use Zephir\Statements\Let\ArrayIndex as LetArrayIndex;
+use Zephir\Statements\Let\ArrayIndexAppend as LetArrayIndexAppend;
 use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
 use Zephir\Statements\Let\ObjectDynamicProperty as LetObjectDynamicProperty;
 use Zephir\Statements\Let\ObjectPropertyAppend as LetObjectPropertyAppend;
 use Zephir\Statements\Let\ObjectPropertyArrayIndex as LetObjectPropertyArrayIndex;
+use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArrayIndexAppend;
 use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\ObjectPropertyDecr as LetObjectPropertyDecr;
 use Zephir\Statements\Let\StaticProperty as LetStaticProperty;
@@ -174,6 +176,11 @@ class LetStatement extends StatementAbstract
                     $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
+                case 'array-index-append':
+                    $let = new LetArrayIndexAppend();
+                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    break;
+
                 case 'object-property-append':
                     $let = new LetObjectPropertyAppend();
                     $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
@@ -181,6 +188,11 @@ class LetStatement extends StatementAbstract
 
                 case 'object-property-array-index':
                     $let = new LetObjectPropertyArrayIndex();
+                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    break;
+
+                case 'object-property-array-index-append':
+                    $let = new LetObjectPropertyArrayIndexAppend();
                     $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
