@@ -45,7 +45,7 @@ class ArrayIndex
      */
     protected function _getResolvedArrayItem($resolvedExpr, $compilationContext)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
 
         switch ($resolvedExpr->getType()) {
 
@@ -258,7 +258,9 @@ class ArrayIndex
         $numberParams = 0;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
+
             switch ($offsetExpr->getType()) {
+
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -267,11 +269,13 @@ class ArrayIndex
                     $offsetItems[] = $offsetExpr->getCode();
                     $numberParams++;
                     break;
+
                 case 'string':
                     $keys .= 's';
                     $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
                     $numberParams += 2;
                     break;
+
                 case 'variable':
                     $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
                     switch ($variableIndex->getType()) {
@@ -293,6 +297,7 @@ class ArrayIndex
                             throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
                     }
                     break;
+
                 default:
                     throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
             }

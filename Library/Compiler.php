@@ -726,7 +726,7 @@ class Compiler
     {
         system('rm -fr .temp');
         system('cd ext && sudo make clean 1> /dev/null');
-        system('cd ext && phpize --clean 1> /dev/null');
+        system('cd ext && sudo phpize --clean 1> /dev/null');
     }
 
     /**

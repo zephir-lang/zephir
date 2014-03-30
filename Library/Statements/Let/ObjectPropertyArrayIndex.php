@@ -34,10 +34,10 @@ use Zephir\GlobalConstant;
  *
  * Updates object properties dynamically
  */
-class ObjectPropertyArrayIndex
+class ObjectPropertyArrayIndex extends ArrayIndex
 {
 
-	/**
+    /**
      * Compiles x->y[z] = {expr} (single offset assignment)
      *
      * @param string $variable
@@ -96,18 +96,35 @@ class ObjectPropertyArrayIndex
 
         switch ($resolvedIndex->getType()) {
 
+            case 'int':
+            case 'uint':
+            case 'long':
+                $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+                $codePrinter->output('ZVAL_LONG(' . $indexVariable->getName() . ', ' . $resolvedIndex->getCode() . ');');
+                break;
+
             case 'string':
                 $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
                 $codePrinter->output('ZVAL_STRING(' . $indexVariable->getName() . ', "' . $resolvedIndex->getCode() . '", 1);');
                 break;
 
+            case 'variable':
+                $variableIndex = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
+                switch ($variableIndex->getType()) {
+
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                        $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
+                        $codePrinter->output('ZVAL_LONG(' . $indexVariable->getName() . ', ' . $variableIndex->getName() . ');');
+                        break;
+
+                }
+                break;
+
         }
 
         switch ($indexVariable->getType()) {
-
-            case 'int':
-                $codePrinter->output('//missing');
-                break;
 
             case 'variable':
             case 'string':
@@ -139,6 +156,13 @@ class ObjectPropertyArrayIndex
                             case 'bool':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                                 $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                                $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                                break;
+
+                            case 'int':
+                            case 'long':
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
                                 $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
                                 break;
 
@@ -177,37 +201,93 @@ class ObjectPropertyArrayIndex
      */
     protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
+        $codePrinter = $compilationContext->codePrinter;
+
+        $property = $statement['property'];
+        $compilationContext->headersManager->add('kernel/object');
 
         /**
-         * We read the variable member in read-only mode, this must return a reference
-         * to the real property in the object
-         *
-         * This could introduce a bug because the variable will be separated
-         * However null values are not converted implicity to objects or arrays
-         *
-         * @todo, use a builder
+         * Create a temporal zval (if needed)
          */
-        $propertyExpr = new Expression(array(
-            'type' => 'property-access',
-            'left' => array(
-                'type' => 'variable',
-                'value' => $statement['variable']
-            ),
-            'right' => array(
-                'type' => 'variable',
-                'value' => $statement['property']
-            )
-        ));
+        $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
-        $propertyExpr->setReadOnly(true);
-        $property = $propertyExpr->compile($compilationContext);
+        /**
+         * Only string/variable/int
+         */
+        $offsetExprs = array();
+        foreach ($statement['index-expr'] as $indexExpr) {
 
-        $propertyVariable = $compilationContext->symbolTable->getVariableForRead($property->getCode(), $compilationContext, $statement);
-        switch ($propertyVariable->getType()) {
+            $indexExpression = new Expression($indexExpr);
 
+            $resolvedIndex = $indexExpression->compile($compilationContext);
+            switch ($resolvedIndex->getType()) {
+                case 'string':
+                case 'int':
+                case 'uint':
+                case 'ulong':
+                case 'long':
+                case 'variable':
+                    break;
+                default:
+                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement['index-expr']);
+            }
+
+            $offsetExprs[] = $resolvedIndex;
         }
 
-        //$this->assignArrayIndex($propertyVariable->getName(), $propertyVariable, $resolvedExpr, $compilationContext, $statement);
+        $keys = '';
+        $numberParams = 0;
+        $offsetItems = array();
+        foreach ($offsetExprs as $offsetExpr) {
+
+            switch ($offsetExpr->getType()) {
+
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                    $keys .= 'l';
+                    $offsetItems[] = $offsetExpr->getCode();
+                    $numberParams++;
+                    break;
+
+                case 'string':
+                    $keys .= 's';
+                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
+                    $numberParams += 2;
+                    break;
+
+                case 'variable':
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
+                    switch ($variableIndex->getType()) {
+
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                            $keys .= 'l';
+                            $offsetItems[] = $variableIndex->getName();
+                            $numberParams++;
+                            break;
+
+                        case 'string':
+                        case 'variable':
+                            $keys .= 'z';
+                            $offsetItems[] = $variableIndex->getName();
+                            $numberParams++;
+                            break;
+
+                        default:
+                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                    }
+                    break;
+
+                default:
+                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
+            }
+        }
+
+        $codePrinter->output('zephir_update_property_array_multi(' . $symbolVariable->getName() . ', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
     }
 
     /**
