@@ -193,8 +193,9 @@ class DeclareStatement extends StatementAbstract
                         $defaultValue = $variable['expr'];
                         switch ($defaultType) {
 
-                            case 'array':
                             case 'null':
+                            case 'array':
+                            case 'empty-array':
                                 break;
 
                             default:

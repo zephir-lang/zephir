@@ -903,48 +903,63 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables, x
 	json_object_object_add(ret, "type", json_object_new_string("declare"));
 
 	switch (type) {
+
 		case XX_T_TYPE_INTEGER:
 			json_object_object_add(ret, "data-type", json_object_new_string("int"));
 			break;
+
 		case XX_T_TYPE_UINTEGER:
 			json_object_object_add(ret, "data-type", json_object_new_string("uint"));
 			break;
+
 		case XX_T_TYPE_LONG:
 			json_object_object_add(ret, "data-type", json_object_new_string("long"));
 			break;
+
 		case XX_T_TYPE_ULONG:
 			json_object_object_add(ret, "data-type", json_object_new_string("ulong"));
 			break;
+
 		case XX_T_TYPE_CHAR:
 			json_object_object_add(ret, "data-type", json_object_new_string("char"));
 			break;
+
 		case XX_T_TYPE_UCHAR:
 			json_object_object_add(ret, "data-type", json_object_new_string("uchar"));
 			break;
+
 		case XX_T_TYPE_DOUBLE:
 			json_object_object_add(ret, "data-type", json_object_new_string("double"));
 			break;
+
 		case XX_T_TYPE_BOOL:
 			json_object_object_add(ret, "data-type", json_object_new_string("bool"));
 			break;
+
 		case XX_T_TYPE_STRING:
 			json_object_object_add(ret, "data-type", json_object_new_string("string"));
 			break;
-		/*case XX_T_TYPE_ARRAY:
+
+		case XX_T_TYPE_ARRAY:
 			json_object_object_add(ret, "data-type", json_object_new_string("array"));
-			break;*/
+			break;
+
 		case XX_T_TYPE_VAR:
 			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
 			break;
+
 	    case XX_T_TYPE_CALLABLE:
             json_object_object_add(ret, "data-type", json_object_new_string("callable"));
             break;
+
         case XX_T_TYPE_RESOURCE:
             json_object_object_add(ret, "data-type", json_object_new_string("resource"));
             break;
+
         case XX_T_TYPE_OBJECT:
             json_object_object_add(ret, "data-type", json_object_new_string("object"));
             break;
+
 		default:
 			fprintf(stderr, "err 2?\n");
 	}
@@ -2270,6 +2285,10 @@ xx_declare_statement(R) ::= TYPE_BOOL xx_declare_variable_list(L) DOTCOMMA . {
 
 xx_declare_statement(R) ::= TYPE_VAR xx_declare_variable_list(L) DOTCOMMA . {
 	R = xx_ret_declare_statement(XX_T_TYPE_VAR, L, status->scanner_state);
+}
+
+xx_declare_statement(R) ::= TYPE_ARRAY xx_declare_variable_list(L) DOTCOMMA . {
+	R = xx_ret_declare_statement(XX_T_TYPE_ARRAY, L, status->scanner_state);
 }
 
 xx_declare_variable_list(R) ::= xx_declare_variable_list(L) COMMA xx_declare_variable(V) . {

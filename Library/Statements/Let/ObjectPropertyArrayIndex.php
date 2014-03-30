@@ -142,6 +142,26 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                         }
                         break;
 
+                    case 'int':
+                    case 'long':
+                    case 'uint':
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        break;
+
+                    case 'char':
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
+                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        break;
+
+                    case 'double':
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        break;
+
                     case 'string':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
