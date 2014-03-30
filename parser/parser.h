@@ -114,6 +114,3 @@
 #define XX_TRUE                           114
 #define XX_FALSE                          115
 #define XX_CBLOCK                         116
-#define XX_RESOURCE                       117
-#define XX_OBJECT                         117
-#define XX_CALLABLE                       117

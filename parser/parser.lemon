@@ -94,18 +94,6 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
 
-	    case XX_T_OBJECT:
-            json_object_object_add(ret, "type", json_object_new_string("object"));
-            break;
-
-	    case XX_T_RESOURCE:
-            json_object_object_add(ret, "type", json_object_new_string("resource"));
-            break;
-
-        case XX_T_CALLABLE:
-            json_object_object_add(ret, "type", json_object_new_string("callable"));
-            break;
-
 		default:
 			if (type == XX_T_TRUE) {
 				json_object_object_add(ret, "type", json_object_new_string("bool"));
