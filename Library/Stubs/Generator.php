@@ -218,16 +218,22 @@ EOF;
     {
         $modifier = implode(' ', $method->getVisibility());
         $modifier = str_replace(' inline', '', $modifier);
+        $modifier = str_replace(' scoped', '', $modifier);
 
         $docBlock = $method->getDocBlock();
         if ($docBlock) {
             $docBlock = $this->buildDocBlock($docBlock);
         }
-        $methodBody = <<<EOL
-    $modifier function {$method->getName()}()
+
+        $methodBody = "\t".$modifier . ' function '.$method->getName().'()';
+        if ($method->isAbstract()) {
+            $methodBody .= ';';
+        } else {
+            $methodBody .= <<<EOL
     {
     }
 EOL;
+        }
 
         return $docBlock . $methodBody;
     }
