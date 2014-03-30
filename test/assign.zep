@@ -9,6 +9,8 @@ class Assign
 {
 	protected testVar {get};
 
+	protected myArray;
+
 	public function testAssign1()
 	{
 		int a;
@@ -356,12 +358,40 @@ class Assign
 		return this->testVar;
 	}
 
+	public function testPropertyArray1()
+	{
+		let this->myArray = [];
+		let this->myArray[] = 1;
+		let this->myArray[] = 1.5;
+		let this->myArray[] = null;
+		let this->myArray[] = false;
+		let this->myArray[] = true;
+		let this->myArray[] = 'A';
+		return this->myArray;
+	}
+
+	public function testPropertyArray2()
+	{
+		int a = 1;
+		double b = 1.5;
+		var c = null;
+		boolean d = false;
+		char e = 'A';
+
+		let this->myArray = [];
+		let this->myArray[] = a;
+		let this->myArray[] = b;
+		let this->myArray[] = c;
+		let this->myArray[] = d;
+		let this->myArray[] = e;
+		return this->myArray;
+	}
+
 	public function testArrayVarAssign1(var index, var value)
 	{
 		var a;
 		let a = [];
 		let a[index] = value;
-
 		return a;
 	}
 
@@ -370,7 +400,14 @@ class Assign
 		var _POST;
 		let _POST = [];
 		let _POST[index] = value;
+		return _POST;
+	}
 
+	public function testArrayProperty(var index, var value)
+	{
+		var _POST;
+		let _POST = [];
+		let _POST[index] = value;
 		return _POST;
 	}
 

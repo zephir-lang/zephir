@@ -2086,9 +2086,13 @@ xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) SBRACKET_OPEN SBRACKE
 	R = xx_ret_let_assignment("object-property-append", O, D, I, NULL, E, status->scanner_state);
 }
 
-/* y->x[z] = {expr} */
+/* y->x[z][] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) xx_array_offset_list(X) xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("object-property-array-index", O, D, I, X, E, status->scanner_state);
+}
+
+xx_let_assignment(R) ::= IDENTIFIER(D) ARROW IDENTIFIER(I) xx_array_offset_list(X) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("object-property-array-index-append", O, D, I, X, E, status->scanner_state);
 }
 
 /* y::x = {expr} */
@@ -2106,14 +2110,24 @@ xx_let_assignment(R) ::= IDENTIFIER(D) DOUBLECOLON IDENTIFIER(I) xx_array_offset
 	R = xx_ret_let_assignment("static-property-array-index", O, D, I, X, E, status->scanner_state);
 }
 
+/* y::x[z][] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) DOUBLECOLON IDENTIFIER(I) xx_array_offset_list(X) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("static-property-array-index-append", O, D, I, X, E, status->scanner_state);
+}
+
 /* y[] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(I) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("variable-append", O, I, NULL, NULL, E, status->scanner_state);
 }
 
-/* y[x] = {expr} // y[x][z] = {expr} */
+/* y[x] = {expr} | y[x][z] = {expr} */
 xx_let_assignment(R) ::= IDENTIFIER(D) xx_array_offset_list(A) xx_assignment_operator(O) xx_assign_expr(E) . {
 	R = xx_ret_let_assignment("array-index", O, D, NULL, A, E, status->scanner_state);
+}
+
+/* y[x][] = {expr} | y[x][z][] = {expr} */
+xx_let_assignment(R) ::= IDENTIFIER(D) xx_array_offset_list(A) SBRACKET_OPEN SBRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("array-index-append", O, D, NULL, A, E, status->scanner_state);
 }
 
 xx_array_offset_list(R) ::= xx_array_offset_list(L) xx_array_offset(O) . {

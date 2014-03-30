@@ -1,7 +1,7 @@
 
 namespace Test;
 
-    class InternalClasses
+class InternalClasses
 {
 	public function testStaticCall()
 	{

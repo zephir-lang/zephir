@@ -27,6 +27,8 @@ ZEPHIR_INIT_CLASS(Test_Assign) {
 
 	zend_declare_property_null(test_assign_ce, SL("testVar"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
+	zend_declare_property_null(test_assign_ce, SL("myArray"), ZEND_ACC_PROTECTED TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -583,6 +585,63 @@ PHP_METHOD(Test_Assign, testPropertyAssignStringConcat) {
 
 }
 
+PHP_METHOD(Test_Assign, testPropertyArray1) {
+
+	zval *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("myArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 1);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_DOUBLE(_1, 1.5);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), (0) ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), (1) ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, 'A');
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	RETURN_MM_MEMBER(this_ptr, "myArray");
+
+}
+
+PHP_METHOD(Test_Assign, testPropertyArray2) {
+
+	char e = 'A';
+	zend_bool d = 0;
+	zval *c = NULL, *_0, *_1;
+	double b = 1.5;
+	int a = 1;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(c);
+	ZVAL_NULL(c);
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("myArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, a);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_DOUBLE(_1, b);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), c TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_BOOL(_1, d);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_1);
+	ZVAL_LONG(_1, e);
+	zephir_update_property_array_append(this_ptr, SL("myArray"), _1 TSRMLS_CC);
+	RETURN_MM_MEMBER(this_ptr, "myArray");
+
+}
+
 PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 
 	zval *index, *value, *a;
@@ -600,6 +659,27 @@ PHP_METHOD(Test_Assign, testArrayVarAssign1) {
 }
 
 PHP_METHOD(Test_Assign, testArrayVarAssign2) {
+
+	int _0;
+	zval *index, *value, *_POST;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &index, &value);
+
+
+
+	ZEPHIR_INIT_VAR(_POST);
+	array_init(_POST);
+	_0 = zephir_maybe_separate_zval(&_POST);
+	zephir_array_update_zval(&_POST, index, &value, PH_COPY | PH_SEPARATE);
+	if (_0) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_POST", _POST);
+	}
+	RETURN_CCTOR(_POST);
+
+}
+
+PHP_METHOD(Test_Assign, testArrayProperty) {
 
 	int _0;
 	zval *index, *value, *_POST;

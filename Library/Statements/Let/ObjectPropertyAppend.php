@@ -64,9 +64,78 @@ class ObjectPropertyAppend
         /* @todo check whether property really does exist */
 
         switch ($resolvedExpr->getType()) {
+
+            case 'null':
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+                break;
+
+            case 'bool':
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                break;
+
+            case 'char':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
+                break;
+
+            case 'int':
+            case 'long':
+            case 'uint':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
+                break;
+
+            case 'double':
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
+                break;
+
             case 'variable':
                 $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableExpr->getType()) {
+
+                    case 'int':
+                    case 'long':
+                    case 'uint':
+                    case 'char':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
+                    case 'double':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
+                    case 'bool':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
                     case 'variable':
                     case 'string':
                     case 'array':
@@ -75,6 +144,7 @@ class ObjectPropertyAppend
                             $variableExpr->setIdle(true);
                         }
                         break;
+
                     default:
                         throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to array property", $statement);
                 }
