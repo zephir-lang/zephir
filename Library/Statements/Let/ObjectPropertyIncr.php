@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyIncr
 {
-
-	/**
+    /**
      * Compiles obj->x++
      *
      * @param string $variable

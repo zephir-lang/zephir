@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class Incr
 {
-
-	/**
+    /**
      * Compiles x++
      *
      * @param string $variable

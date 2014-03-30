@@ -36,8 +36,7 @@ use Zephir\GlobalConstant;
  */
 class StaticProperty
 {
-
-	/**
+    /**
      * Compiles ClassName::foo = {expr}
      *
      * @param                    $className
@@ -179,6 +178,5 @@ class StaticProperty
             default:
                 throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
         }
-
     }
 }

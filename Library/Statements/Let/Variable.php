@@ -36,7 +36,7 @@ use Zephir\GlobalConstant;
  */
 class Variable
 {
-	/**
+    /**
      * Compiles foo = {expr}
      * Changes the value of a mutable variable
      *
