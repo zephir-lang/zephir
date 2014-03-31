@@ -20,6 +20,7 @@
 namespace Zephir\Cache;
 
 use Zephir\CompilationContext;
+use Zephir\ClassMethod;
 use Zephir\Call;
 
 /**
@@ -47,9 +48,10 @@ class StaticMethodCache
 
     /**
      * @param CompilationContext $compilationContext
-     * @param ClassMethod $call
+     * @param ClassMethod|\ReflectionMethod $method
+     * @param boolean $allowNtsCache
      */
-    public function get(CompilationContext $compilationContext, $method)
+    public function get(CompilationContext $compilationContext, $method, $allowNtsCache = true)
     {
         if (!is_object($method)) {
             return 'NULL';
@@ -67,17 +69,33 @@ class StaticMethodCache
 
         }
 
+        $mustBeCached = false;
         if (!$compilationContext->insideCycle) {
-            if (!$method->isPrivate() && !$method->isFinal()) {
-                return 'NULL';
+
+            if (!($method instanceof \ReflectionMethod)) {
+                $classDefinition = $method->getClassDefinition();
+                if (!$classDefinition->isInternal() && $allowNtsCache) {
+                    $mustBeCached = true;
+                } else {
+                    if (!$method->isPrivate() && !$method->isFinal()) {
+                        return 'NULL';
+                    }
+                }
+            } else {
+                if (!$method->isPrivate() && !$method->isFinal()) {
+                    return 'NULL';
+                }
             }
+
         }
 
-        if ($method->isPrivate() || $method->isFinal()) {
+
+        if ($method->isPrivate() || $method->isFinal() || $mustBeCached) {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
         }
+
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 

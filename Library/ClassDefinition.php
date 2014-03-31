@@ -74,38 +74,6 @@ class ClassDefinition
 
     protected $isInternal = false;
 
-    public static function buildFromReflection(\ReflectionClass $class)
-    {
-        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
-
-        $methods = $class->getMethods();
-        if (count($methods) > 0) {
-            foreach ($methods as $method) {
-                $parameters = array();
-
-                foreach ($method->getParameters() as $row) {
-                        $parameters[] = array(
-                        'type' => 'parameter',
-                        'name' => $row->getName(),
-                        'const' => 0,
-                        'data-type' => 'variable',
-                        'mandatory' => !$row->isOptional()
-                    );
-                }
-
-                $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
-                    $parameters
-                ));
-                $classMethod->setIsStatic($method->isStatic());
-                $classDefinition->addMethod($classMethod);
-            }
-        }
-
-        $classDefinition->setIsInternal(true);
-
-        return $classDefinition;
-    }
-
     /**
      * ClassDefinition
      *
@@ -121,7 +89,7 @@ class ClassDefinition
     }
 
     /**
-     * @param $isInternal
+     * @param boolean $isInternal
      */
     public function setIsInternal($isInternal)
     {
@@ -1120,5 +1088,42 @@ class ClassDefinition
                 }
         }
         return $classEntry;
+    }
+
+    /**
+     * Builds a class definition from reflection
+     *
+     * @param \ReflectionClass $class
+     */
+    public static function buildFromReflection(\ReflectionClass $class)
+    {
+        $classDefinition = new ClassDefinition($class->getNamespaceName(), $class->getName());
+
+        $methods = $class->getMethods();
+        if (count($methods) > 0) {
+            foreach ($methods as $method) {
+                $parameters = array();
+
+                foreach ($method->getParameters() as $row) {
+                        $parameters[] = array(
+                        'type' => 'parameter',
+                        'name' => $row->getName(),
+                        'const' => 0,
+                        'data-type' => 'variable',
+                        'mandatory' => !$row->isOptional()
+                    );
+                }
+
+                $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
+                    $parameters
+                ));
+                $classMethod->setIsStatic($method->isStatic());
+                $classDefinition->addMethod($classMethod);
+            }
+        }
+
+        $classDefinition->setIsInternal(true);
+
+        return $classDefinition;
     }
 }

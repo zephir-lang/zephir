@@ -60,7 +60,7 @@ class StaticCall extends Call
          * Check if the  method call can have an inline cache
          */
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
+        $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null, false);
 
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);

@@ -1,3 +1,4 @@
+
 namespace Test;
 
 /**
@@ -11,7 +12,7 @@ class RegexDNA
 	public function process(var path)
 	{
 		var variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength,
-			regex, codeLength, discard;
+			regex, codeLength, discard = null;
 
 		let variants = [
 			"agggtaaa|tttaccct",

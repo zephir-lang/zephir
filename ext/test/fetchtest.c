@@ -80,7 +80,7 @@ PHP_METHOD(Test_FetchTest, testFetchObject1) {
 
 
 	ZEPHIR_OBS_VAR(c);
-	RETURN_MM_BOOL(zephir_read_property_zval(&c, a, b, PH_SILENT_CC));
+	RETURN_MM_BOOL(zephir_fetch_property_zval(&c, a, b, PH_SILENT_CC));
 
 }
 
