@@ -255,7 +255,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         $keys = '';
-        $numberParams = 1;
+        $numberParams = 0;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
 

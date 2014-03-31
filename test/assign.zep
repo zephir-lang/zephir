@@ -662,6 +662,20 @@ class Assign
 		return self::testVarStatic;
 	}
 
+	public function testStaticPropertyArrayAppend1()
+	{
+		let self::testVarStatic      = [];
+		let self::testVarStatic[0][] = 1;
+		let self::testVarStatic[0][] = 1.5;
+		let self::testVarStatic[0][] = null;
+		let self::testVarStatic[0][] = false;
+		let self::testVarStatic[0][] = true;
+		let self::testVarStatic[0][] = 'A';
+		let self::testVarStatic[0][] = "hello";
+		let self::testVarStatic[0][] = [];
+		return self::testVarStatic;
+	}
+
 	public function testArrayVarAssign1(var index, var value)
 	{
 		var a;

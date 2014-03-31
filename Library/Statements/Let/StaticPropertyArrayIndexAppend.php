@@ -30,14 +30,14 @@ use Zephir\Utils;
 use Zephir\GlobalConstant;
 
 /**
- * StaticPropertyArrayIndex
+ * StaticPropertyArrayIndexAppend
  *
  * Updates object properties dynamically
  */
-class StaticPropertyArrayIndex extends ArrayIndex
+class StaticPropertyArrayIndexAppend extends ArrayIndex
 {
     /**
-     * Compiles x::y[a][b] = {expr} (multiple offset assignment)
+     * Compiles x::y[a][b][] = {expr} (multiple offset assignment)
      *
      * @param string $variable
      * @param CompiledExpression $resolvedExpr
@@ -81,7 +81,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
         }
 
         $keys = '';
-        $numberParams = 0;
+        $numberParams = 1;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
 
@@ -132,7 +132,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
             }
         }
 
-        $codePrinter->output('zephir_update_static_property_array_multi_ce(' . $classEntry .', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+        $codePrinter->output('zephir_update_static_property_array_multi_ce(' . $classEntry .', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . 'a"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
 
         if ($variableExpr->isTemporal()) {
             $variableExpr->setIdle(true);
