@@ -69,6 +69,7 @@ zend_class_entry *test_mcall_ce;
 zend_class_entry *test_mcallchained_ce;
 zend_class_entry *test_methodargs_ce;
 zend_class_entry *test_nativearray_ce;
+zend_class_entry *test_oo_abstractclass_ce;
 zend_class_entry *test_oo_ce;
 zend_class_entry *test_oo_constantsinterface_ce;
 zend_class_entry *test_oo_extendpdoclass_ce;
@@ -167,6 +168,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_MethodArgs);
 	ZEPHIR_INIT(Test_NativeArray);
 	ZEPHIR_INIT(Test_Oo);
+	ZEPHIR_INIT(Test_Oo_AbstractClass);
 	ZEPHIR_INIT(Test_Oo_ConstantsInterface);
 	ZEPHIR_INIT(Test_Oo_ExtendPdoClass);
 	ZEPHIR_INIT(Test_Oo_OoConstruct);
