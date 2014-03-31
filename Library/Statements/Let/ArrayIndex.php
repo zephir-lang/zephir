@@ -326,7 +326,7 @@ class ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array $statement
      */
-    public function assign($variable, ZephirVariable $symbolVariable = null, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
 
         /**
