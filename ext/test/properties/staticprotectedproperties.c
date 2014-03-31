@@ -92,7 +92,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, getSomeNull) {
 
 PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeNull) {
 
-	zval *param, *_0;
+	zval *param;
 
 	zephir_fetch_params(0, 1, 0, &param);
 
