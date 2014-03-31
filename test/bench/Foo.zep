@@ -54,8 +54,7 @@ class Foo
 	public static function call_static(var n)
 	{
 	    var i;
-		for i in range(1, n)
-		{
+		for i in range(1, n) {
 			self::f();
 		}
 	}

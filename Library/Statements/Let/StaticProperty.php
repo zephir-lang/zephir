@@ -41,7 +41,6 @@ class StaticProperty
      *
      * @param                    $className
      * @param                    $property
-     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array              $statement
@@ -49,9 +48,9 @@ class StaticProperty
      * @throws CompilerException
      * @internal param string $variable
      */
-    public function assign($className, $property, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-        $compiler = &$compilationContext->compiler;
+        $compiler = $compilationContext->compiler;
         if ($className != 'self' && $className != 'parent') {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
@@ -112,6 +111,9 @@ class StaticProperty
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
                 break;
 
             case 'char':
@@ -119,25 +121,38 @@ class StaticProperty
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
                 break;
 
             case 'double':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
                 break;
 
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
                 break;
 
             case 'bool':
                 if ($resolvedExpr->getBooleanCode() == '1') {
                     $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
                 } else {
-                    $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                    if ($resolvedExpr->getBooleanCode() == '0') {
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                    } else {
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), (' . $resolvedExpr->getBooleanCode() . ') ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                    }
                 }
                 break;
 
@@ -145,6 +160,9 @@ class StaticProperty
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                 $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                if ($tempVariable->isTemporal()) {
+                    $tempVariable->setIdle(true);
+                }
                 break;
 
             case 'variable':
@@ -167,16 +185,39 @@ class StaticProperty
                         } else {
                             $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         }
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+
+                    case 'double':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+                        if ($compilationContext->insideCycle) {
+                            $propertyCache = $compilationContext->symbolTable->getTempVariableForWrite('zend_property_info', $compilationContext);
+                            $propertyCache->setMustInitNull(true);
+                            $propertyCache->setReusable(false);
+                            $codePrinter->output('zephir_update_static_property_ce_cache(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ', &' . $propertyCache->getName() . ' TSRMLS_CC);');
+                        } else {
+                            $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        }
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
                         break;
 
                     case 'bool':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
                         $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
                         break;
 
                     case 'string':
                     case 'variable':
+                    case 'array':
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
                         if ($variableVariable->isTemporal()) {
                             $variableVariable->setIdle(true);

@@ -74,7 +74,7 @@ class LetStatement extends StatementAbstract
                 case 'static-property':
                 case 'static-property-append':
                 case 'static-property-array-index':
-                    $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
+                    $symbolVariable = null;
                     break;
                 default:
                     $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
@@ -159,7 +159,7 @@ class LetStatement extends StatementAbstract
 
                 case 'static-property':
                     $let = new LetStaticProperty();
-                    $let->assign($variable, $assignment['property'], $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'static-property-append':
@@ -168,7 +168,7 @@ class LetStatement extends StatementAbstract
 
                 case 'static-property-array-index':
                     $let = new LetStaticPropertyArrayIndex();
-                    $let->assign($variable, $assignment['property'], $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'array-index':
