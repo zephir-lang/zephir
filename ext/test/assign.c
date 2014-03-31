@@ -1301,12 +1301,9 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli3) {
 
 PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend1) {
 
-	zval *index, *_0, *_1;
+	zval *_0, *_1;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &index);
-
-
 
 	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
