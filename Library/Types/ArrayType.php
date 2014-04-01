@@ -42,7 +42,8 @@ class ArrayType extends AbstractType
     {
         return array(
             'join' => 'join',
-            'reverse' => 'array_reverse',
+            'reversed' => 'array_reverse',
+            'rev' => 'array_reverse',
             'diff' => 'array_diff',
             'flip' => 'array_flip',
             'haskey' => 'array_key_exists',
