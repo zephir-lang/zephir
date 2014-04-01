@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 
@@ -31,58 +31,66 @@ ZEPHIR_INIT_CLASS(Test_Ternary) {
 
 PHP_METHOD(Test_Ternary, testTernary1) {
 
+	zval *_0;
 
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_LONG(return_value, (1 + 100));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
-		ZVAL_BOOL(return_value, 0);
+		ZVAL_BOOL(_0, 0);
 	}
-	return;
+	RETURN_CCTOR(_0);
 
 }
 
 PHP_METHOD(Test_Ternary, testTernary2) {
 
-	zval *b_param = NULL;
+	zval *b_param = NULL, *_0;
 	zend_bool b;
 
-	zephir_fetch_params(0, 1, 0, &b_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &b_param);
 
 	b = zephir_get_boolval(b_param);
 
 
+	ZEPHIR_INIT_VAR(_0);
 	if (b) {
-		ZVAL_STRING(return_value, "foo", 1);
+		ZVAL_STRING(_0, "foo", 1);
 	} else {
-		ZVAL_STRING(return_value, "bar", 1);
+		ZVAL_STRING(_0, "bar", 1);
 	}
-	return;
+	RETURN_CCTOR(_0);
 
 }
 
 PHP_METHOD(Test_Ternary, testTernaryComplex1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *y, *_0 = NULL;
+	zval *a, *y, *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &y);
 
 
 
+	ZEPHIR_INIT_VAR(_0);
 	if (100) {
-		ZVAL_LONG(return_value, (1 + 100));
+		ZVAL_LONG(_0, (1 + 100));
 	} else {
-		ZEPHIR_CALL_METHOD(&_0, a, "y",  NULL);
+		ZEPHIR_CALL_METHOD(&_1, a, "y",  NULL);
 		zephir_check_call_status();
-		if (zephir_is_true(_0)) {
-			ZEPHIR_RETURN_CALL_METHOD(a, "x", NULL);
+		if (zephir_is_true(_1)) {
+			ZEPHIR_CALL_METHOD(&_0, a, "x",  NULL);
 			zephir_check_call_status();
 		} else {
-			ZVAL_BOOL(return_value, zephir_array_isset(a, y));
+			ZEPHIR_INIT_BNVAR(_0);
+			ZVAL_BOOL(_0, zephir_array_isset(a, y));
 		}
 	}
-	RETURN_MM();
+	RETURN_CCTOR(_0);
 
 }
 
@@ -131,20 +139,20 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
  */
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
-	zval *s;
+	zval s = zval_used_for_init;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(s);
 	ZVAL_LONG(s, 23);
 
 	if (1 == 1) {
-		ZEPHIR_INIT_VAR(s);
-		ZVAL_LONG(s, 3);
+		ZEPHIR_SINIT_VAR(s);
+		ZVAL_LONG(&s, 3);
 	} else {
-		ZEPHIR_INIT_BNVAR(s);
-		ZVAL_LONG(s, 10);
+		ZEPHIR_SINIT_NVAR(s);
+		ZVAL_LONG(&s, 10);
 	}
-	RETURN_CCTOR(s);
+	RETURN_LCTOR(s);
 
 }
 
