@@ -549,7 +549,7 @@ class MethodCall extends Call
 
                 }
 
-             }
+            }
         }
 
         /**
