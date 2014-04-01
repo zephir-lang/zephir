@@ -109,13 +109,166 @@ zend_class_entry *test_vars_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
+#define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
+
+void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSRMLS_DC)
+{
+	zephir_memory_entry *start;
+	size_t i;
+
+	start = (zephir_memory_entry *) pecalloc(ZEPHIR_NUM_PREALLOCATED_FRAMES, sizeof(zephir_memory_entry), 1);
+/* pecalloc() will take care of these members for every frame
+	start->pointer      = 0;
+	start->hash_pointer = 0;
+	start->prev = NULL;
+	start->next = NULL;
+*/
+	for (i = 0; i < ZEPHIR_NUM_PREALLOCATED_FRAMES; ++i) {
+		start[i].addresses       = pecalloc(24, sizeof(zval*), 1);
+		start[i].capacity        = 24;
+		start[i].hash_addresses  = pecalloc(8, sizeof(zval*), 1);
+		start[i].hash_capacity   = 8;
+
+#ifndef ZEPHIR_RELEASE
+		start[i].permanent = 1;
+#endif
+	}
+
+	start[0].next = &start[1];
+	start[ZEPHIR_NUM_PREALLOCATED_FRAMES - 1].prev = &start[ZEPHIR_NUM_PREALLOCATED_FRAMES - 2];
+
+	for (i = 1; i < ZEPHIR_NUM_PREALLOCATED_FRAMES - 1; ++i) {
+		start[i].next = &start[i + 1];
+		start[i].prev = &start[i - 1];
+	}
+
+	zephir_globals_ptr->start_memory = start;
+	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
+
+	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
+#ifndef ZEPHIR_RELEASE
+	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
+#else
+	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1);
+#endif
+
+	/* 'Allocator sizeof operand mismatch' warning can be safely ignored */
+	ALLOC_INIT_ZVAL(zephir_globals_ptr->global_null);
+	Z_SET_REFCOUNT_P(zephir_globals_ptr->global_null, 2);
+
+	/* 'Allocator sizeof operand mismatch' warning can be safely ignored */
+	ALLOC_INIT_ZVAL(zephir_globals_ptr->global_false);
+	Z_SET_REFCOUNT_P(zephir_globals_ptr->global_false, 2);
+	ZVAL_FALSE(zephir_globals_ptr->global_false);
+
+	/* 'Allocator sizeof operand mismatch' warning can be safely ignored */
+	ALLOC_INIT_ZVAL(zephir_globals_ptr->global_true);
+	Z_SET_REFCOUNT_P(zephir_globals_ptr->global_true, 2);
+	ZVAL_TRUE(zephir_globals_ptr->global_true);
+
+	//zephir_globals_ptr->initialized = 1;
+}
+
+int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
+{
+	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**)pDest;
+	zend_class_entry *scope;
+	uint len = hash_key->nKeyLength;
+
+	assert(hash_key->arKey != NULL);
+	assert(hash_key->nKeyLength > 2 * sizeof(zend_class_entry**));
+
+	memcpy(&scope, &hash_key->arKey[len - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
+
+/*
+#ifndef ZEPHIR_RELEASE
+	{
+		zend_class_entry *cls;
+		memcpy(&cls, &hash_key->arKey[len - sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
+
+		fprintf(stderr, "func: %s, cls: %s, scope: %s [%u]\n", (*entry)->f->common.function_name, (cls ? cls->name : "N/A"), (scope ? scope->name : "N/A"), (uint)(*entry)->times);
+	}
+#endif
+*/
+
+#ifndef ZEPHIR_RELEASE
+	if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+		return ZEND_HASH_APPLY_REMOVE;
+	}
+#else
+	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
+		return ZEND_HASH_APPLY_REMOVE;
+	}
+#endif
+
+#if PHP_VERSION_ID >= 50400
+	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
+		return ZEND_HASH_APPLY_REMOVE;
+	}
+#else
+	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->module->type != MODULE_PERSISTENT) {
+		return ZEND_HASH_APPLY_REMOVE;
+	}
+#endif
+
+	return ZEND_HASH_APPLY_KEEP;
+}
+
+void zephir_deinitialize_memory(TSRMLS_D)
+{
+	size_t i;
+	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	//if (zephir_globals_ptr->initialized != 1) {
+	//	zephir_globals_ptr->initialized = 0;
+	//	return;
+	//}
+
+	if (zephir_globals_ptr->start_memory != NULL) {
+		zephir_clean_restore_stack(TSRMLS_C);
+	}
+
+	//zephir_orm_destroy_cache(TSRMLS_C);
+
+	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache TSRMLS_CC, zephir_cleanup_fcache, 0);
+
+#ifndef ZEPHIR_RELEASE
+	assert(zephir_globals_ptr->start_memory != NULL);
+#endif
+
+	for (i = 0; i < ZEPHIR_NUM_PREALLOCATED_FRAMES; ++i) {
+		pefree(zephir_globals_ptr->start_memory[i].hash_addresses, 1);
+		pefree(zephir_globals_ptr->start_memory[i].addresses, 1);
+	}
+
+	pefree(zephir_globals_ptr->start_memory, 1);
+	zephir_globals_ptr->start_memory = NULL;
+
+	zend_hash_destroy(zephir_globals_ptr->fcache);
+	pefree(zephir_globals_ptr->fcache, 1);
+	zephir_globals_ptr->fcache = NULL;
+
+	for (i = 0; i < 2; i++) {
+		zval_ptr_dtor(&zephir_globals_ptr->global_null);
+		zval_ptr_dtor(&zephir_globals_ptr->global_false);
+		zval_ptr_dtor(&zephir_globals_ptr->global_true);
+	}
+
+	//zephir_globals_ptr->initialized = 0;
+}
+
 static PHP_MINIT_FUNCTION(test)
 {
 #if PHP_VERSION_ID < 50500
-	const char* old_lc_all = setlocale(LC_ALL, NULL);
+	char* old_lc_all = setlocale(LC_ALL, NULL);
 	if (old_lc_all) {
-		char *tmp = calloc(strlen(old_lc_all)+1, 1);
-		memcpy(tmp, old_lc_all, strlen(old_lc_all));
+		size_t len = strlen(old_lc_all);
+		char *tmp  = calloc(len+1, 1);
+		if (UNEXPECTED(!tmp)) {
+			return FAILURE;
+		}
+
+		memcpy(tmp, old_lc_all, len);
 		old_lc_all = tmp;
 	}
 
@@ -215,6 +368,12 @@ static PHP_MINIT_FUNCTION(test)
 #ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(test)
 {
+
+	zephir_deinitialize_memory(TSRMLS_C);
+
+	//assert(ZEPHIR_GLOBAL(orm).parser_cache == NULL);
+	//assert(ZEPHIR_GLOBAL(orm).ast_cache == NULL);
+
 	return SUCCESS;
 }
 #endif
@@ -222,7 +381,7 @@ static PHP_MSHUTDOWN_FUNCTION(test)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_test_globals *zephir_globals TSRMLS_DC)
 {
 
 	/* Memory options */
@@ -243,53 +402,15 @@ static void php_zephir_init_globals(zend_zephir_globals *zephir_globals TSRMLS_D
 
 }
 
-#ifndef ZEPHIR_RELEASE
-static void zephir_fcall_cache_dtor(void *pData)
-{
-	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**)pData;
-	free(*entry);
-}
-#endif
-
-static int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
-{
-	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**)pDest;
-	zend_class_entry *scope;
-	uint len = hash_key->nKeyLength;
-
-	assert(hash_key->arKey != NULL);
-	assert(hash_key->nKeyLength > 2*sizeof(zend_class_entry**));
-
-	memcpy(&scope, &hash_key->arKey[len - 2*sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
-
-#ifndef ZEPHIR_RELEASE
-if ((*entry)->f->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-	return ZEND_HASH_APPLY_REMOVE;
-}
-#else
-if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-	return ZEND_HASH_APPLY_REMOVE;
-}
-#endif
-
-#if PHP_VERSION_ID >= 50400
-if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
-	return ZEND_HASH_APPLY_REMOVE;
-}
-#else
-if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->module->type != MODULE_PERSISTENT) {
-	return ZEND_HASH_APPLY_REMOVE;
-}
-#endif
-
-	return ZEND_HASH_APPLY_KEEP;
-}
-
 static PHP_RINIT_FUNCTION(test)
 {
 
-	php_zephir_init_globals(ZEPHIR_VGLOBAL TSRMLS_CC);
-	//test_init_interned_strings(TSRMLS_C);
+	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	php_zephir_init_globals(zephir_globals_ptr TSRMLS_CC);
+	//zephir_init_interned_strings(TSRMLS_C);
+
+	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
 
 	return SUCCESS;
 }
@@ -297,18 +418,7 @@ static PHP_RINIT_FUNCTION(test)
 static PHP_RSHUTDOWN_FUNCTION(test)
 {
 
-	if (ZEPHIR_GLOBAL(start_memory) != NULL) {
-		//zephir_clean_restore_stack(TSRMLS_C);
-	}
-
-	/*if (ZEPHIR_GLOBAL(function_cache) != NULL) {
-		zend_hash_destroy(ZEPHIR_GLOBAL(function_cache));
-		FREE_HASHTABLE(ZEPHIR_GLOBAL(function_cache));
-		ZEPHIR_GLOBAL(function_cache) = NULL;
-	}*/
-
-	zend_hash_apply_with_arguments(ZEPHIR_GLOBAL(fcache) TSRMLS_CC, zephir_cleanup_fcache, 0);
-
+	zephir_deinitialize_memory(TSRMLS_C);
 	return SUCCESS;
 }
 
@@ -340,81 +450,12 @@ static PHP_MINFO_FUNCTION(test)
 
 static PHP_GINIT_FUNCTION(test)
 {
-	zephir_memory_entry *start;
-	int num_preallocated_frames = 24;
-	size_t i;
-
 	php_zephir_init_globals(test_globals TSRMLS_CC);
-
-	/* pre-allocated memory frames */
-	start = (zephir_memory_entry *) pecalloc(num_preallocated_frames, sizeof(zephir_memory_entry), 1);
-
-	for (i = 0; i < num_preallocated_frames; ++i) {
-		start[i].addresses = pecalloc(16, sizeof(zval*), 1);
-		start[i].capacity = 16;
-		start[i].hash_addresses = pecalloc(4, sizeof(zval*), 1);
-		start[i].hash_capacity = 4;
-
-#ifndef ZEPHIR_RELEASE
-		start[i].permanent = 1;
-#endif
-	}
-
-	start[0].next = &start[1];
-	start[num_preallocated_frames - 1].prev = &start[num_preallocated_frames - 2];
-
-	for (i = 1; i < num_preallocated_frames - 1; ++i) {
-		start[i].next = &start[i + 1];
-		start[i].prev = &start[i - 1];
-	}
-
-	test_globals->start_memory = start;
-	test_globals->end_memory = start + num_preallocated_frames;
-
-	/* Function call cache */
-	test_globals->fcache = pemalloc(sizeof(HashTable), 1);
-#ifndef ZEPHIR_RELEASE
-	zend_hash_init(test_globals->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
-#else
-	zend_hash_init(test_globals->fcache, 128, NULL, NULL, 1);
-#endif
-
-	/* Global Constants */
-	ALLOC_PERMANENT_ZVAL(test_globals->global_false);
-	INIT_PZVAL(test_globals->global_false);
-	ZVAL_FALSE(test_globals->global_false);
-	Z_ADDREF_P(test_globals->global_false);
-
-	ALLOC_PERMANENT_ZVAL(test_globals->global_true);
-	INIT_PZVAL(test_globals->global_true);
-	ZVAL_TRUE(test_globals->global_true);
-	Z_ADDREF_P(test_globals->global_true);
-
-	ALLOC_PERMANENT_ZVAL(test_globals->global_null);
-	INIT_PZVAL(test_globals->global_null);
-	ZVAL_NULL(test_globals->global_null);
-	Z_ADDREF_P(test_globals->global_null);
-
 }
 
 static PHP_GSHUTDOWN_FUNCTION(test)
 {
-	size_t i;
-	int num_preallocated_frames = 24;
 
-	assert(test_globals->start_memory != NULL);
-
-	for (i = 0; i < num_preallocated_frames; ++i) {
-		pefree(test_globals->start_memory[i].hash_addresses, 1);
-		pefree(test_globals->start_memory[i].addresses, 1);
-	}
-
-	pefree(test_globals->start_memory, 1);
-	test_globals->start_memory = NULL;
-
-	zend_hash_destroy(test_globals->fcache);
-	pefree(test_globals->fcache, 1);
-	test_globals->fcache = NULL;
 }
 
 zend_module_entry test_module_entry = {

@@ -213,6 +213,21 @@ class SymbolTable
 
                 if (is_object($compilationContext) && is_object($compilationContext->branchManager)) {
 
+                    //var_dump($compilationContext->config->get('check-invalid-reads', 'optimizations'));
+
+                    if ($compilationContext->config->get('check-invalid-reads', 'optimizations')) {
+                        switch ($variable->getType()) {
+                            case 'variable':
+                            case 'string':
+                            case 'array':
+                                if (!$variable->isLocalOnly()) {
+                                    $variable->setMustInitNull(true);
+                                    $compilationContext->codePrinter->output('ZEPHIR_CHECK_POINTER(' . $variable->getName() . ');');
+                                }
+                                break;
+                        }
+                    }
+
                     $initBranches = $variable->getInitBranches();
 
                     $currentBranch = $compilationContext->branchManager->getCurrentBranch();

@@ -63,7 +63,8 @@ class Config
             'local-context-pass'                => true,
             'constant-folding'                  => true,
             'static-constant-class-folding'     => true,
-            'call-gatherer-pass'                => true
+            'call-gatherer-pass'                => true,
+            'check-invalid-reads'               => false
         ),
         'namespace'   => '',
         'name'        => '',
@@ -77,6 +78,7 @@ class Config
 
     /**
      * Config constructor
+     *
      */
     public function __construct()
     {
