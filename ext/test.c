@@ -298,7 +298,7 @@ static PHP_RSHUTDOWN_FUNCTION(test)
 {
 
 	if (ZEPHIR_GLOBAL(start_memory) != NULL) {
-		zephir_clean_restore_stack(TSRMLS_C);
+		//zephir_clean_restore_stack(TSRMLS_C);
 	}
 
 	/*if (ZEPHIR_GLOBAL(function_cache) != NULL) {

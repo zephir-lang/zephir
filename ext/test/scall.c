@@ -271,10 +271,11 @@ PHP_METHOD(Test_Scall, testCall12) {
 PHP_METHOD(Test_Scall, testCall13) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_PARENT(test_scall_ce, this_ptr, "testmethod1", NULL);
+	ZEPHIR_RETURN_CALL_PARENT(test_scall_ce, this_ptr, "testmethod1", &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -283,10 +284,11 @@ PHP_METHOD(Test_Scall, testCall13) {
 PHP_METHOD(Test_Scall, testCall14) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_PARENT(test_scall_ce, this_ptr, "testmethod2", NULL);
+	ZEPHIR_RETURN_CALL_PARENT(test_scall_ce, this_ptr, "testmethod2", &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 

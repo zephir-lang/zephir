@@ -167,11 +167,12 @@ PHP_METHOD(Test_Oo, testInstance8) {
 PHP_METHOD(Test_Oo, testInstance9) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "getnew", NULL);
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamica_ce, "getnew", &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -180,11 +181,12 @@ PHP_METHOD(Test_Oo, testInstance9) {
 PHP_METHOD(Test_Oo, testInstance10) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	zval *o = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamicb_ce, "getnew", NULL);
+	ZEPHIR_CALL_CE_STATIC(&o, test_oo_oodynamicb_ce, "getnew", &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 

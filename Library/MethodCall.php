@@ -507,7 +507,7 @@ class MethodCall extends Call
             }
 
         } else {
-             if ($type == self::CALL_DYNAMIC) {
+            if ($type == self::CALL_DYNAMIC) {
 
                 switch ($variableMethod->getType()) {
                     case 'string':
