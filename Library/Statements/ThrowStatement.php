@@ -55,7 +55,7 @@ class ThrowStatement extends StatementAbstract
                         if ($compilationContext->compiler->isClass($className)) {
                             $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                             $message = $expr['parameters'][0]['parameter']['value'];
-                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($message) . '", "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($message) . '", "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ');');
                             $codePrinter->output('return;');
                             return;
                         } else {

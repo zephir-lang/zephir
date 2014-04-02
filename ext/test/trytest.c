@@ -48,7 +48,7 @@ PHP_METHOD(Test_TryTest, testThrow2) {
 	object_init_ex(_0, zend_exception_get_default(TSRMLS_C));
 	ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, message);
 	zephir_check_call_status();
-	zephir_throw_exception(_0 TSRMLS_CC);
+	zephir_throw_exception_debug(_0, "test/trytest.zep", 16 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	return;
 
@@ -84,7 +84,7 @@ PHP_METHOD(Test_TryTest, testTry2) {
 		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 		zephir_check_temp_parameter(_1);
 		zephir_check_call_status_or_jump(try_end_1);
-		zephir_throw_exception(_0 TSRMLS_CC);
+		zephir_throw_exception_debug(_0, "test/trytest.zep", 27 TSRMLS_CC);
 		goto try_end_1;
 
 
@@ -112,7 +112,7 @@ PHP_METHOD(Test_TryTest, testTry3) {
 		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 		zephir_check_temp_parameter(_1);
 		zephir_check_call_status_or_jump(try_end_1);
-		zephir_throw_exception(_0 TSRMLS_CC);
+		zephir_throw_exception_debug(_0, "test/trytest.zep", 34 TSRMLS_CC);
 		goto try_end_1;
 
 
@@ -151,7 +151,7 @@ PHP_METHOD(Test_TryTest, testTry4) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 46 TSRMLS_CC);
 			goto try_end_1;
 
 		} else {
@@ -162,7 +162,7 @@ PHP_METHOD(Test_TryTest, testTry4) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 48 TSRMLS_CC);
 			goto try_end_1;
 
 		}
@@ -208,7 +208,7 @@ PHP_METHOD(Test_TryTest, testTry5) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 63 TSRMLS_CC);
 			goto try_end_1;
 
 		} else {
@@ -219,7 +219,7 @@ PHP_METHOD(Test_TryTest, testTry5) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 65 TSRMLS_CC);
 			goto try_end_1;
 
 		}
@@ -263,7 +263,7 @@ PHP_METHOD(Test_TryTest, testTry6) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 80 TSRMLS_CC);
 			goto try_end_1;
 
 		} else {
@@ -274,7 +274,7 @@ PHP_METHOD(Test_TryTest, testTry6) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 82 TSRMLS_CC);
 			goto try_end_1;
 
 		}
@@ -318,7 +318,7 @@ PHP_METHOD(Test_TryTest, testTry7) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 99 TSRMLS_CC);
 			goto try_end_1;
 
 		} else {
@@ -329,7 +329,7 @@ PHP_METHOD(Test_TryTest, testTry7) {
 			ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 			zephir_check_temp_parameter(_1);
 			zephir_check_call_status_or_jump(try_end_1);
-			zephir_throw_exception(_0 TSRMLS_CC);
+			zephir_throw_exception_debug(_0, "test/trytest.zep", 101 TSRMLS_CC);
 			goto try_end_1;
 
 		}
@@ -366,7 +366,7 @@ PHP_METHOD(Test_TryTest, testTry8) {
 		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, _1);
 		zephir_check_temp_parameter(_1);
 		zephir_check_call_status_or_jump(try_end_1);
-		zephir_throw_exception(_0 TSRMLS_CC);
+		zephir_throw_exception_debug(_0, "test/trytest.zep", 111 TSRMLS_CC);
 		goto try_end_1;
 
 

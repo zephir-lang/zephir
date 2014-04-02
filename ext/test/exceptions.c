@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Exceptions) {
 PHP_METHOD(Test_Exceptions, testException1) {
 
 
-	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello1", "test/exceptions.zep", 9);
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello1", "test/exceptions.zep", 8);
 	return;
 
 }
@@ -46,7 +46,7 @@ PHP_METHOD(Test_Exceptions, testException2) {
 	object_init_ex(_0, test_exception_ce);
 	ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL, msg);
 	zephir_check_call_status();
-	zephir_throw_exception(_0 TSRMLS_CC);
+	zephir_throw_exception_debug(_0, "test/exceptions.zep", 15 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	return;
 
@@ -65,7 +65,7 @@ PHP_METHOD(Test_Exceptions, testException3) {
 	object_init_ex(ex, test_exception_ce);
 	ZEPHIR_CALL_METHOD(NULL, ex, "__construct", NULL, msg);
 	zephir_check_call_status();
-	zephir_throw_exception(ex TSRMLS_CC);
+	zephir_throw_exception_debug(ex, "test/exceptions.zep", 23 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	return;
 
@@ -97,7 +97,7 @@ PHP_METHOD(Test_Exceptions, testException4) {
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception",  NULL);
 	zephir_check_call_status();
-	zephir_throw_exception(_0 TSRMLS_CC);
+	zephir_throw_exception_debug(_0, "test/exceptions.zep", 33 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	return;
 
