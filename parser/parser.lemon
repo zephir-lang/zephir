@@ -1067,13 +1067,14 @@ static json_object *xx_ret_mcall(int type, json_object *O, xx_parser_token *M, j
 	return ret;
 }
 
-static json_object *xx_ret_scall(int dynamic_class, xx_parser_token *O, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
+static json_object *xx_ret_scall(int dynamic_class, xx_parser_token *O, int dynamic_method, xx_parser_token *M, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
 	json_object_object_add(ret, "type", json_object_new_string("scall"));
 	json_object_object_add(ret, "dynamic-class", json_object_new_int(dynamic_class));
 	json_object_object_add(ret, "class", json_object_new_string(O->token));
+	json_object_object_add(ret, "dynamic", json_object_new_int(dynamic_method));
 	json_object_object_add(ret, "name", json_object_new_string(M->token));
 
 	if (parameters) {
@@ -2620,32 +2621,32 @@ xx_fcall_expr(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN P
 
 /* o::m(false, x) */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_scall(0, O, M, P, status->scanner_state);
+	R = xx_ret_scall(0, O, 0, M, P, status->scanner_state);
 }
 
 /* o::m() */
 xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_scall(0, O, M, NULL, status->scanner_state);
+	R = xx_ret_scall(0, O, 0, M, NULL, status->scanner_state);
 }
 
 /* {o}::m(false, x) */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_scall(1, O, M, P, status->scanner_state);
+	R = xx_ret_scall(1, O, 0, M, P, status->scanner_state);
 }
 
 /* {o}::m() */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_scall(1, O, M, NULL, status->scanner_state);
+	R = xx_ret_scall(1, O, 0, M, NULL, status->scanner_state);
 }
 
 /* {o}::{m}(false, x) */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-	R = xx_ret_scall(1, O, M, P, status->scanner_state);
+	R = xx_ret_scall(1, O, 1, M, P, status->scanner_state);
 }
 
 /* {o}::{m}() */
 xx_scall_expr(R) ::= BRACKET_OPEN IDENTIFIER(O) BRACKET_CLOSE DOUBLECOLON BRACKET_OPEN IDENTIFIER(M) BRACKET_CLOSE PARENTHESES_OPEN PARENTHESES_CLOSE . {
-	R = xx_ret_scall(1, O, M, NULL, status->scanner_state);
+	R = xx_ret_scall(1, O, 1, M, NULL, status->scanner_state);
 }
 
 /* o->m(false, x) */

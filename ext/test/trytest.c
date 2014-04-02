@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_TryTest) {
 PHP_METHOD(Test_TryTest, testThrow1) {
 
 
-	ZEPHIR_THROW_EXCEPTION_STRW(zend_exception_get_default(TSRMLS_C), "error");
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(TSRMLS_C), "error", "test/trytest.zep", 10);
 	return;
 
 }
@@ -373,7 +373,7 @@ PHP_METHOD(Test_TryTest, testTry8) {
 	try_end_1:
 
 	zend_clear_exception(TSRMLS_C);
-	ZEPHIR_THROW_EXCEPTION_STR(zend_exception_get_default(TSRMLS_C), "error 2!");
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "error 2!", "test/trytest.zep", 113);
 	return;
 
 }
@@ -381,7 +381,7 @@ PHP_METHOD(Test_TryTest, testTry8) {
 PHP_METHOD(Test_TryTest, someMethod1) {
 
 
-	ZEPHIR_THROW_EXCEPTION_STRW(spl_ce_RuntimeException, "some external exception");
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_RuntimeException, "some external exception", "test/trytest.zep", 118);
 	return;
 
 }
@@ -389,7 +389,7 @@ PHP_METHOD(Test_TryTest, someMethod1) {
 PHP_METHOD(Test_TryTest, someMethod2) {
 
 
-	ZEPHIR_THROW_EXCEPTION_STRW(spl_ce_DomainException, "some external exception");
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_DomainException, "some external exception", "test/trytest.zep", 123);
 	return;
 
 }

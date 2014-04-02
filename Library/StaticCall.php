@@ -335,6 +335,98 @@ class StaticCall extends Call
     }
 
     /**
+     * Calls static methods on using a dynamic variable as class and a dynamic method
+     *
+     * @param array $expression
+     * @param Variable $symbolVariable
+     * @param boolean $mustInit
+     * @param boolean $isExpecting
+     * @param CompilationContext $compilationContext
+     */
+    protected function callFromDynamicClassDynamicMethod(array $expression, $symbolVariable, $mustInit, $isExpecting, CompilationContext $compilationContext)
+    {
+        $codePrinter = $compilationContext->codePrinter;
+
+        /**
+         * Call static methods must grown the stack
+         */
+        $compilationContext->symbolTable->mustGrownStack(true);
+
+        if ($mustInit) {
+            $symbolVariable->setMustInitNull(true);
+            $symbolVariable->trackVariant($compilationContext);
+        }
+
+        $cachePointer = 'NULL';
+
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
+            $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
+        } else {
+            $params = array();
+        }
+
+        /**
+         * Obtain the class entry from the variable
+         */
+        $classNameVariable = $compilationContext->symbolTable->getVariableForRead($expression['class'], $compilationContext, $expression);
+        if ($classNameVariable->isNotVariableAndString()) {
+            throw new CompilerException("Only dynamic/string variables can be used in dynamic classes", $expression);
+        }
+
+        /**
+         * @todo Validate if the variable is really a string!
+         */
+        $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+        $codePrinter->output($classEntryVariable->getName() . ' = zend_fetch_class(Z_STRVAL_P(' . $classNameVariable->getName() . '), Z_STRLEN_P(' . $classNameVariable->getName() . '), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+        $classEntry = $classEntryVariable->getName();
+
+
+        /**
+         * Obtain the method name from the variable
+         */
+        $methodNameVariable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
+        if ($methodNameVariable->isNotVariableAndString()) {
+            throw new CompilerException("Only dynamic/string variables can be used in dynamic methods", $expression);
+        }
+
+        /**
+         * @todo Validate if the variable is really a string!
+         */
+        $methodName = 'Z_STRVAL_P(' . $methodNameVariable->getName() . ')';
+
+        if (!count($params)) {
+            if ($isExpecting) {
+                if ($symbolVariable->getName() == 'return_value') {
+                    $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ');');
+                } else {
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ');');
+                }
+            } else {
+                $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ');');
+            }
+        } else {
+            if ($isExpecting) {
+                if ($symbolVariable->getName() == 'return_value') {
+                    $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                } else {
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                }
+            } else {
+                $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', ' . $methodName . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
+            }
+        }
+
+        /**
+         * Temporary variables must be copied if they have more than one reference
+         */
+        foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
+        }
+
+        $this->addCallStatusOrJump($compilationContext);
+    }
+
+    /**
      * Compiles a static method call
      *
      * @param array $expr
@@ -345,7 +437,10 @@ class StaticCall extends Call
 
         $expression = $expr->getExpression();
 
-        $methodName = strtolower($expression['name']);
+        $dynamicMethod = $expression['dynamic'];
+        if (!$dynamicMethod) {
+            $methodName = strtolower($expression['name']);
+        }
 
         $symbolVariable = null;
 
@@ -435,10 +530,13 @@ class StaticCall extends Call
                     }
                 }
             }
+        }
 
-            /**
-             * Check if the class implements the method
-             */
+        /**
+         * Check if the class implements the method
+         */
+        if (!$dynamicMethod && !$dynamicClass) {
+
             if (!$classDefinition->hasMethod($methodName)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
             } else {
@@ -476,16 +574,14 @@ class StaticCall extends Call
                     }
 
                     if ($callNumberParameters < $expectedNumberParameters) {
-                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                         throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
                     }
                 } else {
 
                     $method = $classDefinition->getMethod("__callStatic");
-
                     if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
                         throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
                     }
-
                 }
             }
         }
@@ -494,18 +590,24 @@ class StaticCall extends Call
          * Call static methods in the same class, use the special context 'self'
          * Call static methods in the 'self' context
          */
-        if (!$dynamicClass) {
-            if ($className == 'self' || $classDefinition == $compilationContext->classDefinition) {
-                $this->callSelf($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+        if (!$dynamicMethod) {
+            if ($dynamicClass) {
+                $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
             } else {
-                if ($className == 'parent') {
-                    $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, isset($method) ? $method : null);
+                if ($className == 'self' || $classDefinition == $compilationContext->classDefinition) {
+                    $this->callSelf($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
                 } else {
-                    $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+                    if ($className == 'parent') {
+                        $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, isset($method) ? $method : null);
+                    } else {
+                        $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+                    }
                 }
             }
         } else {
-            $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
+            if ($dynamicClass) {
+                $this->callFromDynamicClassDynamicMethod($expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
+            }
         }
 
         /**

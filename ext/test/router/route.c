@@ -420,7 +420,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 
 
 	if (Z_TYPE_P(pattern) != IS_STRING) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The pattern must be string");
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(test_router_exception_ce, "The pattern must be string", "test/router/route.zep", 271);
 		return;
 	}
 	if (Z_TYPE_P(paths) != IS_NULL) {
@@ -490,7 +490,7 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 		array_init(routePaths);
 	}
 	if (Z_TYPE_P(routePaths) != IS_ARRAY) {
-		ZEPHIR_THROW_EXCEPTION_STR(test_router_exception_ce, "The route contains invalid paths");
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(test_router_exception_ce, "The route contains invalid paths", "test/router/route.zep", 343);
 		return;
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {

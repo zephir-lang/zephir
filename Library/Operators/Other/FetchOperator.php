@@ -101,12 +101,14 @@ class FetchOperator extends BaseOperator
                 }
 
                 $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
-                if ($evalVariable->getType() != 'variable') {
+                if ($evalVariable->getType() != 'variable' && $evalVariable->getType() != 'array') {
                     throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $expression['right']['left']);
                 }
 
-                if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
-                    $compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-fetch', $expression['right']);
+                if ($evalVariable->getType() == 'variable') {
+                    if ($evalVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                        $compilationContext->logger->warning('Possible attempt to use non array in fetch operator', 'non-valid-fetch', $expression['right']);
+                    }
                 }
 
                 $expr = new Expression($expression['right']['right']);

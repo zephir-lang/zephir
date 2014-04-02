@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Exceptions) {
 PHP_METHOD(Test_Exceptions, testException1) {
 
 
-	ZEPHIR_THROW_EXCEPTION_STRW(test_exception_ce, "hello1");
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello1", "test/exceptions.zep", 9);
 	return;
 
 }

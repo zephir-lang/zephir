@@ -20,6 +20,7 @@
 namespace Zephir\Statements;
 
 use Zephir\Utils;
+use Zephir\Compiler;
 use Zephir\Expression;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
@@ -53,14 +54,16 @@ class ThrowStatement extends StatementAbstract
                         $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
                         if ($compilationContext->compiler->isClass($className)) {
                             $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
+                            $message = $expr['parameters'][0]['parameter']['value'];
+                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($message) . '", "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
                             $codePrinter->output('return;');
                             return;
                         } else {
                             if ($compilationContext->compiler->isInternalClass($className)) {
                                 $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
                                 if ($classEntry) {
-                                    $codePrinter->output('ZEPHIR_THROW_EXCEPTION_STR(' . $classEntry . ', "' . Utils::addSlashes($expr['parameters'][0]['parameter']['value']) . '");');
+                                    $message = $expr['parameters'][0]['parameter']['value'];
+                                    $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classEntry . ', "' . Utils::addSlashes($message) . '", "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ');');
                                     $codePrinter->output('return;');
                                     return;
                                 }
@@ -83,7 +86,7 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
         }
 
-        $codePrinter->output('zephir_throw_exception(' . $variableVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output('zephir_throw_exception_debug(' . $variableVariable->getName() . ', "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ' TSRMLS_CC);');
         if (!$compilationContext->insideTryCatch) {
             $codePrinter->output('ZEPHIR_MM_RESTORE();');
             $codePrinter->output('return;');

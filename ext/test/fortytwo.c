@@ -249,7 +249,7 @@ PHP_METHOD(Test_FortyTwo, proof) {
 			}
 		}
 		if (j != 42) {
-			ZEPHIR_THROW_EXCEPTION_STR(test_exception_ce, "not true");
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(test_exception_ce, "not true", "test/fortytwo.zep", 30);
 			return;
 		}
 	}
