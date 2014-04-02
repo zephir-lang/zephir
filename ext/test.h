@@ -4,10 +4,10 @@
 #ifndef ZEPHIR_CLASS_ENTRIES_H
 #define ZEPHIR_CLASS_ENTRIES_H
 
+#include "test/bench/foo.h"
 #include "test/internalclasses.h"
 #include "test/arithmetic.h"
 #include "test/assign.h"
-#include "test/bench/foo.h"
 #include "test/bitwise.h"
 #include "test/branchprediction.h"
 #include "test/builtin/charmethods.h"
@@ -49,6 +49,7 @@
 #include "test/oo.h"
 #include "test/oo/abstractclass.h"
 #include "test/oo/constantsinterface.h"
+#include "test/oo/dynamicprop.h"
 #include "test/oo/extendpdoclass.h"
 #include "test/oo/ooconstruct.h"
 #include "test/oo/ooconstructparams.h"

@@ -139,20 +139,20 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
  */
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
-	zval s = zval_used_for_init;
+	zval *s;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(s);
 	ZVAL_LONG(s, 23);
 
 	if (1 == 1) {
-		ZEPHIR_SINIT_VAR(s);
-		ZVAL_LONG(&s, 3);
+		ZEPHIR_INIT_VAR(s);
+		ZVAL_LONG(s, 3);
 	} else {
-		ZEPHIR_SINIT_NVAR(s);
-		ZVAL_LONG(&s, 10);
+		ZEPHIR_INIT_BNVAR(s);
+		ZVAL_LONG(s, 10);
 	}
-	RETURN_LCTOR(s);
+	RETURN_CCTOR(s);
 
 }
 
