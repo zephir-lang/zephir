@@ -134,7 +134,7 @@ class StaticPropertyAccess
             if ($this->_expectingVariable) {
                 $symbolVariable = $this->_expectingVariable;
                 if ($symbolVariable->getName() != 'return_value') {
-                    //$symbolVariable->initVariant($compilationContext);
+                    $symbolVariable->observeVariant($compilationContext);
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
                 }
