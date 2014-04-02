@@ -57,7 +57,7 @@ class MergeAppendOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/array');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_merge_append(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_merge_append(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
         return new CompiledExpression('null', null, $expression);
     }
 }
