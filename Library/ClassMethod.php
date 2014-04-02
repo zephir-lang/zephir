@@ -265,9 +265,18 @@ class ClassMethod
      * Checks whether at least one return type hint is null compatible
      *
      * @param string $type
+     * @return boolean
      */
     public function areReturnTypesNullCompatible($type = null)
     {
+        if (count($this->_returnTypes)) {
+            foreach ($this->_returnTypes as $returnType => $definition) {
+                switch ($returnType) {
+                    case 'null':
+                        return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -275,6 +284,7 @@ class ClassMethod
      * Checks whether at least one return type hint is integer compatible
      *
      * @param string $type
+     * @return boolean
      */
     public function areReturnTypesIntCompatible($type = null)
     {
@@ -298,6 +308,7 @@ class ClassMethod
      * Checks whether at least one return type hint is double compatible
      *
      * @param string $type
+     * @return boolean
      */
     public function areReturnTypesDoubleCompatible($type = null)
     {
@@ -316,6 +327,7 @@ class ClassMethod
      * Checks whether at least one return type hint is integer compatible
      *
      * @param string $type
+     * @return boolean
      */
     public function areReturnTypesBoolCompatible($type = null)
     {
@@ -334,6 +346,7 @@ class ClassMethod
      * Checks whether at least one return type hint is integer compatible
      *
      * @param string $type
+     * @return boolean
      */
     public function areReturnTypesStringCompatible($type = null)
     {

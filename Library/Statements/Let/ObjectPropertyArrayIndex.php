@@ -187,6 +187,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
                             case 'variable':
                             case 'string':
+                            case 'array':
                                 $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $variableExpr->getName() . ' TSRMLS_CC);');
                                 if ($variableExpr->isTemporal()) {
                                     $variableExpr->setIdle(true);

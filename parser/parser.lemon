@@ -485,6 +485,10 @@ static json_object *xx_ret_type(int type)
             return json_object_new_string("resource");
         case XX_TYPE_OBJECT:
             return json_object_new_string("object");
+		case XX_T_TYPE_NULL:
+            return json_object_new_string("null");
+        case XX_T_TYPE_THIS:
+            return json_object_new_string("this");
 		default:
 			fprintf(stderr, "unknown type?\n");
 	}
@@ -1618,6 +1622,14 @@ xx_method_return_type_list(R) ::= xx_method_return_type_item(I) . {
 
 xx_method_return_type_item(R) ::= xx_parameter_type(T) . {
 	R = xx_ret_return_type_item(T, NULL, 0, 0, status->scanner_state);
+}
+
+xx_method_return_type_item(R) ::= NULL . {
+	R = xx_ret_return_type_item(xx_ret_type(XX_T_TYPE_NULL), NULL, 0, 0, status->scanner_state);
+}
+
+xx_method_return_type_item(R) ::= THIS . {
+	R = xx_ret_return_type_item(xx_ret_type(XX_T_TYPE_THIS), NULL, 0, 0, status->scanner_state);
 }
 
 xx_method_return_type_item(R) ::= xx_parameter_type(T) NOT . {
