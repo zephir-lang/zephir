@@ -68,7 +68,7 @@ PHP_METHOD(Test_Bench_Foo, read_static) {
 
 	int _1;
 	zend_bool _0;
-	zval *n, *x, *i = NULL, *_2 = NULL;
+	zval *n, *x = NULL, *i = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
@@ -90,6 +90,7 @@ PHP_METHOD(Test_Bench_Foo, read_static) {
 			}
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
+			ZEPHIR_OBS_NVAR(x);
 			zephir_read_static_property_ce(&x, test_bench_foo_ce, SL("a") TSRMLS_CC);
 		}
 	}
