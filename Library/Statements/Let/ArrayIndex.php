@@ -351,19 +351,22 @@ class ArrayIndex
         /**
          * Only dynamic variables can be used as arrays
          */
-        if ($symbolVariable->getType() != 'variable') {
+        if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'array') {
             throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
         }
 
-        if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
-        }
+        if ($symbolVariable->getType() == 'variable') {
 
-        /**
-         * Trying to use a non-object dynamic variable as object
-         */
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
-            $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
+            if ($symbolVariable->hasAnyDynamicType('unknown')) {
+                throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
+            }
+
+            /**
+             * Trying to use a non-object dynamic variable as object
+             */
+            if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                $compilationContext->logger->warning('Possible attempt to update index on a non-array dynamic variable', 'non-array-update', $statement);
+            }
         }
 
         /**

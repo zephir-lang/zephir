@@ -189,6 +189,20 @@ class SymbolTable
                 $superVar->setIsInitialized(true, $compilationContext, $statement);
                 $superVar->setDynamicTypes('array');
                 $this->_variables[$name] = $superVar;
+            } else {
+
+                $found = false;
+                $variable = $this->getVariable($name);
+                foreach ($variable->getInitBranches() as $branch) {
+                    if ($branch->getType() == Branch::TYPE_ROOT) {
+                        $found = true;
+                    }
+                }
+
+                if (!$found) {
+                    $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
+                }
+
             }
         }
 

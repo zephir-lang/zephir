@@ -54,7 +54,6 @@ use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
 class LetStatement extends StatementAbstract
 {
 
-
     /**
      * @param CompilationContext $compilationContext
      * @throws CompilerException
