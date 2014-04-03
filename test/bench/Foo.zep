@@ -140,7 +140,7 @@ class Foo
 
 	}
 
-	public function call($n)
+	public function call(var n)
 	{
 	    var i;
 		for i in range(1, n) {
