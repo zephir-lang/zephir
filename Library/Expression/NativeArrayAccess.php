@@ -137,15 +137,19 @@ class NativeArrayAccess
     {
         $arrayAccess = $expression;
 
-        if ($variableVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException("Cannot use non-initialized variable as an array", $arrayAccess['left']);
-        }
+        if ($variableVariable->getType() == 'variable') {
 
-        /**
-         * Trying to use a non-object dynamic variable as object
-         */
-        if ($variableVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
-            $compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $arrayAccess['left']);
+            if ($variableVariable->hasAnyDynamicType('unknown')) {
+                throw new CompilerException("Cannot use non-initialized variable as an array", $arrayAccess['left']);
+            }
+
+            /**
+             * Trying to use a non-object dynamic variable as object
+             */
+            if ($variableVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                $compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $arrayAccess['left']);
+            }
+
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -341,7 +345,7 @@ class NativeArrayAccess
                 return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
 
             case 'array':
-                break;
+                return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
 
             case 'string':
                 return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
