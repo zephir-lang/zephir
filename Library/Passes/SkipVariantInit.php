@@ -46,14 +46,29 @@ class SkipVariantInit
         $this->_branches[$branchNumber] = 0;
     }
 
+    /**
+     * Check assignment types for possible skip
+     *
+     * @param int $branchNumber
+     * @param array $statement
+     */
     public function passLetStatement($branchNumber, $statement)
     {
         foreach ($statement['assignments'] as $assignment) {
             if ($assignment['assign-type'] == 'variable') {
                 if ($assignment['operator'] == 'assign') {
-                    if ($assignment['expr']['type'] != 'variable' && $assignment['expr']['type'] != 'array-access') {
-                        //echo $assignment['variable'], ' ', $assignment['expr']['type'], PHP_EOL;
-                        $this->_variablesToSkip[$branchNumber][$assignment['variable']] = 1;
+                    switch ($assignment['expr']['type']) {
+                        case 'variable':
+                        case 'array-access':
+                        case 'property-access':
+                        case 'static-property-access':
+                        case 'fcall':
+                        case 'mcall':
+                        case 'scall':
+                            break;
+                        default:
+                            $this->_variablesToSkip[$branchNumber][$assignment['variable']] = 1;
+                            break;
                     }
                 }
             }
