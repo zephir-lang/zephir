@@ -59,7 +59,7 @@ PHP_METHOD(Test_MethodArgs, setCallableStrict) {
 
 	zephir_fetch_params(0, 1, 0, &a);
 
-	if (zephir_is_callable(a TSRMLS_CC) != 1) {
+	if (unlikely(zephir_is_callable(a TSRMLS_CC) != 1)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be callable") TSRMLS_CC);
 		RETURN_NULL();
 	}
@@ -76,7 +76,7 @@ PHP_METHOD(Test_MethodArgs, setObjectStrict) {
 
 	zephir_fetch_params(0, 1, 0, &a);
 
-	if (Z_TYPE_P(a) != IS_OBJECT) {
+	if (unlikely(Z_TYPE_P(a) != IS_OBJECT)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be an object") TSRMLS_CC);
 		RETURN_NULL();
 	}
@@ -93,7 +93,7 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 
 	zephir_fetch_params(0, 1, 0, &a);
 
-	if (Z_TYPE_P(a) != IS_RESOURCE) {
+	if (unlikely(Z_TYPE_P(a) != IS_RESOURCE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be an resource") TSRMLS_CC);
 		RETURN_NULL();
 	}

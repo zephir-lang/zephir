@@ -871,7 +871,7 @@ class ClassMethod
             case 'int':
             case 'uint':
             case 'long':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG) {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG)) {' . PHP_EOL;
                 $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t\t" . '}' . PHP_EOL;
@@ -880,7 +880,7 @@ class ClassMethod
                 return $code;
 
             case 'bool':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL) {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL)) {' . PHP_EOL;
                 $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t\t" . '}' . PHP_EOL;
@@ -889,7 +889,7 @@ class ClassMethod
                 return $code;
 
             case 'double':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE) {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_DOUBLE)) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
@@ -900,12 +900,12 @@ class ClassMethod
             case 'string':
             case 'ulong':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING && Z_TYPE_P(' . $parameter['name'] . '_param) != IS_NULL) {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING && Z_TYPE_P(' . $parameter['name'] . '_param) != IS_NULL)) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
-                $code .= "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) == IS_STRING) {' . PHP_EOL;
+                $code .= "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) == IS_STRING)) {' . PHP_EOL;
                 $code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
                 $code .= "\t" . '} else {' . PHP_EOL;
                 $code .= "\t\tZEPHIR_INIT_VAR(" . $parameter['name'] . ');' . PHP_EOL;
@@ -914,7 +914,7 @@ class ClassMethod
                 return $code;
 
             case 'array':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . '_param) != IS_' . strtoupper($dataType) . ') {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_' . strtoupper($dataType) . ')) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an ' . $dataType . '") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
@@ -925,7 +925,7 @@ class ClassMethod
 
             case 'object':
             case 'resource':
-                $code  = "\tif (Z_TYPE_P(" . $parameter['name'] . ') != IS_' . strtoupper($dataType) . ') {' . PHP_EOL;
+                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . ') != IS_' . strtoupper($dataType) . ')) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an ' . $dataType . '") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
@@ -933,7 +933,7 @@ class ClassMethod
                 return $code;
 
             case 'callable':
-                $code  = "\tif (zephir_is_callable(" . $parameter['name'] . ' TSRMLS_CC) != 1) {' . PHP_EOL;
+                $code  = "\tif (unlikely(zephir_is_callable(" . $parameter['name'] . ' TSRMLS_CC) != 1)) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be callable") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
