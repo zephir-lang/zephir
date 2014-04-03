@@ -306,6 +306,13 @@ class LocalContextPass
             case 'mcall':
             case 'fcall':
             case 'scall':
+                if ($expression['type'] == 'mcall') {
+                    if (isset($expression['variable'])) {
+                        if ($expression['variable']['type'] == 'variable') {
+                            $this->markVariableNoLocal($expression['variable']['value']);
+                        }
+                    }
+                }
                 $this->passCall($expression);
                 $this->_lastCallLine = $expression['line'];
                 break;
@@ -483,6 +490,13 @@ class LocalContextPass
                 case 'scall':
                 case 'fcall':
                 case 'require':
+                    if ($statement['expr']['type'] == 'mcall') {
+                        if (isset($statement['expr']['variable'])) {
+                            if ($statement['expr']['variable']['type'] == 'variable') {
+                                $this->markVariableNoLocal($statement['expr']['variable']['value']);
+                            }
+                        }
+                    }
                     $this->passCall($statement['expr']);
                     $this->_lastCallLine = $statement['line'];
                     break;
