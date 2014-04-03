@@ -139,7 +139,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAge) {
 
 	zephir_fetch_params(0, 1, 0, &age_param);
 
-	if (Z_TYPE_P(age_param) != IS_LONG) {
+	if (unlikely(Z_TYPE_P(age_param) != IS_LONG)) {
 			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'age' must be a long/integer") TSRMLS_CC);
 			RETURN_NULL();
 		}
@@ -158,7 +158,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 
 	zephir_fetch_params(0, 1, 0, &average_param);
 
-	if (Z_TYPE_P(average_param) != IS_DOUBLE) {
+	if (unlikely(Z_TYPE_P(average_param) != IS_DOUBLE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'average' must be a double") TSRMLS_CC);
 		RETURN_NULL();
 	}
@@ -178,12 +178,12 @@ PHP_METHOD(Test_Oo_OoParams, setStrictName) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &name_param);
 
-	if (Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL) {
+	if (unlikely(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
 
-	if (Z_TYPE_P(name_param) == IS_STRING) {
+	if (unlikely(Z_TYPE_P(name_param) == IS_STRING)) {
 		name = name_param;
 	} else {
 		ZEPHIR_INIT_VAR(name);
@@ -216,7 +216,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
 
-	if (Z_TYPE_P(someList_param) != IS_ARRAY) {
+	if (unlikely(Z_TYPE_P(someList_param) != IS_ARRAY)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'someList' must be an array") TSRMLS_CC);
 		RETURN_NULL();
 	}
