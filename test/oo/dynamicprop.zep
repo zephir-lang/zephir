@@ -44,4 +44,28 @@ class DynamicProp
     {
         let this->{property} = null;
     }
+
+    public function setPropertyVariableInt(string! property)
+    {
+        var a = 10;
+        let this->{property} = a;
+    }
+
+    public function setPropertyVariableString(string! property)
+    {
+        var a = "test";
+        let this->{property} = a;
+    }
+
+    public function setPropertyVariableBoolTrue(string! property)
+    {
+        var a = true;
+        let this->{property} = a;
+    }
+
+    public function setPropertyVariableBoolFalse(string! property)
+    {
+        var a = false;
+        let this->{property} = a;
+    }
 }

@@ -223,3 +223,118 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 
 }
 
+PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableInt) {
+
+	int a = 10;
+	zval *property_param = NULL, *_0;
+	zval *property = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &property_param);
+
+	if (Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(property_param) == IS_STRING) {
+		property = property_param;
+	} else {
+		ZEPHIR_INIT_VAR(property);
+		ZVAL_EMPTY_STRING(property);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, a);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableString) {
+
+	zval *property_param = NULL, *a;
+	zval *property = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &property_param);
+
+	if (Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(property_param) == IS_STRING) {
+		property = property_param;
+	} else {
+		ZEPHIR_INIT_VAR(property);
+		ZVAL_EMPTY_STRING(property);
+	}
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "test", 1);
+
+
+	zephir_update_property_zval_zval(this_ptr, property, a TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
+
+	zend_bool a = 1;
+	zval *property_param = NULL, *_0;
+	zval *property = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &property_param);
+
+	if (Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(property_param) == IS_STRING) {
+		property = property_param;
+	} else {
+		ZEPHIR_INIT_VAR(property);
+		ZVAL_EMPTY_STRING(property);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_BOOL(_0, a);
+	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
+
+	zend_bool a = 0;
+	zval *property_param = NULL, *_0;
+	zval *property = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &property_param);
+
+	if (Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (Z_TYPE_P(property_param) == IS_STRING) {
+		property = property_param;
+	} else {
+		ZEPHIR_INIT_VAR(property);
+		ZVAL_EMPTY_STRING(property);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_BOOL(_0, a);
+	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
