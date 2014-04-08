@@ -64,9 +64,73 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 
 	}
 
-	//zend_print_zval_r(assignment, 0 TSRMLS_CC);
-
 	efree(compiled_expr);
+	return 0;
+}
+
+int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
+
+	zval *variable;
+	zephir_variable *symbol_variable;
+
+	_zephir_array_fetch_string(&variable, assignment, SS("variable") TSRMLS_CC);
+	if (Z_TYPE_P(variable) != IS_STRING) {
+		return 0;
+	}
+
+	symbol_variable = zephir_symtable_get_variable_for_write(context->symtable, Z_STRVAL_P(variable), Z_STRLEN_P(variable));
+
+	switch (symbol_variable->type) {
+
+		case ZEPHIR_T_TYPE_INTEGER:
+
+			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
+				LLVMBuildNSWAdd( // // %7 = add nsw i32 %6, 1
+					context->builder,
+					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
+					LLVMConstInt(LLVMInt64Type(), 1, 0),
+					""
+				),
+				symbol_variable->value_ref
+			);
+
+			break;
+
+	}
+
+	return 0;
+}
+
+int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
+
+	zval *variable;
+	zephir_variable *symbol_variable;
+
+	_zephir_array_fetch_string(&variable, assignment, SS("variable") TSRMLS_CC);
+	if (Z_TYPE_P(variable) != IS_STRING) {
+		return 0;
+	}
+
+	symbol_variable = zephir_symtable_get_variable_for_write(context->symtable, Z_STRVAL_P(variable), Z_STRLEN_P(variable));
+
+	switch (symbol_variable->type) {
+
+		case ZEPHIR_T_TYPE_INTEGER:
+
+			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
+				LLVMBuildNSWAdd( // // %7 = add nsw i32 %6, -1
+					context->builder,
+					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
+					LLVMConstInt(LLVMInt64Type(), -1, 0),
+					""
+				),
+				symbol_variable->value_ref
+			);
+
+			break;
+
+	}
+
 	return 0;
 }
 
@@ -98,8 +162,19 @@ int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 			continue;
 		}
 
+		if (!memcmp(Z_STRVAL_P(assign_type), SS("incr"))) {
+			zephir_statement_let_incr(context, *assignment, statement);
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(assign_type), SS("decr"))) {
+			zephir_statement_let_decr(context, *assignment, statement);
+			continue;
+		}
+
+		zend_print_zval_r(*assignment, 0 TSRMLS_CC);
 	}
 
-	//zend_print_zval_r(statement, 0 TSRMLS_CC);
+
 	return 0;
 }

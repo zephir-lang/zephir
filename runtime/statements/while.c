@@ -42,6 +42,12 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 		return 0;
 	}
 
+	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+
+	LLVMBasicBlockRef start_block = LLVMAppendBasicBlock(func, "start-while");
+	LLVMBuildBr(context->builder, start_block);
+	LLVMPositionBuilderAtEnd(context->builder, start_block);
+
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
 	switch (compiled_expr->type) {
 
@@ -74,32 +80,20 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 		return 0;
 	}
 
-	/*LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+	LLVMBasicBlockRef while_block = LLVMAppendBasicBlock(func, "block-while");
+	LLVMBasicBlockRef merge_block = LLVMAppendBasicBlock(func, "merge-while");
+	LLVMBuildCondBr(context->builder, condition, while_block, merge_block);
 
-	LLVMBasicBlockRef then_block = LLVMAppendBasicBlock(func, "then");
-	LLVMBasicBlockRef else_block = LLVMAppendBasicBlock(func, "else");
-	LLVMBasicBlockRef merge_block = LLVMAppendBasicBlock(func, "merge-if");
-
-	LLVMBuildCondBr(context->builder, condition, then_block, else_block);
-
-	LLVMPositionBuilderAtEnd(context->builder, then_block);
-	_zephir_array_fetch_string(&statements, statement, "statements", strlen("statements") + 1 TSRMLS_CC);
+	LLVMPositionBuilderAtEnd(context->builder, while_block);
+	_zephir_array_fetch_string(&statements, statement, SS("statements") TSRMLS_CC);
 	if (Z_TYPE_P(statements) == IS_ARRAY) {
 		zephir_compile_block(context, statements);
 	}
-	LLVMBuildBr(context->builder, merge_block);
-	then_block = LLVMGetInsertBlock(context->builder);
-
-	LLVMPositionBuilderAtEnd(context->builder, else_block);
-	_zephir_array_fetch_string(&statements, statement, "else_statements", strlen("else_statements") + 1 TSRMLS_CC);
-	if (Z_TYPE_P(statements) == IS_ARRAY) {
-		zephir_compile_block(context, statements);
-	}
-	LLVMBuildBr(context->builder, merge_block);
-	else_block = LLVMGetInsertBlock(context->builder);
+	LLVMBuildBr(context->builder, start_block);
+	while_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
 	efree(compiled_expr);
 
-	return 0;*/
+	return 0;
 }

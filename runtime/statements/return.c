@@ -52,6 +52,10 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 
 				case ZEPHIR_T_TYPE_VAR:
 					break;
+
+				case ZEPHIR_T_TYPE_INTEGER:
+					zephir_build_return_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					break;
 			}
 
 			break;

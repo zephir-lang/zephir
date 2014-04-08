@@ -1333,7 +1333,7 @@ class ClassMethod
              */
             if ($variable->getType() == 'variable') {
                 if ($variable->getNumberUses() > 0) {
-                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' &&  && $variable->getName() != 'return_value_ptr') {
+                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);

@@ -31,6 +31,57 @@ int php_printf_long(const char *format, long i) {
 	return 0;
 }
 
+static LLVMValueRef zephir_get_php_printf_long(zephir_context *context)
+{
+	LLVMValueRef    function;
+	LLVMTypeRef arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "php_printf_long");
+	if (!function) {
+
+		arg_tys[0] = LLVMPointerType(LLVMInt8Type(), 0);
+#if ZEPHIR_32
+		arg_tys[1] = LLVMInt32Type();
+#else
+		arg_tys[1] = LLVMInt64Type();
+#endif
+		function = LLVMAddFunction(context->module, "php_printf_long", LLVMFunctionType(LLVMVoidType(), arg_tys, 2, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register php_printf_long");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, php_printf);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	return function;
+}
+
+static LLVMValueRef zephir_get_zend_print_zval(zephir_context *context)
+{
+	LLVMValueRef    function;
+	LLVMTypeRef arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "zend_print_zval");
+	if (!function) {
+
+		arg_tys[0] = context->types.zval_pointer_type;
+		arg_tys[1] = LLVMInt32Type();
+		function = LLVMAddFunction(context->module, "zend_print_zval", LLVMFunctionType(LLVMInt32Type(), arg_tys, 2, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register zend_print_zval");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, zend_print_zval);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+
+	}
+
+	return function;
+}
+
 int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 {
 
@@ -57,62 +108,25 @@ int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 		switch (compiled_expr->type) {
 
 			case ZEPHIR_T_TYPE_INTEGER:
-
-				function = LLVMGetNamedFunction(context->module, "php_printf_long");
-				if (!function) {
-
-					/**
-					 * Initialize php_printf for longs
-					 */
-					arg_tys    = emalloc(2 * sizeof(*arg_tys));
-					arg_tys[0] = LLVMPointerType(LLVMInt8Type(), 0);
-					arg_tys[1] = LLVMInt32Type();
-					function = LLVMAddFunction(context->module, "php_printf_long", LLVMFunctionType(LLVMVoidType(), arg_tys, 2, 0));
-					if (!function) {
-						efree(arg_tys);
-						zend_error(E_ERROR, "Cannot register php_printf_long");
-					}
-
-					LLVMAddGlobalMapping(context->engine, function, php_printf);
-					LLVMSetFunctionCallConv(function, LLVMCCallConv);
-					LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
-
-					efree(arg_tys);
-				}
-
 				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
 				args[1] = compiled_expr->value;
-				LLVMBuildCall(context->builder, function, args, 2, "");
+				LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
 				break;
 
 			case ZEPHIR_T_VARIABLE:
 
 				switch (compiled_expr->variable->type) {
 
+					case ZEPHIR_T_TYPE_INTEGER:
+						args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
+						args[1] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");
+						LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
+						break;
+
 					case ZEPHIR_T_TYPE_VAR:
-
-						function = LLVMGetNamedFunction(context->module, "zend_print_zval");
-						if (!function) {
-
-							arg_tys    = emalloc(2 * sizeof(*arg_tys));
-							arg_tys[0] = context->types.zval_pointer_type;
-							arg_tys[1] = LLVMInt32Type();
-							function = LLVMAddFunction(context->module, "zend_print_zval", LLVMFunctionType(LLVMInt32Type(), arg_tys, 2, 0));
-							if (!function) {
-								efree(arg_tys);
-								zend_error(E_ERROR, "Cannot register zend_print_zval");
-							}
-
-							LLVMAddGlobalMapping(context->engine, function, zend_print_zval);
-							LLVMSetFunctionCallConv(function, LLVMCCallConv);
-							LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
-
-							efree(arg_tys);
-						}
-
-						args[0] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");;
+						args[0] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");
 						args[1] = LLVMConstInt(LLVMInt32Type(), 0, 0);
-						LLVMBuildCall(context->builder, function, args, 2, "");
+						LLVMBuildCall(context->builder, zephir_get_zend_print_zval(context), args, 2, "");
 						break;
 				}
 

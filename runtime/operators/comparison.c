@@ -74,7 +74,7 @@ zephir_compiled_expr *zephir_operator_comparison_greater(zephir_context *context
 						case ZEPHIR_T_TYPE_INTEGER:
 
 							compiled_expr = emalloc(sizeof(zephir_compiled_expr));
-							compiled_expr->type  = ZEPHIR_T_TYPE_INTEGER;
+							compiled_expr->type  = ZEPHIR_T_TYPE_BOOL;
 							compiled_expr->value = LLVMBuildICmp(
 								context->builder,
 								LLVMIntSGT,
