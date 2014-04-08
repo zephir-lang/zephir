@@ -1333,7 +1333,7 @@ class ClassMethod
              */
             if ($variable->getType() == 'variable') {
                 if ($variable->getNumberUses() > 0) {
-                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value') {
+                    if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' &&  && $variable->getName() != 'return_value_ptr') {
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);
@@ -1659,7 +1659,7 @@ class ClassMethod
                 $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable-external", $variable->getOriginal());
             }
 
-            if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value') {
+            if ($variable->getName() != 'this_ptr' && $variable->getName() != 'return_value' && $variable->getName() != 'return_value_ptr') {
                 $type = $variable->getType();
                 if (!isset($usedVariables[$type])) {
                     $usedVariables[$type] = array();
