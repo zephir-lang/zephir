@@ -56,7 +56,7 @@ int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 		compiled_expr = zephir_expr(context, *expr TSRMLS_CC);
 		switch (compiled_expr->type) {
 
-			case ZEPHIR_T_INTEGER:
+			case ZEPHIR_T_TYPE_INTEGER:
 
 				function = LLVMGetNamedFunction(context->module, "php_printf_long");
 				if (!function) {

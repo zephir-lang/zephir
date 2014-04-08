@@ -221,12 +221,12 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
   		symbols[3]->value_ref = alloca[3];
   		symbols[4]->value_ref = alloca[4];
 
-		_zephir_array_fetch_string(&parameters, *method, "parameters", strlen("parameters") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&parameters, *method, SS("parameters") TSRMLS_CC);
 		if (Z_TYPE_P(parameters) == IS_ARRAY) {
 			zephir_process_parameters(context, parameters);
 		}
 
-		_zephir_array_fetch_string(&statements, *method, "statements", strlen("statements") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&statements, *method, SS("statements") TSRMLS_CC);
 		if (Z_TYPE_P(statements) == IS_ARRAY) {
 			zephir_compile_block(context, statements);
 		}
@@ -285,12 +285,12 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 	zend_function_entry class_functions[32];
 	int number_methods = 0, i;
 
-	_zephir_array_fetch_string(&class_name, class_definition, "name", strlen("name") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&class_name, class_definition, SS("name") TSRMLS_CC);
 	if (Z_TYPE_P(class_name) != IS_STRING) {
 		return 0;
 	}
 
-	_zephir_array_fetch_string(&definition, class_definition, "definition", strlen("definition") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&definition, class_definition, SS("definition") TSRMLS_CC);
 	if (Z_TYPE_P(definition) != IS_ARRAY) {
 		ZEPHIR_INIT_OVERLOADED_CLASS_ENTRY_EX(ce, Z_STRVAL_P(class_name), Z_STRLEN_P(class_name), NULL);
 		zend_register_internal_class(&ce TSRMLS_CC);
@@ -300,7 +300,7 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 	/**
 	 * Process methods
 	 */
-	_zephir_array_fetch_string(&methods, definition, "methods", strlen("methods") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&methods, definition, SS("methods") TSRMLS_CC);
 	if (Z_TYPE_P(methods) == IS_ARRAY) {
 		number_methods = zend_hash_num_elements(Z_ARRVAL_P(methods));
 		if (number_methods > 0) {
@@ -315,7 +315,7 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 	}
 	class_ce = zend_register_internal_class(&ce TSRMLS_CC);
 
-	_zephir_array_fetch_string(&properties, definition, "properties", strlen("properties") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&properties, definition, SS("properties") TSRMLS_CC);
 	if (Z_TYPE_P(properties) == IS_ARRAY) {
 		zephir_compile_properties(properties, class_ce);
 	}

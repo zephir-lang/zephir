@@ -29,6 +29,7 @@
 
 #include "statements/echo.h"
 #include "statements/if.h"
+#include "statements/while.h"
 #include "statements/let.h"
 #include "statements/declare.h"
 #include "statements/return.h"
@@ -72,6 +73,11 @@ LLVMValueRef zephir_compile_block(zephir_context *context, zval *statements TSRM
 
 		if (!memcmp(Z_STRVAL_P(type), SS("return"))) {
 			zephir_statement_return(context, *statement);
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(type), SS("while"))) {
+			zephir_statement_while(context, *statement);
 			continue;
 		}
 

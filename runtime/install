@@ -5,8 +5,4 @@ if [ -f Makefile ]; then
 fi
 
 phpize
-aclocal
-libtoolize --force
-autoheader
-autoconf
 ./configure --enable-zephir

@@ -28,14 +28,16 @@
 #include "builder.h"
 #include "blocks.h"
 
-int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
+#include "kernel/main.h"
+
+int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 {
 
 	zval *expr, *statements;
 	zephir_compiled_expr *compiled_expr;
 	LLVMValueRef condition = NULL, then_value, else_value;
 
-	_zephir_array_fetch_string(&expr, statement, "expr", strlen("expr") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&expr, statement, SS("expr") TSRMLS_CC);
 	if (Z_TYPE_P(expr) != IS_ARRAY) {
 		return 0;
 	}
@@ -48,7 +50,11 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 			break;
 
 		case ZEPHIR_T_TYPE_INTEGER:
+#if ZEPHIR_32
 			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt32Type(), 0, 0), "");
+#else
+			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt64Type(), 0, 0), "");
+#endif
 			break;
 
 		case ZEPHIR_T_VARIABLE:
@@ -68,7 +74,7 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 		return 0;
 	}
 
-	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+	/*LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
 
 	LLVMBasicBlockRef then_block = LLVMAppendBasicBlock(func, "then");
 	LLVMBasicBlockRef else_block = LLVMAppendBasicBlock(func, "else");
@@ -95,5 +101,5 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
 	efree(compiled_expr);
 
-	return 0;
+	return 0;*/
 }

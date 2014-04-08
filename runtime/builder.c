@@ -50,7 +50,11 @@ int zephir_initialize_zval_struct(zephir_context *context)
 	LLVMStructSetBody(zvalue_obj_struct, zvalue_obj_struct_types, 2, 0);
 
 	zvalue_struct = LLVMStructCreateNamed(LLVMGetGlobalContext(), "%union._zvalue_value");
+#if ZEPHIR_32
 	zvalue_struct_types[0] = LLVMDoubleType(); // double dval;                /* double value */
+#else
+	zvalue_struct_types[0] = zvalue_string_struct; // { char *val, int len }
+#endif
 	//zvalue_struct_types[2] = zvalue_string_struct; // char *val;
 	//zvalue_struct_types[3] = LLVMPointerType(LLVMInt8Type(), 0); // HashTable *ht;              /* hash table value */
 	//zvalue_struct_types[4] = zvalue_obj_struct; // zend_object_value obj;
@@ -90,7 +94,7 @@ LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef val
 		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
 	}
 
-	args[0] = LLVMBuildLoad(context->builder, value_ref, "");;
+	args[0] = LLVMBuildLoad(context->builder, value_ref, "");
 	return LLVMBuildCall(context->builder, function, args, 1, "");
 }
 
@@ -113,7 +117,7 @@ void zephir_build_zval_long(zephir_context *context, LLVMValueRef symbol_ref, LL
 	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt32Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i32*
 	LLVMBuildStore(context->builder, value_ref, bitcast); // store i32 5000, i32* %8, align 8
 #else
-	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt32Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i64*
+	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt64Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i64*
 	LLVMBuildStore(context->builder, value_ref, bitcast); // store i64 5000, i64* %8, align 8
 #endif
 

@@ -42,7 +42,7 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
 	switch (compiled_expr->type) {
 
-		case ZEPHIR_T_INTEGER:
+		case ZEPHIR_T_TYPE_INTEGER:
 			zephir_build_return_long(context, compiled_expr->value);
 			break;
 

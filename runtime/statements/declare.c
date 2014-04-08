@@ -65,7 +65,11 @@ int zephir_statement_declare(zephir_context *context, zval *statement TSRMLS_DC)
 
 		if (!memcmp(Z_STRVAL_P(data_type), SS("int"))) {
 			symbol = zephir_symtable_add(ZEPHIR_T_TYPE_INTEGER, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+#if ZEPHIR_32
 			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt32Type(), Z_STRVAL_P(name));
+#else
+			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt64Type(), Z_STRVAL_P(name));
+#endif
 			continue;
 		}
 

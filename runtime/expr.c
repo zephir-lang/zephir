@@ -26,10 +26,15 @@
 #include "utils.h"
 #include "symtable.h"
 
+#include "kernel/main.h"
+
+#include "operators/arithmetical.h"
+#include "operators/comparison.h"
+
 zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 {
-	zval *type, *value;
-	zephir_compiled_expr *compiled_expr;
+	zval *type, *value, *left_expr;
+	zephir_compiled_expr *compiled_expr, *compiled_expr_left;
 	zephir_variable *variable;
 
 	_zephir_array_fetch_string(&type, expr, "type", strlen("type") + 1 TSRMLS_CC);
@@ -37,15 +42,15 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return NULL;
 	}
 
-	if (!memcmp(Z_STRVAL_P(type), "int", strlen("int") + 1)) {
+	if (!memcmp(Z_STRVAL_P(type), SS("int"))) {
 
-		_zephir_array_fetch_string(&value, expr, "value", strlen("value") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
 		if (Z_TYPE_P(value) != IS_STRING) {
 			return NULL;
 		}
 
 		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
-		compiled_expr->type  = ZEPHIR_T_INTEGER;
+		compiled_expr->type  = ZEPHIR_T_TYPE_INTEGER;
 #if ZEPHIR_32
 		compiled_expr->value = LLVMConstInt(LLVMInt32Type(), strtol(Z_STRVAL_P(value), NULL, 10), 0);
 #else
@@ -55,9 +60,9 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return compiled_expr;
 	}
 
-	if (!memcmp(Z_STRVAL_P(type), "variable", strlen("variable") + 1)) {
+	if (!memcmp(Z_STRVAL_P(type), SS("variable"))) {
 
-		_zephir_array_fetch_string(&value, expr, "value", strlen("value") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
 		if (Z_TYPE_P(value) != IS_STRING) {
 			return NULL;
 		}
@@ -69,6 +74,24 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		compiled_expr->variable = variable;
 
 		return compiled_expr;
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("add"))) {
+		return zephir_operator_arithmetical_add(context, expr TSRMLS_CC);
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("greater"))) {
+		return zephir_operator_comparison_greater(context, expr TSRMLS_CC);
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("list"))) {
+
+		_zephir_array_fetch_string(&left_expr, expr, SS("left") TSRMLS_CC);
+		if (Z_TYPE_P(left_expr) != IS_ARRAY) {
+			return NULL;
+		}
+
+		return zephir_expr(context, left_expr TSRMLS_CC);
 	}
 
 	zend_error(E_ERROR, "Unknown expression %s", Z_STRVAL_P(type));
