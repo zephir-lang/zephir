@@ -315,7 +315,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'ZEPHIR_IS_BOOL(' . $variableRight->getName() . ', ' . $left->getCode() . ')', $expression);
+                                return new CompiledExpression('bool', 'ZEPHIR_IS_BOOL(' . $variableRight->getName() . ', ' . $left->getBooleanCode() . ')', $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
