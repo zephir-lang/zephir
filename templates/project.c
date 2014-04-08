@@ -65,7 +65,7 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS
 	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
 
 	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
-	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
+	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
 
 	/* 'Allocator sizeof operand mismatch' warning can be safely ignored */
 	ALLOC_INIT_ZVAL(zephir_globals_ptr->global_null);

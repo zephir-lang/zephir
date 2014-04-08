@@ -64,3 +64,4 @@ runtime/modules/
 runtime/run-tests.php
 runtime/a.zep
 runtime/index.php
+runtime/parser.out

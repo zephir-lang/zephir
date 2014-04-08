@@ -52,8 +52,8 @@ typedef struct _zephir_variable {
 
 typedef struct _zephir_context {
 	LLVMModuleRef module;
-    LLVMBuilderRef builder;
-    LLVMExecutionEngineRef engine;
+	LLVMBuilderRef builder;
+	LLVMExecutionEngineRef engine;
 	zephir_symtable *symtable;
 	unsigned int inside_cycle;
 	unsigned int inside_try_catch;
