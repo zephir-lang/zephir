@@ -19,7 +19,7 @@
 */
 
 #include <php.h>
-#include "php_ext.h"
+#include "php_zephir.h"
 
 #include <Zend/zend_API.h>
 #include <Zend/zend_exceptions.h>
@@ -28,9 +28,9 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
-#include "kernel/hash.h"
-#include "kernel/exception.h"
-#include "kernel/backtrace.h"
+//#include "kernel/hash.h"
+#include "kernel/exceptions.h"
+//#include "kernel/backtrace.h"
 
 #if PHP_VERSION_ID >= 50500
 static const unsigned char tolower_map[256] = {
@@ -53,7 +53,7 @@ static const unsigned char tolower_map[256] = {
 };
 #endif
 
-int zephir_has_constructor_ce(const zend_class_entry *ce)
+int zephirt_has_constructor_ce(const zend_class_entry *ce)
 {
 	while (ce) {
 		if (ce->constructor) {
@@ -67,7 +67,7 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
 }
 
 #if 0
-static inline ulong zephir_update_hash(const char *arKey, uint nKeyLength, ulong hash)
+static inline ulong zephirt_update_hash(const char *arKey, uint nKeyLength, ulong hash)
 {
 	for (; nKeyLength >= 8; nKeyLength -= 8) {
 		hash = ((hash << 5) + hash) + *arKey++;
@@ -102,7 +102,7 @@ static inline ulong zephir_update_hash(const char *arKey, uint nKeyLength, ulong
 }
 #endif
 
-static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_class_entry *obj_ce, zephir_call_type type, zval *function_name TSRMLS_DC)
+static ulong zephirt_make_fcall_key(char **result, size_t *length, const zend_class_entry *obj_ce, zephirt_call_type type, zval *function_name TSRMLS_DC)
 {
 	const zend_class_entry *calling_scope = EG(scope);
 	char *buf = NULL, *c;
@@ -113,13 +113,13 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 	*result = NULL;
 	*length = 0;
 
-	if (calling_scope && type == zephir_fcall_parent) {
+	if (calling_scope && type == zephirt_fcall_parent) {
 		calling_scope = calling_scope->parent;
 		if (UNEXPECTED(!calling_scope)) {
 			return 0;
 		}
 	}
-	else if (type == zephir_fcall_static) {
+	else if (type == zephirt_fcall_static) {
 		calling_scope = EG(called_scope);
 		if (UNEXPECTED(!calling_scope)) {
 			return 0;
@@ -201,10 +201,10 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 	return hash;
 }
 
-ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_cache *fcic, zend_fcall_info *fci, zephir_call_type type TSRMLS_DC)
+ZEPHIR_ATTR_NONNULL static void zephirt_fcall_populate_fci_cache(zend_fcall_info_cache *fcic, zend_fcall_info *fci, zephirt_call_type type TSRMLS_DC)
 {
 	switch (type) {
-		case zephir_fcall_parent:
+		case zephirt_fcall_parent:
 			if (EG(scope) && EG(scope)->parent) {
 				fcic->calling_scope = EG(scope)->parent;
 				fcic->called_scope  = EG(called_scope);
@@ -214,7 +214,7 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 
 			break;
 
-		case zephir_fcall_self:
+		case zephirt_fcall_self:
 			if (EG(scope)) {
 				fcic->calling_scope = EG(scope);
 				fcic->called_scope  = EG(called_scope);
@@ -224,7 +224,7 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 
 			break;
 
-		case zephir_fcall_static:
+		case zephirt_fcall_static:
 			if (EG(called_scope)) {
 				fcic->calling_scope = EG(called_scope);
 				fcic->called_scope  = EG(called_scope);
@@ -234,14 +234,14 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 
 			break;
 
-		case zephir_fcall_function:
+		case zephirt_fcall_function:
 			fcic->calling_scope = NULL;
 			fcic->called_scope  = NULL;
 			fcic->object_ptr    = NULL;
 			fcic->initialized   = 1;
 			break;
 
-		case zephir_fcall_ce: {
+		case zephirt_fcall_ce: {
 			zend_class_entry *scope = EG(active_op_array) ? EG(active_op_array)->scope : NULL;
 
 			fcic->initialized      = 1;
@@ -259,7 +259,7 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			break;
 		}
 
-		case zephir_fcall_method:
+		case zephirt_fcall_method:
 			fcic->initialized      = 1;
 			fcic->calling_scope    = EG(scope);
 			fcic->object_ptr       = fci->object_ptr;
@@ -289,8 +289,8 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 /**
  * Calls a function/method in the PHP userland
  */
-int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir_call_type type,
-	zval *function_name, zval **retval_ptr_ptr, zephir_fcall_cache_entry **cache_entry, zend_uint param_count,
+int zephirt_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephirt_call_type type,
+	zval *function_name, zval **retval_ptr_ptr, zephirt_fcall_cache_entry **cache_entry, zend_uint param_count,
 	zval *params[] TSRMLS_DC)
 {
 	zval ***params_ptr, ***params_array = NULL;
@@ -299,11 +299,11 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	int status;
 	zend_fcall_info fci;
 	zend_fcall_info_cache fcic /* , clone */;
-	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals *zephirt_globals_ptr = ZEPHIRT_VGLOBAL;
 	char *fcall_key = NULL;
 	size_t fcall_key_len;
 	ulong fcall_key_hash;
-	zephir_fcall_cache_entry **temp_cache_entry = NULL;
+	zephirt_fcall_cache_entry **temp_cache_entry = NULL;
 	zend_class_entry *old_scope = EG(scope);
 
 	assert(obj_ce || !object_pp);
@@ -313,9 +313,9 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 		*retval_ptr_ptr = NULL;
 	}
 
-	++zephir_globals_ptr->recursive_lock;
+	++zephirt_globals_ptr->recursive_lock;
 
-	if (UNEXPECTED(zephir_globals_ptr->recursive_lock > 2048)) {
+	if (UNEXPECTED(zephirt_globals_ptr->recursive_lock > 2048)) {
 		zend_error(E_ERROR, "Maximum recursion depth exceeded");
 		return FAILURE;
 	}
@@ -340,7 +340,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 		params_ptr = NULL;
 	}
 
-	if (type != zephir_fcall_function && !object_pp) {
+	if (type != zephirt_fcall_function && !object_pp) {
 		object_pp = EG(This) ? &EG(This) : NULL;
 		if (!obj_ce && object_pp) {
 			obj_ce = Z_OBJCE_PP(object_pp);
@@ -352,7 +352,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	}
 
 	if (!cache_entry || !*cache_entry) {
-		fcall_key_hash = zephir_make_fcall_key(&fcall_key, &fcall_key_len, (object_pp ? Z_OBJCE_PP(object_pp) : obj_ce), type, function_name TSRMLS_CC);
+		fcall_key_hash = zephirt_make_fcall_key(&fcall_key, &fcall_key_len, (object_pp ? Z_OBJCE_PP(object_pp) : obj_ce), type, function_name TSRMLS_CC);
 	}
 
 	fci.size           = sizeof(fci);
@@ -367,8 +367,8 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 
 	fcic.initialized = 0;
 	if (!cache_entry || !*cache_entry) {
-		if (fcall_key && zend_hash_quick_find(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, (void**)&temp_cache_entry) != FAILURE) {
-			zephir_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
+		if (fcall_key && zend_hash_quick_find(zephirt_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, (void**)&temp_cache_entry) != FAILURE) {
+			zephirt_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
 
 #ifndef ZEPHIR_RELEASE
 			fcic.function_handler = (*temp_cache_entry)->f;
@@ -379,7 +379,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 			/*memcpy(&clone, &fcic, sizeof(clone));*/
 		}
 	} else {
-		zephir_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
+		zephirt_fcall_populate_fci_cache(&fcic, &fci, type TSRMLS_CC);
 #ifndef ZEPHIR_RELEASE
 		fcic.function_handler = (*cache_entry)->f;
 		++(*temp_cache_entry)->times;
@@ -422,14 +422,14 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry && fcic.initialized) {
-	#ifndef ZEPHIR_RELEASE
-			zephir_fcall_cache_entry *temp_cache_entry = malloc(sizeof(zephir_fcall_cache_entry));
-			cache_entry->f     = fcic.function_handler;
-			cache_entry->times = 0;
-	#else
-			zephir_fcall_cache_entry *temp_cache_entry = fcic.function_handler;
-	#endif
-			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &temp_cache_entry, sizeof(zephir_fcall_cache_entry*), NULL)) {
+	//#ifndef ZEPHIR_RELEASE
+	//		zephirt_fcall_cache_entry *temp_cache_entry = malloc(sizeof(zephirt_fcall_cache_entry));
+	//		cache_entry->f     = fcic.function_handler;
+	//		cache_entry->times = 0;
+	//#else
+			zephirt_fcall_cache_entry *temp_cache_entry = fcic.function_handler;
+	//#endif
+			if (FAILURE == zend_hash_quick_add(zephirt_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &temp_cache_entry, sizeof(zephirt_fcall_cache_entry*), NULL)) {
 	#ifndef ZEPHIR_RELEASE
 				free(temp_cache_entry);
 	#endif
@@ -455,12 +455,12 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 		}
 	}
 
-	--zephir_globals_ptr->recursive_lock;
+	--zephirt_globals_ptr->recursive_lock;
 	return status;
 }
 
-int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uint func_length,
-	zephir_fcall_cache_entry **cache_entry,
+int zephirt_call_func_aparams(zval **return_value_ptr, const char *func_name, uint func_length,
+	zephirt_fcall_cache_entry **cache_entry,
 	uint param_count, zval **params TSRMLS_DC)
 {
 	int status;
@@ -470,13 +470,13 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 #ifndef ZEPHIR_RELEASE
 	if (return_value_ptr && *return_value_ptr) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
-		zephir_print_backtrace();
+		//zephirt_print_backtrace();
 		abort();
 	}
 #endif
 
 	ZVAL_STRINGL(&func, func_name, func_length, 0);
-	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, &func, rvp, cache_entry, param_count, params TSRMLS_CC);
+	status = zephirt_call_user_function(NULL, NULL, zephirt_fcall_function, &func, rvp, cache_entry, param_count, params TSRMLS_CC);
 
 	if (status == FAILURE && !EG(exception)) {
 		zend_error(E_ERROR, "Call to undefined function %s()", func_name);
@@ -496,8 +496,8 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 	return status;
 }
 
-int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
-	zephir_fcall_cache_entry **cache_entry,
+int zephirt_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
+	zephirt_fcall_cache_entry **cache_entry,
 	uint param_count, zval **params TSRMLS_DC)
 {
 	int status;
@@ -506,12 +506,12 @@ int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
 #ifndef ZEPHIR_RELEASE
 	if (return_value_ptr && *return_value_ptr) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
-		zephir_print_backtrace();
+		//zephirt_print_backtrace();
 		abort();
 	}
 #endif
 
-	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, param_count, params TSRMLS_CC);
+	status = zephirt_call_user_function(NULL, NULL, zephirt_fcall_function, func_name, rvp, cache_entry, param_count, params TSRMLS_CC);
 
 	if (status == FAILURE && !EG(exception)) {
 		zend_error(E_ERROR, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
@@ -531,9 +531,9 @@ int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
 	return status;
 }
 
-int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *ce, zephir_call_type type, zval *object,
+int zephirt_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *ce, zephirt_call_type type, zval *object,
 	const char *method_name, uint method_len,
-	zephir_fcall_cache_entry **cache_entry,
+	zephirt_fcall_cache_entry **cache_entry,
 	uint param_count, zval **params TSRMLS_DC)
 {
 	zval *rv = NULL, **rvp = return_value_ptr ? return_value_ptr : &rv;
@@ -544,7 +544,7 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 #ifndef ZEPHIR_RELEASE
 	if (return_value_ptr && *return_value_ptr) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
-		zephir_print_backtrace();
+		//zephirt_print_backtrace();
 		abort();
 	}
 #endif
@@ -553,16 +553,16 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 
 		array_init_size(&fn, 2);
 		switch (type) {
-			case zephir_fcall_parent: add_next_index_stringl(&fn, ZEND_STRL("parent"), 1); break;
-			case zephir_fcall_self:   assert(!ce); add_next_index_stringl(&fn, ZEND_STRL("self"), 1); break;
-			case zephir_fcall_static: assert(!ce); add_next_index_stringl(&fn, ZEND_STRL("static"), 1); break;
+			case zephirt_fcall_parent: add_next_index_stringl(&fn, ZEND_STRL("parent"), 1); break;
+			case zephirt_fcall_self:   assert(!ce); add_next_index_stringl(&fn, ZEND_STRL("self"), 1); break;
+			case zephirt_fcall_static: assert(!ce); add_next_index_stringl(&fn, ZEND_STRL("static"), 1); break;
 
-			case zephir_fcall_ce:
+			case zephirt_fcall_ce:
 				assert(ce != NULL);
 				add_next_index_stringl(&fn, ce->name, ce->name_length, !IS_INTERNED(ce->name));
 				break;
 
-			case zephir_fcall_method:
+			case zephirt_fcall_method:
 			default:
 				assert(object != NULL);
 				Z_ADDREF_P(object);
@@ -578,7 +578,7 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 		ZVAL_STRINGL(&fn, "undefined", sizeof("undefined")-1, 0);
 	}
 
-	status = zephir_call_user_function(object ? &object : NULL, ce, type, &fn, rvp, cache_entry, param_count, params TSRMLS_CC);
+	status = zephirt_call_user_function(object ? &object : NULL, ce, type, &fn, rvp, cache_entry, param_count, params TSRMLS_CC);
 
 	if (Z_TYPE_P(&fn) == IS_ARRAY) {
 		if (Z_REFCOUNT_P(mn) > 1) {
@@ -591,11 +591,11 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 
 	if (status == FAILURE && !EG(exception)) {
 		switch (type) {
-			case zephir_fcall_parent: zend_error(E_ERROR, "Call to undefined function parent::%s()", method_name); break;
-			case zephir_fcall_self:   zend_error(E_ERROR, "Call to undefined function self::%s()", method_name); break;
-			case zephir_fcall_static: zend_error(E_ERROR, "Call to undefined function static::%s()", method_name); break;
-			case zephir_fcall_ce:     zend_error(E_ERROR, "Call to undefined function %s::%s()", ce->name, method_name); break;
-			case zephir_fcall_method: zend_error(E_ERROR, "Call to undefined function %s::%s()", Z_OBJCE_P(object)->name, method_name); break;
+			case zephirt_fcall_parent: zend_error(E_ERROR, "Call to undefined function parent::%s()", method_name); break;
+			case zephirt_fcall_self:   zend_error(E_ERROR, "Call to undefined function self::%s()", method_name); break;
+			case zephirt_fcall_static: zend_error(E_ERROR, "Call to undefined function static::%s()", method_name); break;
+			case zephirt_fcall_ce:     zend_error(E_ERROR, "Call to undefined function %s::%s()", ce->name, method_name); break;
+			case zephirt_fcall_method: zend_error(E_ERROR, "Call to undefined function %s::%s()", Z_OBJCE_P(object)->name, method_name); break;
 			default:                   zend_error(E_ERROR, "Call to undefined function ?::%s()", method_name);
 		}
 	}
@@ -620,7 +620,7 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
  * Replaces call_user_func_array avoiding function lookup
  * This function does not return FAILURE if an exception has ocurred
  */
-int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *params TSRMLS_DC){
+int zephirt_call_user_func_array_noex(zval *return_value, zval *handler, zval *params TSRMLS_DC){
 
 	zval *retval_ptr = NULL;
 	zend_fcall_info fci;
@@ -630,7 +630,7 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 
 	if (params && Z_TYPE_P(params) != IS_ARRAY) {
 		ZVAL_NULL(return_value);
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_call_user_func_array_noex()");
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephirt_call_user_func_array_noex()");
 		return FAILURE;
 	}
 
@@ -675,7 +675,7 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 /**
  * Latest version of zend_throw_exception_internal
  */
-void zephir_throw_exception_internal(zval *exception TSRMLS_DC)
+void zephirt_throw_exception_internal(zval *exception TSRMLS_DC)
 {
 	if (exception != NULL) {
 		zval *previous = EG(exception);
@@ -707,7 +707,7 @@ void zephir_throw_exception_internal(zval *exception TSRMLS_DC)
 	EG(current_execute_data)->opline = EG(exception_op);
 }
 
-int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC) {
+int zephirt_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC) {
 
 	zend_uint i;
 	zval **original_return_value;
@@ -735,7 +735,7 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 		case sizeof(zend_fcall_info):
 			break; /* nothing to do currently */
 		default:
-			zend_error(E_ERROR, "Corrupted fcall_info provided to zephir_call_function()");
+			zend_error(E_ERROR, "Corrupted fcall_info provided to zephirt_call_function()");
 			break;
 	}
 
@@ -991,7 +991,7 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 	EG(current_execute_data) = EX(prev_execute_data);
 
 	if (EG(exception)) {
-		zephir_throw_exception_internal(NULL TSRMLS_CC);
+		zephirt_throw_exception_internal(NULL TSRMLS_CC);
 	}
 	return SUCCESS;
 }

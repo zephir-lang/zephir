@@ -112,7 +112,7 @@ ZEND_DECLARE_MODULE_GLOBALS(test)
 
 #define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
 
-void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSRMLS_DC)
+void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS_DC)
 {
 	zephir_memory_entry *start;
 	size_t i;
@@ -218,7 +218,7 @@ int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zen
 void zephir_deinitialize_memory(TSRMLS_D)
 {
 	size_t i;
-	zend_zephir_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
 	//if (zephir_globals_ptr->initialized != 1) {
 	//	zephir_globals_ptr->initialized = 0;

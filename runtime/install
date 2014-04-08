@@ -1,0 +1,12 @@
+
+if [ -f Makefile ]; then
+	sudo make clean
+	sudo phpize --clean
+fi
+
+phpize
+aclocal
+libtoolize --force
+autoheader
+autoconf
+./configure --enable-zephir
