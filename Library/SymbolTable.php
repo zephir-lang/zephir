@@ -213,7 +213,7 @@ class SymbolTable
         $variable = $this->getVariable($name);
         if (!$variable->isInitialized()) {
             /* DON'T REMOVE THIS!! */
-            throw new CompilerException("Variable '" . $name . "' cannot be read because it's not initialized ", $statement);
+            throw new CompilerException("Variable '" . $name . "' cannot be read because it's not initialized", $statement);
         }
 
         $variable->increaseUses();

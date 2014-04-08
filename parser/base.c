@@ -557,17 +557,18 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_SCANNER_RETCODE_ERR:
 			case XX_SCANNER_RETCODE_IMPOSSIBLE:
 				{
-					char *x = malloc(sizeof(char) * 10000);
+					char *x = malloc(sizeof(char) * 1024);
 					if (state->start) {
 						sprintf(x, "Scanner error: %d %s", scanner_status, state->start);
 					} else {
 						sprintf(x, "Scanner error: %d", scanner_status);
 					}
-					json_object *syntax_error = json_object_new_object();
-					json_object_object_add(syntax_error, "type", json_object_new_string("error"));
-					json_object_object_add(syntax_error, "message", json_object_new_string(x));
+					//json_object *syntax_error = json_object_new_object();
+					//json_object_object_add(syntax_error, "type", json_object_new_string("error"));
+					//json_object_object_add(syntax_error, "message", json_object_new_string(x));
+					fprintf(stderr, "%s\n", x);
 					//free(x);
-					parser_status->ret = syntax_error;
+					//parser_status->ret = syntax_error;
 					status = FAILURE;
 				}
 				break;
