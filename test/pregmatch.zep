@@ -19,7 +19,7 @@ class Pregmatch
 
 	public function testWithoutReturns()
 	{
-		var pattern, subject, matches = "";
+		var pattern, subject, matches = null;
 
 		let pattern = "/def$/";
 		let subject = "abcdef";
@@ -60,7 +60,7 @@ class Pregmatch
 	public function testPregMatchFallback()
 	{
 
-		var pattern, subject, matches;
+		var pattern, subject, matches = null;
 		let matches = [];
 
 		let pattern = "/def$/";
@@ -95,7 +95,7 @@ class Pregmatch
      */
     public function testPregMatchSaveMatches(string str, string pattern)
     {
-        var matches;
+        var matches = null;
         preg_match(pattern, str, matches);
 
         return matches;

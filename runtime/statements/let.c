@@ -54,7 +54,7 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 
 			switch (compiled_expr->type) {
 
-				case ZEPHIR_T_INTEGER:
+				case ZEPHIR_T_TYPE_INTEGER:
 					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
 					break;
 
