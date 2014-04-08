@@ -511,7 +511,6 @@ PHP_METHOD(Test_Router, handle) {
 			if (Z_TYPE_P(currentHostName) != IS_NULL) {
 				continue;
 			}
-			ZEPHIR_INIT_NVAR(matched);
 			if (zephir_memnstr_str(hostname, SL("("), "test/router.zep", 381)) {
 				if (zephir_memnstr_str(hostname, SL("#"), "test/router.zep", 382)) {
 					ZEPHIR_INIT_NVAR(regexHostName);
@@ -522,6 +521,7 @@ PHP_METHOD(Test_Router, handle) {
 				ZEPHIR_CALL_FUNCTION(&matched, "preg_match", &_7, regexHostName, currentHostName);
 				zephir_check_call_status();
 			} else {
+				ZEPHIR_INIT_NVAR(matched);
 				ZVAL_BOOL(matched, ZEPHIR_IS_EQUAL(currentHostName, hostname));
 			}
 			if (!(zephir_is_true(matched))) {
@@ -530,13 +530,13 @@ PHP_METHOD(Test_Router, handle) {
 		}
 		ZEPHIR_CALL_METHOD(&pattern, route, "getcompiledpattern",  NULL);
 		zephir_check_call_status();
-		ZEPHIR_INIT_NVAR(routeFound);
 		if (zephir_memnstr_str(pattern, SL("^"), "test/router.zep", 400)) {
 			Z_SET_ISREF_P(matches);
 			ZEPHIR_CALL_FUNCTION(&routeFound, "preg_match", &_7, pattern, handledUri, matches);
 			Z_UNSET_ISREF_P(matches);
 			zephir_check_call_status();
 		} else {
+			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, ZEPHIR_IS_EQUAL(pattern, handledUri));
 		}
 		if (zephir_is_true(routeFound)) {
