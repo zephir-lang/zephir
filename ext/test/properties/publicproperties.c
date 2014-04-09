@@ -65,6 +65,12 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	 */
 	zend_declare_property_null(test_properties_publicproperties_ce, SL("someArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
+	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromSelfConstantValue"), 123, ZEND_ACC_PUBLIC TSRMLS_CC);
+
+	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC TSRMLS_CC);
+
+	zend_declare_class_constant_long(test_properties_publicproperties_ce, SL("TEST_CONST"), 123 TSRMLS_CC);
+
 	return SUCCESS;
 
 }
