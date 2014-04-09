@@ -3,6 +3,7 @@ namespace Test\Properties;
 
 class PublicProperties
 {
+    const TEST_CONST = 123;
 
 	/**
 	 * This is a public property with no initial value
@@ -48,4 +49,8 @@ class PublicProperties
 	 * This is a public property with an initial array value
 	 */
 	public someArray = [1, 2, 3, 4];
+
+	public testPropertyFromSelfConstantValue = self::TEST_CONST;
+
+	public testPropertyFromClassNameConstantValue = PublicProperties::TEST_CONST;
 }

@@ -301,8 +301,8 @@ class ClassProperty
             case 'static-constant-access':
                 $expression = new Expression($this->_defaultValue);
                 $compiledExpression = $expression->compile($compilationContext);
-                $constant = $compilationContext->classDefinition->getConstant($this->_defaultValue['right']['value']);
-                $this->declareProperty($compilationContext, $constant->getType(), $compiledExpression->getCode());
+
+                $this->declareProperty($compilationContext, $compiledExpression->getType(), $compiledExpression->getCode());
                 break;
 
             default:
