@@ -49,11 +49,11 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject, *matches;
+	zval *pattern, *subject, *matches = NULL;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(matches);
-	ZVAL_STRING(matches, "", 1);
+	ZVAL_NULL(matches);
 
 	ZEPHIR_INIT_VAR(pattern);
 	ZVAL_STRING(pattern, "/def$/", 1);
@@ -111,9 +111,11 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
-	zval *pattern, *subject, *matches, *_0, *_1;
+	zval *pattern, *subject, *matches = NULL, *_0, *_1;
 
 	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(matches);
+	ZVAL_NULL(matches);
 
 	ZEPHIR_INIT_VAR(matches);
 	array_init(matches);
@@ -214,7 +216,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
 	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *str_param = NULL, *pattern_param = NULL, *matches;
+	zval *str_param = NULL, *pattern_param = NULL, *matches = NULL;
 	zval *str = NULL, *pattern = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -222,9 +224,10 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
 	zephir_get_strval(str, str_param);
 	zephir_get_strval(pattern, pattern_param);
-
-
 	ZEPHIR_INIT_VAR(matches);
+	ZVAL_NULL(matches);
+
+
 	Z_SET_ISREF_P(matches);
 	ZEPHIR_CALL_FUNCTION(NULL, "preg_match", &_0, pattern, str, matches);
 	Z_UNSET_ISREF_P(matches);

@@ -15,7 +15,7 @@
 #define PHP_TEST_ZEPVERSION  "0.4.1a"
 #define PHP_TEST_DESCRIPTION "Description test for<br/>Test Extension"
 
-typedef struct _zephir_struct_test {
+typedef struct _zephir_struct_test { 
 	zend_bool my_setting_1;
 	int my_setting_2;
 	double my_setting_3;
@@ -43,7 +43,7 @@ ZEND_BEGIN_MODULE_GLOBALS(test)
 	zval *global_true;
 	zval *global_false;
 	zval *global_null;
-
+	
 	zephir_struct_test test;
 
 	zend_bool my_setting_1;
@@ -73,7 +73,7 @@ ZEND_EXTERN_MODULE_GLOBALS(test)
 	#define ZEPHIR_VGLOBAL &(test_globals)
 #endif
 
-#define zephir_globals test_globals
+#define zephir_globals_def test_globals
 #define zend_zephir_globals_def zend_test_globals
 
 extern zend_module_entry test_module_entry;

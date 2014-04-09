@@ -22,9 +22,47 @@ ZEPHIR_INIT_CLASS(Test_Oo_AbstractClass) {
 
 }
 
-PHP_METHOD(Test_Oo_AbstractClass, test1) {
+PHP_METHOD(Test_Oo_AbstractClass, testMethodDeclaration) {
 
+}
 
+PHP_METHOD(Test_Oo_AbstractClass, testMethodDeclarationWithReturnType) {
+
+}
+
+PHP_METHOD(Test_Oo_AbstractClass, testMethodDeclarationWithParameter) {
+
+}
+
+PHP_METHOD(Test_Oo_AbstractClass, testMethodDeclarationWithParameterAndReturnType) {
+
+}
+
+/**
+ *
+ */
+PHP_METHOD(Test_Oo_AbstractClass, testAbstractMethodDeclaration) {
+
+}
+
+/**
+ *
+ */
+PHP_METHOD(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithReturnType) {
+
+}
+
+/**
+ *
+ */
+PHP_METHOD(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithParameter) {
+
+}
+
+/**
+ *
+ */
+PHP_METHOD(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithParameterAndReturnType) {
 
 }
 

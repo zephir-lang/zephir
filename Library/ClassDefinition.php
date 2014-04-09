@@ -807,7 +807,6 @@ class ClassDefinition
          * Compile methods
          */
         foreach ($methods as $method) {
-
             $docBlock = $method->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock);
@@ -817,7 +816,9 @@ class ClassDefinition
                 $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
                 $codePrinter->outputBlankLine();
 
-                $method->compile($compilationContext);
+                if (!$method->isAbstract()) {
+                    $method->compile($compilationContext);
+                }
 
                 $codePrinter->output('}');
                 $codePrinter->outputBlankLine();
