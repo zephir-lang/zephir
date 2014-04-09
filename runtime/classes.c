@@ -46,11 +46,12 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 {
 	HashTable       *ht;
 	HashPosition    pos = {0};
-	zval **parameter, *name;
-	zephir_variable *symbol;
-	LLVMValueRef    function, args[10];
-	LLVMTypeRef     *arg_tys;
-	int i;
+	zval **parameter, *name, *data_type;
+	zephir_variable *symbol, *symbol_param, *convert_params_from[16], *convert_params_to[16];
+	LLVMValueRef    function, args[16];
+	LLVMTypeRef     arg_tys[3];
+	char            *buffer;
+	int i, number_convert = 0;
 
 	args[0] = LLVMConstInt(LLVMInt32Type(), zend_hash_num_elements(Z_ARRVAL_P(parameters)), 0);
 	args[1] = LLVMConstInt(LLVMInt32Type(), zend_hash_num_elements(Z_ARRVAL_P(parameters)), 0);
@@ -64,16 +65,72 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
 
-		_zephir_array_fetch_string(&name, *parameter, "name", strlen("name") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&name, *parameter, SS("name") TSRMLS_CC);
 		if (Z_TYPE_P(name) != IS_STRING) {
 			continue;
 		}
 
 		symbol = zephir_symtable_add(ZEPHIR_T_TYPE_VAR, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
-		symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, Z_STRVAL_P(name));
-		symbol->initialized = 1;
-		args[i] = symbol->value_ref;
-		i++;
+
+		_zephir_array_fetch_string(&data_type, *parameter, SS("data-type") TSRMLS_CC);
+		if (Z_TYPE_P(data_type) != IS_STRING) {
+
+			symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, Z_STRVAL_P(name));
+			args[i] = symbol->value_ref;
+			symbol->initialized = 1;
+			i++;
+
+		} else {
+
+			buffer = emalloc(sizeof(char) * Z_STRLEN_P(name) + 7);
+			snprintf(buffer, Z_STRLEN_P(name) + 7, "%s_param", Z_STRVAL_P(name));
+			buffer[Z_STRLEN_P(name) + 7] = '\0';
+
+			symbol_param = zephir_symtable_add(ZEPHIR_T_TYPE_VAR, buffer, Z_STRLEN_P(name) + 6, context);
+			symbol_param->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, buffer);
+			symbol_param->initialized = 1;
+			args[i] = symbol_param->value_ref;
+			i++;
+
+			efree(buffer);
+
+			if (!memcmp(Z_STRVAL_P(data_type), SS("long"))) {
+
+				symbol = zephir_symtable_add(ZEPHIR_T_TYPE_LONG, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+#if ZEPHIR_32
+				symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt32Type(), Z_STRVAL_P(name));
+#else
+				symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt64Type(), Z_STRVAL_P(name));
+#endif
+				symbol->initialized = 1;
+
+				convert_params_to[number_convert] = symbol;
+				convert_params_from[number_convert] = symbol_param;
+				number_convert++;
+
+				continue;
+			}
+
+			if (!memcmp(Z_STRVAL_P(data_type), SS("int"))) {
+
+				symbol = zephir_symtable_add(ZEPHIR_T_TYPE_INTEGER, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+#if ZEPHIR_32
+				symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt32Type(), Z_STRVAL_P(name));
+#else
+				symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt64Type(), Z_STRVAL_P(name));
+#endif
+				symbol->initialized = 1;
+
+				convert_params_to[number_convert] = symbol;
+				convert_params_from[number_convert] = symbol_param;
+				number_convert++;
+
+				continue;
+			}
+
+		}
+
+		zend_print_zval_r(*parameter, 0 TSRMLS_CC);
 	}
 	args[i] = NULL;
 
@@ -83,25 +140,21 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	function = LLVMGetNamedFunction(context->module, "zephir_fetch_parameters");
 	if (!function) {
 
-		arg_tys    = emalloc(3 * sizeof(*arg_tys));
 		arg_tys[0] = LLVMInt32Type();
 		arg_tys[1] = LLVMInt32Type();
 		arg_tys[2] = LLVMInt32Type();
 		function = LLVMAddFunction(context->module, "zephir_fetch_parameters", LLVMFunctionType(LLVMInt32Type(), arg_tys, 3, 1));
 		if (!function) {
-			efree(arg_tys);
 			zend_error(E_ERROR, "Cannot register zephir_fetch_parameters");
 		}
 
 		LLVMAddGlobalMapping(context->engine, function, zephirt_fetch_parameters);
 		LLVMSetFunctionCallConv(function, LLVMCCallConv);
 		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
-
-		efree(arg_tys);
 	}
 
 	LLVMValueRef fetchStatus = LLVMBuildCall(context->builder, function, args, i, "");
-	LLVMValueRef condition = LLVMBuildICmp(context->builder, LLVMIntEQ, fetchStatus, LLVMConstInt(LLVMInt32Type(), FAILURE, 0), "ifcond");
+	LLVMValueRef condition = LLVMBuildICmp(context->builder, LLVMIntEQ, fetchStatus, LLVMConstInt(LLVMInt32Type(), FAILURE, 0), "");
 
 	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
 
@@ -120,6 +173,18 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	else_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
+
+	for (i = 0; i < number_convert; i++) {
+
+		switch (convert_params_to[i]->type) {
+
+			case ZEPHIR_T_TYPE_LONG:
+				LLVMBuildStore(context->builder, zephir_build_get_intval(context, convert_params_from[i]->value_ref), convert_params_to[i]->value_ref); // store i64 %16, i64* %a, align 8
+				break;
+
+		}
+
+	}
 }
 
 static void zephir_compile_methods(zephir_context *context, zval *methods, zend_function_entry *class_functions TSRMLS_DC)
@@ -167,12 +232,6 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		symtable = zephir_symtable_new();
 		context->symtable = symtable;
 
-		//%1 = alloca i32, align 4
-  		//%2 = alloca %struct._zval_struct*, align 8
-  		//%3 = alloca %struct._zval_struct**, align 8
-  		//%4 = alloca %struct._zval_struct*, align 8
-  		//%5 = alloca i32, align 4
-
 		/**
 		 * Initialize internal parameters
 		 */
@@ -209,17 +268,17 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		alloca[3] = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, "");
 		alloca[4] = LLVMBuildAlloca(context->builder, LLVMInt32Type(), "");
 
-  		LLVMBuildStore(context->builder, LLVMGetParam(func, 0), alloca[0]);
-  		LLVMBuildStore(context->builder, LLVMGetParam(func, 1), alloca[1]);
-  		LLVMBuildStore(context->builder, LLVMGetParam(func, 2), alloca[2]);
-  		LLVMBuildStore(context->builder, LLVMGetParam(func, 3), alloca[3]);
-  		LLVMBuildStore(context->builder, LLVMGetParam(func, 4), alloca[4]);
+		LLVMBuildStore(context->builder, LLVMGetParam(func, 0), alloca[0]);
+		LLVMBuildStore(context->builder, LLVMGetParam(func, 1), alloca[1]);
+		LLVMBuildStore(context->builder, LLVMGetParam(func, 2), alloca[2]);
+		LLVMBuildStore(context->builder, LLVMGetParam(func, 3), alloca[3]);
+		LLVMBuildStore(context->builder, LLVMGetParam(func, 4), alloca[4]);
 
-  		symbols[0]->value_ref = alloca[0];
-  		symbols[1]->value_ref = alloca[1];
-  		symbols[2]->value_ref = alloca[2];
-  		symbols[3]->value_ref = alloca[3];
-  		symbols[4]->value_ref = alloca[4];
+		symbols[0]->value_ref = alloca[0];
+		symbols[1]->value_ref = alloca[1];
+		symbols[2]->value_ref = alloca[2];
+		symbols[3]->value_ref = alloca[3];
+		symbols[4]->value_ref = alloca[4];
 
 		_zephir_array_fetch_string(&parameters, *method, SS("parameters") TSRMLS_CC);
 		if (Z_TYPE_P(parameters) == IS_ARRAY) {

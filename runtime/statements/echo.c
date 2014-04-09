@@ -130,8 +130,9 @@ int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 		compiled_expr = zephir_expr(context, *expr TSRMLS_CC);
 		switch (compiled_expr->type) {
 
+			case ZEPHIR_T_TYPE_LONG:
 			case ZEPHIR_T_TYPE_INTEGER:
-				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
+				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%ld", "");
 				args[1] = compiled_expr->value;
 				LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
 				break;
@@ -146,8 +147,9 @@ int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 
 				switch (compiled_expr->variable->type) {
 
+					case ZEPHIR_T_TYPE_LONG:
 					case ZEPHIR_T_TYPE_INTEGER:
-						args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
+						args[0] = LLVMBuildGlobalStringPtr(context->builder, "%ld", "");
 						args[1] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");
 						LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
 						break;

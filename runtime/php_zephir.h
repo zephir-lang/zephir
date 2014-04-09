@@ -95,6 +95,14 @@ ZEND_EXTERN_MODULE_GLOBALS(zephir)
 	#define ZEPHIRT_VGLOBAL &(zephir_globals)
 #endif
 
+#if defined(__GNUC__) && (defined(__clang__) || ((__GNUC__ * 100 + __GNUC_MINOR__) >= 405))
+# define UNREACHABLE() __builtin_unreachable()
+# define ASSUME(x) if (x) {} else __builtin_unreachable()
+#else
+# define UNREACHABLE() assert(0)
+# define ASSUME(x) assert(!!(x));
+#endif
+
 /** Define FASTCALL */
 #if defined(__GNUC__) && ZEND_GCC_VERSION >= 3004 && defined(__i386__)
 # define ZEPHIR_FASTCALL __attribute__((fastcall))

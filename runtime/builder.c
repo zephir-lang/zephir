@@ -27,6 +27,7 @@
 #include "symtable.h"
 
 #include "kernel/main.h"
+#include "kernel/operators.h"
 
 int zephir_initialize_zval_struct(zephir_context *context)
 {
@@ -74,7 +75,9 @@ int zephir_initialize_zval_struct(zephir_context *context)
 	return 1;
 }
 
-
+/**
+ * Builds a call to zend_is_true()
+ */
 LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef value_ref) {
 
 	LLVMValueRef    function, args[2];
@@ -98,6 +101,9 @@ LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef val
 	return LLVMBuildCall(context->builder, function, args, 1, "");
 }
 
+/**
+ * Builds a call to ZVAL_LONG()
+ */
 void zephir_build_zval_long(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value_ref) {
 
 	LLVMValueRef indicest[2], indices[2];
@@ -121,6 +127,107 @@ void zephir_build_zval_long(zephir_context *context, LLVMValueRef symbol_ref, LL
 	LLVMBuildStore(context->builder, value_ref, bitcast); // store i64 5000, i64* %8, align 8
 #endif
 
+}
+
+/**
+ * Builds a call to zephir_build_zephir_get_intval_ex
+ */
+LLVMValueRef zephir_build_zephir_get_intval_ex(zephir_context *context, LLVMValueRef value_ref) {
+
+	LLVMValueRef    function, args[2];
+	LLVMTypeRef     arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "zephir_get_intval_ex");
+	if (!function) {
+
+		arg_tys[0] = context->types.zval_pointer_type;
+#if ZEPHIR_32
+		function = LLVMAddFunction(context->module, "zephir_get_intval_ex", LLVMFunctionType(LLVMInt32Type(), arg_tys, 1, 0));
+#else
+		function = LLVMAddFunction(context->module, "zephir_get_intval_ex", LLVMFunctionType(LLVMInt64Type(), arg_tys, 1, 0));
+#endif
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register zephir_get_intval_ex");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, zephir_get_intval_ex);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	args[0] = LLVMBuildLoad(context->builder, value_ref, "");
+	return LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
+ * Builds a call to zephir_get_intval
+ */
+LLVMValueRef zephir_build_get_intval(zephir_context *context, LLVMValueRef symbol_ref) {
+
+	LLVMValueRef ptr, type, ref, cast, condition, then_value, else_value, bitcast, phi;
+	LLVMValueRef indicest[2], indices[2];
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 2, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 2
+	type = LLVMBuildLoad(context->builder, ref, ""); // load i8* %3, align 1
+	cast = LLVMBuildZExt(context->builder, type, LLVMInt32Type(), ""); // zext i8 %4 to i32
+	condition = LLVMBuildICmp(context->builder, LLVMIntEQ, // icmp eq i32 %5, 1
+		cast,
+		LLVMConstInt(LLVMInt32Type(), 1, 0),
+		""
+	);
+
+	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+
+	LLVMBasicBlockRef then_block = LLVMAppendBasicBlock(func, "then");
+	LLVMBasicBlockRef else_block = LLVMAppendBasicBlock(func, "else");
+	LLVMBasicBlockRef merge_block = LLVMAppendBasicBlock(func, "merge-if");
+
+	LLVMBuildCondBr(context->builder, condition, then_block, else_block); // br i1 %6, label %7, label %12
+
+	/**
+	 * Return zvalue.lval member
+	 */
+	LLVMPositionBuilderAtEnd(context->builder, then_block);
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %1, align 8
+	indices[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indices[1] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indices, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 2
+
+#if ZEPHIR_32
+	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt32Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i32*
+#else
+	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt64Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i64*
+#endif
+
+	then_value = LLVMBuildLoad(context->builder, bitcast, ""); // load i64* %10, align 8
+
+	LLVMBuildBr(context->builder, merge_block);
+	then_block = LLVMGetInsertBlock(context->builder);
+
+	/**
+	 * Or, call zephir_get_intval_ex
+	 */
+	LLVMPositionBuilderAtEnd(context->builder, else_block);
+	else_value = zephir_build_zephir_get_intval_ex(context, symbol_ref);
+	LLVMBuildBr(context->builder, merge_block);
+	else_block = LLVMGetInsertBlock(context->builder);
+
+	/**
+	 * Merge the resulting value using a phi
+	 */
+	LLVMPositionBuilderAtEnd(context->builder, merge_block);
+#if ZEPHIR_32
+	phi = LLVMBuildPhi(context->builder, LLVMInt32Type(), ""); //phi i64 [ %11, %7 ], [ %14, %12 ]
+#else
+	phi = LLVMBuildPhi(context->builder, LLVMInt64Type(), ""); //phi i64 [ %11, %7 ], [ %14, %12 ]
+#endif
+    LLVMAddIncoming(phi, &then_value, &then_block, 1);
+    LLVMAddIncoming(phi, &else_value, &else_block, 1);
+
+    return phi;
 }
 
 void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {

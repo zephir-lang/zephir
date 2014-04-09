@@ -189,16 +189,19 @@ zephir_compiled_expr *zephir_operator_comparison_less(zephir_context *context, z
 								case ZEPHIR_T_TYPE_INTEGER:
 
 									compiled_expr = emalloc(sizeof(zephir_compiled_expr));
-									compiled_expr->type  = ZEPHIR_T_INTEGER;
-									compiled_expr->value = LLVMBuildNSWAdd(
+									compiled_expr->type  = ZEPHIR_T_TYPE_BOOL;
+									compiled_expr->value = LLVMBuildICmp(
 										context->builder,
+										LLVMIntSLT,
 										LLVMBuildLoad(context->builder, compiled_expr_left->variable->value_ref, ""),
 										LLVMBuildLoad(context->builder, compiled_expr_right->variable->value_ref, ""),
 										""
 									);
 									return compiled_expr;
 
-									break;
+								default:
+
+									zend_error(E_ERROR, "Unknown operands in 'less' operation %d %d", compiled_expr_left->type, compiled_expr_right->variable->type);
 
 							}
 							break;
@@ -211,6 +214,6 @@ zephir_compiled_expr *zephir_operator_comparison_less(zephir_context *context, z
 
 	}
 
-	zend_error(E_ERROR, "Unknown operands in 'less' operation");
+	zend_error(E_ERROR, "Unknown operands in 'less' operation %d %d", compiled_expr_left->type, compiled_expr_right->type);
 	return NULL;
 }

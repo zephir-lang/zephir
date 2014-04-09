@@ -50,17 +50,32 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			switch (compiled_expr->type) {
 
+				case ZEPHIR_T_TYPE_LONG:
 				case ZEPHIR_T_TYPE_INTEGER:
 					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
 					break;
 
+				case ZEPHIR_T_VARIABLE:
+
+					switch (compiled_expr->variable->type) {
+
+						case ZEPHIR_T_TYPE_LONG:
+						case ZEPHIR_T_TYPE_INTEGER:
+							LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
+							break;
+					}
+					break;
 			}
 
 			break;
+
+		default:
+			zend_error(E_ERROR, "Unknown let variable %d", symbol_variable->type);
 
 	}
 
@@ -82,6 +97,7 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
@@ -115,6 +131,7 @@ int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *s
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
