@@ -30,7 +30,7 @@ Requirements
 
 To compile zephir-parser:
 
-* [json-c](https://github.com/json-c/json-c) (Please install this one from Github)
+* [json-c](https://github.com/phalcon/json-c) (Please install this one from Github)
 * [re2c](http://re2c.org/)
 
 To build the PHP extension:

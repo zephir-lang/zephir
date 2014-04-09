@@ -32,10 +32,11 @@
 
 int zephir_statement_declare(zephir_context *context, zval *statement TSRMLS_DC)
 {
-	zval *data_type, *variables, **variable, *name;
+	zval *data_type, *variables, **variable, *name, *default_value;
 	HashTable       *ht;
 	HashPosition    pos = {0};
 	zephir_variable *symbol;
+	zephir_compiled_expr *compiled_expr;
 
 	_zephir_array_fetch_string(&data_type, statement, SS("data-type") TSRMLS_CC);
 	if (Z_TYPE_P(data_type) != IS_STRING) {
@@ -73,10 +74,52 @@ int zephir_statement_declare(zephir_context *context, zval *statement TSRMLS_DC)
 			continue;
 		}
 
+		if (!memcmp(Z_STRVAL_P(data_type), SS("long"))) {
+			symbol = zephir_symtable_add(ZEPHIR_T_TYPE_LONG, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+#if ZEPHIR_32
+			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt32Type(), Z_STRVAL_P(name));
+#else
+			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt64Type(), Z_STRVAL_P(name));
+#endif
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(data_type), SS("double"))) {
+			symbol = zephir_symtable_add(ZEPHIR_T_TYPE_DOUBLE, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMDoubleType(), Z_STRVAL_P(name));
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(data_type), SS("bool"))) {
+
+			symbol = zephir_symtable_add(ZEPHIR_T_TYPE_BOOL, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+			symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt8Type(), Z_STRVAL_P(name));
+
+			/**
+			 * Assign default value if any
+			 */
+			_zephir_array_fetch_string(&default_value, *variable, SS("expr") TSRMLS_CC);
+			if (Z_TYPE_P(default_value) != IS_ARRAY) {
+				continue;
+			}
+
+			compiled_expr = zephir_expr(context, default_value TSRMLS_CC);
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_BOOL:
+					LLVMBuildStore(context->builder, compiled_expr->value, symbol->value_ref);
+					break;
+
+				default:
+					zend_error(E_ERROR, "Wrong default type for boolean type");
+					break;
+			}
+
+			continue;
+		}
+
 		zend_print_zval_r(*variable, 0 TSRMLS_CC);
-
 	}
-
 
 	return 0;
 }

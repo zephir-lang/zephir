@@ -42,6 +42,23 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return NULL;
 	}
 
+	if (!memcmp(Z_STRVAL_P(type), SS("bool"))) {
+
+		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
+		if (Z_TYPE_P(value) != IS_STRING) {
+			return NULL;
+		}
+
+		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
+		compiled_expr->type  = ZEPHIR_T_TYPE_BOOL;
+		if (!memcmp(Z_STRVAL_P(value), SS("true"))) {
+			compiled_expr->value = LLVMConstInt(LLVMInt8Type(), 1, 0);
+		} else {
+			compiled_expr->value = LLVMConstInt(LLVMInt8Type(), 0, 0);
+		}
+		return compiled_expr;
+	}
+
 	if (!memcmp(Z_STRVAL_P(type), SS("int"))) {
 
 		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
@@ -56,6 +73,20 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 #else
 		compiled_expr->value = LLVMConstInt(LLVMInt64Type(), strtol(Z_STRVAL_P(value), NULL, 10), 0);
 #endif
+
+		return compiled_expr;
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("string"))) {
+
+		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
+		if (Z_TYPE_P(value) != IS_STRING) {
+			return NULL;
+		}
+
+		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
+		compiled_expr->type  = ZEPHIR_T_TYPE_STRING;
+		compiled_expr->value = LLVMBuildGlobalStringPtr(context->builder, Z_STRVAL_P(value), "");
 
 		return compiled_expr;
 	}
@@ -82,6 +113,10 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 
 	if (!memcmp(Z_STRVAL_P(type), SS("greater"))) {
 		return zephir_operator_comparison_greater(context, expr TSRMLS_CC);
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("less"))) {
+		return zephir_operator_comparison_less(context, expr TSRMLS_CC);
 	}
 
 	if (!memcmp(Z_STRVAL_P(type), SS("list"))) {
