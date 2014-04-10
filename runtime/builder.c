@@ -113,7 +113,7 @@ void zephir_build_zval_long(zephir_context *context, LLVMValueRef symbol_ref, LL
 	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
 	indicest[1] = LLVMConstInt(LLVMInt32Type(), 2, 0);
 	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 0
-	LLVMBuildStore(context->builder, LLVMConstInt(LLVMInt8Type(), 1, 0), ref); // store i8 1, i8* %7, align 1
+	LLVMBuildStore(context->builder, LLVMConstInt(LLVMInt8Type(), IS_LONG, 0), ref); // store i8 1, i8* %7, align 1
 
 	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
 	indices[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
@@ -126,6 +126,30 @@ void zephir_build_zval_long(zephir_context *context, LLVMValueRef symbol_ref, LL
 	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMInt64Type(), 0), ""); //bitcast %union._zvalue_value* %7 to i64*
 	LLVMBuildStore(context->builder, value_ref, bitcast); // store i64 5000, i64* %8, align 8
 #endif
+
+}
+
+/**
+ * Builds a call to ZVAL_DOUBLE()
+ */
+void zephir_build_zval_double(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value_ref) {
+
+	LLVMValueRef indicest[2], indices[2];
+	LLVMValueRef ref, ptr, bitcast;
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 2, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 0
+	LLVMBuildStore(context->builder, LLVMConstInt(LLVMInt8Type(), IS_DOUBLE, 0), ref); // store i8 1, i8* %7, align 1
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indices[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indices[1] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indices, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 0
+
+	bitcast = LLVMBuildBitCast(context->builder, ref, LLVMPointerType(LLVMDoubleType(), 0), ""); //bitcast %union._zvalue_value* %5 to double*
+	LLVMBuildStore(context->builder, value_ref, bitcast); // store i64 5000, i64* %8, align 8
 
 }
 
@@ -237,4 +261,13 @@ void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {
 	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"));
 
 	zephir_build_zval_long(context, symbol_variable->value_ref, value_ref);
+}
+
+void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref) {
+
+	zephir_variable *symbol_variable;
+
+	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"));
+
+	zephir_build_zval_double(context, symbol_variable->value_ref, value_ref);
 }

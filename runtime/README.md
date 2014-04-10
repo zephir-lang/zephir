@@ -2,7 +2,7 @@ Zephir Runtime
 ==============
 
 Zephir - Ze(nd Engine) Ph(p) I(nt)r(mediate) - is a high-level language that can be plugged-in into the Zend Engine.
-Code is compiled on-the-fly using a JIT compiler (LLVM). 
+Code is compiled on-the-fly using a JIT compiler (LLVM).
 
 Main features:
 
@@ -10,7 +10,7 @@ Main features:
 * Reduced execution overhead compared with full interpretation
 * Restricted procedural programming, promoting OOP
 * Memory safety
-* Just-In-Time (JIT) compiler
+* Just-In-Time (JIT) compiler+
 
 Compiler design goals:
 

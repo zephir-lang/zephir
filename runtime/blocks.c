@@ -40,6 +40,7 @@ LLVMValueRef zephir_compile_block(zephir_context *context, zval *statements TSRM
 	HashPosition    pos = {0};
 	zval            **statement, *type;
 
+	context->is_unrecheable = 0;
 	zend_hash_internal_pointer_reset_ex(ht, &pos);
 	for (
 	 ; zend_hash_get_current_data_ex(ht, (void**) &statement, &pos) == SUCCESS
@@ -52,31 +53,37 @@ LLVMValueRef zephir_compile_block(zephir_context *context, zval *statements TSRM
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("if"))) {
+			context->is_unrecheable = 0;
 			zephir_statement_if(context, *statement);
 			continue;
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("echo"))) {
+			context->is_unrecheable = 0;
 			zephir_statement_echo(context, *statement);
 			continue;
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("let"))) {
+			context->is_unrecheable = 0;
 			zephir_statement_let(context, *statement);
 			continue;
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("declare"))) {
+			context->is_unrecheable = 0;
 			zephir_statement_declare(context, *statement);
 			continue;
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("return"))) {
+			context->is_unrecheable = 1;
 			zephir_statement_return(context, *statement);
-			continue;
+			break;
 		}
 
 		if (!memcmp(Z_STRVAL_P(type), SS("while"))) {
+			context->is_unrecheable = 0;
 			zephir_statement_while(context, *statement);
 			continue;
 		}

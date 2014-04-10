@@ -26,54 +26,52 @@
 #include "utils.h"
 #include "expr.h"
 #include "builder.h"
+
 #include "kernel/main.h"
 
-int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
-{
+LLVMValueRef zephir_optimizers_evalexpr(zephir_context *context, zval *expr) {
 
-	zval            *expr;
+	LLVMValueRef condition = NULL;
 	zephir_compiled_expr *compiled_expr;
-
-	_zephir_array_fetch_string(&expr, statement, SS("expr") TSRMLS_CC);
-	if (Z_TYPE_P(expr) != IS_ARRAY) {
-		return 0;
-	}
 
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
 	switch (compiled_expr->type) {
 
-		case ZEPHIR_T_TYPE_INTEGER:
-		case ZEPHIR_T_TYPE_LONG:
-			zephir_build_return_long(context, compiled_expr->value);
+		case ZEPHIR_T_TYPE_BOOL:
+			condition = compiled_expr->value;
 			break;
 
-		case ZEPHIR_T_TYPE_DOUBLE:
-			zephir_build_return_double(context, compiled_expr->value);
+		case ZEPHIR_T_TYPE_LONG:
+		case ZEPHIR_T_TYPE_INTEGER:
+#if ZEPHIR_32
+			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt32Type(), 0, 0), "");
+#else
+			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt64Type(), 0, 0), "");
+#endif
 			break;
 
 		case ZEPHIR_T_VARIABLE:
 
 			switch (compiled_expr->variable->type) {
 
-				case ZEPHIR_T_TYPE_VAR:
-					break;
-
 				case ZEPHIR_T_TYPE_INTEGER:
 				case ZEPHIR_T_TYPE_LONG:
-					zephir_build_return_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+#if ZEPHIR_32
+					condition = LLVMBuildICmp(context->builder, LLVMIntNE, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), LLVMConstInt(LLVMInt32Type(), 0, 0), "");
+#else
+					condition = LLVMBuildICmp(context->builder, LLVMIntNE, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), LLVMConstInt(LLVMInt64Type(), 0, 0), "");
+#endif
 					break;
+
+				case ZEPHIR_T_TYPE_VAR:
+					condition = LLVMBuildICmp(context->builder, LLVMIntNE, zephir_build_zend_is_true(context, compiled_expr->variable->value_ref), LLVMConstInt(LLVMInt32Type(), 0, 0), "");
+					break;
+
 			}
 
-			break;
-
-		default:
-			zend_error(E_ERROR, "Unknown compiled expression %d", compiled_expr->type);
-			break;
 	}
 
 	efree(compiled_expr);
 
-	LLVMBuildRetVoid(context->builder);
-
-	return 0;
+	return condition;
 }

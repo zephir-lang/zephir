@@ -288,9 +288,13 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		_zephir_array_fetch_string(&statements, *method, SS("statements") TSRMLS_CC);
 		if (Z_TYPE_P(statements) == IS_ARRAY) {
 			zephir_compile_block(context, statements);
+		} else {
+			context->is_unrecheable = 0;
 		}
 
-		LLVMBuildRetVoid(context->builder);
+		if (context->is_unrecheable == 0) {
+			LLVMBuildRetVoid(context->builder);
+		}
 
 		LLVMDumpValue(func);
 

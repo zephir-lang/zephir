@@ -77,6 +77,20 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return compiled_expr;
 	}
 
+	if (!memcmp(Z_STRVAL_P(type), SS("double"))) {
+
+		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);
+		if (Z_TYPE_P(value) != IS_STRING) {
+			return NULL;
+		}
+
+		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
+		compiled_expr->type  = ZEPHIR_T_TYPE_DOUBLE;
+		compiled_expr->value = LLVMConstReal(LLVMDoubleType(), zend_strtod(Z_STRVAL_P(value), NULL));
+
+		return compiled_expr;
+	}
+
 	if (!memcmp(Z_STRVAL_P(type), SS("string"))) {
 
 		_zephir_array_fetch_string(&value, expr, SS("value") TSRMLS_CC);

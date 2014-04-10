@@ -29,13 +29,16 @@
 #include "blocks.h"
 
 #include "kernel/main.h"
+#include "optimizers/evalexpr.h"
 
+/**
+ * Builds an 'while' statement
+ */
 int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 {
 
 	zval *expr, *statements;
-	zephir_compiled_expr *compiled_expr;
-	LLVMValueRef condition = NULL, then_value, else_value;
+	LLVMValueRef condition, then_value, else_value;
 
 	_zephir_array_fetch_string(&expr, statement, SS("expr") TSRMLS_CC);
 	if (Z_TYPE_P(expr) != IS_ARRAY) {
@@ -48,36 +51,9 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 	LLVMBuildBr(context->builder, start_block);
 	LLVMPositionBuilderAtEnd(context->builder, start_block);
 
-	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
-	switch (compiled_expr->type) {
-
-		case ZEPHIR_T_TYPE_BOOL:
-			condition = compiled_expr->value;
-			break;
-
-		case ZEPHIR_T_TYPE_INTEGER:
-#if ZEPHIR_32
-			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt32Type(), 0, 0), "");
-#else
-			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt64Type(), 0, 0), "");
-#endif
-			break;
-
-		case ZEPHIR_T_VARIABLE:
-
-			switch (compiled_expr->variable->type) {
-
-				case ZEPHIR_T_TYPE_VAR:
-					condition = LLVMBuildICmp(context->builder, LLVMIntNE, zephir_build_zend_is_true(context, compiled_expr->variable->value_ref), LLVMConstInt(LLVMInt32Type(), 0, 0), "");
-					break;
-
-			}
-
-	}
-
+	condition = zephir_optimizers_evalexpr(context, expr);
 	if (!condition) {
-		zend_error(E_ERROR, "Unknown expression");
-		return 0;
+		zend_error(E_ERROR, "Unknown eval expression");
 	}
 
 	LLVMBasicBlockRef while_block = LLVMAppendBasicBlock(func, "block-while");
@@ -93,7 +69,6 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 	while_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
-	efree(compiled_expr);
 
 	return 0;
 }

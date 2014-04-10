@@ -57,6 +57,7 @@ typedef struct _zephir_context {
 	zephir_symtable *symtable;
 	unsigned int inside_cycle;
 	unsigned int inside_try_catch;
+	unsigned int is_unrecheable;
 	struct {
 		LLVMTypeRef zval_type;
 		LLVMTypeRef zval_pointer_type;
