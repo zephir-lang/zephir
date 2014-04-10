@@ -50,6 +50,17 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_BOOL:
+
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_BOOL:
+					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
+					break;
+
+			}
+			break;
+
 		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
@@ -66,6 +77,26 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 
 						case ZEPHIR_T_TYPE_LONG:
 						case ZEPHIR_T_TYPE_INTEGER:
+							LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
+							break;
+					}
+					break;
+			}
+			break;
+
+		case ZEPHIR_T_TYPE_DOUBLE:
+
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_DOUBLE:
+					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
+					break;
+
+				case ZEPHIR_T_VARIABLE:
+
+					switch (compiled_expr->variable->type) {
+
+						case ZEPHIR_T_TYPE_DOUBLE:
 							LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
 							break;
 					}

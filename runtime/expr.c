@@ -125,6 +125,14 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return zephir_operator_arithmetical_add(context, expr TSRMLS_CC);
 	}
 
+	if (!memcmp(Z_STRVAL_P(type), SS("mul"))) {
+		return zephir_operator_arithmetical_mul(context, expr TSRMLS_CC);
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("div"))) {
+		return zephir_operator_arithmetical_div(context, expr TSRMLS_CC);
+	}
+
 	if (!memcmp(Z_STRVAL_P(type), SS("greater"))) {
 		return zephir_operator_comparison_greater(context, expr TSRMLS_CC);
 	}

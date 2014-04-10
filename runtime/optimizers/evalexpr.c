@@ -54,6 +54,10 @@ LLVMValueRef zephir_optimizers_evalexpr(zephir_context *context, zval *expr) {
 
 			switch (compiled_expr->variable->type) {
 
+				case ZEPHIR_T_TYPE_BOOL:
+					condition = LLVMBuildICmp(context->builder, LLVMIntNE, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), LLVMConstInt(LLVMInt8Type(), 0, 0), "");
+					break;
+
 				case ZEPHIR_T_TYPE_INTEGER:
 				case ZEPHIR_T_TYPE_LONG:
 #if ZEPHIR_32

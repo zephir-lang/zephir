@@ -80,7 +80,6 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 	} else {
 		LLVMBuildBr(context->builder, merge_block);
 	}
-
 	else_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
