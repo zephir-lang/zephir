@@ -27,6 +27,7 @@
 #include "symtable.h"
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 #include "kernel/operators.h"
 
 int zephir_initialize_zval_struct(zephir_context *context)
@@ -73,6 +74,82 @@ int zephir_initialize_zval_struct(zephir_context *context)
 	context->types.zvalue_type = zvalue_struct;
 
 	return 1;
+}
+
+/**
+ * Builds a call to 'zephir_grow_stack'
+ */
+void zephir_build_memory_grow_stack(zephir_context *context) {
+
+    LLVMValueRef    function, args[2];
+    LLVMTypeRef     arg_tys[2];
+
+    //zephirt_memory_grow_stack(TSRMLS_C)
+    function = LLVMGetNamedFunction(context->module, "zephirt_memory_grow_stack");
+    if (!function) {
+
+        function = LLVMAddFunction(context->module, "zephirt_memory_grow_stack", LLVMFunctionType(LLVMVoidType(), NULL, 0, 0));
+        if (!function) {
+            zend_error(E_ERROR, "Cannot register zephirt_memory_grow_stack");
+        }
+
+        LLVMAddGlobalMapping(context->engine, function, zephirt_memory_grow_stack);
+        LLVMSetFunctionCallConv(function, LLVMCCallConv);
+        LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+    }
+
+    LLVMBuildCall(context->builder, function, NULL, 0, "");
+}
+
+/**
+ * Builds a call to 'zephir_grow_stack'
+ */
+void zephir_build_memory_restore_stack(zephir_context *context) {
+
+    LLVMValueRef    function, args[2];
+    LLVMTypeRef     arg_tys[2];
+
+    //zephirt_memory_restore_stack(TSRMLS_C)
+    function = LLVMGetNamedFunction(context->module, "zephirt_memory_restore_stack");
+    if (!function) {
+
+        function = LLVMAddFunction(context->module, "zephirt_memory_restore_stack", LLVMFunctionType(LLVMVoidType(), NULL, 0, 0));
+        if (!function) {
+            zend_error(E_ERROR, "Cannot register zephirt_memory_restore_stack");
+        }
+
+        LLVMAddGlobalMapping(context->engine, function, zephirt_memory_restore_stack);
+        LLVMSetFunctionCallConv(function, LLVMCCallConv);
+        LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+    }
+
+    LLVMBuildCall(context->builder, function, NULL, 0, "");
+}
+
+/**
+ * Builds a call to 'zephir_memory_alloc'
+ */
+void zephir_build_memory_alloc(zephir_context *context, LLVMValueRef value_ref) {
+
+    LLVMValueRef    function, args[2];
+    LLVMTypeRef     arg_tys[2];
+
+    function = LLVMGetNamedFunction(context->module, "zephirt_memory_alloc");
+    if (!function) {
+
+        arg_tys[0] = context->types.zval_double_pointer_type;
+        function = LLVMAddFunction(context->module, "zephirt_memory_alloc", LLVMFunctionType(LLVMVoidType(), arg_tys, 1, 0));
+        if (!function) {
+            zend_error(E_ERROR, "Cannot register zephirt_memory_alloc");
+        }
+
+        LLVMAddGlobalMapping(context->engine, function, zephirt_memory_alloc);
+        LLVMSetFunctionCallConv(function, LLVMCCallConv);
+        LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+    }
+
+    args[0] = value_ref;
+    LLVMBuildCall(context->builder, function, args, 1, "");
 }
 
 /**

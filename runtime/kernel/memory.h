@@ -30,27 +30,27 @@ void zephirt_value_dtor(zval *zvalue ZEND_FILE_LINE_DC);
 
 /* Memory Frames */
 #ifndef ZEPHIR_RELEASE
-void ZEPHIR_FASTCALL zephirt_memory_grow_stack(const char *func TSRMLS_DC);
-int ZEPHIR_FASTCALL zephirt_memory_restore_stack(const char *func TSRMLS_DC);
+void zephirt_memory_grow_stack(const char *func TSRMLS_DC);
+int zephirt_memory_restore_stack(const char *func TSRMLS_DC);
 
 #define ZEPHIR_MM_GROW() zephirt_memory_grow_stack(NULL TSRMLS_CC)
 #define ZEPHIR_MM_RESTORE() zephirt_memory_restore_stack(NULL TSRMLS_CC)
 
 #else
-void ZEPHIR_FASTCALL zephirt_memory_grow_stack(TSRMLS_D);
-int ZEPHIR_FASTCALL zephirt_memory_restore_stack(TSRMLS_D);
+void zephirt_memory_grow_stack(TSRMLS_D);
+int zephirt_memory_restore_stack(TSRMLS_D);
 
 #define ZEPHIR_MM_GROW() zephirt_memory_grow_stack(TSRMLS_C)
 #define ZEPHIR_MM_RESTORE() zephirt_memory_restore_stack(TSRMLS_C)
 
 #endif
 
-void ZEPHIR_FASTCALL zephirt_memory_observe(zval **var TSRMLS_DC);
-void ZEPHIR_FASTCALL zephirt_memory_remove(zval **var TSRMLS_DC);
-void ZEPHIR_FASTCALL zephirt_memory_alloc(zval **var TSRMLS_DC);
-void ZEPHIR_FASTCALL zephirt_memory_alloc_pnull(zval **var TSRMLS_DC);
+void zephirt_memory_observe(zval **var TSRMLS_DC);
+void zephirt_memory_remove(zval **var TSRMLS_DC);
+void zephirt_memory_alloc(zval **var TSRMLS_DC);
+void zephirt_memory_alloc_pnull(zval **var TSRMLS_DC);
 
-int ZEPHIR_FASTCALL zephirt_clean_restore_stack(TSRMLS_D);
+int zephirt_clean_restore_stack(TSRMLS_D);
 
 /* Virtual symbol tables */
 void zephirt_create_symbol_table(TSRMLS_D);
@@ -61,7 +61,7 @@ void zephirt_clean_symbol_tables(TSRMLS_D);
 int zephirt_set_symbol(zval *key_name, zval *value TSRMLS_DC);
 int zephirt_set_symbol_str(char *key_name, unsigned int key_length, zval *value TSRMLS_DC);
 
-void ZEPHIR_FASTCALL zephirt_copy_ctor(zval *destiny, zval *origin);
+void zephirt_copy_ctor(zval *destiny, zval *origin);
 
 /* Memory macros */
 #define ZEPHIR_ALLOC_ZVAL(z) \

@@ -26,6 +26,9 @@
 #include "utils.h"
 #include "variable.h"
 
+/**
+ * Creates a new symbol table
+ */
 zephir_symtable *zephir_symtable_new()
 {
 	zephir_symtable *symtable;
@@ -56,6 +59,9 @@ int _zephir_symtable_fetch_string(zephir_variable **return_value, HashTable *arr
 	return FAILURE;
 }
 
+/**
+ * Adds a symbol to the symbol table
+ */
 zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int name_length, zephir_context *context)
 {
 	zephir_variable *variable;
@@ -66,6 +72,7 @@ zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int na
 	variable->name = zend_strndup(name, name_length);
 	variable->name_length = name_length;
 	variable->value_ref = NULL;
+    variable->variant_inits = 0;
 
 	symtable = context->symtable;
 	if (symtable && !symtable->variables) {
@@ -78,6 +85,9 @@ zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int na
 	return variable;
 }
 
+/**
+ * Check if a variable was added to the active symbol table
+ */
 int zephir_symtable_has(const char *name, unsigned int name_length, zephir_context *context)
 {
 	zephir_variable *variable;
@@ -93,12 +103,15 @@ int zephir_symtable_has(const char *name, unsigned int name_length, zephir_conte
 	return 1;
 }
 
+/**
+ * Obtains a variable for mutating
+ */
 zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtable, const char *name, unsigned int name_length)
 {
 	zephir_variable *variable;
 
 	if (_zephir_symtable_fetch_string(&variable, symtable->variables, name, name_length + 1 TSRMLS_CC) == FAILURE) {
-		zend_error(E_ERROR, "Cannot read variable %s because it wasn't declared", name);
+        zend_error(E_ERROR, "Cannot mutate variable \"%s\" because it wasn't defined", name);
 	}
 
 	zephir_variable_incr_uses(variable);
@@ -107,12 +120,15 @@ zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtabl
 	return variable;
 }
 
+/**
+ * Obtains a variable for reading
+ */
 zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable, const char *name, unsigned int name_length)
 {
 	zephir_variable *variable;
 
 	if (_zephir_symtable_fetch_string(&variable, symtable->variables, name, name_length + 1 TSRMLS_CC) == FAILURE) {
-		zend_error(E_ERROR, "Cannot mutate variable %s because it wasn't defined", name);
+		zend_error(E_ERROR, "Cannot read variable \"%s\" because it wasn't declared", name);
 	}
 
 	return variable;

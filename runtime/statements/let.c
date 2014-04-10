@@ -27,6 +27,7 @@
 #include "expr.h"
 #include "builder.h"
 #include "symtable.h"
+#include "variable.h"
 #include "kernel/main.h"
 
 int zephir_statement_let_variable(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
@@ -104,6 +105,38 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 			}
 
 			break;
+
+        case ZEPHIR_T_TYPE_VAR:
+
+            switch (compiled_expr->type) {
+
+                case ZEPHIR_T_TYPE_BOOL:
+                    zephir_variable_init_variant(symbol_variable, context);
+                    break;
+
+                case ZEPHIR_T_TYPE_LONG:
+                case ZEPHIR_T_TYPE_INTEGER:
+                    zephir_variable_init_variant(symbol_variable, context);
+                    zephir_build_zval_long(context, symbol_variable->value_ref, compiled_expr->value);
+                    break;
+
+                case ZEPHIR_T_TYPE_DOUBLE:
+                    zephir_variable_init_variant(symbol_variable, context);
+                    //LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
+                    break;
+
+                case ZEPHIR_T_VARIABLE:
+
+                    switch (compiled_expr->variable->type) {
+
+                        case ZEPHIR_T_TYPE_DOUBLE:
+                            //LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
+                            break;
+                    }
+                    break;
+            }
+
+            break;
 
 		default:
 			zend_error(E_ERROR, "Unknown let variable %d", symbol_variable->type);

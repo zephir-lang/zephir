@@ -3,7 +3,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team and contributors                          |
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -97,7 +97,7 @@ static void zephir_scanner_error_msg(zephir_parser_status *parser_status){
 }
 
 /**
- * Parses a comment returning an intermediate array representation
+ * Parses a program returning an intermediate array representation
  */
 int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, char *file_path TSRMLS_DC) {
 
@@ -391,7 +391,7 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 				break;
 			case ZEPHIR_T_COMMENT:
 				if (parser_status->number_brackets <= 1) {
-					zephir_parse_with_token(zephir_parser, ZEPHIR_T_COMMENT, ZEPHIR_COMMENT, &token, parser_status);
+                    zephir_parse_with_token(zephir_parser, ZEPHIR_T_COMMENT, ZEPHIR_COMMENT, &token, parser_status);
 				}
 				break;
 			case ZEPHIR_T_CBLOCK:
@@ -430,10 +430,10 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 			case ZEPHIR_T_TYPE_VAR:
 				zephir_(zephir_parser, ZEPHIR_TYPE_VAR, NULL, parser_status);
 				break;
-		    case ZEPHIR_T_TYPE_OBJECT:
+            case ZEPHIR_T_TYPE_OBJECT:
                 zephir_(zephir_parser, ZEPHIR_TYPE_OBJECT, NULL, parser_status);
                 break;
-		    case ZEPHIR_T_TYPE_RESOURCE:
+            case ZEPHIR_T_TYPE_RESOURCE:
                 zephir_(zephir_parser, ZEPHIR_TYPE_RESOURCE, NULL, parser_status);
                 break;
             case ZEPHIR_T_TYPE_CALLABLE:
@@ -516,15 +516,14 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 
 			default:
 				parser_status->status = ZEPHIR_PARSING_FAILED;
-				fprintf(stderr, "Scanner: unknown opcode %d\n", token.opcode);
-				/*if (!*error_msg) {
-					error = emalloc(sizeof(char) * (48 + Z_STRLEN_P(state->active_file)));
-					sprintf(error, "Scanner: unknown opcode %d on in %s line %d", token.opcode, Z_STRVAL_P(state->active_file), state->active_line);
-					//PHALCON_INIT_VAR(*error_msg);
+				if (!*error_msg) {
+                    unsigned int length = sizeof(char) * (48 + Z_STRLEN_P(state->active_file));
+					error = emalloc(length);
+					snprintf(error, length, "Scanner: unknown opcode %d on in %s line %d", token.opcode, Z_STRVAL_P(state->active_file), state->active_line);
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
 					efree(error);
-				}*/
+				}
 				break;
 		}
 
@@ -541,18 +540,12 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 			case ZEPHIR_SCANNER_RETCODE_ERR:
 			case ZEPHIR_SCANNER_RETCODE_IMPOSSIBLE:
 				{
-					char *x = malloc(sizeof(char) * 1024);
+					char *x = emalloc(sizeof(char) * 1024);
 					if (state->start) {
-						sprintf(x, "Scanner error: %d %s", scanner_status, state->start);
+						snprintf(x, 1024, "Scanner error: %d %s", scanner_status, state->start);
 					} else {
-						sprintf(x, "Scanner error: %d", scanner_status);
+						snprintf(x, 1024, "Scanner error: %d", scanner_status);
 					}
-					//json_object *syntax_error = json_object_new_object();
-					//json_object_object_add(syntax_error, "type", json_object_new_string("error"));
-					//json_object_object_add(syntax_error, "message", json_object_new_string(x));
-					fprintf(stderr, "%s\n", x);
-					//free(x);
-					//parser_status->ret = syntax_error;
 					status = FAILURE;
 				}
 				break;
@@ -566,15 +559,13 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 
 	if (parser_status->status != ZEPHIR_PARSING_OK) {
 		status = FAILURE;
-		/*if (parser_status->syntax_error) {
+		if (parser_status->syntax_error) {
 			if (!*error_msg) {
-				//PHALCON_INIT_VAR(*error_msg);
 				ALLOC_INIT_ZVAL(*error_msg);
 				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}
 			efree(parser_status->syntax_error);
-		}*/
-		//fprintf(stderr, "error!\n");
+		}
 	}
 
 	zephir_Free(zephir_parser, zephir_wrapper_free);
@@ -593,7 +584,6 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 	}
 
 	if (parser_status->ret) {
-		//printf("%s\n", json_object_to_json_string(parser_status->ret));
 		//zend_print_zval_r(parser_status->ret, 0 TSRMLS_CC);
 		*return_value = parser_status->ret;
 	}

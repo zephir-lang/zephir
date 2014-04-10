@@ -48,6 +48,7 @@ typedef struct _zephir_variable {
 	unsigned int name_length;
 	unsigned char initialized;
 	LLVMValueRef value_ref;
+    unsigned int variant_inits;
 } zephir_variable;
 
 typedef struct _zephir_context {

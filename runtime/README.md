@@ -10,7 +10,7 @@ Main features:
 * Reduced execution overhead compared with full interpretation
 * Restricted procedural programming, promoting OOP
 * Memory safety
-* Just-In-Time (JIT) compiler+
+* Just-In-Time (JIT) compiler
 
 Compiler design goals:
 

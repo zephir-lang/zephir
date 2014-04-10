@@ -64,6 +64,49 @@ static void php_zephirt_init_globals(zend_zephir_globals *zephir_globals TSRMLS_
 	zephir_globals->module = NULL;
 }
 
+#define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
+
+static void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSRMLS_DC)
+{
+	zephir_memory_entry *start;
+	size_t i;
+
+	start = (zephir_memory_entry *) pecalloc(ZEPHIR_NUM_PREALLOCATED_FRAMES, sizeof(zephir_memory_entry), 1);
+/* pecalloc() will take care of these members for every frame
+	start->pointer      = 0;
+	start->hash_pointer = 0;
+	start->prev = NULL;
+	start->next = NULL;
+*/
+	for (i = 0; i < ZEPHIR_NUM_PREALLOCATED_FRAMES; ++i) {
+		start[i].addresses       = pecalloc(24, sizeof(zval*), 1);
+		start[i].capacity        = 24;
+		start[i].hash_addresses  = pecalloc(8, sizeof(zval*), 1);
+		start[i].hash_capacity   = 8;
+
+#ifndef ZEPHIR_RELEASE
+		start[i].permanent = 1;
+#endif
+	}
+
+	start[0].next = &start[1];
+	start[ZEPHIR_NUM_PREALLOCATED_FRAMES - 1].prev = &start[ZEPHIR_NUM_PREALLOCATED_FRAMES - 2];
+
+	for (i = 1; i < ZEPHIR_NUM_PREALLOCATED_FRAMES - 1; ++i) {
+		start[i].next = &start[i + 1];
+		start[i].prev = &start[i - 1];
+	}
+
+	fprintf(stderr, "here");
+
+	zephir_globals_ptr->start_memory = start;
+	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
+
+	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
+	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
+
+}
+
 static void zephir_compile_program(zval *program TSRMLS_DC)
 {
 	HashTable           *ht = Z_ARRVAL_P(program);
@@ -201,8 +244,7 @@ static PHP_RINIT_FUNCTION(zephir){
 
 	php_zephirt_init_globals(zephir_globals_ptr TSRMLS_CC);
 
-	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
-	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1);
+	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
 
 	return SUCCESS;
 }

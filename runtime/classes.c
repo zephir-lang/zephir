@@ -73,12 +73,13 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 		symbol = zephir_symtable_add(ZEPHIR_T_TYPE_VAR, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
 
 		_zephir_array_fetch_string(&data_type, *parameter, SS("data-type") TSRMLS_CC);
-		if (Z_TYPE_P(data_type) != IS_STRING) {
+		if (Z_TYPE_P(data_type) != IS_STRING || !memcmp(Z_STRVAL_P(data_type), SS("variable"))) {
 
 			symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, Z_STRVAL_P(name));
 			args[i] = symbol->value_ref;
 			symbol->initialized = 1;
 			i++;
+			continue;
 
 		} else {
 
@@ -280,6 +281,11 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		symbols[3]->value_ref = alloca[3];
 		symbols[4]->value_ref = alloca[4];
 
+		/**
+		 * Always grow the stack conservatively
+		 */
+		zephir_build_memory_grow_stack(context);
+
 		_zephir_array_fetch_string(&parameters, *method, SS("parameters") TSRMLS_CC);
 		if (Z_TYPE_P(parameters) == IS_ARRAY) {
 			zephir_process_parameters(context, parameters);
@@ -293,6 +299,7 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		}
 
 		if (context->is_unrecheable == 0) {
+			zephir_build_memory_restore_stack(context);
 			LLVMBuildRetVoid(context->builder);
 		}
 
