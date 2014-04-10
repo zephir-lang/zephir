@@ -225,14 +225,48 @@ EOF;
             $docBlock = $this->buildDocBlock($docBlock);
         }
 
-        $methodBody = "\t".$modifier . ' function '.$method->getName().'()';
+        $parameters = array();
+        $methodParameters = $method->getParameters();
+
+        if ($methodParameters) {
+            foreach ($methodParameters->getParameters() as $parameter) {
+                $paramStr = '$'.$parameter['name'];
+
+                if (isset($parameter['default'])) {
+                    $paramStr .= ' = ';
+
+                    switch($parameter['default']['type']) {
+                        case 'null':
+                            $paramStr .= 'null';
+                            break;
+                        case 'string':
+                            $paramStr .= '"'.$parameter['default']['value'].'"';
+                            break;
+                        case 'empty-array':
+                            $paramStr .= 'array()';
+                            break;
+                        /**
+                         * @todo fix it
+                         */
+                        case 'array':
+                            $paramStr .= 'array()';
+                            break;
+                        default:
+                            $paramStr .= $parameter['default']['value'];
+                            break;
+                    }
+                }
+
+                $parameters[] = $paramStr;
+            }
+        }
+
+        $methodBody = "\t".$modifier . ' function '.$method->getName().'('.implode(', ', $parameters).')';
+
         if ($method->isAbstract()) {
             $methodBody .= ';';
         } else {
-            $methodBody .= <<<EOL
-    {
-    }
-EOL;
+            $methodBody .= ' {}';
         }
 
         return $docBlock . $methodBody;
