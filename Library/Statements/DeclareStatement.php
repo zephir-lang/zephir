@@ -229,6 +229,8 @@ class DeclareStatement extends StatementAbstract
                                 $expression = new Expression($variable['expr']);
                                 $expression->setExpectReturn(true, $symbolVariable);
                                 $expression->compile($compilationContext);
+                                // no break
+
                             case 'array':
                             case 'empty-array':
                                 $symbolVariable->setDynamicTypes('array');
