@@ -51,8 +51,7 @@ class Cast
 
     public function testBooleanCastFromArray()
     {
-        var a;
-        let a = [1, 2, 3, 4];
+        var a = [1, 2, 3, 4];
         return (boolean) a;
     }
 

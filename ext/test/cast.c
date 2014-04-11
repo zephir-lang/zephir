@@ -94,6 +94,8 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 	zval *a, *_0;
 
 	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	array_init(a);
 
 	ZEPHIR_INIT_VAR(a);
 	array_init_size(a, 7);

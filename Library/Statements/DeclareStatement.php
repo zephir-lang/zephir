@@ -21,6 +21,7 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
+use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 
 /**
@@ -224,6 +225,10 @@ class DeclareStatement extends StatementAbstract
                                 $symbolVariable->setDynamicTypes('string');
                                 break;
 
+                            case 'array':
+                                $expression = new Expression($variable['expr']);
+                                $expression->setExpectReturn(true, $symbolVariable);
+                                $expression->compile($compilationContext);
                             case 'array':
                             case 'empty-array':
                                 $symbolVariable->setDynamicTypes('array');
