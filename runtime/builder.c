@@ -77,6 +77,30 @@ int zephir_initialize_zval_struct(zephir_context *context)
 }
 
 /**
+ * Builds a call to Z_DELREF_P()
+ */
+void zephir_build_zval_delref(zephir_context *context, LLVMValueRef symbol_ref) {
+
+	LLVMValueRef indicest[2], indices[2];
+	LLVMValueRef ref, ptr, bitcast;
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 1, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 1
+
+	LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
+		LLVMBuildAdd( // add i32 %8, -1
+			context->builder,
+			LLVMBuildLoad(context->builder, ref, ""), // load i32* %a, align 4
+			LLVMConstInt(LLVMInt32Type(), -1, 0),
+			""
+		),
+		ref
+	);
+}
+
+/**
  * Builds a call to 'zephir_grow_stack'
  */
 void zephir_build_memory_grow_stack(zephir_context *context) {
@@ -150,6 +174,13 @@ void zephir_build_memory_alloc(zephir_context *context, LLVMValueRef value_ref) 
 
     args[0] = value_ref;
     LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
+ * Builds a call to 'zephir_memory_nalloc'
+ */
+void zephir_build_memory_nalloc(zephir_context *context, LLVMValueRef value_ref) {
+    zephir_build_zval_delref(context, value_ref);
 }
 
 /**
@@ -464,6 +495,9 @@ LLVMValueRef zephir_build_get_boolval(zephir_context *context, LLVMValueRef symb
     return LLVMBuildTrunc(context->builder, phi, LLVMInt8Type(), "");
 }
 
+/**
+ * Builds a RETURN_LONG
+ */
 void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {
 
 	zephir_variable *symbol_variable;
@@ -473,6 +507,9 @@ void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {
 	zephir_build_zval_long(context, symbol_variable->value_ref, value_ref);
 }
 
+/**
+ * Builds a RETURN_DOUBLE
+ */
 void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref) {
 
 	zephir_variable *symbol_variable;
@@ -482,6 +519,9 @@ void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref)
 	zephir_build_zval_double(context, symbol_variable->value_ref, value_ref);
 }
 
+/**
+ * Builds a RETURN_BOOL
+ */
 void zephir_build_return_bool(zephir_context *context, LLVMValueRef value_ref) {
 
 	zephir_variable *symbol_variable;
