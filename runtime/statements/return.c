@@ -42,6 +42,10 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
 	switch (compiled_expr->type) {
 
+		case ZEPHIR_T_TYPE_BOOL:
+			zephir_build_return_bool(context, compiled_expr->value);
+			break;
+
 		case ZEPHIR_T_TYPE_INTEGER:
 		case ZEPHIR_T_TYPE_LONG:
 			zephir_build_return_long(context, compiled_expr->value);
@@ -58,6 +62,10 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 				case ZEPHIR_T_TYPE_VAR:
 					break;
 
+				case ZEPHIR_T_TYPE_BOOL:
+					zephir_build_return_bool(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					break;
+
 				case ZEPHIR_T_TYPE_INTEGER:
 				case ZEPHIR_T_TYPE_LONG:
 					zephir_build_return_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
@@ -65,6 +73,10 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 
 				case ZEPHIR_T_TYPE_DOUBLE:
 					zephir_build_return_double(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					break;
+
+				default:
+					zend_error(E_ERROR, "Unknown compiled variable expression %d", compiled_expr->variable->type);
 					break;
 			}
 
@@ -77,6 +89,7 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 
 	efree(compiled_expr);
 
+	zephir_build_memory_restore_stack(context);
 	LLVMBuildRetVoid(context->builder);
 
 	return 0;

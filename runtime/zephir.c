@@ -97,8 +97,6 @@ static void zephir_initialize_memory(zend_zephir_globals *zephir_globals_ptr TSR
 		start[i].prev = &start[i - 1];
 	}
 
-	fprintf(stderr, "here");
-
 	zephir_globals_ptr->start_memory = start;
 	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
 

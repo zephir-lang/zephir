@@ -129,6 +129,19 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 				continue;
 			}
 
+			if (!memcmp(Z_STRVAL_P(data_type), SS("bool"))) {
+
+				symbol = zephir_symtable_add(ZEPHIR_T_TYPE_BOOL, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
+				symbol->value_ref = LLVMBuildAlloca(context->builder, LLVMInt8Type(), Z_STRVAL_P(name));
+				symbol->initialized = 1;
+
+				convert_params_to[number_convert] = symbol;
+				convert_params_from[number_convert] = symbol_param;
+				number_convert++;
+
+				continue;
+			}
+
 		}
 
 		zend_print_zval_r(*parameter, 0 TSRMLS_CC);
@@ -166,6 +179,7 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	LLVMBuildCondBr(context->builder, condition, then_block, else_block);
 
 	LLVMPositionBuilderAtEnd(context->builder, then_block);
+	zephir_build_memory_restore_stack(context);
 	LLVMBuildRetVoid(context->builder);
 	then_block = LLVMGetInsertBlock(context->builder);
 
@@ -179,7 +193,12 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 
 		switch (convert_params_to[i]->type) {
 
+			case ZEPHIR_T_TYPE_BOOL:
+				LLVMBuildStore(context->builder, zephir_build_get_boolval(context, convert_params_from[i]->value_ref), convert_params_to[i]->value_ref); // store i64 %16, i64* %a, align 8
+				break;
+
 			case ZEPHIR_T_TYPE_LONG:
+			case ZEPHIR_T_TYPE_INTEGER:
 				LLVMBuildStore(context->builder, zephir_build_get_intval(context, convert_params_from[i]->value_ref), convert_params_to[i]->value_ref); // store i64 %16, i64* %a, align 8
 				break;
 

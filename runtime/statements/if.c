@@ -83,6 +83,7 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 	else_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
+	context->is_unrecheable = 0;
 
 	return 0;
 }

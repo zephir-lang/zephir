@@ -72,7 +72,7 @@ zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int na
 	variable->name = zend_strndup(name, name_length);
 	variable->name_length = name_length;
 	variable->value_ref = NULL;
-    variable->variant_inits = 0;
+	variable->variant_inits = 0;
 
 	symtable = context->symtable;
 	if (symtable && !symtable->variables) {
@@ -111,7 +111,7 @@ zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtabl
 	zephir_variable *variable;
 
 	if (_zephir_symtable_fetch_string(&variable, symtable->variables, name, name_length + 1 TSRMLS_CC) == FAILURE) {
-        zend_error(E_ERROR, "Cannot mutate variable \"%s\" because it wasn't defined", name);
+		zend_error(E_ERROR, "Cannot mutate variable \"%s\" because it wasn't defined", name);
 	}
 
 	zephir_variable_incr_uses(variable);

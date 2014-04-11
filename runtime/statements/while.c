@@ -64,11 +64,16 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 	_zephir_array_fetch_string(&statements, statement, SS("statements") TSRMLS_CC);
 	if (Z_TYPE_P(statements) == IS_ARRAY) {
 		zephir_compile_block(context, statements);
+		if (context->is_unrecheable == 0) {
+			LLVMBuildBr(context->builder, merge_block);
+		}
+	} else {
+		LLVMBuildBr(context->builder, start_block);
 	}
-	LLVMBuildBr(context->builder, start_block);
 	while_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
+	context->is_unrecheable = 0;
 
 	return 0;
 }
