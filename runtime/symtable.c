@@ -29,12 +29,13 @@
 /**
  * Creates a new symbol table
  */
-zephir_symtable *zephir_symtable_new()
+zephir_symtable *zephir_symtable_new(TSRMLS_D)
 {
 	zephir_symtable *symtable;
 
 	symtable = emalloc(sizeof(zephir_symtable));
 	symtable->variables = NULL;
+	symtable->temp_variables = 0;
 
 	return symtable;
 }
@@ -62,7 +63,7 @@ int _zephir_symtable_fetch_string(zephir_variable **return_value, HashTable *arr
 /**
  * Adds a symbol to the symbol table
  */
-zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int name_length, zephir_context *context)
+zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int name_length, zephir_context *context TSRMLS_DC)
 {
 	zephir_variable *variable;
 	zephir_symtable *symtable;
@@ -88,7 +89,7 @@ zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int na
 /**
  * Check if a variable was added to the active symbol table
  */
-int zephir_symtable_has(const char *name, unsigned int name_length, zephir_context *context)
+int zephir_symtable_has(const char *name, unsigned int name_length, zephir_context *context TSRMLS_DC)
 {
 	zephir_variable *variable;
 
@@ -106,7 +107,7 @@ int zephir_symtable_has(const char *name, unsigned int name_length, zephir_conte
 /**
  * Obtains a variable for mutating
  */
-zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtable, const char *name, unsigned int name_length)
+zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtable, const char *name, unsigned int name_length TSRMLS_DC)
 {
 	zephir_variable *variable;
 
@@ -123,7 +124,7 @@ zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtabl
 /**
  * Obtains a variable for reading
  */
-zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable, const char *name, unsigned int name_length)
+zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable, const char *name, unsigned int name_length TSRMLS_DC)
 {
 	zephir_variable *variable;
 
@@ -132,4 +133,45 @@ zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable
 	}
 
 	return variable;
+}
+
+/**
+ * Creates a temporary variable
+ */
+zephir_variable *zephir_symtable_get_temp_variable_for_write(zephir_symtable *symtable, int type, zephir_context *context TSRMLS_DC)
+{
+	zephir_variable *symbol;
+	char *buffer;
+	unsigned int length;
+	LLVMBasicBlockRef current_block;
+
+	symtable->temp_variables++;
+
+	buffer = emalloc(sizeof(char) * 7);
+	length = snprintf(buffer, 7, "_%u", symtable->temp_variables);
+
+	symbol = zephir_symtable_add(type, buffer, length, context);
+	symbol->initialized = 1;
+
+	switch (type) {
+
+		case ZEPHIR_T_TYPE_VAR:
+		case ZEPHIR_T_TYPE_STRING:
+		case ZEPHIR_T_TYPE_ARRAY:
+
+			//current_block = LLVMGetInsertBlock(context->builder);
+			//LLVMPositionBuilderAtEnd(context->builder, context->declarations_block);
+
+			//symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, buffer);
+			//LLVMBuildStore(context->builder, LLVMConstPointerNull(context->types.zval_pointer_type), symbol->value_ref);
+
+			//LLVMPositionBuilderAtEnd(context->builder, current_block);
+			//zephir_variable_init_variant(symbol, context);
+			break;
+	}
+
+	zephir_variable_incr_uses(symbol);
+	zephir_variable_incr_mutations(symbol);
+
+	return symbol;
 }

@@ -215,6 +215,7 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 	zend_function_entry *class_function;
 	LLVMValueRef func, param, alloca[5];
 	LLVMTypeRef ret, params[5];
+	LLVMBasicBlockRef block;
 	zephir_symtable *symtable;
 	zephir_variable *symbols[5];
 	int i;
@@ -246,8 +247,8 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		func = LLVMAddFunction(context->module, Z_STRVAL_P(name), LLVMFunctionType(LLVMVoidType(), params, 5, 0));
 		LLVMSetLinkage(func, LLVMExternalLinkage);
 
-		LLVMBasicBlockRef block = LLVMAppendBasicBlock(func, "entry");
-		LLVMPositionBuilderAtEnd(context->builder, block);
+		context->declarations_block = LLVMAppendBasicBlock(func, "declarations");
+		LLVMPositionBuilderAtEnd(context->builder, context->declarations_block);
 
 		/**
 		 * Initialize context
@@ -307,6 +308,10 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		symbols[2]->value_ref = alloca[2];
 		symbols[3]->value_ref = alloca[3];
 		symbols[4]->value_ref = alloca[4];
+
+		block = LLVMAppendBasicBlock(func, "entry");
+		LLVMBuildBr(context->builder, block);
+		LLVMPositionBuilderAtEnd(context->builder, block);
 
 		/**
 		 * Always grow the stack conservatively

@@ -8,6 +8,8 @@ void zephir_build_emalloc(zephir_context *context, LLVMTypeRef type, size_t size
 void zephir_build_zval_set_refcount(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value);
 void zephir_build_zval_unset_isref(zephir_context *context, LLVMValueRef symbol_ref);
 void zephir_build_zval_dtor(zephir_context *context, LLVMValueRef value_ref);
+void zephir_build_zval_ptr_dtor(zephir_context *context, LLVMValueRef value_ref);
+void zephir_build_copy_on_write(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value_ref);
 
 int zephir_initialize_zval_struct(zephir_context *context);
 LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef value_ref);

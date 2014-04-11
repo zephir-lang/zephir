@@ -50,7 +50,7 @@ LLVMValueRef zephir_optimizers_evalexpr(zephir_context *context, zval *expr) {
 #endif
 			break;
 
-		case ZEPHIR_T_VARIABLE:
+		case ZEPHIR_T_TYPE_VAR:
 
 			switch (compiled_expr->variable->type) {
 

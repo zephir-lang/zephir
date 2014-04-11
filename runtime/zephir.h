@@ -40,6 +40,7 @@ typedef struct _zephir_parser_status {
 
 typedef struct _zephir_symtable {
 	HashTable *variables;
+	unsigned int temp_variables;
 } zephir_symtable;
 
 typedef struct _zephir_variable {
@@ -56,6 +57,7 @@ typedef struct _zephir_context {
 	LLVMBuilderRef builder;
 	LLVMExecutionEngineRef engine;
 	zephir_symtable *symtable;
+	LLVMBasicBlockRef declarations_block;
 	unsigned int inside_cycle;
 	unsigned int inside_try_catch;
 	unsigned int is_unrecheable;

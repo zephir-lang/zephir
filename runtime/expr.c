@@ -115,7 +115,7 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		variable = zephir_symtable_get_variable_for_read(context->symtable, Z_STRVAL_P(value), Z_STRLEN_P(value));
 
 		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
-		compiled_expr->type  = ZEPHIR_T_VARIABLE;
+		compiled_expr->type  = ZEPHIR_T_TYPE_VAR;
 		compiled_expr->variable = variable;
 
 		return compiled_expr;

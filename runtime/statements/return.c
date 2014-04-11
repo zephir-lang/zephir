@@ -55,7 +55,7 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 			zephir_build_return_double(context, compiled_expr->value);
 			break;
 
-		case ZEPHIR_T_VARIABLE:
+		case ZEPHIR_T_TYPE_VAR:
 
 			switch (compiled_expr->variable->type) {
 

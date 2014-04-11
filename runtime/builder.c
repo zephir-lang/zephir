@@ -113,13 +113,13 @@ void zephir_build_emalloc(zephir_context *context, LLVMTypeRef type, size_t size
 	args[1] = LLVMBuildGlobalStringPtr(context->builder, "hello", "");
 	args[2] = LLVMConstInt(LLVMInt32Type(), 1, 0);
 
-	//alloc = LLVMBuildCall(context->builder, function, args, 3, ""); // call i8* @_emalloc(i64 24, i8* getelementptr inbounds ([1 x i8]* @.str2, i32 0, i32 0), i32 1)
-	//bitcast = LLVMBuildBitCast(context->builder, alloc, type, ""); // bitcast i8* %6 to %struct._zval_struct*
-	//LLVMBuildStore(context->builder, bitcast, value_ref); // store %struct._zval_struct* %7, %struct._zval_struct** %p, align 8
+	alloc = LLVMBuildCall(context->builder, function, args, 3, ""); // call i8* @_emalloc(i64 24, i8* getelementptr inbounds ([1 x i8]* @.str2, i32 0, i32 0), i32 1)
+	bitcast = LLVMBuildBitCast(context->builder, alloc, type, ""); // bitcast i8* %6 to %struct._zval_struct*
+	LLVMBuildStore(context->builder, bitcast, value_ref); // store %struct._zval_struct* %7, %struct._zval_struct** %p, align 8
 }
 
 /**
- * Builds a call to 'emalloc'
+ * Builds a call to 'zval_dtor'
  */
 void zephir_build_zval_dtor(zephir_context *context, LLVMValueRef value_ref) {
 
@@ -130,7 +130,7 @@ void zephir_build_zval_dtor(zephir_context *context, LLVMValueRef value_ref) {
 	if (!function) {
 
 		arg_tys[0] = context->types.zval_pointer_type;
-		function = LLVMAddFunction(context->module, "zval_dtor", LLVMFunctionType(LLVMPointerType(LLVMInt8Type(), 0), arg_tys, 1, 0));
+		function = LLVMAddFunction(context->module, "zval_dtor", LLVMFunctionType(LLVMVoidType(), arg_tys, 1, 0));
 		if (!function) {
 			zend_error(E_ERROR, "Cannot register zval_dtor");
 		}
@@ -142,6 +142,56 @@ void zephir_build_zval_dtor(zephir_context *context, LLVMValueRef value_ref) {
 
 	args[0] = LLVMBuildLoad(context->builder, value_ref, "");
 	LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
+ * Builds a call to 'zval_ptr_dtor'
+ */
+void zephir_build_zval_ptr_dtor(zephir_context *context, LLVMValueRef value_ref) {
+
+	LLVMValueRef    function, args[1], bitcast, alloc;
+	LLVMTypeRef     arg_tys[1];
+
+	function = LLVMGetNamedFunction(context->module, "zval_ptr_dtor");
+	if (!function) {
+
+		arg_tys[0] = context->types.zval_double_pointer_type;
+		function = LLVMAddFunction(context->module, "zval_ptr_dtor", LLVMFunctionType(LLVMVoidType(), arg_tys, 1, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register zval_ptr_dtor");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, _zval_ptr_dtor);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	args[0] = value_ref;
+	LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
+ * Builds a call to Z_ADDREF_P()
+ */
+void zephir_build_zval_addref(zephir_context *context, LLVMValueRef symbol_ref) {
+
+	LLVMValueRef indicest[2], indices[2];
+	LLVMValueRef ref, ptr, bitcast;
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 1, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 1
+
+	LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
+		LLVMBuildAdd( // add i32 %8, 1
+			context->builder,
+			LLVMBuildLoad(context->builder, ref, ""), // load i32* %a, align 4
+			LLVMConstInt(LLVMInt32Type(), 1, 0),
+			""
+		),
+		ref
+	);
 }
 
 /**
@@ -293,6 +343,32 @@ void zephir_build_memory_alloc(zephir_context *context, LLVMValueRef value_ref) 
 }
 
 /**
+ * Builds a call to 'zephir_memory_observe'
+ */
+void zephir_build_memory_observe(zephir_context *context, LLVMValueRef value_ref) {
+
+	LLVMValueRef    function, args[2];
+	LLVMTypeRef     arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "zephirt_memory_observe");
+	if (!function) {
+
+		arg_tys[0] = context->types.zval_double_pointer_type;
+		function = LLVMAddFunction(context->module, "zephirt_memory_observe", LLVMFunctionType(LLVMVoidType(), arg_tys, 1, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register zephirt_memory_observe");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, zephirt_memory_observe);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	args[0] = value_ref;
+	LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
  * Builds a call to 'zephir_memory_nalloc'
  */
 void zephir_build_memory_nalloc(zephir_context *context, LLVMValueRef value_ref) {
@@ -391,6 +467,89 @@ void zephir_build_memory_nalloc(zephir_context *context, LLVMValueRef value_ref)
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block1);
 
+}
+
+/**
+ * Builds a ZEPHIR_CPY_WRT call
+ */
+void zephir_build_copy_on_write(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value_ref)
+{
+	LLVMBasicBlockRef then_block1, else_block1, merge_block1, then_block2, else_block2, merge_block2;
+	LLVMValueRef current_function;
+
+	current_function = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+
+	then_block1 = LLVMAppendBasicBlock(current_function, "then");
+	else_block1 = LLVMAppendBasicBlock(current_function, "else");
+	merge_block1 = LLVMAppendBasicBlock(current_function, "merge-if");
+
+	/**
+	 * Check if the pointer is not NULL
+	 */
+	LLVMBuildCondBr(context->builder, LLVMBuildIsNotNull(context->builder, LLVMBuildLoad(context->builder, symbol_ref, ""), ""), then_block1, else_block1);
+
+	LLVMPositionBuilderAtEnd(context->builder, then_block1);
+
+	{
+
+		then_block2 = LLVMAppendBasicBlock(current_function, "then");
+		else_block2 = LLVMAppendBasicBlock(current_function, "else");
+		merge_block2 = LLVMAppendBasicBlock(current_function, "merge-if");
+
+		/**
+		 * Check if the refcount is greater than 1
+		 */
+		LLVMBuildCondBr(context->builder,
+			LLVMBuildICmp(
+				context->builder,
+				LLVMIntUGT,
+				zephir_build_zval_refcount(context, symbol_ref),
+				LLVMConstInt(LLVMInt32Type(), 0, 0),
+				""
+			),
+			then_block2,
+			else_block2
+		);
+
+		LLVMPositionBuilderAtEnd(context->builder, then_block2);
+
+		/**
+		 * Reduce refcount or destroy zval
+		 */
+		zephir_build_zval_ptr_dtor(context, symbol_ref);
+
+		LLVMBuildBr(context->builder, merge_block2);
+		then_block2 = LLVMGetInsertBlock(context->builder);
+
+		LLVMPositionBuilderAtEnd(context->builder, else_block2);
+		LLVMBuildBr(context->builder, merge_block2);
+		else_block2 = LLVMGetInsertBlock(context->builder);
+
+		LLVMPositionBuilderAtEnd(context->builder, merge_block2);
+	}
+
+	LLVMBuildBr(context->builder, merge_block1);
+	then_block1 = LLVMGetInsertBlock(context->builder);
+
+	LLVMPositionBuilderAtEnd(context->builder, else_block1);
+
+	/**
+	 * Variable does not have memory and it is not tracked
+	 */
+	zephir_build_memory_observe(context, symbol_ref);
+
+	LLVMBuildBr(context->builder, merge_block1);
+	else_block1 = LLVMGetInsertBlock(context->builder);
+
+	LLVMPositionBuilderAtEnd(context->builder, merge_block1);
+
+	/**
+	 * Increase refcount of value
+	 */
+	zephir_build_zval_addref(context, value_ref);
+
+  	// load %struct._zval_struct** %2, align 8
+	LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, value_ref, ""), symbol_ref); // store i64 5000, i64* %8, align 8
 }
 
 /**

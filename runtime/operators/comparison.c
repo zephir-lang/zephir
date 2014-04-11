@@ -65,7 +65,7 @@ zephir_compiled_expr *zephir_operator_comparison_greater(zephir_context *context
 			}
 			break;
 
-		case ZEPHIR_T_VARIABLE:
+		case ZEPHIR_T_TYPE_VAR:
 
 			switch (compiled_expr_left->variable->type) {
 
@@ -88,7 +88,7 @@ zephir_compiled_expr *zephir_operator_comparison_greater(zephir_context *context
 							);
 							return compiled_expr;
 
-						case ZEPHIR_T_VARIABLE:
+						case ZEPHIR_T_TYPE_VAR:
 
 							switch (compiled_expr_right->variable->type) {
 
@@ -158,7 +158,7 @@ zephir_compiled_expr *zephir_operator_comparison_less(zephir_context *context, z
 			}
 			break;
 
-		case ZEPHIR_T_VARIABLE:
+		case ZEPHIR_T_TYPE_VAR:
 
 			switch (compiled_expr_left->variable->type) {
 
@@ -181,7 +181,7 @@ zephir_compiled_expr *zephir_operator_comparison_less(zephir_context *context, z
 							);
 							return compiled_expr;
 
-						case ZEPHIR_T_VARIABLE:
+						case ZEPHIR_T_TYPE_VAR:
 
 							switch (compiled_expr_right->variable->type) {
 

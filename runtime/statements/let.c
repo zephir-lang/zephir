@@ -72,7 +72,7 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
 					break;
 
-				case ZEPHIR_T_VARIABLE:
+				case ZEPHIR_T_TYPE_VAR:
 
 					switch (compiled_expr->variable->type) {
 
@@ -93,7 +93,7 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
 					break;
 
-				case ZEPHIR_T_VARIABLE:
+				case ZEPHIR_T_TYPE_VAR:
 
 					switch (compiled_expr->variable->type) {
 
@@ -130,7 +130,7 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 					zephir_build_zval_double(context, symbol_variable->value_ref, compiled_expr->value);
 					break;
 
-				case ZEPHIR_T_VARIABLE:
+				case ZEPHIR_T_TYPE_VAR:
 
 					switch (compiled_expr->variable->type) {
 
@@ -148,6 +148,10 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 						case ZEPHIR_T_TYPE_DOUBLE:
 							zephir_variable_init_variant(symbol_variable, context);
 							zephir_build_zval_double(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), compiled_expr->value);
+							break;
+
+						case ZEPHIR_T_TYPE_VAR:
+							zephir_build_copy_on_write(context, symbol_variable->value_ref, compiled_expr->variable->value_ref);
 							break;
 
 						default:
