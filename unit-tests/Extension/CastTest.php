@@ -25,7 +25,16 @@ class CastTest extends \PHPUnit_Framework_TestCase
     public function testCast()
     {
         $t = new \Test\Cast();
-        $this->assertTrue($t->testCast1() === 5);
-        $this->assertTrue($t->testCast2() === 1);
+
+        $this->assertTrue($t->testIntCastFromFloat() === 5);
+        $this->assertTrue($t->testIntCastFromBoolean() === 1);
+
+        $this->assertTrue($t->testBooleanCastFromIntTrue1() === true);
+        $this->assertTrue($t->testBooleanCastFromIntTrue2() === true);
+        $this->assertTrue($t->testBooleanCastFromIntFalse() === false);
+        $this->assertTrue($t->testBooleanCastFromObject() === true);
+        $this->assertTrue($t->testBooleanCastFromEmptyArray() === false);
+        $this->assertTrue($t->testBooleanCastFromArray() === true);
+        $this->assertTrue($t->testBooleanCaseFromNull() === false);
     }
 }

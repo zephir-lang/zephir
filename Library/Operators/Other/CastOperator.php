@@ -129,6 +129,8 @@ class CastOperator extends BaseOperator
 
             case 'bool':
                 switch ($resolved->getType()) {
+                    case 'int':
+                        return new CompiledExpression('bool', '(zend_bool) '.$resolved->getCode(), $expression);
                     case 'bool':
                         return new CompiledExpression('bool', $resolved->getCode(), $expression);
 
