@@ -21,6 +21,7 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
+use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 
 /**
@@ -223,6 +224,12 @@ class DeclareStatement extends StatementAbstract
                             case 'ulong':
                                 $symbolVariable->setDynamicTypes('string');
                                 break;
+
+                            case 'array':
+                                $expression = new Expression($variable['expr']);
+                                $expression->setExpectReturn(true, $symbolVariable);
+                                $expression->compile($compilationContext);
+                                // no break
 
                             case 'array':
                             case 'empty-array':
