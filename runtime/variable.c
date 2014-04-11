@@ -39,11 +39,11 @@ void zephir_variable_incr_mutations(zephir_variable *variable)
 void zephir_variable_init_variant(zephir_variable *variable, zephir_context *context)
 {
 
-    if (!variable->variant_inits) {
-        zephir_build_memory_alloc(context, variable->value_ref);
-    } else {
+    //if (!variable->variant_inits) {
+    //    zephir_build_memory_alloc(context, variable->value_ref);
+    //} else {
     	zephir_build_memory_nalloc(context, variable->value_ref);
-    }
+    //}
 
     variable->variant_inits++;
 }

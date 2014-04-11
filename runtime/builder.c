@@ -25,6 +25,7 @@
 #include "zephir.h"
 #include "utils.h"
 #include "symtable.h"
+#include "builder.h"
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
@@ -77,6 +78,47 @@ int zephir_initialize_zval_struct(zephir_context *context)
 }
 
 /**
+ * Builds a call to 'emalloc'
+ */
+void zephir_build_emalloc(zephir_context *context, LLVMTypeRef type, size_t size, LLVMValueRef value_ref) {
+
+    LLVMValueRef    function, args[3], bitcast, alloc;
+    LLVMTypeRef     arg_tys[3];
+
+    function = LLVMGetNamedFunction(context->module, "emalloc");
+    if (!function) {
+
+#if ZEPHIR_32
+        arg_tys[0] = LLVMInt32Type();
+#else
+        arg_tys[0] = LLVMInt64Type();
+#endif
+        arg_tys[1] = LLVMPointerType(LLVMInt8Type(), 0);
+        arg_tys[2] = LLVMInt32Type();
+        function = LLVMAddFunction(context->module, "emalloc", LLVMFunctionType(LLVMPointerType(LLVMInt8Type(), 0), arg_tys, 3, 0));
+        if (!function) {
+            zend_error(E_ERROR, "Cannot register emalloc");
+        }
+
+        LLVMAddGlobalMapping(context->engine, function, _emalloc);
+        LLVMSetFunctionCallConv(function, LLVMCCallConv);
+        LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+    }
+
+#if ZEPHIR_32
+    args[0] = LLVMConstInt(LLVMInt32Type(), size, 0);
+#else
+	args[0] = LLVMConstInt(LLVMInt64Type(), size, 0);
+#endif
+	args[1] = LLVMBuildGlobalStringPtr(context->builder, "", "");
+	args[2] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+
+    alloc = LLVMBuildCall(context->builder, function, args, 3, ""); // call i8* @_emalloc(i64 24, i8* getelementptr inbounds ([1 x i8]* @.str2, i32 0, i32 0), i32 1)
+    bitcast = LLVMBuildBitCast(context->builder, alloc, type, ""); // bitcast i8* %6 to %struct._zval_struct*
+	LLVMBuildStore(context->builder, bitcast, value_ref); // store %struct._zval_struct* %7, %struct._zval_struct** %p, align 8
+}
+
+/**
  * Builds a call to Z_DELREF_P()
  */
 void zephir_build_zval_delref(zephir_context *context, LLVMValueRef symbol_ref) {
@@ -98,6 +140,22 @@ void zephir_build_zval_delref(zephir_context *context, LLVMValueRef symbol_ref) 
 		),
 		ref
 	);
+}
+
+/**
+ * Builds a call to Z_REFCOUNT_P()
+ */
+LLVMValueRef zephir_build_zval_refcount(zephir_context *context, LLVMValueRef symbol_ref) {
+
+	LLVMValueRef indicest[2], indices[2];
+	LLVMValueRef ref, ptr, bitcast;
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 1, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 1
+
+	return LLVMBuildLoad(context->builder, ref, ""); //load i32* %7, align 4
 }
 
 /**
@@ -180,7 +238,86 @@ void zephir_build_memory_alloc(zephir_context *context, LLVMValueRef value_ref) 
  * Builds a call to 'zephir_memory_nalloc'
  */
 void zephir_build_memory_nalloc(zephir_context *context, LLVMValueRef value_ref) {
-    zephir_build_zval_delref(context, value_ref);
+
+	LLVMBasicBlockRef then_block1, else_block1, merge_block1, then_block2, else_block2, merge_block2;
+	LLVMValueRef current_function;
+
+	current_function = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
+
+	then_block1 = LLVMAppendBasicBlock(current_function, "then");
+	else_block1 = LLVMAppendBasicBlock(current_function, "else");
+	merge_block1 = LLVMAppendBasicBlock(current_function, "merge-if");
+
+	/**
+	 * Check if the pointer is not NULL
+	 */
+	LLVMBuildCondBr(context->builder, LLVMBuildIsNotNull(context->builder, value_ref, ""), then_block1, else_block1);
+
+	LLVMPositionBuilderAtEnd(context->builder, then_block1);
+
+	{
+
+		then_block2 = LLVMAppendBasicBlock(current_function, "then");
+		else_block2 = LLVMAppendBasicBlock(current_function, "else");
+		merge_block2 = LLVMAppendBasicBlock(current_function, "merge-if");
+
+		/**
+		 * Check if the refcount is greater than 1
+		 */
+		LLVMBuildCondBr(context->builder,
+			LLVMBuildICmp(
+				context->builder,
+				LLVMIntUGT,
+				zephir_build_zval_refcount(context, value_ref),
+				LLVMConstInt(LLVMInt32Type(), 1, 0),
+				""
+			),
+			then_block2,
+			else_block2
+		);
+
+		LLVMPositionBuilderAtEnd(context->builder, then_block2);
+
+		/**
+		 * Reduce the refcount
+		 */
+		zephir_build_zval_delref(context, value_ref);
+
+		/**
+		 * Realloc the pointer
+		 */
+		zephir_build_emalloc(context, context->types.zval_pointer_type, sizeof(zval), value_ref);
+
+		LLVMBuildBr(context->builder, merge_block2);
+		then_block2 = LLVMGetInsertBlock(context->builder);
+
+		LLVMPositionBuilderAtEnd(context->builder, else_block2);
+		LLVMBuildBr(context->builder, merge_block2);
+		else_block2 = LLVMGetInsertBlock(context->builder);
+
+		LLVMPositionBuilderAtEnd(context->builder, merge_block2);
+
+		/**
+		 * Initialize variable to null
+		 */
+		zephir_build_zval_null(context, value_ref);
+	}
+
+	LLVMBuildBr(context->builder, merge_block1);
+	then_block1 = LLVMGetInsertBlock(context->builder);
+
+	LLVMPositionBuilderAtEnd(context->builder, else_block1);
+
+	/**
+	 * Variable does not have memory and it is not tracked
+	 */
+	zephir_build_memory_alloc(context, value_ref);
+
+	LLVMBuildBr(context->builder, merge_block1);
+	else_block1 = LLVMGetInsertBlock(context->builder);
+
+	LLVMPositionBuilderAtEnd(context->builder, merge_block1);
+
 }
 
 /**
@@ -207,6 +344,21 @@ LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef val
 
 	args[0] = LLVMBuildLoad(context->builder, value_ref, "");
 	return LLVMBuildCall(context->builder, function, args, 1, "");
+}
+
+/**
+ * Builds a call to ZVAL_NULL()
+ */
+void zephir_build_zval_null(zephir_context *context, LLVMValueRef symbol_ref) {
+
+	LLVMValueRef indicest[2];
+	LLVMValueRef ref, ptr;
+
+	ptr = LLVMBuildLoad(context->builder, symbol_ref, ""); // load %struct._zval_struct** %2, align 8
+	indicest[0] = LLVMConstInt(LLVMInt32Type(), 0, 0);
+	indicest[1] = LLVMConstInt(LLVMInt32Type(), 2, 0);
+	ref = LLVMBuildInBoundsGEP(context->builder, ptr, indicest, 2, ""); // getelementptr inbounds %struct._zval_struct* %6, i32 0, i32 0
+	LLVMBuildStore(context->builder, LLVMConstInt(LLVMInt8Type(), IS_NULL, 0), ref); // store i8 1, i8* %7, align 1
 }
 
 /**
