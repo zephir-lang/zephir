@@ -26,6 +26,7 @@
 #include "utils.h"
 #include "expr.h"
 #include "symtable.h"
+#include "builder.h"
 
 #include "kernel/main.h"
 
@@ -159,6 +160,39 @@ zephir_compiled_expr *zephir_operator_arithmetical_add(zephir_context *context, 
 									return compiled_expr;
 
 									break;
+
+							}
+							break;
+
+					}
+					break;
+
+				case ZEPHIR_T_TYPE_VAR:
+
+					switch (compiled_expr_right->type) {
+
+						/**
+						 * var(l) + var(r)
+						 */
+						case ZEPHIR_T_VARIABLE:
+
+							switch (compiled_expr_right->variable->type) {
+
+								/**
+						 		 * var(l) + var(r # int)
+								 */
+								case ZEPHIR_T_TYPE_LONG:
+								case ZEPHIR_T_TYPE_INTEGER:
+
+									compiled_expr = emalloc(sizeof(zephir_compiled_expr));
+									compiled_expr->type  = ZEPHIR_T_TYPE_DOUBLE;
+									compiled_expr->value = LLVMBuildFAdd(
+										context->builder,
+										zephir_build_get_doubleval(context, compiled_expr_left->variable->value_ref),
+										LLVMBuildSIToFP(context->builder, LLVMBuildLoad(context->builder, compiled_expr_right->variable->value_ref, ""), LLVMDoubleType(), ""),
+										""
+									);
+									return compiled_expr;
 
 							}
 							break;

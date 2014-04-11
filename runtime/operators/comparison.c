@@ -174,7 +174,7 @@ zephir_compiled_expr *zephir_operator_comparison_less(zephir_context *context, z
 							compiled_expr->type  = ZEPHIR_T_TYPE_BOOL;
 							compiled_expr->value = LLVMBuildICmp(
 								context->builder,
-								LLVMIntSGT,
+								LLVMIntSLT,
 								LLVMBuildLoad(context->builder, compiled_expr_left->variable->value_ref, ""),
 								compiled_expr_right->value,
 								""

@@ -69,6 +69,9 @@ int zephir_statement_declare(zephir_context *context, zval *statement TSRMLS_DC)
 			symbol = zephir_symtable_add(ZEPHIR_T_TYPE_VAR, Z_STRVAL_P(name), Z_STRLEN_P(name), context);
 			symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, Z_STRVAL_P(name));
 
+			// store %struct._zval_struct* null, %struct._zval_struct** %x, align 8
+			LLVMBuildStore(context->builder, LLVMConstPointerNull(context->types.zval_pointer_type), symbol->value_ref);
+
 			/**
 			 * Assign default value if any
 			 */

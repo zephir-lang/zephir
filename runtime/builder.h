@@ -5,6 +5,9 @@ void zephir_build_memory_nalloc(zephir_context *context, LLVMValueRef value_ref)
 void zephir_build_memory_restore_stack(zephir_context *context);
 
 void zephir_build_emalloc(zephir_context *context, LLVMTypeRef type, size_t size, LLVMValueRef value_ref);
+void zephir_build_zval_set_refcount(zephir_context *context, LLVMValueRef symbol_ref, LLVMValueRef value);
+void zephir_build_zval_unset_isref(zephir_context *context, LLVMValueRef symbol_ref);
+void zephir_build_zval_dtor(zephir_context *context, LLVMValueRef value_ref);
 
 int zephir_initialize_zval_struct(zephir_context *context);
 LLVMValueRef zephir_build_zend_is_true(zephir_context *context, LLVMValueRef value_ref);
@@ -20,4 +23,5 @@ void zephir_build_zval_bool(zephir_context *context, LLVMValueRef symbol_ref, LL
 
 LLVMValueRef zephir_build_get_intval(zephir_context *context, LLVMValueRef symbol_ref);
 LLVMValueRef zephir_build_get_boolval(zephir_context *context, LLVMValueRef symbol_ref);
+LLVMValueRef zephir_build_get_doubleval(zephir_context *context, LLVMValueRef symbol_ref);
 

@@ -51,6 +51,8 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 	LLVMBuildBr(context->builder, start_block);
 	LLVMPositionBuilderAtEnd(context->builder, start_block);
 
+	context->inside_cycle++;
+
 	condition = zephir_optimizers_evalexpr(context, expr);
 	if (!condition) {
 		zend_error(E_ERROR, "Unknown eval expression");
@@ -65,7 +67,7 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 	if (Z_TYPE_P(statements) == IS_ARRAY) {
 		zephir_compile_block(context, statements);
 		if (context->is_unrecheable == 0) {
-			LLVMBuildBr(context->builder, merge_block);
+			LLVMBuildBr(context->builder, start_block);
 		}
 	} else {
 		LLVMBuildBr(context->builder, start_block);
@@ -74,6 +76,8 @@ int zephir_statement_while(zephir_context *context, zval *statement TSRMLS_DC)
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
 	context->is_unrecheable = 0;
+
+	context->inside_cycle--;
 
 	return 0;
 }

@@ -212,7 +212,7 @@ static zend_op_array *zephir_compile_file(zend_file_handle *file_handle, int typ
 	return res;
 }
 
-PHP_MINIT_FUNCTION(zephir){
+PHP_MINIT_FUNCTION(zephir) {
 
 	zephir_orig_compile_file = zend_compile_file;
 	zend_compile_file = zephir_compile_file;
@@ -220,23 +220,11 @@ PHP_MINIT_FUNCTION(zephir){
 	return SUCCESS;
 }
 
-static PHP_MSHUTDOWN_FUNCTION(zephir){
-
-	if (ZEPHIRT_GLOBAL(module)) {
-
-		LLVMDumpModule(ZEPHIRT_GLOBAL(module));
-
-		LLVMDisposePassManager(ZEPHIRT_GLOBAL(pass_manager));
-		LLVMDisposeBuilder(ZEPHIRT_GLOBAL(builder));
-		LLVMDisposeModule(ZEPHIRT_GLOBAL(module));
-
-		ZEPHIRT_GLOBAL(module) = NULL;
-	}
-
+static PHP_MSHUTDOWN_FUNCTION(zephir) {
 	return SUCCESS;
 }
 
-static PHP_RINIT_FUNCTION(zephir){
+static PHP_RINIT_FUNCTION(zephir) {
 
 	zend_zephir_globals *zephir_globals_ptr	= ZEPHIRT_VGLOBAL;
 
@@ -248,6 +236,17 @@ static PHP_RINIT_FUNCTION(zephir){
 }
 
 static PHP_RSHUTDOWN_FUNCTION(zephir){
+
+	if (ZEPHIRT_GLOBAL(module) != NULL) {
+
+		//LLVMDumpModule(ZEPHIRT_GLOBAL(module));
+
+		LLVMDisposePassManager(ZEPHIRT_GLOBAL(pass_manager));
+		LLVMDisposeBuilder(ZEPHIRT_GLOBAL(builder));
+		LLVMDisposeModule(ZEPHIRT_GLOBAL(module));
+
+		ZEPHIRT_GLOBAL(module) = NULL;
+	}
 
 	return SUCCESS;
 }

@@ -249,6 +249,14 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		LLVMBasicBlockRef block = LLVMAppendBasicBlock(func, "entry");
 		LLVMPositionBuilderAtEnd(context->builder, block);
 
+		/**
+		 * Initialize context
+		 */
+		context->inside_cycle = 0;
+
+		/**
+		 * Create a new symbol table
+		 */
 		symtable = zephir_symtable_new();
 		context->symtable = symtable;
 
