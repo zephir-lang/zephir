@@ -209,11 +209,14 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	}
 }
 
+/**
+ * This compiles every method into machine-code based methods
+ */
 static void zephir_compile_methods(zephir_context *context, const zval *class_name, zval *methods, zend_function_entry *class_functions TSRMLS_DC)
 {
-	HashTable       *ht;
-	HashPosition    pos = {0};
-	zval **method, *name, *parameters, *statements;
+	HashTable       *ht, *ht_visibility;
+	HashPosition    pos = {0}, pos_visibility = {0};
+	zval **method, *name, *parameters, *statements, *visibility, **visibility_item;
 	zend_function_entry *class_function;
 	LLVMValueRef func, param, alloca[5];
 	LLVMTypeRef ret, params[5];
@@ -237,9 +240,10 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 	 ; zend_hash_get_current_data_ex(ht, (void**) &method, &pos) == SUCCESS
 	 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
+		int flags;
 		char *function_name, function_length;
 
-		_zephir_array_fetch_string(&name, *method, "name", strlen("name") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&name, *method, SS("name") TSRMLS_CC);
 		if (Z_TYPE_P(name) != IS_STRING) {
 			continue;
 		}
@@ -347,18 +351,68 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 			LLVMBuildRetVoid(context->builder);
 		}
 
-		LLVMDumpValue(func);
+		/**
+		 * Shows the generated LLVM IR for every method if enviroment variable is defined
+		 */
+		if (getenv("ZEPHIR_RT_DEBUG")) {
+			LLVMDumpValue(func);
+			if (LLVMVerifyFunction(func, LLVMPrintMessageAction) == 1) {
+				LLVMDeleteFunction(func);
+				continue;
+			}
+		}
 
-		if (LLVMVerifyFunction(func, LLVMPrintMessageAction) == 1) {
-			LLVMDeleteFunction(func);
-			continue;
+		/**
+		 * Check and calculate visibility
+		 */
+		flags = 0;
+		_zephir_array_fetch_string(&visibility, *method, SS("visibility") TSRMLS_CC);
+		if (Z_TYPE_P(visibility) == IS_ARRAY) {
+
+			ht_visibility = Z_ARRVAL_P(visibility);
+			zend_hash_internal_pointer_reset_ex(ht_visibility, &pos_visibility);
+			for (
+			 ; zend_hash_get_current_data_ex(ht_visibility, (void**) &visibility_item, &pos_visibility) == SUCCESS
+			 ; zend_hash_move_forward_ex(ht_visibility, &pos_visibility)
+			) {
+
+				if (Z_TYPE_PP(visibility_item) != IS_STRING) {
+					continue;
+				}
+
+				if (!memcmp(Z_STRVAL_PP(visibility_item), SS("public"))) {
+					flags |= ZEND_ACC_PUBLIC;
+					continue;
+				} else {
+					if (!memcmp(Z_STRVAL_PP(visibility_item), SS("protected"))) {
+						flags |= ZEND_ACC_PROTECTED;
+						continue;
+					} else {
+						if (!memcmp(Z_STRVAL_PP(visibility_item), SS("private"))) {
+							flags |= ZEND_ACC_PRIVATE;
+							continue;
+						}
+					}
+				}
+
+				if (!memcmp(Z_STRVAL_PP(visibility_item), SS("static"))) {
+					flags |= ZEND_ACC_STATIC;
+					continue;
+				}
+
+				if (!memcmp(Z_STRVAL_PP(visibility_item), SS("final"))) {
+					flags |= ZEND_ACC_FINAL;
+					continue;
+				}
+			}
+
 		}
 
 		class_function->fname    = zend_strndup(Z_STRVAL_P(name), Z_STRLEN_P(name));
 		class_function->handler  = LLVMGetPointerToGlobal(context->engine, func);
 		class_function->arg_info = NULL;
 		class_function->num_args = 0;
-		class_function->flags     = ZEND_ACC_PUBLIC;
+		class_function->flags    = flags ? flags : ZEND_ACC_PUBLIC;
 		class_function++;
 
 		efree(context->symtable);
@@ -411,6 +465,9 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 		return 0;
 	}
 
+	/**
+	 * Load the class definition
+	 */
 	_zephir_array_fetch_string(&definition, class_definition, SS("definition") TSRMLS_CC);
 	if (Z_TYPE_P(definition) != IS_ARRAY) {
 		ZEPHIR_INIT_OVERLOADED_CLASS_ENTRY_EX(ce, Z_STRVAL_P(class_name), Z_STRLEN_P(class_name), NULL);
@@ -429,6 +486,9 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 		}
 	}
 
+	/**
+	 * Register the class
+	 */
 	if (number_methods > 0) {
 		ZEPHIR_INIT_OVERLOADED_CLASS_ENTRY_EX(ce, Z_STRVAL_P(class_name), Z_STRLEN_P(class_name), &class_functions[0]);
 	} else{
@@ -436,6 +496,9 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 	}
 	class_ce = zend_register_internal_class(&ce TSRMLS_CC);
 
+	/**
+	 * Process properties
+	 */
 	_zephir_array_fetch_string(&properties, definition, SS("properties") TSRMLS_CC);
 	if (Z_TYPE_P(properties) == IS_ARRAY) {
 		zephir_compile_properties(properties, class_ce);

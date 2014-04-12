@@ -173,6 +173,9 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 	return 0;
 }
 
+/**
+ * Increments a variable
+ */
 int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
 
 	zval *variable;
@@ -191,13 +194,13 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
-				LLVMBuildNSWAdd( // add nsw i32 %6, 1
+				LLVMBuildNSWAdd(
 					context->builder,
 					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
 #if ZEPHIR_32
-					LLVMConstInt(LLVMInt32Type(), 1, 0),
+					LLVMConstInt(LLVMInt32Type(), 1, 0), // add nsw i32 %6, 1
 #else
-					LLVMConstInt(LLVMInt64Type(), 1, 0),
+					LLVMConstInt(LLVMInt64Type(), 1, 0), // add nsw i64 %6, 1
 #endif
 					""
 				),
@@ -211,6 +214,9 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 	return 0;
 }
 
+/**
+ * Decrements a variable
+ */
 int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
 
 	zval *variable;

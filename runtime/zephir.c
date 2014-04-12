@@ -156,6 +156,9 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
 	efree(context);
 }
 
+/**
+ * Opens a file and parses/compiles it using the Zephir parse
+ */
 static void zephir_parse_file(char *file_name TSRMLS_DC)
 {
 	char *contents;
@@ -185,7 +188,7 @@ static void zephir_parse_file(char *file_name TSRMLS_DC)
 	php_stream_close(stream);
 }
 
-static zend_op_array *zephir_compile_file(zend_file_handle *file_handle, int type TSRMLS_DC) /* {{{ */
+static zend_op_array *zephir_compile_file(zend_file_handle *file_handle, int type TSRMLS_DC)
 {
 	zend_op_array *res;
 	int failed;
@@ -239,7 +242,12 @@ static PHP_RSHUTDOWN_FUNCTION(zephir){
 
 	if (ZEPHIRT_GLOBAL(module) != NULL) {
 
-		//LLVMDumpModule(ZEPHIRT_GLOBAL(module));
+		/**
+		 * Shows the generated LLVM IR for the whole global module if enviroment variable is defined
+		 */
+		if (getenv("ZEPHIR_RT_DEBUG")) {
+			LLVMDumpModule(ZEPHIRT_GLOBAL(module));
+		}
 
 		LLVMDisposePassManager(ZEPHIRT_GLOBAL(pass_manager));
 		LLVMDisposeBuilder(ZEPHIRT_GLOBAL(builder));
