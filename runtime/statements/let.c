@@ -194,7 +194,11 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 				LLVMBuildNSWAdd( // add nsw i32 %6, 1
 					context->builder,
 					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
+#if ZEPHIR_32
+					LLVMConstInt(LLVMInt32Type(), 1, 0),
+#else
 					LLVMConstInt(LLVMInt64Type(), 1, 0),
+#endif
 					""
 				),
 				symbol_variable->value_ref
@@ -228,7 +232,11 @@ int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *s
 				LLVMBuildNSWAdd( // // %7 = add nsw i32 %6, -1
 					context->builder,
 					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
+#if ZEPHIR_32
+					LLVMConstInt(LLVMInt32Type(), -1, 0),
+#else
 					LLVMConstInt(LLVMInt64Type(), -1, 0),
+#endif
 					""
 				),
 				symbol_variable->value_ref

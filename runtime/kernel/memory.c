@@ -51,7 +51,7 @@ static zephir_memory_entry* zephirt_memory_grow_stack_common(zend_zephir_globals
     if (!g->active_memory) {
         g->active_memory = g->start_memory;
 //#ifndef ZEPHIR_RELEASE
-        assert(g->active_memory->permanent == 1);
+        //assert(g->active_memory->permanent == 1);
 //#endif
     }
     else if (!g->active_memory->next) {
@@ -76,7 +76,7 @@ static zephir_memory_entry* zephirt_memory_grow_stack_common(zend_zephir_globals
     }
     else {
 //#ifndef ZEPHIR_RELEASE
-        assert(g->active_memory->permanent == 1);
+        //assert(g->active_memory->permanent == 1);
 //#endif
         assert(g->active_memory < g->end_memory && g->active_memory >= g->start_memory);
         g->active_memory = g->active_memory->next;
@@ -343,7 +343,7 @@ ZEPHIR_ATTR_NONNULL static void zephirt_reallocate_memory(const zend_zephir_glob
     }
 
 //#ifndef ZEPHIR_RELEASE
-    assert(frame->permanent == persistent);
+    //assert(frame->permanent == persistent);
 //#endif
 }
 
@@ -361,7 +361,7 @@ ZEPHIR_ATTR_NONNULL static void zephirt_reallocate_hmemory(const zend_zephir_glo
     }
 
 //#ifndef ZEPHIR_RELEASE
-    assert(frame->permanent == persistent);
+    //assert(frame->permanent == persistent);
 //#endif
 }
 
