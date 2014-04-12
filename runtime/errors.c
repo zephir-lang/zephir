@@ -22,36 +22,23 @@
 
 #include <php.h>
 #include "php_zephir.h"
+#include "zephir.h"
+#include "utils.h"
+#include "kernel/main.h"
 
-int _zephir_array_isset_quick_string(const zval *arr, const char *index, uint index_length, unsigned long key) {
-	if (Z_TYPE_P(arr) == IS_ARRAY) {
-		return zend_hash_quick_exists(Z_ARRVAL_P(arr), index, index_length, key);
-	}
-	return 0;
-}
+void zephir_error_ex(char *message, zval *location TSRMLS_DC) {
 
-int _zephir_array_fetch_string(zval **return_value, zval *arr, const char *index, uint index_length TSRMLS_DC){
+	zval *file, *line;
 
-	zval **zv;
+	if (location) {
 
-	if (zend_hash_find(Z_ARRVAL_P(arr), index, index_length, (void**) &zv) == SUCCESS) {
-		*return_value = *zv;
-		return SUCCESS;
-	}
+		_zephir_array_fetch_string(&file, location, SS("file") TSRMLS_CC);
+		_zephir_array_fetch_string(&line, location, SS("line") TSRMLS_CC);
 
-	*return_value = EG(uninitialized_zval_ptr);
-	return FAILURE;
-}
-
-int _zephir_hash_fetch_string(zval **return_value, HashTable *arr, const char *index, uint index_length TSRMLS_DC){
-
-	zval **zv;
-
-	if (zend_hash_find(arr, index, index_length, (void**) &zv) == SUCCESS) {
-		*return_value = *zv;
-		return SUCCESS;
+		if (Z_TYPE_P(file) == IS_STRING && Z_TYPE_P(line) == IS_LONG) {
+			zend_error(E_ERROR, "%s in %s on line %ld", message, Z_STRVAL_P(file), Z_LVAL_P(line));
+		}
 	}
 
-	*return_value = EG(uninitialized_zval_ptr);
-	return FAILURE;
+	zend_error(E_ERROR, "%s", message);
 }

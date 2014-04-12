@@ -969,11 +969,11 @@ LLVMValueRef zephir_build_get_doubleval(zephir_context *context, LLVMValueRef sy
 /**
  * Builds a RETURN_LONG
  */
-void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {
+void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref, zval *location) {
 
 	zephir_variable *symbol_variable;
 
-	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"));
+	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"), context, location);
 
 	zephir_build_zval_long(context, symbol_variable->value_ref, value_ref);
 }
@@ -981,11 +981,11 @@ void zephir_build_return_long(zephir_context *context, LLVMValueRef value_ref) {
 /**
  * Builds a RETURN_DOUBLE
  */
-void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref) {
+void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref, zval *location) {
 
 	zephir_variable *symbol_variable;
 
-	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"));
+	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"), context, location);
 
 	zephir_build_zval_double(context, symbol_variable->value_ref, value_ref);
 }
@@ -993,11 +993,11 @@ void zephir_build_return_double(zephir_context *context, LLVMValueRef value_ref)
 /**
  * Builds a RETURN_BOOL
  */
-void zephir_build_return_bool(zephir_context *context, LLVMValueRef value_ref) {
+void zephir_build_return_bool(zephir_context *context, LLVMValueRef value_ref, zval *location) {
 
 	zephir_variable *symbol_variable;
 
-	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"));
+	symbol_variable = zephir_symtable_get_variable_for_read(context->symtable, SL("return_value"), context, location);
 
 	zephir_build_zval_bool(context, symbol_variable->value_ref, value_ref);
 }

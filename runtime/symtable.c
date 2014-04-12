@@ -25,6 +25,7 @@
 #include "zephir.h"
 #include "utils.h"
 #include "variable.h"
+#include "errors.h"
 
 /**
  * Creates a new symbol table
@@ -73,6 +74,7 @@ zephir_variable *zephir_symtable_add(int type, const char *name, unsigned int na
 	variable->name = zend_strndup(name, name_length);
 	variable->name_length = name_length;
 	variable->value_ref = NULL;
+	variable->initialized = 0;
 	variable->variant_inits = 0;
 
 	symtable = context->symtable;
@@ -124,12 +126,16 @@ zephir_variable *zephir_symtable_get_variable_for_write(zephir_symtable *symtabl
 /**
  * Obtains a variable for reading
  */
-zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable, const char *name, unsigned int name_length TSRMLS_DC)
+zephir_variable *zephir_symtable_get_variable_for_read(zephir_symtable *symtable, const char *name, unsigned int name_length, zephir_context *context, zval *location TSRMLS_DC)
 {
 	zephir_variable *variable;
 
 	if (_zephir_symtable_fetch_string(&variable, symtable->variables, name, name_length + 1 TSRMLS_CC) == FAILURE) {
-		zend_error(E_ERROR, "Cannot read variable \"%s\" because it wasn't declared", name);
+		zephir_error(location, "Cannot read variable \"%s\" because it wasn't declared", name);
+	}
+
+	if (!variable->initialized) {
+		zephir_error(location, "Variable \"%s\" cannot be read because it's not initialized", name);
 	}
 
 	return variable;
@@ -169,6 +175,7 @@ zephir_variable *zephir_symtable_get_temp_variable_for_write(zephir_symtable *sy
 			//zephir_variable_init_variant(symbol, context);
 			break;
 	}
+	efree(buffer);
 
 	zephir_variable_incr_uses(symbol);
 	zephir_variable_incr_mutations(symbol);

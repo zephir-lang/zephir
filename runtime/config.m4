@@ -7,7 +7,7 @@ PHP_ARG_ENABLE(zephir, whether to enable zephir, [ --enable-zephir   Enable Zeph
 if test "$PHP_ZEPHIR" = "yes"; then
 
 	AC_DEFINE(HAVE_ZEPHIR, 1, [Whether you have Zephir])
-	zephir_sources="zephir.c kernel/main.c kernel/memory.c kernel/fcall.c kernel/exceptions.c kernel/operators.c parser.c scanner.c builder.c utils.c classes.c blocks.c expr.c symtable.c variable.c statements/echo.c statements/let.c statements/if.c statements/while.c statements/declare.c statements/return.c operators/arithmetical.c operators/comparison.c optimizers/evalexpr.c"
+	zephir_sources="zephir.c kernel/main.c kernel/memory.c kernel/fcall.c kernel/exceptions.c kernel/operators.c parser.c scanner.c builder.c utils.c classes.c blocks.c expr.c symtable.c variable.c errors.c statements/echo.c statements/let.c statements/if.c statements/while.c statements/declare.c statements/return.c operators/arithmetical.c operators/comparison.c optimizers/evalexpr.c"
 
 	dnl Link LLVM libraries:
 	LLVM_LDFLAGS=`llvm-config-3.3 --libs --ldflags core analysis executionengine jit interpreter native`

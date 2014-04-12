@@ -254,6 +254,7 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 		 * Initialize context
 		 */
 		context->inside_cycle = 0;
+		context->is_unrecheable = 0;
 
 		/**
 		 * Create a new symbol table
@@ -378,6 +379,9 @@ void zephir_compile_properties(zval *properties, zend_class_entry *class_ce)
 	}
 }
 
+/**
+ *
+ */
 int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_DC) {
 
 	zval *name, *properties, **method, **property, *definition, *methods, *class_name, *statements;

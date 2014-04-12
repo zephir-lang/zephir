@@ -47,7 +47,9 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 	}
 
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
+
 	symbol_variable = zephir_symtable_get_variable_for_write(context->symtable, Z_STRVAL_P(variable), Z_STRLEN_P(variable));
+	symbol_variable->initialized = 0;
 
 	switch (symbol_variable->type) {
 
@@ -239,6 +241,10 @@ int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *s
 	return 0;
 }
 
+/**
+ * Assigns values to variables, array indices, object properties, etc.
+ *
+ */
 int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 {
 	HashTable       *ht;
@@ -279,7 +285,6 @@ int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 
 		zend_print_zval_r(*assignment, 0 TSRMLS_CC);
 	}
-
 
 	return 0;
 }

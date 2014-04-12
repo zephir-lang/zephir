@@ -25,6 +25,7 @@
 #include "zephir.h"
 #include "utils.h"
 #include "symtable.h"
+#include "errors.h"
 
 #include "kernel/main.h"
 
@@ -112,7 +113,7 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 			return NULL;
 		}
 
-		variable = zephir_symtable_get_variable_for_read(context->symtable, Z_STRVAL_P(value), Z_STRLEN_P(value));
+		variable = zephir_symtable_get_variable_for_read(context->symtable, Z_STRVAL_P(value), Z_STRLEN_P(value), context, expr);
 
 		compiled_expr = emalloc(sizeof(zephir_compiled_expr));
 		compiled_expr->type  = ZEPHIR_T_TYPE_VAR;
@@ -151,6 +152,6 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 		return zephir_expr(context, left_expr TSRMLS_CC);
 	}
 
-	zend_error(E_ERROR, "Unknown expression %s", Z_STRVAL_P(type));
+	zephir_error(expr, "Unknown expression \"%s\"", Z_STRVAL_P(type));
 	return NULL;
 }

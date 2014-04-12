@@ -28,6 +28,9 @@
 #include "builder.h"
 #include "kernel/main.h"
 
+/**
+ *
+ */
 int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 {
 
@@ -43,16 +46,16 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 	switch (compiled_expr->type) {
 
 		case ZEPHIR_T_TYPE_BOOL:
-			zephir_build_return_bool(context, compiled_expr->value);
+			zephir_build_return_bool(context, compiled_expr->value, statement);
 			break;
 
 		case ZEPHIR_T_TYPE_INTEGER:
 		case ZEPHIR_T_TYPE_LONG:
-			zephir_build_return_long(context, compiled_expr->value);
+			zephir_build_return_long(context, compiled_expr->value, statement);
 			break;
 
 		case ZEPHIR_T_TYPE_DOUBLE:
-			zephir_build_return_double(context, compiled_expr->value);
+			zephir_build_return_double(context, compiled_expr->value, statement);
 			break;
 
 		case ZEPHIR_T_TYPE_VAR:
@@ -63,16 +66,16 @@ int zephir_statement_return(zephir_context *context, zval *statement TSRMLS_DC)
 					break;
 
 				case ZEPHIR_T_TYPE_BOOL:
-					zephir_build_return_bool(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					zephir_build_return_bool(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), statement);
 					break;
 
 				case ZEPHIR_T_TYPE_INTEGER:
 				case ZEPHIR_T_TYPE_LONG:
-					zephir_build_return_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					zephir_build_return_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), statement);
 					break;
 
 				case ZEPHIR_T_TYPE_DOUBLE:
-					zephir_build_return_double(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""));
+					zephir_build_return_double(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), statement);
 					break;
 
 				default:
