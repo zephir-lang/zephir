@@ -20,6 +20,8 @@
 #include "config.h"
 #endif
 
+#include <string.h>
+
 #include <php.h>
 #include "php_zephir.h"
 #include "zephir.h"
@@ -207,7 +209,7 @@ static void zephir_process_parameters(zephir_context *context, zval *parameters 
 	}
 }
 
-static void zephir_compile_methods(zephir_context *context, zval *methods, zend_function_entry *class_functions TSRMLS_DC)
+static void zephir_compile_methods(zephir_context *context, const zval *class_name, zval *methods, zend_function_entry *class_functions TSRMLS_DC)
 {
 	HashTable       *ht;
 	HashPosition    pos = {0};
@@ -235,11 +237,22 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 	 ; zend_hash_get_current_data_ex(ht, (void**) &method, &pos) == SUCCESS
 	 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
+		char *function_name, function_length;
 
 		_zephir_array_fetch_string(&name, *method, "name", strlen("name") + 1 TSRMLS_CC);
 		if (Z_TYPE_P(name) != IS_STRING) {
 			continue;
 		}
+
+		function_length = Z_STRLEN_P(class_name) + Z_STRLEN_P(name) + 2;
+		function_name = emalloc(function_length);
+
+		memcpy(function_name, Z_STRVAL_P(class_name), Z_STRLEN_P(class_name));
+		function_name[Z_STRLEN_P(class_name) + 1] = '+';
+		memcpy(function_name + Z_STRLEN_P(class_name) + 2, Z_STRVAL_P(name), Z_STRLEN_P(name));
+		function_name[function_length] = '\0';
+
+		fprintf(stderr, "%s\n", function_name);
 
 		/**
 		 * Create the function prototype
@@ -357,6 +370,9 @@ static void zephir_compile_methods(zephir_context *context, zval *methods, zend_
 
 }
 
+/**
+ * Declares variables
+ */
 void zephir_compile_properties(zval *properties, zend_class_entry *class_ce)
 {
 	HashTable       *ht;
@@ -370,7 +386,7 @@ void zephir_compile_properties(zval *properties, zend_class_entry *class_ce)
 		 ; zend_hash_move_forward_ex(ht, &pos)
 	) {
 
-		_zephir_array_fetch_string(&name, *property, "name", strlen("name") + 1 TSRMLS_CC);
+		_zephir_array_fetch_string(&name, *property, SS("name") TSRMLS_CC);
 		if (Z_TYPE_P(name) != IS_STRING) {
 			continue;
 		}
@@ -410,7 +426,7 @@ int zephir_compile_class(zephir_context *context, zval *class_definition TSRMLS_
 	if (Z_TYPE_P(methods) == IS_ARRAY) {
 		number_methods = zend_hash_num_elements(Z_ARRVAL_P(methods));
 		if (number_methods > 0) {
-			zephir_compile_methods(context, methods, &class_functions[0]);
+			zephir_compile_methods(context, class_name, methods, &class_functions[0]);
 		}
 	}
 

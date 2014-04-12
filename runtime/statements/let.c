@@ -49,7 +49,7 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
 
 	symbol_variable = zephir_symtable_get_variable_for_write(context->symtable, Z_STRVAL_P(variable), Z_STRLEN_P(variable));
-	symbol_variable->initialized = 0;
+	symbol_variable->initialized = 1;
 
 	switch (symbol_variable->type) {
 
