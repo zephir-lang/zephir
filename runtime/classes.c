@@ -248,16 +248,14 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 		function_name = emalloc(function_length);
 
 		memcpy(function_name, Z_STRVAL_P(class_name), Z_STRLEN_P(class_name));
-		function_name[Z_STRLEN_P(class_name) + 1] = '+';
-		memcpy(function_name + Z_STRLEN_P(class_name) + 2, Z_STRVAL_P(name), Z_STRLEN_P(name));
+		function_name[Z_STRLEN_P(class_name)] = '+';
+		memcpy(function_name + Z_STRLEN_P(class_name) + 1, Z_STRVAL_P(name), Z_STRLEN_P(name));
 		function_name[function_length] = '\0';
-
-		fprintf(stderr, "%s\n", function_name);
 
 		/**
 		 * Create the function prototype
 		 */
-		func = LLVMAddFunction(context->module, Z_STRVAL_P(name), LLVMFunctionType(LLVMVoidType(), params, 5, 0));
+		func = LLVMAddFunction(context->module, function_name, LLVMFunctionType(LLVMVoidType(), params, 5, 0));
 		LLVMSetLinkage(func, LLVMExternalLinkage);
 
 		context->declarations_block = LLVMAppendBasicBlock(func, "declarations");
@@ -364,6 +362,7 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 		class_function++;
 
 		efree(context->symtable);
+		efree(function_name);
 	}
 
 	class_function->fname = NULL;
