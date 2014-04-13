@@ -25,6 +25,8 @@ ZEPHIR_INIT_CLASS(Test_MethodArgs) {
 
 	zend_declare_property_null(test_methodargs_ce, SL("a"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
+	zend_declare_class_constant_string(test_methodargs_ce, SL("GET"), "get" TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -101,6 +103,26 @@ PHP_METHOD(Test_MethodArgs, setResourceStrict) {
 
 
 	zephir_update_property_this(this_ptr, SL("a"), a TSRMLS_CC);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/336
+ */
+PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) {
+
+	zval *method = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &method);
+
+	if (!method) {
+		ZEPHIR_INIT_VAR(method);
+		ZVAL_STRING(method, "get", 1);
+	}
+
+
+	RETURN_CCTOR(method);
 
 }
 
