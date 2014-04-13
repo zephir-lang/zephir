@@ -331,7 +331,6 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 		symbols[4]->value_ref = alloca[4];
 
 		block = LLVMAppendBasicBlock(func, "entry");
-		LLVMBuildBr(context->builder, block);
 		LLVMPositionBuilderAtEnd(context->builder, block);
 
 		/**
@@ -355,6 +354,12 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 			zephir_build_memory_restore_stack(context);
 			LLVMBuildRetVoid(context->builder);
 		}
+
+		/**
+		 * Join "declarations" block with "entry" block
+		 */
+		LLVMPositionBuilderAtEnd(context->builder, context->declarations_block);
+		LLVMBuildBr(context->builder, block);
 
 		/**
 		 * Shows the generated LLVM IR for every method if enviroment variable is defined

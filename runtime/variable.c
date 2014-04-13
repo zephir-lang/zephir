@@ -36,6 +36,9 @@ void zephir_variable_incr_mutations(zephir_variable *variable)
 
 }
 
+/**
+ * Initializes a variant variable
+ */
 void zephir_variable_init_variant(zephir_variable *variable, zephir_context *context)
 {
 

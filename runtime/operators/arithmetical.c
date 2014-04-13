@@ -55,11 +55,15 @@ static LLVMValueRef zephir_get_add_function(zephir_context *context)
 	return function;
 }
 
+/**
+ * Resolves arithmetical operations between dynamic types and static types
+ */
 zephir_compiled_expr *zephir_operator_arithmetical_add(zephir_context *context, zval *expr TSRMLS_DC)
 {
 	zval *left_expr, *right_expr;
 	zephir_compiled_expr *compiled_expr_left, *compiled_expr_right, *compiled_expr;
 	zephir_variable *temp_variable;
+	LLVMValueRef args[3];
 
 	_zephir_array_fetch_string(&left_expr, expr, SS("left") TSRMLS_CC);
 	if (Z_TYPE_P(left_expr) != IS_ARRAY) {
@@ -238,14 +242,17 @@ zephir_compiled_expr *zephir_operator_arithmetical_add(zephir_context *context, 
 								 */
 								case ZEPHIR_T_TYPE_VAR:
 
-									//args[0] = LLVMBuildLoad(context->builder, value_ref, "");
-									//LLVMBuildCall(context->builder, zephir_get_add_function(context), args, 1, "")
-
 									temp_variable = zephir_symtable_get_temp_variable_for_write(context->symtable, ZEPHIR_T_TYPE_VAR, context TSRMLS_CC);
 
 									compiled_expr = emalloc(sizeof(zephir_compiled_expr));
 									compiled_expr->type  = ZEPHIR_T_TYPE_VAR;
 									compiled_expr->variable = temp_variable;
+
+									args[0] = LLVMBuildLoad(context->builder, temp_variable->value_ref, "");
+									args[1] = LLVMBuildLoad(context->builder, compiled_expr_left->variable->value_ref, "");
+									args[2] = LLVMBuildLoad(context->builder, compiled_expr_right->variable->value_ref, "");
+									LLVMBuildCall(context->builder, zephir_get_add_function(context), args, 3, "");
+
 									return compiled_expr;
 
 							}

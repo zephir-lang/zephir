@@ -50,6 +50,10 @@ LLVMValueRef zephir_optimizers_evalexpr(zephir_context *context, zval *expr) {
 #endif
 			break;
 
+		case ZEPHIR_T_TYPE_DOUBLE:
+			condition = LLVMBuildFCmp(context->builder, LLVMRealUNE, compiled_expr->value, LLVMConstReal(LLVMDoubleType(), 0), "");
+			break;
+
 		case ZEPHIR_T_TYPE_VAR:
 
 			switch (compiled_expr->variable->type) {
@@ -65,6 +69,10 @@ LLVMValueRef zephir_optimizers_evalexpr(zephir_context *context, zval *expr) {
 #else
 					condition = LLVMBuildICmp(context->builder, LLVMIntNE, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), LLVMConstInt(LLVMInt64Type(), 0, 0), "");
 #endif
+					break;
+
+				case ZEPHIR_T_TYPE_DOUBLE:
+					condition = LLVMBuildFCmp(context->builder, LLVMRealUNE, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), LLVMConstReal(LLVMDoubleType(), 0), "");
 					break;
 
 				case ZEPHIR_T_TYPE_VAR:

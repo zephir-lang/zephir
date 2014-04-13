@@ -165,14 +165,14 @@ zephir_variable *zephir_symtable_get_temp_variable_for_write(zephir_symtable *sy
 		case ZEPHIR_T_TYPE_STRING:
 		case ZEPHIR_T_TYPE_ARRAY:
 
-			//current_block = LLVMGetInsertBlock(context->builder);
-			//LLVMPositionBuilderAtEnd(context->builder, context->declarations_block);
+			current_block = LLVMGetInsertBlock(context->builder);
+			LLVMPositionBuilderAtEnd(context->builder, context->declarations_block);
 
-			//symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, buffer);
-			//LLVMBuildStore(context->builder, LLVMConstPointerNull(context->types.zval_pointer_type), symbol->value_ref);
+			symbol->value_ref = LLVMBuildAlloca(context->builder, context->types.zval_pointer_type, buffer);
+			LLVMBuildStore(context->builder, LLVMConstPointerNull(context->types.zval_pointer_type), symbol->value_ref);
 
-			//LLVMPositionBuilderAtEnd(context->builder, current_block);
-			//zephir_variable_init_variant(symbol, context);
+			LLVMPositionBuilderAtEnd(context->builder, current_block);
+			zephir_variable_init_variant(symbol, context);
 			break;
 	}
 	efree(buffer);
