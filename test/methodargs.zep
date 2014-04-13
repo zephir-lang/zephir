@@ -2,6 +2,8 @@ namespace Test;
 
 class MethodArgs
 {
+    const GET = "get";
+
     public a;
 
     public function setCallable(callable a)
@@ -27,5 +29,13 @@ class MethodArgs
     public function setResourceStrict(resource! a)
     {
         let this->a = a;
+    }
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/336
+     */
+    public function methodOptionalValueWithDefaultStaticConstantAccess(var method = self::GET)
+    {
+        return method;
     }
 }

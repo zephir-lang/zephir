@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\Passes\CallGathererPass;
@@ -771,6 +772,22 @@ class ClassMethod
 
             case 'variable':
                 switch ($parameter['default']['type']) {
+
+                    case 'static-constant-access':
+                        /**
+                         * Now i can write code for easy use on Expression becase code in this method don`t write with codePrinter ;(
+                         * @todo Rewrite all to codePrinter
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, null);
+                        $expression = new Expression($parameter['default']);
+                        $expression->setExpectReturn(true, $symbolVariable);
+                        $compiledExpression = $expression->compile($compilationContext);
+
+                        $parameter['default']['type'] = $compiledExpression->getType();
+                        $parameter['default']['value'] = $compiledExpression->getCode();
+
+                        return $this->assignDefaultValue($parameter, $compilationContext);
+                        break;
 
                     case 'int':
                     case 'uint':
