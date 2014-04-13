@@ -492,22 +492,8 @@ int zephir_get_token(zephir_scanner_state *s, zephir_scanner_token *token) {
 
 		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/");
 		COMMENT {
-			token->opcode = ZEPHIR_T_COMMENT;
-			token->value = estrndup(q, YYCURSOR - q - 1);
-			token->len = YYCURSOR - q - 1;
-			{
-				int k, ch = s->active_char;
-				for (k = 0; k < (token->len - 1); k++) {
-					if (token->value[k] == '\n') {
-						ch = 1;
-						s->active_line++;
-					} else {
-						ch++;
-					}
-				}
-				s->active_char = ch;
-			}
-			q = YYCURSOR;
+			s->active_char += (YYCURSOR - start);
+			token->opcode = ZEPHIR_T_IGNORE;
 			return 0;
 		}
 

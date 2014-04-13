@@ -99,7 +99,7 @@ static void zephir_scanner_error_msg(zephir_parser_status *parser_status){
 /**
  * Parses a program returning an intermediate array representation
  */
-int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, char *file_path, zval **error_message TSRMLS_DC) {
+int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, char *file_path, zval **error_msg TSRMLS_DC) {
 
 	char *error;
 	zephir_scanner_state *state;
@@ -517,9 +517,9 @@ int zephir_parse_program(zval **return_value, char *program, unsigned int progra
 			default:
 				parser_status->status = ZEPHIR_PARSING_FAILED;
 				if (!*error_msg) {
-                    unsigned int length = sizeof(char) * (48 + Z_STRLEN_P(state->active_file));
+                    unsigned int length = sizeof(char) * 48; // Z_STRLEN_P(state->active_file);
 					error = emalloc(length);
-					snprintf(error, length, "Scanner: unknown opcode %d on in %s line %d", token.opcode, Z_STRVAL_P(state->active_file), state->active_line);
+					snprintf(error, length, "Scanner: unknown opcode %d on in %s line %d", token.opcode, state->active_file, state->active_line);
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
 					efree(error);

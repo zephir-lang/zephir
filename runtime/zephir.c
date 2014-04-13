@@ -177,7 +177,7 @@ static void zephir_parse_file(char *file_name TSRMLS_DC)
 
 	if ((len = php_stream_copy_to_mem(stream, &contents, maxlen, 0)) > 0) {
 
-		zephir_parse_program(&return_value, contents, len, file_name TSRMLS_CC);
+		zephir_parse_program(&return_value, contents, len, file_name, NULL TSRMLS_CC);
 		efree(contents);
 
 		zephir_compile_program(return_value TSRMLS_CC);
