@@ -327,10 +327,10 @@ PHP_METHOD(Test_Quantum, Harmos) {
 
 }
 
-PHP_METHOD(Test_Quantum, test) {
+PHP_METHOD(Test_Quantum, testString) {
 
 
-	RETURN_STRING("wellcom sitepoint", 1);
+	RETURN_STRING("I love Zephir and Phalcon", 1);
 
 }
 
