@@ -17,7 +17,7 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+/*namespace Extension;
 
 class QuantumTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,3 +32,4 @@ class QuantumTest extends \PHPUnit_Framework_TestCase
 
 
 }
+*/
