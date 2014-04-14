@@ -4,10 +4,10 @@
 #ifndef ZEPHIR_CLASS_ENTRIES_H
 #define ZEPHIR_CLASS_ENTRIES_H
 
-#include "test/bench/foo.h"
 #include "test/internalclasses.h"
 #include "test/arithmetic.h"
 #include "test/assign.h"
+#include "test/bench/foo.h"
 #include "test/bitwise.h"
 #include "test/branchprediction.h"
 #include "test/builtin/charmethods.h"
@@ -66,6 +66,7 @@
 #include "test/properties/publicproperties.h"
 #include "test/properties/staticprotectedproperties.h"
 #include "test/properties/staticpublicproperties.h"
+#include "test/quantum.h"
 #include "test/regexdna.h"
 #include "test/requires.h"
 #include "test/resourcetest.h"
