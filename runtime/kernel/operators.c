@@ -27,7 +27,7 @@
 #include "php_zephir.h"
 #include "kernel/main.h"
 #include "kernel/memory.h"
-//#include "kernel/string.h"
+#include "kernel/string.h"
 
 #include "Zend/zend_operators.h"
 

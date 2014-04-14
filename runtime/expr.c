@@ -26,6 +26,7 @@
 #include "utils.h"
 #include "symtable.h"
 #include "errors.h"
+#include "fcall.h"
 
 #include "kernel/main.h"
 
@@ -40,7 +41,7 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 
 	_zephir_array_fetch_string(&type, expr, "type", strlen("type") + 1 TSRMLS_CC);
 	if (Z_TYPE_P(type) != IS_STRING) {
-		return NULL;
+		zephir_error(expr, "Expression is corrupt");
 	}
 
 	if (!memcmp(Z_STRVAL_P(type), SS("bool"))) {
@@ -140,6 +141,10 @@ zephir_compiled_expr *zephir_expr(zephir_context *context, zval *expr TSRMLS_DC)
 
 	if (!memcmp(Z_STRVAL_P(type), SS("less"))) {
 		return zephir_operator_comparison_less(context, expr TSRMLS_CC);
+	}
+
+	if (!memcmp(Z_STRVAL_P(type), SS("fcall"))) {
+		return zephir_fcall_compile(context, expr TSRMLS_CC);
 	}
 
 	if (!memcmp(Z_STRVAL_P(type), SS("list"))) {

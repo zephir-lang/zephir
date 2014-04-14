@@ -6,3 +6,4 @@ fi
 
 phpize
 ./configure --enable-zephir
+sudo make install
