@@ -25,9 +25,8 @@ class QuantumTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\Quantum();
 
-        $this->assertTrue($t->Harmos(7.5) === True);
-        
-        
+        $this->assertTrue($t->Harmos(7.5) == true);
+           
     }
 
 
