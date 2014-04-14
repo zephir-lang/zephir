@@ -3,8 +3,9 @@ namespace Test;
 
 
 /*
-@see http://www.sitepoint.com/getting-started-php-extension-development-via-zephir
- */
+* @see http://www.sitepoint.com/getting-started-php-extension-development-via-zephir
+*
+*/
 class Quantum
 {
 			
