@@ -248,9 +248,6 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 			continue;
 		}
 
-		//fprintf(stderr, "%s %d\n", Z_STRVAL_P(name), Z_STRLEN_P(name));
-		//fprintf(stderr, "%s %d\n", Z_STRVAL_P(class_name), Z_STRLEN_P(class_name));
-
 		function_length = Z_STRLEN_P(class_name) + Z_STRLEN_P(name) + 2;
 		function_name = emalloc(function_length);
 
@@ -258,8 +255,6 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 		function_name[Z_STRLEN_P(class_name)] = '+';
 		memcpy(function_name + Z_STRLEN_P(class_name) + 1, Z_STRVAL_P(name), Z_STRLEN_P(name));
 		function_name[function_length - 1] = '\0';
-
-		//fprintf(stderr, "%s %d\n", function_name, function_length);
 
 		/**
 		 * Create the function prototype
@@ -426,7 +421,7 @@ static void zephir_compile_methods(zephir_context *context, const zval *class_na
 		class_function++;
 
 		efree(context->symtable);
-		//efree(function_name);
+		efree(function_name);
 	}
 
 	class_function->fname = NULL;

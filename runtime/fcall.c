@@ -56,7 +56,7 @@ LLVMValueRef *zephir_resolve_parameters(zephir_context *context, zval *parameter
 		switch (compiled_expr->type) {
 
 			case ZEPHIR_T_TYPE_VAR:
-				args[i] = compiled_expr->variable->value_ref;
+				args[i] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");
 				break;
 
 			default:
@@ -64,6 +64,7 @@ LLVMValueRef *zephir_resolve_parameters(zephir_context *context, zval *parameter
 
 		}
 
+		efree(compiled_expr);
 		i++;
 	}
 
@@ -88,7 +89,7 @@ static LLVMValueRef zephir_get_strlen(zephir_context *context)
 			zend_error(E_ERROR, "Cannot register zephir_strlen");
 		}
 
-		LLVMAddGlobalMapping(context->engine, function, zephir_fast_strlen);
+		LLVMAddGlobalMapping(context->engine, function, zephir_fast_strlen_ev);
 		LLVMSetFunctionCallConv(function, LLVMCCallConv);
 		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
 	}
@@ -115,14 +116,13 @@ zephir_compiled_expr *zephir_strlen_optimizer(zephir_context *context, zval *exp
 
 	args = zephir_resolve_parameters(context, parameters);
 
-	//LLVMTypeOf(args[0]);
-	//LLVMDumpValue(args[0]);
+	LLVMDumpValue(args[0]);
 
 	compiled_expr->value = LLVMBuildCall(context->builder, zephir_get_strlen(context), args, 1, "");
 
 	efree(args);
 
-	return NULL;
+	return compiled_expr;
 }
 
 zephir_compiled_expr *zephir_fcall_compile(zephir_context *context, zval *expr TSRMLS_DC) {
