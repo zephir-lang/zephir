@@ -35,6 +35,11 @@ abstract class AbstractType
         $this->methodMap = $this->getMethodMap();
     }
 
+    public function hasMethod($methodName)
+    {
+        return isset($this->methodMap[$methodName]) ? true : false;
+    }
+
     /**
      * Intercepts calls to built-in methods
      *
