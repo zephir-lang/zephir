@@ -49,6 +49,8 @@ class CastOperator extends BaseOperator
 
             case 'int':
                 switch ($resolved->getType()) {
+                    case 'null':
+                        return new CompiledExpression('int', 0, $expression);
 
                     case 'int':
                         return new CompiledExpression('int', $resolved->getCode(), $expression);
@@ -67,6 +69,9 @@ class CastOperator extends BaseOperator
                                 return new CompiledExpression('int', $symbolVariable->getName(), $expression);
                             case 'double':
                                 return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
+                            case 'bool':
+                                return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
+                            case 'array':
                             case 'variable':
                                 return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
                             default:

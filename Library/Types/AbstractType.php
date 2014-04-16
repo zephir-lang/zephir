@@ -28,7 +28,10 @@ use Zephir\FunctionCall;
 
 abstract class AbstractType
 {
-    protected $methodMap;
+    /**
+     * @var array
+     */
+    protected $methodMap = array();
 
     public function __construct()
     {
