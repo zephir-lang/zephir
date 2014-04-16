@@ -43,6 +43,66 @@ PHP_METHOD(Test_Cast, testIntCastFromBoolean) {
 
 }
 
+PHP_METHOD(Test_Cast, testIntCastFromNull) {
+
+
+	RETURN_LONG(0);
+
+}
+
+PHP_METHOD(Test_Cast, testIntCastFromEmptyArray) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	RETURN_MM_LONG(zephir_get_intval(_0));
+
+}
+
+PHP_METHOD(Test_Cast, testIntCastFromArray) {
+
+	zval *_1;
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init_size(_0, 7);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 1);
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 2);
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 3);
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_INIT_BNVAR(_1);
+	ZVAL_LONG(_1, 4);
+	zephir_array_fast_append(_0, _1);
+	RETURN_MM_LONG(zephir_get_intval(_0));
+
+}
+
+/**
+ * Notice: Object of class stdClass could not be converted to int
+ * @return int 1
+ */
+PHP_METHOD(Test_Cast, testIntCastFromStdClass) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	object_init(_0);
+	RETURN_MM_LONG(zephir_get_intval(_0));
+
+}
+
 /** To boolean cast */
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1) {
 

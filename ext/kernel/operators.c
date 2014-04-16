@@ -388,6 +388,16 @@ void zephir_cast(zval *result, zval *var, zend_uint type){
 long zephir_get_intval_ex(const zval *op) {
 
 	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
+            break;
+
+#if PHP_VERSION_ID > 50400
+	    case IS_CALLABLE:
+#endif
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return 1;
 
 		case IS_LONG:
 			return Z_LVAL_P(op);
@@ -401,6 +411,7 @@ long zephir_get_intval_ex(const zval *op) {
 		case IS_STRING: {
 			long long_value = 0;
 			double double_value = 0;
+
 			ASSUME(Z_STRVAL_P(op) != NULL);
 			zend_uchar type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0);
 			if (type == IS_LONG) {

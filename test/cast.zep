@@ -19,6 +19,30 @@ class Cast
 		return (int) true;
 	}
 
+	public function testIntCastFromNull()
+	{
+	    return (int) null;
+	}
+
+	public function testIntCastFromEmptyArray()
+	{
+        return (int) [];
+	}
+
+	public function testIntCastFromArray()
+	{
+        return (int) [1, 2, 3, 4];
+	}
+
+    /**
+     * Notice: Object of class stdClass could not be converted to int
+     * @return int 1
+     */
+	public function testIntCastFromStdClass()
+	{
+	    return (int) (new \StdClass);
+	}
+
     /** To boolean cast */
 
     public function testBooleanCastFromIntTrue1()
