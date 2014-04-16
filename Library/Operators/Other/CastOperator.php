@@ -69,6 +69,8 @@ class CastOperator extends BaseOperator
                                 return new CompiledExpression('int', $symbolVariable->getName(), $expression);
                             case 'double':
                                 return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
+                            case 'bool':
+                                return new CompiledExpression('int', '(int) (' . $symbolVariable->getName() . ')', $expression);
                             case 'array':
                             case 'variable':
                                 return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
