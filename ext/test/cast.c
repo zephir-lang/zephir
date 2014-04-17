@@ -275,7 +275,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 
 }
 
-PHP_METHOD(Test_Cast, testBooleanCaseFromNull) {
+PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 
 	zval *a = NULL;
 

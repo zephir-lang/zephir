@@ -131,7 +131,7 @@ class Cast
         return (boolean) a;
     }
 
-    public function testBooleanCaseFromNull()
+    public function testBooleanCastFromNull()
     {
         var a = null;
         return (boolean) a;
