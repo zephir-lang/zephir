@@ -49,5 +49,8 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testBooleanCastFromEmptyArray() === false);
         $this->assertTrue($t->testBooleanCastFromArray() === true);
         $this->assertTrue($t->testBooleanCastFromNull() === false);
+
+        $this->assertTrue($t->testObjectCastFromEmptyArray() == (object) array());
+        $this->assertTrue($t->testBooleanCastFromArray() == (object) array(1, 2, 3, 4));
     }
 }

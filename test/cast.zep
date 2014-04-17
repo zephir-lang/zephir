@@ -136,4 +136,16 @@ class Cast
         var a = null;
         return (boolean) a;
     }
+
+    /** To object cast */
+
+    public function testObjectCastFromEmptyArray()
+    {
+        return (object) [];
+    }
+
+    public function testObjectCastFromArray()
+    {
+        return (object) [1, 2, 3, 4];
+    }
 }

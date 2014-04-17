@@ -175,6 +175,22 @@ class CastOperator extends BaseOperator
                 }
                 break;
 
+            case 'object':
+                switch ($resolved->getType()) {
+                    case 'variable':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+                        if ($symbolVariable->isTemporal()) {
+                            $symbolVariable->setIdle(true);
+                        }
+
+                        $compilationContext->codePrinter->output('zephir_convert_to_object(' . $symbolVariable->getName() . ');');
+                        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+                    default:
+                        throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
+                }
+                break;
+
             case 'char':
                 switch ($resolved->getType()) {
                     case 'variable':
