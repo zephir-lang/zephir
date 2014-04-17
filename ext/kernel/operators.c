@@ -353,6 +353,10 @@ void zephir_negate(zval *z TSRMLS_DC) {
 	}
 }
 
+void zephir_convert_to_object(zval *op) {
+    convert_to_object(op);
+}
+
 /**
  * Cast variables converting they to other types
  */
