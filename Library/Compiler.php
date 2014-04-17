@@ -386,6 +386,7 @@ class Compiler
         if (file_exists('.temp/' . self::VERSION . '/gcc-version')) {
             return file_get_contents('.temp/' . self::VERSION . '/gcc-version');
         }
+
         system('gcc -v 2> .temp/' . self::VERSION . '/gcc-version-temp');
         $lines = file('.temp/' . self::VERSION . '/gcc-version-temp');
         foreach ($lines as $line) {
@@ -394,11 +395,13 @@ class Compiler
                 return '4.8.0';
             }
         }
+
         $lastLine = $lines[count($lines) - 1];
         if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
             file_put_contents('.temp/' . self::VERSION . '/gcc-version', $matches[0]);
             return $matches[0];
         }
+
         return '0.0.0';
     }
 
@@ -751,9 +754,11 @@ class Compiler
         if (strstr($src, 'ext/kernel/concat.') !== false) {
             return true;
         }
+
         if (!file_exists($dst)) {
             return false;
         }
+
         return md5_file($src) == md5_file($dst);
     }
 

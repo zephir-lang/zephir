@@ -26,5 +26,5 @@ class SubOperator extends ArithmeticalBaseOperator
 
     protected $_bitOperator = '&';
 
-    protected $_zvalOperator = 'sub_function';
+    protected $_zvalOperator = 'zephir_sub_function';
 }

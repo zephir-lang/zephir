@@ -29,6 +29,11 @@ class Logger
     private static $_files = array();
 
     /**
+     * Stderr handler
+     */
+    protected $_handler;
+
+    /**
      * @var Config
      */
     protected $_config;
@@ -97,7 +102,11 @@ class Logger
                 $warning .= PHP_EOL;
             }
 
-            echo Color::warning($warning);
+            if (!$this->_handler) {
+                $this->_handler = STDERR;
+            }
+
+            fprintf($this->_handler, Color::warning($warning));
 
             return true;
         }
