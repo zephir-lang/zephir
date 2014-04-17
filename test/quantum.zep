@@ -78,7 +78,7 @@ class Quantum
 	 	return true;	
 
 	}
-	public function String(){
+	public function testString(){
 		return "I love Phalcon and Zephir";
 	}
 	
