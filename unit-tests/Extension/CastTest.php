@@ -20,11 +20,13 @@
 namespace Extension;
 
 
+use Test\Cast;
+
 class CastTest extends \PHPUnit_Framework_TestCase
 {
     public function testCast()
     {
-        $t = new \Test\Cast();
+        $t = new Cast();
 
         $this->assertTrue($t->testIntCastFromFloat() === 5);
         $this->assertTrue($t->testIntCastFromBooleanTrue() === 1);
@@ -41,6 +43,11 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testIntCastFromVariableEmptyArray() === 0);
         $this->assertTrue($t->testIntCastFromVariableArray() === 1);
         $this->assertTrue($t->testIntCastFromVariableStdClass() === 1);
+    }
+
+    public function testBooleanCast()
+    {
+        $t = new Cast();
 
         $this->assertTrue($t->testBooleanCastFromIntTrue1() === true);
         $this->assertTrue($t->testBooleanCastFromIntTrue2() === true);
@@ -49,8 +56,19 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testBooleanCastFromEmptyArray() === false);
         $this->assertTrue($t->testBooleanCastFromArray() === true);
         $this->assertTrue($t->testBooleanCastFromNull() === false);
+    }
 
-        $this->assertTrue($t->testObjectCastFromEmptyArray() == (object) array());
-        $this->assertTrue($t->testBooleanCastFromArray() == (object) array(1, 2, 3, 4));
+
+    public function testObjectCast()
+    {
+        $t = new Cast();
+
+        $this->assertEquals((object) 5, $t->testObjectCastFromInt());
+        $this->assertEquals((object) 5.0, $t->testObjectCastFromFloat());
+        $this->assertEquals((object) false, $t->testObjectCastFromFalse());
+        $this->assertEquals((object) true, $t->testObjectCastFromTrue());
+        $this->assertEquals((object) null, $t->testObjectCastFromNull());
+        $this->assertEquals((object) array(), $t->testObjectCastFromEmptyArray());
+        $this->assertEquals((object) array(1, 2, 3, 4), $t->testObjectCastFromArray());
     }
 }

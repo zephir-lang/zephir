@@ -182,7 +182,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					ZEPHIR_SINIT_NVAR(_2);
 					mul_function(&_2, _24, _27 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_8);
-					sub_function(_8, &_1, &_2 TSRMLS_CC);
+					zephir_sub_function(_8, &_1, &_2 TSRMLS_CC);
 					ZEPHIR_SINIT_NVAR(_1);
 					mul_function(&_1, _22, _8 TSRMLS_CC);
 					zephir_array_fetch_long(&_22, paramater, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
@@ -192,7 +192,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					ZEPHIR_SINIT_NVAR(_2);
 					div_function(&_2, &_1, _8 TSRMLS_CC);
 					ZEPHIR_SINIT_NVAR(_1);
-					sub_function(&_1, _21, &_2 TSRMLS_CC);
+					zephir_sub_function(&_1, _21, &_2 TSRMLS_CC);
 					zephir_array_fetch_long(&_21, paramater, 2, PH_NOISY | PH_READONLY TSRMLS_CC);
 					zephir_array_fetch_long(&_22, v, i, PH_NOISY | PH_READONLY TSRMLS_CC);
 					zephir_array_fetch_long(&_24, _22, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
@@ -257,7 +257,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					ZEPHIR_SINIT_NVAR(_2);
 					mul_function(&_2, _24, _27 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_10);
-					sub_function(_10, &_1, &_2 TSRMLS_CC);
+					zephir_sub_function(_10, &_1, &_2 TSRMLS_CC);
 					ZEPHIR_SINIT_NVAR(_1);
 					mul_function(&_1, _22, _10 TSRMLS_CC);
 					zephir_array_fetch_long(&_22, paramater, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
@@ -278,7 +278,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					ZEPHIR_SINIT_NVAR(_28);
 					mul_function(&_28, &_2, _24 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_10);
-					sub_function(_10, &_1, &_28 TSRMLS_CC);
+					zephir_sub_function(_10, &_1, &_28 TSRMLS_CC);
 					zephir_array_update_multi(&psi, &_10 TSRMLS_CC, SL("ll"), 2, j, 1);
 				}
 			}
