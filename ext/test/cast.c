@@ -288,6 +288,71 @@ PHP_METHOD(Test_Cast, testBooleanCastFromNull) {
 }
 
 /** To object cast */
+PHP_METHOD(Test_Cast, testObjectCastFromInt) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 5);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Cast, testObjectCastFromFloat) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_DOUBLE(_0, 5.0);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Cast, testObjectCastFromFalse) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_BOOL(_0, 0);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Cast, testObjectCastFromTrue) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_BOOL(_0, 1);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Cast, testObjectCastFromNull) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_NULL(_0);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
 PHP_METHOD(Test_Cast, testObjectCastFromEmptyArray) {
 
 	zval *_0;

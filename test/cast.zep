@@ -139,6 +139,31 @@ class Cast
 
     /** To object cast */
 
+    public function testObjectCastFromInt()
+    {
+        return (object) 5;
+    }
+
+    public function testObjectCastFromFloat()
+    {
+        return (object) 5.0;
+    }
+
+    public function testObjectCastFromFalse()
+    {
+        return (object) false;
+    }
+
+    public function testObjectCastFromTrue()
+    {
+        return (object) true;
+    }
+
+    public function testObjectCastFromNull()
+    {
+        return (object) null;
+    }
+
     public function testObjectCastFromEmptyArray()
     {
         return (object) [];

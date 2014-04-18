@@ -19,11 +19,13 @@
 
 namespace Zephir\Operators\Other;
 
+use Zephir\Detectors\ReadDetector;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Builder\FunctionCallBuilder;
 
 /**
@@ -177,6 +179,25 @@ class CastOperator extends BaseOperator
 
             case 'object':
                 switch ($resolved->getType()) {
+                    case 'int':
+                    case 'double':
+                    case 'bool':
+                    case 'null':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
+
+                        /**
+                         * zephir_convert_to_object use zval variable
+                         * before use with it we create a new variable and assign value of literal
+                         */
+                        $let = new LetVariable();
+                        $original = $resolved->getOriginal();
+                        $original['operator'] = 'assign';
+                        $let->assign($symbolVariable->getName(), $symbolVariable, $resolved, new ReadDetector(), $compilationContext, $original);
+
+                        $compilationContext->codePrinter->output('zephir_convert_to_object('.$symbolVariable->getName().');');
+                        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
