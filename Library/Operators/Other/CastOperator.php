@@ -120,14 +120,33 @@ class CastOperator extends BaseOperator
 
             case 'double':
                 switch ($resolved->getType()) {
+                    case 'null':
+                        return new CompiledExpression('double', 0, $expression);
+
+                    case 'bool':
+                        return new CompiledExpression('double', $resolved->getBooleanCode(), $expression);
 
                     case 'double':
-                        return new CompiledExpression('int', $resolved->getCode(), $expression);
+                        return new CompiledExpression('double', $resolved->getCode(), $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-                        return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbolVariable->getName() . ')', $expression);
+
+                        switch ($symbolVariable->getType()) {
+                            case 'int':
+                                return new CompiledExpression('double', $symbolVariable->getName(), $expression);
+                            case 'double':
+                                return new CompiledExpression('double', '(double) (' . $symbolVariable->getName() . ')', $expression);
+                            case 'bool':
+                                return new CompiledExpression('double', '(double) (' . $symbolVariable->getName() . ')', $expression);
+                            case 'array':
+                            case 'variable':
+                                return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbolVariable->getName() . ')', $expression);
+                            default:
+                                throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
+                        }
+                        break;
 
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);

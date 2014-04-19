@@ -24,7 +24,7 @@ use Test\Cast;
 
 class CastTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCast()
+    public function testIntCast()
     {
         $t = new Cast();
 
@@ -43,6 +43,27 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testIntCastFromVariableEmptyArray() === 0);
         $this->assertTrue($t->testIntCastFromVariableArray() === 1);
         $this->assertTrue($t->testIntCastFromVariableStdClass() === 1);
+    }
+
+    public function testFloatCast()
+    {
+        $t = new Cast();
+
+        $this->assertTrue($t->testFloatCastFromFloat() === 5.0);
+        $this->assertTrue($t->testFloatCastFromBooleanTrue() === 1.0);
+        $this->assertTrue($t->testFloatCastFromBooleanFalse() === 0.0);
+        $this->assertTrue($t->testFloatCastFromNull() === 0.0);
+        $this->assertTrue($t->testFloatCastFromEmptyArray() === 0.0);
+        $this->assertTrue($t->testFloatCastFromArray() === 1.0);
+        $this->assertTrue($t->testFloatCastFromStdClass() === 1.0);
+
+        $this->assertTrue($t->testFloatCastFromVariableFloat() === 5.0);
+        $this->assertTrue($t->testFloatCastFromVariableBooleanTrue() === 1.0);
+        $this->assertTrue($t->testFloatCastFromVariableBooleanFalse() === 0.0);
+        $this->assertTrue($t->testFloatCastFromVariableNull() === 0.0);
+        $this->assertTrue($t->testFloatCastFromVariableEmptyArray() === 0.0);
+        $this->assertTrue($t->testFloatCastFromVariableArray() === 1.0);
+        $this->assertTrue($t->testFloatCastFromVariableStdClass() === 1.0);
     }
 
     public function testBooleanCast()

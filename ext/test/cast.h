@@ -17,6 +17,20 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableArray);
 PHP_METHOD(Test_Cast, testIntCastFromArray);
 PHP_METHOD(Test_Cast, testIntCastFromStdClass);
 PHP_METHOD(Test_Cast, testIntCastFromVariableStdClass);
+PHP_METHOD(Test_Cast, testFloatCastFromFloat);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableFloat);
+PHP_METHOD(Test_Cast, testFloatCastFromBooleanTrue);
+PHP_METHOD(Test_Cast, testFloatCastFromBooleanFalse);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanTrue);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableBooleanFalse);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableNull);
+PHP_METHOD(Test_Cast, testFloatCastFromNull);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableEmptyArray);
+PHP_METHOD(Test_Cast, testFloatCastFromEmptyArray);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableArray);
+PHP_METHOD(Test_Cast, testFloatCastFromArray);
+PHP_METHOD(Test_Cast, testFloatCastFromStdClass);
+PHP_METHOD(Test_Cast, testFloatCastFromVariableStdClass);
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue1);
 PHP_METHOD(Test_Cast, testBooleanCastFromIntTrue2);
 PHP_METHOD(Test_Cast, testBooleanCastFromIntFalse);
@@ -47,6 +61,20 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testIntCastFromArray, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromStdClass, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromVariableStdClass, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromFloat, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableFloat, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromBooleanTrue, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromBooleanFalse, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanTrue, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableBooleanFalse, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableNull, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromNull, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableEmptyArray, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromEmptyArray, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableArray, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromArray, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromStdClass, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testFloatCastFromVariableStdClass, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testBooleanCastFromIntTrue1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testBooleanCastFromIntTrue2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testBooleanCastFromIntFalse, NULL, ZEND_ACC_PUBLIC)
