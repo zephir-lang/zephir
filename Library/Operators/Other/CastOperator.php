@@ -202,6 +202,7 @@ class CastOperator extends BaseOperator
                     case 'double':
                     case 'bool':
                     case 'null':
+                    case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
 

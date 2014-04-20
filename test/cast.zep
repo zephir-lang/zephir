@@ -261,4 +261,14 @@ class Cast
     {
         return (object) [1, 2, 3, 4];
     }
+
+    public function testObjectCastFromEmptyString()
+    {
+        return (object) "";
+    }
+
+    public function testObjectCastFromString()
+    {
+        return (object) "test string";
+    }
 }

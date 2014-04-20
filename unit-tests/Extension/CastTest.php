@@ -91,5 +91,7 @@ class CastTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals((object) null, $t->testObjectCastFromNull());
         $this->assertEquals((object) array(), $t->testObjectCastFromEmptyArray());
         $this->assertEquals((object) array(1, 2, 3, 4), $t->testObjectCastFromArray());
+        $this->assertEquals((object) "", $t->testObjectCastFromEmptyString());
+        $this->assertEquals((object) "test string", $t->testObjectCastFromString());
     }
 }
