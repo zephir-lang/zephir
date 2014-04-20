@@ -441,6 +441,15 @@ double zephir_get_doubleval_ex(const zval *op) {
 	double double_value = 0;
 
 	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
+            break;
+#if PHP_VERSION_ID > 50400
+	    case IS_CALLABLE:
+#endif
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return (double) 1;
 		case IS_LONG:
 			return (double) Z_LVAL_P(op);
 		case IS_BOOL:
