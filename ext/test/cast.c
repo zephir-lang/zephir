@@ -567,3 +567,29 @@ PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 
 }
 
+PHP_METHOD(Test_Cast, testObjectCastFromEmptyString) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "", 1);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
+PHP_METHOD(Test_Cast, testObjectCastFromString) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "test string", 1);
+	zephir_convert_to_object(_0);
+	RETURN_CCTOR(_0);
+
+}
+
