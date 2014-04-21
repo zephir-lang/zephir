@@ -14,12 +14,24 @@ class Constants extends ConstantsParent
 
 	const C6 = "test";
 
+    /**
+     * Test property addSlashes for constants
+     */
+    const ANNOTATION_REGEX = '/@(\w+)(?:\s*(?:\(\s*)?(.*?)(?:\s*\))?)??\s*(?:\n|\*\/)/';
+    const PARAMETER_REGEX = '/(\w+)\s*=\s*(\[[^\]]*\]|"[^"]*"|[^,)]*)\s*(?:,|$)/';
+
 	protected propertyC1 = self::C1 {get};
 	protected propertyC2 = self::C2 {get};
 	protected propertyC3 = self::C3 {get};
 	protected propertyC4 = self::C4 {get};
 	protected propertyC5 = self::C5 {get};
 	protected propertyC6 = self::C6 {get};
+
+    /**
+     * @todo need fix Unknown default type: static-constant-access
+     */
+	//protected propertyC7 = self::ANNOTATION_REGEX {get};
+	//protected propertyC8 = self::PARAMETER_REGEX {get};
 
 	public function testReadConstant()
 	{

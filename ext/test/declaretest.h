@@ -3,6 +3,8 @@ extern zend_class_entry *test_declaretest_ce;
 
 ZEPHIR_INIT_CLASS(Test_DeclareTest);
 
+PHP_METHOD(Test_DeclareTest, testStringDeclare1);
+PHP_METHOD(Test_DeclareTest, testStringDeclare2);
 PHP_METHOD(Test_DeclareTest, testDeclare1);
 PHP_METHOD(Test_DeclareTest, testDeclare2);
 PHP_METHOD(Test_DeclareTest, testDeclare3);
@@ -20,6 +22,8 @@ PHP_METHOD(Test_DeclareTest, testDeclare14);
 PHP_METHOD(Test_DeclareTest, testDeclare15);
 
 ZEPHIR_INIT_FUNCS(test_declaretest_method_entry) {
+	PHP_ME(Test_DeclareTest, testStringDeclare1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_DeclareTest, testStringDeclare2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare3, NULL, ZEND_ACC_PUBLIC)

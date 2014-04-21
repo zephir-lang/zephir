@@ -44,6 +44,13 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 
+	/**
+	 * Test property addSlashes for constants
+	 */
+	zend_declare_class_constant_null(test_constants_ce, SL("ANNOTATION_REGEX") TSRMLS_CC);
+
+	zend_declare_class_constant_null(test_constants_ce, SL("PARAMETER_REGEX") TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -90,6 +97,9 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 }
 
+/**
+ * @todo need fix Unknown default type: static-constant-access
+ */
 PHP_METHOD(Test_Constants, testReadConstant) {
 
 
