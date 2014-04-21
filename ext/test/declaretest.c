@@ -26,6 +26,30 @@ ZEPHIR_INIT_CLASS(Test_DeclareTest) {
 
 }
 
+PHP_METHOD(Test_DeclareTest, testStringDeclare1) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\/)/", 1);
+
+	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_DeclareTest, testStringDeclare2) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", 1);
+
+	RETURN_CCTOR(a);
+
+}
+
 PHP_METHOD(Test_DeclareTest, testDeclare1) {
 
 	int a = 1;

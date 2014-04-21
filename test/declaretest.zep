@@ -7,6 +7,18 @@ namespace Test;
 
 class DeclareTest
 {
+    public function testStringDeclare1()
+    {
+        var a = "/@(\w+)(?:\s*(?:\(\s*)?(.*?)(?:\s*\))?)??\s*(?:\n|\*\/)/";
+        return a;
+    }
+
+    public function testStringDeclare2()
+    {
+        var a = "/(\w+)\s*=\s*(\[[^\]]*\]|\"[^\"]*\"|[^,)]*)\s*(?:,|$)/";
+        return a;
+    }
+
 	public function testDeclare1()
 	{
 		int a = 1;

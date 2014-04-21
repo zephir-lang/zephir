@@ -32,6 +32,10 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
 
+	zend_declare_property_string(test_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\/)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+
+	zend_declare_property_string(test_constants_ce, SL("propertyC8"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+
 	zend_declare_class_constant_null(test_constants_ce, SL("C1") TSRMLS_CC);
 
 	zend_declare_class_constant_bool(test_constants_ce, SL("C2"), 0 TSRMLS_CC);
@@ -43,6 +47,13 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 	zend_declare_class_constant_double(test_constants_ce, SL("C5"), 10.25 TSRMLS_CC);
 
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
+
+	/**
+	 * Test property addSlashes for constants
+	 */
+	zend_declare_class_constant_null(test_constants_ce, SL("ANNOTATION_REGEX") TSRMLS_CC);
+
+	zend_declare_class_constant_null(test_constants_ce, SL("PARAMETER_REGEX") TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -87,6 +98,20 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 
 	RETURN_MEMBER(this_ptr, "propertyC6");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC7) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC7");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC8) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC8");
 
 }
 
