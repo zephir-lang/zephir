@@ -24,7 +24,8 @@ namespace Zephir;
  * Class Types
  * @package Zephir
  */
-class Types {
+class Types
+{
     const CHAR = 'char';
     const STRING = 'string';
-} 
+}
