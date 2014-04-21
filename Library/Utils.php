@@ -33,12 +33,14 @@ class Utils
      * @param bool $escapeSlash
      * @return string
      */
-    public static function addSlashes($str, $escapeSlash = false)
+    public static function addSlashes($str, $escapeSlash = false, $type = Types::STRING)
     {
         /**
          * @todo Need fix because we need context in what quet it was declared '' or ""
          */
-        $str = str_replace('\"', '"', $str);
+        if ($type == Types::STRING) {
+            $str = str_replace('\"', '"', $str);
+        }
 
         if ($escapeSlash) {
             $str = addslashes($str);

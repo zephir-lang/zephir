@@ -27,11 +27,8 @@ class Constants extends ConstantsParent
 	protected propertyC5 = self::C5 {get};
 	protected propertyC6 = self::C6 {get};
 
-    /**
-     * @todo need fix Unknown default type: static-constant-access
-     */
-	//protected propertyC7 = self::ANNOTATION_REGEX {get};
-	//protected propertyC8 = self::PARAMETER_REGEX {get};
+	protected propertyC7 = self::ANNOTATION_REGEX {get};
+    protected propertyC8 = self::PARAMETER_REGEX {get};
 
 	public function testReadConstant()
 	{

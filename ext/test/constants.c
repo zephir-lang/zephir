@@ -32,6 +32,10 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
 
+	zend_declare_property_string(test_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\/)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+
+	zend_declare_property_string(test_constants_ce, SL("propertyC8"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+
 	zend_declare_class_constant_null(test_constants_ce, SL("C1") TSRMLS_CC);
 
 	zend_declare_class_constant_bool(test_constants_ce, SL("C2"), 0 TSRMLS_CC);
@@ -97,9 +101,20 @@ PHP_METHOD(Test_Constants, getPropertyC6) {
 
 }
 
-/**
- * @todo need fix Unknown default type: static-constant-access
- */
+PHP_METHOD(Test_Constants, getPropertyC7) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC7");
+
+}
+
+PHP_METHOD(Test_Constants, getPropertyC8) {
+
+
+	RETURN_MEMBER(this_ptr, "propertyC8");
+
+}
+
 PHP_METHOD(Test_Constants, testReadConstant) {
 
 

@@ -355,8 +355,9 @@ class ClassProperty
                     $codePrinter->output("zend_declare_property_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), 1, " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 }
                 break;
-            case 'string':
-                $codePrinter->output("zend_declare_property_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
+            case Types::CHAR:
+            case Types::STRING:
+                $codePrinter->output("zend_declare_property_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
             case 'array':
             case 'empty-array':
@@ -364,7 +365,7 @@ class ClassProperty
                 $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
             default:
-                throw new CompilerException('Unknown default type: ' . $this->_defaultValue['type'], $this->_original);
+                throw new CompilerException('Unknown default type: ' . $type, $this->_original);
         }
 
     }
