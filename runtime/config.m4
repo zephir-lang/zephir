@@ -13,7 +13,7 @@ if test "$PHP_ZEPHIR" = "yes"; then
 	LLVM_LDFLAGS=`llvm-config-3.3 --libs --ldflags core analysis executionengine jit interpreter native`
 	LLVM_CFLAGS=`llvm-config-3.3 --cflags`
 	LDFLAGS="$LDFLAGS -Wl,-rpath $LLVM_LDFLAGS"
-	CFLAGS="$CFLAGS -Wl,-rpath $LLVM_CFLAGS -O0 -g3"
+	CFLAGS="$CFLAGS -Wl,-rpath $LLVM_CFLAGS -O0 -g3 -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS"
 
 	dnl Check for stdc++:
 	LIBNAME=stdc++

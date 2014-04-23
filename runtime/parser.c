@@ -7624,7 +7624,7 @@ static void zephir_scanner_error_msg(zephir_parser_status *parser_status){
 /**
  * Parses a program returning an intermediate array representation
  */
-int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, char *file_path, zval **error_msg TSRMLS_DC) {
+int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, const char *file_path, zval **error_msg TSRMLS_DC) {
 
 	char *error;
 	zephir_scanner_state *state;
