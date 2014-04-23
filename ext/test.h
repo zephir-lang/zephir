@@ -59,6 +59,7 @@
 #include "test/oo/oonoconstruct.h"
 #include "test/oo/ooparams.h"
 #include "test/oo/propertyaccess.h"
+#include "test/pdostatement.h"
 #include "test/pregmatch.h"
 #include "test/properties/extendspublicproperties.h"
 #include "test/properties/privateproperties.h"

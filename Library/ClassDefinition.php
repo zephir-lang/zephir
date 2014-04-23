@@ -1076,6 +1076,10 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
                 $classEntry = 'php_pdo_get_dbh_ce()';
                 break;
+            case 'pdostatement':
+                $compilationContext->headersManager->add('kernel/main');
+                $classEntry = 'zephir_get_internal_ce(SS("pdostatement") TSRMLS_CC)';
+                break;
             case 'pdoexception':
                 $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
                 $classEntry = 'php_pdo_get_exception()';
