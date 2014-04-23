@@ -428,7 +428,7 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
 
     if (zend_hash_find(CG(class_table), class_name, class_name_len, (void **)&temp_ce) == FAILURE) {
         zend_error(E_ERROR, "Class '%s' not found", class_name);
-        return; \
+        return NULL;
     }
 
     return *temp_ce;
