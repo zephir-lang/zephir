@@ -31,4 +31,12 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
         $this->assertEquals(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
+
+    public function testPDOStatementExtending()
+    {
+        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+        $stmt = $pdo->prepare('SELECT CURRENT_TIME');
+
+        $this->assertInstanceof('Test\\PdoStatement', $stmt);
+    }
 }
