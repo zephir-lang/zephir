@@ -159,8 +159,9 @@ static void zephir_compile_program(zval *program TSRMLS_DC)
 /**
  * Opens a file and parses/compiles it using the Zephir parse
  */
-static void zephir_parse_file(char *file_name TSRMLS_DC)
+static void zephir_parse_file(const char *file_name TSRMLS_DC)
 {
+    char *file_name_pass = (char*) file_name;
 	char *contents;
 	php_stream *stream;
 	int len;
@@ -170,7 +171,7 @@ static void zephir_parse_file(char *file_name TSRMLS_DC)
 
 	context = php_stream_context_from_zval(zcontext, 0);
 
-	stream = php_stream_open_wrapper_ex(file_name, "rb", 0 | REPORT_ERRORS, NULL, context);
+	stream = php_stream_open_wrapper_ex(file_name_pass, "rb", 0 | REPORT_ERRORS, NULL, context);
 	if (!stream) {
 		return;
 	}
