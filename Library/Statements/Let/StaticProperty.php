@@ -244,7 +244,7 @@ class StaticProperty
                                 ));
                                 $expression->setExpectReturn(true, $tempVariable);
                                 $expression->compile($compilationContext);
-                                $compilationContext->codePrinter->output('concat_function(' . $variableVariable->getName() . ', ' . $tempVariable->getName() . ', '.$variableVariable->getName().' TSRMLS_CC);');
+                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariable->getName() . ', ' . $tempVariable->getName() . ', '.$variableVariable->getName().' TSRMLS_CC);');
                                 //continue
                             case 'assign':
                                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
