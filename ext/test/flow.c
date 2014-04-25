@@ -20,6 +20,7 @@
 #include "kernel/hash.h"
 #include "kernel/object.h"
 #include "kernel/exception.h"
+#include "kernel/iterator.h"
 
 
 /**
@@ -1569,10 +1570,8 @@ PHP_METHOD(Test_Flow, testFor32) {
 
 PHP_METHOD(Test_Flow, testFor33) {
 
-	HashTable *_2;
-	HashPosition _1;
-	int ZEPHIR_LAST_CALL_STATUS;
-	zval *e, *v = NULL, *result, *_0 = NULL, **_3;
+	zend_object_iterator *_0;
+	zval *e, *v = NULL, *result;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &e);
@@ -1585,27 +1584,25 @@ PHP_METHOD(Test_Flow, testFor33) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'", "", 0);
 		return;
 	}
-	ZEPHIR_CALL_FUNCTION(&_0, "iterator", NULL, e);
-	zephir_check_call_status();
-	zephir_is_iterable(_0, &_2, &_1, 0, 0);
-	for (
-	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
-	  ; zephir_hash_move_forward_ex(_2, &_1)
-	) {
-		ZEPHIR_GET_HVALUE(v, _3);
+	_0 = zephir_get_iterator(e TSRMLS_CC);
+	_0->funcs->rewind(_0 TSRMLS_CC);
+	for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
+		{ zval **tmp; 
+		_0->funcs->get_current_data(_0, &tmp TSRMLS_CC);
+		v = *tmp;
+		}
 		zephir_array_append(&result, v, PH_SEPARATE);
 	}
+	_0->funcs->dtor(_0 TSRMLS_CC);
 	RETURN_CCTOR(result);
 
 }
 
 PHP_METHOD(Test_Flow, testFor34) {
 
-	HashTable *_3;
-	HashPosition _2;
-	int ZEPHIR_LAST_CALL_STATUS;
+	zend_object_iterator *_1;
 	zend_bool _0;
-	zval *e = NULL, *v = NULL, *result, *_1 = NULL, **_4;
+	zval *e = NULL, *v = NULL, *result;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 0, 1, &e);
@@ -1626,16 +1623,16 @@ PHP_METHOD(Test_Flow, testFor34) {
 		return;
 	}
 	if (Z_TYPE_P(e) == IS_OBJECT) {
-		ZEPHIR_CALL_FUNCTION(&_1, "iterator", NULL, e);
-		zephir_check_call_status();
-		zephir_is_iterable(_1, &_3, &_2, 0, 0);
-		for (
-		  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
-		  ; zephir_hash_move_forward_ex(_3, &_2)
-		) {
-			ZEPHIR_GET_HVALUE(v, _4);
+		_1 = zephir_get_iterator(e TSRMLS_CC);
+		_1->funcs->rewind(_1 TSRMLS_CC);
+		for (;_1->funcs->valid(_1 TSRMLS_CC) == SUCCESS && !EG(exception); _1->funcs->move_forward(_1 TSRMLS_CC)) {
+			{ zval **tmp; 
+			_1->funcs->get_current_data(_1, &tmp TSRMLS_CC);
+			v = *tmp;
+			}
 			zephir_array_append(&result, v, PH_SEPARATE);
 		}
+		_1->funcs->dtor(_1 TSRMLS_CC);
 		RETURN_CCTOR(result);
 	}
 	ZEPHIR_MM_RESTORE();

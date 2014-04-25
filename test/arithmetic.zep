@@ -7,7 +7,7 @@ namespace Test;
 
 class Arithmetic
 {
-    /* ---------- SUM ----------------*/
+	/* ---------- SUM ----------------*/
 
 	public function intSum()
 	{

@@ -1034,6 +1034,9 @@ class ClassDefinition
             case 'recursiveregexiterator':
                 $classEntry = 'spl_ce_RecursiveRegexIterator';
                 break;
+             case 'directoryiterator':
+                $classEntry = 'spl_ce_DirectoryIterator';
+                break;
             case 'countable':
                 $classEntry = 'spl_ce_Countable';
                 break;

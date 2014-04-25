@@ -4,7 +4,6 @@
 #ifndef ZEPHIR_CLASS_ENTRIES_H
 #define ZEPHIR_CLASS_ENTRIES_H
 
-#include "test/internalclasses.h"
 #include "test/arithmetic.h"
 #include "test/assign.h"
 #include "test/bench/foo.h"
@@ -38,6 +37,7 @@
 #include "test/fortytwo.h"
 #include "test/globals.h"
 #include "test/instanceoff.h"
+#include "test/internalclasses.h"
 #include "test/internalinterfaces.h"
 #include "test/issettest.h"
 #include "test/json.h"
