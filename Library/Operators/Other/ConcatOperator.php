@@ -210,7 +210,7 @@ class ConcatOperator extends BaseOperator
         }
 
         if ($left->getType() == 'variable' && $right->getType() == 'variable') {
-            $compilationContext->codePrinter->output('concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC);');
+            $compilationContext->codePrinter->output('zephir_concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC);');
         }
 
         $expected->setDynamicTypes('string');
