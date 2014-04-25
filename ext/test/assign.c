@@ -1045,6 +1045,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign1) {
 	ZVAL_LONG(_0, 'A');
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), _0 TSRMLS_CC);
 	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "hello", 1);
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), _0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);

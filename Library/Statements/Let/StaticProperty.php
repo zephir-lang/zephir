@@ -136,12 +136,26 @@ class StaticProperty
                 break;
 
             case 'string':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
-                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
+                switch ($statement['operator']) {
+                    case 'assign':
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $tempVariable->initVariant($compilationContext);
+
+                        if ($resolvedExpr->getCode()) {
+                            $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                        } else {
+                            $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
+                        }
+
+                        if ($tempVariable->isTemporal()) {
+                            $tempVariable->setIdle(true);
+                        }
+                        break;
+                    default:
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
                 }
+
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $tempVariable->getName() . ' TSRMLS_CC);');
                 break;
 
             case 'bool':
@@ -216,6 +230,32 @@ class StaticProperty
                         break;
 
                     case 'string':
+                        switch ($statement['operator']) {
+                            case 'concat-assign':
+                                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                                $expression = new Expression(array(
+                                    'type' => 'static-property-access',
+                                    'left' => array(
+                                        'value' => $statement['variable']
+                                    ),
+                                    'right' => array(
+                                        'value' => $statement['property']
+                                    )
+                                ));
+                                $expression->setExpectReturn(true, $tempVariable);
+                                $expression->compile($compilationContext);
+                                $compilationContext->codePrinter->output('concat_function(' . $variableVariable->getName() . ', ' . $tempVariable->getName() . ', '.$variableVariable->getName().' TSRMLS_CC);');
+                                //continue
+                            case 'assign':
+                                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
+                                if ($variableVariable->isTemporal()) {
+                                    $variableVariable->setIdle(true);
+                                }
+                                break;
+                            default:
+                                throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                        }
+                        break;
                     case 'variable':
                     case 'array':
                         $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), ' . $variableVariable->getName() . ' TSRMLS_CC);');
