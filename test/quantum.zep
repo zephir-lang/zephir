@@ -20,13 +20,12 @@ class Quantum
 			k0 = 3.0 * Quantum::PI,
 			dt = dx * dx / 4.0;
 
-		let paramater =[dx, k0, dt, x];
+		let paramater = [dx, k0, dt, x];
 		let i 	= 0,
 			psr = [],
 			psi = [],
 			p2  = [],
-			v 	= [],
-			fp 	= [];
+			v   = [];
 
 		let fp = fopen("harmos.txt", "w");
 		if !fp {
@@ -34,11 +33,11 @@ class Quantum
 		}
 
 		while i <= Quantum::MAX{
-			let item_psi = sin(k0*x) / exp(x*x*2.0),
-				item_psr = cos(k0*x) / exp(x*x*2.0);
+			let item_psi = sin(k0 * x) / exp(x * x * 2.0),
+				item_psr = cos(k0 * x) / exp(x * x * 2.0);
 			let psr[i] = [item_psr],
 				psi[i] = [item_psi],
-				v[i] = [5.0*x*x],
+				v[i] = [5.0 * x * x],
 				x = x + dx,
 				i++;
 		}

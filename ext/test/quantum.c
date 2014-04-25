@@ -73,8 +73,6 @@ PHP_METHOD(Test_Quantum, Harmos) {
 	array_init(p2);
 	ZEPHIR_INIT_VAR(v);
 	array_init(v);
-	ZEPHIR_INIT_VAR(fp);
-	array_init(fp);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_STRING(&_1, "harmos.txt", 0);
 	ZEPHIR_SINIT_VAR(_2);
@@ -115,19 +113,19 @@ PHP_METHOD(Test_Quantum, Harmos) {
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, item_psr);
 		zephir_array_fast_append(_11, _0);
-		zephir_array_update_long(&psr, i, &_11, PH_COPY | PH_SEPARATE, "test/quantum.zep", 39);
+		zephir_array_update_long(&psr, i, &_11, PH_COPY | PH_SEPARATE, "test/quantum.zep", 38);
 		ZEPHIR_INIT_NVAR(_12);
 		array_init_size(_12, 2);
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, item_psi);
 		zephir_array_fast_append(_12, _0);
-		zephir_array_update_long(&psi, i, &_12, PH_COPY | PH_SEPARATE, "test/quantum.zep", 40);
+		zephir_array_update_long(&psi, i, &_12, PH_COPY | PH_SEPARATE, "test/quantum.zep", 39);
 		ZEPHIR_INIT_NVAR(_13);
 		array_init_size(_13, 2);
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, (double) ((double) (5.0 * x) * x));
 		zephir_array_fast_append(_13, _0);
-		zephir_array_update_long(&v, i, &_13, PH_COPY | PH_SEPARATE, "test/quantum.zep", 41);
+		zephir_array_update_long(&v, i, &_13, PH_COPY | PH_SEPARATE, "test/quantum.zep", 40);
 		x = (x + dx);
 		i++;
 	}
@@ -218,7 +216,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					mul_function(&_2, _30, _32 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_8);
 					zephir_add_function(_8, &_1, &_2 TSRMLS_CC);
-					zephir_array_update_long(&p2, i, &_8, PH_COPY | PH_SEPARATE, "test/quantum.zep", 54);
+					zephir_array_update_long(&p2, i, &_8, PH_COPY | PH_SEPARATE, "test/quantum.zep", 53);
 				}
 			}
 			_35 = (751 - 1);
