@@ -59,7 +59,7 @@ class FetchOperator extends BaseOperator
              * @todo use a read detector here
              */
             $readOnly = false;
-            $line = $compilationContext->symbolTable->getLastCallLine();
+            $line = max($compilationContext->symbolTable->getLastCallLine(), $compilationContext->symbolTable->getLastUnsetLine());
             if ($line === false || ($line > 0 && $line < $expression['line'])) {
                 $numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
                 if ($numberMutations == 1) {
