@@ -207,7 +207,7 @@ class Route
 													break;
 												}
 											}
- 										}
+										}
 
 										if foundPattern != 2 {
 											let route .= '(',
@@ -222,7 +222,7 @@ class Route
 											matches[item] = tmp;
 									}
 								} else {
-									let route .= "{" . item ."}";										
+									let route .= "{" . item ."}";
 								}
 								continue;
 							}

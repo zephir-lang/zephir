@@ -23,10 +23,10 @@
 
 
 
-// c implement fibonacci
+// c implementation of fibonacci
 static long fibonacci(long n) {
-		if (n < 2) return n;
-		else return fibonacci(n - 2) + fibonacci(n - 1);
+	if (n < 2) return n;
+	else return fibonacci(n - 2) + fibonacci(n - 1);
 }
 
 
@@ -34,7 +34,6 @@ static long fibonacci(long n) {
 
 /**
  * CBLOCK tests
- * asfas
  */
 ZEPHIR_INIT_CLASS(Test_Cblock) {
 
@@ -62,8 +61,8 @@ PHP_METHOD(Test_Cblock, testCblock2) {
 
 
 	
-				a = fibonacci(MAX_FACTOR);
-			
+			a = fibonacci(MAX_FACTOR);
+		
 	RETURN_LONG(a);
 
 }

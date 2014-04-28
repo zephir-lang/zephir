@@ -7,32 +7,32 @@ namespace Test;
 
 class Unsettest
 {
-    protected property;
+	protected property;
 
-    public function has(var key)
-    {
-        return isset this->property[key];
-    }
+	public function has(var key)
+	{
+		return isset this->property[key];
+	}
 
-    public function addValueToProperty(var key, var value)
-    {
-        let this->property[key] = value;
-    }
+	public function addValueToProperty(var key, var value)
+	{
+		let this->property[key] = value;
+	}
 
-    public function testUnsetValueFromProperty(var key)
-    {
-        unset(this->property[key]);
-    }
+	public function testUnsetValueFromProperty(var key)
+	{
+		unset(this->property[key]);
+	}
 
 	public function testUnsetFromArray(var arrayParameter)
 	{
-	    unset(arrayParameter[0]);
-	    return arrayParameter;
+		unset(arrayParameter[0]);
+		return arrayParameter;
 	}
 
 	public function testUnsetFromArrayByIndexVar(var arrayParameter, var index)
 	{
-	    unset(arrayParameter[index]);
-	    return arrayParameter;
+		unset(arrayParameter[index]);
+		return arrayParameter;
 	}
 }
