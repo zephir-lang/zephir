@@ -53,6 +53,6 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('bool', 'zephir_array_key_exists(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+        return new CompiledExpression('bool', 'zephir_array_key_exists(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC)', $expression);
     }
 }
