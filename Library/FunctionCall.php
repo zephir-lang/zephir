@@ -205,6 +205,10 @@ class FunctionCall extends Call
                     require_once $path;
 
                     $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
+                    if (!class_exists($className, false)) {
+                        throw new \Exception('Class ' . $className . ' cannot be loaded');
+                    }
+
                     $optimizer = new $className();
 
                     if (!($optimizer instanceof OptimizerAbstract)) {

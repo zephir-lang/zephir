@@ -34,7 +34,6 @@ class Config
         'warnings' => array(
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
-            'possible-wrong-parameter'           => true,
             'possible-wrong-parameter-undefined' => false,
             'nonexistent-function'               => true,
             'nonexistent-class'                  => true,
