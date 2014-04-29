@@ -889,20 +889,20 @@ class ClassMethod
             case 'uint':
             case 'long':
                 $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_LONG)) {' . PHP_EOL;
-                $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t\t" . '}' . PHP_EOL;
+                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
+                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+                $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
-                $code .= "\t\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+                $code .= "\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
                 return $code;
 
             case 'bool':
                 $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_BOOL)) {' . PHP_EOL;
-                $code .= "\t\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t\t" . '}' . PHP_EOL;
+                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
+                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
+                $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
-                $code .= "\t\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+                $code .= "\t" . $parameter['name'] . ' = Z_BVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
                 return $code;
 
             case 'double':
@@ -917,7 +917,7 @@ class ClassMethod
             case 'string':
             case 'ulong':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING && Z_TYPE_P(' . $parameter['name'] . '_param) != IS_NULL)) {' . PHP_EOL;
+                $code  = "\t\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_STRING && Z_TYPE_P(' . $parameter['name'] . '_param) != IS_NULL)) {' . PHP_EOL;
                 $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;

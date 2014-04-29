@@ -483,7 +483,7 @@ PHP_METHOD(Test_Mcall, optionalRequereString) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &param_param);
 
-	if (unlikely(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -620,11 +620,11 @@ PHP_METHOD(Test_Mcall, optionalParameterBoolean) {
 		start = 1;
 	} else {
 	if (unlikely(Z_TYPE_P(start_param) != IS_BOOL)) {
-			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be a bool") TSRMLS_CC);
-			RETURN_NULL();
-		}
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'start' must be a bool") TSRMLS_CC);
+		RETURN_NULL();
+	}
 
-		start = Z_BVAL_P(start_param);
+	start = Z_BVAL_P(start_param);
 	}
 
 
@@ -643,11 +643,11 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull) {
 		value = 0;
 	} else {
 	if (unlikely(Z_TYPE_P(value_param) != IS_BOOL)) {
-			zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be a bool") TSRMLS_CC);
-			RETURN_NULL();
-		}
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be a bool") TSRMLS_CC);
+		RETURN_NULL();
+	}
 
-		value = Z_BVAL_P(value_param);
+	value = Z_BVAL_P(value_param);
 	}
 
 

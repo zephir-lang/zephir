@@ -546,6 +546,40 @@ class Assign
 		return this->myArray;
 	}
 
+	public function testPropertyArray12(index)
+	{
+		var temp1, temp2, temp3;
+
+		let this->myArray[index][index][] = 1;
+		let this->myArray[index][index][] = 1.5;
+		let this->myArray[index][index][] = null;
+		let this->myArray[index][index][] = false;
+		let temp1 = this->myArray[index], temp2 = this->myArray;
+		let this->myArray[index][index][] = true;
+		let this->myArray[index][index][] = 'A';
+		let this->myArray[index][index][] = "hello";
+		let this->myArray[index][index][] = [];
+		let temp3 = count(this->myArray);
+		return this->myArray;
+	}
+
+	public function testPropertyArray13(index)
+	{
+		var temp1, temp2, temp3;
+
+		let this->myArray[index][] = 1;
+		let this->myArray[index][] = 1.5;
+		let this->myArray[index][] = null;
+		let this->myArray[index][] = false;
+		let temp1 = this->myArray[index], temp2 = this->myArray;
+		let this->myArray[index][] = true;
+		let this->myArray[index][] = 'A';
+		let this->myArray[index][] = "hello";
+		let this->myArray[index][] = [];
+		let temp3 = count(this->myArray);
+		return this->myArray;
+	}
+
 	public function testStaticPropertyAssign1()
 	{
 		let self::testVarStatic = 1;

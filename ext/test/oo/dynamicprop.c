@@ -39,7 +39,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyInt) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -67,7 +67,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolTrue) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -93,7 +93,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolFalse) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -119,7 +119,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyString) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -148,7 +148,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyChar) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -177,7 +177,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyUChar) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -205,7 +205,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -232,7 +232,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableInt) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -260,7 +260,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableString) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -289,7 +289,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
@@ -318,7 +318,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &property_param);
 
-	if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
+		if (unlikely(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
