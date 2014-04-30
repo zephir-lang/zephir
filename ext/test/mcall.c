@@ -483,7 +483,7 @@ PHP_METHOD(Test_Mcall, optionalRequereString) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &param_param);
 
-		if (unlikely(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
+	if (unlikely(Z_TYPE_P(param_param) != IS_STRING && Z_TYPE_P(param_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
