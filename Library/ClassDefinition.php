@@ -1034,7 +1034,7 @@ class ClassDefinition
             case 'recursiveregexiterator':
                 $classEntry = 'spl_ce_RecursiveRegexIterator';
                 break;
-             case 'directoryiterator':
+            case 'directoryiterator':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_DirectoryIterator';
                 break;
