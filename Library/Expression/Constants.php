@@ -137,7 +137,7 @@ class Constants
         $mergedConstants = array_merge($this->envConstans, $this->magickConstants, $this->resources);
         if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
-                $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistant-constant', $expression);
+                $compilationContext->logger->warning("Constant '" . $constantName . "' does not exist at compile time", 'nonexistent-constant', $expression);
             } else {
                 $isZephirConstant = true;
             }
