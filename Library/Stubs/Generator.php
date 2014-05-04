@@ -251,6 +251,9 @@ EOF;
                         case 'array':
                             $paramStr .= 'array()';
                             break;
+                        case 'static-constant-access':
+                            $paramStr .= $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
+                            break;
                         default:
                             $paramStr .= $parameter['default']['value'];
                             break;
