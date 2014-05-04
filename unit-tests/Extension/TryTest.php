@@ -36,4 +36,10 @@ class TryTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\TryTest();
         $t->testThrow2();
     }
+
+    public function testTryCatchInLoop()
+    {
+        $t = new \Test\TryTest();
+        $this->assertTrue($t->testTryCatchInLoop(array(3, 2, 1, 0)));
+    }
 }
