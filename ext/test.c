@@ -31,6 +31,7 @@ zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_scallparent_ce;
 zend_class_entry *test_arithmetic_ce;
+zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
 zend_class_entry *test_bench_foo_ce;
 zend_class_entry *test_bitwise_ce;
@@ -282,6 +283,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_ScallParent);
 	ZEPHIR_INIT(Test_Arithmetic);
+	ZEPHIR_INIT(Test_ArrayObject);
 	ZEPHIR_INIT(Test_Assign);
 	ZEPHIR_INIT(Test_Bench_Foo);
 	ZEPHIR_INIT(Test_Bitwise);
