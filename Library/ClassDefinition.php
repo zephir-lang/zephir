@@ -1048,6 +1048,10 @@ class ClassDefinition
                 $classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
                 break;
 
+            case 'arrayobject':
+                $compilationContext->headersManager->add('ext/spl/spl_array');
+                $classEntry = 'spl_ce_ArrayObject';
+                break;
             case 'splfixedarray':
                 $compilationContext->headersManager->add('ext/spl/spl_fixedarray');
                 $classEntry = 'spl_ce_SplFixedArray';

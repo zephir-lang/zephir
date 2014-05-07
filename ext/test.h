@@ -5,6 +5,7 @@
 #define ZEPHIR_CLASS_ENTRIES_H
 
 #include "test/arithmetic.h"
+#include "test/arrayobject.h"
 #include "test/assign.h"
 #include "test/bench/foo.h"
 #include "test/bitwise.h"
