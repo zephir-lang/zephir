@@ -19,6 +19,9 @@ please do two things:
 2. Run the full Zephir test suite with the `./vendor/bin/phpunit` command.  You're
    not off the hook even if you just stick to documentation; code
    examples in the docs are tested as well!
+3. If your pull request fix or add some functionality - you have to **add tests**.
+   That is very important. When you add tests, you are helping other developers,
+   and also yourself, do not make mistakes in the future.
 
 Pull requests will be treated as "review requests", and we will give
 feedback we expect to see corrected on
