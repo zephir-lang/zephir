@@ -43,6 +43,7 @@ class Utils
         }
 
         if ($escapeSlash) {
+            $str = str_replace('\\\\', '\\', $str);
             $str = addslashes($str);
         }
 
