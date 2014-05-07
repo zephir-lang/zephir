@@ -40,6 +40,7 @@ class Utils
          */
         if ($type == Types::STRING) {
             $str = str_replace('\"', '"', $str);
+            $str = str_replace('\\\\', '\\', $str);
         }
 
         if ($escapeSlash) {
