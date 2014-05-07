@@ -91,4 +91,32 @@ class Strings
 	{
 		return stripslashes(str);
 	}
+
+    public function testHardcodedMultilineString()
+    {
+        return "
+            Hello world
+        ";
+    }
+
+    public function testEchoMultilineString()
+    {
+        echo "
+            Hello world
+        ";
+    }
+
+    public function testTrimMultilineString()
+    {
+        return trim("
+            Hello world
+        ");
+    }
+
+    public function testWellEscapedMultilineString()
+    {
+        return trim("
+            \\\"\}\$hello\$\\\"\'
+        ");
+    }
 }
