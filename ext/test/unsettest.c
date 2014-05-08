@@ -15,6 +15,7 @@
 #include "kernel/array.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -95,6 +96,25 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 	zephir_array_unset(&arrayParameter, index, PH_SEPARATE);
 	RETURN_CCTOR(arrayParameter);
+
+}
+
+PHP_METHOD(Test_Unsettest, testUnsetTypedArray) {
+
+	zval *key = NULL;
+	zval *arr_param = NULL, *key_param = NULL;
+	zval *arr = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &arr_param, &key_param);
+
+	zephir_get_arrval(arr, arr_param);
+	ZEPHIR_SEPARATE_PARAM(arr);
+	zephir_get_strval(key, key_param);
+
+
+	zephir_array_unset(&arr, key, PH_SEPARATE);
+	RETURN_CTOR(arr);
 
 }
 

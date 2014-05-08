@@ -35,4 +35,10 @@ class Unsettest
 		unset(arrayParameter[index]);
 		return arrayParameter;
 	}
+
+	public function testUnsetTypedArray(array arr, string key)
+	{
+        unset(arr[key]);
+        return arr;
+	}
 }

@@ -54,13 +54,16 @@ class UnsetStatement extends StatementAbstract
                 $expr->setReadOnly(true);
                 $exprIndex = $expr->compile($compilationContext);
                 break;
+            case 'property-access':
+            case 'property-dynamic-access':
+                // @TODO: Implement it
 
             default:
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }
 
         $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
-        if ($variable->getType() != 'variable') {
+        if (!in_array($variable->getType(), array('variable', 'array'))) {
             throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression['left']);
         }
 
