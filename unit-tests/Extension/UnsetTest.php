@@ -19,11 +19,13 @@
 
 namespace Extension;
 
+use Test\Unsettest as UnsetTestExt;
+
 class UnsetTest extends \PHPUnit_Framework_TestCase
 {
     public function testUnsetFromArray()
     {
-        $t = new \Test\Unsettest();
+        $t = new UnsetTestExt();
 
         $testVar = array(1, 2, 3, 4, 5, 6);
         $this->assertSame(array(1 => 2, 3, 4, 5, 6), $t->testUnsetFromArray($testVar));
@@ -34,7 +36,7 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
 
     public function testUnsetValueFromProperty()
     {
-        $t = new \Test\Unsettest();
+        $t = new UnsetTestExt();
 
         $testVar = array(1, 2, 3, 4, 5, 6);
         $this->assertFalse($t->has('testVar'));
@@ -42,5 +44,19 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->has('testVar'));
         $t->testUnsetValueFromProperty('testVar');
         $this->assertFalse($t->has('testVar'));
+
+        $t->testUnsetProperty();
+        $this->assertEquals(null, $t->getProperty());
+    }
+
+    public function testStdClassUnset()
+    {
+        $t = new UnsetTestExt();
+
+        $equalsStdClass = new \StdClass;
+        $equalsStdClass->property1 = 12345;
+        $equalsStdClass->property3 = 12345;
+
+        $this->assertEquals($equalsStdClass, $t->testStdClassUnset());
     }
 }
