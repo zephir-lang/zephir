@@ -26,8 +26,10 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Unsettest();
 
         $testVar = array(1, 2, 3, 4, 5, 6);
-        assert($t->testUnsetFromArray($testVar) == array(1 => 2, 3, 4, 5, 6));
-        assert($t->testUnsetFromArrayByIndexVar($testVar, 0) == array(1 => 2, 3, 4, 5, 6));
+        $this->assertSame(array(1 => 2, 3, 4, 5, 6), $t->testUnsetFromArray($testVar));
+        $this->assertSame(array(1 => 2, 3, 4, 5, 6), $t->testUnsetFromArrayByIndexVar($testVar, 0));
+
+        $this->assertSame(array('foo' => 'bar'), $t->testUnsetTypedArray(array('foo' => 'bar', 'bar' => 'foo'), 'bar'));
     }
 
     public function testUnsetValueFromProperty()
@@ -35,10 +37,10 @@ class UnsetTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Unsettest();
 
         $testVar = array(1, 2, 3, 4, 5, 6);
-        assert($t->has('testVar') === false);
+        $this->assertFalse($t->has('testVar'));
         $t->addValueToProperty('testVar', $testVar);
-        assert($t->has('testVar') === true);
+        $this->assertTrue($t->has('testVar'));
         $t->testUnsetValueFromProperty('testVar');
-        assert($t->has('testVar') === false);
+        $this->assertFalse($t->has('testVar'));
     }
 }
