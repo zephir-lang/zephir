@@ -1261,7 +1261,13 @@ int zephir_unset_property(zval* object, const char* name TSRMLS_DC)
 		ZVAL_STRING(&member, name, 0);
 		old_scope = EG(scope);
 		EG(scope) = Z_OBJCE_P(object);
-		Z_OBJ_HT_P(object)->unset_property(object, &member, 0 TSRMLS_CC);
+
+		#if PHP_VERSION_ID < 50400
+			Z_OBJ_HT_P(object)->unset_property(object, &member TSRMLS_CC);
+		#else
+			Z_OBJ_HT_P(object)->unset_property(object, &member, 0 TSRMLS_CC);
+		#endif
+
 		EG(scope) = old_scope;
 
 		return SUCCESS;
