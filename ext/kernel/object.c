@@ -1251,7 +1251,7 @@ int zephir_update_property_empty_array(zend_class_entry *ce, zval *object, char 
 	return res;
 }
 
-int zephir_unset_property(zval* object, char* name TSRMLS_DC)
+int zephir_unset_property(zval* object, const char* name TSRMLS_DC)
 {
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		zval member;
