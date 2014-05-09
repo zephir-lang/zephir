@@ -1849,7 +1849,7 @@ class ClassMethod
              */
             $lastType = $this->_statements->getLastStatementType();
 
-            if ($lastType != 'return' && $lastType != 'throw') {
+            if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->_statements->getLastStatement())) {
 
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
@@ -1883,5 +1883,23 @@ class ClassMethod
         $codePrinter->clear();
 
         return null;
+    }
+
+    public function hasChildReturnStatementType($statement)
+    {
+        if (!isset($statement['statements']) || !is_array($statement['statements'])) {
+            return false;
+        }
+
+        $statements = $statement['statements'];
+        foreach ($statements as $item) {
+            $type = isset($item['type']) ? $item['type'] : null;
+            if ($type == 'return' || $type == 'throw') {
+                return true;
+            } else {
+                return $this->hasChildReturnStatementType($item);
+            }
+        }
+        return false;
     }
 }
