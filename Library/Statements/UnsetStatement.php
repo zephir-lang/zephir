@@ -66,6 +66,7 @@ class UnsetStatement extends StatementAbstract
                     $compilationContext->codePrinter->output('zephir_unset_property(' . $exprVar->getCode() . ', "' . $expression['right']['value'] . '" TSRMLS_CC);');
                 }
                 return true;
+                //no break because not need to go out switch case
             case 'property-dynamic-access':
                 //@todo fix it
             default:
