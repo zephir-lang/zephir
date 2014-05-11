@@ -43,7 +43,7 @@ class Generator
 
     /**
      * @param CompilerFile[] $files
-     * @param Config $config
+     * @param Config         $config
      */
     public function __construct(array $files, Config $config)
     {
@@ -101,9 +101,10 @@ EOF;
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
-            $source .= ' implements ' . implode(', ', array_map(function ($val) {
+            $interfaces = array_map(function ($val) {
                 return '\\' . $val;
-            }, $implementedInterfaces));
+            }, $implementedInterfaces);
+            $source .= ' implements ' . join(', ', $interfaces);
         }
 
         $source .= PHP_EOL . '{' . PHP_EOL;
@@ -119,46 +120,25 @@ EOF;
         $source .= PHP_EOL;
 
         foreach ($class->getMethods() as $method) {
-            $source .= $this->buildMethod($method) . PHP_EOL . PHP_EOL;
+            $source .= $this->buildMethod($method, $class->getType() === 'interface') . "\n\n";
         }
 
         return $source . '}' . PHP_EOL;
     }
 
     /**
-     * @param string $docBlock
-     * @return string
-     */
-    protected function buildDocBlock($docBlock)
-    {
-        $code = '';
-        $docBlock = '/' . $docBlock . '/';
-
-        foreach (explode("\n", $docBlock) as $line) {
-            $code .= "\t" . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
-        }
-
-        return $code;
-    }
-
-    /**
      * @param ClassProperty $property
+     *
      * @return string
      */
     protected function buildProperty(ClassProperty $property)
     {
-        $source = '';
-        $docBlock = $property->getDocBlock();
-        if ($docBlock) {
-            $source .= $this->buildDocBlock($docBlock);
-        }
-
         $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
         if ($property->isStatic()) {
             $visibility = 'static ' . $visibility;
         }
 
-        $source .= "\t" . $visibility . ' $' . $property->getName();
+        $source = $visibility . ' $' . $property->getName();
 
         switch ($property->getType()) {
             case 'null':
@@ -178,23 +158,19 @@ EOF;
                 $source .= ' = ' . $property->getValue();
                 break;
         }
+        $docBlock = new DocBlock($property->getDocBlock(), 4);
 
-        return $source . ';';
+        return $docBlock . "\n    " . $source . ';';
     }
 
     /**
      * @param ClassConstant $constant
+     *
      * @return string
      */
     protected function buildConstant(ClassConstant $constant)
     {
-        $source = '';
-        $docBlock = $constant->getDocBlock();
-        if ($docBlock) {
-            $source .= $this->buildDocBlock($docBlock);
-        }
-
-        $source .= "\t" . 'const ' . $constant->getName();
+        $source = 'const ' . $constant->getName();
 
         $value = $constant->getValueValue();
 
@@ -206,41 +182,42 @@ EOF;
                 $value = '"' . $value . '"';
                 break;
         }
+        $docBlock = new DocBlock($constant->getDocBlock(), 4);
 
-        return $source . ' = ' . $value . ';';
+        return $docBlock . "\n    " . $source . ' = ' . $value . ';';
     }
 
     /**
      * @param ClassMethod $method
+     *
+     * @param bool        $isInterface
+     *
      * @return string
      */
-    protected function buildMethod(ClassMethod $method)
+    protected function buildMethod(ClassMethod $method, $isInterface)
     {
         $modifier = implode(' ', $method->getVisibility());
         $modifier = str_replace(' inline', '', $modifier);
         $modifier = str_replace(' scoped', '', $modifier);
 
-        $docBlock = $method->getDocBlock();
-        if ($docBlock) {
-            $docBlock = $this->buildDocBlock($docBlock);
-        }
+        $docBlock = new MethodDocBlock($method, 4);
 
         $parameters = array();
         $methodParameters = $method->getParameters();
 
         if ($methodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
-                $paramStr = '$'.$parameter['name'];
+                $paramStr = '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
                     $paramStr .= ' = ';
 
-                    switch($parameter['default']['type']) {
+                    switch ($parameter['default']['type']) {
                         case 'null':
                             $paramStr .= 'null';
                             break;
                         case 'string':
-                            $paramStr .= '"'.$parameter['default']['value'].'"';
+                            $paramStr .= '"' . $parameter['default']['value'] . '"';
                             break;
                         case 'empty-array':
                             $paramStr .= 'array()';
@@ -252,7 +229,7 @@ EOF;
                             $paramStr .= 'array()';
                             break;
                         case 'static-constant-access':
-                            $paramStr .= $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
+                            $paramStr .= $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
                             break;
                         default:
                             $paramStr .= $parameter['default']['value'];
@@ -264,14 +241,14 @@ EOF;
             }
         }
 
-        $methodBody = "\t".$modifier . ' function '.$method->getName().'('.implode(', ', $parameters).')';
+        $methodBody = "\t" . $modifier . ' function ' . $method->getName() . '(' . implode(', ', $parameters) . ')';
 
-        if ($method->isAbstract()) {
+        if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
         } else {
             $methodBody .= ' {}';
         }
 
-        return $docBlock . $methodBody;
+        return $docBlock . "\n" . $methodBody;
     }
 }
