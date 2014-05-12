@@ -12,8 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/array.h"
 #include "kernel/object.h"
+#include "kernel/array.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 
@@ -28,6 +28,13 @@ ZEPHIR_INIT_CLASS(Test_Unsettest) {
 	zend_declare_property_null(test_unsettest_ce, SL("property"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(Test_Unsettest, getProperty) {
+
+
+	RETURN_MEMBER(this_ptr, "property");
 
 }
 
@@ -96,6 +103,36 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 	zephir_array_unset(&arrayParameter, index, PH_SEPARATE);
 	RETURN_CCTOR(arrayParameter);
+
+}
+
+PHP_METHOD(Test_Unsettest, testUnsetProperty) {
+
+
+	zephir_unset_property(this_ptr, "property" TSRMLS_CC);
+	RETURN_MEMBER(this_ptr, "property");
+
+}
+
+PHP_METHOD(Test_Unsettest, testStdClassUnset) {
+
+	zval *simpleObject, *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(simpleObject);
+	object_init(simpleObject);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 12345);
+	zephir_update_property_zval(simpleObject, SL("property1"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_STRING(_0, "test", 1);
+	zephir_update_property_zval(simpleObject, SL("property2"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_LONG(_0, 12345);
+	zephir_update_property_zval(simpleObject, SL("property3"), _0 TSRMLS_CC);
+	zephir_unset_property(simpleObject, "property2" TSRMLS_CC);
+	RETURN_CCTOR(simpleObject);
 
 }
 

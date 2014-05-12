@@ -55,9 +55,20 @@ class UnsetStatement extends StatementAbstract
                 $exprIndex = $expr->compile($compilationContext);
                 break;
             case 'property-access':
-            case 'property-dynamic-access':
-                // @TODO: Implement it
+                $expr = new Expression($expression['left']);
+                $expr->setReadOnly(true);
+                $exprVar = $expr->compile($compilationContext);
 
+                $compilationContext->headersManager->add('kernel/object');
+                if ($exprVar->getCode() == 'this') {
+                    $compilationContext->codePrinter->output('zephir_unset_property(this_ptr, "' . $expression['right']['value'] . '" TSRMLS_CC);');
+                } else {
+                    $compilationContext->codePrinter->output('zephir_unset_property(' . $exprVar->getCode() . ', "' . $expression['right']['value'] . '" TSRMLS_CC);');
+                }
+                return true;
+                //no break because not need to go out switch case
+            case 'property-dynamic-access':
+                //@todo fix it
             default:
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }

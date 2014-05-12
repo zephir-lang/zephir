@@ -299,3 +299,41 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 
 }
 
+PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
+
+
+	RETURN_STRING("\n            Hello world\n        ", 1);
+
+}
+
+PHP_METHOD(Test_Strings, testEchoMultilineString) {
+
+
+	php_printf("\n            Hello world\n        ");
+
+}
+
+PHP_METHOD(Test_Strings, testTrimMultilineString) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "\n            Hello world\n        ", 0);
+	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
+
+	zval _0;
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "\n            \\\"\}\$hello\$\\\"\'\n        ", 0);
+	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	return;
+
+}
+
