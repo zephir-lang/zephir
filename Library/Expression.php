@@ -296,7 +296,7 @@ class Expression
                         return new CompiledExpression('int', $expression['value'], $expression);
                     }
                 }
-                return new LiteralCompiledExpression('string', $expression['value'], $expression);
+                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 
             case 'char':
                 if (!strlen($expression['value'])) {
