@@ -17,6 +17,7 @@
 #include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
+#include "kernel/hash.h"
 
 
 ZEPHIR_INIT_CLASS(Test_TryTest) {
@@ -441,6 +442,56 @@ PHP_METHOD(Test_TryTest, testTry10) {
 	if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
 		zend_clear_exception(TSRMLS_C);
 		RETURN_MM_STRING("domain error", 1);
+	}
+	RETURN_MM_BOOL(0);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/369
+ */
+PHP_METHOD(Test_TryTest, testTryCatchInLoop) {
+
+	zephir_fcall_cache_entry *_4 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	HashTable *_1;
+	HashPosition _0;
+	zval *arr_param = NULL, *val = NULL, **_2, *_3 = NULL, *_5 = NULL;
+	zval *arr = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &arr_param);
+
+	zephir_get_arrval(arr, arr_param);
+
+
+	zephir_is_iterable(arr, &_1, &_0, 0, 0);
+	for (
+	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
+	  ; zephir_hash_move_forward_ex(_1, &_0)
+	) {
+		ZEPHIR_GET_HVALUE(val, _2);
+
+		/* try_start_1: */
+
+			if (ZEPHIR_IS_LONG(val, 0)) {
+				ZEPHIR_INIT_LNVAR(_3);
+				object_init_ex(_3, zend_exception_get_default(TSRMLS_C));
+				ZEPHIR_CALL_METHOD(NULL, _3, "__construct", &_4);
+				zephir_check_call_status_or_jump(try_end_1);
+				zephir_throw_exception_debug(_3, "test/trytest.zep", 165 TSRMLS_CC);
+				goto try_end_1;
+
+			}
+
+		try_end_1:
+
+		ZEPHIR_INIT_NVAR(_5);
+		ZEPHIR_CPY_WRT(_5, EG(exception));
+		if (zephir_is_instance_of(_5, SL("e") TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_BOOL(1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 

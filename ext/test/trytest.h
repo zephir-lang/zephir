@@ -17,6 +17,7 @@ PHP_METHOD(Test_TryTest, someMethod1);
 PHP_METHOD(Test_TryTest, someMethod2);
 PHP_METHOD(Test_TryTest, testTry9);
 PHP_METHOD(Test_TryTest, testTry10);
+PHP_METHOD(Test_TryTest, testTryCatchInLoop);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_trytest_testtry4, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
@@ -34,6 +35,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_trytest_testtry7, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_trytest_testtrycatchinloop, 0, 0, 1)
+	ZEND_ARG_INFO(0, arr)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_trytest_method_entry) {
 	PHP_ME(Test_TryTest, testThrow1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_TryTest, testThrow2, NULL, ZEND_ACC_PUBLIC)
@@ -49,5 +54,6 @@ ZEPHIR_INIT_FUNCS(test_trytest_method_entry) {
 	PHP_ME(Test_TryTest, someMethod2, NULL, ZEND_ACC_PRIVATE)
 	PHP_ME(Test_TryTest, testTry9, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_TryTest, testTry10, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_TryTest, testTryCatchInLoop, arginfo_test_trytest_testtrycatchinloop, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

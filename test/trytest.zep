@@ -153,4 +153,21 @@ class TryTest
 		return false;
 	}
 
+    /**
+     * @link https://github.com/phalcon/zephir/issues/369
+     */
+    public function testTryCatchInLoop(array arr)
+    {
+        var val;
+        for val in arr {
+            try {
+                if val == 0 {
+                    throw new \Exception();
+                }
+            } catch e {
+                return true;
+            }
+        }
+        return false;
+    }
 }
