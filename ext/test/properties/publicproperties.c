@@ -75,6 +75,22 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
 }
 
+PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
+
+	zval *_1;
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_BNVAR(_0);
+	ZVAL_STRING(_0, "someTrue", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	RETURN_CCTOR(_1);
+
+}
+
 PHP_METHOD(Test_Properties_PublicProperties, __construct) {
 
 	zval *_1;

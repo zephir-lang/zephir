@@ -208,7 +208,7 @@ class Expression
          */
         if ($this->_expecting) {
             if ($this->_expectingVariable) {
-                $symbolVariable = &$this->_expectingVariable;
+                $symbolVariable = & $this->_expectingVariable;
                 $symbolVariable->initVariant($compilationContext);
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
@@ -335,6 +335,7 @@ class Expression
                 $propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $propertyAccess->compile($expression, $compilationContext);
 
+            case 'property-string-access':
             case 'property-dynamic-access':
                 $propertyAccess = new PropertyDynamicAccess();
                 $propertyAccess->setReadOnly($this->isReadOnly());
