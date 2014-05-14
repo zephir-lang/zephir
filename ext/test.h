@@ -26,6 +26,7 @@
 #include "test/diinterface.h"
 #include "test/echoes.h"
 #include "test/emptytest.h"
+#include "test/evaltest.h"
 #include "test/exception.h"
 #include "test/exceptions.h"
 #include "test/exists.h"
