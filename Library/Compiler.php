@@ -76,6 +76,11 @@ class Compiler
     protected static $_loadedPrototypes = false;
 
     /**
+     * @var array
+     */
+    protected $_extraFiles = array();
+
+    /**
      * Compiler constructor
      *
      * @param Config $config
@@ -825,8 +830,8 @@ class Compiler
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
             '%PROJECT_CAMELIZE%'     => ucfirst($project),
-            '%FILES_COMPILED%'       => implode(' ', $compiledFiles),
-            '%EXTRA_FILES_COMPILED%' => implode(' ', $this->_extraFiles),
+            '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
+            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->_extraFiles),
         );
 
         foreach ($toReplace as $mark => $replace) {
