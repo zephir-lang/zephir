@@ -525,7 +525,7 @@ class Compiler
          */
         if (self::$_loadedPrototypes == false) {
 
-            FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
+            FunctionCall::addOptimizerDir(__DIR__ . '/Optimizers/FunctionCall');
 
             $optimizerDirs = $this->_config->get('optimizer-dirs');
             if (is_array($optimizerDirs)) {

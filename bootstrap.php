@@ -26,6 +26,6 @@ define('2T', "\t\t");
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require __DIR__ . '/vendor/autoload.php';
 } else {
-    require __DIR__ . '/Library/Loader.php';
+    require __DIR__ . '/src/Loader.php';
     Zephir\Loader::register();
 }

@@ -23,7 +23,7 @@ before_script:
  - ulimit -c unlimited || true
 
 script:
- - php phpcs.phar --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
+ - php phpcs.phar --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 src/ unit-tests/Extension/ unit-tests/Zephir/
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes phpunit --debug --coverage-clover="build/logs/clover.xml" --coverage-text="php://stdout"
 
 after_script:
