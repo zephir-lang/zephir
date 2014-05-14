@@ -12,6 +12,7 @@ before_install:
 
 install:
  - composer --prefer-source install
+ - wget -c https://github.com/squizlabs/PHP_CodeSniffer/releases/download/2.0.0a2/phpcs.phar
 
 before_script:
  - mkdir -p build/coverage
@@ -22,7 +23,7 @@ before_script:
  - ulimit -c unlimited || true
 
 script:
- - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
+ - php phpcs.phar --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes phpunit --debug --coverage-clover="build/logs/clover.xml" --coverage-text="php://stdout"
 
 after_script:
