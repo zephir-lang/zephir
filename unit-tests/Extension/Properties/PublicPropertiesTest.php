@@ -19,11 +19,13 @@
 
 namespace Extension\Properties;
 
+use Test\Properties\PublicProperties;
+
 class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
-        $t = new \Test\Properties\PublicProperties();
+        $t = new PublicProperties();
 
         $this->assertTrue($t->someNull === null);
         $this->assertTrue($t->someNullInitial === null);
@@ -35,5 +37,11 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $t->someEmptyArray);
         $this->assertEquals(array(1, 2, 3, 4), $t->someArray);
+    }
+
+    public function test394Issue()
+    {
+        $t = new PublicProperties();
+        $this->assertTrue($t->test394Issue());
     }
 }
