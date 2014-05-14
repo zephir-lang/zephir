@@ -37,7 +37,7 @@ class Bootstrap
      * Shows an exception opening the file and highlighing the wrong part
      *
      * @param \Exception $e
-     * @param Config $config
+     * @param Config     $config
      */
     protected static function showException(\Exception $e, Config $config = null)
     {
@@ -67,7 +67,6 @@ class Bootstrap
 
         exit(1);
     }
-
 
     /**
      * Returns the commands registered in the compiler
@@ -141,7 +140,7 @@ class Bootstrap
              * Register built-in commands
              * @var $item \DirectoryIterator
              */
-            foreach (new \DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
+            foreach (new \DirectoryIterator(__DIR__ . '/Commands') as $item) {
                 if (!$item->isDir()) {
 
                     $className = 'Zephir\\Commands\\' . str_replace('.php', '', $item->getBaseName());
@@ -178,7 +177,6 @@ class Bootstrap
              * Execute the command
              */
             self::$commands[$action]->execute($config, $logger);
-
         } catch (\Exception $e) {
             self::showException($e, isset($config) ? $config : null);
         }

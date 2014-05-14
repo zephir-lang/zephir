@@ -30,7 +30,7 @@ class Call
 {
     /**
      * Call expression
-	 * @var Expression
+     * @var Expression
      */
     protected $_expression;
 
@@ -194,10 +194,11 @@ class Call
     /**
      * Resolves paramameters
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param boolean $readOnly
+     * @param array              $expression
+     * @param boolean            $readOnly
+     *
      * @return array|null|CompiledExpression[]
      */
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
@@ -286,15 +287,16 @@ class Call
      * Resolve parameters getting aware that the target function/method could retain or change
      * the parameters
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param array $calleeDefinition
+     * @param array              $expression
+     * @param array              $calleeDefinition
+     *
      * @return array
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, $expression, $calleeDefinition = null)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = & $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
 
         /**
@@ -477,20 +479,22 @@ class Call
         $this->_resolvedTypes = $types;
         $this->_resolvedDynamicTypes = $dynamicTypes;
         $this->_mustCheckForCopy = $mustCheck;
+
         return $params;
     }
 
     /**
      * Resolve parameters using zvals in the stack and without allocating memory for constants
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
+     * @param array              $expression
+     *
      * @return array
      */
     public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, $expression)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = & $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
         $params = array();

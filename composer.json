@@ -23,12 +23,11 @@
     },
     "require-dev": {
         "satooshi/php-coveralls": "0.6.1",
-        "squizlabs/php_codesniffer": "1.5.2",
         "ext-gmp": "*"
     },
     "autoload": {
         "psr-4": {
-            "Zephir\\": "Library"
+            "Zephir\\": "src"
         }
     },
     "bin": ["bin/zephir"],
