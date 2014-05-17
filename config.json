@@ -3,6 +3,18 @@
         "path": "ide\/%version%\/%namespace%\/",
         "stubs-run-after-generate": false
     },
+
+    "documentation": {
+        "output-directory":"doc\/%version%\/%namespace%\/",
+        "theme" : {
+            "additional-directories" : [],
+            "name":"zephir",
+            "options":{
+
+            }
+        }
+    },
+
     "warnings": {
         "unused-variable": true,
         "unused-variable-external": false,

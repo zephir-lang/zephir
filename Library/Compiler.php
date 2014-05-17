@@ -973,6 +973,30 @@ class Compiler
         $stubsGenerator->generate($path);
     }
 
+
+    /**
+     * Generate documentations
+     *
+     * @param CommandInterface $command
+     * @param bool             $fromGenerate
+     */
+    public function documentation(CommandInterface $command, $a = false)
+    {
+
+        $this->generate($command);
+
+        $this->_logger->output('Generating documentation...');
+
+        $path = $this->_config->get('path', 'documentation');
+        $path = str_replace('%version%', $this->_config->get('version'), $path);
+        $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
+
+
+
+        $documentator = new Documentation($this->_files, $this->_config);
+        $documentator->build();
+    }
+
     /**
      * Compiles and installs the extension
      *

@@ -31,6 +31,16 @@ class Config
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
         ),
+
+        'documentation' => array(
+
+            "output-directory" => "doc/%version%",
+
+            "theme" => array(
+                "name" => "zephir"
+            )
+        ),
+
         'warnings' => array(
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
