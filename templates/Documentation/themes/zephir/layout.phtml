@@ -1,0 +1,36 @@
+<html>
+
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/style.css") ?>" />
+    </head>
+
+
+    <body>
+        <div id="top-bar">
+            <div id="top-left">
+                Zephir Documentation <span class="version">v1.0.1</span>
+            </div>
+            <div id="top-right">
+                <form >
+                    <input class="search-box" placeholder="Search for a class, method..." type="text" />
+                </form>
+            </div>
+        </div>
+
+        <div id="body">
+
+            <div id="body-left"></div>
+            <div id="body-right">
+                <div class="content">
+                    <?= $this->partial($contentPartial) ?>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+
+
+</html>

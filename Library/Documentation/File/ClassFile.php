@@ -34,15 +34,18 @@ class ClassFile extends AbstractFile {
     {
         return array(
 
+            "classDefinition" => $this->class,
             "className" => $this->class->getName(),
             "classNamespace" => $this->class->getNamespace(),
+            "fullName"  => $this->class->getCompleteName(),
+            "methods"   => $this->class->getMethods()
 
         );
     }
 
     public function getOutputFile()
     {
-        return "html/class/" . str_replace("\\","/", $this->class->getCompleteName()) . ".html" ;
+        return "class/" . str_replace("\\","/", $this->class->getCompleteName()) . ".html" ;
     }
 
 

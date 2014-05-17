@@ -1,0 +1,187 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+
+body{
+    background: #ebebeb;
+
+    margin-top: 76px;
+    margin-left:240px;
+    min-width: 360px;
+
+}
+
+
+body,div,a,p{
+    font-family:arial, sans-serif;
+}
+
+.standard-bandeau{
+    background : #7A6085;
+    padding: 8px;
+    margin-top:8px;
+    font-size: 24px;
+    color:white;
+    font-weight: bold;
+}
+
+#top-bar{
+    height:76px;
+    background : #7A6085;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+}
+
+#top-left{
+    float:left;
+    font-family:arial, sans-serif;
+    color:#FFFFFF;
+    font-size: 26px;
+    font-weight: bold;
+    margin-top:25px;
+    margin-left:35px;
+}
+
+#top-left .version{
+    font-size: 12px;
+}
+
+#top-right{
+    float:right;
+}
+
+#body-left{
+    position: fixed;
+    top:76px;
+    left:0;
+    bottom:0;
+    width:235px;
+    border-right: solid #C2C2C2 4px;
+    overflow-y:auto;
+}
+
+.clearfix:after {
+    content:"";
+    display:block;
+    clear: both;
+}
+
+
+#body-right .content{
+
+    padding:25px 35px;
+
+}
+
+ul.method-summary-list li{
+    border-bottom: 1px solid #C4ADDD;
+    padding: 11px 0 4px 0;
+    height: 25px;
+}
+
+
+ul.method-summary-list li:nth-child(odd){
+
+}
+
+ul.method-summary-list li:nth-child(even){
+    background: #F5F5F5;
+}
+
+.method-summary-list .class-method{
+    font-size: 13px;
+}
+
+.method-summary-list .class-method .method-return{
+    float:left;
+    width:140px;
+    height: 100%;
+}
+
+.method-name{
+    color: #404040;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.param-data-type{
+    font-weight: bold;
+    color:#555;
+
+}
+
+
+
+ul.method-details-list li{
+    border-bottom: 1px solid #C4ADDD;
+    padding: 11px 0 4px 3px;
+
+}
+
+.method-details-list .method-name{
+
+    font-size: 16px;
+
+}
+
+.method-details .method-signature{
+    font-size: 12px;
+}
+
+.method-details .method-signature .method-name{
+    font-size: 14px;
+}
+
+.method-details-details{
+    margin-left:25px;
+}
+
