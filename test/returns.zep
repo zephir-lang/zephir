@@ -21,4 +21,13 @@ class Returns
 	{
 		return (int) false;
 	}
+
+	public function testReturnCast4() -> int
+	{
+		if true {
+			return (int)1;
+		} else {
+			return (int)0;
+		}
+	}
 }

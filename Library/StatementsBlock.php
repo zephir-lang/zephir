@@ -321,4 +321,14 @@ class StatementsBlock
     {
         return $this->_lastStatement['type'];
     }
+
+    /**
+     * Returns the last statement executed
+     *
+     * @return array
+     */
+    public function getLastStatement()
+    {
+        return $this->_lastStatement;
+    }
 }
