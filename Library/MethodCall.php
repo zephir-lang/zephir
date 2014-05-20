@@ -75,6 +75,7 @@ class MethodCall extends Call
                             if (class_exists($builtInTypeClass)) {
                                 $tmpBuiltInType = new $builtInTypeClass;
                                 if ($tmpBuiltInType->hasMethod($methodname)) {
+                                    $builtInType = $tmpBuiltInType;
                                     $caller = $exprCompiledVariable;
                                     break;
                                 }
