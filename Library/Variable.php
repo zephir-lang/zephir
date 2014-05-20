@@ -925,6 +925,15 @@ class Variable
     }
 
     /**
+     * Shortcut is type bool?
+     * @return bool
+     */
+    public function isBoolean()
+    {
+        return $this->_type == 'bool';
+    }
+
+    /**
      * Shortcut is type string?
      * @return bool
      */
@@ -940,6 +949,15 @@ class Variable
     public function isInt()
     {
         return $this->_type == 'int';
+    }
+
+    /**
+     * Shortcut is type double?
+     * @return bool
+     */
+    public function isDouble()
+    {
+        return $this->_type == 'double';
     }
 
     /**

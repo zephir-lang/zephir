@@ -339,7 +339,7 @@ class BitwiseBaseOperator extends BaseOperator
                                 return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
                             case 'variable':
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
+                                $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
 
                                     case 'int':

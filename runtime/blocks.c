@@ -30,9 +30,11 @@
 #include "statements/echo.h"
 #include "statements/if.h"
 #include "statements/while.h"
+#include "statements/loop.h"
 #include "statements/let.h"
 #include "statements/declare.h"
 #include "statements/return.h"
+#include "statements/break.h"
 
 LLVMValueRef zephir_compile_block(zephir_context *context, zval *statements TSRMLS_DC)
 {
@@ -85,6 +87,18 @@ LLVMValueRef zephir_compile_block(zephir_context *context, zval *statements TSRM
 		if (!memcmp(Z_STRVAL_P(type), SS("while"))) {
 			context->is_unrecheable = 0;
 			zephir_statement_while(context, *statement);
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(type), SS("loop"))) {
+			context->is_unrecheable = 0;
+			zephir_statement_loop(context, *statement);
+			continue;
+		}
+
+		if (!memcmp(Z_STRVAL_P(type), SS("break"))) {
+			context->is_unrecheable = 1;
+			zephir_statement_break(context, *statement);
 			continue;
 		}
 

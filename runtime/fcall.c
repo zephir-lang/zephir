@@ -115,9 +115,6 @@ zephir_compiled_expr *zephir_strlen_optimizer(zephir_context *context, zval *exp
 	compiled_expr->type  = ZEPHIR_T_TYPE_LONG;
 
 	args = zephir_resolve_parameters(context, parameters);
-
-	LLVMDumpValue(args[0]);
-
 	compiled_expr->value = LLVMBuildCall(context->builder, zephir_get_strlen(context), args, 1, "");
 
 	efree(args);

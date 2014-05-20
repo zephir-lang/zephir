@@ -180,7 +180,7 @@ class Bootstrap
             self::$commands[$action]->execute($config, $logger);
 
         } catch (\Exception $e) {
-            self::showException($e, $config);
+            self::showException($e, isset($config) ? $config : null);
         }
     }
 }

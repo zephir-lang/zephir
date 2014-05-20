@@ -285,6 +285,39 @@ int zephir_compare_strict_long(zval *op1, long op2 TSRMLS_DC) {
 }
 
 /**
+ * Natural compare with double operandus on right
+ */
+int zephir_compare_strict_double(zval *op1, double op2 TSRMLS_DC) {
+
+	int bool_result;
+
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return Z_LVAL_P(op1) == (long) op2;
+		case IS_DOUBLE:
+			return Z_DVAL_P(op1) == op2;
+		case IS_NULL:
+			return 0 == op2;
+		case IS_BOOL:
+			if (Z_BVAL_P(op1)) {
+				return 1 == op2;
+			} else {
+				return 0 == op2;
+			}
+		default:
+			{
+				zval result, op2_tmp;
+				ZVAL_DOUBLE(&op2_tmp, op2);
+				is_equal_function(&result, op1, &op2_tmp TSRMLS_CC);
+				bool_result = Z_BVAL(result);
+				return bool_result;
+			}
+	}
+
+	return 0;
+}
+
+/**
  * Natural compare with bool operandus on right
  */
 int zephir_compare_strict_bool(zval *op1, zend_bool op2 TSRMLS_DC) {
@@ -353,6 +386,10 @@ void zephir_negate(zval *z TSRMLS_DC) {
 	}
 }
 
+void zephir_convert_to_object(zval *op) {
+    convert_to_object(op);
+}
+
 /**
  * Cast variables converting they to other types
  */
@@ -388,6 +425,16 @@ void zephir_cast(zval *result, zval *var, zend_uint type){
 long zephir_get_intval_ex(const zval *op) {
 
 	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
+            break;
+
+#if PHP_VERSION_ID > 50400
+	    case IS_CALLABLE:
+#endif
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return 1;
 
 		case IS_LONG:
 			return Z_LVAL_P(op);
@@ -401,6 +448,7 @@ long zephir_get_intval_ex(const zval *op) {
 		case IS_STRING: {
 			long long_value = 0;
 			double double_value = 0;
+
 			ASSUME(Z_STRVAL_P(op) != NULL);
 			zend_uchar type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0);
 			if (type == IS_LONG) {
@@ -426,6 +474,15 @@ double zephir_get_doubleval_ex(const zval *op) {
 	double double_value = 0;
 
 	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
+            break;
+#if PHP_VERSION_ID > 50400
+	    case IS_CALLABLE:
+#endif
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return (double) 1;
 		case IS_LONG:
 			return (double) Z_LVAL_P(op);
 		case IS_BOOL:

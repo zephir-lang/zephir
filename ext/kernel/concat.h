@@ -29,3 +29,4 @@ void zephir_concat_sv(zval **result, const char *op1, zend_uint op1_len, zval *o
 void zephir_concat_svs(zval **result, const char *op1, zend_uint op1_len, zval *op2, const char *op3, zend_uint op3_len, int self_var TSRMLS_DC);
 void zephir_concat_vs(zval **result, zval *op1, const char *op2, zend_uint op2_len, int self_var TSRMLS_DC);
 void zephir_concat_vv(zval **result, zval *op1, zval *op2, int self_var TSRMLS_DC);
+void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);

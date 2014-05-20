@@ -40,6 +40,8 @@ class LocalContextPass
 
     protected $_lastCallLine = false;
 
+    protected $_lastUnsetLine = false;
+
     /**
      * Do the compilation pass
      *
@@ -134,6 +136,15 @@ class LocalContextPass
     public function getLastCallLine()
     {
         return $this->_lastCallLine;
+    }
+
+    /**
+     * Returns the line where the latest unset operation was made
+     * @return int
+     */
+    public function getLastUnsetLine()
+    {
+        return $this->_lastUnsetLine;
     }
 
     public function passLetStatement(array $statement)
@@ -517,6 +528,7 @@ class LocalContextPass
                             }
                         }
                     }
+                    $this->_lastUnsetLine = $statement['line'];
                     break;
 
                 case 'break':

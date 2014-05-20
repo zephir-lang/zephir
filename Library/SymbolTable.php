@@ -776,7 +776,7 @@ class SymbolTable
     }
 
     /**
-     * Returns the last line where a any kind of call is performed within the method
+     * Returns the last line where any kind of call was performed within the method
      * This is not necessary related to the symbol table but this information is gathered
      * by the LocalContextPass
      *
@@ -786,6 +786,21 @@ class SymbolTable
     {
         if ($this->_localContext) {
             return $this->_localContext->getLastCallLine();
+        }
+        return 0;
+    }
+
+    /**
+     * Returns the last line where an 'unset' operation was made within the current method
+     * This is not necessary related to the symbol table but this information is gathered
+     * by the LocalContextPass
+     *
+     * @return int
+     */
+    public function getLastUnsetLine()
+    {
+        if ($this->_localContext) {
+            return $this->_localContext->getLastUnsetLine();
         }
         return 0;
     }

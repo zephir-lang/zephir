@@ -99,15 +99,24 @@ class CompilerFile
             throw new Exception('zephir-parser was not found');
         }
 
+        $changed = false;
         if (file_exists($compilePath)) {
             if (filemtime($compilePath) < filemtime($zepRealPath) || filemtime($compilePath) < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
                 system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+                $changed = true;
             }
         } else {
             system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+            $changed = true;
         }
 
-        return json_decode(file_get_contents($compilePath), true);
+        if ($changed || !file_exists($compilePath . '.php')) {
+            $json = json_decode(file_get_contents($compilePath), true);
+            $data = '<?php return ' . var_export($json, true) . ';';
+            file_put_contents($compilePath . '.php', $data);
+        }
+
+        return require $compilePath . '.php';
     }
 
     /**
@@ -673,8 +682,8 @@ class CompilerFile
 
         $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
 
-        $filePath = 'ext/' . $path . '.c';
-        $filePathHeader = 'ext/' . $path . '.h';
+        $filePath = 'ext/' . $path . '.zep.c';
+        $filePathHeader = 'ext/' . $path . '.zep.h';
 
         if (strpos($path, DIRECTORY_SEPARATOR)) {
             $dirname = dirname($filePath);

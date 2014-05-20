@@ -1251,6 +1251,31 @@ int zephir_update_property_empty_array(zend_class_entry *ce, zval *object, char 
 	return res;
 }
 
+int zephir_unset_property(zval* object, const char* name TSRMLS_DC)
+{
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		zval member;
+		zend_class_entry *old_scope;
+
+		INIT_PZVAL(&member);
+		ZVAL_STRING(&member, name, 0);
+		old_scope = EG(scope);
+		EG(scope) = Z_OBJCE_P(object);
+
+		#if PHP_VERSION_ID < 50400
+			Z_OBJ_HT_P(object)->unset_property(object, &member TSRMLS_CC);
+		#else
+			Z_OBJ_HT_P(object)->unset_property(object, &member, 0 TSRMLS_CC);
+		#endif
+
+		EG(scope) = old_scope;
+
+		return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
 /**
  * Unsets an index in an array property
  */
