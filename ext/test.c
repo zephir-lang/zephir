@@ -28,8 +28,10 @@ zend_class_entry *test_diinterface_ce;
 zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
+zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_scallparent_ce;
 zend_class_entry *test_arithmetic_ce;
+zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
 zend_class_entry *test_bench_foo_ce;
 zend_class_entry *test_bitwise_ce;
@@ -48,9 +50,11 @@ zend_class_entry *test_constantsinterfaceb_ce;
 zend_class_entry *test_declaretest_ce;
 zend_class_entry *test_echoes_ce;
 zend_class_entry *test_emptytest_ce;
+zend_class_entry *test_evaltest_ce;
 zend_class_entry *test_exception_ce;
 zend_class_entry *test_exceptions_ce;
 zend_class_entry *test_exists_ce;
+zend_class_entry *test_exitdie_ce;
 zend_class_entry *test_factorial_ce;
 zend_class_entry *test_fannkuch_ce;
 zend_class_entry *test_fcall_ce;
@@ -81,12 +85,14 @@ zend_class_entry *test_oo_oonativeimplements_ce;
 zend_class_entry *test_oo_oonoconstruct_ce;
 zend_class_entry *test_oo_ooparams_ce;
 zend_class_entry *test_oo_propertyaccess_ce;
+zend_class_entry *test_pdostatement_ce;
 zend_class_entry *test_pregmatch_ce;
+zend_class_entry *test_properties_extendspublicproperties_ce;
 zend_class_entry *test_properties_privateproperties_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
-zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_properties_staticprotectedproperties_ce;
 zend_class_entry *test_properties_staticpublicproperties_ce;
+zend_class_entry *test_quantum_ce;
 zend_class_entry *test_regexdna_ce;
 zend_class_entry *test_requires_ce;
 zend_class_entry *test_resourcetest_ce;
@@ -147,11 +153,7 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS
 	zephir_globals_ptr->end_memory   = start + ZEPHIR_NUM_PREALLOCATED_FRAMES;
 
 	zephir_globals_ptr->fcache = pemalloc(sizeof(HashTable), 1);
-#ifndef ZEPHIR_RELEASE
-	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, zephir_fcall_cache_dtor, 1);
-#else
-	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1);
-#endif
+	zend_hash_init(zephir_globals_ptr->fcache, 128, NULL, NULL, 1); // zephir_fcall_cache_dtor
 
 	/* 'Allocator sizeof operand mismatch' warning can be safely ignored */
 	ALLOC_INIT_ZVAL(zephir_globals_ptr->global_null);
@@ -280,8 +282,10 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_Oo_OoDynamicA);
+	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_ScallParent);
 	ZEPHIR_INIT(Test_Arithmetic);
+	ZEPHIR_INIT(Test_ArrayObject);
 	ZEPHIR_INIT(Test_Assign);
 	ZEPHIR_INIT(Test_Bench_Foo);
 	ZEPHIR_INIT(Test_Bitwise);
@@ -300,9 +304,11 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_DeclareTest);
 	ZEPHIR_INIT(Test_Echoes);
 	ZEPHIR_INIT(Test_EmptyTest);
+	ZEPHIR_INIT(Test_EvalTest);
 	ZEPHIR_INIT(Test_Exception);
 	ZEPHIR_INIT(Test_Exceptions);
 	ZEPHIR_INIT(Test_Exists);
+	ZEPHIR_INIT(Test_ExitDie);
 	ZEPHIR_INIT(Test_Factorial);
 	ZEPHIR_INIT(Test_Fannkuch);
 	ZEPHIR_INIT(Test_Fcall);
@@ -333,12 +339,14 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_OoNoConstruct);
 	ZEPHIR_INIT(Test_Oo_OoParams);
 	ZEPHIR_INIT(Test_Oo_PropertyAccess);
+	ZEPHIR_INIT(Test_PdoStatement);
 	ZEPHIR_INIT(Test_Pregmatch);
+	ZEPHIR_INIT(Test_Properties_ExtendsPublicProperties);
 	ZEPHIR_INIT(Test_Properties_PrivateProperties);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
-	ZEPHIR_INIT(Test_Properties_PublicProperties);
 	ZEPHIR_INIT(Test_Properties_StaticProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_StaticPublicProperties);
+	ZEPHIR_INIT(Test_Quantum);
 	ZEPHIR_INIT(Test_RegexDNA);
 	ZEPHIR_INIT(Test_Requires);
 	ZEPHIR_INIT(Test_ResourceTest);

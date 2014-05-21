@@ -58,6 +58,52 @@ static LLVMValueRef zephir_get_php_printf_long(zephir_context *context)
 	return function;
 }
 
+static LLVMValueRef zephir_get_php_printf_double(zephir_context *context)
+{
+	LLVMValueRef    function;
+	LLVMTypeRef arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "php_printf_double");
+	if (!function) {
+
+		arg_tys[0] = LLVMPointerType(LLVMInt8Type(), 0);
+		arg_tys[1] = LLVMDoubleType();
+		function = LLVMAddFunction(context->module, "php_printf_double", LLVMFunctionType(LLVMVoidType(), arg_tys, 2, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register php_printf_double");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, php_printf);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	return function;
+}
+
+static LLVMValueRef zephir_get_php_printf_string(zephir_context *context)
+{
+	LLVMValueRef    function;
+	LLVMTypeRef arg_tys[2];
+
+	function = LLVMGetNamedFunction(context->module, "php_printf_string");
+	if (!function) {
+
+		arg_tys[0] = LLVMPointerType(LLVMInt8Type(), 0);
+		arg_tys[1] = LLVMPointerType(LLVMInt8Type(), 0);
+		function = LLVMAddFunction(context->module, "php_printf_string", LLVMFunctionType(LLVMVoidType(), arg_tys, 2, 0));
+		if (!function) {
+			zend_error(E_ERROR, "Cannot register php_printf_long");
+		}
+
+		LLVMAddGlobalMapping(context->engine, function, php_printf);
+		LLVMSetFunctionCallConv(function, LLVMCCallConv);
+		LLVMAddFunctionAttr(function, LLVMNoUnwindAttribute);
+	}
+
+	return function;
+}
+
 static LLVMValueRef zephir_get_zend_print_zval(zephir_context *context)
 {
 	LLVMValueRef    function;
@@ -107,18 +153,32 @@ int zephir_statement_echo(zephir_context *context, zval *statement TSRMLS_DC)
 		compiled_expr = zephir_expr(context, *expr TSRMLS_CC);
 		switch (compiled_expr->type) {
 
+			case ZEPHIR_T_TYPE_LONG:
 			case ZEPHIR_T_TYPE_INTEGER:
-				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
+				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%ld", "");
 				args[1] = compiled_expr->value;
 				LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
 				break;
 
-			case ZEPHIR_T_VARIABLE:
+			case ZEPHIR_T_TYPE_DOUBLE:
+				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%f", "");
+				args[1] = compiled_expr->value;
+				LLVMBuildCall(context->builder, zephir_get_php_printf_double(context), args, 2, "");
+				break;
+
+			case ZEPHIR_T_TYPE_STRING:
+				args[0] = LLVMBuildGlobalStringPtr(context->builder, "%s", "");
+				args[1] = compiled_expr->value;
+				LLVMBuildCall(context->builder, zephir_get_php_printf_string(context), args, 2, "");
+				break;
+
+			case ZEPHIR_T_TYPE_VAR:
 
 				switch (compiled_expr->variable->type) {
 
+					case ZEPHIR_T_TYPE_LONG:
 					case ZEPHIR_T_TYPE_INTEGER:
-						args[0] = LLVMBuildGlobalStringPtr(context->builder, "%d", "");
+						args[0] = LLVMBuildGlobalStringPtr(context->builder, "%ld", "");
 						args[1] = LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, "");
 						LLVMBuildCall(context->builder, zephir_get_php_printf_long(context), args, 2, "");
 						break;

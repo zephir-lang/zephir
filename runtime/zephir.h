@@ -40,6 +40,7 @@ typedef struct _zephir_parser_status {
 
 typedef struct _zephir_symtable {
 	HashTable *variables;
+	unsigned int temp_variables;
 } zephir_symtable;
 
 typedef struct _zephir_variable {
@@ -48,6 +49,7 @@ typedef struct _zephir_variable {
 	unsigned int name_length;
 	unsigned char initialized;
 	LLVMValueRef value_ref;
+	unsigned int variant_inits;
 } zephir_variable;
 
 typedef struct _zephir_context {
@@ -55,8 +57,10 @@ typedef struct _zephir_context {
 	LLVMBuilderRef builder;
 	LLVMExecutionEngineRef engine;
 	zephir_symtable *symtable;
+	LLVMBasicBlockRef declarations_block;
 	unsigned int inside_cycle;
 	unsigned int inside_try_catch;
+	unsigned int is_unrecheable;
 	struct {
 		LLVMTypeRef zval_type;
 		LLVMTypeRef zval_pointer_type;
@@ -74,6 +78,6 @@ typedef struct _zephir_compiled_expr {
 #define ZEPHIR_PARSING_OK 1
 #define ZEPHIR_PARSING_FAILED 0
 
-int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, char *file_path TSRMLS_DC);
+int zephir_parse_program(zval **return_value, char *program, unsigned int program_length, const char *file_path, zval **error_message TSRMLS_DC);
 
 #endif

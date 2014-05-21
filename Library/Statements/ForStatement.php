@@ -400,15 +400,101 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a 'for' statement that use an 'iterator' as expression
      *
-     * @param array $expression
+     * @param array $exprRaw
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
-    public function compileIterator($expression, $compilationContext)
+    public function compileIterator($exprRaw, $compilationContext)
     {
 
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
+        $compilationContext->headersManager->add('kernel/iterator');
+
+        $codePrinter = $compilationContext->codePrinter;
+
+        /**
+         * Resolve first parameter of iterator(p)
+         */
+        $expr = new Expression($exprRaw['parameters'][0]['parameter']);
+        $expr->setReadOnly(false);
+        $expression = $expr->compile($compilationContext);
+
+        if ($expression->getType() != 'variable') {
+            throw new CompilerException("Unknown type: " . $expression->getType(), $exprRaw);
+        }
+
+        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
+        switch ($exprVariable->getType()) {
+            case 'variable':
+                break;
+        }
+
+        /**
+         * Initialize 'key' variable
+         */
+        if (isset($this->_statement['key'])) {
+            $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
+            if ($keyVariable->getType() != 'variable') {
+                throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
+            }
+            $keyVariable->setMustInitNull(true);
+            $keyVariable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $keyVariable->setDynamicTypes('undefined');
+        }
+
+        /**
+         * Initialize 'value' variable
+         */
+        if (isset($this->_statement['value'])) {
+            $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
+            if ($variable->getType() != 'variable') {
+                throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
+            }
+            $variable->setMustInitNull(true);
+            $variable->setIsInitialized(true, $compilationContext, $this->_statement);
+            $variable->setDynamicTypes('undefined');
+        }
+
+        /**
+         * Variables are initialized in a different way inside cycle
+         */
+        $compilationContext->insideCycle++;
+
+        $codePrinter->output($iteratorVariable ->getName() . ' = zephir_get_iterator(' . $exprVariable->getName() . ' TSRMLS_CC);');
+
+        $codePrinter->output($iteratorVariable ->getName() . '->funcs->rewind(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
+        $codePrinter->output('for (;' . $iteratorVariable ->getName() . '->funcs->valid(' . $iteratorVariable ->getName() . ' TSRMLS_CC) == SUCCESS && !EG(exception); ' . $iteratorVariable ->getName() . '->funcs->move_forward(' . $iteratorVariable ->getName() . ' TSRMLS_CC)) {');
+
+        if (isset($this->_statement['key'])) {
+            $compilationContext->symbolTable->mustGrownStack(true);
+            //$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+        }
+
+        if (isset($this->_statement['value'])) {
+            $compilationContext->symbolTable->mustGrownStack(true);
+            $codePrinter->output("\t" . '{ zval **tmp; ');
+            $codePrinter->output("\t" . $iteratorVariable ->getName() . '->funcs->get_current_data(' . $iteratorVariable ->getName() . ', &tmp TSRMLS_CC);');
+            $codePrinter->output("\t" . $this->_statement['value'] . ' = *tmp;');
+            $codePrinter->output("\t" . '}');
+        }
+
+        /**
+         * Compile statements in the 'for' block
+         */
+        if (isset($this->_statement['statements'])) {
+            $st = new StatementsBlock($this->_statement['statements']);
+            $st->compile($compilationContext);
+        }
+
+        /**
+         * Restore the cycle counter
+         */
+        $compilationContext->insideCycle--;
+
+        $codePrinter->output('}');
+
+        $codePrinter->output($iteratorVariable ->getName() . '->funcs->dtor(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
     }
 
     /**
@@ -495,7 +581,6 @@ class ForStatement extends StatementAbstract
         $compilationContext->insideCycle--;
 
         $codePrinter->output('}');
-
     }
 
     /**
@@ -614,12 +699,12 @@ class ForStatement extends StatementAbstract
                 }
             }
 
-            /*if ($exprRaw['name'] == 'iterator') {
+            if ($exprRaw['name'] == 'iterator') {
                 $status = $this->compileIterator($exprRaw, $compilationContext);
                 if ($status !== false) {
                     return;
                 }
-            }*/
+            }
         }
 
         $expr = new Expression($exprRaw);

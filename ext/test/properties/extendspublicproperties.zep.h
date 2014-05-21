@@ -1,0 +1,5 @@
+
+extern zend_class_entry *test_properties_extendspublicproperties_ce;
+
+ZEPHIR_INIT_CLASS(Test_Properties_ExtendsPublicProperties);
+

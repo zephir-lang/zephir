@@ -125,4 +125,22 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testStripslashes(addslashes('Are you "JOHN"?')) == 'Are you "JOHN"?');
         $this->assertTrue($t->testStripslashes(addslashes("hello\0world")) == "hello\0world");
     }
+
+    public function testMultilineStrings()
+    {
+        $hardcodedString = '
+            Hello world
+        ';
+
+        $t = new \Test\Strings();
+
+        $this->assertEquals($hardcodedString, $t->testHardcodedMultilineString());
+        ob_start();
+        $t->testEchoMultilineString();
+        $this->assertEquals($hardcodedString, ob_get_clean());
+        $this->assertEquals(trim($hardcodedString), $t->testTrimMultilineString());
+
+        $escapedString = '\"}$hello$\"\'';
+        $this->assertEquals($escapedString, $t->testWellEscapedMultilineString());
+    }
 }

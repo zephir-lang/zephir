@@ -7,7 +7,7 @@ namespace Test;
 
 class Bitwise
 {
-    /* ---------- And ----------------*/
+	/* ---------- And ----------------*/
 
 	public function intAnd()
 	{
@@ -878,7 +878,7 @@ class Bitwise
 		return d;
 	}
 
-        /* ------- shift left -------- */
+		/* ------- shift left -------- */
 	public function intShiftLeft()
 	{
 		int a, b, c;

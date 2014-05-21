@@ -64,6 +64,7 @@ class NotOperator extends BaseOperator
                         return new CompiledExpression('bool', '!' . $variable->getName(), $expression);
 
                     case 'variable':
+                        $compilationContext->headersManager->add('kernel/operators');
                         return new CompiledExpression('bool', '!zephir_is_true(' . $variable->getName() . ')', $expression);
 
                     default:

@@ -34,7 +34,6 @@ class Config
         'warnings' => array(
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
-            'possible-wrong-parameter'           => true,
             'possible-wrong-parameter-undefined' => false,
             'nonexistent-function'               => true,
             'nonexistent-class'                  => true,
@@ -46,7 +45,7 @@ class Config
             'non-array-append'                   => true,
             'invalid-return-type'                => true,
             'unreachable-code'                   => true,
-            'nonexistant-constant'               => true,
+            'nonexistent-constant'               => true,
             'not-supported-magic-constant'       => true,
             'non-valid-decrement'                => true,
             'non-valid-increment'                => true,

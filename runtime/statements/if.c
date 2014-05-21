@@ -28,44 +28,26 @@
 #include "builder.h"
 #include "blocks.h"
 
+#include "kernel/main.h"
+#include "optimizers/evalexpr.h"
+
+/**
+ * Builds an 'if' statement
+ */
 int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 {
 
 	zval *expr, *statements;
-	zephir_compiled_expr *compiled_expr;
-	LLVMValueRef condition = NULL, then_value, else_value;
+	LLVMValueRef condition, then_value, else_value;
 
-	_zephir_array_fetch_string(&expr, statement, "expr", strlen("expr") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&expr, statement, SS("expr") TSRMLS_CC);
 	if (Z_TYPE_P(expr) != IS_ARRAY) {
 		return 0;
 	}
 
-	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
-	switch (compiled_expr->type) {
-
-		case ZEPHIR_T_TYPE_BOOL:
-			condition = compiled_expr->value;
-			break;
-
-		case ZEPHIR_T_TYPE_INTEGER:
-			condition = LLVMBuildICmp(context->builder, LLVMIntNE, compiled_expr->value, LLVMConstInt(LLVMInt32Type(), 0, 0), "");
-			break;
-
-		case ZEPHIR_T_VARIABLE:
-
-			switch (compiled_expr->variable->type) {
-
-				case ZEPHIR_T_TYPE_VAR:
-					condition = LLVMBuildICmp(context->builder, LLVMIntNE, zephir_build_zend_is_true(context, compiled_expr->variable->value_ref), LLVMConstInt(LLVMInt32Type(), 0, 0), "");
-					break;
-
-			}
-
-	}
-
+	condition = zephir_optimizers_evalexpr(context, expr);
 	if (!condition) {
-		zend_error(E_ERROR, "Unknown expression");
-		return 0;
+		zend_error(E_ERROR, "Unknown eval expression");
 	}
 
 	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(context->builder));
@@ -77,23 +59,31 @@ int zephir_statement_if(zephir_context *context, zval *statement TSRMLS_DC)
 	LLVMBuildCondBr(context->builder, condition, then_block, else_block);
 
 	LLVMPositionBuilderAtEnd(context->builder, then_block);
-	_zephir_array_fetch_string(&statements, statement, "statements", strlen("statements") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&statements, statement, SS("statements") TSRMLS_CC);
 	if (Z_TYPE_P(statements) == IS_ARRAY) {
 		zephir_compile_block(context, statements);
+		if (context->is_unrecheable == 0) {
+			LLVMBuildBr(context->builder, merge_block);
+		}
+	} else {
+		LLVMBuildBr(context->builder, merge_block);
 	}
-	LLVMBuildBr(context->builder, merge_block);
 	then_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, else_block);
-	_zephir_array_fetch_string(&statements, statement, "else_statements", strlen("else_statements") + 1 TSRMLS_CC);
+	_zephir_array_fetch_string(&statements, statement, SS("else_statements") TSRMLS_CC);
 	if (Z_TYPE_P(statements) == IS_ARRAY) {
 		zephir_compile_block(context, statements);
+		if (context->is_unrecheable == 0) {
+			LLVMBuildBr(context->builder, merge_block);
+		}
+	} else {
+		LLVMBuildBr(context->builder, merge_block);
 	}
-	LLVMBuildBr(context->builder, merge_block);
 	else_block = LLVMGetInsertBlock(context->builder);
 
 	LLVMPositionBuilderAtEnd(context->builder, merge_block);
-	efree(compiled_expr);
+	context->is_unrecheable = 0;
 
 	return 0;
 }

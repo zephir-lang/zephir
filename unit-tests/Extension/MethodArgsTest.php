@@ -67,4 +67,11 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception');
         $t->setResourceStrict(true);
     }
+
+    public function testMethodOptionalValueWithDefaultStaticConstantAccess()
+    {
+        $t = new MethodArgs;
+        $this->assertEquals('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
+        $this->assertEquals(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
+    }
 }

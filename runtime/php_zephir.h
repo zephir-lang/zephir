@@ -24,6 +24,7 @@
 #include <llvm-c/Transforms/Scalar.h>
 #include <llvm-c/ExecutionEngine.h>
 
+#define ZEPHIR_RELEASE 1
 #define PHP_ZEPHIR_VERSION "0.0.1"
 #define PHP_ZEPHIR_EXTNAME "zephir"
 
@@ -95,6 +96,14 @@ ZEND_EXTERN_MODULE_GLOBALS(zephir)
 	#define ZEPHIRT_VGLOBAL &(zephir_globals)
 #endif
 
+#if defined(__GNUC__) && (defined(__clang__) || ((__GNUC__ * 100 + __GNUC_MINOR__) >= 405))
+# define UNREACHABLE() __builtin_unreachable()
+# define ASSUME(x) if (x) {} else __builtin_unreachable()
+#else
+# define UNREACHABLE() assert(0)
+# define ASSUME(x) assert(!!(x));
+#endif
+
 /** Define FASTCALL */
 #if defined(__GNUC__) && ZEND_GCC_VERSION >= 3004 && defined(__i386__)
 # define ZEPHIR_FASTCALL __attribute__((fastcall))
@@ -102,6 +111,24 @@ ZEND_EXTERN_MODULE_GLOBALS(zephir)
 # define ZEPHIR_FASTCALL __fastcall
 #else
 # define ZEPHIR_FASTCALL
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+# define ZEPHIR_ATTR_NONNULL __attribute__((nonnull))
+# define ZEPHIR_ATTR_NONNULL1(x) __attribute__((nonnull (x)))
+# define ZEPHIR_ATTR_NONNULL2(x, y) __attribute__((nonnull (x, y)))
+# define ZEPHIR_ATTR_NONNULL3(x, y, z) __attribute__((nonnull (x, y, z)))
+# define ZEPHIR_ATTR_PURE __attribute__((pure))
+# define ZEPHIR_ATTR_CONST __attribute__((const))
+# define ZEPHIR_ATTR_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+#else
+# define ZEPHIR_ATTR_NONNULL
+# define ZEPHIR_ATTR_NONNULL1(x)
+# define ZEPHIR_ATTR_NONNULL2(x, y)
+# define ZEPHIR_ATTR_NONNULL3(x, y, z)
+# define ZEPHIR_ATTR_PURE
+# define ZEPHIR_ATTR_CONST
+# define ZEPHIR_ATTR_WARN_UNUSED_RESULT
 #endif
 
 #if defined(__x86_64__) || defined(_M_X64)

@@ -280,7 +280,11 @@ class NativeArrayAccess
                     case 'string':
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/array');
-                        $codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+                        if ($variableIndex->isLocalOnly()) {
+                            $codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+                        } else {
+                            $codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ' TSRMLS_CC);');
+                        }
                         break;
 
                     default:

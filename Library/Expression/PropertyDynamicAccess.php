@@ -20,6 +20,7 @@
 
 namespace Zephir\Expression;
 
+use Zephir\Statements\LetStatement;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -92,12 +93,27 @@ class PropertyDynamicAccess
                 throw new CompilerException("Cannot use expression: " . $exprVariable->getType() . " as an object", $propertyAccess['left']);
         }
 
-        $propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyAccess['right']['value'], $compilationContext, $expression);
-        switch ($variableVariable->getType()) {
+        switch ($propertyAccess['right']['type']) {
             case 'variable':
+                $propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyAccess['right']['value'], $compilationContext, $expression);
+                break;
+            case 'string':
+                $propertyVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
+                $statement = new LetStatement(array(
+                    'type' => 'let',
+                    'assignments' => array(
+                        array(
+                            'assign-type' => 'variable',
+                            'variable' => $propertyVariable->getName(),
+                            'operator' => 'assign',
+                            'expr' => $expression['right']
+                        )
+                    )
+                ));
+                $statement->compile($compilationContext);
                 break;
             default:
-                throw new CompilerException("Variable type: " . $variableVariable->getType() . " cannot be used as object", $propertyAccess['left']);
+                throw new CompilerException("Variable type: " . $propertyAccess['right']['type'] . " cannot be used as object", $propertyAccess['left']);
         }
 
         /**

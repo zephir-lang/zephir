@@ -27,6 +27,7 @@
 #include "expr.h"
 #include "builder.h"
 #include "symtable.h"
+#include "variable.h"
 #include "kernel/main.h"
 
 int zephir_statement_let_variable(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
@@ -46,21 +47,125 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 	}
 
 	compiled_expr = zephir_expr(context, expr TSRMLS_CC);
+
 	symbol_variable = zephir_symtable_get_variable_for_write(context->symtable, Z_STRVAL_P(variable), Z_STRLEN_P(variable));
+	symbol_variable->initialized = 1;
 
 	switch (symbol_variable->type) {
 
-		case ZEPHIR_T_TYPE_INTEGER:
+		case ZEPHIR_T_TYPE_BOOL:
 
 			switch (compiled_expr->type) {
 
-				case ZEPHIR_T_TYPE_INTEGER:
+				case ZEPHIR_T_TYPE_BOOL:
 					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
 					break;
 
 			}
+			break;
+
+		case ZEPHIR_T_TYPE_LONG:
+		case ZEPHIR_T_TYPE_INTEGER:
+
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_LONG:
+				case ZEPHIR_T_TYPE_INTEGER:
+					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
+					break;
+
+				case ZEPHIR_T_TYPE_VAR:
+
+					switch (compiled_expr->variable->type) {
+
+						case ZEPHIR_T_TYPE_LONG:
+						case ZEPHIR_T_TYPE_INTEGER:
+							LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
+							break;
+					}
+					break;
+			}
+			break;
+
+		case ZEPHIR_T_TYPE_DOUBLE:
+
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_DOUBLE:
+					LLVMBuildStore(context->builder, compiled_expr->value, symbol_variable->value_ref);
+					break;
+
+				case ZEPHIR_T_TYPE_VAR:
+
+					switch (compiled_expr->variable->type) {
+
+						case ZEPHIR_T_TYPE_DOUBLE:
+							LLVMBuildStore(context->builder, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), symbol_variable->value_ref);
+							break;
+					}
+					break;
+			}
 
 			break;
+
+		case ZEPHIR_T_TYPE_VAR:
+
+			switch (compiled_expr->type) {
+
+				case ZEPHIR_T_TYPE_NULL:
+					zephir_variable_init_variant(symbol_variable, context);
+					break;
+
+				case ZEPHIR_T_TYPE_BOOL:
+					zephir_variable_init_variant(symbol_variable, context);
+					zephir_build_zval_bool(context, symbol_variable->value_ref, compiled_expr->value);
+					break;
+
+				case ZEPHIR_T_TYPE_LONG:
+				case ZEPHIR_T_TYPE_INTEGER:
+					zephir_variable_init_variant(symbol_variable, context);
+					zephir_build_zval_long(context, symbol_variable->value_ref, compiled_expr->value);
+					break;
+
+				case ZEPHIR_T_TYPE_DOUBLE:
+					zephir_variable_init_variant(symbol_variable, context);
+					zephir_build_zval_double(context, symbol_variable->value_ref, compiled_expr->value);
+					break;
+
+				case ZEPHIR_T_TYPE_VAR:
+
+					switch (compiled_expr->variable->type) {
+
+						case ZEPHIR_T_TYPE_BOOL:
+							zephir_variable_init_variant(symbol_variable, context);
+							zephir_build_zval_bool(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), compiled_expr->value);
+							break;
+
+						case ZEPHIR_T_TYPE_LONG:
+						case ZEPHIR_T_TYPE_INTEGER:
+							zephir_variable_init_variant(symbol_variable, context);
+							zephir_build_zval_long(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), compiled_expr->value);
+							break;
+
+						case ZEPHIR_T_TYPE_DOUBLE:
+							zephir_variable_init_variant(symbol_variable, context);
+							zephir_build_zval_double(context, LLVMBuildLoad(context->builder, compiled_expr->variable->value_ref, ""), compiled_expr->value);
+							break;
+
+						case ZEPHIR_T_TYPE_VAR:
+							zephir_build_copy_on_write(context, symbol_variable->value_ref, compiled_expr->variable->value_ref);
+							break;
+
+						default:
+							zend_error(E_ERROR, "Unknown let variable %d", compiled_expr->variable->type);
+					}
+					break;
+			}
+
+			break;
+
+		default:
+			zend_error(E_ERROR, "Unknown let variable %d", symbol_variable->type);
 
 	}
 
@@ -68,6 +173,9 @@ int zephir_statement_let_variable(zephir_context *context, zval *assignment, zva
 	return 0;
 }
 
+/**
+ * Increments a variable
+ */
 int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
 
 	zval *variable;
@@ -82,13 +190,18 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
-				LLVMBuildNSWAdd( // // %7 = add nsw i32 %6, 1
+				LLVMBuildNSWAdd(
 					context->builder,
 					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
-					LLVMConstInt(LLVMInt64Type(), 1, 0),
+#if ZEPHIR_32
+					LLVMConstInt(LLVMInt32Type(), 1, 0), // add nsw i32 %6, 1
+#else
+					LLVMConstInt(LLVMInt64Type(), 1, 0), // add nsw i64 %6, 1
+#endif
 					""
 				),
 				symbol_variable->value_ref
@@ -101,6 +214,9 @@ int zephir_statement_let_incr(zephir_context *context, zval *assignment, zval *s
 	return 0;
 }
 
+/**
+ * Decrements a variable
+ */
 int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *statement TSRMLS_DC) {
 
 	zval *variable;
@@ -115,13 +231,18 @@ int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *s
 
 	switch (symbol_variable->type) {
 
+		case ZEPHIR_T_TYPE_LONG:
 		case ZEPHIR_T_TYPE_INTEGER:
 
 			LLVMBuildStore(context->builder, // store i32 %7, i32* %a, align 4
 				LLVMBuildNSWAdd( // // %7 = add nsw i32 %6, -1
 					context->builder,
 					LLVMBuildLoad(context->builder, symbol_variable->value_ref, ""), // %6 = load i32* %a, align 4
+#if ZEPHIR_32
+					LLVMConstInt(LLVMInt32Type(), -1, 0),
+#else
 					LLVMConstInt(LLVMInt64Type(), -1, 0),
+#endif
 					""
 				),
 				symbol_variable->value_ref
@@ -134,6 +255,10 @@ int zephir_statement_let_decr(zephir_context *context, zval *assignment, zval *s
 	return 0;
 }
 
+/**
+ * Assigns values to variables, array indices, object properties, etc.
+ *
+ */
 int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 {
 	HashTable       *ht;
@@ -174,7 +299,6 @@ int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 
 		zend_print_zval_r(*assignment, 0 TSRMLS_CC);
 	}
-
 
 	return 0;
 }

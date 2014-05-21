@@ -59,10 +59,12 @@ class Bootstrap
             }
         }
         echo PHP_EOL;
+
         if ($config && $config->get('verbose')) {
             echo 'at ', str_replace(ZEPHIRPATH, '', $e->getFile()), '(', $e->getLine(), ')', PHP_EOL;
             echo str_replace(ZEPHIRPATH, '', $e->getTraceAsString()), PHP_EOL;
         }
+
         exit(1);
     }
 
