@@ -1891,15 +1891,44 @@ class ClassMethod
             return false;
         }
 
-        $statements = $statement['statements'];
-        foreach ($statements as $item) {
-            $type = isset($item['type']) ? $item['type'] : null;
-            if ($type == 'return' || $type == 'throw') {
-                return true;
-            } else {
-                return $this->hasChildReturnStatementType($item);
+        if ($statement['type'] == 'if') {
+            $ret = false;
+
+            $statements = $statement['statements'];
+            foreach ($statements as $item) {
+                $type = isset($item['type']) ? $item['type'] : null;
+                if ($type == 'return' || $type == 'throw') {
+                    $ret = true;
+                } else {
+                    $ret = $this->hasChildReturnStatementType($item);
+                }
+            }
+
+            if (!$ret || !isset($statement['else_statements'])) {
+                return false;
+            }
+
+            $statements = $statement['else_statements'];
+            foreach ($statements as $item) {
+                $type = isset($item['type']) ? $item['type'] : null;
+                if ($type == 'return' || $type == 'throw') {
+                    return true;
+                } else {
+                    return $this->hasChildReturnStatementType($item);
+                }
+            }
+        } else {
+            $statements = $statement['statements'];
+            foreach ($statements as $item) {
+                $type = isset($item['type']) ? $item['type'] : null;
+                if ($type == 'return' || $type == 'throw') {
+                    return true;
+                } else {
+                    return $this->hasChildReturnStatementType($item);
+                }
             }
         }
+
         return false;
     }
 }
