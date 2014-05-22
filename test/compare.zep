@@ -23,4 +23,26 @@ class Compare
 	{
 		return self::PI < a;
 	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/411
+	 */
+	public function testVarWithStringEquals(string! str)
+	{
+		if str === "wrong testing" {
+			let str = "NOK";
+		} else {
+			if str === "another testing" {
+				let str = "NOK";
+			} else {
+				if str === "testing" {
+					let str = "OK";
+				} else {
+					let str = "NOK";
+				}
+			}
+		}
+
+		return str;
+	}
 }

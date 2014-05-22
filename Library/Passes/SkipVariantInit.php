@@ -34,6 +34,8 @@ class SkipVariantInit
 
     protected $_variablesToSkip = array();
 
+    protected $_ignoredVariables;
+
     /**
      * Do the compilation pass
      *
@@ -93,8 +95,8 @@ class SkipVariantInit
      */
     public function getVariables()
     {
-
         $variableStats = array();
+
         foreach ($this->_variablesToSkip as $branchNumber => $variables) {
             foreach ($variables as $variable => $one) {
                 if (!isset($variableStats[$variable])) {
@@ -113,5 +115,14 @@ class SkipVariantInit
             }
         }
         return $variables;
+    }
+
+    /**
+     * @param int $branchNumber
+     * @param array $variablesToSkip
+     */
+    public function setVariablesToSkip($branchNumber, $variablesToSkip)
+    {
+        $this->_variablesToSkip[$branchNumber] = $variablesToSkip;
     }
 }

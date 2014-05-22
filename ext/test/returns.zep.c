@@ -46,3 +46,14 @@ PHP_METHOD(Test_Returns, testReturnCast3) {
 
 }
 
+PHP_METHOD(Test_Returns, testReturnCast4) {
+
+
+	if (1) {
+		RETURN_LONG(1);
+	} else {
+		RETURN_LONG(0);
+	}
+
+}
+

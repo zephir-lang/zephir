@@ -61,7 +61,6 @@ PHP_METHOD(Test_Fcall, testCall2) {
 		zephir_check_call_status();
 		RETURN_MM();
 	}
-	ZEPHIR_MM_RESTORE();
 
 }
 
