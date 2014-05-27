@@ -34,6 +34,7 @@ class DocBlock
             if (strpos($line, '@') === 0) {
                 $this->lines[] = $line;
             } else {
+                $line = preg_replace('~([\s\t]+)[*]([\s\t]+)~', '', $line);
                 $this->lines[] = array_pop($this->lines) . "\n{$this->indent} * " . $line;
             }
         }
