@@ -164,7 +164,6 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 			RETURN_MM();
 		}
 	}
-	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -198,7 +197,6 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 			RETURN_MM();
 		}
 	}
-	ZEPHIR_MM_RESTORE();
 
 }
 

@@ -38,7 +38,7 @@ class EvalExpression
 
     protected $_unreachableElse = null;
 
-    protected $_lastVariable;
+    protected $_usedVariables = array();
 
     /**
      * @param array $expr
@@ -190,10 +190,7 @@ class EvalExpression
 
                 }
 
-                /**
-                 * Update last variable used
-                 */
-                $this->_lastVariable = $variableRight;
+                $this->_usedVariables[] = $variableRight->getName();
 
                 /**
                  * Evaluate the variable
@@ -263,6 +260,14 @@ class EvalExpression
      */
     public function getEvalVariable()
     {
-        return $this->_lastVariable;
+        return end($this->_usedVariables);
+    }
+
+    /**
+     * @return array
+     */
+    public function getUsedVariables()
+    {
+        return $this->_usedVariables;
     }
 }

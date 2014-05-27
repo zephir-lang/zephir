@@ -64,7 +64,7 @@ class Generator
             $source = $this->buildClass($class);
 
             $filename = ucfirst($class->getName()) . '.zep.php';
-            $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\', '', strtolower($class->getNamespace())));
+            $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\\\', DIRECTORY_SEPARATOR, strtolower($class->getNamespace())));
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);

@@ -38,12 +38,20 @@ class IfStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
+        $exprRaw = $this->_statement['expr'];
+
+        $expr = new EvalExpression();
+        $condition = $expr->optimize($exprRaw, $compilationContext);
+
         /**
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
         if (isset($this->_statement['statements']) && isset($this->_statement['else_statements'])) {
 
             $skipVariantInit = new SkipVariantInit();
+
+            $skipVariantInit->setVariablesToSkip(0, $expr->getUsedVariables());
+            $skipVariantInit->setVariablesToSkip(1, $expr->getUsedVariables());
 
             $skipVariantInit->pass(0, new StatementsBlock($this->_statement['statements']));
             $skipVariantInit->pass(1, new StatementsBlock($this->_statement['else_statements']));
@@ -60,10 +68,6 @@ class IfStatement extends StatementAbstract
             }
         }
 
-        $exprRaw = $this->_statement['expr'];
-
-        $expr = new EvalExpression();
-        $condition = $expr->optimize($exprRaw, $compilationContext);
         $compilationContext->codePrinter->output('if (' . $condition . ') {');
         $this->_evalExpression = $expr;
 
