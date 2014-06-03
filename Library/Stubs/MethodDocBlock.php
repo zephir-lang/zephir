@@ -81,7 +81,11 @@ class MethodDocBlock extends DocBlock
         }
         foreach ($method->getParameters() as $parameter) {
             if (isset($parameter['data-type'])) {
-                $type = $parameter['data-type'];
+                if ($parameter['data-type'] == 'variable') {
+                    $type = 'mixed';
+                } else {
+                    $type = $parameter['data-type'];
+                }
             } elseif (isset($parameter['cast'])) {
                 $type = $parameter['cast']['value'];
             } else {
