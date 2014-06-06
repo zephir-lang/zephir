@@ -48,6 +48,8 @@ class IsNumericOptimizer extends OptimizerAbstract
             return false;
         }
 
+        $context->headersManager->add('kernel/operators');
+
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         return new CompiledExpression('bool', 'zephir_is_numeric(' . $resolvedParams[0] . ')', $expression);
     }
