@@ -32,6 +32,15 @@ use Zephir\Config;
 class Generator
 {
     /**
+     * Not php visible style variants
+     * @var array
+     */
+    protected $ignoreModifiers = array(
+        'inline',
+        'scoped'
+    );
+
+    /**
      * @var CompilerFile[]
      */
     protected $files;
@@ -196,10 +205,7 @@ EOF;
      */
     protected function buildMethod(ClassMethod $method, $isInterface)
     {
-        $modifier = implode(' ', $method->getVisibility());
-        $modifier = str_replace(' inline', '', $modifier);
-        $modifier = str_replace(' scoped', '', $modifier);
-
+        $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
         $docBlock = new MethodDocBlock($method, 4);
 
         $parameters = array();
