@@ -29,13 +29,13 @@ class IdenticalOperator extends ComparisonBaseOperator
 
     protected $_zvalOperator = 'ZEPHIR_IS_IDENTICAL';
 
-    protected $_zvalLongOperator = 'ZEPHIR_IS_LONG';
+    protected $_zvalLongOperator = 'ZEPHIR_IS_LONG_IDENTICAL';
 
-    protected $_zvalLongNegOperator = 'ZEPHIR_IS_LONG';
+    protected $_zvalLongNegOperator = 'ZEPHIR_IS_LONG_IDENTICAL';
 
-    protected $_zvalStringOperator = 'ZEPHIR_IS_STRING';
+    protected $_zvalStringOperator = 'ZEPHIR_IS_STRING_IDENTICAL';
 
-    protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE';
+    protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE_IDENTICAL';
 
-    protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE';
+    protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE_IDENTICAL';
 }
