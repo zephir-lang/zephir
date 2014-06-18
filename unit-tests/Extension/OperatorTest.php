@@ -17,25 +17,20 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Operators\Comparison;
+namespace Extension;
 
-class IdenticalOperator extends ComparisonBaseOperator
+class OperatorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $_commutative = true;
+    public function test404Issue()
+    {
+        $t = new \Test\Operator();
 
-    protected $_operator = '==';
-
-    protected $_bitOperator = '==';
-
-    protected $_zvalOperator = 'ZEPHIR_IS_IDENTICAL';
-
-    protected $_zvalLongOperator = 'ZEPHIR_IS_LONG_IDENTICAL';
-
-    protected $_zvalLongNegOperator = 'ZEPHIR_IS_LONG_IDENTICAL';
-
-    protected $_zvalStringOperator = 'ZEPHIR_IS_STRING_IDENTICAL';
-
-    protected $_zvalBoolTrueOperator = 'ZEPHIR_IS_TRUE_IDENTICAL';
-
-    protected $_zvalBoolFalseOperator = 'ZEPHIR_IS_FALSE_IDENTICAL';
+        $this->assertFalse($t->testIdentical(true, 1));
+        $this->assertFalse($t->testIdentical(true, 'phalcon'));
+        $this->assertFalse($t->testIdentical(false, 0));
+        $this->assertFalse($t->testIdentical(1, '1'));
+        $this->assertTrue($t->testIdentical(1, 1));
+        $this->assertTrue($t->testIdentical(true, true));
+        $this->assertTrue($t->testIdentical('phalcon', 'phalcon'));
+    }
 }
