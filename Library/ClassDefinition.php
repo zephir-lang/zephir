@@ -1158,8 +1158,9 @@ class ClassDefinition
             'NULL'        => 'null',
         ];
 
-        if (!isset($map[$phpType]))
+        if (!isset($map[$phpType])) {
             throw new CompilerException("Cannot parse constant type '$phpType'");
+        }
 
         return $map[$phpType];
     }
