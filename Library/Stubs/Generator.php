@@ -102,11 +102,7 @@ EOF;
         $source .= $class->getType() . ' ' . $class->getName();
 
         if ($extendsClassDefinition = $class->getExtendsClassDefinition()) {
-            if ($extendsClassDefinition instanceof \ReflectionClass) {
-                $source .= ' extends \\' . $extendsClassDefinition->getName();
-            } else {
                 $source .= ' extends \\' . $extendsClassDefinition->getCompleteName();
-            }
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
