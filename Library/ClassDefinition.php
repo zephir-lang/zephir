@@ -1138,7 +1138,7 @@ class ClassDefinition
         if (count($constants) > 0) {
             foreach ($constants as $constantName => $constantValue) {
                 $type = self::_convertPhpConstantType(gettype($constantValue));
-                $classConstant = new ClassConstant($constantName, ['value' => $constantValue, 'type' => $type], null);
+                $classConstant = new ClassConstant($constantName, array('value' => $constantValue, 'type' => $type), null);
                 $classDefinition->addConstant($classConstant);
             }
         }
@@ -1150,13 +1150,13 @@ class ClassDefinition
 
     private static function _convertPhpConstantType($phpType)
     {
-        $map = [
+        $map = array(
             'boolean'    => 'bool',
             'integer'    => 'int',
             'double'    => 'double',
             'string'    => 'string',
             'NULL'        => 'null',
-        ];
+        );
 
         if (!isset($map[$phpType])) {
             throw new CompilerException("Cannot parse constant type '$phpType'");
