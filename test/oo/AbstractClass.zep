@@ -8,7 +8,7 @@ abstract class AbstractClass
 
 	}
 
-	abstract public function testMethodDeclarationWithReturnType() -> string
+	abstract public function testMethodDeclarationWithReturnType() : string
 	{
 
 	}
@@ -18,7 +18,7 @@ abstract class AbstractClass
 
 	}
 
-	abstract public function testMethodDeclarationWithParameterAndReturnType(var a) -> string
+	abstract public function testMethodDeclarationWithParameterAndReturnType(var a) : string
 	{
 
 	}
@@ -31,7 +31,7 @@ abstract class AbstractClass
 	/**
 	 *
 	 */
-	abstract public function testAbstractMethodDeclarationWithReturnType() -> string;
+	abstract public function testAbstractMethodDeclarationWithReturnType() : string;
 
 	/**
 	 *
@@ -41,5 +41,5 @@ abstract class AbstractClass
 	/**
 	 *
 	 */
-	abstract public function testAbstractMethodDeclarationWithParameterAndReturnType(var a) -> string;
+	abstract public function testAbstractMethodDeclarationWithParameterAndReturnType(var a) : string;
 }

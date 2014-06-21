@@ -1521,68 +1521,68 @@ xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDEN
 	R = xx_ret_class_method(V, I, L, S, C, NULL, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, NULL, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, L, NULL, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, S, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, S, NULL, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, NULL, C, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, C, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, NULL, C, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, L, NULL, C, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, S, C, T, status->scanner_state);
 }
 
-xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+xx_class_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, L, S, C, T, status->scanner_state);
 }
 
 /* method definition */
-xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, T, status->scanner_state);
 }
 
-xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_interface_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, L, NULL, NULL, T, status->scanner_state);
 }
 
-xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, NULL, NULL, C, T, status->scanner_state);
 }
 
-xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE ARROW xx_method_return_type(T) DOTCOMMA . {
+xx_interface_method_definition(R) ::= COMMENT(C) xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE COLON xx_method_return_type(T) DOTCOMMA . {
 	R = xx_ret_class_method(V, I, L, NULL, C, T, status->scanner_state);
 }
 

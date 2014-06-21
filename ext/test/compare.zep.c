@@ -111,15 +111,15 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 	ZEPHIR_SEPARATE_PARAM(str);
 
 
-	if (ZEPHIR_IS_STRING(str, "wrong testing")) {
+	if (ZEPHIR_IS_STRING_IDENTICAL(str, "wrong testing")) {
 		ZEPHIR_INIT_NVAR(str);
 		ZVAL_STRING(str, "NOK", 1);
 	} else {
-		if (ZEPHIR_IS_STRING(str, "another testing")) {
+		if (ZEPHIR_IS_STRING_IDENTICAL(str, "another testing")) {
 			ZEPHIR_INIT_NVAR(str);
 			ZVAL_STRING(str, "NOK", 1);
 		} else {
-			if (ZEPHIR_IS_STRING(str, "testing")) {
+			if (ZEPHIR_IS_STRING_IDENTICAL(str, "testing")) {
 				ZEPHIR_INIT_NVAR(str);
 				ZVAL_STRING(str, "OK", 1);
 			} else {
