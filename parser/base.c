@@ -563,12 +563,8 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 					} else {
 						sprintf(x, "Scanner error: %d", scanner_status);
 					}
-					//json_object *syntax_error = json_object_new_object();
-					//json_object_object_add(syntax_error, "type", json_object_new_string("error"));
-					//json_object_object_add(syntax_error, "message", json_object_new_string(x));
 					fprintf(stderr, "%s\n", x);
-					//free(x);
-					//parser_status->ret = syntax_error;
+					free(x);
 					status = FAILURE;
 				}
 				break;
