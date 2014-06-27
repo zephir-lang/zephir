@@ -182,14 +182,13 @@ class MethodCall extends Call
                 }
 
                 if ($check) {
-
-                    $method = $classDefinition->getMethod($methodName);
+                    $classMethod = $classDefinition->getMethod($methodName);
 
                     /**
                      * Private methods must be called in their declaration scope
                      */
-                    if ($method->isPrivate()) {
-                        if ($method->getClassDefinition() != $classDefinition) {
+                    if ($classMethod->isPrivate()) {
+                        if ($classMethod->getClassDefinition() != $classDefinition) {
                             throw new CompilerException("Cannot call private method '" . $expression['name'] . "' out of its scope", $expression);
                         }
                     }
@@ -203,9 +202,7 @@ class MethodCall extends Call
                         $callNumberParameters = 0;
                     }
 
-                    $classMethod = $classDefinition->getMethod($methodName);
                     $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
-
                     if (!$expectedNumberParameters && $callNumberParameters > 0) {
                         $numberParameters = $classMethod->getNumberOfParameters();
                         if ($callNumberParameters > $numberParameters) {
