@@ -557,28 +557,33 @@ class StaticCall extends Call
 
                 if (!$classDefinition->hasMethod("__callStatic")) {
 
-                    /**
-                     * Try to produce an exception if method is called with a wrong number of parameters
-                     */
-                    if (isset($expression['parameters'])) {
-                        $callNumberParameters = count($expression['parameters']);
-                    } else {
-                        $callNumberParameters = 0;
-                    }
+                    if ($method instanceof ClassMethod && !$method->isInternal()) {
 
-                    $classMethod = $classDefinition->getMethod($methodName);
-                    $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+                        /**
+                         * Try to produce an exception if method is called with a wrong number of parameters
+                         */
+                        if (isset($expression['parameters'])) {
+                            $callNumberParameters = count($expression['parameters']);
+                        } else {
+                            $callNumberParameters = 0;
+                        }
 
-                    if (!$expectedNumberParameters && $callNumberParameters > 0) {
-                        $numberParameters = $classMethod->getNumberOfParameters();
-                        if ($callNumberParameters > $numberParameters) {
+                        $classMethod = $classDefinition->getMethod($methodName);
+                        $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
+
+                        if (!$expectedNumberParameters && $callNumberParameters > 0) {
+                            $numberParameters = $classMethod->getNumberOfParameters();
+                            if ($callNumberParameters > $numberParameters) {
+                                throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
+                            }
+                        }
+
+                        if ($callNumberParameters < $expectedNumberParameters) {
                             throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
                         }
+                        
                     }
 
-                    if ($callNumberParameters < $expectedNumberParameters) {
-                        throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
-                    }
                 } else {
 
                     $method = $classDefinition->getMethod("__callStatic");

@@ -46,13 +46,16 @@ class ClassMethod
     /**
      * @var ClassDefinition
      */
-    protected $_classDefinition;
+    protected $classDefinition;
 
     /**
      * @var array
      */
     protected $_visibility;
 
+    /**
+     * @var string
+     */
     protected $_name;
 
     /**
@@ -62,7 +65,10 @@ class ClassMethod
 
     protected $_statements;
 
-    protected $_docblock;
+    /**
+     * @var string
+     */
+    protected $docblock;
 
     protected $_returnTypes;
 
@@ -70,13 +76,27 @@ class ClassMethod
 
     protected $_void = false;
 
-    protected $isPublic;
+    protected $isPublic = true;
 
+    /**
+     * Whether the method is static or not
+     */
     protected $isStatic = false;
 
+    /**
+     * Whether the method is final or not
+     */
     protected $isFinal = false;
 
+    /**
+     * Whether the method is abstract or not
+     */
     protected $isAbstract = false;
+
+    /**
+     * Whether the method is internal or not
+     */
+    protected $isInternal = false;
 
     /**
      * @var array|null
@@ -99,12 +119,12 @@ class ClassMethod
     {
         $this->checkVisibility($visibility, $name, $original);
 
-        $this->_classDefinition = $classDefinition;
+        $this->classDefinition = $classDefinition;
         $this->_visibility = $visibility;
         $this->_name = $name;
         $this->_parameters = $parameters;
         $this->_statements = $statements;
-        $this->_docblock = $docblock;
+        $this->docblock = $docblock;
         $this->_expression = $original;
 
         if ($returnType['void']) {
@@ -199,9 +219,24 @@ class ClassMethod
         }
     }
 
+    /**
+     * Sets if the method is internal or not
+     *
+     * @param boolean $static
+     */
     public function setIsStatic($static)
     {
         $this->isStatic = $static;
+    }
+
+    /**
+     * Sets if the method is internal or not
+     *
+     * @param boolean $internal
+     */
+    public function setIsInternal($internal)
+    {
+        $this->isInternal = $internal;
     }
 
     /**
@@ -211,7 +246,7 @@ class ClassMethod
      */
     public function getClassDefinition()
     {
-        return $this->_classDefinition;
+        return $this->classDefinition;
     }
 
     /**
@@ -231,7 +266,7 @@ class ClassMethod
      */
     public function getDocBlock()
     {
-        return $this->_docblock;
+        return $this->docblock;
     }
 
     /**
@@ -416,15 +451,11 @@ class ClassMethod
     public function getNumberOfRequiredParameters()
     {
         if (is_object($this->_parameters)) {
-            $parameters = $this->_parameters->getParameters();
+            $parameters = $this->_parameters->getParameters();            
             if (count($parameters)) {
                 $required = 0;
                 foreach ($parameters as $parameter) {
-                    if (isset($parameter['mandatory'])) {
-                        if ($parameter['mandatory']) {
-                            $required++;
-                        }
-                    } else if (!isset($parameter['default'])) {
+                    if (!isset($parameter['default'])) {
                         $required++;
                     }
                 }
@@ -573,7 +604,7 @@ class ClassMethod
         return false;
     }
 
-     /**
+    /**
      * Checks if the method is public
      *
      * @return boolean
@@ -582,7 +613,6 @@ class ClassMethod
     {
         return $this->isPublic;
     }
-
 
     /**
      * Checks is abstract method?
@@ -595,7 +625,7 @@ class ClassMethod
     }
 
     /**
-     * Checks if the method is static
+     * Checks whether the method is static
      *
      * @return boolean
      */
@@ -605,7 +635,7 @@ class ClassMethod
     }
 
     /**
-     * Checks if the method is final
+     * Checks whether the method is final
      *
      * @return boolean
      */
@@ -615,7 +645,17 @@ class ClassMethod
     }
 
     /**
-     * Check if the current method is a constructor
+     * Checks whether the method is internal
+     *
+     * @return boolean
+     */
+    public function isInternal()
+    {
+        return $this->isInternal;
+    }
+
+    /**
+     * Check whether the current method is a constructor
      *
      * @return boolean
      */

@@ -92,6 +92,8 @@ class ClassDefinition
     }
 
     /**
+     * Sets if the class is internal or not
+     *
      * @param boolean $isInternal
      */
     public function setIsInternal($isInternal)
@@ -100,6 +102,8 @@ class ClassDefinition
     }
 
     /**
+     * Returns if the class is internal or not
+     *
      * @return bool
      */
     public function isInternal()
@@ -1130,6 +1134,7 @@ class ClassDefinition
                     $parameters
                 ));
                 $classMethod->setIsStatic($method->isStatic());
+                $classMethod->setIsInternal(true);
                 $classDefinition->addMethod($classMethod);
             }
         }

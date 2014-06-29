@@ -279,7 +279,7 @@ class MethodCall extends Call
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
                                  */
-                                if ($method instanceof ClassMethod) {
+                                if ($method instanceof ClassMethod && !$method->isInternal()) {
 
                                     if (isset($expression['parameters'])) {
                                         $callNumberParameters = count($expression['parameters']);
