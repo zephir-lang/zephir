@@ -451,7 +451,7 @@ class ClassMethod
     public function getNumberOfRequiredParameters()
     {
         if (is_object($this->_parameters)) {
-            $parameters = $this->_parameters->getParameters();            
+            $parameters = $this->_parameters->getParameters();
             if (count($parameters)) {
                 $required = 0;
                 foreach ($parameters as $parameter) {
