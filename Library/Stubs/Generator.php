@@ -68,12 +68,15 @@ class Generator
     public function generate($path)
     {
         $namespace = $this->config->get('namespace');
+
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
             $source = $this->buildClass($class);
 
             $filename = ucfirst($class->getName()) . '.zep.php';
             $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\\\', DIRECTORY_SEPARATOR, strtolower($class->getNamespace())));
+            $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
+            $filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);

@@ -7,6 +7,7 @@ use Zephir\ClassMethod;
 class MethodDocBlock extends DocBlock
 {
     private $parameters = array();
+
     private $return;
 
     public function __construct(ClassMethod $method, $indent = 4)
