@@ -68,7 +68,7 @@ class Compiler
     /**
      * @var \ReflectionClass[]
      */
-    protected static $_internalDefinitions = array();
+    protected static $_reflections = array();
 
     /**
      * @var boolean
@@ -238,12 +238,11 @@ class Compiler
      */
     public function getInternalClassDefinition($className)
     {
-        if (!isset(self::$_internalDefinitions[$className])) {
-            $reflection = new \ReflectionClass($className);
-            self::$_internalDefinitions[$className] = ClassDefinition::buildFromReflection($reflection);
+        if (!isset(self::$_reflections[$className])) {
+            self::$_reflections[$className] = new \ReflectionClass($className);
         }
 
-        return self::$_internalDefinitions[$className];
+        return self::$_reflections[$className];
     }
 
     /**
