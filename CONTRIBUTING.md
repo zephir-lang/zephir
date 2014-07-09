@@ -4,6 +4,11 @@ Zephir is an open source project and a volunteer effort. Contributions are welco
 
 *We only accept bug reports, new feature requests and pull requests in GitHub*.
 
+If you are not familiar with markdown and also
+[GitHub markdown implementation](https://help.github.com/articles/github-flavored-markdown),
+then read this. This is important, because we are all write code, and all our questions about the code.
+So lets respect each other and wrap code-blocks by specified tags.
+
 If you have a change or new feature in mind, please fill an [NFR](https://github.com/phalcon/zephir/wiki/NFR).
 
 ## Pull request procedure
