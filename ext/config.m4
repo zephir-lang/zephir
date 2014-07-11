@@ -60,6 +60,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/oonoconstruct.zep.c
 	test/oo/ooparams.zep.c
 	test/oo/propertyaccess.zep.c
+	test/operator.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c
