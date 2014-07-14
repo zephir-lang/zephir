@@ -37,11 +37,10 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
 
     public function testDoubleSum()
     {
-        $this->assertTrue($this->class->doubleSum() == 3.0);
-        $this->assertTrue($this->class->double2Sum() == 3.0);
-        $this->assertTrue($this->class->doubleSumSimple() == 3.0);
-        $this->assertTrue($this->class->doubleSum2Simple() == 3.0);
-        $this->assertTrue($this->class->doubleSumExpression() == 2.0);
+        $this->assertSame($this->class->doubleSum(), 3.0);
+        $this->assertSame($this->class->double2Sum(), 3.0);
+        $this->assertSame($this->class->doubleSumSimple(), 3.0);
+        $this->assertSame($this->class->doubleSum2Simple(), 3.0);
     }
 
     public function testSummTest()
@@ -82,12 +81,10 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
 
     public function testBoolSum()
     {
-        $this->assertTrue($this->class->boolSum() == true);
-        $this->assertTrue($this->class->double2Sum() == true);
-        $this->assertTrue($this->class->bool2Sum() == true);
-        $this->assertTrue($this->class->bool3Sum() == true);
-        $this->assertTrue($this->class->boolSumSimple() == true);
-        $this->assertTrue($this->class->boolSumExpression() == true);
+        $this->assertTrue($this->class->boolSum());
+        $this->assertTrue($this->class->bool2Sum());
+        $this->assertTrue($this->class->bool3Sum());
+        $this->assertTrue($this->class->boolSumSimple());
     }
 
     public function testAddSum()
