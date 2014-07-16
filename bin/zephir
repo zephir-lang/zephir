@@ -32,4 +32,9 @@ if [ ! -r $ZEPHIRDIR/bin/zephir-parser ]; then
     esac
 fi
 
-php $ZEPHIRDIR/compiler.php $*
+if [[ $1 && $2 && $3 && "$1"=="-c" ]]; then
+    php -c $2 $ZEPHIRDIR/compiler.php ${*:3}
+else
+    php $ZEPHIRDIR/compiler.php $*
+fi
+
