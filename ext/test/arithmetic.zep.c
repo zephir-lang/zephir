@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
 #include "kernel/operators.h"
 
 
@@ -105,6 +106,24 @@ PHP_METHOD(Test_Arithmetic, boolSumSimple) {
 
 }
 
+PHP_METHOD(Test_Arithmetic, boolSumExpression) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
+	zval _0, *_1 = NULL;
+	zend_bool a;
+
+	ZEPHIR_MM_GROW();
+
+	a = 1;
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", &_2, &_0);
+	zephir_check_call_status();
+	RETURN_MM_LONG((a + zephir_get_numberval(_1)));
+
+}
+
 PHP_METHOD(Test_Arithmetic, doubleSum) {
 
 	double a, b, c;
@@ -146,6 +165,40 @@ PHP_METHOD(Test_Arithmetic, doubleSum2Simple) {
 
 	c = 3;
 	RETURN_DOUBLE(c);
+
+}
+
+PHP_METHOD(Test_Arithmetic, doubleSumExpression) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
+	zval _0, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", &_2, &_0);
+	zephir_check_call_status();
+	RETURN_MM_DOUBLE((1.0 + zephir_get_numberval(_1)));
+
+}
+
+PHP_METHOD(Test_Arithmetic, doubleSumVarExpression) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
+	zval _0, *_1 = NULL;
+	double a;
+
+	ZEPHIR_MM_GROW();
+
+	a = 1.0;
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", &_2, &_0);
+	zephir_check_call_status();
+	RETURN_MM_LONG((a + zephir_get_numberval(_1)));
 
 }
 
