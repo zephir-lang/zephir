@@ -33,8 +33,14 @@
     },
     "bin": ["bin/zephir"],
     "scripts": {
-        "post-install-cmd": ["./install"],
-        "post-update-cmd": ["./install"]
+        "post-install-cmd": [
+            "./unit-tests/ci/before_install.sh",
+            "./install"
+        ],
+        "post-update-cmd": [
+            "./unit-tests/ci/before_install.sh",
+            "./install"
+        ]
     },
     "extra": {
         "branch-alias": {
