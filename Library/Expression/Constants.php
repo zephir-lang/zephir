@@ -19,6 +19,7 @@
 
 namespace Zephir\Expression;
 
+use Zephir\Types;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -126,8 +127,9 @@ class Constants
      * @param array $expression
      * @param CompilationContext $compilationContext
      * @return CompiledExpression
+     * @throws \Zephir\CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
         $isPhpConstant = false;
         $isZephirConstant = false;
@@ -167,7 +169,7 @@ class Constants
                     return new LiteralCompiledExpression('double', $constantName, $expression);
 
                 case 'string':
-                    return new LiteralCompiledExpression('string', Utils::addSlashes($constantName), $expression);
+                    return new LiteralCompiledExpression('string', Utils::addSlashes($constantName, true, Types::STRING), $expression);
 
                 case 'object':
                     throw new CompilerException('?');
