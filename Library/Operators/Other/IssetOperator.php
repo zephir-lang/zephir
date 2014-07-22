@@ -81,8 +81,9 @@ class IssetOperator extends BaseOperator
                 $expr = new Expression($left['right']);
                 $expr->setReadOnly(true);
                 $resolvedExpr = $expr->compile($compilationContext);
-                switch ($resolvedExpr->getType()) {
 
+
+                switch ($resolvedExpr->getType()) {
                     case 'int':
                     case 'long':
                         return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $left['right']);
@@ -92,6 +93,8 @@ class IssetOperator extends BaseOperator
 
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
+                        $indexVariable->setLocalOnly(false);
+
                         switch ($indexVariable->getType()) {
 
                             case 'int':
