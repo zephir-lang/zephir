@@ -401,7 +401,11 @@ static json_object *xx_ret_parameter(int const_param, json_object *type, json_ob
 	if (type) {
 		json_object_object_add(ret, "data-type", type);
 		json_object_object_add(ret, "mandatory", json_object_new_int(mandatory));
+	} else {
+		json_object_object_add(ret, "data-type", json_object_new_string("variable"));
+		json_object_object_add(ret, "mandatory", json_object_new_int(0));
 	}
+
 	if (cast) {
 		json_object_object_add(ret, "cast", cast);
 	}
