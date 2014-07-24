@@ -14,6 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Compare) {
@@ -81,6 +83,52 @@ PHP_METHOD(Test_Compare, isMoreThenPi) {
 
 
 	RETURN_BOOL(3.14 < a);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/411
+ */
+PHP_METHOD(Test_Compare, testVarWithStringEquals) {
+
+	zval *str_param = NULL;
+	zval *str = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &str_param);
+
+	if (unlikely(Z_TYPE_P(str_param) != IS_STRING && Z_TYPE_P(str_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'str' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (unlikely(Z_TYPE_P(str_param) == IS_STRING)) {
+		str = str_param;
+	} else {
+		ZEPHIR_INIT_VAR(str);
+		ZVAL_EMPTY_STRING(str);
+	}
+	ZEPHIR_SEPARATE_PARAM(str);
+
+
+	if (ZEPHIR_IS_STRING(str, "wrong testing")) {
+		ZEPHIR_INIT_NVAR(str);
+		ZVAL_STRING(str, "NOK", 1);
+	} else {
+		if (ZEPHIR_IS_STRING(str, "another testing")) {
+			ZEPHIR_INIT_NVAR(str);
+			ZVAL_STRING(str, "NOK", 1);
+		} else {
+			if (ZEPHIR_IS_STRING(str, "testing")) {
+				ZEPHIR_INIT_NVAR(str);
+				ZVAL_STRING(str, "OK", 1);
+			} else {
+				ZEPHIR_INIT_NVAR(str);
+				ZVAL_STRING(str, "NOK", 1);
+			}
+		}
+	}
+	RETURN_CTOR(str);
 
 }
 

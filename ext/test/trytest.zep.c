@@ -91,7 +91,6 @@ PHP_METHOD(Test_TryTest, testTry2) {
 	try_end_1:
 
 	zend_clear_exception(TSRMLS_C);
-	ZEPHIR_MM_RESTORE();
 
 }
 
@@ -345,7 +344,6 @@ PHP_METHOD(Test_TryTest, testTry7) {
 		zend_clear_exception(TSRMLS_C);
 		RETURN_MM_STRING("any error", 1);
 	}
-	ZEPHIR_MM_RESTORE();
 
 }
 

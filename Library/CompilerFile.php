@@ -682,8 +682,8 @@ class CompilerFile
 
         $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
 
-        $filePath = 'ext/' . $path . '.c';
-        $filePathHeader = 'ext/' . $path . '.h';
+        $filePath = 'ext/' . $path . '.zep.c';
+        $filePathHeader = 'ext/' . $path . '.zep.h';
 
         if (strpos($path, DIRECTORY_SEPARATOR)) {
             $dirname = dirname($filePath);

@@ -113,6 +113,11 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG';
                             break;
 
+                        case 'double':
+                        case 'float':
+                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_DOUBLE';
+                            break;
+
                         case 'boolean':
                         case 'bool':
                             $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL';

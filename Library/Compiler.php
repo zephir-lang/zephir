@@ -29,7 +29,7 @@ use Zephir\Commands\CommandGenerate;
  */
 class Compiler
 {
-    const VERSION = '0.4.1a';
+    const VERSION = '0.4.2a';
 
     /**
      * @var CompilerFile[]
@@ -68,12 +68,17 @@ class Compiler
     /**
      * @var \ReflectionClass[]
      */
-    protected static $_reflections = array();
+    protected static $_internalDefinitions = array();
 
     /**
      * @var boolean
      */
     protected static $_loadedPrototypes = false;
+
+    /**
+     * @var array
+     */
+    protected $_extraFiles = array();
 
     /**
      * Compiler constructor
@@ -112,6 +117,7 @@ class Compiler
 
     /**
      * @param string $path
+     *
      * @throws CompilerException
      */
     protected function _recursivePreCompile($path)
@@ -145,6 +151,7 @@ class Compiler
      * Allows to check if a class is part of the compiled extension
      *
      * @param string $className
+     *
      * @return boolean
      */
     public function isClass($className)
@@ -156,6 +163,7 @@ class Compiler
                 }
             }
         }
+
         return false;
     }
 
@@ -163,6 +171,7 @@ class Compiler
      * Allows to check if an interface is part of the compiled extension
      *
      * @param string $className
+     *
      * @return boolean
      */
     public function isInterface($className)
@@ -174,6 +183,7 @@ class Compiler
                 }
             }
         }
+
         return false;
     }
 
@@ -181,6 +191,7 @@ class Compiler
      * Allows to check if a class is part of PHP
      *
      * @param string $className
+     *
      * @return boolean
      */
     public function isInternalClass($className)
@@ -192,6 +203,7 @@ class Compiler
      * Allows to check if a interface is part of PHP
      *
      * @param string $className
+     *
      * @return boolean
      */
     public function isInternalInterface($className)
@@ -203,6 +215,7 @@ class Compiler
      * Returns class the class definition from a given class name
      *
      * @param string $className
+     *
      * @return ClassDefinition
      */
     public function getClassDefinition($className)
@@ -212,6 +225,7 @@ class Compiler
                 return $value;
             }
         }
+
         return false;
     }
 
@@ -219,23 +233,27 @@ class Compiler
      * Returns class the class definition from a given class name
      *
      * @param string $className
+     *
      * @return ClassDefinition
      */
     public function getInternalClassDefinition($className)
     {
-        if (!isset(self::$_reflections[$className])) {
-            self::$_reflections[$className] = new \ReflectionClass($className);
+        if (!isset(self::$_internalDefinitions[$className])) {
+            $reflection = new \ReflectionClass($className);
+            self::$_internalDefinitions[$className] = ClassDefinition::buildFromReflection($reflection);
         }
-        return self::$_reflections[$className];
+
+        return self::$_internalDefinitions[$className];
     }
 
     /**
      * Copies the base kernel to the extension destination
      *
-     * @param $src
-     * @param $dest
+     * @param        $src
+     * @param        $dest
      * @param string $pattern
-     * @param mixed $callback
+     * @param mixed  $callback
+     *
      * @return bool
      */
     protected function _recursiveProcess($src, $dest, $pattern = null, $callback = "copy")
@@ -265,6 +283,7 @@ class Compiler
                 }
             }
         }
+
         return $success;
     }
 
@@ -272,6 +291,7 @@ class Compiler
      * Registers C-constants as PHP constants from a C-file
      *
      * @param array $constantsSources
+     *
      * @throws Exception
      */
     protected function _loadConstantsSources($constantsSources)
@@ -298,6 +318,7 @@ class Compiler
      * Checks if $name is Zephir constant
      *
      * @param string $name
+     *
      * @return boolean
      */
     public function isConstant($name)
@@ -329,6 +350,7 @@ class Compiler
      * Checks if a specific extension global is defined
      *
      * @param string $name
+     *
      * @return boolean
      */
     public function isExtensionGlobal($name)
@@ -340,6 +362,7 @@ class Compiler
      * Returns a extension global by its name
      *
      * @param string $name
+     *
      * @return boolean
      */
     public function getExtensionGlobal($name)
@@ -392,6 +415,7 @@ class Compiler
         foreach ($lines as $line) {
             if (strpos($line, 'LLVM') !== false) {
                 file_put_contents('.temp/' . self::VERSION . '/gcc-version', '4.8.0');
+
                 return '4.8.0';
             }
         }
@@ -399,6 +423,7 @@ class Compiler
         $lastLine = $lines[count($lines) - 1];
         if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
             file_put_contents('.temp/' . self::VERSION . '/gcc-version', $matches[0]);
+
             return $matches[0];
         }
 
@@ -409,6 +434,7 @@ class Compiler
      * Initializes a Zephir extension
      *
      * @param CommandInterface $command
+     *
      * @throws Exception
      */
     public function init(CommandInterface $command)
@@ -453,6 +479,7 @@ class Compiler
 
     /**
      * @param CommandInterface $command
+     *
      * @return bool
      * @throws Exception
      */
@@ -643,7 +670,7 @@ class Compiler
      * Generate ide stubs
      *
      * @param CommandInterface $command
-     * @param bool $fromGenerate
+     * @param bool             $fromGenerate
      */
     public function stubs(CommandInterface $command, $fromGenerate = false)
     {
@@ -663,6 +690,7 @@ class Compiler
      * Compiles and installs the extension
      *
      * @param CommandInterface $command
+     *
      * @throws Exception
      */
     public function install(CommandInterface $command)
@@ -697,6 +725,7 @@ class Compiler
 
     /**
      * Run tests
+     *
      * @param CommandInterface $command
      */
     public function test(CommandInterface $command)
@@ -747,6 +776,7 @@ class Compiler
      *
      * @param string $src
      * @param string $dst
+     *
      * @return boolean
      */
     protected function _checkKernelFile($src, $dst)
@@ -775,6 +805,7 @@ class Compiler
             exec("rm -fr ext/kernel/*");
             $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@');
         }
+
         return !$configured;
     }
 
@@ -782,23 +813,26 @@ class Compiler
      * Create config.m4 and config.w32 by compiled files to test extension
      *
      * @param string $project
+     *
      * @throws Exception
      * @return bool true if need to run configure
      */
     public function createConfigFiles($project)
     {
-
         $content = file_get_contents(__DIR__ . '/../templates/config.m4');
         if (empty($content)) {
             throw new Exception("Template config.m4 doesn't exist");
         }
+        $compiledFiles = array_map(function ($file) {
+            return str_replace('.c', '.zep.c', $file);
+        }, $this->_compiledFiles);
 
         $toReplace = array(
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
             '%PROJECT_CAMELIZE%'     => ucfirst($project),
-            '%FILES_COMPILED%'       => implode(' ', $this->_compiledFiles),
-            '%EXTRA_FILES_COMPILED%' => implode(' ', $this->_extraFiles),
+            '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
+            '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->_extraFiles),
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -900,6 +934,7 @@ class Compiler
      * Process extension globals
      *
      * @param string $namespace
+     *
      * @throws Exception
      * @return array
      */
@@ -1021,12 +1056,9 @@ class Compiler
                                 $initEntries .= 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
                             }
                             break;
-
                     }
                 }
-
             }
-
         }
 
         return array($globalCode, $globalStruct, $globalsDefault);
@@ -1070,6 +1102,7 @@ class Compiler
      * Create project.c and project.h by compiled files to test extension
      *
      * @param string $project
+     *
      * @throws Exception
      * @return boolean
      */
@@ -1175,7 +1208,6 @@ class Compiler
          */
         list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals($project);
 
-
         /**
          * Round 4. Process extension info
          */
@@ -1211,7 +1243,7 @@ class Compiler
         $includeHeaders = array();
         foreach ($this->_compiledFiles as $file) {
             if ($file) {
-                $fileH = str_replace(".c", ".h", $file);
+                $fileH = str_replace(".c", ".zep.h", $file);
                 $include = '#include "' . $fileH . '"';
                 $includeHeaders[] = $include;
             }
@@ -1273,6 +1305,7 @@ class Compiler
      * Returns a short path
      *
      * @param string $path
+     *
      * @return string
      */
     public static function getShortPath($path)
@@ -1284,6 +1317,7 @@ class Compiler
      * Returns a short user path
      *
      * @param string $path
+     *
      * @return string
      */
     public static function getShortUserPath($path)

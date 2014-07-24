@@ -53,4 +53,9 @@ class PublicProperties
 	public testPropertyFromSelfConstantValue = self::TEST_CONST;
 
 	public testPropertyFromClassNameConstantValue = PublicProperties::TEST_CONST;
+
+    public function test394Issue()
+    {
+		return this->{"someTrue"};
+    }
 }

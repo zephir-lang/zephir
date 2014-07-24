@@ -43,6 +43,9 @@ class ClassDefinition
 
     protected $abstract;
 
+    /**
+     * @var ClassDefinition
+     */
     protected $extendsClassDefinition;
 
     /**
@@ -89,6 +92,8 @@ class ClassDefinition
     }
 
     /**
+     * Sets if the class is internal or not
+     *
      * @param boolean $isInternal
      */
     public function setIsInternal($isInternal)
@@ -97,6 +102,8 @@ class ClassDefinition
     }
 
     /**
+     * Returns if the class is internal or not
+     *
      * @return bool
      */
     public function isInternal()
@@ -595,11 +602,7 @@ class ClassDefinition
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
-                if ($interfaceDefinition instanceof ClassDefinition) {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
-                } else {
-                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getName());
-                }
+                throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
             }
         }
     }
@@ -655,7 +658,7 @@ class ClassDefinition
         if ($this->extendsClass) {
 
             $classExtendsDefinition = $this->extendsClassDefinition;
-            if ($classExtendsDefinition instanceof ClassDefinition) {
+            if (!$classExtendsDefinition->isInternal()) {
                 $classEntry = $classExtendsDefinition->getClassEntry();
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
@@ -770,7 +773,7 @@ class ClassDefinition
              */
             if ($classExtendsDefinition) {
 
-                if ($classExtendsDefinition instanceof ClassDefinition) {
+                if (!$classExtendsDefinition->isInternal()) {
                     $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                     if (is_array($interfaces)) {
                         foreach ($interfaces as $interface) {
@@ -1131,12 +1134,39 @@ class ClassDefinition
                     $parameters
                 ));
                 $classMethod->setIsStatic($method->isStatic());
+                $classMethod->setIsInternal(true);
                 $classDefinition->addMethod($classMethod);
+            }
+        }
+
+        $constants = $class->getConstants();
+        if (count($constants) > 0) {
+            foreach ($constants as $constantName => $constantValue) {
+                $type = self::_convertPhpConstantType(gettype($constantValue));
+                $classConstant = new ClassConstant($constantName, array('value' => $constantValue, 'type' => $type), null);
+                $classDefinition->addConstant($classConstant);
             }
         }
 
         $classDefinition->setIsInternal(true);
 
         return $classDefinition;
+    }
+
+    private static function _convertPhpConstantType($phpType)
+    {
+        $map = array(
+            'boolean'    => 'bool',
+            'integer'    => 'int',
+            'double'    => 'double',
+            'string'    => 'string',
+            'NULL'        => 'null',
+        );
+
+        if (!isset($map[$phpType])) {
+            throw new CompilerException("Cannot parse constant type '$phpType'");
+        }
+
+        return $map[$phpType];
     }
 }

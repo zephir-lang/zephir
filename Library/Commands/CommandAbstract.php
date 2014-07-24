@@ -33,25 +33,6 @@ abstract class CommandAbstract implements CommandInterface
     private $_parameters = null;
 
     /**
-     * Command provided by this command
-     *
-     * @return string
-     */
-    abstract public function getCommand();
-
-    /**
-     * Command usage
-     *
-     * @return string
-     */
-    abstract public function getUsage();
-
-    /**
-     * @return string
-     */
-    abstract public function getDescription();
-
-    /**
      * Returns parameter named $name if specified
      * on the commmand line else null
      *
