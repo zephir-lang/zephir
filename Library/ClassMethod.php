@@ -511,6 +511,7 @@ class ClassMethod
      * Returns the C-modifier flags
      *
      * @return string
+     * @throws Exception
      */
     public function getModifiers()
     {
@@ -534,6 +535,9 @@ class ClassMethod
                     break;
                 case 'abstract':
                     $modifiers['ZEND_ACC_ABSTRACT'] = $visibility;
+                    break;
+                case 'deprecated':
+                    $modifiers['ZEND_ACC_DEPRECATED'] = $visibility;
                     break;
                 case 'inline':
                     break;
