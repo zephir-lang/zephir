@@ -153,6 +153,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'deprecated' {
+			s->active_char += sizeof("deprecated")-1;
+			token->opcode = XX_T_DEPRECATED;
+			return 0;
+		}
+
 		'final' {
 			s->active_char += sizeof("final")-1;
 			token->opcode = XX_T_FINAL;

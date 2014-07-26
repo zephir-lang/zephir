@@ -1635,6 +1635,10 @@ xx_visibility(R) ::= INLINE . {
 	R = json_object_new_string("inline");
 }
 
+xx_visibility(R) ::= DEPRECATED . {
+	R = json_object_new_string("deprecated");
+}
+
 xx_visibility(R) ::= ABSTRACT . {
 	R = json_object_new_string("abstract");
 }

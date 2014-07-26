@@ -206,6 +206,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_INLINE:
 				xx_(xx_parser, XX_INLINE, NULL, parser_status);
 				break;
+			case XX_T_DEPRECATED:
+				xx_(xx_parser, XX_DEPRECATED, NULL, parser_status);
+				break;
 			case XX_T_FINAL:
 				xx_(xx_parser, XX_FINAL, NULL, parser_status);
 				break;
