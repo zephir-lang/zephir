@@ -49,6 +49,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/nativearray.zep.c
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
+	test/oo/deprecatedmethods.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
 	test/oo/extendpdoclass.zep.c
@@ -60,6 +61,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/oonoconstruct.zep.c
 	test/oo/ooparams.zep.c
 	test/oo/propertyaccess.zep.c
+	test/operator.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c

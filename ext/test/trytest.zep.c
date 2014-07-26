@@ -117,11 +117,13 @@ PHP_METHOD(Test_TryTest, testTry3) {
 
 	try_end_1:
 
-	ZEPHIR_INIT_NVAR(_1);
-	ZEPHIR_CPY_WRT(_1, EG(exception));
-	if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("error", 1);
+	if (EG(exception)) {
+		ZEPHIR_INIT_NVAR(_1);
+		ZEPHIR_CPY_WRT(_1, EG(exception));
+		if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 
@@ -168,17 +170,19 @@ PHP_METHOD(Test_TryTest, testTry4) {
 
 	try_end_1:
 
-	ZEPHIR_INIT_NVAR(_1);
-	ZEPHIR_CPY_WRT(_1, EG(exception));
-	if (zephir_instance_of_ev(_1, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("domain error", 1);
-	}
-	ZEPHIR_INIT_NVAR(_1);
-	ZEPHIR_CPY_WRT(_1, EG(exception));
-	if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("error", 1);
+	if (EG(exception)) {
+		ZEPHIR_INIT_NVAR(_1);
+		ZEPHIR_CPY_WRT(_1, EG(exception));
+		if (zephir_instance_of_ev(_1, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("domain error", 1);
+		}
+		ZEPHIR_INIT_NVAR(_1);
+		ZEPHIR_CPY_WRT(_1, EG(exception));
+		if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 
@@ -225,15 +229,17 @@ PHP_METHOD(Test_TryTest, testTry5) {
 
 	try_end_1:
 
-	ZEPHIR_INIT_NVAR(_1);
-	ZEPHIR_CPY_WRT(_1, EG(exception));
-	if (zephir_instance_of_ev(_1, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("any error", 1);
-	}
-	if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("any error", 1);
+	if (EG(exception)) {
+		ZEPHIR_INIT_NVAR(_1);
+		ZEPHIR_CPY_WRT(_1, EG(exception));
+		if (zephir_instance_of_ev(_1, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("any error", 1);
+		}
+		if (zephir_instance_of_ev(_1, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("any error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 
@@ -280,15 +286,17 @@ PHP_METHOD(Test_TryTest, testTry6) {
 
 	try_end_1:
 
-	ZEPHIR_CPY_WRT(e, EG(exception));
-	if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("domain error", 1);
-	}
-	ZEPHIR_CPY_WRT(e, EG(exception));
-	if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("error", 1);
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("domain error", 1);
+		}
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 
@@ -335,14 +343,16 @@ PHP_METHOD(Test_TryTest, testTry7) {
 
 	try_end_1:
 
-	ZEPHIR_CPY_WRT(e, EG(exception));
-	if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("any error", 1);
-	}
-	if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("any error", 1);
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("any error", 1);
+		}
+		if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("any error", 1);
+		}
 	}
 
 }
@@ -394,7 +404,6 @@ PHP_METHOD(Test_TryTest, someMethod2) {
 
 PHP_METHOD(Test_TryTest, testTry9) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
 
@@ -403,16 +412,18 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", &_0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod1", NULL);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 
 	try_end_1:
 
-	ZEPHIR_CPY_WRT(e, EG(exception));
-	if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("domain error", 1);
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("domain error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 
@@ -420,7 +431,6 @@ PHP_METHOD(Test_TryTest, testTry9) {
 
 PHP_METHOD(Test_TryTest, testTry10) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
 
@@ -429,16 +439,18 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", &_0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "somemethod2", NULL);
 		zephir_check_call_status_or_jump(try_end_1);
 		RETURN_MM_STRING("not catched", 1);
 
 	try_end_1:
 
-	ZEPHIR_CPY_WRT(e, EG(exception));
-	if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
-		zend_clear_exception(TSRMLS_C);
-		RETURN_MM_STRING("domain error", 1);
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, spl_ce_RuntimeException TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			RETURN_MM_STRING("domain error", 1);
+		}
 	}
 	RETURN_MM_BOOL(0);
 

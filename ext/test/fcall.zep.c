@@ -90,7 +90,7 @@ PHP_METHOD(Test_Fcall, testCall3) {
 			ZVAL_LONG(&_0, 4096);
 			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, handle, &_0);
 			zephir_check_call_status();
-			if (ZEPHIR_IS_FALSE(buffer)) {
+			if (ZEPHIR_IS_FALSE_IDENTICAL(buffer)) {
 				break;
 			}
 			zephir_fwrite(NULL, handle2, buffer TSRMLS_CC);
@@ -128,7 +128,7 @@ PHP_METHOD(Test_Fcall, testCall4) {
 			ZVAL_LONG(&_0, 4096);
 			ZEPHIR_CALL_FUNCTION(&buffer, "fgets", &_3, handle, &_0);
 			zephir_check_call_status();
-			if (ZEPHIR_IS_FALSE(buffer)) {
+			if (ZEPHIR_IS_FALSE_IDENTICAL(buffer)) {
 				break;
 			}
 			zephir_fwrite(NULL, handle2, buffer TSRMLS_CC);
