@@ -37,7 +37,7 @@ class Scall extends ScallParent
 		return a + b;
 	}
 
-	static public function testMethod7() -> <\stdClass>
+	static public function testMethod7() : <\stdClass>
 	{
 		return new \stdClass();
 	}

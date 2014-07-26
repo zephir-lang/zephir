@@ -37,7 +37,7 @@ class Mcall
 		return a + b;
 	}
 
-	private function testMethod7() -> <\stdClass>
+	private function testMethod7() : <\stdClass>
 	{
 		return new \stdClass();
 	}

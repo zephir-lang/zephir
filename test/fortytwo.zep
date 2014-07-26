@@ -8,7 +8,7 @@ namespace Test;
 class FortyTwo
 {
 
-	public function proof() -> void
+	public function proof() : void
 	{
 		var box, side;
 		int i, j;

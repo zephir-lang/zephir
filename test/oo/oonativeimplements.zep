@@ -16,7 +16,7 @@ class OoNativeImplements implements
 
 	/* Countable */
 
-	public function count() -> int
+	public function count() : int
 	{
 	}
 
@@ -38,7 +38,7 @@ class OoNativeImplements implements
 	{
 	}
 
-	public function valid() -> boolean
+	public function valid() : boolean
 	{
 	}
 
@@ -50,10 +50,10 @@ class OoNativeImplements implements
 
 	/* RecursiveIterator */
 
-	public function getChildren() -> <\RecursiveIterator>
+	public function getChildren() : <\RecursiveIterator>
 	{
 	}
-	public function hasChildren() -> boolean
+	public function hasChildren() : boolean
 	{
 	}
 
@@ -64,12 +64,12 @@ class OoNativeImplements implements
 	}
 
 	/* IteratorAggregate */
-	public function getIterator() -> <\Traversable>
+	public function getIterator() : <\Traversable>
 	{
 	}
 
 	/* ArrayAccess*/
-	public function offsetExists (offset) -> boolean
+	public function offsetExists (offset) : boolean
 	{
 	}
 
@@ -86,7 +86,7 @@ class OoNativeImplements implements
 	}
 
 	/* Serializable */
-	public function serialize() -> string
+	public function serialize() : string
 	{
 	}
 
