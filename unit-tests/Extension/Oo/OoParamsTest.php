@@ -48,7 +48,7 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->setEnabled("0") === false);
 
         $this->assertTrue($t->setList(array(1, 2, 3, 4, 5)) === array(1, 2, 3, 4, 5));
-        $this->assertTrue($t->setList(null) == array());
+        $this->assertTrue($t->setList(array()) == array());
     }
 
     public function testSetStrictAgeException1()

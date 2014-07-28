@@ -672,3 +672,38 @@ PHP_METHOD(Test_Mcall, arrayParamWithDefaultEmptyArray) {
 
 }
 
+PHP_METHOD(Test_Mcall, arrayParamWithDefaultNullValue) {
+
+	zval *driverOptions_param = NULL;
+	zval *driverOptions = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &driverOptions_param);
+
+	if (!driverOptions_param) {
+	ZEPHIR_INIT_VAR(driverOptions);
+	ZVAL_NULL(driverOptions);
+	} else {
+		zephir_get_arrval(driverOptions, driverOptions_param);
+	}
+
+
+	RETURN_CTOR(driverOptions);
+
+}
+
+PHP_METHOD(Test_Mcall, arrayParam) {
+
+	zval *driverOptions_param = NULL;
+	zval *driverOptions = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &driverOptions_param);
+
+	zephir_get_arrval(driverOptions, driverOptions_param);
+
+
+	RETURN_CTOR(driverOptions);
+
+}
+

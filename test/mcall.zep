@@ -212,4 +212,14 @@ class Mcall
 	{
 		return driverOptions;
 	}
+
+	public function arrayParamWithDefaultNullValue(array driverOptions = null)
+	{
+		return driverOptions;
+	}
+
+	public function arrayParam(array driverOptions)
+	{
+		return driverOptions;
+	}
 }
