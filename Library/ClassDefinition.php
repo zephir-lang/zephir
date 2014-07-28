@@ -861,7 +861,14 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                    switch($parameter['data-type']) {
+                        case 'array':
+                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . $parameter['mandatory'] . ')');
+                            break;
+                        default:
+                            $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            break;
+                    }
                 }
                 $codePrinter->output('ZEND_END_ARG_INFO()');
                 $codePrinter->outputBlankLine();
