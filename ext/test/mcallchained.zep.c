@@ -85,17 +85,16 @@ PHP_METHOD(Test_McallChained, testChained2) {
 
 PHP_METHOD(Test_McallChained, testChained3) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *_0 = NULL, *_2 = NULL;
+	zval *_0 = NULL, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3",  &_1);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod3",  NULL);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_2, _0, "testmethod2",  NULL);
+	ZEPHIR_CALL_METHOD(&_1, _0, "testmethod2",  NULL);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_METHOD(_2, "testmethod1", NULL);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "testmethod1", NULL);
 	zephir_check_call_status();
 	RETURN_MM();
 

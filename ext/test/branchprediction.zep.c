@@ -46,7 +46,7 @@ PHP_METHOD(Test_BranchPrediction, testLikely2) {
 
 
 
-	if (likely(ZEPHIR_IS_LONG(a, 1))) {
+	if (likely(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
 		RETURN_BOOL(1);
 	} else {
 		RETURN_BOOL(0);
@@ -73,7 +73,7 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely2) {
 
 
 
-	if (likely(ZEPHIR_IS_LONG(a, 1))) {
+	if (likely(ZEPHIR_IS_LONG_IDENTICAL(a, 1))) {
 		RETURN_BOOL(1);
 	} else {
 		RETURN_BOOL(0);
