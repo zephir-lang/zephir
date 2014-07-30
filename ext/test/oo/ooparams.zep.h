@@ -43,7 +43,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setenabled, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setlist, 0, 0, 1)
-	ZEND_ARG_INFO(0, someList)
+	ZEND_ARG_ARRAY_INFO(0, someList, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setstrictage, 0, 0, 1)
@@ -63,7 +63,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setstrictenabled, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setstrictlist, 0, 0, 1)
-	ZEND_ARG_INFO(0, someList)
+	ZEND_ARG_ARRAY_INFO(0, someList, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setagedefault, 0, 0, 0)
@@ -83,7 +83,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setenableddefault, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setlistdefault, 0, 0, 0)
-	ZEND_ARG_INFO(0, someList)
+	ZEND_ARG_ARRAY_INFO(0, someList, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setconstage, 0, 0, 1)

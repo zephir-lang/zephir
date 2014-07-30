@@ -36,7 +36,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_unsettest_testunsetfromarraybyindexvar, 0, 0
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_unsettest_testunsettypedarray, 0, 0, 2)
-	ZEND_ARG_INFO(0, arr)
+	ZEND_ARG_ARRAY_INFO(0, arr, 0)
 	ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
 

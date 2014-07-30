@@ -808,6 +808,9 @@ class ClassMethod
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
                     case 'null':
+                        $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
+                        $code .= "\t" . 'ZVAL_NULL(' . $parameter['name'] . ');' . PHP_EOL;
+                        break;
                     case 'empty-array':
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
@@ -1483,7 +1486,7 @@ class ClassMethod
 
                             case 'null':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                $initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+                                $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
                                 break;
 
                             case 'array':

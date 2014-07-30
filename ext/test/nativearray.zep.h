@@ -81,7 +81,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_testimplodearray, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue264, 0, 0, 1)
-	ZEND_ARG_INFO(0, tokens)
+	ZEND_ARG_ARRAY_INFO(0, tokens, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
