@@ -863,7 +863,7 @@ class ClassDefinition
                 foreach ($parameters->getParameters() as $parameter) {
                     switch($parameter['data-type']) {
                         case 'array':
-                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . $parameter['mandatory'] . ')');
+                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
                         default:
                             $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
