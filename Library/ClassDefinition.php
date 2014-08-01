@@ -601,9 +601,18 @@ class ClassDefinition
     public function checkInterfaceImplements($classDefinition, $interfaceDefinition)
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
+
             if (!$classDefinition->hasMethod($method->getName())) {
                 throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
             }
+
+            if ($method->hasParameters()) {
+                $implementedMethod = $classDefinition->getMethod($method->getName());
+                if ($implementedMethod->getNumberOfRequiredParameters() != $method->getNumberOfRequiredParameters()) {
+                    throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: " . $interfaceDefinition->getCompleteName());
+                }
+            }
+
         }
     }
 
