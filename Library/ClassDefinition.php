@@ -861,21 +861,13 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    if (isset($parameter['data-type'])) {
-                        switch ($parameter['data-type']) {
-                            case 'array':
-                                if (isset($parameter['default'])) {
-                                    $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', 1)');
-                                } else {
-                                    $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', 0)');
-                                }
-                                break;
-                            default:
-                                $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
-                                break;
-                        }
-                    } else {
-                        $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                    switch($parameter['data-type']) {
+                        case 'array':
+                            $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . $parameter['mandatory'] . ')');
+                            break;
+                        default:
+                            $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            break;
                     }
                 }
                 $codePrinter->output('ZEND_END_ARG_INFO()');
