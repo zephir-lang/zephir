@@ -4,8 +4,6 @@
 #ifndef ZEPHIR_CLASS_ENTRIES_H
 #define ZEPHIR_CLASS_ENTRIES_H
 
-#include "test/xx.zep.h"
-#include "test/yy.zep.h"
 #include "test/arithmetic.zep.h"
 #include "test/arrayobject.zep.h"
 #include "test/assign.zep.h"

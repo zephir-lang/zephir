@@ -20,7 +20,7 @@
 #include "kernel/exception.h"
 #include "kernel/string.h"
 #include "kernel/hash.h"
-#include "kernel/concat.h"
+#include "concat.h"
 
 
 /**
