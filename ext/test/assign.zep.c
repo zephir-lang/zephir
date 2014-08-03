@@ -1044,7 +1044,7 @@ PHP_METHOD(Test_Assign, testPropertyArray12) {
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("zza"), 2, index, index);
 	_2 = zephir_fetch_nproperty_this(this_ptr, SL("myArray"), PH_NOISY_CC);
 	ZEPHIR_OBS_VAR(temp1);
-	zephir_array_fetch(&temp1, _2, index, PH_NOISY TSRMLS_CC);
+	zephir_array_fetch(&temp1, _2, index, PH_NOISY, "test/assign.zep", 557 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(temp2);
 	zephir_read_property_this(&temp2, this_ptr, SL("myArray"), PH_NOISY_CC);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("zza"), 2, index, index);
@@ -1083,7 +1083,7 @@ PHP_METHOD(Test_Assign, testPropertyArray13) {
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("za"), 1, index);
 	_2 = zephir_fetch_nproperty_this(this_ptr, SL("myArray"), PH_NOISY_CC);
 	ZEPHIR_OBS_VAR(temp1);
-	zephir_array_fetch(&temp1, _2, index, PH_NOISY TSRMLS_CC);
+	zephir_array_fetch(&temp1, _2, index, PH_NOISY, "test/assign.zep", 574 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(temp2);
 	zephir_read_property_this(&temp2, this_ptr, SL("myArray"), PH_NOISY_CC);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &ZEPHIR_GLOBAL(global_true) TSRMLS_CC, SL("za"), 1, index);

@@ -43,7 +43,7 @@ PHP_METHOD(Test_SPropertyAccess, __construct) {
 	ZVAL_STRING(_0, "abc", 1);
 	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("a"), _0 TSRMLS_CC);
 	_0 = zephir_fetch_static_property_ce(test_spropertyaccess_ce, SL("a") TSRMLS_CC);
-	zephir_array_fetch_long(&_1, _0, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+	zephir_array_fetch_long(&_1, _0, 0, PH_NOISY | PH_READONLY, "test/spropertyaccess.zep", 15 TSRMLS_CC);
 	zephir_update_static_property_ce(test_spropertyaccess_ce, SL("b"), _1 TSRMLS_CC);
 	zephir_read_static_property_ce(&_2, test_spropertyaccess_ce, SL("b") TSRMLS_CC);
 	zephir_update_static_property_ce(test_scallexternal_ce, SL("sproperty"), _2 TSRMLS_CC);

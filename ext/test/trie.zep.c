@@ -83,7 +83,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 		}
 		ZEPHIR_OBS_NVAR(_6);
 		zephir_read_property(&_6, trieNode, SL("children"), PH_NOISY_CC);
-		zephir_array_fetch(&_7, _6, character, PH_NOISY | PH_READONLY TSRMLS_CC);
+		zephir_array_fetch(&_7, _6, character, PH_NOISY | PH_READONLY, "test/trie.zep", 24 TSRMLS_CC);
 		ZEPHIR_CPY_WRT(trieNode, _7);
 		i += 1;
 	}

@@ -97,19 +97,19 @@ PHP_METHOD(Test_Fannkuch, process) {
 					_4 = 1;
 				}
 				i = _5;
-				zephir_array_fetch_long(&_7, perm1, i, PH_NOISY | PH_READONLY TSRMLS_CC);
+				zephir_array_fetch_long(&_7, perm1, i, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 43 TSRMLS_CC);
 				zephir_array_update_long(&perm, i, &_7, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 43);
 			}
 		}
 		flipsCount = 0;
 		k = 0;
 		while (1) {
-			zephir_array_fetch_long(&_7, perm, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_7, perm, 0, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 48 TSRMLS_CC);
 			if (!(!ZEPHIR_IS_LONG(_7, 0))) {
 				break;
 			}
 			ZEPHIR_OBS_NVAR(_8);
-			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY TSRMLS_CC);
+			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY, "test/fannkuch.zep", 49 TSRMLS_CC);
 			k = zephir_get_intval(_8);
 			k2 = (((((k + 1)) / 2)) - 1);
 			_11 = k2;
@@ -126,8 +126,8 @@ PHP_METHOD(Test_Fannkuch, process) {
 						_9 = 1;
 					}
 					i = _10;
-					zephir_array_fetch_long(&temp, perm, i, PH_NOISY | PH_READONLY TSRMLS_CC);
-					zephir_array_fetch_long(&_12, perm, (k - i), PH_NOISY | PH_READONLY TSRMLS_CC);
+					zephir_array_fetch_long(&temp, perm, i, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 51 TSRMLS_CC);
+					zephir_array_fetch_long(&_12, perm, (k - i), PH_NOISY | PH_READONLY, "test/fannkuch.zep", 51 TSRMLS_CC);
 					zephir_array_update_long(&perm, i, &_12, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 51);
 					zephir_array_update_long(&perm, (k - i), &temp, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 51);
 				}
@@ -156,23 +156,23 @@ PHP_METHOD(Test_Fannkuch, process) {
 				zephir_array_fast_append(return_value, _13);
 				RETURN_MM();
 			}
-			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 75 TSRMLS_CC);
 			i = 0;
 			while (1) {
 				if (!(i < r)) {
 					break;
 				}
 				j = (i + 1);
-				zephir_array_fetch_long(&_7, perm1, j, PH_NOISY | PH_READONLY TSRMLS_CC);
+				zephir_array_fetch_long(&_7, perm1, j, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 78 TSRMLS_CC);
 				zephir_array_update_long(&perm1, i, &_7, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 78);
 				i = j;
 			}
 			zephir_array_update_long(&perm1, r, &perm0, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 82);
-			zephir_array_fetch_long(&_12, count, r, PH_NOISY | PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_12, count, r, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 82 TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_13);
 			ZVAL_LONG(_13, (zephir_get_numberval(_12) - 1));
 			zephir_array_update_long(&count, r, &_13, PH_COPY | PH_SEPARATE, "test/fannkuch.zep", 82);
-			zephir_array_fetch_long(&_14, count, r, PH_NOISY | PH_READONLY TSRMLS_CC);
+			zephir_array_fetch_long(&_14, count, r, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 83 TSRMLS_CC);
 			if (ZEPHIR_GT_LONG(_14, 0)) {
 				break;
 			}

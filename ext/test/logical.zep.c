@@ -106,7 +106,7 @@ PHP_METHOD(Test_Logical, testAnd9) {
 		_0 = zephir_array_isset_long(a, b);
 	}
 	if (_0) {
-		zephir_array_fetch_long(&_1, a, b, PH_NOISY | PH_READONLY TSRMLS_CC);
+		zephir_array_fetch_long(&_1, a, b, PH_NOISY | PH_READONLY, "test/logical.zep", 35 TSRMLS_CC);
 		RETURN_CTORW(_1);
 	}
 	RETURN_NULL();
@@ -178,7 +178,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 	}
 	_1 = _0;
 	if (_1) {
-		zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY TSRMLS_CC);
+		zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY, "test/logical.zep", 65 TSRMLS_CC);
 		_1 = ZEPHIR_LT_LONG(minLength, zephir_fast_strlen_ev(_2));
 	}
 	if (_1) {
