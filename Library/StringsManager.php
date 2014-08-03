@@ -37,8 +37,8 @@ class StringsManager
     );
 
     /**
-    * @param string $path
-    */
+     * @param string $path
+     */
     public function addConcatKey($key)
     {
         $this->_concatKeys[$key] = true;
@@ -62,7 +62,7 @@ class StringsManager
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/concat.h"' . PHP_EOL . PHP_EOL;
+#include "concat.h"' . PHP_EOL . PHP_EOL;
 
         $codeh = '';
 
@@ -108,7 +108,7 @@ class StringsManager
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
 
-            $codeh.= '' . $proto . ';' . PHP_EOL;
+            $codeh .= '' . $proto . ';' . PHP_EOL;
 
             $code .= $proto . '{' . PHP_EOL . PHP_EOL;
 
@@ -132,18 +132,18 @@ class StringsManager
 
             $code .= "\t" . 'length = ' . join(' + ', $lengths) . ';' . PHP_EOL;
             $code .= "\t" . 'if (self_var) {' . PHP_EOL;
-            $code .= '' .PHP_EOL;
+            $code .= '' . PHP_EOL;
             $code .= "\t\t" . 'if (Z_TYPE_PP(result) != IS_STRING) {' . PHP_EOL;
             $code .= "\t\t\t" . 'zend_make_printable_zval(*result, &result_copy, &use_copy);' . PHP_EOL;
             $code .= "\t\t\t" . 'if (use_copy) {' . PHP_EOL;
-            $code .= "\t\t\t\t" .'ZEPHIR_CPY_WRT_CTOR(*result, (&result_copy));' . PHP_EOL;
-            $code .= "\t\t\t" .'}'. PHP_EOL;
-            $code .= "\t\t" . '}'. PHP_EOL . PHP_EOL;
+            $code .= "\t\t\t\t" . 'ZEPHIR_CPY_WRT_CTOR(*result, (&result_copy));' . PHP_EOL;
+            $code .= "\t\t\t" . '}' . PHP_EOL;
+            $code .= "\t\t" . '}' . PHP_EOL . PHP_EOL;
             $code .= "\t\t" . 'offset = Z_STRLEN_PP(result);' . PHP_EOL;
             $code .= "\t\t" . 'length += offset;' . PHP_EOL;
             $code .= "\t\t" . 'Z_STRVAL_PP(result) = (char *) erealloc(Z_STRVAL_PP(result), length + 1);' . PHP_EOL;
             $code .= '' . PHP_EOL;
-            $code .= "\t" .'} else {' . PHP_EOL;
+            $code .= "\t" . '} else {' . PHP_EOL;
             $code .= "\t\t" . 'Z_STRVAL_PP(result) = (char *) emalloc(length + 1);' . PHP_EOL;
             $code .= "\t" . '}' . PHP_EOL . PHP_EOL;
 
@@ -237,8 +237,8 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) /* {{{
 EOF;
 
         $codeh .= "void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);";
-        Utils::checkAndWriteIfNeeded(join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
-        Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
+        Utils::checkAndWriteIfNeeded(join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/concat.h');
+        Utils::checkAndWriteIfNeeded($code, 'ext/concat.c');
     }
 
     public function getConcatKeys()

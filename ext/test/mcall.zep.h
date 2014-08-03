@@ -172,11 +172,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_optionalparameterbooleannull, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_arrayparamwithdefaultemptyarray, 0, 0, 0)
-	ZEND_ARG_ARRAY_INFO(0, driverOptions, 0)
+	ZEND_ARG_ARRAY_INFO(0, driverOptions, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_arrayparamwithdefaultnullvalue, 0, 0, 0)
-	ZEND_ARG_ARRAY_INFO(0, driverOptions, 0)
+	ZEND_ARG_ARRAY_INFO(0, driverOptions, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_arrayparam, 0, 0, 1)

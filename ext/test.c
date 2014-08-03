@@ -26,6 +26,7 @@
 
 zend_class_entry *test_diinterface_ce;
 zend_class_entry *test_testinterface_ce;
+zend_class_entry *test_xx_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_properties_publicproperties_ce;
@@ -115,6 +116,7 @@ zend_class_entry *test_unknownclass_ce;
 zend_class_entry *test_unsettest_ce;
 zend_class_entry *test_usetest_ce;
 zend_class_entry *test_vars_ce;
+zend_class_entry *test_yy_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
@@ -282,6 +284,7 @@ static PHP_MINIT_FUNCTION(test)
 
 	ZEPHIR_INIT(Test_DiInterface);
 	ZEPHIR_INIT(Test_TestInterface);
+	ZEPHIR_INIT(Test_Xx);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_Oo_OoDynamicA);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);
@@ -371,6 +374,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Unsettest);
 	ZEPHIR_INIT(Test_UseTest);
 	ZEPHIR_INIT(Test_Vars);
+	ZEPHIR_INIT(Test_Yy);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);
