@@ -592,7 +592,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 			}
 
-			if (!memcmp(token->value, "_", sizeof("_")-1)) {
+			if (token->len == 1 && !memcmp(token->value, "_", sizeof("_")-1)) {
 				token->opcode = XX_T_IDENTIFIER;
 				return 0;
 			}
