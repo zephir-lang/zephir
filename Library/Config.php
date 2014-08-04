@@ -27,6 +27,9 @@ namespace Zephir;
 class Config
 {
     protected $_config = array(
+        'watch' => array(
+            'fpm-restart' => false
+        ),
         'stubs' => array(
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,

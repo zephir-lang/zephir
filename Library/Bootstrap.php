@@ -111,6 +111,11 @@ class Bootstrap
 
                     $parameter = $_SERVER['argv'][$i];
 
+                    if (preg_match('/^-fpm/', $parameter, $matches)) {
+                        $config->set('fpm-restart', true, 'watch');
+                        continue;
+                    }
+
                     if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches) || preg_match('/^-f([a-z0-9\-]+)/', $parameter, $matches)) {
                         $config->set($matches[1], false, 'optimizations');
                         continue;

@@ -628,23 +628,29 @@ class Compiler
         set_time_limit(0);
 
         $loop = \React\EventLoop\Factory::create();
-        $process = new \React\ChildProcess\Process("inotifywait --monitor --quiet --format '%e %f' --event create,moved_to,delete,close_write '" . $this->_config->get('namespace') . "'");
+        $process = new \React\ChildProcess\Process("inotifywait --monitor --quiet --format '%e %f' --event create,moved_to,delete,close_write -r '" . $this->_config->get('namespace') . "'");
 
         $process->on('exit', function ($exitCode, $termSignal) {
             throw new Exception('inotifywait was exit with exitcode :' . $exitCode);
         });
 
-        $loop->addTimer(0.001, function ($timer) use ($process, $command) {
+        $restartFPM = $this->_config->get('fpm-restart', 'watch');
+
+        $loop->addTimer(0.001, function ($timer) use ($process, $command, $restartFPM) {
             $process->start($timer->getLoop());
 
-            $process->stdout->on('data', function ($output) use ($command) {
+            $process->stdout->on('data', function ($output) use ($command, $restartFPM) {
                 try {
                     $this->_logger->debug('Starting build...');
 
                     $start = microtime(true);
-                    $this->compile($command);
+                    $this->install($command);
 
                     $this->_logger->success(sprintf('Build Success after %.4F sec.', microtime(true)-$start));
+
+                    if ($restartFPM) {
+                        exec('sudo service php5-fpm restart');
+                    }
                 } catch (\Exception $e) {
                     $this->_logger->output($e->getMessage());
                     $this->_logger->error('Build Failed');
