@@ -25,7 +25,7 @@
 #include "php.h"
 
 #ifdef PHP_WIN32
-#include "php_string.h"
+#include "ext/standard/php_string.h"
 #endif
 
 #include "php_ext.h"

@@ -1137,6 +1137,7 @@ void zephir_array_unshift(zval *arr, zval *arg TSRMLS_DC)
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
 		zval** args[1]      = { &arg };
 
+		HashTable  oldhash;
 		HashTable *newhash = Z_ARRVAL_P(arr);
 
 		#if PHP_VERSION_ID < 50600
@@ -1145,7 +1146,7 @@ void zephir_array_unshift(zval *arr, zval *arg TSRMLS_DC)
 			php_splice(newhash, 0, 0, args, 1, NULL TSRMLS_CC);
 		#endif
 
-		HashTable  oldhash = *Z_ARRVAL_P(arr);
+		oldhash = *Z_ARRVAL_P(arr);
 		*Z_ARRVAL_P(arr)   = *newhash;
 
 		FREE_HASHTABLE(newhash);

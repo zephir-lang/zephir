@@ -842,6 +842,36 @@ class Compiler
         $needConfigure = Utils::checkAndWriteIfNeeded($content, 'ext/config.m4');
 
         /**
+         * config.w32
+         */
+        $content = file_get_contents(__DIR__ . '/../templates/config.w32');
+        if (empty($content)) {
+            throw new Exception("Template config.w32 doesn't exist");
+        }
+        foreach ($toReplace as $mark => $replace) {
+            $content = str_replace($mark, $replace, $content);
+        }
+        Utils::checkAndWriteIfNeeded($content, 'ext/config.w32');
+
+        /**
+         * %PROJECT_LOWER%.w32.c
+         */
+        $content = file_get_contents(__DIR__ . '/../templates/project.w32.c');
+        $w32Inclues = '';
+
+        foreach ($compiledFiles as $f)
+            $w32Inclues .= "#include \"{$f}\"\n";
+        foreach ($this->_extraFiles as $f)
+            $w32Inclues .= "#include \"{$f}\"\n";
+
+        foreach ($toReplace as $mark => $replace) {
+            $content = str_replace($mark, $replace, $content);
+        }
+
+        $content = str_replace('%W32_FILES_COMPILED_INCLUDED%', $w32Inclues, $content);
+        Utils::checkAndWriteIfNeeded($content, 'ext/'.$toReplace['%PROJECT_LOWER%'].'.w32.c');
+
+        /**
          * php_ext.h
          */
         $content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
@@ -1322,6 +1352,8 @@ class Compiler
      */
     public static function getShortUserPath($path)
     {
+        // strip .zep$ from path
+        $path = preg_replace('/\.zep$/', '', $path);
         return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
     }
 }
