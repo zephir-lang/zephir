@@ -540,7 +540,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		IDENTIFIER = [\\_\$]?[\_a-zA-Z\\][a-zA-Z0-9\_\\]*;
+		IDENTIFIER = [\\_\$]?[_a-zA-Z\\][a-zA-Z0-9\_\\]*;
 		IDENTIFIER {
 
 			if (start[0] == '$') {
@@ -554,37 +554,45 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			}
 			q = YYCURSOR;
 
-			if (!memcmp(token->value, "_GET", sizeof("_GET")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
+			if (token->len > 3) {
+
+				if (!memcmp(token->value, "_GET", sizeof("_GET")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_POST", sizeof("_POST")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_REQUEST", sizeof("_REQUEST")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_COOKIE", sizeof("_COOKIE")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_SERVER", sizeof("_SERVER")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_SESSION", sizeof("_SESSION")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
+
+				if (!memcmp(token->value, "_FILES", sizeof("_FILES")-1)) {
+					token->opcode = XX_T_IDENTIFIER;
+					return 0;
+				}
 			}
 
-			if (!memcmp(token->value, "_POST", sizeof("_POST")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
-			}
-
-			if (!memcmp(token->value, "_REQUEST", sizeof("_REQUEST")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
-			}
-
-			if (!memcmp(token->value, "_COOKIE", sizeof("_COOKIE")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
-			}
-
-			if (!memcmp(token->value, "_SERVER", sizeof("_SERVER")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
-			}
-
-			if (!memcmp(token->value, "_SESSION", sizeof("_SESSION")-1)) {
-				token->opcode = XX_T_IDENTIFIER;
-				return 0;
-			}
-
-			if (!memcmp(token->value, "_FILES", sizeof("_FILES")-1)) {
+			if (!memcmp(token->value, "_", sizeof("_")-1)) {
 				token->opcode = XX_T_IDENTIFIER;
 				return 0;
 			}
@@ -602,6 +610,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				token->opcode = XX_T_IDENTIFIER;
 			}
 			return 0;
+
 		}
 
 		"(" {
