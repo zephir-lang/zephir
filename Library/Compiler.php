@@ -19,6 +19,9 @@
 
 namespace Zephir;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Zephir\Commands\CommandInterface;
 use Zephir\Commands\CommandGenerate;
 
@@ -781,7 +784,7 @@ class Compiler
      */
     protected function _checkKernelFile($src, $dst)
     {
-        if (strstr($src, 'ext/kernel/concat.') !== false) {
+        if (strstr($src, 'ext/concat.') !== false) {
             return true;
         }
 
@@ -802,7 +805,8 @@ class Compiler
         $configured = $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, '_checkKernelFile'));
         if (!$configured) {
             $this->_logger->output('Copying new kernel files...');
-            exec("rm -fr ext/kernel/*");
+            exec("rm -fr ext/kernel/*.c");
+            exec("rm -fr ext/kernel/*.h");
             $this->_recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@');
         }
 

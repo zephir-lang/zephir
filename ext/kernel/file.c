@@ -33,7 +33,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/concat.h"
+#include "concat.h"
 #include "kernel/operators.h"
 #include "kernel/file.h"
 

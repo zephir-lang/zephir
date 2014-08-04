@@ -16,7 +16,7 @@
 #include "kernel/array.h"
 #include "kernel/file.h"
 #include "kernel/string.h"
-#include "kernel/concat.h"
+#include "concat.h"
 #include "kernel/fcall.h"
 #include "kernel/hash.h"
 

@@ -10,7 +10,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/concat.h"
+#include "concat.h"
 
 void zephir_concat_ss(zval **result, const char *op1, zend_uint op1_len, const char *op2, zend_uint op2_len, int self_var TSRMLS_DC){
 

@@ -3,7 +3,6 @@
 parser/lemon
 *.dSYM/
 bin/zephir-parser
-bin/zephir55
 parser/parser.c
 parser/scanner.c
 parser/parser.out
@@ -12,7 +11,6 @@ vendor/
 build
 
 # Ignore for all projects based on Zephir
-
 .temp/
 .libs/
 ext/build/
@@ -36,25 +34,12 @@ ext/libtool
 ide/
 
 # Runtime
-
 runtime/.deps
-runtime/Makefile
-runtime/Makefile.fragments
-runtime/Makefile.global
-runtime/Makefile.objects
+runtime/Makefile*
 runtime/acinclude.m4
 runtime/aclocal.m4
 runtime/autom4te.cache/
-runtime/config.guess
-runtime/config.h
-runtime/config.h.in
-runtime/config.h.in~
-runtime/config.log
-runtime/config.nice
-runtime/config.status
-runtime/config.sub
-runtime/configure
-runtime/configure.in
+runtime/config*
 runtime/install-sh
 runtime/libtool
 runtime/ltmain.sh
@@ -62,6 +47,5 @@ runtime/missing
 runtime/mkinstalldirs
 runtime/modules/
 runtime/run-tests.php
-runtime/a.zep
 runtime/index.php
 runtime/parser.out

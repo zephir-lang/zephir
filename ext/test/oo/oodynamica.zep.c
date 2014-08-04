@@ -14,7 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
-#include "kernel/concat.h"
+#include "concat.h"
 #include "kernel/fcall.h"
 
 

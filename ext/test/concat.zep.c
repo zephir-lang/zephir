@@ -15,7 +15,7 @@
 #include "kernel/object.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
-#include "kernel/concat.h"
+#include "concat.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Concat) {

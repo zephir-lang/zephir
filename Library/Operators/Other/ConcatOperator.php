@@ -141,7 +141,7 @@ class ConcatOperator extends BaseOperator
             throw new CompilerException("Missing right part of the expression", $expression);
         }
 
-        $compilationContext->headersManager->add('kernel/concat');
+        $compilationContext->headersManager->add('concat');
 
         /**
          * Try to optimize the concatenation
