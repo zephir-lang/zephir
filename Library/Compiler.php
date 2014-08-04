@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Zephir\Commands\CommandInterface;
 use Zephir\Commands\CommandGenerate;
 
@@ -620,6 +621,33 @@ class Compiler
         }
 
         return $needConfigure;
+    }
+
+    public function watch(CommandInterface $command)
+    {
+        set_time_limit(0);
+
+        $loop = \React\EventLoop\Factory::create();
+        $process = new \React\ChildProcess\Process("inotifywait --monitor --quiet --format '%e %f' --event create,moved_to,delete,close_write '".$this->_config->get('namespace')."'");
+
+        $process->on('exit', function($exitCode, $termSignal) {
+            throw new Exception('inotifywait was exit with exitcode :'. $exitCode);
+        });
+
+        $loop->addTimer(0.001, function($timer) use ($process, $command) {
+            $process->start($timer->getLoop());
+
+            $process->stdout->on('data', function($output) use($command) {
+                try {
+                    $this->compile($command);
+                    $this->_logger->output('Build Success');
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                    $this->_logger->output('Build Failed');
+                }
+            });
+        });
+        $loop->run();
     }
 
     /**
