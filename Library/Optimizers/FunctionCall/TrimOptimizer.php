@@ -59,8 +59,7 @@ class TrimOptimizer extends OptimizerAbstract
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable();
+        $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }

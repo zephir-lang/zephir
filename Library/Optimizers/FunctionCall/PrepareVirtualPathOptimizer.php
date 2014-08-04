@@ -56,7 +56,7 @@ class PrepareVirtualPathOptimizer extends OptimizerAbstract
          */
         $call->processExpectedReturn($context);
 
-        $symbolVariable = $call->getSymbolVariable();
+        $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable) {
 
             if ($symbolVariable->isNotVariableAndString()) {

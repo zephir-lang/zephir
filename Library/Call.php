@@ -68,6 +68,7 @@ class Call
          */
         $mustInit = false;
         $symbolVariable = null;
+
         $isExpecting = $expr->isExpectingReturn();
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
@@ -184,10 +185,20 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call
      *
+     * @param bool $require
+     * @param CompilationContext $context
      * @return Variable
      */
-    public function getSymbolVariable()
+    public function getSymbolVariable($require = false, CompilationContext $context = null)
     {
+        if ($require || !$this->_symbolVariable) {
+            $symbolVariable = $context->symbolTable->getTempVariable('variable', $context);
+            $symbolVariable->increaseUses();
+            $symbolVariable->initVariant($context);
+
+            $this->_symbolVariable = $symbolVariable;
+        }
+
         return $this->_symbolVariable;
     }
 
