@@ -99,6 +99,7 @@ class MethodCache
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
         }
+
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 

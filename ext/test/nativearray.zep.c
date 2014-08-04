@@ -1009,17 +1009,17 @@ PHP_METHOD(Test_NativeArray, testArrayAppend1) {
 	array_init(a);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "hello", 1);
-	zephir_array_append(&a, _0, PH_SEPARATE);
-	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 405);
+	zephir_array_append(&a, ZEPHIR_GLOBAL(global_null), PH_SEPARATE, "test/nativearray.zep", 405);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_BOOL(_0, 0);
-	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 405);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, 1.10);
-	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 405);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 5);
-	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 405);
 	ZEPHIR_INIT_VAR(_1);
 	array_init_size(_1, 5);
 	ZEPHIR_INIT_BNVAR(_0);
@@ -1031,7 +1031,7 @@ PHP_METHOD(Test_NativeArray, testArrayAppend1) {
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 3);
 	zephir_array_fast_append(_1, _0);
-	zephir_array_append(&a, _1, PH_SEPARATE);
+	zephir_array_append(&a, _1, PH_SEPARATE, "test/nativearray.zep", 405);
 	RETURN_CCTOR(a);
 
 }
@@ -1065,18 +1065,18 @@ PHP_METHOD(Test_NativeArray, testArrayAppend2) {
 	zephir_array_fast_append(g, _0);
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
-	zephir_array_append(&a, b, PH_SEPARATE);
-	zephir_array_append(&a, c, PH_SEPARATE);
+	zephir_array_append(&a, b, PH_SEPARATE, "test/nativearray.zep", 412);
+	zephir_array_append(&a, c, PH_SEPARATE, "test/nativearray.zep", 412);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_BOOL(_0, d);
-	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 412);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_DOUBLE(_0, e);
-	zephir_array_append(&a, _0, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 412);
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, f);
-	zephir_array_append(&a, _0, PH_SEPARATE);
-	zephir_array_append(&a, g, PH_SEPARATE);
+	zephir_array_append(&a, _0, PH_SEPARATE, "test/nativearray.zep", 412);
+	zephir_array_append(&a, g, PH_SEPARATE, "test/nativearray.zep", 412);
 	RETURN_CCTOR(a);
 
 }
