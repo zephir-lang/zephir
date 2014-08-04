@@ -42,15 +42,15 @@ class GlobalsSetOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-            return false;
+            throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
         if (count($expression['parameters']) != 2) {
-            throw new CompilerException("'globals_get' only accepts one parameter", $expression);
+            throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 
         if ($expression['parameters'][0]['parameter']['type'] != 'string') {
-            throw new CompilerException("A string parameter is required for 'globals_get'", $expression);
+            throw new CompilerException("A string parameter is required for 'globals_set'", $expression);
         }
 
         $globalName = $expression['parameters'][0]['parameter']['value'];
