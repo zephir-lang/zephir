@@ -18,8 +18,9 @@
         "issues": "https://github.com/phalcon/zephir/issues?state=open"
     },
     "require": {
-        "php": "~5.3",
-        "ext-json": "*"
+        "php": "~5.4",
+        "ext-json": "*",
+        "react/react": "~0.4"
     },
     "require-dev": {
         "satooshi/php-coveralls": "0.6.1",

@@ -114,6 +114,10 @@ class Logger
         return false;
     }
 
+    const SUCCESS = 0;
+    const DEBUG = 1;
+    const FAIL = 2;
+
     /**
      * @param $message
      * @return bool
@@ -124,6 +128,48 @@ class Logger
             echo $message . PHP_EOL;
             return true;
         }
+        return false;
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    public function error($message)
+    {
+        if (!$this->_config->get('silent')) {
+            echo Color::error($message);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    public function success($message)
+    {
+        if (!$this->_config->get('silent')) {
+            echo Color::success($message);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    public function debug($message)
+    {
+        if (!$this->_config->get('silent')) {
+            echo Color::warning($message);
+            return true;
+        }
+
         return false;
     }
 }
