@@ -234,24 +234,24 @@ static json_object *xx_ret_class(xx_parser_token *T, json_object *class_definiti
 
 static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_definition, xx_parser_token *E, xx_scanner_state *state)
 {
-  json_object *ret = json_object_new_object();
+	json_object *ret = json_object_new_object();
 
-  json_object_object_add(ret, "type", json_object_new_string("interface"));
-  json_object_object_add(ret, "name", json_object_new_string(T->token));
+	json_object_object_add(ret, "type", json_object_new_string("interface"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
 
-  if (E) {
-    json_object_object_add(ret, "extends", json_object_new_string(E->token));
-  }
+	if (E) {
+		json_object_object_add(ret, "extends", json_object_new_string(E->token));
+	}
 
-  if (interface_definition) {
-    json_object_object_add(ret, "definition", interface_definition);
-  }
+	if (interface_definition) {
+		json_object_object_add(ret, "definition", interface_definition);
+	}
 
-  json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-  json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-  json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
-  return ret;
+	return ret;
 }
 
 static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
@@ -277,20 +277,20 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 
 static json_object *xx_ret_interface_definition(json_object *methods, json_object *constants, xx_scanner_state *state)
 {
-  json_object *ret = json_object_new_object();
+	json_object *ret = json_object_new_object();
 
-  if (methods) {
-    json_object_object_add(ret, "methods", methods);
-  }
-  if (constants) {
-    json_object_object_add(ret, "constants", constants);
-  }
+	if (methods) {
+		json_object_object_add(ret, "methods", methods);
+	}
+	if (constants) {
+		json_object_object_add(ret, "constants", constants);
+	}
 
-  json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-  json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-  json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
 
-  return ret;
+	return ret;
 }
 
 static json_object *xx_ret_class_property(json_object *visibility, xx_parser_token *T,
@@ -483,16 +483,16 @@ static json_object *xx_ret_type(int type)
 			return json_object_new_string("array");
 		case XX_TYPE_VAR:
 			return json_object_new_string("variable");
-        case XX_TYPE_CALLABLE:
-            return json_object_new_string("callable");
-        case XX_TYPE_RESOURCE:
-            return json_object_new_string("resource");
-        case XX_TYPE_OBJECT:
-            return json_object_new_string("object");
+		case XX_TYPE_CALLABLE:
+			return json_object_new_string("callable");
+		case XX_TYPE_RESOURCE:
+			return json_object_new_string("resource");
+		case XX_TYPE_OBJECT:
+			return json_object_new_string("object");
 		case XX_T_TYPE_NULL:
-            return json_object_new_string("null");
-        case XX_T_TYPE_THIS:
-            return json_object_new_string("this");
+			return json_object_new_string("null");
+		case XX_T_TYPE_THIS:
+			return json_object_new_string("this");
 		default:
 			fprintf(stderr, "unknown type?\n");
 	}
@@ -956,17 +956,17 @@ static json_object *xx_ret_declare_statement(int type, json_object *variables, x
 			json_object_object_add(ret, "data-type", json_object_new_string("variable"));
 			break;
 
-	    case XX_T_TYPE_CALLABLE:
-            json_object_object_add(ret, "data-type", json_object_new_string("callable"));
-            break;
+		case XX_T_TYPE_CALLABLE:
+			json_object_object_add(ret, "data-type", json_object_new_string("callable"));
+			break;
 
-        case XX_T_TYPE_RESOURCE:
-            json_object_object_add(ret, "data-type", json_object_new_string("resource"));
-            break;
+		case XX_T_TYPE_RESOURCE:
+			json_object_object_add(ret, "data-type", json_object_new_string("resource"));
+			break;
 
-        case XX_T_TYPE_OBJECT:
-            json_object_object_add(ret, "data-type", json_object_new_string("object"));
-            break;
+		case XX_T_TYPE_OBJECT:
+			json_object_object_add(ret, "data-type", json_object_new_string("object"));
+			break;
 
 		default:
 			fprintf(stderr, "err 2?\n");
@@ -1293,6 +1293,10 @@ xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) xx_class_body(B) . {
 
 xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) EXTENDS IDENTIFIER(E) xx_class_body(B) . {
 	R = xx_ret_class(I, B, 0, 1, E, NULL, status->scanner_state);
+}
+
+xx_class_def(R) ::= FINAL CLASS IDENTIFIER(I) IMPLEMENTS xx_implements_list(L) xx_class_body(B) . {
+	R = xx_ret_class(I, B, 0, 1, NULL, L, status->scanner_state);
 }
 
 xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
