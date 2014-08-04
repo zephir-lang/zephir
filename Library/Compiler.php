@@ -1352,8 +1352,6 @@ class Compiler
      */
     public static function getShortUserPath($path)
     {
-        // strip .zep$ from path
-        $path = preg_replace('/\.zep$/', '', $path);
         return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
     }
 }
