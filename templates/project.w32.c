@@ -1,0 +1,23 @@
+#include "%PROJECT_LOWER%.c"
+
+#include "kernel/main.c"
+#include "kernel/memory.c"
+#include "kernel/exception.c"
+#include "kernel/hash.c"
+#include "kernel/debug.c"
+#include "kernel/backtrace.c"
+#include "kernel/object.c"
+#include "kernel/array.c"
+#include "kernel/extended/array.c"
+#include "kernel/string.c"
+#include "kernel/fcall.c"
+#include "kernel/require.c"
+#include "kernel/file.c"
+#include "kernel/operators.c"
+#include "kernel/concat.c"
+#include "kernel/variables.c"
+#include "kernel/filter.c"
+#include "kernel/iterator.c"
+#include "kernel/exit.c"
+
+%W32_FILES_COMPILED_INCLUDED%

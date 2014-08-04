@@ -1,0 +1,5 @@
+ARG_ENABLE("%PROJECT_LOWER%", "enable %PROJECT_LOWER% support", "no");
+
+if (PHP_%PROJECT_UPPER% != "no") {
+  EXTENSION("%PROJECT_LOWER%", "%PROJECT_LOWER%.w32.c");
+}
