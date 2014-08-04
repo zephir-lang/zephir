@@ -253,7 +253,7 @@ class Compiler
      * @param        $src
      * @param        $dest
      * @param string $pattern
-     * @param mixed  $callback
+     * @param mixed $callback
      *
      * @return bool
      */
@@ -628,22 +628,26 @@ class Compiler
         set_time_limit(0);
 
         $loop = \React\EventLoop\Factory::create();
-        $process = new \React\ChildProcess\Process("inotifywait --monitor --quiet --format '%e %f' --event create,moved_to,delete,close_write '".$this->_config->get('namespace')."'");
+        $process = new \React\ChildProcess\Process("inotifywait --monitor --quiet --format '%e %f' --event create,moved_to,delete,close_write '" . $this->_config->get('namespace') . "'");
 
-        $process->on('exit', function($exitCode, $termSignal) {
-            throw new Exception('inotifywait was exit with exitcode :'. $exitCode);
+        $process->on('exit', function ($exitCode, $termSignal) {
+            throw new Exception('inotifywait was exit with exitcode :' . $exitCode);
         });
 
-        $loop->addTimer(0.001, function($timer) use ($process, $command) {
+        $loop->addTimer(0.001, function ($timer) use ($process, $command) {
             $process->start($timer->getLoop());
 
-            $process->stdout->on('data', function($output) use($command) {
+            $process->stdout->on('data', function ($output) use ($command) {
                 try {
+                    $this->_logger->debug('Starting build...');
+
+                    $start = microtime(true);
                     $this->compile($command);
-                    $this->_logger->output('Build Success');
+
+                    $this->_logger->success(sprintf('Build Success after %.4F sec.', microtime(true)-$start));
                 } catch (\Exception $e) {
-                    echo $e->getMessage();
-                    $this->_logger->output('Build Failed');
+                    $this->_logger->output($e->getMessage());
+                    $this->_logger->error('Build Failed');
                 }
             });
         });
@@ -698,7 +702,7 @@ class Compiler
      * Generate ide stubs
      *
      * @param CommandInterface $command
-     * @param bool             $fromGenerate
+     * @param bool $fromGenerate
      */
     public function stubs(CommandInterface $command, $fromGenerate = false)
     {
@@ -856,10 +860,10 @@ class Compiler
         }, $this->_compiledFiles);
 
         $toReplace = array(
-            '%PROJECT_LOWER%'        => strtolower($project),
-            '%PROJECT_UPPER%'        => strtoupper($project),
-            '%PROJECT_CAMELIZE%'     => ucfirst($project),
-            '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_CAMELIZE%' => ucfirst($project),
+            '%FILES_COMPILED%' => implode("\n\t", $compiledFiles),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->_extraFiles),
         );
 
@@ -1242,13 +1246,13 @@ class Compiler
         $phpInfo = $this->processExtensionInfo();
 
         $toReplace = array(
-            '%PROJECT_LOWER%'    => strtolower($project),
-            '%PROJECT_UPPER%'    => strtoupper($project),
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
             '%PROJECT_CAMELIZE%' => ucfirst($project),
-            '%CLASS_ENTRIES%'    => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
-            '%CLASS_INITS%'      => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
-            '%INIT_GLOBALS%'     => $globalsDefault,
-            '%EXTENSION_INFO%'   => $phpInfo
+            '%CLASS_ENTRIES%' => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
+            '%CLASS_INITS%' => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
+            '%INIT_GLOBALS%' => $globalsDefault,
+            '%EXTENSION_INFO%' => $phpInfo
         );
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1297,15 +1301,15 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%'            => strtolower($project),
-            '%PROJECT_UPPER%'            => strtoupper($project),
-            '%PROJECT_EXTNAME%'          => strtolower($project),
-            '%PROJECT_NAME%'             => utf8_decode($this->_config->get('name')),
-            '%PROJECT_AUTHOR%'           => utf8_decode($this->_config->get('author')),
-            '%PROJECT_VERSION%'          => utf8_decode($this->_config->get('version')),
-            '%PROJECT_DESCRIPTION%'      => utf8_decode($this->_config->get('description')),
-            '%PROJECT_ZEPVERSION%'       => self::VERSION,
-            '%EXTENSION_GLOBALS%'        => $globalCode,
+            '%PROJECT_LOWER%' => strtolower($project),
+            '%PROJECT_UPPER%' => strtoupper($project),
+            '%PROJECT_EXTNAME%' => strtolower($project),
+            '%PROJECT_NAME%' => utf8_decode($this->_config->get('name')),
+            '%PROJECT_AUTHOR%' => utf8_decode($this->_config->get('author')),
+            '%PROJECT_VERSION%' => utf8_decode($this->_config->get('version')),
+            '%PROJECT_DESCRIPTION%' => utf8_decode($this->_config->get('description')),
+            '%PROJECT_ZEPVERSION%' => self::VERSION,
+            '%EXTENSION_GLOBALS%' => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct
         );
 

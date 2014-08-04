@@ -11,7 +11,7 @@ class Bitwise
 
 	public function intAnd()
 	{
-		int a, b, c, d1;
+		int a, b, c, d1, d2, e1;
 
 		let a = 1,
 			b = 2,
