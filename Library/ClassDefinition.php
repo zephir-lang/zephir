@@ -608,7 +608,7 @@ class ClassDefinition
 
             if ($method->hasParameters()) {
                 $implementedMethod = $classDefinition->getMethod($method->getName());
-                if ($implementedMethod->getNumberOfRequiredParameters() != $method->getNumberOfRequiredParameters()) {
+                if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()) {
                     throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: " . $interfaceDefinition->getCompleteName());
                 }
             }
