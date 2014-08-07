@@ -150,7 +150,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	zephir_array_append(&vIUBnew, _0, PH_SEPARATE, "test/regexdna.zep", 40);
 	ZEPHIR_INIT_VAR(stuffToRemove);
 	ZVAL_STRING(stuffToRemove, "^>.*$|\n", 1);
-	ZEPHIR_INIT_VAR(discard);
+	ZEPHIR_INIT_BNVAR(discard);
 	ZVAL_NULL(discard);
 	ZEPHIR_INIT_VAR(contents);
 	zephir_file_get_contents(contents, path TSRMLS_CC);

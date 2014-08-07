@@ -96,6 +96,11 @@ class DeclareStatement extends StatementAbstract
              * Variables with a default value are initialized by default
              */
             if ($defaultValue !== null || $defaultType !== null) {
+
+                if ($currentType == 'variable' || $currentType == 'string' || $currentType == 'array') {
+                    $symbolVariable->increaseVariantIfNull();
+                }
+
                 switch ($currentType) {
 
                     case 'int':
@@ -252,7 +257,7 @@ class DeclareStatement extends StatementAbstract
                 }
 
                 $symbolVariable->setDefaultInitValue($defaultValue);
-                $symbolVariable->setIsInitialized(true, $compilationContext, $variable);
+                $symbolVariable->setIsInitialized(true, $compilationContext);
                 $symbolVariable->increaseMutates();
                 $symbolVariable->setPossibleValue(new LiteralCompiledExpression($defaultType, $defaultValue, $variable['expr']), $compilationContext);
             }

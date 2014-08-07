@@ -98,7 +98,11 @@ class NativeArray
                 if ($exprCompiled->getCode() == 'true') {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
                 } else {
-                    return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+                    if ($exprCompiled->getCode() == 'false') {
+                        return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+                    } else {
+                        throw new Exception('?');
+                    }
                 }
                 break;
 

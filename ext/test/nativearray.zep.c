@@ -1052,7 +1052,7 @@ PHP_METHOD(Test_NativeArray, testArrayAppend2) {
 	ZEPHIR_INIT_VAR(g);
 	array_init(g);
 
-	ZEPHIR_INIT_VAR(g);
+	ZEPHIR_INIT_BNVAR(g);
 	array_init_size(g, 5);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);

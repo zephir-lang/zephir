@@ -694,6 +694,14 @@ class Variable
     }
 
     /**
+     * Increase the number of times the varible has been initialized
+     */
+    public function increaseVariantIfNull()
+    {
+        $this->_variantInits++;
+    }
+
+    /**
      * Initializes a variant variable
      *
      * @param CompilationContext $compilationContext

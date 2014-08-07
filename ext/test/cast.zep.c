@@ -128,7 +128,7 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -303,7 +303,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -432,7 +432,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);

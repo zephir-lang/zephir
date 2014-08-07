@@ -146,7 +146,7 @@ PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 	ZVAL_LONG(s, 23);
 
 	if (1 == 1) {
-		ZEPHIR_INIT_VAR(s);
+		ZEPHIR_INIT_BNVAR(s);
 		ZVAL_LONG(s, 3);
 	} else {
 		ZEPHIR_INIT_BNVAR(s);
