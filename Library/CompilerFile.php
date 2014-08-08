@@ -548,7 +548,7 @@ class CompilerFile
     /**
      * Check dependencies
      *
-     * @param \Compiler $compiler
+     * @param Compiler $compiler
      */
     public function checkDependencies(Compiler $compiler)
     {
@@ -587,8 +587,8 @@ class CompilerFile
     /**
      * Compiles the file
      *
-     * @param \Compiler $compiler
-     * @param \StringsManager $stringsManager
+     * @param Compiler $compiler
+     * @param StringsManager $stringsManager
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
     {

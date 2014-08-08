@@ -761,7 +761,11 @@ class ClassDefinition
                 }
 
                 if (!$classEntry) {
-                    throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
+                    if ($compiler->isClass($interface)) {
+                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName() . '. ' . $interface . ' is currently a class', $this->originalNode);
+                    } else {
+                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
+                    }
                 }
 
                 /**

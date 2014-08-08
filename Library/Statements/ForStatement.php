@@ -19,6 +19,7 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Compiler;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\FunctionCall;
@@ -642,7 +643,7 @@ class ForStatement extends StatementAbstract
 
         $compilationContext->headersManager->add('kernel/hash');
 
-        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, '.$this->_statement['reverse'].');');
+        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, ' . $this->_statement['reverse'] . ', "' . Compiler::getShortUserPath($this->_statement['file']) . '", ' . $this->_statement['line'] . ');');
 
         $codePrinter->output('for (');
         $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
