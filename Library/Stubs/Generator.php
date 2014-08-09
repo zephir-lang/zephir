@@ -216,30 +216,7 @@ EOF;
 
                 if (isset($parameter['default'])) {
                     $paramStr .= ' = ';
-
-                    switch ($parameter['default']['type']) {
-                        case 'null':
-                            $paramStr .= 'null';
-                            break;
-                        case 'string':
-                            $paramStr .= '"' . $parameter['default']['value'] . '"';
-                            break;
-                        case 'empty-array':
-                            $paramStr .= 'array()';
-                            break;
-                        /**
-                         * @todo fix it
-                         */
-                        case 'array':
-                            $paramStr .= 'array()';
-                            break;
-                        case 'static-constant-access':
-                            $paramStr .= $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
-                            break;
-                        default:
-                            $paramStr .= $parameter['default']['value'];
-                            break;
-                    }
+                    $paramStr .= $this->wrapPHPValue($parameter);
                 }
 
                 $parameters[] = $paramStr;
@@ -255,5 +232,48 @@ EOF;
         }
 
         return $docBlock . "\n" . $methodBody;
+    }
+
+    /**
+     * Prepare AST defalut value to PHP code print
+     *
+     * @param $parameter
+     * @return string
+     */
+    private function wrapPHPValue($parameter)
+    {
+        switch ($parameter['default']['type']) {
+            case 'null':
+                return 'null';
+                break;
+            case 'string':
+                return '"' . $parameter['default']['value'] . '"';
+                break;
+            case 'empty-array':
+                return 'array()';
+                break;
+            case 'array':
+                $parameters = array();
+
+                array_walk($parameter['default']['left'], function($value) use (&$parameters) {
+                    $parameters[] = $this->wrapPHPValue(array(
+                        'default' => $value['value'],
+                        'type' => $value['value']['type']
+                    ));
+                });
+
+                if (count($parameters) > 0) {
+                    return 'array('.implode(', ', $parameters).')';
+                }
+
+                return 'array()';
+                break;
+            case 'static-constant-access':
+                return $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
+                break;
+            default:
+                return $parameter['default']['value'];
+                break;
+        }
     }
 }
