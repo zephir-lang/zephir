@@ -20,15 +20,12 @@
 namespace Zephir\Detectors;
 
 /**
- * WriteDetector
+ * ForValueUseDetector
  *
- * Detects if a variable is written in a given context
- * If a variable is not modified in a local context we could avoid allocate memory for its body
- * Separate parameters to avoid them to be touched by modifying its reference count
+ * Detects if the traversed variable is modified within the 'for's block
  *
- * @todo, variable is assigned in the fetch operator and in functions that pass parameters by reference
  */
-class WriteDetector
+class ForValueUseDetector
 {
 
     public function passLetStatement($variable, array $statement)
