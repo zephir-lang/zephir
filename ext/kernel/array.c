@@ -1396,7 +1396,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 						break;
 
 					case 'z':
-						zephir_print_r(old_item[j] TSRMLS_DC);
+						//zephir_print_r(old_item[j] TSRMLS_DC);
 
 						zephir_array_update_zval(&(old_p[j]), old_item[j], &p, PH_SEPARATE);
 						break;
