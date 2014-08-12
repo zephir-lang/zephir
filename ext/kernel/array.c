@@ -1270,7 +1270,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 	long old_l[ZEPHIR_MAX_ARRAY_LEVELS], old_ll[ZEPHIR_MAX_ARRAY_LEVELS];
 	char *s, *old_s[ZEPHIR_MAX_ARRAY_LEVELS], old_type[ZEPHIR_MAX_ARRAY_LEVELS];
 	zval *fetched, *tmp, *p, *item, *old_item[ZEPHIR_MAX_ARRAY_LEVELS], *old_p[ZEPHIR_MAX_ARRAY_LEVELS];
-	int i, l, ll, re_update, must_continue;
+	int i, j, l, ll, re_update, must_continue;
 	va_list ap;
 
 	assert(types_length < ZEPHIR_MAX_ARRAY_LEVELS);
@@ -1308,8 +1308,8 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 					}
 				}
 				if (!must_continue) {
+					re_update = Z_REFCOUNT_P(p) > 1;
 					if (i == (types_length - 1)) {
-						re_update = Z_REFCOUNT_P(p) > 1;
 						zephir_array_update_string(&p, s, l, value, PH_COPY | PH_SEPARATE);
 					} else {
 						MAKE_STD_ZVAL(tmp);
@@ -1333,8 +1333,8 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 					}
 				}
 				if (!must_continue) {
+					re_update = Z_REFCOUNT_P(p) > 1;
 					if (i == (types_length - 1)) {
-						re_update = Z_REFCOUNT_P(p) > 1;
 						zephir_array_update_long(&p, ll, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 					} else {
 						MAKE_STD_ZVAL(tmp);
@@ -1358,8 +1358,8 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 					}
 				}
 				if (!must_continue) {
+					re_update = Z_REFCOUNT_P(p) > 1;
 					if (i == (types_length - 1)) {
-						re_update = Z_REFCOUNT_P(p) > 1;
 						zephir_array_update_zval(&p, item, value, PH_COPY | PH_SEPARATE);
 					} else {
 						MAKE_STD_ZVAL(tmp);
@@ -1376,7 +1376,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 				break;
 		}
 
-		/*if (re_update) {
+		if (re_update) {
 
 			for (j = i - 1; j >= 0; j--) {
 
@@ -1384,15 +1384,30 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 					break;
 				}
 
+				zend_print_zval_r(old_p[j], 0 TSRMLS_DC);
+				zend_print_zval_r(p, 0 TSRMLS_DC);
+
+				re_update = Z_REFCOUNT_P(old_p[j]) > 1;
 				switch (old_type[j]) {
+
+					case 'l':
+						//zephir_array_update_long(&(old_p[j]), old_ll[i], p, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
+						fprintf(stderr, "%c\n", old_type[j]);
+						break;
+
 					case 'z':
-						//re_update = Z_REFCOUNT_P(old_p[j]) > 1;
-						//zephir_array_update_zval(&(old_p[j]), old_item[j], &p, PH_SEPARATE);
+						zephir_print_r(old_item[j] TSRMLS_DC);
+
+						zephir_array_update_zval(&(old_p[j]), old_item[j], &p, PH_SEPARATE);
+						break;
+
+					default:
+						fprintf(stderr, "%c\n", old_type[j]);
 						break;
 				}
 
 			}
-		}*/
+		}
 
 		if (i != (types_length - 1)) {
 
