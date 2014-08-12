@@ -140,7 +140,7 @@ class Variable
      */
     public function __construct($type, $name, $branch, $defaultInitValue = null)
     {
-        switch($type) {
+        switch ($type) {
             case 'callable':
             case 'object':
             case 'resource':

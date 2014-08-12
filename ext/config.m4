@@ -41,6 +41,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/internalclasses.zep.c
 	test/internalinterfaces.zep.c
 	test/issettest.zep.c
+	test/issues.zep.c
 	test/json.zep.c
 	test/logical.zep.c
 	test/mcall.zep.c

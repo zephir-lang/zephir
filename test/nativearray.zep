@@ -532,6 +532,15 @@ class NativeArray
 		return a;
 	}
 
+	public function testMultipleArrayUpdate13()
+	{
+		var a; array b, c;
+
+		let b = ["a": 1, "b": 2, "c": 3], c = b;
+
+
+	}
+
 	public function testMultipleArrayAppend1()
 	{
 		var a = []; var b = "y";

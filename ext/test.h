@@ -43,6 +43,7 @@
 #include "test/internalclasses.zep.h"
 #include "test/internalinterfaces.zep.h"
 #include "test/issettest.zep.h"
+#include "test/issues.zep.h"
 #include "test/json.zep.h"
 #include "test/logical.zep.h"
 #include "test/mcall.zep.h"

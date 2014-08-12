@@ -460,7 +460,7 @@ PHP_METHOD(Test_Router, handle) {
 	zephir_update_property_this(this_ptr, SL("_wasMatched"), (0) ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 	zephir_update_property_this(this_ptr, SL("_matchedRoute"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
 	_1 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_1, &_3, &_2, 0, 1);
+	zephir_is_iterable(_1, &_3, &_2, 0, 1, "test/router.zep", 475);
 	for (
 	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
 	  ; zephir_hash_move_backwards_ex(_3, &_2)
@@ -556,7 +556,7 @@ PHP_METHOD(Test_Router, handle) {
 			if (Z_TYPE_P(matches) == IS_ARRAY) {
 				ZEPHIR_CALL_METHOD(&converters, route, "getconverters",  NULL);
 				zephir_check_call_status();
-				zephir_is_iterable(paths, &_10, &_9, 0, 0);
+				zephir_is_iterable(paths, &_10, &_9, 0, 0, "test/router.zep", 466);
 				for (
 				  ; zephir_hash_get_current_data_ex(_10, (void**) &_11, &_9) == SUCCESS
 				  ; zephir_hash_move_forward_ex(_10, &_9)
@@ -945,7 +945,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_CALL_METHOD(&beforeMatch, group, "getbeforematch",  NULL);
 	zephir_check_call_status();
 	if (Z_TYPE_P(beforeMatch) != IS_NULL) {
-		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 0);
+		zephir_is_iterable(groupRoutes, &_1, &_0, 0, 0, "test/router.zep", 693);
 		for (
 		  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 		  ; zephir_hash_move_forward_ex(_1, &_0)
@@ -958,7 +958,7 @@ PHP_METHOD(Test_Router, mount) {
 	ZEPHIR_CALL_METHOD(&hostname, group, "gethostname",  NULL);
 	zephir_check_call_status();
 	if (Z_TYPE_P(hostname) != IS_NULL) {
-		zephir_is_iterable(groupRoutes, &_4, &_3, 0, 0);
+		zephir_is_iterable(groupRoutes, &_4, &_3, 0, 0, "test/router.zep", 702);
 		for (
 		  ; zephir_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
 		  ; zephir_hash_move_forward_ex(_4, &_3)
@@ -1149,7 +1149,7 @@ PHP_METHOD(Test_Router, getRouteById) {
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_0, &_2, &_1, 0, 0);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0, "test/router.zep", 845);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
@@ -1184,7 +1184,7 @@ PHP_METHOD(Test_Router, getRouteByName) {
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_routes"), PH_NOISY_CC);
-	zephir_is_iterable(_0, &_2, &_1, 0, 0);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0, "test/router.zep", 863);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)

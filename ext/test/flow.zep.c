@@ -729,7 +729,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_fast_append(b, _0);
-	zephir_is_iterable(b, &_2, &_1, 0, 0);
+	zephir_is_iterable(b, &_2, &_1, 0, 0, "test/flow.zep", 443);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
@@ -765,7 +765,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_fast_append(b, _0);
-	zephir_is_iterable(b, &_2, &_1, 0, 0);
+	zephir_is_iterable(b, &_2, &_1, 0, 0, "test/flow.zep", 453);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_2, &_1)
@@ -802,7 +802,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_BNVAR(_0);
 	ZVAL_LONG(_0, 4);
 	zephir_array_fast_append(b, _0);
-	zephir_is_iterable(b, &_2, &_1, 0, 1);
+	zephir_is_iterable(b, &_2, &_1, 0, 1, "test/flow.zep", 464);
 	for (
 	  ; zephir_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zephir_hash_move_backwards_ex(_2, &_1)
@@ -1485,7 +1485,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 'd');
 	zephir_array_fast_append(_0, _1);
-	zephir_is_iterable(_0, &_3, &_2, 0, 0);
+	zephir_is_iterable(_0, &_3, &_2, 0, 0, "test/flow.zep", 674);
 	for (
 	  ; zephir_hash_get_current_data_ex(_3, (void**) &_4, &_2) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_3, &_2)
@@ -1556,7 +1556,7 @@ PHP_METHOD(Test_Flow, testFor32) {
 
 
 
-	zephir_is_iterable(e, &_1, &_0, 0, 0);
+	zephir_is_iterable(e, &_1, &_0, 0, 0, "test/flow.zep", 703);
 	for (
 	  ; zephir_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_1, &_0)

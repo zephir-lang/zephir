@@ -165,7 +165,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_CPY_WRT(contents, _3);
 	ZEPHIR_INIT_VAR(codeLength);
 	ZVAL_LONG(codeLength, zephir_fast_strlen_ev(contents));
-	zephir_is_iterable(variants, &_6, &_5, 0, 0);
+	zephir_is_iterable(variants, &_6, &_5, 0, 0, "test/regexdna.zep", 59);
 	for (
 	  ; zephir_hash_get_current_data_ex(_6, (void**) &_7, &_5) == SUCCESS
 	  ; zephir_hash_move_forward_ex(_6, &_5)

@@ -1254,6 +1254,21 @@ PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate12) {
 
 }
 
+PHP_METHOD(Test_NativeArray, testMultipleArrayUpdate13) {
+
+	zval *b, *c;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(b);
+	array_init_size(b, 5);
+	add_assoc_long_ex(b, SS("a"), 1);
+	add_assoc_long_ex(b, SS("b"), 2);
+	add_assoc_long_ex(b, SS("c"), 3);
+	ZEPHIR_MM_RESTORE();
+
+}
+
 PHP_METHOD(Test_NativeArray, testMultipleArrayAppend1) {
 
 	zval *a, *b;
