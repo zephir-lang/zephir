@@ -1092,7 +1092,7 @@ static json_object *xx_ret_scall(int dynamic_class, xx_parser_token *O, int dyna
 	return ret;
 }
 
-static json_object *xx_ret_call_parameter(xx_parser_token *N, json_object *parameter, xx_scanner_state *state)
+static json_object *xx_ret_call_parameter(xx_parser_token *N, json_object *parameter, xx_scanner_state *state, int reference)
 {
 	json_object *ret = json_object_new_object();
 
@@ -1100,6 +1100,9 @@ static json_object *xx_ret_call_parameter(xx_parser_token *N, json_object *param
 		json_object_object_add(ret, "name", json_object_new_string(N->token));
 	}
 	json_object_object_add(ret, "parameter", parameter);
+	if (reference) {
+		json_object_object_add(ret, "reference", json_object_new_int(reference));
+	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -2758,12 +2761,24 @@ xx_call_parameters(R) ::= xx_call_parameter(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
+/* func(expr) */
 xx_call_parameter(R) ::= xx_common_expr(E) . {
-	R = xx_ret_call_parameter(NULL, E, status->scanner_state);
+	R = xx_ret_call_parameter(NULL, E, status->scanner_state, 0);
 }
 
+/* func(name: expr) */
 xx_call_parameter(R) ::= IDENTIFIER(I) COLON xx_common_expr(E) . {
-	R = xx_ret_call_parameter(I, E, status->scanner_state);
+	R = xx_ret_call_parameter(I, E, status->scanner_state, 0);
+}
+
+/* func(&expr) */
+xx_call_parameter(R) ::= XX_T_BITWISE_AND xx_common_expr(E) . {
+	R = xx_ret_call_parameter(NULL, E, status->scanner_state, 1);
+}
+
+/* func(name: &expr) */
+xx_call_parameter(R) ::= IDENTIFIER(I) COLON XX_T_BITWISE_AND  xx_common_expr(E) . {
+	R = xx_ret_call_parameter(I, E, status->scanner_state, 0);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {

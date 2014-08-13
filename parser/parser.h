@@ -115,4 +115,5 @@
 #define XX_DOUBLE                         115
 #define XX_TRUE                           116
 #define XX_FALSE                          117
-#define XX_CBLOCK                         118
+#define XX_XX_T_BITWISE_AND               118
+#define XX_CBLOCK                         119

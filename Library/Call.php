@@ -292,20 +292,20 @@ class Call
      * @param array $calleeDefinition
      * @return array
      */
-    public function getResolvedParams($parameters, CompilationContext $compilationContext, $expression, $calleeDefinition = null)
+    public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
         $codePrinter = &$compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
 
         /**
-         * Static typed parameters in final methods are promotable to read only parameters
+         * Static typed parameters in final/private methods are promotable to read only parameters
          * Recursive calls with static typed methods also also promotable
          */
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal() || $compilationContext->currentMethod == $calleeDefinition) {
+                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         if (isset($parameter['data-type'])) {
@@ -316,6 +316,8 @@ class Call
                                 case 'long':
                                 case 'char':
                                 case 'uchar':
+                                case 'boolean':
+                                case 'bool':
                                     $readOnlyParameters[$position] = true;
                                     break;
                             }
@@ -335,7 +337,15 @@ class Call
             switch ($compiledExpression->getType()) {
 
                 case 'null':
-                    $params[] = 'ZEPHIR_GLOBAL(global_null)';
+                    if (isset($readOnlyParameters[$position])) {
+                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                        $params[] = '&' . $parameterVariable->getName();
+                        $codePrinter->output('ZVAL_NULL(&' . $parameterVariable->getName() . ');');
+                    } else {
+                        $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                        $params[] = $parameterVariable->getName();
+                        $codePrinter->output('ZVAL_NULL(' . $parameterVariable->getName() . ');');
+                    }
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -373,14 +383,39 @@ class Call
 
                 case 'bool':
                     if ($compiledExpression->getCode() == 'true') {
-                        $params[] = 'ZEPHIR_GLOBAL(global_true)';
+                        if (isset($readOnlyParameters[$position])) {
+                            $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                            $codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', 1);');
+                            $params[] = '&' . $parameterVariable->getName();
+                        } else {
+                            $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                            $codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', 1);');
+                            $params[] = $parameterVariable->getName();
+                        }
                     } else {
                         if ($compiledExpression->getCode() == 'false') {
-                            $params[] = 'ZEPHIR_GLOBAL(global_false)';
+                            if (isset($readOnlyParameters[$position])) {
+                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', 0);');
+                                $params[] = '&' . $parameterVariable->getName();
+                            } else {
+                                $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', 0);');
+                                $params[] = $parameterVariable->getName();
+                            }
                         } else {
-                            $params[] = '(' . $compiledExpression->getBooleanCode() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
+                            if (isset($readOnlyParameters[$position])) {
+                                $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_BOOL(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
+                                $params[] = '&' . $parameterVariable->getName();
+                            } else {
+                                $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                                $codePrinter->output('ZVAL_BOOL(' . $parameterVariable->getName() . ', ' . $compiledExpression->getBooleanCode() . ');');
+                                $params[] = $parameterVariable->getName();
+                            }
                         }
                     }
+
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -488,9 +523,9 @@ class Call
      * @param array $expression
      * @return array
      */
-    public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, $expression)
+    public function getReadOnlyResolvedParams($parameters, CompilationContext $compilationContext, array $expression)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
         $params = array();
@@ -530,7 +565,11 @@ class Call
                     if ($compiledExpression->getCode() == 'true') {
                         $params[] = 'ZEPHIR_GLOBAL(global_true)';
                     } else {
-                        $params[] = 'ZEPHIR_GLOBAL(global_false)';
+                        if ($compiledExpression->getCode() == 'false') {
+                            $params[] = 'ZEPHIR_GLOBAL(global_false)';
+                        } else {
+                            throw new Exception('?');
+                        }
                     }
                     break;
 

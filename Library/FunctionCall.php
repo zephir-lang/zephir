@@ -88,7 +88,7 @@ class FunctionCall extends Call
      * @param array $expression
      * @return boolean
      */
-    protected function isReadOnly($funcName, $expression)
+    protected function isReadOnly($funcName, array $expression)
     {
         if ($this->isBuiltInFunction($funcName)) {
             return false;
@@ -112,20 +112,16 @@ class FunctionCall extends Call
                 }
             }
 
-            if ($numberParameters > 0) {
-                $n = 1;
-                $parameters = $reflector->getParameters();
-                foreach ($parameters as $parameter) {
-                    if ($numberParameters >= $n) {
-                        if ($parameter->isPassedByReference()) {
-                            return false;
-                        }
+            if ($reflector->getNumberOfParameters() > 0) {
+                foreach ($reflector->getParameters() as $parameter) {
+                    if ($parameter->isPassedByReference()) {
+                        return false;
                     }
-                    $n++;
                 }
             }
             return true;
         }
+
         return false;
     }
 
@@ -282,7 +278,7 @@ class FunctionCall extends Call
      * @param array $expression
      * @param CompilationContext $compilationContext
      */
-    protected function _callNormal($expression, $compilationContext)
+    protected function _callNormal(array $expression, $compilationContext)
     {
         $funcName = strtolower($expression['name']);
 
@@ -440,7 +436,7 @@ class FunctionCall extends Call
      * @param array $expression
      * @param CompilationContext $compilationContext
      */
-    protected function _callDynamic($expression, $compilationContext)
+    protected function _callDynamic(array $expression, $compilationContext)
     {
 
         $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
