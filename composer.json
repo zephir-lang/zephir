@@ -19,7 +19,9 @@
     },
     "require": {
         "php": "~5.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "re2c": "*",
+        "valgrind": "*"
     },
     "require-dev": {
         "satooshi/php-coveralls": "0.6.1",
