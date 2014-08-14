@@ -8,6 +8,8 @@ php:
 
 before_install:
  - git submodule --quiet update --init --recursive
+ - sudo apt-get update
+ - sudo apt-get -qq install re2c valgrind
  - ./unit-tests/ci/before_install.sh
 
 install:

@@ -1,8 +1,6 @@
 #!/bin/bash
 
 phpenv rehash
-sudo apt-get update
-sudo apt-get -qq install re2c valgrind
 git submodule --quiet update --init --recursive
 cd json-c
 git checkout patch-1
