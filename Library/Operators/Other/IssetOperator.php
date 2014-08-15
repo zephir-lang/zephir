@@ -65,7 +65,7 @@ class IssetOperator extends BaseOperator
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
-                switch($variable->getType()) {
+                switch ($variable->getType()) {
                     case 'array':
                     case 'variable':
                         break;
@@ -74,8 +74,10 @@ class IssetOperator extends BaseOperator
                         break;
                 }
 
-                if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
-                    $compilationContext->logger->warning('Possible attempt to use non array in isset operator', 'non-valid-isset', $expression);
+                if ($variable->getType() == 'variable') {
+                    if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                        $compilationContext->logger->warning('Possible attempt to use non array in isset operator', 'non-valid-isset', $expression);
+                    }
                 }
 
                 $expr = new Expression($left['right']);
