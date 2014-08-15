@@ -62,9 +62,9 @@ class StartsWithOptimizer extends OptimizerAbstract
         }
 
         if (count($expression['parameters']) == 2) {
-            return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', 0)', $expression);
+            return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL)', $expression);
         } else {
-            return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', zend_is_true(' . $resolvedParams[2] . '))', $expression);
+            return new CompiledExpression('bool', 'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')', $expression);
         }
     }
 }
