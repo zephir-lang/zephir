@@ -48,7 +48,7 @@ You can read more about composer binaries
 in it's [documentation](https://getcomposer.org/doc/articles/vendor-binaries.md).
 
 For global installation via composer you can use `composer global require`.
-Do not forget add `~/.composer/bin` into your `$PATH`.
+Do not forget add `~/.composer/vendor/bin` into your `$PATH`.
 
 Also you can just clone zephir repository and run `./install`.
 For global installation add `-c` flag.
