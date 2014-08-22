@@ -30,15 +30,15 @@ use Zephir\Utils;
 use Zephir\GlobalConstant;
 
 /**
- * ExportSymbol
+ * ExportSymbolString
  *
  * Exports a symbol to the current PHP symbol table using a variable as parameter
  */
-class ExportSymbol
+class ExportSymbolString
 {
 
     /**
-     * Compiles {var} = {expr}
+     * Compiles {"var"} = {expr}
      *
      * @param string $variable
      * @param ZephirVariable $symbolVariable
@@ -46,11 +46,11 @@ class ExportSymbol
      * @param CompilationContext $compilationContext,
      * @param array $statement
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable = null, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        $codePrinter->output('if (zephir_set_symbol(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE){');
+        $codePrinter->output('if (zephir_set_symbol_str(SS("' . $statement["variable"] . '"), ' . $resolvedExpr->getCode() . ' TSRMLS_CC) == FAILURE){');
         $codePrinter->output('  return;');
         $codePrinter->output('}');
     }

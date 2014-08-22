@@ -2249,6 +2249,11 @@ xx_let_assignment(R) ::= BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE xx_assignment_
 	R = xx_ret_let_assignment("dynamic-variable", O, I, NULL, NULL, E, status->scanner_state);
 }
 
+/* {"y"} = {expr} */
+xx_let_assignment(R) ::= BRACKET_OPEN STRING(S) BRACKET_CLOSE xx_assignment_operator(O) xx_assign_expr(E) . {
+	R = xx_ret_let_assignment("dynamic-variable-string", O, S, NULL, NULL, E, status->scanner_state);
+}
+
 xx_index_expr(R) ::= xx_common_expr(E) . {
 	R = E;
 }
