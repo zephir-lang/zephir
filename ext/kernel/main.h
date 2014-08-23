@@ -366,6 +366,8 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 		it->funcs->get_current_key(it, var TSRMLS_CC); \
 	}
 
+#endif
+
 /** Foreach */
 #define ZEPHIR_GET_FOREACH_KEY(var, hash, hash_pointer) ZEPHIR_GET_HMKEY(var, hash, hash_pointer)
 
