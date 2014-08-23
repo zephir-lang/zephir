@@ -359,7 +359,8 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
 
 }
 
@@ -371,7 +372,8 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
 
 }
 
@@ -383,7 +385,8 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
 
 }
 

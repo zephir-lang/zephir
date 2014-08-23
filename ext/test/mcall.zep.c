@@ -569,7 +569,8 @@ PHP_METHOD(Test_Mcall, optionalParameterVar) {
 	}
 
 
-	RETURN_CCTORW(param);
+	RETVAL_ZVAL(param, 1, 0);
+	return;
 
 }
 

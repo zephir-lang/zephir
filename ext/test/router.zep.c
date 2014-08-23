@@ -399,7 +399,8 @@ PHP_METHOD(Test_Router, doRemoveExtraSlashes) {
 
 
 
-	RETURN_CCTORW(route);
+	RETVAL_ZVAL(route, 1, 0);
+	return;
 
 }
 

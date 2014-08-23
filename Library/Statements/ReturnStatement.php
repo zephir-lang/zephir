@@ -237,7 +237,8 @@ class ReturnStatement extends StatementAbstract
                                             }
                                         }
                                     } else {
-                                        $codePrinter->output('RETURN_ZVAL(' . $symbolVariable->getName() . ', 1, 0);');
+                                        $codePrinter->output('RETVAL_ZVAL(' . $symbolVariable->getName() . ', 1, 0);');
+                                        $codePrinter->output('RETURN_MM();');
                                     }
                                 } else {
                                     $codePrinter->output('RETURN_MM();');

@@ -158,7 +158,8 @@ PHP_METHOD(Test_Router_Route, compilePattern) {
 		ZEPHIR_CONCAT_SVS(return_value, "#^", pattern, "$#");
 		RETURN_MM();
 	}
-	RETURN_CCTOR(pattern);
+	RETVAL_ZVAL(pattern, 1, 0);
+	RETURN_MM();
 
 }
 
