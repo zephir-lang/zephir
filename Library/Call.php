@@ -304,7 +304,7 @@ class Call
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
-            if (($calleeDefinition instanceof ClassMethod)) {
+            if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
@@ -318,7 +318,7 @@ class Call
                                 case 'uchar':
                                 case 'boolean':
                                 case 'bool':
-                                    //$readOnlyParameters[$position] = true;
+                                    $readOnlyParameters[$position] = true;
                                     break;
                             }
                         }
@@ -346,6 +346,7 @@ class Call
                         $params[] = $parameterVariable->getName();
                         $codePrinter->output('ZVAL_NULL(' . $parameterVariable->getName() . ');');
                     }
+                    $this->_temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -416,6 +417,7 @@ class Call
                         }
                     }
 
+                    $this->_temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
