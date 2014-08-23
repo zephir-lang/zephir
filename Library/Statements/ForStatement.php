@@ -407,7 +407,7 @@ class ForStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
-    public function compileIterator($exprRaw, $compilationContext)
+    public function compileIterator(array $exprRaw, $compilationContext)
     {
 
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
@@ -471,7 +471,7 @@ class ForStatement extends StatementAbstract
 
         if (isset($this->_statement['key'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            //$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            $codePrinter->output("\t" . 'ZEPHIR_GET_IMKEY(' . $this->_statement['key'] . ', ' . $iteratorVariable->getName() . ');');
         }
 
         if (isset($this->_statement['value'])) {
