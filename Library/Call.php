@@ -304,7 +304,7 @@ class Call
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
-            if ($calleeDefinition instanceof ClassMethod) {
+            if (!($calleeDefinition instanceof ClassMethod)) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {

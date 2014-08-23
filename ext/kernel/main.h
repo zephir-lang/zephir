@@ -342,7 +342,7 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 #define ZEPHIR_GET_IMKEY(var, it) \
 	{\
 		int key_type, str_key_len; \
-		long int_key; \
+		ulong int_key; \
 		char *str_key; \
 		\
 		ZEPHIR_INIT_NVAR(var); \
