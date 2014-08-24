@@ -49,6 +49,11 @@ class NativeArrayAccess
     protected $_expectingVariable;
 
     /**
+     * @var boolean
+     */
+    protected $_noisy = true;
+
+    /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
@@ -69,6 +74,16 @@ class NativeArrayAccess
     public function setReadOnly($readOnly)
     {
         $this->_readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode
+     *
+     * @param boolean $noisy
+     */
+    public function setNoisy($noisy)
+    {
+        $this->_noisy = $noisy;
     }
 
     /**
@@ -244,9 +259,17 @@ class NativeArrayAccess
         $symbolVariable->setDynamicTypes('undefined');
 
         if ($this->_readOnly || $readOnly) {
-            $flags = 'PH_NOISY | PH_READONLY';
+            if ($this->_noisy) {
+                $flags = 'PH_NOISY | PH_READONLY';
+            } else {
+                $flags = 'PH_READONLY';
+            }
         } else {
-            $flags = 'PH_NOISY';
+            if ($this->_noisy) {
+                $flags = 'PH_NOISY';
+            } else {
+                $flags = '0';
+            }
         }
 
         /**

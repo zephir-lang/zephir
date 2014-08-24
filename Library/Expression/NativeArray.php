@@ -38,6 +38,8 @@ class NativeArray
 
     protected $_readOnly = false;
 
+    protected $_noisy = true;
+
     protected $_expectingVariable;
 
     /**
@@ -61,6 +63,16 @@ class NativeArray
     public function setReadOnly($readOnly)
     {
         $this->_readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode
+     *
+     * @param boolean $noisy
+     */
+    public function setNoisy($noisy)
+    {
+        $this->_noisy = $noisy;
     }
 
     /**

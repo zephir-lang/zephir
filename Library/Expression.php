@@ -81,6 +81,8 @@ class Expression
 
     protected $_readOnly = false;
 
+    protected $_noisy = true;
+
     protected $_stringOperation = false;
 
     protected $_expectingVariable;
@@ -160,6 +162,26 @@ class Expression
     public function getExpectingVariable()
     {
         return $this->_expectingVariable;
+    }
+
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode
+     *
+     * @param boolean $noisy
+     */
+    public function setNoisy($noisy)
+    {
+        $this->_noisy = $noisy;
+    }
+
+    /**
+     * Checks whether the expression must be resolved in "noisy" mode
+     *
+     * @return boolean
+     */
+    public function isNoisy()
+    {
+        return $this->_noisy;
     }
 
     /**
@@ -326,12 +348,14 @@ class Expression
             case 'array-access':
                 $arrayAccess = new NativeArrayAccess();
                 $arrayAccess->setReadOnly($this->isReadOnly());
+                $arrayAccess->setNoisy($this->isNoisy());
                 $arrayAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $arrayAccess->compile($expression, $compilationContext);
 
             case 'property-access':
                 $propertyAccess = new PropertyAccess();
                 $propertyAccess->setReadOnly($this->isReadOnly());
+                $propertyAccess->setNoisy($this->isNoisy());
                 $propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $propertyAccess->compile($expression, $compilationContext);
 
@@ -339,6 +363,7 @@ class Expression
             case 'property-dynamic-access':
                 $propertyAccess = new PropertyDynamicAccess();
                 $propertyAccess->setReadOnly($this->isReadOnly());
+                $propertyAccess->setNoisy($this->isNoisy());
                 $propertyAccess->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $propertyAccess->compile($expression, $compilationContext);
 

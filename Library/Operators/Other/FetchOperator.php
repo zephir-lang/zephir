@@ -94,6 +94,7 @@ class FetchOperator extends BaseOperator
             case 'array-access':
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
+                $exprVariable->setNoisy(true);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
