@@ -191,10 +191,15 @@ class ReturnStatement extends StatementAbstract
                     break;
 
                 case 'array':
-                    $codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
+                    if ($resolvedExpr->getCode() != 'return_value') {
+                        $codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
+                    } else {
+                        $codePrinter->output('RETURN_MM();');
+                    }
                     break;
 
                 case 'variable':
+
                     if (!isset($symbolVariable)) {
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
                     }

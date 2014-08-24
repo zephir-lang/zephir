@@ -154,7 +154,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, maxFlipsCount);
 				zephir_array_fast_append(return_value, _13);
-				RETURN_CTOR(return_value);
+				RETURN_MM();
 			}
 			zephir_array_fetch_long(&perm0, perm1, 0, PH_NOISY | PH_READONLY, "test/fannkuch.zep", 75 TSRMLS_CC);
 			i = 0;
