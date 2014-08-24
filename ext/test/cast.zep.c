@@ -18,7 +18,7 @@
 
 
 /**
- * X
+ * Cast tests
  */
 ZEPHIR_INIT_CLASS(Test_Cast) {
 
@@ -543,7 +543,7 @@ PHP_METHOD(Test_Cast, testObjectCastFromEmptyArray) {
 
 PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 
-	zval *_1;
+	zval *_1, *_2 = NULL;
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
@@ -562,8 +562,9 @@ PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 4);
 	zephir_array_fast_append(_0, _1);
-	zephir_convert_to_object(_0);
-	RETURN_CTOR(_0);
+	ZEPHIR_CPY_WRT(_2, _0);
+	zephir_convert_to_object(_2);
+	RETURN_CCTOR(_2);
 
 }
 

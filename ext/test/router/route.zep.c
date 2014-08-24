@@ -397,7 +397,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 	array_init_size(return_value, 3);
 	zephir_array_fast_append(return_value, route);
 	zephir_array_fast_append(return_value, matches);
-	RETURN_MM();
+	RETURN_CTOR(return_value);
 
 }
 

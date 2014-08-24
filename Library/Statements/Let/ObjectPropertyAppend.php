@@ -111,6 +111,11 @@ class ObjectPropertyAppend
                 }
                 break;
 
+            case 'array':
+                $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+                $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $variableExpr->getName() . ' TSRMLS_CC);');
+                break;
+
             case 'variable':
                 $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableExpr->getType()) {
@@ -160,6 +165,7 @@ class ObjectPropertyAppend
                         throw new CompilerException("Variable: " . $variableExpr->getType() . " cannot be appended to array property", $statement);
                 }
                 break;
+
             default:
                 throw new CompilerException("Expression: " . $resolvedExpr->getType() . " cannot be appended to array property", $statement);
         }

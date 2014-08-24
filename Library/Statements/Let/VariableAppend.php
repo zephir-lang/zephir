@@ -119,6 +119,11 @@ class VariableAppend
                         $symbolVariable->setIdle(true);
                         break;
 
+                    case 'array':
+                        $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+                        $codePrinter->output('zephir_array_append(&' . $variable . ', ' . $exprVariable->getName() . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+                        break;
+
                     case 'variable':
                         $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                         switch ($exprVariable->getType()) {
@@ -161,6 +166,7 @@ class VariableAppend
                         throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
                 }
                 break;
+
             default:
                 throw new CompilerException("Unknown type", $statement);
         }

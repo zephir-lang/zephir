@@ -1,24 +1,24 @@
 
 /**
- * X
+ * Cast tests
  */
 
 namespace Test;
 
 class Cast
 {
-    /** To int cast */
+	/** To int cast */
 
 	public function testIntCastFromFloat()
 	{
 		return (int) 5.0;
 	}
 
-    public function testIntCastFromVariableFloat()
-    {
-        var a = 5.0;
-        return (int) a;
-    }
+	public function testIntCastFromVariableFloat()
+	{
+		var a = 5.0;
+		return (int) a;
+	}
 
 	public function testIntCastFromBooleanTrue()
 	{
@@ -32,81 +32,81 @@ class Cast
 
 	public function testIntCastFromVariableBooleanTrue()
 	{
-	    var a = true;
+		var a = true;
 		return (int) a;
 	}
 
 	public function testIntCastFromVariableBooleanFalse()
 	{
-	    var a = false;
+		var a = false;
 		return (int) a;
 	}
 
 	public function testIntCastFromVariableNull()
 	{
-	    var a = null;
-	    return (int) a;
+		var a = null;
+		return (int) a;
 	}
 
 	public function testIntCastFromNull()
 	{
-	    return (int) null;
+		return (int) null;
 	}
 
 	public function testIntCastFromVariableEmptyArray()
 	{
-	    var a = [];
-        return (int) a;
+		var a = [];
+		return (int) a;
 	}
 
 	public function testIntCastFromEmptyArray()
 	{
-        return (int) [];
+		return (int) [];
 	}
 
 	public function testIntCastFromVariableArray()
 	{
-	    var a = [1, 2, 3, 4];
-        return (int) a;
+		var a = [1, 2, 3, 4];
+		return (int) a;
 	}
 
 	public function testIntCastFromArray()
 	{
-        return (int) [1, 2, 3, 4];
-	}
-
-    /**
-     * Notice: Object of class stdClass could not be converted to int
-     * @return int 1
-     */
-	public function testIntCastFromStdClass()
-	{
-	    return (int) (new \StdClass);
+		return (int) [1, 2, 3, 4];
 	}
 
 	/**
-     * Notice: Object of class stdClass could not be converted to int
-     * @return int 1
-     */
-	public function testIntCastFromVariableStdClass()
+	 * Notice: Object of class stdClass could not be converted to int
+	 * @return int 1
+	 */
+	public function testIntCastFromStdClass()
 	{
-	    var a;
-	    let a = new \StdClass;
-	    return (int) a;
+		return (int) (new \StdClass);
 	}
 
-    /** To float cast */
+	/**
+	 * Notice: Object of class stdClass could not be converted to int
+	 * @return int 1
+	 */
+	public function testIntCastFromVariableStdClass()
+	{
+		var a;
+		let a = new \StdClass;
+		return (int) a;
+	}
+
+	/** To float cast */
 
 	public function testFloatCastFromFloat()
 	{
 		return (float) 5.0;
 	}
 
-    public function testFloatCastFromVariableFloat()
-    {
-        var a = 5.0;
-        return (float) a;
-    }
+	public function testFloatCastFromVariableFloat()
+	{
+		var a = 5.0;
+		return (float) a;
+	}
 
 	public function testFloatCastFromBooleanTrue()
 	{
@@ -120,155 +120,155 @@ class Cast
 
 	public function testFloatCastFromVariableBooleanTrue()
 	{
-	    var a = true;
+		var a = true;
 		return (float) a;
 	}
 
 	public function testFloatCastFromVariableBooleanFalse()
 	{
-	    var a = false;
+		var a = false;
 		return (float) a;
 	}
 
 	public function testFloatCastFromVariableNull()
 	{
-	    var a = null;
-	    return (float) a;
+		var a = null;
+		return (float) a;
 	}
 
 	public function testFloatCastFromNull()
 	{
-	    return (float) null;
+		return (float) null;
 	}
 
 	public function testFloatCastFromVariableEmptyArray()
 	{
-	    var a = [];
-        return (float) a;
+		var a = [];
+		return (float) a;
 	}
 
 	public function testFloatCastFromEmptyArray()
 	{
-        return (float) [];
+		return (float) [];
 	}
 
 	public function testFloatCastFromVariableArray()
 	{
-	    var a = [1, 2, 3, 4];
-        return (float) a;
+		var a = [1, 2, 3, 4];
+		return (float) a;
 	}
 
 	public function testFloatCastFromArray()
 	{
-        return (float) [1, 2, 3, 4];
-	}
-
-    /**
-     * Notice: Object of class stdClass could not be converted to int
-     * @return int 1
-     */
-	public function testFloatCastFromStdClass()
-	{
-	    return (float) (new \StdClass);
+		return (float) [1, 2, 3, 4];
 	}
 
 	/**
-     * Notice: Object of class stdClass could not be converted to int
-     * @return int 1
-     */
-	public function testFloatCastFromVariableStdClass()
+	 * Notice: Object of class stdClass could not be converted to int
+	 * @return int 1
+	 */
+	public function testFloatCastFromStdClass()
 	{
-	    var a;
-	    let a = new \StdClass;
-	    return (float) a;
+		return (float) (new \StdClass);
 	}
 
-    /** To boolean cast */
+	/**
+	 * Notice: Object of class stdClass could not be converted to int
+	 * @return int 1
+	 */
+	public function testFloatCastFromVariableStdClass()
+	{
+		var a;
+		let a = new \StdClass;
+		return (float) a;
+	}
 
-    public function testBooleanCastFromIntTrue1()
-    {
-        return (boolean) 1;
-    }
+	/** To boolean cast */
 
-    public function testBooleanCastFromIntTrue2()
-    {
-        return (boolean) 1000;
-    }
+	public function testBooleanCastFromIntTrue1()
+	{
+		return (boolean) 1;
+	}
 
-    public function testBooleanCastFromIntFalse()
-    {
-        return (boolean) 0;
-    }
+	public function testBooleanCastFromIntTrue2()
+	{
+		return (boolean) 1000;
+	}
 
-    public function testBooleanCastFromObject()
-    {
-        var simpleObject;
-        let simpleObject = new \StdClass();
-        return (boolean) simpleObject;
-    }
+	public function testBooleanCastFromIntFalse()
+	{
+		return (boolean) 0;
+	}
 
-    public function testBooleanCastFromEmptyArray()
-    {
-        var a = [];
-        return (boolean) a;
-    }
+	public function testBooleanCastFromObject()
+	{
+		var simpleObject;
+		let simpleObject = new \StdClass();
+		return (boolean) simpleObject;
+	}
 
-    public function testBooleanCastFromArray()
-    {
-        var a = [1, 2, 3, 4];
-        return (boolean) a;
-    }
+	public function testBooleanCastFromEmptyArray()
+	{
+		var a = [];
+		return (boolean) a;
+	}
 
-    public function testBooleanCastFromNull()
-    {
-        var a = null;
-        return (boolean) a;
-    }
+	public function testBooleanCastFromArray()
+	{
+		var a = [1, 2, 3, 4];
+		return (boolean) a;
+	}
 
-    /** To object cast */
+	public function testBooleanCastFromNull()
+	{
+		var a = null;
+		return (boolean) a;
+	}
 
-    public function testObjectCastFromInt()
-    {
-        return (object) 5;
-    }
+	/** To object cast */
 
-    public function testObjectCastFromFloat()
-    {
-        return (object) 5.0;
-    }
+	public function testObjectCastFromInt()
+	{
+		return (object) 5;
+	}
 
-    public function testObjectCastFromFalse()
-    {
-        return (object) false;
-    }
+	public function testObjectCastFromFloat()
+	{
+		return (object) 5.0;
+	}
 
-    public function testObjectCastFromTrue()
-    {
-        return (object) true;
-    }
+	public function testObjectCastFromFalse()
+	{
+		return (object) false;
+	}
 
-    public function testObjectCastFromNull()
-    {
-        return (object) null;
-    }
+	public function testObjectCastFromTrue()
+	{
+		return (object) true;
+	}
 
-    public function testObjectCastFromEmptyArray()
-    {
-        return (object) [];
-    }
+	public function testObjectCastFromNull()
+	{
+		return (object) null;
+	}
 
-    public function testObjectCastFromArray()
-    {
-        return (object) [1, 2, 3, 4];
-    }
+	public function testObjectCastFromEmptyArray()
+	{
+		return (object) [];
+	}
 
-    public function testObjectCastFromEmptyString()
-    {
-        return (object) "";
-    }
+	public function testObjectCastFromArray()
+	{
+		return (object) [1, 2, 3, 4];
+	}
 
-    public function testObjectCastFromString()
-    {
-        return (object) "test string";
-    }
+	public function testObjectCastFromEmptyString()
+	{
+		return (object) "";
+	}
+
+	public function testObjectCastFromString()
+	{
+		return (object) "test string";
+	}
 }

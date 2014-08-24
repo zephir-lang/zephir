@@ -1696,7 +1696,7 @@ PHP_METHOD(Test_Flow, testFor36Aux) {
 
 	array_init_size(return_value, 2);
 	zephir_array_fast_append(return_value, hello);
-	return;
+	RETURN_CTORW(return_value);
 
 }
 

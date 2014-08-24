@@ -583,6 +583,11 @@ class Call
                     $params[] = '&' . $parameterVariable->getName();
                     break;
 
+                case 'array':
+                    $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
+                    $params[] = $parameterVariable->getName();
+                    break;
+
                 case 'variable':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
                     switch ($parameterVariable->getType()) {
