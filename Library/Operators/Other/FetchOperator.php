@@ -94,7 +94,7 @@ class FetchOperator extends BaseOperator
             case 'array-access':
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
-                $exprVariable->setNoisy(true);
+                $exprVariable->setNoisy(false);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
@@ -114,7 +114,9 @@ class FetchOperator extends BaseOperator
 
                 $expr = new Expression($expression['right']['right']);
                 $expr->setReadOnly(true);
+                $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
+
                 switch ($resolvedExpr->getType()) {
 
                     case 'int':
@@ -152,6 +154,7 @@ class FetchOperator extends BaseOperator
 
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
+                $exprVariable->setNoisy(false);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
@@ -176,6 +179,7 @@ class FetchOperator extends BaseOperator
 
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
+                $exprVariable->setNoisy(false);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ($exprCompiledVariable->getType() != 'variable') {
