@@ -1023,6 +1023,7 @@ class Variable
                                 }
                                 break;
 
+                            case 'array':
                             case 'variable':
                                 switch ($statement['operator']) {
                                     case 'assign':

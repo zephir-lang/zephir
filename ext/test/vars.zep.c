@@ -37,7 +37,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 4);
+	array_init_size(ar, 5);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 4);
+	array_init_size(ar, 5);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);
@@ -222,7 +222,7 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
 PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
-	zval *testVar_param = NULL, *_0, *_1;
+	zval *testVar_param = NULL, *_0 = NULL;
 	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -236,12 +236,9 @@ PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 	}
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, zephir_fast_count_int(testVar TSRMLS_CC));
+	ZEPHIR_CPY_WRT(_0, testVar);
 	zephir_var_dump(&_0 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_1);
-	ZVAL_LONG(_1, zephir_fast_count_int(testVar TSRMLS_CC));
-	zephir_var_export(&_1 TSRMLS_CC);
+	zephir_var_export(&testVar TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
