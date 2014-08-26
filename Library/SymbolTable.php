@@ -135,7 +135,11 @@ class SymbolTable
      */
     public function getVariable($name)
     {
-        return $this->_variables[$name];
+        if (isset($this->_variables[$name])) {
+            return $this->_variables[$name];
+        }
+
+        return false;
     }
 
     /**
