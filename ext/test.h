@@ -65,6 +65,7 @@
 #include "test/oo/ooparams.zep.h"
 #include "test/oo/propertyaccess.zep.h"
 #include "test/operator.zep.h"
+#include "test/optimizers/arraymerge.zep.h"
 #include "test/pdostatement.zep.h"
 #include "test/pregmatch.zep.h"
 #include "test/properties/extendspublicproperties.zep.h"
