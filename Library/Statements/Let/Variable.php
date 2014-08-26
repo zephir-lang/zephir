@@ -1024,6 +1024,26 @@ class Variable
                                 break;
 
                             case 'array':
+                                switch ($statement['operator']) {
+                                    case 'assign':
+
+                                        if ($variable != $resolvedExpr->getCode()) {
+
+                                            $symbolVariable->setMustInitNull(true);
+                                            $compilationContext->symbolTable->mustGrownStack(true);
+
+                                            /* Inherit the dynamic type data from the assigned value */
+                                            $symbolVariable->setDynamicTypes('array');
+
+                                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+                                        }
+                                        break;
+
+                                    default:
+                                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+                                }
+                                break;
+
                             case 'variable':
                                 switch ($statement['operator']) {
                                     case 'assign':
