@@ -37,7 +37,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 5);
+	array_init_size(ar, 4);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);
@@ -78,7 +78,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 5);
+	array_init_size(ar, 4);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);
@@ -208,6 +208,32 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &testVar);
 
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, zephir_fast_count_int(testVar TSRMLS_CC));
+	zephir_var_dump(&_0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, zephir_fast_count_int(testVar TSRMLS_CC));
+	zephir_var_export(&_1 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
+
+	zval *testVar_param = NULL, *_0, *_1;
+	zval *testVar = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &testVar_param);
+
+	if (!testVar_param) {
+		ZEPHIR_INIT_VAR(testVar);
+		array_init(testVar);
+	} else {
+		zephir_get_arrval(testVar, testVar_param);
+	}
 
 
 	ZEPHIR_INIT_VAR(_0);

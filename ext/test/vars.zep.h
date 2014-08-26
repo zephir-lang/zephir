@@ -11,6 +11,7 @@ PHP_METHOD(Test_Vars, test88IssueParam2InitString);
 PHP_METHOD(Test_Vars, testVarDump2param);
 PHP_METHOD(Test_Vars, testVarDump3param);
 PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport);
+PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testvardump2, 0, 0, 1)
 	ZEND_ARG_INFO(0, ret)
@@ -41,6 +42,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testcountoptimizervardumpandexport, 0, 
 	ZEND_ARG_INFO(0, testVar)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_vars_testarraytypevardumpandexport, 0, 0, 0)
+	ZEND_ARG_ARRAY_INFO(0, testVar, 1)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_vars_method_entry) {
 	PHP_ME(Test_Vars, testVarDump, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testVarDump2, arginfo_test_vars_testvardump2, ZEND_ACC_PUBLIC)
@@ -50,5 +55,6 @@ ZEPHIR_INIT_FUNCS(test_vars_method_entry) {
 	PHP_ME(Test_Vars, testVarDump2param, arginfo_test_vars_testvardump2param, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testVarDump3param, arginfo_test_vars_testvardump3param, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testCountOptimizerVarDumpAndExport, arginfo_test_vars_testcountoptimizervardumpandexport, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Vars, testArrayTypeVarDumpAndExport, arginfo_test_vars_testarraytypevardumpandexport, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

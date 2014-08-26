@@ -62,4 +62,9 @@ class Vars
         var_export(count(testVar));
     }
 
+	public function testArrayTypeVarDumpAndExport(array testVar = [])
+	{
+		var_dump(testVar);
+		var_export(testVar);
+	}
 }
