@@ -52,25 +52,38 @@ class VarDumpOptimizer extends OptimizerAbstract
 
         foreach ($resolvedParams as $resolvedParam) {
 
-            $tempVariable = $context->symbolTable->addTemp('variable', $context);
+            $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
+            if (!$variable) {
+                switch ($resolvedParam->getType()) {
+                    case 'array':
+                        $type = 'array';
+                        break;
+                    default:
+                        $type = 'variable';
+                        break;
+                }
 
-            $statement = new LetStatement(array(
-                'type' => 'let',
-                'assignments' => array(
-                    array(
-                        'assign-type' => 'variable',
-                        'variable' => $tempVariable->getName(),
-                        'operator' => 'assign',
-                        'expr' => array(
-                            'type'  => $resolvedParam->getType(),
-                            'value' => $resolvedParam->getCode()
+                $variable = $context->symbolTable->addTemp($type, $context);
+                $variable->initVariant($context);
+
+                $statement = new LetStatement(array(
+                    'type' => 'let',
+                    'assignments' => array(
+                        array(
+                            'assign-type' => $type,
+                            'variable' => $variable->getName(),
+                            'operator' => 'assign',
+                            'expr' => array(
+                                'type'  => $resolvedParam->getType(),
+                                'value' => $resolvedParam->getCode()
+                            )
                         )
                     )
-                )
-            ));
-            $statement->compile($context);
+                ));
+                $statement->compile($context);
+            }
 
-            $context->codePrinter->output('zephir_var_dump(&' . $tempVariable->getName() . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_var_dump(&' . $variable->getName() . ' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);
