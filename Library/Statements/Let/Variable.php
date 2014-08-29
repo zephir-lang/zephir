@@ -482,6 +482,8 @@ class Variable
                         }
                         break;
 
+                    default:
+                        throw new CompilerException("You cannot {$statement['operator']} {$resolvedExpr->getType()} for array type", $resolvedExpr->getOriginal());
                 }
                 break;
 
