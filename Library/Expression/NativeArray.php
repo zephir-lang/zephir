@@ -19,6 +19,7 @@
 
 namespace Zephir\Expression;
 
+use Zephir\Exception;
 use Zephir\Variable;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
