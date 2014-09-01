@@ -255,7 +255,7 @@ EOF;
             case 'array':
                 $parameters = array();
 
-                array_walk($parameter['default']['left'], function($value) use (&$parameters) {
+                array_walk($parameter['default']['left'], function ($value) use (&$parameters) {
                     $parameters[] = $this->wrapPHPValue(array(
                         'default' => $value['value'],
                         'type' => $value['value']['type']
