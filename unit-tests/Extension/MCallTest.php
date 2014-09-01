@@ -20,6 +20,7 @@
 namespace Extension;
 
 use Test\Mcall;
+use stdClass;
 
 class MCallTest extends \PHPUnit_Framework_TestCase
 {
@@ -170,5 +171,19 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
         $this->assertTrue($t->arrayParam(array()) === array());
         $this->assertTrue($t->arrayParam(array(1, 2, 3)) === array(1, 2, 3));
+    }
+
+    /**
+     * @test
+     */
+    public function objectParamCastStdClass()
+    {
+        $t = new Mcall();
+
+        $this->assertNumberOfParameters(1);
+        $this->assertNumberOfRequiredParameters(1);
+
+        $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
+        $this->assertInstanceOf('stdClass', $t->objectParamCastStdClass(new \stdClass()));
     }
 }

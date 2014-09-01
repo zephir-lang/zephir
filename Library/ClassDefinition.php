@@ -645,7 +645,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = &$this->methods;
+        $methods = & $this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -874,7 +874,7 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    switch($parameter['data-type']) {
+                    switch ($parameter['data-type']) {
                         case 'array':
                             $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
@@ -884,7 +884,7 @@ class ClassDefinition
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
 
-                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', "'.$compilationContext->getFullName($value).'",' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . $compilationContext->getFullName($value) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                                         break;
                                     default:
                                         throw new Exception('Unexpected exception');
@@ -1157,7 +1157,7 @@ class ClassDefinition
                 $parameters = array();
 
                 foreach ($method->getParameters() as $row) {
-                        $parameters[] = array(
+                    $parameters[] = array(
                         'type' => 'parameter',
                         'name' => $row->getName(),
                         'const' => 0,
@@ -1192,11 +1192,11 @@ class ClassDefinition
     private static function _convertPhpConstantType($phpType)
     {
         $map = array(
-            'boolean'    => 'bool',
-            'integer'    => 'int',
-            'double'    => 'double',
-            'string'    => 'string',
-            'NULL'        => 'null',
+            'boolean' => 'bool',
+            'integer' => 'int',
+            'double' => 'double',
+            'string' => 'string',
+            'NULL' => 'null',
         );
 
         if (!isset($map[$phpType])) {
