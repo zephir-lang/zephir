@@ -461,6 +461,7 @@ class Variable
             case 'array':
                 switch ($resolvedExpr->getType()) {
 
+                    case 'variable':
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
