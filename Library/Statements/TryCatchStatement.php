@@ -41,7 +41,7 @@ class TryCatchStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
 
         $compilationContext->insideTryCatch++;
 
