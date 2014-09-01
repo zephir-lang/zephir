@@ -153,7 +153,6 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertTrue($this->getMethodFirstParameter()->isArray());
-        var_dump($t->arrayParamWithDefaultNullValue());
         $this->assertTrue($t->arrayParamWithDefaultNullValue() === null);
         $this->assertTrue($t->arrayParamWithDefaultNullValue(array(1)) === array(1));
     }
