@@ -235,12 +235,12 @@ EOF;
     }
 
     /**
-     * Prepare AST defalut value to PHP code print
+     * Prepare AST default value to PHP code print
      *
      * @param $parameter
      * @return string
      */
-    private function wrapPHPValue($parameter)
+    protected function wrapPHPValue($parameter)
     {
         switch ($parameter['default']['type']) {
             case 'null':
@@ -255,18 +255,14 @@ EOF;
             case 'array':
                 $parameters = array();
 
-                array_walk($parameter['default']['left'], function ($value) use (&$parameters) {
+                foreach ($parameter['default']['left'] as $value) {
                     $parameters[] = $this->wrapPHPValue(array(
                         'default' => $value['value'],
                         'type' => $value['value']['type']
                     ));
-                });
-
-                if (count($parameters) > 0) {
-                    return 'array('.implode(', ', $parameters).')';
                 }
 
-                return 'array()';
+                return 'array('.implode(', ', $parameters).')';
                 break;
             case 'static-constant-access':
                 return $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
