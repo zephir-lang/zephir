@@ -186,4 +186,18 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('stdClass', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('stdClass', $t->objectParamCastStdClass(new \stdClass()));
     }
+
+    /**
+     * @test
+     */
+    public function objectParamCastOoParam()
+    {
+        $t = new Mcall();
+
+        $this->assertNumberOfParameters(1);
+        $this->assertNumberOfRequiredParameters(1);
+
+        $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
+        $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
 }
