@@ -390,7 +390,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	}
 
 	/* Xdebug fix */
-	if (fcic.function_handler && fcic.function_handler.type == ZEND_INTERNAL_FUNCTION && fcic.function_handler->op_array) {
+	if (fcic.function_handler && fcic.function_handler->type == ZEND_INTERNAL_FUNCTION && fcic.function_handler->op_array) {
 		fcic.function_handler->op_array.filename = "?";
 		fcic.function_handler->op_array.line_start = 0;
 		fcic.function_handler->op_array.line_end = 0;
