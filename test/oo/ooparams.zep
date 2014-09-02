@@ -116,4 +116,9 @@ class OoParams
 	{
 	    return obj;
 	}
+
+	public function setObjectClassCast(<Param> parameter)
+	{
+		return parameter;
+	}
 }

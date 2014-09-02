@@ -16,14 +16,14 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_spectralnorm_au, 0, 0, 3)
 	ZEND_ARG_INFO(0, n)
-	ZEND_ARG_INFO(0, u)
-	ZEND_ARG_INFO(0, v)
+	ZEND_ARG_OBJ_INFO(0, u, SplFixedArray, 0)
+	ZEND_ARG_OBJ_INFO(0, v, SplFixedArray, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_spectralnorm_atu, 0, 0, 3)
 	ZEND_ARG_INFO(0, n)
-	ZEND_ARG_INFO(0, u)
-	ZEND_ARG_INFO(0, v)
+	ZEND_ARG_OBJ_INFO(0, u, SplFixedArray, 0)
+	ZEND_ARG_OBJ_INFO(0, v, SplFixedArray, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_spectralnorm_atau, 0, 0, 4)

@@ -222,4 +222,9 @@ class Mcall
 	{
 		return driverOptions;
 	}
+
+	public function objectParamCastStdClass(<\StdClass> param)
+	{
+		return param;
+	}
 }

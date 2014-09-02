@@ -121,11 +121,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor32, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor33, 0, 0, 1)
-	ZEND_ARG_INFO(0, e)
+	ZEND_ARG_OBJ_INFO(0, e, Iterator, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor34, 0, 0, 0)
-	ZEND_ARG_INFO(0, e)
+	ZEND_ARG_OBJ_INFO(0, e, Iterator, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_flow_testfor35aux, 0, 0, 1)

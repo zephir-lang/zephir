@@ -44,6 +44,7 @@ PHP_METHOD(Test_Mcall, optionalParameterBooleanNull);
 PHP_METHOD(Test_Mcall, arrayParamWithDefaultEmptyArray);
 PHP_METHOD(Test_Mcall, arrayParamWithDefaultNullValue);
 PHP_METHOD(Test_Mcall, arrayParam);
+PHP_METHOD(Test_Mcall, objectParamCastStdClass);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod4, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -183,6 +184,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_arrayparam, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, driverOptions, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_objectparamcaststdclass, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, param, StdClass, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testMethod1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testMethod2, NULL, ZEND_ACC_PROTECTED)
@@ -225,5 +230,6 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, arrayParamWithDefaultEmptyArray, arginfo_test_mcall_arrayparamwithdefaultemptyarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, arrayParamWithDefaultNullValue, arginfo_test_mcall_arrayparamwithdefaultnullvalue, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, arrayParam, arginfo_test_mcall_arrayparam, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, objectParamCastStdClass, arginfo_test_mcall_objectparamcaststdclass, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

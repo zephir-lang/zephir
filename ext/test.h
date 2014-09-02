@@ -53,6 +53,7 @@
 #include "test/oo.zep.h"
 #include "test/oo/abstractclass.zep.h"
 #include "test/oo/deprecatedmethods.zep.h"
+#include "test/oo/param.zep.h"
 #include "test/oo/constantsinterface.zep.h"
 #include "test/oo/dynamicprop.zep.h"
 #include "test/oo/extendpdoclass.zep.h"

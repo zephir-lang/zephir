@@ -100,4 +100,12 @@ class OoParamsTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException');
         $t->setStrictName(1234);
     }
+
+    public function setObjectClassCast()
+    {
+        $t = new \Test\Oo\OoParams();
+        $result = $t->setStrictName(new \Test\Oo\Param());
+
+        $this->assertInstanceOf('Test\Oo\Param', $result);
+    }
 }

@@ -51,6 +51,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
 	test/oo/deprecatedmethods.zep.c
+	test/oo/param.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
 	test/oo/extendpdoclass.zep.c
