@@ -64,6 +64,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/ooparams.zep.c
 	test/oo/propertyaccess.zep.c
 	test/operator.zep.c
+	test/optimizers/arraymerge.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c

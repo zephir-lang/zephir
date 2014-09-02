@@ -89,6 +89,7 @@ zend_class_entry *test_oo_ooparams_ce;
 zend_class_entry *test_oo_param_ce;
 zend_class_entry *test_oo_propertyaccess_ce;
 zend_class_entry *test_operator_ce;
+zend_class_entry *test_optimizers_arraymerge_ce;
 zend_class_entry *test_pdostatement_ce;
 zend_class_entry *test_pregmatch_ce;
 zend_class_entry *test_properties_extendspublicproperties_ce;
@@ -347,6 +348,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_Param);
 	ZEPHIR_INIT(Test_Oo_PropertyAccess);
 	ZEPHIR_INIT(Test_Operator);
+	ZEPHIR_INIT(Test_Optimizers_ArrayMerge);
 	ZEPHIR_INIT(Test_PdoStatement);
 	ZEPHIR_INIT(Test_Pregmatch);
 	ZEPHIR_INIT(Test_Properties_ExtendsPublicProperties);
