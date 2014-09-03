@@ -227,4 +227,9 @@ class Mcall
 	{
 		return param;
 	}
+
+	public function objectParamCastOoParam(<Oo\Param> param)
+	{
+		return param;
+	}
 }

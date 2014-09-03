@@ -108,7 +108,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setresource, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_oo_ooparams_setobjectclasscast, 0, 0, 1)
-	ZEND_ARG_OBJ_INFO(0, parameter, Test\Oo\Param, 0)
+	ZEND_ARG_OBJ_INFO(0, parameter, Test\\Oo\\Param, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
