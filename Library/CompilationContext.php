@@ -177,8 +177,12 @@ class CompilationContext
      * @param string $className
      * @return string
      */
-    public function getFullName($className)
+    public function getFullName($className, $addslashes = FALSE)
     {
-        return Utils::getFullName($className, $this->classDefinition->getNamespace(), $this->aliasManager);
+		$fullname = Utils::getFullName($className, $this->classDefinition->getNamespace(), $this->aliasManager);
+		if ($addslashes) {
+			$fullname = addslashes($fullname);
+		}
+        return $fullname;
     }
 }

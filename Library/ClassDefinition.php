@@ -884,7 +884,7 @@ class ClassDefinition
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
 
-                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . $compilationContext->getFullName($value) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . $compilationContext->getFullName($value, TRUE) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                                         break;
                                     default:
                                         throw new Exception('Unexpected exception');
