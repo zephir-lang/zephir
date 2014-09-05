@@ -1099,6 +1099,10 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
+            case 'splfileinfo':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_SplFileInfo';
+                break;
             case 'splheap':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplHeap';
