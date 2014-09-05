@@ -215,8 +215,7 @@ EOF;
                 $paramStr = '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
-                    $paramStr .= ' = ';
-                    $paramStr .= $this->wrapPHPValue($parameter);
+                    $paramStr .= ' = ' . $this->wrapPHPValue($parameter);
                 }
 
                 $parameters[] = $paramStr;
