@@ -177,19 +177,19 @@ class MethodCall extends Call
                 $classDefinition = $compilationContext->classDefinition;
                 if (!$classDefinition->hasMethod($methodName)) {
                     if ($check) {
-                        $found = FALSE;
-                        $interfaces = $classDefinition->isAbstract() ? $classDefinition->getImplementedInterfaces() : NULL;
+                        $found = false;
+                        $interfaces = $classDefinition->isAbstract() ? $classDefinition->getImplementedInterfaces() : null;
                         if (is_array($interfaces)) {
                             $compiler = $compilationContext->compiler;
                             foreach ($interfaces as $interface) {
                                 $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                                 if ($classInterfaceDefinition->hasMethod($methodName)) {
-                                    $found = TRUE;
+                                    $found = true;
                                     $classMethod = $classInterfaceDefinition->getMethod($methodName);
                                     break;
-                                }   
+                                }
                             }
-			}
+                        }
                         if (!$found) {
                             throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
                         }
