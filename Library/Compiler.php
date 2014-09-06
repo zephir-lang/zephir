@@ -857,18 +857,18 @@ class Compiler
          * %PROJECT_LOWER%.w32.c
          */
         $content = file_get_contents(__DIR__ . '/../templates/project.w32.c');
-        $w32Inclues = '';
+        $w32Includes = '';
 
         foreach ($compiledFiles as $f)
-            $w32Inclues .= "#include \"{$f}\"\n";
+            $w32Includes .= "#include \"{$f}\"\n";
         foreach ($this->_extraFiles as $f)
-            $w32Inclues .= "#include \"{$f}\"\n";
+            $w32Includes .= "#include \"{$f}\"\n";
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        $content = str_replace('%W32_FILES_COMPILED_INCLUDED%', $w32Inclues, $content);
+        $content = str_replace('%W32_FILES_COMPILED_INCLUDED%', $w32Includes, $content);
         Utils::checkAndWriteIfNeeded($content, 'ext/'.$toReplace['%PROJECT_LOWER%'].'.w32.c');
 
         /**
