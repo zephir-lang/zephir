@@ -41,7 +41,7 @@ class WriteDetector
         return false;
     }
 
-    public function detect($variable, $statements)
+    public function detect($variable, array $statements)
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {

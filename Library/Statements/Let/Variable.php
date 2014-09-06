@@ -461,6 +461,7 @@ class Variable
             case 'array':
                 switch ($resolvedExpr->getType()) {
 
+                    case 'variable':
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
@@ -482,6 +483,8 @@ class Variable
                         }
                         break;
 
+                    default:
+                        throw new CompilerException("You cannot {$statement['operator']} {$resolvedExpr->getType()} for array type", $resolvedExpr->getOriginal());
                 }
                 break;
 
@@ -1020,6 +1023,27 @@ class Variable
                                         break;
                                     default:
                                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
+                                }
+                                break;
+
+                            case 'array':
+                                switch ($statement['operator']) {
+                                    case 'assign':
+
+                                        if ($variable != $resolvedExpr->getCode()) {
+
+                                            $symbolVariable->setMustInitNull(true);
+                                            $compilationContext->symbolTable->mustGrownStack(true);
+
+                                            /* Inherit the dynamic type data from the assigned value */
+                                            $symbolVariable->setDynamicTypes('array');
+
+                                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+                                        }
+                                        break;
+
+                                    default:
+                                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
                                 }
                                 break;
 

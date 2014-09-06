@@ -18,7 +18,7 @@
 
 
 /**
- * X
+ * Cast tests
  */
 ZEPHIR_INIT_CLASS(Test_Cast) {
 
@@ -128,7 +128,7 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -303,7 +303,7 @@ PHP_METHOD(Test_Cast, testFloatCastFromVariableArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -432,7 +432,7 @@ PHP_METHOD(Test_Cast, testBooleanCastFromArray) {
 	ZEPHIR_INIT_VAR(a);
 	array_init(a);
 
-	ZEPHIR_INIT_VAR(a);
+	ZEPHIR_INIT_BNVAR(a);
 	array_init_size(a, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
@@ -543,7 +543,7 @@ PHP_METHOD(Test_Cast, testObjectCastFromEmptyArray) {
 
 PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 
-	zval *_1;
+	zval *_1, *_2 = NULL;
 	zval *_0;
 
 	ZEPHIR_MM_GROW();
@@ -562,8 +562,9 @@ PHP_METHOD(Test_Cast, testObjectCastFromArray) {
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 4);
 	zephir_array_fast_append(_0, _1);
-	zephir_convert_to_object(_0);
-	RETURN_CTOR(_0);
+	ZEPHIR_CPY_WRT(_2, _0);
+	zephir_convert_to_object(_2);
+	RETURN_CCTOR(_2);
 
 }
 

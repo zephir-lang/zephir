@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Exception;
 use Zephir\Statements\DeclareStatement;
 use Zephir\Statements\IfStatement;
 use Zephir\Statements\ForStatement;
@@ -222,7 +223,7 @@ class StatementsBlock
                 case 'try-catch':
                     $throwStatement = new TryCatchStatement($statement);
                     $throwStatement->compile($compilationContext);
-                    $this->_unreachable = true;
+                    $this->_unreachable = false;
                     break;
 
                 case 'fetch':
@@ -269,8 +270,11 @@ class StatementsBlock
                     $compilationContext->codePrinter->output($statement['value']);
                     break;
 
+                case 'empty':
+                    break;
+
                 default:
-                    $compilationContext->codePrinter->output('//missing ' . $statement['type']);
+                    throw new Exception('Unsupported statement: ' . $statement['type']);
             }
 
             if ($statement['type'] != 'comment') {

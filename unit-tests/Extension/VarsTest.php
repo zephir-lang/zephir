@@ -64,4 +64,14 @@ class VarsTest extends \PHPUnit_Framework_TestCase
 
         ob_clean();
     }
+
+    public function testArrayTypeVarDumpAndExport()
+    {
+        ob_start();
+
+        $t = new \Test\Vars();
+        $t->testArrayTypeVarDumpAndExport(array(1, 2, 3));
+
+        ob_clean();
+    }
 }

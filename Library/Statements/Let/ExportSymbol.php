@@ -32,7 +32,7 @@ use Zephir\GlobalConstant;
 /**
  * ExportSymbol
  *
- * Exports symbol to a
+ * Exports a symbol to the current PHP symbol table using a variable as parameter
  */
 class ExportSymbol
 {

@@ -41,6 +41,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/internalclasses.zep.c
 	test/internalinterfaces.zep.c
 	test/issettest.zep.c
+	test/issues.zep.c
 	test/json.zep.c
 	test/logical.zep.c
 	test/mcall.zep.c
@@ -50,6 +51,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
 	test/oo/deprecatedmethods.zep.c
+	test/oo/param.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
 	test/oo/extendpdoclass.zep.c
@@ -62,6 +64,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/ooparams.zep.c
 	test/oo/propertyaccess.zep.c
 	test/operator.zep.c
+	test/optimizers/arraymerge.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c

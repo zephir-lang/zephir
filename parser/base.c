@@ -92,7 +92,6 @@ static void xx_scanner_error_msg(xx_parser_status *parser_status){
 	/*char *error, *error_part;
 	XX_scanner_state *state = parser_status->scanner_state;
 
-	//PHALCON_INIT_VAR(*error_msg);
 	ALLOC_INIT_ZVAL(*error_msg);
 	if (state->start) {
 		error = emalloc(sizeof(char) * (128 + state->start_length +  Z_STRLEN_P(state->active_file)));
@@ -539,7 +538,6 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				/*if (!*error_msg) {
 					error = emalloc(sizeof(char) * (48 + Z_STRLEN_P(state->active_file)));
 					sprintf(error, "Scanner: unknown opcode %d on in %s line %d", token.opcode, Z_STRVAL_P(state->active_file), state->active_line);
-					//PHALCON_INIT_VAR(*error_msg);
 					ALLOC_INIT_ZVAL(*error_msg);
 					ZVAL_STRING(*error_msg, error, 1);
 					efree(error);
@@ -583,7 +581,6 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 		status = FAILURE;
 		/*if (parser_status->syntax_error) {
 			if (!*error_msg) {
-				//PHALCON_INIT_VAR(*error_msg);
 				ALLOC_INIT_ZVAL(*error_msg);
 				ZVAL_STRING(*error_msg, parser_status->syntax_error, 1);
 			}

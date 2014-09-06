@@ -213,6 +213,8 @@ class MethodCall extends Call
                     if ($callNumberParameters < $expectedNumberParameters) {
                         throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
                     }
+
+                    $method = $classMethod;
                 }
 
             } else {

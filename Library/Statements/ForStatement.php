@@ -19,12 +19,15 @@
 
 namespace Zephir\Statements;
 
+use Zephir\Compiler;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Expression;
+use Zephir\Detectors\ForValueUseDetector;
+use Zephir\Variable;
 
 /**
  * ForStatement
@@ -404,7 +407,7 @@ class ForStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
-    public function compileIterator($exprRaw, $compilationContext)
+    public function compileIterator(array $exprRaw, $compilationContext)
     {
 
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
@@ -463,18 +466,18 @@ class ForStatement extends StatementAbstract
 
         $codePrinter->output($iteratorVariable ->getName() . ' = zephir_get_iterator(' . $exprVariable->getName() . ' TSRMLS_CC);');
 
-        $codePrinter->output($iteratorVariable ->getName() . '->funcs->rewind(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
-        $codePrinter->output('for (;' . $iteratorVariable ->getName() . '->funcs->valid(' . $iteratorVariable ->getName() . ' TSRMLS_CC) == SUCCESS && !EG(exception); ' . $iteratorVariable ->getName() . '->funcs->move_forward(' . $iteratorVariable ->getName() . ' TSRMLS_CC)) {');
+        $codePrinter->output($iteratorVariable ->getName() . '->funcs->rewind(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output('for (;' . $iteratorVariable->getName() . '->funcs->valid(' . $iteratorVariable->getName() . ' TSRMLS_CC) == SUCCESS && !EG(exception); ' . $iteratorVariable ->getName() . '->funcs->move_forward(' . $iteratorVariable ->getName() . ' TSRMLS_CC)) {');
 
         if (isset($this->_statement['key'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            //$codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            $codePrinter->output("\t" . 'ZEPHIR_GET_IMKEY(' . $this->_statement['key'] . ', ' . $iteratorVariable->getName() . ');');
         }
 
         if (isset($this->_statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
             $codePrinter->output("\t" . '{ zval **tmp; ');
-            $codePrinter->output("\t" . $iteratorVariable ->getName() . '->funcs->get_current_data(' . $iteratorVariable ->getName() . ', &tmp TSRMLS_CC);');
+            $codePrinter->output("\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &tmp TSRMLS_CC);');
             $codePrinter->output("\t" . $this->_statement['value'] . ' = *tmp;');
             $codePrinter->output("\t" . '}');
         }
@@ -591,8 +594,9 @@ class ForStatement extends StatementAbstract
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
+     * @param Variable $exprVariable
      */
-    public function compileHashTraverse($expression, $compilationContext)
+    public function compileHashTraverse($expression, $compilationContext, $exprVariable)
     {
 
         $codePrinter = $compilationContext->codePrinter;
@@ -642,7 +646,18 @@ class ForStatement extends StatementAbstract
 
         $compilationContext->headersManager->add('kernel/hash');
 
-        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', 0, '.$this->_statement['reverse'].');');
+        /**
+         * We have to check if hashes are modified within the for's block
+         */
+        $duplicateHash = '0';
+        if (isset($this->_statement['statements'])) {
+            $detector = new ForValueUseDetector();
+            if ($detector->detect($exprVariable->getName(), $this->_statement['statements'])) {
+                $duplicateHash = '1';
+            }
+        }
+
+        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $this->_statement['reverse'] . ', "' . Compiler::getShortUserPath($this->_statement['file']) . '", ' . $this->_statement['line'] . ');');
 
         $codePrinter->output('for (');
         $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
@@ -720,7 +735,7 @@ class ForStatement extends StatementAbstract
 
             case 'variable':
             case 'array':
-                $this->compileHashTraverse($expression, $compilationContext);
+                $this->compileHashTraverse($expression, $compilationContext, $exprVariable);
                 break;
 
             case 'string':

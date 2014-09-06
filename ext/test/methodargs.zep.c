@@ -122,7 +122,8 @@ PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 	}
 
 
-	RETURN_CCTOR(method);
+	RETVAL_ZVAL(method, 1, 0);
+	RETURN_MM();
 
 }
 

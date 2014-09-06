@@ -39,6 +39,11 @@ class PropertyAccess
     protected $_expectingVariable;
 
     /**
+     * @var boolean
+     */
+    protected $_noisy = true;
+
+    /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value
      *
@@ -59,6 +64,16 @@ class PropertyAccess
     public function setReadOnly($readOnly)
     {
         $this->_readOnly = $readOnly;
+    }
+
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode
+     *
+     * @param boolean $noisy
+     */
+    public function setNoisy($noisy)
+    {
+        $this->_noisy = $noisy;
     }
 
     /**

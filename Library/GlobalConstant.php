@@ -29,16 +29,31 @@ class GlobalConstant
 {
     private $_name;
 
+    /**
+     * Creates a new global constant
+     *
+     * @param string $name
+     */
     public function __construct($name)
     {
         $this->_name = $name;
     }
 
+    /**
+     * Returns global constant name
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->_name;
     }
 
+    /**
+     * Check if the global constant is temporal
+     *
+     * @return boolean
+     */
     public function isTemporal()
     {
         return false;

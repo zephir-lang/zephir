@@ -17,6 +17,7 @@
 #include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
 
 
 /**
@@ -359,7 +360,8 @@ PHP_METHOD(Test_Oo_OoParams, setObject) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
 
 }
 
@@ -371,7 +373,8 @@ PHP_METHOD(Test_Oo_OoParams, setCallable) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
 
 }
 
@@ -383,7 +386,25 @@ PHP_METHOD(Test_Oo_OoParams, setResource) {
 
 
 
-	RETURN_CCTORW(obj);
+	RETVAL_ZVAL(obj, 1, 0);
+	return;
+
+}
+
+PHP_METHOD(Test_Oo_OoParams, setObjectClassCast) {
+
+	zval *parameter;
+
+	zephir_fetch_params(0, 1, 0, &parameter);
+
+
+
+	if (!(zephir_instance_of_ev(parameter, test_oo_param_ce TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'parameter' must be an instance of 'Test\\Oo\\Param'", "", 0);
+		return;
+	}
+	RETVAL_ZVAL(parameter, 1, 0);
+	return;
 
 }
 

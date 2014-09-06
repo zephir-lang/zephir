@@ -608,7 +608,7 @@ class ClassDefinition
 
             if ($method->hasParameters()) {
                 $implementedMethod = $classDefinition->getMethod($method->getName());
-                if ($implementedMethod->getNumberOfRequiredParameters() != $method->getNumberOfRequiredParameters()) {
+                if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()) {
                     throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: " . $interfaceDefinition->getCompleteName());
                 }
             }
@@ -645,7 +645,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = &$this->methods;
+        $methods = & $this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -761,7 +761,11 @@ class ClassDefinition
                 }
 
                 if (!$classEntry) {
-                    throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
+                    if ($compiler->isClass($interface)) {
+                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName() . '. ' . $interface . ' is currently a class', $this->originalNode);
+                    } else {
+                        throw new CompilerException("Cannot locate interface " . $interface . " when implementing interfaces on " . $this->getCompleteName(), $this->originalNode);
+                    }
                 }
 
                 /**
@@ -870,9 +874,25 @@ class ClassDefinition
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
-                    switch($parameter['data-type']) {
+                    switch ($parameter['data-type']) {
                         case 'array':
                             $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
+                        case 'variable':
+                            if (isset($parameter['cast'])) {
+                                switch ($parameter['cast']['type']) {
+                                    case 'variable':
+                                        $value = $parameter['cast']['value'];
+
+                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::addSlashes($compilationContext->getFullName($value), true) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        break;
+                                    default:
+                                        throw new Exception('Unexpected exception');
+                                }
+
+                            } else {
+                                $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            }
                             break;
                         default:
                             $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
@@ -1137,7 +1157,7 @@ class ClassDefinition
                 $parameters = array();
 
                 foreach ($method->getParameters() as $row) {
-                        $parameters[] = array(
+                    $parameters[] = array(
                         'type' => 'parameter',
                         'name' => $row->getName(),
                         'const' => 0,
@@ -1172,11 +1192,11 @@ class ClassDefinition
     private static function _convertPhpConstantType($phpType)
     {
         $map = array(
-            'boolean'    => 'bool',
-            'integer'    => 'int',
-            'double'    => 'double',
-            'string'    => 'string',
-            'NULL'        => 'null',
+            'boolean' => 'bool',
+            'integer' => 'int',
+            'double' => 'double',
+            'string' => 'string',
+            'NULL' => 'null',
         );
 
         if (!isset($map[$phpType])) {

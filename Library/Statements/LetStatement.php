@@ -45,6 +45,7 @@ use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArr
 use Zephir\Statements\Let\Decr as LetDecr;
 use Zephir\Statements\Let\Incr as LetIncr;
 use Zephir\Statements\Let\ExportSymbol as LetExportSymbol;
+use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
 
 /**
  * LetStatement
@@ -71,12 +72,15 @@ class LetStatement extends StatementAbstract
              * Get the symbol from the symbol table if necessary
              */
             switch ($assignment['assign-type']) {
+
                 case 'static-property':
                 case 'static-property-append':
                 case 'static-property-array-index':
                 case 'static-property-array-index-append':
+                case 'dynamic-variable-string':
                     $symbolVariable = null;
                     break;
+
                 default:
                     $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
                     break;
@@ -224,6 +228,11 @@ class LetStatement extends StatementAbstract
 
                 case 'dynamic-variable':
                     $let = new LetExportSymbol();
+                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    break;
+
+                case 'dynamic-variable-string':
+                    $let = new LetExportSymbolString();
                     $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 

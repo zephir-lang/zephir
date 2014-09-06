@@ -543,6 +543,7 @@ class StaticCall extends Call
             if (!$classDefinition->hasMethod($methodName)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
             } else {
+
                 $method = $classDefinition->getMethod($methodName);
 
                 if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
@@ -586,9 +587,11 @@ class StaticCall extends Call
 
                 } else {
 
-                    $method = $classDefinition->getMethod("__callStatic");
-                    if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
-                        throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
+                    if (!isset($method)) {
+                        $method = $classDefinition->getMethod("__callStatic");
+                        if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
+                            throw new CompilerException("Cannot call private magic method '__call' out of its scope", $expression);
+                        }
                     }
                 }
             }

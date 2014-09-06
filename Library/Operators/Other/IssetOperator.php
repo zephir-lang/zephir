@@ -58,32 +58,38 @@ class IssetOperator extends BaseOperator
 
                 $exprVariable = new Expression($left['left']);
                 $exprVariable->setReadOnly(true);
+                $exprVariable->setNoisy(false);
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
-                if ($exprCompiledVariable->getType() != 'variable') {
+                if ($exprCompiledVariable->getType() != 'variable' && $exprCompiledVariable->getType() != 'array') {
                     throw new CompilerException("Expression type: " . $exprCompiledVariable->getType() . " cannot be used as array", $left['left']);
                 }
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
-                switch($variable->getType()) {
+                switch ($variable->getType()) {
+
                     case 'array':
                     case 'variable':
                         break;
+
                     default:
                         throw new CompilerException("Variable type: " . $variable->getType() . " cannot be used as array", $left['left']);
                         break;
                 }
 
-                if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
-                    $compilationContext->logger->warning('Possible attempt to use non array in isset operator', 'non-valid-isset', $expression);
+                if ($variable->getType() == 'variable') {
+                    if ($variable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
+                        $compilationContext->logger->warning('Possible attempt to use non array in isset operator', 'non-valid-isset', $expression);
+                    }
                 }
 
                 $expr = new Expression($left['right']);
                 $expr->setReadOnly(true);
+                $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
 
-
                 switch ($resolvedExpr->getType()) {
+
                     case 'int':
                     case 'long':
                         return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $left['right']);
@@ -143,19 +149,24 @@ class IssetOperator extends BaseOperator
 
                 $expr = new Expression($left['right']);
                 $expr->setReadOnly(true);
+                $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 switch ($resolvedExpr->getType()) {
+
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
                         switch ($indexVariable->getType()) {
+
                             case 'variable':
                             case 'string':
                                 return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression['left']['right']);
+
                             default:
                                 throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
                         }
                         break;
+
                     default:
                         throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
                 }

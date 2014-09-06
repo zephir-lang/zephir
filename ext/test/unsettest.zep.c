@@ -87,7 +87,8 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArray) {
 
 
 	zephir_array_unset_long(&arrayParameter, 0, PH_SEPARATE);
-	RETURN_CCTOR(arrayParameter);
+	RETVAL_ZVAL(arrayParameter, 1, 0);
+	RETURN_MM();
 
 }
 
@@ -102,7 +103,8 @@ PHP_METHOD(Test_Unsettest, testUnsetFromArrayByIndexVar) {
 
 
 	zephir_array_unset(&arrayParameter, index, PH_SEPARATE);
-	RETURN_CCTOR(arrayParameter);
+	RETVAL_ZVAL(arrayParameter, 1, 0);
+	RETURN_MM();
 
 }
 

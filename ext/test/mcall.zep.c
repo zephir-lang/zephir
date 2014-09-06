@@ -17,6 +17,7 @@
 #include "kernel/fcall.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
 
 
 /**
@@ -124,11 +125,12 @@ PHP_METHOD(Test_Mcall, testCall2) {
 
 PHP_METHOD(Test_Mcall, testCall3) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", NULL);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -168,6 +170,7 @@ PHP_METHOD(Test_Mcall, testCall5) {
 
 PHP_METHOD(Test_Mcall, testCall6) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a, *b;
 
@@ -176,7 +179,7 @@ PHP_METHOD(Test_Mcall, testCall6) {
 
 
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", NULL, a, b);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", &_0, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -222,19 +225,20 @@ PHP_METHOD(Test_Mcall, testCall8) {
 
 PHP_METHOD(Test_Mcall, testCall9) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *a, *b, *_0 = NULL, *_1 = NULL;
+	zval *a, *b, *_0 = NULL, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod6", NULL, a, b);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod6", &_1, a, b);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "testmethod5", NULL, a, b);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "testmethod5", NULL, a, b);
 	zephir_check_call_status();
-	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	zephir_add_function(return_value, _0, _2 TSRMLS_CC);
 	RETURN_MM();
 
 }
@@ -357,11 +361,12 @@ PHP_METHOD(Test_Mcall, testCall17) {
 
 PHP_METHOD(Test_Mcall, testCall18) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod7", NULL);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod7", &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -384,6 +389,7 @@ PHP_METHOD(Test_Mcall, testMethod19) {
 
 PHP_METHOD(Test_Mcall, testCall20) {
 
+	zephir_fcall_cache_entry *_4 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *k_param = NULL, *p, *_3 = NULL;
@@ -409,7 +415,7 @@ PHP_METHOD(Test_Mcall, testCall20) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod19", NULL, p, p);
+			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod19", &_4, p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(_3);
 		}
@@ -435,6 +441,7 @@ PHP_METHOD(Test_Mcall, testMethod21) {
 
 PHP_METHOD(Test_Mcall, testCall22) {
 
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
 	int _1, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *k_param = NULL, *p, *_3 = NULL;
@@ -460,7 +467,7 @@ PHP_METHOD(Test_Mcall, testCall22) {
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod21", NULL, p, p);
+			ZEPHIR_CALL_METHOD(&_3, this_ptr, "testmethod21", &_4, p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(_3);
 		}
@@ -563,7 +570,8 @@ PHP_METHOD(Test_Mcall, optionalParameterVar) {
 	}
 
 
-	RETURN_CCTORW(param);
+	RETVAL_ZVAL(param, 1, 0);
+	return;
 
 }
 
@@ -704,6 +712,40 @@ PHP_METHOD(Test_Mcall, arrayParam) {
 
 
 	RETURN_CTOR(driverOptions);
+
+}
+
+PHP_METHOD(Test_Mcall, objectParamCastStdClass) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	if (!(zephir_instance_of_ev(param, zend_standard_class_def TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'param' must be an instance of 'StdClass'", "", 0);
+		return;
+	}
+	RETVAL_ZVAL(param, 1, 0);
+	return;
+
+}
+
+PHP_METHOD(Test_Mcall, objectParamCastOoParam) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	if (!(zephir_instance_of_ev(param, test_oo_param_ce TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'param' must be an instance of 'Test\\Oo\\Param'", "", 0);
+		return;
+	}
+	RETVAL_ZVAL(param, 1, 0);
+	return;
 
 }
 
