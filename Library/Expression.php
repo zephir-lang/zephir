@@ -628,6 +628,10 @@ class Expression
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);
 
+            case 'closure':
+                /* @todo: implement this */
+                return new LiteralCompiledExpression('null', null, $expression);
+
             default:
                 throw new CompilerException("Unknown expression: " . $type, $expression);
         }
