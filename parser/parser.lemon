@@ -2786,13 +2786,24 @@ xx_call_parameter(R) ::= IDENTIFIER(I) COLON BITWISE_AND  xx_common_expr(E) . {
 	R = xx_ret_call_parameter(I, E, status->scanner_state, 0);
 }
 
-/** empty closure **/
+/** empty closure function () { } **/
 xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_expr("closure", NULL, NULL, NULL, status->scanner_state);
 }
 
+/** function() { ... }*/
 xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_expr("closure", NULL, S, NULL, status->scanner_state);
+}
+
+/** function(a, b, c) { }*/
+xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_expr("closure", L, NULL, NULL, status->scanner_state);
+}
+
+/** function(a, b, c) { ... }*/
+xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_expr("closure", L, S, NULL, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {
