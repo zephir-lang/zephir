@@ -282,7 +282,7 @@ class LocalContextPass
             case 'variable':
             case 'constant':
             case 'static-constant-access':
-            case 'closure';
+            case 'closure':
                 break;
 
             case 'sub':
