@@ -142,16 +142,6 @@ class ClassDefinition
     }
 
     /**
-     * Check if the class definition correspond to an interface
-     *
-     * @return boolean
-     */
-    public function isInterface()
-    {
-        return $this->type == 'interface';
-    }
-
-    /**
      * Returns the class name without namespace
      *
      * @return string
@@ -159,6 +149,16 @@ class ClassDefinition
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Check if the class definition correspond to an interface
+     *
+     * @return boolean
+     */
+    public function isInterface()
+    {
+        return $this->type == 'interface';
     }
 
     /**
@@ -538,6 +538,8 @@ class ClassDefinition
     }
 
     /**
+     * Set a method and its body
+     *
      * @param $methodName
      * @param ClassMethod $method
      */
@@ -546,6 +548,11 @@ class ClassDefinition
         $this->methods[$methodName] = $method;
     }
 
+    /**
+     * Sets class methods externally
+     *
+     * @param array $methods
+     */
     public function setMethods($methods)
     {
         $this->methods = $methods;
