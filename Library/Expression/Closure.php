@@ -49,7 +49,7 @@ class Closure
     /**
      * Unique closure ID
      */
-    protected static function $_id = 0;
+    protected static $_id = 0;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
