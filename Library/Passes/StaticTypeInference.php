@@ -303,7 +303,7 @@ class StaticTypeInference
                 return 'string';
 
             case 'static-constant-access':
-            case 'closure';
+            case 'closure':
                 return 'variable';
 
             case 'div':
