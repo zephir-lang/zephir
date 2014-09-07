@@ -172,7 +172,7 @@ class CompilationContext
 
     /**
      * Transform class/interface name to FQN format
-     * WHY WHY :'(
+     * @todo WHY WHY :'(
      *
      * @param string $className
      * @return string

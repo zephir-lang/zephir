@@ -62,6 +62,8 @@ class CompilerFile
      *
      * @param string $className
      * @param string $filePath
+     * @param Config $config
+     * @param Logger $logger
      */
     public function __construct($className, $filePath, Config $config, Logger $logger)
     {

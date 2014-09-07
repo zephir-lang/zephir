@@ -230,6 +230,16 @@ class Compiler
     }
 
     /**
+     * Inserts a class definition to the compiler
+     *
+     * @param ClassDefinition $classDefinition
+     */
+    public function addClassDefinition(ClassDefinition $classDefinition)
+    {
+        $this->_definitions[$classDefinition->getCompleteName()] = $classDefinition;
+    }
+
+    /**
      * Returns class the class definition from a given class name
      *
      * @param string $className
