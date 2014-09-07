@@ -54,6 +54,19 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/param.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
+	test/oo/extend/spl/arrayobject.zep.c
+	test/oo/extend/spl/directoryiterator.zep.c
+	test/oo/extend/spl/fileinfo.zep.c
+	test/oo/extend/spl/fileobject.zep.c
+	test/oo/extend/spl/filesystemiterator.zep.c
+	test/oo/extend/spl/fixedarray.zep.c
+	test/oo/extend/spl/globiterator.zep.c
+	test/oo/extend/spl/heap.zep.c
+	test/oo/extend/spl/maxheap.zep.c
+	test/oo/extend/spl/minheap.zep.c
+	test/oo/extend/spl/priorityqueue.zep.c
+	test/oo/extend/spl/recursivedirectoryiterator.zep.c
+	test/oo/extend/spl/tempfileobject.zep.c
 	test/oo/extendpdoclass.zep.c
 	test/oo/ooconstruct.zep.c
 	test/oo/ooconstructparams.zep.c

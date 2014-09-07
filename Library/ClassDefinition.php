@@ -1077,6 +1077,26 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_DirectoryIterator';
                 break;
+            case 'filesystemiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_FilesystemIterator';
+                break;
+            case 'recursivedirectoryiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_RecursiveDirectoryIterator';
+                break;
+            case 'globiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_GlobIterator';
+                break;
+            case 'splfileobject':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_SplFileObject';
+                break;
+            case 'spltempfileobject':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_SplTempFileObject';
+                break;
             case 'countable':
                 $classEntry = 'spl_ce_Countable';
                 break;
@@ -1098,6 +1118,10 @@ class ClassDefinition
             case 'splpriorityqueue':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
+                break;
+            case 'splfileinfo':
+                $compilationContext->headersManager->add('ext/spl/spl_directory');
+                $classEntry = 'spl_ce_SplFileInfo';
                 break;
             case 'splheap':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
