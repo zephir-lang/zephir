@@ -20,6 +20,7 @@
 namespace Zephir\Expression;
 
 use Zephir\Exception;
+use Zephir\LiteralCompiledExpression;
 use Zephir\Variable;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
@@ -34,22 +35,22 @@ class Closure
     /**
      * @var bool
      */
-    protected $_expecting = true;
+    protected $expecting = true;
 
     /**
      * @var bool
      */
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
     /**
      * @var Variable
      */
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
     /**
      * Unique closure ID
      */
-    protected static $_id = 0;
+    protected static $id = 0;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -60,8 +61,8 @@ class Closure
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -71,7 +72,7 @@ class Closure
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -79,12 +80,12 @@ class Closure
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
-     * @return CompiledExpression
+     * @return LiteralCompiledExpression
      * @throws \Zephir\CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-        $classDefinition = new ClassDefinition($compilationContext->config->get('namespace'), self::$_id . '__closure');
+        $classDefinition = new ClassDefinition($compilationContext->config->get('namespace'), self::$id . '__closure');
 
         $compilationContext->compiler->addClassDefinition($classDefinition);
 
