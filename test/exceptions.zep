@@ -8,6 +8,11 @@ class Exceptions
 		throw new Exception("hello1");
 	}
 
+	public function testExceptionStringEscape()
+	{
+		throw new Exception("hello \"simple code\" test");
+	}
+
 	public function testException2()
 	{
 		var msg;
