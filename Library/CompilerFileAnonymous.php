@@ -244,5 +244,4 @@ class CompilerFileAnonymous
     {
         return $this->compiledFile;
     }
-
 }

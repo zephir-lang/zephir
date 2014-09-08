@@ -26,79 +26,78 @@ namespace Zephir\FileSystem;
  */
 class HardDisk
 {
-	protected $basePath;
+    protected $basePath;
 
-	protected $initialized = false;
+    protected $initialized = false;
 
-	public function __construct($basePath = '.temp/')
-	{
-		$this->basePath = $basePath;
-	}
+    public function __construct($basePath = '.temp/')
+    {
+        $this->basePath = $basePath;
+    }
 
-	public function isInitialized()
-	{
-		return $this->initialized;
-	}
+    public function isInitialized()
+    {
+        return $this->initialized;
+    }
 
-	public function initialize()
-	{
-		if (!is_dir($this->basePath)) {
-			mkdir($this->basePath);
-		}
-		$this->basePath = realpath($this->basePath) . DIRECTORY_SEPARATOR;
-		$this->initialized = true;
-	}
+    public function initialize()
+    {
+        if (!is_dir($this->basePath)) {
+            mkdir($this->basePath);
+        }
+        $this->basePath = realpath($this->basePath) . DIRECTORY_SEPARATOR;
+        $this->initialized = true;
+    }
 
-	public function exists($path)
-	{
-		return file_exists($this->basePath . $path);
-	}
+    public function exists($path)
+    {
+        return file_exists($this->basePath . $path);
+    }
 
-	public function makeDirectory($path)
-	{
-		return mkdir($this->basePath . $path);
-	}
+    public function makeDirectory($path)
+    {
+        return mkdir($this->basePath . $path);
+    }
 
-	public function file($path)
-	{
-		return file($this->basePath . $path);
-	}
+    public function file($path)
+    {
+        return file($this->basePath . $path);
+    }
 
-	public function modificationTime($path)
-	{
-		return filemtime($this->basePath . $path);
-	}
+    public function modificationTime($path)
+    {
+        return filemtime($this->basePath . $path);
+    }
 
-	public function read($path)
-	{
-		return file_get_contents($this->basePath . $path);
-	}
+    public function read($path)
+    {
+        return file_get_contents($this->basePath . $path);
+    }
 
-	public function write($path, $data)
-	{
-		return file_put_contents($this->basePath . $path, $data);
-	}
+    public function write($path, $data)
+    {
+        return file_put_contents($this->basePath . $path, $data);
+    }
 
-	public function system($command, $descriptor, $destination)
-	{
-		switch ($descriptor) {
-			case 'stdout':
-				system($command . ' > ' . $this->basePath . $destination);
-				break;
-			case 'stderr':
-				system($command . ' 2> ' . $this->basePath . $destination);
-				break;
-		}
-	}
+    public function system($command, $descriptor, $destination)
+    {
+        switch ($descriptor) {
+            case 'stdout':
+                system($command . ' > ' . $this->basePath . $destination);
+                break;
+            case 'stderr':
+                system($command . ' 2> ' . $this->basePath . $destination);
+                break;
+        }
+    }
 
-	public function requireFile($path)
-	{
-		return require $this->basePath . $path;
-	}
+    public function requireFile($path)
+    {
+        return require $this->basePath . $path;
+    }
 
-	public function clean()
-	{
-		system('rm -fr ' . $this->basePath);
-	}
-
+    public function clean()
+    {
+        system('rm -fr ' . $this->basePath);
+    }
 }
