@@ -30,11 +30,21 @@ class HardDisk
 
     protected $initialized = false;
 
+    /**
+     * HardDisk constructor
+     *
+     * @param string $basePath
+     */
     public function __construct($basePath = '.temp/')
     {
         $this->basePath = $basePath;
     }
 
+    /**
+     * Checks if the filesystem is initialized
+     *
+     * @return boolean
+     */
     public function isInitialized()
     {
         return $this->initialized;
@@ -69,16 +79,34 @@ class HardDisk
         return filemtime($this->basePath . $path);
     }
 
+    /**
+     * Writes data from a temporary entry
+     *
+     * @param string $path
+     */
     public function read($path)
     {
         return file_get_contents($this->basePath . $path);
     }
 
+    /**
+     * Writes data into a temporary entry
+     *
+     * @param string $path
+     * @param string $data
+     */
     public function write($path, $data)
     {
         return file_put_contents($this->basePath . $path, $data);
     }
 
+    /**
+     * Executes a command and saves the result into a temporary entry
+     *
+     * @param string $command
+     * @param string $descriptor
+     * @param string $destination
+     */
     public function system($command, $descriptor, $destination)
     {
         switch ($descriptor) {
@@ -91,13 +119,57 @@ class HardDisk
         }
     }
 
+    /**
+     * Requires a file from the temporary directory
+     *
+     * @param string $path
+     */
     public function requireFile($path)
     {
         return require $this->basePath . $path;
     }
 
+    /**
+     * Deletes the temporary directory
+     */
     public function clean()
     {
         system('rm -fr ' . $this->basePath);
+    }
+
+    /**
+     * This function does not perform operations in the temporary
+     * directory but it caches the results to avoid reprocessing
+     *
+     * @param string $algorithm
+     * @param string $path
+     * @param boolean $cache
+     */
+    public function getHashFile($algorithm, $path, $cache = false)
+    {
+        if ($cache == false) {
+            return hash_file($algorithm, $path);
+        } else {
+
+            $changed = false;
+            $cacheFile = $this->basePath . str_replace('/', '_', $path) . '.md5';
+            if (!file_exists($cacheFile)) {
+                $hash = hash_file($algorithm, $path);
+                file_put_contents($cacheFile, $hash);
+                $changed = true;
+            } else {
+                if (filemtime($path) < filemtime($cacheFile)) {
+                    $hash = hash_file($algorithm, $path);
+                    file_put_contents($cacheFile, $hash);
+                    $changed = true;
+                }
+            }
+
+            if (!$changed) {
+                return file_get_contents($cacheFile);
+            }
+
+            return $hash;
+        }
     }
 }
