@@ -124,7 +124,7 @@ class NewInstanceOperator extends BaseOperator
                     if (!class_exists($className, false)) {
                         $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
                         $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
-                        $classNameToFetch = 'SL("' . Utils::addSlashes($className, true) . '")';
+                        $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
                         $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
                         $classEntry = $zendClassEntry->getName();
                     } else {
@@ -143,7 +143,7 @@ class NewInstanceOperator extends BaseOperator
                         $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if (!$classEntry) {
                             $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-                            $classNameToFetch = 'SL("' . Utils::addSlashes($className, true) . '")';
+                            $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
                             $codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $classNameToFetch . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
                             $classEntry = $zendClassEntry->getName();
                         }

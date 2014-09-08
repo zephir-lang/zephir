@@ -724,7 +724,7 @@ PHP_METHOD(Test_Mcall, objectParamCastStdClass) {
 
 
 	if (!(zephir_instance_of_ev(param, zend_standard_class_def TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter \'param\' must be an instance of \'StdClass\'", "", 0);
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'param' must be an instance of 'StdClass'", "", 0);
 		return;
 	}
 	RETVAL_ZVAL(param, 1, 0);
@@ -741,7 +741,7 @@ PHP_METHOD(Test_Mcall, objectParamCastOoParam) {
 
 
 	if (!(zephir_instance_of_ev(param, test_oo_param_ce TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter \'param\' must be an instance of \'Test\\\\Oo\\\\Param\'", "", 0);
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'param' must be an instance of 'Test\\Oo\\Param'", "", 0);
 		return;
 	}
 	RETVAL_ZVAL(param, 1, 0);

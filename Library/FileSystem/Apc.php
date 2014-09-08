@@ -20,24 +20,24 @@
 namespace Zephir\FileSystem;
 
 /**
- * HardDisk
+ * Apc
  *
- * Uses the standard hard-disk as filesystem for temporary operations
+ * Uses APC as filesystem for temporary operations
  */
-class HardDisk
+class Apc
 {
-    protected $basePath;
+    protected $basePrefix;
 
     protected $initialized = false;
 
     /**
-     * HardDisk constructor
+     * Apc constructor
      *
-     * @param string $basePath
+     * @param string $basePrefix
      */
-    public function __construct($basePath = '.temp/')
+    public function __construct($basePrefix = 'zephir-')
     {
-        $this->basePath = $basePath;
+        $this->basePrefix = $basePrefix;
     }
 
     /**
@@ -55,10 +55,6 @@ class HardDisk
      */
     public function initialize()
     {
-        if (!is_dir($this->basePath)) {
-            mkdir($this->basePath);
-        }
-        $this->basePath = realpath($this->basePath) . DIRECTORY_SEPARATOR;
         $this->initialized = true;
     }
 
@@ -70,7 +66,7 @@ class HardDisk
      */
     public function exists($path)
     {
-        return file_exists($this->basePath . $path);
+        return apc_exists($this->basePrefix . $path);
     }
 
     /**
@@ -81,7 +77,7 @@ class HardDisk
      */
     public function makeDirectory($path)
     {
-        return mkdir($this->basePath . $path);
+        return true;
     }
 
     /**
@@ -92,7 +88,7 @@ class HardDisk
      */
     public function file($path)
     {
-        return file($this->basePath . $path);
+        return explode("\n", apc_fetch($this->basePrefix . $path));
     }
 
     /**
@@ -103,7 +99,7 @@ class HardDisk
      */
     public function modificationTime($path)
     {
-        return filemtime($this->basePath . $path);
+        return apc_fetch($this->basePrefix . $path . '-mtime');
     }
 
     /**
@@ -113,7 +109,7 @@ class HardDisk
      */
     public function read($path)
     {
-        return file_get_contents($this->basePath . $path);
+        return apc_fetch($this->basePrefix . $path);
     }
 
     /**
@@ -121,10 +117,13 @@ class HardDisk
      *
      * @param string $path
      * @param string $data
+     * @return boolean
      */
     public function write($path, $data)
     {
-        return file_put_contents($this->basePath . $path, $data);
+        $status = apc_store($this->basePrefix . $path, $data);
+        apc_store($this->basePrefix . $path . '-mtime', time());
+        return $status;
     }
 
     /**
@@ -136,24 +135,28 @@ class HardDisk
      */
     public function system($command, $descriptor, $destination)
     {
+        $tempDestination = '.temp-cmd';
         switch ($descriptor) {
             case 'stdout':
-                system($command . ' > ' . $this->basePath . $destination);
+                system($command . ' > ' . $tempDestination);
                 break;
             case 'stderr':
-                system($command . ' 2> ' . $this->basePath . $destination);
+                system($command . ' 2> ' . $tempDestination);
                 break;
         }
+        apc_store($this->basePrefix . $destination, file_get_contents($tempDestination));
     }
 
     /**
      * Requires a file from the temporary directory
      *
      * @param string $path
+     * @return array
      */
     public function requireFile($path)
     {
-        return require $this->basePath . $path;
+        $code = apc_fetch($this->basePrefix . $path);
+        return eval(str_replace('<?php ', '', $code));
     }
 
     /**
@@ -161,7 +164,10 @@ class HardDisk
      */
     public function clean()
     {
-        system('rm -fr ' . $this->basePath);
+        foreach (new \APCIterator('user') as $counter) {
+            //echo $counter['key'];
+            apc_delete($counter['key']);
+        }
     }
 
     /**
@@ -180,21 +186,21 @@ class HardDisk
         } else {
 
             $changed = false;
-            $cacheFile = $this->basePath . str_replace('/', '_', $path) . '.md5';
-            if (!file_exists($cacheFile)) {
+            $cacheFile = $this->basePrefix . str_replace('/', '_', $path) . '.md5';
+            if (!apc_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
-                file_put_contents($cacheFile, $hash);
+                apc_store($cacheFile, $hash);
                 $changed = true;
             } else {
                 if (filemtime($path) < filemtime($cacheFile)) {
                     $hash = hash_file($algorithm, $path);
-                    file_put_contents($cacheFile, $hash);
+                    apc_store($cacheFile, $hash);
                     $changed = true;
                 }
             }
 
             if (!$changed) {
-                return file_get_contents($cacheFile);
+                return apc_fetch($cacheFile);
             }
 
             return $hash;
