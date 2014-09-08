@@ -709,19 +709,21 @@ class CompilerFile
                 }
             } else {
 
+                $fileSystem = $compiler->getFileSystem();
+
                 /**
                  * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
                  * thus avoiding unnecesary recompilations
                  */
                 $output = $codePrinter->getOutput();
-                $hash = hash_file('md5', $filePath);
+                $hash = $fileSystem->getHashFile('md5', $filePath, true);
                 if (md5($output) != $hash) {
                     file_put_contents($filePath, $output);
                 }
 
                 if ($compilationContext->headerPrinter) {
                     $output = $compilationContext->headerPrinter->getOutput();
-                    $hash = hash_file('md5', $filePathHeader);
+                    $hash = $fileSystem->getHashFile('md5', $filePathHeader, true);
                     if (md5($output) != $hash) {
                         file_put_contents($filePathHeader, $output);
                     }
