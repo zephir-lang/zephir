@@ -31,7 +31,7 @@ PHP_METHOD(Test_InternalClasses, testStaticCall) {
 
 	ZEPHIR_MM_GROW();
 
-	phalcon_phalcon_di = zend_fetch_class(SL("\\Phalcon\\DI"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+	phalcon_phalcon_di = zend_fetch_class(SL("\\Phalcon\\Di"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	ZEPHIR_RETURN_CALL_CE_STATIC(phalcon_phalcon_di, "getdefault", NULL);
 	zephir_check_call_status();
 	RETURN_MM();
