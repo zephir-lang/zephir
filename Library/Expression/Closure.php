@@ -23,6 +23,8 @@ use Zephir\Exception;
 use Zephir\Variable;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
+use Zephir\CompilerFileAnonymous;
+use Zephir\LiteralCompiledExpression;
 
 /**
  * Closure
@@ -34,22 +36,22 @@ class Closure
     /**
      * @var bool
      */
-    protected $_expecting = true;
+    protected $expecting = true;
 
     /**
      * @var bool
      */
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
     /**
      * @var Variable
      */
-    protected $_expectingVariable;
+    protected $expectingVariable;
 
     /**
      * Unique closure ID
      */
-    protected static $_id = 0;
+    protected static $id = 0;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -60,8 +62,8 @@ class Closure
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -71,7 +73,7 @@ class Closure
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -84,10 +86,19 @@ class Closure
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-        $classDefinition = new ClassDefinition($compilationContext->config->get('namespace'), self::$_id . '__closure');
+        $classDefinition = new ClassDefinition(
+            $compilationContext->config->get('namespace'),
+            self::$id . '__closure'
+        );
 
-        $compilationContext->compiler->addClassDefinition($classDefinition);
+        $compilerFile = new CompilerFileAnonymous(
+            $classDefinition,
+            $compilationContext->config,
+            $compilationContext->logger
+        );
 
-        return new LiteralCompiledExpression('null', null, $expression)
+        $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
+
+        return new LiteralCompiledExpression('null', null, $expression);
     }
 }

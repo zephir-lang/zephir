@@ -1357,7 +1357,7 @@ class ClassMethod
                                     new ParameterBuilder(
                                         new LiteralBuilder(
                                             "string",
-                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::addSlashes($className, true) . "'"
+                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::escapeClassName($className) . "'"
                                         )
                                     )
                                 ))

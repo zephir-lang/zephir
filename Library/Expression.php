@@ -60,6 +60,7 @@ use Zephir\Operators\Other\RequireOperator;
 use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\CastOperator;
 
+use Zephir\Expression\Closure;
 use Zephir\Expression\Constants;
 use Zephir\Expression\NativeArray;
 use Zephir\Expression\NativeArrayAccess;
@@ -629,8 +630,10 @@ class Expression
                 return $expr->compile($expression, $compilationContext);
 
             case 'closure':
-                /* @todo: implement this */
-                return new LiteralCompiledExpression('null', null, $expression);
+                $closure = new Closure();
+                $closure->setReadOnly($this->isReadOnly());
+                $closure->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $closure->compile($expression, $compilationContext);
 
             default:
                 throw new CompilerException("Unknown expression: " . $type, $expression);
