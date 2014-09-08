@@ -15,6 +15,7 @@
 #include "test/builtin/stringmethods.zep.h"
 #include "test/cast.zep.h"
 #include "test/cblock.zep.h"
+#include "test/closures.zep.h"
 #include "test/compare.zep.h"
 #include "test/concat.zep.h"
 #include "test/constants.zep.h"

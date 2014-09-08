@@ -13,6 +13,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/builtin/stringmethods.zep.c
 	test/cast.zep.c
 	test/cblock.zep.c
+	test/closures.zep.c
 	test/compare.zep.c
 	test/concat.zep.c
 	test/constants.zep.c
