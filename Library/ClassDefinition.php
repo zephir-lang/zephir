@@ -882,17 +882,21 @@ class ClassDefinition
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
+
                         case 'array':
                             $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
+
                         case 'variable':
                             if (isset($parameter['cast'])) {
+
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
 
-                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::addSlashes($compilationContext->getFullName($value), true) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                                         break;
+
                                     default:
                                         throw new Exception('Unexpected exception');
                                 }
@@ -901,6 +905,7 @@ class ClassDefinition
                                 $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                             }
                             break;
+
                         default:
                             $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                             break;

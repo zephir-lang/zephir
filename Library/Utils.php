@@ -27,6 +27,17 @@ namespace Zephir;
 class Utils
 {
     /**
+     * Prepares a class name to be used as a C-string
+     *
+     * @param string $className
+     * @return string
+     */
+    public static function escapeClassName($className)
+    {
+        return str_replace('\\', '\\\\', $className);
+    }
+
+    /**
      * Prepares a string to be used as a C-string
      *
      * @param string $str
@@ -43,12 +54,13 @@ class Utils
         }
 
         if ($escapeSlash) {
-            $str = addslashes($str);
+            $str = addcslashes($str, '"');
         }
 
         $str = str_replace("\n", "\\n", $str);
         $str = str_replace("\r", "\\r", $str);
         $str = str_replace("\t", "\\t", $str);
+        $str = str_replace("\v", "\\v", $str);
 
         //$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
 
@@ -76,10 +88,10 @@ class Utils
     public static function checkAndWriteIfNeeded($content, $path)
     {
         if (file_exists($path)) {
-            $content_md5 = md5($content);
-            $existing_md5 = md5_file($path);
+            $contentMd5 = md5($content);
+            $existingMd5 = md5_file($path);
 
-            if ($content_md5 != $existing_md5) {
+            if ($contentMd5 != $existingMd5) {
                 file_put_contents($path, $content);
                 return true;
             }

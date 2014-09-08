@@ -69,8 +69,6 @@ class CompilerFile
     {
         $this->_className = $className;
         $this->_filePath = $filePath;
-        $this->_compiledFilePath = preg_replace('/\.zep$/', '', $className);
-        $this->_filesCompiled = array();
         $this->_headerCBlocks = array();
         $this->_config = $config;
         $this->_logger = $logger;
@@ -89,12 +87,13 @@ class CompilerFile
     /**
      * Compiles the file generating a JSON intermediate representation
      *
+     * @param Compiler $compiler
      * @return array
      */
-    public function genIR()
+    public function genIR(Compiler $compiler)
     {
 
-        $compilePath = '.temp' . DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', realpath($this->_filePath)) . ".js";
+        $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', realpath($this->_filePath)) . ".js";
         $zepRealPath = realpath($this->_filePath);
 
         if (!file_exists(ZEPHIRPATH . '/bin/zephir-parser')) {
@@ -102,23 +101,25 @@ class CompilerFile
         }
 
         $changed = false;
-        if (file_exists($compilePath)) {
-            if (filemtime($compilePath) < filemtime($zepRealPath) || filemtime($compilePath) < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
-                system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+        $fileSystem = $compiler->getFileSystem();
+        if ($fileSystem->exists($compilePath)) {
+            $modificationTime = $fileSystem->modificationTime($compilePath);
+            if ($modificationTime < filemtime($zepRealPath) || $modificationTime < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
+                $fileSystem->system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath, 'stdout', $compilePath);
                 $changed = true;
             }
         } else {
-            system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath . ' > ' . $compilePath);
+            $fileSystem->system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath, 'stdout', $compilePath);
             $changed = true;
         }
 
-        if ($changed || !file_exists($compilePath . '.php')) {
-            $json = json_decode(file_get_contents($compilePath), true);
+        if ($changed || !$fileSystem->exists($compilePath . '.php')) {
+            $json = json_decode($fileSystem->read($compilePath), true);
             $data = '<?php return ' . var_export($json, true) . ';';
-            file_put_contents($compilePath . '.php', $data);
+            $fileSystem->write($compilePath . '.php', $data);
         }
 
-        return require $compilePath . '.php';
+        return $fileSystem->requireFile($compilePath . '.php');
     }
 
     /**
@@ -126,7 +127,7 @@ class CompilerFile
      *
      * @param CompilationContext $compilationContext
      * @param string $namespace
-     * @param string $topStatement
+     * @param array $topStatement
      */
     public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
     {
@@ -442,13 +443,15 @@ class CompilerFile
     }
 
     /**
+     * Pre-compiles a zephir file. Generates the IR and perform basic validations
+     *
      * @throws ParseException
      * @throws CompilerException
      * @throws Exception
      */
-    public function preCompile()
+    public function preCompile(Compiler $compiler)
     {
-        $ir = $this->genIR();
+        $ir = $this->genIR($compiler);
 
         if (!is_array($ir)) {
             throw new Exception("Cannot parse file: " . realpath($this->_filePath));
