@@ -20,20 +20,18 @@
 namespace Zephir\FileSystem;
 
 /**
- * Apc
+ * Redis
  *
- * Uses APC as filesystem for temporary operations
- * APC creates a new memory pool when a CLI process is created so this
- * adapter is useless
+ * Uses Redis as filesystem for temporary operations
  */
-class Apc
+class Redis
 {
     protected $basePrefix;
 
     protected $initialized = false;
 
     /**
-     * Apc constructor
+     * Redis constructor
      *
      * @param string $basePrefix
      */
@@ -57,6 +55,8 @@ class Apc
      */
     public function initialize()
     {
+        $this->redis = new \Redis;
+        $this->redis->connect('127.0.0.1', 6379);
         $this->initialized = true;
     }
 
@@ -68,7 +68,7 @@ class Apc
      */
     public function exists($path)
     {
-        return apc_exists($this->basePrefix . $path);
+        return $this->redis->exists($this->basePrefix . $path);
     }
 
     /**
@@ -79,7 +79,7 @@ class Apc
      */
     public function makeDirectory($path)
     {
-        return true;
+        $this->redis->set($this->basePrefix . $path, true);
     }
 
     /**
@@ -90,7 +90,7 @@ class Apc
      */
     public function file($path)
     {
-        return explode("\n", apc_fetch($this->basePrefix . $path));
+        return explode("\n", $this->redis->get($this->basePrefix . $path));
     }
 
     /**
@@ -101,7 +101,7 @@ class Apc
      */
     public function modificationTime($path)
     {
-        return apc_fetch($this->basePrefix . $path . '-mtime');
+        return $this->redis->get($this->basePrefix . $path . '-mtime');
     }
 
     /**
@@ -111,7 +111,7 @@ class Apc
      */
     public function read($path)
     {
-        return apc_fetch($this->basePrefix . $path);
+        return $this->redis->get($this->basePrefix . $path);
     }
 
     /**
@@ -123,8 +123,8 @@ class Apc
      */
     public function write($path, $data)
     {
-        $status = apc_store($this->basePrefix . $path, $data);
-        apc_store($this->basePrefix . $path . '-mtime', time());
+        $status = $this->redis->set($this->basePrefix . $path, $data);
+        $this->redis->set($this->basePrefix . $path . '-mtime', time());
         return $status;
     }
 
@@ -146,8 +146,8 @@ class Apc
                 system($command . ' 2> ' . $tempDestination);
                 break;
         }
-        apc_store($this->basePrefix . $destination, file_get_contents($tempDestination));
-        apc_store($this->basePrefix . $destination . '-mtime', time());
+        $this->redis->set($this->basePrefix . $destination, file_get_contents($tempDestination));
+        $this->redis->set($this->basePrefix . $destination . '-mtime', time());
         @unlink('.temp-cmd');
     }
 
@@ -159,7 +159,7 @@ class Apc
      */
     public function requireFile($path)
     {
-        $code = apc_fetch($this->basePrefix . $path);
+        $code = $this->redis->get($this->basePrefix . $path);
         return eval(str_replace('<?php ', '', $code));
     }
 
@@ -168,9 +168,11 @@ class Apc
      */
     public function clean()
     {
-        foreach (new \APCIterator('user') as $counter) {
-            //echo $counter['key'];
-            apc_delete($counter['key']);
+        if (!$this->initialized) {
+            $this->initialize();
+        }
+        foreach ($this->redis->keys('zephir-*') as $key) {
+            $this->redis->delete($key);
         }
     }
 
@@ -191,20 +193,22 @@ class Apc
 
             $changed = false;
             $cacheFile = $this->basePrefix . str_replace('/', '_', $path) . '.md5';
-            if (!apc_exists($cacheFile)) {
+            if (!$this->redis->exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
-                apc_store($cacheFile, $hash);
+                $this->redis->set($cacheFile, $hash);
+                $this->redis->set($cacheFile . '-mtime', time());
                 $changed = true;
             } else {
-                if (filemtime($path) < filemtime($cacheFile)) {
+                if (filemtime($path) < $this->redis->get($cacheFile . '-mtime')) {
                     $hash = hash_file($algorithm, $path);
-                    apc_store($cacheFile, $hash);
+                    $this->redis->set($cacheFile, $hash);
+                    $this->redis->set($cacheFile . '-mtime', time());
                     $changed = true;
                 }
             }
 
             if (!$changed) {
-                return apc_fetch($cacheFile);
+                return $this->redis->get($cacheFile);
             }
 
             return $hash;
