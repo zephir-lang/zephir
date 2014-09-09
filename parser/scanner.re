@@ -93,12 +93,6 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		'abstract' {
-			s->active_char += sizeof("abstract")-1;
-			token->opcode = XX_T_ABSTRACT;
-			return 0;
-		}
-
 		'interface' {
 			s->active_char += sizeof("interface")-1;
 			token->opcode = XX_T_INTERFACE;
