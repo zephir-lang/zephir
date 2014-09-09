@@ -61,7 +61,7 @@ class LocalContextPass
         }
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array'||  $variable['expr']['type'] == 'array') {
+                if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
                     $this->_variables[$variable['variable']] = false;
                     continue;
                 }
@@ -88,6 +88,7 @@ class LocalContextPass
      * Asks the local context information whether a variable can be stored in the stack instead of the heap
      *
      * @param string $variable
+     *
      * @return boolean
      */
     public function shouldBeLocal($variable)
@@ -97,6 +98,7 @@ class LocalContextPass
                 return true;
             }
         }
+
         return false;
     }
 
@@ -118,6 +120,7 @@ class LocalContextPass
      * Returns the number of assignment instructions that mutated a variable
      *
      * @param string $variable
+     *
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -125,6 +128,7 @@ class LocalContextPass
         if (isset($this->_mutations[$variable])) {
             return $this->_mutations[$variable];
         }
+
         return 0;
     }
 
@@ -149,17 +153,17 @@ class LocalContextPass
 
     public function passLetStatement(array $statement)
     {
-        foreach ($statement['assignments'] as $assigment) {
+        foreach ($statement['assignments'] as $assignment) {
 
-            if (isset($assigment['expr'])) {
-                $this->passExpression($assigment['expr']);
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
             }
-            $this->increaseMutations($assigment['variable']);
+            $this->increaseMutations($assignment['variable']);
 
-            switch ($assigment['assign-type']) {
+            switch ($assignment['assign-type']) {
 
                 case 'variable':
-                    switch ($assigment['expr']['type']) {
+                    switch ($assignment['expr']['type']) {
 
                         case 'property-access':
                         case 'array-access':
@@ -176,24 +180,24 @@ class LocalContextPass
                         case 'require':
                         case 'type-hint':
                         case 'minus':
-                            $this->markVariableNoLocal($assigment['variable']);
+                            $this->markVariableNoLocal($assignment['variable']);
                             break;
 
                         case 'constant':
-                            if (defined($assigment['expr']['value'])) {
-                                if (gettype(constant($assigment['expr']['value'])) == 'string') {
-                                    $this->markVariableNoLocal($assigment['variable']);
+                            if (defined($assignment['expr']['value'])) {
+                                if (gettype(constant($assignment['expr']['value'])) == 'string') {
+                                    $this->markVariableNoLocal($assignment['variable']);
                                 }
                             }
                             break;
 
                         case 'variable':
-                            $this->markVariableNoLocal($assigment['expr']['value']);
-                            $this->markVariableNoLocal($assigment['variable']);
+                            $this->markVariableNoLocal($assignment['expr']['value']);
+                            $this->markVariableNoLocal($assignment['variable']);
                             break;
 
                         default:
-                            //echo '[', $assigment['expr']['type'], ']';
+                            //echo '[', $assignment['expr']['type'], ']';
                     }
                     break;
 
@@ -202,27 +206,27 @@ class LocalContextPass
                 case 'object-property-array-index':
                 case 'object-property-append':
 
-                    switch ($assigment['expr']['type']) {
+                    switch ($assignment['expr']['type']) {
                         case 'variable':
-                            $this->markVariableNoLocal($assigment['expr']['value']);
+                            $this->markVariableNoLocal($assignment['expr']['value']);
                             break;
                     }
-                    $this->markVariableNoLocal($assigment['variable']);
+                    $this->markVariableNoLocal($assignment['variable']);
                     break;
 
                 case 'variable-append':
-                    $this->markVariableNoLocal($assigment['variable']);
-                    switch ($assigment['expr']['type']) {
+                    $this->markVariableNoLocal($assignment['variable']);
+                    switch ($assignment['expr']['type']) {
                         case 'variable':
-                            $this->markVariableNoLocal($assigment['expr']['value']);
+                            $this->markVariableNoLocal($assignment['expr']['value']);
                             break;
                         default:
-                            //echo '[', $assigment['assign-type'], ']';
+                            //echo '[', $assignment['assign-type'], ']';
                     }
                     break;
 
                 default:
-                    //echo $assigment['assign-type'];
+                    //echo $assignment['assign-type'];
             }
         }
     }

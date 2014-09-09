@@ -216,13 +216,13 @@ class StaticTypeInference
 
     public function passLetStatement(array $statement)
     {
-        foreach ($statement['assignments'] as $assigment) {
-            switch ($assigment['assign-type']) {
+        foreach ($statement['assignments'] as $assignment) {
+            switch ($assignment['assign-type']) {
 
                 case 'variable':
-                    $type = $this->passExpression($assigment['expr']);
+                    $type = $this->passExpression($assignment['expr']);
                     if (is_string($type)) {
-                        $this->markVariable($assigment['variable'], $type);
+                        $this->markVariable($assignment['variable'], $type);
                     }
                     break;
 
@@ -231,15 +231,15 @@ class StaticTypeInference
                 case 'object-property-array-index':
                 case 'object-property-append':
                 case 'static-property-access':
-                    $this->markVariable($assigment['variable'], 'variable');
+                    $this->markVariable($assignment['variable'], 'variable');
                     break;
 
                 case 'variable-append':
-                    $this->markVariable($assigment['variable'], 'variable');
+                    $this->markVariable($assignment['variable'], 'variable');
                     break;
 
                 default:
-                    //echo $assigment['assign-type'];
+                    // echo $assignment['assign-type'];
             }
         }
     }

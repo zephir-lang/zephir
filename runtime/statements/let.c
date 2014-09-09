@@ -263,14 +263,14 @@ int zephir_statement_let(zephir_context *context, zval *statement TSRMLS_DC)
 {
 	HashTable       *ht;
 	HashPosition    pos = {0};
-	zval *assigments, **assignment, *assign_type;
+	zval *assignment, **assignment, *assign_type;
 
-	_zephir_array_fetch_string(&assigments, statement, SS("assignments") TSRMLS_CC);
-	if (Z_TYPE_P(assigments) != IS_ARRAY) {
+	_zephir_array_fetch_string(&assignment, statement, SS("assignments") TSRMLS_CC);
+	if (Z_TYPE_P(assignment) != IS_ARRAY) {
 		return 0;
 	}
 
-	ht = Z_ARRVAL_P(assigments);
+	ht = Z_ARRVAL_P(assignment);
 	zend_hash_internal_pointer_reset_ex(ht, &pos);
 	for (
 	 ; zend_hash_get_current_data_ex(ht, (void**) &assignment, &pos) == SUCCESS
