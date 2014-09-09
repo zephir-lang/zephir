@@ -30,8 +30,8 @@ class ForValueUseDetector
 
     public function passLetStatement($variable, array $statement)
     {
-        foreach ($statement['assignments'] as $assigment) {
-            if ($assigment['variable'] == $variable) {
+        foreach ($statement['assignments'] as $assignment) {
+            if ($assignment['variable'] == $variable) {
                 return true;
             }
         }

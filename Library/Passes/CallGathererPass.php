@@ -92,9 +92,9 @@ class CallGathererPass
 
     public function passLetStatement(array $statement)
     {
-        foreach ($statement['assignments'] as $assigment) {
-            if (isset($assigment['expr'])) {
-                $this->passExpression($assigment['expr']);
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
             }
         }
     }
