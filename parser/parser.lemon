@@ -1476,6 +1476,14 @@ xx_class_const_definition(R) ::= CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOT
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
 }
 
+xx_class_const_definition(R) ::= COMMENT(C) CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_const(I, E, C, status->scanner_state);
+}
+
+xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
+	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
+}
+
 /** method definition */
 
 

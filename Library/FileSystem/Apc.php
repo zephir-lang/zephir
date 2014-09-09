@@ -79,7 +79,7 @@ class Apc
      */
     public function makeDirectory($path)
     {
-        return true;
+        return apc_store($this->basePrefix . $path);
     }
 
     /**
@@ -169,7 +169,6 @@ class Apc
     public function clean()
     {
         foreach (new \APCIterator('user') as $counter) {
-            //echo $counter['key'];
             apc_delete($counter['key']);
         }
     }
@@ -194,11 +193,13 @@ class Apc
             if (!apc_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 apc_store($cacheFile, $hash);
+                apc_store($cacheFile . '-mtime', $hash);
                 $changed = true;
             } else {
                 if (filemtime($path) < filemtime($cacheFile)) {
                     $hash = hash_file($algorithm, $path);
                     apc_store($cacheFile, $hash);
+                    apc_store($cacheFile . '-mtime', $hash);
                     $changed = true;
                 }
             }

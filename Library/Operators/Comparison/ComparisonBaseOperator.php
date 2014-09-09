@@ -472,6 +472,43 @@ class ComparisonBaseOperator extends BaseOperator
                         }
                         break;
 
+                    case 'array':
+                        switch ($right->getType()) {
+
+                            case 'null':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                if ($variable->isLocalOnly()) {
+                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variable->getName() . ', "")', $expression['left']);
+                                } else {
+                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable->getName() . ', "")', $expression['left']);
+                                }
+                                break;
+
+                            case 'variable':
+                                $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
+                                switch ($variableRight->getType()) {
+
+                                    case 'string':
+                                    case 'variable':
+                                    case 'array':
+                                        $compilationContext->headersManager->add('kernel/operators');
+                                        if ($variable->isLocalOnly()) {
+                                            return new CompiledExpression('bool', $this->_zvalOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+                                        } else {
+                                            return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
+                                        }
+                                        break;
+
+                                    default:
+                                        throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                                }
+                                break;
+
+                            default:
+                                throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                        }
+                        break;
+
                     case 'string':
                         switch ($right->getType()) {
 
@@ -603,6 +640,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                                     case 'string':
                                     case 'variable':
+                                    case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         if ($variable->isLocalOnly()) {
                                             return new CompiledExpression('bool', $this->_zvalOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
