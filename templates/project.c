@@ -12,7 +12,7 @@
 #endif
 
 #include "php_ext.h"
-#include "%PROJECT_LOWER%.h"
+#include "%PROJECT_LOWER_SAFE%.h"
 
 #include <ext/standard/info.h>
 
@@ -276,7 +276,7 @@ static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 
 }
 
-zend_module_entry %PROJECT_LOWER%_module_entry = {
+zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
 	NULL,
@@ -300,5 +300,5 @@ zend_module_entry %PROJECT_LOWER%_module_entry = {
 };
 
 #ifdef COMPILE_DL_%PROJECT_UPPER%
-ZEND_GET_MODULE(%PROJECT_LOWER%)
+ZEND_GET_MODULE(%PROJECT_LOWER_SAFE%)
 #endif
