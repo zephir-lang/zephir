@@ -177,13 +177,28 @@ class MethodCall extends Call
                 $classDefinition = $compilationContext->classDefinition;
                 if (!$classDefinition->hasMethod($methodName)) {
                     if ($check) {
-                        throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                        $found = false;
+                        $interfaces = $classDefinition->isAbstract() ? $classDefinition->getImplementedInterfaces() : null;
+                        if (is_array($interfaces)) {
+                            $compiler = $compilationContext->compiler;
+                            foreach ($interfaces as $interface) {
+                                $classInterfaceDefinition = $compiler->getClassDefinition($interface);
+                                if ($classInterfaceDefinition->hasMethod($methodName)) {
+                                    $found = true;
+                                    $classMethod = $classInterfaceDefinition->getMethod($methodName);
+                                    break;
+                                }
+                            }
+                        }
+                        if (!$found) {
+                            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                        }
                     }
+                } else if ($check) {
+                    $classMethod = $classDefinition->getMethod($methodName);
                 }
 
                 if ($check) {
-                    $classMethod = $classDefinition->getMethod($methodName);
-
                     /**
                      * Private methods must be called in their declaration scope
                      */
