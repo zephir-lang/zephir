@@ -51,7 +51,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 	k0 = (3.0 * 3.14159265358979323846);
 	dt = ((dx * dx) / 4.0);
 	ZEPHIR_INIT_VAR(paramater);
-	array_init_size(paramater, 7);
+	array_init_size(paramater, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_DOUBLE(_0, dx);
 	zephir_array_fast_append(paramater, _0);

@@ -37,7 +37,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 5);
+	array_init_size(ar, 4);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);
@@ -77,7 +77,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_STRING(a, "hello", 1);
 	ZEPHIR_INIT_VAR(ar);
-	array_init_size(ar, 5);
+	array_init_size(ar, 4);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(ar, _0);

@@ -25,6 +25,7 @@
 #include "kernel/memory.h"
 
 zend_class_entry *test_diinterface_ce;
+zend_class_entry *test_methodinterface_ce;
 zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
@@ -73,6 +74,7 @@ zend_class_entry *test_json_ce;
 zend_class_entry *test_logical_ce;
 zend_class_entry *test_mcall_ce;
 zend_class_entry *test_mcallchained_ce;
+zend_class_entry *test_methodabstract_ce;
 zend_class_entry *test_methodargs_ce;
 zend_class_entry *test_nativearray_ce;
 zend_class_entry *test_oo_abstractclass_ce;
@@ -298,6 +300,7 @@ static PHP_MINIT_FUNCTION(test)
 #endif
 
 	ZEPHIR_INIT(Test_DiInterface);
+	ZEPHIR_INIT(Test_MethodInterface);
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_Oo_OoDynamicA);
@@ -346,6 +349,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Logical);
 	ZEPHIR_INIT(Test_Mcall);
 	ZEPHIR_INIT(Test_McallChained);
+	ZEPHIR_INIT(Test_MethodAbstract);
 	ZEPHIR_INIT(Test_MethodArgs);
 	ZEPHIR_INIT(Test_NativeArray);
 	ZEPHIR_INIT(Test_Oo);

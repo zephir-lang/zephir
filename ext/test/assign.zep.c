@@ -1130,7 +1130,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign1) {
 	array_init(_1);
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), _1 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_2);
-	array_init_size(_2, 5);
+	array_init_size(_2, 4);
 	ZEPHIR_INIT_BNVAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_2, _1);

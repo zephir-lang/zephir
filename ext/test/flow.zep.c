@@ -716,7 +716,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	c = 0;
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -752,7 +752,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -789,7 +789,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -1472,7 +1472,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_EMPTY_STRING(b);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 7);
+	array_init_size(_0, 6);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 'a');
 	zephir_array_fast_append(_0, _1);
