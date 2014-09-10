@@ -887,6 +887,9 @@ class ClassDefinition
                             $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
 
+                        case 'object':
+                            $codePrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', stdClass, ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
                         case 'variable':
                             if (isset($parameter['cast'])) {
 
