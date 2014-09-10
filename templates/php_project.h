@@ -61,7 +61,7 @@ ZEND_EXTERN_MODULE_GLOBALS(%PROJECT_LOWER%)
 #define zephir_globals_def %PROJECT_LOWER%_globals
 #define zend_zephir_globals_def zend_%PROJECT_LOWER%_globals
 
-extern zend_module_entry %PROJECT_LOWER%_module_entry;
-#define phpext_%PROJECT_LOWER%_ptr &%PROJECT_LOWER%_module_entry
+extern zend_module_entry %PROJECT_LOWER_SAFE%_module_entry;
+#define phpext_%PROJECT_LOWER%_ptr &%PROJECT_LOWER_SAFE%_module_entry
 
 #endif

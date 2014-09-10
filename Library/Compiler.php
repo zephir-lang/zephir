@@ -857,11 +857,19 @@ class Compiler
         if (empty($content)) {
             throw new Exception("Template config.m4 doesn't exist");
         }
+
+        if ($project == 'zend') {
+            $safeProject = 'zend_';
+        } else {
+            $safeProject = $project;
+        }
+
         $compiledFiles = array_map(function ($file) {
             return str_replace('.c', '.zep.c', $file);
         }, $this->compiledFiles);
 
         $toReplace = array(
+            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
             '%PROJECT_CAMELIZE%'     => ucfirst($project),
@@ -914,7 +922,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -932,7 +940,7 @@ class Compiler
         }
 
         $toReplace = array(
-            '%PROJECT_LOWER%' => strtolower($project)
+            '%PROJECT_LOWER_SAFE%' => strtolower($safeProject)
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -1279,19 +1287,26 @@ class Compiler
          */
         list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals($project);
 
+        if ($project == 'zend') {
+            $safeProject = 'zend_';
+        } else {
+            $safeProject = $project;
+        }
+
         /**
          * Round 4. Process extension info
          */
         $phpInfo = $this->processExtensionInfo();
 
         $toReplace = array(
-            '%PROJECT_LOWER%'    => strtolower($project),
-            '%PROJECT_UPPER%'    => strtoupper($project),
-            '%PROJECT_CAMELIZE%' => ucfirst($project),
-            '%CLASS_ENTRIES%'    => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
-            '%CLASS_INITS%'      => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
-            '%INIT_GLOBALS%'     => $globalsDefault,
-            '%EXTENSION_INFO%'   => $phpInfo
+            '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
+            '%PROJECT_LOWER%'       => strtolower($project),
+            '%PROJECT_UPPER%'       => strtoupper($project),
+            '%PROJECT_CAMELIZE%'    => ucfirst($project),
+            '%CLASS_ENTRIES%'       => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
+            '%CLASS_INITS%'         => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
+            '%INIT_GLOBALS%'        => $globalsDefault,
+            '%EXTENSION_INFO%'      => $phpInfo
         );
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
@@ -1300,7 +1315,7 @@ class Compiler
         /**
          * Round 5. Generate and place the entry point of the project
          */
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $project . '.c');
+        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.c');
         unset($content);
 
         /**
@@ -1328,7 +1343,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/' . $project . '.h');
+        Utils::checkAndWriteIfNeeded($content, 'ext/' . $safeProject . '.h');
         unset($content);
 
         /**
@@ -1340,6 +1355,7 @@ class Compiler
         }
 
         $toReplace = array(
+            '%PROJECT_LOWER_SAFE%'       => strtolower($safeProject),
             '%PROJECT_LOWER%'            => strtolower($project),
             '%PROJECT_UPPER%'            => strtoupper($project),
             '%PROJECT_EXTNAME%'          => strtolower($project),
@@ -1356,7 +1372,7 @@ class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        Utils::checkAndWriteIfNeeded($content, 'ext/php_' . $project . '.h');
+        Utils::checkAndWriteIfNeeded($content, 'ext/php_' . $safeProject . '.h');
         unset($content);
 
         return $needConfigure;
