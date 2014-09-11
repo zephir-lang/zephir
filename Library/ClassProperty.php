@@ -269,8 +269,18 @@ class ClassProperty
                         }
 
                         if ($needLetStatementAdded) {
-                            $statements[] = $letStatement;
-                            $statementsBlock->setStatements($statements);
+                            $newStatements = array();
+
+                            /**
+                             * Start from let statement
+                             */
+                            $newStatements[] = $letStatement;
+
+                            foreach ($statements as $statement) {
+                                $newStatements[] = $statement;
+                            }
+
+                            $statementsBlock->setStatements($newStatements);
                             $constructMethod->setStatementsBlock($statementsBlock);
                             $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                         }
