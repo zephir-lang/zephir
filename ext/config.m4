@@ -47,7 +47,9 @@ if test "$PHP_TEST" = "yes"; then
 	test/logical.zep.c
 	test/mcall.zep.c
 	test/mcallchained.zep.c
+	test/methodabstract.zep.c
 	test/methodargs.zep.c
+	test/methodinterface.zep.c
 	test/nativearray.zep.c
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
@@ -83,6 +85,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c
 	test/properties/privateproperties.zep.c
+	test/properties/propertyarray.zep.c
 	test/properties/protectedproperties.zep.c
 	test/properties/publicproperties.zep.c
 	test/properties/staticprotectedproperties.zep.c
