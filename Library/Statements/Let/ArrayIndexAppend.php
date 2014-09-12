@@ -67,7 +67,7 @@ class ArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assigment without cast", $indexExpr);
+                    throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assignment without cast", $indexExpr);
             }
 
             $offsetExprs[] = $exprIndex;

@@ -156,7 +156,7 @@ class ArrayIndex
             case 'variable':
                 break;
             default:
-                throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array offset in assigment without cast", $statement['index-expr'][0]);
+                throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array offset in assignment without cast", $statement['index-expr'][0]);
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -252,7 +252,7 @@ class ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assigment without cast", $indexExpr);
+                    throw new CompilerException("Index: " . $exprIndex->getType() . " cannot be used as array index in assignment without cast", $indexExpr);
             }
 
             $offsetExprs[] = $exprIndex;
