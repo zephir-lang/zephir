@@ -2830,6 +2830,10 @@ xx_array_item(R) ::= xx_array_value(V) . {
 	R = xx_ret_array_item(NULL, V, status->scanner_state);
 }
 
+xx_array_key(R) ::= CONSTANT(I) . {
+	R = xx_ret_literal(XX_T_CONSTANT, I, status->scanner_state);
+}
+
 xx_array_key(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state);
 }

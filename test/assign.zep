@@ -741,4 +741,13 @@ class Assign
 	{
 		let _POST[index] = value;
 	}
+
+        /**
+         * @link https://github.com/phalcon/zephir/issues/523
+         */
+        public function testConstantKeyAssign()
+        {
+		var elements;
+		let elements = ["abc": 1, ABDAY_1: DAY_1, ABDAY_2: DAY_2];
+        }
 }
