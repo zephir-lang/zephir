@@ -34,6 +34,8 @@ class NotIdenticalOperator extends ComparisonBaseOperator
 
     protected $_zvalLongOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
 
+    protected $_zvalLongNegOperator = '!ZEPHIR_IS_LONG_IDENTICAL';
+
     protected $_zvalStringOperator = '!ZEPHIR_IS_STRING_IDENTICAL';
 
     protected $_zvalBoolTrueOperator = '!ZEPHIR_IS_TRUE_IDENTICAL';
