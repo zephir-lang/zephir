@@ -38,4 +38,10 @@ class MethodArgs
 	{
 		return method;
 	}
+	
+	public static function testParamTypeString(string str) -> string
+	{
+		let str = trim(str);
+		return str;
+	}
 }
