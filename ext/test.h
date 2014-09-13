@@ -104,6 +104,7 @@
 #include "test/scallparent.zep.h"
 #include "test/spectralnorm.zep.h"
 #include "test/spropertyaccess.zep.h"
+#include "test/statements.zep.h"
 #include "test/strings.zep.h"
 #include "test/ternary.zep.h"
 #include "test/testinterface.zep.h"

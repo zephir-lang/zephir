@@ -102,6 +102,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/scallparent.zep.c
 	test/spectralnorm.zep.c
 	test/spropertyaccess.zep.c
+	test/statements.zep.c
 	test/strings.zep.c
 	test/ternary.zep.c
 	test/testinterface.zep.c

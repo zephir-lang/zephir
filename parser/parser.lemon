@@ -565,7 +565,7 @@ static json_object *xx_ret_let_assignment(char *type, json_object *operator, xx_
 	return ret;
 }
 
-static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *else_statements, xx_scanner_state *state)
+static json_object *xx_ret_if_statement(json_object *expr, json_object *statements, json_object *elseif_statements, json_object *else_statements, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -574,6 +574,10 @@ static json_object *xx_ret_if_statement(json_object *expr, json_object *statemen
 
 	if (statements) {
 		json_object_object_add(ret, "statements", statements);
+	}
+
+	if (elseif_statements) {
+		json_object_object_add(ret, "elseif_statements", elseif_statements);
 	}
 
 	if (else_statements) {
@@ -1962,76 +1966,75 @@ xx_continue_statement(R) ::= CONTINUE DOTCOMMA . {
 
 /* if(a) {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, NULL, NULL, status->scanner_state);
 }
 
 /* if(a) {} elseif(b) {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE xx_elseif_statements(L) . {
-    R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, NULL, L, status->scanner_state);
 }
 
 /* if(a) {} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, NULL, NULL, status->scanner_state);
 }
 
 /* if(a) {} elseif(b) {} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE xx_elseif_statements(L) ELSE BRACKET_OPEN BRACKET_CLOSE . {
-    R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, L, NULL, status->scanner_state);
 }
 
 /* if(a) {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, L, NULL, NULL, status->scanner_state);
 }
 
 /* if(a) {...} elseif(b) {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(S) . {
-    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+	R = xx_ret_if_statement(E, L, S, NULL, status->scanner_state);
 }
 
 /* if(a) {...} else {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, S, status->scanner_state);
+	R = xx_ret_if_statement(E, L, NULL, S, status->scanner_state);
 }
 
 /* if(a) {...} elseif(b) {...} else {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(ES) ELSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
-    ES;
-    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+	R = xx_ret_if_statement(E, L, ES, S, status->scanner_state);
 }
 
 /* if(a) {...} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, L, NULL, NULL, status->scanner_state);
 }
 
 /* if(a) {...} elseif(b) {} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(S) ELSE BRACKET_OPEN BRACKET_CLOSE . {
-    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+	R = xx_ret_if_statement(E, L, S, NULL, status->scanner_state);
 }
 
 /* if(a) {} else {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-	R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, NULL, L, status->scanner_state);
 }
 
 xx_elseif_statements(R) ::= xx_elseif_statements(C) xx_elseif_statement(K) . {
-    R = xx_ret_list(C, K);
+	R = xx_ret_list(C, K);
 }
 
 xx_elseif_statements(R) ::= xx_elseif_statement(K) . {
-    R = xx_ret_list(NULL, K);
+	R = xx_ret_list(NULL, K);
 }
 
 /* elseif(b) {} */
 xx_elseif_statement(R) ::= ELSEIF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
-    R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, NULL, NULL, NULL, status->scanner_state);
 }
 
 /* elseif(b) {...} */
 xx_elseif_statement(R) ::= ELSEIF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
-    R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
+	R = xx_ret_if_statement(E, L, NULL, NULL, status->scanner_state);
 }
 
 xx_switch_statement(R) ::= SWITCH xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
