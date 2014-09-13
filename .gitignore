@@ -34,6 +34,8 @@ ext/libtool
 *.o
 *.loT
 ide/
+compile.log
+compile-errors.log
 
 # Runtime
 
