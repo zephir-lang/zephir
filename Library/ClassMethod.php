@@ -1914,6 +1914,11 @@ class ClassMethod
                     throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $this->_expression['return-type']);
                 }
             }
+        } else {
+            if ($symbolTable->getMustGrownStack()) {
+                $compilationContext->headersManager->add('kernel/memory');
+                $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
+            }
         }
 
         /**
