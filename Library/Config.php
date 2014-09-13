@@ -82,10 +82,12 @@ class Config
     public function __construct()
     {
         if (file_exists('config.json')) {
+
             $config = json_decode(file_get_contents('config.json'), true);
             if (!is_array($config)) {
                 throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");
             }
+
             foreach ($config as $key => $configSection) {
                 if (!is_array($configSection)) {
                     $this->_config[$key] = $configSection;
@@ -144,16 +146,17 @@ class Config
     public function saveOnExit()
     {
         if ($this->_changed) {
+
             /**
              * Above PHP 5.4
              */
-            if (defined('JSON_PRETTY_PRINT')) {
-                $config = json_encode($this->_config, JSON_PRETTY_PRINT);
-            } else {
-                $config = json_encode($this->_config);
-            }
+            //if (defined('JSON_PRETTY_PRINT')) {
+            //    $config = json_encode($this->_config, JSON_PRETTY_PRINT);
+            //} else {
+            //    $config = json_encode($this->_config);
+            //}
 
-            file_put_contents('config.json', $config);
+            //file_put_contents('config.json', $config);
         }
     }
 }

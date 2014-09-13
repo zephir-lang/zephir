@@ -691,12 +691,14 @@ class Compiler
                 'cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
             );
         }
+
+        $currentDir = getcwd();
         $this->logger->output('Compiling...');
         $verbose = ($this->config->get('verbose') ? true : false);
         if ($verbose) {
             passthru('cd ext && make -j2', $exit);
         } else {
-            exec('cd ext && make --silent -j2', $output, $exit);
+            exec('cd ext && (make --silent -j2 2>' . $currentDir . '/compile-errors.log 1>' . $currentDir . '/compile.log)', $output, $exit);
         }
     }
 
@@ -711,6 +713,7 @@ class Compiler
         if (!$fromGenerate) {
             $this->generate($command);
         }
+
         $this->logger->output('Generating stubs...');
         $stubsGenerator = new Stubs\Generator($this->files, $this->config);
         $path = $this->config->get('path', 'stubs');
@@ -734,6 +737,10 @@ class Compiler
          */
         $namespace = str_replace('\\', '_', $this->checkDirectory());
 
+        @unlink("compile.log");
+        @unlink("compile-errors.log");
+        @unlink("ext/modules/" . $namespace . ".so");
+
         $this->compile($command);
 
         $this->logger->output('Installing...');
@@ -748,7 +755,12 @@ class Compiler
             }
         }
 
-        exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make --silent install) > /dev/null 2>&1', $output, $exit);
+        $currentDir = getcwd();
+        exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
+
+        if (!file_exists("ext/modules/" . $namespace . ".so")) {
+            throw new CompilerException("Internal extension compilation failed. Check compile-errors.log for more information");
+        }
 
         $this->logger->output('Extension installed!');
         if (!extension_loaded($namespace)) {

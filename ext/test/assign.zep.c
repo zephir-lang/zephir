@@ -1489,3 +1489,21 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/523
+ */
+PHP_METHOD(Test_Assign, testConstantKeyAssign) {
+
+	zval *elements;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(elements);
+	array_init_size(elements, 5);
+	add_assoc_long_ex(elements, SS("abc"), 1);
+	add_index_long(elements, 14, 7);
+	add_index_long(elements, 15, 8);
+	ZEPHIR_MM_RESTORE();
+
+}
+
