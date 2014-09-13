@@ -1,0 +1,14 @@
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.2/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="./unit-tests/Bootstrap.php">
+    <testsuites>
+        <testsuite name="Extension Test Suite">
+            <directory>./unit-tests/Extension/</directory>
+        </testsuite>
+        <testsuite name="Zephir Test Suite">
+            <directory>./unit-tests/Zephir/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
