@@ -14,7 +14,6 @@ install:
  - composer --prefer-source install
 
 before_script:
- - mkdir -p build/coverage
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - $(phpenv which php) compiler.php generate
  - $(phpenv which php) compiler.php stubs
@@ -24,9 +23,6 @@ before_script:
 script:
  - vendor/bin/phpcs --standard=PSR2 --report=emacs --extensions=php --warning-severity=0 Library/ unit-tests/Extension/ unit-tests/Zephir/
  - valgrind --read-var-info=yes --error-exitcode=1 --fullpath-after= --track-origins=yes phpunit --debug
-
-after_script:
- - vendor/bin/coveralls -v --exclude-no-stmt
 
 after_failure:
  - sudo apt-get -qq install gdb
