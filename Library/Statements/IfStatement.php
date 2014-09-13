@@ -72,9 +72,9 @@ class IfStatement extends StatementAbstract
         $this->_evalExpression = $expr;
 
         /**
-         * Try to mark lastest temporary variable used as idle
+         * Try to mark latest temporary variable used as idle
          */
-        $evalVariable =  $expr->getEvalVariable();
+        $evalVariable = $expr->getEvalVariable();
         if (is_object($evalVariable)) {
             if ($evalVariable->isTemporal()) {
                 $evalVariable->setIdle(true);
@@ -88,6 +88,22 @@ class IfStatement extends StatementAbstract
             $st = new StatementsBlock($this->_statement['statements']);
             $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
             $branch->setRelatedStatement($this);
+        }
+
+        /**
+         * Compile statements in the 'elseif' block
+         */
+        if (isset($this->_statement['elseif_statements'])) {
+            foreach ($this->_statement['elseif_statements'] as $statement) {
+                if (!isset($statement['statements'])) {
+                    continue;
+                }
+                $condition = $expr->optimize($statement['expr'], $compilationContext);
+                $compilationContext->codePrinter->output('} else if (' . $condition . ') {');
+                $st = new StatementsBlock($statement['statements']);
+                $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
+                $branch->setRelatedStatement($this);
+            }
         }
 
         /**
