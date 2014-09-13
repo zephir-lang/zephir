@@ -63,6 +63,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case '*':
                         return new CompiledExpression('int', $expression['left']['value'] * $expression['right']['value'], $expression);
+
+                    case '**':
+                        return new CompiledExpression('int', pow($expression['left']['value'], $expression['right']['value']), $expression);
                 }
             }
 
@@ -77,6 +80,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case '*':
                         return new CompiledExpression('double', $expression['left']['value'] * $expression['right']['value'], $expression);
+
+                    case '**':
+                        return new CompiledExpression('double', pow($expression['left']['value'], $expression['right']['value']), $expression);
                 }
             }
         }
@@ -105,6 +111,7 @@ class ArithmeticalBaseOperator extends BaseOperator
             case '+':
             case '-':
             case '*':
+            case '**':
                 $optimized = $this->optimizeConstantFolding($expression, $compilationContext);
                 if (is_object($optimized)) {
                     return $optimized;

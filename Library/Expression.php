@@ -20,6 +20,7 @@
 namespace Zephir;
 
 use Zephir\Operators\Arithmetical\AddOperator;
+use Zephir\Operators\Arithmetical\ExpOperator;
 use Zephir\Operators\Arithmetical\SubOperator;
 use Zephir\Operators\Arithmetical\MulOperator;
 use Zephir\Operators\Arithmetical\DivOperator;
@@ -496,6 +497,12 @@ class Expression
 
             case 'mul':
                 $expr = new MulOperator();
+                $expr->setReadOnly($this->isReadOnly());
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
+
+            case 'exp':
+                $expr = new ExpOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);

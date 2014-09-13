@@ -11,4 +11,14 @@ class Operator
     {
         return a ** b ** c;
     }
+
+    public function testExponential2()
+    {
+        return 3 ** 4;
+    }
+
+    public function testExponential3(int a, int b)
+    {
+        return a ** b;
+    }
 }

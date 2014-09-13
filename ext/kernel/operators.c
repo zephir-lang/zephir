@@ -377,6 +377,16 @@ int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) {
 	return status;
 }
 
+int zephir_exp_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) {
+    int status;
+    int ref_count = Z_REFCOUNT_P(result);
+    int is_ref = Z_ISREF_P(result);
+    status = pow_function(result, op1, op2 TSRMLS_CC);
+    Z_SET_REFCOUNT_P(result, ref_count);
+    Z_SET_ISREF_TO_P(result, is_ref);
+    return status;
+}
+
 void zephir_negate(zval *z TSRMLS_DC) {
 	while (1) {
 		switch (Z_TYPE_P(z)) {
