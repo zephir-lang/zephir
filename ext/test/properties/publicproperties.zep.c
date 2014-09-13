@@ -102,7 +102,7 @@ PHP_METHOD(Test_Properties_PublicProperties, __construct) {
 	array_init(_0);
 	zephir_update_property_this(this_ptr, SL("someEmptyArray"), _0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);
-	array_init_size(_1, 7);
+	array_init_size(_1, 6);
 	ZEPHIR_INIT_VAR(_2);
 	ZVAL_LONG(_2, 1);
 	zephir_array_fast_append(_1, _2);

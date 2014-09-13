@@ -15,7 +15,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setcallable, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setobject, 0, 0, 1)
-	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_OBJ_INFO(0, a, stdClass, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setcallablestrict, 0, 0, 1)
@@ -23,7 +23,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setcallablestrict, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setobjectstrict, 0, 0, 1)
-	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_OBJ_INFO(0, a, stdClass, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setresourcestrict, 0, 0, 1)
