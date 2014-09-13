@@ -1960,28 +1960,78 @@ xx_continue_statement(R) ::= CONTINUE DOTCOMMA . {
 	R = xx_ret_continue_statement(status->scanner_state);
 }
 
+/* if(a) {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
 }
 
+/* if(a) {} elseif(b) {} */
+xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE xx_elseif_statements(L) . {
+    R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+}
+
+/* if(a) {} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
 }
 
+/* if(a) {} elseif(b) {} else {} */
+xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE xx_elseif_statements(L) ELSE BRACKET_OPEN BRACKET_CLOSE . {
+    R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+}
+
+/* if(a) {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
 }
 
+/* if(a) {...} elseif(b) {...} */
+xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(S) . {
+    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+}
+
+/* if(a) {...} else {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, L, S, status->scanner_state);
 }
 
+/* if(a) {...} elseif(b) {...} else {...} */
+xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(ES) ELSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
+    ES;
+    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+}
+
+/* if(a) {...} else {} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE ELSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
 }
 
+/* if(a) {...} elseif(b) {} else {} */
+xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE xx_elseif_statements(S) ELSE BRACKET_OPEN BRACKET_CLOSE . {
+    R = xx_ret_if_statement(E, L, S, status->scanner_state);
+}
+
+/* if(a) {} else {...} */
 xx_if_statement(R) ::= IF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE ELSE BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
 	R = xx_ret_if_statement(E, NULL, L, status->scanner_state);
+}
+
+xx_elseif_statements(R) ::= xx_elseif_statements(C) xx_elseif_statement(K) . {
+    R = xx_ret_list(C, K);
+}
+
+xx_elseif_statements(R) ::= xx_elseif_statement(K) . {
+    R = xx_ret_list(NULL, K);
+}
+
+/* elseif(b) {} */
+xx_elseif_statement(R) ::= ELSEIF xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
+    R = xx_ret_if_statement(E, NULL, NULL, status->scanner_state);
+}
+
+/* elseif(b) {...} */
+xx_elseif_statement(R) ::= ELSEIF xx_eval_expr(E) BRACKET_OPEN xx_statement_list(L) BRACKET_CLOSE . {
+    R = xx_ret_if_statement(E, L, NULL, status->scanner_state);
 }
 
 xx_switch_statement(R) ::= SWITCH xx_eval_expr(E) BRACKET_OPEN BRACKET_CLOSE . {
