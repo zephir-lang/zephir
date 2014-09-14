@@ -87,6 +87,7 @@
 #include "test/pregmatch.zep.h"
 #include "test/properties/extendspublicproperties.zep.h"
 #include "test/properties/privateproperties.zep.h"
+#include "test/properties/propertyarray.zep.h"
 #include "test/properties/protectedproperties.zep.h"
 #include "test/properties/publicproperties.zep.h"
 #include "test/properties/staticprotectedproperties.zep.h"

@@ -85,6 +85,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c
 	test/properties/privateproperties.zep.c
+	test/properties/propertyarray.zep.c
 	test/properties/protectedproperties.zep.c
 	test/properties/publicproperties.zep.c
 	test/properties/staticprotectedproperties.zep.c

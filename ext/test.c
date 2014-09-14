@@ -110,6 +110,7 @@ zend_class_entry *test_pdostatement_ce;
 zend_class_entry *test_pregmatch_ce;
 zend_class_entry *test_properties_extendspublicproperties_ce;
 zend_class_entry *test_properties_privateproperties_ce;
+zend_class_entry *test_properties_propertyarray_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
 zend_class_entry *test_properties_staticprotectedproperties_ce;
 zend_class_entry *test_properties_staticpublicproperties_ce;
@@ -385,6 +386,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Pregmatch);
 	ZEPHIR_INIT(Test_Properties_ExtendsPublicProperties);
 	ZEPHIR_INIT(Test_Properties_PrivateProperties);
+	ZEPHIR_INIT(Test_Properties_PropertyArray);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_StaticProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_StaticPublicProperties);
