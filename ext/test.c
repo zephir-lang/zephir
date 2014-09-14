@@ -126,6 +126,7 @@ zend_class_entry *test_scall_ce;
 zend_class_entry *test_scallexternal_ce;
 zend_class_entry *test_spectralnorm_ce;
 zend_class_entry *test_spropertyaccess_ce;
+zend_class_entry *test_statements_ce;
 zend_class_entry *test_strings_ce;
 zend_class_entry *test_ternary_ce;
 zend_class_entry *test_trie_ce;
@@ -402,6 +403,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Scall);
 	ZEPHIR_INIT(Test_ScallExternal);
 	ZEPHIR_INIT(Test_SpectralNorm);
+	ZEPHIR_INIT(Test_Statements);
 	ZEPHIR_INIT(Test_Strings);
 	ZEPHIR_INIT(Test_Ternary);
 	ZEPHIR_INIT(Test_Trie);

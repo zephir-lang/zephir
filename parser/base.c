@@ -238,6 +238,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_ELSE:
 				xx_(xx_parser, XX_ELSE, NULL, parser_status);
 				break;
+			case XX_T_ELSEIF:
+				xx_(xx_parser, XX_ELSEIF, NULL, parser_status);
+				break;
 			case XX_T_LOOP:
 				xx_(xx_parser, XX_LOOP, NULL, parser_status);
 				break;
