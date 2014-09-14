@@ -90,6 +90,7 @@ void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy);
 
 /** Operator functions */
 int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+int zephir_exp_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 int zephir_and_function(zval *result, zval *left, zval *right);
 void zephir_negate(zval *z TSRMLS_DC);
 

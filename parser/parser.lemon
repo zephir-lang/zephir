@@ -42,6 +42,7 @@
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
+%right EXP .
 %right ISSET FETCH EMPTY .
 %right TYPEOF .
 %right CLONE .
@@ -2509,6 +2510,11 @@ xx_common_expr(R) ::= xx_common_expr(O1) SUB xx_common_expr(O2) . {
 /* y = a * b */
 xx_common_expr(R) ::= xx_common_expr(O1) MUL xx_common_expr(O2) . {
 	R = xx_ret_expr("mul", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a ** b */
+xx_common_expr(R) ::= xx_common_expr(O1) EXP xx_common_expr(O2) . {
+	R = xx_ret_expr("exp", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a / b */

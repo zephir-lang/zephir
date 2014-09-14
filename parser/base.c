@@ -3,7 +3,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team and contributors                          |
+ | Copyright (c) 2013-2014 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -21,34 +21,34 @@
 
 const xx_token_names xx_tokens[] =
 {
-	{ XX_T_INTEGER,             "INTEGER" },
-	{ XX_T_DOUBLE,              "DOUBLE" },
-	{ XX_T_STRING,              "STRING" },
-	{ XX_T_IDENTIFIER,    		"IDENTIFIER" },
-	{ XX_T_AT,                  "@" },
-	{ XX_T_COMMA,               "," },
-	{ XX_T_ASSIGN,              "=" },
-	{ XX_T_COLON,               ":" },
-	{ XX_T_PARENTHESES_OPEN,    "(" },
-	{ XX_T_PARENTHESES_CLOSE,   ")" },
-	{ XX_T_BRACKET_OPEN,        "{" },
-	{ XX_T_BRACKET_CLOSE,       "}" },
- 	{ XX_T_SBRACKET_OPEN,       "[" },
-	{ XX_T_SBRACKET_CLOSE,      "]" },
+	{ XX_T_INTEGER,           "INTEGER" },
+	{ XX_T_DOUBLE,            "DOUBLE" },
+	{ XX_T_STRING,            "STRING" },
+	{ XX_T_IDENTIFIER,        "IDENTIFIER" },
+	{ XX_T_AT,                "@" },
+	{ XX_T_COMMA,             "," },
+	{ XX_T_ASSIGN,            "=" },
+	{ XX_T_COLON,             ":" },
+	{ XX_T_PARENTHESES_OPEN,  "(" },
+	{ XX_T_PARENTHESES_CLOSE, ")" },
+	{ XX_T_BRACKET_OPEN,      "{" },
+	{ XX_T_BRACKET_CLOSE,     "}" },
+ 	{ XX_T_SBRACKET_OPEN,     "[" },
+	{ XX_T_SBRACKET_CLOSE,    "]" },
 	{  0, NULL }
 };
 
 char *strndup(const char *s, size_t len)
 {
-    if (s) {
-        char *ns = malloc(len + 1);
-        if (ns) {
-            ns[len] = 0;
-            return strncpy(ns, s, len);
-        }
-    }
+	if (s) {
+		char *ns = malloc(len + 1);
+		if (ns) {
+			ns[len] = 0;
+			return strncpy(ns, s, len);
+		}
+	}
 
-    return NULL;
+	return NULL;
 }
 
 /**
@@ -448,15 +448,15 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_TYPE_VAR:
 				xx_(xx_parser, XX_TYPE_VAR, NULL, parser_status);
 				break;
-		    case XX_T_TYPE_OBJECT:
-                xx_(xx_parser, XX_TYPE_OBJECT, NULL, parser_status);
-                break;
-		    case XX_T_TYPE_RESOURCE:
-                xx_(xx_parser, XX_TYPE_RESOURCE, NULL, parser_status);
-                break;
-            case XX_T_TYPE_CALLABLE:
-                xx_(xx_parser, XX_TYPE_CALLABLE, NULL, parser_status);
-                break;
+			case XX_T_TYPE_OBJECT:
+				xx_(xx_parser, XX_TYPE_OBJECT, NULL, parser_status);
+				break;
+			case XX_T_TYPE_RESOURCE:
+				xx_(xx_parser, XX_TYPE_RESOURCE, NULL, parser_status);
+				break;
+			case XX_T_TYPE_CALLABLE:
+				xx_(xx_parser, XX_TYPE_CALLABLE, NULL, parser_status);
+				break;
 
 			case XX_T_ADD:
 				xx_(xx_parser, XX_ADD, NULL, parser_status);
@@ -466,6 +466,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_MUL:
 				xx_(xx_parser, XX_MUL, NULL, parser_status);
+				break;
+			case XX_T_EXP:
+				xx_(xx_parser, XX_EXP, NULL, parser_status);
 				break;
 			case XX_T_DIV:
 				xx_(xx_parser, XX_DIV, NULL, parser_status);

@@ -63,6 +63,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case '*':
                         return new CompiledExpression('int', $expression['left']['value'] * $expression['right']['value'], $expression);
+
+                    case '**':
+                        return new CompiledExpression('int', pow($expression['left']['value'], $expression['right']['value']), $expression);
                 }
             }
 
@@ -77,6 +80,9 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case '*':
                         return new CompiledExpression('double', $expression['left']['value'] * $expression['right']['value'], $expression);
+
+                    case '**':
+                        return new CompiledExpression('double', pow($expression['left']['value'], $expression['right']['value']), $expression);
                 }
             }
         }
@@ -105,6 +111,7 @@ class ArithmeticalBaseOperator extends BaseOperator
             case '+':
             case '-':
             case '*':
+            case '**':
                 $optimized = $this->optimizeConstantFolding($expression, $compilationContext);
                 if (is_object($optimized)) {
                     return $optimized;
@@ -485,96 +492,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         }
 
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
-
-                                    default:
-                                        throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
-                                }
-                                break;
-
-                            default:
-                                throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
-                        }
-                        break;
-
-                    case 'variable':
-                        switch ($right->getType()) {
-
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'double':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $op = $this->_operator;
-                                if ($variableLeft->isLocalOnly()) {
-                                    $op1 = '&' . $variableLeft->getName();
-                                } else {
-                                    $op1 = $variableLeft->getName();
-                                }
-                                $op2 = $right->getCode();
-                                return new CompiledExpression('double', 'zephir_get_numberval(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
-
-                            case 'variable':
-
-                                $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
-
-                                switch ($variableRight->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('int', 'zephir_get_numberval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        } else {
-                                            return new CompiledExpression('int', 'zephir_get_numberval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        }
-                                        break;
-
-                                    case 'bool':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('int', 'zephir_get_numberval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        } else {
-                                            return new CompiledExpression('int', 'zephir_get_numberval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        }
-                                        break;
-
-                                    case 'variable':
-                                        $variableRight = $compilationContext->symbolTable->getVariableForRead($variableRight->getCode(), $compilationContext, $expression);
-                                        switch ($variableRight->getType()) {
-
-                                            case 'int':
-                                                return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . ' (double) ' . $variableRight->getName(), $expression);
-
-                                            case 'double':
-                                                return new CompiledExpression('double', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-
-                                            case 'bool':
-                                                return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
-
-                                            case 'variable':
-                                                $compilationContext->headersManager->add('kernel/operators');
-
-                                                if ($variableLeft->isLocalOnly()) {
-                                                    $op1 = '&' . $variableLeft->getName();
-                                                } else {
-                                                    $op1 = $variableLeft->getName();
-                                                }
-                                                if ($variableRight->isLocalOnly()) {
-                                                    $op2 = '&' . $variableRight->getName();
-                                                } else {
-                                                    $op2 = $variableRight->getName();
-                                                }
-
-                                                $expected = $this->getExpected($compilationContext, $expression);
-                                                $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ');');
-                                                return new CompiledExpression('variable', $expected->getName(), $expression);
-
-                                            default:
-                                                throw new CompilerException("Cannot operate variable('double') with variable('" . $variableRight->getType() . "')", $expression);
-                                        }
-                                        break;
 
                                     default:
                                         throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);

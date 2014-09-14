@@ -17,29 +17,14 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Zephir\Operators\Arithmetical;
 
-use Test\Operator;
-
-class OperatorTest extends \PHPUnit_Framework_TestCase
+/**
+ * @author Nikita Gusakov <dev@nkt.me>
+ */
+class ExpOperator extends ArithmeticalBaseOperator
 {
-    public function test404Issue()
-    {
-        $t = new Operator();
-
-        $this->assertFalse($t->testIdentical(true, 1));
-        $this->assertFalse($t->testIdentical(true, 'phalcon'));
-        $this->assertFalse($t->testIdentical(false, 0));
-        $this->assertFalse($t->testIdentical(1, '1'));
-        $this->assertTrue($t->testIdentical(1, 1));
-        $this->assertTrue($t->testIdentical(true, true));
-        $this->assertTrue($t->testIdentical('phalcon', 'phalcon'));
-    }
-
-    public function testExponential()
-    {
-        $t = new Operator();
-
-        $this->assertEquals(8, $t->testExponential(2, 3, 1));
-    }
+    protected $_operator = '**';
+    protected $_bitOperator = '**';
+    protected $_zvalOperator = 'zephir_exp_function';
 }

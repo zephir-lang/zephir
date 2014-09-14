@@ -36,3 +36,40 @@ PHP_METHOD(Test_Operator, testIdentical) {
 
 }
 
+PHP_METHOD(Test_Operator, testExponential) {
+
+	zval *a, *b, *c, _0;
+
+	zephir_fetch_params(0, 3, 0, &a, &b, &c);
+
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	zephir_exp_function(&_0, b, c TSRMLS_CC);
+	zephir_exp_function(return_value, a, &_0 TSRMLS_CC);
+	return;
+
+}
+
+PHP_METHOD(Test_Operator, testExponential2) {
+
+
+	RETURN_LONG(81);
+
+}
+
+PHP_METHOD(Test_Operator, testExponential3) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	int a, b;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
+
+
+	RETURN_LONG((a ** b));
+
+}
+
