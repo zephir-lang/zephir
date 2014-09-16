@@ -501,12 +501,12 @@ class MethodCall extends Call
 
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD_NOPARAMS(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '",  ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_CALL_METHOD_NOPARAMS(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '",  ' . $cachePointer . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_METHOD_NOPARAMS(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                 }
 
             } else {
@@ -544,12 +544,12 @@ class MethodCall extends Call
 
                     if ($isExpecting) {
                         if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD_NOPARAMS(' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
                         } else {
-                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '),  ' . $cachePointer . ');');
+                            $codePrinter->output('ZEPHIR_CALL_METHOD_NOPARAMS(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '),  ' . $cachePointer . ');');
                         }
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_CALL_METHOD_NOPARAMS(NULL, ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
                     }
 
                 } else {

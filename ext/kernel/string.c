@@ -907,6 +907,7 @@ int zephir_spprintf(char **message, int max_len, char *format, ...)
  * Makes a substr like the PHP function. This function SUPPORT negative from and length
  */
 void zephir_substr(zval *return_value, zval *str, long f, long l) {
+		long str_len;
 
 	if (Z_TYPE_P(str) != IS_STRING) {
 
@@ -922,7 +923,7 @@ void zephir_substr(zval *return_value, zval *str, long f, long l) {
 		RETURN_FALSE;
 	}
 
-		long str_len = Z_STRLEN_P(str);
+		str_len = Z_STRLEN_P(str);
 
 		if ((l < 0 && -l > str_len)) {
 			RETURN_FALSE;

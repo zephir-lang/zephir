@@ -55,8 +55,9 @@ static zephir_memory_entry* zephir_memory_grow_stack_common(zend_zephir_globals_
 #endif
 	}
 	else if (!g->active_memory->next) {
+		zephir_memory_entry *entry;
 		assert(g->active_memory >= g->end_memory - 1 || g->active_memory < g->start_memory);
-		zephir_memory_entry *entry = (zephir_memory_entry *) ecalloc(1, sizeof(zephir_memory_entry));
+		entry = (zephir_memory_entry *) ecalloc(1, sizeof(zephir_memory_entry));
 	/* ecalloc() will take care of these members
 		entry->pointer   = 0;
 		entry->capacity  = 0;
