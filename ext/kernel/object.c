@@ -61,7 +61,7 @@ int zephir_get_class_constant(zval *return_value, zend_class_entry *ce, char *co
 int zephir_instance_of(zval *result, const zval *object, const zend_class_entry *ce TSRMLS_DC) {
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "instanceof expects an object instance");
+		// php_error_docref(NULL TSRMLS_CC, E_WARNING, "instanceof expects an object instance");
 		ZVAL_FALSE(result);
 		return FAILURE;
 	}
@@ -73,7 +73,7 @@ int zephir_instance_of(zval *result, const zval *object, const zend_class_entry 
 int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce TSRMLS_DC) {
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "instanceof expects an object instance");
+		// php_error_docref(NULL TSRMLS_CC, E_WARNING, "instanceof expects an object instance");
 		return 0;
 	}
 

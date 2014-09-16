@@ -1,4 +1,4 @@
-#include "%PROJECT_LOWER%.c"
+#include "%PROJECT_LOWER_SAFE%.c"
 
 #include "kernel/main.c"
 #include "kernel/memory.c"
