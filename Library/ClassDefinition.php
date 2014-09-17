@@ -188,7 +188,7 @@ class ClassDefinition
      */
     public function isAbstract()
     {
-        return $this->abstract;
+        return $this->abstract || $this->isInterface();
     }
 
     /**

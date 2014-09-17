@@ -25,6 +25,7 @@
 #include "kernel/memory.h"
 
 zend_class_entry *test_diinterface_ce;
+zend_class_entry *test_extendedinterface_ce;
 zend_class_entry *test_methodinterface_ce;
 zend_class_entry *test_testinterface_ce;
 zend_class_entry *test_constantsparent_ce;
@@ -302,6 +303,7 @@ static PHP_MINIT_FUNCTION(test)
 #endif
 
 	ZEPHIR_INIT(Test_DiInterface);
+	ZEPHIR_INIT(Test_ExtendedInterface);
 	ZEPHIR_INIT(Test_MethodInterface);
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_ConstantsParent);

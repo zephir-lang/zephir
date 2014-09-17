@@ -200,7 +200,10 @@ class CompilerFile
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
-            $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
+            foreach ($topStatement['extends'] as &$extend) {
+                $extend['value'] = $this->getFullName($extend['value']);
+            }
+            $classDefinition->setImplementsInterfaces($topStatement['extends']);
         }
 
         $classDefinition->setType('interface');
