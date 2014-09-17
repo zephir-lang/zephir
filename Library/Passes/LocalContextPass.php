@@ -168,10 +168,10 @@ class LocalContextPass
                         case 'property-access':
                         case 'array-access':
                         case 'static-property-access':
+                        case 'static-constant-access':
                         case 'string':
                         case 'array':
                         case 'empty-array':
-                        case 'new':
                         case 'fcall':
                         case 'mcall':
                         case 'scall':
@@ -180,6 +180,7 @@ class LocalContextPass
                         case 'require':
                         case 'type-hint':
                         case 'minus':
+                        case 'new':
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
 

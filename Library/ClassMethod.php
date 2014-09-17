@@ -735,35 +735,43 @@ class ClassMethod
             case 'long':
             case 'ulong':
                 switch ($parameter['default']['type']) {
+
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
                         break;
+
                     case 'int':
                     case 'uint':
                     case 'long':
                         $code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
                         break;
+
                     case 'double':
                         $code .= "\t\t" . $parameter['name'] . ' = (int) ' . $parameter['default']['value'] . ';' . PHP_EOL;
                         break;
+
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
                 }
                 break;
 
             case 'double':
+
                 switch ($parameter['default']['type']) {
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
                         break;
+
                     case 'int':
                     case 'uint':
                     case 'long':
                         $code .= "\t\t" . $parameter['name'] . ' = (double) ' . $parameter['default']['value'] . ';' . PHP_EOL;
                         break;
+
                     case 'double':
                         $code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['default']['value'] . ';' . PHP_EOL;
                         break;
+
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
                 }
@@ -771,9 +779,11 @@ class ClassMethod
 
             case 'bool':
                 switch ($parameter['default']['type']) {
+
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
                         break;
+
                     case 'bool':
                         if ($parameter['default']['value'] == 'true') {
                             $code .= "\t\t" . $parameter['name'] . ' = 1;' . PHP_EOL;
@@ -781,6 +791,7 @@ class ClassMethod
                             $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
                         }
                         break;
+
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
                 }
@@ -790,14 +801,17 @@ class ClassMethod
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
+
                     case 'null':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t\t" . 'ZVAL_EMPTY_STRING(' . $parameter['name'] . ');' . PHP_EOL;
                         break;
+
                     case 'string':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t\t" . 'ZVAL_STRING(' . $parameter['name'] . ', "' . Utils::addSlashes($parameter['default']['value'], true) . '", 1);' . PHP_EOL;
                         break;
+
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
                 }

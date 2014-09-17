@@ -150,13 +150,13 @@ class Config
             /**
              * Above PHP 5.4
              */
-            //if (defined('JSON_PRETTY_PRINT')) {
-            //    $config = json_encode($this->_config, JSON_PRETTY_PRINT);
-            //} else {
-            //    $config = json_encode($this->_config);
-            //}
+            if (defined('JSON_PRETTY_PRINT')) {
+                $config = json_encode($this->_config, JSON_PRETTY_PRINT);
+            } else {
+                $config = json_encode($this->_config);
+            }
 
-            //file_put_contents('config.json', $config);
+            file_put_contents('config.json', $config);
         }
     }
 }
