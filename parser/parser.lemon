@@ -2269,33 +2269,42 @@ xx_let_assignments(R) ::= xx_let_assignment(A) . {
 	R = xx_ret_list(NULL, A);
 }
 
-/* */
+// =
 xx_assignment_operator(R) ::= ASSIGN . {
 	R = json_object_new_string("assign");
 }
 
-/* */
+// = &
+xx_assignment_operator(R) ::= ASSIGN BITWISE_AND . {
+    R = json_object_new_string("ref-assign");
+}
+
+// +=
 xx_assignment_operator(R) ::= ADDASSIGN . {
 	R = json_object_new_string("add-assign");
 }
 
-/* */
+// -=
 xx_assignment_operator(R) ::= SUBASSIGN . {
 	R = json_object_new_string("sub-assign");
 }
 
+// *=
 xx_assignment_operator(R) ::= MULASSIGN . {
 	R = json_object_new_string("mul-assign");
 }
 
+// /=
 xx_assignment_operator(R) ::= DIVASSIGN . {
 	R = json_object_new_string("div-assign");
 }
 
+// .=
 xx_assignment_operator(R) ::= CONCATASSIGN . {
 	R = json_object_new_string("concat-assign");
 }
 
+// %=
 xx_assignment_operator(R) ::= MODASSIGN . {
 	R = json_object_new_string("mod-assign");
 }
