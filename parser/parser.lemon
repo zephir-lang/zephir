@@ -390,7 +390,7 @@ static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token
 }
 
 static json_object *xx_ret_parameter(int const_param, json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value,
-	int mandatory, xx_scanner_state *state)
+	int mandatory, int reference, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -412,6 +412,8 @@ static json_object *xx_ret_parameter(int const_param, json_object *type, json_ob
 	if (default_value) {
 		json_object_object_add(ret, "default", default_value);
 	}
+
+    json_object_object_add(ret, "reference", reference);
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1718,68 +1720,165 @@ xx_parameter_list(R) ::= xx_parameter(P) . {
 }
 
 /* xx_parameter_list */
+
+// a
 xx_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 0, status->scanner_state);
 }
 
+// &a
+xx_parameter(R) ::= BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 1, status->scanner_state);
+}
+
+// const a
 xx_parameter(R) ::= CONST IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 0, status->scanner_state);
 }
 
+// const &a
+xx_parameter(R) ::= CONST BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 1, status->scanner_state);
+}
+
+// type a
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 0, status->scanner_state);
 }
 
+// type &a
+xx_parameter(R) ::= xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 1, status->scanner_state);
+}
+
+// const type a
 xx_parameter(R) ::= CONST xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, T, NULL, I, NULL, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 0, status->scanner_state);
 }
 
+// const type &a
+xx_parameter(R) ::= CONST xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 1, status->scanner_state);
+}
+
+// type! a
 xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 0, status->scanner_state);
 }
 
+// type! &a
+xx_parameter(R) ::= xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 1, status->scanner_state);
+}
+
+// const type! a
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, T, NULL, I, NULL, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 0, status->scanner_state);
 }
 
+// const type! &a
+xx_parameter(R) ::= CONST xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 1, status->scanner_state);
+}
+
+// <cast> a
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, NULL, C, I, NULL, 0, status->scanner_state);
+    R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 0, status->scanner_state);
 }
 
+// <cast> &a
+xx_parameter(R) ::= xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 1, status->scanner_state);
+}
+
+// const <cast> a
 xx_parameter(R) ::= CONST xx_parameter_cast(C) IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, NULL, C, I, NULL, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 0, status->scanner_state);
 }
 
+// const <cast> &a
+xx_parameter(R) ::= CONST xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) . {
+    R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 1, status->scanner_state);
+}
+
+// a = default_value
 xx_parameter(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, NULL, NULL, I, E, 0, status->scanner_state);
+    R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 0, status->scanner_state);
 }
 
+// &a = default_value
+xx_parameter(R) ::= BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 1, status->scanner_state);
+}
+
+// const a = default_value
 xx_parameter(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, NULL, NULL, I, E, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 0, status->scanner_state);
 }
 
+// const &a = default_value
+xx_parameter(R) ::= CONST BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 1, status->scanner_state);
+}
+
+// type a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, T, NULL, I, E, 0, status->scanner_state);
+    R = xx_ret_parameter(0, T, NULL, I, E, 0, 0, status->scanner_state);
 }
 
+// type &a = default_value
+xx_parameter(R) ::= xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(0, T, NULL, I, E, 0, 1, status->scanner_state);
+}
+
+// const type a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, T, NULL, I, E, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 0, 0, status->scanner_state);
 }
 
+// const type &a = default_value
+xx_parameter(R) ::= CONST xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(1, T, NULL, I, E, 0, 1, status->scanner_state);
+}
+
+// type! a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, T, NULL, I, E, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, E, 1, 0, status->scanner_state);
 }
 
+// type! &a = default_value
+xx_parameter(R) ::= xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(0, T, NULL, I, E, 1, 1, status->scanner_state);
+}
+
+// const type! a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, T, NULL, I, E, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 1, 0, status->scanner_state);
 }
 
+// const type! &a = default_value
+xx_parameter(R) ::= CONST xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(1, T, NULL, I, E, 1, 1, status->scanner_state);
+}
+
+// <cast> a = default_value
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, NULL, C, I, E, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, C, I, E, 0, 0, status->scanner_state);
 }
 
+// <cast> &a = default_value
+xx_parameter(R) ::= xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(0, NULL, C, I, E, 0, 1, status->scanner_state);
+}
+
+// const <cast> a = default_value
 xx_parameter(R) ::= CONST xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, NULL, C, I, E, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, E, 0, 0, status->scanner_state);
+}
+
+// const <cast> &a = default_value
+xx_parameter(R) ::= CONST xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+    R = xx_ret_parameter(1, NULL, C, I, E, 0, 1, status->scanner_state);
 }
 
 /* xx_parameter_cast */
