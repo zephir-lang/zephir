@@ -80,6 +80,10 @@ class SkipVariantInit
     public function passStatementBlock($branchNumber, array $statements)
     {
         foreach ($statements as $statement) {
+            if (!isset($statement['type'])) {
+                continue;
+            }
+
             switch ($statement['type']) {
                 case 'let':
                     $this->passLetStatement($branchNumber, $statement);

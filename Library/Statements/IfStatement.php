@@ -59,6 +59,16 @@ class IfStatement extends StatementAbstract
             $skipVariantInit->pass(0, new StatementsBlock($this->_statement['statements']));
             $skipVariantInit->pass(1, new StatementsBlock($this->_statement['else_statements']));
 
+            $lastBranchId = 1;
+
+            if (isset($this->_statement['elseif_statements'])) {
+                foreach ($this->_statement['elseif_statements'] as $statement) {
+                    $lastBranchId++;
+                    $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
+                    $skipVariantInit->pass($lastBranchId, new StatementsBlock($statement));
+                }
+            }
+
             $symbolTable = $compilationContext->symbolTable;
             foreach ($skipVariantInit->getVariables() as $variable) {
                 if ($symbolTable->hasVariable($variable)) {
