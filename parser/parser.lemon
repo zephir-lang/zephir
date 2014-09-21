@@ -413,7 +413,7 @@ static json_object *xx_ret_parameter(int const_param, json_object *type, json_ob
 		json_object_object_add(ret, "default", default_value);
 	}
 
-    json_object_object_add(ret, "reference", reference);
+    json_object_object_add(ret, "reference", json_object_new_int(reference));
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
