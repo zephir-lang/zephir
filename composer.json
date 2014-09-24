@@ -32,8 +32,8 @@
     },
     "bin": ["bin/zephir"],
     "scripts": {
-        "post-install-cmd": ["./install"],
-        "post-update-cmd": ["./install"]
+        "post-package-install": ["./install"],
+        "post-package-update": ["./install"]
     },
     "extra": {
         "branch-alias": {
