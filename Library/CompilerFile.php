@@ -590,6 +590,27 @@ class CompilerFile
                 }
             }
         }
+
+        $implementedInterfaces = $classDefinition->getImplementedInterfaces();
+        if ($implementedInterfaces) {
+            $interfaceDefinitions = array();
+
+            foreach ($implementedInterfaces as $interface) {
+                if ($compiler->isInterface($interface)) {
+                    $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
+                } else {
+                    if ($compiler->isInternalInterface($interface)) {
+                        $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
+                    } else {
+                        throw new CompilerException('Cannot locate interface "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                    }
+                }
+            }
+
+            if ($interfaceDefinitions) {
+                $classDefinition->setImplementedInterfaceDefinitions($interfaceDefinitions);
+            }
+        }
     }
 
     /**
