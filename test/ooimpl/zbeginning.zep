@@ -1,5 +1,5 @@
 namespace Test\OoImpl;
 
-interface Ovr
+interface ZBeginning
 {
 }
