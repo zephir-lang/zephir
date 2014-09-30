@@ -68,11 +68,12 @@ Compile the extension:
 ./bin/zephir compile
 ```
 
-Documentation & Blog
---------------------
-* A preliminary documentation can be found [here](http://zephir-lang.com/)
-* Official Blog can be found [here](http://blog.zephir-lang.com/)
-* Sublime/TextMate highlight-syntax bundle [here](http://github.com/phalcon/zephir-sublime)
+External Links
+--------------
+* [Documentation](http://zephir-lang.com/)
+* [Official Blog](http://blog.zephir-lang.com/)
+* [Forum](http://forum.zephir-lang.com/)
+* [Twitter](http://twitter.com/phalconphp)
 
 License
 -------
@@ -80,7 +81,7 @@ Zephir is open-sourced software licensed under the MIT License. See the LICENSE 
 
 Contributing
 ------------
-[See `CONTRIBUTING.md`](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
+See [CONTRIBUTING.md](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
 
 Current Build Status
 --------------------
