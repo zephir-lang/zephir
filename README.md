@@ -82,18 +82,6 @@ Contributing
 ------------
 [See `CONTRIBUTING.md`](https://github.com/phalcon/zephir/blob/master/CONTRIBUTING.md) for details about contributions to this repository.
 
-Donate & Sponsor
-----------------
-Zephir is available to the public without charge, under the permissive MIT License.
-Zephir is available to everyone freely on terms that allow both non-commercial and commercial activity.
-This license allows for academics, for-profit software developers, volunteers and enthusiasts alike to
-collaborate together to make a better software for everyone.
-
-Donate allowing us to invest more time and resources to the project,
-ensuring it will be ready sooner and with loads of features.
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8N7LHE5QH376N)
-
 Current Build Status
 --------------------
 Zephir is built under Travis CI service. Every commit pushed to this repository will queue a build into the continuous integration service and will run all PHPUnit tests to ensure that everything is going well and the project is stable. The current build status is:
