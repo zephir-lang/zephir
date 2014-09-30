@@ -30,6 +30,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/exceptions.zep.c
 	test/exists.zep.c
 	test/exitdie.zep.c
+	test/extendedinterface.zep.c
 	test/factorial.zep.c
 	test/fannkuch.zep.c
 	test/fcall.zep.c

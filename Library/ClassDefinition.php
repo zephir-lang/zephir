@@ -49,6 +49,11 @@ class ClassDefinition
     protected $extendsClassDefinition;
 
     /**
+     * @var ClassDefinition[]
+     */
+    protected $implementedInterfaceDefinitions;
+
+    /**
      * @var ClassProperty[]
      */
     protected $properties = array();
@@ -188,7 +193,7 @@ class ClassDefinition
      */
     public function isAbstract()
     {
-        return $this->abstract;
+        return $this->abstract || $this->isInterface();
     }
 
     /**
@@ -297,6 +302,26 @@ class ClassDefinition
     }
 
     /**
+     * Sets the class definition for the implemented interfaces
+     *
+     * @param ClassDefinition[] $interfaceDefinitions
+     */
+    public function setImplementedInterfaceDefinitions(array $implementedInterfaceDefinitions)
+    {
+        $this->implementedInterfaceDefinitions = $implementedInterfaceDefinitions;
+    }
+
+    /**
+     * Returns the class definition for the implemented interfaces
+     *
+     * @return ClassDefinition[]
+     */
+    public function getImplementedInterfaceDefinitions()
+    {
+        return $this->implementedInterfaceDefinitions;
+    }
+
+    /**
      * Calculate the dependency rank of the class based on its dependencies
      *
      */
@@ -306,6 +331,14 @@ class ClassDefinition
             $classDefinition = $this->extendsClassDefinition;
             if (method_exists($classDefinition, 'increaseDependencyRank')) {
                 $classDefinition->increaseDependencyRank($this->dependencyRank * 2);
+            }
+        }
+
+        if ($this->implementedInterfaceDefinitions) {
+            foreach ($this->implementedInterfaceDefinitions as $interfaceDefinition) {
+                if (method_exists($interfaceDefinition, 'increaseDependencyRank')) {
+                    $interfaceDefinition->increaseDependencyRank($this->dependencyRank * 2);
+                }
             }
         }
     }

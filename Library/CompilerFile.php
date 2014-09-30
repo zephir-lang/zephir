@@ -200,7 +200,10 @@ class CompilerFile
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
 
         if (isset($topStatement['extends'])) {
-            $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
+            foreach ($topStatement['extends'] as &$extend) {
+                $extend['value'] = $this->getFullName($extend['value']);
+            }
+            $classDefinition->setImplementsInterfaces($topStatement['extends']);
         }
 
         $classDefinition->setType('interface');
@@ -585,6 +588,27 @@ class CompilerFile
                         throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
                     }
                 }
+            }
+        }
+
+        $implementedInterfaces = $classDefinition->getImplementedInterfaces();
+        if ($implementedInterfaces) {
+            $interfaceDefinitions = array();
+
+            foreach ($implementedInterfaces as $interface) {
+                if ($compiler->isInterface($interface)) {
+                    $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
+                } else {
+                    if ($compiler->isInternalInterface($interface)) {
+                        $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
+                    } else {
+                        throw new CompilerException('Cannot locate interface "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                    }
+                }
+            }
+
+            if ($interfaceDefinitions) {
+                $classDefinition->setImplementedInterfaceDefinitions($interfaceDefinitions);
             }
         }
     }

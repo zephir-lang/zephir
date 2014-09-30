@@ -32,6 +32,7 @@
 #include "test/exceptions.zep.h"
 #include "test/exists.zep.h"
 #include "test/exitdie.zep.h"
+#include "test/extendedinterface.zep.h"
 #include "test/factorial.zep.h"
 #include "test/fannkuch.zep.h"
 #include "test/fcall.zep.h"
