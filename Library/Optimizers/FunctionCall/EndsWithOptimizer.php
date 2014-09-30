@@ -44,7 +44,7 @@ class EndsWithOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 2) {
+        if (count($expression['parameters']) != 2 && count($expression['parameters']) != 3) {
             return false;
         }
 
@@ -61,6 +61,17 @@ class EndsWithOptimizer extends OptimizerAbstract
             return new CompiledExpression('bool', 'zephir_end_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')', $expression);
+        if (count($expression['parameters']) == 2) {
+            return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL)', $expression);
+        } else {
+            return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')', $expression);
+        }
     }
+
+
+
+
+
+
+
 }
