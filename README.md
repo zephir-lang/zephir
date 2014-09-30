@@ -72,7 +72,7 @@ External Links
 * [Documentation](http://zephir-lang.com/)
 * [Official Blog](http://blog.zephir-lang.com/)
 * [Forum](http://forum.zephir-lang.com/)
-* [Twitter](http://twitter.com/phalconphp)
+* [Twitter](http://twitter.com/zephirlang)
 
 License
 -------
