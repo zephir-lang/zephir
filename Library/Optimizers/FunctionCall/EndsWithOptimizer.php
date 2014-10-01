@@ -67,11 +67,4 @@ class EndsWithOptimizer extends OptimizerAbstract
             return new CompiledExpression('bool', 'zephir_end_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')', $expression);
         }
     }
-
-
-
-
-
-
-
 }
