@@ -47,4 +47,11 @@ class StatementsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('less', $t->testElseIf2(5, 10));
         $this->assertEquals('else', $t->testElseIf2(11, 10));
     }
+
+    public function test544Issue()
+    {
+        $t = new Statements;
+        var_dump($t->test544Issue(5));
+        var_dump($t->test544Issue(100));
+    }
 }
