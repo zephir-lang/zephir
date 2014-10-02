@@ -24,10 +24,12 @@
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
 
+zend_class_entry *test_testinterface_ce;
+zend_class_entry *test_methodinterface_ce;
+zend_class_entry *test_ooimpl_zbeginning_ce;
 zend_class_entry *test_diinterface_ce;
 zend_class_entry *test_extendedinterface_ce;
-zend_class_entry *test_methodinterface_ce;
-zend_class_entry *test_testinterface_ce;
+zend_class_entry *test_ooimpl_abeginning_ce;
 zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_properties_publicproperties_ce;
@@ -302,10 +304,12 @@ static PHP_MINIT_FUNCTION(test)
 	setlocale(LC_ALL, "C");
 #endif
 
+	ZEPHIR_INIT(Test_TestInterface);
+	ZEPHIR_INIT(Test_MethodInterface);
+	ZEPHIR_INIT(Test_OoImpl_ZBeginning);
 	ZEPHIR_INIT(Test_DiInterface);
 	ZEPHIR_INIT(Test_ExtendedInterface);
-	ZEPHIR_INIT(Test_MethodInterface);
-	ZEPHIR_INIT(Test_TestInterface);
+	ZEPHIR_INIT(Test_OoImpl_ABeginning);
 	ZEPHIR_INIT(Test_ConstantsParent);
 	ZEPHIR_INIT(Test_Oo_OoDynamicA);
 	ZEPHIR_INIT(Test_Properties_PublicProperties);

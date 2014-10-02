@@ -82,6 +82,8 @@
 #include "test/oo/oonoconstruct.zep.h"
 #include "test/oo/ooparams.zep.h"
 #include "test/oo/propertyaccess.zep.h"
+#include "test/ooimpl/abeginning.zep.h"
+#include "test/ooimpl/zbeginning.zep.h"
 #include "test/operator.zep.h"
 #include "test/optimizers/arraymerge.zep.h"
 #include "test/pdostatement.zep.h"
