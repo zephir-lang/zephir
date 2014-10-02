@@ -78,3 +78,41 @@ PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 
 }
 
+PHP_METHOD(Test_Statements, testElseIf1) {
+
+	zval *num_param = NULL;
+	int num, total = 10;
+
+	zephir_fetch_params(0, 1, 0, &num_param);
+
+	num = zephir_get_intval(num_param);
+
+
+	if (num < total) {
+		RETURN_STRING("less", 1);
+	} else if (num == total) {
+		RETURN_STRING("equal", 1);
+	} else {
+		RETURN_STRING("else", 1);
+	}
+
+}
+
+PHP_METHOD(Test_Statements, testElseIf2) {
+
+	zval *num, *total;
+
+	zephir_fetch_params(0, 2, 0, &num, &total);
+
+
+
+	if (ZEPHIR_LT(num, total)) {
+		RETURN_STRING("less", 1);
+	} else if (ZEPHIR_IS_EQUAL(num, total)) {
+		RETURN_STRING("equal", 1);
+	} else {
+		RETURN_STRING("else", 1);
+	}
+
+}
+

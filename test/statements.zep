@@ -29,6 +29,30 @@ class Statements
 
 		let result3 = strpos(this->tmp2, this->tmp1);
 
-		let result4 = strpos(this->tmp2, this->tmp1);
-	}
+        let result4 = strpos(this->tmp2, this->tmp1);
+    }
+
+    public function testElseIf1(int num)
+    {
+        var total = 10;
+
+        if (num < total) {
+            return "less";
+        } elseif (num == total) {
+            return "equal";
+        } else {
+            return "else";
+        }
+    }
+
+    public function testElseIf2(var num, var total)
+    {
+        if (num < total) {
+            return "less";
+        } elseif (num == total) {
+            return "equal";
+        } else {
+            return "else";
+        }
+    }
 }
