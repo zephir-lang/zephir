@@ -19,11 +19,15 @@
     },
     "require": {
         "php": "~5.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-hash": "*",
+        "ext-ctype": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.5.2",
-        "ext-gmp": "*"
+        "ext-gmp": "*",
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*"
     },
     "autoload": {
         "psr-4": {
