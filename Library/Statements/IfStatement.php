@@ -47,24 +47,34 @@ class IfStatement extends StatementAbstract
         /**
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
-        if (isset($this->_statement['statements']) && isset($this->_statement['else_statements'])) {
+        if (isset($this->_statement['statements']) && (isset($this->_statement['else_statements']) || isset($this->_statement['elseif_statements']))) {
 
             $readDetector = new ReadDetector();
 
             $skipVariantInit = new SkipVariantInit();
 
             $skipVariantInit->setVariablesToSkip(0, $expr->getUsedVariables());
-            $skipVariantInit->setVariablesToSkip(1, $expr->getUsedVariables());
-
             $skipVariantInit->pass(0, new StatementsBlock($this->_statement['statements']));
-            $skipVariantInit->pass(1, new StatementsBlock($this->_statement['else_statements']));
 
-            $lastBranchId = 1;
+            $lastBranchId = 0;
+
+            if (isset($this->_statement['else_statements'])) {
+                ++$lastBranchId;
+                $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
+                $skipVariantInit->pass($lastBranchId, new StatementsBlock($this->_statement['else_statements']));
+            }
 
             if (isset($this->_statement['elseif_statements'])) {
-                foreach ($this->_statement['elseif_statements'] as $statement) {
+                foreach ($this->_statement['elseif_statements'] as $key => $statement) {
+                    $this->_statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
+
                     $lastBranchId++;
                     $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
+
+                    if (!isset($statement['statements'])) {
+                        continue;
+                    }
+
                     $skipVariantInit->pass($lastBranchId, new StatementsBlock($statement));
                 }
             }
@@ -80,18 +90,6 @@ class IfStatement extends StatementAbstract
                         }
                     }
                 }
-            }
-        }
-
-        /**
-         * Compile statements in the 'elseif' block
-         */
-        if (isset($this->_statement['elseif_statements'])) {
-            foreach ($this->_statement['elseif_statements'] as $key => $statement) {
-                if (!isset($statement['statements'])) {
-                    continue;
-                }
-                $this->_statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
             }
         }
 
