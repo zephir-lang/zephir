@@ -165,4 +165,3 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 	ZEPHIR_MM_RESTORE();
 
 }
-
