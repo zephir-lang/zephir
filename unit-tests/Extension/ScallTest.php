@@ -47,5 +47,8 @@ class ScallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($t->testCall13() == "hello parent public");
         $this->assertTrue($t->testCall14() == "hello parent protected");
+
+        $this->assertEquals("hello ScallParent", \Test\Scallparent::testCallStatic());
+        $this->assertEquals("hello Scall", $t::testCallStatic());
     }
 }

@@ -66,7 +66,7 @@ class NewInstanceOperator extends BaseOperator
         $symbolVariable->setDynamicTypes('object');
 
         $dynamic = false;
-        if ($expression['class'] == 'self') {
+        if (in_array($expression['class'], array('self', 'static'))) {
             $className = $compilationContext->classDefinition->getCompleteName();
         } else {
             $className = $expression['class'];

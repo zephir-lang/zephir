@@ -140,8 +140,8 @@ class Scall extends ScallParent
 		return j;
 	}
 
-    static protected function staticMethod()
-    {
-        return "Scall";
-    }
+        static protected function testMethodStatic()
+        {
+                return "hello Scall";
+        }
 }
