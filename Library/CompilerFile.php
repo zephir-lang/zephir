@@ -424,6 +424,24 @@ class CompilerFile
             }
 
             /**
+             * Register enums
+             */
+            if (isset($definition['enums'])) {
+                foreach ($definition['enums'] as $enum) {
+                    if (!isset($enum['statements'])) {
+                        continue;
+                    }
+                    foreach ($enum['statements'] as $i => $statement) {
+                        $classDefinition->addConstant(new ClassConstant(
+                            $enum['name'],
+                            isset($constant['default']) ? $constant['default'] : $i,
+                            isset($constant['docblock']) ? $constant['docblock'] : null
+                        ));
+                    }
+                }
+            }
+
+            /**
              * Register methods
              */
             if (isset($definition['methods'])) {
