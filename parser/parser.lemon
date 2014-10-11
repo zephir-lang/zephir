@@ -1395,24 +1395,80 @@ xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_methods_de
 	R = xx_ret_class_definition(C, M, NULL, NULL, status->scanner_state);
 }
 
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, NULL, E, status->scanner_state);
+}
+
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) . {
 	R = xx_ret_class_definition(C, NULL, K, NULL, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_enums_definition(E) xx_class_consts_definition(K) . {
+	R = xx_ret_class_definition(C, NULL, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_enums_definition(E) . {
+	R = xx_ret_class_definition(C, NULL, K, E, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) . {
 	R = xx_ret_class_definition(C, NULL, K, NULL, status->scanner_state);
 }
 
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_consts_definition(K) xx_class_properties_definition(C) . {
+	R = xx_ret_class_definition(C, NULL, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_enums_definition(E) . {
+	R = xx_ret_class_definition(C, NULL, K, E, status->scanner_state);
+}
+
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_methods_definition(M) . {
 	R = xx_ret_class_definition(NULL, M, K, NULL, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(NULL, M, NULL, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(NULL, M, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_methods_definition(M) xx_class_enums_definition(E) . {
+	R = xx_ret_class_definition(NULL, M, K, E, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
 	R = xx_ret_class_definition(C, M, K, NULL, status->scanner_state);
 }
 
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_enums_definition(E) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_enums_definition(E) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
+}
+
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
 	R = xx_ret_class_definition(C, M, K, NULL, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_enums_definition(E) xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_enums_definition(E) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_enums_definition(E) xx_class_methods_definition(M) . {
+	R = xx_ret_class_definition(C, M, K, E, status->scanner_state);
 }
 
 xx_interface_definition(R) ::= xx_class_consts_definition(C) . {
