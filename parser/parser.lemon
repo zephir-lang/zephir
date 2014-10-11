@@ -254,7 +254,7 @@ static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_
 	return ret;
 }
 
-static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
+static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, json_object *enums, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
@@ -266,6 +266,9 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	}
 	if (constants) {
 		json_object_object_add(ret, "constants", constants);
+	}
+	if (enums) {
+		json_object_object_add(ret, "enums", enums);
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -348,6 +351,45 @@ static json_object *xx_ret_class_const(xx_parser_token *T, json_object *default_
 
 	if (D) {
 		json_object_object_add(ret, "docblock", json_object_new_string(D->token));
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_enum(xx_parser_token *nameT, json_object *statements, xx_parser_token *dbT, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("enum"));
+	json_object_object_add(ret, "name", json_object_new_string(nameT->token));
+
+	if (statements) {
+		json_object_object_add(ret, "statements", statements);
+	}
+
+	if (dbT) {
+		json_object_object_add(ret, "docblock", dbT->token);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
+static json_object *xx_ret_enum_statement(xx_parser_token *nameT, json_object *default_value, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "name", json_object_new_string(nameT->token));
+
+	if (default_value) {
+		json_object_object_add(ret, "default", default_value);
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
@@ -1334,39 +1376,43 @@ xx_interface_body(R) ::= BRACKET_OPEN xx_interface_definition(D) BRACKET_CLOSE .
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) . {
-	R = xx_ret_class_definition(C, NULL, NULL, status->scanner_state);
+	R = xx_ret_class_definition(C, NULL, NULL, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(C) . {
-	R = xx_ret_class_definition(NULL, NULL, C, status->scanner_state);
+	R = xx_ret_class_definition(NULL, NULL, C, NULL, status->scanner_state);
+}
+
+xx_class_definition(R) ::= xx_class_enums_definition(E) . {
+	R = xx_ret_class_definition(NULL, NULL, NULL, E, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(NULL, M, NULL, status->scanner_state);
+	R = xx_ret_class_definition(NULL, M, NULL, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, NULL, status->scanner_state);
+	R = xx_ret_class_definition(C, M, NULL, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) . {
-	R = xx_ret_class_definition(C, NULL, K, status->scanner_state);
+	R = xx_ret_class_definition(C, NULL, K, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) . {
-	R = xx_ret_class_definition(C, NULL, K, status->scanner_state);
+	R = xx_ret_class_definition(C, NULL, K, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(NULL, M, K, status->scanner_state);
+	R = xx_ret_class_definition(NULL, M, K, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_properties_definition(C) xx_class_consts_definition(K) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, K, status->scanner_state);
+	R = xx_ret_class_definition(C, M, K, NULL, status->scanner_state);
 }
 
 xx_class_definition(R) ::= xx_class_consts_definition(K) xx_class_properties_definition(C) xx_class_methods_definition(M) . {
-	R = xx_ret_class_definition(C, M, K, status->scanner_state);
+	R = xx_ret_class_definition(C, M, K, NULL, status->scanner_state);
 }
 
 xx_interface_definition(R) ::= xx_class_consts_definition(C) . {
@@ -1455,6 +1501,14 @@ xx_class_consts_definition(R) ::= xx_class_const_definition(K) . {
 	R = xx_ret_list(NULL, K);
 }
 
+xx_class_enums_definition(R) ::= xx_class_enums_definition(L) xx_enum_definition(E) . {
+	R = xx_ret_list(L, E);
+}
+
+xx_class_enums_definition(R) ::= xx_enum_definition(E) . {
+	R = xx_ret_list(NULL, E);
+}
+
 xx_class_methods_definition(R) ::= xx_class_methods_definition(L) xx_class_method_definition(P) . {
 	R = xx_ret_list(L, P);
 }
@@ -1471,6 +1525,8 @@ xx_interface_methods_definition(R) ::= xx_interface_method_definition(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
+// const definition
+
 xx_class_const_definition(R) ::= COMMENT(C) CONST CONSTANT(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, C, status->scanner_state);
 }
@@ -1485,6 +1541,40 @@ xx_class_const_definition(R) ::= COMMENT(C) CONST IDENTIFIER(I) ASSIGN xx_litera
 
 xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) DOTCOMMA . {
 	R = xx_ret_class_const(I, E, NULL, status->scanner_state);
+}
+
+// enum definition
+
+xx_enum_definition(R) ::= COMMENT(C) ENUM IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_enum(I, NULL, C, status->scanner_state);
+}
+
+xx_enum_definition(R) ::= ENUM IDENTIFIER(I) BRACKET_OPEN BRACKET_CLOSE . {
+	R = xx_ret_enum(I, NULL, NULL, status->scanner_state);
+}
+
+xx_enum_definition(R) ::= COMMENT(C) ENUM IDENTIFIER(I) BRACKET_OPEN xx_enum_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_enum(I, S, C, status->scanner_state);
+}
+
+xx_enum_definition(R) ::= ENUM IDENTIFIER(I) BRACKET_OPEN xx_enum_statement_list(S) BRACKET_CLOSE . {
+	R = xx_ret_enum(I, S, NULL, status->scanner_state);
+}
+
+xx_enum_statement_list(R) ::= xx_enum_statement_list(L) COMMA xx_enum_statement(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_enum_statement_list(R) ::= xx_enum_statement(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
+xx_enum_statement(R) ::= IDENTIFIER(I) . {
+	R = xx_ret_enum_statement(I, NULL, status->scanner_state);
+}
+
+xx_enum_statement(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+	R = xx_ret_enum_statement(I, E, status->scanner_state);
 }
 
 /** method definition */
