@@ -1639,8 +1639,6 @@ class ClassMethod
 
                 switch ($dataType) {
                     case 'variable':
-                    case 'string':
-                    case 'array':
                     case 'resource':
                     case 'object':
                     case 'callable':

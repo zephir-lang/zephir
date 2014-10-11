@@ -74,4 +74,10 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
         $this->assertEquals(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
     }
+
+    public function testParamTypeString()
+    {
+        $t = new MethodArgs;
+        $this->assertEquals('test', $t->testParamTypeString(' test '));
+    }
 }
