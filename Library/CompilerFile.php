@@ -127,6 +127,7 @@ class CompilerFile
         $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->_filePath));
         $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
+        return zephir_parse_file($zepRealPath);
 
         if (PHP_OS == "WINNT") {
             $zephirParserBinary = ZEPHIRPATH . 'bin\zephir-parser.exe';

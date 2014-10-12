@@ -310,26 +310,6 @@ class Assign
 		return arr;
 	}
 
-	public function testAssign37()
-	{
-		var v = "abc";
-		var arr = [];
-		let arr = [
-			"a": ["b_key": "b_val", "b": []]
-		];
-
-		let arr["a"]["b"]["d_key"] = "d_val";
-		let arr["s"] = 1;
-		let arr["a"]["b"]["c"]["d"]["e"] = "f";
-		let arr[1] = [
-			2: [3: 4]
-		];
-
-		let arr[1][2][5] = 6;
-		let arr[1][2][v] = v;
-		return arr;
-	}
-
 	public function testPropertyAssign1()
 	{
 		let this->testVar = 1;
@@ -638,24 +618,6 @@ class Assign
 		return this->myArray;
 	}
 
-	public function testPropertyArray14()
-	{
-		var v = "abc";
-		let this->myArray = [
-			"a": ["b_key": "b_val"]
-		];
-		let this->myArray["a"]["b"]["d_key"] = "d_val";
-		let this->myArray[1] = [
-			2: [3: 4]
-		];
-
-		let this->myArray["s"] = 1;
-		let this->myArray["a"]["b"]["c"]["d"]["e"] = "f";
-		let this->myArray[1][2][5] = 6;
-		let this->myArray[1][2][v] = v;
-		return this->myArray;
-	}
-
 	public function testStaticPropertyAssign1()
 	{
 		let self::testVarStatic = 1;
@@ -780,24 +742,6 @@ class Assign
 		let self::testVarStatic[index][index] = 'A';
 		let self::testVarStatic[index][index] = "hello";
 		let self::testVarStatic[index][index] = [];
-		return self::testVarStatic;
-	}
-
-	public function testStaticPropertyArrayMulti4()
-	{
-		var v = "abc";
-		let self::testVarStatic = [
-			"a": ["b_key": "b_val"]
-		];
-		let self::testVarStatic["a"]["b"]["d_key"] = "d_val";
-		let self::testVarStatic[1] = [
-			2: [3: 4]
-		];
-
-		let self::testVarStatic["s"] = 1;
-		let self::testVarStatic["a"]["b"]["c"]["d"]["e"] = "f";
-		let self::testVarStatic[1][2][5] = 6;
-		let self::testVarStatic[1][2][v] = v;
 		return self::testVarStatic;
 	}
 
