@@ -15,6 +15,7 @@
 #include "kernel/exception.h"
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Exceptions) {
@@ -36,7 +37,7 @@ PHP_METHOD(Test_Exceptions, testException1) {
 PHP_METHOD(Test_Exceptions, testExceptionStringEscape) {
 
 
-	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello \"simple code\" test", "test/exceptions.zep", 13);
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello \\\"simple code\\\" test", "test/exceptions.zep", 13);
 	return;
 
 }
@@ -108,6 +109,40 @@ PHP_METHOD(Test_Exceptions, testException4) {
 	zephir_throw_exception_debug(_0, "test/exceptions.zep", 38 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 	return;
+
+}
+
+PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
+
+	zval *type_param = NULL;
+	zval *type = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &type_param);
+
+	zephir_get_strval(type, type_param);
+
+
+	do {
+		if (ZEPHIR_IS_STRING(type, "string")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "Test", "test/exceptions.zep", 45);
+			return;
+		}
+		if (ZEPHIR_IS_STRING(type, "char")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "t", "test/exceptions.zep", 47);
+			return;
+		}
+		if (ZEPHIR_IS_STRING(type, "int")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123", "test/exceptions.zep", 49);
+			return;
+		}
+		if (ZEPHIR_IS_STRING(type, "double")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123.123", "test/exceptions.zep", 51);
+			return;
+		}
+	} while(0);
+
+	ZEPHIR_MM_RESTORE();
 
 }
 
