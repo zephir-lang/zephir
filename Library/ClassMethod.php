@@ -1639,8 +1639,8 @@ class ClassMethod
 
                 switch ($dataType) {
                     case 'variable':
-                    case 'string':
-                    case 'array':
+                    /*case 'string':
+                    case 'array':*/
                     case 'resource':
                     case 'object':
                     case 'callable':
@@ -1697,7 +1697,7 @@ class ClassMethod
                         if ($mandatory) {
                             $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
                         } else {
-                            $initCode .= "\t".$this->assignZvalValue($parameter, $compilationContext);
+                            $initCode .= "\t" . $this->assignZvalValue($parameter, $compilationContext);
                         }
                     }
                 }
