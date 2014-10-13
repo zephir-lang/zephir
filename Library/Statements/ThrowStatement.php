@@ -19,12 +19,13 @@
 
 namespace Zephir\Statements;
 
+use Zephir\CodePrinter;
+use Zephir\CompilationContext;
+use Zephir\Compiler;
+use Zephir\CompilerException;
+use Zephir\Expression;
 use Zephir\Types;
 use Zephir\Utils;
-use Zephir\Compiler;
-use Zephir\Expression;
-use Zephir\CompilationContext;
-use Zephir\CompilerException;
 
 /**
  * ThrowStatement
@@ -49,29 +50,33 @@ class ThrowStatement extends StatementAbstract
          * This optimizes throw new Exception("hello")
          */
         if (!$compilationContext->insideTryCatch) {
-            if (isset($expr['class'])) {
-                if (isset($expr['parameters']) && count($expr['parameters']) == 1) {
-                    if ($expr['parameters'][0]['parameter']['type'] == 'string') {
-                        $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
-                        if ($compilationContext->compiler->isClass($className)) {
-                            $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                            $message = $expr['parameters'][0]['parameter']['value'];
-                            $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classDefinition->getClassEntry() . ', "' . Utils::addSlashes($message, true, Types::STRING) . '", "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ');');
-                            $codePrinter->output('return;');
-                            return;
-                        } else {
-                            if ($compilationContext->compiler->isInternalClass($className)) {
-                                $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
-                                if ($classEntry) {
-                                    $message = $expr['parameters'][0]['parameter']['value'];
-                                    $codePrinter->output('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(' . $classEntry . ', "' . Utils::addSlashes($message, true, Types::STRING) . '", "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ');');
-                                    $codePrinter->output('return;');
-                                    return;
-                                }
-                            }
-                        }
+            if (isset($expr['class']) &&
+                isset($expr['parameters']) &&
+                count($expr['parameters']) == 1 &&
+                $expr['parameters'][0]['parameter']['type'] == 'string'
+            ) {
+                $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                if ($compilationContext->compiler->isClass($className)) {
+                    $classDefinition = $compilationContext->compiler->getClassDefinition($className);
+                    $message = $expr['parameters'][0]['parameter']['value'];
+                    $class = $classDefinition->getClassEntry();
+                    $this->throwStringException($codePrinter, $class, $message, $statement['expr']);
+
+                    return;
+                } elseif ($compilationContext->compiler->isInternalClass($className)) {
+                    $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
+                    if ($classEntry) {
+                        $message = $expr['parameters'][0]['parameter']['value'];
+                        $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
+
+                        return;
                     }
                 }
+            } elseif (in_array($expr['type'], array('string', 'char', 'int', 'double'))) {
+                $class = $compilationContext->classDefinition->getClassEntryByClassName('Exception', $compilationContext);
+                $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
+
+                return;
             }
         }
 
@@ -99,5 +104,15 @@ class ThrowStatement extends StatementAbstract
         if ($variableVariable->isTemporal()) {
             $variableVariable->setIdle(true);
         }
+    }
+
+    private function throwStringException(CodePrinter $printer, $class, $message, $expression)
+    {
+        $message = Utils::addSlashes($message, true, Types::CHAR);
+        $path = Compiler::getShortUserPath($expression['file']);
+        $printer->output(
+            sprintf('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);', $class, $message, $path, $expression['line'])
+        );
+        $printer->output('return;');
     }
 }

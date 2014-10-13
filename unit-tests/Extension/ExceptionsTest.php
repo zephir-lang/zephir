@@ -19,37 +19,87 @@
 
 namespace Extension;
 
+use Test\Exceptions;
+
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException Test\Exception
+     * @expectedExceptionMessage hello1
+     */
     public function testException1()
     {
-        $this->setExpectedException('\Test\Exception', 'hello1');
-
-        $t = new \Test\Exceptions();
+        $t = new Exceptions();
         $t->testException1();
     }
 
+    /**
+     * @expectedException Test\Exception
+     * @expectedExceptionMessage hello2
+     */
     public function testException2()
     {
-        $this->setExpectedException('\Test\Exception', 'hello2');
-
-        $t = new \Test\Exceptions();
+        $t = new Exceptions();
         $t->testException2();
     }
 
+    /**
+     * @expectedException Test\Exception
+     * @expectedExceptionMessage hello3
+     */
     public function testException3()
     {
-        $this->setExpectedException('\Test\Exception', 'hello3');
-
-        $t = new \Test\Exceptions();
+        $t = new Exceptions();
         $t->testException3();
     }
 
+    /**
+     * @expectedException Test\Exception
+     * @expectedExceptionMessage hello4
+     */
     public function testException4()
     {
-        $this->setExpectedException('\Test\Exception', 'hello4');
-
-        $t = new \Test\Exceptions();
+        $t = new Exceptions();
         $t->testException4();
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Test
+     */
+    public function testExceptionString()
+    {
+        $t = new Exceptions();
+        $t->testExceptionLiteral('string');
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage t
+     */
+    public function testExceptionChar()
+    {
+        $t = new Exceptions();
+        $t->testExceptionLiteral('char');
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage 123
+     */
+    public function testExceptionInt()
+    {
+        $t = new Exceptions();
+        $t->testExceptionLiteral('int');
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage 123.123
+     */
+    public function testExceptionDouble()
+    {
+        $t = new Exceptions();
+        $t->testExceptionLiteral('double');
     }
 }
