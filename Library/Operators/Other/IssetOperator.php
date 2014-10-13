@@ -160,7 +160,7 @@ class IssetOperator extends BaseOperator
 
                             case 'variable':
                             case 'string':
-                                return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $expression['left']['right']);
+                                return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $left['right']);
 
                             default:
                                 throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);

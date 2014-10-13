@@ -1669,13 +1669,15 @@ class ClassMethod
                     $dataType = 'variable';
                 }
 
-                switch($dataType) {
+                switch ($dataType) {
+
                     case 'object':
                     case 'callable':
                     case 'resource':
                     case 'variable':
                         $name = $parameter['name'];
                         break;
+
                     default:
                         $name = $parameter['name'] . '_param';
                         break;
