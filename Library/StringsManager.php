@@ -141,7 +141,7 @@ class StringsManager
             $code .= "\t\t" . '}'. PHP_EOL . PHP_EOL;
             $code .= "\t\t" . 'offset = Z_STRLEN_PP(result);' . PHP_EOL;
             $code .= "\t\t" . 'length += offset;' . PHP_EOL;
-            $code .= "\t\t" . 'Z_STRVAL_PP(result) = (char *) erealloc(Z_STRVAL_PP(result), length + 1);' . PHP_EOL;
+            $code .= "\t\t" . 'Z_STRVAL_PP(result) = (char *) str_erealloc(Z_STRVAL_PP(result), length + 1);' . PHP_EOL;
             $code .= '' . PHP_EOL;
             $code .= "\t" .'} else {' . PHP_EOL;
             $code .= "\t\t" . 'Z_STRVAL_PP(result) = (char *) emalloc(length + 1);' . PHP_EOL;
@@ -201,7 +201,7 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) /* {{{
 	if (use_copy2) {
 		op2 = &op2_copy;
 	}
-	if (result==op1 && !IS_INTERNED(Z_STRVAL_P(op1))) {	/* special case, perform operations on result */
+	if (result == op1 && !IS_INTERNED(Z_STRVAL_P(op1))) {	/* special case, perform operations on result */
 		uint res_len = Z_STRLEN_P(op1) + Z_STRLEN_P(op2);
 
 		if (Z_STRLEN_P(result) < 0 || (int) (Z_STRLEN_P(op1) + Z_STRLEN_P(op2)) < 0) {
@@ -210,10 +210,10 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) /* {{{
 			zend_error(E_ERROR, "String size overflow");
 		}
 
-		Z_STRVAL_P(result) = erealloc(Z_STRVAL_P(result), res_len+1);
+		Z_STRVAL_P(result) = str_erealloc(Z_STRVAL_P(result), res_len+1);
 
-		memcpy(Z_STRVAL_P(result)+Z_STRLEN_P(result), Z_STRVAL_P(op2), Z_STRLEN_P(op2));
-		Z_STRVAL_P(result)[res_len]=0;
+		memcpy(Z_STRVAL_P(result) + Z_STRLEN_P(result), Z_STRVAL_P(op2), Z_STRLEN_P(op2));
+		Z_STRVAL_P(result)[res_len] = 0;
 		Z_STRLEN_P(result) = res_len;
 	} else {
 		int length = Z_STRLEN_P(op1) + Z_STRLEN_P(op2);
