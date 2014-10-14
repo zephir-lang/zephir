@@ -1404,6 +1404,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 		}
 
 		if (re_update) {
+
 			for (j = i - 1; j >= 0; j--) {
 
 				if (!re_update) {
