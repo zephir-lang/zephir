@@ -107,6 +107,9 @@ class Struct
             case 'bool':
                 return 'zend_bool';
 
+            case 'hash':
+                return 'HashTable* ';
+
             case 'int':
             case 'uint':
             case 'long':
@@ -151,6 +154,7 @@ class Struct
             case 'uint':
             case 'long':
             case 'double':
+            case 'hash':
                 return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
             default:
