@@ -85,6 +85,12 @@ class ComparisonBaseOperator extends BaseOperator
                 throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
             }
 
+            if ($variableVariable->isLocalOnly()) {
+                $variableName = '&' . $variableVariable->getName();
+            } else {
+                $variableName = $variableVariable->getName();
+            }
+
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
@@ -92,43 +98,43 @@ class ComparisonBaseOperator extends BaseOperator
                     switch ($value) {
 
                         case 'array':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_ARRAY';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY';
                             break;
 
                         case 'object':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_OBJECT';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_OBJECT';
                             break;
 
                         case 'null':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_NULL';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_NULL';
                             break;
 
                         case 'string':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_STRING';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_STRING';
                             break;
 
                         case 'int':
                         case 'integer':
                         case 'long':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_LONG';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG';
                             break;
 
                         case 'double':
                         case 'float':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_DOUBLE';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_DOUBLE';
                             break;
 
                         case 'boolean':
                         case 'bool':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_BOOL';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_BOOL';
                             break;
 
                         case 'resource':
-                            $condition = 'Z_TYPE_P(' . $variableVariable->getName() . ') ' . $operator . ' IS_RESOURCE';
+                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_RESOURCE';
                             break;
 
                         case 'callable':
-                            $condition = 'zephir_is_callable(' . $variableVariable->getName() . ' TSRMLS_CC) ' . $operator . ' 1';
+                            $condition = 'zephir_is_callable(' . $variableName . ' TSRMLS_CC) ' . $operator . ' 1';
                             break;
 
                         default:

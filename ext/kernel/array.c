@@ -1276,8 +1276,6 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 
 	SEPARATE_ZVAL_IF_NOT_REF(arr);
 
-	
-
 /*
 	memset(old_type, '\0', ZEPHIR_MAX_ARRAY_LEVELS);
 	memset(old_s, '\0', ZEPHIR_MAX_ARRAY_LEVELS);
@@ -1321,7 +1319,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 						zephir_array_update_string(&p, s, l, &tmp, PH_SEPARATE);
 						if (re_update) {
 							wrap_tmp = 1;
-						} else { 
+						} else {
 							p = tmp;
 						}
 					}
@@ -1351,7 +1349,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 						zephir_array_update_long(&p, ll, &tmp, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 						if (re_update) {
 							wrap_tmp = 1;
-						} else { 
+						} else {
 							p = tmp;
 						}
 					}
@@ -1381,7 +1379,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 						zephir_array_update_zval(&p, item, &tmp, PH_SEPARATE);
 						if (re_update) {
 							wrap_tmp = 1;
-						} else { 
+						} else {
 							p = tmp;
 						}
 					}
@@ -1395,6 +1393,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 		}
 
 		if (re_update) {
+
 			for (j = i - 1; j >= 0; j--) {
 
 				if (!re_update) {
