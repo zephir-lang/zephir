@@ -24,6 +24,7 @@ use Zephir\CompilerException;
 use Zephir\Passes\SkipVariantInit;
 use Zephir\StatementsBlock;
 use Zephir\Optimizers\EvalExpression;
+use Zephir\Detectors\ReadDetector;
 use Zephir\Branch;
 
 /**
@@ -48,6 +49,8 @@ class IfStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements']) && isset($this->_statement['else_statements'])) {
 
+            $readDetector = new ReadDetector();
+
             $skipVariantInit = new SkipVariantInit();
 
             $skipVariantInit->setVariablesToSkip(0, $expr->getUsedVariables());
@@ -61,8 +64,10 @@ class IfStatement extends StatementAbstract
                 if ($symbolTable->hasVariable($variable)) {
                     $symbolVariable = $symbolTable->getVariable($variable);
                     if ($symbolVariable->getType() == 'variable') {
-                        $symbolVariable->initVariant($compilationContext);
-                        $symbolVariable->skipInitVariant(2);
+                        if (!$readDetector->detect($variable, $exprRaw)) {
+                            $symbolVariable->initVariant($compilationContext);
+                            $symbolVariable->skipInitVariant(2);
+                        }
                     }
                 }
             }
