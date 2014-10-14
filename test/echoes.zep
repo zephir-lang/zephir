@@ -31,4 +31,14 @@ class Echoes
 	{
 		echo "hello";
 	}
+
+	public function testEcho6()
+	{
+		echo "hello here is a quote: \"";
+	}
+
+	public function testEcho7()
+	{
+		echo "\r\t echo' \"";
+	}
 }
