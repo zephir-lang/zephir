@@ -21,6 +21,18 @@ namespace Extension;
 
 class AssignTest extends \PHPUnit_Framework_TestCase
 {
+    public function getComplexArrayTestValue()
+    {
+        return array(
+            1 => array(2 => array(3 => 4, 5 => 6, "abc" => "abc")),
+            "a" => array(
+                "b_key" => "b_val",
+                "b" => array("d_key" => "d_val", "c" => array("d" => array("e" => "f")))
+            ),
+            "s" => 1
+        );
+    }
+    
     public function testAssign()
     {
         $t = new \Test\Assign();
@@ -61,6 +73,7 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testAssign34() === false);
         $this->assertTrue($t->testAssign35() === false);
         $this->assertTrue($t->testAssign36() === false);
+        $this->assertTrue($t->testAssign37() == $this->getComplexArrayTestValue());
     }
 
     public function testPropertyAssign()
@@ -79,6 +92,8 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testPropertyAssignStringConcat() === 'test string');
         $this->assertTrue($t->testArrayVarAssign1('test_index', 'value') == array('test_index' => 'value'));
         $this->assertTrue($t->testArrayVarAssign2('test_index', 'value') == array('test_index' => 'value'));
+        $this->assertTrue($t->testPropertyArray14() == $this->getComplexArrayTestValue());
+        $this->assertTrue($t->testStaticPropertyArrayMulti4() == $this->getComplexArrayTestValue());
     }
 
     public function testGlobalVarAssign()
