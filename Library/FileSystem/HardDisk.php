@@ -186,7 +186,7 @@ class HardDisk
                 file_put_contents($cacheFile, $hash);
                 $changed = true;
             } else {
-                if (filemtime($path) < filemtime($cacheFile)) {
+                if (filemtime($path) > filemtime($cacheFile)) {
                     $hash = hash_file($algorithm, $path);
                     file_put_contents($cacheFile, $hash);
                     $changed = true;

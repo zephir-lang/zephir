@@ -196,7 +196,7 @@ class Apc
                 apc_store($cacheFile . '-mtime', $hash);
                 $changed = true;
             } else {
-                if (filemtime($path) < filemtime($cacheFile)) {
+                if (filemtime($path) > filemtime($cacheFile)) {
                     $hash = hash_file($algorithm, $path);
                     apc_store($cacheFile, $hash);
                     apc_store($cacheFile . '-mtime', $hash);
