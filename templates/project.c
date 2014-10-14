@@ -24,6 +24,8 @@
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
 
+%EXTRA_INCLUDES%
+
 %CLASS_ENTRIES%
 
 ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
@@ -205,9 +207,6 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 
 	zephir_deinitialize_memory(TSRMLS_C);
 
-	//assert(ZEPHIR_GLOBAL(orm).parser_cache == NULL);
-	//assert(ZEPHIR_GLOBAL(orm).ast_cache == NULL);
-
 	return SUCCESS;
 }
 #endif
@@ -245,6 +244,8 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 
 static PHP_RSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
+
+	%DESTRUCTORS%
 
 	zephir_deinitialize_memory(TSRMLS_C);
 	return SUCCESS;

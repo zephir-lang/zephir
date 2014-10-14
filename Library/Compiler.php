@@ -124,6 +124,8 @@ class Compiler
     }
 
     /**
+     * Recursively pre-compiles all sources found in the given path
+     *
      * @param string $path
      *
      * @throws CompilerException
@@ -624,8 +626,8 @@ class Compiler
         /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
          */
-        $namespace = str_replace('\\', '_', $namespace);
-        $needConfigure = $this->createConfigFiles($namespace);
+        $namespace      = str_replace('\\', '_', $namespace);
+        $needConfigure  = $this->createConfigFiles($namespace);
         $needConfigure |= $this->createProjectFiles($namespace);
         $needConfigure |= $this->checkIfPhpized();
 
@@ -1127,6 +1129,8 @@ class Compiler
 
     /**
      * Generates phpinfo() sections showing information about the extension
+     *
+     * @return string
      */
     public function processExtensionInfo()
     {
@@ -1160,7 +1164,31 @@ class Compiler
     }
 
     /**
-     * Create project.c and project.h by compiled files to test extension
+     * Process extension destructors
+     *
+     * @param array $destructors
+     * @return array
+     */
+    public function processDestructors(array $destructors)
+    {
+        $codes = array();
+        $includes = array();
+
+        /**
+         * Destructors thrown when the request is being shutdown
+         */
+        if (isset($destructors['request'])) {
+            foreach ($destructors['request'] as $destructor) {
+                $codes[] = $destructor['code'] . ';';
+                $includes[] = "#include \"" . $destructor['include'] . "\"";
+            }
+        }
+
+        return array(join(PHP_EOL, $includes), join("\n\t", $codes));
+    }
+
+    /**
+     * Create project.c and project.h according to the current extension
      *
      * @param string $project
      *
@@ -1179,6 +1207,8 @@ class Compiler
             throw new Exception("Template project.c doesn't exist");
         }
 
+        $includes = '';
+        $destructors = '';
         $files = $this->files;
 
         /**
@@ -1280,6 +1310,16 @@ class Compiler
          */
         $phpInfo = $this->processExtensionInfo();
 
+        /**
+         * Check if there are module/request/global destructors
+         */
+        $destructors = $this->config->get('destructors');
+        if (is_array($destructors)) {
+            $invokeDestructors = $this->processDestructors($destructors);
+            $includes = $invokeDestructors[0];
+            $destructors = $invokeDestructors[1];
+        }
+
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
             '%PROJECT_LOWER%'       => strtolower($project),
@@ -1288,7 +1328,9 @@ class Compiler
             '%CLASS_ENTRIES%'       => implode(PHP_EOL, array_merge($completeInterfaceEntries, $completeClassEntries)),
             '%CLASS_INITS%'         => implode(PHP_EOL . "\t", array_merge($completeInterfaceInits, $completeClassInits)),
             '%INIT_GLOBALS%'        => $globalsDefault,
-            '%EXTENSION_INFO%'      => $phpInfo
+            '%EXTENSION_INFO%'      => $phpInfo,
+            '%EXTRA_INCLUDES%'      => $includes,
+            '%DESTRUCTORS%'         => $destructors
         );
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
