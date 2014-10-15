@@ -34,6 +34,7 @@ use Zephir\Statements\Let\ArrayIndex as LetArrayIndex;
 use Zephir\Statements\Let\ArrayIndexAppend as LetArrayIndexAppend;
 use Zephir\Statements\Let\ObjectProperty as LetObjectProperty;
 use Zephir\Statements\Let\ObjectDynamicProperty as LetObjectDynamicProperty;
+use Zephir\Statements\Let\ObjectDynamicStringProperty as LetObjectDynamicStringProperty;
 use Zephir\Statements\Let\ObjectPropertyAppend as LetObjectPropertyAppend;
 use Zephir\Statements\Let\ObjectPropertyArrayIndex as LetObjectPropertyArrayIndex;
 use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArrayIndexAppend;
@@ -164,7 +165,8 @@ class LetStatement extends StatementAbstract
                     break;
 
                 case 'string-dynamic-object-property':
-                    /* @todo, implement this */
+                    $let = new LetObjectDynamicStringProperty();
+                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'static-property':

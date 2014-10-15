@@ -60,5 +60,17 @@ class DynamicPropTest extends \PHPUnit_Framework_TestCase
 
         $class->setPropertyVariableBoolFalse('test');
         $this->assertEquals(false, $class->test);
+        
+        $class->setPropertyInt("property");
+        $this->assertEquals(10, $class->property);
+        
+        $class->setExistingStringProperty();
+        $this->assertEquals("works", $class->test);
+        
+        $class->setExistingStringPropertyString("test");
+        $this->assertEquals("test", $class->eproperty);
+        
+        $class->setNonExistingStringProperty();
+        $this->assertEquals("works", $class->property);
     }
 }
