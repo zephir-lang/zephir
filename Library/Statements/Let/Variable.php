@@ -1056,7 +1056,7 @@ class Variable
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
                                             /* Inherit the dynamic type data from the assigned value */
-                                            $symbolVariable->setDynamicTypes($itemVariable->getDynamicTypes());
+                                            $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
                                             $symbolVariable->setClassTypes($itemVariable->getClassTypes());
 
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
@@ -1097,7 +1097,7 @@ class Variable
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
                                             /* Inherit the dynamic type data from the assigned value */
-                                            $symbolVariable->setDynamicTypes($itemVariable->getDynamicTypes());
+                                            $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
                                             $symbolVariable->setClassTypes($itemVariable->getClassTypes());
 
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
