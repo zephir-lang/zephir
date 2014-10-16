@@ -988,7 +988,7 @@ class ClassMethod
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
-                $code .= "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) == IS_STRING)) {' . PHP_EOL;
+                $code .= "\tif (likely(Z_TYPE_P(" . $parameter['name'] . '_param) == IS_STRING)) {' . PHP_EOL;
                 $code .= "\t\tzephir_get_strval(" . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
                 $code .= "\t" . '} else {' . PHP_EOL;
                 $code .= "\t\tZEPHIR_INIT_VAR(" . $parameter['name'] . ');' . PHP_EOL;
