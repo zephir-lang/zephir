@@ -7,7 +7,6 @@ namespace Test;
 
 class ScallParent
 {
-
 	static public function testMethod1()
 	{
 		return "hello parent public";
@@ -18,4 +17,13 @@ class ScallParent
 		return "hello parent protected";
 	}
 
+        static public function testCallStatic()
+        {
+                return static::testMethodStatic();
+        }
+
+        static protected function testMethodStatic()
+        {
+                return "hello ScallParent";
+        }
 }

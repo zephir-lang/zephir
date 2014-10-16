@@ -155,7 +155,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
     {
 
         $compiler = $compilationContext->compiler;
-        if ($className != 'self' && $className != 'parent') {
+        if (!in_array($className, array('self', 'static', 'parent'))) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -167,7 +167,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
                 }
             }
         } else {
-            if ($className == 'self') {
+            if (in_array($className, array('self', 'static'))) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {

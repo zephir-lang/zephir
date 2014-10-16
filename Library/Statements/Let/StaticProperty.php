@@ -51,7 +51,7 @@ class StaticProperty
     public function assignStatic($className, $property, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
         $compiler = $compilationContext->compiler;
-        if ($className != 'self' && $className != 'parent') {
+        if (!in_array($className, array('self', 'static', 'parent'))) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -63,7 +63,7 @@ class StaticProperty
                 }
             }
         } else {
-            if ($className == 'self') {
+            if (in_array($className, array('self', 'static'))) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ($className == 'parent') {
