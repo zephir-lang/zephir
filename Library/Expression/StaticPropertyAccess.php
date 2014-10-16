@@ -71,7 +71,7 @@ class StaticPropertyAccess
     public function compile($expression, CompilationContext $compilationContext)
     {
         $className = $expression['left']['value'];
-        $compiler = &$compilationContext->compiler;
+        $compiler = $compilationContext->compiler;
         $property = $expression['right']['value'];
 
         /**
@@ -133,9 +133,7 @@ class StaticPropertyAccess
         if ($this->_expecting) {
             if ($this->_expectingVariable) {
                 $symbolVariable = $this->_expectingVariable;
-                if ($symbolVariable->getName() != 'return_value') {
-                    $symbolVariable->observeVariant($compilationContext);
-                } else {
+                if ($symbolVariable->getName() == 'return_value') {
                     $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
                 }
             } else {
@@ -160,9 +158,15 @@ class StaticPropertyAccess
             if ($this->_readOnly) {
                 $compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
             } else {
+                if ($symbolVariable->getName() != 'return_value') {
+                    $symbolVariable->observeVariant($compilationContext);
+                }
                 $compilationContext->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
             }
         } else {
+            if ($symbolVariable->getName() != 'return_value') {
+                $symbolVariable->observeVariant($compilationContext);
+            }
             $compilationContext->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
         }
 
