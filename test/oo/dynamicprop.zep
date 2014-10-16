@@ -68,4 +68,19 @@ class DynamicProp
 		var a = false;
 		let this->{property} = a;
 	}
+
+	public function setExistingStringProperty()
+	{
+		let this->{"test"} = "works";
+	}
+
+	public function setExistingStringPropertyString(string! value)
+	{
+		let this->{"eproperty"} = value;
+	}
+
+	public function setNonExistingStringProperty()
+	{
+		let this->{"property"} = "works";
+	}
 }
