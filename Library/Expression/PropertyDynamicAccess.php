@@ -150,7 +150,7 @@ class PropertyDynamicAccess
         /**
          * Variable that receives a property value must be polymorphic
          */
-        if ($symbolVariable->getType() != 'variable') {
+        if ($symbolVariable && !$symbolVariable->isVariable()) {
             throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign property value", $expression);
         }
 

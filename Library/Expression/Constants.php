@@ -210,7 +210,7 @@ class Constants
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
         }
 
