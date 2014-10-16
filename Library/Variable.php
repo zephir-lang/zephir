@@ -436,7 +436,7 @@ class Variable
         if ($types) {
             unset($this->_dynamicTypes['unknown']);
             if (is_string($types)) {
-                if (!isset($this->_dynamicType[$types])) {
+                if (!isset($this->_dynamicTypes[$types])) {
                     $this->_dynamicTypes[$types] = true;
                 }
             } else {
