@@ -716,7 +716,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	c = 0;
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -752,7 +752,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -789,7 +789,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -1472,7 +1472,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_EMPTY_STRING(b);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 6);
+	array_init_size(_0, 7);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 'a');
 	zephir_array_fast_append(_0, _1);
@@ -1676,7 +1676,7 @@ PHP_METHOD(Test_Flow, testFor35) {
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
 			ZEPHIR_INIT_NVAR(_3);
-			ZVAL_STRING(_3, "hello", 0);
+			ZVAL_STRING(_3, "hello", ZEPHIR_TEMP_PARAM_COPY);
 			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor35aux", &_4, _3);
 			zephir_check_temp_parameter(_3);
 			zephir_check_call_status();
@@ -1725,7 +1725,7 @@ PHP_METHOD(Test_Flow, testFor36) {
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
 			ZEPHIR_INIT_NVAR(_3);
-			ZVAL_STRING(_3, "hello", 0);
+			ZVAL_STRING(_3, "hello", ZEPHIR_TEMP_PARAM_COPY);
 			ZEPHIR_CALL_METHOD(NULL, this_ptr, "testfor36aux", &_4, _3);
 			zephir_check_temp_parameter(_3);
 			zephir_check_call_status();

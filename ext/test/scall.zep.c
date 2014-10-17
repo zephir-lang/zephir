@@ -395,3 +395,10 @@ PHP_METHOD(Test_Scall, testCall18) {
 
 }
 
+PHP_METHOD(Test_Scall, testMethodStatic) {
+
+
+	RETURN_STRING("hello Scall", 1);
+
+}
+

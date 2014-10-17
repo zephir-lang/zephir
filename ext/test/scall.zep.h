@@ -28,6 +28,7 @@ PHP_METHOD(Test_Scall, testCall15);
 PHP_METHOD(Test_Scall, testMethod16);
 PHP_METHOD(Test_Scall, testCall17);
 PHP_METHOD(Test_Scall, testCall18);
+PHP_METHOD(Test_Scall, testMethodStatic);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_scall_testmethod4, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -115,5 +116,6 @@ ZEPHIR_INIT_FUNCS(test_scall_method_entry) {
 	PHP_ME(Test_Scall, testMethod16, arginfo_test_scall_testmethod16, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Scall, testCall17, arginfo_test_scall_testcall17, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Scall, testCall18, arginfo_test_scall_testcall18, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Scall, testMethodStatic, NULL, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
   PHP_FE_END
 };

@@ -102,13 +102,12 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(str_param) == IS_STRING)) {
-		str = str_param;
+	if (likely(Z_TYPE_P(str_param) == IS_STRING)) {
+		zephir_get_strval(str, str_param);
 	} else {
 		ZEPHIR_INIT_VAR(str);
 		ZVAL_EMPTY_STRING(str);
 	}
-	ZEPHIR_SEPARATE_PARAM(str);
 
 
 	if (ZEPHIR_IS_STRING_IDENTICAL(str, "wrong testing")) {

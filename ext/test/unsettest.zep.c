@@ -148,7 +148,6 @@ PHP_METHOD(Test_Unsettest, testUnsetTypedArray) {
 	zephir_fetch_params(1, 2, 0, &arr_param, &key_param);
 
 	zephir_get_arrval(arr, arr_param);
-	ZEPHIR_SEPARATE_PARAM(arr);
 	zephir_get_strval(key, key_param);
 
 

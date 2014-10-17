@@ -294,7 +294,7 @@ class Call
      */
     public function getResolvedParams($parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null)
     {
-        $codePrinter = &$compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
 
         /**

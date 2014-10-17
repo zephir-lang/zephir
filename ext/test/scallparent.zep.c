@@ -12,6 +12,8 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/fcall.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -36,6 +38,25 @@ PHP_METHOD(Test_ScallParent, testMethod2) {
 
 
 	RETURN_STRING("hello parent protected", 1);
+
+}
+
+PHP_METHOD(Test_ScallParent, testCallStatic) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_ScallParent, testMethodStatic) {
+
+
+	RETURN_STRING("hello ScallParent", 1);
 
 }
 

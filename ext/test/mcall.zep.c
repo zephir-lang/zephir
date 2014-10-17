@@ -489,8 +489,8 @@ PHP_METHOD(Test_Mcall, optionalRequereString) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(param_param) == IS_STRING)) {
-		param = param_param;
+	if (likely(Z_TYPE_P(param_param) == IS_STRING)) {
+		zephir_get_strval(param, param_param);
 	} else {
 		ZEPHIR_INIT_VAR(param);
 		ZVAL_EMPTY_STRING(param);

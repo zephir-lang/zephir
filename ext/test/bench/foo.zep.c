@@ -170,7 +170,7 @@ PHP_METHOD(Test_Bench_Foo, empty_static) {
 
 	int _1;
 	zend_bool x, _0;
-	zval *n, *i = NULL, *_2 = NULL, *_3;
+	zval *n, *i = NULL, *_2 = NULL, *_3 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n);
@@ -192,6 +192,7 @@ PHP_METHOD(Test_Bench_Foo, empty_static) {
 			}
 			ZEPHIR_INIT_NVAR(i);
 			ZVAL_LONG(i, _1);
+			ZEPHIR_OBS_NVAR(_3);
 			zephir_read_static_property_ce(&_3, test_bench_foo_ce, SL("a") TSRMLS_CC);
 			x = ZEPHIR_IS_EMPTY(_3);
 		}

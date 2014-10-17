@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -44,8 +45,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyInt) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -54,7 +55,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyInt) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 10);
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -72,15 +73,15 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolTrue) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
 	}
 
 
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -98,15 +99,15 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolFalse) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
 	}
 
 
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -124,8 +125,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyString) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -134,7 +135,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyString) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "string", 1);
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -153,8 +154,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyChar) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -182,8 +183,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyUChar) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -210,15 +211,15 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
 	}
 
 
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -237,8 +238,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableInt) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -265,8 +266,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableString) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -294,8 +295,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -304,7 +305,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_BOOL(_0, a);
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -323,8 +324,8 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 		RETURN_MM_NULL();
 	}
 
-	if (unlikely(Z_TYPE_P(property_param) == IS_STRING)) {
-		property = property_param;
+	if (likely(Z_TYPE_P(property_param) == IS_STRING)) {
+		zephir_get_strval(property, property_param);
 	} else {
 		ZEPHIR_INIT_VAR(property);
 		ZVAL_EMPTY_STRING(property);
@@ -333,7 +334,59 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_BOOL(_0, a);
-	zephir_update_property_this(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setExistingStringProperty) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "works", 1);
+	zephir_update_property_zval(this_ptr, SL("test"),  _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setExistingStringPropertyString) {
+
+	zval *value_param = NULL;
+	zval *value = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value_param);
+
+	if (unlikely(Z_TYPE_P(value_param) != IS_STRING && Z_TYPE_P(value_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(value_param) == IS_STRING)) {
+		zephir_get_strval(value, value_param);
+	} else {
+		ZEPHIR_INIT_VAR(value);
+		ZVAL_EMPTY_STRING(value);
+	}
+
+
+	zephir_update_property_zval(this_ptr, SL("eproperty"), value TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Oo_DynamicProp, setNonExistingStringProperty) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "works", 1);
+	zephir_update_property_zval(this_ptr, SL("property"),  _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }

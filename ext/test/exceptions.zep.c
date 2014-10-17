@@ -89,7 +89,7 @@ PHP_METHOD(Test_Exceptions, getException) {
 
 	object_init_ex(return_value, test_exception_ce);
 	ZEPHIR_INIT_VAR(_0);
-	ZVAL_STRING(_0, "hello4", 0);
+	ZVAL_STRING(_0, "hello4", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, _0);
 	zephir_check_temp_parameter(_0);
 	zephir_check_call_status();

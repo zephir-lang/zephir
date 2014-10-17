@@ -210,9 +210,9 @@ PHP_METHOD(Test_Fcall, testCall1FromVar) {
 	ZEPHIR_INIT_VAR(funcName);
 	ZVAL_STRING(funcName, "strpos", 1);
 	ZEPHIR_INIT_VAR(_0);
-	ZVAL_STRING(_0, "hello", 0);
+	ZVAL_STRING(_0, "hello", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_INIT_VAR(_1);
-	ZVAL_STRING(_1, "l", 0);
+	ZVAL_STRING(_1, "l", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(funcName, NULL, _0, _1);
 	zephir_check_temp_parameter(_0);
 	zephir_check_temp_parameter(_1);

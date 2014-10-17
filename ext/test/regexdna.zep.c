@@ -50,7 +50,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 
 
 	ZEPHIR_INIT_VAR(variants);
-	array_init_size(variants, 12);
+	array_init_size(variants, 13);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "agggtaaa|tttaccct", 1);
 	zephir_array_fast_append(variants, _0);
@@ -159,7 +159,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 	ZEPHIR_INIT_VAR(_1);
 	ZEPHIR_CONCAT_SVS(_1, "/", stuffToRemove, "/mS");
 	ZEPHIR_INIT_BNVAR(_0);
-	ZVAL_STRING(_0, "", 0);
+	ZVAL_STRING(_0, "", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, _1, _0, contents);
 	zephir_check_temp_parameter(_0);
 	zephir_check_call_status();
