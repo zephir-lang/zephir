@@ -158,8 +158,6 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g TSRMLS
 				if (Z_REFCOUNT_PP(ptr) == 1) {
 					if (!Z_ISREF_PP(ptr)) {
 						zval_ptr_dtor(ptr);
-					} else {
-						efree(ptr);
 					}
 				} else {
 					Z_DELREF_PP(ptr);
