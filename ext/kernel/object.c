@@ -960,6 +960,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
 		}
@@ -975,6 +976,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				array_init(tmp);
 				separated = 1;
 			}
@@ -1026,6 +1028,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				tmp_arr = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp_arr, 0);
+				Z_UNSET_ISREF_P(tmp_arr);
 				separated = 1;
 			}
 		}
@@ -1041,6 +1044,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				tmp_arr = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp_arr, 0);
+				Z_UNSET_ISREF_P(tmp_arr);
 				array_init(tmp_arr);
 				separated = 1;
 			}
@@ -1250,6 +1254,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
 		}
@@ -1265,6 +1270,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				array_init(tmp);
 				separated = 1;
 			}
@@ -1308,6 +1314,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
 			Z_SET_REFCOUNT_P(tmp, 0);
+			Z_UNSET_ISREF_P(tmp);
 			separated = 1;
 		}
 	}
@@ -1323,6 +1330,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
 			Z_SET_REFCOUNT_P(tmp, 0);
+			Z_UNSET_ISREF_P(tmp);
 			array_init(tmp);
 			separated = 1;
 		}
@@ -1401,6 +1409,7 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
 		}
@@ -1664,6 +1673,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			tmp_arr = new_zv;
 			zval_copy_ctor(new_zv);
 			Z_SET_REFCOUNT_P(tmp_arr, 0);
+			Z_UNSET_ISREF_P(tmp_arr);
 			separated = 1;
 		}
 	}
@@ -1679,6 +1689,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			tmp_arr = new_zv;
 			zval_copy_ctor(new_zv);
 			Z_SET_REFCOUNT_P(tmp_arr, 0);
+			Z_UNSET_ISREF_P(tmp_arr);
 			array_init(tmp_arr);
 			separated = 1;
 		}
@@ -2014,6 +2025,7 @@ int zephir_property_incr(zval *object, char *property_name, unsigned int propert
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
 		}
@@ -2061,6 +2073,7 @@ int zephir_property_decr(zval *object, char *property_name, unsigned int propert
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
 				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
 		}
