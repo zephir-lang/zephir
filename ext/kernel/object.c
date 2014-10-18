@@ -1594,7 +1594,7 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 		return SUCCESS;
 	}
 #else
-	return zend_update_static_property(scope, name, name_length, value TSRMLS_DC);
+	return zend_update_static_property(scope, name, name_length, value TSRMLS_CC);
 #endif
 }
 

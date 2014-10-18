@@ -156,7 +156,11 @@ static void zephir_memory_restore_stack_common(zend_zephir_globals_def *g TSRMLS
 			ptr = active_memory->addresses[i];
 			if (EXPECTED(ptr != NULL && *(ptr) != NULL)) {
 				if (Z_REFCOUNT_PP(ptr) == 1) {
-					zval_ptr_dtor(ptr);
+					if (!Z_ISREF_PP(ptr)) {
+						zval_ptr_dtor(ptr);
+					} else {
+						efree(ptr);
+					}
 				} else {
 					Z_DELREF_PP(ptr);
 				}
