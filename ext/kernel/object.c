@@ -953,13 +953,15 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp);
-			tmp = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp);
+				tmp = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp, 0);
+				separated = 1;
+			}
 		}
 
 		/** Convert the value to array if not is an array */
@@ -1017,13 +1019,15 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp_arr) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp_arr);
-			tmp_arr = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp_arr, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp_arr)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp_arr);
+				tmp_arr = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp_arr, 0);
+				separated = 1;
+			}
 		}
 
 		/** Convert the value to array if not is an array */
@@ -1239,13 +1243,15 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp);
-			tmp = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp);
+				tmp = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp, 0);
+				separated = 1;
+			}
 		}
 
 		/** Convert the value to array if not is an array */
@@ -1295,13 +1301,15 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 
 	/** Separation only when refcount > 1 */
 	if (Z_REFCOUNT_P(tmp) > 1) {
-		zval *new_zv;
-		ALLOC_ZVAL(new_zv);
-		INIT_PZVAL_COPY(new_zv, tmp);
-		tmp = new_zv;
-		zval_copy_ctor(new_zv);
-		Z_SET_REFCOUNT_P(tmp, 0);
-		separated = 1;
+		if (!Z_ISREF_P(tmp)) {
+			zval *new_zv;
+			ALLOC_ZVAL(new_zv);
+			INIT_PZVAL_COPY(new_zv, tmp);
+			tmp = new_zv;
+			zval_copy_ctor(new_zv);
+			Z_SET_REFCOUNT_P(tmp, 0);
+			separated = 1;
+		}
 	}
 
 	/** Convert the value to array if not is an array */
@@ -1386,13 +1394,15 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp);
-			tmp = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp);
+				tmp = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp, 0);
+				separated = 1;
+			}
 		}
 
 		zephir_array_unset(&tmp, index, 0);
@@ -1608,7 +1618,7 @@ int zephir_read_static_property(zval **result, const char *class_name, unsigned 
 #if PHP_VERSION_ID < 50600
 		return zephir_read_static_property_ce(result, *ce, property_name, property_length TSRMLS_CC);
 #else
-		*result = zend_read_static_property(*ce, property_name, property_length, 1 TSRMLS_DC);
+		*result = zend_read_static_property(*ce, property_name, property_length, 1 TSRMLS_CC);
 		if (*result) {
 			Z_ADDREF_PP(result);
 			return SUCCESS;
@@ -1647,13 +1657,15 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 
 	/** Separation only when refcount > 1 */
 	if (Z_REFCOUNT_P(tmp_arr) > 1) {
-		zval *new_zv;
-		ALLOC_ZVAL(new_zv);
-		INIT_PZVAL_COPY(new_zv, tmp_arr);
-		tmp_arr = new_zv;
-		zval_copy_ctor(new_zv);
-		Z_SET_REFCOUNT_P(tmp_arr, 0);
-		separated = 1;
+		if (!Z_ISREF_P(tmp_arr)) {
+			zval *new_zv;
+			ALLOC_ZVAL(new_zv);
+			INIT_PZVAL_COPY(new_zv, tmp_arr);
+			tmp_arr = new_zv;
+			zval_copy_ctor(new_zv);
+			Z_SET_REFCOUNT_P(tmp_arr, 0);
+			separated = 1;
+		}
 	}
 
 	/** Convert the value to array if not is an array */
@@ -1995,13 +2007,15 @@ int zephir_property_incr(zval *object, char *property_name, unsigned int propert
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp);
-			tmp = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp);
+				tmp = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp, 0);
+				separated = 1;
+			}
 		}
 
 		zephir_increment(tmp);
@@ -2040,13 +2054,15 @@ int zephir_property_decr(zval *object, char *property_name, unsigned int propert
 
 		/** Separation only when refcount > 1 */
 		if (Z_REFCOUNT_P(tmp) > 1) {
-			zval *new_zv;
-			ALLOC_ZVAL(new_zv);
-			INIT_PZVAL_COPY(new_zv, tmp);
-			tmp = new_zv;
-			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
-			separated = 1;
+			if (!Z_ISREF_P(tmp)) {
+				zval *new_zv;
+				ALLOC_ZVAL(new_zv);
+				INIT_PZVAL_COPY(new_zv, tmp);
+				tmp = new_zv;
+				zval_copy_ctor(new_zv);
+				Z_SET_REFCOUNT_P(tmp, 0);
+				separated = 1;
+			}
 		}
 
 		zephir_decrement(tmp);
