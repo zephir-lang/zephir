@@ -1550,29 +1550,31 @@ static zval **zephir_std_get_static_property(zend_class_entry *ce, const char *p
 static int zephir_update_static_property_ex(zend_class_entry *scope, const char *name, int name_length,
 	zval **value, zend_property_info **property_info TSRMLS_DC)
 {
-	zval **property;
+	zval **property; zval **safe_value = NULL;
 	zend_class_entry *old_scope = EG(scope);
 
 	/**
 	 * We have to protect super globals to avoid them make converted to references
 	 */
 	if (*value == ZEPHIR_GLOBAL(global_null)) {
-		ALLOC_ZVAL(*value);
-		Z_UNSET_ISREF_PP(value);
-		Z_SET_REFCOUNT_PP(value, 0);
-		ZVAL_NULL(*value);
+		ALLOC_ZVAL(*safe_value);
+		Z_UNSET_ISREF_PP(safe_value);
+		Z_SET_REFCOUNT_PP(safe_value, 0);
+		ZVAL_NULL(*safe_value);
 	} else {
 		if (*value == ZEPHIR_GLOBAL(global_true)) {
-			ALLOC_ZVAL(*value);
-			Z_UNSET_ISREF_PP(value);
-			Z_SET_REFCOUNT_PP(value, 0);
-			ZVAL_BOOL(*value, 1);
+			ALLOC_ZVAL(*safe_value);
+			Z_UNSET_ISREF_PP(safe_value);
+			Z_SET_REFCOUNT_PP(safe_value, 0);
+			ZVAL_BOOL(*safe_value, 1);
 		} else {
 			if (*value == ZEPHIR_GLOBAL(global_false)) {
-				ALLOC_ZVAL(*value);
-				Z_UNSET_ISREF_PP(value);
-				Z_SET_REFCOUNT_PP(value, 0);
-				ZVAL_BOOL(*value, 0);
+				ALLOC_ZVAL(*safe_value);
+				Z_UNSET_ISREF_PP(safe_value);
+				Z_SET_REFCOUNT_PP(safe_value, 0);
+				ZVAL_BOOL(*safe_value, 0);
+			} else {
+				safe_value = value;
 			}
 		}
 	}
@@ -1588,25 +1590,25 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 	if (!property) {
 		return FAILURE;
 	} else {
-		if (*property != *value) {
+		if (*property != *safe_value) {
 			if (PZVAL_IS_REF(*property)) {
 				zval_dtor(*property);
-				Z_TYPE_PP(property) = Z_TYPE_PP(value);
-				(*property)->value = (*value)->value;
-				if (Z_REFCOUNT_PP(value) > 0) {
+				Z_TYPE_PP(property) = Z_TYPE_PP(safe_value);
+				(*property)->value = (*safe_value)->value;
+				if (Z_REFCOUNT_PP(safe_value) > 0) {
 					zval_copy_ctor(*property);
 				} else {
-					efree(*value);
-					*value = NULL;
+					efree(*safe_value);
+					*safe_value = NULL;
 				}
 			} else {
 				zval *garbage = *property;
 
-				Z_ADDREF_PP(value);
-				if (Z_ISREF_PP(value)) {
-					SEPARATE_ZVAL(value);
+				Z_ADDREF_PP(safe_value);
+				if (Z_ISREF_PP(safe_value)) {
+					SEPARATE_ZVAL(safe_value);
 				}
-				*property = *value;
+				*property = *safe_value;
 				zval_ptr_dtor(&garbage);
 			}
 		}
@@ -1621,15 +1623,7 @@ int zephir_read_static_property(zval **result, const char *class_name, unsigned 
 	unsigned int property_length TSRMLS_DC) {
 	zend_class_entry **ce;
 	if (zend_lookup_class(class_name, class_length, &ce TSRMLS_CC) == SUCCESS) {
-#if PHP_VERSION_ID < 50600
 		return zephir_read_static_property_ce(result, *ce, property_name, property_length TSRMLS_CC);
-#else
-		*result = zend_read_static_property(*ce, property_name, property_length, 1 TSRMLS_CC);
-		if (*result) {
-			Z_ADDREF_PP(result);
-			return SUCCESS;
-		}
-#endif
 	}
 	return FAILURE;
 }
