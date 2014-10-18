@@ -1558,6 +1558,7 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 		}
 	}
 
+#if PHP_VERSION_ID < 50600
 	EG(scope) = scope;
 #if PHP_VERSION_ID < 50400
 	property = zend_std_get_static_property(scope, name, name_length, 0 TSRMLS_CC);
@@ -1592,16 +1593,27 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 		}
 		return SUCCESS;
 	}
+#else
+	return zend_update_static_property(scope, name, name_length, value TSRMLS_DC);
+#endif
 }
 
 /**
  * Query a static property value from a zend_class_entry
  */
 int zephir_read_static_property(zval **result, const char *class_name, unsigned int class_length, char *property_name,
-	unsigned int property_length TSRMLS_DC){
+	unsigned int property_length TSRMLS_DC) {
 	zend_class_entry **ce;
 	if (zend_lookup_class(class_name, class_length, &ce TSRMLS_CC) == SUCCESS) {
+#if PHP_VERSION_ID < 50600
 		return zephir_read_static_property_ce(result, *ce, property_name, property_length TSRMLS_CC);
+#else
+		*result = zend_read_static_property(*ce, property_name, property_length, 1 TSRMLS_DC);
+		if (*result) {
+			Z_ADDREF_PP(result);
+			return SUCCESS;
+		}
+#endif
 	}
 	return FAILURE;
 }
@@ -1848,7 +1860,6 @@ int zephir_update_static_property(const char *class_name, unsigned int class_len
 	if (zend_lookup_class(class_name, class_length, &ce TSRMLS_CC) == SUCCESS) {
 		return zend_update_static_property(*ce, name, name_length, value TSRMLS_CC);
 	}
-
 	return FAILURE;
 }
 
