@@ -599,7 +599,7 @@ class Variable
      */
     public function setMustInitNull($mustInitNull)
     {
-        $this->_mustInitNull = $mustInitNull;
+        $this->_mustInitNull = (boolean) $mustInitNull;
     }
 
     /**
@@ -734,6 +734,7 @@ class Variable
                 } else {
                     if ($this->_variantInits > 0) {
                         if ($this->_initBranch === 1) {
+                            $this->setMustInitNull(true);
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
                         } else {
                             $this->_mustInitNull = true;
