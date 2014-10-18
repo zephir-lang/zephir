@@ -85,13 +85,18 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
 
 #define ZEPHIR_INIT_NVAR(z)\
 	if (z) { \
-		if (Z_REFCOUNT_P(z) > 1 || Z_ISREF_P(z)) { \
+		if (Z_REFCOUNT_P(z) > 1) { \
 			Z_DELREF_P(z); \
 			ALLOC_ZVAL(z); \
 			Z_SET_REFCOUNT_P(z, 1); \
 			Z_UNSET_ISREF_P(z); \
-		} else {\
-			zephir_dtor(z); \
+		} else { \
+			if (!Z_ISREF_P(z)) { \
+				zephir_dtor(z); \
+			} else { \
+				Z_SET_REFCOUNT_P(z, 1); \
+				Z_UNSET_ISREF_P(z); \
+			} \
 		} \
 		ZVAL_NULL(z); \
 	} else { \
@@ -102,8 +107,8 @@ void ZEPHIR_FASTCALL zephir_copy_ctor(zval *destiny, zval *origin);
  * Second allocation, assumes the variable was allocated for the first time in the branch zero
  */
 #define ZEPHIR_INIT_BNVAR(z) \
-	if (Z_REFCOUNT_P(z) > 1 || Z_ISREF_P(z)) { \
-		Z_DELREF_P(z); \
+	if (Z_REFCOUNT_P(z) > 1) { \
+		zephir_ptr_dtor(&z); \
 		ALLOC_ZVAL(z); \
 		Z_SET_REFCOUNT_P(z, 1); \
 		Z_UNSET_ISREF_P(z); \
