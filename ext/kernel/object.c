@@ -1414,7 +1414,7 @@ int zephir_unset_property_array(zval *object, char *property, unsigned int prope
 			}
 		}
 
-		zephir_array_unset(&tmp, index, 0);
+		zephir_array_unset(&tmp, index, PH_SEPARATE);
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, tmp TSRMLS_CC);
