@@ -38,6 +38,11 @@ class Variable
     protected $_dynamicTypes = array('unknown' => true);
 
     /**
+     * Variable's last type
+     */
+    protected $_lasttype;
+
+    /**
      * Variable's name
      */
     protected $_name;
@@ -439,6 +444,7 @@ class Variable
                 if (!isset($this->_dynamicType[$types])) {
                     $this->_dynamicTypes[$types] = true;
                 }
+                $this->_lasttype = $types;
             } else {
                 foreach ($types as $type => $one) {
                     if (!isset($this->_dynamicTypes[$type])) {
@@ -457,6 +463,16 @@ class Variable
     public function getDynamicTypes()
     {
         return $this->_dynamicTypes;
+    }
+
+    /**
+     * Returns the last type in a polimorphic variable
+     *
+     * @return array
+     */
+    public function getLastType()
+    {
+        return $this->_lasttype;
     }
 
     /**

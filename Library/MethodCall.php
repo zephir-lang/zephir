@@ -68,6 +68,19 @@ class MethodCall extends Call
 
                     case 'variable':
                         $caller = $variableVariable;
+                        $lasttype = $variableVariable->getLastType();
+                        if (!empty($lasttype)) {
+                            $methodname = $expression['name'];
+                            $builtInTypeClass = 'Zephir\Types\\' . ucfirst($lasttype) . 'Type';
+                            if (class_exists($builtInTypeClass)) {
+                                $tmpBuiltInType = new $builtInTypeClass;
+                                if ($tmpBuiltInType->hasMethod($methodname)) {
+                                    $builtInType = $tmpBuiltInType;
+                                    $caller = $exprCompiledVariable;
+                                    break;
+                                }
+                            }
+                        }
                         break;
 
                     default:
