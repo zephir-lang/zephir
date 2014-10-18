@@ -959,7 +959,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_SET_REFCOUNT_P(tmp, 1);
 				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
@@ -975,7 +975,7 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_SET_REFCOUNT_P(tmp, 1);
 				Z_UNSET_ISREF_P(tmp);
 				array_init(tmp);
 				separated = 1;
@@ -1027,7 +1027,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				INIT_PZVAL_COPY(new_zv, tmp_arr);
 				tmp_arr = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp_arr, 0);
+				Z_SET_REFCOUNT_P(tmp_arr, 1);
 				Z_UNSET_ISREF_P(tmp_arr);
 				separated = 1;
 			}
@@ -1043,7 +1043,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				INIT_PZVAL_COPY(new_zv, tmp_arr);
 				tmp_arr = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp_arr, 0);
+				Z_SET_REFCOUNT_P(tmp_arr, 1);
 				Z_UNSET_ISREF_P(tmp_arr);
 				array_init(tmp_arr);
 				separated = 1;
@@ -1080,7 +1080,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 						Z_DELREF_P(fetched);
 					}
 					if (!must_continue) {
-						re_update = Z_REFCOUNT_P(p) > 1;
+						re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 						if (i == (types_length - 1)) {
 							zephir_array_update_string(&p, s, l, value, PH_COPY | PH_SEPARATE);
 						} else {
@@ -1112,7 +1112,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 						Z_DELREF_P(fetched);
 					}
 					if (!must_continue) {
-						re_update = Z_REFCOUNT_P(p) > 1;
+						re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 						if (i == (types_length - 1)) {
 							zephir_array_update_long(&p, ll, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 						} else {
@@ -1144,7 +1144,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 						Z_DELREF_P(fetched);
 					}
 					if (!must_continue) {
-						re_update = Z_REFCOUNT_P(p) > 1;
+						re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 						if (i == (types_length - 1)) {
 							zephir_array_update_zval(&p, item, value, PH_COPY | PH_SEPARATE);
 						} else {
@@ -1161,7 +1161,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 					break;
 
 				case 'a':
-					re_update = Z_REFCOUNT_P(p) > 1;
+					re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 					zephir_array_append(&p, *value, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 					break;
 			}
@@ -1173,7 +1173,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 						break;
 					}
 
-					re_update = Z_REFCOUNT_P(old_p[j]) > 1;
+					re_update = Z_REFCOUNT_P(old_p[j]) > 1 && !Z_ISREF_P(old_p[j]);
 					switch (old_type[j]) {
 
 						case 's':
@@ -1253,7 +1253,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_SET_REFCOUNT_P(tmp, 1);
 				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
@@ -1269,7 +1269,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 0);
+				Z_SET_REFCOUNT_P(tmp, 1);
 				Z_UNSET_ISREF_P(tmp);
 				array_init(tmp);
 				separated = 1;
@@ -1313,7 +1313,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			INIT_PZVAL_COPY(new_zv, tmp);
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
+			Z_SET_REFCOUNT_P(tmp, 1);
 			Z_UNSET_ISREF_P(tmp);
 			separated = 1;
 		}
@@ -1329,7 +1329,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			INIT_PZVAL_COPY(new_zv, tmp);
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 0);
+			Z_SET_REFCOUNT_P(tmp, 1);
 			Z_UNSET_ISREF_P(tmp);
 			array_init(tmp);
 			separated = 1;
@@ -1672,7 +1672,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			INIT_PZVAL_COPY(new_zv, tmp_arr);
 			tmp_arr = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp_arr, 0);
+			Z_SET_REFCOUNT_P(tmp_arr, 1);
 			Z_UNSET_ISREF_P(tmp_arr);
 			separated = 1;
 		}
@@ -1688,7 +1688,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			INIT_PZVAL_COPY(new_zv, tmp_arr);
 			tmp_arr = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp_arr, 0);
+			Z_SET_REFCOUNT_P(tmp_arr, 1);
 			Z_UNSET_ISREF_P(tmp_arr);
 			array_init(tmp_arr);
 			separated = 1;
@@ -1725,7 +1725,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 					Z_DELREF_P(fetched);
 				}
 				if (!must_continue) {
-					re_update = Z_REFCOUNT_P(p) > 1;
+					re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 					if (i == (types_length - 1)) {
 						zephir_array_update_string(&p, s, l, value, PH_COPY | PH_SEPARATE);
 					} else {
@@ -1757,7 +1757,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 					Z_DELREF_P(fetched);
 				}
 				if (!must_continue) {
-					re_update = Z_REFCOUNT_P(p) > 1;
+					re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 					if (i == (types_length - 1)) {
 						zephir_array_update_long(&p, ll, value, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 					} else {
@@ -1789,7 +1789,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 					Z_DELREF_P(fetched);
 				}
 				if (!must_continue) {
-					re_update = Z_REFCOUNT_P(p) > 1;
+					re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 					if (i == (types_length - 1)) {
 						zephir_array_update_zval(&p, item, value, PH_COPY | PH_SEPARATE);
 					} else {
@@ -1806,7 +1806,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 				break;
 
 			case 'a':
-				re_update = Z_REFCOUNT_P(p) > 1;
+				re_update = Z_REFCOUNT_P(p) > 1 && !Z_ISREF_P(p);
 				zephir_array_append(&p, *value, PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
 				break;
 		}
@@ -1818,7 +1818,7 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 					break;
 				}
 
-				re_update = Z_REFCOUNT_P(old_p[j]) > 1;
+				re_update = Z_REFCOUNT_P(old_p[j]) > 1 && !Z_ISREF_P(old_p[j]);
 				switch (old_type[j]) {
 
 					case 's':
