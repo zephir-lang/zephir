@@ -1253,7 +1253,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 1);
+				Z_SET_REFCOUNT_P(tmp, 0);
 				Z_UNSET_ISREF_P(tmp);
 				separated = 1;
 			}
@@ -1269,7 +1269,7 @@ int zephir_update_property_array_string(zval *object, char *property, unsigned i
 				INIT_PZVAL_COPY(new_zv, tmp);
 				tmp = new_zv;
 				zval_copy_ctor(new_zv);
-				Z_SET_REFCOUNT_P(tmp, 1);
+				Z_SET_REFCOUNT_P(tmp, 0);
 				Z_UNSET_ISREF_P(tmp);
 				array_init(tmp);
 				separated = 1;
@@ -1313,7 +1313,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			INIT_PZVAL_COPY(new_zv, tmp);
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 1);
+			Z_SET_REFCOUNT_P(tmp, 0);
 			Z_UNSET_ISREF_P(tmp);
 			separated = 1;
 		}
@@ -1329,7 +1329,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			INIT_PZVAL_COPY(new_zv, tmp);
 			tmp = new_zv;
 			zval_copy_ctor(new_zv);
-			Z_SET_REFCOUNT_P(tmp, 1);
+			Z_SET_REFCOUNT_P(tmp, 0);
 			Z_UNSET_ISREF_P(tmp);
 			array_init(tmp);
 			separated = 1;
