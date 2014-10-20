@@ -461,6 +461,7 @@ int zephir_read_property(zval **result, zval *object, const char *property_name,
 		}
 
 		ALLOC_INIT_ZVAL(*result);
+		ZVAL_NULL(*result);
 		return FAILURE;
 	}
 
@@ -1480,15 +1481,18 @@ zval* zephir_fetch_static_property_ce(zend_class_entry *ce, const char *property
 }
 
 int zephir_read_static_property_ce(zval **result, zend_class_entry *ce, const char *property, int len TSRMLS_DC) {
-	assert(ce != NULL);
-
-	*result = zephir_fetch_static_property_ce(ce, property, len TSRMLS_CC);
-	if (*result) {
-		Z_ADDREF_PP(result);
+	zval *tmp;
+	tmp = zephir_fetch_static_property_ce(ce, property, len TSRMLS_CC);
+	if (tmp) {
+		if (!Z_ISREF_P(tmp)) {
+			*result = tmp;
+			Z_ADDREF_PP(result);
+		} else {
+			ALLOC_INIT_ZVAL(*result);
+			ZVAL_ZVAL(*result, tmp, 1, 0);
+		}
 		return SUCCESS;
 	}
-
-	return FAILURE;
 }
 
 #if PHP_VERSION_ID >= 50400
