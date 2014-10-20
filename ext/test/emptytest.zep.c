@@ -45,7 +45,7 @@ PHP_METHOD(Test_EmptyTest, testDynamicVarArrayEmpty) {
 
 PHP_METHOD(Test_EmptyTest, testDynamicVarArrayNotEmpty) {
 
-	zval *a, *_0;
+	zval *a, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 

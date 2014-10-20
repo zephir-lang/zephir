@@ -139,7 +139,7 @@ PHP_METHOD(Test_Ternary, testTernaryComplex3) {
  */
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable) {
 
-	zval *s;
+	zval *s = NULL;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(s);

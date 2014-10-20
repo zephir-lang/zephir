@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Test_Vars) {
 
 PHP_METHOD(Test_Vars, testVarDump) {
 
-	zval *a, *ar, *_0;
+	zval *a, *ar, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -53,7 +53,7 @@ PHP_METHOD(Test_Vars, testVarDump) {
 
 PHP_METHOD(Test_Vars, testVarDump2) {
 
-	zval *ret, *_0;
+	zval *ret, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &ret);
@@ -70,7 +70,7 @@ PHP_METHOD(Test_Vars, testVarDump2) {
 
 PHP_METHOD(Test_Vars, testVarExport) {
 
-	zval *a, *ar, *ret, *_0;
+	zval *a, *ar, *ret = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -191,7 +191,7 @@ PHP_METHOD(Test_Vars, testVarDump3param) {
 
 PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
-	zval *testVar, *_0, *_1;
+	zval *testVar, *_0 = NULL, *_1;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &testVar);

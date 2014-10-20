@@ -53,7 +53,7 @@ PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 	ZEPHIR_OBS_VAR(_0);
 	zephir_read_static_property_ce(&_0, test_concat_ce, SL("testProperty") TSRMLS_CC);
 	zephir_concat_function(title, _0, title TSRMLS_CC);
-	zephir_update_static_property_ce(test_concat_ce, SL("testProperty"), title TSRMLS_CC);
+	zephir_update_static_property_ce(test_concat_ce, SL("testProperty"), &title TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }

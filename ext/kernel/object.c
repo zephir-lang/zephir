@@ -1517,7 +1517,7 @@ static zval **zephir_std_get_static_property(zend_class_entry *ce, const char *p
 		}
 
 		#ifndef ZEPHIR_RELEASE
-		if (UNEXPECTED(!zend_verify_property_access(temp_property_info, ce TSRMLS_CC))) {
+		/*if (UNEXPECTED(!zend_verify_property_access(temp_property_info, ce TSRMLS_CC))) {
 			if (!silent) {
 				zend_error_noreturn(E_ERROR, "Cannot access %s property %s::$%s", zend_visibility_string(temp_property_info->flags), ce->name, property_name);
 			}
@@ -1529,7 +1529,7 @@ static zval **zephir_std_get_static_property(zend_class_entry *ce, const char *p
 				zend_error_noreturn(E_ERROR, "Access to undeclared static property: %s::$%s", ce->name, property_name);
 			}
 			return NULL;
-		}
+		}*/
 		#endif
 
 		zend_update_class_constants(ce TSRMLS_CC);

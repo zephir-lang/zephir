@@ -456,6 +456,30 @@ class Compiler
     }
 
     /**
+     * Returns GCC flags for current compilation
+     *
+     * @param boolean $development
+     * @return string
+     */
+    public function getGccFlags($development = false)
+    {
+        $gccFlags = getenv('CFLAGS');
+        if (!is_string($gccFlags)) {
+            if (!$development) {
+                $gccVersion = $this->getGccVersion();
+                if (version_compare($gccVersion, '4.6.0', '>=')) {
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
+                } else {
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
+                }
+            } else {
+                $gccFlags = '-O0 -g3';
+            }
+        }
+        return $gccFlags;
+    }
+
+    /**
      * Initializes a Zephir extension
      *
      * @param CommandInterface $command
@@ -662,8 +686,9 @@ class Compiler
      * Compiles the extension without installing it
      *
      * @param CommandInterface $command
+     * @param boolean $development
      */
-    public function compile(CommandInterface $command)
+    public function compile(CommandInterface $command, $development = false)
     {
         /**
          * Get global namespace
@@ -679,15 +704,7 @@ class Compiler
 
             $this->logger->output('Preparing configuration file...');
 
-            $gccFlags = getenv('CFLAGS');
-            if (!is_string($gccFlags)) {
-                $gccVersion = $this->getGccVersion();
-                if (version_compare($gccVersion, '4.6.0', '>=')) {
-                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto';
-                } else {
-                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
-                }
-            }
+            $gccFlags = $this->getGccFlags($development);
 
             exec(
                 'cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
@@ -696,12 +713,7 @@ class Compiler
 
         $currentDir = getcwd();
         $this->logger->output('Compiling...');
-        $verbose = ($this->config->get('verbose') ? true : false);
-        if ($verbose) {
-            passthru('cd ext && make -j2', $exit);
-        } else {
-            exec('cd ext && (make --silent -j2 2>' . $currentDir . '/compile-errors.log 1>' . $currentDir . '/compile.log)', $output, $exit);
-        }
+        exec('cd ext && (make --silent -j2 2>' . $currentDir . '/compile-errors.log 1>' . $currentDir . '/compile.log)', $output, $exit);
     }
 
     /**
@@ -729,10 +741,11 @@ class Compiler
      * Compiles and installs the extension
      *
      * @param CommandInterface $command
+     * @param boolean $development
      *
      * @throws Exception
      */
-    public function install(CommandInterface $command)
+    public function install(CommandInterface $command, $development = false)
     {
         /**
          * Get global namespace
@@ -743,19 +756,11 @@ class Compiler
         @unlink("compile-errors.log");
         @unlink("ext/modules/" . $namespace . ".so");
 
-        $this->compile($command);
+        $this->compile($command, $development);
 
         $this->logger->output('Installing...');
 
-        $gccFlags = getenv('CFLAGS');
-        if (!is_string($gccFlags)) {
-            $gccVersion = $this->getGccVersion();
-            if (version_compare($gccVersion, '4.6.0', '>=')) {
-                $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto';
-            } else {
-                $gccFlags = '-O2 -fvisibility=hidden -Wparentheses';
-            }
-        }
+        $gccFlags = $this->getGccFlags($development);
 
         $currentDir = getcwd();
         exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
@@ -816,7 +821,17 @@ class Compiler
      */
     public function build(CommandInterface $command)
     {
-        $this->install($command);
+        $this->install($command, false);
+    }
+
+    /**
+     * Compiles and installs the extension in development mode (debug symbols and no optimizations)
+     *
+     * @param CommandInterface $command
+     */
+    public function buildDev(CommandInterface $command)
+    {
+        $this->install($command, true);
     }
 
     /**

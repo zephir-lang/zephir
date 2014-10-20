@@ -98,7 +98,7 @@ PHP_METHOD(Test_Properties_StaticProtectedProperties, setSomeNull) {
 
 
 
-	zephir_update_static_property_ce(test_properties_staticprotectedproperties_ce, SL("someNull"), param TSRMLS_CC);
+	zephir_update_static_property_ce(test_properties_staticprotectedproperties_ce, SL("someNull"), &param TSRMLS_CC);
 
 }
 

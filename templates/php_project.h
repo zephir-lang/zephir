@@ -4,8 +4,6 @@
 #ifndef PHP_%PROJECT_UPPER%_H
 #define PHP_%PROJECT_UPPER%_H 1
 
-#define ZEPHIR_RELEASE 1
-
 #include "kernel/globals.h"
 
 #define PHP_%PROJECT_UPPER%_NAME        "%PROJECT_NAME%"
@@ -18,6 +16,8 @@
 %EXTENSION_STRUCT_GLOBALS%
 
 ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
+
+	int initialized;
 
 	/* Memory */
 	zephir_memory_entry *start_memory; /**< The first preallocated frame */

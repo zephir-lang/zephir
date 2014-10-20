@@ -71,7 +71,7 @@ PHP_METHOD(Test_Fibonnaci, fibDouble) {
 PHP_METHOD(Test_Fibonnaci, fibArray) {
 
 	int i, n, k, j;
-	zval *fib, *a, *b, *c = NULL, *_0;
+	zval *fib, *a, *b, *c = NULL, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -105,7 +105,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 	int i, n;
-	zval *fib, *_0, *_1, *_2, *_3 = NULL;
+	zval *fib, *_0 = NULL, *_1, *_2, *_3 = NULL;
 
 	ZEPHIR_MM_GROW();
 

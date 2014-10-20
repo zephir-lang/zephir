@@ -710,7 +710,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 	HashTable *_2;
 	HashPosition _1;
 	int c;
-	zval *v = NULL, *b, *_0, **_3;
+	zval *v = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -746,7 +746,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 	HashTable *_2;
 	HashPosition _1;
 	double c;
-	zval *v = NULL, *k = NULL, *b, *_0, **_3;
+	zval *v = NULL, *k = NULL, *b, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -782,7 +782,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 
 	HashTable *_2;
 	HashPosition _1;
-	zval *v = NULL, *b, *c, *_0, **_3;
+	zval *v = NULL, *b, *c, *_0 = NULL, **_3;
 
 	ZEPHIR_MM_GROW();
 
@@ -1465,7 +1465,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	HashPosition _2;
 	zval *_0;
 	zval *b;
-	zval *a = NULL, *_1, **_4;
+	zval *a = NULL, *_1 = NULL, **_4;
 
 	ZEPHIR_MM_GROW();
 

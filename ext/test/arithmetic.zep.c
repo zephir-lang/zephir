@@ -888,7 +888,7 @@ PHP_METHOD(Test_Arithmetic, addSum21) {
 PHP_METHOD(Test_Arithmetic, addSum22) {
 
 	int b, _0;
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -1750,7 +1750,7 @@ PHP_METHOD(Test_Arithmetic, sub21) {
 PHP_METHOD(Test_Arithmetic, sub22) {
 
 	int b, _0;
-	zval *a;
+	zval *a = NULL;
 
 	ZEPHIR_MM_GROW();
 

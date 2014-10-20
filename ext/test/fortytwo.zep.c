@@ -35,9 +35,9 @@ PHP_METHOD(Test_FortyTwo, proof) {
 	zend_bool _5;
 	HashTable *_3;
 	HashPosition _2;
-	zval *_0;
+	zval *_0 = NULL;
 	int i, j, _6, _7;
-	zval *box, *side = NULL, *_1, **_4, *_8;
+	zval *box, *side = NULL, *_1 = NULL, **_4, *_8;
 
 	ZEPHIR_MM_GROW();
 

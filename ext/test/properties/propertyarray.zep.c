@@ -36,7 +36,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PropertyArray) {
 
 PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 
-	zval *_1, *_3;
+	zval *_1 = NULL, *_3;
 	zval *_0, *_2;
 
 	ZEPHIR_MM_GROW();

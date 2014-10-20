@@ -44,7 +44,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 
 PHP_METHOD(Test_Json, testEncodeArray) {
 
-	zval *arr, *_0;
+	zval *arr, *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -66,7 +66,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 
 PHP_METHOD(Test_Json, testEncodeOptions) {
 
-	zval *arr, *_0, _1;
+	zval *arr, *_0 = NULL, _1;
 
 	ZEPHIR_MM_GROW();
 

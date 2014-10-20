@@ -197,7 +197,7 @@ void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS
 	Z_SET_REFCOUNT_P(zephir_globals_ptr->global_true, 2);
 	ZVAL_TRUE(zephir_globals_ptr->global_true);
 
-	//zephir_globals_ptr->initialized = 1;
+	zephir_globals_ptr->initialized = 1;
 }
 
 int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key)
@@ -250,16 +250,14 @@ void zephir_deinitialize_memory(TSRMLS_D)
 	size_t i;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 
-	//if (zephir_globals_ptr->initialized != 1) {
-	//	zephir_globals_ptr->initialized = 0;
-	//	return;
-	//}
+	if (zephir_globals_ptr->initialized != 1) {
+		zephir_globals_ptr->initialized = 0;
+		return;
+	}
 
 	if (zephir_globals_ptr->start_memory != NULL) {
 		zephir_clean_restore_stack(TSRMLS_C);
 	}
-
-	//zephir_orm_destroy_cache(TSRMLS_C);
 
 	zend_hash_apply_with_arguments(zephir_globals_ptr->fcache TSRMLS_CC, zephir_cleanup_fcache, 0);
 
@@ -285,7 +283,7 @@ void zephir_deinitialize_memory(TSRMLS_D)
 		zval_ptr_dtor(&zephir_globals_ptr->global_true);
 	}
 
-	//zephir_globals_ptr->initialized = 0;
+	zephir_globals_ptr->initialized = 0;
 }
 
 static PHP_MINIT_FUNCTION(test)
@@ -444,6 +442,7 @@ static PHP_MSHUTDOWN_FUNCTION(test)
  */
 static void php_zephir_init_globals(zend_test_globals *zephir_globals TSRMLS_DC)
 {
+	zephir_globals->initialized = 0;
 
 	/* Memory options */
 	zephir_globals->active_memory = NULL;

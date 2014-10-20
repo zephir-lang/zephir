@@ -126,7 +126,7 @@ PHP_METHOD(Test_Bench_Foo, write_static) {
 			ZVAL_LONG(i, _1);
 			ZEPHIR_INIT_ZVAL_NREF(_3);
 			ZVAL_LONG(_3, 0);
-			zephir_update_static_property_ce(test_bench_foo_ce, SL("a"), _3 TSRMLS_CC);
+			zephir_update_static_property_ce(test_bench_foo_ce, SL("a"), &_3 TSRMLS_CC);
 		}
 	}
 	ZEPHIR_MM_RESTORE();
