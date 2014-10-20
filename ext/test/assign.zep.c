@@ -1204,9 +1204,9 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign1) {
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_DOUBLE(_0, 1.5);
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC);
-	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
-	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
-	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
+	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &(ZEPHIR_GLOBAL(global_null)) TSRMLS_CC);
+	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &(ZEPHIR_GLOBAL(global_false)) TSRMLS_CC);
+	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &(ZEPHIR_GLOBAL(global_true)) TSRMLS_CC);
 	ZEPHIR_INIT_ZVAL_NREF(_0);
 	ZVAL_LONG(_0, 'A');
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC);

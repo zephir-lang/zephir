@@ -102,7 +102,7 @@ class StaticProperty
         switch ($resolvedExpr->getType()) {
 
             case 'null':
-                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &(ZEPHIR_GLOBAL(global_null)) TSRMLS_CC);');
                 break;
 
             case 'int':
@@ -160,12 +160,12 @@ class StaticProperty
 
             case 'bool':
                 if ($resolvedExpr->getBooleanCode() == '1') {
-                    $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
+                    $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &(ZEPHIR_GLOBAL(global_true)) TSRMLS_CC);');
                 } else {
                     if ($resolvedExpr->getBooleanCode() == '0') {
-                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &(ZEPHIR_GLOBAL(global_false)) TSRMLS_CC);');
                     } else {
-                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), (' . $resolvedExpr->getBooleanCode() . ') ? &ZEPHIR_GLOBAL(global_true) : &ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                        $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), (' . $resolvedExpr->getBooleanCode() . ') ? &(ZEPHIR_GLOBAL(global_true)) : &(ZEPHIR_GLOBAL(global_false)) TSRMLS_CC);');
                     }
                 }
                 break;
