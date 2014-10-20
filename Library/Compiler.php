@@ -527,8 +527,9 @@ class Compiler
     }
 
     /**
-     * @param CommandInterface $command
+     * Generates the C sources from Zephir without compiling them
      *
+     * @param CommandInterface $command
      * @return bool
      * @throws Exception
      */
@@ -634,7 +635,6 @@ class Compiler
         }
 
         $hash = md5($hash);
-
         $this->compiledFiles = $files;
 
         /**

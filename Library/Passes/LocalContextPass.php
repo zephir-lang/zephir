@@ -197,8 +197,17 @@ class LocalContextPass
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
 
+                        case 'cast':
+                            switch ($assignment['expr']['left']) {
+                                case 'array':
+                                case 'string':
+                                    $this->markVariableNoLocal($assignment['variable']);
+                                    break;
+                            }
+                            break;
+
                         default:
-                            //echo '[', $assignment['expr']['type'], ']';
+                            //echo '[', $assignment['expr']['type'], ']', PHP_EOL;
                     }
                     break;
 
