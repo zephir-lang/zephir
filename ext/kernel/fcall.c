@@ -604,7 +604,7 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 		} else {
 			ZVAL_NULL(mn);
 		}*/
-		zval_ptr_dtor(&mn);
+		//zval_ptr_dtor(&mn);
 	//}
 
 	if (status == FAILURE && !EG(exception)) {
