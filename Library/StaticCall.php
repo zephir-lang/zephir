@@ -478,7 +478,7 @@ class StaticCall extends Call
              */
             $symbolVariable->setDynamicTypes('undefined');
 
-            if ($symbolVariable->getType() != 'variable') {
+            if (!$symbolVariable->isVariable()) {
                 throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
             }
         }

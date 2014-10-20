@@ -51,8 +51,7 @@ class NewInstanceOperator extends BaseOperator
          * Resolves the symbol that expects the value
          */
         $symbolVariable = $this->getExpected($compilationContext, $expression);
-
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Objects can only be instantiated into dynamic variables", $expression);
         }
 

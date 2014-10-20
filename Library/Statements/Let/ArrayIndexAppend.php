@@ -166,7 +166,7 @@ class ArrayIndexAppend extends ArrayIndex
         /**
          * Only dynamic variables can be used as arrays
          */
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
         }
 

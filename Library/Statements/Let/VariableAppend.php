@@ -62,7 +62,7 @@ class VariableAppend
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
         }
 

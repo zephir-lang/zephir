@@ -53,7 +53,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 

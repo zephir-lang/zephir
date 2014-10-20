@@ -435,14 +435,15 @@ class Variable
     {
         if ($types) {
             unset($this->_dynamicTypes['unknown']);
+
             if (is_string($types)) {
-                if (!isset($this->_dynamicType[$types])) {
+                if (!isset($this->_dynamicTypes[$types])) {
                     $this->_dynamicTypes[$types] = true;
                 }
             } else {
                 foreach ($types as $type => $one) {
-                    if (!isset($this->_dynamicTypes[$type])) {
-                        $this->_dynamicTypes[$type] = true;
+                    if (!isset($this->_dynamicTypes[$one])) {
+                        $this->_dynamicTypes[$one] = true;
                     }
                 }
             }
@@ -954,12 +955,30 @@ class Variable
     }
 
     /**
+     * Shortcut is type double?
+     * @return bool
+     */
+    public function isArray()
+    {
+        return $this->_type == 'array';
+    }
+
+    /**
      * Shortcut is type variable or string?
      * @return bool
      */
     public function isNotVariableAndString()
     {
         return !$this->isVariable() && !$this->isString();
+    }
+
+    /**
+     * Shortcut is type variable or array?
+     * @return bool
+     */
+    public function isNotVariableAndArray()
+    {
+        return !$this->isVariable() && !$this->isArray();
     }
 
     /**

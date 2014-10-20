@@ -63,7 +63,7 @@ class CloneOperator extends BaseOperator
         }
 
         $symbolVariable = $this->getExpected($compilationContext, $expression);
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Objects can only be cloned into dynamic variables", $expression);
         }
 
