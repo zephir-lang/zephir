@@ -1493,6 +1493,8 @@ int zephir_read_static_property_ce(zval **result, zend_class_entry *ce, const ch
 		}
 		return SUCCESS;
 	}
+	ALLOC_INIT_ZVAL(*result);
+	return FAILURE;
 }
 
 #if PHP_VERSION_ID >= 50400
@@ -1660,9 +1662,12 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	int i, j, l, ll, re_update, must_continue, wrap_tmp;
 	int separated = 0;
 
-	zephir_read_static_property_ce(&tmp_arr, ce, property, property_length TSRMLS_CC);
-
-	Z_DELREF_P(tmp_arr);
+	tmp_arr = zephir_fetch_static_property_ce(ce, property, property_length TSRMLS_CC);
+	if (!tmp_arr) {
+		ALLOC_INIT_ZVAL(tmp_arr);
+		array_init(tmp_arr);
+		separated = 1;
+	}
 
 	/** Separation only when refcount > 1 */
 	if (Z_REFCOUNT_P(tmp_arr) > 1) {
