@@ -683,7 +683,7 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 		} \
 	}
 
-#if PHP_VERSION_ID < 50600
+#ifdef ZEPHIR_RELEASE
 #define ZEPHIR_TEMP_PARAM_COPY 0
 #define zephir_check_temp_parameter(param) do { if (Z_REFCOUNT_P(param) > 1) zval_copy_ctor(param); else ZVAL_NULL(param); } while(0)
 #else
