@@ -153,7 +153,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
         }
 

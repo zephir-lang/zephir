@@ -52,7 +52,7 @@ class ObjectDynamicProperty
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Variable type '" . $symbolVariable->getType() . "' cannot be used as object", $statement);
         }
 
@@ -67,7 +67,7 @@ class ObjectDynamicProperty
             throw new CompilerException("Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName() . "::" . $propertyName . "' because it is not initialized", $statement);
         }
 
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Cannot use variable type: " . $symbolVariable->getType() . " as an object", $statement);
         }
 

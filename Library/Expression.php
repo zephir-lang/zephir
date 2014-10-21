@@ -243,7 +243,7 @@ class Expression
         /**
          * Variable that receives property accesses must be polimorphic
          */
-        if ($symbolVariable->getType() != 'variable' && $symbolVariable->getType() != 'array') {
+        if (!$symbolVariable->isVariable() && $symbolVariable->getType() != 'array') {
             throw new CompilerException("Cannot use variable: " . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ") to create empty array", $expression);
         }
 
@@ -276,7 +276,7 @@ class Expression
         }
 
         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-        if ($symbolVariable->getType() != 'variable') {
+        if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Type-Hints only can be applied to dynamic variables", $expression);
         }
 
