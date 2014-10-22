@@ -83,6 +83,18 @@ class IfStatement extends StatementAbstract
             }
         }
 
+        /**
+         * Compile statements in the 'elseif' block
+         */
+        if (isset($this->_statement['elseif_statements'])) {
+            foreach ($this->_statement['elseif_statements'] as $key => $statement) {
+                if (!isset($statement['statements'])) {
+                    continue;
+                }
+                $this->_statement['elseif_statements'][$key]['condition'] = $expr->optimize($statement['expr'], $compilationContext);
+            }
+        }
+
         $compilationContext->codePrinter->output('if (' . $condition . ') {');
         $this->_evalExpression = $expr;
 
@@ -109,13 +121,13 @@ class IfStatement extends StatementAbstract
          * Compile statements in the 'elseif' block
          */
         if (isset($this->_statement['elseif_statements'])) {
-            foreach ($this->_statement['elseif_statements'] as $statement) {
+            foreach ($this->_statement['elseif_statements'] as $key => $statement) {
                 if (!isset($statement['statements'])) {
                     continue;
                 }
-                $condition = $expr->optimize($statement['expr'], $compilationContext);
-                $compilationContext->codePrinter->output('} else if (' . $condition . ') {');
+
                 $st = new StatementsBlock($statement['statements']);
+                $compilationContext->codePrinter->output('} else if (' . $statement['condition'] . ') {');
                 $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
                 $branch->setRelatedStatement($this);
             }

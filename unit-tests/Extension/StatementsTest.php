@@ -51,7 +51,8 @@ class StatementsTest extends \PHPUnit_Framework_TestCase
     public function test544Issue()
     {
         $t = new Statements;
-        var_dump($t->test544Issue(5));
-        var_dump($t->test544Issue(100));
+
+        $this->assertSame('====>...............................................................................................', $t->test544Issue(5));
+        $this->assertSame('====================================================================================================' . "\n", $t->test544Issue(100));
     }
 }
