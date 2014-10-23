@@ -177,6 +177,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'enum' {
+			s->active_char += sizeof("enum")-1;
+			token->opcode = XX_T_ENUM;
+			return 0;
+		}
+
 		'let' {
 			s->active_char += sizeof("let")-1;
 			token->opcode = XX_T_LET;

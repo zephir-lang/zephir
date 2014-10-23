@@ -152,6 +152,8 @@
 
 #define XX_T_ELSEIF 452
 
+#define XX_T_ENUM 453
+
 /* List of tokens and their names */
 typedef struct _xx_token_names {
 	unsigned int code;
