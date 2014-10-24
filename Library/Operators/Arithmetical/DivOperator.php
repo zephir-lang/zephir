@@ -210,7 +210,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
 
                             case 'double':
-                            	return new CompiledExpression('double', 'zephir_safe_div_long_double(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
+                                return new CompiledExpression('double', 'zephir_safe_div_long_double(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -369,7 +369,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 }
                                 break;
 
-							case 'double':
+                            case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variableLeft->isLocalOnly()) {
                                     $op1 = '&' . $variableLeft->getName();
@@ -472,7 +472,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
 
                             case 'double':
-                            	$compilationContext->headersManager->add('kernel/operators');
+                                $compilationContext->headersManager->add('kernel/operators');
                                 if ($variableLeft->isLocalOnly()) {
                                     $op1 = '&' . $variableLeft->getName();
                                 } else {

@@ -93,16 +93,12 @@ class PregMatchOptimizer extends OptimizerAbstract
          */
         $call->processExpectedReturn($context);
 
-        $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                    throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-            }
-            if ($call->mustInitSymbolVariable()) {
-                $symbolVariable->initVariant($context);
-            }
-        } else {
-            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
+        $symbolVariable = $call->getSymbolVariable(true, $context);
+
+        if (!$symbolVariable->isVariable()) {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
+        if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
 

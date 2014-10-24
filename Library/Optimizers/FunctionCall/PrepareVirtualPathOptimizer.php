@@ -56,16 +56,14 @@ class PrepareVirtualPathOptimizer extends OptimizerAbstract
          */
         $call->processExpectedReturn($context);
 
-        $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable) {
+        $symbolVariable = $call->getSymbolVariable(true, $context);
 
-            if ($symbolVariable->isNotVariableAndString()) {
-                throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-            }
+        if ($symbolVariable->isNotVariableAndString()) {
+            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+        }
 
-            if ($call->mustInitSymbolVariable()) {
-                $symbolVariable->initVariant($context);
-            }
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
