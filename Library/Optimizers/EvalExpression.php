@@ -52,6 +52,10 @@ class EvalExpression
         if ($expr['type'] == 'not') {
             $conditions = $this->optimize($expr['left'], $compilationContext);
             if ($conditions !== false) {
+                if ($this->_unreachable !== null) {
+                    $this->_unreachable = !$this->_unreachable;
+                    $this->_unreachableElse = !$this->_unreachableElse;
+                }
                 return '!(' . $conditions . ')';
             }
         }
