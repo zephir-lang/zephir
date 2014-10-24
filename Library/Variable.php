@@ -734,8 +734,7 @@ class Variable
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
                 } else {
                     if ($this->_variantInits > 0) {
-                        if ($this->_initBranch === 1) {
-                            $this->setMustInitNull(true);
+                        if ($this->_initBranch === 0) {
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
                         } else {
                             $this->_mustInitNull = true;
