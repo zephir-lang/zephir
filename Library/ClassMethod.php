@@ -1425,10 +1425,21 @@ class ClassMethod
                                 case 'int':
                                 case 'uint':
                                 case 'long':
-                                case 'char':
-                                case 'uchar':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
+                                    break;
+
+                                case 'char':
+                                case 'uchar':
+                                    if (strlen($defaultValue['value']) > 2) {
+                                        if (strlen($defaultValue['value']) > 10) {
+                                            throw new CompilerException("Invalid char literal: '" . substr($defaultValue['value'], 0, 10) . "...'", $defaultValue);
+                                        } else {
+                                            throw new CompilerException("Invalid char literal: '" . $defaultValue['value'] . "'", $defaultValue);
+                                        }
+                                    }
+                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
+                                    $initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', \'' . $defaultValue['value'] . '\');' . PHP_EOL;
                                     break;
 
                                 case 'null':
@@ -1640,8 +1651,6 @@ class ClassMethod
 
                 switch ($dataType) {
                     case 'variable':
-                    /*case 'string':
-                    case 'array':*/
                     case 'resource':
                     case 'object':
                     case 'callable':
@@ -1855,6 +1864,7 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
+
                 if (($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object') && $variable->mustInitNull()) {
                     if ($variable->isLocalOnly()) {
                         $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
@@ -1865,42 +1875,61 @@ class ClassMethod
                             $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
                         }
                     }
-                } else {
-                    if ($variable->isLocalOnly()) {
-                        $groupVariables[] = $variable->getName();
-                    } else {
-                        if ($variable->isDoublePointer()) {
-                            if ($variable->mustInitNull()) {
-                                $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
-                            } else {
-                                $groupVariables[] = $pointer . $pointer . $variable->getName();
-                            }
-                        } else {
-                            $defaultValue = $variable->getDefaultInitValue();
-                            if ($defaultValue !== null) {
-                                switch($type) {
-                                    case 'variable':
-                                    case 'string':
-                                    case 'array':
-                                    case 'resource':
-                                    case 'callable':
-                                    case 'object':
-                                        $groupVariables[] = $pointer . $variable->getName();
-                                        break;
-                                    default:
-                                        $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
-                                        break;
-                                }
-                            } else {
-                                if ($variable->mustInitNull() && $pointer) {
-                                    $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
-                                } else {
-                                    $groupVariables[] = $pointer . $variable->getName();
-                                }
-                            }
-                        }
-                    }
+                    continue;
                 }
+
+                if ($variable->isLocalOnly()) {
+                    $groupVariables[] = $variable->getName();
+                    continue;
+                }
+
+                if ($variable->isDoublePointer()) {
+                    if ($variable->mustInitNull()) {
+                        $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
+                    } else {
+                        $groupVariables[] = $pointer . $pointer . $variable->getName();
+                    }
+                    continue;
+                }
+
+                $defaultValue = $variable->getDefaultInitValue();
+                if ($defaultValue !== null) {
+
+                    switch($type) {
+
+                        case 'variable':
+                        case 'string':
+                        case 'array':
+                        case 'resource':
+                        case 'callable':
+                        case 'object':
+                            $groupVariables[] = $pointer . $variable->getName();
+                            break;
+
+                        case 'char':
+                            if (strlen($defaultValue) > 2) {
+                                if (strlen($defaultValue) > 10) {
+                                    throw new CompilerException("Invalid char literal: '" . substr($defaultValue, 0, 10) . "...'", $variable->getOriginal());
+                                } else {
+                                    throw new CompilerException("Invalid char literal: '" . $defaultValue . "'", $variable->getOriginal());
+                                }
+                            }
+                            /* no break */
+
+                        default:
+                            $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
+                            break;
+                    }
+
+                    continue;
+                }
+
+                if ($variable->mustInitNull() && $pointer) {
+                    $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
+                    continue;
+                }
+
+                $groupVariables[] = $pointer . $variable->getName();
             }
 
             $codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');

@@ -26,17 +26,17 @@ namespace Zephir;
  */
 class Logger
 {
-    private static $_files = array();
+    private static $files = array();
 
     /**
      * Stderr handler
      */
-    protected $_handler;
+    protected $handler;
 
     /**
      * @var Config
      */
-    protected $_config;
+    protected $config;
 
     /**
      * Logger constructor
@@ -45,7 +45,7 @@ class Logger
      */
     public function __construct(Config $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -56,10 +56,12 @@ class Logger
      */
     public function set($type, $value)
     {
-        $this->_config->set($type, $value, 'warnings');
+        $this->config->set($type, $value, 'warnings');
     }
 
     /**
+     * Sends a warning to the logger
+     *
      * @param $message
      * @param $type
      * @param $node
@@ -68,8 +70,8 @@ class Logger
      */
     public function warning($message, $type, $node)
     {
-        if (!$this->_config->get('silent')) {
-            if (!$this->_config->get($type, 'warnings')) {
+        if (!$this->config->get('silent')) {
+            if (!$this->config->get($type, 'warnings')) {
                 return false;
             }
 
@@ -102,11 +104,11 @@ class Logger
                 $warning .= PHP_EOL;
             }
 
-            if (!$this->_handler) {
-                $this->_handler = STDERR;
+            if (!$this->handler) {
+                $this->handler = STDERR;
             }
 
-            fprintf($this->_handler, Color::warning($warning));
+            fprintf($this->handler, "%s", Color::warning($warning));
 
             return true;
         }
@@ -115,12 +117,14 @@ class Logger
     }
 
     /**
+     * Outputs a message to stdout if the silent flag is not enabled
+     *
      * @param $message
      * @return bool
      */
     public function output($message)
     {
-        if (!$this->_config->get('silent')) {
+        if (!$this->config->get('silent')) {
             echo $message . PHP_EOL;
             return true;
         }
