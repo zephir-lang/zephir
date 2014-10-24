@@ -1907,7 +1907,7 @@ class ClassMethod
                             break;
 
                         case 'char':
-                            if (strlen($defaultValue) > 2) {
+                            if (strlen($defaultValue) > 4) {
                                 if (strlen($defaultValue) > 10) {
                                     throw new CompilerException("Invalid char literal: '" . substr($defaultValue, 0, 10) . "...'", $variable->getOriginal());
                                 } else {

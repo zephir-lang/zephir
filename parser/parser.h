@@ -8,9 +8,9 @@
 #define XX_QUESTION                        8
 #define XX_LIKELY                          9
 #define XX_UNLIKELY                       10
-#define XX_INSTANCEOF                     11
-#define XX_OR                             12
-#define XX_AND                            13
+#define XX_OR                             11
+#define XX_AND                            12
+#define XX_INSTANCEOF                     13
 #define XX_BITWISE_OR                     14
 #define XX_BITWISE_AND                    15
 #define XX_BITWISE_XOR                    16
