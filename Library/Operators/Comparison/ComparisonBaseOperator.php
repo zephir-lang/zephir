@@ -95,6 +95,77 @@ class ComparisonBaseOperator extends BaseOperator
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
+
+                case 'double':
+                    switch ($value) {
+
+                        case 'double':
+                            $condition = '1';
+                            break;
+
+                        default;
+                            $condition = '0';
+                            break;
+                    }
+                    break;
+
+                case 'int':
+                case 'integer':
+                case 'long':
+                    switch ($value) {
+
+                        case 'int':
+                        case 'integer':
+                        case 'long':
+                            $condition = '1';
+                            break;
+
+                        default;
+                            $condition = '0';
+                            break;
+                    }
+                    break;
+
+                case 'bool':
+                    switch ($value) {
+
+                        case 'bool':
+                        case 'boolean':
+                            $condition = '1';
+                            break;
+
+                        default;
+                            $condition = '0';
+                            break;
+                    }
+                    break;
+
+                case 'array':
+                    switch ($value) {
+
+                        case 'array':
+                            $condition = '1';
+                            break;
+
+                        default;
+                            $condition = '0';
+                            break;
+                    }
+                    break;
+
+                case 'string':
+                    switch ($value) {
+
+                        case 'string':
+                            $condition = '1';
+                            break;
+
+                        default;
+                            $condition = '0';
+                            break;
+                    }
+                    break;
+
                 case 'variable':
                     switch ($value) {
 
