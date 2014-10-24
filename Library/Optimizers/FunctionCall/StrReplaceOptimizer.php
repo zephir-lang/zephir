@@ -46,7 +46,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
         }
 
         if (count($expression['parameters']) != 3) {
-            throw new CompilerException("'str_replace' only accepts three parameter");
+            throw new CompilerException("'str_replace' only accepts three parameter", $expression);
         }
 
         /**

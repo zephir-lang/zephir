@@ -517,6 +517,17 @@ void zephir_fast_str_replace(zval *return_value, zval *search, zval *replace, zv
 		return;
 	}
 
+	/**
+	 * Fallback to userland function if the first parameter is an array
+	 */
+	if (Z_TYPE_P(search) == IS_ARRAY) {
+		do {
+			zval *params[] = { search, replace, subject };
+			zephir_call_func_aparams(&return_value, "str_replace", sizeof("str_replace")-1, NULL, 3, params TSRMLS_CC);
+			return;
+		} while(0);
+	}
+
 	if (Z_TYPE_P(replace) != IS_STRING) {
 		zend_make_printable_zval(replace, &replace_copy, &copy_replace);
 		if (copy_replace) {
@@ -922,54 +933,53 @@ void zephir_substr(zval *return_value, zval *str, long f, long l) {
 		RETURN_FALSE;
 	}
 
-		long str_len = Z_STRLEN_P(str);
+	long str_len = Z_STRLEN_P(str);
 
-		if ((l < 0 && -l > str_len)) {
-			RETURN_FALSE;
-		} else if (l > str_len) {
-			l = str_len;
-		} else if (l == 0) {
-			l = str_len;
-		}
+	if ((l < 0 && -l > str_len)) {
+		RETURN_FALSE;
+	} else if (l > str_len) {
+		l = str_len;
+	} else if (l == 0) {
+		l = str_len;
+	}
 
-		if (f > str_len) {
-			RETURN_FALSE;
-		} else if (f < 0 && -f > str_len) {
+	if (f > str_len) {
+		RETURN_FALSE;
+	} else if (f < 0 && -f > str_len) {
+		f = 0;
+	}
+
+	if (l < 0 && (l + str_len - f) < 0) {
+		RETURN_FALSE;
+	}
+
+	/* if "from" position is negative, count start position from the end
+	 * of the string
+	 */
+	if (f < 0) {
+		f = str_len + f;
+		if (f < 0) {
 			f = 0;
 		}
+	}
 
-		if (l < 0 && (l + str_len - f) < 0) {
-			RETURN_FALSE;
-		}
-
-
-		/* if "from" position is negative, count start position from the end
-		 * of the string
-		 */
-		if (f < 0) {
-			f = str_len + f;
-			if (f < 0) {
-				f = 0;
-			}
-		}
-
-		/* if "length" position is negative, set it to the length
-		 * needed to stop that many chars from the end of the string
-		 */
+	/* if "length" position is negative, set it to the length
+	 * needed to stop that many chars from the end of the string
+	 */
+	if (l < 0) {
+		l = (str_len - f) + l;
 		if (l < 0) {
-			l = (str_len - f) + l;
-			if (l < 0) {
-				l = 0;
-			}
+			l = 0;
 		}
+	}
 
-		if (f >= str_len) {
-			RETURN_FALSE;
-		}
+	if (f >= str_len) {
+		RETURN_FALSE;
+	}
 
-		if ((f + l) > str_len) {
-			l = str_len - f;
-		}
+	if ((f + l) > str_len) {
+		l = str_len - f;
+	}
 
 	if (l <= 0){
 		RETURN_EMPTY_STRING();

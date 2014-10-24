@@ -46,7 +46,7 @@ class UniquePathKeyOptimizer extends OptimizerAbstract
         }
 
         if (count($expression['parameters']) != 1) {
-            throw new CompilerException("'unique_path_key' only accepts three parameter");
+            throw new CompilerException("'unique_path_key' only accepts three parameter", $expression);
         }
 
         /**
