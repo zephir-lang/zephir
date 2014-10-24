@@ -506,7 +506,7 @@ void zephir_fast_stripos_str(zval *return_value, zval *haystack, char *needle, u
 /**
  * Immediate function resolution for str_replace function
  */
-void zephir_fast_str_replace(zval *return_value, zval *search, zval *replace, zval *subject) {
+void zephir_fast_str_replace(zval *return_value, zval *search, zval *replace, zval *subject TSRMLS_DC) {
 
 	zval replace_copy, search_copy;
 	int copy_replace = 0, copy_search = 0;
