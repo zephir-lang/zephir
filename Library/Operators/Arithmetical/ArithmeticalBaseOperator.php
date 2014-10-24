@@ -85,6 +85,8 @@ class ArithmeticalBaseOperator extends BaseOperator
     }
 
     /**
+     * Compiles the arithmetical operation
+     *
      * @param array $expression
      * @param CompilationContext $compilationContext
      */

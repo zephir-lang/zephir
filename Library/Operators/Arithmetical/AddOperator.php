@@ -19,6 +19,11 @@
 
 namespace Zephir\Operators\Arithmetical;
 
+/**
+ * AddOperator
+ *
+ * Generates an arithmetical operation according to the operands
+ */
 class AddOperator extends ArithmeticalBaseOperator
 {
 

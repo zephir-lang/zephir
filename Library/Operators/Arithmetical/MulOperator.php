@@ -19,6 +19,11 @@
 
 namespace Zephir\Operators\Arithmetical;
 
+/**
+ * MulOperator
+ *
+ * Generates an arithmetical operation according to the operands
+ */
 class MulOperator extends ArithmeticalBaseOperator
 {
 

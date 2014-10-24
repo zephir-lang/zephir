@@ -19,6 +19,11 @@
 
 namespace Zephir\Operators\Arithmetical;
 
+/**
+ * ModOperator
+ *
+ * Generates an arithmetical operation according to the operands
+ */
 class ModOperator extends ArithmeticalBaseOperator
 {
 
