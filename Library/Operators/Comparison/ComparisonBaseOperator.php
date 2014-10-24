@@ -100,10 +100,11 @@ class ComparisonBaseOperator extends BaseOperator
                     switch ($value) {
 
                         case 'double':
+                        case 'float':
                             $condition = '1';
                             break;
 
-                        default;
+                        default:
                             $condition = '0';
                             break;
                     }
@@ -120,7 +121,7 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = '1';
                             break;
 
-                        default;
+                        default:
                             $condition = '0';
                             break;
                     }
@@ -134,7 +135,7 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = '1';
                             break;
 
-                        default;
+                        default:
                             $condition = '0';
                             break;
                     }
@@ -147,7 +148,7 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = '1';
                             break;
 
-                        default;
+                        default:
                             $condition = '0';
                             break;
                     }
@@ -160,7 +161,7 @@ class ComparisonBaseOperator extends BaseOperator
                             $condition = '1';
                             break;
 
-                        default;
+                        default:
                             $condition = '0';
                             break;
                     }
