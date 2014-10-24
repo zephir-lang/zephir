@@ -473,6 +473,7 @@ class Variable
 
                                     /* Inherit the dynamic type data from the assigned value */
                                     $symbolVariable->setDynamicTypes('array');
+                                    $symbolVariable->increaseVariantIfNull();
 
                                     $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
                                 }
@@ -593,6 +594,7 @@ class Variable
 
                                     case 'assign':
                                         $symbolVariable->setMustInitNull(true);
+                                        $symbolVariable->increaseVariantIfNull();
                                         $compilationContext->symbolTable->mustGrownStack(true);
                                         if ($variable != $itemVariable->getName()) {
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
@@ -929,6 +931,7 @@ class Variable
 
                                     /* Inherit the dynamic type data from the assigned value */
                                     $symbolVariable->setDynamicTypes('array');
+                                    $symbolVariable->increaseVariantIfNull();
 
                                     $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
                                 }
@@ -1037,6 +1040,7 @@ class Variable
 
                                             /* Inherit the dynamic type data from the assigned value */
                                             $symbolVariable->setDynamicTypes('array');
+                                            $symbolVariable->increaseVariantIfNull();
 
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
                                         }
@@ -1058,6 +1062,7 @@ class Variable
                                             /* Inherit the dynamic type data from the assigned value */
                                             $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
                                             $symbolVariable->setClassTypes($itemVariable->getClassTypes());
+                                            $symbolVariable->increaseVariantIfNull();
 
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
                                             if ($itemVariable->isTemporal()) {
@@ -1093,12 +1098,14 @@ class Variable
 
                                     case 'assign':
                                         if ($itemVariable->getName() != $variable) {
+
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
                                             /* Inherit the dynamic type data from the assigned value */
                                             $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
                                             $symbolVariable->setClassTypes($itemVariable->getClassTypes());
+                                            $symbolVariable->increaseVariantIfNull();
 
                                             $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
                                             if ($itemVariable->isTemporal()) {

@@ -163,6 +163,7 @@ class Bootstrap
             }
 
             if (!isset(self::$commands[$action])) {
+
                 $message = 'Unrecognized action "' . $action . '"';
                 $metaphone = metaphone($action);
                 foreach (self::$commands as $key => $command) {

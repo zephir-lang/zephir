@@ -60,6 +60,7 @@ class ComparisonBaseOperator extends BaseOperator
             }
 
             if (isset($expr['type'])) {
+
                 switch ($expr['type']) {
 
                     case 'identical':
@@ -358,6 +359,9 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'ulong':
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 
+                            case 'double':
+                                return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
+
                             case 'char':
                             case 'uchar':
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
@@ -366,7 +370,6 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
 
                             case 'variable':
-
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
 
