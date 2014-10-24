@@ -12,10 +12,10 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Quantum) {
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 
 	dx = 0.02;
 	k0 = (3.0 * 3.14159265358979323846);
-	dt = ((dx * dx) / 4.0);
+	dt = zephir_safe_div_double_long((dx * dx), 4.0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(paramater);
 	array_init_size(paramater, 7);
 	ZEPHIR_INIT_VAR(_0);

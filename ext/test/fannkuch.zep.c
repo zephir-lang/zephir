@@ -111,7 +111,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 			ZEPHIR_OBS_NVAR(_8);
 			zephir_array_fetch_long(&_8, perm, 0, PH_NOISY, "test/fannkuch.zep", 49 TSRMLS_CC);
 			k = zephir_get_intval(_8);
-			k2 = (((((k + 1)) / 2)) - 1);
+			k2 = (long) (((zephir_safe_div_long_long(((k + 1)), 2 TSRMLS_CC)) - (double) (1)));
 			_11 = k2;
 			_10 = 0;
 			_9 = 0;

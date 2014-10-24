@@ -46,7 +46,7 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 	zephir_add_function(_0, i, j TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(_1);
 	zephir_add_function(&_1, i, j TSRMLS_CC);
-	RETURN_MM_LONG((1 / ((((zephir_get_numberval(_0) * (zephir_get_numberval(&_1) + 1)) / 2) + zephir_get_numberval(i)) + 1)));
+	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(_0) * (zephir_get_numberval(&_1) + 1)), 2 TSRMLS_CC) + zephir_get_numberval(i)) + (double) (1)) TSRMLS_CC));
 
 }
 
@@ -354,7 +354,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 		}
 	}
 	ZEPHIR_SINIT_VAR(_18);
-	ZVAL_LONG(&_18, (vBv / vv));
+	ZVAL_DOUBLE(&_18, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
 	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", &_19, &_18);
 	zephir_check_call_status();
 	RETURN_MM();

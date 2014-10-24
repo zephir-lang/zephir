@@ -339,6 +339,54 @@ class ComparisonBaseOperator extends BaseOperator
                 }
                 break;
 
+            case 'string':
+                $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                $compilationContext->codePrinter->output('ZVAL_STRING(&' . $variableLeft->getName() . ', "' . $left->getCode() . '", 0);');
+
+                switch ($right->getType()) {
+
+                    case 'null':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        if ($variableLeft->isLocalOnly()) {
+                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variableLeft->getName() . ', "")', $expression['left']);
+                        } else {
+                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeft->getName() . ', "")', $expression['left']);
+                        }
+                        break;
+
+                    case 'string':
+                        $compilationContext->headersManager->add('kernel/operators');
+                        if ($variableLeft->isLocalOnly()) {
+                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variableLeft->getName() . ', "' . $right->getCode() . '")', $expression['left']);
+                        } else {
+                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeft->getName() . ', "' . $right->getCode() . '")', $expression['left']);
+                        }
+                        break;
+
+                    case 'variable':
+                        $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
+                        switch ($variableRight->getType()) {
+
+                            case 'string':
+                            case 'variable':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                if ($variableLeft->isLocalOnly()) {
+                                    return new CompiledExpression('bool', $this->_zvalOperator . '(&' . $variableLeft->getName() . ', ' . $variableRight->getName() . ')', $expression);
+                                } else {
+                                    return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ')', $expression);
+                                }
+                                break;
+
+                            default:
+                                throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
+                        }
+                        break;
+
+                    default:
+                        throw new CompilerException("Unknown type: " . $right->getType(), $expression['left']);
+                }
+                break;
+
             case 'variable':
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
