@@ -247,13 +247,13 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(v);
 	object_init_ex(v, spl_ce_SplFixedArray);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
 	ZEPHIR_CALL_METHOD(NULL, v, "__construct", NULL, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(w);
 	object_init_ex(w, spl_ce_SplFixedArray);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
 	ZEPHIR_CALL_METHOD(NULL, w, "__construct", NULL, _0);
 	zephir_check_call_status();

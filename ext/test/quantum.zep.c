@@ -55,13 +55,13 @@ PHP_METHOD(Test_Quantum, Harmos) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_DOUBLE(_0, dx);
 	zephir_array_fast_append(paramater, _0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_DOUBLE(_0, k0);
 	zephir_array_fast_append(paramater, _0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_DOUBLE(_0, dt);
 	zephir_array_fast_append(paramater, _0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_DOUBLE(_0, x);
 	zephir_array_fast_append(paramater, _0);
 	i = 0;
@@ -133,7 +133,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 	j = 1;
 	ZEPHIR_INIT_VAR(tmp);
 	array_init_size(tmp, 2);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_DOUBLE(_0, 2.0);
 	zephir_array_fast_append(tmp, _0);
 	_16 = 20000;

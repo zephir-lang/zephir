@@ -117,7 +117,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 	ZEPHIR_INIT_VAR(matches);
 	ZVAL_NULL(matches);
 
-	ZEPHIR_INIT_BNVAR(matches);
+	ZEPHIR_INIT_NVAR(matches);
 	array_init(matches);
 	ZEPHIR_INIT_VAR(pattern);
 	ZVAL_STRING(pattern, "/def$/", 1);

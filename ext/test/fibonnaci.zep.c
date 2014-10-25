@@ -80,7 +80,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
 	zephir_array_fast_append(fib, _0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(fib, _0);
 	i = 2;
@@ -114,7 +114,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 0);
 	zephir_array_fast_append(fib, _0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(fib, _0);
 	i = 2;
