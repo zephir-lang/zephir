@@ -101,11 +101,11 @@ class ComparisonBaseOperator extends BaseOperator
 
                         case 'double':
                         case 'float':
-                            $condition = '1';
+                            $condition = '1 ' . $operator . ' 1';
                             break;
 
                         default:
-                            $condition = '0';
+                            $condition = '1 ' . $operator . ' 0';
                             break;
                     }
                     break;
@@ -118,11 +118,11 @@ class ComparisonBaseOperator extends BaseOperator
                         case 'int':
                         case 'integer':
                         case 'long':
-                            $condition = '1';
+                            $condition = '1 ' . $operator . ' 1';
                             break;
 
                         default:
-                            $condition = '0';
+                            $condition = '1 ' . $operator . ' 0';
                             break;
                     }
                     break;
@@ -132,11 +132,11 @@ class ComparisonBaseOperator extends BaseOperator
 
                         case 'bool':
                         case 'boolean':
-                            $condition = '1';
+                            $condition = '1 ' . $operator . ' 1';
                             break;
 
                         default:
-                            $condition = '0';
+                            $condition = '1 ' . $operator . ' 0';
                             break;
                     }
                     break;
@@ -145,11 +145,11 @@ class ComparisonBaseOperator extends BaseOperator
                     switch ($value) {
 
                         case 'array':
-                            $condition = '1';
+                            $condition = '1 ' . $operator . ' 1';
                             break;
 
                         default:
-                            $condition = '0';
+                            $condition = '1 ' . $operator . ' 0';
                             break;
                     }
                     break;
@@ -158,11 +158,11 @@ class ComparisonBaseOperator extends BaseOperator
                     switch ($value) {
 
                         case 'string':
-                            $condition = '1';
+                            $condition = '1 ' . $operator . ' 1';
                             break;
 
                         default:
-                            $condition = '0';
+                            $condition = '1 ' . $operator . ' 0';
                             break;
                     }
                     break;
@@ -187,8 +187,8 @@ class ComparisonBaseOperator extends BaseOperator
                             break;
 
                         case 'int':
-                        case 'integer':
                         case 'long':
+                        case 'integer':
                             $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG';
                             break;
 
