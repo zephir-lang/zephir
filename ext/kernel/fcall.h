@@ -658,13 +658,7 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC);
 #define ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER zephir_call_function
 #else
-/** Improved version in PHP >= 50500 */
-#if PHP_VERSION_ID >= 50500
-int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC);
-#define ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER zephir_call_function
-#else
 #define ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER zend_call_function
-#endif
 #endif
 
 #ifndef zend_error_noreturn
