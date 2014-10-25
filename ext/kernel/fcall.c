@@ -483,7 +483,10 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, param_count, params TSRMLS_CC);
 
 	if (status == FAILURE && !EG(exception)) {
-		zend_error(E_ERROR, "Call to undefined function %s()", func_name);
+		zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined function %s()", func_name);
+		if (return_value_ptr) {
+			*return_value_ptr = NULL;
+		}
 	} else {
 		if (EG(exception)) {
 			status = FAILURE;
@@ -525,7 +528,10 @@ int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, param_count, params TSRMLS_CC);
 
 	if (status == FAILURE && !EG(exception)) {
-		zend_error(E_ERROR, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
+		zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
+		if (return_value_ptr) {
+			*return_value_ptr = NULL;
+		}
 	} else {
 		if (EG(exception)) {
 			status = FAILURE;
@@ -562,7 +568,11 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 
 	if (object) {
 		if (Z_TYPE_P(object) != IS_OBJECT) {
-			zend_error(E_ERROR, "Trying to call method %s on a non-object", method_name);
+			zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Trying to call method %s on a non-object", method_name);
+			if (return_value_ptr) {
+				*return_value_ptr = NULL;
+			}
+			return FAILURE;
 		}
 	}
 
@@ -597,24 +607,35 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 	}
 
 	status = zephir_call_user_function(object ? &object : NULL, ce, type, fn, rvp, cache_entry, param_count, params TSRMLS_CC);
-
-	/*if (Z_TYPE_P(fn) == IS_ARRAY) {
-		if (Z_REFCOUNT_P(mn) > 1) {
-			zval_copy_ctor(mn);
-		} else {
-			ZVAL_NULL(mn);
-		}*/
-		//zval_ptr_dtor(&mn);
-	//}
-
 	if (status == FAILURE && !EG(exception)) {
 		switch (type) {
-			case zephir_fcall_parent: zend_error(E_ERROR, "Call to undefined function parent::%s()", method_name); break;
-			case zephir_fcall_self:   zend_error(E_ERROR, "Call to undefined function self::%s()", method_name); break;
-			case zephir_fcall_static: zend_error(E_ERROR, "Call to undefined function static::%s()", method_name); break;
-			case zephir_fcall_ce:     zend_error(E_ERROR, "Call to undefined function %s::%s()", ce->name, method_name); break;
-			case zephir_fcall_method: zend_error(E_ERROR, "Call to undefined function %s::%s()", Z_OBJCE_P(object)->name, method_name); break;
-			default:                  zend_error(E_ERROR, "Call to undefined function ?::%s()", method_name);
+
+			case zephir_fcall_parent:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method parent::%s()", method_name);
+				break;
+
+			case zephir_fcall_self:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method self::%s()", method_name);
+				break;
+
+			case zephir_fcall_static:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method static::%s()", method_name);
+				break;
+
+			case zephir_fcall_ce:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method %s::%s()", ce->name, method_name);
+				break;
+
+			case zephir_fcall_method:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method %s::%s()", ce->name, method_name);
+				break;
+
+			default:
+				zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined method ?::%s()", method_name);
+		}
+
+		if (return_value_ptr) {
+			*return_value_ptr = NULL;
 		}
 	} else {
 		if (EG(exception)) {
@@ -629,9 +650,6 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 		zval_ptr_dtor(&rv);
 	}
 
-	/*if (Z_TYPE_P(fn) == IS_STRING) {
-		ZVAL_NULL(fn);
-	}*/
 	zval_ptr_dtor(&fn);
 
 	return status;
