@@ -103,7 +103,7 @@ static inline ulong zephir_update_hash(const char *arKey, uint nKeyLength, ulong
 }
 #endif
 
-static char *zephir_fcall_possible_method(zend_class_entry *ce, char *wrong_name TSRMLS_DC)
+static char *zephir_fcall_possible_method(zend_class_entry *ce, const char *wrong_name TSRMLS_DC)
 {
 	HashTable *methods;
 	HashPosition   pos;
@@ -492,15 +492,15 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry) {
 #ifndef ZEPHIR_RELEASE
-			zephir_fcall_cache_entry *cache_entry = malloc(sizeof(zephir_fcall_cache_entry));
+			zephir_fcall_cache_entry *temp_cache_entry = malloc(sizeof(zephir_fcall_cache_entry));
 			cache_entry->f     = fcic.function_handler;
 			cache_entry->times = 0;
 #else
-			zephir_fcall_cache_entry *cache_entry = fcic.function_handler;
+			zephir_fcall_cache_entry *temp_cache_entry = fcic.function_handler;
 #endif
 			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &temp_cache_entry, sizeof(zephir_fcall_cache_entry*), NULL)) {
 #ifndef ZEPHIR_RELEASE
-				free(cache_entry);
+				free(temp_cache_entry);
 #endif
 			} else {
 #ifdef ZEPHIR_RELEASE
