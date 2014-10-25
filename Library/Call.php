@@ -630,7 +630,11 @@ class Call
                         case 'string':
                         case 'variable':
                         case 'array':
-                            $params[] = $parameterVariable->getName();
+                            if ($parameterVariable->isLocalOnly()) {
+                                $params[] = '&' . $parameterVariable->getName();
+                            } else {
+                                $params[] = $parameterVariable->getName();
+                            }
                             break;
 
                         default:
