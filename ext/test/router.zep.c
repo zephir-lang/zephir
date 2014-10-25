@@ -595,7 +595,7 @@ PHP_METHOD(Test_Router, handle) {
 		zephir_read_property_this(&notFoundPaths, this_ptr, SL("_notFoundPaths"), PH_NOISY_CC);
 		if (Z_TYPE_P(notFoundPaths) != IS_NULL) {
 			ZEPHIR_CPY_WRT(parts, notFoundPaths);
-			ZEPHIR_INIT_BNVAR(routeFound);
+			ZEPHIR_INIT_NVAR(routeFound);
 			ZVAL_BOOL(routeFound, 1);
 		}
 	}
@@ -647,7 +647,7 @@ PHP_METHOD(Test_Router, handle) {
 			ZEPHIR_CALL_FUNCTION(&strParams, "substr", &_13, paramsStr, &_12);
 			zephir_check_call_status();
 			if (zephir_is_true(strParams)) {
-				ZEPHIR_INIT_BNVAR(params);
+				ZEPHIR_INIT_NVAR(params);
 				zephir_fast_explode_str(params, SL("/"), strParams, LONG_MAX TSRMLS_CC);
 			}
 			zephir_array_unset_string(&parts, SS("params"), PH_SEPARATE);

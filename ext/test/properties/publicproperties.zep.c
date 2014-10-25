@@ -83,7 +83,7 @@ PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_BNVAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_STRING(_0, "someTrue", 1);
 	ZEPHIR_OBS_VAR(_1);
 	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
@@ -103,17 +103,17 @@ PHP_METHOD(Test_Properties_PublicProperties, __construct) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
-	ZEPHIR_INIT_BNVAR(_1);
+	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, 2);
 	zephir_array_fast_append(_0, _1);
-	ZEPHIR_INIT_BNVAR(_1);
+	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, 3);
 	zephir_array_fast_append(_0, _1);
-	ZEPHIR_INIT_BNVAR(_1);
+	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, 4);
 	zephir_array_fast_append(_0, _1);
 	zephir_update_property_this(this_ptr, SL("someArray"), _0 TSRMLS_CC);
-	ZEPHIR_INIT_BNVAR(_1);
+	ZEPHIR_INIT_NVAR(_1);
 	array_init(_1);
 	zephir_update_property_this(this_ptr, SL("someEmptyArray"), _1 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

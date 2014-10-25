@@ -895,7 +895,7 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
-	ZEPHIR_INIT_BNVAR(a);
+	ZEPHIR_INIT_NVAR(a);
 	_0 = zephir_get_numberval(a);
 	ZVAL_LONG(a, _0 + b);
 	RETURN_CCTOR(a);
@@ -1757,7 +1757,7 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
-	ZEPHIR_INIT_BNVAR(a);
+	ZEPHIR_INIT_NVAR(a);
 	_0 = zephir_get_numberval(a);
 	ZVAL_LONG(a, _0 - b);
 	RETURN_CCTOR(a);
