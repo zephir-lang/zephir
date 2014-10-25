@@ -592,6 +592,30 @@ class ClassDefinition
     }
 
     /**
+     * Tries to find the most similar name
+     *
+     * @param string $methodName
+     * @return string|boolean
+     */
+    public function getPossibleMethodName($methodName)
+    {
+        $methodNameLower = strtolower($methodName);
+
+        foreach ($this->methods as $name => $method) {
+            if (metaphone($methodNameLower) == metaphone($name)) {
+                return $method->getName();
+            }
+        }
+
+        $extendsClassDefinition = $this->extendsClassDefinition;
+        if ($extendsClassDefinition) {
+            return $extendsClassDefinition->getPossibleMethodName($methodName);
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the name of the zend_class_entry according to the class name
      *
      * @return string

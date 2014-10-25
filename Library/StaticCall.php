@@ -46,6 +46,7 @@ class StaticCall extends Call
         if (!in_array($context, array('SELF', 'STATIC'))) {
             $context = 'SELF';
         }
+
         $codePrinter = $compilationContext->codePrinter;
 
         /**
@@ -541,7 +542,12 @@ class StaticCall extends Call
         if (!$dynamicMethod && !$dynamicClass) {
 
             if (!$classDefinition->hasMethod($methodName)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
+                $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
+                if ($possibleMethod) {
+                    throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'. Did you mean '" . $possibleMethod . "'?", $expression);
+                } else {
+                    throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
+                }
             } else {
 
                 $method = $classDefinition->getMethod($methodName);

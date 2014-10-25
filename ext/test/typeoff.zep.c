@@ -37,7 +37,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringFalse) {
 
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
-	RETURN_MM_BOOL(0);
+	RETURN_MM_BOOL(1 == 0);
 
 }
 
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Typeoff, testNativeStringTrue) {
 
 	ZEPHIR_INIT_VAR(testVar);
 	ZVAL_STRING(testVar, "sdfsdf", 1);
-	RETURN_MM_BOOL(1);
+	RETURN_MM_BOOL(1 == 1);
 
 }
 
@@ -59,7 +59,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntFalse) {
 
 
 	testVar = 12345;
-	RETURN_BOOL(0);
+	RETURN_BOOL(1 == 0);
 
 }
 
@@ -69,7 +69,7 @@ PHP_METHOD(Test_Typeoff, testNativeIntTrue) {
 
 
 	testVar = 12345;
-	RETURN_BOOL(1);
+	RETURN_BOOL(1 == 1);
 
 }
 
@@ -79,7 +79,7 @@ PHP_METHOD(Test_Typeoff, testNativeDoubleTrue) {
 
 
 	testVar = (double) (12345);
-	RETURN_BOOL(1);
+	RETURN_BOOL(1 == 1);
 
 }
 
@@ -89,7 +89,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolTrue) {
 
 
 	testVar = 1;
-	RETURN_BOOL(1);
+	RETURN_BOOL(1 == 1);
 
 }
 
@@ -99,7 +99,7 @@ PHP_METHOD(Test_Typeoff, testNativeBoolFalse) {
 
 
 	testVar = 0;
-	RETURN_BOOL(0);
+	RETURN_BOOL(1 == 0);
 
 }
 

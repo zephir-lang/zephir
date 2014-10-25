@@ -146,6 +146,7 @@ class MethodCall extends Call
          */
         if (!$builtInType) {
             if ($isExpecting) {
+
                 if (!$symbolVariable->isVariable()) {
                     throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
                 }
@@ -189,11 +190,18 @@ class MethodCall extends Call
                             }
                         }
                         if (!$found) {
-                            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                            $possibleMethod = $classDefinition->getPossibleMethodName($expression['name']);
+                            if ($possibleMethod) {
+                                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'. Did you mean '" . $possibleMethod . "'?", $expression);
+                            } else {
+                                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
+                            }
                         }
                     }
-                } else if ($check) {
-                    $classMethod = $classDefinition->getMethod($methodName);
+                } else {
+                    if ($check) {
+                        $classMethod = $classDefinition->getMethod($methodName);
+                    }
                 }
 
                 if ($check) {
