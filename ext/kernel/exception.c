@@ -124,7 +124,7 @@ void zephir_throw_exception_format(zend_class_entry *ce TSRMLS_DC, const char *f
 	object_init_ex(object, ce);
 
 	va_start(args, format);
-	len = zend_vspprintf(&buffer, 0, format, args);
+	len = vspprintf(&buffer, 0, format, args);
 	va_end(args);
 
 	ALLOC_INIT_ZVAL(msg);
