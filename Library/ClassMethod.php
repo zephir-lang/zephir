@@ -831,15 +831,18 @@ class ClassMethod
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
+
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t" . 'ZVAL_NULL(' . $parameter['name'] . ');' . PHP_EOL;
+                        $code .= "\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
                         break;
+
                     case 'empty-array':
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
                         break;
+
                     default:
                         throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(array)", $parameter);
                 }

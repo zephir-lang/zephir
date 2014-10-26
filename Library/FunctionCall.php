@@ -94,6 +94,17 @@ class FunctionCall extends Call
             return false;
         }
 
+        /**
+         * These functions are supposed to be read-only but they change parameters ref-count
+         */
+        switch ($funcName) {
+            case 'min':
+            case 'max':
+            case 'call_user_func':
+            case 'call_user_func_array':
+                return false;
+        }
+
         $reflector = $this->getReflector($funcName);
         if ($reflector) {
 
