@@ -51,15 +51,40 @@ abstract class AbstractType
      */
     public function invokeMethod($methodName, $caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
+
+        /**
+         * Checks first whether the method exist in the array type definition
+         */
         if (method_exists($this, $methodName)) {
             return $this->{$methodName}($caller, $compilationContext, $call, $expression);
         }
+
+        /**
+         * Check the method map
+         */
         if (isset($this->methodMap[$methodName])) {
-            if (isset($expression['parameters'])) {
-                $parameters = $expression['parameters'];
-                array_unshift($parameters, array('parameter' => $caller));
+
+            $paramNumber = $this->getNumberParam($methodName);
+            if ($paramNumber == 0) {
+                if (isset($expression['parameters'])) {
+                    $parameters = $expression['parameters'];
+                    array_unshift($parameters, array('parameter' => $caller));
+                } else {
+                    $parameters = array(array('parameter' => $caller));
+                }
             } else {
-                $parameters = array(array('parameter' => $caller));
+                if (isset($expression['parameters'])) {
+                    $parameters = array();
+                    foreach ($expression['parameters'] as $number => $parameter) {
+                        if ($number == $paramNumber) {
+                            $parameters[] = null;
+                        }
+                        $parameters[] = $parameter;
+                    }
+                    $parameters[$paramNumber] = array('parameter' => $caller);
+                } else {
+                    $parameters = array(array('parameter' => $caller));
+                }
             }
 
             $builder = new FunctionCallBuilder(

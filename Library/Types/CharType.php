@@ -62,4 +62,14 @@ class CharType extends AbstractType
 
         return $expression->compile($compilationContext);
     }
+
+    /**
+     * Returns the number of the parameter where the object must be bound
+     *
+     * @return int
+     */
+    protected function getNumberParam()
+    {
+        return 0;
+    }
 }

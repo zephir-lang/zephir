@@ -19,6 +19,11 @@
 
 namespace Zephir\Types;
 
+/**
+ * IntType
+ *
+ * Defines methods of the built-in int type
+ */
 class IntType extends AbstractType
 {
     /**
@@ -50,5 +55,16 @@ class IntType extends AbstractType
             'atan' => 'atan',
             'log' => 'log'
         );
+    }
+
+    /**
+     * Returns the number of the parameter where the object must be bound
+     *
+     * @param $methodName
+     * @return int
+     */
+    protected function getNumberParam($methodName)
+    {
+        return 0;
     }
 }

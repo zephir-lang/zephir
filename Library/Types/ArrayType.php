@@ -25,6 +25,11 @@ use Zephir\Expression;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
 
+/**
+ * ArrayType
+ *
+ * Defines methods of the built-in array type
+ */
 class ArrayType extends AbstractType
 {
     /**
@@ -59,6 +64,7 @@ class ArrayType extends AbstractType
             'push' => 'array_push',
             'rand' => 'array_rand',
             'replace' => 'array_replace',
+            'map' => 'array_map',
             'replacerecursive' => 'array_replace_recursive',
             'shift' => 'array_shift',
             'slice' => 'array_slice',
@@ -78,8 +84,23 @@ class ArrayType extends AbstractType
             'sortbykey' => 'ksort',
             'reversesort' => 'rsort',
             'reversesortbykey' => 'krsort',
-            'shuffle' => 'shuffle'
+            'shuffle' => 'shuffle',
+            'tojson' => 'json_encode',
         );
+    }
+
+    /**
+     * Returns the number of the parameter where the object must be bound
+     *
+     * @param $methodName
+     * @return int
+     */
+    protected function getNumberParam($methodName)
+    {
+        if ($methodName == "map") {
+            return 1;
+        }
+        return 0;
     }
 
     /**
