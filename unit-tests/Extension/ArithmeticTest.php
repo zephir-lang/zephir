@@ -201,6 +201,12 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->class->mul3() == 1 * (1 << 10));
     }
 
+    public function testDiv()
+    {
+        $this->assertSame(24.75, $this->class->div1());
+        $this->assertSame(24.75, $this->class->div2());
+    }
+
     public function testLetStatement()
     {
         $this->assertTrue($this->class->letStatementIntMinus() === -1);
