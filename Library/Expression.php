@@ -61,6 +61,7 @@ use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\CastOperator;
 
 use Zephir\Expression\Closure;
+use Zephir\Expression\ClosureArrow;
 use Zephir\Expression\Constants;
 use Zephir\Expression\NativeArray;
 use Zephir\Expression\NativeArrayAccess;
@@ -636,7 +637,10 @@ class Expression
                 return $closure->compile($expression, $compilationContext);
 
             case 'closure-arrow':
-                return new LiteralCompiledExpression('null', null, $expression);
+                $closure = new ClosureArrow();
+                $closure->setReadOnly($this->isReadOnly());
+                $closure->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $closure->compile($expression, $compilationContext);
 
             default:
                 throw new CompilerException("Unknown expression: " . $type, $expression);

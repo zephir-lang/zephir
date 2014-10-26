@@ -66,14 +66,16 @@ PHP_METHOD(Test_Closures, simple5) {
 PHP_METHOD(Test_Closures, arrow1) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_5__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 
 PHP_METHOD(Test_Closures, arrow2) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_6__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 

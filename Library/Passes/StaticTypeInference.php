@@ -302,8 +302,9 @@ class StaticTypeInference
                 }
                 return 'string';
 
-            case 'static-constant-access':
             case 'closure':
+            case 'closure-arrow':
+            case 'static-constant-access':
                 return 'variable';
 
             case 'div':

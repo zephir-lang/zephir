@@ -153,6 +153,7 @@ class CallGathererPass
             case 'constant':
             case 'empty-array':
             case 'closure':
+            case 'closure-arrow':
                 break;
 
             case 'div':

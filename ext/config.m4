@@ -121,7 +121,9 @@ if test "$PHP_TEST" = "yes"; then
 	test/1__closure.zep.c
 	test/2__closure.zep.c
 	test/3__closure.zep.c
-	test/4__closure.zep.c "
+	test/4__closure.zep.c
+	test/5__closure.zep.c
+	test/6__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared)
 
 	old_CPPFLAGS=$CPPFLAGS

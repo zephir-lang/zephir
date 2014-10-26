@@ -124,5 +124,7 @@
 #include "test/2__closure.zep.h"
 #include "test/3__closure.zep.h"
 #include "test/4__closure.zep.h"
+#include "test/5__closure.zep.h"
+#include "test/6__closure.zep.h"
 
 #endif

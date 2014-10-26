@@ -19,7 +19,6 @@
 
 namespace Zephir;
 
-use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\Passes\CallGathererPass;
@@ -27,6 +26,7 @@ use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\LiteralBuilder;
 use Zephir\Builder\ParameterBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
+use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Builder\Operators\UnaryOperatorBuilder;
 use Zephir\Builder\Operators\BinaryOperatorBuilder;
 use Zephir\Builder\Operators\TypeOfOperatorBuilder;
