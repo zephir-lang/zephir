@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/object.h"
 
 
 /**
@@ -23,6 +24,8 @@
 ZEPHIR_INIT_CLASS(Test_Arithmetic) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Arithmetic, test, arithmetic, test_arithmetic_method_entry, 0);
+
+	zend_declare_property_long(test_arithmetic_ce, SL("tmp1"), 100, ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -1880,6 +1883,25 @@ PHP_METHOD(Test_Arithmetic, letStatementVarMinus) {
 	zephir_negate(b TSRMLS_CC);
 	ZEPHIR_CPY_WRT(a, b);
 	RETURN_CCTOR(a);
+
+}
+
+PHP_METHOD(Test_Arithmetic, div1) {
+
+	int a = 100;
+
+
+	RETURN_DOUBLE(zephir_safe_div_long_long(((a - 1)), 4 TSRMLS_CC));
+
+}
+
+PHP_METHOD(Test_Arithmetic, div2) {
+
+	zval *_0;
+
+
+	_0 = zephir_fetch_nproperty_this(this_ptr, SL("tmp1"), PH_NOISY_CC);
+	RETURN_DOUBLE(zephir_safe_div_long_long(((zephir_get_numberval(_0) - 1)), 4 TSRMLS_CC));
 
 }
 

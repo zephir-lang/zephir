@@ -7,6 +7,8 @@ namespace Test;
 
 class Arithmetic
 {
+	protected tmp1 = 100;
+
 	/* ---------- SUM ----------------*/
 
 	public function intSum()
@@ -1387,5 +1389,16 @@ class Arithmetic
 		var a;
 		let a = -b;
 		return a;
+	}
+
+	public function div1()
+	{
+		var a = 100;
+		return (a - 1) / 4;
+	}
+
+	public function div2()
+	{
+		return (this->tmp1 - 1) / 4;
 	}
 }
