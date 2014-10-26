@@ -95,6 +95,8 @@ class Closure
             self::$id . '__closure'
         );
 
+        $classDefinition->setIsFinal(true);
+
         $compilerFile = new CompilerFileAnonymous(
             $classDefinition,
             $compilationContext->config,
@@ -117,7 +119,7 @@ class Closure
 
         $classMethod = new ClassMethod(
             $classDefinition,
-            array('public'),
+            array('public', 'final'),
             '__invoke',
             $parameters,
             new StatementsBlock($block),
@@ -141,6 +143,8 @@ class Closure
 
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->codePrinter->output('zephir_create_closure_ex(' . $symbolVariable->getName() . ', this_ptr, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
+
+        self::$id++;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

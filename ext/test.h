@@ -120,5 +120,9 @@
 #include "test/usetest.zep.h"
 #include "test/vars.zep.h"
 #include "test/0__closure.zep.h"
+#include "test/1__closure.zep.h"
+#include "test/2__closure.zep.h"
+#include "test/3__closure.zep.h"
+#include "test/4__closure.zep.h"
 
 #endif

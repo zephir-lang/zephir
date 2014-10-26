@@ -14,15 +14,15 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(test_0__closure) {
+ZEPHIR_INIT_CLASS(test_1__closure) {
 
-	ZEPHIR_REGISTER_CLASS(test, 0__closure, test, 0__closure, test_0__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(test, 1__closure, test, 1__closure, test_1__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 
 }
 
-PHP_METHOD(test_0__closure, __invoke) {
+PHP_METHOD(test_1__closure, __invoke) {
 
 
 

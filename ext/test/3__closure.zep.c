@@ -12,17 +12,23 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(test_0__closure) {
+ZEPHIR_INIT_CLASS(test_3__closure) {
 
-	ZEPHIR_REGISTER_CLASS(test, 0__closure, test, 0__closure, test_0__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(test, 3__closure, test, 3__closure, test_3__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 
 }
 
-PHP_METHOD(test_0__closure, __invoke) {
+PHP_METHOD(test_3__closure, __invoke) {
+
+	zval *param1;
+
+	zephir_fetch_params(0, 1, 0, &param1);
+
 
 
 

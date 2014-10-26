@@ -32,9 +32,10 @@ class Closures
 	public function simple5()
 	{
 		return function(var param1) {
-			return function() {
+			/*return function() {
 				return 1;
-			};
+			};*/
+			return null;
 		};
 	}
 }

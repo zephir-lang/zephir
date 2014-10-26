@@ -518,31 +518,41 @@ class ClassMethod
         $modifiers = array();
         foreach ($this->_visibility as $visibility) {
             switch ($visibility) {
+
                 case 'public':
                     $modifiers['ZEND_ACC_PUBLIC'] = $visibility;
                     break;
+
                 case 'protected':
                     $modifiers['ZEND_ACC_PROTECTED'] = $visibility;
                     break;
+
                 case 'private':
                     $modifiers['ZEND_ACC_PRIVATE'] = $visibility;
                     break;
+
                 case 'static':
                     $modifiers['ZEND_ACC_STATIC'] = $visibility;
                     break;
+
                 case 'final':
                     $modifiers['ZEND_ACC_FINAL'] = $visibility;
                     break;
+
                 case 'abstract':
                     $modifiers['ZEND_ACC_ABSTRACT'] = $visibility;
                     break;
+
                 case 'deprecated':
                     $modifiers['ZEND_ACC_DEPRECATED'] = $visibility;
                     break;
+
                 case 'inline':
                     break;
+
                 case 'scoped':
                     break;
+
                 default:
                     throw new Exception('Unknown modifier "' . $visibility . '"');
             }
