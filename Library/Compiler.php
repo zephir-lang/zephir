@@ -757,9 +757,7 @@ class Compiler
         $path = str_replace('%version%', $this->config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
 
-        var_dump($path);
-
-        //$stubsGenerator->generate($path);
+        $stubsGenerator->generate($path);
     }
 
     /**
