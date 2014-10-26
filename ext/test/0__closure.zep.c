@@ -12,13 +12,22 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(test_0__closure) {
 
-	ZEPHIR_REGISTER_CLASS(test, 0__closure, test, 0__closure, NULL, 0);
+	ZEPHIR_REGISTER_CLASS(test, 0__closure, test, 0__closure, test_0__closure_method_entry, 0);
 
 	return SUCCESS;
+
+}
+
+PHP_METHOD(test_0__closure, __invoke) {
+
+
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 

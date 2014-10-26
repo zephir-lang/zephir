@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Closures) {
@@ -25,35 +26,40 @@ ZEPHIR_INIT_CLASS(Test_Closures) {
 PHP_METHOD(Test_Closures, simple1) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 
 PHP_METHOD(Test_Closures, simple2) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 
 PHP_METHOD(Test_Closures, simple3) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 
 PHP_METHOD(Test_Closures, simple4) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 
 PHP_METHOD(Test_Closures, simple5) {
 
 
-	RETURN_NULL();
+	zephir_create_closure_ex(return_value, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	return;
 
 }
 

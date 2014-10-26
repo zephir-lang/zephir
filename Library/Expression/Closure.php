@@ -22,6 +22,7 @@ namespace Zephir\Expression;
 use Zephir\ClassMethod;
 use Zephir\Exception;
 use Zephir\Variable;
+use Zephir\ClassMethodParameters;
 use Zephir\CompiledExpression;
 use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
@@ -102,6 +103,12 @@ class Closure
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
+        if (isset($expression['left'])) {
+            $parameters = new ClassMethodParameters($expression['left']);
+        } else {
+            $parameters = null;
+        }
+
         if (isset($expression['right'])) {
             $block = $expression['right'];
         } else {
@@ -112,7 +119,7 @@ class Closure
             $classDefinition,
             array('public'),
             '__invoke',
-            null,
+            $parameters,
             new StatementsBlock($block),
             null,
             null,

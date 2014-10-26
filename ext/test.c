@@ -36,6 +36,7 @@ zend_class_entry *test_constantsparent_ce;
 zend_class_entry *test_oo_oodynamica_ce;
 zend_class_entry *test_properties_publicproperties_ce;
 zend_class_entry *test_scallparent_ce;
+zend_class_entry *test_0__closure_ce;
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
@@ -422,6 +423,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Unsettest);
 	ZEPHIR_INIT(Test_UseTest);
 	ZEPHIR_INIT(Test_Vars);
+	ZEPHIR_INIT(test_0__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

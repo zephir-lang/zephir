@@ -119,5 +119,6 @@
 #include "test/unsettest.zep.h"
 #include "test/usetest.zep.h"
 #include "test/vars.zep.h"
+#include "test/0__closure.zep.h"
 
 #endif

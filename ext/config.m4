@@ -116,7 +116,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/unknownclass.zep.c
 	test/unsettest.zep.c
 	test/usetest.zep.c
-	test/vars.zep.c "
+	test/vars.zep.c
+	test/0__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared)
 
 	old_CPPFLAGS=$CPPFLAGS
