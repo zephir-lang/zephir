@@ -24,8 +24,8 @@ namespace Zephir\Api;
  */
 class Generator
 {
-	public function generate()
-	{
-		//var_dump($config);
-	}
+    public function generate()
+    {
+        //var_dump($config);
+    }
 }

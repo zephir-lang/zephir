@@ -19,8 +19,8 @@
 
 namespace Zephir\Cache;
 
-use Zephir\CompilationContext;
 use Zephir\Call;
+use Zephir\CompilationContext;
 
 /**
  * FunctionCache
@@ -48,6 +48,8 @@ class FunctionCache
     protected $gatherer;
 
     /**
+     * FunctionCache constructor
+     *
      * @param CallGathererPass $gatherer
      */
     public function __construct($gatherer)
@@ -81,6 +83,8 @@ class FunctionCache
     }
 
     /**
+     * Retrieves/Creates a function cache for a function call
+     *
      * @param string $functionName
      * @param Call $call
      * @param CompilationContext $compilationContext

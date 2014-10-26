@@ -48,6 +48,8 @@ class MethodCache
     protected $gatherer;
 
     /**
+     * MethodCache
+     *
      * @param CallGathererPass $gatherer
      */
     public function __construct($gatherer)
@@ -56,6 +58,8 @@ class MethodCache
     }
 
     /**
+     * Retrieves/Creates a function cache for a method call
+     *
      * @param CompilationContext $compilationContext
      * @param ClassMethod $call
      */
