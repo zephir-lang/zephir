@@ -101,6 +101,8 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		'class' {
 			s->active_char += sizeof("class")-1;
+			s->class_line = s->active_line;
+			s->class_char = s->active_char;
 			token->opcode = XX_T_CLASS;
 			return 0;
 		}
@@ -167,12 +169,16 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		'function' {
 			s->active_char += sizeof("function")-1;
+			s->method_line = s->active_line;
+			s->method_char = s->active_char;
 			token->opcode = XX_T_FUNCTION;
 			return 0;
 		}
 
 		'fn' {
 			s->active_char += sizeof("fn")-1;
+			s->method_line = s->active_line;
+			s->method_char = s->active_char;
 			token->opcode = XX_T_FUNCTION;
 			return 0;
 		}
@@ -796,6 +802,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		"->" {
 			s->active_char += 2;
 			token->opcode = XX_T_ARROW;
+			return 0;
+		}
+
+		"=>" {
+			s->active_char += 2;
+			token->opcode = XX_T_DOUBLEARROW;
 			return 0;
 		}
 

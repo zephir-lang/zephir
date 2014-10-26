@@ -63,3 +63,17 @@ PHP_METHOD(Test_Closures, simple5) {
 
 }
 
+PHP_METHOD(Test_Closures, arrow1) {
+
+
+	RETURN_NULL();
+
+}
+
+PHP_METHOD(Test_Closures, arrow2) {
+
+
+	RETURN_NULL();
+
+}
+

@@ -38,4 +38,14 @@ class Closures
 			return null;
 		};
 	}
+
+	public function arrow1()
+	{
+		return x => x + 100;
+	}
+
+	public function arrow2()
+	{
+		return x => (x + 100) + (x * 150);
+	}
 }

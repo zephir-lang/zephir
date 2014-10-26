@@ -33,6 +33,7 @@
 
 %left COMMA .
 %right REQUIRE .
+%right DOUBLEARROW .
 %right QUESTION .
 %right LIKELY UNLIKELY .
 %left OR .
@@ -269,8 +270,8 @@ static json_object *xx_ret_class_definition(json_object *properties, json_object
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
 
 	return ret;
 }
@@ -383,8 +384,8 @@ static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token
 	}
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
-	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
-	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+	json_object_object_add(ret, "line", json_object_new_int(state->method_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->method_char));
 
 	return ret;
 }
@@ -2970,6 +2971,11 @@ xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES
 /** function(a, b, c) { ... }*/
 xx_common_expr(R) ::= FUNCTION PARENTHESES_OPEN xx_parameter_list(L) PARENTHESES_CLOSE BRACKET_OPEN xx_statement_list(S) BRACKET_CLOSE . {
 	R = xx_ret_expr("closure", L, S, NULL, status->scanner_state);
+}
+
+/** x => x + 1 */
+xx_common_expr(R) ::= IDENTIFIER(I) DOUBLEARROW xx_common_expr(E) . {
+	R = xx_ret_expr("closure-arrow", xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), E, NULL, status->scanner_state);
 }
 
 xx_array_list(R) ::= xx_array_list(L) COMMA xx_array_item(I) . {

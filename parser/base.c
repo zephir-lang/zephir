@@ -158,6 +158,10 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 	state->active_file = file_path;
 	state->active_line = 1;
 	state->active_char = 1;
+	state->class_line = 0;
+	state->class_char = 0;
+	state->method_line = 0;
+	state->method_char = 0;
 
 	state->end = state->start;
 
@@ -358,6 +362,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 				break;
 			case XX_T_ARROW:
 				xx_(xx_parser, XX_ARROW, NULL, parser_status);
+				break;
+			case XX_T_DOUBLEARROW:
+				xx_(xx_parser, XX_DOUBLEARROW, NULL, parser_status);
 				break;
 			case XX_T_DOUBLECOLON:
 				xx_(xx_parser, XX_DOUBLECOLON, NULL, parser_status);

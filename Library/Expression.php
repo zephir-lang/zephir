@@ -635,6 +635,9 @@ class Expression
                 $closure->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $closure->compile($expression, $compilationContext);
 
+            case 'closure-arrow':
+                return new LiteralCompiledExpression('null', null, $expression);
+
             default:
                 throw new CompilerException("Unknown expression: " . $type, $expression);
         }

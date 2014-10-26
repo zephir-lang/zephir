@@ -147,6 +147,7 @@
 #define XX_T_MODASSIGN 418
 #define XX_T_BITWISE_SHIFTLEFT 419
 #define XX_T_BITWISE_SHIFTRIGHT 420
+#define XX_T_DOUBLEARROW 440
 
 #define XX_T_CBLOCK 451
 
@@ -167,6 +168,10 @@ typedef struct _xx_scanner_state {
 	int mode;
 	unsigned int active_line;
 	unsigned int active_char;
+	unsigned int class_line;
+	unsigned int class_char;
+	unsigned int method_line;
+	unsigned int method_char;
 	char *active_file;
 } xx_scanner_state;
 
