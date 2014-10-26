@@ -102,17 +102,23 @@ class Closure
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
+        if (isset($expression['right'])) {
+            $block = $expression['right'];
+        } else {
+            $block = array();
+        }
+
         $classMethod = new ClassMethod(
             $classDefinition,
             array('public'),
             '__invoke',
             null,
-            new StatementsBlock($expression['right']),
+            new StatementsBlock($block),
             null,
             null,
-            $expression['right']
+            $expression
         );
-        $classDefinition->addMethod($classMethod, $expression['right']);
+        $classDefinition->addMethod($classMethod, $block);
 
         $compilationContext->headersManager->add('kernel/object');
 
