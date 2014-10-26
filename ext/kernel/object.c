@@ -2134,6 +2134,11 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 		return FAILURE;
 	}
 
+#if PHP_VERSION_ID < 50400
+	zend_create_closure(return_value, function_ptr TSRMLS_CC);
+#else
 	zend_create_closure(return_value, function_ptr, ce, this_ptr TSRMLS_CC);
+#endif
+	return SUCCESS;
 }
 
