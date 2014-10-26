@@ -12,10 +12,10 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/string.h"
+#include "kernel/operators.h"
 #include "kernel/concat.h"
 #include "kernel/fcall.h"
 #include "ext/spl/spl_exceptions.h"
@@ -47,28 +47,6 @@ ZEPHIR_INIT_CLASS(Test_Statements) {
 
 }
 
-PHP_METHOD(Test_Statements, testElseIf) {
-
-	zval *num_param = NULL;
-	int num;
-
-	zephir_fetch_params(0, 1, 0, &num_param);
-
-	num = zephir_get_intval(num_param);
-
-
-	if (num > 0) {
-		RETURN_STRING("more", 1);
-	} else if (num == 0) {
-		RETURN_STRING("equal", 1);
-	} else if (num == -1) {
-		RETURN_STRING("-1", 1);
-	} else {
-		RETURN_STRING("less", 1);
-	}
-
-}
-
 PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 
 	zval *result1, *result2, *result3, *result4, *_0, *_1, *_2, *_3, *_4, *_5, *_6, *_7;
@@ -92,6 +70,28 @@ PHP_METHOD(Test_Statements, testPropertyAcccessAvoidTmpReuse) {
 	ZEPHIR_INIT_VAR(result4);
 	zephir_fast_strpos(result4, _6, _7, 0 );
 	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Statements, testElseIf) {
+
+	zval *num_param = NULL;
+	int num;
+
+	zephir_fetch_params(0, 1, 0, &num_param);
+
+	num = zephir_get_intval(num_param);
+
+
+	if (num > 0) {
+		RETURN_STRING("more", 1);
+	} else if (num == 0) {
+		RETURN_STRING("equal", 1);
+	} else if (num == -1) {
+		RETURN_STRING("-1", 1);
+	} else {
+		RETURN_STRING("less", 1);
+	}
 
 }
 
@@ -157,7 +157,7 @@ PHP_METHOD(Test_Statements, test544Issue) {
 	if (ZEPHIR_GT_LONG(_0, step)) {
 		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
 		_3 = zephir_fetch_nproperty_this(this_ptr, SL("totalSteps"), PH_NOISY_CC);
-		filledWidth = ((((zephir_get_numberval(_2) - 1)) / zephir_get_numberval(_3)) * step);
+		filledWidth = (long) ((zephir_safe_div_long_zval(((zephir_get_numberval(_2) - 1)), _3 TSRMLS_CC) * step));
 		_4 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
 		unfilledWidth = (((zephir_get_numberval(_4) - 1)) - filledWidth);
 		_5 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
@@ -210,7 +210,7 @@ PHP_METHOD(Test_Statements, test544IssueWithVariable) {
 	totalSteps = zephir_get_numberval(_0);
 	if (step < totalSteps) {
 		_1 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
-		filledWidth = ((((zephir_get_numberval(_1) - 1)) / totalSteps) * step);
+		filledWidth = (long) ((zephir_safe_div_long_long(((zephir_get_numberval(_1) - 1)), totalSteps TSRMLS_CC) * step));
 		_2 = zephir_fetch_nproperty_this(this_ptr, SL("width"), PH_NOISY_CC);
 		unfilledWidth = (((zephir_get_numberval(_2) - 1)) - filledWidth);
 		_3 = zephir_fetch_nproperty_this(this_ptr, SL("filledChar"), PH_NOISY_CC);
