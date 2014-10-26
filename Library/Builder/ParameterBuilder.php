@@ -34,6 +34,11 @@ class ParameterBuilder
         $this->value = $value;
     }
 
+    /**
+     * Returns a builder definition
+     *
+     * @return array
+     */
     public function get()
     {
         return array(

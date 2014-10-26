@@ -19,6 +19,9 @@
 
 namespace Zephir\Builder\Operators;
 
+/**
+ * Abstract class for builders
+ */
 abstract class AbstractOperatorBuilder
 {
     abstract public function get();

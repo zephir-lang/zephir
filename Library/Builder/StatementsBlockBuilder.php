@@ -36,6 +36,11 @@ class StatementsBlockBuilder
         $this->raw = $raw;
     }
 
+    /**
+     * Returns a builder definition
+     *
+     * @return array
+     */
     public function get()
     {
         if (!$this->raw) {

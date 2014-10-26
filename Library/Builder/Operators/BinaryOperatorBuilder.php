@@ -36,6 +36,16 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
 
     protected $char;
 
+    /**
+     * BinaryOperatorBuilder constructor
+     *
+     * @param string $operator
+     * @param Builder $leftExpression
+     * @param Builder $rightExpression
+     * @param string $file
+     * @param int $line
+     * @param string $char
+     */
     public function __construct($operator, $leftExpression, $rightExpression, $file = null, $line = 0, $char = 0)
     {
         $this->operator = $operator;
@@ -46,6 +56,11 @@ class BinaryOperatorBuilder extends AbstractOperatorBuilder
         $this->char = $char;
     }
 
+    /**
+     * Returns a builder definition
+     *
+     * @return array
+     */
     public function get()
     {
         return array(

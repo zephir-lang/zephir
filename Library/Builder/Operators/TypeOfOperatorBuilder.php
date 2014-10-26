@@ -44,6 +44,11 @@ class TypeOfOperatorBuilder extends AbstractOperatorBuilder
         $this->char = $char;
     }
 
+    /**
+     * Returns a builder definition
+     *
+     * @return array
+     */
     public function get()
     {
         return array(

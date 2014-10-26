@@ -34,6 +34,11 @@ class VariableBuilder
         $this->name = $name;
     }
 
+    /**
+     * Returns a builder definition
+     *
+     * @return array
+     */
     public function get()
     {
         return array(
