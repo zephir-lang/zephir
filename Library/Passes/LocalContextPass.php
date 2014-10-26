@@ -181,6 +181,7 @@ class LocalContextPass
                         case 'type-hint':
                         case 'minus':
                         case 'new':
+                        case 'closure':
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
 
