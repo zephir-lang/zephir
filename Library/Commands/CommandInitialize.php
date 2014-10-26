@@ -51,6 +51,8 @@ class CommandInitialize extends CommandAbstract
     }
 
     /**
+     * Returns the description of the command
+     *
      * @return string
      */
     public function getDescription()

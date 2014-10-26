@@ -135,8 +135,9 @@ EOF;
     }
 
     /**
-     * @param ClassProperty $property
      *
+     *
+     * @param ClassProperty $property
      * @return string
      */
     protected function buildProperty(ClassProperty $property)

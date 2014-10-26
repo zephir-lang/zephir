@@ -20,21 +20,20 @@
 namespace Zephir\Commands;
 
 /**
- * CommandInstall
+ * CommandApi
  *
- * Installs the extension in the extension directory
+ * Generates a HTML API based on the classes exposed in the extension
  */
-class CommandInstall extends CommandAbstract
+class CommandApi extends CommandAbstract
 {
-
     /**
      * Command provided by this command
      *
-     * @return string
+     * @return array|string
      */
     public function getCommand()
     {
-        return 'install';
+        return 'api';
     }
 
     /**
@@ -44,7 +43,7 @@ class CommandInstall extends CommandAbstract
      */
     public function getUsage()
     {
-        return 'install';
+        return 'api';
     }
 
     /**
@@ -54,6 +53,6 @@ class CommandInstall extends CommandAbstract
      */
     public function getDescription()
     {
-        return 'Installs the extension (requires root password)';
+        return 'Generates a HTML API';
     }
 }

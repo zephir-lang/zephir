@@ -17,43 +17,15 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Commands;
+namespace Zephir\Api;
 
 /**
- * CommandInstall
  *
- * Installs the extension in the extension directory
  */
-class CommandInstall extends CommandAbstract
+class Generator
 {
-
-    /**
-     * Command provided by this command
-     *
-     * @return string
-     */
-    public function getCommand()
-    {
-        return 'install';
-    }
-
-    /**
-     * Command usage
-     *
-     * @return string
-     */
-    public function getUsage()
-    {
-        return 'install';
-    }
-
-    /**
-     * Returns the description of the command
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Installs the extension (requires root password)';
-    }
+	public function generate()
+	{
+		//var_dump($config);
+	}
 }

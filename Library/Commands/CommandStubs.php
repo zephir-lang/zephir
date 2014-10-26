@@ -22,7 +22,7 @@ namespace Zephir\Commands;
 /**
  * CommandGenerate
  *
- * Generate the code without compiling it
+ * Produce stubs that can be used in a PHP IDE
  */
 class CommandStubs extends CommandAbstract
 {
@@ -47,6 +47,8 @@ class CommandStubs extends CommandAbstract
     }
 
     /**
+     * Returns the description of the command
+     *
      * @return string
      */
     public function getDescription()

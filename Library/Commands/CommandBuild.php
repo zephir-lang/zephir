@@ -22,7 +22,7 @@ namespace Zephir\Commands;
 /**
  * BuildCommand
  *
- * Produce the extension installation
+ * Generates/Builds/Install the extension
  */
 class CommandBuild extends CommandAbstract
 {
@@ -48,6 +48,8 @@ class CommandBuild extends CommandAbstract
     }
 
     /**
+     * Returns the description of the command
+     *
      * @return string
      */
     public function getDescription()

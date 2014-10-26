@@ -717,7 +717,29 @@ class Compiler
     }
 
     /**
-     * Generate ide stubs
+     * Generate a HTML API
+     *
+     * @param CommandInterface $command
+     * @param bool             $fromGenerate
+     */
+    public function api(CommandInterface $command, $fromGenerate = false)
+    {
+        if (!$fromGenerate) {
+            $this->generate($command);
+        }
+
+        $this->logger->output('Generating API...');
+        $stubsGenerator = new Api\Generator($this->files, $this->config);
+
+        $path = $this->config->get('path', 'stubs');
+        $path = str_replace('%version%', $this->config->get('version'), $path);
+        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
+
+        $stubsGenerator->generate($path);
+    }
+
+    /**
+     * Generate IDE stubs
      *
      * @param CommandInterface $command
      * @param bool             $fromGenerate
@@ -730,11 +752,14 @@ class Compiler
 
         $this->logger->output('Generating stubs...');
         $stubsGenerator = new Stubs\Generator($this->files, $this->config);
+
         $path = $this->config->get('path', 'stubs');
         $path = str_replace('%version%', $this->config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
 
-        $stubsGenerator->generate($path);
+        var_dump($path);
+
+        //$stubsGenerator->generate($path);
     }
 
     /**

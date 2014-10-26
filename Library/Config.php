@@ -101,6 +101,8 @@ class Config
     }
 
     /**
+     * Retrieves a configuration setting
+     *
      * @param $key
      * @param null $namespace
      * @return mixed
@@ -125,6 +127,8 @@ class Config
     }
 
     /**
+     * Changes a configuration setting
+     *
      * @param $key
      * @param $value
      * @param null $namespace
@@ -145,17 +149,12 @@ class Config
      */
     public function saveOnExit()
     {
-        if ($this->_changed) {
-
-            /**
-             * Above PHP 5.4
-             */
+        if ($this->_changed && !file_exists('config.json')) {
             if (defined('JSON_PRETTY_PRINT')) {
                 $config = json_encode($this->_config, JSON_PRETTY_PRINT);
             } else {
                 $config = json_encode($this->_config);
             }
-
             file_put_contents('config.json', $config);
         }
     }
