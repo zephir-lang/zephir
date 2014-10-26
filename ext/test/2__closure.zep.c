@@ -12,7 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(test_2__closure) {
@@ -24,11 +23,6 @@ ZEPHIR_INIT_CLASS(test_2__closure) {
 }
 
 PHP_METHOD(test_2__closure, __invoke) {
-
-	zval *param1;
-
-	zephir_fetch_params(0, 1, 0, &param1);
-
 
 
 

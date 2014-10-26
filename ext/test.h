@@ -10,6 +10,7 @@
 #include "test/bench/foo.zep.h"
 #include "test/bitwise.zep.h"
 #include "test/branchprediction.zep.h"
+#include "test/builtin/arraymethods.zep.h"
 #include "test/builtin/charmethods.zep.h"
 #include "test/builtin/intmethods.zep.h"
 #include "test/builtin/stringmethods.zep.h"
@@ -126,5 +127,6 @@
 #include "test/4__closure.zep.h"
 #include "test/5__closure.zep.h"
 #include "test/6__closure.zep.h"
+#include "test/7__closure.zep.h"
 
 #endif

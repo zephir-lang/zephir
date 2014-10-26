@@ -31,7 +31,6 @@ PHP_METHOD(test_4__closure, __invoke) {
 
 
 
-	RETURN_NULL();
 
 }
 

@@ -43,12 +43,14 @@ zend_class_entry *test_3__closure_ce;
 zend_class_entry *test_4__closure_ce;
 zend_class_entry *test_5__closure_ce;
 zend_class_entry *test_6__closure_ce;
+zend_class_entry *test_7__closure_ce;
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
 zend_class_entry *test_bench_foo_ce;
 zend_class_entry *test_bitwise_ce;
 zend_class_entry *test_branchprediction_ce;
+zend_class_entry *test_builtin_arraymethods_ce;
 zend_class_entry *test_builtin_charmethods_ce;
 zend_class_entry *test_builtin_intmethods_ce;
 zend_class_entry *test_builtin_stringmethods_ce;
@@ -330,6 +332,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Bench_Foo);
 	ZEPHIR_INIT(Test_Bitwise);
 	ZEPHIR_INIT(Test_BranchPrediction);
+	ZEPHIR_INIT(Test_BuiltIn_ArrayMethods);
 	ZEPHIR_INIT(Test_BuiltIn_CharMethods);
 	ZEPHIR_INIT(Test_BuiltIn_IntMethods);
 	ZEPHIR_INIT(Test_BuiltIn_StringMethods);
@@ -436,6 +439,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(test_4__closure);
 	ZEPHIR_INIT(test_5__closure);
 	ZEPHIR_INIT(test_6__closure);
+	ZEPHIR_INIT(test_7__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

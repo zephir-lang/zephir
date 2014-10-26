@@ -8,6 +8,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/bench/foo.zep.c
 	test/bitwise.zep.c
 	test/branchprediction.zep.c
+	test/builtin/arraymethods.zep.c
 	test/builtin/charmethods.zep.c
 	test/builtin/intmethods.zep.c
 	test/builtin/stringmethods.zep.c
@@ -123,7 +124,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/3__closure.zep.c
 	test/4__closure.zep.c
 	test/5__closure.zep.c
-	test/6__closure.zep.c "
+	test/6__closure.zep.c
+	test/7__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared)
 
 	old_CPPFLAGS=$CPPFLAGS

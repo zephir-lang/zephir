@@ -16,15 +16,15 @@
 #include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(test_6__closure) {
+ZEPHIR_INIT_CLASS(test_7__closure) {
 
-	ZEPHIR_REGISTER_CLASS(test, 6__closure, test, 6__closure, test_6__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(test, 7__closure, test, 7__closure, test_7__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 
 }
 
-PHP_METHOD(test_6__closure, __invoke) {
+PHP_METHOD(test_7__closure, __invoke) {
 
 	zval *x;
 
@@ -32,7 +32,7 @@ PHP_METHOD(test_6__closure, __invoke) {
 
 
 
-	RETURN_LONG((zephir_get_numberval(x) + 100));
+	RETURN_LONG((((zephir_get_numberval(x) + 100)) + ((zephir_get_numberval(x) * 150))));
 
 }
 
