@@ -630,8 +630,19 @@ class Compiler
          * Round 3.2. Compile anonymous classes
          */
         foreach ($this->anonymousFiles as $compileFile) {
+
             $compileFile->compile($this, $this->stringManager);
             $compiledFile = $compileFile->getCompiledFile();
+
+            $methods = array();
+            $classDefinition = $compileFile->getClassDefinition();
+            foreach ($classDefinition->getMethods() as $method) {
+                $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+            }
+
+            $files[] = $compiledFile;
+
+            $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
         }
 
         $hash = md5($hash);
@@ -1247,7 +1258,7 @@ class Compiler
 
         $includes = '';
         $destructors = '';
-        $files = $this->files;
+        $files = array_merge($this->files, $this->anonymousFiles);
 
         /**
          * Round 1. Calculate the dependency rank

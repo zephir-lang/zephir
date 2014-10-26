@@ -19,8 +19,11 @@
 
 namespace Zephir\Expression;
 
+use Zephir\ClassMethod;
 use Zephir\Exception;
 use Zephir\Variable;
+use Zephir\CompiledExpression;
+use Zephir\StatementsBlock;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\CompilerFileAnonymous;
@@ -99,6 +102,33 @@ class Closure
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
-        return new LiteralCompiledExpression('null', null, $expression);
+        $classMethod = new ClassMethod(
+            $classDefinition,
+            array('public'),
+            '__invoke',
+            null,
+            new StatementsBlock($expression['right']),
+            null,
+            null,
+            $expression['right']
+        );
+        $classDefinition->addMethod($classMethod, $expression['right']);
+
+        $compilationContext->headersManager->add('kernel/object');
+
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+        }
+
+        $symbolVariable->initVariant($compilationContext);
+        $compilationContext->codePrinter->output('zephir_create_closure_ex(' . $symbolVariable->getName() . ', this_ptr, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
