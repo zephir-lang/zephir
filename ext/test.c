@@ -96,6 +96,7 @@ zend_class_entry *test_oo_ce;
 zend_class_entry *test_oo_constantsinterface_ce;
 zend_class_entry *test_oo_deprecatedmethods_ce;
 zend_class_entry *test_oo_dynamicprop_ce;
+zend_class_entry *test_oo_extend_application_ce;
 zend_class_entry *test_oo_extend_spl_arrayobject_ce;
 zend_class_entry *test_oo_extend_spl_directoryiterator_ce;
 zend_class_entry *test_oo_extend_spl_doublylinkedlist_ce;
@@ -383,6 +384,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Oo_DeprecatedMethods);
 	ZEPHIR_INIT(Test_Oo_DynamicProp);
 	ZEPHIR_INIT(Test_Oo_ExtendPdoClass);
+	ZEPHIR_INIT(Test_Oo_Extend_Application);
 	ZEPHIR_INIT(Test_Oo_Extend_Spl_ArrayObject);
 	ZEPHIR_INIT(Test_Oo_Extend_Spl_DirectoryIterator);
 	ZEPHIR_INIT(Test_Oo_Extend_Spl_DoublyLinkedList);

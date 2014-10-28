@@ -61,6 +61,7 @@
 #include "test/oo/param.zep.h"
 #include "test/oo/constantsinterface.zep.h"
 #include "test/oo/dynamicprop.zep.h"
+#include "test/oo/extend/application.zep.h"
 #include "test/oo/extend/spl/arrayobject.zep.h"
 #include "test/oo/extend/spl/directoryiterator.zep.h"
 #include "test/oo/extend/spl/doublylinkedlist.zep.h"

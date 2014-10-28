@@ -39,4 +39,10 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceof('Test\\PdoStatement', $stmt);
     }
+
+    public function testInstanceOfPhalconApplication()
+    {
+        $class = new \Test\Oo\Extend\Application();
+        $this->assertInstanceOf('Phalcon\Mvc\Application', $class);
+    }
 }
