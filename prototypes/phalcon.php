@@ -17,6 +17,13 @@ namespace Phalcon {
     }
 }
 
+namespace Phalcon\Mvc {
+    class Application
+    {
+
+    }
+}
+
 namespace Phalcon\Mvc\Model {
     class Query
     {
