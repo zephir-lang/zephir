@@ -135,7 +135,7 @@ class Bootstrap
                         continue;
                     }
 
-                    if (preg_match('/^--([a-z0-9\-]+)=(*)/', $parameter, $matches)) {
+                    if (preg_match('/^--([a-z0-9\-]+)=(.*)/', $parameter, $matches)) {
                         $config->set($matches[1], $matches[2], 'extra');
                         continue;
                     }
