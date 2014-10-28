@@ -163,6 +163,15 @@ class LocalContextPass
             switch ($assignment['assign-type']) {
 
                 case 'variable':
+
+                    switch ($assignment['operator']) {
+                        case 'mul-assign':
+                        case 'sub-assign':
+                        case 'add-assign':
+                            $this->markVariableNoLocal($assignment['variable']);
+                            break;
+                    }
+
                     switch ($assignment['expr']['type']) {
 
                         case 'property-access':

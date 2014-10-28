@@ -759,6 +759,7 @@ class Variable
                     case 'uint':
                     case 'long':
                     case 'ulong':
+
                         if ($symbolVariable->isLocalOnly()) {
                             $symbol = '&' . $variable;
                         } else {
@@ -766,16 +767,21 @@ class Variable
                         }
 
                         switch ($statement['operator']) {
+
                             case 'mul-assign':
                             case 'sub-assign':
                             case 'add-assign':
+
                                 switch($statement['operator']) {
+
                                     case 'mul-assign':
                                         $functionName = 'ZEPHIR_MUL_ASSIGN';
                                         break;
+
                                     case 'sub-assign':
                                         $functionName = 'ZEPHIR_SUB_ASSIGN';
                                         break;
+
                                     case 'add-assign':
                                         $functionName = 'ZEPHIR_ADD_ASSIGN';
                                         break;
@@ -786,8 +792,9 @@ class Variable
 
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output($functionName.'(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                                $codePrinter->output($functionName . '(' . $symbol . ', ' . $tempVariable->getName() . ');');
                                 break;
+
                             case 'assign':
                                 $symbolVariable->setDynamicTypes('long');
                                 if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
@@ -800,6 +807,7 @@ class Variable
                                     $codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
                                 }
                                 break;
+
                             case 'div-assign':
                                 $symbolVariable->setDynamicTypes('double');
                                 if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
@@ -812,6 +820,7 @@ class Variable
                                     $codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
                                 }
                                 break;
+
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
                         }
