@@ -61,6 +61,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
 	test/oo/extend/application.zep.c
+	test/oo/extend/memcache.zep.c
 	test/oo/extend/spl/arrayobject.zep.c
 	test/oo/extend/spl/directoryiterator.zep.c
 	test/oo/extend/spl/doublylinkedlist.zep.c
