@@ -352,6 +352,7 @@ class ComparisonBaseOperator extends BaseOperator
                                 } else {
                                     return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $left->getCode() . ')', $expression);
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
@@ -513,6 +514,7 @@ class ComparisonBaseOperator extends BaseOperator
                                         } else {
                                             return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
                                         }
+                                        break;
 
                                     default:
                                         throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
