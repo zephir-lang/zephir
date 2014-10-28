@@ -7,6 +7,7 @@ namespace Test\Oo;
 
 class OoNativeImplements implements
 							\Countable,
+							\Traversable,
 							\Iterator,
 							\OuterIterator,
 							\RecursiveIterator,
