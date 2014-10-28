@@ -42,6 +42,10 @@ class ExtendClassTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOfPhalconMvcApplication()
     {
+        if (!extension_loaded('phalcon')) {
+            $this->markTestSkipped('No phalcon ext loaded');
+        }
+
         $class = new \Test\Oo\Extend\Application();
         $this->assertInstanceOf('Phalcon\Mvc\Application', $class);
     }
