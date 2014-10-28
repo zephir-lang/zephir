@@ -347,7 +347,11 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $left->getCode() . ')', $expression);
+                                if ($variableRight->isLocalOnly()) {
+                                    return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(&' . $variableRight->getName() . ', ' . $left->getCode() . ')', $expression);
+                                } else {
+                                    return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $left->getCode() . ')', $expression);
+                                }
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
@@ -504,7 +508,11 @@ class ComparisonBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
+                                        if ($variableRight->isLocalOnly()) {
+                                            return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(&' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
+                                        } else {
+                                            return new CompiledExpression('bool', $this->_zvalLongNegOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
+                                        }
 
                                     default:
                                         throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
