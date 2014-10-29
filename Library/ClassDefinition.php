@@ -1031,6 +1031,9 @@ class ClassDefinition
             case 'exception':
                 $classEntry = 'zend_exception_get_default(TSRMLS_C)';
                 break;
+            case 'errorexception':
+                $classEntry = 'error_exception_ce';
+                break;
 
             /**
              * Zend interfaces (Zend/zend_interfaces.h)
