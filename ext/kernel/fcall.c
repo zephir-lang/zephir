@@ -224,7 +224,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		}
 	}
 	else if (Z_TYPE_P(function_name) == IS_OBJECT) {
-		if (Z_OBJ_HANDLER_P(function_name, get_closure)) {
+		/*if (Z_OBJ_HANDLER_P(function_name, get_closure)) {
 			l   = sizeof("__invoke");
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
@@ -232,7 +232,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 			memcpy(buf,                  "__invoke",     l);
 			memcpy(buf + l,              &calling_scope, ppzce_size);
 			memcpy(buf + l + ppzce_size, &obj_ce,        ppzce_size);
-		}
+		}*/
 	}
 
 	if (EXPECTED(buf != NULL)) {
