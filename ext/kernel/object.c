@@ -2095,6 +2095,9 @@ int zephir_property_decr(zval *object, char *property_name, unsigned int propert
 	return SUCCESS;
 }
 
+/**
+ * Fetches a property using a const char
+ */
 int zephir_fetch_property(zval **result, zval *object, const char *property_name, zend_uint property_length, int silent TSRMLS_DC) {
 
 	if (zephir_isset_property(object, property_name, property_length + 1 TSRMLS_CC)) {
@@ -2107,6 +2110,9 @@ int zephir_fetch_property(zval **result, zval *object, const char *property_name
 	return 0;
 }
 
+/**
+ * Fetches a property using a zval property
+ */
 int zephir_fetch_property_zval(zval **result, zval *object, zval *property, int silent TSRMLS_DC) {
 
 	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
@@ -2125,6 +2131,9 @@ int zephir_fetch_property_zval(zval **result, zval *object, zval *property, int 
 	return 0;
 }
 
+/**
+ * Creates a closure
+ */
 int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length TSRMLS_DC) {
 
 	zend_function *function_ptr;

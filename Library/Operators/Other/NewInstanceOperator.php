@@ -120,9 +120,21 @@ class NewInstanceOperator extends BaseOperator
                         throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
                     }
 
-                    $classNameToFetch = 'Z_STRVAL_P(' . $className . '), Z_STRLEN_P(' . $className . ')';
+                    /**
+                     * Use a safe string version of the variable to avoid segfaults
+                     */
+                    $compilationContext->headersManager->add('kernel/object');
+                    $safeSymbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $expression);
+                    $safeSymbolVariable->setMustInitNull(true);
+                    $safeSymbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                    $safeSymbolVariable->increaseUses();
+
+                    $compilationContext->codePrinter->output('zephir_fetch_safe_class(' . $safeSymbolVariable->getName() .', ' . $classNameVariable->getName() .');');
+
+                    $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbolVariable->getName() . '), Z_STRLEN_P(' . $safeSymbolVariable->getName() . ')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();
+
                 } else {
 
                     if (!class_exists($className, false)) {
