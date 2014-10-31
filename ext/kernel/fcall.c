@@ -60,10 +60,8 @@ int zephir_has_constructor_ce(const zend_class_entry *ce)
 		if (ce->constructor) {
 			return 1;
 		}
-
 		ce = ce->parent;
 	}
-
 	return 0;
 }
 

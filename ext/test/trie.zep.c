@@ -32,7 +32,7 @@ ZEPHIR_INIT_CLASS(Test_Trie) {
 
 PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 
-	zend_class_entry *_5;
+	zephir_nts_static zend_class_entry *_5 = NULL;
 	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
 	int i, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool create;
@@ -70,7 +70,9 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 		if (!(zephir_array_isset(_3, character))) {
 			if (create) {
 				ZEPHIR_INIT_LNVAR(_4);
-				_5 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+				if (!_5) {
+					_5 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+				}
 				object_init_ex(_4, _5);
 				if (zephir_has_constructor(_4 TSRMLS_CC)) {
 					ZEPHIR_CALL_METHOD(NULL, _4, "__construct", NULL);

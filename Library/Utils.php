@@ -42,6 +42,7 @@ class Utils
      *
      * @param string $str
      * @param bool $escapeSlash
+     * @param int $type
      * @return string
      */
     public static function addSlashes($str, $escapeSlash = false, $type = Types::STRING)
@@ -107,6 +108,8 @@ class Utils
      * Transform class/interface name to FQN format
      *
      * @param string $className
+     * @param string $currentNamespace
+     * @param AliasManager $aliasManager
      * @return string
      */
     public static function getFullName($className, $currentNamespace, AliasManager $aliasManager = null)
@@ -131,10 +134,14 @@ class Utils
             }
 
             // Relative class/interface name
-            return $currentNamespace . '\\' . $className;
-        } else {
-            // Absolute class/interface name
-            return substr($className, 1);
+            if ($currentNamespace) {
+                return $currentNamespace . '\\' . $className;
+            } else {
+                return $className;
+            }
         }
+
+        // Absolute class/interface name
+        return substr($className, 1);
     }
 }

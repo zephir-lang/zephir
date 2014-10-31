@@ -1184,7 +1184,7 @@ class ClassMethod
         $branchManager->addBranch($branch);
 
         /**
-         * Cache Manager manages both function and method call caches
+         * Cache Manager manages function calls, method calls and class entries caches
          */
         $cacheManager = new CacheManager();
         $cacheManager->setGatherer($callGathererPass);
@@ -1866,6 +1866,15 @@ class ClassMethod
                     $code = 'zephir_nts_static zephir_fcall_cache_entry ';
                     break;
 
+                case 'static_zend_class_entry':
+                    $pointer = '*';
+                    $code = 'zephir_nts_static zend_class_entry ';
+                    break;
+
+                case 'zephir_ce_guard':
+                    $code = 'zephir_nts_static zend_bool ';
+                    break;
+
                 default:
                     throw new CompilerException("Unsupported type in declare: " . $type);
             }
@@ -1878,7 +1887,8 @@ class ClassMethod
              */
             foreach ($variables as $variable) {
 
-                if (($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object') && $variable->mustInitNull()) {
+                $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
+                if ($isComplex && $variable->mustInitNull()) {
                     if ($variable->isLocalOnly()) {
                         $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
                     } else {

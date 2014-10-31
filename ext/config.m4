@@ -61,6 +61,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/dynamicprop.zep.c
 	test/oo/extend/spl/arrayobject.zep.c
 	test/oo/extend/spl/directoryiterator.zep.c
+	test/oo/extend/spl/doublylinkedlist.zep.c
 	test/oo/extend/spl/fileinfo.zep.c
 	test/oo/extend/spl/fileobject.zep.c
 	test/oo/extend/spl/filesystemiterator.zep.c
@@ -70,7 +71,9 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/extend/spl/maxheap.zep.c
 	test/oo/extend/spl/minheap.zep.c
 	test/oo/extend/spl/priorityqueue.zep.c
+	test/oo/extend/spl/queue.zep.c
 	test/oo/extend/spl/recursivedirectoryiterator.zep.c
+	test/oo/extend/spl/stack.zep.c
 	test/oo/extend/spl/tempfileobject.zep.c
 	test/oo/extendpdoclass.zep.c
 	test/oo/ooconstruct.zep.c

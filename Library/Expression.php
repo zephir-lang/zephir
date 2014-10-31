@@ -73,7 +73,7 @@ use Zephir\Expression\StaticPropertyAccess;
 /**
  * Expressions
  *
- * Represents an expression. Most language constructions in a language are expressions
+ * Represents an expression. Most language constructs in a language are expressions
  */
 class Expression
 {

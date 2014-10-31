@@ -690,7 +690,7 @@ PHP_METHOD(Test_Mcall, arrayParamWithDefaultNullValue) {
 
 	if (!driverOptions_param) {
 	ZEPHIR_INIT_VAR(driverOptions);
-	ZVAL_NULL(driverOptions);
+	array_init(driverOptions);
 	} else {
 		zephir_get_arrval(driverOptions, driverOptions_param);
 	}

@@ -22,20 +22,35 @@ namespace Zephir;
 use Zephir\Cache\FunctionCache;
 use Zephir\Cache\MethodCache;
 use Zephir\Cache\StaticMethodCache;
+use Zephir\Cache\ClassEntryCache;
 use Zephir\Passes\CallGathererPass;
 
 /**
  * CacheManager
  *
- * Creates and manages both function and method caches
+ * Creates and manages function, method and class entries caches
  */
 class CacheManager
 {
+    /**
+     * @var FunctionCache
+     */
     protected $functionCache;
 
+    /**
+     * @var MethodCache
+     */
     protected $methodCache;
 
+    /**
+     * @var StaticMethodCache
+     */
     protected $staticMethodCache;
+
+    /**
+     * @var ClassEntryCache
+     */
+    protected $classEntryCache;
 
     /**
      * @var CallGathererPass|null
@@ -50,6 +65,19 @@ class CacheManager
     public function setGatherer(CallGathererPass $gatherer = null)
     {
         $this->gatherer = $gatherer;
+    }
+
+    /**
+     * Creates or returns an existing class entry cache
+     *
+     * @return ClassEntryCache
+     */
+    public function getClassEntryCache()
+    {
+        if (!$this->classEntryCache) {
+            $this->classEntryCache = new ClassEntryCache();
+        }
+        return $this->classEntryCache;
     }
 
     /**

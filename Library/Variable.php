@@ -620,14 +620,17 @@ class Variable
     public function enableDefaultAutoInitValue()
     {
         switch ($this->_type) {
+
             case 'boolean':
             case 'bool':
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
+            case 'zephir_ce_guard':
                 $this->_defaultInitValue = 0;
                 break;
+
             case 'variable':
             case 'string':
             case 'array':
@@ -636,6 +639,7 @@ class Variable
                 $this->setMustInitNull(true);
                 $this->setLocalOnly(false);
                 break;
+
             default:
                 throw new CompilerException('Cannot create an automatic safe default value for variable type: ' . $this->_type);
         }
@@ -910,6 +914,7 @@ class Variable
 
     /**
      * Shortcut is type variable?
+     *
      * @return bool
      */
     public function isVariable()
@@ -919,6 +924,7 @@ class Variable
 
     /**
      * Shortcut is type bool?
+     *
      * @return bool
      */
     public function isBoolean()
@@ -928,6 +934,7 @@ class Variable
 
     /**
      * Shortcut is type string?
+     *
      * @return bool
      */
     public function isString()
@@ -937,6 +944,7 @@ class Variable
 
     /**
      * Shortcut is type int?
+     *
      * @return bool
      */
     public function isInt()
@@ -946,6 +954,7 @@ class Variable
 
     /**
      * Shortcut is type double?
+     *
      * @return bool
      */
     public function isDouble()
@@ -955,6 +964,7 @@ class Variable
 
     /**
      * Shortcut is type double?
+     *
      * @return bool
      */
     public function isArray()
@@ -964,6 +974,17 @@ class Variable
 
     /**
      * Shortcut is type variable or string?
+     *
+     * @return bool
+     */
+    public function isNotVariable()
+    {
+        return !$this->isVariable();
+    }
+
+    /**
+     * Shortcut is type variable or string?
+     *
      * @return bool
      */
     public function isNotVariableAndString()
@@ -973,6 +994,7 @@ class Variable
 
     /**
      * Shortcut is type variable or array?
+     *
      * @return bool
      */
     public function isNotVariableAndArray()

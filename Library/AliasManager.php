@@ -30,7 +30,9 @@ class AliasManager
     protected $aliases = array();
 
     /**
+     * Adds a renaming in a "use" to the alias manager
      *
+     * @param array $useStatement
      */
     public function add(array $useStatement)
     {
