@@ -61,6 +61,8 @@ ZEND_EXTERN_MODULE_GLOBALS(%PROJECT_LOWER%)
 	#define ZEPHIR_VGLOBAL &(%PROJECT_LOWER%_globals)
 #endif
 
+#define ZEPHIR_API ZEND_API
+
 #define zephir_globals_def %PROJECT_LOWER%_globals
 #define zend_zephir_globals_def zend_%PROJECT_LOWER%_globals
 
