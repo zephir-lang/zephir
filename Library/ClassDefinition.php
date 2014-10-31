@@ -1210,6 +1210,18 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplMaxHeap';
                 break;
+            case 'splstack':
+                $compilationContext->headersManager->add('ext/spl/spl_dllist');
+                $classEntry = 'spl_ce_SplStack';
+                break;
+            case 'splqueue':
+                $compilationContext->headersManager->add('ext/spl/spl_dllist');
+                $classEntry = 'spl_ce_SplQueue';
+                break;
+            case 'spldoublylinkedlist':
+                $compilationContext->headersManager->add('ext/spl/spl_dllist');
+                $classEntry = 'spl_ce_SplDoublyLinkedList';
+                break;
             case 'stdclass':
                 $classEntry = 'zend_standard_class_def';
                 break;
