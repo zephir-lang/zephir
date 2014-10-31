@@ -1490,7 +1490,6 @@ xx_class_const_definition(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) D
 
 /** method definition */
 
-
 /** xx_visibility_list FUNCTION (xx_parameter_list) {} */
 xx_class_method_definition(R) ::= xx_visibility_list(V) FUNCTION IDENTIFIER(I) PARENTHESES_OPEN PARENTHESES_CLOSE BRACKET_OPEN BRACKET_CLOSE . {
 	R = xx_ret_class_method(V, I, NULL, NULL, NULL, NULL, status->scanner_state);

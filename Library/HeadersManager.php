@@ -57,6 +57,7 @@ class HeadersManager
         if (!is_string($path)) {
             throw new \InvalidArgumentException('$path must be only string type');
         }
+
         if (!$position) {
             $this->_headers[$path] = $path;
         } else {

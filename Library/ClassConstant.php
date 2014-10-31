@@ -107,27 +107,27 @@ class ClassConstant
 
             case 'long':
             case 'int':
-                $compilationContext->codePrinter->output("zend_declare_class_constant_long(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->_value['value'] . " TSRMLS_CC);");
+                $compilationContext->codePrinter->output("zend_declare_class_constant_long(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->_value['value'] . " TSRMLS_CC);");
                 break;
 
             case 'double':
-                $compilationContext->codePrinter->output("zend_declare_class_constant_double(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->_value['value'] . " TSRMLS_CC);");
+                $compilationContext->codePrinter->output("zend_declare_class_constant_double(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->_value['value'] . " TSRMLS_CC);");
                 break;
 
             case 'bool':
                 if ($this->_value['value'] == 'false') {
-                    $compilationContext->codePrinter->output("zend_declare_class_constant_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), 0 TSRMLS_CC);");
+                    $compilationContext->codePrinter->output("zend_declare_class_constant_bool(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), 0 TSRMLS_CC);");
                 } else {
-                    $compilationContext->codePrinter->output("zend_declare_class_constant_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), 1 TSRMLS_CC);");
+                    $compilationContext->codePrinter->output("zend_declare_class_constant_bool(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), 1 TSRMLS_CC);");
                 }
                 break;
 
             case 'string':
-                $compilationContext->codePrinter->output("zend_declare_class_constant_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->_value['value']) . "\" TSRMLS_CC);");
+                $compilationContext->codePrinter->output("zend_declare_class_constant_string(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->_value['value']) . "\" TSRMLS_CC);");
                 break;
 
             default:
-                $compilationContext->codePrinter->output("zend_declare_class_constant_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\") TSRMLS_CC);");
+                $compilationContext->codePrinter->output("zend_declare_class_constant_null(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\") TSRMLS_CC);");
         }
     }
 }

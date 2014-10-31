@@ -119,7 +119,7 @@ class StaticCall extends Call
     {
 
         $codePrinter = $compilationContext->codePrinter;
-        $classCe = $classDefinition->getClassEntry();
+        $classCe = $classDefinition->getClassEntry($compilationContext);
         //$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
 
         /**
@@ -204,7 +204,7 @@ class StaticCall extends Call
             $classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, 'zend_class_entry', $compilationContext);
             $classEntry = $classEntryVariable->getName();
         } else {
-            $classEntry = $classDefinition->getClassEntry();
+            $classEntry = $classDefinition->getClassEntry($compilationContext);
         }
 
         /**

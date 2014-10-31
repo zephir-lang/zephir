@@ -106,7 +106,7 @@ class NewInstanceOperator extends BaseOperator
              * Classes inside the same extension
              */
             if ($classDefinition) {
-                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ');');
+                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ');');
                 $symbolVariable->setClassTypes($className);
             } else {
 
@@ -116,8 +116,8 @@ class NewInstanceOperator extends BaseOperator
                 if ($dynamic) {
 
                     $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
-                    if ($classNameVariable->isNotVariable()) {
-                        throw new CompilerException("Only dynamic/string variables can be used in new operator", $expression);
+                    if ($classNameVariable->isNotVariableAndString()) {
+                        throw new CompilerException("Only dynamic/string variables can be used in new operator. " . $classNameVariable->getName(), $expression);
                     }
 
                     /**

@@ -111,31 +111,31 @@ class Bootstrap
 
                     $parameter = $_SERVER['argv'][$i];
 
-                    if (preg_match('/^-fno-([a-z0-9\-]+)/', $parameter, $matches)) {
+                    if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
                         $config->set($matches[1], false, 'optimizations');
                         continue;
                     }
 
-                    if (preg_match('/^-f([a-z0-9\-]+)/', $parameter, $matches)) {
+                    if (preg_match('/^-f([a-z0-9\-]+)$/', $parameter, $matches)) {
                         $config->set($matches[1], true, 'optimizations');
                     }
 
-                    if (preg_match('/^-W([a-z0-9\-]+)/', $parameter, $matches)) {
+                    if (preg_match('/^-W([a-z0-9\-]+)$/', $parameter, $matches)) {
                         $logger->set($matches[1], false, 'warnings');
                         continue;
                     }
 
-                    if (preg_match('/^-w([a-z0-9\-]+)/', $parameter, $matches)) {
+                    if (preg_match('/^-w([a-z0-9\-]+)$/', $parameter, $matches)) {
                         $logger->set($matches[1], true, 'warnings');
                         continue;
                     }
 
-                    if (preg_match('/^--([a-z0-9\-]+)/', $parameter, $matches)) {
+                    if (preg_match('/^--([a-z0-9\-]+)$/', $parameter, $matches)) {
                         $config->set($matches[1], true, 'extra');
                         continue;
                     }
 
-                    if (preg_match('/^--([a-z0-9\-]+)=(.*)/', $parameter, $matches)) {
+                    if (preg_match('/^--([a-z0-9\-]+)=(.*)$/', $parameter, $matches)) {
                         $config->set($matches[1], $matches[2], 'extra');
                         continue;
                     }

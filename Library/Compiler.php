@@ -54,7 +54,19 @@ class Compiler
 
     protected $constants = array();
 
+    /**
+     * Extension globals
+     *
+     * @var array
+     */
     protected $globals = array();
+
+    /**
+     * External dependencies
+     *
+     * @var array
+     */
+    protected $externalDependencies = array();
 
     /**
      * @var StringsManager
@@ -161,17 +173,57 @@ class Compiler
     }
 
     /**
+     * Loads a class definition in an external dependency
+     *
+     * @param string $className
+     * @param string $location
+     */
+    public function loadExternalClass($className, $location)
+    {
+
+        $filePath = $location . DIRECTORY_SEPARATOR . strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.zep';
+        if (!file_exists($filePath)) {
+            throw new CompilerException("Class '$className' must be located at '$filePath' but this file is missing");
+        }
+
+        /**
+         * Fix the class name
+         */
+        $className = join('\\', array_map(function ($i) {
+            return ucfirst($i);
+        }, explode('\\', $className)));
+
+        $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
+        $this->files[$className]->setIsExternal(true);
+        $this->files[$className]->preCompile($this);
+
+        $this->definitions[$className] = $this->files[$className]->getClassDefinition();
+    }
+
+    /**
      * Allows to check if a class is part of the compiled extension
      *
      * @param string $className
-     *
      * @return boolean
      */
     public function isClass($className)
     {
+
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
                 if ($value->getType() == 'class') {
+                    return true;
+                }
+            }
+        }
+
+        /**
+         * Try to autoload the class from an external dependency
+         */
+        if (count($this->externalDependencies)) {
+            foreach ($this->externalDependencies as $namespace => $location) {
+                if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
+                    $this->loadExternalClass($className, $location);
                     return true;
                 }
             }
@@ -192,6 +244,18 @@ class Compiler
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
                 if ($value->getType() == 'interface') {
+                    return true;
+                }
+            }
+        }
+
+        /**
+         * Try to autoload the class from an external dependency
+         */
+        if (count($this->externalDependencies)) {
+            foreach ($this->externalDependencies as $namespace => $location) {
+                if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
+                    $this->loadExternalClass($className, $location);
                     return true;
                 }
             }
@@ -243,7 +307,7 @@ class Compiler
     }
 
     /**
-     * Inserts a class definition to the compiler
+     * Inserts an anonymous class definition in the compiler
      *
      * @param CompilerFileAnonymous $file
      * @param ClassDefinition $classDefinition
@@ -541,6 +605,31 @@ class Compiler
         $namespace = $this->checkDirectory();
 
         /**
+         * Check whether there are external dependencies
+         */
+        $externalDependencies = $this->config->get('external-dependencies');
+        if (is_array($externalDependencies)) {
+            foreach ($externalDependencies as $dependencyNs => $location) {
+
+                if (!file_exists($location)) {
+                    throw new CompilerException('Location of dependency "' . $dependencyNs . '" does not exist. Check the config.json for more information');
+                }
+
+                $this->addExternalDependency($dependencyNs, $location);
+            }
+        }
+
+        /**
+         * Check if there are module/request/global destructors
+         */
+        $destructors = $this->config->get('destructors');
+        if (is_array($destructors)) {
+            $invokeDestructors = $this->processDestructors($destructors);
+            $includes = $invokeDestructors[0];
+            $destructors = $invokeDestructors[1];
+        }
+
+        /**
          * Round 1. pre-compile all files in memory
          */
         $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
@@ -612,18 +701,24 @@ class Compiler
         $hash = "";
         foreach ($this->files as $compileFile) {
 
-            $compileFile->compile($this, $this->stringManager);
-            $compiledFile = $compileFile->getCompiledFile();
+            /**
+             * Only compile classes in the local extension, ignore external classes
+             */
+            if (!$compileFile->isExternal()) {
 
-            $methods = array();
-            $classDefinition = $compileFile->getClassDefinition();
-            foreach ($classDefinition->getMethods() as $method) {
-                $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                $compileFile->compile($this, $this->stringManager);
+                $compiledFile = $compileFile->getCompiledFile();
+
+                $methods = array();
+                $classDefinition = $compileFile->getClassDefinition();
+                foreach ($classDefinition->getMethods() as $method) {
+                    $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                }
+
+                $files[] = $compiledFile;
+
+                $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
             }
-
-            $files[] = $compiledFile;
-
-            $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
         }
 
         /**
@@ -931,12 +1026,25 @@ class Compiler
             return str_replace('.c', '.zep.c', $file);
         }, $this->compiledFiles);
 
+        /**
+         * If export-classes is enabled all headers are copied to include/php/ext
+         */
+        $exportClasses = $this->config->get('export-classes', 'extra');
+        if ($exportClasses) {
+            $compiledHeaders = array_map(function ($file) {
+                return str_replace('.c', '.zep.h', $file);
+            }, $this->compiledFiles);
+        } else {
+            $compiledHeaders = array('php_' . strtoupper($project) . '.h');
+        }
+
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
             '%PROJECT_UPPER%'        => strtoupper($project),
             '%PROJECT_CAMELIZE%'     => ucfirst($project),
             '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
+            '%HEADERS_COMPILED%'     => implode(" ", $compiledHeaders),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
         );
 
@@ -1237,6 +1345,17 @@ class Compiler
     }
 
     /**
+     * Adds an external dependency to the compiler
+     *
+     * @param string $namespace
+     * @param string $location
+     */
+    public function addExternalDependency($namespace, $location)
+    {
+        $this->externalDependencies[$namespace] = $location;
+    }
+
+    /**
      * Create project.c and project.h according to the current extension
      *
      * @param string $project
@@ -1267,9 +1386,11 @@ class Compiler
          * have more weight
          */
         foreach ($files as $file) {
-            $classDefinition = $file->getClassDefinition();
-            if ($classDefinition) {
-                $classDefinition->calculateDependencyRank();
+            if (!$file->isExternal()) {
+                $classDefinition = $file->getClassDefinition();
+                if ($classDefinition) {
+                    $classDefinition->calculateDependencyRank();
+                }
             }
         }
 
@@ -1277,9 +1398,11 @@ class Compiler
          * Round 1.5 Make a second pass to ensure classes will have the correct weight
          */
         foreach ($files as $file) {
-            $classDefinition = $file->getClassDefinition();
-            if ($classDefinition) {
-                $classDefinition->calculateDependencyRank();
+            if (!$file->isExternal()) {
+                $classDefinition = $file->getClassDefinition();
+                if ($classDefinition) {
+                    $classDefinition->calculateDependencyRank();
+                }
             }
         }
 
@@ -1293,23 +1416,25 @@ class Compiler
          * Round 2. Generate the ZEPHIR_INIT calls according to the dependency rank
          */
         foreach ($files as $file) {
-            $classDefinition = $file->getClassDefinition();
-            if ($classDefinition) {
-                $dependencyRank = $classDefinition->getDependencyRank();
-                if ($classDefinition->getType() == 'class') {
-                    if (!isset($classInits[$dependencyRank])) {
-                        $classEntries[$dependencyRank] = array();
-                        $classInits[$dependencyRank] = array();
+            if (!$file->isExternal()) {
+                $classDefinition = $file->getClassDefinition();
+                if ($classDefinition) {
+                    $dependencyRank = $classDefinition->getDependencyRank();
+                    if ($classDefinition->getType() == 'class') {
+                        if (!isset($classInits[$dependencyRank])) {
+                            $classEntries[$dependencyRank] = array();
+                            $classInits[$dependencyRank] = array();
+                        }
+                        $classEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+                        $classInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
+                    } else {
+                        if (!isset($interfaceInits[$dependencyRank])) {
+                            $interfaceEntries[$dependencyRank] = array();
+                            $interfaceInits[$dependencyRank] = array();
+                        }
+                        $interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
+                        $interfaceInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
                     }
-                    $classEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
-                    $classInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
-                } else {
-                    if (!isset($interfaceInits[$dependencyRank])) {
-                        $interfaceEntries[$dependencyRank] = array();
-                        $interfaceInits[$dependencyRank] = array();
-                    }
-                    $interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
-                    $interfaceInits[$dependencyRank][] = 'ZEPHIR_INIT(' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . ');';
                 }
             }
         }

@@ -97,7 +97,7 @@ class StaticProperty
         $codePrinter = $compilationContext->codePrinter;
 
         $compilationContext->headersManager->add('kernel/object');
-        $classEntry = $classDefinition->getClassEntry();
+        $classEntry = $classDefinition->getClassEntry($compilationContext);
 
         switch ($resolvedExpr->getType()) {
 

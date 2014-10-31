@@ -1,6 +1,7 @@
 PHP_ARG_ENABLE(%PROJECT_LOWER%, whether to enable %PROJECT_LOWER%, [ --enable-%PROJECT_LOWER%   Enable %PROJECT_CAMELIZE%])
 
 if test "$PHP_%PROJECT_UPPER%" = "yes"; then
+
 	AC_DEFINE(HAVE_%PROJECT_UPPER%, 1, [Whether you have %PROJECT_CAMELIZE%])
 	%PROJECT_LOWER%_sources="%PROJECT_LOWER_SAFE%.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c %FILES_COMPILED% %EXTRA_FILES_COMPILED%"
 	PHP_NEW_EXTENSION(%PROJECT_LOWER%, $%PROJECT_LOWER%_sources, $ext_shared)
@@ -43,4 +44,6 @@ if test "$PHP_%PROJECT_UPPER%" = "yes"; then
 	)
 
 	CPPFLAGS=$old_CPPFLAGS
+
+	PHP_INSTALL_HEADERS([ext/%PROJECT_LOWER%], [%HEADERS_COMPILED%])
 fi

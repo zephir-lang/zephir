@@ -30,9 +30,14 @@ use Zephir\Logger;
  */
 class CompilerFileAnonymous
 {
+    /**
+     * @var string
+     */
     protected $namespace;
 
     protected $compiledFile;
+
+    protected $external = false;
 
     /**
      * @var ClassDefinition
@@ -74,6 +79,26 @@ class CompilerFileAnonymous
     public function getClassDefinition()
     {
         return $this->classDefinition;
+    }
+
+    /**
+     * Sets if the class belongs to an external dependency or not
+     *
+     * @param boolean $external
+     */
+    public function setIsExternal($external)
+    {
+        $this->external = (bool) $external;
+    }
+
+    /**
+     * Checks if the class file belongs to an external dependency or not
+     *
+     * @return bool
+     */
+    public function isExternal()
+    {
+        return $this->external;
     }
 
     /**

@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\HeadersManager;
+
 /**
  * ClassDefinition
  *
@@ -26,8 +28,14 @@ namespace Zephir;
  */
 class ClassDefinition
 {
+    /**
+     * @var string
+     */
     protected $namespace;
 
+    /**
+     * @var string
+     */
     protected $name;
 
     /**
@@ -35,13 +43,30 @@ class ClassDefinition
      */
     protected $type = 'class';
 
+    /**
+     * @var string
+     */
     protected $extendsClass;
 
+    /**
+     * @var array
+     */
     protected $interfaces;
 
+    /**
+     * @var bool
+     */
     protected $final;
 
+    /**
+     * @var bool
+     */
     protected $abstract;
+
+    /**
+     * @var bool
+     */
+    protected $external = false;
 
     /**
      * @var ClassDefinition
@@ -107,13 +132,33 @@ class ClassDefinition
     }
 
     /**
-     * Returns if the class is internal or not
+     * Returns whether the class is internal or not
      *
      * @return bool
      */
     public function isInternal()
     {
         return $this->isInternal;
+    }
+
+    /**
+     * Sets whether the class is external or not
+     *
+     * @param boolean $isExternal
+     */
+    public function setIsExternal($isExternal)
+    {
+        $this->external = $isExternal;
+    }
+
+    /**
+     * Returns whether the class is internal or not
+     *
+     * @return bool
+     */
+    public function isExternal()
+    {
+        return $this->external;
     }
 
     /**
@@ -618,10 +663,22 @@ class ClassDefinition
     /**
      * Returns the name of the zend_class_entry according to the class name
      *
+     * @param CompilationContext $compilationContext
      * @return string
      */
-    public function getClassEntry()
+    public function getClassEntry(CompilationContext $compilationContext = null)
     {
+        if ($this->external) {
+
+            if (!is_object($compilationContext)) {
+                throw new Exception('A compilation context is required');
+            }
+
+            /**
+             * Automatically add the external header
+             */
+            $compilationContext->headersManager->add($this->getExternalHeader(), HeadersManager::POSITION_LAST);
+        }
         return strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name) . '_ce';
     }
 
@@ -654,6 +711,17 @@ class ClassDefinition
     public function getSCName($namespace)
     {
         return str_replace($namespace . "_", "", strtolower(str_replace('\\', '_', $this->namespace) . '_' . $this->name));
+    }
+
+    /**
+     * Returns an absolute location to the class header
+     *
+     * @return string
+     */
+    public function getExternalHeader()
+    {
+        $parts = explode('\\', $this->namespace);
+        return 'ext/' . strtolower($parts[0] . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $this->namespace) . DIRECTORY_SEPARATOR . $this->name) . '.zep';
     }
 
     /**
@@ -739,7 +807,7 @@ class ClassDefinition
 
             $classExtendsDefinition = $this->extendsClassDefinition;
             if (!$classExtendsDefinition->isInternal()) {
-                $classEntry = $classExtendsDefinition->getClassEntry();
+                $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
             }
@@ -769,7 +837,6 @@ class ClassDefinition
 
         $this->eventsManager->listen('setMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
             $needBreak = false;
-
             $methods[$method->getName()] = $method;
             $compilationContext->classDefinition->setMethods($methods);
         });
@@ -823,7 +890,7 @@ class ClassDefinition
 
                 if ($compiler->isInterface($interface)) {
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    $classEntry = $classInterfaceDefinition->getClassEntry();
+                    $classEntry = $classInterfaceDefinition->getClassEntry($compilationContext);
                 } else {
                     if ($compiler->isInternalInterface($interface)) {
                         $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
@@ -916,12 +983,22 @@ class ClassDefinition
         }
 
         /**
+         * Check whether classes must be exported
+         */
+        $exportClasses = $compilationContext->config->get('export-classes', 'extra');
+        if ($exportClasses) {
+            $exportAPI = 'extern ZEPHIR_API';
+        } else {
+            $exportAPI = 'extern';
+        }
+
+        /**
          * Create a code printer for the header file
          */
         $codePrinter = new CodePrinter();
 
         $codePrinter->outputBlankLine();
-        $codePrinter->output('extern zend_class_entry *' . $this->getClassEntry() . ';');
+        $codePrinter->output($exportAPI . ' zend_class_entry *' . $this->getClassEntry() . ';');
         $codePrinter->outputBlankLine();
 
         $codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ');');
@@ -1025,6 +1102,7 @@ class ClassDefinition
     public function getClassEntryByClassName($className, $compilationContext, $check = false)
     {
         switch (strtolower($className)) {
+
             /**
              * Zend classes
              */
@@ -1038,12 +1116,15 @@ class ClassDefinition
             case 'iterator':
                 $classEntry = 'zend_ce_iterator';
                 break;
+
             case 'arrayaccess':
                 $classEntry = 'zend_ce_arrayaccess';
                 break;
+
             case 'serializable':
                 $classEntry = 'zend_ce_serializable';
                 break;
+
             case 'iteratoraggregate':
                 $classEntry = 'zend_ce_aggregate';
                 break;
@@ -1054,39 +1135,51 @@ class ClassDefinition
             case 'logicexception':
                 $classEntry = 'spl_ce_LogicException';
                 break;
+
             case 'badfunctioncallexception':
                 $classEntry = 'spl_ce_BadFunctionCallException';
                 break;
+
             case 'badmethodcallexception':
                 $classEntry = 'spl_ce_BadMethodCallException';
                 break;
+
             case 'domainexception':
                 $classEntry = 'spl_ce_DomainException';
                 break;
+
             case 'invalidargumentexception':
                 $classEntry = 'spl_ce_InvalidArgumentException';
                 break;
+
             case 'lengthexception':
                 $classEntry = 'spl_ce_LengthException';
                 break;
+
             case 'outofrangeexception':
                 $classEntry = 'spl_ce_OutOfRangeException';
                 break;
+
             case 'runtimeexception':
                 $classEntry = 'spl_ce_RuntimeException';
                 break;
+
             case 'outofboundsexception':
                 $classEntry = 'spl_ce_OutOfBoundsException';
                 break;
+
             case 'overflowexception':
                 $classEntry = 'spl_ce_OverflowException';
                 break;
+
             case 'rangeexception':
                 $classEntry = 'spl_ce_RangeException';
                 break;
+
             case 'underflowexception':
                 $classEntry = 'spl_ce_UnderflowException';
                 break;
+
             case 'unexpectedvalueexception':
                 $classEntry = 'spl_ce_UnexpectedValueException';
                 break;
@@ -1097,87 +1190,113 @@ class ClassDefinition
             case 'recursiveiterator':
                 $classEntry = 'spl_ce_RecursiveIterator';
                 break;
+
             case 'recursiveiteratoriterator':
                 $classEntry = 'spl_ce_RecursiveIteratorIterator';
                 break;
+
             case 'recursivetreeiterator':
                 $classEntry = 'spl_ce_RecursiveTreeIterator';
                 break;
+
             case 'filteriterator':
                 $classEntry = 'spl_ce_FilterIterator';
                 break;
+
             case 'recursivefilteriterator':
                 $classEntry = 'spl_ce_RecursiveFilterIterator';
                 break;
+
             case 'parentiterator':
                 $classEntry = 'spl_ce_ParentIterator';
                 break;
+
             case 'seekableiterator':
                 $classEntry = 'spl_ce_SeekableIterator';
                 break;
+
             case 'limititerator':
                 $classEntry = 'spl_ce_LimitIterator';
                 break;
+
             case 'cachingiterator':
                 $classEntry = 'spl_ce_CachingIterator';
                 break;
+
             case 'recursivecachingiterator':
                 $classEntry = 'spl_ce_RecursiveCachingIterator';
                 break;
+
             case 'outeriterator':
                 $classEntry = 'spl_ce_OuterIterator';
                 break;
+
             case 'iteratoriterator':
                 $classEntry = 'spl_ce_IteratorIterator';
                 break;
+
             case 'norewinditerator':
                 $classEntry = 'spl_ce_NoRewindIterator';
                 break;
+
             case 'infiniteiterator':
                 $classEntry = 'spl_ce_InfiniteIterator';
                 break;
+
             case 'emptyiterator':
                 $classEntry = 'spl_ce_EmptyIterator';
                 break;
+
             case 'appenditerator':
                 $classEntry = 'spl_ce_AppendIterator';
                 break;
+
             case 'regexiterator':
                 $classEntry = 'spl_ce_RegexIterator';
                 break;
+
             case 'recursiveregexiterator':
                 $classEntry = 'spl_ce_RecursiveRegexIterator';
                 break;
+
             case 'directoryiterator':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_DirectoryIterator';
                 break;
+
             case 'filesystemiterator':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_FilesystemIterator';
                 break;
+
             case 'recursivedirectoryiterator':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_RecursiveDirectoryIterator';
                 break;
+
             case 'globiterator':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_GlobIterator';
                 break;
+
             case 'splfileobject':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_SplFileObject';
                 break;
+
             case 'spltempfileobject':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_SplTempFileObject';
                 break;
+
             case 'countable':
                 $classEntry = 'spl_ce_Countable';
                 break;
+
             case 'callbackfilteriterator':
                 $classEntry = 'spl_ce_CallbackFilterIterator';
                 break;
+
             case 'recursivecallbackfilteriterator':
                 $classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
                 break;
@@ -1186,45 +1305,56 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/spl/spl_array');
                 $classEntry = 'spl_ce_ArrayObject';
                 break;
+
             case 'splfixedarray':
                 $compilationContext->headersManager->add('ext/spl/spl_fixedarray');
                 $classEntry = 'spl_ce_SplFixedArray';
                 break;
+
             case 'splpriorityqueue':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplPriorityQueue';
                 break;
+
             case 'splfileinfo':
                 $compilationContext->headersManager->add('ext/spl/spl_directory');
                 $classEntry = 'spl_ce_SplFileInfo';
                 break;
+
             case 'splheap':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplHeap';
                 break;
+
             case 'splminheap':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplMinHeap';
                 break;
+
             case 'splmaxheap':
                 $compilationContext->headersManager->add('ext/spl/spl_heap');
                 $classEntry = 'spl_ce_SplMaxHeap';
                 break;
+
             case 'splstack':
                 $compilationContext->headersManager->add('ext/spl/spl_dllist');
                 $classEntry = 'spl_ce_SplStack';
                 break;
+
             case 'splqueue':
                 $compilationContext->headersManager->add('ext/spl/spl_dllist');
                 $classEntry = 'spl_ce_SplQueue';
                 break;
+
             case 'spldoublylinkedlist':
                 $compilationContext->headersManager->add('ext/spl/spl_dllist');
                 $classEntry = 'spl_ce_SplDoublyLinkedList';
                 break;
+
             case 'stdclass':
                 $classEntry = 'zend_standard_class_def';
                 break;
+
             case 'closure':
                 $compilationContext->headersManager->add('Zend/zend_closures');
                 $classEntry = 'zend_ce_closure';
@@ -1234,10 +1364,12 @@ class ClassDefinition
                 $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
                 $classEntry = 'php_pdo_get_dbh_ce()';
                 break;
+
             case 'pdostatement':
                 $compilationContext->headersManager->add('kernel/main');
                 $classEntry = 'zephir_get_internal_ce(SS("pdostatement") TSRMLS_CC)';
                 break;
+
             case 'pdoexception':
                 $compilationContext->headersManager->add('ext/pdo/php_pdo_driver');
                 $classEntry = 'php_pdo_get_exception()';
@@ -1300,6 +1432,7 @@ class ClassDefinition
                     return false;
                 }
         }
+
         return $classEntry;
     }
 

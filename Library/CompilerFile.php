@@ -28,12 +28,20 @@ namespace Zephir;
 class CompilerFile
 {
 
+    /**
+     * Namespace of the
+     */
     protected $_namespace;
 
     protected $_className;
 
     protected $_filePath;
 
+    protected $_external = false;
+
+    /**
+     * Original internal representation (IR) of the file
+     */
     protected $_ir;
 
     protected $_originalNode;
@@ -45,6 +53,9 @@ class CompilerFile
      */
     protected $_classDefinition;
 
+    /**
+     * @var array
+     */
     protected $_headerCBlocks;
 
     /**
@@ -82,6 +93,26 @@ class CompilerFile
     public function getClassDefinition()
     {
         return $this->_classDefinition;
+    }
+
+    /**
+     * Sets if the class belongs to an external dependency or not
+     *
+     * @param boolean $external
+     */
+    public function setIsExternal($external)
+    {
+        $this->_external = (bool) $external;
+    }
+
+    /**
+     * Checks if the class file belongs to an external dependency or not
+     *
+     * @return bool
+     */
+    public function isExternal()
+    {
+        return $this->_external;
     }
 
     /**
@@ -198,6 +229,7 @@ class CompilerFile
     public function preCompileInterface($namespace, $topStatement)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+        $classDefinition->setIsExternal($this->_external);
 
         if (isset($topStatement['extends'])) {
             foreach ($topStatement['extends'] as &$extend) {
@@ -363,6 +395,7 @@ class CompilerFile
     public function preCompileClass($namespace, $topStatement)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+        $classDefinition->setIsExternal($this->_external);
 
         if (isset($topStatement['extends'])) {
             $classDefinition->setExtendsClass($this->getFullName($topStatement['extends']));
@@ -446,7 +479,7 @@ class CompilerFile
     }
 
     /**
-     * Pre-compiles a zephir file. Generates the IR and perform basic validations
+     * Pre-compiles a Zephir file. Generates the IR and perform basic validations
      *
      * @throws ParseException
      * @throws CompilerException
@@ -536,8 +569,10 @@ class CompilerFile
             throw new CompilerException("Every file must contain at least a class or an interface", $topStatement);
         }
 
-        if (strtolower($this->_filePath) != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
-            throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
+        if (!$this->_external) {
+            if (strtolower($this->_filePath) != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
+                throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
+            }
         }
 
         $this->_ir = $ir;
@@ -624,6 +659,13 @@ class CompilerFile
 
         if (!$this->_ir) {
             throw new CompilerException('IR related to compiled file is missing');
+        }
+
+        /**
+         * External classes should not be compiled as part of the extension
+         */
+        if ($this->_external) {
+            return;
         }
 
         /**

@@ -144,7 +144,7 @@ class StaticConstantAccess
             $symbolVariable->setDynamicTypes('undefined');
 
             $compilationContext->headersManager->add('kernel/object');
-            $compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SS("' . $constant . '") TSRMLS_CC);');
+            $compilationContext->codePrinter->output('zephir_get_class_constant(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ', SS("' . $constant . '") TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 

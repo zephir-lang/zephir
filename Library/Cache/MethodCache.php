@@ -71,8 +71,16 @@ class MethodCache
 
         if (!($method instanceof \ReflectionMethod)) {
 
-            if (isset($this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()])) {
-                return '&' . $this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()]->getName();
+            /**
+             * Avoid generate caches for external classes
+             */
+            if ($method->getClassDefinition()->isExternal()) {
+                return 'NULL';
+            }
+
+            $completeName = $method->getClassDefinition()->getCompleteName();
+            if (isset($this->cache[$completeName][$method->getName()])) {
+                return '&' . $this->cache[$completeName][$method->getName()]->getName();
             }
 
             if ($method->getClassDefinition()->isInterface()) {
@@ -82,6 +90,7 @@ class MethodCache
 
         if (!$compilationContext->insideCycle) {
             if (!($method instanceof \ReflectionMethod)) {
+
                 if (!$method->isPrivate() && !$method->isFinal() && !$method->getClassDefinition()->isFinal()) {
                     $gatherer = $this->gatherer;
                     if (is_object($gatherer)) {
@@ -108,7 +117,7 @@ class MethodCache
         $functionCache->setReusable(false);
 
         if (!($method instanceof \ReflectionMethod)) {
-            $this->cache[$method->getClassDefinition()->getCompleteName()][$method->getName()] = $functionCache;
+            $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 
         return '&' . $functionCache->getName();

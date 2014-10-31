@@ -199,7 +199,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         }
 
         $compilationContext->headersManager->add('kernel/object');
-        $classEntry = $classDefinition->getClassEntry();
+        $classEntry = $classDefinition->getClassEntry($compilationContext);
         $this->_assignStaticPropertyArrayMultipleIndex($classEntry, $property, $resolvedExpr, $compilationContext, $statement);
     }
 }

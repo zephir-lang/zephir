@@ -66,7 +66,7 @@ class InstanceOfOperator extends BaseOperator
                 $className = Utils::getFullName($resolvedVariable, $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
                 if ($compilationContext->compiler->isClass($className)) {
                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                    $classEntry = $classDefinition->getClassEntry();
+                    $classEntry = $classDefinition->getClassEntry($compilationContext);
                 } else {
                     if (!class_exists($className, false)) {
                         $code = 'SL("' . $resolvedVariable . '")';
@@ -87,11 +87,11 @@ class InstanceOfOperator extends BaseOperator
                             $className = $compilationContext->getFullName($resolvedVariable);
                             if ($compilationContext->compiler->isClass($className)) {
                                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                                $classEntry = $classDefinition->getClassEntry();
+                                $classEntry = $classDefinition->getClassEntry($compilationContext);
                             } else {
                                 if ($compilationContext->compiler->isInterface($className)) {
                                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                                    $classEntry = $classDefinition->getClassEntry();
+                                    $classEntry = $classDefinition->getClassEntry($compilationContext);
                                 } else {
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';

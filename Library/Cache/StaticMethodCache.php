@@ -59,8 +59,16 @@ class StaticMethodCache
             return 'NULL';
         }
 
-        $completeName = $method->getClassDefinition()->getCompleteName();
         if (!($method instanceof \ReflectionMethod)) {
+
+            $completeName = $method->getClassDefinition()->getCompleteName();
+
+            /**
+             * Avoid generate caches for external classes
+             */
+            if ($method->getClassDefinition()->isExternal()) {
+                return 'NULL';
+            }
 
             if (isset($this->cache[$completeName][$method->getName()])) {
                 return '&' . $this->cache[$completeName][$method->getName()]->getName();
