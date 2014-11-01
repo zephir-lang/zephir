@@ -2553,8 +2553,12 @@ xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
 }
 
-xx_common_expr(R) ::= SUB xx_common_expr(O1) . {
+xx_common_expr(R) ::= SUB xx_common_expr(O1) . [NOT] {
 	R = xx_ret_expr("minus", O1, NULL, NULL, status->scanner_state);
+}
+
+xx_common_expr(R) ::= PLUS xx_common_expr(O1) . [NOT] {
+	R = xx_ret_expr("plus", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= ISSET xx_common_expr(O1) . {

@@ -112,9 +112,10 @@
 #define XX_RETURN                         112
 #define XX_UNSET                          113
 #define XX_THROW                          114
-#define XX_INTEGER                        115
-#define XX_CHAR                           116
-#define XX_DOUBLE                         117
-#define XX_TRUE                           118
-#define XX_FALSE                          119
-#define XX_CBLOCK                         120
+#define XX_PLUS                           115
+#define XX_INTEGER                        116
+#define XX_CHAR                           117
+#define XX_DOUBLE                         118
+#define XX_TRUE                           119
+#define XX_FALSE                          120
+#define XX_CBLOCK                         121
