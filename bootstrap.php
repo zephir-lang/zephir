@@ -19,7 +19,7 @@
 
 error_reporting(E_ALL);
 
-define('ZEPHIRPATH', __DIR__ . '/');
+define('ZEPHIRPATH', __DIR__ . DIRECTORY_SEPARATOR);
 define('T', "\t");
 define('2T', "\t\t");
 

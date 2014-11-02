@@ -626,7 +626,7 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 	return status;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
 
 	FILE *fp;
 	char ch;
@@ -661,4 +661,6 @@ int main(int argc, char **argv) {
 		free(program);
 	}
 
+	return 0;
 }
+

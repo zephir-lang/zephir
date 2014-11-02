@@ -124,23 +124,30 @@ class CompilerFile
     public function genIR(Compiler $compiler)
     {
 
-        $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', realpath($this->_filePath)) . ".js";
+        $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->_filePath));
+        $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
 
-        if (!file_exists(ZEPHIRPATH . '/bin/zephir-parser')) {
-            throw new Exception('zephir-parser was not found');
+        if (PHP_OS == "WINNT") {
+            $zephirParserBinary = ZEPHIRPATH . 'bin\zephir-parser.exe';
+        } else {
+            $zephirParserBinary = ZEPHIRPATH . 'bin/zephir-parser';
+        }
+
+        if (!file_exists($zephirParserBinary)) {
+            throw new Exception($zephirParserBinary . ' was not found');
         }
 
         $changed = false;
         $fileSystem = $compiler->getFileSystem();
         if ($fileSystem->exists($compilePath)) {
             $modificationTime = $fileSystem->modificationTime($compilePath);
-            if ($modificationTime < filemtime($zepRealPath) || $modificationTime < filemtime(ZEPHIRPATH . '/bin/zephir-parser')) {
-                $fileSystem->system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath, 'stdout', $compilePath);
+            if ($modificationTime < filemtime($zepRealPath) || $modificationTime < filemtime($zephirParserBinary)) {
+                $fileSystem->system($zephirParserBinary . ' ' . $zepRealPath, 'stdout', $compilePath);
                 $changed = true;
             }
         } else {
-            $fileSystem->system(ZEPHIRPATH . '/bin/zephir-parser ' . $zepRealPath, 'stdout', $compilePath);
+            $fileSystem->system($zephirParserBinary . ' ' . $zepRealPath, 'stdout', $compilePath);
             $changed = true;
         }
 
@@ -570,8 +577,11 @@ class CompilerFile
         }
 
         if (!$this->_external) {
-            if (strtolower($this->_filePath) != strtolower(str_replace('\\', '/', $namespace) . '/' . $name) . '.zep') {
-                throw new CompilerException('Unexpected class name ' . str_replace('\\', '/', $namespace) . '\\' . $name . ' in file: ' . $this->_filePath);
+            $expectedPath = strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR . $name) . '.zep';
+            if (strtolower($this->_filePath) != $expectedPath) {
+                $className = str_replace('\\', '/', $namespace) . '\\' . $name;
+                $message = 'Unexpected class name ' . $className . ' in file: ' . $this->_filePath . ', expected: ' . $expectedPath;
+                throw new CompilerException($message);
             }
         }
 

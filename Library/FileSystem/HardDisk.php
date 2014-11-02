@@ -150,6 +150,7 @@ class HardDisk
      * Requires a file from the temporary directory
      *
      * @param string $path
+     * @return boolean
      */
     public function requireFile($path)
     {
@@ -161,7 +162,11 @@ class HardDisk
      */
     public function clean()
     {
-        system('rm -fr ' . $this->basePath);
+        if (PHP_OS == "WINNT") {
+            system('rmdir ' . $this->basePath . ' /s /q');
+        } else {
+            system('rm -fr ' . $this->basePath);
+        }
     }
 
     /**
@@ -180,7 +185,7 @@ class HardDisk
         } else {
 
             $changed = false;
-            $cacheFile = $this->basePath . str_replace('/', '_', $path) . '.md5';
+            $cacheFile = $this->basePath . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {
                 $hash = hash_file($algorithm, $path);
                 file_put_contents($cacheFile, $hash);

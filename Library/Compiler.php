@@ -119,10 +119,10 @@ class Compiler
      */
     protected function preCompile($filePath)
     {
-        if (preg_match('/\.zep$/', $filePath)) {
+        if (preg_match('#\.zep$#', $filePath)) {
 
-            $className = str_replace('/', '\\', $filePath);
-            $className = preg_replace('/.zep$/', '', $className);
+            $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
+            $className = preg_replace('#.zep$#', '', $className);
 
             $className = join('\\', array_map(function ($i) {
                 return ucfirst($i);
@@ -350,24 +350,26 @@ class Compiler
         $success = true;
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $item) {
+
             $pathName = $item->getPathname();
             if (!is_readable($pathName)) {
                 continue;
             }
+
             $fileName = $item->getFileName();
             if ($item->isDir()) {
                 if ($fileName != '.' && $fileName != '..') {
-                    if (!is_dir($dest . '/' . $fileName)) {
-                        mkdir($dest . '/' . $fileName, 0755, true);
+                    if (!is_dir($dest . DIRECTORY_SEPARATOR . $fileName)) {
+                        mkdir($dest . DIRECTORY_SEPARATOR . $fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dest . '/' . $fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dest . DIRECTORY_SEPARATOR . $fileName, $pattern, $callback);
                 }
             } else {
                 if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
                     if (is_string($callback)) {
-                        $success = $success && $callback($pathName, $dest . '/' . $fileName);
+                        $success = $success && $callback($pathName, $dest . DIRECTORY_SEPARATOR . $fileName);
                     } else {
-                        $success = $success && call_user_func($callback, $pathName, $dest . '/' . $fileName);
+                        $success = $success && call_user_func($callback, $pathName, $dest . DIRECTORY_SEPARATOR . $fileName);
                     }
                 }
             }
@@ -496,24 +498,27 @@ class Compiler
     protected function getGccVersion()
     {
 
-        if ($this->fileSystem->exists(self::VERSION . '/gcc-version')) {
-            return $this->fileSystem->read(self::VERSION . '/gcc-version');
-        }
+        if (PHP_OS != "WINNT") {
 
-        $this->fileSystem->system('gcc -v', 'stderr', self::VERSION . '/gcc-version-temp');
-        $lines = $this->fileSystem->file(self::VERSION . '/gcc-version-temp');
-
-        foreach ($lines as $line) {
-            if (strpos($line, 'LLVM') !== false) {
-                $this->fileSystem->write(self::VERSION . '/gcc-version', '4.8.0');
-                return '4.8.0';
+            if ($this->fileSystem->exists(self::VERSION . '/gcc-version')) {
+                return $this->fileSystem->read(self::VERSION . '/gcc-version');
             }
-        }
 
-        $lastLine = $lines[count($lines) - 1];
-        if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
-            $this->fileSystem->write(self::VERSION . '/gcc-version', $matches[0]);
-            return $matches[0];
+            $this->fileSystem->system('gcc -v', 'stderr', self::VERSION . '/gcc-version-temp');
+            $lines = $this->fileSystem->file(self::VERSION . '/gcc-version-temp');
+
+            foreach ($lines as $line) {
+                if (strpos($line, 'LLVM') !== false) {
+                    $this->fileSystem->write(self::VERSION . '/gcc-version', '4.8.0');
+                    return '4.8.0';
+                }
+            }
+
+            $lastLine = $lines[count($lines) - 1];
+            if (preg_match('/[0-9]+\.[0-9]+\.[0-9]+/', $lastLine, $matches)) {
+                $this->fileSystem->write(self::VERSION . '/gcc-version', $matches[0]);
+                return $matches[0];
+            }
         }
 
         return '0.0.0';
@@ -527,20 +532,22 @@ class Compiler
      */
     public function getGccFlags($development = false)
     {
-        $gccFlags = getenv('CFLAGS');
-        if (!is_string($gccFlags)) {
-            if (!$development) {
-                $gccVersion = $this->getGccVersion();
-                if (version_compare($gccVersion, '4.6.0', '>=')) {
-                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
+        if (PHP_OS != "WINNT") {
+            $gccFlags = getenv('CFLAGS');
+            if (!is_string($gccFlags)) {
+                if (!$development) {
+                    $gccVersion = $this->getGccVersion();
+                    if (version_compare($gccVersion, '4.6.0', '>=')) {
+                        $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
+                    } else {
+                        $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
+                    }
                 } else {
-                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
+                    $gccFlags = '-O0 -g3';
                 }
-            } else {
-                $gccFlags = '-O0 -g3';
             }
+            return $gccFlags;
         }
-        return $gccFlags;
     }
 
     /**
@@ -634,7 +641,7 @@ class Compiler
          */
         $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
         if (!count($this->files)) {
-            throw new Exception("Zephir files to compile weren't found");
+            throw new Exception("Zephir files to compile couldn't be found. Did you add a first class to the extension?");
         }
 
         /**
@@ -991,11 +998,19 @@ class Compiler
      */
     protected function checkKernelFiles()
     {
-        $configured = $this->recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@', array($this, 'checkKernelFile'));
+        $kernelPath = realpath("ext/kernel");
+        $sourceKernelPath = realpath(__DIR__ . '/../ext/kernel');
+
+        $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.c|h$@', array($this, 'checkKernelFile'));
         if (!$configured) {
             $this->logger->output('Copying new kernel files...');
-            exec("rm -fr ext/kernel/*");
-            $this->recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel', '@^.*\.c|h$@');
+            if (PHP_OS != "WINNT") {
+                exec("rm -fr " . $kernelPath . "/*");
+            } else {
+                echo "rmdir " . $kernelPath . " /s /q";
+            }
+            @mkdir($kernelPath);
+            $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.c|h$@');
         }
 
         return !$configured;
