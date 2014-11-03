@@ -68,7 +68,7 @@ class BitwiseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->complex21And() === 1.0);
         $this->assertTrue($t->complex22And() === 0.0);
         $this->assertTrue($t->complex23And() === 1.0);
-        $this->assertTrue($t->complex24And() === 0.0);
+        $this->assertTrue($t->complex24And() === 0);
 
         // OR TESTS
         $this->assertTrue($t->intOr() === 3);

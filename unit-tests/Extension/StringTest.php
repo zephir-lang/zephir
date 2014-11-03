@@ -140,7 +140,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($hardcodedString, ob_get_clean());
         $this->assertEquals(trim($hardcodedString), $t->testTrimMultilineString());
 
-        $escapedString = '\"}$hello$\"\'';
+        $escapedString = '\"\}\$hello\$\"\\\'';
         $this->assertEquals($escapedString, $t->testWellEscapedMultilineString());
     }
 }
