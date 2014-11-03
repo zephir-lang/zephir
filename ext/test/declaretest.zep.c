@@ -32,7 +32,7 @@ PHP_METHOD(Test_DeclareTest, testStringDeclare1) {
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(a);
-	ZVAL_STRING(a, "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\/)/", 1);
+	ZVAL_STRING(a, "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\n|\\*\\/)/", 1);
 
 	RETURN_CCTOR(a);
 

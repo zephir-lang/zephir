@@ -37,7 +37,7 @@ PHP_METHOD(Test_Exceptions, testException1) {
 PHP_METHOD(Test_Exceptions, testExceptionStringEscape) {
 
 
-	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello \\\"simple code\\\" test", "test/exceptions.zep", 13);
+	ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_exception_ce, "hello \"simple code\" test", "test/exceptions.zep", 13);
 	return;
 
 }

@@ -117,7 +117,7 @@ class ThrowStatement extends StatementAbstract
      */
     private function throwStringException(CodePrinter $printer, $class, $message, $expression)
     {
-        $message = Utils::addSlashes($message, true, Types::CHAR);
+        $message = Utils::addSlashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
         $printer->output(
             sprintf('ZEPHIR_THROW_EXCEPTION_DEBUG_STR(%s, "%s", "%s", %s);', $class, $message, $path, $expression['line'])

@@ -45,43 +45,59 @@ class Utils
      * @param int $type
      * @return string
      */
-    public static function addSlashes($str, $escapeSlash = false, $type = Types::STRING)
+    public static function addSlashes($str, $escapeSlash = false)
     {
-        /**
-         * @todo Need fix because we need context in what quet it was declared '' or ""
-         */
-        if ($type == Types::STRING) {
-            $str = str_replace('\"', '"', $str);
-        }
-
         $newstr = "";
+        $after = null;
         $before = null;
         $length = strlen($str);
         for ($i = 0; $i < $length; $i++) {
+
             $ch = substr($str, $i, 1);
-            if ($ch == '"' && $before != "\\") {
-                $newstr .= "\\" . '"';
+            if ($i != ($length -1)) {
+                $after = substr($str, $i + 1, 1);
             } else {
-                switch ($ch) {
-                    case "\n":
-                        $newstr .= "\\n";
-                        break;
-                    case "\t":
-                        $newstr .= "\\t";
-                        break;
-                    case "\r":
-                        $newstr .= "\\r";
-                        break;
-                    case "\v":
-                        $newstr .= "\\v";
-                        break;
-                    default:
-                        $newstr .= $ch;
-                }
+                $after = null;
+            }
+
+            switch ($ch) {
+                case '"':
+                    $newstr .= "\\" . '"';
+                    break;
+                case "\n":
+                    $newstr .= "\\" . 'n';
+                    break;
+                case "\t":
+                    $newstr .= "\\" . 't';
+                    break;
+                case "\r":
+                    $newstr .= "\\" . 'r';
+                    break;
+                case "\v":
+                    $newstr .= "\\" . 'v';
+                    break;
+                case '\\':
+                    switch ($after) {
+                        case "n":
+                        case "v":
+                        case "t":
+                        case "r":
+                        case '"':
+                        case "\\":
+                            $newstr .= $ch . $after;
+                            $i++;
+                            $before = null;
+                            continue;
+                        default:
+                            $newstr .= "\\\\";
+                            break;
+                    }
+                    break;
+                default:
+                    $newstr .= $ch;
             }
             $before = $ch;
         }
-
         return $newstr;
     }
 

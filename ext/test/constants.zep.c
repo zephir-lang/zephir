@@ -32,7 +32,7 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
 
-	zend_declare_property_string(test_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\/)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_string(test_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\n|\\*\\/)/", ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	zend_declare_property_string(test_constants_ce, SL("propertyC8"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", ZEND_ACC_PROTECTED TSRMLS_CC);
 

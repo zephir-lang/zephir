@@ -319,7 +319,7 @@ PHP_METHOD(Test_Strings, testTrimMultilineString) {
 
 
 	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_STRING(&_0, "\\n            Hello world\\n        ", 0);
+	ZVAL_STRING(&_0, "\n            Hello world\n        ", 0);
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	return;
 
@@ -331,7 +331,7 @@ PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 
 
 	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_STRING(&_0, "\\n            \\\\\\\"\\}\\$hello\\$\\\\\\\"\\'\\n        ", 0);
+	ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\\'\n        ", 0);
 	zephir_fast_trim(return_value, &_0, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	return;
 
