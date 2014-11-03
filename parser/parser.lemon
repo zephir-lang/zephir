@@ -48,7 +48,7 @@
 %right CLONE .
 %right NEW .
 %right NOT .
-%right BITWISE_AND .
+%left BITWISE_AND .
 %right PARENTHESES_CLOSE .
 %right SBRACKET_OPEN .
 %right ARROW .
