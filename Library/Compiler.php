@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.5.7a';
+    const VERSION = '0.5.8a';
 
     /**
      * @var CompilerFile[]
@@ -1717,6 +1717,6 @@ class Compiler
      */
     public static function getShortUserPath($path)
     {
-        return str_replace('\\',  '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path));
+        return str_replace('\\', '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path));
     }
 }
