@@ -1506,7 +1506,7 @@ static zval **zephir_std_get_static_property(zend_class_entry *ce, const char *p
 
 	if (!property_info || !*property_info) {
 
-		if (UNEXPECTED(zend_hash_quick_find(&ce->properties_info, property_name, property_name_len+1, hash_value, (void **) &temp_property_info)==FAILURE)) {
+		if (UNEXPECTED(zend_hash_quick_find(&ce->properties_info, property_name, property_name_len + 1, hash_value, (void **) &temp_property_info)==FAILURE)) {
 			if (!silent) {
 				zend_error_noreturn(E_ERROR, "Access to undeclared static property: %s::$%s", ce->name, property_name);
 			}
@@ -1589,7 +1589,7 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 #if PHP_VERSION_ID < 50400
 	property = zend_std_get_static_property(scope, name, name_length, 0 TSRMLS_CC);
 #else
-	property = zephir_std_get_static_property(scope, name, name_length, zend_inline_hash_func(name, name_length), 0, property_info TSRMLS_CC);
+	property = zephir_std_get_static_property(scope, name, name_length, zend_inline_hash_func(name, name_length + 1), 0, property_info TSRMLS_CC);
 #endif
 	EG(scope) = old_scope;
 
