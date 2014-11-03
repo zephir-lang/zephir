@@ -27,5 +27,4 @@ class Concat
 		let url = "append" . url;
 		return url;
 	}
-
 }

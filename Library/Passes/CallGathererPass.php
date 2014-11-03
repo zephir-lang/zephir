@@ -154,6 +154,7 @@ class CallGathererPass
             case 'empty-array':
             case 'closure':
             case 'closure-arrow':
+            case 'reference':
                 break;
 
             case 'div':

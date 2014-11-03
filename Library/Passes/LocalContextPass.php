@@ -192,6 +192,7 @@ class LocalContextPass
                         case 'new':
                         case 'closure':
                         case 'closure-arrow':
+                        case 'reference':
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
 
@@ -309,6 +310,12 @@ class LocalContextPass
             case 'static-constant-access':
             case 'closure':
             case 'closure-arrow':
+                break;
+
+            case 'reference':
+                if ($expression['left']['type'] == 'variable') {
+                    $this->markVariableNoLocal($expression['left']['value']);
+                }
                 break;
 
             case 'sub':

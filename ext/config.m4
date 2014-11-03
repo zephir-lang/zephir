@@ -99,6 +99,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/properties/staticprotectedproperties.zep.c
 	test/properties/staticpublicproperties.zep.c
 	test/quantum.zep.c
+	test/references.zep.c
 	test/regexdna.zep.c
 	test/requires.zep.c
 	test/resourcetest.zep.c

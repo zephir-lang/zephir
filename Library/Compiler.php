@@ -425,7 +425,7 @@ class Compiler
     }
 
     /**
-     * Checks if $name is Zephir constant
+     * Checks if $name is a Zephir constant
      *
      * @param string $name
      *
@@ -447,9 +447,11 @@ class Compiler
     }
 
     /**
+     * Sets extensions globals
+     *
      * @param array $globals
      */
-    public function setExtensionGlobals($globals)
+    public function setExtensionGlobals(array $globals)
     {
         foreach ($globals as $key => $value) {
             $this->globals[$key] = $value;
@@ -481,6 +483,8 @@ class Compiler
     }
 
     /**
+     * Checks if the current directory is a valid Zephir project
+     *
      * @return string
      * @throws Exception
      */

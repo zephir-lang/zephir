@@ -100,6 +100,7 @@
 #include "test/properties/staticprotectedproperties.zep.h"
 #include "test/properties/staticpublicproperties.zep.h"
 #include "test/quantum.zep.h"
+#include "test/references.zep.h"
 #include "test/regexdna.zep.h"
 #include "test/requires.zep.h"
 #include "test/resourcetest.zep.h"

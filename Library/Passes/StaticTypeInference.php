@@ -307,6 +307,12 @@ class StaticTypeInference
             case 'static-constant-access':
                 return 'variable';
 
+            case 'reference':
+                if ($expression['left']['type'] == 'variable') {
+                    $this->markVariable($expression['left']['value'], 'variable');
+                }
+                return 'variable';
+
             case 'div':
                 return 'double';
 
