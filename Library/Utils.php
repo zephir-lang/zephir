@@ -54,18 +54,35 @@ class Utils
             $str = str_replace('\"', '"', $str);
         }
 
-        if ($escapeSlash) {
-            $str = addcslashes($str, '"\\');
+        $newstr = "";
+        $before = null;
+        $length = strlen($str);
+        for ($i = 0; $i < $length; $i++) {
+            $ch = substr($str, $i, 1);
+            if ($ch == '"' && $before != "\\") {
+                $newstr .= "\\" . '"';
+            } else {
+                switch ($ch) {
+                    case "\n":
+                        $newstr .= "\\n";
+                        break;
+                    case "\t":
+                        $newstr .= "\\t";
+                        break;
+                    case "\r":
+                        $newstr .= "\\r";
+                        break;
+                    case "\v":
+                        $newstr .= "\\v";
+                        break;
+                    default:
+                        $newstr .= $ch;
+                }
+            }
+            $before = $ch;
         }
 
-        $str = str_replace("\n", "\\n", $str);
-        $str = str_replace("\r", "\\r", $str);
-        $str = str_replace("\t", "\\t", $str);
-        $str = str_replace("\v", "\\v", $str);
-
-        //$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
-
-        return $str;
+        return $newstr;
     }
 
     /**
