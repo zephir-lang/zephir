@@ -1,6 +1,7 @@
 PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test])
 
 if test "$PHP_TEST" = "yes"; then
+
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
 	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c test/arithmetic.zep.c
 	test/arrayobject.zep.c
@@ -169,4 +170,6 @@ if test "$PHP_TEST" = "yes"; then
 	)
 
 	CPPFLAGS=$old_CPPFLAGS
+
+	PHP_INSTALL_HEADERS([ext/test], [php_TEST.h])
 fi

@@ -431,7 +431,7 @@ class Call
                 case 'ulong':
                 case 'string':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode(), true, Types::CHAR) . '", ZEPHIR_TEMP_PARAM_COPY);');
+                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode()) . '", ZEPHIR_TEMP_PARAM_COPY);');
                     $this->_temporalVariables[] = $parameterVariable;
                     $mustCheck[] = $parameterVariable->getName();
                     $params[] = $parameterVariable->getName();

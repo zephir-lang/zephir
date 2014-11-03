@@ -379,6 +379,25 @@ class Compiler
     }
 
     /**
+     * Recursively deletes files in a specified location
+     *
+     * @param string $path
+     * @param string $mask
+     */
+    protected function recursiveDeletePath($path, $mask)
+    {
+        $objects = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($objects as $name => $object) {
+            if (preg_match($mask, $name)) {
+                @unlink($name);
+            }
+        }
+    }
+
+    /**
      * Registers C-constants as PHP constants from a C-file
      *
      * @param array $constantsSources
@@ -1001,16 +1020,12 @@ class Compiler
         $kernelPath = realpath("ext/kernel");
         $sourceKernelPath = realpath(__DIR__ . '/../ext/kernel');
 
-        $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.c|h$@', array($this, 'checkKernelFile'));
+        $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@', array($this, 'checkKernelFile'));
         if (!$configured) {
             $this->logger->output('Copying new kernel files...');
-            if (PHP_OS != "WINNT") {
-                exec("rm -fr " . $kernelPath . "/*");
-            } else {
-                //echo "rmdir " . $kernelPath . " /s /q";
-            }
+            $this->recursiveDeletePath($kernelPath, '@^.*\.[cho]$@');
             @mkdir($kernelPath);
-            $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.c|h$@');
+            $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
         }
 
         return !$configured;

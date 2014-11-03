@@ -141,7 +141,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getTrimmed) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_SINIT_VAR(_1);
-	ZVAL_STRING(&_1, " hello \t\n", 0);
+	ZVAL_STRING(&_1, " hello \\t\\n", 0);
 	zephir_fast_trim(_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	RETURN_CCTOR(_0);
 

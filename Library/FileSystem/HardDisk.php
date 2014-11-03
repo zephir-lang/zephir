@@ -162,10 +162,14 @@ class HardDisk
      */
     public function clean()
     {
-        if (PHP_OS == "WINNT") {
-            system('rmdir ' . $this->basePath . ' /s /q');
-        } else {
-            system('rm -fr ' . $this->basePath);
+        $objects = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->basePath),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($objects as $name => $object) {
+            if (!$object->isDir()) {
+                @unlink($name);
+            }
         }
     }
 

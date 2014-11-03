@@ -291,7 +291,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					}
 					zephir_array_fetch_long(&_20, p2, i, PH_NOISY | PH_READONLY, "test/quantum.zep", 67 TSRMLS_CC);
 					ZEPHIR_SINIT_NVAR(_1);
-					ZVAL_STRING(&_1, "%16.8lf %16.8lf %16.8lf \n", 0);
+					ZVAL_STRING(&_1, "%16.8lf %16.8lf %16.8lf \\n", 0);
 					ZEPHIR_SINIT_NVAR(_2);
 					ZVAL_DOUBLE(&_2, ((double) i * dx));
 					ZEPHIR_SINIT_NVAR(_28);
@@ -301,7 +301,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 					i = (i + 10);
 				}
 				ZEPHIR_SINIT_NVAR(_1);
-				ZVAL_STRING(&_1, "\n", 0);
+				ZVAL_STRING(&_1, "\\n", 0);
 				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_37, fp, &_1);
 				zephir_check_call_status();
 			}

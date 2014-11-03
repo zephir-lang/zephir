@@ -207,6 +207,36 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'bool':
                         return new CompiledExpression('int', '(' . $left->getBooleanCode() . ' ' . $this->_bitOperator . ' ' . $right->getBooleanCode() . ')', $expression);
 
+                    case 'variable':
+                        $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
+                        switch ($variableRight->getType()) {
+
+                            case 'int':
+                            case 'uint':
+                            case 'long':
+                            case 'ulong':
+                                return new CompiledExpression('int', '((int) (' . $left->getBooleanCode() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
+                            case 'bool':
+                                return new CompiledExpression('int', '((int) (' . $left->getBooleanCode() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
+
+                            case 'double':
+                                return new CompiledExpression('int', '((int) (' . $left->getBooleanCode() . ') ' . $this->_operator . ' (int) (' . $variableRight->getName() . '))', $expression);
+
+                            case 'variable':
+                                $compilationContext->headersManager->add('kernel/operators');
+                                if ($variableRight->isLocalOnly()) {
+                                    return new CompiledExpression('int', '((int) (' . $left->getBooleanCode() . ') ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
+                                } else {
+                                    return new CompiledExpression('int', '((int) (' . $left->getBooleanCode() . ') ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
+                                }
+                                break;
+
+                            default:
+                                throw new CompilerException("Cannot operate ('bool') with variable('" . $variableRight->getType() . "')", $expression);
+                        }
+                        break;
+
                     default:
                         throw new CompilerException("Cannot operate 'bool' with '" . $right->getType() . "'", $expression);
                 }

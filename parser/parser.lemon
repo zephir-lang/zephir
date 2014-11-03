@@ -39,7 +39,7 @@
 %left OR .
 %left AND .
 %left INSTANCEOF .
-%left BITWISE_OR BITWISE_AND BITWISE_XOR BITWISE_SHIFTLEFT BITWISE_SHIFTRIGHT .
+%left BITWISE_OR BITWISE_XOR BITWISE_SHIFTLEFT BITWISE_SHIFTRIGHT .
 %left EQUALS IDENTICAL LESS GREATER LESSEQUAL GREATEREQUAL NOTIDENTICAL NOTEQUALS .
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
@@ -48,6 +48,7 @@
 %right CLONE .
 %right NEW .
 %right NOT .
+%right BITWISE_AND .
 %right PARENTHESES_CLOSE .
 %right SBRACKET_OPEN .
 %right ARROW .
@@ -2274,11 +2275,6 @@ xx_assignment_operator(R) ::= ASSIGN . {
 	R = json_object_new_string("assign");
 }
 
-// = &
-xx_assignment_operator(R) ::= ASSIGN BITWISE_AND . {
-    R = json_object_new_string("ref-assign");
-}
-
 // +=
 xx_assignment_operator(R) ::= ADDASSIGN . {
 	R = json_object_new_string("add-assign");
@@ -2549,6 +2545,10 @@ xx_assign_expr(R) ::= xx_common_expr(E) . {
 	R = E;
 }
 
+xx_common_expr(R) ::= BITWISE_AND xx_common_expr(O1) . {
+	R = xx_ret_expr("reference", O1, NULL, NULL, status->scanner_state);
+}
+
 xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
 }
@@ -2698,14 +2698,14 @@ xx_common_expr(R) ::= xx_common_expr(O1) OR xx_common_expr(O2) . {
 	R = xx_ret_expr("or", O1, O2, NULL, status->scanner_state);
 }
 
-/* y = a & b */
-xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_AND xx_common_expr(O2) . {
-	R = xx_ret_expr("bitwise_and", O1, O2, NULL, status->scanner_state);
-}
-
 /* y = a | b */
 xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_OR xx_common_expr(O2) . {
 	R = xx_ret_expr("bitwise_or", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a & b */
+xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_AND xx_common_expr(O2) . [BITWISE_OR] {
+	R = xx_ret_expr("bitwise_and", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = a ^ b */

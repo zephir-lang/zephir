@@ -4,6 +4,10 @@
 #ifndef PHP_TEST_H
 #define PHP_TEST_H 1
 
+#ifdef PHP_WIN32
+#define ZEPHIR_RELEASE 1
+#endif
+
 #include "kernel/globals.h"
 
 #define PHP_TEST_NAME        "Test Extension"
@@ -75,6 +79,8 @@ ZEND_EXTERN_MODULE_GLOBALS(test)
 #else
 	#define ZEPHIR_VGLOBAL &(test_globals)
 #endif
+
+#define ZEPHIR_API ZEND_API
 
 #define zephir_globals_def test_globals
 #define zend_zephir_globals_def zend_test_globals
