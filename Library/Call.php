@@ -431,7 +431,7 @@ class Call
                 case 'ulong':
                 case 'string':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", ZEPHIR_TEMP_PARAM_COPY);');
+                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode(), true, Types::CHAR) . '", ZEPHIR_TEMP_PARAM_COPY);');
                     $this->_temporalVariables[] = $parameterVariable;
                     $mustCheck[] = $parameterVariable->getName();
                     $params[] = $parameterVariable->getName();
@@ -584,7 +584,7 @@ class Call
                 case 'string':
                 case 'ulong':
                     $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . $compiledExpression->getCode() . '", 0);');
+                    $codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode(), true, Types::CHAR) . '", 0);');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     break;

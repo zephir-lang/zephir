@@ -61,22 +61,23 @@ class ThrowStatement extends StatementAbstract
                     $message = $expr['parameters'][0]['parameter']['value'];
                     $class = $classDefinition->getClassEntry();
                     $this->throwStringException($codePrinter, $class, $message, $statement['expr']);
-
                     return;
-                } elseif ($compilationContext->compiler->isInternalClass($className)) {
-                    $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
-                    if ($classEntry) {
-                        $message = $expr['parameters'][0]['parameter']['value'];
-                        $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
-
-                        return;
+                } else {
+                    if ($compilationContext->compiler->isInternalClass($className)) {
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
+                        if ($classEntry) {
+                            $message = $expr['parameters'][0]['parameter']['value'];
+                            $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
+                            return;
+                        }
                     }
                 }
-            } elseif (in_array($expr['type'], array('string', 'char', 'int', 'double'))) {
-                $class = $compilationContext->classDefinition->getClassEntryByClassName('Exception', $compilationContext);
-                $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
-
-                return;
+            } else {
+                if (in_array($expr['type'], array('string', 'char', 'int', 'double'))) {
+                    $class = $compilationContext->classDefinition->getClassEntryByClassName('Exception', $compilationContext);
+                    $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
+                    return;
+                }
             }
         }
 
@@ -106,6 +107,14 @@ class ThrowStatement extends StatementAbstract
         }
     }
 
+    /**
+     * Throws an exception escaping the data
+     *
+     * @param CodePrinter $printer
+     * @param string $class
+     * @param string $message
+     * @param array $expression
+     */
     private function throwStringException(CodePrinter $printer, $class, $message, $expression)
     {
         $message = Utils::addSlashes($message, true, Types::CHAR);

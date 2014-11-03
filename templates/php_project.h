@@ -4,6 +4,10 @@
 #ifndef PHP_%PROJECT_UPPER%_H
 #define PHP_%PROJECT_UPPER%_H 1
 
+#ifdef PHP_WIN32
+#define ZEPHIR_RELEASE 1
+#endif
+
 #include "kernel/globals.h"
 
 #define PHP_%PROJECT_UPPER%_NAME        "%PROJECT_NAME%"

@@ -58,10 +58,10 @@ class Utils
             $str = addcslashes($str, '"\\');
         }
 
-        /*$str = str_replace("\n", "\\n", $str);
+        $str = str_replace("\n", "\\n", $str);
         $str = str_replace("\r", "\\r", $str);
         $str = str_replace("\t", "\\t", $str);
-        $str = str_replace("\v", "\\v", $str);*/
+        $str = str_replace("\v", "\\v", $str);
 
         //$str = preg_replace('#\\\\([^nrt"])#', '\\\\$1', $str);
 

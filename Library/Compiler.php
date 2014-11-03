@@ -980,7 +980,7 @@ class Compiler
      */
     protected function checkKernelFile($src, $dst)
     {
-        if (strstr($src, 'ext/kernel/concat.') !== false) {
+        if (strstr($src, 'ext' . DIRECTORY_SEPARATOR . 'kernel' . DIRECTORY_SEPARATOR . 'concat.') !== false) {
             return true;
         }
 
@@ -1007,7 +1007,7 @@ class Compiler
             if (PHP_OS != "WINNT") {
                 exec("rm -fr " . $kernelPath . "/*");
             } else {
-                echo "rmdir " . $kernelPath . " /s /q";
+                //echo "rmdir " . $kernelPath . " /s /q";
             }
             @mkdir($kernelPath);
             $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.c|h$@');
@@ -1017,7 +1017,31 @@ class Compiler
     }
 
     /**
-     * Create config.m4 and config.w32 by compiled files to test extension
+     * Process config.w32 sections
+     *
+     * @param array $sources
+     * @param string $project
+     * @return array
+     */
+    protected function processAddSources($sources, $project)
+    {
+        $groupSources = array();
+        foreach ($sources as $source) {
+            $dirName = str_replace(DIRECTORY_SEPARATOR, '/', dirname($source));
+            if (!isset($groupSources[$dirName])) {
+                $groupSources[$dirName] = array();
+            }
+            $groupSources[$dirName][] = basename($source);
+        }
+        $groups = array();
+        foreach ($groupSources as $dirname => $files) {
+            $groups[] = 'ADD_SOURCES("ext/' . $project . '/' . $dirname . '", "' . join(' ', $files) . '", "' . $project . '");';
+        }
+        return $groups;
+    }
+
+    /**
+     * Create config.m4 and config.w32 for the extension
      *
      * @param string $project
      *
@@ -1026,9 +1050,15 @@ class Compiler
      */
     public function createConfigFiles($project)
     {
-        $content = file_get_contents(__DIR__ . '/../templates/config.m4');
-        if (empty($content)) {
+
+        $contentM4 = file_get_contents(__DIR__ . '/../templates/config.m4');
+        if (empty($contentM4)) {
             throw new Exception("Template config.m4 doesn't exist");
+        }
+
+        $contentW32 = file_get_contents(__DIR__ . '/../templates/config.w32');
+        if (empty($contentW32)) {
+            throw new Exception("Template config.w32 doesn't exist");
         }
 
         if ($project == 'zend') {
@@ -1053,6 +1083,9 @@ class Compiler
             $compiledHeaders = array('php_' . strtoupper($project) . '.h');
         }
 
+        /**
+         * Generate config.m4
+         */
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
             '%PROJECT_LOWER%'        => strtolower($project),
@@ -1064,10 +1097,27 @@ class Compiler
         );
 
         foreach ($toReplace as $mark => $replace) {
-            $content = str_replace($mark, $replace, $content);
+            $contentM4 = str_replace($mark, $replace, $contentM4);
         }
 
-        $needConfigure = Utils::checkAndWriteIfNeeded($content, 'ext/config.m4');
+        $needConfigure = Utils::checkAndWriteIfNeeded($contentM4, 'ext/config.m4');
+
+        /**
+         * Generate config.w32
+         */
+        $toReplace = array(
+            '%PROJECT_LOWER_SAFE%'   => strtolower($safeProject),
+            '%PROJECT_LOWER%'        => strtolower($project),
+            '%PROJECT_UPPER%'        => strtoupper($project),
+            '%FILES_COMPILED%'       => implode("\r\n\t", $this->processAddSources($compiledFiles, strtolower($project))),
+            '%EXTRA_FILES_COMPILED%' => implode("\r\n\t", $this->processAddSources($this->extraFiles, strtolower($project))),
+        );
+
+        foreach ($toReplace as $mark => $replace) {
+            $contentW32 = str_replace($mark, $replace, $contentW32);
+        }
+
+        $needConfigure = Utils::checkAndWriteIfNeeded($contentW32, 'ext/config.w32');
 
         /**
          * php_ext.h
@@ -1260,7 +1310,7 @@ class Compiler
                         break;
 
                     default:
-                        throw new Exception("Unknown type '" . $global['type'] . "'");
+                        throw new Exception("Unknown type '" . $global['type'] . "' for extension global '" . $name . "'");
                 }
 
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
@@ -1652,6 +1702,6 @@ class Compiler
      */
     public static function getShortUserPath($path)
     {
-        return str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path);
+        return str_replace('\\',  '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path));
     }
 }

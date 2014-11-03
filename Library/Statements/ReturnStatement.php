@@ -22,6 +22,8 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Expression;
+use Zephir\Utils;
+use Zephir\Types;
 
 /**
  * ReturnStatement
@@ -187,7 +189,7 @@ class ReturnStatement extends StatementAbstract
                     break;
 
                 case 'string':
-                    $codePrinter->output('RETURN_MM_STRING("' . $resolvedExpr->getCode() . '", 1);');
+                    $codePrinter->output('RETURN_MM_STRING("' . Utils::addSlashes($resolvedExpr->getCode(), true, Types::CHAR) . '", 1);');
                     break;
 
                 case 'array':

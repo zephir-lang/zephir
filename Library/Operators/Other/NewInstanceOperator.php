@@ -139,7 +139,7 @@ class NewInstanceOperator extends BaseOperator
 
                     if (!class_exists($className, false)) {
 
-                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time ', "nonexistent-class", $expression);
+                        $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', "nonexistent-class", $expression);
                         $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);

@@ -1123,7 +1123,7 @@ int zephir_call_function(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache 
 
 #endif
 
-inline void zephir_eval_php(zval *str, zval *retval_ptr, char *context TSRMLS_DC)
+void zephir_eval_php(zval *str, zval *retval_ptr, char *context TSRMLS_DC)
 {
     zend_eval_string_ex(Z_STRVAL_P(str), retval_ptr, context, 1 TSRMLS_CC);
 }
