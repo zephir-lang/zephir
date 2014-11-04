@@ -26,15 +26,15 @@ ZEPHIR_INIT_CLASS(Test_References) {
 
 PHP_METHOD(Test_References, assignByRef) {
 
-	zval *a = NULL, *b = NULL;
+	zval *a, *b = NULL;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(a);
 	ZVAL_LONG(a, 100);
 	ZEPHIR_MAKE_REFERENCE(b, a);
-	ZEPHIR_INIT_NVAR(a);
-	ZVAL_LONG(a, 50);
+	ZEPHIR_INIT_NVAR(b);
+	ZVAL_LONG(b, 50);
 	RETURN_MM_BOOL(ZEPHIR_IS_EQUAL(a, b));
 
 }
