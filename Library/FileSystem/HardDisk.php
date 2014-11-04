@@ -162,13 +162,15 @@ class HardDisk
      */
     public function clean()
     {
-        $objects = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->basePath),
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
-        foreach ($objects as $name => $object) {
-            if (!$object->isDir()) {
-                @unlink($name);
+        if (is_dir($this->basePath)) {
+            $objects = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($this->basePath),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($objects as $name => $object) {
+                if (!$object->isDir()) {
+                    @unlink($name);
+                }
             }
         }
     }
