@@ -238,7 +238,7 @@ class ClassDefinition
      */
     public function isAbstract()
     {
-        return $this->abstract || $this->isInterface();
+        return $this->abstract;
     }
 
     /**
@@ -909,7 +909,7 @@ class ClassDefinition
                 /**
                  * We don't check if abstract classes implement the methods in their interfaces
                  */
-                if (!$this->isAbstract()) {
+                if (!$this->isAbstract() && !$this->isInterface()) {
                     $this->checkInterfaceImplements($this, $classInterfaceDefinition);
                 }
 
@@ -917,7 +917,7 @@ class ClassDefinition
             }
         }
 
-        if (!$this->isAbstract()) {
+        if (!$this->isAbstract() && !$this->isInterface()) {
 
             /**
              * Interfaces in extended classes may have
