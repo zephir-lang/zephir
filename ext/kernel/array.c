@@ -1273,7 +1273,7 @@ int zephir_array_update_multi(zval **arr, zval **value TSRMLS_DC, const char *ty
 	zval *fetched, *tmp, *p, *item, *old_item[ZEPHIR_MAX_ARRAY_LEVELS], *old_p[ZEPHIR_MAX_ARRAY_LEVELS];
 	int i, j, l, ll, re_update, must_continue, wrap_tmp;
 
-	va_start(ap, types_length);
+	va_start(ap, types_count);
 
 	assert(types_length < ZEPHIR_MAX_ARRAY_LEVELS);
 

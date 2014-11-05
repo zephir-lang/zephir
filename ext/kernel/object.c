@@ -1009,7 +1009,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 	int i, j, l, ll, re_update, must_continue, wrap_tmp;
 	int separated = 0;
 
-	va_start(ap, types_length);
+	va_start(ap, types_count);
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 
@@ -1655,8 +1655,6 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	zval *fetched, *tmp, *tmp_arr, *p, *item, *old_item[ZEPHIR_MAX_ARRAY_LEVELS], *old_p[ZEPHIR_MAX_ARRAY_LEVELS];
 	int i, j, l, ll, re_update, must_continue, wrap_tmp;
 	int separated = 0;
-
-	va_start(ap, types_length);
 
 	tmp_arr = zephir_fetch_static_property_ce(ce, property, property_length TSRMLS_CC);
 	if (!tmp_arr) {
