@@ -23,6 +23,7 @@ use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Expression;
 use Zephir\Utils;
+use Zephir\Types;
 
 /**
  * EchoStatement
@@ -67,7 +68,7 @@ class EchoStatement extends StatementAbstract
                     break;
 
                 case 'string':
-                    $compilationContext->codePrinter->output('php_printf("' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
+                    $compilationContext->codePrinter->output('php_printf("' . $resolvedExpr->getCode() . '");');
                     break;
 
                 case 'null':
