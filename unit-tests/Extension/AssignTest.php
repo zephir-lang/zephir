@@ -32,7 +32,7 @@ class AssignTest extends \PHPUnit_Framework_TestCase
             "s" => 1
         );
     }
-    
+
     public function testAssign()
     {
         $t = new \Test\Assign();
@@ -94,6 +94,7 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testArrayVarAssign2('test_index', 'value') == array('test_index' => 'value'));
         $this->assertTrue($t->testPropertyArray14() == $this->getComplexArrayTestValue());
         $this->assertTrue($t->testStaticPropertyArrayMulti4() == $this->getComplexArrayTestValue());
+        $this->assertTrue($t->testStaticPropertyArrayAppend() == array("test", 1, 1.5, false, array()));
     }
 
     public function testGlobalVarAssign()

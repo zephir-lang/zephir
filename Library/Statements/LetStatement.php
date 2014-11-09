@@ -41,6 +41,7 @@ use Zephir\Statements\Let\ObjectPropertyArrayIndexAppend as LetObjectPropertyArr
 use Zephir\Statements\Let\ObjectPropertyIncr as LetObjectPropertyIncr;
 use Zephir\Statements\Let\ObjectPropertyDecr as LetObjectPropertyDecr;
 use Zephir\Statements\Let\StaticProperty as LetStaticProperty;
+use Zephir\Statements\Let\StaticPropertyAppend as LetStaticPropertyAppend;
 use Zephir\Statements\Let\StaticPropertyArrayIndex as LetStaticPropertyArrayIndex;
 use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArrayIndexAppend;
 use Zephir\Statements\Let\Decr as LetDecr;
@@ -175,7 +176,8 @@ class LetStatement extends StatementAbstract
                     break;
 
                 case 'static-property-append':
-                    /* @todo, implement this */
+                    $let = new LetStaticPropertyAppend();
+                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'static-property-array-index':
