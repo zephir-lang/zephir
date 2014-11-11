@@ -71,7 +71,7 @@ class MethodDocBlock extends DocBlock
         $lines = array();
 
         foreach ($this->lines as $line) {
-            if (preg_match('#^@(param|return) +(.*)$#', $line, $matches) === 0) {
+            if (preg_match('#^@(param|return|var) +(.*)$#', $line, $matches) === 0) {
                 $lines[] = $line;
             } else {
                 list(, $docType, $tokens) = $matches;
