@@ -71,10 +71,21 @@ class MethodDocBlock extends DocBlock
         $lines = array();
 
         foreach ($this->lines as $line) {
-            if (preg_match('#@(param|return) *(\w+)* *(\$\w+)* *(.+?)*#', $line, $matches) === 0) {
+            if (preg_match('#^@(param|return) +(.*)$#', $line, $matches) === 0) {
                 $lines[] = $line;
             } else {
-                list(, $docType, $type, $name, $description) = $matches;
+                list(, $docType, $tokens) = $matches;
+
+                $tokens = preg_split('/\s+/', $tokens, 3);
+                $type = $tokens[0];
+
+                if (strpos($type, 'Phalcon\\') === 0) {
+                    $type = str_replace('Phalcon\\', '\Phalcon\\', $type);
+                }
+
+                $name = isset($tokens[1]) ? '$' . $tokens[1] : '';
+                $description = isset($tokens[2]) ? $tokens[2] : '';
+
                 switch ($docType) {
                     case 'param':
                         $this->parameters[$name] = array($type, $description);
