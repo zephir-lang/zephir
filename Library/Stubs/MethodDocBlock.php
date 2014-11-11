@@ -76,6 +76,11 @@ class MethodDocBlock extends DocBlock
             } else {
                 list(, $docType, $tokens) = $matches;
 
+                // Magic getters
+                if($docType == 'var') {
+                    $docType = 'return';
+                }
+
                 $tokens = preg_split('/\s+/', $tokens, 3);
                 $type = $tokens[0];
 
