@@ -112,7 +112,9 @@ EOF;
             $interfaces = array_map(function ($val) {
                 return '\\' . $val;
             }, $implementedInterfaces);
-            $source .= ' implements ' . join(', ', $interfaces);
+
+            $keyword = $class->getType() == 'interface' ? ' extends ' : ' implements ';
+            $source .= $keyword . join(', ', $interfaces);
         }
 
         $source .= PHP_EOL . '{' . PHP_EOL;

@@ -44,10 +44,13 @@ class DocBlock
     public function __construct($source, $indent = 4)
     {
         $this->indent = str_repeat(' ', $indent);
+
         foreach (explode("\n", trim($source, '/')) as $line) {
-            if ('' === $line = trim($line, '* ')) {
+            $line = trim($line, "\t*\0 ");
+            if ('' === $line) {
                 continue;
             }
+
             if (strpos($line, '@') === 0) {
                 $this->lines[] = $line;
             } else {
