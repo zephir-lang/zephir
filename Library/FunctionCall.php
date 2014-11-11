@@ -100,6 +100,7 @@ class FunctionCall extends Call
         switch ($funcName) {
             case 'min':
             case 'max':
+            case 'array_fill':
             case 'call_user_func':
             case 'call_user_func_array':
                 return false;

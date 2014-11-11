@@ -99,4 +99,12 @@ class Fcall
 	{
 		return func_get_args();
 	}
+
+	public function testArrayFill()
+	{
+		var v1, v2;
+		let v1 = array_fill(0, 5, "?");
+		let v2 = array_fill(0, 6, "?");
+		return [v1, v2];
+	}
 }
