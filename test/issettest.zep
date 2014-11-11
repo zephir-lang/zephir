@@ -7,6 +7,7 @@ namespace Test;
 
 class IssetTest
 {
+	public s = ["a": "true"];
 
 	public function testIssetArray1(var a, var b)
 	{
@@ -48,4 +49,24 @@ class IssetTest
 		return isset a->{"b"};
 	}
 
+	public function testIssetDynamicProperty1()
+	{
+		var g;
+		let g = this->{"s"};
+		if isset g["a"] {
+			return true;
+		}
+		return false;
+	}
+
+	public function testIssetDynamicProperty2(var inp)
+	{
+		var g;
+		let g = inp->{"s"};
+
+		if isset g["a"] {
+			return true;
+		}
+		return false;
+	}
 }

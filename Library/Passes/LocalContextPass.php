@@ -175,6 +175,8 @@ class LocalContextPass
                     switch ($assignment['expr']['type']) {
 
                         case 'property-access':
+                        case 'property-dynamic-access':
+                        case 'property-string-access':
                         case 'array-access':
                         case 'static-property-access':
                         case 'static-constant-access':
