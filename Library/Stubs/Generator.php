@@ -106,6 +106,8 @@ EOF;
 
         if ($extendsClassDefinition = $class->getExtendsClassDefinition()) {
                 $source .= ' extends \\' . $extendsClassDefinition->getCompleteName();
+        } elseif ($extends = $class->getExtendsClass()) {
+                $source .= ' extends \\' . $extends;
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
