@@ -77,7 +77,7 @@ class MethodDocBlock extends DocBlock
                 list(, $docType, $tokens) = $matches;
 
                 // Magic getters
-                if($docType == 'var') {
+                if ($docType == 'var') {
                     $docType = 'return';
                 }
 
