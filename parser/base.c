@@ -633,7 +633,7 @@ int main(int argc, char *argv[]) {
 	char *program;
 	int i, length;
 
-	if (argc > 0) {
+	if (argc > 1) {
 
 		fp = fopen(argv[1], "r");
 		if (!fp) {
