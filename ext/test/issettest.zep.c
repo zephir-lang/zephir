@@ -17,13 +17,11 @@
 #include "kernel/operators.h"
 #include "kernel/object.h"
 
-
-/**
- * Unset statement tests
- */
 ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, IssetTest, test, issettest, test_issettest_method_entry, 0);
+
+	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -127,6 +125,61 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 
 
 	RETURN_BOOL((0 == 0));
+
+}
+
+PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
+
+	zval *_0 = NULL;
+	zval *g;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "s", 1);
+	ZEPHIR_OBS_VAR(g);
+	zephir_read_property_zval(&g, this_ptr, _0, PH_NOISY_CC);
+	if (zephir_array_isset_string(g, SS("a"))) {
+		RETURN_MM_BOOL(1);
+	}
+	RETURN_MM_BOOL(0);
+
+}
+
+PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
+
+	zval *_0 = NULL;
+	zval *inp, *g;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &inp);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "s", 1);
+	ZEPHIR_OBS_VAR(g);
+	zephir_read_property_zval(&g, inp, _0, PH_NOISY_CC);
+	if (zephir_array_isset_string(g, SS("a"))) {
+		RETURN_MM_BOOL(1);
+	}
+	RETURN_MM_BOOL(0);
+
+}
+
+PHP_METHOD(Test_IssetTest, __construct) {
+
+	zval *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init_size(_0, 2);
+	add_assoc_stringl_ex(_0, SS("a"), SL("true"), 1);
+	zephir_update_property_this(this_ptr, SL("s"), _0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 
 }
 

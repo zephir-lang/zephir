@@ -73,6 +73,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign2);
 PHP_METHOD(Test_Assign, testStaticPropertyArray1);
 PHP_METHOD(Test_Assign, testStaticPropertyArray2);
 PHP_METHOD(Test_Assign, testStaticPropertyArray3);
+PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend);
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli1);
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli2);
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli3);
@@ -215,6 +216,7 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testStaticPropertyArray1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testStaticPropertyArray2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testStaticPropertyArray3, arginfo_test_assign_teststaticpropertyarray3, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testStaticPropertyArrayAppend, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testStaticPropertyArrayMutli1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testStaticPropertyArrayMutli2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testStaticPropertyArrayMutli3, arginfo_test_assign_teststaticpropertyarraymutli3, ZEND_ACC_PUBLIC)

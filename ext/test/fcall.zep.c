@@ -17,6 +17,7 @@
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
 #include "kernel/file.h"
+#include "kernel/array.h"
 
 
 /**
@@ -260,6 +261,39 @@ PHP_METHOD(Test_Fcall, testFunctionGetArgs) {
 
 	ZEPHIR_RETURN_CALL_FUNCTION("func_get_args", &_0);
 	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Fcall, testArrayFill) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_3 = NULL;
+	zval *v1 = NULL, *v2 = NULL, *_0 = NULL, *_1 = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 0);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 5);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_STRING(_2, "?", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_FUNCTION(&v1, "array_fill", &_3, _0, _1, _2);
+	zephir_check_temp_parameter(_2);
+	zephir_check_call_status();
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 0);
+	ZEPHIR_INIT_NVAR(_1);
+	ZVAL_LONG(_1, 6);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "?", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_FUNCTION(&v2, "array_fill", &_3, _0, _1, _2);
+	zephir_check_temp_parameter(_2);
+	zephir_check_call_status();
+	array_init_size(return_value, 3);
+	zephir_array_fast_append(return_value, v1);
+	zephir_array_fast_append(return_value, v2);
 	RETURN_MM();
 
 }

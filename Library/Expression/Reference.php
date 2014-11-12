@@ -214,6 +214,6 @@ class Reference
         $symbolVariable->increaseVariantIfNull();
         $compilationContext->codePrinter->output('ZEPHIR_MAKE_REFERENCE(' . $symbolVariable->getName() . ', ' . $leftVariable->getName() . ');');
 
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        return new CompiledExpression('reference', $symbolVariable->getRealName(), $expression);
     }
 }

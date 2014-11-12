@@ -1367,6 +1367,33 @@ PHP_METHOD(Test_Assign, testStaticPropertyArray3) {
 
 }
 
+PHP_METHOD(Test_Assign, testStaticPropertyArrayAppend) {
+
+	zval *_0 = NULL, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "test", 1);
+	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC, SL("a"), 1);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 1);
+	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC, SL("a"), 1);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_DOUBLE(_0, 1.5);
+	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC, SL("a"), 1);
+	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &ZEPHIR_GLOBAL(global_false) TSRMLS_CC, SL("a"), 1);
+	ZEPHIR_INIT_NVAR(_0);
+	array_init(_0);
+	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &_0 TSRMLS_CC, SL("a"), 1);
+	_1 = zephir_fetch_static_property_ce(test_assign_ce, SL("testVarStatic") TSRMLS_CC);
+	RETURN_CTOR(_1);
+
+}
+
 PHP_METHOD(Test_Assign, testStaticPropertyArrayMutli1) {
 
 	zval *_0 = NULL, *_1;
@@ -1490,7 +1517,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyArrayMulti4) {
 	ZEPHIR_INIT_VAR(_3);
 	array_init_size(_3, 2);
 	add_index_long(_3, 3, 4);
-	zephir_array_update_long(&_1, 2, &_3, PH_COPY, "test/assign.zep", 746);
+	zephir_array_update_long(&_1, 2, &_3, PH_COPY, "test/assign.zep", 757);
 	zephir_update_static_property_array_multi_ce(test_assign_ce, SL("testVarStatic"), &_1 TSRMLS_CC, SL("l"), 1, 1);
 	ZEPHIR_INIT_NVAR(_2);
 	ZVAL_LONG(_2, 1);
@@ -1630,8 +1657,8 @@ PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 	ZEPHIR_INIT_VAR(elements);
 	array_init_size(elements, 5);
 	add_assoc_long_ex(elements, SS("abc"), 1);
-	add_index_long(elements, 131072, 131079);
-	add_index_long(elements, 131073, 131080);
+	add_index_long(elements, 14, 7);
+	add_index_long(elements, 15, 8);
 	ZEPHIR_MM_RESTORE();
 
 }

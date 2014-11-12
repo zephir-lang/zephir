@@ -618,7 +618,9 @@ class CompilerFile
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        throw new CompilerException('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
+                        $classDefinition->setExtendsClassDefinition($extendedDefinition);
+                        $this->_logger->warning('Cannot locate class "' . $extendedClass . '" when extending class "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->_originalNode);
                     }
                 }
             } else {
@@ -630,7 +632,9 @@ class CompilerFile
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
+                        $classDefinition->setExtendsClassDefinition($extendedDefinition);
+                        //throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
                     }
                 }
             }
@@ -647,7 +651,9 @@ class CompilerFile
                     if ($compiler->isInternalInterface($interface)) {
                         $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
                     } else {
-                        throw new CompilerException('Cannot locate interface "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
+                        $classDefinition->setExtendsClassDefinition($extendedDefinition);
+                        //throw new CompilerException('Cannot locate interface "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
                     }
                 }
             }
