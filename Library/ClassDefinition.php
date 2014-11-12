@@ -1099,7 +1099,7 @@ class ClassDefinition
      * @return string
      * @throws CompilerException
      */
-    public function getClassEntryByClassName($className, $compilationContext, $check = false)
+    public function getClassEntryByClassName($className, $compilationContext, $check = true)
     {
         switch (strtolower($className)) {
 
@@ -1429,7 +1429,7 @@ class ClassDefinition
                 if (!$check) {
                     throw new CompilerException('Unknown class entry for "' . $className . '"');
                 } else {
-                    return false;
+                    $classEntry = 'zephir_get_internal_ce(SS("'.str_replace('\\', '\\\\', strtolower($className)).'") TSRMLS_CC)';
                 }
         }
 

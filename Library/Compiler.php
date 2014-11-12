@@ -722,6 +722,37 @@ class Compiler
 
             self::$loadedPrototypes = true;
         }
+        
+        /**
+         * Round 1. pre-compile all files in memory
+         */
+        $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
+        if (!count($this->files)) {
+            throw new Exception("Zephir files to compile weren't found");
+        }
+
+        /**
+         * Round 2. Check 'extends' and 'implements' dependencies
+         */
+        foreach ($this->files as $compileFile) {
+            $compileFile->checkDependencies($this);
+        }
+
+        /**
+         * Convert C-constants into PHP constants
+         */
+        $constantsSources = $this->config->get('constants-sources');
+        if (is_array($constantsSources)) {
+            $this->loadConstantsSources($constantsSources);
+        }
+
+        /**
+         * Set extension globals
+         */
+        $globals = $this->config->get('globals');
+        if (is_array($globals)) {
+            $this->setExtensionGlobals($globals);
+        }
 
         /**
          * Round 3. Compile all files to C sources
