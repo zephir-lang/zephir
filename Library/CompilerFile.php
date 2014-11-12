@@ -634,7 +634,7 @@ class CompilerFile
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        //throw new CompilerException('Cannot locate interface "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                        $this->_logger->warning('Cannot locate class "' . $extendedClass . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->_originalNode);
                     }
                 }
             }
@@ -653,7 +653,7 @@ class CompilerFile
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
-                        //throw new CompilerException('Cannot locate interface "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', $this->_originalNode);
+                        $this->_logger->warning('Cannot locate class "' . $interface . '" when extending interface "' . $classDefinition->getCompleteName() . '"', 'nonexistent-class', $this->_originalNode);
                     }
                 }
             }
