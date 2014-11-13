@@ -29,109 +29,109 @@ class Variable
     /**
      * Variable's type
      */
-    protected $_type;
+    protected $type;
 
     /**
      * Current dynamic type of the variable
      * @var array
      */
-    protected $_dynamicTypes = array('unknown' => true);
+    protected $dynamicTypes = array('unknown' => true);
 
     /**
      * Variable's name
      */
-    protected $_name;
+    protected $name;
 
     /**
      * Branch where the variable was declared
      */
-    protected $_branch;
+    protected $branch;
 
     /**
      * Branch where the variable was initialized for the first time
      */
-    protected $_initBranch = false;
+    protected $initBranch = false;
 
     /**
      * Compiled variable's name
      */
-    protected $_lowName;
+    protected $lowName;
 
     /**
      * Number of times the variable has been read
      */
-    protected $_numberUses = 0;
+    protected $numberUses = 0;
 
     /**
      * Whether the variable is temporal or not
      */
-    protected $_temporal = false;
+    protected $temporal = false;
 
     /**
      * Temporal variables are marked as idle
      */
-    protected $_idle = false;
+    protected $idle = false;
 
     /**
      * Reusable temporary variables?
      */
-    protected $_reusable = true;
+    protected $reusable = true;
 
     /**
      * Number of mutations to the variable
      */
-    protected $_numberMutates = 0;
+    protected $numberMutates = 0;
 
     /**
      * Whether the variable has received any assignment
      */
-    protected $_initialized = false;
+    protected $initialized = false;
 
-    protected $_initBranches = array();
+    protected $initBranches = array();
 
-    protected $_isExternal = false;
+    protected $isExternal = false;
 
-    protected $_variantInits = 0;
+    protected $variantInits = 0;
 
-    protected $_mustInitNull = false;
+    protected $mustInitNull = false;
 
-    protected $_readOnly = false;
+    protected $readOnly = false;
 
-    protected $_localOnly = false;
+    protected $localOnly = false;
 
-    protected $_memoryTracked = true;
+    protected $memoryTracked = true;
 
-    protected $_doublePointer = false;
+    protected $doublePointer = false;
 
-    protected $_defaultInitValue;
+    protected $defaultInitValue;
 
     /**
      * Class type
      */
-    protected $_classTypes = array();
+    protected $classTypes = array();
 
     /**
      * Initialization skips
      */
-    protected $_numberSkips = 0;
+    protected $numberSkips = 0;
 
     /**
      * AST node where the variable was originally declared or created
      */
-    protected $_node;
+    protected $node;
 
     /**
      * Possible constant value assigned to the variable
      */
-    protected $_possibleValue;
+    protected $possibleValue;
 
     /**
      * Branch where the variable got its last possible value
      */
-    protected $_possibleValueBranch;
+    protected $possibleValueBranch;
 
     /**
-     *
+     * Variable constructor
      *
      * @param string $type
      * @param string $name
@@ -148,9 +148,9 @@ class Variable
                 break;
         }
 
-        $this->_type = $type;
-        $this->_name = $name;
-        $this->_branch = $branch;
+        $this->type = $type;
+        $this->name = $name;
+        $this->branch = $branch;
     }
 
     /**
@@ -160,7 +160,7 @@ class Variable
      */
     public function getInitBranch()
     {
-        return $this->_initBranch;
+        return $this->initBranch;
     }
 
     /**
@@ -170,7 +170,7 @@ class Variable
      */
     public function getInitBranches()
     {
-        return $this->_initBranches;
+        return $this->initBranches;
     }
 
     /**
@@ -180,7 +180,7 @@ class Variable
      */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -190,7 +190,7 @@ class Variable
      */
     public function setLocalOnly($localOnly)
     {
-        $this->_localOnly = $localOnly;
+        $this->localOnly = $localOnly;
     }
 
     /**
@@ -200,7 +200,7 @@ class Variable
      */
     public function isLocalOnly()
     {
-        return $this->_localOnly;
+        return $this->localOnly;
     }
 
     /**
@@ -210,7 +210,7 @@ class Variable
      */
     public function setIsDoublePointer($doublePointer)
     {
-        $this->_doublePointer = $doublePointer;
+        $this->doublePointer = $doublePointer;
     }
 
     /**
@@ -218,7 +218,7 @@ class Variable
      */
     public function isDoublePointer()
     {
-        return $this->_doublePointer;
+        return $this->doublePointer;
     }
 
     /**
@@ -228,7 +228,7 @@ class Variable
      */
     public function getRealName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -238,10 +238,10 @@ class Variable
      */
     public function getName()
     {
-        if ($this->_lowName) {
-            return $this->_lowName;
+        if ($this->lowName) {
+            return $this->lowName;
         }
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -251,7 +251,7 @@ class Variable
      */
     public function setLowName($lowName)
     {
-        $this->_lowName = $lowName;
+        $this->lowName = $lowName;
     }
 
     /**
@@ -261,7 +261,7 @@ class Variable
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -271,7 +271,7 @@ class Variable
      */
     public function isReadOnly()
     {
-        return $this->_readOnly;
+        return $this->readOnly;
     }
 
     /**
@@ -281,7 +281,7 @@ class Variable
      */
     public function setTemporal($temporal)
     {
-        $this->_temporal = $temporal;
+        $this->temporal = $temporal;
     }
 
     /**
@@ -291,7 +291,7 @@ class Variable
      */
     public function isTemporal()
     {
-        return $this->_temporal;
+        return $this->temporal;
     }
 
     /**
@@ -301,12 +301,12 @@ class Variable
      */
     public function setIdle($idle)
     {
-        if ($this->_reusable) {
-            $this->_classTypes = array();
-            $this->_dynamicTypes = array('unknown' => true);
-            $this->_idle = $idle;
+        if ($this->reusable) {
+            $this->classTypes = array();
+            $this->dynamicTypes = array('unknown' => true);
+            $this->idle = $idle;
         } else {
-            $this->_idle = false;
+            $this->idle = false;
         }
     }
 
@@ -317,7 +317,7 @@ class Variable
      */
     public function isIdle()
     {
-        return $this->_idle;
+        return $this->idle;
     }
 
     /**
@@ -327,7 +327,7 @@ class Variable
      */
     public function setReusable($reusable)
     {
-        $this->_reusable = $reusable;
+        $this->reusable = $reusable;
     }
 
     /**
@@ -337,7 +337,7 @@ class Variable
      */
     public function isReusable()
     {
-        return $this->_reusable;
+        return $this->reusable;
     }
 
     /**
@@ -347,7 +347,7 @@ class Variable
      */
     public function setMemoryTracked($memoryTracked)
     {
-        $this->_memoryTracked = $memoryTracked;
+        $this->memoryTracked = $memoryTracked;
     }
 
     /**
@@ -357,7 +357,7 @@ class Variable
      */
     public function isMemoryTracked()
     {
-        return $this->_memoryTracked;
+        return $this->memoryTracked;
     }
 
     /**
@@ -367,7 +367,7 @@ class Variable
      */
     public function getBranch()
     {
-        return $this->_branch;
+        return $this->branch;
     }
 
     /**
@@ -377,7 +377,7 @@ class Variable
      */
     public function setOriginal($node)
     {
-        $this->_node = $node;
+        $this->node = $node;
     }
 
     /**
@@ -387,7 +387,7 @@ class Variable
      */
     public function getOriginal()
     {
-        $node = $this->_node;
+        $node = $this->node;
         if ($node) {
             return $node;
         }
@@ -403,13 +403,13 @@ class Variable
     {
         if ($classTypes) {
             if (is_string($classTypes)) {
-                if (!in_array($classTypes, $this->_classTypes)) {
-                    $this->_classTypes[] = $classTypes;
+                if (!in_array($classTypes, $this->classTypes)) {
+                    $this->classTypes[] = $classTypes;
                 }
             } else {
                 foreach ($classTypes as $classType) {
-                    if (!in_array($classType, $this->_classTypes)) {
-                        $this->_classTypes[] = $classType;
+                    if (!in_array($classType, $this->classTypes)) {
+                        $this->classTypes[] = $classType;
                     }
                 }
             }
@@ -423,7 +423,7 @@ class Variable
      */
     public function getClassTypes()
     {
-        return $this->_classTypes;
+        return $this->classTypes;
     }
 
     /**
@@ -434,16 +434,16 @@ class Variable
     public function setDynamicTypes($types)
     {
         if ($types) {
-            unset($this->_dynamicTypes['unknown']);
+            unset($this->dynamicTypes['unknown']);
 
             if (is_string($types)) {
-                if (!isset($this->_dynamicTypes[$types])) {
-                    $this->_dynamicTypes[$types] = true;
+                if (!isset($this->dynamicTypes[$types])) {
+                    $this->dynamicTypes[$types] = true;
                 }
             } else {
                 foreach ($types as $type => $one) {
-                    if (!isset($this->_dynamicTypes[$one])) {
-                        $this->_dynamicTypes[$one] = true;
+                    if (!isset($this->dynamicTypes[$one])) {
+                        $this->dynamicTypes[$one] = true;
                     }
                 }
             }
@@ -457,7 +457,7 @@ class Variable
      */
     public function getDynamicTypes()
     {
-        return $this->_dynamicTypes;
+        return $this->dynamicTypes;
     }
 
     /**
@@ -468,10 +468,10 @@ class Variable
     public function hasAnyDynamicType($types)
     {
         if (is_string($types)) {
-            return isset($this->_dynamicTypes[$types]);
+            return isset($this->dynamicTypes[$types]);
         } else {
             foreach ($types as $type) {
-                if (isset($this->_dynamicTypes[$type])) {
+                if (isset($this->dynamicTypes[$type])) {
                     return true;
                 }
             }
@@ -488,7 +488,7 @@ class Variable
     {
         $number = 0;
         foreach ($types as $type) {
-            if (isset($this->_dynamicTypes[$type])) {
+            if (isset($this->dynamicTypes[$type])) {
                 $number++;
             }
         }
@@ -500,7 +500,7 @@ class Variable
      */
     public function increaseUses()
     {
-        $this->_numberUses++;
+        $this->numberUses++;
     }
 
     /**
@@ -508,7 +508,7 @@ class Variable
      */
     public function increaseMutates()
     {
-        $this->_numberMutates++;
+        $this->numberMutates++;
     }
 
     /**
@@ -518,7 +518,7 @@ class Variable
      */
     public function getNumberUses()
     {
-        return $this->_numberUses;
+        return $this->numberUses;
     }
 
     /**
@@ -528,7 +528,7 @@ class Variable
      */
     public function getNumberMutations()
     {
-        return $this->_numberMutates;
+        return $this->numberMutates;
     }
 
     /**
@@ -544,11 +544,11 @@ class Variable
             if ($compilationContext->branchManager) {
                 $currentBranch = $compilationContext->branchManager->getCurrentBranch();
                 if ($currentBranch) {
-                    $this->_initBranches[] = $currentBranch;
+                    $this->initBranches[] = $currentBranch;
                 }
             }
         }
-        $this->_initialized = $initialized;
+        $this->initialized = $initialized;
     }
 
     /**
@@ -558,7 +558,7 @@ class Variable
      */
     public function isInitialized()
     {
-        return $this->_initialized;
+        return $this->initialized;
     }
 
     /**
@@ -568,8 +568,8 @@ class Variable
      */
     public function setIsExternal($isExternal)
     {
-        $this->_isExternal = $isExternal;
-        $this->_variantInits = 1;
+        $this->isExternal = $isExternal;
+        $this->variantInits = 1;
     }
 
     /**
@@ -579,7 +579,7 @@ class Variable
      */
     public function isExternal()
     {
-        return $this->_isExternal;
+        return $this->isExternal;
     }
 
     /**
@@ -589,7 +589,7 @@ class Variable
      */
     public function mustInitNull()
     {
-        return $this->_mustInitNull;
+        return $this->mustInitNull;
     }
 
     /**
@@ -600,7 +600,7 @@ class Variable
      */
     public function setMustInitNull($mustInitNull)
     {
-        $this->_mustInitNull = (boolean) $mustInitNull;
+        $this->mustInitNull = (boolean) $mustInitNull;
     }
 
     /**
@@ -610,7 +610,7 @@ class Variable
      */
     public function setDefaultInitValue($value)
     {
-        $this->_defaultInitValue = $value;
+        $this->defaultInitValue = $value;
     }
 
     /**
@@ -619,7 +619,7 @@ class Variable
      */
     public function enableDefaultAutoInitValue()
     {
-        switch ($this->_type) {
+        switch ($this->type) {
 
             case 'boolean':
             case 'bool':
@@ -628,20 +628,20 @@ class Variable
             case 'long':
             case 'ulong':
             case 'zephir_ce_guard':
-                $this->_defaultInitValue = 0;
+                $this->defaultInitValue = 0;
                 break;
 
             case 'variable':
             case 'string':
             case 'array':
-                $this->_defaultInitValue = null;
+                $this->defaultInitValue = null;
                 $this->setDynamicTypes('null');
                 $this->setMustInitNull(true);
                 $this->setLocalOnly(false);
                 break;
 
             default:
-                throw new CompilerException('Cannot create an automatic safe default value for variable type: ' . $this->_type);
+                throw new CompilerException('Cannot create an automatic safe default value for variable type: ' . $this->type);
         }
     }
 
@@ -652,7 +652,7 @@ class Variable
      */
     public function getDefaultInitValue()
     {
-        return $this->_defaultInitValue;
+        return $this->defaultInitValue;
     }
 
     /**
@@ -674,7 +674,7 @@ class Variable
      */
     public function skipInitVariant($numberSkips)
     {
-        $this->_numberSkips += $numberSkips;
+        $this->numberSkips += $numberSkips;
     }
 
     /**
@@ -684,7 +684,7 @@ class Variable
      */
     public function getSkipVariant()
     {
-        return $this->_numberSkips;
+        return $this->numberSkips;
     }
 
     /*
@@ -695,7 +695,7 @@ class Variable
     public function initNonReferenced(CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/memory');
-        $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->_name . ');');
+        $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF(' . $this->name . ');');
     }
 
     /**
@@ -703,7 +703,7 @@ class Variable
      */
     public function increaseVariantIfNull()
     {
-        $this->_variantInits++;
+        $this->variantInits++;
     }
 
     /**
@@ -713,8 +713,8 @@ class Variable
      */
     public function initVariant(CompilationContext $compilationContext)
     {
-        if ($this->_numberSkips) {
-            $this->_numberSkips--;
+        if ($this->numberSkips) {
+            $this->numberSkips--;
             return;
         }
 
@@ -725,8 +725,8 @@ class Variable
          */
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 
-            if ($this->_initBranch === false) {
-                $this->_initBranch = $compilationContext->currentBranch;
+            if ($this->initBranch === false) {
+                $this->initBranch = $compilationContext->currentBranch;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
@@ -734,14 +734,14 @@ class Variable
             if (!$this->isLocalOnly()) {
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                    $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
                 } else {
-                    if ($this->_variantInits > 0) {
-                        if ($this->_initBranch === 0) {
+                    if ($this->variantInits > 0) {
+                        if ($this->initBranch === 0) {
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
                         } else {
-                            $this->_mustInitNull = true;
+                            $this->mustInitNull = true;
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
                         }
                     } else {
@@ -749,15 +749,15 @@ class Variable
                     }
                 }
             } else {
-                if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                    $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_NVAR(' . $this->getName() . ');');
                 } else {
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
                 }
             }
 
-            $this->_variantInits++;
+            $this->variantInits++;
         }
     }
 
@@ -768,8 +768,8 @@ class Variable
      */
     public function trackVariant(CompilationContext $compilationContext)
     {
-        if ($this->_numberSkips) {
-            $this->_numberSkips--;
+        if ($this->numberSkips) {
+            $this->numberSkips--;
             return;
         }
 
@@ -780,28 +780,28 @@ class Variable
          */
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 
-            if ($this->_initBranch === false) {
-                $this->_initBranch = $compilationContext->currentBranch;
+            if ($this->initBranch === false) {
+                $this->initBranch = $compilationContext->currentBranch;
             }
 
             if (!$this->isLocalOnly()) {
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                    $this->mustInitNull = true;
                 } else {
-                    if ($this->_variantInits > 0) {
-                        if ($this->_initBranch !== 1) {
-                            $this->_mustInitNull = true;
+                    if ($this->variantInits > 0) {
+                        if ($this->initBranch !== 1) {
+                            $this->mustInitNull = true;
                         }
                     }
                 }
             } else {
-                if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                    $this->mustInitNull = true;
                 }
             }
 
-            $this->_variantInits++;
+            $this->variantInits++;
         }
     }
 
@@ -813,35 +813,35 @@ class Variable
      */
     public function initComplexLiteralVariant(CompilationContext $compilationContext)
     {
-        if ($this->_numberSkips) {
-            $this->_numberSkips--;
+        if ($this->numberSkips) {
+            $this->numberSkips--;
             return;
         }
 
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
 
-            if ($this->_initBranch === false) {
-                $this->_initBranch = $compilationContext->currentBranch;
+            if ($this->initBranch === false) {
+                $this->initBranch = $compilationContext->currentBranch;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
             if (!$this->isLocalOnly()) {
                 $compilationContext->symbolTable->mustGrownStack(true);
-                if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                    $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_LNVAR(' . $this->getName() . ');');
                 } else {
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
                 }
             } else {
-                if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                    $this->_mustInitNull = true;
+                if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                    $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_LNVAR(' . $this->getName() . ');');
                 } else {
                     $compilationContext->codePrinter->output('ZEPHIR_SINIT_VAR(' . $this->getName() . ');');
                 }
             }
-            $this->_variantInits++;
+            $this->variantInits++;
         }
     }
 
@@ -853,27 +853,27 @@ class Variable
     public function observeVariant(CompilationContext $compilationContext)
     {
 
-        if ($this->_numberSkips) {
-            $this->_numberSkips--;
+        if ($this->numberSkips) {
+            $this->numberSkips--;
             return;
         }
 
         $name = $this->getName();
         if ($name != 'this_ptr' && $name != 'return_value') {
 
-            if ($this->_initBranch === false) {
-                $this->_initBranch = $compilationContext->currentBranch;
+            if ($this->initBranch === false) {
+                $this->initBranch = $compilationContext->currentBranch;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
-            if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                $this->_mustInitNull = true;
+            if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                $this->mustInitNull = true;
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
             } else {
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
             }
-            $this->_variantInits++;
+            $this->variantInits++;
         }
     }
 
@@ -886,27 +886,27 @@ class Variable
     public function observeOrNullifyVariant(CompilationContext $compilationContext)
     {
 
-        if ($this->_numberSkips) {
-            $this->_numberSkips--;
+        if ($this->numberSkips) {
+            $this->numberSkips--;
             return;
         }
 
         $name = $this->getName();
         if ($name != 'this_ptr' && $name != 'return_value') {
 
-            if ($this->_initBranch === false) {
-                $this->_initBranch = $compilationContext->currentBranch;
+            if ($this->initBranch === false) {
+                $this->initBranch = $compilationContext->currentBranch;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
-            if ($this->_variantInits > 0 || $compilationContext->insideCycle) {
-                $this->_mustInitNull = true;
+            if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+                $this->mustInitNull = true;
                 //$compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
             } else {
                 //$compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
             }
-            $this->_variantInits++;
+            $this->variantInits++;
 
             $this->setMustInitNull(true);
         }
@@ -919,7 +919,7 @@ class Variable
      */
     public function isVariable()
     {
-        return $this->_type == 'variable';
+        return $this->type == 'variable';
     }
 
     /**
@@ -929,7 +929,7 @@ class Variable
      */
     public function isBoolean()
     {
-        return $this->_type == 'bool';
+        return $this->type == 'bool';
     }
 
     /**
@@ -939,7 +939,7 @@ class Variable
      */
     public function isString()
     {
-        return $this->_type == 'string';
+        return $this->type == 'string';
     }
 
     /**
@@ -949,7 +949,7 @@ class Variable
      */
     public function isInt()
     {
-        return $this->_type == 'int';
+        return $this->type == 'int';
     }
 
     /**
@@ -959,7 +959,7 @@ class Variable
      */
     public function isDouble()
     {
-        return $this->_type == 'double';
+        return $this->type == 'double';
     }
 
     /**
@@ -969,7 +969,7 @@ class Variable
      */
     public function isArray()
     {
-        return $this->_type == 'array';
+        return $this->type == 'array';
     }
 
     /**
@@ -1010,8 +1010,8 @@ class Variable
      */
     public function setPossibleValue(CompiledExpression $possibleValue, CompilationContext $compilationContext)
     {
-        $this->_possibleValue = $possibleValue;
-        $this->_possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
+        $this->possibleValue = $possibleValue;
+        $this->possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
     }
 
     /**
@@ -1021,7 +1021,7 @@ class Variable
      */
     public function getPossibleValue()
     {
-        return $this->_possibleValue;
+        return $this->possibleValue;
     }
 
     /**
@@ -1031,6 +1031,6 @@ class Variable
      */
     public function getPossibleValueBranch()
     {
-        return $this->_possibleValueBranch;
+        return $this->possibleValueBranch;
     }
 }
