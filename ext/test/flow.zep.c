@@ -1735,6 +1735,85 @@ PHP_METHOD(Test_Flow, testFor36) {
 
 }
 
+PHP_METHOD(Test_Flow, testFor37) {
+
+	zend_bool _0;
+	int i = 0, _1, _2;
+
+
+	_2 = 10;
+	_1 = 1;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			_1 = _1;
+			i++;
+		}
+	}
+	RETURN_LONG(i);
+
+}
+
+PHP_METHOD(Test_Flow, testFor38) {
+
+	zend_bool _1;
+	long _0;
+	zval *v = NULL;
+	int i = 0, _2, _3;
+
+	ZEPHIR_MM_GROW();
+
+	_3 = 10;
+	_2 = 1;
+	_0 = 0;
+	_1 = 0;
+	if (_2 <= _3) {
+		while (1) {
+			if (_1) {
+				_0++;
+				_2++;
+				if (!(_2 <= _3)) {
+					break;
+				}
+			} else {
+				_1 = 1;
+			}
+			_0 = _0;
+			ZEPHIR_INIT_NVAR(v);
+			ZVAL_LONG(v, _2);
+			i++;
+		}
+	}
+	RETURN_MM_LONG(i);
+
+}
+
+PHP_METHOD(Test_Flow, testFor39) {
+
+	zval _2;
+	long _1;
+	char _0;
+	int i = 0;
+
+
+	ZEPHIR_SINIT_VAR(_2);
+	ZVAL_STRING(&_2, "hello", 0);
+	for (_1 = 0; _1 < Z_STRLEN_P(&_2); _1++) {
+		_0 = ZEPHIR_STRING_OFFSET(&_2, _1);
+		i++;
+	}
+	RETURN_LONG(i);
+
+}
+
 PHP_METHOD(Test_Flow, testSwitch1) {
 
 	int a;

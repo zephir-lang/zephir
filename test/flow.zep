@@ -751,6 +751,33 @@ class Flow
 		return true;
 	}
 
+	public function testFor37()
+	{
+		var i = 0;
+		for _ in range(1, 10) {
+			let i++;
+		}
+		return i;
+	}
+
+	public function testFor38()
+	{
+		var i = 0, v;
+		for _, v in range(1, 10) {
+			let i++;
+		}
+		return i;
+	}
+
+	public function testFor39()
+	{
+		var i = 0;
+		for _ in "hello" {
+			let i++;
+		}
+		return i;
+	}
+
 	public function testSwitch1()
 	{
 		var a;
