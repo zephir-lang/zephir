@@ -111,13 +111,12 @@ class Compiler
         $this->stringManager = new StringsManager();
         $this->fileSystem = new FileSystem();
         $this->checkRequires();
-        
     }
     
     /**
      * Check require extensions orther when build your extension
      */
-    protected function checkRequires() 
+    protected function checkRequires()
     {
         $extension_requires = $this->config->get("requires");
         $extension_requires = $extension_requires["extensions"];
