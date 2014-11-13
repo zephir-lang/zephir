@@ -313,6 +313,45 @@ int ZEND_FASTCALL zephir_memory_restore_stack(const char *func TSRMLS_DC)
 }
 
 /**
+ * Adds a memory frame in the current executed method
+ */
+void ZEND_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC)
+{
+	zephir_memory_entry *entry;
+	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
+	if (g->start_memory == NULL) {
+		zephir_initialize_memory(g TSRMLS_CC);
+	}
+	entry = zephir_memory_grow_stack_common(g);
+	entry->func = func;
+}
+
+#else
+
+/**
+ * Adds a memory frame in the current executed method
+ */
+void ZEND_FASTCALL zephir_memory_grow_stack(TSRMLS_D)
+{
+	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
+	if (g->start_memory == NULL) {
+		zephir_initialize_memory(g TSRMLS_CC);
+	}
+	zephir_memory_grow_stack_common(g);
+}
+
+/**
+ * Finishes the current memory stack by releasing allocated memory
+ */
+int ZEND_FASTCALL zephir_memory_restore_stack(TSRMLS_D)
+{
+	zephir_memory_restore_stack_common(ZEPHIR_VGLOBAL TSRMLS_CC);
+	return SUCCESS;
+}
+
+#endif
+
+/**
  * Pre-allocates memory for further use in execution
  */
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS_DC)
@@ -460,45 +499,6 @@ void zephir_deinitialize_memory(TSRMLS_D)
 
 	zephir_globals_ptr->initialized = 0;
 }
-
-/**
- * Adds a memory frame in the current executed method
- */
-void ZEND_FASTCALL zephir_memory_grow_stack(const char *func TSRMLS_DC)
-{
-	zephir_memory_entry *entry;
-	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
-	if (g->start_memory == NULL) {
-		zephir_initialize_memory(g TSRMLS_CC);
-	}
-	entry = zephir_memory_grow_stack_common(g);
-	entry->func = func;
-}
-
-#else
-
-/**
- * Adds a memory frame in the current executed method
- */
-void ZEND_FASTCALL zephir_memory_grow_stack(TSRMLS_D)
-{
-	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
-	if (g->start_memory == NULL) {
-		zephir_initialize_memory(g TSRMLS_CC);
-	}
-	zephir_memory_grow_stack_common(g);
-}
-
-/**
- * Finishes the current memory stack by releasing allocated memory
- */
-int ZEND_FASTCALL zephir_memory_restore_stack(TSRMLS_D)
-{
-	zephir_memory_restore_stack_common(ZEPHIR_VGLOBAL TSRMLS_CC);
-	return SUCCESS;
-}
-
-#endif
 
 ZEPHIR_ATTR_NONNULL static void zephir_reallocate_memory(const zend_zephir_globals_def *g)
 {
