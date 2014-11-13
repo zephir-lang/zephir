@@ -104,12 +104,35 @@ class Compiler
      * @param Config $config
      * @param Logger $logger
      */
-    public function __construct(Config $config, Logger $logger)
+        public function __construct(Config $config, Logger $logger)
     {
         $this->config = $config;
         $this->logger = $logger;
         $this->stringManager = new StringsManager();
         $this->fileSystem = new FileSystem();
+        $this->checkRequires();
+        
+    }
+    
+    /**
+     * Check require extensions orther when build your extension
+     */
+    protected function checkRequires(){
+        $extension_requires = $this->config->get("requires")["extensions"];
+        if($extension_requires){
+            $collection_error = PHP_EOL."\tCould not load Extension : ";
+            foreach ($extension_requires as $key => $value) {
+                if(!extension_loaded($value)){
+                    $collection_error .= $value.", ";
+                }
+            }
+            
+            if($collection_error != PHP_EOL."\tCould not load Extension : "){
+                $collection_error .= PHP_EOL."\tYou must add extensions above before build this extension!";
+                throw new Exception($collection_error);
+            }
+        }
+        
     }
 
     /**
