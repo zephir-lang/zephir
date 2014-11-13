@@ -104,7 +104,7 @@ class Compiler
      * @param Config $config
      * @param Logger $logger
      */
-        public function __construct(Config $config, Logger $logger)
+    public function __construct(Config $config, Logger $logger)
     {
         $this->config = $config;
         $this->logger = $logger;
