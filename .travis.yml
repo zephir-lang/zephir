@@ -17,6 +17,7 @@ before_script:
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - $(phpenv which php) compiler.php generate
  - $(phpenv which php) compiler.php stubs
+ - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
  - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
