@@ -397,6 +397,7 @@ class SymbolTable
                 $superVar->setDynamicTypes('array');
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
+                $superVar->setUsed(true, $statement);
                 $this->_variables[$name] = $superVar;
                 return $superVar;
             }
@@ -452,6 +453,7 @@ class SymbolTable
                 $superVar->setDynamicTypes('array');
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
+                $superVar->setUsed(true, $statement);
                 $this->_variables[$name] = $superVar;
                 return $superVar;
             }
@@ -542,7 +544,9 @@ class SymbolTable
     public function getTempVariable($type, $compilationContext)
     {
         $tempVar = $this->_tempVariable++;
-        return $this->addVariable($type, '_' . $tempVar, $compilationContext);
+        $variable = $this->addVariable($type, '_' . $tempVar, $compilationContext);
+        $variable->setTemporal(true);
+        return $variable;
     }
 
     /**

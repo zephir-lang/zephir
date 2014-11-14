@@ -695,7 +695,7 @@ class ForStatement extends StatementAbstract
                     throw new CompilerException("Cannot use variable: " . $this->_statement['key'] . " type: " . $keyVariable->getType() . " as key in hash traversal", $this->_statement['expr']);
                 }
             } else {
-                $keyVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
+                $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
             }
 
             $keyVariable->setMustInitNull(true);
@@ -714,7 +714,7 @@ class ForStatement extends StatementAbstract
                     throw new CompilerException("Cannot use variable: " . $this->_statement['value'] . " type: " . $variable->getType() . " as value in hash traversal", $this->_statement['expr']);
                 }
             } else {
-                $variable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
+                $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
             }
 
             $variable->setMustInitNull(true);
@@ -765,12 +765,12 @@ class ForStatement extends StatementAbstract
 
         if (isset($this->_statement['key'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $this->_statement['key'] . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
         }
 
         if (isset($this->_statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $this->_statement['value'] . ', ' . $tempVariable->getName() . ');');
+            $codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $variable->getName() . ', ' . $tempVariable->getName() . ');');
         }
 
         /**

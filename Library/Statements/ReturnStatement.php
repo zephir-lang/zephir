@@ -80,6 +80,9 @@ class ReturnStatement extends StatementAbstract
                 }
             }
 
+            /**
+             * Fetches return_value and tries to return the value directly there
+             */
             $variable = $compilationContext->symbolTable->getVariable('return_value');
 
             $expr = new Expression($statement['expr']);
