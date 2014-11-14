@@ -1777,6 +1777,7 @@ class ClassMethod
 
         /**
          * Check if there are assigned but not used variables
+         * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
 

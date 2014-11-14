@@ -417,7 +417,60 @@ class SymbolTable
          */
         if (!$compilationContext->insideCycle) {
             $variable->setUsed(false, $statement);
+        } else {
+            $variable->setUsed(true, $statement);
         }
+
+        return $variable;
+    }
+
+    /**
+     * Return a variable in the symbol table, it will be used for a mutating operation
+     * This method implies mutation of one of the members of the variable but no the variables it self
+     *
+     * @param string $name
+     * @param CompilationContext $compilationContext
+     * @param array $statement
+     * @return Variable
+     */
+    public function getVariableForUpdate($name, $compilationContext, array $statement = null)
+    {
+        /**
+         * Create superglobals just in time
+         */
+        if ($this->isSuperGlobal($name)) {
+
+            if (!$this->hasVariable($name)) {
+
+                /**
+                 * @TODO, injecting globals, initialize to null and check first?
+                 */
+                $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
+
+                $superVar = new Variable('variable', $name, $compilationContext->currentBranch);
+                $superVar->setIsInitialized(true, $compilationContext, $statement);
+                $superVar->setDynamicTypes('array');
+                $superVar->increaseMutates();
+                $superVar->increaseUses();
+                $this->_variables[$name] = $superVar;
+                return $superVar;
+            }
+        }
+
+        if (!$this->hasVariable($name)) {
+            throw new CompilerException("Cannot mutate variable '" . $name . "' because it wasn't defined", $statement);
+        }
+
+        $variable = $this->getVariable($name);
+        $variable->increaseUses();
+        $variable->increaseMutates();
+
+        /**
+         * Saves the last place where the variable was mutated
+         * We discard mutations inside loops because iterations could use the value
+         * and Zephir only provides top-down compilation
+         */
+        $variable->setUsed(true, $statement);
 
         return $variable;
     }

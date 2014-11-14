@@ -83,6 +83,18 @@ class LetStatement extends StatementAbstract
                     $symbolVariable = null;
                     break;
 
+                case 'array-index':
+                case 'variable-append':
+                case 'object-property':
+                case 'array-index-append':
+                case 'string-dynamic-object-property':
+                case 'variable-dynamic-object-property':
+                case 'array-index-append':
+                case 'string-dynamic-object-property':
+                case 'static-property-array-index-append':
+                    $symbolVariable = $compilationContext->symbolTable->getVariableForUpdate($variable, $compilationContext, $assignment);
+                    break;
+
                 default:
                     $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
                     break;
