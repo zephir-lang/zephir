@@ -101,7 +101,8 @@ class Foo
 		}
 	}*/
 
-	public function post_inc_prop($n) {
+	public function post_inc_prop(n)
+	{
 		var i;
 
 		for i in range(1, n) {
@@ -109,7 +110,8 @@ class Foo
 		}
 	}
 
-	public function post_dec_prop($n) {
+	public function post_dec_prop(n)
+	{
 		var i;
 
 		for i in range(1, n) {
@@ -117,7 +119,7 @@ class Foo
 		}
 	}
 
-	public function isset_prop($n)
+	public function isset_prop(n)
 	{
 		var i, x;
 

@@ -327,9 +327,12 @@ class ClassProperty
     {
         return new LetStatementBuilder(array(
             'assign-type' => 'object-property',
-            'operator' => 'assign',
-            'variable' => 'this',
-            'property' => $this->_name,
+            'operator'    => 'assign',
+            'variable'    => 'this',
+            'property'    => $this->_name,
+            'file'        => $this->_original['default']['file'],
+            'line'        => $this->_original['default']['line'],
+            'char'        => $this->_original['default']['char'],
         ), $this->_original['default']);
     }
 

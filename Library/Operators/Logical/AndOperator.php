@@ -92,9 +92,9 @@ class AndOperator extends LogicalBaseOperator
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
                     'expr' => $assignExprLeft,
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char']
+                    'file' => $expression['left']['file'],
+                    'line' => $expression['left']['line'],
+                    'char' => $expression['left']['char']
                 )
             )
         ));
@@ -149,9 +149,9 @@ class AndOperator extends LogicalBaseOperator
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
                     'expr' => $assignExprRight,
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char']
+                    'file' => $expression['right']['file'],
+                    'line' => $expression['right']['line'],
+                    'char' => $expression['right']['char']
                 )
             )
         ));

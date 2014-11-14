@@ -121,7 +121,10 @@ class PropertyDynamicAccess
                             'assign-type' => 'variable',
                             'variable' => $propertyVariable->getName(),
                             'operator' => 'assign',
-                            'expr' => $expression['right']
+                            'expr' => $expression['right'],
+                            'file' => $expression['right']['file'],
+                            'line' => $expression['right']['line'],
+                            'char' => $expression['right']['char'],
                         )
                     )
                 ));

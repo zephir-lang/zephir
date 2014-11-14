@@ -856,7 +856,7 @@ class ClassMethod
                          * Now I can write code for easy use on Expression becase code in this method don't write with codePrinter ;(
                          * @todo Rewrite all to codePrinter
                          */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, null);
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
@@ -1772,6 +1772,29 @@ class ClassMethod
                     $usedVariables[$type] = array();
                 }
                 $usedVariables[$type][] = $variable;
+            }
+        }
+
+        /**
+         * Check if there are assigned but not used variables
+         */
+        foreach ($symbolTable->getVariables() as $variable) {
+
+            if ($variable->isExternal() == true || $variable->isTemporal()) {
+                continue;
+            }
+
+            if ($variable->getName() == 'this_ptr' || $variable->getName() == 'return_value' || $variable->getName() == 'return_value_ptr' || $variable->getName() == 'ZEPHIR_LAST_CALL_STATUS') {
+                continue;
+            }
+
+            if (!$variable->isUsed()) {
+                $node = $variable->getLastUsedNode();
+                if (is_array($node)) {
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $node);
+                } else {
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                }
             }
         }
 

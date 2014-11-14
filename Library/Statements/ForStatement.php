@@ -80,19 +80,19 @@ class ForStatement extends StatementAbstract
             /**
              * This variable is used to check if the loop is in its first iteration
              */
-            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext);
+            $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite('long', $compilationContext, $this->_statement);
             $keyVariable->increaseUses();
         }
 
         /**
          * This variable is used to check if the loop is in its first iteration
          */
-        $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
+        $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext, $this->_statement);
 
         if ($parameters[0]->getType() != 'variable') {
             $tempVariable = $compilationContext->symbolTable->addTemp($parameters[0]->getType(), $compilationContext);
         } else {
-            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode(), $compilationContext, $this->_statement);
+            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[0]->getCode(), $compilationContext, $this->_statement['expr']);
             $tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
         }
 
@@ -103,7 +103,7 @@ class ForStatement extends StatementAbstract
         if ($parameters[1]->getType() != 'variable') {
             $upperBoundVariable = $compilationContext->symbolTable->getTempVariable($parameters[1]->getType(), $compilationContext);
         } else {
-            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode(), $compilationContext, $this->_statement);
+            $rangeVariable = $compilationContext->symbolTable->getVariableForRead($parameters[1]->getCode(), $compilationContext, $this->_statement['expr']);
             $upperBoundVariable = $compilationContext->symbolTable->getTempVariable($rangeVariable->getType(), $compilationContext);
         }
 
@@ -120,7 +120,13 @@ class ForStatement extends StatementAbstract
                     'expr' => array(
                         'type' => $parameters[1]->getType(),
                         'value' => $parameters[1]->getCode(),
+                        'file' => $this->_statement['file'],
+                        'line' => $this->_statement['line'],
+                        'char' => $this->_statement['char']
                     ),
+                    'file' => $this->_statement['file'],
+                    'line' => $this->_statement['line'],
+                    'char' => $this->_statement['char']
                 )
             )
         ));

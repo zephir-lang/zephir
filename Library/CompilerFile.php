@@ -347,7 +347,13 @@ class CompilerFile
                                         'expr' => array(
                                             'type' => 'variable',
                                             'value' => $name,
-                                        )
+                                            'file'  => $property['file'],
+                                            'line'  => $property['line'],
+                                            'char'  => $property['char']
+                                        ),
+                                        'file'  => $property['file'],
+                                        'line'  => $property['line'],
+                                        'char'  => $property['char']
                                     )
                                 )
                             )

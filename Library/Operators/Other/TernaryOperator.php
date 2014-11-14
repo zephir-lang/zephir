@@ -72,7 +72,10 @@ class TernaryOperator extends BaseOperator
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
-                    'expr'        => $expression['right']
+                    'expr'        => $expression['right'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 )
             )
         ));
@@ -92,7 +95,10 @@ class TernaryOperator extends BaseOperator
                     'assign-type' => 'variable',
                     'variable'    => $returnVariable->getName(),
                     'operator'    => 'assign',
-                    'expr'        => $expression['extra']
+                    'expr'        => $expression['extra'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 )
             )
         ));

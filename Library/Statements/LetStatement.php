@@ -68,11 +68,6 @@ class LetStatement extends StatementAbstract
         $statement = $this->_statement;
         foreach ($statement['assignments'] as $assignment) {
 
-            // @todo: Remove this
-            if (isset($assignment['operator']) && $assignment['operator'] == 'ref-assign') {
-                throw new CompilerException('Zephir not support reference assignment for now. Stay tuned for https://github.com/phalcon/zephir/issues/203', $assignment);
-            }
-
             $variable = $assignment['variable'];
 
             /**

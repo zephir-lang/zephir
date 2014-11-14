@@ -54,6 +54,10 @@ class VarDumpOptimizer extends OptimizerAbstract
 
             $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
             if (!$variable) {
+
+                /**
+                 * Complex expressions require a temporary variable
+                 */
                 switch ($resolvedParam->getType()) {
                     case 'array':
                         $type = 'array';
@@ -75,12 +79,25 @@ class VarDumpOptimizer extends OptimizerAbstract
                             'operator' => 'assign',
                             'expr' => array(
                                 'type'  => $resolvedParam->getType(),
-                                'value' => $resolvedParam->getCode()
-                            )
+                                'value' => $resolvedParam->getCode(),
+                                'file'  => $expression['file'],
+                                'line'  => $expression['line'],
+                                'char'  => $expression['char'],
+                            ),
+                            'file'  => $expression['file'],
+                            'line'  => $expression['line'],
+                            'char'  => $expression['char'],
                         )
                     )
                 ));
                 $statement->compile($context);
+
+            } else {
+
+                /**
+                 * This mark the variable as used
+                 */
+                $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
             }
 
             $context->codePrinter->output('zephir_var_dump(&' . $variable->getName() . ' TSRMLS_CC);');

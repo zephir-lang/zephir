@@ -357,6 +357,11 @@ class SymbolTable
                         }
 
                     }
+
+                    /**
+                     * Saves the lastest place where the variable was used
+                     */
+                    $variable->setUsed(true, $statement);
                 }
             }
         }
@@ -373,7 +378,7 @@ class SymbolTable
      * @param array $statement
      * @return Variable
      */
-    public function getVariableForWrite($name, $compilationContext, $statement = null)
+    public function getVariableForWrite($name, $compilationContext, array $statement = null)
     {
         /**
          * Create superglobals just in time
@@ -405,12 +410,22 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
+        /**
+         * Saves the last place where the variable was mutated
+         * We discard mutations inside loops because iterations could use the value
+         * and Zephir only provides top-down compilation
+         */
+        if (!$compilationContext->insideCycle) {
+            $variable->setUsed(false, $statement);
+        }
+
         return $variable;
     }
 
     /**
      * Return a variable in the symbol table, it will be used for a write operation
      *
+     * @param boolean $mustGrownStack
      */
     public function mustGrownStack($mustGrownStack)
     {

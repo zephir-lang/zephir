@@ -92,6 +92,9 @@ class OrOperator extends LogicalBaseOperator
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
                     'expr' => $assignExprLeft,
+                    'file' => $expression['left']['file'],
+                    'line' => $expression['left']['line'],
+                    'char' => $expression['left']['char'],
                 )
             )
         ));
@@ -146,6 +149,9 @@ class OrOperator extends LogicalBaseOperator
                     'variable' => $flagVariable->getName(),
                     'operator' => 'assign',
                     'expr' => $assignExprRight,
+                    'file' => $expression['right']['file'],
+                    'line' => $expression['right']['line'],
+                    'char' => $expression['right']['char'],
                 )
             )
         ));

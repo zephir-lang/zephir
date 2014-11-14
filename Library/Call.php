@@ -260,7 +260,9 @@ class Call
             foreach ($parameters as $parameter) {
 
                 if (is_array($parameter['parameter'])) {
+
                     $paramExpr = new Expression($parameter['parameter']);
+
                     switch ($parameter['parameter']['type']) {
                         case 'property-access':
                         case 'array-access':
@@ -271,6 +273,7 @@ class Call
                             $paramExpr->setReadOnly($readOnly);
                             break;
                     }
+
                     $params[] = $paramExpr->compile($compilationContext);
                     continue;
                 }

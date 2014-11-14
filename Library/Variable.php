@@ -131,6 +131,16 @@ class Variable
     protected $possibleValueBranch;
 
     /**
+     * Whether the variable was used or not
+     */
+    protected $used = false;
+
+    /**
+     * Last AST node where the variable was used
+     */
+    protected $usedNode;
+
+    /**
      * Variable constructor
      *
      * @param string $type
@@ -338,6 +348,38 @@ class Variable
     public function isReusable()
     {
         return $this->reusable;
+    }
+
+    /**
+     * Sets the latest node where a variable was used
+     *
+     * @param boolean $used
+     * @param array $node
+     */
+    public function setUsed($used, $node)
+    {
+        $this->used = $used;
+        $this->usedNode = $node;
+    }
+
+    /**
+     * Checks whether the last value assigned was used
+     *
+     * @return boolean
+     */
+    public function isUsed()
+    {
+        return $this->used;
+    }
+
+    /**
+     * Returns the last node where the variable was assigned or used
+     *
+     * @return array
+     */
+    public function getLastUsedNode()
+    {
+        return $this->usedNode;
     }
 
     /**
