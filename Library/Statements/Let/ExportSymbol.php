@@ -27,7 +27,6 @@ use Zephir\Expression;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\Utils;
-use Zephir\GlobalConstant;
 use Zephir\Statements\LetStatement;
 
 /**
@@ -54,7 +53,7 @@ class ExportSymbol
         $variable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $statement);
         $variable->setMustInitNull(true);
 
-        $statement = new LetStatement(array(
+        $letStatement = new LetStatement(array(
             'type' => 'let',
             'assignments' => array(
                 array(
@@ -74,7 +73,7 @@ class ExportSymbol
                 )
             )
         ));
-        $statement->compile($compilationContext);
+        $letStatement->compile($compilationContext);
 
         $codePrinter->output('if (zephir_set_symbol(' . $symbolVariable->getName() . ', ' . $variable->getName() . ' TSRMLS_CC) == FAILURE){');
         $codePrinter->output("\t" . 'return;');
