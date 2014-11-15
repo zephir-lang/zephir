@@ -357,14 +357,14 @@ class SymbolTable
                         }
 
                     }
-
-                    /**
-                     * Saves the lastest place where the variable was used
-                     */
-                    $variable->setUsed(true, $statement);
                 }
             }
         }
+
+        /**
+         * Saves the lastest place where the variable was used
+         */
+        $variable->setUsed(true, $statement);
 
         return $variable;
     }
