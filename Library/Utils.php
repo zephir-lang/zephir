@@ -177,4 +177,9 @@ class Utils
         // Absolute class/interface name
         return substr($className, 1);
     }
+
+    public static function isWindows()
+    {
+        return strncasecmp(PHP_OS, 'WIN', 3) == 0;
+    }
 }
