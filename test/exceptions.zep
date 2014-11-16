@@ -38,6 +38,14 @@ class Exceptions
         throw this->getException();
     }
 
+    public function testException5()
+    {
+        var exception;
+
+        let exception = new Exception("hello5");
+        throw exception;
+    }
+
     public function testExceptionLiteral(string type)
     {
         switch(type) {
