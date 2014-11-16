@@ -64,6 +64,16 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException Test\Exception
+     * @expectedExceptionMessage hello5
+     */
+    public function testException5()
+    {
+        $t = new Exceptions();
+        $t->testException5();
+    }
+
+    /**
      * @expectedException Exception
      * @expectedExceptionMessage Test
      */

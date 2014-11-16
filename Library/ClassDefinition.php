@@ -1429,7 +1429,7 @@ class ClassDefinition
                 if (!$check) {
                     throw new CompilerException('Unknown class entry for "' . $className . '"');
                 } else {
-                    $classEntry = 'zephir_get_internal_ce(SS("'.str_replace('\\', '\\\\', strtolower($className)).'") TSRMLS_CC)';
+                    $classEntry = 'zephir_get_internal_ce(SS("' . Utils::escapeClassName(strtolower($className)) . '") TSRMLS_CC)';
                 }
         }
 
