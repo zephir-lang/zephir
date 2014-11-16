@@ -100,7 +100,7 @@ class TryCatchStatement extends StatementAbstract
                         new BinaryOperatorBuilder(
                             'instanceof',
                             new VariableBuilder($variable->getName()),
-                            new VariableBuilder('\\' . $class['value'])
+                            new VariableBuilder($class['value'])
                         ),
                         new StatementsBlockBuilder(array_merge(
                             array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_C);')),

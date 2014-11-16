@@ -112,6 +112,26 @@ PHP_METHOD(Test_Exceptions, testException4) {
 
 }
 
+PHP_METHOD(Test_Exceptions, testException5) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *exception, *_0;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(exception);
+	object_init_ex(exception, test_exception_ce);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "hello5", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_METHOD(NULL, exception, "__construct", NULL, _0);
+	zephir_check_temp_parameter(_0);
+	zephir_check_call_status();
+	zephir_throw_exception_debug(exception, "test/exceptions.zep", 46 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+	return;
+
+}
+
 PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 
 	zval *type_param = NULL;
@@ -125,19 +145,19 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 
 	do {
 		if (ZEPHIR_IS_STRING(type, "string")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "Test", "test/exceptions.zep", 45);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "Test", "test/exceptions.zep", 53);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(type, "char")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "t", "test/exceptions.zep", 47);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "t", "test/exceptions.zep", 55);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(type, "int")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123", "test/exceptions.zep", 49);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123", "test/exceptions.zep", 57);
 			return;
 		}
 		if (ZEPHIR_IS_STRING(type, "double")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123.123", "test/exceptions.zep", 51);
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(zend_exception_get_default(TSRMLS_C), "123.123", "test/exceptions.zep", 59);
 			return;
 		}
 	} while(0);
