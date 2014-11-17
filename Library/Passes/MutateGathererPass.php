@@ -94,7 +94,9 @@ class MutateGathererPass
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] != 'variable') {
+                if ($parameter['parameter']['type'] == 'variable') {
+                    $this->increaseMutations($parameter['parameter']['value']);
+                } else {
                     $this->passExpression($parameter['parameter']);
                 }
             }
