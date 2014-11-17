@@ -137,7 +137,8 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if (($this->_detectionFlags & self::DETECT_ARRAY_USE) == self::DETECT_ARRAY_USE && $parameter['parameter']['type'] == 'variable') {
+                $usePass = ($this->_detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
+                if ($usePass && $parameter['parameter']['type'] == 'variable') {
                     $this->increaseMutations($parameter['parameter']['value']);
                 } else {
                     $this->passExpression($parameter['parameter']);
@@ -154,8 +155,9 @@ class WriteDetector
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            if (($this->_detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS && $parameter['parameter']['type'] == 'variable') {
-                $this->increaseMutations($parameter['parameter']['value']);
+            $usePass = ($this->_detectionFlags & self::DETECT_ARRAY_USE) == self::DETECT_ARRAY_USE;
+            if ($usePass && $item['value']['type'] == 'variable') {
+                $this->increaseMutations($item['value']['value']);
             } else {
                 $this->passExpression($item['value']);
             }
@@ -171,7 +173,10 @@ class WriteDetector
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ($parameter['parameter']['type'] != 'variable') {
+                $usePass = ($this->_detectionFlags & self::DETECT_PARAM_PASS) == self::DETECT_PARAM_PASS;
+                if ($usePass && $parameter['parameter']['type'] == 'variable') {
+                    $this->increaseMutations($parameter['parameter']['value']);
+                } else {
                     $this->passExpression($parameter['parameter']);
                 }
             }
