@@ -25,9 +25,12 @@ class EmptyTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\EmptyTest();
 
-        assert($t->testDynamicVarArrayEmpty() == true);
-        assert($t->testDynamicVarArrayNotEmpty() == false);
-        assert($t->testEmptyString() == true);
-        assert($t->testNotEmptyString() == false);
+        $this->assertTrue($t->testDynamicVarArrayEmpty());
+        $this->assertFalse($t->testDynamicVarArrayNotEmpty());
+        $this->assertTrue($t->testEmptyString());
+        $this->assertFalse($t->testNotEmptyString());
+        $this->assertTrue($t->testString(""));
+        $this->assertFalse($t->testString('this is a string'));
+        $this->assertFalse($t->testString('0'));
     }
 }
