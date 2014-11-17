@@ -82,6 +82,11 @@ class MutateGathererPass
         return 0;
     }
 
+    /**
+     * Pass let statements
+     *
+     * @param array $statement
+     */
     public function passLetStatement(array $statement)
     {
         foreach ($statement['assignments'] as $assignment) {
@@ -92,6 +97,11 @@ class MutateGathererPass
         }
     }
 
+    /**
+     * Pass call expressions
+     *
+     * @param array $statement
+     */
     public function passCall(array $expression)
     {
         if (isset($expression['parameters'])) {
@@ -105,6 +115,11 @@ class MutateGathererPass
         }
     }
 
+    /**
+     * Pass array expressions
+     *
+     * @param array $statement
+     */
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
@@ -114,6 +129,11 @@ class MutateGathererPass
         }
     }
 
+    /**
+     * Pass "new" expressions
+     *
+     * @param array $statement
+     */
     public function passNew(array $expression)
     {
         if (isset($expression['parameters'])) {
@@ -125,6 +145,11 @@ class MutateGathererPass
         }
     }
 
+    /**
+     * Pass expressions
+     *
+     * @param array $statement
+     */
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
@@ -235,6 +260,11 @@ class MutateGathererPass
         }
     }
 
+    /**
+     * Pass statement block
+     *
+     * @param array $statement
+     */
     public function passStatementBlock(array $statements)
     {
         foreach ($statements as $statement) {

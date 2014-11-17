@@ -686,9 +686,10 @@ class ForStatement extends StatementAbstract
 
     /**
      * Compiles traversing of hash values
+     *
      * - Evaluated expression must be a zval
-     * - Every key must be a zval
-     * - Every value must be a zval
+     * - A key must be a zval
+     * - A value must be a zval
      *
      * @param array $expression
      * @param CompilationContext $compilationContext
@@ -756,14 +757,29 @@ class ForStatement extends StatementAbstract
 
         $compilationContext->headersManager->add('kernel/hash');
 
+        $duplicateHash = '0';
+        $duplicateKey = false;
+
         /**
          * We have to check if hashes are modified within the for's block
          */
-        $duplicateHash = '0';
         if (isset($this->_statement['statements'])) {
+
             $detector = new ForValueUseDetector();
             if ($detector->detect($exprVariable->getName(), $this->_statement['statements'])) {
                 $duplicateHash = '1';
+            }
+
+            /**
+             * Detect if the key is modified or passed to an external scope
+             */
+            if (isset($this->_statement['key'])) {
+                if (!$keyVariable->isTemporal()) {
+                    $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
+                    if ($detector->detect($keyVariable->getName(), $this->_statement['statements'])) {
+                        $duplicateKey = true;
+                    }
+                }
             }
         }
 
@@ -779,8 +795,12 @@ class ForStatement extends StatementAbstract
         $codePrinter->output(') {');
 
         if (isset($this->_statement['key'])) {
-            $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            if ($duplicateKey) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            } else {
+                $codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            }
         }
 
         if (isset($this->_statement['value'])) {
