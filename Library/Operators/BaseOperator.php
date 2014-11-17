@@ -51,10 +51,43 @@ class BaseOperator
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to
+     * store the result. This method returns a variable that is always stored in the heap
+     *
+     * @param CompilationContext $compilationContext
+     * @param array $expression
+     * @param boolean $init
+     * @return Variable
+     */
+    public function getExpectedNonLiteral(CompilationContext $compilationContext, $expression, $init = true)
+    {
+        $isExpecting = $this->_expecting;
+        $symbolVariable = $this->_expectingVariable;
+
+        if ($isExpecting) {
+            if (is_object($symbolVariable)) {
+                if ($symbolVariable->getType() == 'variable' && !$symbolVariable->isLocalOnly()) {
+                    if (!$init) {
+                        return $symbolVariable;
+                    }
+                    $symbolVariable->initVariant($compilationContext);
+                } else {
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                }
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            }
+        }
+        return $symbolVariable;
+    }
+
+    /**
+     * Returns the expected variable for assignment or creates a temporary variable to
      * store the result
      *
      * @param CompilationContext $compilationContext
      * @param array $expression
+     * @param boolean $init
+     * @return Variable
      */
     public function getExpected(CompilationContext $compilationContext, $expression, $init = true)
     {

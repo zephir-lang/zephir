@@ -34,6 +34,7 @@ use Zephir\Utils;
  */
 class NewInstanceOperator extends BaseOperator
 {
+    protected $_literalOnly = false;
 
     /**
      * Creates a new instance
@@ -51,9 +52,14 @@ class NewInstanceOperator extends BaseOperator
         /**
          * Resolves the symbol that expects the value
          */
-        $symbolVariable = $this->getExpected($compilationContext, $expression);
+        $this->_literalOnly = false;
+        $symbolVariable = $this->getExpectedNonLiteral($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Objects can only be instantiated into dynamic variables", $expression);
+        }
+
+        if ($symbolVariable->isLocalOnly()) {
+            throw new CompilerException("Cannot use non-heap variable to store new instance", $expression);
         }
 
         if ($symbolVariable->hasDifferentDynamicType(array('unknown', 'undefined', 'object', 'null'))) {
