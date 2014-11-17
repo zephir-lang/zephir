@@ -217,7 +217,12 @@ EOF;
 
         if ($methodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
-                $paramStr = '$' . $parameter['name'];
+                $paramStr = '';
+                if (isset($parameter['cast'])) {
+                    $paramStr .= $parameter['cast']['value'] . ' ';
+                }
+                
+                $paramStr .= '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
                     $paramStr .= ' = ' . $this->wrapPHPValue($parameter);
