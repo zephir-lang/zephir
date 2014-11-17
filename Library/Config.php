@@ -70,7 +70,10 @@ class Config
         'description' => '',
         'author'      => '',
         'version'     => '0.0.1',
-        'verbose'     => false
+        'verbose'     => false,
+        'requires' => array(
+            'extensions'    => array()
+        )
     );
 
     protected $_changed = false;
