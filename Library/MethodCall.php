@@ -205,6 +205,7 @@ class MethodCall extends Call
                 }
 
                 if ($check) {
+
                     /**
                      * Private methods must be called in their declaration scope
                      */
@@ -514,7 +515,7 @@ class MethodCall extends Call
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '",  ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                     }
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');

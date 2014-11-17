@@ -524,7 +524,7 @@ class ForStatement extends StatementAbstract
             $compilationContext->symbolTable->mustGrownStack(true);
             $codePrinter->output("\t" . '{ zval **tmp; ');
             $codePrinter->output("\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &tmp TSRMLS_CC);');
-            $codePrinter->output("\t" . $this->_statement['value'] . ' = *tmp;');
+            $codePrinter->output("\t" . $variable->getName() . ' = *tmp;');
             $codePrinter->output("\t" . '}');
         }
 
