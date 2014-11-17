@@ -501,7 +501,12 @@ class MethodCall extends Call
              * Check if the method call can have an inline cache
              */
             $methodCache = $compilationContext->cacheManager->getMethodCache();
-            $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
+
+            $cachePointer = $methodCache->get(
+                $compilationContext,
+                isset($method) ? $method : null,
+                $variableVariable
+            );
 
             if (!count($params)) {
 

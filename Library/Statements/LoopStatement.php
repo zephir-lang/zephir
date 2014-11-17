@@ -63,6 +63,7 @@ class LoopStatement extends StatementAbstract
             throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->_statement);
         }
 
+        $st->isLoop(true);
         $st->compile($compilationContext, false, Branch::TYPE_LOOP_INFINITE);
 
         $compilationContext->insideCycle--;

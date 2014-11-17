@@ -53,8 +53,8 @@ class DieOptimizer extends OptimizerAbstract
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
             $context->codePrinter->output('zephir_exit(' . $resolvedParams[0] .');');
         }
-        $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
-        return new CompiledExpression('void ', '', $expression);
 
+        $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
+        return new CompiledExpression('null', '', $expression);
     }
 }

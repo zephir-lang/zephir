@@ -66,6 +66,7 @@ class WhileStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
+            $st->isLoop(true);
             $st->compile($compilationContext);
         }
 

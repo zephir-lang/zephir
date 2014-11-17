@@ -51,6 +51,8 @@ class StatementsBlock
 
     protected $_debug = false;
 
+    protected $_loop = false;
+
     protected $_lastStatement;
 
     /**
@@ -61,6 +63,16 @@ class StatementsBlock
     public function __construct(array $statements)
     {
         $this->_statements = $statements;
+    }
+
+    /**
+     * Sets whether the statements blocks belongs to a loop
+     *
+     * @param boolean $loop
+     */
+    public function isLoop($loop)
+    {
+        $this->_loop = $loop;
     }
 
     /**
@@ -89,6 +101,14 @@ class StatementsBlock
         $this->_unreachable = $unreachable;
 
         $statements = $this->_statements;
+
+        /**
+         * Reference the block if it belongs to a loop
+         */
+        if ($this->_loop) {
+            array_push($compilationContext->cycleBlocks, $this);
+        }
+
         foreach ($statements as $statement) {
 
             /**
@@ -280,6 +300,13 @@ class StatementsBlock
             if ($statement['type'] != 'comment') {
                 $this->_lastStatement = $statement;
             }
+        }
+
+        /**
+         * Reference the block if it belongs to a loop
+         */
+        if ($this->_loop) {
+            array_pop($compilationContext->cycleBlocks);
         }
 
         /**

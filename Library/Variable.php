@@ -133,7 +133,7 @@ class Variable
     /**
      * Whether the variable was used or not
      */
-    protected $used = false;
+    protected $used = true;
 
     /**
      * Last AST node where the variable was used
