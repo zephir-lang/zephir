@@ -1,4 +1,3 @@
 @echo off
 
-set PTOOLSPATH="C:\zephir"
-php %PTOOLSPATH%\compiler.php %*
+php %~dp0\..\compiler.php %*

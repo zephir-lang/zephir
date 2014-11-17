@@ -1,9 +1,9 @@
 ARG_ENABLE("%PROJECT_LOWER%", "enable %PROJECT_LOWER%", "no");
 
 if (PHP_%PROJECT_UPPER% != "no") {
-  EXTENSION("%PROJECT_LOWER%", "%PROJECT_LOWER%.c", null, "-Iext/%PROJECT_LOWER%");
-  ADD_SOURCES("ext/%PROJECT_LOWER%/kernel", "main.c memory.c exception.c hash.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c concat.c variables.c filter.c iterator.c exit.c", "%PROJECT_LOWER%");
-  ADD_SOURCES("ext/%PROJECT_LOWER%/kernel/extended", "array.c", "%PROJECT_LOWER%");
+  EXTENSION("%PROJECT_LOWER%", "%PROJECT_LOWER%.c", null, "-I"+configure_module_dirname);
+  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c hash.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c concat.c variables.c filter.c iterator.c exit.c", "%PROJECT_LOWER%");
+  ADD_SOURCES(configure_module_dirname + "/kernel/extended", "array.c", "%PROJECT_LOWER%");
   %EXTRA_FILES_COMPILED%
   %FILES_COMPILED%
   ADD_FLAG("CFLAGS_%PROJECT_UPPER%", "/D ZEPHIR_RELEASE");
