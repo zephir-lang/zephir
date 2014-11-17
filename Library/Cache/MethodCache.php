@@ -23,7 +23,6 @@ use Zephir\Call;
 use Zephir\ClassMethod;
 use Zephir\Variable;
 use Zephir\CompilationContext;
-use Zephir\Passes\MutateGathererPass;
 
 /**
  * MethodCache
@@ -75,14 +74,12 @@ class MethodCache
              * Try to generate a cache based on the fact the variable is not modified within the loop block
              */
             if ($compilationContext->insideCycle && !$caller->isTemporal()) {
+
                 if (count($compilationContext->cycleBlocks) && $caller->getType() == 'variable') {
 
                     $currentBlock = $compilationContext->cycleBlocks[count($compilationContext->cycleBlocks) - 1];
 
-                    $mutatePass = new MutateGathererPass;
-                    $mutatePass->pass($currentBlock);
-
-                    if ($mutatePass->getNumberOfMutations($caller->getName()) == 0) {
+                    if ($currentBlock->getMutateGatherer(true)->getNumberOfMutations($caller->getName()) == 0) {
 
                         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
                         $functionCache->setMustInitNull(true);

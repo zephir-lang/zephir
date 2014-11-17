@@ -56,6 +56,7 @@ class MutateGathererPass
      * Increase the number of mutations a variable has inside a statement block
      *
      * @param string $variable
+     * @return MutateGathererPass
      */
     public function increaseMutations($variable)
     {
@@ -64,6 +65,7 @@ class MutateGathererPass
         } else {
             $this->_mutations[$variable] = 1;
         }
+        return $this;
     }
 
     /**

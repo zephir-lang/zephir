@@ -410,6 +410,10 @@ class ForStatement extends StatementAbstract
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
             $st->isLoop(true);
+            if (isset($this->_statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            }
+            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -533,6 +537,11 @@ class ForStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
+            $st->isLoop(true);
+            if (isset($this->_statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            }
+            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -662,6 +671,11 @@ class ForStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
+            $st->isLoop(true);
+            if (isset($this->_statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            }
+            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
             $st->compile($compilationContext);
         }
 
@@ -779,6 +793,11 @@ class ForStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
             $st = new StatementsBlock($this->_statement['statements']);
+            $st->isLoop(true);
+            if (isset($this->_statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
+            }
+            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
             $st->compile($compilationContext);
         }
 

@@ -197,7 +197,9 @@ class SymbolTable
                 $superVar = new Variable('variable', $name, $compilationContext->currentBranch);
                 $superVar->setIsInitialized(true, $compilationContext, $statement);
                 $superVar->setDynamicTypes('array');
+                $superVar->setIsExternal(true);
                 $this->_variables[$name] = $superVar;
+
             } else {
 
                 $found = false;
@@ -453,6 +455,7 @@ class SymbolTable
                 $superVar->setDynamicTypes('array');
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
+                $superVar->setIsExternal(true);
                 $superVar->setUsed(true, $statement);
                 $this->_variables[$name] = $superVar;
                 return $superVar;
