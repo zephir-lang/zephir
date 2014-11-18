@@ -60,7 +60,7 @@ PHP_METHOD(Test_Mcall, testMethod4) {
 
 
 
-	zephir_add_function(return_value, a, b TSRMLS_CC);
+	zephir_add_function_ex(return_value, a, b TSRMLS_CC);
 	return;
 
 }
@@ -73,7 +73,7 @@ PHP_METHOD(Test_Mcall, testMethod5) {
 
 
 
-	zephir_add_function(return_value, a, b TSRMLS_CC);
+	zephir_add_function_ex(return_value, a, b TSRMLS_CC);
 	return;
 
 }
@@ -86,7 +86,7 @@ PHP_METHOD(Test_Mcall, testMethod6) {
 
 
 
-	zephir_add_function(return_value, a, b TSRMLS_CC);
+	zephir_add_function_ex(return_value, a, b TSRMLS_CC);
 	return;
 
 }
@@ -199,7 +199,7 @@ PHP_METHOD(Test_Mcall, testCall7) {
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "testmethod4", NULL, a, b);
 	zephir_check_call_status();
-	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	zephir_add_function_ex(return_value, _0, _1 TSRMLS_CC);
 	RETURN_MM();
 
 }
@@ -218,7 +218,7 @@ PHP_METHOD(Test_Mcall, testCall8) {
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "testmethod5", NULL, a, b);
 	zephir_check_call_status();
-	zephir_add_function(return_value, _0, _1 TSRMLS_CC);
+	zephir_add_function_ex(return_value, _0, _1 TSRMLS_CC);
 	RETURN_MM();
 
 }
@@ -238,7 +238,7 @@ PHP_METHOD(Test_Mcall, testCall9) {
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_2, this_ptr, "testmethod5", NULL, a, b);
 	zephir_check_call_status();
-	zephir_add_function(return_value, _0, _2 TSRMLS_CC);
+	zephir_add_function_ex(return_value, _0, _2 TSRMLS_CC);
 	RETURN_MM();
 
 }

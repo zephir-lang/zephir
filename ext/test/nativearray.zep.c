@@ -713,7 +713,7 @@ PHP_METHOD(Test_NativeArray, testArrayAccess6) {
 	zephir_array_fetch_string(&_0, a, SL("a"), PH_NOISY | PH_READONLY, "test/nativearray.zep", 303 TSRMLS_CC);
 	zephir_array_fetch_string(&_1, a, SL("b"), PH_NOISY | PH_READONLY, "test/nativearray.zep", 303 TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(b);
-	zephir_add_function(&b, _0, _1 TSRMLS_CC);
+	zephir_add_function_ex(&b, _0, _1 TSRMLS_CC);
 	RETURN_LCTOR(b);
 
 }

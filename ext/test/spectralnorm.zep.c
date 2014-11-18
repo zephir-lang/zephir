@@ -43,9 +43,9 @@ PHP_METHOD(Test_SpectralNorm, Ax) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	zephir_add_function(_0, i, j TSRMLS_CC);
+	zephir_add_function_ex(_0, i, j TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(_1);
-	zephir_add_function(&_1, i, j TSRMLS_CC);
+	zephir_add_function_ex(&_1, i, j TSRMLS_CC);
 	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(_0) * (zephir_get_numberval(&_1) + 1)), 2 TSRMLS_CC) + zephir_get_numberval(i)) + (double) (1)) TSRMLS_CC));
 
 }
