@@ -59,7 +59,9 @@ use Zephir\Operators\Other\InstanceOfOperator;
 use Zephir\Operators\Other\RequireOperator;
 use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\CastOperator;
+
 use Zephir\Operators\Other\RangeInclusiveOperator;
+use Zephir\Operators\Other\RangeExclusiveOperator;
 
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -564,6 +566,12 @@ class Expression
 
             case 'irange':
                 $expr = new RangeInclusiveOperator();
+                $expr->setReadOnly($this->isReadOnly());
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
+
+            case 'erange':
+                $expr = new RangeExclusiveOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);
