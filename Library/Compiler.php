@@ -1821,7 +1821,8 @@ class Compiler
      * @throws Exception
      * @return string
      */
-    public function generatePackageDependenciesM4($contentM4) {
+    public function generatePackageDependenciesM4($contentM4)
+    {
         $packageDependencies = $this->config->get('package-dependencies');
         if (is_array($packageDependencies)) {
 
@@ -1836,26 +1837,26 @@ class Compiler
                 $operatorCmd = '--exact-version';
                 $ar = explode("=", $version);
                 if (count($ar) == 1) {
-                    if($version == '*') {
+                    if ($version == '*') {
                         $version = '0.0.0';
                         $operator = '>=';
                         $operatorCmd = '--atleast-version';
                     }
                 } else {
                     switch ($ar[0]) {
-                      default:
-                        $version = trim($ar[1]);
-                        break;
-                      case '<':
-                        $operator = '<=';
-                        $operatorCmd = '--max-version';
-                        $version = trim($ar[1]);
-                        break;
-                      case '>':
-                        $operator = '>=';
-                        $operatorCmd = '--atleast-version';
-                        $version = trim($ar[1]);
-                        break;
+                        default:
+                            $version = trim($ar[1]);
+                            break;
+                        case '<':
+                            $operator = '<=';
+                            $operatorCmd = '--max-version';
+                            $version = trim($ar[1]);
+                            break;
+                        case '>':
+                            $operator = '>=';
+                            $operatorCmd = '--atleast-version';
+                            $version = trim($ar[1]);
+                            break;
                     }
                 }
 
