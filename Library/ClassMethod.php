@@ -1010,14 +1010,11 @@ class ClassMethod
                 return $code;
 
             case 'array':
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameter['name'] . '_param) != IS_' . strtoupper($dataType) . ')) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an ' . $dataType . '") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                $code .= "\t\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
-                $code .= PHP_EOL;
-                return $code;
+                /**
+                 * We dont need to check array type
+                 * because It's already checked with ZEND_ARG_ARRAY_INFO
+                 */
+                break;
 
             case 'object':
             case 'resource':
