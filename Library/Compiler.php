@@ -1184,6 +1184,13 @@ class Compiler
             $compiledHeaders = array('php_' . strtoupper($project) . '.h');
         }
 
+        /*
+         * Check extra-libs, extra-cflags, package-dependencies exists
+         */
+        $extraLibs = $this->config->get('extra-libs');
+        $extraCflags = $this->config->get('extra-cflags');
+        $contentM4 = $this->generatePackageDependenciesM4($contentM4);
+
         /**
          * Generate config.m4
          */
@@ -1195,6 +1202,8 @@ class Compiler
             '%FILES_COMPILED%'       => implode("\n\t", $compiledFiles),
             '%HEADERS_COMPILED%'     => implode(" ", $compiledHeaders),
             '%EXTRA_FILES_COMPILED%' => implode("\n\t", $this->extraFiles),
+            '%PROJECT_EXTRA_LIBS%' => $extraLibs,
+            '%PROJECT_EXTRA_CFLAGS%' => $extraCflags,
         );
 
         foreach ($toReplace as $mark => $replace) {
@@ -1804,5 +1813,75 @@ class Compiler
     public static function getShortUserPath($path)
     {
         return str_replace('\\', '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $path));
+    }
+
+    /**
+     * Generate package-dependencies config for m4
+     *
+     * @throws Exception
+     * @return string
+     */
+    public function generatePackageDependenciesM4($contentM4) {
+        $packageDependencies = $this->config->get('package-dependencies');
+        if (is_array($packageDependencies)) {
+
+            $pkgconfigM4 = file_get_contents(__DIR__ . '/../templates/pkg-config.m4');
+            $pkgconfigCheckM4 = file_get_contents(__DIR__ . '/../templates/pkg-config-check.m4');
+            $extraCFlags = '';
+
+            foreach ($packageDependencies as $pkg => $version) {
+                $pkgM4Buf = $pkgconfigCheckM4;
+
+                $operator = '=';
+                $operatorCmd = '--exact-version';
+                $ar = explode("=", $version);
+                if (count($ar) == 1) {
+                    if($version == '*') {
+                        $version = '0.0.0';
+                        $operator = '>=';
+                        $operatorCmd = '--atleast-version';
+                    }
+                } else {
+                    switch ($ar[0]) {
+                      default:
+                        $version = trim($ar[1]);
+                        break;
+                      case '<':
+                        $operator = '<=';
+                        $operatorCmd = '--max-version';
+                        $version = trim($ar[1]);
+                        break;
+                      case '>':
+                        $operator = '>=';
+                        $operatorCmd = '--atleast-version';
+                        $version = trim($ar[1]);
+                        break;
+                    }
+                }
+
+                $toReplace = array(
+                    '%PACKAGE_LOWER%'        => strtolower($pkg),
+                    '%PACKAGE_UPPER%'        => strtoupper($pkg),
+                    '%PACKAGE_REQUESTED_VERSION%'        => $operator.' '.$version,
+                    '%PACKAGE_PKG_CONFIG_COMPARE_VERSION%'        => $operatorCmd.'='.$version,
+                );
+
+                foreach ($toReplace as $mark => $replace) {
+                    $pkgM4Buf = str_replace($mark, $replace, $pkgM4Buf);
+                }
+
+                $pkgconfigM4 .= $pkgM4Buf;
+                $extraCFlags .= '$PHP_' . strtoupper($pkg) . '_INCS ';
+
+            }
+            $contentM4 = str_replace('%PROJECT_EXTRA_CFLAGS%', '%PROJECT_EXTRA_CFLAGS% '.$extraCFlags, $contentM4);
+
+            $contentM4 = str_replace('%PROJECT_PACKAGE_DEPENDENCIES%', $pkgconfigM4, $contentM4);
+
+            return $contentM4;
+        }
+
+        $contentM4 = str_replace('%PROJECT_PACKAGE_DEPENDENCIES%', '', $contentM4);
+        return $contentM4;
     }
 }
