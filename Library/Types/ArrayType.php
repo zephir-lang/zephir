@@ -87,6 +87,7 @@ class ArrayType extends AbstractType
             'reversesortbykey' => 'krsort',
             'shuffle' => 'shuffle',
             'tojson' => 'json_encode',
+            'reduce' => 'array_reduce',
         );
     }
 

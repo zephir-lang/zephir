@@ -84,12 +84,14 @@ void zephir_make_printable_zval(zval *expr, zval *expr_copy, int *use_copy);
 
 #if PHP_VERSION_ID < 50400
 #define zephir_sub_function(result, left, right) sub_function(result, left, right)
+#define zephir_add_function(result, left, right) zephir_add_function_ex(result, left, right TSRMLS_CC)
 #else
+#define zephir_add_function(result, left, right) fast_add_function(result, left, right)
 #define zephir_sub_function(result, left, right) fast_sub_function(result, left, right)
 #endif
 
 /** Operator functions */
-int zephir_add_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+int zephir_add_function_ex(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 int zephir_and_function(zval *result, zval *left, zval *right);
 void zephir_negate(zval *z TSRMLS_DC);
 

@@ -192,6 +192,13 @@ class DivOperator extends ArithmeticalBaseOperator
                 }
                 break;
 
+            case 'array':
+                switch ($right->getType()) {
+                    default:
+                        throw new CompilerException("Operation is not supported between arrays", $expression);
+                }
+                break;
+
             case 'variable':
 
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
@@ -346,6 +353,9 @@ class DivOperator extends ArithmeticalBaseOperator
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
+
+                    case 'array':
+                        throw new CompilerException("Cannot operate array variables'", $expression);
 
                     case 'variable':
                         switch ($right->getType()) {
