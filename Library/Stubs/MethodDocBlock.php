@@ -30,9 +30,12 @@ class MethodDocBlock extends DocBlock
 
     private $return;
 
+    private $shortcutName = '';
+
     public function __construct(ClassMethod $method, $indent = 4)
     {
         parent::__construct($method->getDocBlock(), $indent);
+        $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
         $this->parseMethodParameters($method);
         $this->parseLines();
         if (!$this->return) {
@@ -76,19 +79,24 @@ class MethodDocBlock extends DocBlock
             } else {
                 list(, $docType, $tokens) = $matches;
 
-                // Magic getters
-                if ($docType == 'var') {
-                    $docType = 'return';
-                }
-
                 $tokens = preg_split('/\s+/', $tokens, 3);
                 $type = $tokens[0];
 
+                if ($docType == 'var' && $this->shortcutName == 'set') {
+                    $docType = 'param';
+                    $name = array_keys($this->parameters);
+                    $name = $name[0];
+                } elseif ($docType == 'var' && $this->shortcutName == 'get') {
+                    $docType = 'return';
+                } else {
+                    $name = isset($tokens[1]) ? '$' . $tokens[1] : '';
+                }
+
+                // TODO: there must be a better way
                 if (strpos($type, 'Phalcon\\') === 0) {
                     $type = str_replace('Phalcon\\', '\Phalcon\\', $type);
                 }
 
-                $name = isset($tokens[1]) ? '$' . $tokens[1] : '';
                 $description = isset($tokens[2]) ? $tokens[2] : '';
 
                 switch ($docType) {
@@ -101,6 +109,7 @@ class MethodDocBlock extends DocBlock
                 }
             }
         }
+
         $this->lines = $lines;
     }
 

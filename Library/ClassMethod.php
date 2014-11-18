@@ -679,6 +679,26 @@ class ClassMethod
     }
 
     /**
+     * Checks if method is a shortcut
+     *
+     * @return bool
+     */
+    public function isShortcut()
+    {
+        return $this->_expression &&  $this->_expression['type'] == 'shortcut';
+    }
+
+    /**
+     * Return shortcut method name
+     *
+     * @return mixed
+     */
+    public function getShortcutName()
+    {
+        return $this->_expression['name'];
+    }
+
+    /**
      * Replace macros
      *
      * @param SymbolTable $symbolTable
