@@ -184,7 +184,7 @@ double zephir_safe_div_double_zval(double op1, zval *op2 TSRMLS_DC);
 			if (Z_TYPE_P(z) == IS_LONG && Z_TYPE_P(v) == IS_DOUBLE) {  \
 				Z_LVAL_P(z) -= Z_DVAL_P(v);  \
 			} else {  \
-				zephir_sub_function(&tmp, z, v TSRMLS_CC);  \
+				sub_function(&tmp, z, v TSRMLS_CC);  \
 				if (Z_TYPE(tmp) == IS_LONG) {  \
 					Z_LVAL_P(z) = Z_LVAL(tmp);  \
 				} else {  \
@@ -238,7 +238,7 @@ double zephir_safe_div_double_zval(double op1, zval *op2 TSRMLS_DC);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		zephir_sub_function(&tmp, z, v TSRMLS_CC);  \
+		sub_function(&tmp, z, v TSRMLS_CC);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
 			Z_LVAL_P(z) = Z_LVAL(tmp);  \
 		} else {  \
