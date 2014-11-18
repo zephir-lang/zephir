@@ -184,6 +184,31 @@ class WriteDetector
     }
 
     /**
+     * Pass "declare" statement
+     *
+     * @param array $statement
+     */
+    public function declareVariables(array $statement)
+    {
+        if (isset($statement['data-type'])) {
+            if ($statement['data-type'] != 'variable') {
+                return;
+            }
+        }
+
+        foreach ($statement['variables'] as $variable) {
+            if (isset($variable['expr'])) {
+                if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
+                    continue;
+                }
+            }
+
+            $this->increaseMutations($variable['variable']);
+        }
+    }
+
+
+    /**
      * Pass expressions
      *
      * @param array $statement
