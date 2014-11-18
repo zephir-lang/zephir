@@ -1011,10 +1011,12 @@ class ClassMethod
 
             case 'array':
                 /**
-                 * We dont need to check array type
+                 * We don't need to check array type
                  * because It's already checked with ZEND_ARG_ARRAY_INFO
                  */
-                break;
+                $code = "\t" . $parameter['name'] . ' = ' . $parameter['name'] . '_param;' . PHP_EOL;
+                $code .= PHP_EOL;
+                return $code;
 
             case 'object':
             case 'resource':
