@@ -865,6 +865,18 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		".." {
+			s->active_char += 2;
+			token->opcode = XX_T_INCLUSIVE_RANGE;
+			return 0;
+		}
+
+		"..." {
+			s->active_char += 3;
+			token->opcode = XX_T_EXCLUSIVE_RANGE;
+			return 0;
+		}
+
 		":" {
 			s->active_char++;
 			token->opcode = XX_T_COLON;

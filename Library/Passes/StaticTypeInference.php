@@ -389,6 +389,10 @@ class StaticTypeInference
             case 'less-equal':
                 return 'bool';
 
+            case 'irange':
+            case 'erange':
+                return 'variable';
+
             case 'typeof':
                 $this->passExpression($expression['left']);
                 return 'string';

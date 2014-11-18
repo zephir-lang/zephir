@@ -197,6 +197,8 @@ class LocalContextPass
                         case 'closure':
                         case 'closure-arrow':
                         case 'reference':
+                        case 'irange':
+                        case 'erange':
                             $this->markVariableNoLocal($assignment['variable']);
                             break;
 
@@ -343,6 +345,8 @@ class LocalContextPass
             case 'bitwise_xor':
             case 'bitwise_shiftleft':
             case 'bitwise_shiftright':
+            case 'irange':
+            case 'erange':
                 $this->passExpression($expression['left']);
                 $this->passExpression($expression['right']);
                 break;

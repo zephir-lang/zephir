@@ -44,6 +44,7 @@
 %left ADD SUB CONCAT .
 %left MUL DIV MOD .
 %right ISSET FETCH EMPTY .
+%left INCLUSIVE_RANGE EXCLUSIVE_RANGE .
 %right TYPEOF .
 %right CLONE .
 %right NEW .
@@ -2726,6 +2727,16 @@ xx_common_expr(R) ::= xx_common_expr(O1) BITWISE_SHIFTRIGHT xx_common_expr(O2) .
 /* y = a instanceof b */
 xx_common_expr(R) ::= xx_common_expr(O1) INSTANCEOF xx_common_expr(O2) . {
 	R = xx_ret_expr("instanceof", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a .. b */
+xx_common_expr(R) ::= xx_common_expr(O1) INCLUSIVE_RANGE xx_common_expr(O2) . {
+	R = xx_ret_expr("irange", O1, O2, NULL, status->scanner_state);
+}
+
+/* y = a ... b */
+xx_common_expr(R) ::= xx_common_expr(O1) EXCLUSIVE_RANGE xx_common_expr(O2) . {
+	R = xx_ret_expr("erange", O1, O2, NULL, status->scanner_state);
 }
 
 /* y = fetch x, z[k] */

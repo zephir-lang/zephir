@@ -194,6 +194,8 @@ class MutateGathererPass
             case 'bitwise_xor':
             case 'bitwise_shiftleft':
             case 'bitwise_shiftright':
+            case 'irange':
+            case 'erange':
                 $this->passExpression($expression['left']);
                 $this->passExpression($expression['right']);
                 break;

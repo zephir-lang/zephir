@@ -178,6 +178,8 @@ class CallGathererPass
             case 'greater':
             case 'greater-equal':
             case 'less-equal':
+            case 'irange':
+            case 'erange':
                 $this->passExpression($expression['left']);
                 $this->passExpression($expression['right']);
                 break;

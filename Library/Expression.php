@@ -59,6 +59,7 @@ use Zephir\Operators\Other\InstanceOfOperator;
 use Zephir\Operators\Other\RequireOperator;
 use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\CastOperator;
+use Zephir\Operators\Other\RangeInclusiveOperator;
 
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -558,6 +559,12 @@ class Expression
 
             case 'concat':
                 $expr = new ConcatOperator();
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
+
+            case 'irange':
+                $expr = new RangeInclusiveOperator();
+                $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);
 

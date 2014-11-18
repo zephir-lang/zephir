@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.5.8a';
+    const VERSION = '0.5.9a';
 
     /**
      * @var CompilerFile[]
@@ -112,7 +112,7 @@ class Compiler
         $this->fileSystem = new FileSystem();
         $this->checkRequires();
     }
-    
+
     /**
      * Check require extensions orther when build your extension
      */
@@ -127,13 +127,13 @@ class Compiler
                     $collection_error .= $value . ", ";
                 }
             }
-            
+
             if ($collection_error != PHP_EOL . "\tCould not load Extension : ") {
                 $collection_error .= PHP_EOL . "\tYou must add extensions above before build this extension!";
                 throw new Exception($collection_error);
             }
         }
-        
+
     }
 
     /**

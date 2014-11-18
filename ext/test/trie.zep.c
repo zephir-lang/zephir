@@ -69,7 +69,7 @@ PHP_METHOD(Test_Trie, getTrieNodeByKey) {
 		zephir_read_property(&_3, trieNode, SL("children"), PH_NOISY_CC);
 		if (!(zephir_array_isset(_3, character))) {
 			if (create) {
-				ZEPHIR_INIT_LNVAR(_4);
+				ZEPHIR_INIT_NVAR(_4);
 				if (!_5) {
 					_5 = zend_fetch_class(SL("tries\\trienode"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 				}
