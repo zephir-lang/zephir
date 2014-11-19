@@ -214,14 +214,20 @@ EOF;
 
         $parameters = array();
         $methodParameters = $method->getParameters();
+        $aliasManager = $method->getClassDefinition()->getAliasManager();
 
         if ($methodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
-                    $paramStr .= $parameter['cast']['value'] . ' ';
+                    if ($aliasManager->isAlias($parameter['cast']['value'])) {
+                        $cast = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
+                    } else {
+                        $cast = $parameter['cast']['value'];
+                    }
+                    $paramStr .= $cast . ' ';
                 }
-                
+
                 $paramStr .= '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {

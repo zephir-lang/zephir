@@ -92,6 +92,7 @@ class CompilerFile
      */
     public function getClassDefinition()
     {
+        $this->_classDefinition->setAliasManager($this->_aliasManager);
         return $this->_classDefinition;
     }
 
