@@ -108,6 +108,11 @@ class ClassDefinition
     protected $isInternal = false;
 
     /**
+     * @var AliasManager
+     */
+    protected $_aliasManager = null;
+
+    /**
      * ClassDefinition
      *
      * @param string $namespace
@@ -1088,6 +1093,22 @@ class ClassDefinition
         }
 
         $compilationContext->headerPrinter = $codePrinter;
+    }
+
+    /**
+     * @return AliasManager
+     */
+    public function getAliasManager()
+    {
+        return $this->_aliasManager;
+    }
+
+    /**
+     * @param AliasManager $aliasManager
+     */
+    public function setAliasManager($aliasManager)
+    {
+        $this->_aliasManager = $aliasManager;
     }
 
     /**
