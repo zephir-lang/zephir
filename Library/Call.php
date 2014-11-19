@@ -445,8 +445,8 @@ class Call
                 case 'array':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
                     $params[] = $parameterVariable->getName();
-                    $types[] = $parameterVariable->getType();
-                    $dynamicTypes[] = $parameterVariable->getType();
+                    $types[] = $compiledExpression->getType();
+                    $dynamicTypes[] = $compiledExpression->getType();
                     break;
 
                 case 'variable':
@@ -540,12 +540,17 @@ class Call
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
 
         $params = array();
+        $types = array();
+        $dynamicTypes = array();
+
         foreach ($exprParams as $compiledExpression) {
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
 
                 case 'null':
                     $params[] = 'ZEPHIR_GLOBAL(global_null)';
+                    $types[] = 'null';
+                    $dynamicTypes[] = 'null';
                     break;
 
                 case 'int':
@@ -555,6 +560,8 @@ class Call
                     $codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
+                    $types[] = $parameterVariable->getType();
+                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'char':
@@ -563,6 +570,8 @@ class Call
                     $codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', \'' . $compiledExpression->getCode() . '\');');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
+                    $types[] = $parameterVariable->getType();
+                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'double':
@@ -570,6 +579,8 @@ class Call
                     $codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
+                    $types[] = $parameterVariable->getType();
+                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'bool':
@@ -582,6 +593,8 @@ class Call
                             throw new Exception('?');
                         }
                     }
+                    $types[] = 'bool';
+                    $dynamicTypes[] = 'bool';
                     break;
 
                 case 'string':
@@ -590,11 +603,15 @@ class Call
                     $codePrinter->output('ZVAL_STRING(&' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode()) . '", 0);');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
+                    $types[] = $parameterVariable->getType();
+                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'array':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
                     $params[] = $parameterVariable->getName();
+                    $types[] = $parameterVariable->getType();
+                    $dynamicTypes[] = $parameterVariable->getType();
                     break;
 
                 case 'variable':
@@ -608,6 +625,8 @@ class Call
                             $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                             $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
+                            $types[] = $parameterVariable->getType();
+                            $dynamicTypes[] = $parameterVariable->getType();
                             $this->_temporalVariables[] = $parameterTempVariable;
                             break;
 
@@ -616,6 +635,8 @@ class Call
                             $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                             $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
+                            $types[] = $parameterVariable->getType();
+                            $dynamicTypes[] = $parameterVariable->getType();
                             $this->_temporalVariables[] = $parameterTempVariable;
                             break;
 
@@ -623,11 +644,15 @@ class Call
                             $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                             $codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
+                            $types[] = $parameterVariable->getType();
+                            $dynamicTypes[] = $parameterVariable->getType();
                             $this->_temporalVariables[] = $parameterTempVariable;
                             break;
 
                         case 'bool':
                             $params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
+                            $dynamicTypes[] = $parameterVariable->getType();
+                            $types[] = $parameterVariable->getType();
                             break;
 
                         case 'string':
@@ -638,6 +663,8 @@ class Call
                             } else {
                                 $params[] = $parameterVariable->getName();
                             }
+                            $dynamicTypes[] = $parameterVariable->getType();
+                            $types[] = $parameterVariable->getType();
                             break;
 
                         default:
@@ -649,6 +676,9 @@ class Call
                     throw new CompilerException("Cannot use value type: " . $compiledExpression->getType() . " as parameter", $expression);
             }
         }
+
+        $this->_resolvedTypes = $types;
+        $this->_resolvedDynamicTypes = $dynamicTypes;
 
         return $params;
     }

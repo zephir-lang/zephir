@@ -116,7 +116,7 @@ class ClosureArrow extends Closure
         }
 
         $symbolVariable->initVariant($compilationContext);
-        $compilationContext->codePrinter->output('zephir_create_closure_ex(' . $symbolVariable->getName() . ', this_ptr, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
+        $compilationContext->codePrinter->output('zephir_create_closure_ex(' . $symbolVariable->getName() . ', NULL, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
 
         self::$id++;
 

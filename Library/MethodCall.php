@@ -471,7 +471,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
                                                 break;
                                         }
                                         break;
@@ -485,7 +485,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
                                                 break;
                                         }
                                         break;
@@ -499,7 +499,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
                                                 break;
                                         }
                                         break;
@@ -513,7 +513,7 @@ class MethodCall extends Call
                                                 break;
 
                                             default:
-                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
                                                 break;
                                         }
                                         break;
