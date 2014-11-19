@@ -31,6 +31,6 @@ class EmptyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($t->testNotEmptyString());
         $this->assertTrue($t->testString(""));
         $this->assertFalse($t->testString('this is a string'));
-        $this->assertFalse($t->testString('0'));
+        $this->assertTrue($t->testString('0'));
     }
 }

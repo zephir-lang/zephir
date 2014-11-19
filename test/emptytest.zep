@@ -42,8 +42,8 @@ class EmptyTest
 		return empty(a);
 	}
 
-        public function testString(string a)
-        {
-                return empty(a);
-        }
+	public function testString(string a)
+	{
+		return empty(a);
+	}
 }
