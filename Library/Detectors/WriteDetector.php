@@ -120,9 +120,11 @@ class WriteDetector
             }
             $this->increaseMutations($assignment['variable']);
             if (($this->_detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT) == self::DETECT_VALUE_IN_ASSIGNMENT) {
-                if ($assignment['expr']['type'] == 'variable') {
-                    $this->increaseMutations($assignment['expr']['value']);
-                    break;
+                if (isset($assignment['expr'])) {
+                    if ($assignment['expr']['type'] == 'variable') {
+                        $this->increaseMutations($assignment['expr']['value']);
+                        break;
+                    }
                 }
             }
         }
