@@ -26,28 +26,37 @@ namespace Zephir;
  */
 class HeadersManager
 {
+    /**
+     * Insert the header at the beginning of the header list
+     */
     const POSITION_FIRST = 1;
+
+    /**
+     * Insert the header at the end of the header list
+     */
     const POSITION_LAST = 2;
 
     /**
      * List of headers
      * @var array
      */
-    protected $_headers = array();
+    protected $headers = array();
 
     /**
      * List of headers
      * @var array
      */
-    protected $_headersFirst = array();
+    protected $headersFirst = array();
 
     /**
      * List of headers
      * @var array
      */
-    protected $_headersLast = array();
+    protected $headersLast = array();
 
     /**
+     * Adds a header path to the manager
+     *
      * @param string $path
      * @param int $position
      * @throws \InvalidArgumentException
@@ -59,14 +68,14 @@ class HeadersManager
         }
 
         if (!$position) {
-            $this->_headers[$path] = $path;
+            $this->headers[$path] = $path;
         } else {
             switch ($position) {
                 case self::POSITION_FIRST:
-                    $this->_headersFirst[$path] = $path;
+                    $this->headersFirst[$path] = $path;
                     break;
                 case self::POSITION_LAST:
-                    $this->_headersLast[$path] = $path;
+                    $this->headersLast[$path] = $path;
                     break;
                 default:
                     break;
@@ -75,10 +84,12 @@ class HeadersManager
     }
 
     /**
-    * @return array
-    */
+     * Returns a set of headers merged
+     *
+     * @return array
+     */
     public function get()
     {
-        return array_merge($this->_headersFirst, $this->_headers, $this->_headersLast);
+        return array_merge($this->headersFirst, $this->headers, $this->headersLast);
     }
 }

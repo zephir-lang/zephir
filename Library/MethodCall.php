@@ -588,8 +588,6 @@ class MethodCall extends Call
             $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
         }
 
-        $this->addCallStatusOrJump($compilationContext);
-
         /**
          * We can mark temporary variables generated as idle
          */
@@ -609,6 +607,8 @@ class MethodCall extends Call
                 }
             }
         }
+
+        $this->addCallStatusOrJump($compilationContext);
 
         if ($isExpecting) {
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

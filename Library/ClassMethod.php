@@ -686,7 +686,7 @@ class ClassMethod
      */
     public function isShortcut()
     {
-        return $this->_expression &&  $this->_expression['type'] == 'shortcut';
+        return $this->expression &&  $this->expression['type'] == 'shortcut';
     }
 
     /**
@@ -696,7 +696,7 @@ class ClassMethod
      */
     public function getShortcutName()
     {
-        return $this->_expression['name'];
+        return $this->expression['name'];
     }
 
     /**

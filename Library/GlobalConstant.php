@@ -27,7 +27,7 @@ namespace Zephir;
  */
 class GlobalConstant
 {
-    private $_name;
+    protected $name;
 
     /**
      * Creates a new global constant
@@ -36,7 +36,7 @@ class GlobalConstant
      */
     public function __construct($name)
     {
-        $this->_name = $name;
+        $this->name = $name;
     }
 
     /**
@@ -46,7 +46,7 @@ class GlobalConstant
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
