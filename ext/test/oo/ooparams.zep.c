@@ -164,7 +164,7 @@ PHP_METHOD(Test_Oo_OoParams, setStrictAverage) {
 		RETURN_NULL();
 	}
 
-		average = Z_DVAL_P(average_param);
+	average = Z_DVAL_P(average_param);
 
 
 	RETURN_DOUBLE(average);
@@ -216,6 +216,8 @@ PHP_METHOD(Test_Oo_OoParams, setStrictList) {
 	zval *someList = NULL;
 
 	zephir_fetch_params(0, 1, 0, &someList_param);
+
+	someList = someList_param;
 
 
 

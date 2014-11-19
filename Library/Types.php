@@ -27,5 +27,6 @@ namespace Zephir;
 class Types
 {
     const CHAR = 'char';
+
     const STRING = 'string';
 }

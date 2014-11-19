@@ -178,6 +178,11 @@ class Utils
         return substr($className, 1);
     }
 
+    /**
+     * Check if the host OS is windows
+     *
+     * @return boolean
+     */
     public static function isWindows()
     {
         return strncasecmp(PHP_OS, 'WIN', 3) == 0;

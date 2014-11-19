@@ -29,21 +29,21 @@ use Zephir\Passes\StaticTypeInference;
  */
 class SymbolTable
 {
-    protected $_mustGrownStack = false;
+    protected $mustGrownStack = false;
 
-    protected $_variables = array();
+    protected $variables = array();
 
-    protected $_tempVariable = 0;
+    protected $tempVariable = 0;
 
-    protected $_tempVariables = array();
+    protected $tempVariables = array();
 
     /**
      * @var LocalContextPass
      */
-    protected $_localContext;
+    protected $localContext;
 
     /**
-     * Variable
+     * SymbolTable
      *
      * @param CompilationContext $compilationContext
      */
@@ -56,17 +56,17 @@ class SymbolTable
         $thisVar->setReadOnly(true);
         $thisVar->setLowName('this_ptr');
         $thisVar->setDynamicTypes('object');
-        $this->_variables['this'] = $thisVar;
+        $this->variables['this'] = $thisVar;
 
         $returnValue = new Variable('variable', 'return_value', $compilationContext->currentBranch);
         $returnValue->setIsInitialized(true, $compilationContext, array());
         $returnValue->increaseUses();
-        $this->_variables['return_value'] = $returnValue;
+        $this->variables['return_value'] = $returnValue;
 
         $returnValue = new Variable('variable', 'return_value_ptr', $compilationContext->currentBranch);
         $returnValue->setIsInitialized(true, $compilationContext, array());
         $returnValue->increaseUses();
-        $this->_variables['return_value_ptr'] = $returnValue;
+        $this->variables['return_value_ptr'] = $returnValue;
     }
 
     /**
@@ -76,7 +76,7 @@ class SymbolTable
      */
     public function setLocalContext(LocalContextPass $localContext)
     {
-        $this->_localContext = $localContext;
+        $this->localContext = $localContext;
     }
 
     /**
@@ -87,7 +87,7 @@ class SymbolTable
      */
     public function hasVariable($name)
     {
-        return isset($this->_variables[$name]);
+        return isset($this->variables[$name]);
     }
 
     /**
@@ -103,16 +103,16 @@ class SymbolTable
     {
         $variable = new Variable($type, $name, $compilationContext->currentBranch, $defaultValue);
         if ($type == 'variable') {
-            if ($this->_localContext) {
+            if ($this->localContext) {
                 /**
                  * Checks whether a variable can be optimized to be static or not
                  */
-                if ($this->_localContext->shouldBeLocal($name)) {
+                if ($this->localContext->shouldBeLocal($name)) {
                     $variable->setLocalOnly(true);
                 }
             }
         }
-        $this->_variables[$name] = $variable;
+        $this->variables[$name] = $variable;
         return $variable;
     }
 
@@ -124,7 +124,7 @@ class SymbolTable
      */
     public function addRawVariable(Variable $variable)
     {
-        $this->_variables[$variable->getName()] = $variable;
+        $this->variables[$variable->getName()] = $variable;
         return $variable;
     }
 
@@ -135,8 +135,8 @@ class SymbolTable
      */
     public function getVariable($name)
     {
-        if (isset($this->_variables[$name])) {
-            return $this->_variables[$name];
+        if (isset($this->variables[$name])) {
+            return $this->variables[$name];
         }
 
         return false;
@@ -149,7 +149,7 @@ class SymbolTable
      */
     public function getVariables()
     {
-        return $this->_variables;
+        return $this->variables;
     }
 
     /**
@@ -198,7 +198,7 @@ class SymbolTable
                 $superVar->setIsInitialized(true, $compilationContext, $statement);
                 $superVar->setDynamicTypes('array');
                 $superVar->setIsExternal(true);
-                $this->_variables[$name] = $superVar;
+                $this->variables[$name] = $superVar;
 
             } else {
 
@@ -400,7 +400,7 @@ class SymbolTable
                 $superVar->increaseMutates();
                 $superVar->increaseUses();
                 $superVar->setUsed(true, $statement);
-                $this->_variables[$name] = $superVar;
+                $this->variables[$name] = $superVar;
                 return $superVar;
             }
         }
@@ -457,7 +457,7 @@ class SymbolTable
                 $superVar->increaseUses();
                 $superVar->setIsExternal(true);
                 $superVar->setUsed(true, $statement);
-                $this->_variables[$name] = $superVar;
+                $this->variables[$name] = $superVar;
                 return $superVar;
             }
         }
@@ -487,7 +487,7 @@ class SymbolTable
      */
     public function mustGrownStack($mustGrownStack)
     {
-        $this->_mustGrownStack = $mustGrownStack;
+        $this->mustGrownStack = $mustGrownStack;
     }
 
     /**
@@ -497,7 +497,7 @@ class SymbolTable
      */
     public function getMustGrownStack()
     {
-        return $this->_mustGrownStack;
+        return $this->mustGrownStack;
     }
 
     /**
@@ -507,12 +507,12 @@ class SymbolTable
      * @param string $location
      * @param Variable $variable
      */
-    protected function _registerTempVariable($type, $location, Variable $variable)
+    protected function registerTempVariable($type, $location, Variable $variable)
     {
-        if (!isset($this->_tempVariables[$location][$type])) {
-            $this->_tempVariables[$location][$type] = array();
+        if (!isset($this->tempVariables[$location][$type])) {
+            $this->tempVariables[$location][$type] = array();
         }
-        $this->_tempVariables[$location][$type][] = $variable;
+        $this->tempVariables[$location][$type][] = $variable;
     }
 
     /**
@@ -522,10 +522,10 @@ class SymbolTable
      * @param string $location
      * @return Variable
      */
-    protected function _reuseTempVariable($type, $location)
+    protected function reuseTempVariable($type, $location)
     {
-        if (isset($this->_tempVariables[$location][$type])) {
-            foreach ($this->_tempVariables[$location][$type] as $variable) {
+        if (isset($this->tempVariables[$location][$type])) {
+            foreach ($this->tempVariables[$location][$type] as $variable) {
                 if (!$variable->isDoublePointer()) {
                     if ($variable->isIdle()) {
                         $variable->setIdle(false);
@@ -546,7 +546,7 @@ class SymbolTable
      */
     public function getTempVariable($type, $compilationContext)
     {
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $compilationContext);
         $variable->setTemporal(true);
         return $variable;
@@ -561,7 +561,7 @@ class SymbolTable
      */
     public function getTempVariableForWrite($type, CompilationContext $context)
     {
-        $variable = $this->_reuseTempVariable($type, 'heap');
+        $variable = $this->reuseTempVariable($type, 'heap');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -571,7 +571,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -581,7 +581,7 @@ class SymbolTable
             $variable->initVariant($context);
         }
 
-        $this->_registerTempVariable($type, 'heap', $variable);
+        $this->registerTempVariable($type, 'heap', $variable);
         return $variable;
     }
 
@@ -596,7 +596,7 @@ class SymbolTable
      */
     public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced = false)
     {
-        $variable = $this->_reuseTempVariable($type, 'non-tracked');
+        $variable = $this->reuseTempVariable($type, 'non-tracked');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -606,7 +606,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -614,7 +614,7 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        $this->_registerTempVariable($type, 'non-tracked', $variable);
+        $this->registerTempVariable($type, 'non-tracked', $variable);
 
         if ($initNonReferenced) {
             $variable->initNonReferenced($context);
@@ -633,14 +633,14 @@ class SymbolTable
      */
     public function getTempNonTrackedUninitializedVariable($type, CompilationContext $context)
     {
-        $variable = $this->_reuseTempVariable($type, 'non-tracked-uninitialized');
+        $variable = $this->reuseTempVariable($type, 'non-tracked-uninitialized');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -648,7 +648,7 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        $this->_registerTempVariable($type, 'non-tracked-uninitialized', $variable);
+        $this->registerTempVariable($type, 'non-tracked-uninitialized', $variable);
 
         return $variable;
     }
@@ -664,7 +664,7 @@ class SymbolTable
      */
     public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
     {
-        $variable = $this->_reuseTempVariable($type, 'heap-literal');
+        $variable = $this->reuseTempVariable($type, 'heap-literal');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -674,7 +674,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->increaseUses();
@@ -684,7 +684,7 @@ class SymbolTable
             $variable->initComplexLiteralVariant($context);
         }
 
-        $this->_registerTempVariable($type, 'heap-literal', $variable);
+        $this->registerTempVariable($type, 'heap-literal', $variable);
         return $variable;
     }
 
@@ -697,7 +697,7 @@ class SymbolTable
      */
     public function getTempLocalVariableForWrite($type, CompilationContext $context)
     {
-        $variable = $this->_reuseTempVariable($type, 'stack');
+        $variable = $this->reuseTempVariable($type, 'stack');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -708,7 +708,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->increaseUses();
@@ -719,7 +719,7 @@ class SymbolTable
             $variable->initVariant($context);
         }
 
-        $this->_registerTempVariable($type, 'stack', $variable);
+        $this->registerTempVariable($type, 'stack', $variable);
         return $variable;
     }
 
@@ -732,21 +732,21 @@ class SymbolTable
      */
     public function addTemp($type, CompilationContext $context)
     {
-        /*$variable = $this->_reuseTempVariable($type, 'heap');
+        /*$variable = $this->reuseTempVariable($type, 'heap');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
             return $variable;
         }*/
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        //$this->_registerTempVariable($type, 'heap', $variable);
+        //$this->registerTempVariable($type, 'heap', $variable);
         return $variable;
     }
 
@@ -761,7 +761,7 @@ class SymbolTable
     public function getTempVariableForObserve($type, CompilationContext $context)
     {
 
-        $variable = $this->_reuseTempVariable($type, 'observe');
+        $variable = $this->reuseTempVariable($type, 'observe');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -769,7 +769,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -777,7 +777,7 @@ class SymbolTable
         $variable->increaseMutates();
         $variable->observeVariant($context);
 
-        $this->_registerTempVariable($type, 'observe', $variable);
+        $this->registerTempVariable($type, 'observe', $variable);
         return $variable;
     }
 
@@ -792,7 +792,7 @@ class SymbolTable
     public function getTempVariableForObserveOrNullify($type, CompilationContext $context)
     {
 
-        $variable = $this->_reuseTempVariable($type, 'observe-nullify');
+        $variable = $this->reuseTempVariable($type, 'observe-nullify');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
@@ -800,7 +800,7 @@ class SymbolTable
             return $variable;
         }
 
-        $tempVar = $this->_tempVariable++;
+        $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context, array());
         $variable->setTemporal(true);
@@ -808,7 +808,7 @@ class SymbolTable
         $variable->increaseMutates();
         $variable->observeOrNullifyVariant($context);
 
-        $this->_registerTempVariable($type, 'observe-nullify', $variable);
+        $this->registerTempVariable($type, 'observe-nullify', $variable);
         return $variable;
     }
 
@@ -819,7 +819,7 @@ class SymbolTable
      */
     public function getTemporalVariables()
     {
-        return $this->_tempVariables;
+        return $this->tempVariables;
     }
 
     /**
@@ -831,7 +831,7 @@ class SymbolTable
     public function markTemporalVariablesIdle(CompilationContext $compilationContext)
     {
         $branch = $compilationContext->currentBranch;
-        foreach ($this->_tempVariables as $location => $typeVariables) {
+        foreach ($this->tempVariables as $location => $typeVariables) {
             foreach ($typeVariables as $type => $variables) {
                 foreach ($variables as $variable) {
                     if ($branch == $variable->getBranch()) {
@@ -850,8 +850,8 @@ class SymbolTable
      */
     public function getExpectedMutations($variable)
     {
-        if ($this->_localContext) {
-            return $this->_localContext->getNumberOfMutations($variable);
+        if ($this->localContext) {
+            return $this->localContext->getNumberOfMutations($variable);
         }
         return 0;
     }
@@ -865,8 +865,8 @@ class SymbolTable
      */
     public function getLastCallLine()
     {
-        if ($this->_localContext) {
-            return $this->_localContext->getLastCallLine();
+        if ($this->localContext) {
+            return $this->localContext->getLastCallLine();
         }
         return 0;
     }
@@ -880,8 +880,8 @@ class SymbolTable
      */
     public function getLastUnsetLine()
     {
-        if ($this->_localContext) {
-            return $this->_localContext->getLastUnsetLine();
+        if ($this->localContext) {
+            return $this->localContext->getLastUnsetLine();
         }
         return 0;
     }

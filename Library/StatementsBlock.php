@@ -46,17 +46,17 @@ use Zephir\Passes\MutateGathererPass;
  */
 class StatementsBlock
 {
-    protected $_statements;
+    protected $statements;
 
-    protected $_unreachable;
+    protected $unreachable;
 
-    protected $_debug = false;
+    protected $debug = false;
 
-    protected $_loop = false;
+    protected $loop = false;
 
-    protected $_mutateGatherer;
+    protected $mutateGatherer;
 
-    protected $_lastStatement;
+    protected $lastStatement;
 
     /**
      * StatementsBlock constructor
@@ -65,7 +65,7 @@ class StatementsBlock
      */
     public function __construct(array $statements)
     {
-        $this->_statements = $statements;
+        $this->statements = $statements;
     }
 
     /**
@@ -76,7 +76,7 @@ class StatementsBlock
      */
     public function isLoop($loop)
     {
-        $this->_loop = $loop;
+        $this->loop = $loop;
         return $this;
     }
 
@@ -103,14 +103,14 @@ class StatementsBlock
          */
         $compilationContext->branchManager->addBranch($currentBranch);
 
-        $this->_unreachable = $unreachable;
+        $this->unreachable = $unreachable;
 
-        $statements = $this->_statements;
+        $statements = $this->statements;
 
         /**
          * Reference the block if it belongs to a loop
          */
-        if ($this->_loop) {
+        if ($this->loop) {
             array_push($compilationContext->cycleBlocks, $this);
         }
 
@@ -119,7 +119,7 @@ class StatementsBlock
             /**
              * Generate GDB hints
              */
-            if ($this->_debug) {
+            if ($this->debug) {
                 if (isset($statement['file'])) {
                     if ($statement['type'] != 'declare' && $statement['type'] != 'comment') {
                         $compilationContext->codePrinter->outputNoIndent('#line ' . $statement['line'] . ' "' . $statement['file'] . '"');
@@ -130,7 +130,7 @@ class StatementsBlock
             /**
              * Show warnings if code is generated when the 'unreachable state' is 'on'
              */
-            if ($this->_unreachable === true) {
+            if ($this->unreachable === true) {
                 switch ($statement['type']) {
 
                     case 'echo':
@@ -209,7 +209,7 @@ class StatementsBlock
                 case 'return':
                     $returnStatement = new ReturnStatement($statement);
                     $returnStatement->compile($compilationContext);
-                    $this->_unreachable = true;
+                    $this->unreachable = true;
                     break;
 
                 case 'require':
@@ -225,13 +225,13 @@ class StatementsBlock
                 case 'break':
                     $breakStatement = new BreakStatement($statement);
                     $breakStatement->compile($compilationContext);
-                    $this->_unreachable = true;
+                    $this->unreachable = true;
                     break;
 
                 case 'continue':
                     $continueStatement = new ContinueStatement($statement);
                     $continueStatement->compile($compilationContext);
-                    $this->_unreachable = true;
+                    $this->unreachable = true;
                     break;
 
                 case 'unset':
@@ -242,13 +242,13 @@ class StatementsBlock
                 case 'throw':
                     $throwStatement = new ThrowStatement($statement);
                     $throwStatement->compile($compilationContext);
-                    $this->_unreachable = true;
+                    $this->unreachable = true;
                     break;
 
                 case 'try-catch':
                     $throwStatement = new TryCatchStatement($statement);
                     $throwStatement->compile($compilationContext);
-                    $this->_unreachable = false;
+                    $this->unreachable = false;
                     break;
 
                 case 'fetch':
@@ -303,14 +303,14 @@ class StatementsBlock
             }
 
             if ($statement['type'] != 'comment') {
-                $this->_lastStatement = $statement;
+                $this->lastStatement = $statement;
             }
         }
 
         /**
          * Reference the block if it belongs to a loop
          */
-        if ($this->_loop) {
+        if ($this->loop) {
             array_pop($compilationContext->cycleBlocks);
         }
 
@@ -335,7 +335,7 @@ class StatementsBlock
      */
     public function getStatements()
     {
-        return $this->_statements;
+        return $this->statements;
     }
 
     /**
@@ -345,7 +345,7 @@ class StatementsBlock
      */
     public function setStatements(array $statements)
     {
-        $this->_statements = $statements;
+        $this->statements = $statements;
     }
 
     /**
@@ -355,7 +355,7 @@ class StatementsBlock
      */
     public function getLastStatementType()
     {
-        return $this->_lastStatement['type'];
+        return $this->lastStatement['type'];
     }
 
     /**
@@ -365,7 +365,7 @@ class StatementsBlock
      */
     public function getLastStatement()
     {
-        return $this->_lastStatement;
+        return $this->lastStatement;
     }
 
     /**
@@ -376,12 +376,12 @@ class StatementsBlock
      */
     public function getMutateGatherer($pass = false)
     {
-        if (!$this->_mutateGatherer) {
-            $this->_mutateGatherer = new MutateGathererPass;
+        if (!$this->mutateGatherer) {
+            $this->mutateGatherer = new MutateGathererPass;
         }
         if ($pass) {
-            $this->_mutateGatherer->pass($this);
+            $this->mutateGatherer->pass($this);
         }
-        return $this->_mutateGatherer;
+        return $this->mutateGatherer;
     }
 }

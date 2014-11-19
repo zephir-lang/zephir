@@ -51,30 +51,30 @@ class ClassMethod
     /**
      * @var array
      */
-    protected $_visibility;
+    protected $visibility;
 
     /**
      * @var string
      */
-    protected $_name;
+    protected $name;
 
     /**
      * @var ClassMethodParameters
      */
-    protected $_parameters;
+    protected $parameters;
 
-    protected $_statements;
+    protected $statements;
 
     /**
      * @var string
      */
     protected $docblock;
 
-    protected $_returnTypes;
+    protected $returnTypes;
 
-    protected $_returnClassTypes;
+    protected $returnClassTypes;
 
-    protected $_void = false;
+    protected $void = false;
 
     protected $isPublic = true;
 
@@ -101,7 +101,7 @@ class ClassMethod
     /**
      * @var array|null
      */
-    protected $_expression;
+    protected $expression;
 
     /**
      * ClassMethod constructor
@@ -120,15 +120,15 @@ class ClassMethod
         $this->checkVisibility($visibility, $name, $original);
 
         $this->classDefinition = $classDefinition;
-        $this->_visibility = $visibility;
-        $this->_name = $name;
-        $this->_parameters = $parameters;
-        $this->_statements = $statements;
+        $this->visibility = $visibility;
+        $this->name = $name;
+        $this->parameters = $parameters;
+        $this->statements = $statements;
         $this->docblock = $docblock;
-        $this->_expression = $original;
+        $this->expression = $original;
 
         if ($returnType['void']) {
-            $this->_void = true;
+            $this->void = true;
             return;
         }
 
@@ -147,10 +147,10 @@ class ClassMethod
             }
             if (count($castTypes)) {
                 $types['object'] = array();
-                $this->_returnClassTypes = $castTypes;
+                $this->returnClassTypes = $castTypes;
             }
             if (count($types)) {
-                $this->_returnTypes = $types;
+                $this->returnTypes = $types;
             }
         }
     }
@@ -162,7 +162,7 @@ class ClassMethod
      */
     public function getStatementsBlock()
     {
-        return $this->_statements;
+        return $this->statements;
     }
 
     /**
@@ -172,7 +172,7 @@ class ClassMethod
      */
     public function setStatementsBlock(StatementsBlock $statementsBlock)
     {
-        $this->_statements = $statementsBlock;
+        $this->statements = $statementsBlock;
     }
 
     /**
@@ -186,6 +186,7 @@ class ClassMethod
     public function checkVisibility(array $visibility, $name, array $original = null)
     {
         if (count($visibility) > 1) {
+
             if (in_array('public', $visibility) && in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
             }
@@ -256,7 +257,7 @@ class ClassMethod
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -276,7 +277,7 @@ class ClassMethod
      */
     public function getParameters()
     {
-        return $this->_parameters;
+        return $this->parameters;
     }
 
     /**
@@ -286,11 +287,11 @@ class ClassMethod
      */
     public function hasReturnTypes()
     {
-        if (count($this->_returnTypes)) {
+        if (count($this->returnTypes)) {
             return true;
         }
 
-        if (count($this->_returnClassTypes)) {
+        if (count($this->returnClassTypes)) {
             return true;
         }
 
@@ -305,8 +306,8 @@ class ClassMethod
      */
     public function areReturnTypesNullCompatible($type = null)
     {
-        if (count($this->_returnTypes)) {
-            foreach ($this->_returnTypes as $returnType => $definition) {
+        if (count($this->returnTypes)) {
+            foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'null':
                         return true;
@@ -324,8 +325,8 @@ class ClassMethod
      */
     public function areReturnTypesIntCompatible($type = null)
     {
-        if (count($this->_returnTypes)) {
-            foreach ($this->_returnTypes as $returnType => $definition) {
+        if (count($this->returnTypes)) {
+            foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'int':
                     case 'uint':
@@ -348,8 +349,8 @@ class ClassMethod
      */
     public function areReturnTypesDoubleCompatible($type = null)
     {
-        if (count($this->_returnTypes)) {
-            foreach ($this->_returnTypes as $returnType => $definition) {
+        if (count($this->returnTypes)) {
+            foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'double':
                         return true;
@@ -367,8 +368,8 @@ class ClassMethod
      */
     public function areReturnTypesBoolCompatible($type = null)
     {
-        if (count($this->_returnTypes)) {
-            foreach ($this->_returnTypes as $returnType => $definition) {
+        if (count($this->returnTypes)) {
+            foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'bool':
                         return true;
@@ -386,8 +387,8 @@ class ClassMethod
      */
     public function areReturnTypesStringCompatible($type = null)
     {
-        if (count($this->_returnTypes)) {
-            foreach ($this->_returnTypes as $returnType => $definition) {
+        if (count($this->returnTypes)) {
+            foreach ($this->returnTypes as $returnType => $definition) {
                 switch ($returnType) {
                     case 'string':
                         return true;
@@ -404,7 +405,7 @@ class ClassMethod
      */
     public function getReturnTypes()
     {
-        return $this->_returnTypes;
+        return $this->returnTypes;
     }
 
     /**
@@ -414,7 +415,7 @@ class ClassMethod
      */
     public function getReturnClassTypes()
     {
-        return $this->_returnClassTypes;
+        return $this->returnClassTypes;
     }
 
     /**
@@ -424,8 +425,8 @@ class ClassMethod
      */
     public function hasParameters()
     {
-        if (is_object($this->_parameters)) {
-            return count($this->_parameters->getParameters()) > 0;
+        if (is_object($this->parameters)) {
+            return count($this->parameters->getParameters()) > 0;
         }
         return false;
     }
@@ -437,8 +438,8 @@ class ClassMethod
      */
     public function getNumberOfParameters()
     {
-        if (is_object($this->_parameters)) {
-            return count($this->_parameters->getParameters());
+        if (is_object($this->parameters)) {
+            return count($this->parameters->getParameters());
         }
         return 0;
     }
@@ -450,8 +451,8 @@ class ClassMethod
      */
     public function getNumberOfRequiredParameters()
     {
-        if (is_object($this->_parameters)) {
-            $parameters = $this->_parameters->getParameters();
+        if (is_object($this->parameters)) {
+            $parameters = $this->parameters->getParameters();
             if (count($parameters)) {
                 $required = 0;
                 foreach ($parameters as $parameter) {
@@ -472,8 +473,8 @@ class ClassMethod
      */
     public function getInternalParameters()
     {
-        if (is_object($this->_parameters)) {
-            $parameters = $this->_parameters->getParameters();
+        if (is_object($this->parameters)) {
+            $parameters = $this->parameters->getParameters();
             if (count($parameters)) {
                 return count($parameters) . ', ...';
             }
@@ -489,7 +490,7 @@ class ClassMethod
      */
     public function hasModifier($modifier)
     {
-        foreach ($this->_visibility as $visibility) {
+        foreach ($this->visibility as $visibility) {
             if ($visibility == $modifier) {
                 return true;
             }
@@ -504,7 +505,7 @@ class ClassMethod
      */
     public function getVisibility()
     {
-        return $this->_visibility;
+        return $this->visibility;
     }
 
     /**
@@ -516,7 +517,7 @@ class ClassMethod
     public function getModifiers()
     {
         $modifiers = array();
-        foreach ($this->_visibility as $visibility) {
+        foreach ($this->visibility as $visibility) {
             switch ($visibility) {
 
                 case 'public':
@@ -558,10 +559,10 @@ class ClassMethod
             }
         }
 
-        if ($this->_name == '__construct') {
+        if ($this->name == '__construct') {
             $modifiers['ZEND_ACC_CTOR'] = true;
         } else {
-            if ($this->_name == '__destruct') {
+            if ($this->name == '__destruct') {
                 $modifiers['ZEND_ACC_DTOR'] = true;
             }
         }
@@ -576,7 +577,7 @@ class ClassMethod
      */
     public function isVoid()
     {
-        return $this->_void;
+        return $this->void;
     }
 
     /**
@@ -586,8 +587,8 @@ class ClassMethod
      */
     public function isInline()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('inline', $this->_visibility);
+        if (is_array($this->visibility)) {
+            return in_array('inline', $this->visibility);
         }
         return false;
     }
@@ -599,8 +600,8 @@ class ClassMethod
      */
     public function isPrivate()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('private', $this->_visibility);
+        if (is_array($this->visibility)) {
+            return in_array('private', $this->visibility);
         }
         return false;
     }
@@ -612,8 +613,8 @@ class ClassMethod
      */
     public function isProtected()
     {
-        if (is_array($this->_visibility)) {
-            return in_array('protected', $this->_visibility);
+        if (is_array($this->visibility)) {
+            return in_array('protected', $this->visibility);
         }
         return false;
     }
@@ -675,7 +676,7 @@ class ClassMethod
      */
     public function isConstructor()
     {
-        return $this->_name == '__construct';
+        return $this->name == '__construct';
     }
 
     /**
@@ -989,7 +990,7 @@ class ClassMethod
                 $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
                 $code .= "\t" . '}' . PHP_EOL;
                 $code .= PHP_EOL;
-                $code .= "\t\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
+                $code .= "\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameter['name'] . '_param);' . PHP_EOL;
                 return $code;
 
             case 'string':
@@ -1105,7 +1106,7 @@ class ClassMethod
          */
         $compilationContext->currentMethod = $this;
 
-        if (is_object($this->_statements)) {
+        if (is_object($this->statements)) {
 
             /**
              * This pass checks for zval variables than can be potentially
@@ -1114,7 +1115,7 @@ class ClassMethod
              */
             if ($compilationContext->config->get('local-context-pass', 'optimizations')) {
                 $localContext = new LocalContextPass();
-                $localContext->pass($this->_statements);
+                $localContext->pass($this->statements);
             } else {
                 $localContext = null;
             }
@@ -1125,10 +1126,10 @@ class ClassMethod
              */
             if ($compilationContext->config->get('static-type-inference', 'optimizations')) {
                 $typeInference = new StaticTypeInference();
-                $typeInference->pass($this->_statements);
+                $typeInference->pass($this->statements);
                 if ($compilationContext->config->get('static-type-inference-second-pass', 'optimizations')) {
                     $typeInference->reduce();
-                    $typeInference->pass($this->_statements);
+                    $typeInference->pass($this->statements);
                 }
             } else {
                 $typeInference = null;
@@ -1139,7 +1140,7 @@ class ClassMethod
              */
             if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
                 $callGathererPass = new CallGathererPass($compilationContext);
-                $callGathererPass->pass($this->_statements);
+                $callGathererPass->pass($this->statements);
             } else {
                 $callGathererPass = null;
             }
@@ -1161,7 +1162,7 @@ class ClassMethod
         /**
          * Parameters has an additional extra mutation
          */
-        $parameters = $this->_parameters;
+        $parameters = $this->parameters;
         if ($localContext) {
             if (is_object($parameters)) {
                 foreach ($parameters->getParameters() as $parameter) {
@@ -1403,7 +1404,7 @@ class ClassMethod
         /**
          * Compile the block of statements if any
          */
-        if (is_object($this->_statements)) {
+        if (is_object($this->statements)) {
 
             if ($this->hasModifier('static')) {
                 $compilationContext->staticContext = true;
@@ -1414,7 +1415,7 @@ class ClassMethod
             /**
              * Compile the statements block as a 'root' branch
              */
-            $this->_statements->compile($compilationContext, false, Branch::TYPE_ROOT);
+            $this->statements->compile($compilationContext, false, Branch::TYPE_ROOT);
         }
 
         /**
@@ -1593,7 +1594,7 @@ class ClassMethod
              * variable is modified so as do the proper separation
              */
             $parametersToSeparate = array();
-            if (is_object($this->_statements)) {
+            if (is_object($this->statements)) {
 
                 /**
                  * If local context is not available
@@ -1619,7 +1620,7 @@ class ClassMethod
                         case 'callable':
                             $name = $parameter['name'];
                             if (!$localContext) {
-                                if ($writeDetector->detect($name, $this->_statements->getStatements())) {
+                                if ($writeDetector->detect($name, $this->statements->getStatements())) {
                                     $parametersToSeparate[$name] = true;
                                 }
                             } else {
@@ -1984,15 +1985,15 @@ class ClassMethod
         /**
          * Finalize the method compilation
          */
-        if (is_object($this->_statements)) {
+        if (is_object($this->statements)) {
 
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed
              */
-            $lastType = $this->_statements->getLastStatementType();
+            $lastType = $this->statements->getLastStatementType();
 
-            if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->_statements->getLastStatement())) {
+            if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
 
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
@@ -2003,7 +2004,7 @@ class ClassMethod
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
                  */
                 if ($this->hasReturnTypes()) {
-                    throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $this->_expression['return-type']);
+                    throw new CompilerException('Reached end of the method without returning a valid type specified in the return-type hints', $this->expression['return-type']);
                 }
             }
         }

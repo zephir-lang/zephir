@@ -21,6 +21,7 @@ namespace Zephir;
 
 /**
  * Class EventsManager
+ *
  * @package Zephir
  */
 class EventsManager
@@ -31,6 +32,8 @@ class EventsManager
     private $listeners = array();
 
     /**
+     * Attachs a listener to a specific event type
+     *
      * @param $event
      * @param $callback
      */
@@ -44,6 +47,8 @@ class EventsManager
     }
 
     /**
+     * Triggers an event for the specified event type
+     *
      * @param $event
      * @param array $param
      */
