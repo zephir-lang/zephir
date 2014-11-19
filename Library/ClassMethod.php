@@ -70,38 +70,87 @@ class ClassMethod
      */
     protected $docblock;
 
+    /**
+     * Types returned by the method
+     *
+     * @var array
+     */
     protected $returnTypes;
 
+    /**
+     * Class type hints returned by the method
+     */
     protected $returnClassTypes;
 
+    /**
+     * Whether the variable is void
+     *
+     * @var boolean
+     */
     protected $void = false;
 
+    /**
+     * Whether the method is public or not
+     *
+     * @var boolean
+     */
     protected $isPublic = true;
 
     /**
      * Whether the method is static or not
+     *
+     * @var boolean
      */
     protected $isStatic = false;
 
     /**
      * Whether the method is final or not
+     *
+     * @var boolean
      */
     protected $isFinal = false;
 
     /**
      * Whether the method is abstract or not
+     *
+     * @var boolean
      */
     protected $isAbstract = false;
 
     /**
      * Whether the method is internal or not
+     *
+     * @var boolean
      */
     protected $isInternal = false;
 
     /**
      * @var array|null
+     *
+     * @var boolean
      */
     protected $expression;
+
+    /**
+     * LocalContextPass
+     *
+     * @var LocalContextPass
+     */
+    protected $localContext;
+
+    /**
+     * Static Type Inference Pass
+     *
+     * @var StaticTypeInferencePass
+     */
+    protected $typeInference;
+
+    /**
+     * Call Gatherer Pass
+     *
+     * @var CallGathererPass
+     */
+    protected $callGathererPass;
 
     /**
      * ClassMethod constructor
@@ -686,7 +735,7 @@ class ClassMethod
      */
     public function isShortcut()
     {
-        return $this->expression &&  $this->expression['type'] == 'shortcut';
+        return $this->expression && $this->expression['type'] == 'shortcut';
     }
 
     /**
@@ -697,6 +746,36 @@ class ClassMethod
     public function getShortcutName()
     {
         return $this->expression['name'];
+    }
+
+    /**
+     * Returns the local context pass information
+     *
+     * @return LocalContextPass
+     */
+    public function getLocalContextPass()
+    {
+        return $this->localContext;
+    }
+
+    /**
+     * Returns the static type inference pass information
+     *
+     * @return StaticTypeInference
+     */
+    public function getStaticTypeInferencePass()
+    {
+        return $this->typeInference;
+    }
+
+    /**
+     * Returns the call gatherer pass information
+     *
+     * @return CallGathererPass
+     */
+    public function getCallGathererPass()
+    {
+        return $this->callGathererPass;
     }
 
     /**
@@ -1113,18 +1192,17 @@ class ClassMethod
     }
 
     /**
-     * Compiles the method
+     * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods
      *
      * @param CompilationContext $compilationContext
      * @return null
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function preCompile(CompilationContext $compilationContext)
     {
-        /**
-         * Set the method currently being compiled
-         */
-        $compilationContext->currentMethod = $this;
+        $localContext = null;
+        $typeInference = null;
+        $callGathererPass = null;
 
         if (is_object($this->statements)) {
 
@@ -1136,8 +1214,6 @@ class ClassMethod
             if ($compilationContext->config->get('local-context-pass', 'optimizations')) {
                 $localContext = new LocalContextPass();
                 $localContext->pass($this->statements);
-            } else {
-                $localContext = null;
             }
 
             /**
@@ -1151,8 +1227,6 @@ class ClassMethod
                     $typeInference->reduce();
                     $typeInference->pass($this->statements);
                 }
-            } else {
-                $typeInference = null;
             }
 
             /**
@@ -1161,15 +1235,35 @@ class ClassMethod
             if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
                 $callGathererPass = new CallGathererPass($compilationContext);
                 $callGathererPass->pass($this->statements);
-            } else {
-                $callGathererPass = null;
             }
 
-        } else {
-            $localContext = null;
-            $typeInference = null;
-            $callGathererPass = null;
         }
+
+        $this->localContext = $localContext;
+        $this->typeInference = $typeInference;
+        $this->callGathererPass = $callGathererPass;
+    }
+
+    /**
+     * Compiles the method
+     *
+     * @param CompilationContext $compilationContext
+     * @return null
+     * @throws CompilerException
+     */
+    public function compile(CompilationContext $compilationContext)
+    {
+        /**
+         * Set the method currently being compiled
+         */
+        $compilationContext->currentMethod = $this;
+
+        /**
+         * Assign pre-made compilation passses
+         */
+        $localContext = $this->localContext;
+        $typeInference = $this->typeInference;
+        $callGathererPass = $this->callGathererPass;
 
         /**
          * Every method has its own symbol table
@@ -2030,7 +2124,7 @@ class ClassMethod
         }
 
         /**
-         * Remove macros that restore the memory stack if it wasn't used
+         * Remove macros that grow/restore the memory frame stack if it wasn't used
          */
         $code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
 
@@ -2049,6 +2143,12 @@ class ClassMethod
         return null;
     }
 
+    /**
+     * Simple method to check if one of the paths are returning the right expected type
+     *
+     * @param array $statement
+     * @return boolean
+     */
     public function hasChildReturnStatementType($statement)
     {
         if (!isset($statement['statements']) || !is_array($statement['statements'])) {

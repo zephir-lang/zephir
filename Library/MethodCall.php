@@ -440,9 +440,13 @@ class MethodCall extends Call
             if ($type == self::CALL_NORMAL) {
 
                 if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
+
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
+                    //$typeInference = $method->getStaticTypeInferencePass();
+
                     foreach ($method->getParameters() as $n => $parameter) {
+
                         if (isset($parameter['data-type'])) {
 
                             if (!isset($resolvedTypes[$n])) {
@@ -454,21 +458,78 @@ class MethodCall extends Call
                              */
                             if ($resolvedTypes[$n] != $parameter['data-type']) {
 
-                                /**
-                                 * Passing polymorphic variables to static typed parameters
-                                 * could lead to potential transformations
-                                 */
-                                if ($resolvedTypes[$n] == 'variable') {
-                                    if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
-                                        if ($resolvedDynamicTypes[$n] == 'undefined') {
-                                            $compilationContext->logger->warning("Passing possible incorrect type to parameter: " . $classDefinition->getCompleteName() . '::' . $parameter[0]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter[0]['data-type'], "possible-wrong-parameter-undefined", $expression);
+                                switch ($resolvedTypes[$n]) {
+
+                                    case 'bool':
+                                    case 'boolean':
+                                        switch ($parameter['data-type']) {
+
+                                            /* compatible types */
+                                            case 'bool':
+                                            case 'boolean':
+                                            case 'variable':
+                                                break;
+
+                                            default:
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                break;
                                         }
-                                        //echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
-                                    }
-                                } else {
-                                    if ($parameter['data-type'] != 'variable') {
-                                        //echo '2: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
-                                    }
+                                        break;
+
+                                    case 'array':
+                                        switch ($parameter['data-type']) {
+
+                                            /* compatible types */
+                                            case 'array':
+                                            case 'variable':
+                                                break;
+
+                                            default:
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                break;
+                                        }
+                                        break;
+
+                                    case 'callable':
+                                        switch ($parameter['data-type']) {
+
+                                            /* compatible types */
+                                            case 'callable':
+                                            case 'variable':
+                                                break;
+
+                                            default:
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                break;
+                                        }
+                                        break;
+
+                                    case 'string':
+                                        switch ($parameter['data-type']) {
+
+                                            /* compatible types */
+                                            case 'string':
+                                            case 'variable':
+                                                break;
+
+                                            default:
+                                                $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $parameter['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
+                                                break;
+                                        }
+                                        break;
+
+                                    /**
+                                     * Passing polymorphic variables to static typed parameters
+                                     * could lead to potential unexpected type coercions
+                                     */
+                                    case 'variable':
+                                        if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
+                                            if ($resolvedDynamicTypes[$n] == 'undefined') {
+                                                $compilationContext->logger->warning("Passing possible incorrect type to parameter: " . $classDefinition->getCompleteName() . '::' . $parameter[$n]['name'] . ', passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter[$n]['data-type'], "possible-wrong-parameter-undefined", $expression);
+                                            }
+                                            //echo '1: ', $resolvedTypes[$n], ' ', $resolvedDynamicTypes[$n], ' ', $parameter[0]['data-type'], ' ', PHP_EOL;
+                                        }
+                                        break;
                                 }
                             }
                         }

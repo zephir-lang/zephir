@@ -5,7 +5,7 @@ class Trie
 {
 	private trie;
 
-	public function getTrieNodeByKey(string key, boolean create=false)
+	public function getTrieNodeByKey(string key, boolean create = false)
 	{
 		var trieNode, keyLen, i, character;
 		let trieNode = this->trie;
@@ -24,8 +24,6 @@ class Trie
 			let trieNode = trieNode->children[character];
 			let i += 1;
 		}
-
 		return trieNode;
 	}
-
 }

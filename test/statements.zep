@@ -43,7 +43,7 @@ class Statements
             return "less";
         }
     }
-    
+
     public function testElseIf1(int num)
     {
         var total = 10;
@@ -68,7 +68,8 @@ class Statements
         }
     }
 
-    public function test544Issue(int! step) {
+    public function test544Issue(int! step)
+    {
         int filledWidth, unfilledWidth;
 
         if step < this->totalSteps {
@@ -82,7 +83,8 @@ class Statements
         }
     }
 
-    public function test544IssueWithVariable(int! step) {
+    public function test544IssueWithVariable(int! step)
+    {
         int filledWidth, unfilledWidth, totalSteps;
 
         let totalSteps = this->totalSteps;

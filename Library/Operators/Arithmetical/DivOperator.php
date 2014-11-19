@@ -202,8 +202,8 @@ class DivOperator extends ArithmeticalBaseOperator
             case 'variable':
 
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
-
                 switch ($variableLeft->getType()) {
+
                     case 'int':
                     case 'uint':
                     case 'long':

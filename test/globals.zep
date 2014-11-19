@@ -37,5 +37,4 @@ class Globals
 	{
 		return globals_get("my_setting_3");
 	}
-
 }

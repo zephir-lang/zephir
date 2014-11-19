@@ -26,5 +26,4 @@ class OoConstructParams
 	{
 		return this->b;
 	}
-
 }

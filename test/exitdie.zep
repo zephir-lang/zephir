@@ -1,8 +1,10 @@
 namespace Test;
 
-class ExitDie {
+class ExitDie
+{
 
-	public function testExit(param="") {
+	public function testExit(param = "")
+	{
 		if typeof param == "string" && param == "" {
 			exit();
 		} else {
@@ -10,12 +12,12 @@ class ExitDie {
 		}
 	}
 
-	public function testDie(param="") {
+	public function testDie(param = "")
+	{
 		if typeof param == "string" && param == "" {
 			die();
 		} else {
 			die(param);
 		}
 	}
-
 }

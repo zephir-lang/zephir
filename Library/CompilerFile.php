@@ -405,8 +405,9 @@ class CompilerFile
      *
      * @param string $namespace
      * @param array $topStatement
+     * @param CompilationContext $compilationContext
      */
-    public function preCompileClass($namespace, $topStatement)
+    public function preCompileClass($namespace, $topStatement, $compilationContext)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->_external);
@@ -490,6 +491,16 @@ class CompilerFile
         }
 
         $this->_classDefinition = $classDefinition;
+
+        /**
+         * Assign current class definition to the compilation context
+         */
+        $compilationContext->classDefinition = $classDefinition;
+
+        /**
+         * Run pre-compilation passes
+         */
+        $classDefinition->preCompile($compilationContext);
     }
 
     /**
@@ -515,6 +526,31 @@ class CompilerFile
          * Alias Manager
          */
         $this->_aliasManager = new AliasManager();
+
+        /**
+         * Compilation context stores common objects required by compilation entities
+         */
+        $compilationContext = new CompilationContext;
+
+        /**
+         * Set global compiler in the compilation context
+         */
+        $compilationContext->compiler = $compiler;
+
+        /**
+         * Set global config in the compilation context
+         */
+        $compilationContext->config = $this->_config;
+
+        /**
+         * Set global logger in the compilation context
+         */
+        $compilationContext->logger = $this->_logger;
+
+        /**
+         * Alias manager
+         */
+        $compilationContext->aliasManager = $this->_aliasManager;
 
         /**
          * Traverse the top level statements looking for the namespace
@@ -556,7 +592,7 @@ class CompilerFile
                     }
                     $class = true;
                     $name = $topStatement['name'];
-                    $this->preCompileClass($namespace, $topStatement);
+                    $this->preCompileClass($namespace, $topStatement, $compilationContext);
                     $this->_originalNode = $topStatement;
                     break;
 

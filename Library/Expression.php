@@ -259,7 +259,7 @@ class Expression
 
         $compilationContext->codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
 
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
     }
 
     /**

@@ -17,13 +17,13 @@ class ScallParent
 		return "hello parent protected";
 	}
 
-        static public function testCallStatic()
-        {
-                return static::testMethodStatic();
-        }
+	static public function testCallStatic()
+	{
+		return static::testMethodStatic();
+	}
 
-        static protected function testMethodStatic()
-        {
-                return "hello ScallParent";
-        }
+	static protected function testMethodStatic()
+	{
+		return "hello ScallParent";
+	}
 }

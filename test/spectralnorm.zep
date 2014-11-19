@@ -68,5 +68,4 @@ class SpectralNorm
 
 		return sqrt(vBv / vv);
 	}
-
 }

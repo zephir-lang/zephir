@@ -31,5 +31,4 @@ class FetchTest
 		var c;
 		return fetch c, a->{b};
 	}
-
 }

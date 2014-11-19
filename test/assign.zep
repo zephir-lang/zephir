@@ -693,15 +693,15 @@ class Assign
 	}
 
 	public function testStaticPropertyArrayAppend()
-    {
-    	let self::testVarStatic = [];
-    	let self::testVarStatic[] = "test";
-    	let self::testVarStatic[] = 1;
-    	let self::testVarStatic[] = 1.5;
-    	let self::testVarStatic[] = false;
-    	let self::testVarStatic[] = [];
-    	return self::testVarStatic;
-    }
+	{
+		let self::testVarStatic = [];
+		let self::testVarStatic[] = "test";
+		let self::testVarStatic[] = 1;
+		let self::testVarStatic[] = 1.5;
+		let self::testVarStatic[] = false;
+		let self::testVarStatic[] = [];
+		return self::testVarStatic;
+	}
 
 	public function testStaticPropertyArrayMutli1()
 	{
@@ -809,12 +809,12 @@ class Assign
 		let _POST[index] = value;
 	}
 
-        /**
-         * @link https://github.com/phalcon/zephir/issues/523
-         */
-        public function testConstantKeyAssign()
-        {
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/523
+	 */
+	public function testConstantKeyAssign()
+	{
 		var elements;
 		let elements = ["abc": 1, ABDAY_1: DAY_1, ABDAY_2: DAY_2];
-        }
+	}
 }

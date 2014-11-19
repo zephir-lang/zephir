@@ -2,6 +2,12 @@ PHP_ARG_ENABLE(test, whether to enable test, [ --enable-test   Enable Test])
 
 if test "$PHP_TEST" = "yes"; then
 
+	
+
+	if ! test "x" = "x"; then
+		PHP_EVAL_LIBLINE(, TEST_SHARED_LIBADD)
+	fi
+
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
 	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c test/arithmetic.zep.c
 	test/arrayobject.zep.c
@@ -99,6 +105,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/properties/staticprotectedproperties.zep.c
 	test/properties/staticpublicproperties.zep.c
 	test/quantum.zep.c
+	test/range.zep.c
 	test/references.zep.c
 	test/regexdna.zep.c
 	test/requires.zep.c
@@ -131,7 +138,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/5__closure.zep.c
 	test/6__closure.zep.c
 	test/7__closure.zep.c "
-	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared)
+	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
+	PHP_SUBST(TEST_SHARED_LIBADD)
 
 	old_CPPFLAGS=$CPPFLAGS
 	CPPFLAGS="$CPPFLAGS $INCLUDES"
@@ -173,4 +181,5 @@ if test "$PHP_TEST" = "yes"; then
 	CPPFLAGS=$old_CPPFLAGS
 
 	PHP_INSTALL_HEADERS([ext/test], [php_TEST.h])
+
 fi

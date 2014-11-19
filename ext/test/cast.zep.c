@@ -530,14 +530,15 @@ PHP_METHOD(Test_Cast, testObjectCastFromNull) {
 
 PHP_METHOD(Test_Cast, testObjectCastFromEmptyArray) {
 
-	zval *_0;
+	zval *_0, *_1 = NULL;
 
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
-	zephir_convert_to_object(_0);
-	RETURN_CCTOR(_0);
+	ZEPHIR_CPY_WRT(_1, _0);
+	zephir_convert_to_object(_1);
+	RETURN_CCTOR(_1);
 
 }
 

@@ -91,3 +91,18 @@ PHP_METHOD(Test_EmptyTest, testNotEmptyString) {
 
 }
 
+PHP_METHOD(Test_EmptyTest, testString) {
+
+	zval *a_param = NULL;
+	zval *a = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a_param);
+
+	zephir_get_strval(a, a_param);
+
+
+	RETURN_MM_BOOL(ZEPHIR_IS_EMPTY(a));
+
+}
+

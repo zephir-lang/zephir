@@ -108,5 +108,4 @@ class DeclareTest
 		var a = null;
 		return a;
 	}
-	
 }

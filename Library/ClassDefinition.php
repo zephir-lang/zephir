@@ -734,6 +734,7 @@ class ClassDefinition
      *
      * @param ClassDefinition $classDefinition
      * @param ClassDefinition $interfaceDefinition
+     * @throws CompilerException
      */
     public function checkInterfaceImplements($classDefinition, $interfaceDefinition)
     {
@@ -749,7 +750,25 @@ class ClassDefinition
                     throw new CompilerException("Class " . $classDefinition->getCompleteName() . "::" . $method->getName() . "() does not have the same number of required parameters in interface: " . $interfaceDefinition->getCompleteName());
                 }
             }
+        }
+    }
 
+    /**
+     * Pre-compiles a class/interface gathering method information required by other methods
+     *
+     * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     */
+    public function preCompile(CompilationContext $compilationContext)
+    {
+        /**
+         * Pre-Compile methods
+         */
+        foreach ($this->methods as $method) {
+
+            if ($this->getType() == 'class' && !$method->isAbstract()) {
+                $method->preCompile($compilationContext);
+            }
         }
     }
 
@@ -782,7 +801,7 @@ class ClassDefinition
         /**
          * Method entry
          */
-        $methods = & $this->methods;
+        $methods = &$this->methods;
 
         if (count($methods)) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -851,10 +870,12 @@ class ClassDefinition
          * @var $property ClassProperty
          */
         foreach ($this->getProperties() as $property) {
+
             $docBlock = $property->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock, true);
             }
+
             $property->compile($compilationContext);
             $codePrinter->outputBlankLine();
         }
@@ -870,10 +891,12 @@ class ClassDefinition
          * @var $constant ClassConstant
          */
         foreach ($this->getConstants() as $constant) {
+
             $docBlock = $constant->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock, true);
             }
+
             $constant->compile($compilationContext);
             $codePrinter->outputBlankLine();
         }
@@ -885,6 +908,7 @@ class ClassDefinition
         $compiler = $compilationContext->compiler;
 
         if (is_array($interfaces)) {
+
             $codePrinter->outputBlankLine(true);
 
             foreach ($interfaces as $interface) {
@@ -966,6 +990,7 @@ class ClassDefinition
          * Compile methods
          */
         foreach ($methods as $method) {
+
             $docBlock = $method->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock);
