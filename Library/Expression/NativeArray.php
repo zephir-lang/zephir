@@ -202,6 +202,10 @@ class NativeArray
 
         $codePrinter = $compilationContext->codePrinter;
 
+        if (!isset($expression['left'])) {
+            return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
+        }
+
         /**
          * This calculates a prime number bigger than the current array size to possibly
          * reduce hash collisions when adding new members to the array
