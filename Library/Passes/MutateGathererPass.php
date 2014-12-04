@@ -29,9 +29,9 @@ use Zephir\StatementsBlock;
  */
 class MutateGathererPass
 {
-    protected $_variables = array();
+    protected $variables = array();
 
-    protected $_mutations = array();
+    protected $mutations = array();
 
     /**
      * Do the compilation pass
@@ -46,8 +46,8 @@ class MutateGathererPass
     public function declareVariables(array $statement)
     {
         foreach ($statement['variables'] as $variable) {
-            if (!isset($this->_variables[$variable['variable']])) {
-                $this->_variables[$variable['variable']] = true;
+            if (!isset($this->variables[$variable['variable']])) {
+                $this->variables[$variable['variable']] = true;
             }
         }
     }
@@ -60,10 +60,10 @@ class MutateGathererPass
      */
     public function increaseMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            $this->_mutations[$variable]++;
+        if (isset($this->mutations[$variable])) {
+            $this->mutations[$variable]++;
         } else {
-            $this->_mutations[$variable] = 1;
+            $this->mutations[$variable] = 1;
         }
         return $this;
     }
@@ -76,8 +76,8 @@ class MutateGathererPass
      */
     public function getNumberOfMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            return $this->_mutations[$variable];
+        if (isset($this->mutations[$variable])) {
+            return $this->mutations[$variable];
         }
         return 0;
     }

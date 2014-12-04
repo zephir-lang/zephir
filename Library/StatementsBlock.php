@@ -369,6 +369,16 @@ class StatementsBlock
     }
 
     /**
+     * Returns the last line in the last statement
+     */
+    public function getLastLine()
+    {
+        if (!$this->lastStatement) {
+            $this->lastStatement = $this->statements[count($this->statements) - 1];
+        }
+    }
+
+    /**
      * Create/Returns a mutate gatherer pass for this block
      *
      * @param boolean $pass

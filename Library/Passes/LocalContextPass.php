@@ -36,13 +36,15 @@ use Zephir\StatementsBlock;
  */
 class LocalContextPass
 {
-    protected $_variables = array();
+    protected $variables = array();
 
-    protected $_mutations = array();
+    protected $mutations = array();
 
-    protected $_lastCallLine = false;
+    protected $uses = array();
 
-    protected $_lastUnsetLine = false;
+    protected $lastCallLine = false;
+
+    protected $lastUnsetLine = false;
 
     /**
      * Do the compilation pass
@@ -64,12 +66,12 @@ class LocalContextPass
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
                 if ($variable['expr']['type'] == 'string' || $variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
-                    $this->_variables[$variable['variable']] = false;
+                    $this->variables[$variable['variable']] = false;
                     continue;
                 }
             }
-            if (!isset($this->_variables[$variable['variable']])) {
-                $this->_variables[$variable['variable']] = true;
+            if (!isset($this->variables[$variable['variable']])) {
+                $this->variables[$variable['variable']] = true;
             }
         }
     }
@@ -81,8 +83,21 @@ class LocalContextPass
      */
     public function markVariableNoLocal($variable)
     {
-        if (isset($this->_variables[$variable])) {
-            $this->_variables[$variable] = false;
+        if (isset($this->variables[$variable])) {
+            $this->variables[$variable] = false;
+        }
+    }
+
+    /**
+     * Marks the lastest use/read of a variable
+     *
+     * @param string $variable
+     * @param array $node
+     */
+    public function markLastUse($variable, $node)
+    {
+        if (isset($node['line'])) {
+            $this->uses[$variable] = $node['line'];
         }
     }
 
@@ -95,8 +110,8 @@ class LocalContextPass
      */
     public function shouldBeLocal($variable)
     {
-        if (isset($this->_variables[$variable])) {
-            if ($this->_variables[$variable]) {
+        if (isset($this->variables[$variable])) {
+            if ($this->variables[$variable]) {
                 return true;
             }
         }
@@ -111,10 +126,10 @@ class LocalContextPass
      */
     public function increaseMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            $this->_mutations[$variable]++;
+        if (isset($this->mutations[$variable])) {
+            $this->mutations[$variable]++;
         } else {
-            $this->_mutations[$variable] = 1;
+            $this->mutations[$variable] = 1;
         }
     }
 
@@ -127,10 +142,24 @@ class LocalContextPass
      */
     public function getNumberOfMutations($variable)
     {
-        if (isset($this->_mutations[$variable])) {
-            return $this->_mutations[$variable];
+        if (isset($this->mutations[$variable])) {
+            return $this->mutations[$variable];
         }
 
+        return 0;
+    }
+
+    /**
+     * Returns the latest line where a variable was read
+     *
+     * @param string $variable
+     * @return int
+     */
+    public function getLastVariableUseLine($variable)
+    {
+        if (isset($this->uses[$variable])) {
+            return $this->uses[$variable];
+        }
         return 0;
     }
 
@@ -141,7 +170,7 @@ class LocalContextPass
      */
     public function getLastCallLine()
     {
-        return $this->_lastCallLine;
+        return $this->lastCallLine;
     }
 
     /**
@@ -150,7 +179,7 @@ class LocalContextPass
      */
     public function getLastUnsetLine()
     {
-        return $this->_lastUnsetLine;
+        return $this->lastUnsetLine;
     }
 
     public function passLetStatement(array $statement)
@@ -311,11 +340,14 @@ class LocalContextPass
             case 'char':
             case 'uchar':
             case 'empty-array':
-            case 'variable':
             case 'constant':
             case 'static-constant-access':
             case 'closure':
             case 'closure-arrow':
+                break;
+
+            case 'variable':
+                $this->markLastUse($expression['value'], $expression);
                 break;
 
             case 'reference':
@@ -367,7 +399,7 @@ class LocalContextPass
                     }
                 }
                 $this->passCall($expression);
-                $this->_lastCallLine = $expression['line'];
+                $this->lastCallLine = $expression['line'];
                 break;
 
             case 'array':
@@ -487,10 +519,12 @@ class LocalContextPass
                         $this->passExpression($statement['expr']);
                     }
                     if (isset($statement['value'])) {
+                        $this->markLastUse($statement['value'], $statement);
                         $this->markVariableNoLocal($statement['value']);
                         $this->increaseMutations($statement['value']);
                     }
                     if (isset($statement['key'])) {
+                        $this->markLastUse($statement['key'], $statement);
                         $this->markVariableNoLocal($statement['key']);
                         $this->increaseMutations($statement['key']);
                     }
@@ -532,7 +566,7 @@ class LocalContextPass
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }
-                    $this->_lastCallLine = $statement['line'];
+                    $this->lastCallLine = $statement['line'];
                     break;
 
                 case 'fetch':
@@ -551,7 +585,7 @@ class LocalContextPass
                         }
                     }
                     $this->passCall($statement['expr']);
-                    $this->_lastCallLine = $statement['line'];
+                    $this->lastCallLine = $statement['line'];
                     break;
 
                 case 'unset':
@@ -570,7 +604,7 @@ class LocalContextPass
                             }
                         }
                     }
-                    $this->_lastUnsetLine = $statement['line'];
+                    $this->lastUnsetLine = $statement['line'];
                     break;
 
                 case 'break':

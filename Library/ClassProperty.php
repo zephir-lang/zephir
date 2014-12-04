@@ -371,25 +371,31 @@ class ClassProperty
         }
 
         switch ($type) {
+
             case 'long':
             case 'int':
                 $codePrinter->output("zend_declare_property_long(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+
             case 'double':
                 $codePrinter->output("zend_declare_property_double(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+
             case 'bool':
                 $codePrinter->output("zend_declare_property_bool(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), ".$this->getBooleanCode($value).", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+
             case Types::CHAR:
             case Types::STRING:
                 $codePrinter->output("zend_declare_property_string(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($value, true, $type) . "\", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+
             case 'array':
             case 'empty-array':
             case 'null':
                 $codePrinter->output("zend_declare_property_null(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $this->getVisibilityAccesor() . " TSRMLS_CC);");
                 break;
+
             default:
                 throw new CompilerException('Unknown default type: ' . $type, $this->original);
         }

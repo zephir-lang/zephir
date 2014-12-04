@@ -58,6 +58,10 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
+        if (count($statement['index-expr']) > 16) {
+            throw new CompilerException("Too many array indexes", $statement);
+        }
+
         /**
          * Only string/variable/int
          */
@@ -76,7 +80,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement['index-expr']);
+                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement);
             }
 
             $offsetExprs[] = $resolvedIndex;

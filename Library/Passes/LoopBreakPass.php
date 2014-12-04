@@ -30,7 +30,7 @@ use Zephir\StatementsBlock;
 class LoopBreakPass
 {
 
-    protected $_hasBreak = false;
+    protected $hasBreak = false;
 
     /**
      * Do the compilation pass
@@ -59,7 +59,7 @@ class LoopBreakPass
                 case 'break':
                 case 'return':
                 case 'throw':
-                    $this->_hasBreak = true;
+                    $this->hasBreak = true;
                     break;
             }
         }
@@ -67,6 +67,6 @@ class LoopBreakPass
 
     public function hasBreak()
     {
-        return $this->_hasBreak;
+        return $this->hasBreak;
     }
 }

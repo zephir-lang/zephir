@@ -765,6 +765,11 @@ class ForStatement extends StatementAbstract
          */
         if (isset($this->_statement['statements'])) {
 
+            /**
+             * Create the statements block here to obtain the last use line
+             */
+            $st = new StatementsBlock($this->_statement['statements']);
+
             $detector = new ForValueUseDetector();
             if ($detector->detect($exprVariable->getName(), $this->_statement['statements'])) {
                 $duplicateHash = '1';
@@ -777,6 +782,9 @@ class ForStatement extends StatementAbstract
                 if (!$keyVariable->isTemporal()) {
                     $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
                     if ($detector->detect($keyVariable->getName(), $this->_statement['statements'])) {
+                        $loopContext = $compilationContext->currentMethod->getLocalContextPass();
+                        echo $st->getLastLine();
+                        //echo $loopContext->getLastVariableUseLine($keyVariable->getName());
                         $duplicateKey = true;
                     }
                 }
@@ -812,7 +820,6 @@ class ForStatement extends StatementAbstract
          * Compile statements in the 'for' block
          */
         if (isset($this->_statement['statements'])) {
-            $st = new StatementsBlock($this->_statement['statements']);
             $st->isLoop(true);
             if (isset($this->_statement['key'])) {
                 $st->getMutateGatherer()->increaseMutations($this->_statement['key']);

@@ -93,6 +93,7 @@ class Decr
                     $codePrinter->output('zephir_decrement(' . $variable . ');');
                 }
                 break;
+
             default:
                 throw new CompilerException("Cannot decrement variable: " . $symbolVariable->getType(), $statement);
         }

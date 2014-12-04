@@ -68,12 +68,12 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'variable':
                 break;
             default:
-                throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement['index-expr']);
+                throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement);
         }
 
         if ($resolvedIndex->getType() == 'variable') {
 
-            $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
+            $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement);
             switch ($indexVariable->getType()) {
                 case 'string':
                 case 'int':

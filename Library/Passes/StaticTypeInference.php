@@ -29,9 +29,9 @@ use Zephir\StatementsBlock;
  */
 class StaticTypeInference
 {
-    protected $_variables = array();
+    protected $variables = array();
 
-    protected $_infered = array();
+    protected $infered = array();
 
     /**
      * Do the compilation pass
@@ -46,7 +46,7 @@ class StaticTypeInference
     public function declareVariables(array $statement)
     {
         foreach ($statement['variables'] as $variable) {
-            if (!isset($this->_variables[$variable['variable']])) {
+            if (!isset($this->variables[$variable['variable']])) {
                 if (isset($variable['expr']['type'])) {
                     if ($variable['expr']['type'] == 'empty-array' || $variable['expr']['type'] == 'array') {
                         $this->markVariable($variable['variable'], 'array');
@@ -66,8 +66,8 @@ class StaticTypeInference
      */
     public function markVariableIfUnknown($variable, $type)
     {
-        $this->_variables[$variable] = $type;
-        $this->_infered[$variable] = $type;
+        $this->variables[$variable] = $type;
+        $this->infered[$variable] = $type;
     }
 
     /**
@@ -78,13 +78,13 @@ class StaticTypeInference
      */
     public function markVariable($variable, $type)
     {
-        if (isset($this->_variables[$variable])) {
-            $currentType = $this->_variables[$variable];
+        if (isset($this->variables[$variable])) {
+            $currentType = $this->variables[$variable];
             if ($currentType == 'undefined') {
                 return;
             }
         } else {
-            $this->_variables[$variable] = $type;
+            $this->variables[$variable] = $type;
             return;
         }
 
@@ -99,7 +99,7 @@ class StaticTypeInference
                     case 'double':
                         break;
                     default:
-                        $this->_variables[$variable] = 'undefined';
+                        $this->variables[$variable] = 'undefined';
                         break;
                 }
                 break;
@@ -110,7 +110,7 @@ class StaticTypeInference
                     case 'numeric':
                         break;
                     default:
-                        $this->_variables[$variable] = 'undefined';
+                        $this->variables[$variable] = 'undefined';
                         break;
                 }
                 break;
@@ -121,7 +121,7 @@ class StaticTypeInference
                     case 'numeric':
                         break;
                     default:
-                        $this->_variables[$variable] = 'undefined';
+                        $this->variables[$variable] = 'undefined';
                         break;
                 }
                 break;
@@ -131,7 +131,7 @@ class StaticTypeInference
                     case 'string':
                         break;
                     default:
-                        $this->_variables[$variable] = 'undefined';
+                        $this->variables[$variable] = 'undefined';
                         break;
                 }
                 break;
@@ -152,23 +152,23 @@ class StaticTypeInference
                     case 'numeric':
                         break;
                     default:
-                        $this->_variables[$variable] = 'undefined';
+                        $this->variables[$variable] = 'undefined';
                         break;
                 }
                 break;
 
             case 'null':
                 if ($type != 'null') {
-                    $this->_variables[$variable] = 'undefined';
+                    $this->variables[$variable] = 'undefined';
                 }
                 break;
 
             case 'variable':
-                $this->_variables[$variable] = 'undefined';
+                $this->variables[$variable] = 'undefined';
                 break;
 
             case 'array':
-                $this->_variables[$variable] = 'undefined';
+                $this->variables[$variable] = 'undefined';
                 break;
 
             default:
@@ -185,12 +185,12 @@ class StaticTypeInference
     public function reduce()
     {
         $pass = false;
-        foreach ($this->_variables as $variable => $type) {
+        foreach ($this->variables as $variable => $type) {
             if ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'null' || $type == 'numeric') {
-                unset($this->_variables[$variable]);
+                unset($this->variables[$variable]);
             } else {
                 $pass = true;
-                $this->_infered[$variable] = $type;
+                $this->infered[$variable] = $type;
             }
         }
         return $pass;
@@ -204,8 +204,8 @@ class StaticTypeInference
      */
     public function getInferedType($variable)
     {
-        if (isset($this->_variables[$variable])) {
-            $type = $this->_variables[$variable];
+        if (isset($this->variables[$variable])) {
+            $type = $this->variables[$variable];
             if ($type != 'variable' && $type != 'undefined' && $type != 'string' && $type != 'array' && $type != 'null' && $type != 'numeric') {
                 //echo $variable, ' ', $type, PHP_EOL;
                 return $type;
@@ -453,8 +453,8 @@ class StaticTypeInference
                 return $this->passExpression($expression['right']);
 
             case 'variable':
-                if (isset($this->_infered[$expression['value']])) {
-                    return $this->_infered[$expression['value']];
+                if (isset($this->infered[$expression['value']])) {
+                    return $this->infered[$expression['value']];
                 }
                 return null;
 

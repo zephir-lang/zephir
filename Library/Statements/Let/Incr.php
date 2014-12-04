@@ -60,6 +60,7 @@ class Incr
         $codePrinter = &$compilationContext->codePrinter;
 
         switch ($symbolVariable->getType()) {
+
             case 'int':
             case 'uint':
             case 'long':
@@ -69,6 +70,7 @@ class Incr
             case 'uchar':
                 $codePrinter->output($variable . '++;');
                 break;
+
             case 'variable':
                 /**
                  * Update non-numeric dynamic variables could be expensive
@@ -85,6 +87,7 @@ class Incr
                     $codePrinter->output('zephir_increment(' . $variable . ');');
                 }
                 break;
+
             default:
                 throw new CompilerException("Cannot increment: " . $symbolVariable->getType(), $statement);
         }

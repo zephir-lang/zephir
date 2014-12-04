@@ -30,11 +30,11 @@ use Zephir\StatementsBlock;
 class SkipVariantInit
 {
 
-    protected $_branches = array();
+    protected $branches = array();
 
-    protected $_variablesToSkip = array();
+    protected $variablesToSkip = array();
 
-    protected $_ignoredVariables;
+    protected $ignoredVariables;
 
     /**
      * Do the compilation pass
@@ -45,7 +45,7 @@ class SkipVariantInit
     public function pass($branchNumber, StatementsBlock $block)
     {
         $this->passStatementBlock($branchNumber, $block->getStatements());
-        $this->_branches[$branchNumber] = 0;
+        $this->branches[$branchNumber] = 0;
     }
 
     /**
@@ -69,7 +69,7 @@ class SkipVariantInit
                         case 'scall':
                             break;
                         default:
-                            $this->_variablesToSkip[$branchNumber][$assignment['variable']] = 1;
+                            $this->variablesToSkip[$branchNumber][$assignment['variable']] = 1;
                             break;
                     }
                 }
@@ -101,7 +101,7 @@ class SkipVariantInit
     {
         $variableStats = array();
 
-        foreach ($this->_variablesToSkip as $branchNumber => $variables) {
+        foreach ($this->variablesToSkip as $branchNumber => $variables) {
             foreach ($variables as $variable => $one) {
                 if (!isset($variableStats[$variable])) {
                     $variableStats[$variable] = 1;
@@ -112,7 +112,7 @@ class SkipVariantInit
         }
 
         $variables = array();
-        $numberBranches = count($this->_branches);
+        $numberBranches = count($this->branches);
         foreach ($variableStats as $variable => $number) {
             if ($number == $numberBranches) {
                 $variables[] = $variable;
@@ -127,6 +127,6 @@ class SkipVariantInit
      */
     public function setVariablesToSkip($branchNumber, $variablesToSkip)
     {
-        $this->_variablesToSkip[$branchNumber] = $variablesToSkip;
+        $this->variablesToSkip[$branchNumber] = $variablesToSkip;
     }
 }
