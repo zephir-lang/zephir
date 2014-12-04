@@ -67,7 +67,7 @@ class EchoStatement extends StatementAbstract
                     break;
 
                 case 'string':
-                    $compilationContext->codePrinter->output('php_printf("' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
+                    $compilationContext->codePrinter->output('php_printf("%s", "' . Utils::addSlashes($resolvedExpr->getCode()) . '");');
                     break;
 
                 case 'null':

@@ -327,7 +327,7 @@ class StaticTypeInference
                 $left = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
                 if ($left == 'int' && $right == 'int') {
-                    return 'long';
+                    return 'int';
                 }
                 if ($left == 'uint' && $right == 'uint') {
                     return 'uint';
@@ -370,7 +370,7 @@ class StaticTypeInference
                 if ($left == 'ulong' && $right == 'ulong') {
                     return 'ulong';
                 }
-                return 'long';
+                return 'int';
 
             case 'and':
             case 'or':

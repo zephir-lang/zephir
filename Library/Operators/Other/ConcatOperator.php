@@ -24,6 +24,7 @@ use Zephir\CompilationContext;
 use Zephir\Expression;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Utils;
 
 /**
  * ConcatOperator
@@ -111,7 +112,7 @@ class ConcatOperator extends BaseOperator
 
                 case 'string':
                     $key .= 's';
-                    $concatParts[] = '"' . $compiledExpr->getCode() . '"';
+                    $concatParts[] = '"' . Utils::addSlashes($compiledExpr->getCode()) . '"';
                     break;
 
                 default:
