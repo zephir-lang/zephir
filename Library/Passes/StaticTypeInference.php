@@ -298,7 +298,7 @@ class StaticTypeInference
 
             case 'string':
                 if (ctype_digit($expression['value'])) {
-                    return 'int';
+                    return 'long';
                 }
                 return 'string';
 
@@ -327,7 +327,7 @@ class StaticTypeInference
                 $left = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
                 if ($left == 'int' && $right == 'int') {
-                    return 'int';
+                    return 'long';
                 }
                 if ($left == 'uint' && $right == 'uint') {
                     return 'uint';
@@ -370,7 +370,7 @@ class StaticTypeInference
                 if ($left == 'ulong' && $right == 'ulong') {
                     return 'ulong';
                 }
-                return 'int';
+                return 'long';
 
             case 'and':
             case 'or':
