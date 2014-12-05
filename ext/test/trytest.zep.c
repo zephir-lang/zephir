@@ -458,3 +458,24 @@ PHP_METHOD(Test_TryTest, testTry10) {
 
 }
 
+PHP_METHOD(Test_TryTest, testTry11) {
+
+	zval *ex = NULL;
+
+
+
+	/* try_start_1: */
+
+		RETURN_STRING("test", 1);
+
+	try_end_1:
+
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(ex, EG(exception));
+		if (zephir_instance_of_ev(ex, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+		}
+	}
+
+}
+

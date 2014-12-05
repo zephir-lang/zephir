@@ -156,9 +156,9 @@ PHP_METHOD(Test_Logical, testMixed1) {
 		_1 = (second) ? 1 : 0;
 	}
 	if (_1) {
-		php_printf("ok");
+		php_printf("%s", "ok");
 	} else {
-		php_printf("wrong");
+		php_printf("%s", "wrong");
 	}
 
 }

@@ -242,7 +242,8 @@ PHP_METHOD(Test_Bitwise, intVarAnd) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 
-	int a, b, c;
+	int c;
+	long a, b;
 
 
 	a = 1;
@@ -254,7 +255,8 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastAnd) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCast2And) {
 
-	int a, b, c;
+	int b, c;
+	long a;
 
 
 	a = 1;
@@ -787,7 +789,8 @@ PHP_METHOD(Test_Bitwise, intVarOr) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 
-	int a, b, c;
+	int c;
+	long a, b;
 
 
 	a = 1;
@@ -799,7 +802,8 @@ PHP_METHOD(Test_Bitwise, intVarImplicitCastOr) {
 
 PHP_METHOD(Test_Bitwise, intVarImplicitCast2Or) {
 
-	int a, b, c;
+	int b, c;
+	long a;
 
 
 	a = 1;

@@ -99,7 +99,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 	zephir_array_fast_append(_0, _1);
 	ZEPHIR_INIT_NVAR(_1);
 	ZEPHIR_INIT_NVAR(_1);
-	zephir_create_closure_ex(_1, this_ptr, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
+	zephir_create_closure_ex(_1, NULL, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
 	ZEPHIR_CALL_FUNCTION(&_2, "array_map", &_3, _1, _0);
 	zephir_check_call_status();
 	RETURN_CCTOR(_2);
