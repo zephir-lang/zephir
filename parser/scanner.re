@@ -16,8 +16,8 @@
  +--------------------------------------------------------------------------+
 */
 
-#include "stdio.h"
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
 #include "scanner.h"
 
 #define YYCTYPE unsigned char
