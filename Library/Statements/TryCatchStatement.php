@@ -104,7 +104,7 @@ class TryCatchStatement extends StatementAbstract
                         ),
                         new StatementsBlockBuilder(array_merge(
                             array(array('type' => 'cblock', 'value' => 'zend_clear_exception(TSRMLS_C);')),
-                            $catch['statements']
+                            isset($catch['statements']) ? $catch['statements'] : array()
                         ), true)
                     );
 

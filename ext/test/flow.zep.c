@@ -1989,19 +1989,19 @@ PHP_METHOD(Test_Flow, testUnrechable1) {
 	ZVAL_STRING(d, "", 1);
 
 	if (a) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	}
 	if (b) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	}
 	if (c) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	}
 	if (zephir_is_true(d)) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	}
 	if (e) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	}
 	ZEPHIR_MM_RESTORE();
 
@@ -2020,29 +2020,29 @@ PHP_METHOD(Test_Flow, testUnrechable2) {
 	ZVAL_STRING(d, "hello", 1);
 
 	if (a) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	} else {
-		php_printf("hello false");
+		php_printf("%s", "hello false");
 	}
 	if (b) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	} else {
-		php_printf("hello false");
+		php_printf("%s", "hello false");
 	}
 	if (c) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	} else {
-		php_printf("hello false");
+		php_printf("%s", "hello false");
 	}
 	if (zephir_is_true(d)) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	} else {
-		php_printf("hello false");
+		php_printf("%s", "hello false");
 	}
 	if (e) {
-		php_printf("hello true");
+		php_printf("%s", "hello true");
 	} else {
-		php_printf("hello false");
+		php_printf("%s", "hello false");
 	}
 	ZEPHIR_MM_RESTORE();
 

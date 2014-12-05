@@ -309,7 +309,7 @@ PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 PHP_METHOD(Test_Strings, testEchoMultilineString) {
 
 
-	php_printf("\n            Hello world\n        ");
+	php_printf("%s", "\n            Hello world\n        ");
 
 }
 

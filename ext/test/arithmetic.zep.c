@@ -299,7 +299,8 @@ PHP_METHOD(Test_Arithmetic, intVarSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
-	int a, b, c;
+	int c;
+	long a, b;
 
 
 	a = 1;
@@ -311,7 +312,8 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSum) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sum) {
 
-	int a, b, c;
+	int b, c;
+	long a;
 
 
 	a = 1;
@@ -1161,7 +1163,8 @@ PHP_METHOD(Test_Arithmetic, intVarSub) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCastSub) {
 
-	int a, b, c;
+	int c;
+	long a, b;
 
 
 	a = 1;
@@ -1173,7 +1176,8 @@ PHP_METHOD(Test_Arithmetic, intVarImplicitCastSub) {
 
 PHP_METHOD(Test_Arithmetic, intVarImplicitCast2Sub) {
 
-	int a, b, c;
+	int b, c;
+	long a;
 
 
 	a = 1;
