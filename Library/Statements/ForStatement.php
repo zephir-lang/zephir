@@ -758,7 +758,7 @@ class ForStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/hash');
 
         $duplicateHash = '0';
-        $duplicateKey = false;
+        $duplicateKey = true;
 
         /**
          * We have to check if hashes are modified within the for's block
@@ -783,7 +783,7 @@ class ForStatement extends StatementAbstract
                     $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
                     if ($detector->detect($keyVariable->getName(), $this->_statement['statements'])) {
                         $loopContext = $compilationContext->currentMethod->getLocalContextPass();
-                        echo $st->getLastLine();
+                        //echo $st->getLastLine();
                         //echo $loopContext->getLastVariableUseLine($keyVariable->getName());
                         $duplicateKey = true;
                     }
