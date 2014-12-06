@@ -691,15 +691,26 @@ class Arithmetic
 		return c;
 	}
 
-	public function int2Sub()
+	public function intLetSub()
 	{
-		int a, c;
+		int b, c;
 
-		let a = 1,
-			c = a - 2;
+		let c = 1,
+			b = 2,
+			c -= b;
 
 		return c;
 	}
+
+    public function intSub2()
+    {
+        int a, c;
+
+        let a = 1,
+            c = a - 2;
+
+        return c;
+    }
 
 	public function intSubSimple()
 	{

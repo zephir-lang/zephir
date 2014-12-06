@@ -949,7 +949,19 @@ PHP_METHOD(Test_Arithmetic, intSub) {
 
 }
 
-PHP_METHOD(Test_Arithmetic, int2Sub) {
+PHP_METHOD(Test_Arithmetic, intLetSub) {
+
+	int b, c;
+
+
+	c = 1;
+	b = 2;
+	c -= b;
+	RETURN_LONG(c);
+
+}
+
+PHP_METHOD(Test_Arithmetic, intSub2) {
 
 	int a, c;
 

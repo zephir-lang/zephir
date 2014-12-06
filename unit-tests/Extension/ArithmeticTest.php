@@ -123,8 +123,10 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
     public function testSubTest()
     {
         $this->assertTrue($this->class->intSub() === -1);
-        $this->assertTrue($this->class->int2Sub() === -1);
+        $this->assertTrue($this->class->intSub2() === -1);
+        $this->assertTrue($this->class->intLetSub() === -1);
         $this->assertTrue($this->class->intSubSimple() === -1);
+        
         $this->assertTrue($this->class->boolSub() === true);
         $this->assertTrue($this->class->bool2Sub() === true);
         $this->assertTrue($this->class->bool3Sub() === false); // true - false
