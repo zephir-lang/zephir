@@ -74,12 +74,20 @@ class Utils
                 case "\v":
                     $newstr .= "\\" . 'v';
                     break;
+                case "\u":
+                    $newstr .= "\\" . 'u';
+                    break;
+                case "\U":
+                    $newstr .= "\\" . 'U';
+                    break;
                 case '\\':
                     switch ($after) {
                         case "n":
                         case "v":
                         case "t":
                         case "r":
+                        case "u":
+                        case "U":
                         case '"':
                         case "\\":
                             $newstr .= $ch . $after;
