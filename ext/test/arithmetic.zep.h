@@ -77,7 +77,8 @@ PHP_METHOD(Test_Arithmetic, addSum22);
 PHP_METHOD(Test_Arithmetic, addSum23);
 PHP_METHOD(Test_Arithmetic, addSum24);
 PHP_METHOD(Test_Arithmetic, intSub);
-PHP_METHOD(Test_Arithmetic, int2Sub);
+PHP_METHOD(Test_Arithmetic, intLetSub);
+PHP_METHOD(Test_Arithmetic, intSub2);
 PHP_METHOD(Test_Arithmetic, intSubSimple);
 PHP_METHOD(Test_Arithmetic, boolSub);
 PHP_METHOD(Test_Arithmetic, bool2Sub);
@@ -252,7 +253,8 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, addSum23, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, addSum24, arginfo_test_arithmetic_addsum24, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, intSub, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Arithmetic, int2Sub, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, intLetSub, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Arithmetic, intSub2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, intSubSimple, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, boolSub, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, bool2Sub, NULL, ZEND_ACC_PUBLIC)
