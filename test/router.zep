@@ -243,7 +243,7 @@ class Router
 	{
 		var namespaceName, module, controller, action, params;
 
-		if typeof defaults == "array" {
+		if typeof defaults !== "array" {
 			throw new Router\Exception("Defaults must be an array");
 		}
 
