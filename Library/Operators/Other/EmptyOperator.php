@@ -51,7 +51,7 @@ class EmptyOperator extends BaseOperator
         $leftExpr->setReadOnly(true);
         $left = $leftExpr->compile($compilationContext);
 
-        if ($left->getType() != 'variable') {
+        if ($left->getType() != 'variable' && $left->getType() != 'array') {
             throw new CompilerException("'empty' operand only can be a variable", $expression['left']);
         }
 
