@@ -56,7 +56,7 @@ class EmptyOperator extends BaseOperator
         }
 
         $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
-        if ($variableLeft->isNotVariableAndString()) {
+        if (!$variableLeft->isVariable() && !$variableLeft->isString() && !$variableLeft->isArray()) {
             throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
         }
 
