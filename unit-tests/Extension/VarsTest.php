@@ -39,7 +39,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         ob_start();
 
         $t = new \Test\Vars();
-        $this->assertTrue($t->testVarExport() == "'hello'");
+        $this->assertEquals($t->testVarExport(), "'hello'");
 
         ob_clean();
     }
@@ -81,6 +81,26 @@ class VarsTest extends \PHPUnit_Framework_TestCase
 
         $t = new \Test\Vars();
         $t->testIntVarDump();
+
+        ob_clean();
+    }
+
+    public function testDoubleVarDump()
+    {
+        ob_start();
+
+        $t = new \Test\Vars();
+        $t->testDoubleVarDump();
+
+        ob_clean();
+    }
+
+    public function testBoolVarDump()
+    {
+        ob_start();
+
+        $t = new \Test\Vars();
+        $t->testBoolVarDump();
 
         ob_clean();
     }

@@ -77,5 +77,24 @@ class Vars
 	    let a = 1;
 
 	    var_dump(a);
+	    var_export(a);
+	}
+
+	public function testDoubleVarDump()
+	{
+	    double a;
+	    let a = 1;
+
+	    var_dump(a);
+	    var_export(a);
+	}
+
+	public function testBoolVarDump()
+	{
+	    bool a;
+	    let a = true;
+
+	    var_dump(a);
+	    var_export(a);
 	}
 }
