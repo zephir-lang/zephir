@@ -231,3 +231,13 @@ PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
 }
 
+PHP_METHOD(Test_Vars, testIntVarDump) {
+
+	int a;
+
+
+	a = 1;
+	zephir_var_dump(&a TSRMLS_CC);
+
+}
+

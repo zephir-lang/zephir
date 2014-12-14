@@ -67,4 +67,15 @@ class Vars
 		var_dump(testVar);
 		var_export(testVar);
 	}
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/681
+     */
+	public function testIntVarDump()
+	{
+	    int a;
+	    let a = 1;
+
+	    var_dump(a);
+	}
 }

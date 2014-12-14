@@ -74,4 +74,14 @@ class VarsTest extends \PHPUnit_Framework_TestCase
 
         ob_clean();
     }
+
+    public function testIntVarDump()
+    {
+        ob_start();
+
+        $t = new \Test\Vars();
+        $t->testIntVarDump();
+
+        ob_clean();
+    }
 }
