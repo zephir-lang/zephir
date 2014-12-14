@@ -97,7 +97,7 @@ PHP_METHOD(Test_Vars, testVarExport) {
 
 PHP_METHOD(Test_Vars, test88Issue) {
 
-	zval *param1_param = NULL, *param2_param = NULL;
+	zval *param1_param = NULL, *param2_param = NULL, *_0 = NULL, *_1 = NULL;
 	zval *param1 = NULL, *param2 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -122,8 +122,12 @@ PHP_METHOD(Test_Vars, test88Issue) {
 	}
 
 
-	zephir_var_dump(&param1 TSRMLS_CC);
-	zephir_var_dump(&param2 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CPY_WRT(_0, param1);
+	zephir_var_dump(&_0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZEPHIR_CPY_WRT(_1, param2);
+	zephir_var_dump(&_1 TSRMLS_CC);
 	zephir_var_export(&param1 TSRMLS_CC);
 	zephir_var_export(&param2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -211,7 +215,7 @@ PHP_METHOD(Test_Vars, testCountOptimizerVarDumpAndExport) {
 
 PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 
-	zval *testVar_param = NULL;
+	zval *testVar_param = NULL, *_0 = NULL;
 	zval *testVar = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -225,19 +229,30 @@ PHP_METHOD(Test_Vars, testArrayTypeVarDumpAndExport) {
 	}
 
 
-	zephir_var_dump(&testVar TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CPY_WRT(_0, testVar);
+	zephir_var_dump(&_0 TSRMLS_CC);
 	zephir_var_export(&testVar TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/681
+ */
 PHP_METHOD(Test_Vars, testIntVarDump) {
 
+	zval *_0 = NULL;
 	int a;
 
+	ZEPHIR_MM_GROW();
 
 	a = 1;
-	zephir_var_dump(&a TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, a);
+	zephir_var_dump(&_0 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
 
 }
 
