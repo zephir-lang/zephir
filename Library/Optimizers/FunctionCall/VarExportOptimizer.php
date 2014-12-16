@@ -26,6 +26,7 @@ use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Statements\LetStatement;
 
 /**
  * VarExportOptimizer
@@ -38,7 +39,8 @@ class VarExportOptimizer extends OptimizerAbstract
      * @param array $expression
      * @param Call $call
      * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
+     * @return mixed|CompiledExpression
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -62,14 +64,64 @@ class VarExportOptimizer extends OptimizerAbstract
         }
 
         $context->headersManager->add('kernel/variables');
-        $resolvedParams = $call->getResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
+        $resolvedParam = $resolvedParams[0];
 
+        if (!$symbolVariable || !$symbolVariable->isVariable()) {
+
+            /**
+             * Complex expressions require a temporary variable
+             */
+            switch ($resolvedParam->getType()) {
+                case 'array':
+                    $type = 'array';
+                    break;
+                default:
+                    $type = 'variable';
+                    break;
+            }
+
+            $variable = $context->symbolTable->addTemp($type, $context);
+            $variable->initVariant($context);
+
+            $statement = new LetStatement(array(
+                'type' => 'let',
+                'assignments' => array(
+                    array(
+                        'assign-type' => $type,
+                        'variable' => $variable->getName(),
+                        'operator' => 'assign',
+                        'expr' => array(
+                            'type'  => $resolvedParam->getType(),
+                            'value' => $resolvedParam->getCode(),
+                            'file'  => $expression['file'],
+                            'line'  => $expression['line'],
+                            'char'  => $expression['char'],
+                        ),
+                        'file'  => $expression['file'],
+                        'line'  => $expression['line'],
+                        'char'  => $expression['char'],
+                    )
+                )
+            ));
+            $statement->compile($context);
+
+        } else {
+            /**
+             * This mark the variable as used
+             */
+            $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
+        }
+
+        /**
+         * let a = var_export(val);
+         */
         if ($symbolVariable) {
-            $context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . ') TSRMLS_CC);');
+            $context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $variable->getName() . ') TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_var_export(&' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_var_export(&' . $variable->getName() . ' TSRMLS_CC);');
         return new CompiledExpression('null', 'null', $expression);
     }
 }

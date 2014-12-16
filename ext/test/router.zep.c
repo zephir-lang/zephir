@@ -365,7 +365,7 @@ PHP_METHOD(Test_Router, setDefaults) {
 
 
 
-	if (Z_TYPE_P(defaults) == IS_ARRAY) {
+	if (Z_TYPE_P(defaults) != IS_ARRAY) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(test_router_exception_ce, "Defaults must be an array", "test/router.zep", 247);
 		return;
 	}
