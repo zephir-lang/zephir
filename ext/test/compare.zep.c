@@ -131,3 +131,33 @@ PHP_METHOD(Test_Compare, testVarWithStringEquals) {
 
 }
 
+PHP_METHOD(Test_Compare, testVarEqualsNull) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	if (Z_TYPE_P(a) == IS_NULL) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
+
+}
+
+PHP_METHOD(Test_Compare, testNullEqualsVar) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	if (Z_TYPE_P(a) == IS_NULL) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
+
+}
+

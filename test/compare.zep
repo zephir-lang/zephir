@@ -45,4 +45,22 @@ class Compare
 
 		return str;
 	}
+
+	public function testVarEqualsNull(var a)
+	{
+		if (a === NULL) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function testNullEqualsVar(var a)
+	{
+		if (NULL === a) {
+			return true;
+		}
+
+		return false;
+	}
 }
