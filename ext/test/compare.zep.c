@@ -154,7 +154,7 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 
 
 
-	if (Z_TYPE_P(a) != IS_NULL) {
+	if (Z_TYPE_P(a) == IS_NULL) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);

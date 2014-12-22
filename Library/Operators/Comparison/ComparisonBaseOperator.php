@@ -292,7 +292,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'Z_TYPE_P(' . $variableRight->getName() . ') != IS_NULL', $expression);
+                                return new CompiledExpression('bool', 'Z_TYPE_P(' . $variableRight->getName() . ') ' . $this->_operator . ' IS_NULL', $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
