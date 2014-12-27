@@ -953,7 +953,7 @@ class ClassMethod
 
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression becase code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
