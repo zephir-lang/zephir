@@ -551,7 +551,7 @@ class BitwiseBaseOperator extends BaseOperator
                                 throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
                         }
                         break;
-                    
+
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
