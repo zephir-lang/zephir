@@ -544,8 +544,7 @@ class Compiler
      */
     protected function getGccVersion()
     {
-
-        if (PHP_OS != "WINNT") {
+        if (!Utils::isWindows()) {
 
             if ($this->fileSystem->exists(self::VERSION . '/gcc-version')) {
                 return $this->fileSystem->read(self::VERSION . '/gcc-version');
