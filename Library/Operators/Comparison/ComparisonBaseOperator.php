@@ -309,7 +309,6 @@ class ComparisonBaseOperator extends BaseOperator
             case 'long':
             case 'double':
             case 'ulong':
-            case 'int':
             case 'char':
             case 'uchar':
                 switch ($right->getType()) {
