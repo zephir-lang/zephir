@@ -2142,4 +2142,3 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 #endif
 	return SUCCESS;
 }
-
