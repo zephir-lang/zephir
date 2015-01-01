@@ -3,7 +3,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team and contributors                          |
+ | Copyright (c) 2013-2015 Zephir Team and contributors                          |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |

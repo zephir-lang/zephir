@@ -1198,10 +1198,10 @@ static zval *zephir_ret_cblock(zephir_parser_token *T, zephir_scanner_state *sta
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
-/* 
+/*
 ** These constants (all generated automatically by the parser generator)
 ** specify the various kinds of tokens (terminals) that the parser
-** understands. 
+** understands.
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
@@ -1218,7 +1218,7 @@ static zval *zephir_ret_cblock(zephir_parser_token *T, zephir_scanner_state *sta
 **                       and nonterminals.  "int" is used otherwise.
 **    YYNOCODE           is a number of type YYCODETYPE which corresponds
 **                       to no legal terminal or nonterminal number.  This
-**                       number is used to fill in empty slots of the hash 
+**                       number is used to fill in empty slots of the hash
 **                       table.
 **    YYFALLBACK         If defined, this indicates that one or more tokens
 **                       have fall-back values which should be used if the
@@ -1227,7 +1227,7 @@ static zval *zephir_ret_cblock(zephir_parser_token *T, zephir_scanner_state *sta
 **                       and nonterminal numbers.  "unsigned char" is
 **                       used if there are fewer than 250 rules and
 **                       states combined.  "int" is used otherwise.
-**    zephir_TOKENTYPE     is the data type used for minor tokens given 
+**    zephir_TOKENTYPE     is the data type used for minor tokens given
 **                       directly to the parser from the tokenizer.
 **    YYMINORTYPE        is the data type used for all minor tokens.
 **                       This is typically a union of many types, one of
@@ -1268,7 +1268,7 @@ typedef union {
 /* Next are that tables used to determine what action to take based on the
 ** current state and lookahead token.  These tables are used to implement
 ** functions that take a state number and lookahead value and return an
-** action integer.  
+** action integer.
 **
 ** Suppose the action integer is N.  Then the action is determined as
 ** follows
@@ -1293,7 +1293,7 @@ typedef union {
 ** If the index value yy_shift_ofst[S]+X is out of range or if the value
 ** yy_lookahead[yy_shift_ofst[S]+X] is not equal to X or if yy_shift_ofst[S]
 ** is equal to YY_SHIFT_USE_DFLT, it means that the action is not in the table
-** and that yy_default[S] should be used instead.  
+** and that yy_default[S] should be used instead.
 **
 ** The formula above is for computing the action when the lookahead is
 ** a terminal symbol.  If the lookahead is a non-terminal (as occurs after
@@ -3252,7 +3252,7 @@ static YYACTIONTYPE yy_default[] = {
 
 /* The next table maps tokens into fallback tokens.  If a construct
 ** like the following:
-** 
+**
 **      %fallback ID X Y Z.
 **
 ** appears in the grammer, then ID becomes a fallback token for X, Y,
@@ -3303,10 +3303,10 @@ static char *yyTracePrompt = 0;
 #endif /* NDEBUG */
 
 #ifndef NDEBUG
-/* 
+/*
 ** Turn parser tracing on by giving a stream to which to write the trace
 ** and a prompt to preface each trace message.  Tracing is turned off
-** by making either argument NULL 
+** by making either argument NULL
 **
 ** Inputs:
 ** <ul>
@@ -3331,37 +3331,37 @@ void zephir_Trace(FILE *TraceFILE, char *zTracePrompt){
 #ifndef NDEBUG
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
-static const char *yyTokenName[] = { 
-  "$",             "PUBLIC",        "PROTECTED",     "STATIC",      
-  "PRIVATE",       "SCOPED",        "COMMA",         "REQUIRE",     
-  "QUESTION",      "LIKELY",        "UNLIKELY",      "INSTANCEOF",  
-  "OR",            "AND",           "BITWISE_OR",    "BITWISE_AND", 
-  "BITWISE_XOR",   "BITWISE_SHIFTLEFT",  "BITWISE_SHIFTRIGHT",  "EQUALS",      
-  "IDENTICAL",     "LESS",          "GREATER",       "LESSEQUAL",   
-  "GREATEREQUAL",  "NOTIDENTICAL",  "NOTEQUALS",     "ADD",         
-  "SUB",           "CONCAT",        "MUL",           "DIV",         
-  "MOD",           "ISSET",         "FETCH",         "EMPTY",       
-  "TYPEOF",        "CLONE",         "NEW",           "NOT",         
-  "PARENTHESES_CLOSE",  "SBRACKET_OPEN",  "ARROW",         "NAMESPACE",   
-  "IDENTIFIER",    "DOTCOMMA",      "USE",           "AS",          
-  "INTERFACE",     "EXTENDS",       "CLASS",         "IMPLEMENTS",  
+static const char *yyTokenName[] = {
+  "$",             "PUBLIC",        "PROTECTED",     "STATIC",
+  "PRIVATE",       "SCOPED",        "COMMA",         "REQUIRE",
+  "QUESTION",      "LIKELY",        "UNLIKELY",      "INSTANCEOF",
+  "OR",            "AND",           "BITWISE_OR",    "BITWISE_AND",
+  "BITWISE_XOR",   "BITWISE_SHIFTLEFT",  "BITWISE_SHIFTRIGHT",  "EQUALS",
+  "IDENTICAL",     "LESS",          "GREATER",       "LESSEQUAL",
+  "GREATEREQUAL",  "NOTIDENTICAL",  "NOTEQUALS",     "ADD",
+  "SUB",           "CONCAT",        "MUL",           "DIV",
+  "MOD",           "ISSET",         "FETCH",         "EMPTY",
+  "TYPEOF",        "CLONE",         "NEW",           "NOT",
+  "PARENTHESES_CLOSE",  "SBRACKET_OPEN",  "ARROW",         "NAMESPACE",
+  "IDENTIFIER",    "DOTCOMMA",      "USE",           "AS",
+  "INTERFACE",     "EXTENDS",       "CLASS",         "IMPLEMENTS",
   "ABSTRACT",      "FINAL",         "BRACKET_OPEN",  "BRACKET_CLOSE",
-  "COMMENT",       "ASSIGN",        "CONST",         "CONSTANT",    
-  "FUNCTION",      "PARENTHESES_OPEN",  "INLINE",        "VOID",        
+  "COMMENT",       "ASSIGN",        "CONST",         "CONSTANT",
+  "FUNCTION",      "PARENTHESES_OPEN",  "INLINE",        "VOID",
   "NULL",          "THIS",          "SBRACKET_CLOSE",  "TYPE_INTEGER",
-  "TYPE_UINTEGER",  "TYPE_LONG",     "TYPE_ULONG",    "TYPE_CHAR",   
-  "TYPE_UCHAR",    "TYPE_DOUBLE",   "TYPE_BOOL",     "TYPE_STRING", 
+  "TYPE_UINTEGER",  "TYPE_LONG",     "TYPE_ULONG",    "TYPE_CHAR",
+  "TYPE_UCHAR",    "TYPE_DOUBLE",   "TYPE_BOOL",     "TYPE_STRING",
   "TYPE_ARRAY",    "TYPE_VAR",      "TYPE_CALLABLE",  "TYPE_RESOURCE",
-  "TYPE_OBJECT",   "BREAK",         "CONTINUE",      "IF",          
-  "ELSE",          "SWITCH",        "CASE",          "COLON",       
-  "DEFAULT",       "LOOP",          "WHILE",         "DO",          
-  "TRY",           "CATCH",         "FOR",           "IN",          
-  "REVERSE",       "LET",           "ADDASSIGN",     "SUBASSIGN",   
-  "MULASSIGN",     "DIVASSIGN",     "CONCATASSIGN",  "MODASSIGN",   
-  "STRING",        "DOUBLECOLON",   "INCR",          "DECR",        
-  "ECHO",          "RETURN",        "UNSET",         "THROW",       
-  "INTEGER",       "CHAR",          "DOUBLE",        "TRUE",        
-  "FALSE",         "CBLOCK",        "error",         "program",     
+  "TYPE_OBJECT",   "BREAK",         "CONTINUE",      "IF",
+  "ELSE",          "SWITCH",        "CASE",          "COLON",
+  "DEFAULT",       "LOOP",          "WHILE",         "DO",
+  "TRY",           "CATCH",         "FOR",           "IN",
+  "REVERSE",       "LET",           "ADDASSIGN",     "SUBASSIGN",
+  "MULASSIGN",     "DIVASSIGN",     "CONCATASSIGN",  "MODASSIGN",
+  "STRING",        "DOUBLECOLON",   "INCR",          "DECR",
+  "ECHO",          "RETURN",        "UNSET",         "THROW",
+  "INTEGER",       "CHAR",          "DOUBLE",        "TRUE",
+  "FALSE",         "CBLOCK",        "error",         "program",
   "zephir_language",  "zephir_top_statement_list",  "zephir_top_statement",  "zephir_namespace_def",
   "zephir_use_aliases",  "zephir_class_def",  "zephir_interface_def",  "zephir_comment",
   "zephir_cblock",  "zephir_use_aliases_list",  "zephir_interface_body",  "zephir_class_body",
@@ -3801,7 +3801,7 @@ const char *zephir_TokenName(int tokenType){
 #endif
 }
 
-/* 
+/*
 ** This function allocates a new parser.
 ** The only argument is a pointer to a function which works like
 ** malloc.
@@ -3832,7 +3832,7 @@ static void yy_destructor(YYCODETYPE yymajor, YYMINORTYPE *yypminor){
     /* Here is inserted the actions which take place when a
     ** terminal or non-terminal is destroyed.  This can happen
     ** when the symbol is popped from the stack during a
-    ** reduce or during error processing or when a parser is 
+    ** reduce or during error processing or when a parser is
     ** being destroyed before it is finished parsing.
     **
     ** Note: during a reduce, the only symbols destroyed are those
@@ -4002,7 +4002,7 @@ static int yy_pop_parser_stack(yyParser *pParser){
   return yymajor;
 }
 
-/* 
+/*
 ** Deallocate and destroy a parser.  Destructors are all called for
 ** all stack elements before shutting the parser down.
 **
@@ -4038,7 +4038,7 @@ static int yy_find_shift_action(
 ){
   int i;
   int stateno = pParser->yystack[pParser->yyidx].stateno;
- 
+
   /* if( pParser->yyidx<0 ) return YY_NO_ACTION;  */
   i = yy_shift_ofst[stateno];
   if( i==YY_SHIFT_USE_DFLT ){
@@ -4082,7 +4082,7 @@ static int yy_find_reduce_action(
 ){
   int i;
   int stateno = pParser->yystack[pParser->yyidx].stateno;
- 
+
   i = yy_reduce_ofst[stateno];
   if( i==YY_REDUCE_USE_DFLT ){
     return yy_default[stateno];
@@ -4555,7 +4555,7 @@ static void yy_reduce(
   zephir_ARG_FETCH;
   yymsp = &yypParser->yystack[yypParser->yyidx];
 #ifndef NDEBUG
-  if( yyTraceFILE && yyruleno>=0 
+  if( yyTraceFILE && yyruleno>=0
         && yyruleno<sizeof(yyRuleName)/sizeof(yyRuleName[0]) ){
     fprintf(yyTraceFILE, "%sReduce [%s].\n", yyTracePrompt,
       yyRuleName[yyruleno]);
@@ -7446,7 +7446,7 @@ void zephir_(
 #ifdef YYERRORSYMBOL
       /* A syntax error has occurred.
       ** The response to an error depends upon whether or not the
-      ** grammar defines an error token "ERROR".  
+      ** grammar defines an error token "ERROR".
       **
       ** This is what we do if the grammar does define ERROR:
       **
@@ -7528,7 +7528,7 @@ void zephir_(
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2015 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
