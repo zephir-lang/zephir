@@ -880,7 +880,7 @@ class ClassMethod
 
 
                         if ($compiledExpression->getType() != 'double') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -922,7 +922,7 @@ class ClassMethod
 
 
                         if ($compiledExpression->getType() != 'bool') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
