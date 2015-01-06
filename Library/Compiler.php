@@ -941,16 +941,23 @@ class Compiler
             $this->generate($command);
         }
 
-        $this->logger->output('Generating API...');
-        $stubsGenerator = new Api\Generator($this->files, $this->config);
-
-        $path = $this->config->get('path', 'stubs');
+        $path = $this->config->get('path', 'api');
+        
+        if(!$path){
+            $this->logger->output("\e[31mError: no api path in the config\e[0m.");
+            $this->logger->output('Please set a value for "api"=>"path"  ');
+            return;
+        }
+        
         $path = str_replace('%version%', $this->config->get('version'), $path);
         $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
 
-        $stubsGenerator->generate($path);
+        $this->logger->output('Generating API...');
+        
+        $documentator = new Documentation($this->files, $this->config);
+        $documentator->build();
     }
-
+    
     /**
      * Generate IDE stubs
      *
@@ -973,29 +980,6 @@ class Compiler
         $stubsGenerator->generate($path);
     }
 
-
-    /**
-     * Generate documentations
-     *
-     * @param CommandInterface $command
-     * @param bool             $fromGenerate
-     */
-    public function documentation(CommandInterface $command, $a = false)
-    {
-
-        $this->generate($command);
-
-        $this->_logger->output('Generating documentation...');
-
-        $path = $this->_config->get('path', 'documentation');
-        $path = str_replace('%version%', $this->_config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->_config->get('namespace')), $path);
-
-
-
-        $documentator = new Documentation($this->_files, $this->_config);
-        $documentator->build();
-    }
 
     /**
      * Compiles and installs the extension
