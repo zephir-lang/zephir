@@ -4,7 +4,7 @@
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
  +--------------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team and contributors                     |
+ | Copyright (c) 2013-2015 Zephir Team and contributors                     |
  +--------------------------------------------------------------------------+
  | This source file is subject the MIT license, that is bundled with        |
  | this package in the file LICENSE, and is available through the           |
@@ -60,16 +60,16 @@ class DynamicPropTest extends \PHPUnit_Framework_TestCase
 
         $class->setPropertyVariableBoolFalse('test');
         $this->assertEquals(false, $class->test);
-        
+
         $class->setPropertyInt("property");
         $this->assertEquals(10, $class->property);
-        
+
         $class->setExistingStringProperty();
         $this->assertEquals("works", $class->test);
-        
+
         $class->setExistingStringPropertyString("test");
         $this->assertEquals("test", $class->eproperty);
-        
+
         $class->setNonExistingStringProperty();
         $this->assertEquals("works", $class->property);
     }

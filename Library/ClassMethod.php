@@ -4,7 +4,7 @@
  +----------------------------------------------------------------------+
  | Zephir Language                                                      |
  +----------------------------------------------------------------------+
- | Copyright (c) 2013-2014 Zephir Team                                  |
+ | Copyright (c) 2013-2015 Zephir Team                                  |
  +----------------------------------------------------------------------+
  | This source file is subject to version 1.0 of the MIT license,       |
  | that is bundled with this package in the file LICENSE, and is        |
