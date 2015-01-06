@@ -25,12 +25,13 @@ sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c
 export CFLAGS="-g3 -O0"
 gcc -Wl,-rpath /usr/local/lib -I/usr/local/include -L/usr/local/lib -L/opt/local/lib -g3 -w parser.c scanner.c -ljson-c -o ../bin/zephir-parser
 
+cd ..
+
 # Using the -c option will copy zephir in /usr/local/bin
 options='c'
 while getopts $options option
 do
   if [[ "$option" == "c" ]]; then
-    cd ..
     ZEPHIRDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     sed "s#%ZEPHIRDIR%#$ZEPHIRDIR#g" bin/zephir > bin/zephir-cmd
     chmod 755 bin/zephir-cmd
@@ -39,3 +40,8 @@ do
     exit 0
   fi
 done
+
+
+if [ -d "/etc/bash_completion.d/" ]; then
+  sudo cp bin/bash_completion /etc/bash_completion.d/zephir
+fi
