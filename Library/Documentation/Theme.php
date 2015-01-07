@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 5/17/14
- * Time: 7:58 AM
- */
 
 namespace Zephir\Documentation;
 
@@ -16,18 +10,22 @@ class Theme {
     protected $themeDir;
     protected $outputDir;
     protected $themeConfig;
-
+    protected $options;
+    
     function __construct($themeDir , $outputDir , $themeConfig)
     {
         $this->outputDir   = $outputDir;
         $this->themeConfig = $themeConfig;
         $this->themeDir    = $themeDir;
+        $this->options     = $themeConfig["options"];
     }
 
 
     public function drawFile(AbstractFile $file){
 
-        $output   = pathinfo( $this->outputDir . "/" . $file->getOutputFile());
+        $outputFile = ltrim($file->getOutputFile() ,"/");
+        
+        $output   = pathinfo( $this->outputDir . "/" . $outputFile);
         $outputDirname  = $output["dirname"];
         $outputBasename = $output["basename"];
         $outputFilename = $outputDirname . "/" . $outputBasename;
@@ -39,7 +37,7 @@ class Theme {
 
 
 
-        $subDirNumber= count(explode("/", $file->getOutputFile()))-1;
+        $subDirNumber= count(explode("/", $outputFile))-1;
 
         if($subDirNumber > 0)
             $pathToRoot = str_repeat("../",$subDirNumber);
@@ -48,12 +46,10 @@ class Theme {
 
         $template = new Template($file->getData() , $this->themeDir , $file->getTemplateName());
         $template->setPathToRoot($pathToRoot);
-
+        $template->setThemeOptions($this->options);
+        
         touch($outputFilename);
         $template->write($outputFilename);
-
-        $this->buildStaticDirectory();
-
     }
 
     public function buildStaticDirectory(){

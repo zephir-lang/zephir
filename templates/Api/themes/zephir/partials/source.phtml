@@ -1,0 +1,29 @@
+<?php
+
+    $items = array(
+        array("name" => "Classes" , "url" => "/classes.html" ),
+        $items[] = array("name" => $fullName , "url" => $this->url($classDefinition)),
+        $items[] = array("name" => "Source"),
+    );
+?>
+
+<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+
+<div class="class-header">
+    <div class="class-full-name">
+        <?php foreach($namespacePieces as $nsname => $nspath){ ?>
+        <span class="namespace-piece">
+            <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>"><?=$nsname?></a>
+        </span>
+        <?php } ?>
+        <h1 class="class-name"><?= $className ?></h1>
+    </div>
+    <div class="class-type">Class</div>
+</div>
+
+
+<pre class="zephir-source-file">
+
+    <?= file_get_contents(realpath($compilerFile->getFilePath())) ?>
+
+</pre>

@@ -940,21 +940,10 @@ class Compiler
         if (!$fromGenerate) {
             $this->generate($command);
         }
-
-        $path = $this->config->get('path', 'api');
         
-        if(!$path){
-            $this->logger->output("\e[31mError: no api path in the config\e[0m.");
-            $this->logger->output('Please set a value for "api"=>"path"  ');
-            return;
-        }
-        
-        $path = str_replace('%version%', $this->config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
-
         $this->logger->output('Generating API...');
         
-        $documentator = new Documentation($this->files, $this->config);
+        $documentator = new Documentation($this->files, $this->config, $this->logger);
         $documentator->build();
     }
     

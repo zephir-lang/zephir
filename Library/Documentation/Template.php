@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 5/17/14
- * Time: 7:53 AM
- */
 
 namespace Zephir\Documentation;
 
 
 use Zephir\Exception;
+
+use Zephir\CompilerFile;
+use Zephir\ClassDefinition;
+use Zephir\Documentation;
 
 class Template {
 
@@ -18,6 +16,7 @@ class Template {
     protected $data;
     protected $nestedLevel;
     protected $pathToRoot="./";
+    protected $themeOptions;
 
     function __construct($data, $rootDirectory, $template, $nestedLevel=0)
     {
@@ -35,12 +34,47 @@ class Template {
         $this->nestedLevel = $nestedLevel;
     }
 
+    public function themeOption($name) {
+        return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null ;
+    }
+
+    /**
+     * add theme options to make them available during the render phase
+     * @param type $themeOptions
+     */
+    public function setThemeOptions($themeOptions) {
+        $this->themeOptions = $themeOptions;
+    }    
+    
     /**
      * @param string $pathToRoot
      */
     public function setPathToRoot($pathToRoot)
     {
         $this->pathToRoot = $pathToRoot;
+    }
+    
+    /**
+     * Generate an url relative to the current directory
+     * @param string $url the url we want to reach
+     * @return the relative path to the url
+     */
+    public function url($url){
+
+        if(is_string($url)){
+            if($url{0} == "/"){
+                return $this->getPathToRoot() . ltrim ($url,"/");
+            }else if(is_string($url)){
+                return $url;
+            }
+        }else if($url instanceof ClassDefinition){
+            return $this->url(Documentation::classUrl($url));
+        }else if($url instanceof CompilerFile){
+            return $this->url(Documentation::classUrl($url->getClassDefinition()));
+        }
+        
+        return;
+        
     }
 
     /**
@@ -101,6 +135,7 @@ class Template {
 
         $template = new Template(array_merge($this->data,$data),$this->rootDirectory,$fileName,$newLevel);
         $template->setPathToRoot($this->getPathToRoot());
+        $template->setThemeOptions($this->themeOptions);
 
         return $template->parse();
     }

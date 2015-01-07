@@ -6,7 +6,10 @@
 
 <li class="class-method clearfix">
 
+    <div class="hidden-anchor"  id="method-details-<?= $method->getName() ?>"></div>
+    
     <div class="method-details">
+        
 
         <h3 class="method-name"><?= $method->getName() ?></h3>
 
@@ -17,8 +20,11 @@
                 <?= $method->isStatic() ? "static" : "" ?>
                 <?= $method->isFinal() ? "final" : "" ?>
                 <?= implode(" ",$method->getVisibility()) ?>
-                function <span class="method-name"><?= $method->getName() ?></span>(<?= $this->partial("class/method-summary-params.phtml" ) ?>)
-
+                function <span class="method-name"><?= $method->getName() ?></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
+                
+                <div>
+                <?= $method->getDocBlock() ?>
+                </div>
             </div>
         </div>
 

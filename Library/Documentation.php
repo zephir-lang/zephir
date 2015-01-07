@@ -42,35 +42,40 @@ class Documentation
      * @var Theme
      */
     protected $theme;
+    
+    protected $logger;
 
     /**
      * @param CompilerFile[] $files
      * @param Config         $config
      */
-    public function __construct(array $classes,Config $config)
+    public function __construct(array $classes,Config $config,  \Zephir\Logger $logger)
     {
+        
+        ksort($classes);
+        
         $this->config = $config;
         $this->classes = $classes;
+        $this->logger  = $logger;
 
-        $themeConfig = $config->get("theme","documentation");
-
-
+        $themeConfig = $config->get("theme","api");
+        
         if(!$themeConfig)
             throw new ConfigException("Theme configuration is not present");
-
-        $themeDir = realpath(ZEPHIRPATH . "/templates/Documentation/themes/" . $themeConfig["name"]);
+        
+        if( !isset($themeConfig["name"]) || !$themeConfig["name"])
+            throw new ConfigException("There is no theme ");
+        
+        $themeDir = realpath(ZEPHIRPATH . "/templates/Api/themes/" . $themeConfig["name"]);
 
         if(!file_exists($themeDir))
             throw new ConfigException("There is no theme name " . $themeConfig["name"]);
 
-
-        $outputDir = $config->get("output-directory","documentation");
+        $outputDir = $this->config->get('path', 'api');
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
-
-
         if(!$outputDir)
-            throw new ConfigException("Documentation's output directory is not configured");
+            throw new ConfigException("Api path is not configured");
 
         if(!file_exists($outputDir))
             if(!mkdir($outputDir,0777,true))
@@ -79,35 +84,39 @@ class Documentation
         if(!is_writable($outputDir))
             throw new Exception("Can't write output directory $outputDir");
 
-
-
         $this->theme = new Theme($themeDir,$outputDir,$themeConfig);
-
-
     }
 
     public function build(){
 
         $files = array();
-
+        
         foreach($this->classes as $className => $class){
-            $file = new File\ClassFile($this->config,$class->getClassDefinition());
-
+            $file = new File\ClassFile($this->config,$class);
             $this->theme->drawFile($file);
-
+            
+            $sfile = new File\SourceFile($this->config,$class);
+            $this->theme->drawFile($sfile);
+            
         }
 
+        $file = new File\ClassesFile($this->config,$this->classes);
+        $this->theme->drawFile($file);
+        
+        $this->theme->buildStaticDirectory();
+        
     }
-
-
-
-
-    protected function __getThemeDirectory(){
-        return $this->config->get("directory","theme");
+    
+    public static function classUrl(ClassDefinition $c){
+        return "/class/" . str_replace("\\","/", $c->getCompleteName()) . ".html";
     }
-
-    protected function __getOutputDirectory(){
-        return $this->config->get("output-directory");
+    
+    public static function namespaceUrl($ns){
+        return "/namespace/" . str_replace("\\","/", $ns) . ".html";
+    }
+    
+    public static function sourceUrl(ClassDefinition $c){
+        return "/source/" . str_replace("\\","/", $c->getCompleteName()) . ".html";
     }
 
 }

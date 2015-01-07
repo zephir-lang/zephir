@@ -4,13 +4,13 @@
         "stubs-run-after-generate": false
     },
 
-    "documentation": {
-        "output-directory":"doc\/%version%\/%namespace%\/",
+    "api": {
+        "path"  : "doc/%version%",
         "theme" : {
-            "additional-directories" : [],
             "name":"zephir",
-            "options":{
-
+            "options" :{
+                "github":"https://github.com/user/repo",
+                "analytics":null
             }
         }
     },

@@ -1,0 +1,49 @@
+<?php
+
+    $items = array(
+        array("name" => "Classes" , "url" => "/classes.html" ),
+        $items[] = array("name" => $fullName)
+    );
+?>
+
+<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+
+<div class="class-header">
+    <div class="class-full-name">
+        <?php foreach($namespacePieces as $nsname => $nspath){ ?>
+        <span class="namespace-piece">
+            <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>"><?=$nsname?></a>
+        </span>
+        <?php } ?>
+        <h1 class="class-name"><?= $className ?></h1>
+    </div>
+    <div class="class-type">Class</div>
+</div>
+
+
+<a href="<?= $this->url(Zephir\Documentation::sourceUrl($classDefinition)) ?>">Source</a>
+
+<?php if($this->themeOption("github")){ ?>
+<a href="<?= $this->themeOption("github") . "/tree/master/" . $compilerFile->getFilePath() ?>">Github</a>
+<?php } ?>
+
+
+<div class="hidden-anchor"  id="methods"></div>
+<div class="methods-summary standard-bandeau">Methods</div>
+<ul class="method-summary-list">
+    <?php foreach($methods as $method){ ?>
+
+        <?= $this->partial("partials/class/method-summary.phtml",array("method"=>$method)) ?>
+
+    <?php } ?>
+</ul>
+
+<div class="hidden-anchor"  id="methods-details"></div>
+<div class="methods-summary standard-bandeau">Methods Details</div>
+<ul class="method-details-list">
+    <?php foreach($methods as $method){ ?>
+
+        <?= $this->partial("partials/class/method-details.phtml",array("method"=>$method)) ?>
+
+    <?php } ?>
+</ul>

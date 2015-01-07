@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bob
- * Date: 5/16/14
- * Time: 6:01 PM
- */
 
 namespace Zephir\Documentation\File;
 
 
 use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
-use Zephir\Documentation\File;
+use Zephir\CompilerFile;
 
 class ClassFile extends AbstractFile {
 
@@ -19,10 +13,17 @@ class ClassFile extends AbstractFile {
      * @var ClassDefinition
      */
     protected $class;
-
-    function __construct($config , ClassDefinition $class)
+    
+    /**
+     *
+     * @var CompilerFile
+     */
+    protected $compilerFile;
+    
+    function __construct($config , CompilerFile $class)
     {
-        $this->class = $class;
+        $this->compilerFile = $class;
+        $this->class = $class->getClassDefinition();
     }
 
     public function getTemplateName()
@@ -32,27 +33,39 @@ class ClassFile extends AbstractFile {
 
     public function getData()
     {
+        
+        $nsPieces = explode('\\', $this->class->getNamespace());
+        
+        $nsPathes = array();
+        $nsStr = "";
+        
+        foreach($nsPieces as $n){
+            
+            if(strlen($nsStr) > 0){
+                $nsStr.= '\\';
+            }
+            $nsStr.= $n;
+            $nsPathes[$n] = $nsStr;
+        }
+        
         return array(
 
             "classDefinition" => $this->class,
+            "compilerFile"    => $this->compilerFile,
             "className" => $this->class->getName(),
             "classNamespace" => $this->class->getNamespace(),
             "fullName"  => $this->class->getCompleteName(),
-            "methods"   => $this->class->getMethods()
+            "methods"   => $this->class->getMethods(),
+            "namespacePieces" => $nsPathes
 
         );
     }
 
     public function getOutputFile()
     {
-        return "class/" . str_replace("\\","/", $this->class->getCompleteName()) . ".html" ;
+        return \Zephir\Documentation::classUrl($this->class);
     }
 
-
-    public function writeFile($baseDir)
-    {
-        parent::writeFile($baseDir, "class/" . $this->data['className'] .".html", $this->data);
-    }
 
 
 } 

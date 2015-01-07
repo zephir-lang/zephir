@@ -32,12 +32,16 @@ class Config
             'stubs-run-after-generate' => false,
         ),
 
-        'documentation' => array(
+        'api' => array(
 
-            "output-directory" => "doc/%version%",
+            "path" => "doc/%version%",
 
             "theme" => array(
-                "name" => "zephir"
+                "name" => "zephir",
+                "options" => array(
+                    "github" => null,
+                    "analytics" => null
+                )
             )
         ),
 
