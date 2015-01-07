@@ -2,8 +2,11 @@
 
 
     <head>
+        <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/prettify.css") ?>" />
         <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/style.css") ?>" />
         
+        
+        <script src="<?= $this->asset("static/prettify.js") ?>"></script>
         
         <?php if($this->themeOption("analytics")){ ?>
         
@@ -25,7 +28,7 @@
     </head>
 
 
-    <body>
+    <body onload="prettyPrint()">
         <div id="top-bar">
             <div id="top-left">
                 Zephir Documentation <span class="version">v1.0.1</span>

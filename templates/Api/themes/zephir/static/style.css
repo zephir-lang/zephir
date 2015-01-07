@@ -79,6 +79,7 @@ body,div,a,p{
     top:0;
     left:0;
     right:0;
+    z-index: 999;
 }
 
 #top-left{
@@ -258,12 +259,3 @@ ul.method-details-list li{
     content: '';
 }
 
-.zephir-source-file{
-    padding:2px;
-    border-left: 3px solid #428bca;
-    background: rgb(18, 27, 33);
-    color: #f6f3e8;
-    word-break: break-all;
-    font-size: 15px;
-    font-family: Consolas, Menlo, 'Courier New', monospace;
-}

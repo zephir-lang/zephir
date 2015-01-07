@@ -21,9 +21,8 @@
     <div class="class-type">Class</div>
 </div>
 
+<?php if($this->themeOption("github")){ ?>
+<a href="<?= $this->themeOption("github") . "/tree/master/" . $compilerFile->getFilePath() ?>">Github</a>
+<?php } ?>
 
-<pre class="zephir-source-file">
-
-    <?= file_get_contents(realpath($compilerFile->getFilePath())) ?>
-
-</pre>
+<pre class="zephir-source-file prettyprint linenums"><?= file_get_contents(realpath($compilerFile->getFilePath())) ?></pre>
