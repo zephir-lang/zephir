@@ -20,7 +20,7 @@
 namespace Zephir;
 use Zephir\Documentation\File;
 use Zephir\Documentation\Theme;
-
+use Zephir\Documentation\NamespaceAccessor;
 
 /**
  * Documentation Generator
@@ -88,20 +88,40 @@ class Documentation
     }
 
     public function build(){
-
-        $files = array();
+        
+        $byNamespace = array();
         
         foreach($this->classes as $className => $class){
-            $file = new File\ClassFile($this->config,$class);
-            $this->theme->drawFile($file);
             
+            // class files (class/ns1/n2/class.html)
+            $cfile = new File\ClassFile($this->config,$class);
+            $this->theme->drawFile($cfile);
+            
+            // class source file (source/ns1/n2/class.html)
             $sfile = new File\SourceFile($this->config,$class);
             $this->theme->drawFile($sfile);
             
         }
 
+        // classes file (classes.html)
         $file = new File\ClassesFile($this->config,$this->classes);
         $this->theme->drawFile($file);
+        
+        
+        $namespaceAccessor = new NamespaceAccessor($this->classes);
+        $namespaceAccessor->build();
+        
+        $byNamespace = $namespaceAccessor->getByNamespace();
+        
+        foreach($byNamespace as $namespaceName=>$nh){
+            // namespace files (namespace/ns1/n2/namespace.html)
+            $nfile = new File\NamespaceFile($this->config,$nh);
+            $this->theme->drawFile($nfile);
+        }
+        
+        // namespaces files (namespaces.html)
+        $nsfile = new File\NamespacesFile($this->config,$namespaceAccessor);
+        $this->theme->drawFile($nsfile);
         
         $this->theme->buildStaticDirectory();
         
