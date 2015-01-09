@@ -3,6 +3,7 @@
 namespace Zephir\Documentation;
 
 
+use Zephir\ClassDefinition;
 use Zephir\Exception;
 
 class Theme {
@@ -68,6 +69,103 @@ class Theme {
             $this->__copyDir($themeStt,$outputStt . "/static");
 
         }
+
+    }
+
+    public function buildJsonClassDefinition($classList,NamespaceAccessor $nsA){
+
+        $output = array(
+
+            "allClasses" => array(),
+            "allNamespaces" => array(),
+            "classes" => array(),
+            "namespaces" => array()
+
+
+        );
+
+        foreach($classList as $class){
+
+            $cDef = $class->getClassDefinition();
+            $cName = $cDef->getCompleteName();
+
+            $output["allClasses"][$cName] = array(
+                "type" => $cDef->getType(),
+                "name" => $cName,
+                "shortname" => $cDef->getName()
+            );
+
+            if( ! strpos($cName,"\\") > 0 ){
+                $output["classes"][] = $cName;
+            }
+
+
+        }
+
+
+        $tree = $nsA->getNamespaceTree();
+        $namespaces = $nsA->getByNamespace();
+
+
+        foreach($namespaces as $ns){
+
+            $subclasses     = array();
+            $subnamespaces  = array();
+
+            foreach($ns->getClasses() as $scs){
+                $subclasses[] = $scs->getClassDefinition()->getCompleteName();
+            }
+
+            foreach($ns->getNamespaces() as $sns){
+                $subnamespaces[] = $sns->getFullNamespace();
+            }
+
+            $output["allNamespaces"][$ns->getFullNamespace()] = array(
+
+                "name"       => $ns->getFullNamespace(),
+                "shortName"  => $ns->getShortName(),
+                "parentName" => $ns->getParentName(),
+                "classes"    => $subclasses,
+                "namespaces" => $subnamespaces
+
+            );
+
+            if( ! strpos($ns->getFullNamespace(),"\\") > 0 ){
+                $output["namespaces"][] = $ns->getFullNamespace();
+            }
+
+        }
+
+
+
+        return json_encode($output);
+    }
+
+    public function createFile($path,$content){
+        $outputFile = $this->getOutputPath($path);
+        touch($outputFile);
+        file_put_contents($outputFile,$content);
+    }
+
+    private function __namespaceTreeHelper(NamespaceHelper $ns){
+
+        $output = array(
+            "classes"    => array(),
+            "namespaces" => array()
+        );
+
+        $subNs = $ns->getNamespaces();
+        $subCs = $ns->getClasses();
+
+        foreach($subCs as $c){
+            $output["classes"][] = $c->getClassDefinition()->getCompleteName();
+        }
+
+        foreach($subNs as $sns){
+            $output["namespaces"][$sns->getFullNamespace()] = $this->__namespaceTreeHelper($sns);
+        }
+
+        return $output;
 
     }
 

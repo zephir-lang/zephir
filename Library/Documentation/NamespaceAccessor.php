@@ -52,10 +52,11 @@ class NamespaceAccessor {
                 if(strlen($actualStr) > 0){
                     $previous = $byNamespace[$actualStr];
                     $actualStr.= "\\";
-                    $isRoot = true;
+                    $isRoot = false;
                 }else{
                     $previous = null;
                     $isRoot = false;
+                    $isRoot = true;
                 }
                 $actualStr.= $n;
                 
@@ -82,6 +83,7 @@ class NamespaceAccessor {
         }
         
         $this->byNamespace = $byNamespace;
+        $this->namespaceTree = $tree;
         
     }
     

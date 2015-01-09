@@ -124,6 +124,11 @@ class Documentation
         $this->theme->drawFile($nsfile);
         
         $this->theme->buildStaticDirectory();
+
+        $JsonClassDef = $this->theme->buildJsonClassDefinition($this->classes , $namespaceAccessor);
+        $this->theme->createFile("asset/api_definition.js","var ZephirApi = $JsonClassDef;");
+
+
         
     }
     

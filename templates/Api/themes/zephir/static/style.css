@@ -259,3 +259,7 @@ ul.method-details-list li{
     content: '';
 }
 
+
+.menu-node{
+    margin-left:5px;
+}

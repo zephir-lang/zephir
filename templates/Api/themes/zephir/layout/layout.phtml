@@ -6,8 +6,14 @@
         <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/style.css") ?>" />
         
         
+        <script src="<?= $this->asset("static/jquery.min.js") ?>"></script>
         <script src="<?= $this->asset("static/prettify.js") ?>"></script>
-        
+        <script src="<?= $this->asset("api_definition.js") ?>"></script>
+
+        <script>var ZepCurrentPath = '<?=$this->url("/")?>'</script>
+
+        <script src="<?= $this->asset("static/script.js") ?>"></script>
+
         <?php if($this->themeOption("analytics")){ ?>
         
         <!-- Google Analytics -->
@@ -34,15 +40,28 @@
                 Zephir Documentation <span class="version">v1.0.1</span>
             </div>
             <div id="top-right">
-                <form >
-                    <input class="search-box" placeholder="Search for a class, method..." type="text" />
-                </form>
+
             </div>
         </div>
 
         <div id="body">
 
-            <div id="body-left"></div>
+            <div id="body-left">
+
+                <div class="header-search">
+
+                    <form >
+                        <input class="search-box" placeholder="Search for a class, method..." type="text" />
+                    </form>
+
+                    <div id="menu-wrapper">
+
+
+                    </div>
+
+                </div>
+
+            </div>
             <div id="body-right">
                 <div class="content">
                     <?= $this->partial($contentPartial) ?>
@@ -50,6 +69,39 @@
             </div>
 
         </div>
+
+
+        <script type="text/html" id="leftMenuNode">
+
+            <ul class="menu">
+            {{#namespaces}}
+            {{>menuItemNamespace}}
+            {{/namespaces}}
+
+            {{#classes}}
+             eee
+            {{/classes}}
+            </ul>
+
+        </script>
+
+        <script type="text/html" id="menuItemNamespace">
+
+            <li class="menu-namespace">
+                <div class="namepsace-name">{{name}}</div>
+                {{>leftMenuNode}}
+            </li>
+
+        </script>
+
+        <script type="text/html" id="menuItemClass">
+
+            <li class="menu-class">
+                <div class="class-name type={{type}}">{{name}}</div>
+            </li>
+
+        </script>
+
 
     </body>
 
