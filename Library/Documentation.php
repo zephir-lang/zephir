@@ -132,8 +132,15 @@ class Documentation
         
     }
     
-    public static function classUrl(ClassDefinition $c){
-        return "/class/" . str_replace("\\","/", $c->getCompleteName()) . ".html";
+    public static function classUrl($c){
+        
+        if($c instanceof ClassDefinition){
+            $cname = $c->getCompleteName();
+        }else{
+            $cname = $c;
+        }
+        
+        return "/class/" . str_replace("\\","/", $cname ) . ".html";
     }
     
     public static function namespaceUrl($ns){

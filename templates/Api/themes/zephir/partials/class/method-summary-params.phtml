@@ -6,11 +6,12 @@
         $i=0;
         foreach($method->getParameters() as $param){
 
+            echo $i > 0 ? ',' : '';
+            
             if($param['data-type']){
                 ?><span class="param-data-type"><?=$param['data-type']?></span><?php
             }
 
-            echo $i > 0 ? ',' : '';
             ?>  <span class="param-name">$<?=$param['name']?></span><?php
             $i++;
         }

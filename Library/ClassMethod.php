@@ -75,12 +75,12 @@ class ClassMethod
      *
      * @var array
      */
-    protected $returnTypes;
+    protected $returnTypes = array();
 
     /**
      * Class type hints returned by the method
      */
-    protected $returnClassTypes;
+    protected $returnClassTypes = array();
 
     /**
      * Whether the variable is void

@@ -41,7 +41,7 @@
 
 pre.prettyprint {
     padding:5px;
-    border-left: 3px solid #428bca;
+    border-left: 3px solid %_main_color_%;
     background: rgb(18, 27, 33);
     color: #f6f3e8;
     word-break: break-all;

@@ -12,11 +12,16 @@
 
             $allTypes = array();
 
-            if($method->getReturnClassTypes()){
-                $allTypes = array_merge($allTypes,$method->getReturnClassTypes());
-
+            $_lClasses = $method->getReturnClassTypes();
+            
+            foreach($_lClasses as $c){
+                
+                $_lFullClassName = $classNamespace . "\\" . $c;
+                $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
+                
+                $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+                
             }
-
 
             $types = $method->getReturnTypes();
 

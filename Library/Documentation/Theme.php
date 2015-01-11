@@ -66,7 +66,22 @@ class Theme {
             if(!file_exists($outputStt))
                 mkdir($outputStt);
 
-            $this->__copyDir($themeStt,$outputStt . "/static");
+            $files = array();
+            
+            $this->__copyDir($themeStt , $outputStt . "/static" , $files);
+            
+            foreach($files as $f){
+                
+                foreach($this->options as $optName => $opt){
+                    
+                    $fcontent = file_get_contents($f);
+                    $fcontent = str_replace("%_" . $optName . "_%", $opt, $fcontent);
+                    
+                    file_put_contents($f, $fcontent);
+                    
+                }
+                
+            }
 
         }
 
@@ -174,16 +189,18 @@ class Theme {
      * @param $src
      * @param $dst
      */
-    private function __copyDir($src,$dst){
+    private function __copyDir($src,$dst , &$files=null){
         $dir = opendir($src);
         @mkdir($dst);
         while(false !== ( $file = readdir($dir)) ) {
             if (( $file != '.' ) && ( $file != '..' )) {
                 if ( is_dir($src . '/' . $file) ) {
-                    $this->__copyDir($src . '/' . $file,$dst . '/' . $file);
+                    $this->__copyDir($src . '/' . $file,$dst . '/' . $file , $files);
                 }
                 else {
                     copy($src . '/' . $file,$dst . '/' . $file);
+                    if(is_array($files))
+                        $files[] = $dst . '/' . $file;
                 }
             }
         }

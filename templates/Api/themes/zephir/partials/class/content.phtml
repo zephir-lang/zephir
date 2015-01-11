@@ -8,8 +8,21 @@
 
 <?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
 
-<div class="class-header">
+<div class="class-header clearfix">
+    
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="<?= $this->url(Zephir\Documentation::sourceUrl($classDefinition)) ?>">Source</a>
+
+        <?php if($this->themeOption("github")){ ?>
+        <a class="zep-button" href="<?= $this->themeOption("github") . "/tree/master/" . $compilerFile->getFilePath() ?>">Github</a>
+        <?php } ?>
+    </div>
+    
     <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
         <?php foreach($namespacePieces as $nsname => $nspath){ ?>
         <span class="namespace-piece">
             <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>"><?=$nsname?></a>
@@ -17,15 +30,8 @@
         <?php } ?>
         <h1 class="class-name"><?= $className ?></h1>
     </div>
-    <div class="class-type">Class</div>
+
 </div>
-
-
-<a href="<?= $this->url(Zephir\Documentation::sourceUrl($classDefinition)) ?>">Source</a>
-
-<?php if($this->themeOption("github")){ ?>
-<a href="<?= $this->themeOption("github") . "/tree/master/" . $compilerFile->getFilePath() ?>">Github</a>
-<?php } ?>
 
 
 <div class="hidden-anchor"  id="methods"></div>

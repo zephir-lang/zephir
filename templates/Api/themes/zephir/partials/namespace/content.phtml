@@ -8,19 +8,21 @@
 
 <?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
 
+
+
 <div class="namespace-header">
     <div class="namespace-full-name">
+        <div class="class-type">Namespace</div>
        
         <h1 class="namespace-name"><?= $namespaceHelper->getFullNamespace() ?></h1>
     </div>
-    <div class="class-type">Namespace</div>
 </div>
 
 
 <?php if( count($subNamespaces)>0 ){ ?>
 
     <div class="subnamespaces">
-        <h2>Sub Namespaces</h2>
+        <h2 class="standard-bandeau">Sub Namespaces</h2>
         
         <ul>
             <?php foreach ($subNamespaces as $ns){ ?>
@@ -36,7 +38,7 @@
 <?php if( count($subClasses)>0 ){ ?>
 
     <div class="subclasses">
-        <h2>Sub Classes</h2>
+        <h2 class="standard-bandeau">Sub Classes</h2>
         
         <ul>
             <?php foreach ($subClasses as $sc){ ?>
