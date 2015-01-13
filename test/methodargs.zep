@@ -4,6 +4,10 @@ class MethodArgs
 {
 	const GET = "get";
 
+	const MY_DOUBLE = 1.32;
+
+	const MY_BOOL = true;
+
 	public a;
 
 	public function setCallable(callable a)
@@ -37,5 +41,32 @@ class MethodArgs
 	public function methodOptionalValueWithDefaultStaticConstantAccess(var method = self::GET)
 	{
 		return method;
+	}
+
+	/**
+	 * For string parameter
+	 * @link https://github.com/phalcon/zephir/issues/696
+	 */
+	public function methodOptionalStringValueWithDefaultStaticConstantAccess(string parameter = self::GET)
+	{
+		return parameter;
+	}
+
+	/**
+	 * For double parameter
+	 * @link https://github.com/phalcon/zephir/issues/696
+	 */
+	public function methodOptionalDoubleValueWithDefaultStaticConstantAccess(double parameter = self::MY_DOUBLE)
+	{
+		return parameter;
+	}
+
+	/**
+	 * For bool parameter
+	 * @link https://github.com/phalcon/zephir/issues/696
+	 */
+	public function methodOptionalBoolValueWithDefaultStaticConstantAccess(bool parameter = self::MY_BOOL)
+	{
+		return parameter;
 	}
 }

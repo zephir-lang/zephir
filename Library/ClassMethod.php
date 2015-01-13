@@ -868,6 +868,27 @@ class ClassMethod
             case 'double':
 
                 switch ($parameter['default']['type']) {
+                    case 'static-constant-access':
+                        /**
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * @todo Rewrite all to codePrinter
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
+                        $expression = new Expression($parameter['default']);
+                        $expression->setExpectReturn(true, $symbolVariable);
+                        $compiledExpression = $expression->compile($compilationContext);
+
+
+                        if ($compiledExpression->getType() != 'double') {
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
+                        }
+
+                        $parameter['default']['type'] = $compiledExpression->getType();
+                        $parameter['default']['value'] = $compiledExpression->getCode();
+
+                        return $this->assignDefaultValue($parameter, $compilationContext);
+                        break;
+
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
                         break;
@@ -889,6 +910,26 @@ class ClassMethod
 
             case 'bool':
                 switch ($parameter['default']['type']) {
+                    case 'static-constant-access':
+                        /**
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * @todo Rewrite all to codePrinter
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
+                        $expression = new Expression($parameter['default']);
+                        $expression->setExpectReturn(true, $symbolVariable);
+                        $compiledExpression = $expression->compile($compilationContext);
+
+
+                        if ($compiledExpression->getType() != 'bool') {
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
+                        }
+
+                        $parameter['default']['type'] = $compiledExpression->getType();
+                        $parameter['default']['value'] = $compiledExpression->getCode();
+
+                        return $this->assignDefaultValue($parameter, $compilationContext);
+                        break;
 
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;
@@ -911,6 +952,26 @@ class ClassMethod
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
+                    case 'static-constant-access':
+                        /**
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * @todo Rewrite all to codePrinter
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
+                        $expression = new Expression($parameter['default']);
+                        $expression->setExpectReturn(true, $symbolVariable);
+                        $compiledExpression = $expression->compile($compilationContext);
+
+
+                        if ($compiledExpression->getType() != 'string') {
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                        }
+
+                        $parameter['default']['type'] = $compiledExpression->getType();
+                        $parameter['default']['value'] = $compiledExpression->getCode();
+
+                        return $this->assignDefaultValue($parameter, $compilationContext);
+                        break;
 
                     case 'null':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
@@ -953,7 +1014,7 @@ class ClassMethod
 
                     case 'static-constant-access':
                         /**
-                         * Now I can write code for easy use on Expression becase code in this method don't write with codePrinter ;(
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
                          * @todo Rewrite all to codePrinter
                          */
                         $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);

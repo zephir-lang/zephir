@@ -72,6 +72,10 @@ class MethodArgsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new MethodArgs;
         $this->assertEquals('test', $t->methodOptionalValueWithDefaultStaticConstantAccess('test'));
+        
         $this->assertEquals(MethodArgs::GET, $t->methodOptionalValueWithDefaultStaticConstantAccess());
+        $this->assertEquals(MethodArgs::GET, $t->methodOptionalStringValueWithDefaultStaticConstantAccess());
+        $this->assertEquals(MethodArgs::MY_DOUBLE, $t->methodOptionalDoubleValueWithDefaultStaticConstantAccess());
+        $this->assertEquals(MethodArgs::MY_BOOL, $t->methodOptionalBoolValueWithDefaultStaticConstantAccess());
     }
 }

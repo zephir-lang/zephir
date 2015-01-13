@@ -27,6 +27,10 @@ ZEPHIR_INIT_CLASS(Test_MethodArgs) {
 
 	zend_declare_class_constant_string(test_methodargs_ce, SL("GET"), "get" TSRMLS_CC);
 
+	zend_declare_class_constant_double(test_methodargs_ce, SL("MY_DOUBLE"), 1.32 TSRMLS_CC);
+
+	zend_declare_class_constant_bool(test_methodargs_ce, SL("MY_BOOL"), 1 TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -124,6 +128,74 @@ PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess) 
 
 	RETVAL_ZVAL(method, 1, 0);
 	RETURN_MM();
+
+}
+
+/**
+ * For string parameter
+ * @link https://github.com/phalcon/zephir/issues/696
+ */
+PHP_METHOD(Test_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess) {
+
+	zval *parameter_param = NULL;
+	zval *parameter = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &parameter_param);
+
+	if (!parameter_param) {
+		ZEPHIR_INIT_VAR(parameter);
+		ZVAL_STRING(parameter, "get", 1);
+	} else {
+		zephir_get_strval(parameter, parameter_param);
+	}
+
+
+	RETURN_CTOR(parameter);
+
+}
+
+/**
+ * For double parameter
+ * @link https://github.com/phalcon/zephir/issues/696
+ */
+PHP_METHOD(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess) {
+
+	zval *parameter_param = NULL;
+	double parameter;
+
+	zephir_fetch_params(0, 0, 1, &parameter_param);
+
+	if (!parameter_param) {
+		parameter = 1.32;
+	} else {
+		parameter = zephir_get_doubleval(parameter_param);
+	}
+
+
+	RETURN_DOUBLE(parameter);
+
+}
+
+/**
+ * For bool parameter
+ * @link https://github.com/phalcon/zephir/issues/696
+ */
+PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess) {
+
+	zval *parameter_param = NULL;
+	zend_bool parameter;
+
+	zephir_fetch_params(0, 0, 1, &parameter_param);
+
+	if (!parameter_param) {
+		parameter = 1;
+	} else {
+		parameter = zephir_get_boolval(parameter_param);
+	}
+
+
+	RETURN_BOOL(parameter);
 
 }
 
