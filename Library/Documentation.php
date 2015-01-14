@@ -51,7 +51,7 @@ class Documentation
      */
     public function __construct(array $classes,Config $config,  \Zephir\Logger $logger)
     {
-        
+             
         ksort($classes);
         
         $this->config = $config;
