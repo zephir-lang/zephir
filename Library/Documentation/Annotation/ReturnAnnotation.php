@@ -17,41 +17,48 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Documentation;
+namespace Zephir\Documentation\Annotation;
 
+use Zephir\Documentation\Annotation;
+use Zephir\Documentation\Docblock;
 
 /**
- * Annotation
- *
- * A parsed Annotation
+ * A return annotation that looks like  `(@)return type description`
  */
-class Annotation
+class ReturnAnnotation extends Annotation
 {
-
-    protected $name;
-    protected $string;
     
-    protected $contentParsed = false;
+    protected $returnType;
+    protected $description;
 
+
+    protected function parseContent() { 
+        $spaceIndex = strpos($this->string, " ");
+        
+        if( false !== $spaceIndex ){
+            $this->returnType = substr($this->string, 0, $spaceIndex);
+            $this->description = substr($this->string, $spaceIndex + 1);
+        }else{
+            $this->returnType = $this->string;
+        }
+        
+        $this->contentParsed = true;
+    }
     
-    
-    function __construct($name, $string) {
-        $this->name = $name;
-        $this->string = trim($string);
+    public function getReturnType() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->returnType;
     }
 
-    public function getString() {
-        return $this->string;
+    public function getDescription() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->description;
     }
-
-    public function setString($string) {
-        $this->string = $string;
-    }
-
-
-    public function getName() {
-        return $this->name;
-    }
-
     
 }

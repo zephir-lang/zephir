@@ -34,7 +34,7 @@ use Zephir\Documentation\Docblock;
  * @link http://somelink2.com/ example2
  * 
  */
-class AnnotationParser
+class DocblockParser
 {
 
 
@@ -79,6 +79,8 @@ class AnnotationParser
 
     /**
      * Parses the internal annotation string
+     * 
+     * @return Docblock the parsed docblock
      */
     public function parse(){
   
@@ -122,7 +124,7 @@ class AnnotationParser
                     if($currentChar=="*"){
                         if($this->nextCharacter() == "/"){
                             // stop annotation parsing on end of comment
-                            $this->tryRegisterAnnotation();
+                            $this->__tryRegisterAnnotation();
                             break;
                         }else if($this->ignoreStar){
                             $this->nextCharacter();
@@ -148,7 +150,7 @@ class AnnotationParser
                         // stop annotation parsing on new line
                         if( $currentChar == "\n" || $currentChar == "\r"){
 
-                            $this->tryRegisterAnnotation();
+                            $this->__tryRegisterAnnotation();
                             
                             $this->ignoreSpaces = true;
                             $this->ignoreStar   = true;
@@ -192,10 +194,7 @@ class AnnotationParser
                     
                 }
             }
-            
-            
-            
-            
+
             $this->nextCharacter();
         }
         
@@ -203,15 +202,28 @@ class AnnotationParser
         $this->docblockObj->setSummary(trim($this->summaryStr));
         $this->docblockObj->setDescription(trim($this->descriptionStr));
         
+        return $this->docblockObj;
+        
     }
+    
+    /**
+     * return the parsed docblock. It will return null until you run the parse() method
+     * @return Docblock the parsed docblock
+     */
+    public function getParsedDocblock() {
+        return $this->docblockObj;
+    }
+
+        
     
     /**
      * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
      */
-    private function tryRegisterAnnotation(){
+    private function __tryRegisterAnnotation(){
         
         if( ($this->annotationNameOpen || $this->annotationOpen) && strlen($this->currentAnnotationStr) > 0 ){
-            $this->docblockObj->addAnnotation(new Annotation($this->currentAnnotationStr,$this->currentAnnotationContentStr));
+            $annotation = $this->__createAnnotation($this->currentAnnotationStr,$this->currentAnnotationContentStr);
+            $this->docblockObj->addAnnotation($annotation);
         }
         
         $this->annotationNameOpen = false;
@@ -219,7 +231,43 @@ class AnnotationParser
         
     }
     
+    /**
+     * @param string $name the annotation name
+     * @param string $string the annotation name
+     * @return \Zephir\Documentation\Annotation
+     */
+    private function __createAnnotation($name,$string){
+        
+        
+        switch ($name){
+            
+            case "link":
+                $annotation = new Annotation\Link($name, $string);
+                $annotation->getLinkText();
+                break;
+            
+            case "return":
+                $annotation = new Annotation\ReturnAnnotation($name, $string);
+                $annotation->getReturnType();
+                break;
+            
+            case "see":
+                $annotation = new Annotation\See($name, $string);
+                $annotation->getRessource();
+                break;
+                
+            default :
+                $annotation = new Annotation($name, $string);
+                break;
+            
+        }
+        
+        return $annotation;
+        
+    }
+
     
+
     /**
      * moves the current cursor to the next character
      * @return string the new current character

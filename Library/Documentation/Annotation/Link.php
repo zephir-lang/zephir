@@ -17,41 +17,51 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Documentation;
+namespace Zephir\Documentation\Annotation;
 
+use Zephir\Documentation\Annotation;
+use Zephir\Documentation\Docblock;
 
 /**
- * Annotation
- *
- * A parsed Annotation
+ * A link annotation that looks like  `(@)link uri text`
+ * 
  */
-class Annotation
+class Link extends Annotation
 {
-
-    protected $name;
-    protected $string;
     
-    protected $contentParsed = false;
+    protected $uri;
+    protected $linkText;
 
+
+    protected function parseContent() { 
+        $spaceIndex = strpos($this->string, " ");
+        
+        if( false !== $spaceIndex ){
+            $this->uri = substr($this->string, 0, $spaceIndex);
+            $this->linkText = substr($this->string, $spaceIndex + 1);
+        }else{
+            $this->uri = $this->string;
+        }
+        
+        $this->contentParsed = true;
+    }
     
-    
-    function __construct($name, $string) {
-        $this->name = $name;
-        $this->string = trim($string);
+    public function getUri() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->uri;
     }
 
-    public function getString() {
-        return $this->string;
+    public function getLinkText() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->linkText;
     }
 
-    public function setString($string) {
-        $this->string = $string;
-    }
-
-
-    public function getName() {
-        return $this->name;
-    }
 
     
 }

@@ -17,41 +17,53 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Documentation;
+namespace Zephir\Documentation\Annotation;
 
+use Zephir\Documentation\Annotation;
+use Zephir\Documentation\Docblock;
 
 /**
- * Annotation
- *
- * A parsed Annotation
+ * A link annotation that looks like  `(@)link uri text`
+ * 
  */
-class Annotation
+class See extends Annotation
 {
-
-    protected $name;
-    protected $string;
     
-    protected $contentParsed = false;
+    protected $ressource;
+    protected $text;
 
+
+    protected function parseContent() { 
+        $spaceIndex = strpos($this->string, " ");
+        
+        if( false !== $spaceIndex ){
+            $this->ressource = substr($this->string, 0, $spaceIndex);
+            $this->text = substr($this->string, $spaceIndex + 1);
+        }else{
+            $this->ressource = $this->string;
+        }
+        
+        $this->contentParsed = true;
+    }
     
     
-    function __construct($name, $string) {
-        $this->name = $name;
-        $this->string = trim($string);
+    public function getRessource() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->ressource;
     }
 
-    public function getString() {
-        return $this->string;
+    public function getText() {
+        
+        if(!$this->contentParsed)
+            $this->parseContent();
+        
+        return $this->text;
     }
 
-    public function setString($string) {
-        $this->string = $string;
-    }
 
-
-    public function getName() {
-        return $this->name;
-    }
 
     
 }
