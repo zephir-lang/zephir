@@ -35,23 +35,25 @@ class Annotation
 
     
     
-    function __construct($name, $string) {
+    public function __construct($name, $string)
+    {
         $this->name = $name;
         $this->string = trim($string);
     }
 
-    public function getString() {
+    public function getString()
+    {
         return $this->string;
     }
 
-    public function setString($string) {
+    public function setString($string)
+    {
         $this->string = $string;
     }
 
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
-
-    
 }

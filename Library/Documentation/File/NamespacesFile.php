@@ -2,19 +2,19 @@
 
 namespace Zephir\Documentation\File;
 
-
 use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
 use Zephir\Documentation\NamespaceAccessor;
 
-class NamespacesFile extends AbstractFile {
+class NamespacesFile extends AbstractFile
+{
 
     /**
      * @var NamespaceAccessor
      */
     protected $namespaceAccessor;
 
-    function __construct($config , NamespaceAccessor $namespaceAccessor)
+    public function __construct($config, NamespaceAccessor $namespaceAccessor)
     {
         $this->namespaceAccessor = $namespaceAccessor;
     }
@@ -37,5 +37,4 @@ class NamespacesFile extends AbstractFile {
     {
         return "namespaces.html" ;
     }
-
-} 
+}

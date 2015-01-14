@@ -33,13 +33,14 @@ class See extends Annotation
     protected $text;
 
 
-    protected function parseContent() { 
+    protected function parseContent()
+    {
         $spaceIndex = strpos($this->string, " ");
         
-        if( false !== $spaceIndex ){
+        if (false !== $spaceIndex) {
             $this->ressource = substr($this->string, 0, $spaceIndex);
             $this->text = substr($this->string, $spaceIndex + 1);
-        }else{
+        } else {
             $this->ressource = $this->string;
         }
         
@@ -47,23 +48,23 @@ class See extends Annotation
     }
     
     
-    public function getRessource() {
+    public function getRessource()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->ressource;
     }
 
-    public function getText() {
+    public function getText()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->text;
     }
-
-
-
-    
 }

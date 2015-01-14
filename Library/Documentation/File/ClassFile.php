@@ -2,12 +2,12 @@
 
 namespace Zephir\Documentation\File;
 
-
 use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
 
-class ClassFile extends AbstractFile {
+class ClassFile extends AbstractFile
+{
 
     /**
      * @var ClassDefinition
@@ -20,7 +20,7 @@ class ClassFile extends AbstractFile {
      */
     protected $compilerFile;
     
-    function __construct($config , CompilerFile $class)
+    public function __construct($config, CompilerFile $class)
     {
         $this->compilerFile = $class;
         $this->class = $class->getClassDefinition();
@@ -39,9 +39,9 @@ class ClassFile extends AbstractFile {
         $nsPathes = array();
         $nsStr = "";
         
-        foreach($nsPieces as $n){
+        foreach ($nsPieces as $n) {
             
-            if(strlen($nsStr) > 0){
+            if (strlen($nsStr) > 0) {
                 $nsStr.= '\\';
             }
             $nsStr.= $n;
@@ -65,7 +65,4 @@ class ClassFile extends AbstractFile {
     {
         return \Zephir\Documentation::classUrl($this->class);
     }
-
-
-
-} 
+}

@@ -880,9 +880,8 @@ class CompilerFile
      * 
      * @return type
      */
-    public function getFilePath() {
+    public function getFilePath()
+    {
         return $this->_filePath;
     }
-
-
 }

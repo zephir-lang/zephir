@@ -5,7 +5,8 @@ namespace Zephir\Documentation\File;
 
 use Zephir\ClassDefinition;
 
-class SourceFile extends ClassFile {
+class SourceFile extends ClassFile
+{
 
     /**
      * @var ClassDefinition
@@ -21,5 +22,4 @@ class SourceFile extends ClassFile {
     {
         return \Zephir\Documentation::sourceUrl($this->class);
     }
-
-} 
+}

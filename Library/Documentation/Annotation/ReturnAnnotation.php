@@ -32,33 +32,37 @@ class ReturnAnnotation extends Annotation
     protected $description;
 
 
-    protected function parseContent() { 
+    protected function parseContent()
+    {
         $spaceIndex = strpos($this->string, " ");
         
-        if( false !== $spaceIndex ){
+        if (false !== $spaceIndex) {
             $this->returnType = substr($this->string, 0, $spaceIndex);
             $this->description = substr($this->string, $spaceIndex + 1);
-        }else{
+        } else {
             $this->returnType = $this->string;
         }
         
         $this->contentParsed = true;
     }
     
-    public function getReturnType() {
+    public function getReturnType()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->returnType;
     }
 
-    public function getDescription() {
+    public function getDescription()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->description;
     }
-    
 }

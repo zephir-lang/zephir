@@ -8,8 +8,9 @@ use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
 use Zephir\Documentation\NamespaceHelper;
 
-class NamespaceFile extends AbstractFile {
-
+class NamespaceFile extends AbstractFile
+{
+    
     /**
      * @var \Zephir\Documentation\NamespaceHelper
      */
@@ -21,7 +22,7 @@ class NamespaceFile extends AbstractFile {
      */
     protected $compilerFile;
     
-    function __construct($config , NamespaceHelper $nh)
+    public function __construct($config, NamespaceHelper $nh)
     {
         $this->namespaceHelper = $nh;
     }
@@ -48,7 +49,4 @@ class NamespaceFile extends AbstractFile {
     {
         return \Zephir\Documentation::namespaceUrl($this->namespaceHelper->getFullNamespace());
     }
-
-
-
-} 
+}

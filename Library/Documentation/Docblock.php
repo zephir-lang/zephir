@@ -33,32 +33,33 @@ class Docblock
     protected $summary;
 
 
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function getAnnotations() {
+    public function getAnnotations()
+    {
         return $this->annotations;
     }
 
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
     }
 
-    public function addAnnotation($annotation) {
+    public function addAnnotation($annotation)
+    {
         $this->annotations[] = $annotation;
     }
     
-    public function getSummary() {
+    public function getSummary()
+    {
         return $this->summary;
     }
 
-    public function setSummary($summary) {
+    public function setSummary($summary)
+    {
         $this->summary = $summary;
     }
-
-
-
-
-    
 }

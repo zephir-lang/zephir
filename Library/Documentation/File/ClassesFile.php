@@ -2,18 +2,18 @@
 
 namespace Zephir\Documentation\File;
 
-
 use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
 
-class ClassesFile extends AbstractFile {
+class ClassesFile extends AbstractFile
+{
 
     /**
      * @var ClassDefinition
      */
     protected $classes;
 
-    function __construct($config , $classList)
+    public function __construct($config, $classList)
     {
         $this->classes = $classList;
     }
@@ -34,5 +34,4 @@ class ClassesFile extends AbstractFile {
     {
         return "classes.html" ;
     }
-
-} 
+}

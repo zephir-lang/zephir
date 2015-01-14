@@ -33,35 +33,37 @@ class Link extends Annotation
     protected $linkText;
 
 
-    protected function parseContent() { 
+    protected function parseContent()
+    {
         $spaceIndex = strpos($this->string, " ");
         
-        if( false !== $spaceIndex ){
+        if (false !== $spaceIndex) {
             $this->uri = substr($this->string, 0, $spaceIndex);
             $this->linkText = substr($this->string, $spaceIndex + 1);
-        }else{
+        } else {
             $this->uri = $this->string;
         }
         
         $this->contentParsed = true;
     }
     
-    public function getUri() {
+    public function getUri()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->uri;
     }
 
-    public function getLinkText() {
+    public function getLinkText()
+    {
         
-        if(!$this->contentParsed)
+        if (!$this->contentParsed) {
             $this->parseContent();
+        }
         
         return $this->linkText;
     }
-
-
-    
 }
