@@ -188,6 +188,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_INTERFACE:
 				xx_(xx_parser, XX_INTERFACE, NULL, parser_status);
 				break;
+			case XX_T_TRAIT:
+				xx_(xx_parser, XX_TRAIT, NULL, parser_status);
+				break;
 			case XX_T_EXTENDS:
 				xx_(xx_parser, XX_EXTENDS, NULL, parser_status);
 				break;

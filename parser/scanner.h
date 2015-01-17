@@ -51,6 +51,7 @@
 #define XX_T_TYPE_NULL 334
 #define XX_T_TYPE_THIS 335
 
+#define XX_T_TRAIT 459
 #define XX_T_NAMESPACE 350
 #define XX_T_CLASS 351
 #define XX_T_PUBLIC 352

@@ -257,6 +257,24 @@ static json_object *xx_ret_interface(xx_parser_token *T, json_object *interface_
 	return ret;
 }
 
+static json_object *xx_ret_trait(xx_parser_token *T, json_object *trait_definition,  xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("trait"));
+	json_object_object_add(ret, "name", json_object_new_string(T->token));
+
+	if (trait_definition) {
+		json_object_object_add(ret, "definition", trait_definition);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->class_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->class_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_class_definition(json_object *properties, json_object *methods, json_object *constants, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -1224,6 +1242,10 @@ xx_top_statement(R) ::= xx_interface_def(T) . {
 	R = T;
 }
 
+xx_top_statement(R) ::= xx_trait_def(T) . {
+	R = T;
+}
+
 xx_top_statement(R) ::= xx_comment(T) . {
 	R = T;
 }
@@ -1262,6 +1284,10 @@ xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) xx_interface_body(B) . {
 
 xx_interface_def(R) ::= INTERFACE IDENTIFIER(I) EXTENDS xx_implements_list(L) xx_interface_body(B) . {
 	R = xx_ret_interface(I, B, L, status->scanner_state);
+}
+
+xx_trait_def(R) ::= TRAIT IDENTIFIER(I) xx_trait_body(B) . {
+	R = xx_ret_trait(I, B, status->scanner_state);
 }
 
 xx_class_def(R) ::= CLASS IDENTIFIER(I) xx_class_body(B) . {
@@ -1313,6 +1339,14 @@ xx_class_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
 }
 
 xx_class_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
+	R = C;
+}
+
+xx_trait_body(R) ::= BRACKET_OPEN BRACKET_CLOSE . {
+	R = NULL;
+}
+
+xx_trait_body(R) ::= BRACKET_OPEN xx_class_definition(C) BRACKET_CLOSE . {
 	R = C;
 }
 
