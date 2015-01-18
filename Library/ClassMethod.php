@@ -35,6 +35,8 @@ use Zephir\Builder\Statements\IfStatementBuilder;
 use Zephir\Builder\Statements\ThrowStatementBuilder;
 use Zephir\Statements\IfStatement;
 use Zephir\Detectors\WriteDetector;
+use Zephir\Documentation\Docblock;
+use Zephir\Documentation\DocblockParser;
 
 /**
  * ClassMethod
@@ -69,6 +71,11 @@ class ClassMethod
      * @var string
      */
     protected $docblock;
+    
+    /**
+     * @var Documentation\Docblock
+     */
+    protected $parsedDocblock;
 
     /**
      * Types returned by the method
@@ -310,7 +317,7 @@ class ClassMethod
     }
 
     /**
-     * Returns the docblock
+     * Returns the raw docblock
      *
      * @return string
      */
@@ -318,6 +325,26 @@ class ClassMethod
     {
         return $this->docblock;
     }
+    
+    /**
+     * Returns the parsed docblock
+     *
+     * @return Docblock
+     */
+    public function getParsedDocBlock()
+    {
+        if (!$this->parsedDocblock) {
+            
+            if ( strlen($this->docblock)>0) {
+                $parser = new DocblockParser("/" . $this->docblock ."/");
+                $this->parsedDocblock = $parser->parse();
+            } else {
+                return null;
+            }
+        }
+        return $this->parsedDocblock;
+    }
+
 
     /**
      * Returns the parameters

@@ -76,7 +76,7 @@ class DocblockParser
      */
     public function parse()
     {
-  
+          
         $this->docblockObj = new Docblock();
         
         $this->ignoreSpaces = false;

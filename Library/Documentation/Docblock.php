@@ -29,7 +29,11 @@ class Docblock
 {
 
     protected $description;
-    protected $annotations;
+    /**
+     *
+     * @var Annotation[]
+     */
+    protected $annotations = array();
     protected $summary;
 
 
@@ -43,6 +47,22 @@ class Docblock
         return $this->annotations;
     }
 
+    /**
+     * 
+     * @param string $type the annotation name you want to get
+     * @return Annotation[] an array containing the annotations matching the name
+     */
+    public function getAnnotationcByType($type)
+    {
+        $annotations = array();
+        foreach ($this->annotations as $an) {
+            if ($an->getName() == $type) {
+                $annotations[] = $an;
+            }
+        }
+        return $annotations;
+    }
+    
     public function setDescription($description)
     {
         $this->description = $description;

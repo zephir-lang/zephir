@@ -215,6 +215,10 @@ ul.method-details-list li{
     font-size: 12px;
 }
 
+.method-details .method-signature h3.method-name{
+    display: inline;
+}
+
 .method-details .method-signature .method-name{
     font-size: 14px;
 }
@@ -325,3 +329,7 @@ ul.method-details-list li{
     margin-top: 5px;
 }
 
+.method-summary .summary-text{
+    margin-top: 3px;
+    color: #666;
+}
