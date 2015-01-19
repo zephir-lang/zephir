@@ -104,10 +104,13 @@ EOF;
 
         $source .= $class->getType() . ' ' . $class->getName();
 
-        if ($extendsClassDefinition = $class->getExtendsClassDefinition()) {
-                $source .= ' extends \\' . $extendsClassDefinition->getCompleteName();
-        } elseif ($extends = $class->getExtendsClass()) {
-                $source .= ' extends \\' . $extends;
+        if ($class->getExtendsClass()) {
+            $extendsClassDefinition = $class->getExtendsClassDefinition();
+            if (!$extendsClassDefinition) {
+                throw new \RuntimeException('Class "'. $class->getName().'" does not have a extendsClassDefinition');
+            }
+
+            $source .= ' extends ' . ($extendsClassDefinition->isInternal() ? '' : '\\') . $extendsClassDefinition->getCompleteName();
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {
