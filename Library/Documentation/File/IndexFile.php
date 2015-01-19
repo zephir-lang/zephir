@@ -5,10 +5,10 @@ namespace Zephir\Documentation\File;
 use Zephir\Documentation\AbstractFile;
 use Zephir\Documentation\NamespaceAccessor;
 
-class NamespacesFile extends AbstractFile
+class IndexFile extends AbstractFile
 {
 
-    /**
+        /**
      * @var NamespaceAccessor
      */
     protected $namespaceAccessor;
@@ -20,7 +20,7 @@ class NamespacesFile extends AbstractFile
 
     public function getTemplateName()
     {
-        return "namespaces.phtml";
+        return "index.phtml";
     }
 
     public function getData()
@@ -34,6 +34,6 @@ class NamespacesFile extends AbstractFile
 
     public function getOutputFile()
     {
-        return "namespaces.html" ;
+        return "index.html" ;
     }
 }

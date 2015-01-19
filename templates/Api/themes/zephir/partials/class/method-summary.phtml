@@ -16,10 +16,16 @@
             
             foreach($_lClasses as $c){
                 
-                $_lFullClassName = $classNamespace . "\\" . $c;
-                $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
-                
-                $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+                if ($c{0} == "\\") {
+                    $allTypes[] = substr($c,1);
+                } else {
+
+                    $_lFullClassName = $classNamespace . "\\" . $c;
+                    $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
+
+                    $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+                    
+                }
                 
             }
 

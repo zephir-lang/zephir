@@ -132,6 +132,11 @@ class Documentation
         $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
         $this->theme->drawFile($nsfile);
         
+        
+        // index (index.html)
+        $indexfile = new File\IndexFile($this->config, $namespaceAccessor);
+        $this->theme->drawFile($indexfile);
+        
         $this->theme->buildStaticDirectory();
 
         $JsonClassDef = $this->theme->buildJsonClassDefinition($this->classes, $namespaceAccessor);
