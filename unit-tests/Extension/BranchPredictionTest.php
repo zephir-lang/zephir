@@ -29,5 +29,6 @@ class BranchPredictionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($b->testLikely2(false) === false);
         $this->assertTrue($b->testUnlikely1() === true);
         $this->assertTrue($b->testUnlikely2(false) === false);
+        $this->assertTrue($b->testBranch1([1, 2, 3]) === [1, 2, 3, 4, 5]);
     }
 }

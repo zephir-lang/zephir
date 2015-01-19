@@ -42,4 +42,13 @@ class BranchPrediction
 			return false;
 		}
 	}
+
+	public function testBranch1(var a)
+	{
+		if typeof a == "array" {
+			a->merge([4, 5]);
+		}
+
+		return a;
+	}
 }
