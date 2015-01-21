@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class VariableAppend
 {
-
     /**
      * Compiles foo[] = {expr}
      *
@@ -62,8 +61,11 @@ class VariableAppend
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is local only", $statement);
         }
 
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
+        /**
+         * Only dynamic variables and arrays can be used as arrays
+         */
+        if ($symbolVariable->isNotVariableAndArray()) {
+            throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as an array", $statement);
         }
 
         if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array'))) {
@@ -76,6 +78,7 @@ class VariableAppend
 
         $type = $symbolVariable->getType();
         switch ($type) {
+            case 'array':
             case 'variable':
                 switch ($resolvedExpr->getType()) {
                     case 'null':
@@ -152,17 +155,17 @@ class VariableAppend
                                 break;
 
                             default:
-                                throw new CompilerException("Unknown type " . $exprVariable->getType(), $statement);
+                                throw new CompilerException("Unknown type: " . $exprVariable->getType(), $statement);
                         }
                         break;
 
                     default:
-                        throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
+                        throw new CompilerException("Unknown type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException("Unknown type", $statement);
+                throw new CompilerException("Unknown type: " . $type, $statement);
         }
     }
 }
