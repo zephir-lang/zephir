@@ -140,6 +140,7 @@ class ArrayIndexAppend extends ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array $statement
+     * @throws CompilerException
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
@@ -164,9 +165,9 @@ class ArrayIndexAppend extends ArrayIndex
         }
 
         /**
-         * Only dynamic variables can be used as arrays
+         * Only dynamic variables and arrays can be used as arrays
          */
-        if (!$symbolVariable->isVariable()) {
+        if ($symbolVariable->isNotVariableAndArray()) {
             throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as array", $statement);
         }
 
