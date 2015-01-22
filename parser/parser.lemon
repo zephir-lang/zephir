@@ -3133,6 +3133,11 @@ xx_common_expr(R) ::= xx_common_expr(O1) QUESTION xx_common_expr(O2) COLON xx_co
 	R = xx_ret_expr("ternary", O1, O2, O3, status->scanner_state);
 }
 
+/* a ?: b */
+xx_common_expr(R) ::= xx_common_expr(O1) QUESTION COLON xx_common_expr(O3) . {
+	R = xx_ret_expr("short-ternary", O1, NULL, O3, status->scanner_state);
+}
+
 xx_call_parameters(R) ::= xx_call_parameters(L) COMMA xx_call_parameter(P) . {
 	R = xx_ret_list(L, P);
 }
