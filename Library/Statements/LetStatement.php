@@ -64,17 +64,15 @@ class LetStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext)
     {
         $readDetector = new ReadDetector();
-
         $statement = $this->_statement;
-        foreach ($statement['assignments'] as $assignment) {
 
+        foreach ($statement['assignments'] as $assignment) {
             $variable = $assignment['variable'];
 
             /**
              * Get the symbol from the symbol table if necessary
              */
             switch ($assignment['assign-type']) {
-
                 case 'static-property':
                 case 'static-property-append':
                 case 'static-property-array-index':
@@ -104,7 +102,6 @@ class LetStatement extends StatementAbstract
              * Incr/Decr assignments don't require an expression
              */
             if (isset($assignment['expr'])) {
-
                 $expr = new Expression($assignment['expr']);
 
                 switch ($assignment['assign-type']) {

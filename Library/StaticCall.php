@@ -557,9 +557,7 @@ class StaticCall extends Call
                 }
 
                 if (!$classDefinition->hasMethod("__callStatic")) {
-
                     if ($method instanceof ClassMethod && !$method->isInternal()) {
-
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */
@@ -584,9 +582,7 @@ class StaticCall extends Call
                         }
 
                     }
-
                 } else {
-
                     if (!isset($method)) {
                         $method = $classDefinition->getMethod("__callStatic");
                         if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
@@ -632,7 +628,6 @@ class StaticCall extends Call
         if ($isExpecting) {
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
-
                     $returnClassTypes = $method->getReturnClassTypes();
                     if ($returnClassTypes !== null) {
                         $symbolVariable->setDynamicTypes('object');

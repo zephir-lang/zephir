@@ -60,11 +60,11 @@ class StaticPropertyArrayIndex extends ArrayIndex
          * Only string/variable/int
          */
         $offsetExprs = array();
+
         foreach ($statement['index-expr'] as $indexExpr) {
-
             $indexExpression = new Expression($indexExpr);
-
             $resolvedIndex = $indexExpression->compile($compilationContext);
+
             switch ($resolvedIndex->getType()) {
                 case 'string':
                 case 'int':
@@ -83,10 +83,9 @@ class StaticPropertyArrayIndex extends ArrayIndex
         $keys = '';
         $numberParams = 0;
         $offsetItems = array();
+
         foreach ($offsetExprs as $offsetExpr) {
-
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':

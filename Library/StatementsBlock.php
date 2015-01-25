@@ -115,7 +115,6 @@ class StatementsBlock
         }
 
         foreach ($statements as $statement) {
-
             /**
              * Generate GDB hints
              */

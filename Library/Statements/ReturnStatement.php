@@ -40,11 +40,9 @@ class ReturnStatement extends StatementAbstract
     {
 
         $statement = $this->_statement;
-
         $codePrinter = $compilationContext->codePrinter;
 
         if (isset($statement['expr'])) {
-
             $currentMethod = $compilationContext->currentMethod;
 
             if ($currentMethod->isConstructor()) {
@@ -62,7 +60,6 @@ class ReturnStatement extends StatementAbstract
                 if ($statement['expr']['left']['type'] == 'variable') {
                     if ($statement['expr']['left']['value'] == 'this') {
                         if ($statement['expr']['right']['type'] == 'variable') {
-
                             /**
                              * If the property is accessed on 'this', we check if the property does exist
                              */
@@ -95,7 +92,6 @@ class ReturnStatement extends StatementAbstract
              */
             if ($currentMethod->hasReturnTypes()) {
                 switch ($resolvedExpr->getType()) {
-
                     case 'null':
                         if (!$currentMethod->areReturnTypesNullCompatible()) {
                             throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
