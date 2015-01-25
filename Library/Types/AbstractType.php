@@ -63,7 +63,6 @@ abstract class AbstractType
          * Check the method map
          */
         if (isset($this->methodMap[$methodName])) {
-
             $paramNumber = $this->getNumberParam($methodName);
             if ($paramNumber == 0) {
                 if (isset($expression['parameters'])) {

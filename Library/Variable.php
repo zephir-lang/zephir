@@ -859,7 +859,6 @@ class Variable
         }
 
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
-
             if ($this->initBranch === false) {
                 $this->initBranch = $compilationContext->currentBranch;
             }
@@ -900,7 +899,6 @@ class Variable
 
         $name = $this->getName();
         if ($name != 'this_ptr' && $name != 'return_value') {
-
             if ($this->initBranch === false) {
                 $this->initBranch = $compilationContext->currentBranch;
             }
@@ -933,7 +931,6 @@ class Variable
 
         $name = $this->getName();
         if ($name != 'this_ptr' && $name != 'return_value') {
-
             if ($this->initBranch === false) {
                 $this->initBranch = $compilationContext->currentBranch;
             }

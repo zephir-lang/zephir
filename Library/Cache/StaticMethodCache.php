@@ -60,7 +60,6 @@ class StaticMethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
-
             $completeName = $method->getClassDefinition()->getCompleteName();
 
             /**
@@ -81,7 +80,6 @@ class StaticMethodCache
 
         $mustBeCached = false;
         if (!$compilationContext->insideCycle) {
-
             if (!($method instanceof \ReflectionMethod)) {
                 $classDefinition = $method->getClassDefinition();
                 if (!$classDefinition->isInternal() && $allowNtsCache) {
