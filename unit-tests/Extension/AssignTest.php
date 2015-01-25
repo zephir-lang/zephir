@@ -107,5 +107,13 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         assert(!isset($_POST['test_index']));
         $t->testGlobalVarAssign('test_index', 'value');
         assert($_POST['test_index'] == 'value');
+        
+        /* Check primitive types */
+        $t->testAssignSuperGlobals();
+        assert($_GET["steststr"] == "stest");
+        assert($_GET["steststr2"] == "stest2");
+        assert($_GET["stestint"] == 1);
+        assert($_GET["stestint2"] == 2);
+        assert($_GET["stest2"] == "testval");
     }
 }
