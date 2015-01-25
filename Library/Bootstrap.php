@@ -85,7 +85,6 @@ class Bootstrap
     public static function boot()
     {
         try {
-
             /**
              * Global config
              */
@@ -108,7 +107,6 @@ class Bootstrap
              */
             if ($_SERVER['argc'] >= 2) {
                 for ($i = 2; $i < $_SERVER['argc']; $i++) {
-
                     $parameter = $_SERVER['argv'][$i];
 
                     if (preg_match('/^-fno-([a-z0-9\-]+)$/', $parameter, $matches)) {
@@ -166,7 +164,6 @@ class Bootstrap
              */
             foreach (new \DirectoryIterator(ZEPHIRPATH . 'Library/Commands') as $item) {
                 if (!$item->isDir()) {
-
                     $className = 'Zephir\\Commands\\' . str_replace('.php', '', $item->getBaseName());
                     $class = new \ReflectionClass($className);
 
@@ -186,7 +183,6 @@ class Bootstrap
             }
 
             if (!isset(self::$commands[$action])) {
-
                 $message = 'Unrecognized action "' . $action . '"';
                 $metaphone = metaphone($action);
                 foreach (self::$commands as $key => $command) {

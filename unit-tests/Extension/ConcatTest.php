@@ -19,7 +19,6 @@
 
 namespace Extension;
 
-
 use Test\Concat;
 
 class ConcatTest extends \PHPUnit_Framework_TestCase

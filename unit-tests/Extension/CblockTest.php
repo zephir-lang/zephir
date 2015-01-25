@@ -19,7 +19,6 @@
 
 namespace Extension;
 
-
 class CblockTest extends \PHPUnit_Framework_TestCase
 {
     public function testBlock()

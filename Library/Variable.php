@@ -766,7 +766,6 @@ class Variable
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
-
             if ($this->initBranch === false) {
                 $this->initBranch = $compilationContext->currentBranch;
             }
@@ -821,7 +820,6 @@ class Variable
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
         if ($this->getName() != 'this_ptr' && $this->getName() != 'return_value') {
-
             if ($this->initBranch === false) {
                 $this->initBranch = $compilationContext->currentBranch;
             }
