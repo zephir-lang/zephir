@@ -41,12 +41,11 @@ class ForStatement extends StatementAbstract
      * Compiles a for statement that use a 'range' as expression
      *
      * @param array $exprRaw
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return boolean
      */
     public function compileRange($exprRaw, $compilationContext)
     {
-
         if (!count($exprRaw['parameters'])) {
             return false;
         }
@@ -76,7 +75,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             /**
              * This variable is used to check if the loop is in its first iteration
              */
@@ -133,7 +131,6 @@ class ForStatement extends StatementAbstract
         $statement->compile($compilationContext);
 
         if ($this->_statement['reverse']) {
-
             /**
              * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
              */
@@ -159,7 +156,6 @@ class ForStatement extends StatementAbstract
             ));
 
         } else {
-
             /**
              * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
              */
@@ -324,7 +320,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             /**
              * Check for anonymous variables
              */
@@ -365,7 +360,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             /**
              * Check for anonymous variables
              */
@@ -434,12 +428,11 @@ class ForStatement extends StatementAbstract
      * Compiles a 'for' statement that use an 'iterator' as expression
      *
      * @param array $exprRaw
-     * @param \CompilationContext $compilationContext
+     * @param CompilationContext $compilationContext
      * @return boolean
      */
     public function compileIterator(array $exprRaw, $compilationContext)
     {
-
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
         $compilationContext->headersManager->add('kernel/iterator');
@@ -467,7 +460,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
@@ -490,7 +482,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 if ($variable->getType() != 'variable') {
@@ -549,7 +540,6 @@ class ForStatement extends StatementAbstract
          * Restore the cycle counter
          */
         $compilationContext->insideCycle--;
-
         $codePrinter->output('}');
 
         $codePrinter->output($iteratorVariable ->getName() . '->funcs->dtor(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
@@ -573,7 +563,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 switch ($keyVariable->getType()) {
@@ -600,7 +589,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 switch ($variable->getType()) {
@@ -704,7 +692,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
@@ -723,7 +710,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 if ($variable->getType() != 'variable') {
@@ -764,7 +750,6 @@ class ForStatement extends StatementAbstract
          * We have to check if hashes are modified within the for's block
          */
         if (isset($this->_statement['statements'])) {
-
             /**
              * Create the statements block here to obtain the last use line
              */
@@ -848,7 +833,6 @@ class ForStatement extends StatementAbstract
          * @TODO implement optimizers here
          */
         if ($exprRaw['type'] == 'fcall') {
-
             if ($exprRaw['name'] == 'range') {
                 $status = $this->compileRange($exprRaw, $compilationContext);
                 if ($status !== false) {

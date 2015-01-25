@@ -43,11 +43,16 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
      * @param string $variable
      * @param Variable $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext ,
      * @param array $statement
      */
-    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
+    protected function _assignPropertyArrayMultipleIndex(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ) {
         $codePrinter = $compilationContext->codePrinter;
 
         $property = $statement['property'];
@@ -66,8 +71,8 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          * Only string/variable/int
          */
         $offsetExprs = array();
-        foreach ($statement['index-expr'] as $indexExpr) {
 
+        foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
 
             $resolvedIndex = $indexExpression->compile($compilationContext);
@@ -80,7 +85,10 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException("Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast", $statement);
+                    throw new CompilerException(
+                        "Expression: " . $resolvedIndex->getType() . " cannot be used as index without cast",
+                        $statement
+                    );
             }
 
             $offsetExprs[] = $resolvedIndex;
@@ -90,33 +98,34 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          * Check if the property to update is defined
          */
         if ($symbolVariable->getRealName() == 'this') {
-
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
+                throw new CompilerException(
+                    "Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'",
+                    $statement
+                );
             }
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
-
             /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
             if ($symbolVariable->hasAnyDynamicType('object')) {
-
                 $classType = current($symbolVariable->getClassTypes());
                 $compiler = $compilationContext->compiler;
 
                 if ($compiler->isClass($classType)) {
-
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
+                        throw new CompilerException("Cannot locate class definition for class: " . $classType,
+                            $statement);
                     }
 
                     if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'", $statement);
+                        throw new CompilerException("Class '" . $classType . "' does not have a property called: '" . $property . "'",
+                            $statement);
                     }
                 }
             }
@@ -125,10 +134,9 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         $keys = '';
         $numberParams = 0;
         $offsetItems = array();
+
         foreach ($offsetExprs as $offsetExpr) {
-
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -145,7 +153,8 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                     break;
 
                 case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(),
+                        $compilationContext, $statement);
                     switch ($variableIndex->getType()) {
 
                         case 'int':
@@ -165,16 +174,19 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                             break;
 
                         default:
-                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index",
+                                $statement);
                     }
                     break;
 
                 default:
-                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
+                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index",
+                        $statement);
             }
         }
 
-        $codePrinter->output('zephir_update_property_array_multi(' . $symbolVariable->getName() . ', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . 'a"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+        $codePrinter->output('zephir_update_property_array_multi(' . $symbolVariable->getName() . ', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("' . $keys . 'a"), ' . $numberParams . ', ' . join(', ',
+                $offsetItems) . ');');
     }
 
     /**
@@ -183,20 +195,36 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
      * @param string $variable
      * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext ,
      * @param array $statement
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
-    {
-
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ) {
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is not initialized",
+                $statement
+            );
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Attempt to use variable type: " . $symbolVariable->getType() . " as object", $statement);
+            throw new CompilerException(
+                "Attempt to use variable type: " . $symbolVariable->getType() . " as object",
+                $statement
+            );
         }
 
-        $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        $this->_assignPropertyArrayMultipleIndex(
+            $variable,
+            $symbolVariable,
+            $resolvedExpr,
+            $compilationContext,
+            $statement
+        );
     }
 }
