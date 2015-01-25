@@ -31,6 +31,8 @@ ZEPHIR_INIT_CLASS(Test_MethodArgs) {
 
 	zend_declare_class_constant_bool(test_methodargs_ce, SL("MY_BOOL"), 1 TSRMLS_CC);
 
+	zend_declare_class_constant_long(test_methodargs_ce, SL("MY_INT"), 12345 TSRMLS_CC);
+
 	return SUCCESS;
 
 }
@@ -196,6 +198,28 @@ PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 
 
 	RETURN_BOOL(parameter);
+
+}
+
+/**
+ * For int parameter
+ * @link https://github.com/phalcon/zephir/issues/728
+ */
+PHP_METHOD(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess) {
+
+	zval *parameter_param = NULL;
+	int parameter;
+
+	zephir_fetch_params(0, 0, 1, &parameter_param);
+
+	if (!parameter_param) {
+		parameter = 12345;
+	} else {
+		parameter = zephir_get_intval(parameter_param);
+	}
+
+
+	RETURN_LONG(parameter);
 
 }
 
