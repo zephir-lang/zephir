@@ -24,7 +24,7 @@
         "ext-ctype": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "1.5.2",
+        "squizlabs/php_codesniffer": "~2.1",
         "ext-gmp": "*",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*"
