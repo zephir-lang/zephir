@@ -12,6 +12,7 @@ PHP_METHOD(Test_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess);
 PHP_METHOD(Test_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess);
 PHP_METHOD(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess);
 PHP_METHOD(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess);
+PHP_METHOD(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_setcallable, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
@@ -49,6 +50,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_methodoptionalboolvaluewithdefaul
 	ZEND_ARG_INFO(0, parameter)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_methodargs_methodoptionalintvaluewithdefaultstaticconstantaccess, 0, 0, 0)
+	ZEND_ARG_INFO(0, parameter)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(test_methodargs_method_entry) {
 	PHP_ME(Test_MethodArgs, setCallable, arginfo_test_methodargs_setcallable, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_MethodArgs, setObject, arginfo_test_methodargs_setobject, ZEND_ACC_PUBLIC)
@@ -59,5 +64,6 @@ ZEPHIR_INIT_FUNCS(test_methodargs_method_entry) {
 	PHP_ME(Test_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess, arginfo_test_methodargs_methodoptionalstringvaluewithdefaultstaticconstantaccess, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAccess, arginfo_test_methodargs_methodoptionaldoublevaluewithdefaultstaticconstantaccess, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAccess, arginfo_test_methodargs_methodoptionalboolvaluewithdefaultstaticconstantaccess, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAccess, arginfo_test_methodargs_methodoptionalintvaluewithdefaultstaticconstantaccess, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

@@ -838,13 +838,36 @@ class ClassMethod
         }
 
         $code = '';
-        switch ($dataType) {
 
+        /**
+         * @todo Refactoring this place, move to one - static-constant-access
+         */
+        switch ($dataType) {
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
                 switch ($parameter['default']['type']) {
+                    case 'static-constant-access':
+                        /**
+                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
+                         * @todo Rewrite all to codePrinter
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
+                        $expression = new Expression($parameter['default']);
+                        $expression->setExpectReturn(true, $symbolVariable);
+                        $compiledExpression = $expression->compile($compilationContext);
+
+
+                        if ($compiledExpression->getType() != 'int') {
+                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+                        }
+
+                        $parameter['default']['type'] = $compiledExpression->getType();
+                        $parameter['default']['value'] = $compiledExpression->getCode();
+
+                        return $this->assignDefaultValue($parameter, $compilationContext);
+                        break;
 
                     case 'null':
                         $code .= "\t\t" . $parameter['name'] . ' = 0;' . PHP_EOL;

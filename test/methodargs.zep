@@ -8,6 +8,8 @@ class MethodArgs
 
 	const MY_BOOL = true;
 
+	const MY_INT = 12345;
+
 	public a;
 
 	public function setCallable(callable a)
@@ -66,6 +68,15 @@ class MethodArgs
 	 * @link https://github.com/phalcon/zephir/issues/696
 	 */
 	public function methodOptionalBoolValueWithDefaultStaticConstantAccess(bool parameter = self::MY_BOOL)
+	{
+		return parameter;
+	}
+
+	/**
+	 * For int parameter
+	 * @link https://github.com/phalcon/zephir/issues/728
+	 */
+	public function methodOptionalIntValueWithDefaultStaticConstantAccess(int parameter = self::MY_INT)
 	{
 		return parameter;
 	}
