@@ -51,7 +51,7 @@ class NotOperator extends BaseOperator
             case 'uint':
             case 'long':
             case 'ulong':
-                return new CompiledExpression('bool', '!' . $left->getCode(), $expression);
+                return new CompiledExpression('bool', '!(' . $left->getCode() . ')', $expression);
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
