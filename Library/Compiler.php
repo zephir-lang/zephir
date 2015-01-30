@@ -1571,6 +1571,7 @@ class Compiler
         /**
          * Round 1.5 Make a second pass to ensure classes will have the correct weight
          */
+        $files = array_reverse($files);
         foreach ($files as $file) {
             if (!$file->isExternal()) {
                 $classDefinition = $file->getClassDefinition();
@@ -1579,6 +1580,7 @@ class Compiler
                 }
             }
         }
+        $files = array_reverse($files);
 
         $classEntries = array();
         $classInits = array();
