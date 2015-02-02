@@ -171,10 +171,15 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                         break;
 
                     case 'bool':
-                        if ($resolvedExpr->getBooleanCode() == '1') {
+                        $booleanCode = $resolvedExpr->getBooleanCode();
+                        if ($booleanCode == '1') {
                             $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_true) TSRMLS_CC);');
-                        } else {
+                        } else if ($booleanCode == '0') {
                             $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
+                        } else {
+                            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                            $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $booleanCode . ');');
+                            $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         }
                         break;
 
