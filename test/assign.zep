@@ -817,4 +817,17 @@ class Assign
 		var elements;
 		let elements = ["abc": 1, ABDAY_1: DAY_1, ABDAY_2: DAY_2];
 	}
+
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/725
+	 */
+	public function testAssignSuperGlobals()
+	{
+		var v = "stest2";
+		let _GET["steststr"] = "stest";
+		let _GET["steststr2"] = v;
+		let _GET["stestint"] = 1;
+		let _GET["stestint2"] = 2;
+		let _GET[v] = "testval";
+	}
 }

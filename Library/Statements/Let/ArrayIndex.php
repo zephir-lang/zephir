@@ -171,6 +171,11 @@ class ArrayIndex
 
         $compilationContext->headersManager->add('kernel/array');
 
+        if ($isGlobalVariable) {
+            $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
+            $codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&' . $variable . ');');
+        }
+        
         switch ($exprIndex->getType()) {
 
             case 'int':
@@ -186,11 +191,6 @@ class ArrayIndex
 
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
-
-                if ($isGlobalVariable) {
-                    $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
-                    $codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&' . $variable . ');');
-                }
 
                 switch ($variableIndex->getType()) {
                     case 'int':
@@ -208,18 +208,16 @@ class ArrayIndex
                     default:
                         throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
                 }
-
-                if ($isGlobalVariable) {
-                    $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
-                    $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
-                    $codePrinter->output('}');
-                }
-
                 break;
             default:
                 throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
         }
-
+        
+        if ($isGlobalVariable) {
+            $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
+            $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
+            $codePrinter->output('}');
+        }
     }
 
     /**
