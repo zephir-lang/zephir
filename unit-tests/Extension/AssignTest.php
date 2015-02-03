@@ -95,6 +95,7 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testPropertyArray14() == $this->getComplexArrayTestValue());
         $this->assertTrue($t->testStaticPropertyArrayMulti4() == $this->getComplexArrayTestValue());
         $this->assertTrue($t->testStaticPropertyArrayAppend() == array("test", 1, 1.5, false, array()));
+        $this->assertTrue($t->testArrayBoolExpressionAssign() == array("a" => true, "b" => false));
     }
 
     public function testGlobalVarAssign()
