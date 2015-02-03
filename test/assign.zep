@@ -819,6 +819,19 @@ class Assign
 	}
 
 	/**
+	 * @link https://github.com/phalcon/zephir/issues/746
+	 *
+	 */
+	public function testArrayBoolExpressionAssign()
+	{
+		var str = "abc";
+		let this->myArray = [];
+		let this->myArray["a"] = str == "abc";
+		let this->myArray["b"] = str != "abc";
+		return this->myArray;
+	}
+
+	/**
 	 * @link https://github.com/phalcon/zephir/issues/725
 	 */
 	public function testAssignSuperGlobals()
