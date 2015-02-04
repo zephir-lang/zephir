@@ -122,4 +122,42 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
         $t = new NativeArray();
         $this->assertFalse($t->issue264(array(1, 2, 3)));
     }
+
+    public function testIssue743()
+    {
+        $t = new NativeArray();
+
+        $expected = array(42 => array("str" => "ok"));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array())));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => null))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => 42.7))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => 42))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => true))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => "bad"))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => array()))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => array("hey")))));
+        $this->assertEquals($expected, $t->issue743a(array(42 => array("str" => new \stdClass()))));
+
+        $expected = array("str" => array(42 => "ok"));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array())));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => null))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => 42.7))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => 42))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => true))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => "bad"))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => array()))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => array("hey")))));
+        $this->assertEquals($expected, $t->issue743b(array("str" => array(42 => new \stdClass()))));
+
+        $expected = array("str" => array("hey" => "ok"));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array())));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => null))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => 42.7))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => 42))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => true))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => "bad"))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => array()))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => array("hey")))));
+        $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => new \stdClass()))));
+    }
 }

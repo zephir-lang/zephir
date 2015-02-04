@@ -602,4 +602,24 @@ class NativeArray
 	{
 	    return !isset(tokens[1]);
 	}
+
+	public function issue743a(array current)
+	{
+		let current[42]["str"] = "ok";
+		return current;
+	}
+
+	public function issue743b(array current)
+	{
+		let current["str"][42] = "ok";
+		return current;
+	}
+
+	public function issue743c(array current)
+	{
+		var key;
+		let key = "hey";
+		let current["str"][$key] = "ok";
+		return current;
+	}
 }
