@@ -381,6 +381,9 @@ class ClassDefinition
             $classDefinition = $this->extendsClassDefinition;
             if (method_exists($classDefinition, 'increaseDependencyRank')) {
                 $classDefinition->increaseDependencyRank($this->dependencyRank * 2);
+                while ($classDefinition->isInternal() && $classDefinition->getDependencyRank() <= $this->getDependencyRank()) {
+                    $classDefinition->increaseDependencyRank();
+                }
             }
         }
 
@@ -388,6 +391,9 @@ class ClassDefinition
             foreach ($this->implementedInterfaceDefinitions as $interfaceDefinition) {
                 if (method_exists($interfaceDefinition, 'increaseDependencyRank')) {
                     $interfaceDefinition->increaseDependencyRank($this->dependencyRank * 2);
+                    while ($interfaceDefinition->isInternal() && $interfaceDefinition->getDependencyRank() <= $this->getDependencyRank()) {
+                        $interfaceDefinition->increaseDependencyRank();
+                    }
                 }
             }
         }
