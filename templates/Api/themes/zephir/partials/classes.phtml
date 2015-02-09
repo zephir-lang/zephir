@@ -1,0 +1,11 @@
+<div class="class-list">
+
+    <ul>
+    <?php foreach($classes as $className => $class){ ?>
+
+        <li> <a href="<?= $this->url($class) ?>"><?= $className ?></a></li>
+
+    <?php } ?>
+    </ul>
+    
+</div>

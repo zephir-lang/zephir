@@ -1,0 +1,75 @@
+<html>
+
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/prettify.css") ?>" />
+        <link rel="stylesheet" type="text/css" href="<?= $this->asset("static/style.css") ?>" />
+        
+        
+        <script src="<?= $this->asset("static/jquery.min.js") ?>"></script>
+        <script src="<?= $this->asset("static/prettify.js") ?>"></script>
+        <script src="<?= $this->asset("api_definition.js") ?>"></script>
+
+        <script>var ZepCurrentPath = '<?=$this->url("/")?>'</script>
+
+        <script src="<?= $this->asset("static/script.js") ?>"></script>
+
+        <?php if($this->themeOption("analytics")){ ?>
+        
+        <!-- Google Analytics -->
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '<?= $this->themeOption("analytics") ?>', 'auto');
+        ga('send', 'pageview');
+
+        </script>
+        <!-- End Google Analytics -->
+        
+        <?php } ?>
+        
+    </head>
+
+
+    <body onload="prettyPrint()">
+        <div id="top-bar">
+            <div id="top-left">
+                Zephir Documentation <span class="version">v1.0.1</span>
+            </div>
+            <div id="top-right">
+
+            </div>
+        </div>
+
+        <div id="body">
+
+            <div id="body-left">
+
+                <div class="header-search">
+
+                    <input class="search-box" placeholder="Search for a class or namespace " type="text" />
+             
+                    <div id="menu-wrapper">
+
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div id="body-right">
+                <div class="content">
+                    <?= $this->partial($contentPartial) ?>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+
+
+</html>

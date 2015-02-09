@@ -1,0 +1,37 @@
+<?php
+
+    $items = array(
+        array("name" => "Classes" , "url" => "/classes.html" ),
+        $items[] = array("name" => $fullName , "url" => $this->url($classDefinition)),
+        $items[] = array("name" => "Source"),
+    );
+?>
+
+<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+
+<div class="class-header source clearfix">
+    
+    <div class="access-buttons">
+        <a class="zep-button" href="<?= $this->url($classDefinition) ?>">Class</a>
+
+        <?php if($this->themeOption("github")){ ?>
+        <a class="zep-button" href="<?= $this->themeOption("github") . "/tree/master/" . $compilerFile->getFilePath() ?>">Github</a>
+        <?php } ?>
+    </div>
+    
+    <div class="class-full-name">
+        
+        <span class="class-type">Class</span>
+        
+        <?php foreach($namespacePieces as $nsname => $nspath){ ?>
+        <span class="namespace-piece">
+            <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>"><?=$nsname?></a>
+        </span>
+        <?php } ?>
+        <h1 class="class-name"><?= $className ?></h1>
+    </div>
+    
+</div>
+
+
+<pre class="zephir-source-file prettyprint linenums"><?= file_get_contents(realpath($compilerFile->getFilePath())) ?></pre>

@@ -940,17 +940,13 @@ class Compiler
         if (!$fromGenerate) {
             $this->generate($command);
         }
-
+        
         $this->logger->output('Generating API...');
-        $stubsGenerator = new Api\Generator($this->files, $this->config);
-
-        $path = $this->config->get('path', 'stubs');
-        $path = str_replace('%version%', $this->config->get('version'), $path);
-        $path = str_replace('%namespace%', ucfirst($this->config->get('namespace')), $path);
-
-        $stubsGenerator->generate($path);
+        
+        $documentator = new Documentation($this->files, $this->config, $this->logger);
+        $documentator->build();
     }
-
+    
     /**
      * Generate IDE stubs
      *
@@ -972,6 +968,7 @@ class Compiler
 
         $stubsGenerator->generate($path);
     }
+
 
     /**
      * Compiles and installs the extension

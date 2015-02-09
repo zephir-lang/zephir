@@ -1,0 +1,47 @@
+<?php
+
+/* @var $method \Zephir\ClassMethod */
+
+$visibilities = $method->getVisibility();
+$docblock =  $method->getParsedDocBlock();
+
+?>
+
+<li class="class-method clearfix">
+
+    <div class="hidden-anchor"  id="method-details-<?= $method->getName() ?>"></div>
+    
+    <div class="method-details">
+        
+
+        
+
+        <div class="method-details-details">
+            <div class="method-signature">
+
+                
+                <?php foreach($visibilities as $visibility){ ?>
+                    
+                <span class="visibility-<?= $visibility ?>"><?= $visibility ?></span>
+                
+                <?php } ?>
+                
+                function <h3 class="method-name"><?= $method->getName() ?></h3>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
+                
+                <?php if ($docblock) { ?>
+                
+                    <div>
+                    <?= $docblock->getSummary() ?>
+                    </div>
+                    <div>
+                    <?= $docblock->getDescription() ?>
+                    </div>
+                
+                <?php } ?>
+                
+            </div>
+        </div>
+
+    </div>
+
+</li>

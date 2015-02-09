@@ -1,0 +1,62 @@
+<?php
+
+/* @var $method \Zephir\ClassMethod */
+
+?>
+
+<li class="class-method clearfix">
+
+    <div class="method-return">
+
+        <?php
+
+            $allTypes = array();
+
+            $_lClasses = $method->getReturnClassTypes();
+            
+            foreach($_lClasses as $c){
+                
+                if ($c{0} == "\\") {
+                    $allTypes[] = substr($c,1);
+                } else {
+
+                    $_lFullClassName = $classNamespace . "\\" . $c;
+                    $_lClassUrl = $this->url(\Zephir\Documentation::classUrl($_lFullClassName));
+
+                    $allTypes[]= "<a href='$_lClassUrl'>$_lFullClassName</a>";
+                    
+                }
+                
+            }
+
+            $types = $method->getReturnTypes();
+
+            if($types && count($types)>0 ){
+
+                foreach($types as $type){
+
+                    if($type && isset($type["data-type"]))
+                        $allTypes[] =  $type["data-type"];
+                }
+            }
+
+            echo implode("|",$allTypes);
+
+        ?>
+
+        <?php 
+            
+            $docblock = $method->getParsedDocblock();
+        
+ 
+        ?>
+        
+    </div>
+    <div class="method-summary">
+        <span class="method-name"><a href="#method-details-<?= $method->getName() ?>"><?= $method->getName() ?></a></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
+        <?php if($docblock){ ?>
+        <div class="summary-text"><?= $docblock->getSummary() ?></div>
+        <?php } ?>
+    </div>
+
+</li>

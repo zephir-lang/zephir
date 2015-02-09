@@ -873,4 +873,15 @@ class CompilerFile
     {
         return Utils::getFullName($name, $this->_namespace, $this->_aliasManager);
     }
+    
+    /**
+     * 
+     * Returns the path to the source file
+     * 
+     * @return type
+     */
+    public function getFilePath()
+    {
+        return $this->_filePath;
+    }
 }

@@ -1,0 +1,13 @@
+<div class="breadcrumb">
+    
+    <ul>
+        
+        <li><a href="<?= $this->url("/index.html") ?>">Home</a></li>
+        
+        <?php foreach($items as $i){ ?>
+        <li><a <?php if( isset($i["url"])){ ?>href="<?= $this->url($i["url"]) ?>"<?php } ?>><?= $i["name"] ?></a></li>
+        <?php } ?>
+        
+    </ul>
+    
+</div>

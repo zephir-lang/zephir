@@ -3,6 +3,18 @@
         "path": "ide\/%version%\/%namespace%\/",
         "stubs-run-after-generate": false
     },
+
+    "api": {
+        "path"  : "doc/%version%",
+        "theme" : {
+            "name":"zephir",
+            "options" :{
+                "github":"https://github.com/user/repo",
+                "analytics":null
+            }
+        }
+    },
+
     "warnings": {
         "unused-variable": true,
         "unused-variable-external": false,

@@ -1,0 +1,33 @@
+<?php
+
+/* @var $method \Zephir\ClassMethod */
+
+?>
+
+<li class="class-method clearfix">
+
+    <div class="hidden-anchor"  id="method-details-<?= $method->getName() ?>"></div>
+    
+    <div class="method-details">
+        
+
+        <h3 class="method-name"><?= $method->getName() ?></h3>
+
+        <div class="method-details-details">
+            <div class="method-signature">
+
+                <?= $method->isAbstract() ? "abstract" : "" ?>
+                <?= $method->isStatic() ? "static" : "" ?>
+                <?= $method->isFinal() ? "final" : "" ?>
+                <?= implode(" ",$method->getVisibility()) ?>
+                function <span class="method-name"><?= $method->getName() ?></span>(<?= $this->partial("partials/class/method-summary-params.phtml" ) ?>)
+                
+                <div>
+                <?= $method->getDocBlock() ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</li>

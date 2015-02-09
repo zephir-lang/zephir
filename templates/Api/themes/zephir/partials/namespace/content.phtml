@@ -1,0 +1,53 @@
+<?php
+
+    $items = array(
+        array("name" => "Namespaces" , "url" => "/namespaces.html" ),
+        $items[] = array("name" => $namespaceHelper->getFullNamespace())
+    );
+?>
+
+<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+
+
+
+<div class="namespace-header">
+    <div class="namespace-full-name">
+        <div class="class-type">Namespace</div>
+       
+        <h1 class="namespace-name"><?= $namespaceHelper->getFullNamespace() ?></h1>
+    </div>
+</div>
+
+
+<?php if( count($subNamespaces)>0 ){ ?>
+
+    <div class="subnamespaces">
+        <h2 class="standard-bandeau">Sub Namespaces</h2>
+        
+        <ul>
+            <?php foreach ($subNamespaces as $ns){ ?>
+            <li><a href="<?= $this->url(Zephir\Documentation::namespaceUrl($ns->getFullNamespace())) ?>"><?= $ns->getFullNamespace() ?></a></li>
+            <?php } ?>
+            
+        </ul>
+        
+    </div>
+<?php } ?>
+
+
+<?php if( count($subClasses)>0 ){ ?>
+
+    <div class="subclasses">
+        <h2 class="standard-bandeau">Sub Classes</h2>
+        
+        <ul>
+            <?php foreach ($subClasses as $sc){ ?>
+            <li><a href="<?= $this->url($sc) ?>"><?= $sc->getClassDefinition()->getName() ?></a></li>
+            <?php } ?>
+            
+        </ul>
+        
+    </div>
+<?php } ?>
+
+

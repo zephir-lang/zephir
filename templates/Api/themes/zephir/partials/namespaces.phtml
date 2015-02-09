@@ -1,0 +1,19 @@
+<?php
+    $items = array(
+        array("name" => "Namespaces" ),
+    );
+?>
+<?= $this->partial("partials/breadcrumb.phtml",array("items"=> $items)) ?>
+
+
+<div class="namespace-list">
+
+    <ul>
+    <?php foreach($namespaces as $namesapceName => $ns){ ?>
+
+        <li> <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($namesapceName)) ?>"><?= $namesapceName ?></a></li>
+
+    <?php } ?>
+    </ul>
+    
+</div>

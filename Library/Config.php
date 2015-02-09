@@ -31,6 +31,23 @@ class Config
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
         ),
+
+        'api' => array(
+
+            "path" => "doc/%version%",
+
+            "theme" => array(
+                "name" => "zephir",
+                "options" => array(
+                    "github" => null,
+                    "analytics" => null,
+                    "main_color" => "#3E6496",
+                    "link_color" => "#3E6496",
+                    "link_hover_color" => "#5F9AE7"
+                )
+            )
+        ),
+
         'warnings' => array(
             'unused-variable'                    => true,
             'unused-variable-external'           => false,
