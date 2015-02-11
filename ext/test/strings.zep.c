@@ -299,6 +299,23 @@ PHP_METHOD(Test_Strings, testStripslashes) {
 
 }
 
+PHP_METHOD(Test_Strings, testLevenshtein) {
+
+	zval *str1_param = NULL, *str2_param = NULL;
+	zval *str1 = NULL, *str2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &str1_param, &str2_param);
+
+	zephir_get_strval(str1, str1_param);
+	zephir_get_strval(str2, str2_param);
+
+
+	zephir_levenshtein(return_value, str1, "test/strings.zep", 97);
+	RETURN_MM();
+
+}
+
 PHP_METHOD(Test_Strings, testHardcodedMultilineString) {
 
 
