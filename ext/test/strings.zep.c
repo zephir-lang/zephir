@@ -311,7 +311,7 @@ PHP_METHOD(Test_Strings, testLevenshtein) {
 	zephir_get_strval(str2, str2_param);
 
 
-	zephir_levenshtein(return_value, str1, "test/strings.zep", 97);
+	zephir_levenshtein(str1, str2, "test/strings.zep", 97);
 	RETURN_MM();
 
 }

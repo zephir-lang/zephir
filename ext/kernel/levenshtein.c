@@ -117,6 +117,9 @@ void zephir_levenshtein(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS) {
     str1_len = sizeof(str1);
     str2_len = sizeof(str2);
 
+	str1 = Z_STRVAL_P(str1);
+	str2 = Z_STRVAL_P(str2);
+
     zend_long cost_ins, cost_rep, cost_del;
     zend_long distance = -1;
 
@@ -128,3 +131,18 @@ void zephir_levenshtein(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS) {
 
     RETURN_LONG(distance);
 }
+
+void zephir_levenshtein(char *str1, size_t str1_len, char *str2, size_t str2_len, ZEPHIR_DEBUG_PARAMS) {
+
+    zend_long cost_ins, cost_rep, cost_del;
+    zend_long distance = -1;
+
+    distance = reference_levdist(str1, str1_len, str2, str2_len, 1, 1, 1);
+
+	if (distance < 0 && /* TODO */ ZEND_NUM_ARGS() != 3) {
+		php_error_docref(NULL, E_WARNING, "Argument string(s) too long");
+	}
+
+    RETURN_LONG(distance);
+}
+

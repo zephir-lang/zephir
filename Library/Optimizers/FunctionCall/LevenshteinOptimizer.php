@@ -61,7 +61,10 @@ class LevenshteinOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable();
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
+            throw new CompilerException(
+                "Returned values by functions can only be assigned to variant variables",
+                $expression
+            );
         }
 
         if ($call->mustInitSymbolVariable()) {
@@ -74,7 +77,7 @@ class LevenshteinOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        $context->codePrinter->output('zephir_levenshtein(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+        $context->codePrinter->output('zephir_levenshtein('. $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

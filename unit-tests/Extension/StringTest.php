@@ -126,6 +126,14 @@ class StringTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testStripslashes(addslashes("hello\0world")) == "hello\0world");
     }
 
+    public function testLevenshtein()
+    {
+        $t = new \Test\Strings();
+
+        $this->assertTrue($t->testLevenshtein("abcd", "ab") == levenshtein("abcd", "ab"));
+    }
+
+
     public function testMultilineStrings()
     {
         $hardcodedString = '
