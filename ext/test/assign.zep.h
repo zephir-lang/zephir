@@ -84,6 +84,8 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2);
 PHP_METHOD(Test_Assign, testArrayProperty);
 PHP_METHOD(Test_Assign, testGlobalVarAssign);
 PHP_METHOD(Test_Assign, testConstantKeyAssign);
+PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign);
+PHP_METHOD(Test_Assign, testAssignSuperGlobals);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_assign_testpropertyarray4, 0, 0, 1)
 	ZEND_ARG_INFO(0, index)
@@ -227,5 +229,7 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testArrayProperty, arginfo_test_assign_testarrayproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testGlobalVarAssign, arginfo_test_assign_testglobalvarassign, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testConstantKeyAssign, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testArrayBoolExpressionAssign, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Assign, testAssignSuperGlobals, NULL, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

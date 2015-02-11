@@ -1437,7 +1437,63 @@ PHP_METHOD(Test_NativeArray, issue264) {
 	zephir_get_arrval(tokens, tokens_param);
 
 
-	RETURN_MM_BOOL(!zephir_array_isset_long(tokens, 1));
+	RETURN_MM_BOOL(!(zephir_array_isset_long(tokens, 1)));
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743a) {
+
+	zval *current_param = NULL, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("ls"), 3, 42, SL("str"));
+	RETURN_CTOR(current);
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743b) {
+
+	zval *current_param = NULL, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("sl"), 3, SL("str"), 42);
+	RETURN_CTOR(current);
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743c) {
+
+	zval *current_param = NULL, *key, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(key);
+	ZVAL_STRING(key, "hey", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("sz"), 3, SL("str"), key);
+	RETURN_CTOR(current);
 
 }
 

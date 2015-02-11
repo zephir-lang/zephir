@@ -92,6 +92,11 @@ class Strings
 		return stripslashes(str);
 	}
 
+	public function testLevenshtein(string str1, string str2)
+	{
+		return levenshtein(str1, str2);
+	}
+
     public function testHardcodedMultilineString()
     {
         return "

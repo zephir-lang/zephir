@@ -72,6 +72,9 @@ PHP_METHOD(Test_NativeArray, testArrayKeys);
 PHP_METHOD(Test_NativeArray, testImplodeArray);
 PHP_METHOD(Test_NativeArray, issue110);
 PHP_METHOD(Test_NativeArray, issue264);
+PHP_METHOD(Test_NativeArray, issue743a);
+PHP_METHOD(Test_NativeArray, issue743b);
+PHP_METHOD(Test_NativeArray, issue743c);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_testarraykeys, 0, 0, 1)
 	ZEND_ARG_INFO(0, param)
@@ -83,6 +86,18 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue264, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, tokens, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue743a, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, current, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue743b, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, current, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_nativearray_issue743c, 0, 0, 1)
+	ZEND_ARG_ARRAY_INFO(0, current, 0)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
@@ -155,5 +170,8 @@ ZEPHIR_INIT_FUNCS(test_nativearray_method_entry) {
 	PHP_ME(Test_NativeArray, testImplodeArray, arginfo_test_nativearray_testimplodearray, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, issue110, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_NativeArray, issue264, arginfo_test_nativearray_issue264, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, issue743a, arginfo_test_nativearray_issue743a, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, issue743b, arginfo_test_nativearray_issue743b, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_NativeArray, issue743c, arginfo_test_nativearray_issue743c, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

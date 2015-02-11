@@ -1663,3 +1663,82 @@ PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/746
+ *
+ */
+PHP_METHOD(Test_Assign, testArrayBoolExpressionAssign) {
+
+	zval *str, *_0, *_1, *_2, *_3, *_4;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(str);
+	ZVAL_STRING(str, "abc", 1);
+
+	ZEPHIR_INIT_VAR(_0);
+	array_init(_0);
+	zephir_update_property_this(this_ptr, SL("myArray"), _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "a", 1);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_BOOL(_2, ZEPHIR_IS_STRING(str, "abc"));
+	zephir_update_property_array(this_ptr, SL("myArray"), _1, _2 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_STRING(_3, "b", 1);
+	ZEPHIR_INIT_VAR(_4);
+	ZVAL_BOOL(_4, !ZEPHIR_IS_STRING(str, "abc"));
+	zephir_update_property_array(this_ptr, SL("myArray"), _3, _4 TSRMLS_CC);
+	RETURN_MM_MEMBER(this_ptr, "myArray");
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/725
+ */
+PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
+
+	int _1, _2, _4, _6, _8;
+	zval *v, *_GET, *_0, *_3, *_5, *_7;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(v);
+	ZVAL_STRING(v, "stest2", 1);
+
+	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "stest", 1);
+	_1 = zephir_maybe_separate_zval(&_GET);
+	zephir_array_update_string(&_GET, SL("steststr"), &_0, PH_COPY | PH_SEPARATE);
+	if (_1) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_GET", _GET);
+	}
+	_2 = zephir_maybe_separate_zval(&_GET);
+	zephir_array_update_string(&_GET, SL("steststr2"), &v, PH_COPY | PH_SEPARATE);
+	if (_2) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_GET", _GET);
+	}
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_LONG(_3, 1);
+	_4 = zephir_maybe_separate_zval(&_GET);
+	zephir_array_update_string(&_GET, SL("stestint"), &_3, PH_COPY | PH_SEPARATE);
+	if (_4) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_GET", _GET);
+	}
+	ZEPHIR_INIT_VAR(_5);
+	ZVAL_LONG(_5, 2);
+	_6 = zephir_maybe_separate_zval(&_GET);
+	zephir_array_update_string(&_GET, SL("stestint2"), &_5, PH_COPY | PH_SEPARATE);
+	if (_6) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_GET", _GET);
+	}
+	ZEPHIR_INIT_VAR(_7);
+	ZVAL_STRING(_7, "testval", 1);
+	_8 = zephir_maybe_separate_zval(&_GET);
+	zephir_array_update_zval(&_GET, v, &_7, PH_COPY | PH_SEPARATE);
+	if (_8) {
+		ZEND_SET_SYMBOL(&EG(symbol_table), "_GET", _GET);
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
