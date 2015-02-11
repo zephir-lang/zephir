@@ -109,7 +109,7 @@ static int custom_levdist(char *str1, char *str2, char *callback_name)
 }
 /* }}} */
 
-void zephir_levenshtein(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS) {
+void zephir_levenshtein_zval(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS) {
 
     char *str1, *str2;
     size_t str1_len, str2_len;
@@ -132,7 +132,7 @@ void zephir_levenshtein(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS) {
     RETURN_LONG(distance);
 }
 
-void zephir_levenshtein(char *str1, size_t str1_len, char *str2, size_t str2_len, ZEPHIR_DEBUG_PARAMS) {
+void zephir_levenshtein_string(char *str1, size_t str1_len, char *str2, size_t str2_len ZEPHIR_DEBUG_PARAMS) {
 
     zend_long cost_ins, cost_rep, cost_del;
     zend_long distance = -1;

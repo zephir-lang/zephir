@@ -71,13 +71,13 @@ class LevenshteinOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->headersManager->add('kernel/string');
+        $context->headersManager->add('kernel/levenshtein');
 
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        $context->codePrinter->output('zephir_levenshtein('. $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+        $context->codePrinter->output('zephir_levenshtein_zval('. $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

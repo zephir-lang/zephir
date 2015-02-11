@@ -37,7 +37,7 @@
 
 #include <Zend/zend.h>
 
-int zephir_levenshtein(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS);
-int zephir_levenshtein(char *str1, size_t str1_len, char *str2, size_t str2_len, ZEPHIR_DEBUG_PARAMS);
+int zephir_levenshtein_zval(zval *str1, zval *str2 ZEPHIR_DEBUG_PARAMS);
+int zephir_levenshtein_string(char *str1, size_t str1_len, char *str2, size_t str2_len ZEPHIR_DEBUG_PARAMS);
 
 #endif /* ZEPHIR_KERNEL_LEVENSHTEIN_H */

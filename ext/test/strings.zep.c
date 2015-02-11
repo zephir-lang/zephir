@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
+#include "kernel/levenshtein.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Strings) {
@@ -311,7 +312,7 @@ PHP_METHOD(Test_Strings, testLevenshtein) {
 	zephir_get_strval(str2, str2_param);
 
 
-	zephir_levenshtein(str1, str2, "test/strings.zep", 97);
+	zephir_levenshtein_zval(str1, str2, "test/strings.zep", 97);
 	RETURN_MM();
 
 }
