@@ -139,7 +139,7 @@ static PHP_GSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 
 %FE_HEADER%
 zend_function_entry php_%PROJECT_LOWER_SAFE%_functions[] = {
-    %FE_ENTRIES%
+%FE_ENTRIES%
 };
 
 zend_module_entry %PROJECT_LOWER_SAFE%_module_entry = {

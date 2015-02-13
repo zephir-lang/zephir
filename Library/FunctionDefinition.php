@@ -116,10 +116,8 @@ class FunctionDefinition
     protected $callGathererPass;
 
     /**
-     * ClassMethod constructor
+     * FunctionDefinition constructor
      *
-     * @param ClassDefinition $classDefinition
-     * @param array $visibility
      * @param $name
      * @param $parameters
      * @param StatementsBlock $statements

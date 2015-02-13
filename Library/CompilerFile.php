@@ -206,6 +206,11 @@ class CompilerFile
 
     public function compileFunction(CompilationContext $compilationContext, $namespace, $topStatement)
     {
+        /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
+        $bakClassDefinition = $compilationContext->classDefinition;
+        $compilationContext->classDefinition = null;
+
+
         $functionDefinition = new FunctionDefinition(
             $namespace,
             $topStatement['name'],
@@ -214,12 +219,17 @@ class CompilerFile
             isset($method['return-type']) ? $method['return-type'] : null,
             $topStatement
         );
+        $compilationContext->currentMethod = $functionDefinition;
 
         $codePrinter = $compilationContext->codePrinter;
         $codePrinter->output('PHP_FUNCTION(' . $namespace . '_' . $functionDefinition->getName() . ') {');
         $functionDefinition->compile($compilationContext);
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
+
+        /** Restore */
+        $compilationContext->classDefinition = $bakClassDefinition;
+        $compilationContext->currentMethod = null;
     }
 
     /**
