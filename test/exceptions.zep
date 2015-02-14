@@ -59,4 +59,15 @@ class Exceptions
                 throw 123.123;
         }
     }
+
+    public function testExceptionRethrow()
+    {
+        var e;
+        try {
+            this->testException1();
+        }
+        catch \Exception, e {
+            throw e;
+        }
+    }
 }

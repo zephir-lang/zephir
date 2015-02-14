@@ -112,4 +112,15 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         $t = new Exceptions();
         $t->testExceptionLiteral('double');
     }
+
+    public function testExceptionRethrow()
+    {
+        $t = new Exceptions();
+        try {
+            $t->testExceptionRethrow();
+            $this->assertFalse();
+        } catch (\Exception $e) {
+            $this->assertEquals(8, $e->getLine());
+        }
+    }
 }
