@@ -143,7 +143,7 @@ class DivOperator extends ArithmeticalBaseOperator
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', (double) (' . $right->getCode() . '))', $expression);
+                        return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', (double) (' . $right->getCode() . ') TSRMLS_CC)', $expression);
 
                     case 'double':
                         return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
