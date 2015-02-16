@@ -611,11 +611,11 @@ class CompilerFile
         }
 
         /* Set namespace and flag as global, if before namespace declaration */
-        foreach ($this->_functionDefinitions as $funcDef)
-        {
-            if ($funcDef->getNamespace() != null) continue;
-            $funcDef->setGlobal(true);
-            $funcDef->setNamespace($namespace);
+        foreach ($this->_functionDefinitions as $funcDef) {
+            if ($funcDef->getNamespace() == null) {
+                $funcDef->setGlobal(true);
+                $funcDef->setNamespace($namespace);
+            }
         }
 
         $class = false;
@@ -839,8 +839,9 @@ class CompilerFile
 
         /* ensure functions are handled last */
         foreach ($this->_ir as $topStatement) {
-            if ($topStatement['type'] != 'function') continue;
-            $this->compileFunction($compilationContext, $this->_namespace, $topStatement);
+            if ($topStatement['type'] == 'function') {
+                $this->compileFunction($compilationContext, $this->_namespace, $topStatement);
+            }
         }
 
         /* apply headers */
@@ -963,11 +964,11 @@ class CompilerFile
     {
         return Utils::getFullName($name, $this->_namespace, $this->_aliasManager);
     }
-    
+
     /**
-     * 
+     *
      * Returns the path to the source file
-     * 
+     *
      * @return type
      */
     public function getFilePath()

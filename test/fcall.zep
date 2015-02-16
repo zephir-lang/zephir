@@ -3,7 +3,18 @@
  * Function calls
  */
 
+/* Test global function declaration */
+function zephir_global_method_test(var str)
+{
+	return new Fcall()->testStrtokVarBySlash(str);
+}
 namespace Test;
+
+/* Test function declaration in namespace */
+function zephir_namespaced_method_test(var str)
+{
+	return new Fcall()->testCall5(str, 5);
+}
 
 class Fcall
 {
