@@ -100,6 +100,20 @@ int zephir_is_instance_of(zval *object, const char *class_name, unsigned int cla
 	return 0;
 }
 
+int zephir_zval_is_traversable(zval *object TSRMLS_DC) {
+
+	zend_class_entry *ce, *temp_ce;
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		ce = Z_OBJCE_P(object);
+		if (ce->get_iterator || (ce->parent && ce->parent->get_iterator)) {
+			return SUCCESS;
+		}
+	}
+
+	return FAILURE;
+}
+
 /**
  * Returns a class name into a zval result
  */
