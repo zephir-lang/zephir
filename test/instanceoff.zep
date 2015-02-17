@@ -27,4 +27,13 @@ class Instanceoff
 		let a = new \stdClass();
 		return a instanceof UnknownClass;
 	}
+
+	public function testInstanceOf4(var a)
+	{
+		if a instanceof \Traversable {
+			return true;
+		}
+
+		return false;
+	}
 }

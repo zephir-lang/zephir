@@ -33,13 +33,12 @@ use Zephir\Utils;
  */
 class InstanceOfOperator extends BaseOperator
 {
-
     /**
-     *
-     * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param $expression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
      * @throws CompilerException
+     * @throws \Zephir\Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -58,11 +57,12 @@ class InstanceOfOperator extends BaseOperator
         $right = new Expression($expression['right']);
         $resolved = $right->compile($compilationContext);
         $resolvedVariable = $resolved->getCode();
-
+        
         switch ($resolved->getType()) {
 
             case 'string':
                 $className = Utils::getFullName($resolvedVariable, $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+
                 if ($compilationContext->compiler->isClass($className)) {
                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                     $classEntry = $classDefinition->getClassEntry($compilationContext);
@@ -84,6 +84,11 @@ class InstanceOfOperator extends BaseOperator
                     case 'variable':
                         if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
                             $className = $compilationContext->getFullName($resolvedVariable);
+
+                            if ($className == 'Traversable') {
+                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbolVariable->getName() . ' TSRMLS_CC)', $expression);
+                            }
+
                             if ($compilationContext->compiler->isClass($className)) {
                                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                                 $classEntry = $classDefinition->getClassEntry($compilationContext);

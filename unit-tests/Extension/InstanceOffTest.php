@@ -19,23 +19,33 @@
 
 namespace Extension;
 
+use Test\InstanceOff;
+
 class InstanceOffTest extends \PHPUnit_Framework_TestCase
 {
     public function testInstanceOf1()
     {
-        $t = new \Test\InstanceOff();
+        $t = new InstanceOff();
         $this->assertTrue($t->testInstanceOf1() === true);
     }
 
     public function testInstanceOf2()
     {
-        $t = new \Test\InstanceOff();
+        $t = new InstanceOff();
         $this->assertTrue($t->testInstanceOf2() === true);
     }
 
     public function testInstanceOf3()
     {
-        $t = new \Test\InstanceOff();
+        $t = new InstanceOff();
         $this->assertTrue($t->testInstanceOf3() === false);
+    }
+
+    public function testInstanceOf4()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf4(new \ArrayIterator(array())));
+        $this->assertTrue($t->testInstanceOf4(new \ArrayObject()));
     }
 }
