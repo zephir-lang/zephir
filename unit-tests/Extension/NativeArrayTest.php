@@ -160,4 +160,10 @@ class NativeArrayTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => array("hey")))));
         $this->assertEquals($expected, $t->issue743c(array("str" => array("hey" => new \stdClass()))));
     }
+    
+    public function testIssue709()
+    {
+        $t = new NativeArray();
+        $this->assertTrue($t->Issue709());
+    }
 }
