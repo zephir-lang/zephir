@@ -36,46 +36,43 @@ class StringType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getTypeName()
-    {
-        return 'string';
-    }
+    public $methodMap = array(
+        'index' => 'strpos',
+        'trim' => 'trim',
+        'trimleft' => 'ltrim',
+        'trimright' => 'rtrim',
+        'length' => 'strlen',
+        'lower' => 'strtolower',
+        'upper' => 'strtoupper',
+        'lowerfirst' => 'lcfirst',
+        'upperfirst' => 'ucfirst',
+        'format' => 'sprintf',
+        'md5' => 'md5',
+        'sha1' => 'sha1',
+        'nl2br' => 'nl2br',
+        'parsecsv' => 'str_getcsv',
+        'parsejson' => 'json_decode',
+        'tojson' => 'json_encode',
+        'toutf8' => 'utf8_encode',
+        'repeat' => 'str_repeat',
+        'shuffle' => 'str_shuffle',
+        'split' => 'str_split',
+        'compare' => 'strcmp',
+        'comparelocale' => 'strcoll',
+        'rev' => 'strrev',
+        'htmlspecialchars' => 'htmlspecialchars',
+        'camelize' => 'camelize',
+        'uncamelize' => 'uncamelize',
+    );
 
     /**
      * {@inheritdoc}
      */
-    protected function getMethodMap()
+    public function getTypeName()
     {
-        return array(
-            'index' => 'strpos',
-            'trim' => 'trim',
-            'trimleft' => 'ltrim',
-            'trimright' => 'rtrim',
-            'length' => 'strlen',
-            'lower' => 'strtolower',
-            'upper' => 'strtoupper',
-            'lowerfirst' => 'lcfirst',
-            'upperfirst' => 'ucfirst',
-            'format' => 'sprintf',
-            'md5' => 'md5',
-            'sha1' => 'sha1',
-            'nl2br' => 'nl2br',
-            'parsecsv' => 'str_getcsv',
-            'parsejson' => 'json_decode',
-            'tojson' => 'json_encode',
-            'toutf8' => 'utf8_encode',
-            'repeat' => 'str_repeat',
-            'shuffle' => 'str_shuffle',
-            'split' => 'str_split',
-            'compare' => 'strcmp',
-            'comparelocale' => 'strcoll',
-            'rev' => 'strrev',
-            'htmlspecialchars' => 'htmlspecialchars',
-            'camelize' => 'camelize',
-            'uncamelize' => 'uncamelize',
-        );
+        return 'string';
     }
-
+    
     /**
      * Returns the number of the parameter where the object must be bound
      *

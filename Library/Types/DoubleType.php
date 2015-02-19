@@ -29,32 +29,29 @@ class DoubleType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getTypeName()
-    {
-        return 'double';
-    }
+    public $methodMap = array(
+        'abs' => 'abs',
+        'tobinary' => 'decbin',
+        'tohex' => 'dechex',
+        'tooctal' => 'decoct',
+        'pow' => 'pow',
+        'sqrt' => 'sqrt',
+        'exp' => 'exp',
+        'sin' => 'sin',
+        'cos' => 'cos',
+        'tan' => 'tan',
+        'asin' => 'asin',
+        'acos' => 'acos',
+        'atan' => 'atan',
+        'log' => 'log'
+    );
 
     /**
      * {@inheritdoc}
      */
-    protected function getMethodMap()
+    public function getTypeName()
     {
-        return array(
-            'abs' => 'abs',
-            'tobinary' => 'decbin',
-            'tohex' => 'dechex',
-            'tooctal' => 'decoct',
-            'pow' => 'pow',
-            'sqrt' => 'sqrt',
-            'exp' => 'exp',
-            'sin' => 'sin',
-            'cos' => 'cos',
-            'tan' => 'tan',
-            'asin' => 'asin',
-            'acos' => 'acos',
-            'atan' => 'atan',
-            'log' => 'log'
-        );
+        return 'double';
     }
 
     /**
