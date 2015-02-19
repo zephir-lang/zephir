@@ -89,16 +89,14 @@ class ArrayType extends AbstractType
     }
 
     /**
-     * Returns the number of the parameter where the object must be bound
-     *
-     * @param $methodName
-     * @return int
+     * {@inheritdoc}
      */
     protected function getNumberParam($methodName)
     {
         if ($methodName == "map") {
             return 1;
         }
+
         return 0;
     }
 

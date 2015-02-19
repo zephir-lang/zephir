@@ -53,15 +53,4 @@ class DoubleType extends AbstractType
     {
         return 'double';
     }
-
-    /**
-     * Returns the number of the parameter where the object must be bound
-     *
-     * @param $methodName
-     * @return int
-     */
-    protected function getNumberParam($methodName)
-    {
-        return 0;
-    }
 }

@@ -101,9 +101,22 @@ abstract class AbstractType
     }
 
     /**
-     * @return string The name of the type
+     * Get the name of the type
+     *
+     * @return string
      */
     abstract public function getTypeName();
+
+    /**
+     * Returns the number of the parameter where the object must be bound
+     *
+     * @param $methodName
+     * @return int
+     */
+    protected function getNumberParam($methodName)
+    {
+        return 0;
+    }
 
     /**
      * @return array
