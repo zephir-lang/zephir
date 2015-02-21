@@ -1,11 +1,21 @@
-language: php
-
+language:
+  - php
+  - c
+  
 php:
   - 5.3
   - 5.4
   - 5.5
   - 5.6
-
+  
+compiler:
+  - gcc
+  - clang
+ 
+env:
+  - CC="gcc"
+  - CC="clang"
+  
 before_install:
  - git submodule --quiet update --init --recursive
  - ./unit-tests/ci/before_install.sh
