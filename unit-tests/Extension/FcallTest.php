@@ -50,4 +50,10 @@ class FcallTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Fcall();
         $this->assertTrue($t->testArrayFill() == array(array_fill(0, 5, "?"), array_fill(0, 6, "?")));
     }
+    
+    public function testFunctionDeclaration()
+    {
+        $this->assertTrue(\Test\zephir_namespaced_method_test("a") == "aaaaa");
+        $this->assertTrue(zephir_global_method_test("ab/c") == "ab");
+    }
 }

@@ -186,6 +186,9 @@ class CompilationContext
      */
     public function getFullName($className)
     {
-        return Utils::getFullName($className, $this->classDefinition->getNamespace(), $this->aliasManager);
+        $namespace = (isset($this->currentMethod) && $this->currentMethod instanceof FunctionDefinition) ?
+            $this->currentMethod->getNamespace() :
+            $this->classDefinition->getNamespace();
+        return Utils::getFullName($className, $namespace, $this->aliasManager);
     }
 }

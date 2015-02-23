@@ -54,6 +54,11 @@ class CompilerFile
     protected $_classDefinition;
 
     /**
+     * @var FunctionDefinition[]
+     */
+    protected $_functionDefinitions = array();
+
+    /**
      * @var array
      */
     protected $_headerCBlocks;
@@ -96,6 +101,11 @@ class CompilerFile
         return $this->_classDefinition;
     }
 
+    public function getFunctionDefinitions()
+    {
+        return $this->_functionDefinitions;
+    }
+
     /**
      * Sets if the class belongs to an external dependency or not
      *
@@ -114,6 +124,22 @@ class CompilerFile
     public function isExternal()
     {
         return $this->_external;
+    }
+
+    /**
+     * Adds a function to the function definitions
+     *
+     * @param FunctionDefinition $func
+     * @param array $statement
+     */
+    public function addFunction(FunctionDefinition $func, $statement = null)
+    {
+        $funcName = strtolower($func->getName());
+        if (isset($this->_functionDefinitions[$funcName])) {
+            throw new CompilerException("Function '" . $func->getName() . "' was defined more than one time", $statement);
+        }
+
+        $this->_functionDefinitions[$funcName] = $func;
     }
 
     /**
@@ -176,45 +202,34 @@ class CompilerFile
          * Do the compilation
          */
         $classDefinition->compile($compilationContext);
+    }
 
-        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+    public function compileFunction(CompilationContext $compilationContext, $namespace, $topStatement)
+    {
+        /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
+        $bakClassDefinition = $compilationContext->classDefinition;
+        $compilationContext->classDefinition = null;
 
-        $code  = '' . PHP_EOL;
-        $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
-        $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
-        $code .= '#endif' . PHP_EOL;
-        $code .= '' . PHP_EOL;
 
-        $code .= '#include <php.h>' . PHP_EOL;
-        $code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
-        $code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
-        $code .= '' . PHP_EOL;
+        $functionDefinition = new FunctionDefinition(
+            $namespace,
+            $topStatement['name'],
+            isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
+            isset($topStatement['statements']) ? new StatementsBlock($topStatement['statements']) : null,
+            isset($method['return-type']) ? $method['return-type'] : null,
+            $topStatement
+        );
+        $compilationContext->currentMethod = $functionDefinition;
 
-        if ($classDefinition->getType() == 'class') {
-            $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
-            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
-            $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
-        } else {
-            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
-        }
-        $code .= '' . PHP_EOL;
+        $codePrinter = $compilationContext->codePrinter;
+        $codePrinter->output('PHP_FUNCTION(' . $namespace . '_' . $functionDefinition->getName() . ') {');
+        $functionDefinition->compile($compilationContext);
+        $codePrinter->output('}');
+        $codePrinter->outputBlankLine();
 
-        $code .= '#include "kernel/main.h"' . PHP_EOL;
-
-        if ($classDefinition->getType() == 'class') {
-            foreach ($compilationContext->headersManager->get() as $header => $one) {
-                $code .= '#include "' . $header . '.h"' . PHP_EOL;
-            }
-        }
-
-        if (count($this->_headerCBlocks) > 0) {
-            $code .= implode($this->_headerCBlocks, PHP_EOL) . PHP_EOL;
-        }
-
-        /**
-         * Prepend the required files to the header
-         */
-        $compilationContext->codePrinter->preOutput($code);
+        /** Restore */
+        $compilationContext->classDefinition = $bakClassDefinition;
+        $compilationContext->currentMethod = null;
     }
 
     /**
@@ -573,11 +588,34 @@ class CompilerFile
                 case 'cblock':
                     $this->_headerCBlocks[] = $topStatement['value'];
                     break;
+
+
+                case 'function':
+                    /* Just do the precompilation of the function */
+                    $functionDefinition = new FunctionDefinition(
+                        $namespace,
+                        $topStatement['name'],
+                        isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
+                        null,
+                        isset($topStatement['return-type']) ? $topStatement['return-type'] : null,
+                        $topStatement
+                    );
+                    $functionDefinition->preCompile($compilationContext);
+                    $this->_functionDefinitions[] = $functionDefinition;
+                    break;
             }
         }
 
         if (!$namespace) {
             throw new CompilerException("A namespace is required", $topStatement);
+        }
+
+        /* Set namespace and flag as global, if before namespace declaration */
+        foreach ($this->_functionDefinitions as $funcDef) {
+            if ($funcDef->getNamespace() == null) {
+                $funcDef->setGlobal(true);
+                $funcDef->setNamespace($namespace);
+            }
         }
 
         $class = false;
@@ -796,9 +834,18 @@ class CompilerFile
                 case 'comment':
                     $this->compileComment($compilationContext, $topStatement);
                     break;
-
             }
         }
+
+        /* ensure functions are handled last */
+        foreach ($this->_ir as $topStatement) {
+            if ($topStatement['type'] == 'function') {
+                $this->compileFunction($compilationContext, $this->_namespace, $topStatement);
+            }
+        }
+
+        /* apply headers */
+        $this->applyClassHeaders($compilationContext);
 
         $classDefinition = $this->_classDefinition;
         if (!$classDefinition) {
@@ -863,6 +910,50 @@ class CompilerFile
         $this->_ir = null;
     }
 
+    public function applyClassHeaders($compilationContext)
+    {
+        $classDefinition = $this->_classDefinition;
+
+        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+
+        $code  = '' . PHP_EOL;
+        $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
+        $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
+        $code .= '#endif' . PHP_EOL;
+        $code .= '' . PHP_EOL;
+
+        $code .= '#include <php.h>' . PHP_EOL;
+        $code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
+        $code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
+        $code .= '' . PHP_EOL;
+
+        if ($classDefinition->getType() == 'class') {
+            $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
+            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+            $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
+        } else {
+            $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+        }
+        $code .= '' . PHP_EOL;
+
+        $code .= '#include "kernel/main.h"' . PHP_EOL;
+
+        if ($classDefinition->getType() == 'class') {
+            foreach ($compilationContext->headersManager->get() as $header => $one) {
+                $code .= '#include "' . $header . '.h"' . PHP_EOL;
+            }
+        }
+
+        if (count($this->_headerCBlocks) > 0) {
+            $code .= implode($this->_headerCBlocks, PHP_EOL) . PHP_EOL;
+        }
+
+        /**
+         * Prepend the required files to the header
+         */
+        $compilationContext->codePrinter->preOutput($code);
+    }
+
     /**
      * Transform class/interface name to FQN format
      *
@@ -873,11 +964,11 @@ class CompilerFile
     {
         return Utils::getFullName($name, $this->_namespace, $this->_aliasManager);
     }
-    
+
     /**
-     * 
+     *
      * Returns the path to the source file
-     * 
+     *
      * @return type
      */
     public function getFilePath()
