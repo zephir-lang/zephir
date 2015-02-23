@@ -48,7 +48,7 @@ class Compiler
     protected $definitions = array();
 
     /**
-     * @var FunctionDefinitions[]
+     * @var FunctionDefinition[]
      */
     protected $functionDefinitions = array();
 
