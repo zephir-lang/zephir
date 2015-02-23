@@ -1529,6 +1529,40 @@ class Compiler
         $this->externalDependencies[$namespace] = $location;
     }
 
+    public function calculateDependencies($files, $_dependency = null)
+    {
+        /**
+         * Classes are ordered according to a dependency ranking
+         * Classes with higher rank, need to be initialized first
+         * We first build a dependency tree and then set the rank accordingly
+         */
+        if ($_dependency == null) {
+            $dependencyTree = array();
+            foreach ($files as $file) {
+                if (!$file->isExternal()) {
+                    $classDefinition = $file->getClassDefinition();
+                    $dependencyTree[$classDefinition->getCompleteName()] = $classDefinition->getDependencies();
+                }
+            }
+
+            /* Make sure the dependencies are loaded first (recursively) */
+            foreach ($dependencyTree as $className => $dependencies) {
+                foreach ($dependencies as $dependency) {
+                    $dependency->increaseDependencyRank(0);
+                    $this->calculateDependencies($dependencyTree, $dependency);
+                }
+            }
+            return;
+        }
+        $dependencyTree = $files;
+        if (isset($dependencyTree[$_dependency->getCompleteName()])) {
+            foreach ($dependencyTree[$_dependency->getCompleteName()] as $dependency) {
+                $dependency->increaseDependencyRank(0);
+                $this->calculateDependencies($dependencyTree, $dependency);
+            }
+        }
+    }
+
     /**
      * Create project.c and project.h according to the current extension
      *
@@ -1555,30 +1589,8 @@ class Compiler
 
         /**
          * Round 1. Calculate the dependency rank
-         * Classes are ordered according to a dependency ranking
-         * Classes that are dependencies of classes that are dependency of other classes
-         * have more weight
          */
-        foreach ($files as $file) {
-            if (!$file->isExternal()) {
-                $classDefinition = $file->getClassDefinition();
-                if ($classDefinition) {
-                    $classDefinition->calculateDependencyRank();
-                }
-            }
-        }
-
-        /**
-         * Round 1.5 Make a second pass to ensure classes will have the correct weight
-         */
-        foreach ($files as $file) {
-            if (!$file->isExternal()) {
-                $classDefinition = $file->getClassDefinition();
-                if ($classDefinition) {
-                    $classDefinition->calculateDependencyRank();
-                }
-            }
-        }
+        $this->calculateDependencies($files);
 
         $classEntries = array();
         $classInits = array();

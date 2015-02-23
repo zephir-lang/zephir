@@ -375,22 +375,24 @@ class ClassDefinition
      * Calculate the dependency rank of the class based on its dependencies
      *
      */
-    public function calculateDependencyRank()
+    public function getDependencies()
     {
+        $dependencies = array();
         if ($this->extendsClassDefinition) {
             $classDefinition = $this->extendsClassDefinition;
             if (method_exists($classDefinition, 'increaseDependencyRank')) {
-                $classDefinition->increaseDependencyRank($this->dependencyRank * 2);
+                $dependencies[] = $classDefinition;
             }
         }
 
         if ($this->implementedInterfaceDefinitions) {
             foreach ($this->implementedInterfaceDefinitions as $interfaceDefinition) {
                 if (method_exists($interfaceDefinition, 'increaseDependencyRank')) {
-                    $interfaceDefinition->increaseDependencyRank($this->dependencyRank * 2);
+                    $dependencies[] = $interfaceDefinition;
                 }
             }
         }
+        return $dependencies;
     }
 
     /**
