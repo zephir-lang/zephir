@@ -16,6 +16,7 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 #include "kernel/string.h"
+#include "kernel/fcall.h"
 
 
 /**
@@ -1437,7 +1438,115 @@ PHP_METHOD(Test_NativeArray, issue264) {
 	zephir_get_arrval(tokens, tokens_param);
 
 
-	RETURN_MM_BOOL(!zephir_array_isset_long(tokens, 1));
+	RETURN_MM_BOOL(!(zephir_array_isset_long(tokens, 1)));
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743a) {
+
+	zval *current_param = NULL, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("ls"), 3, 42, SL("str"));
+	RETURN_CTOR(current);
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743b) {
+
+	zval *current_param = NULL, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("sl"), 3, SL("str"), 42);
+	RETURN_CTOR(current);
+
+}
+
+PHP_METHOD(Test_NativeArray, issue743c) {
+
+	zval *current_param = NULL, *key, *_0;
+	zval *current = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &current_param);
+
+	zephir_get_arrval(current, current_param);
+
+
+	ZEPHIR_INIT_VAR(key);
+	ZVAL_STRING(key, "hey", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "ok", 1);
+	zephir_array_update_multi(&current, &_0 TSRMLS_CC, SL("sz"), 3, SL("str"), key);
+	RETURN_CTOR(current);
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/709
+ */
+PHP_METHOD(Test_NativeArray, issue709) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_6 = NULL;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool works = 1, _0, _7;
+	zval *c = NULL, *arr = NULL, *_3 = NULL, *_4, *_5 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	_2 = 50;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(c);
+			ZVAL_LONG(c, _1);
+			ZEPHIR_INIT_NVAR(arr);
+			array_init_size(arr, 3);
+			ZEPHIR_INIT_NVAR(_3);
+			ZVAL_LONG(_3, 1);
+			zephir_array_fast_append(arr, _3);
+			ZEPHIR_INIT_NVAR(_3);
+			ZVAL_LONG(_3, 2);
+			zephir_array_fast_append(arr, _3);
+			ZEPHIR_CALL_FUNCTION(&_5, "array_rand", &_6, arr);
+			zephir_check_call_status();
+			zephir_array_fetch(&_4, arr, _5, PH_NOISY | PH_READONLY, "test/nativearray.zep", 636 TSRMLS_CC);
+			ZEPHIR_CPY_WRT(arr, _4);
+			_7 = ZEPHIR_LT_LONG(arr, 0);
+			if (!(_7)) {
+				_7 = ZEPHIR_GT_LONG(arr, 2);
+			}
+			if (_7) {
+				works = 0;
+			}
+		}
+	}
+	RETURN_MM_BOOL(works);
 
 }
 

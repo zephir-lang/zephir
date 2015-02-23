@@ -1616,7 +1616,7 @@ PHP_METHOD(Test_Flow, testFor34) {
 
 	_0 = Z_TYPE_P(e) != IS_NULL;
 	if (_0) {
-		_0 = !zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC);
+		_0 = !(zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC));
 	}
 	if (_0) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'", "", 0);

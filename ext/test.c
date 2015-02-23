@@ -409,12 +409,30 @@ static PHP_GSHUTDOWN_FUNCTION(test)
 
 }
 
+PHP_FUNCTION(Test_zephir_global_method_test);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_zephir_global_method_test, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(Test_zephir_namespaced_method_test);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_zephir_namespaced_method_test, 0, 0, 1)
+	ZEND_ARG_INFO(0, str)
+ZEND_END_ARG_INFO()
+
+
+zend_function_entry php_test_functions[] = {
+ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(Test_zephir_global_method_test), arginfo_test_zephir_global_method_test)
+ZEND_NS_NAMED_FE("Test", zephir_namespaced_method_test, ZEND_FN(Test_zephir_namespaced_method_test), arginfo_test_zephir_namespaced_method_test)
+ZEND_FE_END
+
+};
+
 zend_module_entry test_module_entry = {
 	STANDARD_MODULE_HEADER_EX,
 	NULL,
 	NULL,
 	PHP_TEST_EXTNAME,
-	NULL,
+	php_test_functions,
 	PHP_MINIT(test),
 #ifndef ZEPHIR_RELEASE
 	PHP_MSHUTDOWN(test),

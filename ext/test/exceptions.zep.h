@@ -11,6 +11,7 @@ PHP_METHOD(Test_Exceptions, getException);
 PHP_METHOD(Test_Exceptions, testException4);
 PHP_METHOD(Test_Exceptions, testException5);
 PHP_METHOD(Test_Exceptions, testExceptionLiteral);
+PHP_METHOD(Test_Exceptions, testExceptionRethrow);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_exceptions_testexceptionliteral, 0, 0, 1)
 	ZEND_ARG_INFO(0, type)
@@ -25,5 +26,6 @@ ZEPHIR_INIT_FUNCS(test_exceptions_method_entry) {
 	PHP_ME(Test_Exceptions, testException4, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, testException5, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exceptions, testExceptionLiteral, arginfo_test_exceptions_testexceptionliteral, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Exceptions, testExceptionRethrow, NULL, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

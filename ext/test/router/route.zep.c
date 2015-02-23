@@ -264,7 +264,7 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
 										}
 										_9 = _10;
 									}
-									_7 = !_9;
+									_7 = !(_9);
 								}
 								if (_7) {
 									notValid = 1;

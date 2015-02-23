@@ -23,6 +23,8 @@
 /**
  * Function calls
  */
+/* Test global function declaration */
+/* Test function declaration in namespace */
 ZEPHIR_INIT_CLASS(Test_Fcall) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Fcall, test, fcall, test_fcall_method_entry, 0);
@@ -294,6 +296,50 @@ PHP_METHOD(Test_Fcall, testArrayFill) {
 	array_init_size(return_value, 3);
 	zephir_array_fast_append(return_value, v1);
 	zephir_array_fast_append(return_value, v2);
+	RETURN_MM();
+
+}
+
+PHP_FUNCTION(Test_zephir_global_method_test) {
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *str, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &str);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	object_init_ex(_0, test_fcall_ce);
+	if (zephir_has_constructor(_0 TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL);
+		zephir_check_call_status();
+	}
+	ZEPHIR_RETURN_CALL_METHOD(_0, "teststrtokvarbyslash", NULL, str);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+PHP_FUNCTION(Test_zephir_namespaced_method_test) {
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *str, *_0, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &str);
+
+
+
+	ZEPHIR_INIT_VAR(_0);
+	object_init_ex(_0, test_fcall_ce);
+	if (zephir_has_constructor(_0 TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL);
+		zephir_check_call_status();
+	}
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 5);
+	ZEPHIR_RETURN_CALL_METHOD(_0, "testcall5", NULL, str, _1);
+	zephir_check_call_status();
 	RETURN_MM();
 
 }

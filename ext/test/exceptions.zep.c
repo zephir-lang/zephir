@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/object.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Exceptions) {
@@ -162,6 +163,34 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 		}
 	} while(0);
 
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *e = NULL;
+
+	ZEPHIR_MM_GROW();
+
+
+	/* try_start_1: */
+
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "testexception1", NULL);
+		zephir_check_call_status_or_jump(try_end_1);
+
+	try_end_1:
+
+	if (EG(exception)) {
+		ZEPHIR_CPY_WRT(e, EG(exception));
+		if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
+			zend_clear_exception(TSRMLS_C);
+			zephir_throw_exception_debug(e, "test/exceptions.zep", 70 TSRMLS_CC);
+			ZEPHIR_MM_RESTORE();
+			return;
+		}
+	}
 	ZEPHIR_MM_RESTORE();
 
 }

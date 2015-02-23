@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.5.9a';
+    const VERSION = '0.6.0a';
 
     /**
      * @var CompilerFile[]
@@ -946,13 +946,13 @@ class Compiler
         if (!$fromGenerate) {
             $this->generate($command);
         }
-        
+
         $this->logger->output('Generating API...');
-        
+
         $documentator = new Documentation($this->files, $this->config, $this->logger);
         $documentator->build();
     }
-    
+
     /**
      * Generate IDE stubs
      *
