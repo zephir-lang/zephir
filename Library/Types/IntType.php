@@ -29,42 +29,28 @@ class IntType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getTypeName()
-    {
-        return 'int';
-    }
+    public $methodMap = array(
+        'abs' => 'abs',
+        'tobinary' => 'decbin',
+        'tohex' => 'dechex',
+        'tooctal' => 'decoct',
+        'pow' => 'pow',
+        'sqrt' => 'sqrt',
+        'exp' => 'exp',
+        'sin' => 'sin',
+        'cos' => 'cos',
+        'tan' => 'tan',
+        'asin' => 'asin',
+        'acos' => 'acos',
+        'atan' => 'atan',
+        'log' => 'log'
+    );
 
     /**
      * {@inheritdoc}
      */
-    protected function getMethodMap()
+    public function getTypeName()
     {
-        return array(
-            'abs' => 'abs',
-            'tobinary' => 'decbin',
-            'tohex' => 'dechex',
-            'tooctal' => 'decoct',
-            'pow' => 'pow',
-            'sqrt' => 'sqrt',
-            'exp' => 'exp',
-            'sin' => 'sin',
-            'cos' => 'cos',
-            'tan' => 'tan',
-            'asin' => 'asin',
-            'acos' => 'acos',
-            'atan' => 'atan',
-            'log' => 'log'
-        );
-    }
-
-    /**
-     * Returns the number of the parameter where the object must be bound
-     *
-     * @param $methodName
-     * @return int
-     */
-    protected function getNumberParam($methodName)
-    {
-        return 0;
+        return 'int';
     }
 }

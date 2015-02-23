@@ -29,14 +29,11 @@ use Zephir\FunctionCall;
 abstract class AbstractType
 {
     /**
+     * The array of methods in zephir mapped to PHP internal methods
+     *
      * @var array
      */
     protected $methodMap = array();
-
-    public function __construct()
-    {
-        $this->methodMap = $this->getMethodMap();
-    }
 
     /**
      * Intercepts calls to built-in methods
@@ -104,15 +101,28 @@ abstract class AbstractType
     }
 
     /**
-     * @return string The name of the type
+     * Get the name of the type
+     *
+     * @return string
      */
     abstract public function getTypeName();
 
     /**
-     * @return array The array of methods in zephir mapped to PHP internal methods
+     * Returns the number of the parameter where the object must be bound
+     *
+     * @param $methodName
+     * @return int
      */
-    protected function getMethodMap()
+    protected function getNumberParam($methodName)
     {
-        return array();
+        return 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMethodMap()
+    {
+        return $this->methodMap;
     }
 }
