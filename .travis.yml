@@ -1,11 +1,21 @@
-language: php
-
+language:
+  - php
+  - c
+  
 php:
   - 5.3
   - 5.4
   - 5.5
   - 5.6
-
+  
+compiler:
+  - gcc
+  - clang
+ 
+env:
+  - CC="gcc" CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"
+  - CC="clang" CFLAGS="-g3 -O1 -DZEPHIR_RELEASE=1"
+  
 before_install:
  - git submodule --quiet update --init --recursive
  - ./unit-tests/ci/before_install.sh
@@ -17,7 +27,7 @@ before_script:
  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - $(phpenv which php) compiler.php generate
  - $(phpenv which php) compiler.php stubs
- - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
+ - (cd ext; phpize && ./configure --silent --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
 script:
