@@ -66,6 +66,10 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/param.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/dynamicprop.zep.c
+	test/oo/extend/exception.zep.c
+	test/oo/extend/db/exception.zep.c
+	test/oo/extend/db/query/exception.zep.c
+	test/oo/extend/db/query/placeholder/exception.zep.c
 	test/oo/extend/spl/arrayobject.zep.c
 	test/oo/extend/spl/directoryiterator.zep.c
 	test/oo/extend/spl/doublylinkedlist.zep.c

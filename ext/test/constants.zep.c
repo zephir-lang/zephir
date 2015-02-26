@@ -48,12 +48,14 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 
+	zend_declare_class_constant_string(test_constants_ce, SL("className"), "Constants" TSRMLS_CC);
+
 	/**
 	 * Test property addSlashes for constants
 	 */
-	zend_declare_class_constant_null(test_constants_ce, SL("ANNOTATION_REGEX") TSRMLS_CC);
+	zend_declare_class_constant_string(test_constants_ce, SL("ANNOTATION_REGEX"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\n|\\*\\/)/" TSRMLS_CC);
 
-	zend_declare_class_constant_null(test_constants_ce, SL("PARAMETER_REGEX") TSRMLS_CC);
+	zend_declare_class_constant_string(test_constants_ce, SL("PARAMETER_REGEX"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/" TSRMLS_CC);
 
 	return SUCCESS;
 
