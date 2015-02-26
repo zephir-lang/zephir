@@ -19,24 +19,27 @@
 
 namespace Extension;
 
+use Test\Constants;
+
 class ConstantsTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstantsDeclaration()
     {
-        $t = new \Test\Constants();
+        $t = new Constants();
 
-        $this->assertTrue(\Test\Constants::C1 === null);
-        $this->assertTrue(\Test\Constants::C2 === false);
-        $this->assertTrue(\Test\Constants::C3 === true);
-        $this->assertTrue(\Test\Constants::C4 === 10);
-        $this->assertTrue(\Test\Constants::C5 === 10.25);
-        $this->assertTrue(\Test\Constants::C6 === "test");
+        $this->assertTrue(Constants::C1 === null);
+        $this->assertTrue(Constants::C2 === false);
+        $this->assertTrue(Constants::C3 === true);
+        $this->assertTrue(Constants::C4 === 10);
+        $this->assertTrue(Constants::C5 === 10.25);
+        $this->assertTrue(Constants::C6 === "test");
+        $this->assertTrue(Constants::className === "Constants");
 
     }
 
     public function testConstantGetters()
     {
-        $t = new \Test\Constants();
+        $t = new Constants();
         $this->assertTrue($t->getPropertyC1() === null);
         $this->assertTrue($t->getPropertyC2() === false);
         $this->assertTrue($t->getPropertyC3() === true);
@@ -47,16 +50,16 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
 
     public function testConstantsRead()
     {
-        $t = new \Test\Constants();
+        $t = new Constants();
         $this->assertTrue($t->testReadConstant() === ENT_QUOTES);
-        $this->assertTrue($t->testReadClassConstant1() === \Test\Constants::C4);
-        $this->assertTrue($t->testReadClassConstant2() === \Test\Constants::C4);
+        $this->assertTrue($t->testReadClassConstant1() === Constants::C4);
+        $this->assertTrue($t->testReadClassConstant2() === Constants::C4);
         $this->assertTrue($t->testReadClassConstant3() === \Test\ConstantsParent::P4);
     }
 
     public function testEnvConstants()
     {
-        $t = new \Test\Constants();
+        $t = new Constants();
 
         $phpVersion = $t->testPHPVersionEnvConstant();
         $this->assertTrue(is_string($phpVersion) && !empty($phpVersion));
@@ -67,7 +70,7 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
 
     public function testMagickConstants()
     {
-        $t = new \Test\Constants();
+        $t = new Constants();
 
         $this->assertTrue($t->testClassMagicConstant() == 'Constants');
         $this->assertTrue($t->testMethodMagicConstant() == 'Constants:testMethodMagicConstant');

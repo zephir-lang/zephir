@@ -14,9 +14,9 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Test_Oo_Extend_Application) {
+ZEPHIR_INIT_CLASS(Test_Oo_Extend_Exception) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Test\\Oo\\Extend, Application, test, oo_extend_application, zephir_get_internal_ce(SS("phalcon\\mvc\\application") TSRMLS_CC), NULL, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Test\\Oo\\Extend, Exception, test, oo_extend_exception, zend_exception_get_default(TSRMLS_C), NULL, 0);
 
 	return SUCCESS;
 

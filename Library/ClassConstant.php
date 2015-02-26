@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\Expression\Constants;
+
 /**
  * ClassConstant
  *
@@ -28,6 +30,9 @@ class ClassConstant
 {
     protected $name;
 
+    /**
+     * @var array
+     */
     protected $value;
 
     protected $docblock;
@@ -102,17 +107,30 @@ class ClassConstant
      * Produce the code to register a class constant
      *
      * @param CompilationContext $compilationContext
+     * @throws CompilerException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext)
     {
-
         switch ($this->value['type']) {
+            case 'constant':
+                $constant = new Constants();
+                $compiledExpression = $constant->compile($this->value, $compilationContext);
+
+                $this->value['type'] = $compiledExpression->getType();
+                $this->value['value'] = $compiledExpression->getCode();
+
+                /**
+                 * With no-break this will be broken (unexpected), use re-compile for new type pass
+                 * @todo review variant without break
+                 */
+                $this->compile($compilationContext);
+                break;
 
             case 'long':
             case 'int':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_long(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->value['value'] . " TSRMLS_CC);");
                 break;
-
             case 'double':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_double(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->value['value'] . " TSRMLS_CC);");
                 break;
@@ -126,11 +144,16 @@ class ClassConstant
                 break;
 
             case 'string':
+            case 'char':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_string(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), \"" . Utils::addSlashes($this->value['value']) . "\" TSRMLS_CC);");
                 break;
 
-            default:
+            case 'null':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_null(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\") TSRMLS_CC);");
+                break;
+
+            default:
+                throw new CompilerException('Type "' . $this->value['type'] . '" is not supported.');
         }
     }
 }

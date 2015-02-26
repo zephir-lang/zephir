@@ -14,6 +14,8 @@ class Constants extends ConstantsParent
 
 	const C6 = "test";
 
+	const className = __CLASS__;
+
     /**
      * Test property addSlashes for constants
      */
