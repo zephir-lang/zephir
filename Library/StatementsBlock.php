@@ -295,6 +295,7 @@ class StatementsBlock
                     $compilationContext->codePrinter->output($statement['value']);
                     break;
 
+                case 'comment':
                 case 'empty':
                     break;
 

@@ -6,8 +6,12 @@
 /* Test global function declaration */
 function zephir_global_method_test(var str)
 {
+	/**
+	 * Simple comment
+	 */
 	return new Fcall()->testStrtokVarBySlash(str);
 }
+
 namespace Test;
 
 /* Test function declaration in namespace */
