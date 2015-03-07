@@ -105,14 +105,16 @@ class FlowTest extends \PHPUnit_Framework_TestCase
     public function testSwitch()
     {
         $t = new \Test\Flow();
-        $this->assertTrue($t->testSwitch1() === 10);
-        $this->assertTrue($t->testSwitch2() === true);
-        $this->assertTrue($t->testSwitch3() === false);
-        $this->assertTrue($t->testSwitch4() === 2);
-        $this->assertTrue($t->testSwitch5() === 1);
-        $this->assertTrue($t->testSwitch6() === 1);
-        $this->assertTrue($t->testSwitch7() === 1);
-        $this->assertTrue($t->testSwitch8() === 2);
-        $this->assertTrue($t->testSwitch9() === 2);
+        $this->assertEquals($t->testSwitch1(), 10);
+        $this->assertEquals($t->testSwitch2(), true);
+        $this->assertEquals($t->testSwitch3(), false);
+        $this->assertEquals($t->testSwitch4(), 2);
+        $this->assertEquals($t->testSwitch5(), 1);
+        $this->assertEquals($t->testSwitch6(), 1);
+        $this->assertEquals($t->testSwitch7(), 1);
+        $this->assertEquals($t->testSwitch8(), 2);
+        $this->assertEquals($t->testSwitch9(), 2);
+        $this->assertEquals($t->testSwitch10(), 2);
+        $this->assertEquals($t->testSwitch11(), 1);
     }
 }

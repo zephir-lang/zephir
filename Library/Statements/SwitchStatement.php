@@ -91,7 +91,7 @@ class SwitchStatement extends StatementAbstract
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
 
-            $clauses = $this->_statement['clauses'];
+            $clauses = $this->normalizeClauses($this->_statement['clauses']);
             $tempLeft = array('type' => 'variable', 'value' => $tempVariable->getRealName());
 
             /**
@@ -171,5 +171,33 @@ class SwitchStatement extends StatementAbstract
             $codePrinter->outputBlankLine();
         }
 
+    }
+
+    public function normalizeClauses($clauses)
+    {
+        foreach ($clauses as $defaultIndex => $clause) {
+            if ($clause['type'] == 'default') {
+                break;
+            }
+        }
+
+        if ($defaultIndex === count($clauses) - 1) {
+            return $clauses;
+        }
+
+        $emptyClausesBeforeDefault = array();
+        for ($i = $defaultIndex - 1; $i >= 0; $i--) {
+            $clause = $clauses[$i];
+            if (isset($clause['statements'])) {
+                break;
+            }
+            $emptyClausesBeforeDefault[] = $i;
+        }
+
+        foreach ($emptyClausesBeforeDefault as $i) {
+            unset($clauses[$i]);
+        }
+
+        return $clauses;
     }
 }
