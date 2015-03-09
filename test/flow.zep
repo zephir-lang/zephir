@@ -902,6 +902,20 @@ class Flow
 		return 2;
 	}
 
+    public function testSwitch11()
+    {
+        var a;
+        let a = 1;
+
+        switch a {
+            case 1:
+            default:
+                return 1;
+            case 2:
+                return 2;
+        }
+    }
+
 	public function testUnrechable1()
 	{
 		var a = 0, b = 0.0, c = false, d = "", e = '\0';
