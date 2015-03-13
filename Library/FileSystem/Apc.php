@@ -187,7 +187,6 @@ class Apc
         if ($cache == false) {
             return hash_file($algorithm, $path);
         } else {
-
             $changed = false;
             $cacheFile = $this->basePrefix . str_replace('/', '_', $path) . '.md5';
             if (!apc_exists($cacheFile)) {

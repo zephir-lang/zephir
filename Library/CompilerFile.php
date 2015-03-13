@@ -150,7 +150,6 @@ class CompilerFile
      */
     public function genIR(Compiler $compiler)
     {
-
         $normalizedPath = str_replace(array(DIRECTORY_SEPARATOR, ":", '/'), '_', realpath($this->_filePath));
         $compilePath = DIRECTORY_SEPARATOR . Compiler::VERSION . DIRECTORY_SEPARATOR . $normalizedPath . ".js";
         $zepRealPath = realpath($this->_filePath);
@@ -300,7 +299,6 @@ class CompilerFile
     protected function _processShorcuts(array $property, ClassDefinition $classDefinition)
     {
         foreach ($property['shortcuts'] as $shortcut) {
-
             if (substr($property['name'], 0, 1) == '_') {
                 $name = substr($property['name'], 1);
             } else {
@@ -447,7 +445,6 @@ class CompilerFile
         }
 
         if (isset($topStatement['definition'])) {
-
             $definition = $topStatement['definition'];
 
             if (isset($definition['properties'])) {
@@ -753,7 +750,6 @@ class CompilerFile
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager)
     {
-
         if (!$this->_ir) {
             throw new CompilerException('IR related to compiled file is missing');
         }
@@ -812,7 +808,6 @@ class CompilerFile
         $class = false;
         $interface = false;
         foreach ($this->_ir as $topStatement) {
-
             switch ($topStatement['type']) {
 
                 case 'class':
@@ -880,7 +875,6 @@ class CompilerFile
                     file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
                 }
             } else {
-
                 $fileSystem = $compiler->getFileSystem();
 
                 /**

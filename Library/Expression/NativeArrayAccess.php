@@ -93,7 +93,6 @@ class NativeArrayAccess
      */
     protected function _accessStringOffset($expression, Variable $variableVariable, CompilationContext $compilationContext)
     {
-
         if ($this->_expecting) {
             if ($this->_expectingVariable) {
                 $symbolVariable = $this->_expectingVariable;
@@ -154,7 +153,6 @@ class NativeArrayAccess
         $arrayAccess = $expression;
 
         if ($variableVariable->getType() == 'variable') {
-
             if ($variableVariable->hasAnyDynamicType('unknown')) {
                 throw new CompilerException("Cannot use non-initialized variable as an array", $arrayAccess['left']);
             }
@@ -165,7 +163,6 @@ class NativeArrayAccess
             if ($variableVariable->hasDifferentDynamicType(array('undefined', 'array', 'null'))) {
                 $compilationContext->logger->warning('Possible attempt to access array-index on a non-array dynamic variable', 'non-array-access', $arrayAccess['left']);
             }
-
         }
 
         $codePrinter = $compilationContext->codePrinter;
@@ -380,6 +377,5 @@ class NativeArrayAccess
             case 'string':
                 return $this->_accessStringOffset($expression, $variableVariable, $compilationContext);
         }
-
     }
 }

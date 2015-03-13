@@ -24,7 +24,7 @@ use Zephir\Documentation\Docblock;
 
 /**
  * A link annotation that looks like  `(@)link uri text`
- * 
+ *
  */
 class Link extends Annotation
 {
@@ -49,7 +49,6 @@ class Link extends Annotation
     
     public function getUri()
     {
-        
         if (!$this->contentParsed) {
             $this->parseContent();
         }
@@ -59,7 +58,6 @@ class Link extends Annotation
 
     public function getLinkText()
     {
-        
         if (!$this->contentParsed) {
             $this->parseContent();
         }

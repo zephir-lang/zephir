@@ -19,7 +19,6 @@
 
 namespace Zephir\Documentation;
 
-
 /**
  * Annotation
  *
@@ -48,7 +47,7 @@ class Docblock
     }
 
     /**
-     * 
+     *
      * @param string $type the annotation name you want to get
      * @return Annotation[] an array containing the annotations matching the name
      */

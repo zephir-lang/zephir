@@ -52,7 +52,6 @@ class Utils
         $before = null;
         $length = strlen($str);
         for ($i = 0; $i < $length; $i++) {
-
             $ch = substr($str, $i, 1);
             if ($i != ($length -1)) {
                 $after = substr($str, $i + 1, 1);

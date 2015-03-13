@@ -1040,7 +1040,6 @@ class FunctionDefinition
                 $callGathererPass = new CallGathererPass($compilationContext);
                 $callGathererPass->pass($this->statements);
             }
-
         }
 
         $this->localContext = $localContext;
@@ -1160,7 +1159,7 @@ class FunctionDefinition
 
                 $symbolParam = null;
                 if (isset($parameter['data-type'])) {
-                    switch($parameter['data-type']) {
+                    switch ($parameter['data-type']) {
                         case 'object':
                         case 'callable':
                         case 'resource':
@@ -1210,7 +1209,6 @@ class FunctionDefinition
                      * Increase uses
                      */
                     $symbolParam->increaseUses();
-
                 } else {
                     if (isset($parameter['default'])) {
                         if (isset($parameter['data-type'])) {
@@ -1323,7 +1321,6 @@ class FunctionDefinition
          * Compile the block of statements if any
          */
         if (is_object($this->statements)) {
-
             $compilationContext->staticContext = true;
 
             /**
@@ -1454,7 +1451,6 @@ class FunctionDefinition
                     }
                 }
             }
-
         }
 
         /**
@@ -1473,7 +1469,6 @@ class FunctionDefinition
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
-
                 if (isset($parameter['data-type'])) {
                     $dataType = $parameter['data-type'];
                 } else {
@@ -1518,7 +1513,6 @@ class FunctionDefinition
                 }
 
                 foreach ($parameters->getParameters() as $parameter) {
-
                     if (isset($parameter['data-type'])) {
                         $dataType = $parameter['data-type'];
                     } else {
@@ -1551,7 +1545,6 @@ class FunctionDefinition
              * Initialize required parameters
              */
             foreach ($requiredParams as $parameter) {
-
                 if (isset($parameter['mandatory'])) {
                     $mandatory = $parameter['mandatory'];
                 } else {
@@ -1593,7 +1586,6 @@ class FunctionDefinition
              * Initialize optional parameters
              */
             foreach ($optionalParams as $parameter) {
-
                 if (isset($parameter['mandatory'])) {
                     $mandatory = $parameter['mandatory'];
                 } else {
@@ -1670,7 +1662,6 @@ class FunctionDefinition
          */
         $usedVariables = array();
         foreach ($symbolTable->getVariables() as $variable) {
-
             if ($variable->getNumberUses() <= 0) {
                 if ($variable->isExternal() == false) {
                     $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in function ' . $this->getName(), "unused-variable", $variable->getOriginal());
@@ -1693,7 +1684,6 @@ class FunctionDefinition
          * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
-
             if ($variable->isExternal() == true || $variable->isTemporal()) {
                 continue;
             }
@@ -1720,7 +1710,6 @@ class FunctionDefinition
          * Generate the variable definition for variables used
          */
         foreach ($usedVariables as $type => $variables) {
-
             $pointer = null;
             switch ($type) {
 
@@ -1823,7 +1812,6 @@ class FunctionDefinition
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-
                 $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
                 if ($isComplex && $variable->mustInitNull()) {
                     if ($variable->isLocalOnly()) {
@@ -1854,8 +1842,7 @@ class FunctionDefinition
 
                 $defaultValue = $variable->getDefaultInitValue();
                 if ($defaultValue !== null) {
-
-                    switch($type) {
+                    switch ($type) {
 
                         case 'variable':
                         case 'string':
@@ -1907,7 +1894,6 @@ class FunctionDefinition
             $lastType = $this->statements->getLastStatementType();
 
             if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
-
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');

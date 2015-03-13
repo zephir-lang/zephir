@@ -92,7 +92,6 @@ class FunctionCache
      */
     public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
     {
-
         if (isset($this->cache[$functionName])) {
             return '&' . $this->cache[$functionName]->getName();
         }

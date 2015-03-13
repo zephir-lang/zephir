@@ -201,6 +201,5 @@ class ObjectDynamicStringProperty
             default:
                 throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
         }
-
     }
 }

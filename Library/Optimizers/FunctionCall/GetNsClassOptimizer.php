@@ -42,7 +42,7 @@ class GetNsClassOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (!isset($expression['parameters'])) {
-                return false;
+            return false;
         }
 
         if (count($expression['parameters']) != 1) {

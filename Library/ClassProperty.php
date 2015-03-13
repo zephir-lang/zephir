@@ -55,7 +55,6 @@ class ClassProperty
      */
     public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
     {
-
         $this->checkVisibility($visibility, $name, $original);
 
         $this->classDefinition = $classDefinition;
@@ -153,7 +152,6 @@ class ClassProperty
         $modifiers = array();
 
         foreach ($this->visibility as $visibility) {
-
             switch ($visibility) {
 
                 case 'protected':
@@ -399,6 +397,5 @@ class ClassProperty
             default:
                 throw new CompilerException('Unknown default type: ' . $type, $this->original);
         }
-
     }
 }

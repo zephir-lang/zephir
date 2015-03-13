@@ -67,7 +67,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          */
         $offsetExprs = array();
         foreach ($statement['index-expr'] as $indexExpr) {
-
             $indexExpression = new Expression($indexExpr);
 
             $resolvedIndex = $indexExpression->compile($compilationContext);
@@ -90,7 +89,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          * Check if the property to update is defined
          */
         if ($symbolVariable->getRealName() == 'this') {
-
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
@@ -104,12 +102,10 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
              * is defined on that class
              */
             if ($symbolVariable->hasAnyDynamicType('object')) {
-
                 $classType = current($symbolVariable->getClassTypes());
                 $compiler = $compilationContext->compiler;
 
                 if ($compiler->isClass($classType)) {
-
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
                         throw new CompilerException("Cannot locate class definition for class: " . $classType, $statement);
@@ -126,7 +122,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         $numberParams = 0;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
-
             switch ($offsetExpr->getType()) {
 
                 case 'int':
@@ -188,7 +183,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }

@@ -185,7 +185,6 @@ class LocalContextPass
     public function passLetStatement(array $statement)
     {
         foreach ($statement['assignments'] as $assignment) {
-
             if (isset($assignment['expr'])) {
                 $this->passExpression($assignment['expr']);
             }
@@ -457,7 +456,6 @@ class LocalContextPass
     public function passStatementBlock(array $statements)
     {
         foreach ($statements as $statement) {
-
             switch ($statement['type']) {
 
                 case 'let':

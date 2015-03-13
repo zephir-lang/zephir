@@ -38,13 +38,11 @@ class ReturnStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-
         $statement = $this->_statement;
 
         $codePrinter = $compilationContext->codePrinter;
 
         if (isset($statement['expr'])) {
-
             $currentMethod = $compilationContext->currentMethod;
 
             if ($currentMethod->isConstructor()) {

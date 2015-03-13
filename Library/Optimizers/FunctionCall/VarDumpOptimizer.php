@@ -51,7 +51,6 @@ class VarDumpOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
 
         foreach ($resolvedParams as $resolvedParam) {
-
             $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
             if (!$variable || !$variable->isVariable()) {
 
@@ -91,7 +90,6 @@ class VarDumpOptimizer extends OptimizerAbstract
                     )
                 ));
                 $statement->compile($context);
-
             } else {
 
                 /**

@@ -117,7 +117,6 @@ class StaticCall extends Call
      */
     protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, $method)
     {
-
         $codePrinter = $compilationContext->codePrinter;
         $classCe = $classDefinition->getClassEntry($compilationContext);
         //$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
@@ -154,7 +153,6 @@ class StaticCall extends Call
             } else {
                 $codePrinter->output('ZEPHIR_CALL_PARENT(NULL, ' . $classCe . ', this_ptr, "' . $methodName . '", ' . $cachePointer . ');');
             }
-
         } else {
             if ($isExpecting) {
                 if ($symbolVariable->getName() == 'return_value') {
@@ -437,7 +435,6 @@ class StaticCall extends Call
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
-
         $expression = $expr->getExpression();
 
         $methodName = strtolower($expression['name']);
@@ -493,12 +490,10 @@ class StaticCall extends Call
 
         $dynamicClass = $expression['dynamic-class'];
         if (!$dynamicClass) {
-
             $className = $expression['class'];
             $classDefinition = false;
 
             if (!in_array($className, array('self', 'static', 'parent'))) {
-
                 if (is_string($className)) {
                     $className = $compilationContext->getFullName($className);
                     if ($compiler->isClass($className)) {
@@ -520,7 +515,6 @@ class StaticCall extends Call
                         }
                     }
                 }
-
             } else {
                 if ($className == 'parent') {
                     $classDefinition = $compilationContext->classDefinition;
@@ -540,7 +534,6 @@ class StaticCall extends Call
          * Check if the class implements the method
          */
         if (!$dynamicMethod && !$dynamicClass) {
-
             if (!$classDefinition->hasMethod($methodName)) {
                 $possibleMethod = $classDefinition->getPossibleMethodName($methodName);
                 if ($possibleMethod) {
@@ -549,7 +542,6 @@ class StaticCall extends Call
                     throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement static method: '" . $expression['name'] . "'", $expression);
                 }
             } else {
-
                 $method = $classDefinition->getMethod($methodName);
 
                 if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
@@ -563,7 +555,6 @@ class StaticCall extends Call
                 }
 
                 if (!$classDefinition->hasMethod("__callStatic")) {
-
                     if ($method instanceof ClassMethod && !$method->isInternal()) {
 
                         /**
@@ -588,11 +579,8 @@ class StaticCall extends Call
                         if ($callNumberParameters < $expectedNumberParameters) {
                             throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' called with a wrong number of parameters, the method has: " . $expectedNumberParameters . ", passed: " . $callNumberParameters, $expression);
                         }
-
                     }
-
                 } else {
-
                     if (!isset($method)) {
                         $method = $classDefinition->getMethod("__callStatic");
                         if ($method->isPrivate() && $method->getClassDefinition() != $compilationContext->classDefinition) {
@@ -638,7 +626,6 @@ class StaticCall extends Call
         if ($isExpecting) {
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
-
                     $returnClassTypes = $method->getReturnClassTypes();
                     if ($returnClassTypes !== null) {
                         $symbolVariable->setDynamicTypes('object');
@@ -653,7 +640,6 @@ class StaticCall extends Call
                             $symbolVariable->setDynamicTypes($dataType);
                         }
                     }
-
                 }
             }
         }

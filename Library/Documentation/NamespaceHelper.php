@@ -42,7 +42,6 @@ class NamespaceHelper
         array_pop($ex);
 
         $this->parentName = implode("\\", $ex);
-
     }
     
     public function addClass(CompilerFile $c)

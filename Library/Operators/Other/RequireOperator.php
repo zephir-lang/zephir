@@ -41,7 +41,6 @@ class RequireOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         $expr = new Expression($expression['left']);
         $expr->setReadOnly(true);
         $expr->setExpectReturn(true);
@@ -54,7 +53,6 @@ class RequireOperator extends BaseOperator
                     $compilationContext->logger->warning('Possible attempt to use invalid type as path in "require" operator', 'non-valid-require', $expression);
                 }
             }
-
         }
 
         $symbolVariable = false;

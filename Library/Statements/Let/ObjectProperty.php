@@ -47,7 +47,6 @@ class ObjectProperty
      */
     public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is not initialized", $statement);
         }
@@ -111,7 +110,7 @@ class ObjectProperty
                     case 'sub-assign':
                     case 'add-assign':
 
-                        switch($statement['operator']) {
+                        switch ($statement['operator']) {
                             case 'mul-assign':
                                 $functionName = 'ZEPHIR_MUL_ASSIGN';
                                 break;
@@ -174,7 +173,7 @@ class ObjectProperty
                     case 'sub-assign':
                     case 'add-assign':
 
-                        switch($statement['operator']) {
+                        switch ($statement['operator']) {
                             case 'mul-assign':
                                 $functionName = 'ZEPHIR_MUL_ASSIGN';
                                 break;
@@ -211,7 +210,7 @@ class ObjectProperty
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 
-                switch($statement['operator']) {
+                switch ($statement['operator']) {
                     case 'concat-assign':
                         $codePrinter->output('zephir_concat_self_str(&' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
                         break;
@@ -316,6 +315,5 @@ class ObjectProperty
             default:
                 throw new CompilerException("Unknown type " . $resolvedExpr->getType(), $statement);
         }
-
     }
 }

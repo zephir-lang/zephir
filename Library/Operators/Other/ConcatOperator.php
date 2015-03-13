@@ -64,7 +64,6 @@ class ConcatOperator extends BaseOperator
         $concatParts = array();
         $parts = array_reverse($parts);
         foreach ($parts as $part) {
-
             $expr = new Expression($part);
             $expr->setStringOperation(true);
             switch ($part['type']) {
@@ -118,7 +117,6 @@ class ConcatOperator extends BaseOperator
                 default:
                     throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
             }
-
         }
 
         $compilationContext->stringsManager->addConcatKey($key);
@@ -133,7 +131,6 @@ class ConcatOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         if (!isset($expression['left'])) {
             throw new CompilerException("Missing left part of the expression", $expression);
         }
@@ -149,7 +146,6 @@ class ConcatOperator extends BaseOperator
          */
         $optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
         if (is_array($optimized)) {
-
             if (!$isFullString) {
                 $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
             } else {

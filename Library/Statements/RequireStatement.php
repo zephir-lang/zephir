@@ -36,7 +36,6 @@ class RequireStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext)
     {
-
         $expression = array(
             'type' => 'require',
             'left' => $this->_statement['expr'],

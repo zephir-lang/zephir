@@ -143,7 +143,6 @@ class ArrayIndex
      */
     protected function _assignArrayIndexSingle($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-
         $expression = new Expression($statement['index-expr'][0]);
         $exprIndex = $expression->compile($compilationContext);
 
@@ -231,12 +230,10 @@ class ArrayIndex
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-
         $codePrinter = $compilationContext->codePrinter;
 
         $offsetExprs = array();
         foreach ($statement['index-expr'] as $indexExpr) {
-
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
@@ -267,7 +264,6 @@ class ArrayIndex
         $numberParams = 0;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
-
             switch ($offsetExpr->getType()) {
 
                 case 'int':
@@ -358,7 +354,6 @@ class ArrayIndex
         }
 
         if ($symbolVariable->getType() == 'variable') {
-
             if ($symbolVariable->hasAnyDynamicType('unknown')) {
                 throw new CompilerException("Cannot use non-initialized variable as an object", $statement);
             }

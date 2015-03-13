@@ -43,7 +43,6 @@ class InstanceOfOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         $left = new Expression($expression['left']);
         $resolved = $left->compile($compilationContext);
 

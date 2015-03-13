@@ -53,7 +53,7 @@ class InterfaceExistsOptimizer extends OptimizerAbstract
          * Process autoload
          */
         $autoload = '1 ';
-        if (count($expression['parameters']) == 2 && ($expression['parameters'][1]['parameter']['type'] == 'int' || $expression['parameters'][1]['parameter']['type'] == 'bool' )) {
+        if (count($expression['parameters']) == 2 && ($expression['parameters'][1]['parameter']['type'] == 'int' || $expression['parameters'][1]['parameter']['type'] == 'bool')) {
             $autoload = $expression['parameters'][1]['parameter']['value'] . ' ';
             unset($expression['parameters'][1]);
         }

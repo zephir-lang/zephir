@@ -117,7 +117,6 @@ class CallGathererPass
 
     public function passNew(array $expression)
     {
-
         if (!$expression['dynamic']) {
             $className = $this->compilationContext->getFullName($expression['class']);
             if (!isset($this->methodCalls[$className]['__construct'])) {
@@ -272,7 +271,6 @@ class CallGathererPass
     public function passStatementBlock(array $statements)
     {
         foreach ($statements as $statement) {
-
             switch ($statement['type']) {
 
                 case 'let':

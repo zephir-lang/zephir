@@ -147,7 +147,6 @@ class EvalExpression
 
                 $possibleValue = $variableRight->getPossibleValue();
                 if (is_object($possibleValue)) {
-
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
 
@@ -155,9 +154,7 @@ class EvalExpression
                          * Check if the possible value was assigned in the root branch
                          */
                         if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
-
                             if ($possibleValue instanceof LiteralCompiledExpression) {
-
                                 switch ($possibleValue->getType()) {
 
                                     case 'null':
@@ -195,7 +192,6 @@ class EvalExpression
                             }
                         }
                     }
-
                 }
 
                 $this->_usedVariables[] = $variableRight->getName();

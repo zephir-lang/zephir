@@ -180,7 +180,6 @@ class Constants
         }
 
         if (in_array($constantName, $this->magickConstants)) {
-
             switch ($constantName) {
 
                 case '__CLASS__':

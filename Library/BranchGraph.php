@@ -37,7 +37,6 @@ class BranchGraph
      */
     public function addLeaf(Branch $branch)
     {
-
         if (isset($this->branchMap[$branch->getUniqueId()])) {
             $branchNode = $this->branchMap[$branch->getUniqueId()];
         } else {

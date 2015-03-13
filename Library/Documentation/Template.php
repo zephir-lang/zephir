@@ -3,7 +3,6 @@
 namespace Zephir\Documentation;
 
 use Zephir\Exception;
-
 use Zephir\CompilerFile;
 use Zephir\ClassDefinition;
 use Zephir\Documentation;
@@ -64,21 +63,19 @@ class Template
      */
     public function url($url)
     {
-
         if (is_string($url)) {
             if ($url{0} == "/") {
                 return $this->getPathToRoot() . ltrim($url, "/");
-            } else if (is_string($url)) {
+            } elseif (is_string($url)) {
                 return $url;
             }
-        } else if ($url instanceof ClassDefinition) {
+        } elseif ($url instanceof ClassDefinition) {
             return $this->url(Documentation::classUrl($url));
-        } else if ($url instanceof CompilerFile) {
+        } elseif ($url instanceof CompilerFile) {
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
         }
         
         return;
-        
     }
 
     /**
@@ -103,7 +100,6 @@ class Template
 
     public function parse()
     {
-
         foreach ($this->data as $name => $value) {
             $$name = $value;
         }
@@ -117,7 +113,6 @@ class Template
 
     private function __getSecureFilePath($fileName)
     {
-
         $input   = pathinfo($this->rootDirectory . "/" . $fileName);
         $inputDirname  = $input["dirname"];
         $inputBasename = $input["basename"];
@@ -133,7 +128,6 @@ class Template
 
     public function partial($fileName, array $data = array())
     {
-
         $newLevel = $this->nestedLevel+1;
 
         $template = new Template(array_merge($this->data, $data), $this->rootDirectory, $fileName, $newLevel);

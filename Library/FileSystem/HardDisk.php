@@ -189,7 +189,6 @@ class HardDisk
         if ($cache == false) {
             return hash_file($algorithm, $path);
         } else {
-
             $changed = false;
             $cacheFile = $this->basePath . str_replace(array(DIRECTORY_SEPARATOR, ':', '/'), '_', $path) . '.md5';
             if (!file_exists($cacheFile)) {

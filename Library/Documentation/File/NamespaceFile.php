@@ -2,7 +2,6 @@
 
 namespace Zephir\Documentation\File;
 
-
 use Zephir\ClassDefinition;
 use Zephir\Documentation\AbstractFile;
 use Zephir\CompilerFile;
@@ -34,8 +33,6 @@ class NamespaceFile extends AbstractFile
 
     public function getData()
     {
-     
-        
         return array(
 
             "namespaceHelper" => $this->namespaceHelper,

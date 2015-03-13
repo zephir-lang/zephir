@@ -58,7 +58,6 @@ class BasenameOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable) {
-
             if ($symbolVariable->isNotVariableAndString()) {
                 throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
             }

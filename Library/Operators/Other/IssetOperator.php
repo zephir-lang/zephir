@@ -43,7 +43,6 @@ class IssetOperator extends BaseOperator
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-
         if ($expression['left']['type'] == 'list') {
             $left = $expression['left']['left'];
         } else {

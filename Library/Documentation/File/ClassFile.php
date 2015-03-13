@@ -33,14 +33,12 @@ class ClassFile extends AbstractFile
 
     public function getData()
     {
-        
         $nsPieces = explode('\\', $this->class->getNamespace());
         
         $nsPathes = array();
         $nsStr = "";
         
         foreach ($nsPieces as $n) {
-            
             if (strlen($nsStr) > 0) {
                 $nsStr.= '\\';
             }

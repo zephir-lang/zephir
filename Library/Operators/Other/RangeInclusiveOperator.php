@@ -42,7 +42,6 @@ class RangeInclusiveOperator extends BaseOperator
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-
         if (!isset($expression['left'])) {
             throw new CompilerException("Invalid 'left' operand for 'irange' expression", $expression['left']);
         }

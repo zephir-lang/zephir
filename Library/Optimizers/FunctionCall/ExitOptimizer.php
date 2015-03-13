@@ -55,6 +55,5 @@ class ExitOptimizer extends OptimizerAbstract
         }
         $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
         return new CompiledExpression('void ', '', $expression);
-
     }
 }

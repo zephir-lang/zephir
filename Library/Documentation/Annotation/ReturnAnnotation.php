@@ -48,7 +48,6 @@ class ReturnAnnotation extends Annotation
     
     public function getReturnType()
     {
-        
         if (!$this->contentParsed) {
             $this->parseContent();
         }
@@ -58,7 +57,6 @@ class ReturnAnnotation extends Annotation
 
     public function getDescription()
     {
-        
         if (!$this->contentParsed) {
             $this->parseContent();
         }

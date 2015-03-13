@@ -111,7 +111,6 @@ class ArrayType extends AbstractType
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-
         $builder = new FunctionCallBuilder(
             'join',
             array_merge($expression['parameters'], array(array('parameter' => $caller))),

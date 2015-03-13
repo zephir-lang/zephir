@@ -74,13 +74,10 @@ class MethodCache
              * Try to generate a cache based on the fact the variable is not modified within the loop block
              */
             if ($compilationContext->insideCycle && !$caller->isTemporal()) {
-
                 if (count($compilationContext->cycleBlocks) && $caller->getType() == 'variable') {
-
                     $currentBlock = $compilationContext->cycleBlocks[count($compilationContext->cycleBlocks) - 1];
 
                     if ($currentBlock->getMutateGatherer(true)->getNumberOfMutations($caller->getName()) == 0) {
-
                         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
                         $functionCache->setMustInitNull(true);
                         $functionCache->setReusable(false);
@@ -114,7 +111,6 @@ class MethodCache
 
         if (!$compilationContext->insideCycle) {
             if (!($method instanceof \ReflectionMethod)) {
-
                 if (!$method->isPrivate() && !$method->isFinal() && !$method->getClassDefinition()->isFinal()) {
                     $gatherer = $this->gatherer;
                     if (is_object($gatherer)) {

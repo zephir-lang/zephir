@@ -76,6 +76,5 @@ class WhileStatement extends StatementAbstract
         $compilationContext->insideCycle--;
 
         $codePrinter->output('}');
-
     }
 }

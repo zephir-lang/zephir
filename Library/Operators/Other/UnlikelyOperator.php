@@ -42,7 +42,6 @@ class UnlikelyOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         if (!isset($expression['left'])) {
             throw new CompilerException("Invalid 'left' operand for 'unlikely' expression", $expression['left']);
         }

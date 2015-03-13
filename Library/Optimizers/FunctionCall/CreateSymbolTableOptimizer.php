@@ -41,7 +41,6 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-
         if (isset($expression['parameters'])) {
             if (count($expression['parameters']) != 0) {
                 throw new CompilerException("This function doesn't require parameters", $expression);

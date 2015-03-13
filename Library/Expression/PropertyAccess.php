@@ -121,7 +121,6 @@ class PropertyAccess
          * If the property is accessed on 'this', we check if the method does exist
          */
         if ($variableVariable->getRealName() == 'this') {
-
             $classDefinition = $currentClassDefinition;
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $expression);
@@ -135,12 +134,10 @@ class PropertyAccess
              * is defined on that class
              */
             if ($variableVariable->hasAnyDynamicType('object')) {
-
                 $classType = current($variableVariable->getClassTypes());
                 $compiler = $compilationContext->compiler;
 
                 if ($compiler->isClass($classType)) {
-
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
                         throw new CompilerException("Cannot locate class definition for class: " . $classType, $expression);
@@ -160,7 +157,6 @@ class PropertyAccess
          * according to its modifiers
          */
         if ($propertyDefinition) {
-
             if ($propertyDefinition->isStatic()) {
                 throw new CompilerException("Attempt to access static property '" . $property . "' as non static", $expression);
             }
@@ -180,7 +176,6 @@ class PropertyAccess
                     }
                 } else {
                     if ($propertyDefinition->isProtected()) {
-
                     } else {
                         if ($propertyDefinition->isPrivate()) {
                             $declarationDefinition = $propertyDefinition->getClassDefinition();
@@ -190,7 +185,6 @@ class PropertyAccess
                         }
                     }
                 }
-
             }
         }
 
@@ -199,10 +193,8 @@ class PropertyAccess
          */
         $readOnly = false;
         if ($classDefinition == $currentClassDefinition && $this->_readOnly) {
-
             if ($this->_expecting) {
                 if ($this->_expectingVariable) {
-
                     $symbolVariable = $this->_expectingVariable;
 
                     /**
@@ -241,11 +233,9 @@ class PropertyAccess
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
             }
-
         } else {
             if ($this->_expecting) {
                 if ($this->_expectingVariable) {
-
                     $symbolVariable = $this->_expectingVariable;
 
                     /**
@@ -276,7 +266,6 @@ class PropertyAccess
                             $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
                         }
                     }
-
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
                 }

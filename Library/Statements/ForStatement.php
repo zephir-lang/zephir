@@ -46,7 +46,6 @@ class ForStatement extends StatementAbstract
      */
     public function compileRange($exprRaw, $compilationContext)
     {
-
         if (!count($exprRaw['parameters'])) {
             return false;
         }
@@ -157,7 +156,6 @@ class ForStatement extends StatementAbstract
                     )
                 )
             ));
-
         } else {
 
             /**
@@ -427,7 +425,6 @@ class ForStatement extends StatementAbstract
         $codePrinter->decreaseLevel();
 
         $codePrinter->output('}');
-
     }
 
     /**
@@ -439,7 +436,6 @@ class ForStatement extends StatementAbstract
      */
     public function compileIterator(array $exprRaw, $compilationContext)
     {
-
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
         $compilationContext->headersManager->add('kernel/iterator');
@@ -467,7 +463,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
@@ -490,7 +485,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 if ($variable->getType() != 'variable') {
@@ -573,7 +567,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 switch ($keyVariable->getType()) {
@@ -600,7 +593,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 switch ($variable->getType()) {
@@ -697,14 +689,12 @@ class ForStatement extends StatementAbstract
      */
     public function compileHashTraverse($expression, $compilationContext, $exprVariable)
     {
-
         $codePrinter = $compilationContext->codePrinter;
 
         /**
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             if ($this->_statement['key'] != '_') {
                 $keyVariable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['key'], $compilationContext, $this->_statement['expr']);
                 if ($keyVariable->getType() != 'variable') {
@@ -723,7 +713,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             if ($this->_statement['value'] != '_') {
                 $variable = $compilationContext->symbolTable->getVariableForWrite($this->_statement['value'], $compilationContext, $this->_statement['expr']);
                 if ($variable->getType() != 'variable') {
@@ -848,7 +837,6 @@ class ForStatement extends StatementAbstract
          * @TODO implement optimizers here
          */
         if ($exprRaw['type'] == 'fcall') {
-
             if ($exprRaw['name'] == 'range') {
                 $status = $this->compileRange($exprRaw, $compilationContext);
                 if ($status !== false) {
@@ -895,6 +883,5 @@ class ForStatement extends StatementAbstract
             default:
                 throw new CompilerException("Cannot traverse value type: " . $exprVariable->getType(), $exprRaw);
         }
-
     }
 }

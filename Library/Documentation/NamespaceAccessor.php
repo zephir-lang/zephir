@@ -35,7 +35,7 @@ class NamespaceAccessor
 
 
     /**
-     * 
+     *
      * @param \Zephir\CompilerFile[] $files
      */
     public function __construct($files)
@@ -44,7 +44,7 @@ class NamespaceAccessor
     }
     
     /**
-     * 
+     *
      * @return NamespaceHelper[]
      */
     public function getByNamespace()
@@ -60,17 +60,13 @@ class NamespaceAccessor
         
     public function build()
     {
-        
-        
         $byNamespace = array();
         $tree = array();
         
         foreach ($this->classes as $className => $class) {
-            
             $ns = explode("\\", $class->getClassDefinition()->getNamespace());
             $actualStr = "";
             foreach ($ns as $n) {
-                
                 if (strlen($actualStr) > 0) {
                     $previous = $byNamespace[$actualStr];
                     $actualStr.= "\\";
@@ -97,15 +93,12 @@ class NamespaceAccessor
                         $tree[$n] = $nh;
                     }
                 }
-                
             }
             
             $nh->addClass($class);
-            
         }
         
         $this->byNamespace = $byNamespace;
         $this->namespaceTree = $tree;
-        
     }
 }

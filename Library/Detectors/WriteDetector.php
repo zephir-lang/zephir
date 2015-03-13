@@ -333,7 +333,6 @@ class WriteDetector
     public function passStatementBlock(array $statements)
     {
         foreach ($statements as $statement) {
-
             switch ($statement['type']) {
 
                 case 'let':

@@ -42,7 +42,6 @@ class FetchOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         $compilationContext->headersManager->add('kernel/array');
 
         $variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
@@ -78,7 +77,6 @@ class FetchOperator extends BaseOperator
                 $variable->setDynamicTypes('undefined');
                 $variable->setPossibleValue(new CompiledExpression('undefined', '', $expression), $compilationContext);
             }
-
         } else {
             $variable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
         }
@@ -215,6 +213,5 @@ class FetchOperator extends BaseOperator
             default:
                 throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);
         }
-
     }
 }

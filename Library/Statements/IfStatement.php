@@ -48,7 +48,6 @@ class IfStatement extends StatementAbstract
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
         if (isset($this->_statement['statements']) && (isset($this->_statement['else_statements']) || isset($this->_statement['elseif_statements']))) {
-
             $readDetector = new ReadDetector();
 
             $skipVariantInit = new SkipVariantInit();
@@ -142,6 +141,5 @@ class IfStatement extends StatementAbstract
         }
 
         $compilationContext->codePrinter->output('}');
-
     }
 }

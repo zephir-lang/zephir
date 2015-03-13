@@ -242,7 +242,6 @@ class ClassMethod
     public function checkVisibility(array $visibility, $name, array $original = null)
     {
         if (count($visibility) > 1) {
-
             if (in_array('public', $visibility) && in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
             }
@@ -334,7 +333,6 @@ class ClassMethod
     public function getParsedDocBlock()
     {
         if (!$this->parsedDocblock) {
-            
             if (strlen($this->docblock)>0) {
                 $parser = new DocblockParser("/" . $this->docblock ."/");
                 $this->parsedDocblock = $parser->parse();
@@ -1347,7 +1345,6 @@ class ClassMethod
                 $callGathererPass = new CallGathererPass($compilationContext);
                 $callGathererPass->pass($this->statements);
             }
-
         }
 
         $this->localContext = $localContext;
@@ -1467,7 +1464,7 @@ class ClassMethod
 
                 $symbolParam = null;
                 if (isset($parameter['data-type'])) {
-                    switch($parameter['data-type']) {
+                    switch ($parameter['data-type']) {
                         case 'object':
                         case 'callable':
                         case 'resource':
@@ -1517,7 +1514,6 @@ class ClassMethod
                      * Increase uses
                      */
                     $symbolParam->increaseUses();
-
                 } else {
                     if (isset($parameter['default'])) {
                         if (isset($parameter['data-type'])) {
@@ -1630,7 +1626,6 @@ class ClassMethod
          * Compile the block of statements if any
          */
         if (is_object($this->statements)) {
-
             if ($this->hasModifier('static')) {
                 $compilationContext->staticContext = true;
             } else {
@@ -1765,7 +1760,6 @@ class ClassMethod
                     }
                 }
             }
-
         }
 
         /**
@@ -1784,7 +1778,6 @@ class ClassMethod
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
             foreach ($parameters->getParameters() as $parameter) {
-
                 if (isset($parameter['data-type'])) {
                     $dataType = $parameter['data-type'];
                 } else {
@@ -1829,7 +1822,6 @@ class ClassMethod
                 }
 
                 foreach ($parameters->getParameters() as $parameter) {
-
                     if (isset($parameter['data-type'])) {
                         $dataType = $parameter['data-type'];
                     } else {
@@ -1862,7 +1854,6 @@ class ClassMethod
              * Initialize required parameters
              */
             foreach ($requiredParams as $parameter) {
-
                 if (isset($parameter['mandatory'])) {
                     $mandatory = $parameter['mandatory'];
                 } else {
@@ -1904,7 +1895,6 @@ class ClassMethod
              * Initialize optional parameters
              */
             foreach ($optionalParams as $parameter) {
-
                 if (isset($parameter['mandatory'])) {
                     $mandatory = $parameter['mandatory'];
                 } else {
@@ -1982,7 +1972,6 @@ class ClassMethod
         $usedVariables = array();
         $completeName = $compilationContext->classDefinition->getCompleteName();
         foreach ($symbolTable->getVariables() as $variable) {
-
             if ($variable->getNumberUses() <= 0) {
                 if ($variable->isExternal() == false) {
                     $compilationContext->logger->warning('Variable "' . $variable->getName() . '" declared but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
@@ -2005,7 +1994,6 @@ class ClassMethod
          * Warn whenever a variable is unused aside from its declaration.
          */
         foreach ($symbolTable->getVariables() as $variable) {
-
             if ($variable->isExternal() == true || $variable->isTemporal()) {
                 continue;
             }
@@ -2032,7 +2020,6 @@ class ClassMethod
          * Generate the variable definition for variables used
          */
         foreach ($usedVariables as $type => $variables) {
-
             $pointer = null;
             switch ($type) {
 
@@ -2135,7 +2122,6 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-
                 $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
                 if ($isComplex && $variable->mustInitNull()) {
                     if ($variable->isLocalOnly()) {
@@ -2166,8 +2152,7 @@ class ClassMethod
 
                 $defaultValue = $variable->getDefaultInitValue();
                 if ($defaultValue !== null) {
-
-                    switch($type) {
+                    switch ($type) {
 
                         case 'variable':
                         case 'string':
@@ -2219,7 +2204,6 @@ class ClassMethod
             $lastType = $this->statements->getLastStatementType();
 
             if ($lastType != 'return' && $lastType != 'throw' && !$this->hasChildReturnStatementType($this->statements->getLastStatement())) {
-
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');

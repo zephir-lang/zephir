@@ -53,14 +53,12 @@ class ComparisonBaseOperator extends BaseOperator
         }
 
         if ($expr['left']['type'] == 'typeof') {
-
             if ($expr['right']['type'] != 'string') {
                 $compilationContext->logger->warning("Possible invalid comparison for 'typeof' operator with non-string", "invalid-typeof-comparison", $expr['right']);
                 return false;
             }
 
             if (isset($expr['type'])) {
-
                 switch ($expr['type']) {
 
                     case 'identical':
@@ -805,6 +803,5 @@ class ComparisonBaseOperator extends BaseOperator
             default:
                 throw new CompilerException("Unknown type: " . $left->getType(), $expression);
         }
-
     }
 }

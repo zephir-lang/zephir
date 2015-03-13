@@ -67,7 +67,6 @@ class LetStatement extends StatementAbstract
 
         $statement = $this->_statement;
         foreach ($statement['assignments'] as $assignment) {
-
             $variable = $assignment['variable'];
 
             /**
@@ -104,7 +103,6 @@ class LetStatement extends StatementAbstract
              * Incr/Decr assignments don't require an expression
              */
             if (isset($assignment['expr'])) {
-
                 $expr = new Expression($assignment['expr']);
 
                 switch ($assignment['assign-type']) {

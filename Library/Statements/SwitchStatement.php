@@ -49,7 +49,6 @@ class SwitchStatement extends StatementAbstract
         $resolvedExpr = $exprEval->compile($compilationContext);
 
         if (isset($this->_statement['clauses'])) {
-
             $evalExpr = new EvalExpression();
 
             $codePrinter->output('do {');
@@ -86,7 +85,6 @@ class SwitchStatement extends StatementAbstract
                     )
                 ));
                 $statement->compile($compilationContext);
-
             } else {
                 $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
             }
@@ -102,7 +100,6 @@ class SwitchStatement extends StatementAbstract
             $exprStack = array();
             $defaultBlock = null;
             foreach ($clauses as $clause) {
-
                 if ($clause['type'] == 'case') {
                     $expr = array(
                         'type' => 'equals',
@@ -124,7 +121,6 @@ class SwitchStatement extends StatementAbstract
                         $defaultBlock = $clause['statements'];
                     }
                 }
-
             }
 
             /**
@@ -132,7 +128,6 @@ class SwitchStatement extends StatementAbstract
              * grouping 'cases' without a statement block using an 'or'
              */
             foreach ($blocks as $block) {
-
                 $expressions = $block['expr'];
 
                 if (count($expressions) == 1) {
@@ -170,7 +165,6 @@ class SwitchStatement extends StatementAbstract
             $codePrinter->output('} while(0);');
             $codePrinter->outputBlankLine();
         }
-
     }
 
     public function normalizeClauses($clauses)

@@ -105,7 +105,6 @@ class VarExportOptimizer extends OptimizerAbstract
                 )
             ));
             $statement->compile($context);
-
         } else {
             /**
              * This mark the variable as used

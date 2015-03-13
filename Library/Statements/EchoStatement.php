@@ -38,7 +38,6 @@ class EchoStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext)
     {
         foreach ($this->_statement['expressions'] as $echoExpr) {
-
             $expr = new Expression($echoExpr);
             $expr->setReadOnly(true);
             $resolvedExpr = $expr->compile($compilationContext);

@@ -45,11 +45,11 @@ class FunctionCall extends Call
      */
     const CALL_DYNAMIC_STRING = 3;
 
-    static protected $_optimizers = array();
+    protected static $_optimizers = array();
 
-    static protected $_functionReflection = array();
+    protected static $_functionReflection = array();
 
-    static protected $_optimizerDirectories = array();
+    protected static $_optimizerDirectories = array();
 
     private static $_functionCache = null;
 
@@ -108,7 +108,6 @@ class FunctionCall extends Call
 
         $reflector = $this->getReflector($funcName);
         if ($reflector) {
-
             if (isset($expression['parameters'])) {
                 /**
                  * Check if the number of parameters
@@ -162,7 +161,6 @@ class FunctionCall extends Call
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
-
                             if (!preg_match('/^[a-zA-Z0-9\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
                                 continue;
@@ -199,17 +197,14 @@ class FunctionCall extends Call
          * Check if the optimizer is already cached
          */
         if (!isset(self::$_optimizers[$funcName])) {
-
             $camelizeFunctionName = Utils::camelize($funcName);
 
             /**
              * Check every optimizer directory for an optimizer
              */
             foreach (self::$_optimizerDirectories as $directory) {
-
                 $path =  $directory . DIRECTORY_SEPARATOR . $camelizeFunctionName . 'Optimizer.php';
                 if (file_exists($path)) {
-
                     require_once $path;
 
                     $className = 'Zephir\Optimizers\FunctionCall\\' . $camelizeFunctionName . 'Optimizer';
@@ -225,11 +220,9 @@ class FunctionCall extends Call
 
                     break;
                 }
-
             }
 
             self::$_optimizers[$funcName] = $optimizer;
-
         } else {
             $optimizer = self::$_optimizers[$funcName];
         }
@@ -449,7 +442,6 @@ class FunctionCall extends Call
      */
     protected function _callDynamic(array $expression, $compilationContext)
     {
-
         $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
         switch ($variable->getType()) {
 
@@ -585,7 +577,6 @@ class FunctionCall extends Call
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
-
         $this->_expression = $expr;
         $expression = $expr->getExpression();
 

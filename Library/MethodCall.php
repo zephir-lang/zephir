@@ -52,7 +52,6 @@ class MethodCall extends Call
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
-
         $expression = $expr->getExpression();
 
         $exprVariable = new Expression($expression['variable']);
@@ -108,7 +107,6 @@ class MethodCall extends Call
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
             $methodName = strtolower($expression['name']);
         } else {
-
             $variableMethod = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
 
             if (is_object($builtInType)) {
@@ -146,7 +144,6 @@ class MethodCall extends Call
          */
         if (!$builtInType) {
             if ($isExpecting) {
-
                 if (!$symbolVariable->isVariable()) {
                     throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
                 }
@@ -156,7 +153,6 @@ class MethodCall extends Call
                  */
                 $symbolVariable->setDynamicTypes('undefined');
             }
-
         } else {
             return $builtInType->invokeMethod($methodName, $caller, $compilationContext, $this, $expression);
         }
@@ -170,9 +166,7 @@ class MethodCall extends Call
          * Try to check if the method exist in the callee, only when method call is self::CALL_NORMAL
          */
         if ($type == self::CALL_NORMAL) {
-
             if ($variableVariable->getRealName() == 'this') {
-
                 $classDefinition = $compilationContext->classDefinition;
                 if (!$classDefinition->hasMethod($methodName)) {
                     if ($check) {
@@ -238,7 +232,6 @@ class MethodCall extends Call
 
                     $method = $classMethod;
                 }
-
             } else {
 
                 /**
@@ -246,18 +239,14 @@ class MethodCall extends Call
                  * to determine method existance in compile time
                  */
                 if ($check && $variableVariable->hasAnyDynamicType('object')) {
-
                     $classTypes = $variableVariable->getClassTypes();
 
                     if (count($classTypes)) {
-
                         $numberImplemented = 0;
                         $compiler = $compilationContext->compiler;
                         foreach ($classTypes as $classType) {
-
                             if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
                                 $compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
-
                                 if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
                                     $classDefinition = $compiler->getClassDefinition($classType);
                                 } else {
@@ -301,7 +290,6 @@ class MethodCall extends Call
                                  * Internal methods may have invalid Reflection information
                                  */
                                 if ($method instanceof ClassMethod && !$method->isInternal()) {
-
                                     if (isset($expression['parameters'])) {
                                         $callNumberParameters = count($expression['parameters']);
                                     } else {
@@ -330,12 +318,10 @@ class MethodCall extends Call
                                  */
                                 $numberImplemented++;
                                 break;
-
                             } else {
                                 $numberImplemented++;
                                 $compilationContext->logger->warning("Class \"" . $classType . "\" does not exist at compile time", "nonexistent-class", $expression);
                             }
-
                         }
 
                         if ($numberImplemented == 0) {
@@ -364,7 +350,6 @@ class MethodCall extends Call
         if ($isExpecting) {
             if (isset($method)) {
                 if ($method instanceof ClassMethod) {
-
                     if ($method->isVoid()) {
                         throw new CompilerException("Method '" . $classDefinition->getCompleteName() . "::" . $expression['name'] . "' is marked as 'void' and it does not return anything", $expression);
                     }
@@ -385,7 +370,6 @@ class MethodCall extends Call
                             $symbolVariable->setDynamicTypes($dataType);
                         }
                     }
-
                 }
             }
         }
@@ -424,7 +408,6 @@ class MethodCall extends Call
          * Mark references
          */
         if (isset($expression['parameters'])) {
-
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression, isset($method) ? $method : null);
             if (count($references)) {
                 foreach ($params as $position => $param) {
@@ -438,17 +421,13 @@ class MethodCall extends Call
              * We check here if a correct parameter type is passed to the called method
              */
             if ($type == self::CALL_NORMAL) {
-
                 if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
-
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
                     //$typeInference = $method->getStaticTypeInferencePass();
 
                     foreach ($method->getParameters() as $n => $parameter) {
-
                         if (isset($parameter['data-type'])) {
-
                             if (!isset($resolvedTypes[$n])) {
                                 continue;
                             }
@@ -457,7 +436,6 @@ class MethodCall extends Call
                              * If the passed parameter is different to the expected type we show a warning
                              */
                             if ($resolvedTypes[$n] != $parameter['data-type']) {
-
                                 switch ($resolvedTypes[$n]) {
 
                                     case 'bool':
@@ -536,7 +514,6 @@ class MethodCall extends Call
                     }
                 }
             }
-
         } else {
             $params = array();
         }
@@ -571,7 +548,6 @@ class MethodCall extends Call
             );
 
             if (!count($params)) {
-
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
@@ -581,9 +557,7 @@ class MethodCall extends Call
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                 }
-
             } else {
-
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -593,12 +567,9 @@ class MethodCall extends Call
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
-
             }
-
         } else {
             if ($type == self::CALL_DYNAMIC) {
-
                 switch ($variableMethod->getType()) {
                     case 'string':
                     case 'variable':
@@ -608,13 +579,11 @@ class MethodCall extends Call
                 }
 
                 if ($variableMethod->getType() == 'variable') {
-
                 }
 
                 $cachePointer = 'NULL';
 
                 if (!count($params)) {
-
                     if ($isExpecting) {
                         if ($symbolVariable->getName() == 'return_value') {
                             $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
@@ -624,9 +593,7 @@ class MethodCall extends Call
                     } else {
                         $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ');');
                     }
-
                 } else {
-
                     if ($isExpecting) {
                         if ($symbolVariable->getName() == 'return_value') {
                             $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -636,9 +603,7 @@ class MethodCall extends Call
                     } else {
                         $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', Z_STRVAL_P(' . $variableMethod->getName() . '), ' . $cachePointer . ', ' . join(', ', $params) . ');');
                     }
-
                 }
-
             }
         }
 

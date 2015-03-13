@@ -46,7 +46,6 @@ class NewInstanceOperator extends BaseOperator
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-
         $codePrinter = $compilationContext->codePrinter;
 
         /**
@@ -93,16 +92,13 @@ class NewInstanceOperator extends BaseOperator
         $isStdClass = $lowerClassName === 'stdclass' || $lowerClassName === '\stdclass';
 
         if ($isStdClass) {
-
             if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
             }
 
             $codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
             $symbolVariable->setClassTypes('stdclass');
-
         } else {
-
             $classDefinition = false;
             if ($compilationContext->compiler->isClass($className)) {
                 $classDefinition = $compilationContext->compiler->getClassDefinition($className);
@@ -120,7 +116,6 @@ class NewInstanceOperator extends BaseOperator
                  * Classes outside the extension
                  */
                 if ($dynamic) {
-
                     $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
                     if ($classNameVariable->isNotVariableAndString()) {
                         throw new CompilerException("Only dynamic/string variables can be used in new operator. " . $classNameVariable->getName(), $expression);
@@ -140,19 +135,14 @@ class NewInstanceOperator extends BaseOperator
                     $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbolVariable->getName() . '), Z_STRLEN_P(' . $safeSymbolVariable->getName() . ')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();
-
                 } else {
-
                     if (!class_exists($className, false)) {
-
                         $compilationContext->logger->warning('Class "' . $className . '" does not exist at compile time', "nonexistent-class", $expression);
                         $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
-
                     } else {
-
                         $reflectionClass = new \ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
@@ -166,7 +156,6 @@ class NewInstanceOperator extends BaseOperator
 
                         $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if (!$classEntry) {
-
                             $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
                             $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                             $classEntry = $zendClassEntry->getName();
@@ -174,7 +163,6 @@ class NewInstanceOperator extends BaseOperator
                     }
 
                     $symbolVariable->setClassTypes($className);
-
                 }
                 $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classEntry . ');');
             }
@@ -199,7 +187,6 @@ class NewInstanceOperator extends BaseOperator
          */
         $callConstructor = false;
         if ($compilationContext->compiler->isClass($className)) {
-
             $classDefinition = $compilationContext->compiler->getClassDefinition($className);
 
             if ($classDefinition->getType() != 'class') {
@@ -207,9 +194,7 @@ class NewInstanceOperator extends BaseOperator
             }
 
             $callConstructor = $classDefinition->hasMethod("__construct");
-
         } else {
-
             if ($compilationContext->compiler->isInternalClass($className)) {
                 $classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
                 $callConstructor = $classDefinition->hasMethod("__construct");
@@ -248,7 +233,6 @@ class NewInstanceOperator extends BaseOperator
             $callExpr->setExpectReturn(false);
             $methodCall->compile($callExpr, $compilationContext);
         } else {
-
             $compilationContext->headersManager->add('kernel/fcall');
 
             /* @todo, generate the code using builders */

@@ -40,7 +40,6 @@ class LikelyOperator extends BaseOperator
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-
         if (!isset($expression['left'])) {
             throw new CompilerException("Invalid 'left' operand for 'likely' expression", $expression['left']);
         }

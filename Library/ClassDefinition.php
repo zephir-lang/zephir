@@ -676,7 +676,6 @@ class ClassDefinition
     public function getClassEntry(CompilationContext $compilationContext = null)
     {
         if ($this->external) {
-
             if (!is_object($compilationContext)) {
                 throw new Exception('A compilation context is required');
             }
@@ -741,7 +740,6 @@ class ClassDefinition
     public function checkInterfaceImplements($classDefinition, $interfaceDefinition)
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
-
             if (!$classDefinition->hasMethod($method->getName())) {
                 throw new CompilerException("Class " . $classDefinition->getCompleteName() . " must implement method: " . $method->getName() . " defined on interface: " . $interfaceDefinition->getCompleteName());
             }
@@ -767,7 +765,6 @@ class ClassDefinition
          * Pre-Compile methods
          */
         foreach ($this->methods as $method) {
-
             if ($this->getType() == 'class' && !$method->isAbstract()) {
                 $method->preCompile($compilationContext);
             }
@@ -830,7 +827,6 @@ class ClassDefinition
          */
         $classExtendsDefinition = null;
         if ($this->extendsClass) {
-
             $classExtendsDefinition = $this->extendsClassDefinition;
             if (!$classExtendsDefinition->isInternal()) {
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
@@ -872,7 +868,6 @@ class ClassDefinition
          * @var $property ClassProperty
          */
         foreach ($this->getProperties() as $property) {
-
             $docBlock = $property->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock, true);
@@ -893,7 +888,6 @@ class ClassDefinition
          * @var $constant ClassConstant
          */
         foreach ($this->getConstants() as $constant) {
-
             $docBlock = $constant->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock, true);
@@ -910,7 +904,6 @@ class ClassDefinition
         $compiler = $compilationContext->compiler;
 
         if (is_array($interfaces)) {
-
             $codePrinter->outputBlankLine(true);
 
             foreach ($interfaces as $interface) {
@@ -954,12 +947,10 @@ class ClassDefinition
              * Interfaces in extended classes may have
              */
             if ($classExtendsDefinition) {
-
                 if (!$classExtendsDefinition->isInternal()) {
                     $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                     if (is_array($interfaces)) {
                         foreach ($interfaces as $interface) {
-
                             $classInterfaceDefinition = null;
                             if ($compiler->isInterface($interface)) {
                                 $classInterfaceDefinition = $compiler->getClassDefinition($interface);
@@ -972,11 +963,9 @@ class ClassDefinition
                             if ($classInterfaceDefinition) {
                                 $this->checkInterfaceImplements($this, $classInterfaceDefinition);
                             }
-
                         }
                     }
                 }
-
             }
         }
 
@@ -992,7 +981,6 @@ class ClassDefinition
          * Compile methods
          */
         foreach ($methods as $method) {
-
             $docBlock = $method->getDocBlock();
             if ($docBlock) {
                 $codePrinter->outputDocBlock($docBlock);
@@ -1049,7 +1037,6 @@ class ClassDefinition
          * Create argument info
          */
         foreach ($methods as $method) {
-
             $parameters = $method->getParameters();
             if (count($parameters)) {
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
@@ -1062,7 +1049,6 @@ class ClassDefinition
 
                         case 'variable':
                             if (isset($parameter['cast'])) {
-
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
@@ -1072,7 +1058,6 @@ class ClassDefinition
                                     default:
                                         throw new Exception('Unexpected exception');
                                 }
-
                             } else {
                                 $codePrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                             }
@@ -1086,7 +1071,6 @@ class ClassDefinition
                 $codePrinter->output('ZEND_END_ARG_INFO()');
                 $codePrinter->outputBlankLine();
             }
-
         }
 
         if (count($methods)) {

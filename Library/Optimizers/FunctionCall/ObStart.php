@@ -30,7 +30,7 @@ use Zephir\Optimizers\OptimizerAbstract;
  *
  * Optimizes calls to 'ob_start' using internal function
  */
-class ObStartOptimizer extends OptimizerAbstract
+class ObStart extends OptimizerAbstract
 {
     /**
      * @todo This optimizer doesn`t work at while and etc statements

@@ -467,7 +467,6 @@ class Variable
                             case 'assign':
 
                                 if ($variable != $resolvedExpr->getCode()) {
-
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -772,7 +771,7 @@ class Variable
                             case 'sub-assign':
                             case 'add-assign':
 
-                                switch($statement['operator']) {
+                                switch ($statement['operator']) {
 
                                     case 'mul-assign':
                                         $functionName = 'ZEPHIR_MUL_ASSIGN';
@@ -934,7 +933,6 @@ class Variable
                             case 'assign':
 
                                 if ($variable != $resolvedExpr->getCode()) {
-
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1043,7 +1041,6 @@ class Variable
                                     case 'assign':
 
                                         if ($variable != $resolvedExpr->getCode()) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1064,7 +1061,6 @@ class Variable
                                 switch ($statement['operator']) {
                                     case 'assign':
                                         if ($itemVariable->getName() != $variable) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1107,7 +1103,6 @@ class Variable
 
                                     case 'assign':
                                         if ($itemVariable->getName() != $variable) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 

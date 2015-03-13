@@ -45,7 +45,6 @@ class CastOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         $expr = new Expression($expression['right']);
         $resolved = $expr->compile($compilationContext);
 

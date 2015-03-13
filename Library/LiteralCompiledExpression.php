@@ -27,5 +27,4 @@ namespace Zephir;
  */
 class LiteralCompiledExpression extends CompiledExpression
 {
-
 }

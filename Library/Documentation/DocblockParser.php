@@ -61,7 +61,7 @@ class DocblockParser
 
 
     /**
-     * 
+     *
      * @param string $annotation a row annotation string begining with /**
      */
     public function __construct($annotation)
@@ -71,12 +71,11 @@ class DocblockParser
 
     /**
      * Parses the internal annotation string
-     * 
+     *
      * @return Docblock the parsed docblock
      */
     public function parse()
     {
-          
         $this->docblockObj = new Docblock();
         
         $this->ignoreSpaces = false;
@@ -99,7 +98,6 @@ class DocblockParser
         $this->currentChar = $this->annotation[0];
 
         while (null !== $this->currentChar) {
-            
             $currentChar = $this->currentChar;
 
             if ($this->ignoreSpaces && ctype_space($currentChar)) {
@@ -113,20 +111,18 @@ class DocblockParser
                         }
                     }
                 } else {
-                    
                     if ($currentChar == "*") {
                         if ($this->nextCharacter() == "/") {
                             // stop annotation parsing on end of comment
                             $this->__tryRegisterAnnotation();
                             break;
-                        } else if ($this->ignoreStar) {
+                        } elseif ($this->ignoreStar) {
                             $this->nextCharacter();
                             continue;
                         }
                     }
                     
                     if ($currentChar == "@") {
-                        
                         $this->descriptionStr = trim($this->descriptionStr);
                         if ($this->descriptionOpen && strlen($this->descriptionStr) > 0) {
                             $this->descriptionOpen = false;
@@ -137,33 +133,25 @@ class DocblockParser
                         
                         $this->ignoreSpaces = false;
                         $this->annotationNameOpen = true;
-                        
-                    } else if ($this->annotationNameOpen || $this->annotationOpen) {
+                    } elseif ($this->annotationNameOpen || $this->annotationOpen) {
                         
                         // stop annotation parsing on new line
                         if ($currentChar == "\n" || $currentChar == "\r") {
-
                             $this->__tryRegisterAnnotation();
                             
                             $this->ignoreSpaces = true;
                             $this->ignoreStar   = true;
-                            
-                            
-
-                        } else if ($this->annotationNameOpen) {
-
+                        } elseif ($this->annotationNameOpen) {
                             if (ctype_space($currentChar)) {
                                 $this->annotationNameOpen = false;
                                 $this->annotationOpen = true;
                             } else {
                                 $this->currentAnnotationStr .= $currentChar;
                             }
-
-                        } else if ($this->annotationOpen) {
+                        } elseif ($this->annotationOpen) {
                             $this->currentAnnotationContentStr .= $currentChar;
                         }
-                        
-                    } else if ($this->summaryOpen) {
+                    } elseif ($this->summaryOpen) {
                         
                         // stop summary on new line
                         if (strlen($this->summaryStr) > 0 && ($currentChar == "\n" || $currentChar == "\r")) {
@@ -173,8 +161,7 @@ class DocblockParser
                         } else {
                             $this->summaryStr .= $currentChar;
                         }
-                        
-                    } else if ($this->descriptionOpen) {
+                    } elseif ($this->descriptionOpen) {
                         
                         // stop description on new line
                         if ($currentChar == "\n" || $currentChar == "\r") {
@@ -182,9 +169,7 @@ class DocblockParser
                         } else {
                             $this->descriptionStr .= $currentChar;
                         }
-                        
                     }
-                    
                 }
             }
 
@@ -196,7 +181,6 @@ class DocblockParser
         $this->docblockObj->setDescription(trim($this->descriptionStr));
         
         return $this->docblockObj;
-        
     }
     
     /**
@@ -215,7 +199,6 @@ class DocblockParser
      */
     private function __tryRegisterAnnotation()
     {
-        
         if (($this->annotationNameOpen || $this->annotationOpen) && strlen($this->currentAnnotationStr) > 0) {
             $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
             $this->docblockObj->addAnnotation($annotation);
@@ -223,7 +206,6 @@ class DocblockParser
         
         $this->annotationNameOpen = false;
         $this->annotationOpen = false;
-        
     }
     
     /**

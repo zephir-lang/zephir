@@ -45,7 +45,6 @@ class ClassEntryCache
          * Creates a guard variable if the class name is not dynamic
          */
         if (!$dynamic) {
-
             $zendClassEntry = $compilationContext->symbolTable->addTemp('static_zend_class_entry', $compilationContext);
             $zendClassEntry->setMustInitNull(true);
 

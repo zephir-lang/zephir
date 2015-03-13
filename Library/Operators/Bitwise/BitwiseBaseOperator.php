@@ -47,13 +47,11 @@ class BitwiseBaseOperator extends BaseOperator
      */
     public function optimizeConstantFolding($expression, CompilationContext $compilationContext)
     {
-
         if ($expression['left']['type'] != 'int' && $expression['left']['type'] != 'double') {
             return false;
         }
 
         if ($compilationContext->config->get('constant-folding', 'optimizations')) {
-
             if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
                 switch ($this->_operator) {
 

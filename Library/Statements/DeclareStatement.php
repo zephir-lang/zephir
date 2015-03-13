@@ -47,7 +47,6 @@ class DeclareStatement extends StatementAbstract
         $symbolTable = $compilationContext->symbolTable;
 
         foreach ($statement['variables'] as $variable) {
-
             if ($symbolTable->hasVariable($variable['variable'])) {
                 throw new CompilerException("Variable '" . $variable['variable'] . "' is already defined", $variable);
             }
@@ -96,7 +95,6 @@ class DeclareStatement extends StatementAbstract
              * Variables with a default value are initialized by default
              */
             if ($defaultValue !== null || $defaultType !== null) {
-
                 if ($currentType == 'variable' || $currentType == 'string' || $currentType == 'array') {
                     $symbolVariable->increaseVariantIfNull();
                 }

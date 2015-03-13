@@ -138,7 +138,6 @@ class Compiler
                 throw new Exception($collection_error);
             }
         }
-
     }
 
     /**
@@ -149,7 +148,6 @@ class Compiler
     protected function preCompile($filePath)
     {
         if (preg_match('#\.zep$#', $filePath)) {
-
             $className = str_replace(DIRECTORY_SEPARATOR, '\\', $filePath);
             $className = preg_replace('#.zep$#', '', $className);
 
@@ -210,7 +208,6 @@ class Compiler
      */
     public function loadExternalClass($className, $location)
     {
-
         $filePath = $location . DIRECTORY_SEPARATOR . strtolower(str_replace('\\', DIRECTORY_SEPARATOR, $className)) . '.zep';
         if (!file_exists($filePath)) {
             throw new CompilerException("Class '$className' must be located at '$filePath' but this file is missing");
@@ -238,7 +235,6 @@ class Compiler
      */
     public function isClass($className)
     {
-
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
                 if ($value->getType() == 'class') {
@@ -380,7 +376,6 @@ class Compiler
         $success = true;
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $item) {
-
             $pathName = $item->getPathname();
             if (!is_readable($pathName)) {
                 continue;
@@ -437,7 +432,6 @@ class Compiler
     protected function loadConstantsSources($constantsSources)
     {
         foreach ($constantsSources as $constantsSource) {
-
             if (!file_exists($constantsSource)) {
                 throw new Exception("File '" . $constantsSource . "' with constants definitions");
             }
@@ -551,7 +545,6 @@ class Compiler
     protected function getGccVersion()
     {
         if (!Utils::isWindows()) {
-
             if ($this->fileSystem->exists(self::VERSION . '/gcc-version')) {
                 return $this->fileSystem->read(self::VERSION . '/gcc-version');
             }
@@ -669,7 +662,6 @@ class Compiler
         $externalDependencies = $this->config->get('external-dependencies');
         if (is_array($externalDependencies)) {
             foreach ($externalDependencies as $dependencyNs => $location) {
-
                 if (!file_exists($location)) {
                     throw new CompilerException('Location of dependency "' . $dependencyNs . '" does not exist. Check the config.json for more information');
                 }
@@ -723,7 +715,6 @@ class Compiler
          * Load function optimizers
          */
         if (self::$loadedPrototypes == false) {
-
             FunctionCall::addOptimizerDir(ZEPHIRPATH . 'Library/Optimizers/FunctionCall');
 
             $optimizerDirs = $this->config->get('optimizer-dirs');
@@ -795,7 +786,6 @@ class Compiler
              * Only compile classes in the local extension, ignore external classes
              */
             if (!$compileFile->isExternal()) {
-
                 $compileFile->compile($this, $this->stringManager);
                 $compiledFile = $compileFile->getCompiledFile();
 
@@ -815,7 +805,6 @@ class Compiler
          * Round 3.2. Compile anonymous classes
          */
         foreach ($this->anonymousFiles as $compileFile) {
-
             $compileFile->compile($this, $this->stringManager);
             $compiledFile = $compileFile->getCompiledFile();
 
@@ -1153,7 +1142,6 @@ class Compiler
      */
     public function createConfigFiles($project)
     {
-
         $contentM4 = file_get_contents(__DIR__ . '/../templates/config.m4');
         if (empty($contentM4)) {
             throw new Exception("Template config.m4 doesn't exist");
@@ -1340,7 +1328,6 @@ class Compiler
          */
         $globals = $this->config->get('globals');
         if (is_array($globals)) {
-
             $structures = array();
             $variables = array();
             foreach ($globals as $name => $global) {
@@ -1356,14 +1343,12 @@ class Compiler
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
-
                 if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
                     throw new Exception("Struct name: '" . $structureName . "' contains invalid characters");
                 }
 
                 $structBuilder = new Code\Builder\Struct('_zephir_struct_' . $structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
-
                     if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
                         throw new Exception("Struct field name: '" . $field . "' contains invalid characters");
                     }
@@ -1385,7 +1370,6 @@ class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-
                 if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
@@ -1428,7 +1412,6 @@ class Compiler
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
 
                 if (isset($global['ini-entry'])) {
-
                     $iniEntry = $global['ini-entry'];
 
                     if (!isset($iniEntry['name'])) {
@@ -1799,7 +1782,6 @@ class Compiler
 
                             case 'variable':
                                 if (isset($parameter['cast'])) {
-
                                     switch ($parameter['cast']['type']) {
                                         case 'variable':
                                             $value = $parameter['cast']['value'];
@@ -1809,7 +1791,6 @@ class Compiler
                                         default:
                                             throw new Exception('Unexpected exception');
                                     }
-
                                 } else {
                                     $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
                                 }
@@ -1912,7 +1893,6 @@ class Compiler
     {
         $packageDependencies = $this->config->get('package-dependencies');
         if (is_array($packageDependencies)) {
-
             $pkgconfigM4 = file_get_contents(__DIR__ . '/../templates/pkg-config.m4');
             $pkgconfigCheckM4 = file_get_contents(__DIR__ . '/../templates/pkg-config-check.m4');
             $extraCFlags = '';
@@ -1960,7 +1940,6 @@ class Compiler
 
                 $pkgconfigM4 .= $pkgM4Buf;
                 $extraCFlags .= '$PHP_' . strtoupper($pkg) . '_INCS ';
-
             }
             $contentM4 = str_replace('%PROJECT_EXTRA_CFLAGS%', '%PROJECT_EXTRA_CFLAGS% '.$extraCFlags, $contentM4);
 

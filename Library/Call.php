@@ -30,7 +30,7 @@ class Call
 {
     /**
      * Call expression
-	 * @var Expression
+     * @var Expression
      */
     protected $_expression;
 
@@ -133,7 +133,6 @@ class Call
      */
     public function processExpectedComplexLiteralReturn(CompilationContext $compilationContext)
     {
-
         $expr = $this->_expression;
         $expression = $expr->getExpression();
 
@@ -209,7 +208,6 @@ class Call
     public function getResolvedParamsAsExpr($parameters, CompilationContext $compilationContext, $expression, $readOnly = false)
     {
         if (!$this->_resolvedParams) {
-
             $hasParametersByName = false;
             foreach ($parameters as $parameter) {
                 if (isset($parameter['name'])) {
@@ -258,9 +256,7 @@ class Call
 
             $params = array();
             foreach ($parameters as $parameter) {
-
                 if (is_array($parameter['parameter'])) {
-
                     $paramExpr = new Expression($parameter['parameter']);
 
                     switch ($parameter['parameter']['type']) {
@@ -341,7 +337,6 @@ class Call
         $dynamicTypes = array();
         $mustCheck = array();
         foreach ($exprParams as $position => $compiledExpression) {
-
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
 

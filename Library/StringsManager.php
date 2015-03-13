@@ -49,7 +49,6 @@ class StringsManager
      */
     public function genConcatCode()
     {
-
         $code = '
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +68,6 @@ class StringsManager
         $macros = array();
         ksort($this->_concatKeys, SORT_STRING);
         foreach ($this->_concatKeys as $key => $one) {
-
             $len = strlen($key);
             $params = array();
             $zvalCopy = array();

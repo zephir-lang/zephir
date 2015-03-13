@@ -24,13 +24,10 @@ use Zephir\Operators\Arithmetical\SubOperator;
 use Zephir\Operators\Arithmetical\MulOperator;
 use Zephir\Operators\Arithmetical\DivOperator;
 use Zephir\Operators\Arithmetical\ModOperator;
-
 use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
-
 use Zephir\Operators\Logical\AndOperator;
 use Zephir\Operators\Logical\OrOperator;
-
 use Zephir\Operators\Comparison\EqualsOperator;
 use Zephir\Operators\Comparison\NotEqualsOperator;
 use Zephir\Operators\Comparison\IdenticalOperator;
@@ -39,13 +36,11 @@ use Zephir\Operators\Comparison\LessEqualOperator;
 use Zephir\Operators\Comparison\LessOperator;
 use Zephir\Operators\Comparison\GreaterOperator;
 use Zephir\Operators\Comparison\GreaterEqualOperator;
-
 use Zephir\Operators\Bitwise\BitwiseAndOperator;
 use Zephir\Operators\Bitwise\BitwiseOrOperator;
 use Zephir\Operators\Bitwise\BitwiseXorOperator;
 use Zephir\Operators\Bitwise\ShiftLeftOperator;
 use Zephir\Operators\Bitwise\ShiftRightOperator;
-
 use Zephir\Operators\Other\NewInstanceOperator;
 use Zephir\Operators\Other\CloneOperator;
 use Zephir\Operators\Other\ConcatOperator;
@@ -59,10 +54,8 @@ use Zephir\Operators\Other\InstanceOfOperator;
 use Zephir\Operators\Other\RequireOperator;
 use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\CastOperator;
-
 use Zephir\Operators\Other\RangeInclusiveOperator;
 use Zephir\Operators\Other\RangeExclusiveOperator;
-
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
 use Zephir\Expression\Constants;
@@ -271,7 +264,6 @@ class Expression
      */
     public function compileTypeHint($expression, CompilationContext $compilationContext)
     {
-
         $expr = new Expression($expression['right']);
         $expr->setReadOnly(true);
         $resolved = $expr->compile($compilationContext);

@@ -103,7 +103,6 @@ class Config
     public function __construct()
     {
         if (file_exists('config.json')) {
-
             $config = json_decode(file_get_contents('config.json'), true);
             if (!is_array($config)) {
                 throw new Exception("config.json is not valid or there is no Zephir extension initialized in this directory");

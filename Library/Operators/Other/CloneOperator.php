@@ -41,7 +41,6 @@ class CloneOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         $compilationContext->headersManager->add('kernel/object');
 
         $exprVariable = new Expression($expression['left']);

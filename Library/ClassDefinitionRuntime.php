@@ -30,6 +30,5 @@ class ClassDefinitionRuntime
 {
     public function __construct($className)
     {
-
     }
 }

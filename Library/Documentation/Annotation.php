@@ -19,7 +19,6 @@
 
 namespace Zephir\Documentation;
 
-
 /**
  * Annotation
  *

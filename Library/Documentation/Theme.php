@@ -41,7 +41,6 @@ class Theme
 
     public function drawFile(AbstractFile $file)
     {
-
         $outputFile = ltrim($file->getOutputFile(), "/");
         
         $output   = pathinfo($this->outputDir . "/" . $outputFile);
@@ -78,7 +77,6 @@ class Theme
         $themeStt = $this->getThemePath("static");
 
         if (file_exists($themeStt)) {
-
             $outputStt = $this->getOutputPath("asset");
 
             if (!file_exists($outputStt)) {
@@ -90,25 +88,18 @@ class Theme
             $this->__copyDir($themeStt, $outputStt . "/static", $files);
             
             foreach ($files as $f) {
-                
                 foreach ($this->options as $optName => $opt) {
-                    
                     $fcontent = file_get_contents($f);
                     $fcontent = str_replace("%_" . $optName . "_%", $opt, $fcontent);
                     
                     file_put_contents($f, $fcontent);
-                    
                 }
-                
             }
-
         }
-
     }
 
     public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
     {
-
         $output = array(
 
             "allClasses" => array(),
@@ -119,7 +110,6 @@ class Theme
         );
 
         foreach ($classList as $class) {
-
             $cDef = $class->getClassDefinition();
             $cName = $cDef->getCompleteName();
 
@@ -132,7 +122,6 @@ class Theme
             if (!strpos($cName, "\\") > 0) {
                 $output["classes"][] = $cName;
             }
-
         }
 
 
@@ -141,7 +130,6 @@ class Theme
 
 
         foreach ($namespaces as $ns) {
-
             $subclasses     = array();
             $subnamespaces  = array();
 
@@ -179,7 +167,6 @@ class Theme
 
     private function __namespaceTreeHelper(NamespaceHelper $ns)
     {
-
         $output = array(
             "classes"    => array(),
             "namespaces" => array()
@@ -197,7 +184,6 @@ class Theme
         }
 
         return $output;
-
     }
 
     /**
@@ -209,8 +195,8 @@ class Theme
     {
         $dir = opendir($src);
         @mkdir($dst);
-        while (false !== ( $file = readdir($dir))) {
-            if (( $file != '.' ) && ( $file != '..' )) {
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
                 if (is_dir($src . '/' . $file)) {
                     $this->__copyDir($src . '/' . $file, $dst . '/' . $file, $files);
                 } else {
@@ -226,25 +212,21 @@ class Theme
 
     public function getThemePath($path)
     {
-
         $path   = pathinfo($this->themeDir . "/" . $path);
         $pathDirname  = $path["dirname"];
         $pathBasename = $path["basename"];
         $pathFilename = $pathDirname . "/" . $pathBasename;
 
         return $pathFilename;
-
     }
 
     public function getOutputPath($path)
     {
-
         $path   = pathinfo($this->outputDir . "/" . $path);
         $pathDirname  = $path["dirname"];
         $pathBasename = $path["basename"];
         $pathFilename = $pathDirname . "/" . $pathBasename;
 
         return $pathFilename;
-
     }
 }

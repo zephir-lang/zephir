@@ -48,12 +48,10 @@ class ArrayIndexAppend extends ArrayIndex
      */
     protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
     {
-
         $codePrinter = $compilationContext->codePrinter;
 
         $offsetExprs = array();
         foreach ($statement['index-expr'] as $indexExpr) {
-
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
@@ -84,7 +82,6 @@ class ArrayIndexAppend extends ArrayIndex
         $numberParams = 1;
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
-
             switch ($offsetExpr->getType()) {
 
                 case 'int':

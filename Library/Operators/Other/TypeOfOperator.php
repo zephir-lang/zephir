@@ -41,7 +41,6 @@ class TypeOfOperator extends BaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-
         if (!isset($expression['left'])) {
             throw new CompilerException("Invalid 'left' operand for 'typeof' expression", $expression['left']);
         }

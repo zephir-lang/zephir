@@ -53,7 +53,6 @@ class Documentation
      */
     public function __construct(array $classes, Config $config, Logger $logger)
     {
-        
         ksort($classes);
         
         $this->config = $config;
@@ -109,7 +108,6 @@ class Documentation
             // class source file (source/ns1/n2/class.html)
             $sfile = new File\SourceFile($this->config, $class);
             $this->theme->drawFile($sfile);
-            
         }
 
         // classes file (classes.html)
