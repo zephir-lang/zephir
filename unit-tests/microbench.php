@@ -35,12 +35,12 @@ function end_test($start, $name, $overhead = null)
     ob_end_clean();
     $last_time = $end-$start;
     $total += $last_time;
-    $num = number_format($last_time,3);
+    $num = number_format($last_time, 3);
     $pad = str_repeat(" ", 24-strlen($name)-strlen($num));
     if (is_null($overhead)) {
         echo $name.$pad.$num."\n";
     } else {
-        $num2 = number_format($last_time - $overhead,3);
+        $num2 = number_format($last_time - $overhead, 3);
         echo $name.$pad.$num."    ".$num2."\n";
     }
     ob_start();
@@ -52,7 +52,7 @@ function total()
     global $total;
     $pad = str_repeat("-", 24);
     echo $pad."\n";
-    $num = number_format($total,3);
+    $num = number_format($total, 3);
     $pad = str_repeat(" ", 24-strlen("Total")-strlen($num));
     echo "Total".$pad.$num."\n";
 }

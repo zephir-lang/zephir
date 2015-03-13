@@ -71,7 +71,7 @@ class ClassMethod
      * @var string
      */
     protected $docblock;
-    
+
     /**
      * @var Documentation\Docblock
      */
@@ -324,7 +324,7 @@ class ClassMethod
     {
         return $this->docblock;
     }
-    
+
     /**
      * Returns the parsed docblock
      *
@@ -1314,7 +1314,6 @@ class ClassMethod
         $callGathererPass = null;
 
         if (is_object($this->statements)) {
-
             /**
              * This pass checks for zval variables than can be potentially
              * used without allocating memory and track it
@@ -1436,7 +1435,6 @@ class ClassMethod
         $compilationContext->insideTryCatch = 0;
 
         if (is_object($parameters)) {
-
             /**
              * Round 1. Create variables in parameters in the symbol table
              */

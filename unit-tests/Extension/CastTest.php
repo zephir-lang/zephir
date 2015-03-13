@@ -19,7 +19,6 @@
 
 namespace Extension;
 
-
 use Test\Cast;
 
 class CastTest extends \PHPUnit_Framework_TestCase

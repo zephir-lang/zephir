@@ -21,7 +21,7 @@ namespace Extension;
 
 use Test\Pregmatch;
 
-class PregMatchTest extends \PHPUnit_Framework_TestCase
+class PregmatchTest extends \PHPUnit_Framework_TestCase
 {
     public function testPregMatch()
     {

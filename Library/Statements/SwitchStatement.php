@@ -55,7 +55,6 @@ class SwitchStatement extends StatementAbstract
             $compilationContext->codePrinter->increaseLevel();
 
             if ($resolvedExpr->getType() != 'variable') {
-
                 /**
                  * Create a temporary variable
                  */

@@ -151,7 +151,6 @@ class Utils
         }
 
         if ($className[0] !== '\\') {
-
             // If class/interface name not begin with \ maybe a alias or a sub-namespace
             $firstSepPos = strpos($className, '\\');
             if (false !== $firstSepPos) {

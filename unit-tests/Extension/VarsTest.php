@@ -28,7 +28,7 @@ class VarsTest extends \PHPUnit_Framework_TestCase
         $t = new \Test\Vars();
         $t->testVarDump();
         $t->testVarDump2param(3.1, true);
-        $t->testVarDump3param(3.1, true, array(1,2,3));
+        $t->testVarDump3param(3.1, true, array(1, 2, 3));
         $t->testVarDump2param(3.1, true);
 
         ob_clean();

@@ -65,7 +65,6 @@ class TryCatchStatement extends StatementAbstract
         $compilationContext->insideTryCatch--;
 
         if (isset($this->_statement['catches'])) {
-
             /**
              * Check if there was an exception
              */

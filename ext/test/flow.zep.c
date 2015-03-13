@@ -1976,6 +1976,22 @@ PHP_METHOD(Test_Flow, testSwitch10) {
 
 }
 
+PHP_METHOD(Test_Flow, testSwitch11) {
+
+	int a;
+
+
+	a = 1;
+	do {
+		if (a == 2) {
+			RETURN_LONG(2);
+		}
+		RETURN_LONG(1);
+	} while(0);
+
+
+}
+
 PHP_METHOD(Test_Flow, testUnrechable1) {
 
 	char e = '\0';

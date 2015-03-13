@@ -75,7 +75,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             /**
              * This variable is used to check if the loop is in its first iteration
              */
@@ -132,7 +131,6 @@ class ForStatement extends StatementAbstract
         $statement->compile($compilationContext);
 
         if ($this->_statement['reverse']) {
-
             /**
              * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
              */
@@ -157,7 +155,6 @@ class ForStatement extends StatementAbstract
                 )
             ));
         } else {
-
             /**
              * Create an implicit 'let' operation for the initialize expression, @TODO use a builder
              */
@@ -322,7 +319,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'key' variable
          */
         if (isset($this->_statement['key'])) {
-
             /**
              * Check for anonymous variables
              */
@@ -363,7 +359,6 @@ class ForStatement extends StatementAbstract
          * Initialize 'value' variable
          */
         if (isset($this->_statement['value'])) {
-
             /**
              * Check for anonymous variables
              */
@@ -753,7 +748,6 @@ class ForStatement extends StatementAbstract
          * We have to check if hashes are modified within the for's block
          */
         if (isset($this->_statement['statements'])) {
-
             /**
              * Create the statements block here to obtain the last use line
              */

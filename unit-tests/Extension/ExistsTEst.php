@@ -19,7 +19,7 @@
 
 namespace Extension;
 
-class ExistsTest extends \PHPUnit_Framework_TestCase
+class ExistsTEst extends \PHPUnit_Framework_TestCase
 {
     public function testAssertations()
     {
