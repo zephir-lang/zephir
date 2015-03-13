@@ -65,7 +65,6 @@ class TryCatchStatement extends StatementAbstract
         $compilationContext->insideTryCatch--;
 
         if (isset($this->_statement['catches'])) {
-
             /**
              * Check if there was an exception
              */
@@ -73,7 +72,6 @@ class TryCatchStatement extends StatementAbstract
             $codePrinter->increaseLevel();
 
             foreach ($this->_statement['catches'] as $catch) {
-
                 if (isset($catch['variable'])) {
                     $variable = $compilationContext->symbolTable->getVariableForWrite($catch['variable']['value'], $compilationContext, $catch['variable']);
                     if ($variable->getType() != 'variable') {
@@ -95,7 +93,6 @@ class TryCatchStatement extends StatementAbstract
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
-
                     $ifCheck = new IfStatementBuilder(
                         new BinaryOperatorBuilder(
                             'instanceof',

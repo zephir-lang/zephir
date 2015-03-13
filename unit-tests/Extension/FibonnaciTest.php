@@ -19,7 +19,6 @@
 
 namespace Extension;
 
-
 class FibonnaciTest extends \PHPUnit_Framework_TestCase
 {
     public function testMethods()

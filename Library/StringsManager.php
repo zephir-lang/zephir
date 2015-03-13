@@ -68,8 +68,8 @@ class StringsManager
 
         $macros = array();
         ksort($this->_concatKeys, SORT_STRING);
+        
         foreach ($this->_concatKeys as $key => $one) {
-
             $len = strlen($key);
             $params = array();
             $zvalCopy = array();

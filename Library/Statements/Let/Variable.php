@@ -465,9 +465,7 @@ class Variable
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
-
                                 if ($variable != $resolvedExpr->getCode()) {
-
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -932,9 +930,7 @@ class Variable
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
-
                                 if ($variable != $resolvedExpr->getCode()) {
-
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1041,9 +1037,7 @@ class Variable
                             case 'array':
                                 switch ($statement['operator']) {
                                     case 'assign':
-
                                         if ($variable != $resolvedExpr->getCode()) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1064,7 +1058,6 @@ class Variable
                                 switch ($statement['operator']) {
                                     case 'assign':
                                         if ($itemVariable->getName() != $variable) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -1104,10 +1097,8 @@ class Variable
 
                             case 'string':
                                 switch ($statement['operator']) {
-
                                     case 'assign':
                                         if ($itemVariable->getName() != $variable) {
-
                                             $symbolVariable->setMustInitNull(true);
                                             $compilationContext->symbolTable->mustGrownStack(true);
 

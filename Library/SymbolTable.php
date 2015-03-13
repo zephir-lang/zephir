@@ -186,9 +186,7 @@ class SymbolTable
          * Create superglobals just in time
          */
         if ($this->isSuperGlobal($name)) {
-
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
@@ -201,7 +199,6 @@ class SymbolTable
                 $this->variables[$name] = $superVar;
 
             } else {
-
                 $found = false;
                 $variable = $this->getVariable($name);
                 foreach ($variable->getInitBranches() as $branch) {
@@ -213,7 +210,6 @@ class SymbolTable
                 if (!$found) {
                     $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
                 }
-
             }
         }
 
@@ -233,11 +229,8 @@ class SymbolTable
          * Analize branches to detect possible initialization of variables in conditional branches
          */
         if (!$variable->isTemporal() && !$variable->getSkipVariant()) {
-
             if ($name != 'return_value' && $name != 'this') {
-
                 if (is_object($compilationContext) && is_object($compilationContext->branchManager)) {
-
                     if ($compilationContext->config->get('check-invalid-reads', 'optimizations')) {
                         switch ($variable->getType()) {
                             case 'variable':
@@ -257,7 +250,6 @@ class SymbolTable
                     $branches = array_reverse($initBranches);
 
                     if (count($branches) == 1) {
-
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if ($branches[0]->isUnreachable() === true) {
                                 throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
@@ -272,7 +264,6 @@ class SymbolTable
 
                         $tempBranch = $branches[0]->getParentBranch();
                         while ($tempBranch) {
-
                             if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                 if ($tempBranch->isUnreachable() === true) {
                                     throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
@@ -286,7 +277,6 @@ class SymbolTable
 
                     $found = false;
                     foreach ($branches as $branch) {
-
                         /*+
                          * Variable was initialized in the same current branch
                          */
@@ -306,7 +296,6 @@ class SymbolTable
                     }
 
                     if (!$found) {
-
                         /**
                          * Check if last assignment
                          * Variable was initialized in a sub-branch and it's beign used in a parent branch
@@ -318,17 +307,13 @@ class SymbolTable
                         }
 
                         if ($possibleBadAssignment) {
-
                             if (count($branches) > 1) {
-
                                 $graph = new BranchGraph();
                                 foreach ($branches as $branch) {
                                     $graph->addLeaf($branch);
                                 }
                                 //echo $graph->getRoot()->show();
-
                             } else {
-
                                 /**
                                  * Variable is assigned just once and it's assigned in a conditional branch
                                  */
@@ -386,9 +371,7 @@ class SymbolTable
          * Create superglobals just in time
          */
         if ($this->isSuperGlobal($name)) {
-
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
@@ -442,9 +425,7 @@ class SymbolTable
          * Create superglobals just in time
          */
         if ($this->isSuperGlobal($name)) {
-
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */

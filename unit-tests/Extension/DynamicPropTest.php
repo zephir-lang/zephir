@@ -19,7 +19,6 @@
 
 namespace Extension;
 
-
 class DynamicPropTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetProperty()
