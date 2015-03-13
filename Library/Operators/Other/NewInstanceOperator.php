@@ -111,7 +111,6 @@ class NewInstanceOperator extends BaseOperator
                 $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ');');
                 $symbolVariable->setClassTypes($className);
             } else {
-
                 /**
                  * Classes outside the extension
                  */

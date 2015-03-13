@@ -53,7 +53,6 @@ class VarDumpOptimizer extends OptimizerAbstract
         foreach ($resolvedParams as $resolvedParam) {
             $variable = $context->symbolTable->getVariable($resolvedParam->getCode());
             if (!$variable || !$variable->isVariable()) {
-
                 /**
                  * Complex expressions require a temporary variable
                  */
@@ -91,7 +90,6 @@ class VarDumpOptimizer extends OptimizerAbstract
                 ));
                 $statement->compile($context);
             } else {
-
                 /**
                  * This mark the variable as used
                  */

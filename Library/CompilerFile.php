@@ -865,7 +865,6 @@ class CompilerFile
         }
 
         if ($codePrinter) {
-
             /**
              * If the file does not exists we create it for the first time
              */

@@ -72,7 +72,6 @@ class ObjectPropertyAppend
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
-
             /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class

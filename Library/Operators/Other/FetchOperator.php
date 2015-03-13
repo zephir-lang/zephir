@@ -53,7 +53,6 @@ class FetchOperator extends BaseOperator
          * return_value must not be observed
          */
         if ($variable->getName() != 'return_value') {
-
             /*
              * @todo use a read detector here
              */

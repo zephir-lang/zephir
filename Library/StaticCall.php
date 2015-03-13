@@ -470,7 +470,6 @@ class StaticCall extends Call
          * Method calls only return zvals so we need to validate the target variable is also a zval
          */
         if ($isExpecting) {
-
             /**
              * At this point, we don't know the exact dynamic type returned by the static method call
              */
@@ -556,7 +555,6 @@ class StaticCall extends Call
 
                 if (!$classDefinition->hasMethod("__callStatic")) {
                     if ($method instanceof ClassMethod && !$method->isInternal()) {
-
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */

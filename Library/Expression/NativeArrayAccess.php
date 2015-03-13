@@ -175,7 +175,6 @@ class NativeArrayAccess
 
         if ($this->_readOnly) {
             if ($this->_expecting && $this->_expectingVariable) {
-
                 /**
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
@@ -209,7 +208,6 @@ class NativeArrayAccess
             }
         } else {
             if ($this->_expecting && $this->_expectingVariable) {
-
                 /**
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable

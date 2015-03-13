@@ -60,7 +60,6 @@ class ReturnStatement extends StatementAbstract
                 if ($statement['expr']['left']['type'] == 'variable') {
                     if ($statement['expr']['left']['value'] == 'this') {
                         if ($statement['expr']['right']['type'] == 'variable') {
-
                             /**
                              * If the property is accessed on 'this', we check if the property does exist
                              */

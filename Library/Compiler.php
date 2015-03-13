@@ -725,7 +725,6 @@ class Compiler
             }
 
             if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
-
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
@@ -781,7 +780,6 @@ class Compiler
 
         $hash = "";
         foreach ($this->files as $compileFile) {
-
             /**
              * Only compile classes in the local extension, ignore external classes
              */

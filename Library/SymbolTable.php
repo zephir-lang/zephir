@@ -187,7 +187,6 @@ class SymbolTable
          */
         if ($this->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
@@ -276,7 +275,6 @@ class SymbolTable
 
                     $found = false;
                     foreach ($branches as $branch) {
-
                         /*+
                          * Variable was initialized in the same current branch
                          */
@@ -295,7 +293,6 @@ class SymbolTable
                     }
 
                     if (!$found) {
-
                         /**
                          * Check if last assignment
                          * Variable was initialized in a sub-branch and it's beign used in a parent branch
@@ -314,7 +311,6 @@ class SymbolTable
                                 }
                                 //echo $graph->getRoot()->show();
                             } else {
-
                                 /**
                                  * Variable is assigned just once and it's assigned in a conditional branch
                                  */
@@ -370,7 +366,6 @@ class SymbolTable
          */
         if ($this->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
@@ -425,7 +420,6 @@ class SymbolTable
          */
         if ($this->isSuperGlobal($name)) {
             if (!$this->hasVariable($name)) {
-
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */

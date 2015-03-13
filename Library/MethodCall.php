@@ -199,7 +199,6 @@ class MethodCall extends Call
                 }
 
                 if ($check) {
-
                     /**
                      * Private methods must be called in their declaration scope
                      */
@@ -233,7 +232,6 @@ class MethodCall extends Call
                     $method = $classMethod;
                 }
             } else {
-
                 /**
                  * Variables whose dynamic type is 'object' can be used
                  * to determine method existance in compile time
@@ -535,7 +533,6 @@ class MethodCall extends Call
          * Generate the code according to the call type
          */
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-
             /**
              * Check if the method call can have an inline cache
              */

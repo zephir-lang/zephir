@@ -85,7 +85,6 @@ class Bootstrap
     public static function boot()
     {
         try {
-
             /**
              * Global config
              */

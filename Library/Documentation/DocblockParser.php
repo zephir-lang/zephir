@@ -37,8 +37,8 @@ class DocblockParser
     protected $currentCharIndex = null;
     protected $currentLine = null;
     protected $lines = array();
-    
-    
+
+
     // Parsing helpers
     protected $ignoreSpaces;
     protected $ignoreStar;
@@ -77,7 +77,7 @@ class DocblockParser
     public function parse()
     {
         $this->docblockObj = new Docblock();
-        
+
         $this->ignoreSpaces = false;
         $this->ignoreStar   = true;
         $this->commentOpen  = false;
@@ -85,13 +85,13 @@ class DocblockParser
         $this->annotationOpen = false;
         $this->summaryOpen = true;
         $this->descriptionOpen = false;
-        
+
         $this->currentAnnotationStr = null;
         $this->currentAnnotationContentStr = null;
-        
+
         $this->summaryStr = "";
         $this->descriptionStr = "";
-        
+
         $this->currentLine = 0;
         $this->currentCharIndex = 0;
         $this->annotationLen = strlen($this->annotation);
@@ -121,7 +121,7 @@ class DocblockParser
                             continue;
                         }
                     }
-                    
+
                     if ($currentChar == "@") {
                         $this->descriptionStr = trim($this->descriptionStr);
                         if ($this->descriptionOpen && strlen($this->descriptionStr) > 0) {
@@ -130,15 +130,14 @@ class DocblockParser
 
                         $this->currentAnnotationStr = "";
                         $this->currentAnnotationContentStr = "";
-                        
+
                         $this->ignoreSpaces = false;
                         $this->annotationNameOpen = true;
                     } elseif ($this->annotationNameOpen || $this->annotationOpen) {
-                        
                         // stop annotation parsing on new line
                         if ($currentChar == "\n" || $currentChar == "\r") {
                             $this->__tryRegisterAnnotation();
-                            
+
                             $this->ignoreSpaces = true;
                             $this->ignoreStar   = true;
                         } elseif ($this->annotationNameOpen) {
@@ -152,7 +151,6 @@ class DocblockParser
                             $this->currentAnnotationContentStr .= $currentChar;
                         }
                     } elseif ($this->summaryOpen) {
-                        
                         // stop summary on new line
                         if (strlen($this->summaryStr) > 0 && ($currentChar == "\n" || $currentChar == "\r")) {
                             $this->summaryOpen = false;
@@ -162,7 +160,6 @@ class DocblockParser
                             $this->summaryStr .= $currentChar;
                         }
                     } elseif ($this->descriptionOpen) {
-                        
                         // stop description on new line
                         if ($currentChar == "\n" || $currentChar == "\r") {
                             $this->descriptionStr .= PHP_EOL;
@@ -175,14 +172,14 @@ class DocblockParser
 
             $this->nextCharacter();
         }
-        
-        
+
+
         $this->docblockObj->setSummary(trim($this->summaryStr));
         $this->docblockObj->setDescription(trim($this->descriptionStr));
-        
+
         return $this->docblockObj;
     }
-    
+
     /**
      * return the parsed docblock. It will return null until you run the parse() method
      * @return Docblock the parsed docblock
@@ -192,8 +189,8 @@ class DocblockParser
         return $this->docblockObj;
     }
 
-        
-    
+
+
     /**
      * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
      */
@@ -203,11 +200,11 @@ class DocblockParser
             $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
             $this->docblockObj->addAnnotation($annotation);
         }
-        
+
         $this->annotationNameOpen = false;
         $this->annotationOpen = false;
     }
-    
+
     /**
      * @param string $name the annotation name
      * @param string $string the annotation name
@@ -220,26 +217,26 @@ class DocblockParser
                 $annotation = new Annotation\Link($name, $string);
                 $annotation->getLinkText();
                 break;
-            
+
             case "return":
                 $annotation = new Annotation\ReturnAnnotation($name, $string);
                 $annotation->getReturnType();
                 break;
-            
+
             case "see":
                 $annotation = new Annotation\See($name, $string);
                 $annotation->getRessource();
                 break;
-                
+
             default:
                 $annotation = new Annotation($name, $string);
                 break;
         }
-        
+
         return $annotation;
     }
 
-    
+
 
     /**
      * moves the current cursor to the next character
@@ -254,7 +251,7 @@ class DocblockParser
         } else {
             $this->currentChar = $this->annotation{$this->currentCharIndex};
         }
-        
+
         return $this->currentChar;
     }
 }

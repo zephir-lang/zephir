@@ -223,7 +223,6 @@ class CompilerFileAnonymous
         }
 
         if ($codePrinter) {
-
             /**
              * If the file does not exists we create it for the first time
              */
@@ -233,7 +232,6 @@ class CompilerFileAnonymous
                     file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
                 }
             } else {
-
                 /**
                  * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
                  * thus avoiding unnecesary recompilations

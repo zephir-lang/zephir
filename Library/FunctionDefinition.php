@@ -1009,7 +1009,6 @@ class FunctionDefinition
         $callGathererPass = null;
 
         if (is_object($this->statements)) {
-
             /**
              * This pass checks for zval variables than can be potentially
              * used without allocating memory and track it
@@ -1131,13 +1130,11 @@ class FunctionDefinition
         $compilationContext->insideTryCatch = 0;
 
         if (is_object($parameters)) {
-
             /**
              * Round 1. Create variables in parameters in the symbol table
              */
             $classCastChecks = array();
             foreach ($parameters->getParameters() as $parameter) {
-
                 /**
                  * Change dynamic variables to low level types
                  */
@@ -1189,7 +1186,6 @@ class FunctionDefinition
                 }
 
                 if (is_object($symbolParam)) {
-
                     /**
                      * Parameters are marked as 'external'
                      */
@@ -1261,7 +1257,6 @@ class FunctionDefinition
              */
             foreach ($classCastChecks as $classCastCheck) {
                 foreach ($classCastCheck[0]->getClassTypes() as $className) {
-
                     /**
                      * If the parameter is nullable check it must pass the 'instanceof' validation
                      */
@@ -1334,7 +1329,6 @@ class FunctionDefinition
          */
         $initVarCode = "";
         foreach ($symbolTable->getVariables() as $variable) {
-
             /**
              * Initialize 'dynamic' variables with default values
              */
@@ -1459,7 +1453,6 @@ class FunctionDefinition
         $initCode = "";
         $code = "";
         if (is_object($parameters)) {
-
             /**
              * Round 2. Fetch the parameters in the method
              */
@@ -1504,7 +1497,6 @@ class FunctionDefinition
              */
             $parametersToSeparate = array();
             if (is_object($this->statements)) {
-
                 /**
                  * If local context is not available
                  */
@@ -1558,7 +1550,6 @@ class FunctionDefinition
                 }
 
                 if ($dataType != 'variable') {
-
                     /**
                      * Assign value from zval to low level type
                      */
@@ -1886,7 +1877,6 @@ class FunctionDefinition
          * Finalize the method compilation
          */
         if (is_object($this->statements)) {
-
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed

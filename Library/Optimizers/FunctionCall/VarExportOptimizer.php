@@ -68,7 +68,6 @@ class VarExportOptimizer extends OptimizerAbstract
         $resolvedParam = $resolvedParams[0];
 
         if (!$symbolVariable || !$symbolVariable->isVariable()) {
-
             /**
              * Complex expressions require a temporary variable
              */

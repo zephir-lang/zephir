@@ -69,7 +69,6 @@ class MethodCache
     public function get(CompilationContext $compilationContext, $method, $caller)
     {
         if (!is_object($method)) {
-
             /**
              * Try to generate a cache based on the fact the variable is not modified within the loop block
              */
@@ -91,7 +90,6 @@ class MethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
-
             /**
              * Avoid generate caches for external classes
              */

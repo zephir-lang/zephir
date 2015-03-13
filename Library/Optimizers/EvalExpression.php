@@ -149,7 +149,6 @@ class EvalExpression
                 if (is_object($possibleValue)) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
-
                         /**
                          * Check if the possible value was assigned in the root branch
                          */

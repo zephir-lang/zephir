@@ -128,7 +128,6 @@ class PropertyAccess
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
-
             /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
@@ -162,7 +161,6 @@ class PropertyAccess
             }
 
             if (!$propertyDefinition->isPublic()) {
-
                 /**
                  * Protected variables only can be read in the class context
                  * where they were declared

@@ -942,7 +942,6 @@ class ClassDefinition
         }
 
         if (!$this->isAbstract() && !$this->isInterface()) {
-
             /**
              * Interfaces in extended classes may have
              */
