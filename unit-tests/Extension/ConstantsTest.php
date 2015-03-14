@@ -32,8 +32,8 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(Constants::C3 === true);
         $this->assertTrue(Constants::C4 === 10);
         $this->assertTrue(Constants::C5 === 10.25);
-        $this->assertTrue(Constants::C6 === "test");
-        $this->assertTrue(Constants::className === "Constants");
+        $this->assertTrue(Constants::C6 === 'test');
+        $this->assertTrue(Constants::className === 'Test\Constants');
     }
 
     public function testConstantGetters()
@@ -71,9 +71,10 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Constants();
 
-        $this->assertTrue($t->testClassMagicConstant() == 'Constants');
+        $this->assertTrue($t->testNamespaceMagicConstant() == 'Test');
+        $this->assertTrue($t->testClassMagicConstant() == 'Test\Constants');
+
         $this->assertTrue($t->testMethodMagicConstant() == 'Constants:testMethodMagicConstant');
         $this->assertTrue($t->testFunctionMagicConstant() == 'testFunctionMagicConstant');
-        $this->assertTrue($t->testNamespaceMagicConstant() == 'Test');
     }
 }

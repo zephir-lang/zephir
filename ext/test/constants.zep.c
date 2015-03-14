@@ -48,7 +48,7 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 
-	zend_declare_class_constant_string(test_constants_ce, SL("className"), "Constants" TSRMLS_CC);
+	zend_declare_class_constant_string(test_constants_ce, SL("className"), "Test\\Constants" TSRMLS_CC);
 
 	/**
 	 * Test property addSlashes for constants
@@ -156,7 +156,7 @@ PHP_METHOD(Test_Constants, testPHPVersionEnvConstant) {
 PHP_METHOD(Test_Constants, testClassMagicConstant) {
 
 
-	RETURN_STRING("Constants", 1);
+	RETURN_STRING("Test\\Constants", 1);
 
 }
 
