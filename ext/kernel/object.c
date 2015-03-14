@@ -104,6 +104,7 @@ int zephir_is_instance_of(zval *object, const char *class_name, unsigned int cla
 int zephir_zval_is_traversable(zval *object TSRMLS_DC) {
 
 	zend_class_entry *ce;
+	unsigned int i;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		ce = Z_OBJCE_P(object);
@@ -112,10 +113,11 @@ int zephir_zval_is_traversable(zval *object TSRMLS_DC) {
 			return 1;
 		}
 
-		uint32_t i;
-
 		for (i = 0; i < ce->num_interfaces; i++) {
-			if (ce->interfaces[i] == zend_ce_aggregate || ce->interfaces[i] == zend_ce_iterator || ce->interfaces[i] == zend_ce_traversable) {
+			if (ce->interfaces[i] == zend_ce_aggregate ||
+				ce->interfaces[i] == zend_ce_iterator ||
+				ce->interfaces[i] == zend_ce_traversable
+			) {
 				return 1;
 			}
 		}
