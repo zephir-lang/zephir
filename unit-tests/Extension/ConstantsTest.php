@@ -20,6 +20,7 @@
 namespace Extension;
 
 use Test\Constants;
+use Test\Oo\ConstantsInterface;
 
 class ConstantsTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,10 +72,14 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Constants();
 
-        $this->assertTrue($t->testNamespaceMagicConstant() == 'Test');
-        $this->assertTrue($t->testClassMagicConstant() == 'Test\Constants');
+        $this->assertSame($t->testNamespaceMagicConstant(), 'Test');
+        $this->assertSame($t->testClassMagicConstant(), 'Test\Constants');
 
-        $this->assertTrue($t->testMethodMagicConstant() == 'Constants:testMethodMagicConstant');
-        $this->assertTrue($t->testFunctionMagicConstant() == 'testFunctionMagicConstant');
+        $this->assertSame($t->testMethodMagicConstant(), 'Constants:testMethodMagicConstant');
+        $this->assertSame($t->testFunctionMagicConstant(), 'testFunctionMagicConstant');
+
+
+        $this->assertSame(ConstantsInterface::CLASSNAME, 'Test\Oo\ConstantsInterface');
+        $this->assertSame(ConstantsInterface::NAMESPACENAME, 'Test\Oo');
     }
 }

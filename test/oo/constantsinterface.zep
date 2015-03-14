@@ -3,6 +3,9 @@ namespace Test\Oo;
 
 class ConstantsInterface implements \Test\TestInterface
 {
+    const CLASSNAME = __CLASS__;
+    const NAMESPACENAME = __NAMESPACE__;
+
 	public function testReadInterfaceConstant1()
 	{
 		return \Test\TestInterface::C1;
