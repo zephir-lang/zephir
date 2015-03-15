@@ -128,10 +128,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $t->optionalParameterBoolean('test');
     }
 
-    /**
-     * @test
-     */
-    public function arrayParamWithDefaultEmptyArray()
+    public function testArrayParamWithDefaultEmptyArray()
     {
         $t = new Mcall();
 
@@ -143,10 +140,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->arrayParamWithDefaultEmptyArray(array(1)) === array(1));
     }
 
-    /**
-     * @test
-     */
-    public function arrayParamWithDefaultNullValue()
+    public function testArrayParamWithDefaultNullValue()
     {
         $t = new Mcall();
 
@@ -158,10 +152,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->arrayParamWithDefaultNullValue(array(1)) === array(1));
     }
 
-    /**
-     * @test
-     */
-    public function arrayParam()
+    public function testArrayParam()
     {
         $t = new Mcall();
 
@@ -173,10 +164,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->arrayParam(array(1, 2, 3)) === array(1, 2, 3));
     }
 
-    /**
-     * @test
-     */
-    public function objectParamCastStdClass()
+    public function testObjectParamCastStdClass()
     {
         $t = new Mcall();
 
@@ -187,10 +175,7 @@ class MCallTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $t->objectParamCastStdClass(new \stdClass()));
     }
 
-    /**
-     * @test
-     */
-    public function objectParamCastOoParam()
+    public function testObjectParamCastOoParam()
     {
         $t = new Mcall();
 
@@ -199,5 +184,12 @@ class MCallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('Test\Oo\Param', $this->getMethodFirstParameter()->getClass()->getName());
         $this->assertInstanceOf('Test\Oo\Param', $t->objectParamCastOoParam(new \Test\Oo\Param()));
+    }
+
+    public function testUIntParameters()
+    {
+        $t = new Mcall();
+
+        $this->assertEquals($t->testCallUInt(-1), 1);
     }
 }
