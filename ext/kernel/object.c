@@ -104,7 +104,7 @@ int zephir_is_instance_of(zval *object, const char *class_name, unsigned int cla
 int zephir_zval_is_traversable(zval *object TSRMLS_DC) {
 
 	zend_class_entry *ce;
-	unsigned int i;
+	zend_uint i;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
 		ce = Z_OBJCE_P(object);
