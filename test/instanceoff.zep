@@ -36,4 +36,13 @@ class Instanceoff
 
 		return false;
 	}
+
+	public function testInstanceOf5(var a)
+	{
+		if a instanceof this {
+			return true;
+		}
+
+		return false;
+	}
 }

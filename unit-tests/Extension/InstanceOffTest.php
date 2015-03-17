@@ -56,4 +56,21 @@ class InstanceOffTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($t->testInstanceOf4(array()));
         $this->assertFalse($t->testInstanceOf4(new \StdClass));
     }
+
+    /**
+     * @link https://github.com/phalcon/zephir/issues/776
+     */
+    public function testInstanceOf5()
+    {
+        $t = new InstanceOff();
+
+        $this->assertTrue($t->testInstanceOf5($t));
+
+        /**
+         * Cannot test instance of for not objects
+         * @link https://github.com/phalcon/zephir/issues/822
+         */
+
+        $this->assertFalse($t->testInstanceOf5(new \StdClass));
+    }
 }

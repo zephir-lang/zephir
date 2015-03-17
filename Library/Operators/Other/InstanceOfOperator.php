@@ -35,42 +35,42 @@ class InstanceOfOperator extends BaseOperator
 {
     /**
      * @param $expression
-     * @param CompilationContext $compilationContext
+     * @param CompilationContext $context
      * @return CompiledExpression
      * @throws CompilerException
      * @throws \Zephir\Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $context)
     {
         $left = new Expression($expression['left']);
-        $resolved = $left->compile($compilationContext);
+        $resolved = $left->compile($context);
 
         if ($resolved->getType() != 'variable') {
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
-        $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+        $symbolVariable = $context->symbolTable->getVariableForRead($resolved->getCode(), $context, $expression);
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
         $right = new Expression($expression['right']);
-        $resolved = $right->compile($compilationContext);
+        $resolved = $right->compile($context);
         $resolvedVariable = $resolved->getCode();
-        
+
         switch ($resolved->getType()) {
 
             case 'string':
-                $className = Utils::getFullName($resolvedVariable, $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                $className = Utils::getFullName($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
 
-                if ($compilationContext->compiler->isClass($className)) {
-                    $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                    $classEntry = $classDefinition->getClassEntry($compilationContext);
+                if ($context->compiler->isClass($className)) {
+                    $classDefinition = $context->compiler->getClassDefinition($className);
+                    $classEntry = $classDefinition->getClassEntry($context);
                 } else {
                     if (!class_exists($className, false)) {
                         $code = 'SL("' . $resolvedVariable . '")';
                     } else {
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                        $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                         if (!$classEntry) {
                             $code = 'SL("' . $resolvedVariable . '")';
                         }
@@ -82,25 +82,30 @@ class InstanceOfOperator extends BaseOperator
                 switch ($resolved->getType()) {
 
                     case 'variable':
-                        if (!$compilationContext->symbolTable->hasVariable($resolvedVariable)) {
-                            $className = $compilationContext->getFullName($resolvedVariable);
+                        if ($resolvedVariable == 'this') {
+                            /**
+                             * @todo It's an optimization variant, but maybe we need to get entry in runtime?
+                             */
+                            $classEntry = $context->classDefinition->getClassEntry($context);
+                        } elseif (!$context->symbolTable->hasVariable($resolvedVariable)) {
+                            $className = $context->getFullName($resolvedVariable);
 
                             if ($className == 'Traversable') {
                                 return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbolVariable->getName() . ' TSRMLS_CC)', $expression);
                             }
 
-                            if ($compilationContext->compiler->isClass($className)) {
-                                $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                                $classEntry = $classDefinition->getClassEntry($compilationContext);
+                            if ($context->compiler->isClass($className)) {
+                                $classDefinition = $context->compiler->getClassDefinition($className);
+                                $classEntry = $classDefinition->getClassEntry($context);
                             } else {
-                                if ($compilationContext->compiler->isInterface($className)) {
-                                    $classDefinition = $compilationContext->compiler->getClassDefinition($className);
-                                    $classEntry = $classDefinition->getClassEntry($compilationContext);
+                                if ($context->compiler->isInterface($className)) {
+                                    $classDefinition = $context->compiler->getClassDefinition($className);
+                                    $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
                                     } else {
-                                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
+                                        $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
                                         if (!$classEntry) {
                                             $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
                                         }
@@ -114,11 +119,11 @@ class InstanceOfOperator extends BaseOperator
 
                     case 'property-access':
                     case 'array-access':
-                        $compilationContext->headersManager->add('kernel/operators');
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
+                        $context->headersManager->add('kernel/operators');
+                        $tempVariable = $context->symbolTable->getTempVariableForWrite('string', $context);
                         $tempVariable->setMustInitNull(true);
                         $tempVariableName = $tempVariable->getName();
-                        $compilationContext->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
+                        $context->codePrinter->output('zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');');
                         $code = 'Z_STRVAL_P(' . $tempVariableName . '), Z_STRLEN_P(' . $tempVariableName . ')';
                         break;
 
@@ -128,7 +133,7 @@ class InstanceOfOperator extends BaseOperator
         }
 
         /* @TODO, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
-        $compilationContext->headersManager->add('kernel/object');
+        $context->headersManager->add('kernel/object');
         if (isset($code)) {
             return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
         }

@@ -84,3 +84,18 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf4) {
 
 }
 
+PHP_METHOD(Test_Instanceoff, testInstanceOf5) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	if (zephir_instance_of_ev(a, test_instanceoff_ce TSRMLS_CC)) {
+		RETURN_BOOL(1);
+	}
+	RETURN_BOOL(0);
+
+}
+
