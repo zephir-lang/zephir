@@ -40,8 +40,7 @@ setx php_devpack "c:\path-to-extracted-devpack"
 
 Installation of Zephir
 ----------------------
-- Clone/Download the repostiory and set the path as below  
-(TODO: Parser Building instructions)
+- Clone/Download the repostiory and set the path as below 
 ```
 setx path "%path%;c:\path-to-zephir\bin"
 ```
@@ -55,6 +54,15 @@ Usage of Zephir
 - Execute ``%PHP_SDK%\bin\phpsdk_setvars``
 - ``CD`` to your extension and ``zephir build``
 - Take the built ``.dll`` from ``your_ext/Release/php_extname.dll``
+
+Building the parser
+--------------------
+- Build zephir/json-c using VS2012 and copy the resulting **json-c.lib** (static library)
+  to the parser directory
+- Requirements: Copy re2c.exe to the parser folder (from PHP-SDK for example)
+- You may have to adjust the paths in buildWin32.bat (if you for example do not use VS2012 on a x64 machine)
+- Run parser/buildWin32.bat to build the parser.exe
+
 
 Additional Links
 ------------------
