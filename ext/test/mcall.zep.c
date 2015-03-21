@@ -476,6 +476,28 @@ PHP_METHOD(Test_Mcall, testCall22) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/812
+ */
+PHP_METHOD(Test_Mcall, testCallUInt) {
+
+	zval *val_param = NULL;
+	unsigned int val;
+
+	zephir_fetch_params(0, 1, 0, &val_param);
+
+	if (unlikely(Z_TYPE_P(val_param) != IS_LONG)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'val' must be a long/integer") TSRMLS_CC);
+		RETURN_NULL();
+	}
+
+	val = Z_LVAL_P(val_param);
+
+
+	RETURN_LONG(val);
+
+}
+
 PHP_METHOD(Test_Mcall, optionalRequereString) {
 
 	zval *param_param = NULL;

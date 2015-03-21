@@ -160,6 +160,14 @@ class Mcall
 		return j;
 	}
 
+    /**
+     * @link https://github.com/phalcon/zephir/issues/812
+     */
+    public function testCallUInt(const uint! val)
+    {
+        return val;
+    }
+
 	public function optionalRequereString(string! param)
 	{
 		return param;
