@@ -65,11 +65,11 @@ class MicrotimeOptimizer extends OptimizerAbstract
 
         if (!isset($expression['parameters'])) {
             $symbolVariable->setDynamicTypes('string');
-            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', NULL);');
+            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', NULL TSRMLS_CC);');
         } else {
             $symbolVariable->setDynamicTypes('double');
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
         }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
