@@ -86,6 +86,7 @@ void zephir_base64_decode(zval *return_value, zval *data);
 
 /** Hash */
 void zephir_md5(zval *return_value, zval *str);
+void zephir_crc32(zval *return_value, zval *str TSRMLS_DC);
 
 /** JSON */
 int zephir_json_encode(zval *return_value, zval **return_value_ptr, zval *v, int opts TSRMLS_DC);
