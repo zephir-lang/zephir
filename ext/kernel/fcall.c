@@ -197,7 +197,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		l   = (size_t)(Z_STRLEN_P(function_name)) + 1;
 		c   = Z_STRVAL_P(function_name);
 		len = 2 * ppzce_size + l;
-		buf = ecalloc(1, len);
+		buf = emalloc(len);
 
 		memcpy(buf,                  c,               l);
 		memcpy(buf + l,              &calling_scope,  ppzce_size);
@@ -214,7 +214,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 			l   = (size_t)(Z_STRLEN_PP(method)) + 1;
 			c   = Z_STRVAL_PP(method);
 			len = 2 * ppzce_size + l;
-			buf = ecalloc(1, len);
+			buf = emalloc(len);
 
 			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
@@ -225,7 +225,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 		/*if (Z_OBJ_HANDLER_P(function_name, get_closure)) {
 			l   = sizeof("__invoke");
 			len = 2 * ppzce_size + l;
-			buf = ecalloc(1, len);
+			buf = emalloc(len);
 
 			memcpy(buf,                  "__invoke",     l);
 			memcpy(buf + l,              &calling_scope, ppzce_size);
