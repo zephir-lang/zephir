@@ -67,7 +67,7 @@ class CeilOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('double');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_ceil(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output('zephir_ceil(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
