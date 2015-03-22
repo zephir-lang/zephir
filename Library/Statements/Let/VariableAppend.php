@@ -67,8 +67,10 @@ class VariableAppend
             throw new CompilerException("Cannot use variable type: '" . $symbolVariable->getType() . "' as an array", $statement);
         }
 
-        if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array'))) {
-            $compilationContext->logger->warning('Possible attempt to append elements on a non-array dynamic variable', 'non-array-append', $statement);
+        if ($symbolVariable->getType() == 'variable') {
+            if ($symbolVariable->hasDifferentDynamicType(array('undefined', 'array'))) {
+                $compilationContext->logger->warning('Possible attempt to append elements on a non-array dynamic variable', 'non-array-append', $statement);
+            }
         }
 
         $codePrinter = $compilationContext->codePrinter;
