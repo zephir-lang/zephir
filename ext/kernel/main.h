@@ -341,6 +341,13 @@ int zephir_fetch_parameters(int num_args TSRMLS_DC, int required_args, int optio
 	? _str_erealloc(str, new_len, INTERNED_LEN(str)) \
 	: erealloc(str, new_len))
 
+#ifndef str_efree
+#define str_efree(s) do { \
+	if (!IS_INTERNED(s)) { \
+		efree((char*)s); \
+	} \
+} while (0)
+
 static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
 	char *buf = (char *) emalloc(new_len);
 	memcpy(buf, str, old_len);
