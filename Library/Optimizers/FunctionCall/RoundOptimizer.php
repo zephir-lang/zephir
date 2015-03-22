@@ -26,11 +26,12 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * MicrotimeOptimizer
+ * RoundOptimizer
  *
- * Optimizes calls to 'microtime' using internal function
+ * Optimizes calls to 'round' using internal function
+ * parameters float $val [, int $precision = 0 [, int $mode = PHP_ROUND_HALF_UP ]]
  */
-class MicrotimeOptimizer extends OptimizerAbstract
+class RoundOptimizer extends OptimizerAbstract
 {
     /**
      * @param array $expression
@@ -41,8 +42,11 @@ class MicrotimeOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        /* microtime has one optional parameter (get_as_float) */
-        if (isset($expression['parameters']) && count($expression['parameters']) > 2) {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
+
+        if (count($expression['parameters']) > 4) {
             return false;
         }
 
@@ -60,16 +64,17 @@ class MicrotimeOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->headersManager->add('kernel/time');
-        
+        $context->headersManager->add('kernel/operators');
+        $symbolVariable->setDynamicTypes('double');
 
-        if (!isset($expression['parameters'])) {
-            $symbolVariable->setDynamicTypes('string');
-            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', NULL TSRMLS_CC);');
-        } else {
-            $symbolVariable->setDynamicTypes('double');
-            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        
+        if (count($expression['parameters']) == 1) { //Only float $val
+            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', NULL, NULL TSRMLS_CC);');
+        } else if (count($expression['parameters']) == 2) { //float $val, int $mode
+            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL TSRMLS_CC);');
+        } else { //all
+            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
         }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
