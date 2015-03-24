@@ -1562,7 +1562,6 @@ class ClassMethod
              */
             foreach ($classCastChecks as $classCastCheck) {
                 foreach ($classCastCheck[0]->getClassTypes() as $className) {
-
                     /**
                      * If the parameter is nullable check it must pass the 'instanceof' validation
                      */
