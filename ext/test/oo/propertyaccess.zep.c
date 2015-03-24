@@ -68,7 +68,7 @@ PHP_METHOD(Test_Oo_PropertyAccess, __construct) {
 	zephir_array_fetch_long(&_5, _4, 1, PH_NOISY | PH_READONLY, "test/oo/propertyaccess.zep", 20 TSRMLS_CC);
 	zephir_update_property_zval(test, SL("test3"), _5 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_6);
-	array_init_size(_6, 7);
+	array_init_size(_6, 6);
 	ZEPHIR_OBS_VAR(_7);
 	zephir_read_property(&_7, test, SL("test"), PH_NOISY_CC);
 	ZEPHIR_OBS_VAR(_8);

@@ -15,7 +15,6 @@
 #include "kernel/string.h"
 #include "kernel/memory.h"
 #include "kernel/operators.h"
-#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Strings) {
@@ -192,12 +191,10 @@ PHP_METHOD(Test_Strings, testExplodeLimit) {
 
 PHP_METHOD(Test_Strings, testSubstr) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
-	int from, len, ZEPHIR_LAST_CALL_STATUS;
+	int from, len;
 	zval *str, *from_param = NULL, *len_param = NULL, _0, _1;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 3, 0, &str, &from_param, &len_param);
+	zephir_fetch_params(0, 3, 0, &str, &from_param, &len_param);
 
 	from = zephir_get_intval(from_param);
 	len = zephir_get_intval(len_param);
@@ -207,59 +204,48 @@ PHP_METHOD(Test_Strings, testSubstr) {
 	ZVAL_LONG(&_0, from);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, len);
-	ZEPHIR_RETURN_CALL_FUNCTION("substr", &_2, str, &_0, &_1);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_substr(return_value, str, zephir_get_intval(&_0), zephir_get_intval(&_1), 0);
+	return;
 
 }
 
 PHP_METHOD(Test_Strings, testSubstr2) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
-	int from, ZEPHIR_LAST_CALL_STATUS;
+	int from;
 	zval *str, *from_param = NULL, _0;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &str, &from_param);
+	zephir_fetch_params(0, 2, 0, &str, &from_param);
 
 	from = zephir_get_intval(from_param);
 
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, from);
-	ZEPHIR_RETURN_CALL_FUNCTION("substr", &_1, str, &_0);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_substr(return_value, str, zephir_get_intval(&_0), 0, ZEPHIR_SUBSTR_NO_LENGTH);
+	return;
 
 }
 
 PHP_METHOD(Test_Strings, testSubstr3) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
 	zval *str, _0;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &str);
+	zephir_fetch_params(0, 1, 0, &str);
 
 
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, -1);
-	ZEPHIR_RETURN_CALL_FUNCTION("substr", &_1, str, &_0);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_substr(return_value, str, -1 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
+	return;
 
 }
 
 PHP_METHOD(Test_Strings, testSubstr4) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
 	zval *str, _0, _1;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &str);
+	zephir_fetch_params(0, 1, 0, &str);
 
 
 
@@ -267,9 +253,8 @@ PHP_METHOD(Test_Strings, testSubstr4) {
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, -1);
-	ZEPHIR_RETURN_CALL_FUNCTION("substr", &_2, str, &_0, &_1);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_substr(return_value, str, 0 , -1 , 0);
+	return;
 
 }
 

@@ -253,9 +253,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getLowerFirst) {
 
 PHP_METHOD(Test_BuiltIn_StringMethods, getUpperFirst) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
-	zval *str_param = NULL, *_0 = NULL;
+	zval *str_param = NULL, *_0;
 	zval *str = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -264,8 +262,8 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getUpperFirst) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_CALL_FUNCTION(&_0, "ucfirst", &_1, str);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	zephir_ucfirst(_0, str);
 	RETURN_CCTOR(_0);
 
 }
@@ -293,9 +291,7 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getFormatted) {
 
 PHP_METHOD(Test_BuiltIn_StringMethods, getMd5) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
-	zval *str_param = NULL, *_0 = NULL;
+	zval *str_param = NULL, *_0;
 	zval *str = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -304,8 +300,8 @@ PHP_METHOD(Test_BuiltIn_StringMethods, getMd5) {
 	zephir_get_strval(str, str_param);
 
 
-	ZEPHIR_CALL_FUNCTION(&_0, "md5", &_1, str);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	zephir_md5(_0, str);
 	RETURN_CCTOR(_0);
 
 }

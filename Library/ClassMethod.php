@@ -1562,6 +1562,7 @@ class ClassMethod
              */
             foreach ($classCastChecks as $classCastCheck) {
                 foreach ($classCastCheck[0]->getClassTypes() as $className) {
+
                     /**
                      * If the parameter is nullable check it must pass the 'instanceof' validation
                      */
@@ -1593,7 +1594,7 @@ class ClassMethod
                         );
                     }
 
-                    $ifCheck = new IfStatementBuilder(
+                    /*$ifCheck = new IfStatementBuilder(
                         $evalExpr,
                         new StatementsBlockBuilder(array(
                             new ThrowStatementBuilder(
@@ -1610,7 +1611,7 @@ class ClassMethod
                     );
 
                     $ifStatement = new IfStatement($ifCheck->get());
-                    $ifStatement->compile($compilationContext);
+                    $ifStatement->compile($compilationContext);*/
                 }
             }
 

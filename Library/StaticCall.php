@@ -192,14 +192,13 @@ class StaticCall extends Call
         $codePrinter = $compilationContext->codePrinter;
 
         if ($classDefinition->isInternal()) {
-            $variableName = str_replace('\\', '_', $classDefinition->getSCName('local'));
 
-            if (!$compilationContext->symbolTable->hasVariable($variableName)) {
-                $classEntryVariable = $compilationContext->symbolTable->addVariable('zend_class_entry', $variableName, $compilationContext);
-                $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("\\\\'.str_replace('\\', '\\\\', $classDefinition->getName()).'"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
-            }
+            //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
+                $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+                $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            //}
 
-            $classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);
+            //$classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);
             $classEntry = $classEntryVariable->getName();
         } else {
             $classEntry = $classDefinition->getClassEntry($compilationContext);
@@ -380,7 +379,6 @@ class StaticCall extends Call
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
         $codePrinter->output($classEntryVariable->getName() . ' = zend_fetch_class(Z_STRVAL_P(' . $classNameVariable->getName() . '), Z_STRLEN_P(' . $classNameVariable->getName() . '), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
-
 
         /**
          * Obtain the method name from the variable

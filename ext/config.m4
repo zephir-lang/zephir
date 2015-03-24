@@ -9,7 +9,7 @@ if test "$PHP_TEST" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
-	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c test/arithmetic.zep.c
+	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/arithmetic.zep.c
 	test/arrayobject.zep.c
 	test/assign.zep.c
 	test/bench/foo.zep.c
@@ -99,6 +99,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/ooimpl/zbeginning.zep.c
 	test/operator.zep.c
 	test/optimizers/arraymerge.zep.c
+	test/optimizers/substr.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c

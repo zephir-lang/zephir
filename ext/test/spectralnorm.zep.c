@@ -14,10 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
-#include "ext/spl/spl_fixedarray.h"
-#include "kernel/object.h"
-#include "kernel/exception.h"
 #include "kernel/fcall.h"
+#include "ext/spl/spl_fixedarray.h"
 
 
 /**
@@ -64,14 +62,6 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 	n = zephir_get_intval(n_param);
 
 
-	if (!(zephir_instance_of_ev(u, spl_ce_SplFixedArray TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'u' must be an instance of 'SplFixedArray'", "", 0);
-		return;
-	}
-	if (!(zephir_instance_of_ev(v, spl_ce_SplFixedArray TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'v' must be an instance of 'SplFixedArray'", "", 0);
-		return;
-	}
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;
@@ -142,14 +132,6 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 	n = zephir_get_intval(n_param);
 
 
-	if (!(zephir_instance_of_ev(u, spl_ce_SplFixedArray TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'u' must be an instance of 'SplFixedArray'", "", 0);
-		return;
-	}
-	if (!(zephir_instance_of_ev(v, spl_ce_SplFixedArray TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'v' must be an instance of 'SplFixedArray'", "", 0);
-		return;
-	}
 	_2 = (n - 1);
 	_1 = 0;
 	_0 = 0;

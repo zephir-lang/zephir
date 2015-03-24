@@ -123,9 +123,8 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getOctal) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_3 = NULL;
-	zval *num_param = NULL, *exp_param = NULL, _0, _1, *_2 = NULL;
-	int num, exp, ZEPHIR_LAST_CALL_STATUS;
+	zval *num_param = NULL, *exp_param = NULL, *_0, _1, _2;
+	int num, exp;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &num_param, &exp_param);
@@ -134,13 +133,13 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getPow) {
 	exp = zephir_get_intval(exp_param);
 
 
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, num);
+	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_SINIT_VAR(_1);
-	ZVAL_LONG(&_1, exp);
-	ZEPHIR_CALL_FUNCTION(&_2, "pow", &_3, &_0, &_1);
-	zephir_check_call_status();
-	RETURN_CCTOR(_2);
+	ZVAL_LONG(&_1, num);
+	ZEPHIR_SINIT_VAR(_2);
+	ZVAL_LONG(&_2, exp);
+	zephir_pow_function(_0, &_1, &_2);
+	RETURN_CCTOR(_0);
 
 }
 

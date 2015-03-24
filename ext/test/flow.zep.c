@@ -18,8 +18,6 @@
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/hash.h"
-#include "kernel/object.h"
-#include "kernel/exception.h"
 #include "kernel/iterator.h"
 
 
@@ -716,7 +714,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	c = 0;
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -752,7 +750,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -789,7 +787,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 7);
+	array_init_size(b, 6);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -1472,7 +1470,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_EMPTY_STRING(b);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 7);
+	array_init_size(_0, 6);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 'a');
 	zephir_array_fast_append(_0, _1);
@@ -1580,10 +1578,6 @@ PHP_METHOD(Test_Flow, testFor33) {
 	array_init(result);
 
 
-	if (!(zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'", "", 0);
-		return;
-	}
 	_0 = zephir_get_iterator(e TSRMLS_CC);
 	_0->funcs->rewind(_0 TSRMLS_CC);
 	for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
@@ -1600,8 +1594,7 @@ PHP_METHOD(Test_Flow, testFor33) {
 
 PHP_METHOD(Test_Flow, testFor34) {
 
-	zend_object_iterator *_1;
-	zend_bool _0;
+	zend_object_iterator *_0;
 	zval *e = NULL, *v = NULL, *result;
 
 	ZEPHIR_MM_GROW();
@@ -1614,25 +1607,17 @@ PHP_METHOD(Test_Flow, testFor34) {
 	array_init(result);
 
 
-	_0 = Z_TYPE_P(e) != IS_NULL;
-	if (_0) {
-		_0 = !(zephir_is_instance_of(e, SL("Iterator") TSRMLS_CC));
-	}
-	if (_0) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'e' must be an instance of 'Iterator'", "", 0);
-		return;
-	}
 	if (Z_TYPE_P(e) == IS_OBJECT) {
-		_1 = zephir_get_iterator(e TSRMLS_CC);
-		_1->funcs->rewind(_1 TSRMLS_CC);
-		for (;_1->funcs->valid(_1 TSRMLS_CC) == SUCCESS && !EG(exception); _1->funcs->move_forward(_1 TSRMLS_CC)) {
+		_0 = zephir_get_iterator(e TSRMLS_CC);
+		_0->funcs->rewind(_0 TSRMLS_CC);
+		for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
 			{ zval **tmp; 
-			_1->funcs->get_current_data(_1, &tmp TSRMLS_CC);
+			_0->funcs->get_current_data(_0, &tmp TSRMLS_CC);
 			v = *tmp;
 			}
 			zephir_array_append(&result, v, PH_SEPARATE, "test/flow.zep", 720);
 		}
-		_1->funcs->dtor(_1 TSRMLS_CC);
+		_0->funcs->dtor(_0 TSRMLS_CC);
 		RETURN_CCTOR(result);
 	}
 	ZEPHIR_MM_RESTORE();
