@@ -40,15 +40,15 @@ class Variable
      * Compiles foo = {expr}
      * Changes the value of a mutable variable
      *
-     * @param $variable
-     * @param Variable $symbolVariable
+     * @param string $variable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param ReadDetector $readDetector
      * @param CompilationContext $compilationContext
-     * @param $statement
+     * @param array $statement
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, ReadDetector $readDetector, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, ReadDetector $readDetector, CompilationContext $compilationContext, array $statement)
     {
         if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '" . $variable . "' because it is read only", $statement);

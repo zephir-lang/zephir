@@ -35,12 +35,12 @@ class FetchOperator extends BaseOperator
 {
 
     /**
-     *
      * @param array $expression
-     * @param \CompilationContext $compilationContext
-     * @return \CompiledExpression
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
         $compilationContext->headersManager->add('kernel/array');
 

@@ -42,7 +42,6 @@ class Utils
      *
      * @param string $str
      * @param bool $escapeSlash
-     * @param int $type
      * @return string
      */
     public static function addSlashes($str, $escapeSlash = false)

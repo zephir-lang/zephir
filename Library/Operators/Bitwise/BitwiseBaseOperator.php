@@ -41,11 +41,12 @@ class BitwiseBaseOperator extends BaseOperator
     /**
      * This tries to perform arithmetical operations
      * Probably gcc/clang will optimize them without this optimization
-     *
      * @see http://en.wikipedia.org/wiki/Constant_folding
      * @param array $expression
+     * @param CompilationContext $compilationContext
+     * @return bool|CompiledExpression
      */
-    public function optimizeConstantFolding($expression, CompilationContext $compilationContext)
+    public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
     {
         if ($expression['left']['type'] != 'int' && $expression['left']['type'] != 'double') {
             return false;

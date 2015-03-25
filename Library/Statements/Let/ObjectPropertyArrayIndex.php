@@ -36,16 +36,18 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyArrayIndex extends ArrayIndex
 {
+
     /**
      * Compiles x->y[z] = {expr} (single offset assignment)
      *
      * @param string $variable
-     * @param Variable $symbolVariable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext
      * @param array $statement
+     * @throws CompilerException
      */
-    protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -254,12 +256,13 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      * Compiles x->y[a][b] = {expr} (multiple offset assignment)
      *
      * @param string $variable
-     * @param Variable $symbolVariable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext
      * @param array $statement
+     * @throws CompilerException
      */
-    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         $codePrinter = $compilationContext->codePrinter;
 

@@ -131,7 +131,8 @@ class SymbolTable
     /**
      * Returns a variable in the symbol table
      *
-     * @return Variable
+     * @param $name
+     * @return bool
      */
     public function getVariable($name)
     {
@@ -145,7 +146,7 @@ class SymbolTable
     /**
      * Returns all the variables defined in the symbol table
      *
-     * @return Variable[]
+     * @return array
      */
     public function getVariables()
     {
@@ -516,10 +517,10 @@ class SymbolTable
      * Returns a temporal variable
      *
      * @param string $type
-     * @param CompilationContext $context
+     * @param CompilationContext $compilationContext
      * @return Variable
      */
-    public function getTempVariable($type, $compilationContext)
+    public function getTempVariable($type, CompilationContext $compilationContext)
     {
         $tempVar = $this->tempVariable++;
         $variable = $this->addVariable($type, '_' . $tempVar, $compilationContext);

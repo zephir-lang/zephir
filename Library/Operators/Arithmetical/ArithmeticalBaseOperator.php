@@ -42,8 +42,10 @@ class ArithmeticalBaseOperator extends BaseOperator
      *
      * @see http://en.wikipedia.org/wiki/Constant_folding
      * @param array $expression
+     * @param CompilationContext $compilationContext
+     * @return bool|CompiledExpression
      */
-    public function optimizeConstantFolding($expression, CompilationContext $compilationContext)
+    public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
     {
         if ($expression['left']['type'] != 'int' && $expression['left']['type'] != 'double') {
             return false;

@@ -37,7 +37,7 @@ class StringsManager
     );
 
     /**
-    * @param string $path
+    * @param string $key
     */
     public function addConcatKey($key)
     {

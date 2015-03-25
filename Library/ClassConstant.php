@@ -39,6 +39,10 @@ class ClassConstant
 
     /**
      * ClassConstant constructor
+     *
+     * @param $name
+     * @param $value
+     * @param $docBlock
      */
     public function __construct($name, $value, $docBlock)
     {

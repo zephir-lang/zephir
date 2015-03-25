@@ -100,7 +100,7 @@ class MutateGathererPass
     /**
      * Pass call expressions
      *
-     * @param array $statement
+     * @param array $expression
      */
     public function passCall(array $expression)
     {
@@ -118,7 +118,7 @@ class MutateGathererPass
     /**
      * Pass array expressions
      *
-     * @param array $statement
+     * @param array $expression
      */
     public function passArray(array $expression)
     {
@@ -132,7 +132,7 @@ class MutateGathererPass
     /**
      * Pass "new" expressions
      *
-     * @param array $statement
+     * @param array $expression
      */
     public function passNew(array $expression)
     {
@@ -148,7 +148,7 @@ class MutateGathererPass
     /**
      * Pass expressions
      *
-     * @param array $statement
+     * @param array $expression
      */
     public function passExpression(array $expression)
     {
@@ -265,7 +265,7 @@ class MutateGathererPass
     /**
      * Pass statement block
      *
-     * @param array $statement
+     * @param array $statements
      */
     public function passStatementBlock(array $statements)
     {

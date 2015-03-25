@@ -427,8 +427,10 @@ class StaticCall extends Call
     /**
      * Compiles a static method call
      *
-     * @param array $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {

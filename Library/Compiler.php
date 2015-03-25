@@ -1884,6 +1884,7 @@ class Compiler
     /**
      * Generate package-dependencies config for m4
      *
+     * @param $contentM4
      * @throws Exception
      * @return string
      */
