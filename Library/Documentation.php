@@ -48,7 +48,7 @@ class Documentation
     protected $logger;
 
     /**
-     * @param array $classes
+     * @param CompilerFile[] $classes
      * @param Config $config
      * @param Logger $logger
      * @throws ConfigException
