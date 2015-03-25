@@ -21,6 +21,7 @@
 #define ZEPHIR_KERNEL_MAIN_H
 
 #include "Zend/zend_interfaces.h"
+#include "Zend/zend_string.h"
 #include "ext/spl/spl_exceptions.h"
 #include "ext/spl/spl_iterators.h"
 
