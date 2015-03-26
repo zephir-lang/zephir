@@ -159,7 +159,7 @@ class CompilationContext
     /**
      * Function Cache
      *
-     * @var FunctionCache
+     * @var Cache\FunctionCache
      */
     public $functionCache;
 
@@ -189,6 +189,7 @@ class CompilationContext
         $namespace = (isset($this->currentMethod) && $this->currentMethod instanceof FunctionDefinition) ?
             $this->currentMethod->getNamespace() :
             $this->classDefinition->getNamespace();
+
         return Utils::getFullName($className, $namespace, $this->aliasManager);
     }
 }
