@@ -211,6 +211,16 @@ class FunctionDefinition
     }
 
     /**
+     * Returns the class name including its namespace
+     *
+     * @return string
+     */
+    public function getCompleteName()
+    {
+        return $this->namespace . '\\' . $this->name;
+    }
+
+    /**
      * Returns the parameters
      *
      * @return ClassMethodParameters
@@ -436,17 +446,6 @@ class FunctionDefinition
     {
         return $this->void;
     }
-
-    /**
-     * Checks is abstract method?
-     *
-     * @return bool
-     */
-    public function isAbstract()
-    {
-        return $this->isAbstract;
-    }
-
 
     /**
      * Checks if method is a shortcut
@@ -1686,9 +1685,9 @@ class FunctionDefinition
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
                 if (is_array($node)) {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $node);
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $this->getCompleteName() . '::' . $this->getName(), "unused-variable", $node);
                 } else {
-                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $completeName . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
+                    $compilationContext->logger->warning('Variable "' . $variable->getName() . '" assigned but not used in ' . $this->getCompleteName() . '::' . $this->getName(), "unused-variable", $variable->getOriginal());
                 }
             }
         }

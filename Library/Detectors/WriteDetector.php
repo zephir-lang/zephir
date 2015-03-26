@@ -58,16 +58,6 @@ class WriteDetector
     }
 
     /**
-     * Do the detection pass on all variables
-     *
-     * @param string $variable
-     */
-    public function detectAll()
-    {
-        $this->passStatementBlock($statements);
-    }
-
-    /**
      * Sets detection flags
      *
      * @param int $flags
