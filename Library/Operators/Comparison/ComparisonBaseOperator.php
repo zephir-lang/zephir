@@ -401,8 +401,8 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'ZEPHIR_IS_BOOL(' . $variableRight->getName() . ', ' . $left->getBooleanCode() . ')', $expression);
-
+                                $boolOperator = $left->getBooleanCode() == '1' ? $this->_zvalBoolTrueOperator : $this->_zvalBoolFalseOperator;
+                                return new CompiledExpression('bool', $boolOperator . '(' . $variableRight->getName() . ')', $expression);
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
                         }
