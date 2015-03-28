@@ -63,14 +63,12 @@ class GlobalsSetOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        //$globalDefinition = $context->compiler->getExtensionGlobal($globalName);
+        $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
 
-        //if (strpos($globalName, '.') !== false) {
-        //    $parts = explode('.', $globalName);
-        //    return new CompiledExpression($globalDefinition['type'], 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1], $expression);
-        //}
-
-        //return new CompiledExpression($globalDefinition['type'], 'ZEPHIR_GLOBAL(' . $globalName . ')', $expression);
+        if (strpos($globalName, '.') !== false) {
+            $parts = explode('.', $globalName);
+            $context->codePrinter->output('ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1] . ' = zend_is_true(' . $resolvedParams[0] . ');');
+        }
 
         return new CompiledExpression('null', null, $expression);
     }
