@@ -16,4 +16,11 @@
   +------------------------------------------------------------------------+
 */
 
+#define ZEPHIR_FCALL_TYPE_UNKNOWN 0
+#define ZEPHIR_FCALL_TYPE_FUNC 1
+
+typedef struct _zephir_fcall_info {
+  int type;
+} zephir_fcall_info;
+
 int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache TSRMLS_DC);

@@ -33,6 +33,41 @@
 
 #if PHP_VERSION_ID >= 50600
 
+/**
+ * Latest version of zend_throw_exception_internal
+ */
+static void zephir_throw_exception_internal(zval *exception TSRMLS_DC)
+{
+	if (exception != NULL) {
+		zval *previous = EG(exception);
+		zend_exception_set_previous(exception, EG(exception) TSRMLS_CC);
+		EG(exception) = exception;
+		if (previous) {
+			return;
+		}
+	}
+
+	if (!EG(current_execute_data)) {
+		if (EG(exception)) {
+			zend_exception_error(EG(exception), E_ERROR TSRMLS_CC);
+		}
+		zend_error(E_ERROR, "Exception thrown without a stack frame");
+	}
+
+	if (zend_throw_exception_hook) {
+		zend_throw_exception_hook(exception TSRMLS_CC);
+	}
+
+	if (EG(current_execute_data)->opline == NULL ||
+		(EG(current_execute_data)->opline + 1)->opcode == ZEND_HANDLE_EXCEPTION) {
+		/* no need to rethrow the exception */
+		return;
+	}
+
+	EG(opline_before_exception) = EG(current_execute_data)->opline;
+	EG(current_execute_data)->opline = EG(exception_op);
+}
+
 static int zephir_is_callable_check_class(const char *name, int name_len, zend_fcall_info_cache *fcc, int *strict_class, char **error TSRMLS_DC) /* {{{ */
 {
 	int ret = 0;
@@ -207,7 +242,6 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 			}
 		}
 	} else {
-get_function_via_handler:
 		if (fcc->object_ptr && fcc->calling_scope == ce_org) {
 			if (strict_class && ce_org->__call) {
 				fcc->function_handler = emalloc(sizeof(zend_internal_function));
@@ -690,6 +724,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	EG(current_execute_data) = &execute_data;
 
 	if (EX(function_state).function->type == ZEND_USER_FUNCTION) {
+
 		calling_symbol_table = EG(active_symbol_table);
 		EG(scope) = EX(function_state).function->common.scope;
 		if (fci->symbol_table) {
@@ -704,11 +739,11 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		EG(active_op_array) = (zend_op_array *) EX(function_state).function;
 		original_opline_ptr = EG(opline_ptr);
 
-		if (EG(active_op_array)->fn_flags & ZEND_ACC_GENERATOR) {
-			*fci->retval_ptr_ptr = zend_generator_create_zval(EG(active_op_array) TSRMLS_CC);
-		} else {
+		//if (EG(active_op_array)->fn_flags & ZEND_ACC_GENERATOR) {
+		//	*fci->retval_ptr_ptr = zend_generator_create_zval(EG(active_op_array) TSRMLS_CC);
+		//} else {
 			zend_execute(EG(active_op_array) TSRMLS_CC);
-		}
+		//}
 
 		if (!fci->symbol_table && EG(active_symbol_table)) {
 			zend_clean_and_cache_symbol_table(EG(active_symbol_table) TSRMLS_CC);
@@ -775,7 +810,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	EG(current_execute_data) = EX(prev_execute_data);
 
 	if (EG(exception)) {
-		zend_throw_exception_internal(NULL TSRMLS_CC);
+		zephir_throw_exception_internal(NULL TSRMLS_CC);
 	}
 	return SUCCESS;
 }
