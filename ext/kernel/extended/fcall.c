@@ -569,6 +569,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	zval *current_this;
 	zend_execute_data execute_data;
 	zend_fcall_info_cache fci_cache_local;
+	zend_uint fn_flags;
 
 	*fci->retval_ptr_ptr = NULL;
 
@@ -628,6 +629,19 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 	if (fci->object_ptr && Z_TYPE_P(fci->object_ptr) == IS_OBJECT &&
 		(!EG(objects_store).object_buckets || !EG(objects_store).object_buckets[Z_OBJ_HANDLE_P(fci->object_ptr)].valid)) {
 		return FAILURE;
+	}
+
+	fn_flags = EX(function_state).function->common.fn_flags;
+	if (fn_flags & (ZEND_ACC_ABSTRACT|ZEND_ACC_DEPRECATED)) {
+		if (fn_flags & ZEND_ACC_ABSTRACT) {
+			zend_error_noreturn(E_ERROR, "Cannot call abstract method %s::%s()", EX(function_state).function->common.scope->name, EX(function_state).function->common.function_name);
+		}
+		if (fn_flags & ZEND_ACC_DEPRECATED) {
+ 			zend_error(E_DEPRECATED, "Function %s%s%s() is deprecated",
+				EX(function_state).function->common.scope ? EX(function_state).function->common.scope->name : "",
+				EX(function_state).function->common.scope ? "::" : "",
+				EX(function_state).function->common.function_name);
+		}
 	}
 
 	ZEND_VM_STACK_GROW_IF_NEEDED(fci->param_count + 1);
