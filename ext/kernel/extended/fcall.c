@@ -154,7 +154,7 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 		*strict_class = 1;
 		ret = 1;
 	} else {
-		if (error) zend_spprintf(error, 0, "class '%.*s' not found", name_len, name);
+		if (error) zephir_spprintf(error, 0, "class '%.*s' not found", name_len, name);
 	}
 	efree(lcname);
 	return ret;
@@ -206,7 +206,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 		mlen = Z_STRLEN_P(callable) - clen - 2;
 
 		if (colon == Z_STRVAL_P(callable)) {
-			if (error) zend_spprintf(error, 0, "invalid function name");
+			if (error) zephir_spprintf(error, 0, "invalid function name");
 			return 0;
 		}
 
@@ -225,7 +225,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 
 		ftable = &fcc->calling_scope->function_table;
 		if (ce_org && !instanceof_function(ce_org, fcc->calling_scope TSRMLS_CC)) {
-			if (error) zend_spprintf(error, 0, "class '%s' is not a subclass of '%s'", ce_org->name, fcc->calling_scope->name);
+			if (error) zephir_spprintf(error, 0, "class '%s' is not a subclass of '%s'", ce_org->name, fcc->calling_scope->name);
 			return 0;
 		}
 		mname = Z_STRVAL_P(callable) + clen + 2;
@@ -238,7 +238,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 	} else {
 		/* We already checked for plain function before. */
 		if (error && !(check_flags & IS_CALLABLE_CHECK_SILENT)) {
-			zend_spprintf(error, 0, "function '%s' not found or invalid function name", Z_STRVAL_P(callable));
+			zephir_spprintf(error, 0, "function '%s' not found or invalid function name", Z_STRVAL_P(callable));
 		}
 		return 0;
 	}
@@ -319,7 +319,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 		if (fcc->calling_scope && !call_via_handler) {
 			if (!fcc->object_ptr && (fcc->function_handler->common.fn_flags & ZEND_ACC_ABSTRACT)) {
 				if (error) {
-					zend_spprintf(error, 0, "cannot call abstract method %s::%s()", fcc->calling_scope->name, fcc->function_handler->common.function_name);
+					zephir_spprintf(error, 0, "cannot call abstract method %s::%s()", fcc->calling_scope->name, fcc->function_handler->common.function_name);
 					retval = 0;
 				} else {
 					zend_error(E_ERROR, "Cannot call abstract method %s::%s()", fcc->calling_scope->name, fcc->function_handler->common.function_name);
@@ -341,7 +341,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 				if (EG(This) && instanceof_function(Z_OBJCE_P(EG(This)), fcc->calling_scope TSRMLS_CC)) {
 					fcc->object_ptr = EG(This);
 					if (error) {
-						zend_spprintf(error, 0, "non-static method %s::%s() %s be called statically, assuming $this from compatible context %s", fcc->calling_scope->name, fcc->function_handler->common.function_name, verb, Z_OBJCE_P(EG(This))->name);
+						zephir_spprintf(error, 0, "non-static method %s::%s() %s be called statically, assuming $this from compatible context %s", fcc->calling_scope->name, fcc->function_handler->common.function_name, verb, Z_OBJCE_P(EG(This))->name);
 						if (severity == E_ERROR) {
 							retval = 0;
 						}
@@ -350,7 +350,7 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 					}
 				} else {
 					if (error) {
-						zend_spprintf(error, 0, "non-static method %s::%s() %s be called statically", fcc->calling_scope->name, fcc->function_handler->common.function_name, verb);
+						zephir_spprintf(error, 0, "non-static method %s::%s() %s be called statically", fcc->calling_scope->name, fcc->function_handler->common.function_name, verb);
 						if (severity == E_ERROR) {
 							retval = 0;
 						}
@@ -362,9 +362,9 @@ static int zephir_is_callable_check_func(int check_flags, zval *callable, zend_f
 		}
 	} else if (error && !(check_flags & IS_CALLABLE_CHECK_SILENT)) {
 		if (fcc->calling_scope) {
-			if (error) zend_spprintf(error, 0, "class '%s' does not have a method '%s'", fcc->calling_scope->name, mname);
+			if (error) zephir_spprintf(error, 0, "class '%s' does not have a method '%s'", fcc->calling_scope->name, mname);
 		} else {
-			if (error) zend_spprintf(error, 0, "function '%s' does not exist", mname);
+			if (error) zephir_spprintf(error, 0, "function '%s' does not exist", mname);
 		}
 	}
 	efree(lmname);
@@ -534,12 +534,12 @@ static zend_bool zephir_is_callable_ex(zval *callable, zval *object_ptr, uint ch
 				} else {
 					if (zend_hash_num_elements(Z_ARRVAL_P(callable)) == 2) {
 						if (!obj || (Z_TYPE_PP(obj) != IS_STRING && Z_TYPE_PP(obj) != IS_OBJECT)) {
-							if (error) zend_spprintf(error, 0, "first array member is not a valid class name or object");
+							if (error) zephir_spprintf(error, 0, "first array member is not a valid class name or object");
 						} else {
-							if (error) zend_spprintf(error, 0, "second array member is not a valid method");
+							if (error) zephir_spprintf(error, 0, "second array member is not a valid method");
 						}
 					} else {
-						if (error) zend_spprintf(error, 0, "array must have exactly two members");
+						if (error) zephir_spprintf(error, 0, "array must have exactly two members");
 					}
 					if (callable_name) {
 						*callable_name = estrndup("Array", sizeof("Array")-1);
@@ -574,7 +574,7 @@ static zend_bool zephir_is_callable_ex(zval *callable, zval *object_ptr, uint ch
 				*callable_name_len = Z_STRLEN(expr_copy);
 				zval_dtor(&expr_copy);
 			}
-			if (error) zend_spprintf(error, 0, "no array or string given");
+			if (error) zephir_spprintf(error, 0, "no array or string given");
 			return 0;
 	}
 }
@@ -735,12 +735,12 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				} else {
 					if (zend_hash_num_elements(Z_ARRVAL_P(callable)) == 2) {
 						if (!obj || (Z_TYPE_PP(obj) != IS_STRING && Z_TYPE_PP(obj) != IS_OBJECT)) {
-							if (error) zend_spprintf(error, 0, "first array member is not a valid class name or object");
+							if (error) zephir_spprintf(error, 0, "first array member is not a valid class name or object");
 						} else {
-							if (error) zend_spprintf(error, 0, "second array member is not a valid method");
+							if (error) zephir_spprintf(error, 0, "second array member is not a valid method");
 						}
 					} else {
-						if (error) zend_spprintf(error, 0, "array must have exactly two members");
+						if (error) zephir_spprintf(error, 0, "array must have exactly two members");
 					}
 					if (callable_name) {
 						*callable_name = estrndup("Array", sizeof("Array")-1);
@@ -774,7 +774,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				*callable_name_len = Z_STRLEN(expr_copy);
 				zval_dtor(&expr_copy);
 			}
-			if (error) zend_spprintf(error, 0, "no array or string given");
+			if (error) zephir_spprintf(error, 0, "no array or string given");
 			return 0;
 	}*/
 }

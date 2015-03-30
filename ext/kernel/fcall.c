@@ -659,16 +659,22 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 #endif
 
 #if PHP_VERSION_ID >= 50600
+
 	info.type = ZEPHIR_FCALL_TYPE_FUNC;
 	info.class_name = NULL;
 	info.func_name = func_name;
 	info.func_length = func_length;
-#else
-	ALLOC_INIT_ZVAL(func);
-	ZVAL_STRINGL(func, func_name, func_length, 0);
-#endif
 
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, param_count, params, &info TSRMLS_CC);
+
+#else
+
+	ALLOC_INIT_ZVAL(func);
+	ZVAL_STRINGL(func, func_name, func_length, 0);
+
+	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, param_count, params, NULL TSRMLS_CC);
+#endif
+
 	if (status == FAILURE && !EG(exception)) {
 		zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined function %s()", func_name);
 		if (return_value_ptr) {
