@@ -1218,7 +1218,7 @@ PHP_METHOD(Test_Assign, testStaticPropertyAssign1) {
 	array_init(_1);
 	zephir_update_static_property_ce(test_assign_ce, SL("testVarStatic"), &_1 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_2);
-	array_init_size(_2, 4);
+	array_init_size(_2, 5);
 	ZEPHIR_INIT_VAR(_3);
 	ZVAL_LONG(_3, 1);
 	zephir_array_fast_append(_2, _3);
@@ -1655,10 +1655,10 @@ PHP_METHOD(Test_Assign, testConstantKeyAssign) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(elements);
-	array_init_size(elements, 4);
+	array_init_size(elements, 5);
 	add_assoc_long_ex(elements, SS("abc"), 1);
-	add_index_long(elements, 14, 7);
-	add_index_long(elements, 15, 8);
+	add_index_long(elements, 131072, 131079);
+	add_index_long(elements, 131073, 131080);
 	ZEPHIR_MM_RESTORE();
 
 }
