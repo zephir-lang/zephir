@@ -303,7 +303,7 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 			l   = (size_t)(info->func_length) + 1;
 			c   = (char*) info->func_name;
 			len = 2 * ppzce_size + l;
-			buf = ecalloc(1, len);
+			buf = emalloc(len);
 
 			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
@@ -319,7 +319,7 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 			l   = (size_t)(info->func_length) + 1;
 			c   = (char*) info->func_name;
 			len = 2 * ppzce_size + l;
-			buf = ecalloc(1, len);
+			buf = emalloc(len);
 
 			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
