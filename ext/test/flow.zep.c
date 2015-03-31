@@ -714,7 +714,7 @@ PHP_METHOD(Test_Flow, testFor1) {
 
 	c = 0;
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -750,7 +750,7 @@ PHP_METHOD(Test_Flow, testFor2) {
 
 	c = (double) (0);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -787,7 +787,7 @@ PHP_METHOD(Test_Flow, testFor3) {
 	ZEPHIR_INIT_VAR(c);
 	array_init(c);
 	ZEPHIR_INIT_VAR(b);
-	array_init_size(b, 6);
+	array_init_size(b, 7);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(b, _0);
@@ -1470,7 +1470,7 @@ PHP_METHOD(Test_Flow, testFor24) {
 	ZEPHIR_INIT_VAR(b);
 	ZVAL_EMPTY_STRING(b);
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 6);
+	array_init_size(_0, 7);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 'a');
 	zephir_array_fast_append(_0, _1);
@@ -1796,6 +1796,41 @@ PHP_METHOD(Test_Flow, testFor39) {
 		i++;
 	}
 	RETURN_LONG(i);
+
+}
+
+PHP_METHOD(Test_Flow, testFor40) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *a = NULL, *b, *_3 = NULL;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(b);
+	ZVAL_LONG(b, 0);
+
+	_2 = 10000000;
+	_1 = 1;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(a);
+			ZVAL_LONG(a, _1);
+			ZEPHIR_CALL_FUNCTION(&_3, "sqrt", &_4, a);
+			zephir_check_call_status();
+			ZEPHIR_ADD_ASSIGN(b, _3);
+		}
+	}
+	RETURN_CCTOR(b);
 
 }
 
