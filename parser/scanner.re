@@ -546,7 +546,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		// We have to remove this and define constants in compiler
+		/* We have to remove this and define constants in compiler */
 		IDENTIFIER = [\\_\$]?[_a-zA-Z\\][a-zA-Z0-9_\\]*;
 		IDENTIFIER {
 
@@ -599,7 +599,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 			}
 
-			// This is hack
+			/* This is hack */
 			if (token->len == 1 && !memcmp(token->value, "_", sizeof("_")-1)
 				|| token->len == 2 && !memcmp(token->value, "__", sizeof("__")-1)
 				|| token->len == 3 && !memcmp(token->value, "___", sizeof("___")-1)
