@@ -25,6 +25,7 @@ use Zephir\ClassMethod;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Config;
+use Zephir\Exception;
 
 /**
  * Stubs Generator
@@ -52,7 +53,7 @@ class Generator
 
     /**
      * @param CompilerFile[] $files
-     * @param Config         $config
+     * @param Config $config
      */
     public function __construct(array $files, Config $config)
     {
@@ -74,7 +75,8 @@ class Generator
             $source = $this->buildClass($class);
 
             $filename = ucfirst($class->getName()) . '.zep.php';
-            $filePath = $path . str_replace($namespace, '', str_replace($namespace . '\\\\', DIRECTORY_SEPARATOR, strtolower($class->getNamespace())));
+            $filePath = $path . str_replace($namespace, '',
+                    str_replace($namespace . '\\\\', DIRECTORY_SEPARATOR, strtolower($class->getNamespace())));
             $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
             $filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
 
@@ -107,7 +109,7 @@ EOF;
         if ($class->getExtendsClass()) {
             $extendsClassDefinition = $class->getExtendsClassDefinition();
             if (!$extendsClassDefinition) {
-                throw new \RuntimeException('Class "'. $class->getName().'" does not have a extendsClassDefinition');
+                throw new \RuntimeException('Class "' . $class->getName() . '" does not have a extendsClassDefinition');
             }
 
             $source .= ' extends ' . ($extendsClassDefinition->isInternal() ? '' : '\\') . $extendsClassDefinition->getCompleteName();
@@ -156,26 +158,14 @@ EOF;
 
         $source = $visibility . ' $' . $property->getName();
 
-        switch ($property->getType()) {
-            case 'null':
-                // @TODO: Fix getting value
-            case 'static-constant-access':
-                break;
-            case 'string':
-                $source .= ' = "' . $property->getValue() . '"';
-                break;
-            case 'empty-array':
-                $source .= ' = array()';
-                break;
-            case 'array':
-                $source .= ' = array(' . implode(', ', $property->getValue()) . ')';
-                break;
-            default:
-                $source .= ' = ' . $property->getValue();
-                break;
+        if (isset($property->getOriginal()['default'])) {
+            $source .= ' = ' . $this->wrapPHPValue(array(
+                    'default' => $property->getOriginal()['default']
+                ));
         }
-        $docBlock = new DocBlock($property->getDocBlock(), 4);
 
+
+        $docBlock = new DocBlock($property->getDocBlock(), 4);
         return $docBlock . "\n    " . $source . ';';
     }
 
@@ -206,7 +196,7 @@ EOF;
     /**
      * @param ClassMethod $method
      *
-     * @param bool        $isInterface
+     * @param bool $isInterface
      *
      * @return string
      */
@@ -257,6 +247,7 @@ EOF;
      *
      * @param $parameter
      * @return string
+     * @throws Exception
      */
     protected function wrapPHPValue($parameter)
     {
@@ -264,12 +255,15 @@ EOF;
             case 'null':
                 return 'null';
                 break;
+
             case 'string':
                 return '"' . $parameter['default']['value'] . '"';
                 break;
+
             case 'empty-array':
                 return 'array()';
                 break;
+
             case 'array':
                 $parameters = array();
 
@@ -280,13 +274,21 @@ EOF;
                     ));
                 }
 
-                return 'array('.implode(', ', $parameters).')';
+                return 'array(' . implode(', ', $parameters) . ')';
                 break;
+
             case 'static-constant-access':
                 return $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
                 break;
-            default:
+
+            case 'int':
+            case 'double':
+            case 'bool':
                 return $parameter['default']['value'];
+                break;
+
+            default:
+                throw new Exception('Stubs - value with type: ' . $parameter['default']['type'] . ' is not supported');
                 break;
         }
     }

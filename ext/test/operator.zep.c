@@ -36,3 +36,27 @@ PHP_METHOD(Test_Operator, testIdentical) {
 
 }
 
+PHP_METHOD(Test_Operator, testIdenticalVarFalse) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	RETURN_BOOL(ZEPHIR_IS_FALSE_IDENTICAL(param));
+
+}
+
+PHP_METHOD(Test_Operator, testIdenticalFalseVar) {
+
+	zval *param;
+
+	zephir_fetch_params(0, 1, 0, &param);
+
+
+
+	RETURN_BOOL(ZEPHIR_IS_FALSE_IDENTICAL(param));
+
+}
+
