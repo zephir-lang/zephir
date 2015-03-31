@@ -127,11 +127,11 @@ EOF;
         $source .= PHP_EOL . '{' . PHP_EOL;
 
         foreach ($class->getConstants() as $constant) {
-            $source .= $this->buildConstant($constant) . PHP_EOL;
+            $source .= $this->buildConstant($constant) . PHP_EOL . PHP_EOL;
         }
 
         foreach ($class->getProperties() as $property) {
-            $source .= $this->buildProperty($property) . PHP_EOL;
+            $source .= $this->buildProperty($property) . PHP_EOL . PHP_EOL;
         }
 
         $source .= PHP_EOL;
@@ -178,18 +178,11 @@ EOF;
     {
         $source = 'const ' . $constant->getName();
 
-        $value = $constant->getValueValue();
+        $value = $this->wrapPHPValue(array(
+            'default' => $constant->getValue()
+        ));
 
-        switch ($constant->getType()) {
-            case 'null':
-                $value .= 'null';
-                break;
-            case 'string':
-                $value = '"' . $value . '"';
-                break;
-        }
         $docBlock = new DocBlock($constant->getDocBlock(), 4);
-
         return $docBlock . "\n    " . $source . ' = ' . $value . ';';
     }
 
@@ -257,6 +250,7 @@ EOF;
                 break;
 
             case 'string':
+            case 'char':
                 return '"' . $parameter['default']['value'] . '"';
                 break;
 
