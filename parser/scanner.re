@@ -280,22 +280,22 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 		}
 
 		'object' {
-            s->active_char += sizeof("object")-1;
-            token->opcode = XX_T_TYPE_OBJECT;
-            return 0;
-        }
+			s->active_char += sizeof("object")-1;
+			token->opcode = XX_T_TYPE_OBJECT;
+			return 0;
+		}
 
-        'callable' {
-            s->active_char += sizeof("callable")-1;
-            token->opcode = XX_T_TYPE_CALLABLE;
-            return 0;
-        }
+		'callable' {
+			s->active_char += sizeof("callable")-1;
+			token->opcode = XX_T_TYPE_CALLABLE;
+			return 0;
+		}
 
-        'resource' {
-            s->active_char += sizeof("resource")-1;
-            token->opcode = XX_T_TYPE_RESOURCE;
-            return 0;
-        }
+		'resource' {
+			s->active_char += sizeof("resource")-1;
+			token->opcode = XX_T_TYPE_RESOURCE;
+			return 0;
+		}
 
 		'if' {
 			s->active_char += sizeof("if")-1;
@@ -546,7 +546,8 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		IDENTIFIER = [\\_\$]?[_a-zA-Z\\][a-zA-Z0-9\_\\]*;
+		// We have to remove this and define constants in compiler
+		IDENTIFIER = [\\_\$]?[_a-zA-Z\\][a-zA-Z0-9_\\]*;
 		IDENTIFIER {
 
 			if (start[0] == '$') {
@@ -598,7 +599,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 			}
 
-			if (token->len == 1 && !memcmp(token->value, "_", sizeof("_")-1)) {
+			// This is hack
+			if (token->len == 1 && !memcmp(token->value, "_", sizeof("_")-1)
+				|| token->len == 2 && !memcmp(token->value, "__", sizeof("__")-1)
+				|| token->len == 3 && !memcmp(token->value, "___", sizeof("___")-1)
+				|| token->len == 4 && !memcmp(token->value, "____", sizeof("____")-1)
+				) {
 				token->opcode = XX_T_IDENTIFIER;
 				return 0;
 			}
