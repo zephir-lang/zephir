@@ -257,7 +257,6 @@ class Call
             $params = array();
             foreach ($parameters as $parameter) {
                 if (is_array($parameter['parameter'])) {
-
                     $paramExpr = new Expression($parameter['parameter']);
 
                     switch ($parameter['parameter']['type']) {
@@ -312,15 +311,11 @@ class Call
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
-
             if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
-
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
-
                         if (isset($parameter['data-type'])) {
-
                             switch ($parameter['data-type']) {
                                 case 'int':
                                 case 'uint':
