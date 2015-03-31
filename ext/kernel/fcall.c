@@ -673,6 +673,7 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 	ZVAL_STRINGL(func, func_name, func_length, 0);
 
 	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, param_count, params, NULL TSRMLS_CC);
+
 #endif
 
 	if (status == FAILURE && !EG(exception)) {
@@ -782,20 +783,17 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 		switch (type) {
 
 			case zephir_fcall_parent:
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
-				info.class_name = "parent";
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD;
 				break;
 
 			case zephir_fcall_self:
 				assert(!ce);
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
-				info.class_name = "self";
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD;
 				break;
 
 			case zephir_fcall_static:
 				assert(!ce);
-				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
-				info.class_name = "static";
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD;
 				break;
 
 			case zephir_fcall_ce:
@@ -915,7 +913,9 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 		zval_ptr_dtor(&rv);
 	}
 
+#if PHP_VERSION_ID < 50600
 	zval_ptr_dtor(&fn);
+#endif
 
 	return status;
 }
