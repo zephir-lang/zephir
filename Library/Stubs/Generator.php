@@ -147,7 +147,7 @@ EOF;
     }
 
     /**
-     *
+     * Build property
      *
      * @param ClassProperty $property
      * @return string
@@ -160,11 +160,12 @@ EOF;
         }
 
         $source = $visibility . ' $' . $property->getName();
+        $original = $property->getOriginal();
 
-        if (isset($property->getOriginal()['default'])) {
+        if (isset($original['default'])) {
             $source .= ' = ' . $this->wrapPHPValue(array(
-                    'default' => $property->getOriginal()['default']
-                ));
+                'default' => $original['default']
+            ));
         }
 
 
