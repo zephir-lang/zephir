@@ -190,6 +190,7 @@ class Theme
      * from : http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php
      * @param $src
      * @param $dst
+     * @param $files
      */
     private function __copyDir($src, $dst, &$files = null)
     {

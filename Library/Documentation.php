@@ -48,8 +48,11 @@ class Documentation
     protected $logger;
 
     /**
-     * @param CompilerFile[] $files
-     * @param Config         $config
+     * @param CompilerFile[] $classes
+     * @param Config $config
+     * @param Logger $logger
+     * @throws ConfigException
+     * @throws Exception
      */
     public function __construct(array $classes, Config $config, Logger $logger)
     {

@@ -51,7 +51,7 @@ abstract class CommandAbstract implements CommandInterface
     /**
      * Returns parameter named $name if specified
      * on the commmand line else null
-     * @param string $parameterName
+     * @param string $name
      * @return string
      */
     public function getParameter($name)
@@ -61,9 +61,8 @@ abstract class CommandAbstract implements CommandInterface
 
     /**
      * Executes the command
-     *
-     * Config $config
-     * Logger $logger
+     * @param Config $config
+     * @param Logger $logger
      */
     public function execute(Config $config, Logger $logger)
     {

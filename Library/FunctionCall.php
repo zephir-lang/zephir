@@ -141,9 +141,10 @@ class FunctionCall extends Call
      * specific parameters to be passed by reference
      *
      * @param string $funcName
-     * @param array $expression
+     * @param array $parameters
      * @param CompilationContext $compilationContext
      * @param array $references
+     * @param array $expression
      * @return boolean
      */
     protected function markReferences($funcName, $parameters, CompilationContext $compilationContext, &$references, $expression)
@@ -573,7 +574,9 @@ class FunctionCall extends Call
      * Compiles a function
      *
      * @param Expression $expr
-     * @param CompilationContext $expr
+     * @param CompilationContext $compilationContext
+     * @return CompiledExpression
+     * @throws CompilerException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {

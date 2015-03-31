@@ -518,6 +518,7 @@ class CompilerFile
     /**
      * Pre-compiles a Zephir file. Generates the IR and perform basic validations
      *
+     * @param Compiler $compiler
      * @throws ParseException
      * @throws CompilerException
      * @throws Exception

@@ -43,8 +43,11 @@ class FunctionCallBuilder
      * FunctionCallBuilder construct
      *
      * @param string $name
-     * @param array $name
-     * @param int $name
+     * @param array $parameters
+     * @param int $type
+     * @param string $file
+     * @param int $line
+     * @param int $char
      */
     public function __construct($name, $parameters, $type = 1, $file = null, $line = 0, $char = 0)
     {
@@ -56,6 +59,9 @@ class FunctionCallBuilder
         $this->char = $char;
     }
 
+    /**
+     * @return array
+     */
     public function get()
     {
         return array(

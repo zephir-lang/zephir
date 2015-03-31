@@ -354,7 +354,7 @@ class ClassDefinition
     /**
      * Sets the class definition for the implemented interfaces
      *
-     * @param ClassDefinition[] $interfaceDefinitions
+     * @param ClassDefinition[] $implementedInterfaceDefinitions
      */
     public function setImplementedInterfaceDefinitions(array $implementedInterfaceDefinitions)
     {

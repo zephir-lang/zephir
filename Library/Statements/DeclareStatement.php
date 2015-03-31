@@ -264,6 +264,9 @@ class DeclareStatement extends StatementAbstract
 
     /**
      * throw exception for invalid default type
+     * @param $defaultType
+     * @param $dateType
+     * @param $variable
      * @throws CompilerException
      */
     public static function invalidDefaultTypeException($defaultType, $dateType, $variable)
