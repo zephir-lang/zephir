@@ -296,45 +296,36 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 		calling_scope = NULL;
 	}
 
-	if (info->type == ZEPHIR_FCALL_TYPE_FUNC) {
-		l   = (size_t)(info->func_length) + 1;
-		c   = (char*) info->func_name;
-		len = 2 * ppzce_size + l;
-		buf = ecalloc(1, len);
+	switch (info->type) {
 
-		memcpy(buf,                  c,               l);
-		memcpy(buf + l,              &calling_scope,  ppzce_size);
-		memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
-	}
-	/*else if (Z_TYPE_P(function_name) == IS_ARRAY) {
-		zval **method;
-		HashTable *function_hash = Z_ARRVAL_P(function_name);
-		if (
-			    function_hash->nNumOfElements == 2
-			 && zend_hash_index_find(function_hash, 1, (void**)&method) == SUCCESS
-			 && Z_TYPE_PP(method) == IS_STRING
-		) {
-			l   = (size_t)(Z_STRLEN_PP(method)) + 1;
-			c   = Z_STRVAL_PP(method);
+		case ZEPHIR_FCALL_TYPE_FUNC:
+
+			l   = (size_t)(info->func_length) + 1;
+			c   = (char*) info->func_name;
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
 
 			memcpy(buf,                  c,               l);
 			memcpy(buf + l,              &calling_scope,  ppzce_size);
 			memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
-		}
-	}
-	else if (Z_TYPE_P(function_name) == IS_OBJECT) {
-		/*if (Z_OBJ_HANDLER_P(function_name, get_closure)) {
-			l   = sizeof("__invoke");
+			break;
+
+		case ZEPHIR_FCALL_TYPE_CE_METHOD:
+		case ZEPHIR_FCALL_TYPE_ZVAL_METHOD:
+		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
+		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
+		case ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD:
+
+			l   = (size_t)(info->func_length) + 1;
+			c   = (char*) info->func_name;
 			len = 2 * ppzce_size + l;
 			buf = ecalloc(1, len);
 
-			memcpy(buf,                  "__invoke",     l);
-			memcpy(buf + l,              &calling_scope, ppzce_size);
-			memcpy(buf + l + ppzce_size, &obj_ce,        ppzce_size);
-		}
-	}*/
+			memcpy(buf,                  c,               l);
+			memcpy(buf + l,              &calling_scope,  ppzce_size);
+			memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
+			break;
+	}
 
 	if (EXPECTED(buf != NULL)) {
 		size_t i;
