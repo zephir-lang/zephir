@@ -257,14 +257,17 @@ class Call
             $params = array();
             foreach ($parameters as $parameter) {
                 if (is_array($parameter['parameter'])) {
+
                     $paramExpr = new Expression($parameter['parameter']);
 
                     switch ($parameter['parameter']['type']) {
+
                         case 'property-access':
                         case 'array-access':
                         case 'static-property-access':
                             $paramExpr->setReadOnly(true);
                             break;
+
                         default:
                             $paramExpr->setReadOnly($readOnly);
                             break;
@@ -309,11 +312,15 @@ class Call
         $isFinal = false;
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
+
             if ($calleeDefinition instanceof ClassMethod) {
                 if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
+
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
+
                         if (isset($parameter['data-type'])) {
+
                             switch ($parameter['data-type']) {
                                 case 'int':
                                 case 'uint':
@@ -705,6 +712,18 @@ class Call
             $compilationContext->codePrinter->output('zephir_check_call_status();');
         } else {
             $compilationContext->codePrinter->output('zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');');
+        }
+    }
+
+    /**
+     * Checks if temporary parameters must be copied or not
+     *
+     * @param CompilationContext $compilationContext
+     */
+    public function checkTempParameters(CompilationContext $compilationContext)
+    {
+        foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
+            $compilationContext->codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
         }
     }
 

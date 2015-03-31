@@ -80,6 +80,8 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         $call->addCallStatusFlag($context);
 
         $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
+
+        $call->checkTempParameters($context);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
