@@ -251,7 +251,7 @@ EOF;
 
             case 'string':
             case 'char':
-                return '"' . $parameter['default']['value'] . '"';
+                return '"' . addslashes($parameter['default']['value']) . '"';
                 break;
 
             case 'empty-array':
@@ -262,7 +262,16 @@ EOF;
                 $parameters = array();
 
                 foreach ($parameter['default']['left'] as $value) {
-                    $parameters[] = $this->wrapPHPValue(array(
+                    $source = '';
+
+                    if (isset($value['key'])) {
+                        $source .= $this->wrapPHPValue(array(
+                            'default' => $value['key'],
+                            'type' => $value['key']['type']
+                        )) . ' => ';
+                    }
+
+                    $parameters[] = $source . $this->wrapPHPValue(array(
                         'default' => $value['value'],
                         'type' => $value['value']['type']
                     ));
