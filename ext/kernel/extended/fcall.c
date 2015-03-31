@@ -27,6 +27,7 @@
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
 #include "kernel/hash.h"
+#include "kernel/string.h"
 #include "kernel/operators.h"
 #include "kernel/exception.h"
 #include "kernel/backtrace.h"
@@ -599,6 +600,25 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 		case ZEPHIR_FCALL_TYPE_FUNC:
 			if (zend_hash_find(EG(function_table), info->func_name, info->func_length + 1, (void**)&fcc->function_handler) == SUCCESS) {
 				return 1;
+			}
+			break;
+
+		case ZEPHIR_FCALL_TYPE_ZVAL_METHOD:
+			{
+				zval **method = NULL;
+				zval **obj = NULL;
+				int strict_class = 0;
+
+				if (!EG(objects_store).object_buckets || !EG(objects_store).object_buckets[Z_OBJ_HANDLE_P(info->object_ptr)].valid) {
+					return 0;
+				}
+
+				fcc->calling_scope = Z_OBJCE_P(info->object_ptr); /* TBFixed: what if it's overloaded? */
+				fcc->object_ptr = info->object_ptr;
+
+				if (zend_hash_find(&info->ce->function_table, info->func_name, info->func_length + 1, (void**)&fcc->function_handler) == SUCCESS) {
+					return 1;
+				}
 			}
 			break;
 	}

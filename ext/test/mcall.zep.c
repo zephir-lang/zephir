@@ -740,3 +740,30 @@ PHP_METHOD(Test_Mcall, objectParamCastOoParam) {
 
 }
 
+PHP_METHOD(Test_Mcall, bb) {
+
+
+	RETURN_STRING("hello", 1);
+
+}
+
+PHP_METHOD(Test_Mcall, aa) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	object_init_ex(a, test_mcall_ce);
+	if (zephir_has_constructor(a TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, a, "__construct", NULL);
+		zephir_check_call_status();
+	}
+	ZEPHIR_RETURN_CALL_METHOD(a, "bb", &_0);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+

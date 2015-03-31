@@ -21,10 +21,14 @@
 
 #define ZEPHIR_FCALL_TYPE_UNKNOWN 0
 #define ZEPHIR_FCALL_TYPE_FUNC 1
+#define ZEPHIR_FCALL_TYPE_CLASS_METHOD 2
+#define ZEPHIR_FCALL_TYPE_CE_METHOD 3
+#define ZEPHIR_FCALL_TYPE_ZVAL_METHOD 4
 
 typedef struct _zephir_fcall_info {
   int type;
   zend_class_entry *ce;
+  zval *object_ptr;
   const char *class_name;
   int class_length;
   const char *func_name;

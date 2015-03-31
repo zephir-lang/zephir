@@ -298,7 +298,7 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 
 	if (info->type == ZEPHIR_FCALL_TYPE_FUNC) {
 		l   = (size_t)(info->func_length) + 1;
-		c   = info->func_name;
+		c   = (char*) info->func_name;
 		len = 2 * ppzce_size + l;
 		buf = ecalloc(1, len);
 
@@ -750,9 +750,12 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 {
 	char *possible_method;
 	zval *rv = NULL, **rvp = return_value_ptr ? return_value_ptr : &rv;
-	zval *fn;
+	zval *fn = NULL;
 	zval *mn;
 	int status;
+#if PHP_VERSION_ID >= 50600
+	zephir_fcall_info info;
+#endif
 
 #ifndef ZEPHIR_RELEASE
 	if (return_value_ptr && *return_value_ptr) {
@@ -771,6 +774,52 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 			return FAILURE;
 		}
 	}
+
+#if PHP_VERSION_ID >= 50600
+
+	if (!cache_entry || !*cache_entry) {
+
+		switch (type) {
+
+			case zephir_fcall_parent:
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
+				info.class_name = "parent";
+				break;
+
+			case zephir_fcall_self:
+				assert(!ce);
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
+				info.class_name = "self";
+				break;
+
+			case zephir_fcall_static:
+				assert(!ce);
+				info.type = ZEPHIR_FCALL_TYPE_CLASS_METHOD;
+				info.class_name = "static";
+				break;
+
+			case zephir_fcall_ce:
+				assert(ce != NULL);
+				info.type = ZEPHIR_FCALL_TYPE_CE_METHOD;
+				info.ce = ce;
+				break;
+
+			case zephir_fcall_method:
+			default:
+				assert(object != NULL);
+				info.type = ZEPHIR_FCALL_TYPE_ZVAL_METHOD;
+				info.object_ptr = object;
+				info.ce = ce;
+				break;
+		}
+
+		info.func_name = method_name;
+		info.func_length = method_len;
+	}
+
+	status = zephir_call_user_function(object ? &object : NULL, ce, type, fn, rvp, cache_entry, param_count, params, &info TSRMLS_CC);
+
+#else
 
 	ALLOC_INIT_ZVAL(fn);
 	if (!cache_entry || !*cache_entry) {
@@ -803,6 +852,8 @@ int zephir_call_class_method_aparams(zval **return_value_ptr, zend_class_entry *
 	}
 
 	status = zephir_call_user_function(object ? &object : NULL, ce, type, fn, rvp, cache_entry, param_count, params, NULL TSRMLS_CC);
+
+#endif
 
 	if (status == FAILURE && !EG(exception)) {
 

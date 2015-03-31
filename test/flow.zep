@@ -778,6 +778,15 @@ class Flow
 		return i;
 	}
 
+	public function testFor40()
+	{
+		var a, b = 0;
+		for a in range(1, 10000000) {
+			let b += sqrt(a);		
+		}
+		return b;
+	}
+
 	public function testSwitch1()
 	{
 		var a;

@@ -232,4 +232,16 @@ class Mcall
 	{
 		return param;
 	}
+
+	private function bb()
+	{
+		return "hello";
+	}
+
+	public function aa()
+	{
+		var a;
+		let a = new self;
+		return a->bb();
+	}
 }
