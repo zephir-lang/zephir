@@ -66,16 +66,34 @@ class RoundOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/operators');
         $symbolVariable->setDynamicTypes('double');
-
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        
-        if (count($expression['parameters']) == 1) { //Only float $val
-            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', NULL, NULL TSRMLS_CC);');
-        } else if (count($expression['parameters']) == 2) { //float $val, int $mode
-            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL TSRMLS_CC);');
-        } else { //all
-            $context->codePrinter->output('zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
+
+        switch (count($expression['parameters'])) {
+            /**
+             * Only float $val
+             */
+            case 1:
+                $context->codePrinter->output(
+                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', NULL, NULL TSRMLS_CC);'
+                );
+                break;
+
+            /**
+             * float $val, int $mode
+             */
+            case 2:
+                $context->codePrinter->output(
+                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL TSRMLS_CC);'
+                );
+                break;
+
+            default:
+                $context->codePrinter->output(
+                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);'
+                );
+                break;
         }
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
