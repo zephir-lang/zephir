@@ -149,6 +149,8 @@ class Utils
             throw new \InvalidArgumentException('Class name must be a string ' . print_r($className, true));
         }
 
+        var_dump($aliasManager);
+
         if ($className[0] !== '\\') {
             // If class/interface name not begin with \ maybe a alias or a sub-namespace
             $firstSepPos = strpos($className, '\\');
@@ -158,6 +160,7 @@ class Utils
                     return $aliasManager->getAlias($baseName) . '\\' . substr($className, $firstSepPos + 1);
                 }
             } else {
+                var_dump($aliasManager->getAlias($className));
                 if ($aliasManager->isAlias($className)) {
                     return $aliasManager->getAlias($className);
                 }

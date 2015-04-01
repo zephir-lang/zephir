@@ -587,7 +587,9 @@ class CompilerFile
                     $this->_headerCBlocks[] = $topStatement['value'];
                     break;
 
-
+                case 'use':
+                    $this->_aliasManager->add($topStatement);
+                    break;
                 case 'function':
                     /* Just do the precompilation of the function */
                     $functionDefinition = new FunctionDefinition(

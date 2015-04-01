@@ -1040,6 +1040,31 @@ class FunctionDefinition
             }
         }
 
+        $compilationContext->currentMethod = $this;
+
+        /**
+         * Fix relative alias in object parameter hint to protect bug
+         * when we printing function declaration in Compiler
+         *
+         * @see Compiler::generateFunctionInformation();
+         */
+        foreach ($this->parameters as $key => $parameter) {
+            switch ($parameter['data-type']) {
+                case 'variable':
+                    if (isset($parameter['cast'])) {
+                        switch ($parameter['cast']['type']) {
+                            case 'variable':
+                                var_dump($parameter['cast']['value']);
+                                var_dump($compilationContext->getFullName($parameter['cast']['value']));
+                                $parameter['cast']['value'] = $compilationContext->getFullName($parameter['cast']['value']);
+                                $this->parameters[$key] = $parameter;
+                                break;
+                        }
+                    }
+                    break;
+            }
+        }
+
         $this->localContext = $localContext;
         $this->typeInference = $typeInference;
         $this->callGathererPass = $callGathererPass;
@@ -1287,24 +1312,24 @@ class FunctionDefinition
                         );
                     }
 
-                    $ifCheck = new IfStatementBuilder(
-                        $evalExpr,
-                        new StatementsBlockBuilder(array(
-                            new ThrowStatementBuilder(
-                                new NewInstanceOperatorBuilder('\InvalidArgumentException', array(
-                                    new ParameterBuilder(
-                                        new LiteralBuilder(
-                                            "string",
-                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::escapeClassName($className) . "'"
-                                        )
-                                    )
-                                ))
-                            )
-                        ))
-                    );
-
-                    $ifStatement = new IfStatement($ifCheck->get());
-                    $ifStatement->compile($compilationContext);
+//                    $ifCheck = new IfStatementBuilder(
+//                        $evalExpr,
+//                        new StatementsBlockBuilder(array(
+//                            new ThrowStatementBuilder(
+//                                new NewInstanceOperatorBuilder('\InvalidArgumentException', array(
+//                                    new ParameterBuilder(
+//                                        new LiteralBuilder(
+//                                            "string",
+//                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::escapeClassName($className) . "'"
+//                                        )
+//                                    )
+//                                ))
+//                            )
+//                        ))
+//                    );
+//
+//                    $ifStatement = new IfStatement($ifCheck->get());
+//                    $ifStatement->compile($compilationContext);
                 }
             }
 
@@ -1913,26 +1938,6 @@ class FunctionDefinition
         $compilationContext->branchManager = null;
         $compilationContext->cacheManager = null;
         $compilationContext->typeInference = null;
-
-        /**
-         * Fix relative alias in object parameter hint to protect bug
-         * when we printing function declaration in Compiler
-         *
-         * @see Compiler::generateFunctionInformation();
-         */
-        foreach ($this->parameters as $key => $parameter) {
-            switch ($parameter['data-type']) {
-                case 'variable':
-                    if (isset($parameter['cast'])) {
-                        switch ($parameter['cast']['type']) {
-                            case 'variable':
-                                $this->parameters[$key]['cast']['value'] = $compilationContext->getFullName($parameter['cast']['value']);
-                                break;
-                        }
-                    }
-                    break;
-            }
-        }
 
         $codePrinter->clear();
 

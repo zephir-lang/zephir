@@ -18,8 +18,6 @@
 #include "kernel/operators.h"
 #include "kernel/file.h"
 #include "kernel/array.h"
-#include "kernel/object.h"
-#include "kernel/exception.h"
 
 
 /**
@@ -353,10 +351,6 @@ PHP_FUNCTION(Test_test_call_relative_object_hint) {
 
 
 
-	if (!(zephir_instance_of_ev(a, test_oo_propertyaccess_ce TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'a' must be an instance of 'Test\\Oo\\PropertyAccess'", "", 0);
-		return;
-	}
 	RETURN_BOOL(1);
 
 }
@@ -368,10 +362,6 @@ PHP_FUNCTION(Test_test_call_object_hint) {
 
 
 
-	if (!(zephir_instance_of_ev(a, test_oo_propertyaccess_ce TSRMLS_CC))) {
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'a' must be an instance of 'Test\\Oo\\PropertyAccess'", "", 0);
-		return;
-	}
 	RETURN_BOOL(1);
 
 }
