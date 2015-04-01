@@ -55,7 +55,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyInt) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 10);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -81,7 +81,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolTrue) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, ZEPHIR_GLOBAL(global_true) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -107,7 +107,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyBoolFalse) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, ZEPHIR_GLOBAL(global_false) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -135,7 +135,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyString) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "string", 1);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -164,7 +164,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyChar) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -193,7 +193,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyUChar) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -219,7 +219,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyNull) {
 	}
 
 
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -248,7 +248,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableInt) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, a);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -305,7 +305,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolTrue) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_BOOL(_0, a);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -334,7 +334,7 @@ PHP_METHOD(Test_Oo_DynamicProp, setPropertyVariableBoolFalse) {
 
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_BOOL(_0, a);
-	zephir_update_property_zval(this_ptr, Z_STRVAL_P(property), Z_STRLEN_P(property), _0 TSRMLS_CC);
+	zephir_update_property_zval_zval(this_ptr, property, _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }
