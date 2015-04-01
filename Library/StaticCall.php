@@ -297,6 +297,8 @@ class StaticCall extends Call
             throw new CompilerException("Only dynamic/string variables can be used in dynamic classes", $expression);
         }
 
+        $compilationContext->headersManager->add('kernel/object');
+
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
         $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
@@ -371,6 +373,8 @@ class StaticCall extends Call
         if ($classNameVariable->isNotVariableAndString()) {
             throw new CompilerException("Only dynamic/string variables can be used in dynamic classes", $expression);
         }
+
+        $compilationContext->headersManager->add('kernel/object');
 
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
         $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
