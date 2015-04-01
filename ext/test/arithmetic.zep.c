@@ -1850,6 +1850,92 @@ PHP_METHOD(Test_Arithmetic, mul3) {
 
 }
 
+/* Less */
+PHP_METHOD(Test_Arithmetic, less1) {
+
+	int a = 1, b = 2;
+
+
+	RETURN_BOOL(a < b);
+
+}
+
+PHP_METHOD(Test_Arithmetic, less2) {
+
+	int a = 2, b = 1;
+
+
+	RETURN_BOOL(a < b);
+
+}
+
+PHP_METHOD(Test_Arithmetic, less3) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(ZEPHIR_LT_LONG(a, 5));
+
+}
+
+PHP_METHOD(Test_Arithmetic, less4) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(ZEPHIR_LT_LONG(a, 5.0));
+
+}
+
+/* Greater */
+PHP_METHOD(Test_Arithmetic, greater1) {
+
+	int a = 1, b = 2;
+
+
+	RETURN_BOOL(a > b);
+
+}
+
+PHP_METHOD(Test_Arithmetic, greater2) {
+
+	int a = 2, b = 1;
+
+
+	RETURN_BOOL(a > b);
+
+}
+
+PHP_METHOD(Test_Arithmetic, greater3) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(ZEPHIR_GT_LONG(a, 5));
+
+}
+
+PHP_METHOD(Test_Arithmetic, greater4) {
+
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(ZEPHIR_GT_LONG(a, 5.0));
+
+}
+
 PHP_METHOD(Test_Arithmetic, letStatementIntMinus) {
 
 	int a;
