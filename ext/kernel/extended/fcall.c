@@ -671,6 +671,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 			}
 
 			fcc->calling_scope = Z_OBJCE_P(info->object_ptr); /* TBFixed: what if it's overloaded? */
+			fcc->called_scope = fcc->calling_scope;
 			fcc->object_ptr = info->object_ptr;
 
 			if (zend_hash_find(&info->ce->function_table, info->func_name, info->func_length + 1, (void**)&fcc->function_handler) == SUCCESS) {
@@ -688,7 +689,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				return 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_DC);
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
@@ -717,7 +718,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				return 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_DC);
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD:
 
@@ -750,7 +751,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				return 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
 
@@ -779,7 +780,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				return 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
 
 		case ZEPHIR_FCALL_TYPE_CE_METHOD:
 			{
@@ -810,7 +811,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					return 1;
 				}
 
-				return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
+				return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
 			}
 			break;
 	}
