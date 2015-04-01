@@ -298,7 +298,7 @@ class StaticCall extends Call
         }
 
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-        $codePrinter->output($classEntryVariable->getName() . ' = zend_fetch_class(Z_STRVAL_P(' . $classNameVariable->getName() . '), Z_STRLEN_P(' . $classNameVariable->getName() . '), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
 
         if (!count($params)) {
