@@ -14,10 +14,22 @@ function zephir_global_method_test(var str)
 
 namespace Test;
 
+use Test\Oo\PropertyAccess;
+
 /* Test function declaration in namespace */
 function zephir_namespaced_method_test(var str)
 {
 	return new Fcall()->testCall5(str, 5);
+}
+
+function test_call_relative_object_hint(<PropertyAccess> a) -> boolean
+{
+	return true;
+}
+
+function test_call_object_hint(<\Test\Oo\PropertyAccess> a) -> boolean
+{
+	return true;
 }
 
 class Fcall

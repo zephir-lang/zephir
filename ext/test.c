@@ -429,10 +429,22 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_zephir_namespaced_method_test, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
+PHP_FUNCTION(Test_test_call_relative_object_hint);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_test_call_relative_object_hint, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, a, PropertyAccess, 0)
+ZEND_END_ARG_INFO()
+
+PHP_FUNCTION(Test_test_call_object_hint);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_test_call_object_hint, 0, 0, 1)
+	ZEND_ARG_OBJ_INFO(0, a, \\Test\\Oo\\PropertyAccess, 0)
+ZEND_END_ARG_INFO()
+
 
 zend_function_entry php_test_functions[] = {
 ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(Test_zephir_global_method_test), arginfo_test_zephir_global_method_test)
 ZEND_NS_NAMED_FE("Test", zephir_namespaced_method_test, ZEND_FN(Test_zephir_namespaced_method_test), arginfo_test_zephir_namespaced_method_test)
+ZEND_NS_NAMED_FE("Test", test_call_relative_object_hint, ZEND_FN(Test_test_call_relative_object_hint), arginfo_test_test_call_relative_object_hint)
+ZEND_NS_NAMED_FE("Test", test_call_object_hint, ZEND_FN(Test_test_call_object_hint), arginfo_test_test_call_object_hint)
 ZEND_FE_END
 
 };

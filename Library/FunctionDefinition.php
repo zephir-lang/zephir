@@ -1451,6 +1451,7 @@ class FunctionDefinition
          */
         $initCode = "";
         $code = "";
+
         if (is_object($parameters)) {
             /**
              * Round 2. Fetch the parameters in the method
@@ -1460,6 +1461,7 @@ class FunctionDefinition
             $optionalParams = array();
             $numberRequiredParams = 0;
             $numberOptionalParams = 0;
+
             foreach ($parameters->getParameters() as $parameter) {
                 if (isset($parameter['data-type'])) {
                     $dataType = $parameter['data-type'];
@@ -1911,6 +1913,26 @@ class FunctionDefinition
         $compilationContext->branchManager = null;
         $compilationContext->cacheManager = null;
         $compilationContext->typeInference = null;
+
+        /**
+         * Fix relative alias in object parameter hint to protect bug
+         * when we printing function declaration in Compiler
+         *
+         * @see Compiler::generateFunctionInformation();
+         */
+        foreach ($this->parameters as $key => $parameter) {
+            switch ($parameter['data-type']) {
+                case 'variable':
+                    if (isset($parameter['cast'])) {
+                        switch ($parameter['cast']['type']) {
+                            case 'variable':
+                                $this->parameters[$key]['cast']['value'] = $compilationContext->getFullName($parameter['cast']['value']);
+                                break;
+                        }
+                    }
+                    break;
+            }
+        }
 
         $codePrinter->clear();
 

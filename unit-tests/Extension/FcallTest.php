@@ -19,11 +19,14 @@
 
 namespace Extension;
 
+use Test\Fcall;
+use Test\Oo\PropertyAccess;
+
 class FcallTest extends \PHPUnit_Framework_TestCase
 {
     public function testCall()
     {
-        $t = new \Test\Fcall();
+        $t = new Fcall();
         $this->assertTrue($t->testCall1() === 0);
         $this->assertTrue($t->testCall2() > -1);
         $this->assertTrue($t->testCall1FromVar() === 2);
@@ -31,14 +34,14 @@ class FcallTest extends \PHPUnit_Framework_TestCase
 
     public function testStrtok()
     {
-        $t = new \Test\Fcall();
+        $t = new Fcall();
         $this->assertTrue($t->testStrtokFalse() === false);
         $this->assertTrue($t->testStrtokVarBySlash('test') === 'test');
     }
 
     public function testFunctionGetArgs()
     {
-        $t = new \Test\Fcall();
+        $t = new Fcall();
         $this->assertTrue($t->testFunctionGetArgs(true, false) === array(true, false));
         $this->assertTrue($t->testFunctionGetArgs(1025, false) === array(1025, false));
         $this->assertTrue($t->testFunctionGetArgs(false, 1234) === array(false, 1234));
@@ -47,13 +50,16 @@ class FcallTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayFill()
     {
-        $t = new \Test\Fcall();
+        $t = new Fcall();
         $this->assertTrue($t->testArrayFill() == array(array_fill(0, 5, "?"), array_fill(0, 6, "?")));
     }
-    
+
     public function testFunctionDeclaration()
     {
         $this->assertTrue(\Test\zephir_namespaced_method_test("a") == "aaaaa");
+        $this->assertTrue(\Test\test_call_relative_object_hint(new PropertyAccess()));
+        $this->assertTrue(\Test\test_call_object_hint(new PropertyAccess()));
+
         $this->assertTrue(zephir_global_method_test("ab/c") == "ab");
     }
 }
