@@ -50,7 +50,7 @@ PHP_METHOD(Test_Issues, someMethod) {
 
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("adapter"), PH_NOISY_CC);
-	ZEPHIR_RETURN_CALL_METHOD(_0, Z_STRVAL_P(methodName), NULL);
+	ZEPHIR_RETURN_CALL_METHOD_ZVAL(_0, methodName, NULL);
 	zephir_check_call_status();
 	RETURN_MM();
 

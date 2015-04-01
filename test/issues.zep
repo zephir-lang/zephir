@@ -1,23 +1,22 @@
 
 namespace Test;
 
-class Issues 
+class Issues
 {
-    protected adapter;
+	protected adapter;
 
-    public function setAdapter(var adapter)
-    {
-        let this->adapter = adapter;
-    }
+	public function setAdapter(var adapter)
+	{
+		let this->adapter = adapter;
+	}
 
-    public function someMethod(var methodName)
-    {
-        return this->adapter->{methodName}();
-    }
+	public function someMethod(var methodName)
+	{
+		return this->adapter->{methodName}();
+	}
 
-    public function test()
-    {
-            echo "test";
-    }
-
+	public function test()
+	{
+		echo "test";
+	}
 }
