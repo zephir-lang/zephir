@@ -703,6 +703,7 @@ class Call
      */
     public function addCallStatusOrJump(CompilationContext $compilationContext)
     {
+        $compilationContext->headersManager->add('kernel/fcall');
         if (!$compilationContext->insideTryCatch) {
             $compilationContext->codePrinter->output('zephir_check_call_status();');
         } else {
@@ -717,6 +718,7 @@ class Call
      */
     public function checkTempParameters(CompilationContext $compilationContext)
     {
+        $compilationContext->headersManager->add('kernel/fcall');
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
             $compilationContext->codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
         }
