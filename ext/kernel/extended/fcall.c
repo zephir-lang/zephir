@@ -580,8 +580,64 @@ static zend_bool zephir_is_callable_ex(zval *callable, zval *object_ptr, uint ch
 	}
 }
 
+static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_fcall_info_cache *fcc, zend_class_entry *ce_org, int strict_class TSRMLS_DC)
+{
+	int call_via_handler = 0;
+
+	if (fcc->object_ptr && fcc->calling_scope == ce_org) {
+		if (strict_class && ce_org->__call) {
+			fcc->function_handler = emalloc(sizeof(zend_internal_function));
+			fcc->function_handler->internal_function.type = ZEND_INTERNAL_FUNCTION;
+			fcc->function_handler->internal_function.module = (ce_org->type == ZEND_INTERNAL_CLASS) ? ce_org->info.internal.module : NULL;
+			fcc->function_handler->internal_function.handler = zend_std_call_user_call;
+			fcc->function_handler->internal_function.arg_info = NULL;
+			fcc->function_handler->internal_function.num_args = 0;
+			fcc->function_handler->internal_function.scope = ce_org;
+			fcc->function_handler->internal_function.fn_flags = ZEND_ACC_CALL_VIA_HANDLER;
+			fcc->function_handler->internal_function.function_name = estrndup(info->func_name, info->func_length);
+			call_via_handler = 1;
+			return 1;
+		} else if (Z_OBJ_HT_P(fcc->object_ptr)->get_method) {
+			fcc->function_handler = Z_OBJ_HT_P(fcc->object_ptr)->get_method(&fcc->object_ptr, (char *)info->func_name, info->func_length, NULL TSRMLS_CC);
+			if (fcc->function_handler) {
+				if (strict_class &&
+					(!fcc->function_handler->common.scope ||
+					 !instanceof_function(ce_org, fcc->function_handler->common.scope TSRMLS_CC))) {
+					if ((fcc->function_handler->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0) {
+						if (fcc->function_handler->type != ZEND_OVERLOADED_FUNCTION) {
+							efree((char*)fcc->function_handler->common.function_name);
+						}
+						efree(fcc->function_handler);
+					}
+				} else {
+					call_via_handler = (fcc->function_handler->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
+					return 1;
+				}
+			}
+		}
+	} else if (fcc->calling_scope) {
+		if (fcc->calling_scope->get_static_method) {
+			fcc->function_handler = fcc->calling_scope->get_static_method(fcc->calling_scope, (char *)info->func_name, info->func_length TSRMLS_CC);
+		} else {
+			fcc->function_handler = zend_std_get_static_method(fcc->calling_scope, info->func_name, info->func_length, NULL TSRMLS_CC);
+		}
+		if (fcc->function_handler) {
+			call_via_handler = (fcc->function_handler->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
+			if (call_via_handler && !fcc->object_ptr && EG(This) &&
+				Z_OBJ_HT_P(EG(This))->get_class_entry &&
+				instanceof_function(Z_OBJCE_P(EG(This)), fcc->calling_scope TSRMLS_CC)) {
+				fcc->object_ptr = EG(This);
+			}
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_info_cache *fcc TSRMLS_DC)
 {
+	zend_class_entry *ce_org = fcc->calling_scope;
 	zend_fcall_info_cache fcc_local;
 
 	if (fcc == NULL) {
@@ -626,7 +682,8 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				}
 				return 1;
 			}
-			break;
+
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_DC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
@@ -654,7 +711,8 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				}
 				return 1;
 			}
-			break;
+
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_DC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD:
 
@@ -686,7 +744,8 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				}
 				return 1;
 			}
-			break;
+
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
 
 		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
 
@@ -714,7 +773,8 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				}
 				return 1;
 			}
-			break;
+
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
 
 		case ZEPHIR_FCALL_TYPE_CE_METHOD:
 			{
@@ -745,7 +805,8 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					return 1;
 				}
 			}
-			break;
+
+			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
 	}
 
 	return 0;
