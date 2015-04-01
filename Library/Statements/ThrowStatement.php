@@ -55,7 +55,7 @@ class ThrowStatement extends StatementAbstract
                 count($expr['parameters']) == 1 &&
                 $expr['parameters'][0]['parameter']['type'] == 'string'
             ) {
-                $className = Utils::getFullName($expr['class'], $compilationContext->classDefinition->getNamespace(), $compilationContext->aliasManager);
+                $className = $compilationContext->getFullName($expr['class']);
                 if ($compilationContext->compiler->isClass($className)) {
                     $classDefinition = $compilationContext->compiler->getClassDefinition($className);
                     $message = $expr['parameters'][0]['parameter']['value'];
