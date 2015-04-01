@@ -583,6 +583,7 @@ static zend_bool zephir_is_callable_ex(zval *callable, zval *object_ptr, uint ch
 static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_fcall_info_cache *fcc, zend_class_entry *ce_org, int strict_class TSRMLS_DC)
 {
 	int call_via_handler = 0;
+	char *lcname = zend_str_tolower_dup(info->func_name, info->func_length);
 
 	if (fcc->object_ptr && fcc->calling_scope == ce_org) {
 		if (strict_class && ce_org->__call) {
@@ -594,11 +595,12 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 			fcc->function_handler->internal_function.num_args = 0;
 			fcc->function_handler->internal_function.scope = ce_org;
 			fcc->function_handler->internal_function.fn_flags = ZEND_ACC_CALL_VIA_HANDLER;
-			fcc->function_handler->internal_function.function_name = estrndup(info->func_name, info->func_length);
+			fcc->function_handler->internal_function.function_name = estrndup(lcname, info->func_length);
 			call_via_handler = 1;
+			efree(lcname);
 			return 1;
 		} else if (Z_OBJ_HT_P(fcc->object_ptr)->get_method) {
-			fcc->function_handler = Z_OBJ_HT_P(fcc->object_ptr)->get_method(&fcc->object_ptr, (char *)info->func_name, info->func_length, NULL TSRMLS_CC);
+			fcc->function_handler = Z_OBJ_HT_P(fcc->object_ptr)->get_method(&fcc->object_ptr, lcname, info->func_length, NULL TSRMLS_CC);
 			if (fcc->function_handler) {
 				if (strict_class &&
 					(!fcc->function_handler->common.scope ||
@@ -611,15 +613,16 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 					}
 				} else {
 					call_via_handler = (fcc->function_handler->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
+					efree(lcname);
 					return 1;
 				}
 			}
 		}
 	} else if (fcc->calling_scope) {
 		if (fcc->calling_scope->get_static_method) {
-			fcc->function_handler = fcc->calling_scope->get_static_method(fcc->calling_scope, (char *)info->func_name, info->func_length TSRMLS_CC);
+			fcc->function_handler = fcc->calling_scope->get_static_method(fcc->calling_scope, lcname, info->func_length TSRMLS_CC);
 		} else {
-			fcc->function_handler = zend_std_get_static_method(fcc->calling_scope, info->func_name, info->func_length, NULL TSRMLS_CC);
+			fcc->function_handler = zend_std_get_static_method(fcc->calling_scope, lcname, info->func_length, NULL TSRMLS_CC);
 		}
 		if (fcc->function_handler) {
 			call_via_handler = (fcc->function_handler->common.fn_flags & ZEND_ACC_CALL_VIA_HANDLER) != 0;
@@ -628,10 +631,12 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 				instanceof_function(Z_OBJCE_P(EG(This)), fcc->calling_scope TSRMLS_CC)) {
 				fcc->object_ptr = EG(This);
 			}
+			efree(lcname);
 			return 1;
 		}
 	}
 
+	efree(lcname);
 	return 0;
 }
 
@@ -804,9 +809,10 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					}
 					return 1;
 				}
-			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
+				return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_DC);
+			}
+			break;
 	}
 
 	return 0;
