@@ -1783,7 +1783,7 @@ class Compiler
                                     switch ($parameter['cast']['type']) {
                                         case 'variable':
                                             $value = $parameter['cast']['value'];
-                                            $headerPrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                            $headerPrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($value) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                                             break;
 
                                         default:
