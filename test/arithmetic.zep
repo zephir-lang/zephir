@@ -1372,6 +1372,58 @@ class Arithmetic
 		return a;
 	}
 
+	/* Less */
+
+	public function less1()
+	{
+		var a = 1, b = 2;
+
+		return a < b;
+	}
+
+	public function less2()
+	{
+		var a = 2, b = 1;
+
+		return a < b;
+	}
+
+	public function less3(var a)
+	{
+		return a < 5;
+	}
+
+	public function less4(var a)
+	{
+		return a < 5.0;
+	}
+
+	/* Greater */
+
+	public function greater1()
+	{
+		var a = 1, b = 2;
+
+		return a > b;
+	}
+
+	public function greater2()
+	{
+		var a = 2, b = 1;
+
+		return a > b;
+	}
+
+	public function greater3(var a)
+	{
+		return a > 5;
+	}
+
+	public function greater4(var a)
+	{
+		return a > 5.0;
+	}
+
 	public function letStatementIntMinus()
 	{
 		int a;
