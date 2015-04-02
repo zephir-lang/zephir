@@ -638,6 +638,7 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 
 static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_info_cache *fcc TSRMLS_DC)
 {
+	int retval = 0;
 	zend_class_entry *ce_org = fcc->calling_scope;
 	zend_fcall_info_cache fcc_local;
 
@@ -694,10 +695,13 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					}
 					efree(fcc->function_handler);
 				}
-				return 1;
+				retval = 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
+			if (!retval) {
+				retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
+			}
+			break;
 
 		case ZEPHIR_FCALL_TYPE_CLASS_SELF_METHOD:
 
@@ -723,10 +727,13 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					}
 					efree(fcc->function_handler);
 				}
-				return 1;
+				retval = 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
+			if (!retval) {
+				retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 0 TSRMLS_CC);
+			}
+			break;
 
 		case ZEPHIR_FCALL_TYPE_CLASS_PARENT_METHOD:
 
@@ -756,10 +763,12 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					}
 					efree(fcc->function_handler);
 				}
-				return 1;
+				retval = 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+			if (!retval) {
+				retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+			}
 
 		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
 
@@ -785,10 +794,13 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 					}
 					efree(fcc->function_handler);
 				}
-				return 1;
+				retval = 1;
 			}
 
-			return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+			if (!retval) {
+				retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+			}
+			break;
 
 		case ZEPHIR_FCALL_TYPE_CE_METHOD:
 			{
@@ -816,15 +828,24 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 						}
 						efree(fcc->function_handler);
 					}
-					return 1;
+					retval = 1;
 				}
 
-				return zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+				if (!retval) {
+					retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
+				}
 			}
 			break;
 	}
 
-	return 0;
+	if (fcc->object_ptr) {
+		fcc->called_scope = Z_OBJCE_P(fcc->object_ptr);
+	}
+	if (retval) {
+		fcc->initialized = 1;
+	}
+
+	return retval;
 }
 
 int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_cache, zephir_fcall_info *info TSRMLS_DC)

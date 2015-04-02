@@ -861,7 +861,8 @@ class Compiler
             $this->stubs($command, true);
         }
 
-        return $needConfigure;
+        //return $needConfigure;
+        return false;
     }
 
     /**
