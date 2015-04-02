@@ -376,7 +376,6 @@ class Compiler
         $success = true;
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $item) {
-
             $pathName = $item->getPathname();
             if (!is_readable($pathName)) {
                 $this->logger->output('File is not readable :' . $pathName);
