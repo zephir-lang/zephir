@@ -769,6 +769,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 			if (!retval) {
 				retval = zephir_is_info_dynamic_callable(info, fcc, ce_org, 1 TSRMLS_CC);
 			}
+			break;
 
 		case ZEPHIR_FCALL_TYPE_CLASS_STATIC_METHOD:
 
