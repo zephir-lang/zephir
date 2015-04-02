@@ -87,6 +87,50 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->class->boolSumSimple());
     }
 
+    public function testVarLess()
+    {
+        $this->assertTrue($this->class->less1());
+        $this->assertFalse($this->class->less2());
+
+        /**
+         * X < 5
+         */
+        $this->assertFalse($this->class->less3(100));
+        $this->assertFalse($this->class->less3(6));
+        $this->assertFalse($this->class->less3(5));
+        $this->assertTrue($this->class->less3(4));
+
+        /**
+         * X < 5.0
+         */
+        $this->assertFalse($this->class->less4(100));
+        $this->assertFalse($this->class->less4(6));
+        $this->assertFalse($this->class->less4(5));
+        $this->assertTrue($this->class->less4(4));
+    }
+
+    public function testVarGreater()
+    {
+        $this->assertFalse($this->class->greater1());
+        $this->assertTrue($this->class->greater2());
+
+        /**
+         * X > 5
+         */
+        $this->assertTrue($this->class->greater3(100));
+        $this->assertTrue($this->class->greater3(6));
+        $this->assertFalse($this->class->greater3(5));
+        $this->assertFalse($this->class->greater3(4));
+
+        /**
+         * X > 5.0
+         */
+        $this->assertTrue($this->class->greater4(100));
+        $this->assertTrue($this->class->greater4(6));
+        $this->assertFalse($this->class->greater4(5));
+        $this->assertFalse($this->class->greater4(4));
+    }
+
     public function testAddSum()
     {
         $this->assertTrue($this->class->addSum1() == 10);

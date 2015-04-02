@@ -706,6 +706,7 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
+                            case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variable->isLocalOnly()) {
                                     return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', ' . $right->getCode() . ')', $expression['left']);
