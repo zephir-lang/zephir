@@ -105,7 +105,7 @@ class InstanceOfOperator extends BaseOperator
                                     if (!class_exists($className, false)) {
                                         $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
                                     } else {
-                                        $classEntry = $context->classDefinition->getClassEntryByClassName($className, $context, true);
+                                        $classEntry = Utils::getFullName($resolvedVariable,'', $context->aliasManager);
                                         if (!$classEntry) {
                                             $code = 'SL("' . trim(Utils::escapeClassName($className), "\\") . '")';
                                         }

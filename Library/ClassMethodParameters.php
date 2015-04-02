@@ -24,7 +24,7 @@ namespace Zephir;
  *
  * Represents the parameters defined in a method
  */
-class ClassMethodParameters implements \Countable, \Iterator
+class ClassMethodParameters implements \Countable, \Iterator, \ArrayAccess
 {
     private $_parameters = array();
 
@@ -86,5 +86,25 @@ class ClassMethodParameters implements \Countable, \Iterator
     public function next()
     {
         $this->_position++;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->_parameters[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->_parameters[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->_parameters[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->_parameters[$offset]);
     }
 }

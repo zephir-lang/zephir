@@ -344,3 +344,25 @@ PHP_FUNCTION(Test_zephir_namespaced_method_test) {
 
 }
 
+PHP_FUNCTION(Test_test_call_relative_object_hint) {
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(1);
+
+}
+
+PHP_FUNCTION(Test_test_call_object_hint) {
+	zval *a;
+
+	zephir_fetch_params(0, 1, 0, &a);
+
+
+
+	RETURN_BOOL(1);
+
+}
+
