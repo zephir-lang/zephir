@@ -376,14 +376,17 @@ class Compiler
         $success = true;
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $item) {
+
             $pathName = $item->getPathname();
             if (!is_readable($pathName)) {
+                $this->logger->output('File is not readable :' . $pathName);
                 continue;
             }
 
             $fileName = $item->getFileName();
+
             if ($item->isDir()) {
-                if ($fileName != '.' && $fileName != '..') {
+                if ($fileName != '.' && $fileName != '..' && $fileName != '.libs') {
                     if (!is_dir($dest . DIRECTORY_SEPARATOR . $fileName)) {
                         mkdir($dest . DIRECTORY_SEPARATOR . $fileName, 0755, true);
                     }
@@ -391,11 +394,8 @@ class Compiler
                 }
             } else {
                 if (!$pattern || ($pattern && preg_match($pattern, $fileName) === 1)) {
-                    if (is_string($callback)) {
-                        $success = $success && $callback($pathName, $dest . DIRECTORY_SEPARATOR . $fileName);
-                    } else {
-                        $success = $success && call_user_func($callback, $pathName, $dest . DIRECTORY_SEPARATOR . $fileName);
-                    }
+                    $path = $dest . DIRECTORY_SEPARATOR . $fileName;
+                    $success = $success && call_user_func($callback, $pathName, $path);
                 }
             }
         }
@@ -1095,10 +1095,10 @@ class Compiler
         $kernelPath = realpath("ext/kernel");
         $sourceKernelPath = realpath(__DIR__ . '/../ext/kernel');
 
-        $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@', array($this, 'checkKernelFile'));
+        $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@.*\.[ch]$@', array($this, 'checkKernelFile'));
         if (!$configured) {
             $this->logger->output('Copying new kernel files...');
-            $this->recursiveDeletePath($kernelPath, '@^.*\.[cho]$@');
+            $this->recursiveDeletePath($kernelPath, '@^.*\.[lcho]$@');
             @mkdir($kernelPath);
             $this->recursiveProcess($sourceKernelPath, $kernelPath, '@^.*\.[ch]$@');
         }
