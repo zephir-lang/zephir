@@ -601,7 +601,7 @@ void ZEND_FASTCALL zephir_ptr_dtor(zval **var)
 		} else {
 			Z_DELREF_PP(var);
 			if (Z_REFCOUNT_PP(var) == 0) {
-				efree(*var);
+				zval_ptr_dtor(*var);
 			}
 		}
 	}
