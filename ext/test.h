@@ -115,6 +115,7 @@
 #include "test/router/exception.zep.h"
 #include "test/router/route.zep.h"
 #include "test/scall.zep.h"
+#include "test/scalldynamic.zep.h"
 #include "test/scallexternal.zep.h"
 #include "test/scallparent.zep.h"
 #include "test/spectralnorm.zep.h"

@@ -98,7 +98,7 @@ class ThrowStatement extends StatementAbstract
             $codePrinter->output('ZEPHIR_MM_RESTORE();');
             $codePrinter->output('return;');
         } else {
-            $codePrinter->output('goto try_end_' . $compilationContext->insideTryCatch . ';');
+            $codePrinter->output('goto try_end_' . $compilationContext->currentTryCatch . ';');
             $codePrinter->outputBlankLine();
         }
 

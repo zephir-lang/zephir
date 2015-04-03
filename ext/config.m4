@@ -120,6 +120,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/router/exception.zep.c
 	test/router/route.zep.c
 	test/scall.zep.c
+	test/scalldynamic.zep.c
 	test/scallexternal.zep.c
 	test/scallparent.zep.c
 	test/spectralnorm.zep.c

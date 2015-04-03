@@ -868,11 +868,14 @@ class ClassMethod
          * @todo Refactoring this place, move to one - static-constant-access
          */
         switch ($dataType) {
+
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
+
                 switch ($parameter['default']['type']) {
+
                     case 'static-constant-access':
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
@@ -882,7 +885,6 @@ class ClassMethod
                         $expression = new Expression($parameter['default']);
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
-
 
                         if ($compiledExpression->getType() != 'int') {
                             throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
@@ -1433,6 +1435,7 @@ class ClassMethod
          */
         $compilationContext->insideCycle = 0;
         $compilationContext->insideTryCatch = 0;
+        $compilationContext->currentTryCatch = 0;
 
         if (is_object($parameters)) {
             /**
@@ -1462,12 +1465,14 @@ class ClassMethod
                 $symbolParam = null;
                 if (isset($parameter['data-type'])) {
                     switch ($parameter['data-type']) {
+
                         case 'object':
                         case 'callable':
                         case 'resource':
                         case 'variable':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             break;
+
                         default:
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
@@ -1510,6 +1515,7 @@ class ClassMethod
                      * Increase uses
                      */
                     $symbolParam->increaseUses();
+
                 } else {
                     if (isset($parameter['default'])) {
                         if (isset($parameter['data-type'])) {

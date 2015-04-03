@@ -44,9 +44,10 @@ class TryCatchStatement extends StatementAbstract
         $codePrinter = $compilationContext->codePrinter;
 
         $compilationContext->insideTryCatch++;
+        $currentTryCatch = ++$compilationContext->currentTryCatch;
 
         $codePrinter->outputBlankLine();
-        $codePrinter->output('/* try_start_' . $compilationContext->insideTryCatch . ': */');
+        $codePrinter->output('/* try_start_' . $currentTryCatch . ': */');
         $codePrinter->outputBlankLine();
 
         if (isset($this->_statement['statements'])) {
@@ -55,7 +56,7 @@ class TryCatchStatement extends StatementAbstract
         }
 
         $codePrinter->outputBlankLine();
-        $codePrinter->output('try_end_' . $compilationContext->insideTryCatch . ':');
+        $codePrinter->output('try_end_' . $currentTryCatch . ':');
 
         /**
          * If 'try' is the latest statement add a 'dummy' statement to avoid compilation errors

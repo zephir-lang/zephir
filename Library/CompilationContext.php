@@ -136,6 +136,13 @@ class CompilationContext
     public $currentBranch = 0;
 
     /**
+     * Global consecutive for try/catch blocks
+     *
+     * @var int
+     */
+    public $currentTryCatch = 0;
+
+    /**
      * Helps to create graphs of conditional/jump branches in a specific method
      *
      * @var BranchManager
