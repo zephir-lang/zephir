@@ -221,6 +221,7 @@ class CastOperator extends BaseOperator
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                        $symbolVariable->increaseUses();
                         $compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
@@ -233,16 +234,19 @@ class CastOperator extends BaseOperator
 
             case 'array':
                 switch ($resolved->getType()) {
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext, $expression);
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                        $symbolVariable->increaseUses();
                         $compilationContext->codePrinter->output('zephir_get_arrval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
