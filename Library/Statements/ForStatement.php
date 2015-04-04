@@ -57,6 +57,10 @@ class ForStatement extends StatementAbstract
         $functionCall = new FunctionCall();
         $parameters = $functionCall->getResolvedParamsAsExpr($exprRaw['parameters'], $compilationContext, $exprRaw);
 
+        if (count($parameters) != 2 && count($parameters) != 3) {
+            throw new CompilerException("Wrong number of parameters", $this->_statement['expr']);
+        }
+
         if ($parameters[0]->getType() != 'variable') {
             if (!$parameters[0]->isIntCompatibleType()) {
                 return false;
@@ -515,9 +519,9 @@ class ForStatement extends StatementAbstract
 
         if (isset($this->_statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . '{ zval **tmp; ');
-            $codePrinter->output("\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &tmp TSRMLS_CC);');
-            $codePrinter->output("\t" . $variable->getName() . ' = *tmp;');
+            $codePrinter->output("\t" . '{ zval **ZEPHIR_TMP_ITERATOR_PTR; ');
+            $codePrinter->output("\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);');
+            $codePrinter->output("\t" . 'ZEPHIR_CPY_WRT(' . $variable->getName() . ', (*ZEPHIR_TMP_ITERATOR_PTR));');
             $codePrinter->output("\t" . '}');
         }
 

@@ -1581,9 +1581,9 @@ PHP_METHOD(Test_Flow, testFor33) {
 	_0 = zephir_get_iterator(e TSRMLS_CC);
 	_0->funcs->rewind(_0 TSRMLS_CC);
 	for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
-		{ zval **tmp; 
-		_0->funcs->get_current_data(_0, &tmp TSRMLS_CC);
-		v = *tmp;
+		{ zval **ZEPHIR_TMP_ITERATOR_PTR; 
+		_0->funcs->get_current_data(_0, &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);
+		ZEPHIR_CPY_WRT(v, (*ZEPHIR_TMP_ITERATOR_PTR));
 		}
 		zephir_array_append(&result, v, PH_SEPARATE, "test/flow.zep", 710);
 	}
@@ -1611,9 +1611,9 @@ PHP_METHOD(Test_Flow, testFor34) {
 		_0 = zephir_get_iterator(e TSRMLS_CC);
 		_0->funcs->rewind(_0 TSRMLS_CC);
 		for (;_0->funcs->valid(_0 TSRMLS_CC) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0 TSRMLS_CC)) {
-			{ zval **tmp; 
-			_0->funcs->get_current_data(_0, &tmp TSRMLS_CC);
-			v = *tmp;
+			{ zval **ZEPHIR_TMP_ITERATOR_PTR; 
+			_0->funcs->get_current_data(_0, &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);
+			ZEPHIR_CPY_WRT(v, (*ZEPHIR_TMP_ITERATOR_PTR));
 			}
 			zephir_array_append(&result, v, PH_SEPARATE, "test/flow.zep", 720);
 		}
