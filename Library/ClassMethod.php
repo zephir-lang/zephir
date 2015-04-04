@@ -887,7 +887,7 @@ class ClassMethod
                         $compiledExpression = $expression->compile($compilationContext);
 
                         if ($compiledExpression->getType() != 'int') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(int)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(int)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -930,7 +930,7 @@ class ClassMethod
 
 
                         if ($compiledExpression->getType() != 'double') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(double)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(double)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -972,7 +972,7 @@ class ClassMethod
 
 
                         if ($compiledExpression->getType() != 'bool') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(bool)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(bool)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
@@ -1001,6 +1001,7 @@ class ClassMethod
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
+
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
@@ -1012,9 +1013,8 @@ class ClassMethod
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
 
-
                         if ($compiledExpression->getType() != 'string') {
-                            throw new CompilerException("Default parameter value type: " . $parameter['default']['type'] . " cannot be assigned to variable(string)", $parameter);
+                            throw new CompilerException("Default parameter value type: " . $compiledExpression->getType() . " cannot be assigned to variable(string)", $parameter);
                         }
 
                         $parameter['default']['type'] = $compiledExpression->getType();
