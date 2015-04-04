@@ -31,7 +31,7 @@ class ArrayObjectTest extends \PHPUnit_Framework_TestCase
         $t->test_1 = 1;
         $this->assertEquals(1, $t->test_1);
 
-        $t["test_2"] = 1;
-        $this->assertEquals(1, $t->test_2);
+        $t['test_2'] = 1;
+        $this->assertEquals(1, $t['test_2']);
     }
 }
