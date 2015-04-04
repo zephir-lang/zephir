@@ -10,7 +10,10 @@
             "name":"zephir",
             "options" :{
                 "github":"https://github.com/user/repo",
-                "analytics":null
+                "analytics":null,
+                "main_color": "#3E6496",
+                "link_color": "#3E6496",
+                "link_hover_color": "#5F9AE7"
             }
         }
     },
