@@ -63,6 +63,7 @@ class Documentation
         $this->logger  = $logger;
 
         $themeConfig = $config->get("theme", "api");
+        $themeConfig["options"]["version"] = $config->get('version');
 
         if (!$themeConfig) {
             throw new ConfigException("Theme configuration is not present");
