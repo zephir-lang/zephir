@@ -199,6 +199,14 @@ class FunctionDefinition
     {
         return $this->name;
     }
+    
+    /**
+     * Get the internal name used in generated C code
+     */
+    public function getInternalName()
+    {
+        return ($this->isGlobal() ? 'g_' : 'f_') . str_replace('\\', '_', $this->namespace) . '_' . $this->getName();
+    }
 
     public function isGlobal()
     {
