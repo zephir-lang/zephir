@@ -132,13 +132,13 @@ class CompilerFile
      * @param FunctionDefinition $func
      * @param array $statement
      */
-    public function addFunction(FunctionDefinition $func, $statement = null)
+    public function addFunction(Compiler $compiler, FunctionDefinition $func, $statement = null)
     {
-        $funcName = strtolower($func->getName());
+        $compiler->addFunction($func, $statement);
+        $funcName = strtolower($func->getInternalName());
         if (isset($this->_functionDefinitions[$funcName])) {
-            throw new CompilerException("Function '" . $func->getName() . "' was defined more than one time", $statement);
+            throw new CompilerException("Function '" . $func->getName() . "' was defined more than one time (in the same file)", $statement);
         }
-
         $this->_functionDefinitions[$funcName] = $func;
     }
 
@@ -203,25 +203,15 @@ class CompilerFile
         $classDefinition->compile($compilationContext);
     }
 
-    public function compileFunction(CompilationContext $compilationContext, $namespace, $topStatement)
+    public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
     {
         /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
         $bakClassDefinition = $compilationContext->classDefinition;
         $compilationContext->classDefinition = null;
-
-
-        $functionDefinition = new FunctionDefinition(
-            $namespace,
-            $topStatement['name'],
-            isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
-            isset($topStatement['statements']) ? new StatementsBlock($topStatement['statements']) : null,
-            isset($method['return-type']) ? $method['return-type'] : null,
-            $topStatement
-        );
         $compilationContext->currentMethod = $functionDefinition;
 
         $codePrinter = $compilationContext->codePrinter;
-        $codePrinter->output('PHP_FUNCTION(' . $namespace . '_' . $functionDefinition->getName() . ') {');
+        $codePrinter->output('PHP_FUNCTION(' . $functionDefinition->getInternalName() . ') {');
         $functionDefinition->compile($compilationContext);
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
@@ -594,12 +584,12 @@ class CompilerFile
                         $namespace,
                         $topStatement['name'],
                         isset($topStatement['parameters']) ? new ClassMethodParameters($topStatement['parameters']) : null,
-                        null,
+                        isset($topStatement['statements']) ? new StatementsBlock($topStatement['statements']) : null,
                         isset($topStatement['return-type']) ? $topStatement['return-type'] : null,
                         $topStatement
                     );
                     $functionDefinition->preCompile($compilationContext);
-                    $this->_functionDefinitions[] = $functionDefinition;
+                    $this->addFunction($compiler, $functionDefinition, $topStatement);
                     break;
             }
         }
@@ -612,7 +602,7 @@ class CompilerFile
         foreach ($this->_functionDefinitions as $funcDef) {
             if ($funcDef->getNamespace() == null) {
                 $funcDef->setGlobal(true);
-                $funcDef->setNamespace($namespace);
+                $funcDef->setNamespace($compiler->getConfig()->get('namespace'));
             }
         }
 
@@ -834,10 +824,8 @@ class CompilerFile
         }
 
         /* ensure functions are handled last */
-        foreach ($this->_ir as $topStatement) {
-            if ($topStatement['type'] == 'function') {
-                $this->compileFunction($compilationContext, $this->_namespace, $topStatement);
-            }
+        foreach ($this->_functionDefinitions as $funcDef) {
+            $this->compileFunction($compilationContext, $funcDef);
         }
 
         /* apply headers */

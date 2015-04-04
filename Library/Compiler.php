@@ -139,6 +139,22 @@ class Compiler
             }
         }
     }
+    
+    /**
+     * Adds a function to the function definitions
+     *
+     * @param FunctionDefinition $func
+     * @param array $statement
+     */
+    public function addFunction(FunctionDefinition $func, $statement = null)
+    {
+        $funcName = strtolower($func->getInternalName());
+        if (isset($this->functionDefinitions[$funcName])) {
+            throw new CompilerException("Function '" . $func->getCompleteName() . "' was defined more than one time", $statement);
+        }
+
+        $this->functionDefinitions[$funcName] = $func;
+    }
 
     /**
      * Pre-compiles classes creating a CompilerFile definition
@@ -159,7 +175,6 @@ class Compiler
             $this->files[$className]->preCompile($this);
 
             $this->definitions[$className] = $this->files[$className]->getClassDefinition();
-            $this->functionDefinitions[$className] = $this->files[$className]->getFunctionDefinitions();
         }
     }
 
@@ -739,37 +754,6 @@ class Compiler
             }
 
             self::$loadedPrototypes = true;
-        }
-
-        /**
-         * Round 1. pre-compile all files in memory
-         */
-        $this->recursivePreCompile(str_replace('\\', DIRECTORY_SEPARATOR, $namespace));
-        if (!count($this->files)) {
-            throw new Exception("Zephir files to compile weren't found");
-        }
-
-        /**
-         * Round 2. Check 'extends' and 'implements' dependencies
-         */
-        foreach ($this->files as $compileFile) {
-            $compileFile->checkDependencies($this);
-        }
-
-        /**
-         * Convert C-constants into PHP constants
-         */
-        $constantsSources = $this->config->get('constants-sources');
-        if (is_array($constantsSources)) {
-            $this->loadConstantsSources($constantsSources);
-        }
-
-        /**
-         * Set extension globals
-         */
-        $globals = $this->config->get('globals');
-        if (is_array($globals)) {
-            $this->setExtensionGlobals($globals);
         }
 
         /**
@@ -1761,54 +1745,52 @@ class Compiler
          * Create argument info
          */
 
-        foreach ($this->functionDefinitions as $file => $funcs) {
-            foreach ($funcs as $func) {
-                $funcName = $func->getNamespace() . '_' . $func->getName();
-                $argInfoName = 'arginfo_' . strtolower($func->getNamespace() . '_' . $func->getName());
+        foreach ($this->functionDefinitions as $func) {
+            $funcName = $func->getInternalName();
+            $argInfoName = 'arginfo_' . strtolower($funcName);
 
-                $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
-                $parameters = $func->getParameters();
-                if (count($parameters)) {
-                    $headerPrinter->output('ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' . $func->getNumberOfRequiredParameters() . ')');
-                    foreach ($parameters->getParameters() as $parameter) {
-                        switch ($parameter['data-type']) {
+            $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
+            $parameters = $func->getParameters();
+            if (count($parameters)) {
+                $headerPrinter->output('ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' . $func->getNumberOfRequiredParameters() . ')');
+                foreach ($parameters->getParameters() as $parameter) {
+                    switch ($parameter['data-type']) {
 
-                            case 'array':
-                                $headerPrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
-                                break;
+                        case 'array':
+                            $headerPrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            break;
 
-                            case 'variable':
-                                if (isset($parameter['cast'])) {
-                                    switch ($parameter['cast']['type']) {
-                                        case 'variable':
-                                            $value = $parameter['cast']['value'];
-                                            $headerPrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
-                                            break;
+                        case 'variable':
+                            if (isset($parameter['cast'])) {
+                                switch ($parameter['cast']['type']) {
+                                    case 'variable':
+                                        $value = $parameter['cast']['value'];
+                                        $headerPrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        break;
 
-                                        default:
-                                            throw new Exception('Unexpected exception');
-                                    }
-                                } else {
-                                    $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                                    default:
+                                        throw new Exception('Unexpected exception');
                                 }
-                                break;
-
-                            default:
+                            } else {
                                 $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
-                                break;
-                        }
-                    }
-                    $headerPrinter->output('ZEND_END_ARG_INFO()');
-                    $headerPrinter->outputBlankLine();
-                }
-                /** Generate FE's */
-                $paramData = (count($parameters) ? $argInfoName : 'NULL');
+                            }
+                            break;
 
-                if ($func->isGlobal()) {
-                    $entryPrinter->output('ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
-                } else {
-                    $entryPrinter->output('ZEND_NS_NAMED_FE("' . $func->getNamespace() . '", '. $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
+                        default:
+                            $headerPrinter->output("\t" . 'ZEND_ARG_INFO(0, ' . $parameter['name'] . ')');
+                            break;
+                    }
                 }
+                $headerPrinter->output('ZEND_END_ARG_INFO()');
+                $headerPrinter->outputBlankLine();
+            }
+            /** Generate FE's */
+            $paramData = (count($parameters) ? $argInfoName : 'NULL');
+
+            if ($func->isGlobal()) {
+                $entryPrinter->output('ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
+            } else {
+                $entryPrinter->output('ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", '. $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
             }
         }
         $entryPrinter->output('ZEND_FE_END');
