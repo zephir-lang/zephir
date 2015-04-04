@@ -1028,7 +1028,13 @@ class Compiler
      */
     public function clean(CommandInterface $command)
     {
-        system('cd ext && make clean 1> /dev/null');
+        $this->fileSystem->clean();
+        if (Utils::isWindows()){
+        	system('cd ext && nmake clean-all');
+        }
+        else{
+        	system('cd ext && sudo make clean 1> /dev/null');
+        }
     }
 
     /**
@@ -1039,8 +1045,14 @@ class Compiler
     public function fullClean(CommandInterface $command)
     {
         $this->fileSystem->clean();
-        system('cd ext && sudo make clean 1> /dev/null');
-        system('cd ext && sudo phpize --clean 1> /dev/null');
+        if (Utils::isWindows()){
+        	system('cd ext && nmake clean-all');
+        	system('cd ext && phpize --clean');
+        }
+        else{
+        	system('cd ext && sudo make clean 1> /dev/null');
+        	system('cd ext && sudo phpize --clean 1> /dev/null');
+        }
     }
 
     /**
