@@ -519,9 +519,10 @@ class ForStatement extends StatementAbstract
 
         if (isset($this->_statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . '{ zval **ZEPHIR_TMP_ITERATOR_PTR; ');
-            $codePrinter->output("\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);');
-            $codePrinter->output("\t" . 'ZEPHIR_CPY_WRT(' . $variable->getName() . ', (*ZEPHIR_TMP_ITERATOR_PTR));');
+            $codePrinter->output("\t" . '{');
+            $codePrinter->output("\t\t" . 'zval **ZEPHIR_TMP_ITERATOR_PTR;');
+            $codePrinter->output("\t\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);');
+            $codePrinter->output("\t\t" . 'ZEPHIR_CPY_WRT(' . $variable->getName() . ', (*ZEPHIR_TMP_ITERATOR_PTR));');
             $codePrinter->output("\t" . '}');
         }
 
