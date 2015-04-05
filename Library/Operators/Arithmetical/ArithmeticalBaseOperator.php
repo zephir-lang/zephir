@@ -85,6 +85,40 @@ class ArithmeticalBaseOperator extends BaseOperator
     }
 
     /**
+     * Returns proper dynamic types
+     *
+     * @param Variable $left
+     * @param Variable $right
+     * @return string
+     */
+    private function getDynamicTypes($left, $right)
+    {
+        if ($this->_operator == '/') {
+            return 'double';
+        }
+
+        switch ($left->getType()) {
+
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+
+                switch ($right->getType()) {
+
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                        return 'int';
+                }
+                break;
+        }
+
+        return 'double';
+    }
+
+    /**
      * Compiles the arithmetical operation
      *
      * @param array $expression
@@ -443,6 +477,8 @@ class ArithmeticalBaseOperator extends BaseOperator
                                             $variableRight->setIdle(true);
                                         }
 
+                                        $expected->setDynamicTypes($this->getDynamicTypes($variableLeft, $variableRight));
+
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
 
                                     default:
@@ -535,6 +571,8 @@ class ArithmeticalBaseOperator extends BaseOperator
                                             $variableRight->setIdle(true);
                                         }
 
+                                        $expected->setDynamicTypes($this->getDynamicTypes($variableLeft, $variableRight));
+
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
 
                                     default:
@@ -546,7 +584,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                 throw new CompilerException("Cannot operate 'variable' with '" . $right->getType() . "'", $expression);
                         }
                         break;
-                    
+
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }

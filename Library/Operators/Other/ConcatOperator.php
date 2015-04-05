@@ -146,6 +146,7 @@ class ConcatOperator extends BaseOperator
          */
         $optimized = $this->_getOptimizedConcat($expression, $compilationContext, $isFullString);
         if (is_array($optimized)) {
+
             if (!$isFullString) {
                 $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
             } else {

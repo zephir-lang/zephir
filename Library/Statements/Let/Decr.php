@@ -74,7 +74,7 @@ class Decr
                  * Variable is probably not initialized here
                  */
                 if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                    throw new CompilerException("Attempt to increment uninitialized variable", $statement);
+                    throw new CompilerException("Attempt to decrement uninitialized variable", $statement);
                 }
 
                 /**
