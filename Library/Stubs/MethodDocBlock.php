@@ -19,6 +19,7 @@
 
 namespace Zephir\Stubs;
 
+use Zephir\AliasManager;
 use Zephir\ClassMethod;
 
 /**
@@ -32,18 +33,28 @@ class MethodDocBlock extends DocBlock
 
     private $shortcutName = '';
 
-    public function __construct(ClassMethod $method, $indent = 4)
+    /**
+     * @var AliasManager
+     */
+    private $aliasManager;
+
+    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = 4)
     {
         parent::__construct($method->getDocBlock(), $indent);
+
+        $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
         $this->parseMethodParameters($method);
         $this->parseLines();
+
         if (!$this->return) {
             $this->parseMethodReturnType($method);
         }
+
         if ($this->parameters) {
             $this->appendParametersLines();
         }
+
         if ($this->return) {
             $this->appendReturnLine();
         }
@@ -53,6 +64,7 @@ class MethodDocBlock extends DocBlock
     {
         $return = array();
         $returnTypes = $method->getReturnTypes();
+
         if ($returnTypes) {
             foreach ($returnTypes as $type) {
                 if (isset($type['data-type'])) {
@@ -60,10 +72,18 @@ class MethodDocBlock extends DocBlock
                 }
             }
         }
+
         $returnClassTypes = $method->getReturnClassTypes();
         if ($returnClassTypes) {
+            foreach ($returnClassTypes as $key => $returnClassType) {
+                if ($this->aliasManager->isAlias($returnClassType)) {
+                    $returnClassTypes[$key] = "\\" . $this->aliasManager->getAlias($returnClassType);
+                }
+            }
+
             $return = array_merge($return, $returnClassTypes);
         }
+
         if ($return) {
             $this->return = array(join('|', $return), '');
         }
@@ -116,6 +136,7 @@ class MethodDocBlock extends DocBlock
     private function appendReturnLine()
     {
         list($type, $description) = $this->return;
+
         $this->lines[] = '@return ' . $type . ' ' . $description;
     }
 
@@ -125,6 +146,7 @@ class MethodDocBlock extends DocBlock
         if (!$parameters) {
             return;
         }
+
         foreach ($method->getParameters() as $parameter) {
             if (isset($parameter['data-type'])) {
                 if ($parameter['data-type'] == 'variable') {

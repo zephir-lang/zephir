@@ -200,11 +200,12 @@ EOF;
     protected function buildMethod(ClassMethod $method, $isInterface)
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
-        $docBlock = new MethodDocBlock($method, 4);
 
-        $parameters = array();
         $methodParameters = $method->getParameters();
         $aliasManager = $method->getClassDefinition()->getAliasManager();
+        $docBlock = new MethodDocBlock($method, $aliasManager);
+
+        $parameters = array();
 
         if ($methodParameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
