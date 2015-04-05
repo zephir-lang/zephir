@@ -1097,7 +1097,6 @@ class Variable
                             case 'assign':
 
                                 if ($itemVariable->getName() != $variable) {
-
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
 
