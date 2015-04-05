@@ -106,9 +106,14 @@ class Variable
     protected $defaultInitValue;
 
     /**
-     * Class type
+     * Class types
      */
     protected $classTypes = array();
+
+    /**
+     * Associated class
+     */
+    protected $associatedClass;
 
     /**
      * Initialization skips
@@ -469,6 +474,26 @@ class Variable
     }
 
     /**
+     * Sets the PHP class related to variable
+     *
+     * @param ClassDefinition $associatedClass
+     */
+    public function setAssociatedClass($associatedClass)
+    {
+        $this->associatedClass = $associatedClass;
+    }
+
+    /**
+     * Returns the class related to the variable
+     *
+     * @return ClassDefinition
+     */
+    public function getAssociatedClass()
+    {
+        return $this->associatedClass;
+    }
+
+    /**
      * Sets the current dynamic type in a polimorphic variable
      *
      * @param string|array $types
@@ -799,6 +824,7 @@ class Variable
             }
 
             $this->variantInits++;
+            $this->associatedClass = null;
         }
     }
 

@@ -300,7 +300,8 @@ PHP_METHOD(Test_Fcall, testArrayFill) {
 
 }
 
-PHP_FUNCTION(Test_zephir_global_method_test) {
+PHP_FUNCTION(g_test_zephir_global_method_test) {
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *str, *_0;
 
@@ -315,13 +316,14 @@ PHP_FUNCTION(Test_zephir_global_method_test) {
 		ZEPHIR_CALL_METHOD(NULL, _0, "__construct", NULL);
 		zephir_check_call_status();
 	}
-	ZEPHIR_RETURN_CALL_METHOD(_0, "teststrtokvarbyslash", NULL, str);
+	ZEPHIR_RETURN_CALL_METHOD(_0, "teststrtokvarbyslash", &_1, str);
 	zephir_check_call_status();
 	RETURN_MM();
 
 }
 
-PHP_FUNCTION(Test_zephir_namespaced_method_test) {
+PHP_FUNCTION(f_Test_zephir_namespaced_method_test) {
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *str, *_0, *_1;
 
@@ -338,7 +340,7 @@ PHP_FUNCTION(Test_zephir_namespaced_method_test) {
 	}
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 5);
-	ZEPHIR_RETURN_CALL_METHOD(_0, "testcall5", NULL, str, _1);
+	ZEPHIR_RETURN_CALL_METHOD(_0, "testcall5", &_2, str, _1);
 	zephir_check_call_status();
 	RETURN_MM();
 

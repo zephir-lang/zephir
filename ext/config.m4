@@ -46,6 +46,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/fibonnaci.zep.c
 	test/flow.zep.c
 	test/fortytwo.zep.c
+	test/functional.zep.c
 	test/globals.zep.c
 	test/instanceoff.zep.c
 	test/internalclasses.zep.c
@@ -62,9 +63,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/nativearray.zep.c
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
-	test/oo/deprecatedmethods.zep.c
-	test/oo/param.zep.c
 	test/oo/constantsinterface.zep.c
+	test/oo/deprecatedmethods.zep.c
 	test/oo/dynamicprop.zep.c
 	test/oo/extend/exception.zep.c
 	test/oo/extend/db/exception.zep.c
@@ -94,6 +94,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/oonativeimplements.zep.c
 	test/oo/oonoconstruct.zep.c
 	test/oo/ooparams.zep.c
+	test/oo/param.zep.c
 	test/oo/propertyaccess.zep.c
 	test/ooimpl/abeginning.zep.c
 	test/ooimpl/zbeginning.zep.c
@@ -143,7 +144,8 @@ if test "$PHP_TEST" = "yes"; then
 	test/4__closure.zep.c
 	test/5__closure.zep.c
 	test/6__closure.zep.c
-	test/7__closure.zep.c "
+	test/7__closure.zep.c
+	test/8__closure.zep.c "
 	PHP_NEW_EXTENSION(test, $test_sources, $ext_shared,, )
 	PHP_SUBST(TEST_SHARED_LIBADD)
 

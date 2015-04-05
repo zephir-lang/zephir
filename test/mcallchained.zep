@@ -49,5 +49,4 @@ class McallChained
 		let this->temp = this;
 		return this->temp->testMethod1()->testMethod2();
 	}
-
 }

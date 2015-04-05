@@ -100,5 +100,4 @@ class Pregmatch
 
         return matches;
     }
-
 }

@@ -41,6 +41,7 @@
 #include "test/fibonnaci.zep.h"
 #include "test/flow.zep.h"
 #include "test/fortytwo.zep.h"
+#include "test/functional.zep.h"
 #include "test/globals.zep.h"
 #include "test/instanceoff.zep.h"
 #include "test/internalclasses.zep.h"
@@ -57,9 +58,8 @@
 #include "test/nativearray.zep.h"
 #include "test/oo.zep.h"
 #include "test/oo/abstractclass.zep.h"
-#include "test/oo/deprecatedmethods.zep.h"
-#include "test/oo/param.zep.h"
 #include "test/oo/constantsinterface.zep.h"
+#include "test/oo/deprecatedmethods.zep.h"
 #include "test/oo/dynamicprop.zep.h"
 #include "test/oo/extend/exception.zep.h"
 #include "test/oo/extend/db/exception.zep.h"
@@ -89,6 +89,7 @@
 #include "test/oo/oonativeimplements.zep.h"
 #include "test/oo/oonoconstruct.zep.h"
 #include "test/oo/ooparams.zep.h"
+#include "test/oo/param.zep.h"
 #include "test/oo/propertyaccess.zep.h"
 #include "test/ooimpl/abeginning.zep.h"
 #include "test/ooimpl/zbeginning.zep.h"
@@ -139,5 +140,6 @@
 #include "test/5__closure.zep.h"
 #include "test/6__closure.zep.h"
 #include "test/7__closure.zep.h"
+#include "test/8__closure.zep.h"
 
 #endif

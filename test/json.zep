@@ -42,5 +42,4 @@ class Json
 		let arr = "[1,2,3]";
 		return json_decode(arr);
 	}
-
 }

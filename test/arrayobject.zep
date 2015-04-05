@@ -1,5 +1,6 @@
 
 namespace Test;
 
-class ArrayObject extends \ArrayObject {
+class ArrayObject extends \ArrayObject
+{
 }

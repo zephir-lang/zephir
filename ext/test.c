@@ -47,6 +47,7 @@ zend_class_entry *test_4__closure_ce;
 zend_class_entry *test_5__closure_ce;
 zend_class_entry *test_6__closure_ce;
 zend_class_entry *test_7__closure_ce;
+zend_class_entry *test_8__closure_ce;
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
@@ -81,6 +82,7 @@ zend_class_entry *test_fetchtest_ce;
 zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
 zend_class_entry *test_fortytwo_ce;
+zend_class_entry *test_functional_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_instanceoff_ce;
 zend_class_entry *test_internalclasses_ce;
@@ -229,6 +231,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Fibonnaci);
 	ZEPHIR_INIT(Test_Flow);
 	ZEPHIR_INIT(Test_FortyTwo);
+	ZEPHIR_INIT(Test_Functional);
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Instanceoff);
 	ZEPHIR_INIT(Test_InternalClasses);
@@ -317,6 +320,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(test_5__closure);
 	ZEPHIR_INIT(test_6__closure);
 	ZEPHIR_INIT(test_7__closure);
+	ZEPHIR_INIT(test_8__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);
@@ -421,20 +425,20 @@ static PHP_GSHUTDOWN_FUNCTION(test)
 
 }
 
-PHP_FUNCTION(Test_zephir_global_method_test);
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_zephir_global_method_test, 0, 0, 1)
+PHP_FUNCTION(g_test_zephir_global_method_test);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_g_test_zephir_global_method_test, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
-PHP_FUNCTION(Test_zephir_namespaced_method_test);
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_zephir_namespaced_method_test, 0, 0, 1)
+PHP_FUNCTION(f_Test_zephir_namespaced_method_test);
+ZEND_BEGIN_ARG_INFO_EX(arginfo_f_test_zephir_namespaced_method_test, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
 ZEND_END_ARG_INFO()
 
 
 zend_function_entry php_test_functions[] = {
-ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(Test_zephir_global_method_test), arginfo_test_zephir_global_method_test)
-ZEND_NS_NAMED_FE("Test", zephir_namespaced_method_test, ZEND_FN(Test_zephir_namespaced_method_test), arginfo_test_zephir_namespaced_method_test)
+ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(g_test_zephir_global_method_test), arginfo_g_test_zephir_global_method_test)
+ZEND_NS_NAMED_FE("Test", zephir_namespaced_method_test, ZEND_FN(f_Test_zephir_namespaced_method_test), arginfo_f_test_zephir_namespaced_method_test)
 ZEND_FE_END
 
 };

@@ -17,5 +17,4 @@ class Factorial
 	{
 		return num === 0 || num === 1 ? 1 : num * this->intRecursiveFactorial(num - 1);
 	}
-
 }

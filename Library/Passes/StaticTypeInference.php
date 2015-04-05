@@ -594,6 +594,7 @@ class StaticTypeInference
                 case 'continue':
                 case 'unset':
                 case 'cblock':
+                case 'comment':
                 case 'empty': // empty statement != empty operator
                     break;
 

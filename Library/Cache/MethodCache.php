@@ -22,6 +22,7 @@ namespace Zephir\Cache;
 use Zephir\Call;
 use Zephir\ClassMethod;
 use Zephir\Variable;
+use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 
 /**
@@ -57,6 +58,31 @@ class MethodCache
     public function __construct($gatherer)
     {
         $this->gatherer = $gatherer;
+    }
+
+    /**
+     * Checks if the class is suitable for caching
+     *
+     * @param ClassDefinition $classDefinition
+     * @return boolean
+     */
+    private function isClassCacheable($classDefinition)
+    {
+        if ($classDefinition instanceof ClassDefinition) {
+            return true;
+        }
+        if ($classDefinition instanceof \ReflectionClass) {
+            if ($classDefinition->isInternal() && $classDefinition->isInstantiable()) {
+                $extension = $classDefinition->getExtension();
+                switch ($extension->getName()) {
+                    case 'Reflection':
+                    case 'Core':
+                    case 'SPL':
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -107,6 +133,7 @@ class MethodCache
             }
         }
 
+        $associatedClass = null;
         if (!$compilationContext->insideCycle) {
             if (!($method instanceof \ReflectionMethod)) {
                 if (!$method->isPrivate() && !$method->isFinal() && !$method->getClassDefinition()->isFinal()) {
@@ -114,7 +141,13 @@ class MethodCache
                     if (is_object($gatherer)) {
                         $number = $gatherer->getNumberOfMethodCalls($method->getClassDefinition()->getCompleteName(), $method->getName());
                         if ($number <= 1) {
-                            return 'NULL';
+                            $associatedClass = $caller->getAssociatedClass();
+                            if (!is_object($associatedClass)) {
+                                return 'NULL';
+                            }
+                            if (!$this->isClassCacheable($associatedClass)) {
+                                return 'NULL';
+                            }
                         }
                     } else {
                         return 'NULL';
@@ -125,7 +158,7 @@ class MethodCache
             }
         }
 
-        if (!($method instanceof \ReflectionMethod) && ($method->isPrivate() || $method->isFinal() || $method->getClassDefinition()->isFinal())) {
+        if (!($method instanceof \ReflectionMethod) && ($method->isPrivate() || $method->isFinal() || $method->getClassDefinition()->isFinal() || $associatedClass)) {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);

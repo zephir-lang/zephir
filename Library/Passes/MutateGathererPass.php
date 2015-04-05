@@ -406,6 +406,7 @@ class MutateGathererPass
                 case 'continue':
                 case 'empty':
                 case 'cblock':
+                case 'comment':
                     break;
 
                 default:

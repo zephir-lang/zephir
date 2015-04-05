@@ -47,7 +47,7 @@ class Quantum
 		for n in range(0, 20000) {
 
 			for i in range(1, Quantum::MAX - 1) {
-				let psr[i][1] =psr[i][0] - paramater[2] * (psi[i + 1][0] + psi[i - 1][0]
+				let psr[i][1] = psr[i][0] - paramater[2] * (psi[i + 1][0] + psi[i - 1][0]
 								- tmp[0] * psi[i][0]) / (paramater[0] * paramater[0]) + paramater[2] * v[i][0] * psi[i][0],
 
 					p2[i] = psr[i][0]*psr[i][1] + psi[i][0]*psi[i][0];
@@ -87,5 +87,4 @@ class Quantum
 	{
 		return "I love Phalcon and Zephir";
 	}
-
 }

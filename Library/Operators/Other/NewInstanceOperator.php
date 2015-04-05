@@ -110,6 +110,7 @@ class NewInstanceOperator extends BaseOperator
             if ($classDefinition) {
                 $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ');');
                 $symbolVariable->setClassTypes($className);
+                $symbolVariable->setAssociatedClass($classDefinition);
             } else {
                 /**
                  * Classes outside the extension
@@ -158,6 +159,8 @@ class NewInstanceOperator extends BaseOperator
                             $classNameToFetch = 'SL("' . Utils::escapeClassName($className) . '")';
                             $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                             $classEntry = $zendClassEntry->getName();
+                        } else {
+                            $symbolVariable->setAssociatedClass($reflectionClass);
                         }
                     }
 
