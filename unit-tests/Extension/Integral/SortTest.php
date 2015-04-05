@@ -23,8 +23,8 @@ class SortTest extends \PHPUnit_Framework_TestCase
 {
     public function testSort()
     {
-    	$data = $original = range(1, 50);
-		shuffle($data);
+        $data = $original = range(1, 50);
+        shuffle($data);
 
         $t = new \Test\Sort();
         $this->assertTrue($t->quick($data) === $original);
