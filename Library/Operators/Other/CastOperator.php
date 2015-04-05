@@ -203,12 +203,15 @@ class CastOperator extends BaseOperator
 
             case 'char':
                 switch ($resolved->getType()) {
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
                         $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
+
                         return new CompiledExpression('variable', $tempVariable->getName(), $expression);
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }
@@ -216,6 +219,7 @@ class CastOperator extends BaseOperator
 
             case 'string':
                 switch ($resolved->getType()) {
+
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
@@ -227,6 +231,7 @@ class CastOperator extends BaseOperator
                             $symbolVariable->setIdle(true);
                         }
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+
                     default:
                         throw new CompilerException("Cannot cast: " . $resolved->getType() . " to " . $expression['left'], $expression);
                 }

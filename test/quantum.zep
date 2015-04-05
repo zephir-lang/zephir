@@ -10,11 +10,12 @@ class Quantum
 
 	/*
 	 */
-	public function Harmos(double x)
+	public function harmos(double x)
 	{
 		int	 i, j, n;
 		var  psr, psi, p2, v, paramater, fp;
 		double dt, dx, k0, item_psr, item_psi;
+		var tmp;
 
 		let dx = 0.02,
 			k0 = 3.0 * Quantum::PI,
@@ -42,7 +43,6 @@ class Quantum
 				i++;
 		}
 
-		var tmp;
 		let i = 1, j = 1, tmp = [2.0];
 		for n in range(0, 20000) {
 
@@ -77,14 +77,8 @@ class Quantum
 					psr[j][0] = psr[j][1];
 				let j++;
 			}
-
 		}
 
 		return true;
-	}
-
-	public function testString()
-	{
-		return "I love Phalcon and Zephir";
 	}
 }

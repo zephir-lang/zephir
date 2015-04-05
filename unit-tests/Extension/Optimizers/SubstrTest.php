@@ -25,22 +25,21 @@ class SubstrTest extends \PHPUnit_Framework_TestCase
     public function testTwoArguments1()
     {
         $t = new Substr();
-        
+
         $strings_array = array(null, '', 12345, 'abcdef', '123abc', '_123abc');
         $results1 = array(false, false, '2345', 'bcdef', '23abc', '123abc');
         $results2 = array(false, false, '12345', 'abcdef', '123abc', '_123abc');
         $results3 = array(false, false, '45', 'ef', 'bc', 'bc');
-        
+
         $c = 0;
         foreach ($strings_array as $str) {
-            echo $str."\n";
             $this->assertSame($t->testTwoArguments($str, 1), $results1[$c]);
             $this->assertSame($t->testTwoArguments($str, 0), $results2[$c]);
             $this->assertSame($t->testTwoArguments($str, -2), $results3[$c]);
             ++$c;
         }
     }
-    
+
     public function testThreeArguments1()
     {
         $t = new Substr();

@@ -4,7 +4,7 @@ namespace Test;
 /**
  * Test\Fannkuch
  *
- * Fannkuch Refux in Zephir
+ * Fannkuch Redux in Zephir
  *
  * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
  */
@@ -89,5 +89,4 @@ class Fannkuch
 			let permCount++;
 		}
 	}
-
 }

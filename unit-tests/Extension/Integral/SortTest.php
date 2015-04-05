@@ -17,13 +17,16 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Extension\Integral;
 
-class FannkuchTest extends \PHPUnit_Framework_TestCase
+class SortTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFannkuch()
+    public function testSort()
     {
-        $t = new \Test\Fannkuch();
-        $this->assertTrue($t->process(5) === array(11, 5, 7));
+    	$data = $original = range(1, 50);
+		shuffle($data);
+
+        $t = new \Test\Sort();
+        $this->assertTrue($t->quick($data) === $original);
     }
 }

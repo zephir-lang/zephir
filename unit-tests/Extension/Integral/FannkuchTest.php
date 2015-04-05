@@ -17,18 +17,13 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Extension\Integral;
 
-class RegexDNATest extends \PHPUnit_Framework_TestCase
+class FannkuchTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProcess()
+    public function testFannkuch()
     {
-        $t = new \Test\RegexDNA();
-
-        ob_start();
-        $t->process(__DIR__ . "/regexdna-input.txt");
-        $content = ob_get_clean();
-
-        $this->assertTrue($content == file_get_contents(__DIR__ . "/regexdna-output.txt"));
+        $t = new \Test\Fannkuch();
+        $this->assertTrue($t->process(5) === array(11, 5, 7));
     }
 }

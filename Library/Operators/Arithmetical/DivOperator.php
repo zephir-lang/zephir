@@ -28,7 +28,7 @@ use Zephir\CompiledExpression;
 /**
  * DivOperator
  *
- * Generates an arirthmetical operation according to the operands
+ * Generates an arithmetical operation according to the operands
  */
 class DivOperator extends ArithmeticalBaseOperator
 {
