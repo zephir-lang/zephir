@@ -141,7 +141,7 @@ PHP_METHOD(Test_Fasta, main) {
 	ZEPHIR_CONCAT_SSSSSSS(_0, "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG", "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA", "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT", "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA", "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG", "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC", "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA");
 	ZEPHIR_CPY_WRT(alu, _0);
 	ZEPHIR_INIT_VAR(iub);
-	zephir_create_array(iub, 15, 0);
+	zephir_create_array(iub, 15, 0 TSRMLS_CC);
 	add_assoc_double_ex(iub, SS("a"), 0.27);
 	add_assoc_double_ex(iub, SS("c"), 0.12);
 	add_assoc_double_ex(iub, SS("g"), 0.12);
@@ -158,7 +158,7 @@ PHP_METHOD(Test_Fasta, main) {
 	add_assoc_double_ex(iub, SS("W"), 0.02);
 	add_assoc_double_ex(iub, SS("Y"), 0.02);
 	ZEPHIR_INIT_VAR(homoSap);
-	zephir_create_array(homoSap, 4, 0);
+	zephir_create_array(homoSap, 4, 0 TSRMLS_CC);
 	add_assoc_double_ex(homoSap, SS("a"), 0.3029549426680);
 	add_assoc_double_ex(homoSap, SS("c"), 0.1979883004921);
 	add_assoc_double_ex(homoSap, SS("g"), 0.1975473066391);

@@ -82,7 +82,7 @@ PHP_METHOD(Test_Sort, quick) {
 	ZEPHIR_CALL_METHOD(&_6, this_ptr, "quick", NULL, left);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_7);
-	array_init(_7);
+	zephir_create_array(_7, 1, 0 TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_5);
 	ZVAL_LONG(_5, pivot);
 	zephir_array_fast_append(_7, _5);

@@ -50,7 +50,7 @@ PHP_METHOD(Test_RegexDNA, process) {
 
 
 	ZEPHIR_INIT_VAR(variants);
-	zephir_create_array(variants, 9, 0);
+	zephir_create_array(variants, 9, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "agggtaaa|tttaccct", 1);
 	zephir_array_fast_append(variants, _0);

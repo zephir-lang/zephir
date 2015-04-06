@@ -176,7 +176,7 @@ PHP_METHOD(Test_IssetTest, __construct) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init(_0);
+	zephir_create_array(_0, 1, 0 TSRMLS_CC);
 	add_assoc_stringl_ex(_0, SS("a"), SL("true"), 1);
 	zephir_update_property_this(this_ptr, SL("s"), _0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

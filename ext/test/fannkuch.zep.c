@@ -144,7 +144,7 @@ PHP_METHOD(Test_Fannkuch, process) {
 		}
 		while (1) {
 			if (r == n) {
-				zephir_create_array(return_value, 3, 0);
+				zephir_create_array(return_value, 3, 0 TSRMLS_CC);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, checksum);
 				zephir_array_fast_append(return_value, _13);

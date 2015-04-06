@@ -214,10 +214,10 @@ class NativeArray
          */
         $arrayLength = count($expression['left']);
         if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
-            $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0);');
+            $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0 TSRMLS_CC);');
         } else {
-            if ($arrayLength > 1) {
-                $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . $arrayLength . ', 0);');
+            if ($arrayLength > 0) {
+                $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . $arrayLength . ', 0 TSRMLS_CC);');
             } else {
                 $codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
             }
