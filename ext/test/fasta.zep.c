@@ -78,11 +78,11 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZEPHIR_INIT_VAR(l);
 	ZEPHIR_SINIT_NVAR(_6);
 	ZVAL_DOUBLE(&_6, zephir_safe_div_zval_long(n, 60 TSRMLS_CC));
-	zephir_floor(l, &_6);
+	zephir_floor(l, &_6 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(k);
 	ZEPHIR_SINIT_NVAR(_7);
 	ZVAL_DOUBLE(&_7, zephir_safe_div_zval_long(l, i TSRMLS_CC));
-	zephir_floor(k, &_7);
+	zephir_floor(k, &_7 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(block);
 	zephir_fast_join_str(block, SL("\n"), lines TSRMLS_CC);
 	while (1) {
@@ -101,13 +101,13 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 		if (!(ZEPHIR_LT(j, k))) {
 			break;
 		}
-		zephir_array_fetch(&_9, lines, j, PH_NOISY | PH_READONLY, "test/fasta.zep", 39 TSRMLS_CC);
+		zephir_array_fetch(&_9, lines, j, PH_NOISY | PH_READONLY, "test/fasta.zep", 38 TSRMLS_CC);
 		zend_print_zval(_9, 0);
 		ZEPHIR_SEPARATE(j);
 		zephir_increment(j);
 	}
 	if (zephir_safe_mod_zval_long(n, 60 TSRMLS_CC) > 0) {
-		zephir_array_fetch(&_9, lines, k, PH_NOISY | PH_READONLY, "test/fasta.zep", 44 TSRMLS_CC);
+		zephir_array_fetch(&_9, lines, k, PH_NOISY | PH_READONLY, "test/fasta.zep", 43 TSRMLS_CC);
 		ZEPHIR_SINIT_NVAR(_6);
 		ZVAL_LONG(&_6, 0);
 		ZEPHIR_SINIT_NVAR(_7);
@@ -172,36 +172,3 @@ PHP_METHOD(Test_Fasta, main) {
 
 }
 
-/*var rand=(function() {
-      var Last = 42;
-      return function() { return (Last=(Last * 3877 + 29573) % 139968) / 139968 }
-   })();
-
-   function printLineMaker(table) {
-     var h = 0, k = [], v = [], c, l=0;
-     for (c in table) { l = v[h] = table[k[h++] = c]+=l; }
-     return function(x) {
-       var line = "";
-       next: for (var i=0; i<x; ++i) {
-         var r = rand(), j=0;
-         for (;;++j) {
-           if (r < v[j]) {
-             line += k[j];
-             continue next;
-           }
-         }
-       }
-       print(line);
-     }
-   }
-
-   function fastaRandom(n, table) {
-     var printLine=printLineMaker(table);
-     while ((n -= 60) > -1) { printLine(60) }
-     if (n<0 && n>-60) { printLine(60 + n) }
-   }
-
-   (function main(n) {
-
-
-   }).call(this, 1*arguments[0]*1)*/
