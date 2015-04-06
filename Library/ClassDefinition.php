@@ -1406,6 +1406,16 @@ class ClassDefinition
                 $classEntry = 'php_pdo_get_exception()';
                 break;
 
+            case 'datetime':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_date_ce()';
+                break;
+
+            case 'datetimezone':
+                $compilationContext->headersManager->add('ext/date/php_date');
+                $classEntry = 'php_date_get_timezone_ce()';
+                break;
+
             // Reflection
             /*case 'reflector':
                 $compilationContext->headersManager->add('ext/reflection/php_reflection');
