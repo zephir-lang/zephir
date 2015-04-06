@@ -32,12 +32,22 @@ int zephir_hash_init(HashTable *ht, uint nSize, hash_func_t pHashFunction, dtor_
 	if (nSize >= 0x80000000) {
 		ht->nTableSize = 0x80000000;
 	} else {
-		if (nSize > 3) {
+#if PHP_VERSION_ID < 50400
+		{
+			uint i = 3;
+			while ((1U << i) < nSize) {
+				i++;
+			}
+			ht->nTableSize = 1 << i;
+		}
+#else
+		if (nSize > 4) {
 			ht->nTableSize = nSize + (nSize >> 2);
 		} else {
 			ht->nTableSize = 4;
 		}
 	}
+#endif
 
 #if ZEND_DEBUG
 	ht->inconsistent = 0;
