@@ -46,8 +46,8 @@ int zephir_hash_init(HashTable *ht, uint nSize, hash_func_t pHashFunction, dtor_
 		} else {
 			ht->nTableSize = 4;
 		}
-	}
 #endif
+	}
 
 #if ZEND_DEBUG
 	ht->inconsistent = 0;
