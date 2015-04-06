@@ -58,6 +58,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/logical.zep.c
 	test/mcall.zep.c
 	test/mcallchained.zep.c
+	test/mcalldynamic.zep.c
 	test/methodabstract.zep.c
 	test/methodargs.zep.c
 	test/methodinterface.zep.c
