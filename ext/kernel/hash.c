@@ -35,7 +35,7 @@ int zephir_hash_init(HashTable *ht, uint nSize, hash_func_t pHashFunction, dtor_
 		if (nSize > 3) {
 			ht->nTableSize = nSize + (nSize >> 2);
 		} else {
-			ht->nTableSize = 3;
+			ht->nTableSize = 4;
 		}
 	}
 
