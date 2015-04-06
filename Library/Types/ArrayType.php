@@ -41,6 +41,7 @@ class ArrayType extends AbstractType
         'rev' => 'array_reverse',
         'diff' => 'array_diff',
         'flip' => 'array_flip',
+        'fill' => 'array_fill',
         'walk' => 'array_walk',
         'haskey' => 'array_key_exists',
         'keys' => 'array_keys',

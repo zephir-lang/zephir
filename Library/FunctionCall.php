@@ -101,6 +101,7 @@ class FunctionCall extends Call
             case 'min':
             case 'max':
             case 'array_fill':
+            case 'array_pad':
             case 'call_user_func':
             case 'call_user_func_array':
                 return false;

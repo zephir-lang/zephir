@@ -41,6 +41,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/extendedinterface.zep.c
 	test/factorial.zep.c
 	test/fannkuch.zep.c
+	test/fasta.zep.c
 	test/fcall.zep.c
 	test/fetchtest.zep.c
 	test/fibonnaci.zep.c
@@ -100,6 +101,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/ooimpl/zbeginning.zep.c
 	test/operator.zep.c
 	test/optimizers/arraymerge.zep.c
+	test/optimizers/createarray.zep.c
 	test/optimizers/substr.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
@@ -124,13 +126,13 @@ if test "$PHP_TEST" = "yes"; then
 	test/scalldynamic.zep.c
 	test/scallexternal.zep.c
 	test/scallparent.zep.c
+	test/sort.zep.c
 	test/spectralnorm.zep.c
 	test/spropertyaccess.zep.c
 	test/statements.zep.c
 	test/strings.zep.c
 	test/ternary.zep.c
 	test/testinterface.zep.c
-	test/trie.zep.c
 	test/trytest.zep.c
 	test/typeoff.zep.c
 	test/unknownclass.zep.c

@@ -126,7 +126,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_INIT_VAR(_0);
 		object_init_ex(_0, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_1);
-		array_init_size(_1, 2);
+		array_init(_1);
 		add_assoc_long_ex(_1, SS("controller"), 1);
 		ZEPHIR_INIT_VAR(_2);
 		ZVAL_STRING(_2, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", ZEPHIR_TEMP_PARAM_COPY);
@@ -137,7 +137,7 @@ PHP_METHOD(Test_Router, __construct) {
 		ZEPHIR_INIT_NVAR(_2);
 		object_init_ex(_2, test_router_route_ce);
 		ZEPHIR_INIT_VAR(_4);
-		array_init_size(_4, 5);
+		zephir_create_array(_4, 3, 0);
 		add_assoc_long_ex(_4, SS("controller"), 1);
 		add_assoc_long_ex(_4, SS("action"), 2);
 		add_assoc_long_ex(_4, SS("params"), 3);

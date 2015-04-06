@@ -293,7 +293,7 @@ PHP_METHOD(Test_Fcall, testArrayFill) {
 	ZEPHIR_CALL_FUNCTION(&v2, "array_fill", &_3, _0, _1, _2);
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
-	array_init_size(return_value, 3);
+	zephir_create_array(return_value, 2, 0);
 	zephir_array_fast_append(return_value, v1);
 	zephir_array_fast_append(return_value, v2);
 	RETURN_MM();

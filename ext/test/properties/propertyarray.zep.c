@@ -42,7 +42,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 7);
+	zephir_create_array(_0, 4, 0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
@@ -60,7 +60,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 	array_init(_1);
 	zephir_update_property_this(this_ptr, SL("someEmptyArray"), _1 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_2);
-	array_init_size(_2, 2);
+	array_init(_2);
 	ZEPHIR_INIT_VAR(_3);
 	ZVAL_LONG(_3, 1);
 	zephir_array_fast_append(_2, _3);

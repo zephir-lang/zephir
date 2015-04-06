@@ -294,6 +294,7 @@ class Assign
 	{
 		var v = "abc";
 		var arr = [];
+
 		let arr = [
 			"a": ["b_key": "b_val", "b": []]
 		];

@@ -59,7 +59,7 @@ PHP_METHOD(Test_Oo_ExtendPdoClass, __construct) {
 
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 2);
+	array_init(_0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "Test\\PdoStatement", 1);
 	zephir_array_fast_append(_0, _1);

@@ -42,6 +42,7 @@ use Zephir\Operators\Bitwise\BitwiseXorOperator;
 use Zephir\Operators\Bitwise\ShiftLeftOperator;
 use Zephir\Operators\Bitwise\ShiftRightOperator;
 use Zephir\Operators\Other\NewInstanceOperator;
+use Zephir\Operators\Other\NewInstanceTypeOperator;
 use Zephir\Operators\Other\CloneOperator;
 use Zephir\Operators\Other\ConcatOperator;
 use Zephir\Operators\Other\EmptyOperator;
@@ -415,6 +416,12 @@ class Expression
 
             case 'new':
                 $expr = new NewInstanceOperator();
+                $expr->setReadOnly($this->isReadOnly());
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
+
+            case 'new-type':
+                $expr = new NewInstanceTypeOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);

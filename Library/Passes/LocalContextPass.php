@@ -222,6 +222,7 @@ class LocalContextPass
                         case 'type-hint':
                         case 'minus':
                         case 'new':
+                        case 'new-type':
                         case 'closure':
                         case 'closure-arrow':
                         case 'reference':
@@ -406,6 +407,7 @@ class LocalContextPass
                 break;
 
             case 'new':
+            case 'new-type':
                 $this->passNew($expression);
                 break;
 

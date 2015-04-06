@@ -133,6 +133,15 @@ class CallGathererPass
         }
     }
 
+    public function passNewType(array $expression)
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
+        }
+    }
+
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
@@ -218,6 +227,10 @@ class CallGathererPass
 
             case 'new':
                 $this->passNew($expression);
+                break;
+
+            case 'new-type':
+                $this->passNewType($expression);
                 break;
 
             case 'property-access':

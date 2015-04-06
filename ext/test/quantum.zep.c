@@ -32,13 +32,13 @@ ZEPHIR_INIT_CLASS(Test_Quantum) {
 
 /*
  */
-PHP_METHOD(Test_Quantum, Harmos) {
+PHP_METHOD(Test_Quantum, harmos) {
 
 	zend_bool _14, _17, _33, _36;
 	zval *_11 = NULL, *_12 = NULL, *_13 = NULL;
 	zephir_nts_static zephir_fcall_cache_entry *_3 = NULL, *_5 = NULL, *_7 = NULL, *_9 = NULL, *_37 = NULL;
 	int i, j, n, ZEPHIR_LAST_CALL_STATUS, _15, _16, _18, _19, _34, _35;
-	zval *x_param = NULL, *psr, *psi, *p2, *v, *paramater, *fp = NULL, *_0 = NULL, _1 = zval_used_for_init, _2 = zval_used_for_init, *_4 = NULL, *_6 = NULL, *_8 = NULL, *_10 = NULL, *tmp, *_20, *_21, *_22, *_23, *_24, *_25, *_26, *_27, _28 = zval_used_for_init, *_29, *_30, *_31, *_32;
+	zval *x_param = NULL, *psr, *psi, *p2, *v, *paramater, *fp = NULL, *tmp, *_0 = NULL, _1 = zval_used_for_init, _2 = zval_used_for_init, *_4 = NULL, *_6 = NULL, *_8 = NULL, *_10 = NULL, *_20, *_21, *_22, *_23, *_24, *_25, *_26, *_27, _28 = zval_used_for_init, *_29, *_30, *_31, *_32;
 	double x, dt, dx, k0, item_psr, item_psi;
 
 	ZEPHIR_MM_GROW();
@@ -51,7 +51,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 	k0 = (3.0 * 3.14159265358979323846);
 	dt = zephir_safe_div_double_long((dx * dx), 4.0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(paramater);
-	array_init_size(paramater, 7);
+	zephir_create_array(paramater, 4, 0);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_DOUBLE(_0, dx);
 	zephir_array_fast_append(paramater, _0);
@@ -109,30 +109,30 @@ PHP_METHOD(Test_Quantum, Harmos) {
 		div_function(_10, _4, _6 TSRMLS_CC);
 		item_psr = zephir_get_numberval(_10);
 		ZEPHIR_INIT_NVAR(_11);
-		array_init_size(_11, 2);
+		array_init(_11);
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, item_psr);
 		zephir_array_fast_append(_11, _0);
-		zephir_array_update_long(&psr, i, &_11, PH_COPY | PH_SEPARATE, "test/quantum.zep", 38);
+		zephir_array_update_long(&psr, i, &_11, PH_COPY | PH_SEPARATE, "test/quantum.zep", 39);
 		ZEPHIR_INIT_NVAR(_12);
-		array_init_size(_12, 2);
+		array_init(_12);
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, item_psi);
 		zephir_array_fast_append(_12, _0);
-		zephir_array_update_long(&psi, i, &_12, PH_COPY | PH_SEPARATE, "test/quantum.zep", 39);
+		zephir_array_update_long(&psi, i, &_12, PH_COPY | PH_SEPARATE, "test/quantum.zep", 40);
 		ZEPHIR_INIT_NVAR(_13);
-		array_init_size(_13, 2);
+		array_init(_13);
 		ZEPHIR_INIT_NVAR(_0);
 		ZVAL_DOUBLE(_0, (double) ((double) (5.0 * x) * x));
 		zephir_array_fast_append(_13, _0);
-		zephir_array_update_long(&v, i, &_13, PH_COPY | PH_SEPARATE, "test/quantum.zep", 40);
+		zephir_array_update_long(&v, i, &_13, PH_COPY | PH_SEPARATE, "test/quantum.zep", 41);
 		x = (x + dx);
 		i++;
 	}
 	i = 1;
 	j = 1;
 	ZEPHIR_INIT_VAR(tmp);
-	array_init_size(tmp, 2);
+	array_init(tmp);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_DOUBLE(_0, 2.0);
 	zephir_array_fast_append(tmp, _0);
@@ -281,7 +281,7 @@ PHP_METHOD(Test_Quantum, Harmos) {
 			}
 			_36 = n == 0;
 			if (!(_36)) {
-				_36 = (n % 2000) == 0;
+				_36 = zephir_safe_mod_long_long(n, 2000 TSRMLS_CC) == 0;
 			}
 			if (_36) {
 				i = 1;
@@ -321,13 +321,6 @@ PHP_METHOD(Test_Quantum, Harmos) {
 		}
 	}
 	RETURN_MM_BOOL(1);
-
-}
-
-PHP_METHOD(Test_Quantum, testString) {
-
-
-	RETURN_STRING("I love Phalcon and Zephir", 1);
 
 }
 

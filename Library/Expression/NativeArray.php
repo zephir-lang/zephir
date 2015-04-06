@@ -206,15 +206,21 @@ class NativeArray
             return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
         }
 
+        $compilationContext->headersManager->add('kernel/array');
+
         /**
          * This calculates a prime number bigger than the current array size to possibly
          * reduce hash collisions when adding new members to the array
          */
-        $arrayLength = intval(count($expression['left']) * 1.25);
-        if (!function_exists('gmp_nextprime')) {
-            $codePrinter->output('array_init_size(' . $symbolVariable->getName() . ', ' . ($arrayLength + 1) . ');');
+        $arrayLength = count($expression['left']);
+        if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
+            $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0);');
         } else {
-            $codePrinter->output('array_init_size(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength)) . ');');
+            if ($arrayLength > 1) {
+                $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . $arrayLength . ', 0);');
+            } else {
+                $codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
+            }
         }
 
         foreach ($expression['left'] as $item) {
@@ -255,12 +261,10 @@ class NativeArray
                                 break;
 
                             case 'null':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &ZEPHIR_GLOBAL(global_null), PH_COPY | PH_SEPARATE);');
                                 break;
 
                             case 'array':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                 $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
                                 if ($valueVariable->isTemporal()) {
@@ -269,7 +273,6 @@ class NativeArray
                                 break;
 
                             case 'variable':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                 $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
                                 if ($valueVariable->isTemporal()) {
@@ -298,7 +301,6 @@ class NativeArray
                                 break;
 
                             case 'bool':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getBooleanCode() . ');');
                                 if ($resolvedExpr->getCode() == 'true') {
                                     $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &ZEPHIR_GLOBAL(global_true), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
@@ -312,7 +314,6 @@ class NativeArray
                                 break;
 
                             case 'null':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &ZEPHIR_GLOBAL(global_null), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
                                 break;
 
@@ -321,7 +322,6 @@ class NativeArray
                                 break;
 
                             case 'array':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                 $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
                                 if ($valueVariable->isTemporal()) {
@@ -330,7 +330,6 @@ class NativeArray
                                 break;
 
                             case 'variable':
-                                $compilationContext->headersManager->add('kernel/array');
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                 $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
                                 if ($valueVariable->isTemporal()) {
@@ -379,7 +378,6 @@ class NativeArray
                                         break;
 
                                     case 'variable':
-                                        $compilationContext->headersManager->add('kernel/array');
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($item['file']) . '", ' . $item['line'] . ');');
                                         if ($valueVariable->isTemporal()) {
@@ -420,7 +418,6 @@ class NativeArray
                                         break;
 
                                     case 'variable':
-                                        $compilationContext->headersManager->add('kernel/array');
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $resolvedExprKey->getCode() . '), Z_STRLEN_P(' . $item['key']['value'] . '), &' . $valueVariable->getName() . ', PH_COPY);');
                                         if ($valueVariable->isTemporal()) {
@@ -440,7 +437,6 @@ class NativeArray
 
                                     case 'null':
                                     case 'bool':
-                                        $compilationContext->headersManager->add('kernel/array');
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
                                         if ($valueVariable->isTemporal()) {
@@ -449,7 +445,6 @@ class NativeArray
                                         break;
 
                                     case 'variable':
-                                        $compilationContext->headersManager->add('kernel/array');
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
                                         if ($valueVariable->isTemporal()) {
@@ -474,7 +469,6 @@ class NativeArray
                 $expr = new Expression($item['value']);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                $compilationContext->headersManager->add('kernel/array');
                 $codePrinter->output('zephir_array_fast_append(' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ');');
                 if ($itemVariable->isTemporal()) {
                     $itemVariable->setIdle(true);

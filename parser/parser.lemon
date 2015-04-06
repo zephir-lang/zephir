@@ -1056,6 +1056,24 @@ static json_object *xx_ret_new_instance(int dynamic, xx_parser_token *T, json_ob
 	return ret;
 }
 
+static json_object *xx_ret_new_instance_type(json_object *type, json_object *parameters, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("new-type"));
+	json_object_object_add(ret, "internal-type", type);
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_throw_exception(json_object *expr, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -2934,6 +2952,11 @@ xx_common_expr(R) ::= NEW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_O
 /* y = new {MyClass}(false, x) */
 xx_common_expr(R) ::= NEW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
 	R = xx_ret_new_instance(1, I, P, status->scanner_state);
+}
+
+/* y = new array() */
+xx_common_expr(R) ::= NEW xx_parameter_type(T) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_new_instance_type(T, P, status->scanner_state);
 }
 
 /* y = f(false, x) */

@@ -20,7 +20,7 @@
 /**
  * Test\Fannkuch
  *
- * Fannkuch Refux in Zephir
+ * Fannkuch Redux in Zephir
  *
  * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
  */
@@ -137,14 +137,14 @@ PHP_METHOD(Test_Fannkuch, process) {
 		if (maxFlipsCount < flipsCount) {
 			maxFlipsCount = flipsCount;
 		}
-		if ((permCount % 2) == 0) {
+		if (zephir_safe_mod_long_long(permCount, 2 TSRMLS_CC) == 0) {
 			checksum += flipsCount;
 		} else {
 			checksum -= flipsCount;
 		}
 		while (1) {
 			if (r == n) {
-				array_init_size(return_value, 5);
+				zephir_create_array(return_value, 3, 0);
 				ZEPHIR_INIT_NVAR(_13);
 				ZVAL_LONG(_13, checksum);
 				zephir_array_fast_append(return_value, _13);

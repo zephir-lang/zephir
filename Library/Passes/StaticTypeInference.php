@@ -419,6 +419,7 @@ class StaticTypeInference
                 return 'variable';
 
             case 'new':
+            case 'new-type':
                 $this->passNew($expression);
                 return 'undefined';
 

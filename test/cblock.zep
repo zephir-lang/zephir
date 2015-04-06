@@ -5,7 +5,7 @@
 
 %{
 // top statement before namespace, add to after headers
-#define MAX_FACTOR 40
+#define MAX_FACTOR 10
 }%
 
 namespace Test;

@@ -269,6 +269,7 @@ class WriteDetector
                 break;
 
             case 'new':
+            case 'new-type':
                 $this->passNew($expression);
                 break;
 

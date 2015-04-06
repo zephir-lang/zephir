@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/string.h"
 #include "kernel/array.h"
+#include "kernel/string.h"
 #include "kernel/operators.h"
 
 
@@ -33,7 +33,7 @@ PHP_METHOD(Test_Json, testEncodeObject) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(obj);
-	array_init_size(obj, 5);
+	zephir_create_array(obj, 3, 0);
 	add_assoc_stringl_ex(obj, SS("a"), SL("hello"), 1);
 	add_assoc_stringl_ex(obj, SS("b"), SL("world"), 1);
 	add_assoc_long_ex(obj, SS("c"), 128);
@@ -49,7 +49,7 @@ PHP_METHOD(Test_Json, testEncodeArray) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(arr);
-	array_init_size(arr, 5);
+	zephir_create_array(arr, 3, 0);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, 1);
 	zephir_array_fast_append(arr, _0);
@@ -71,7 +71,7 @@ PHP_METHOD(Test_Json, testEncodeOptions) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(arr);
-	array_init_size(arr, 7);
+	zephir_create_array(arr, 4, 0);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "<foo>", 1);
 	zephir_array_fast_append(arr, _0);

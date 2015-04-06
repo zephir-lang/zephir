@@ -1,5 +1,4 @@
 <?php
-
 /*
  +--------------------------------------------------------------------------+
  | Zephir Language                                                          |
@@ -17,42 +16,22 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Commands;
+namespace Extension\Optimizers;
 
-/**
- * CommandGenerate
- *
- * Produce stubs that can be used in a PHP IDE
- */
-class CommandStubs extends CommandAbstract
+use Test\Optimizers\CreateArray;
+
+class CreateArrayTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Command provided by this command
-     *
-     * @return array|string
-     */
-    public function getCommand()
+    public function testCreateArrayNoSize()
     {
-        return 'stubs';
+    	$t = new CreateArray;
+        $this->assertEquals(count($t->createNoSize()), 0);
     }
 
-    /**
-     * Command usage
-     *
-     * @return string
-     */
-    public function getUsage()
+    public function testCreateArraySize()
     {
-        return 'stubs';
-    }
-
-    /**
-     * Returns the description of the command
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Generates extension PHP stubs';
+    	$t = new CreateArray;
+        $this->assertEquals(count($t->createSize(3)),  3);
+        $this->assertEquals(count($t->createSize(10)), 10);
     }
 }

@@ -16,7 +16,6 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
-#include "ext/spl/spl_fixedarray.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Functional) {
@@ -65,42 +64,6 @@ PHP_METHOD(Test_Functional, map2) {
 	ZEPHIR_CALL_FUNCTION(&_0, "array_map", &_1, b, a);
 	zephir_check_call_status();
 	RETURN_CCTOR(_0);
-
-}
-
-PHP_METHOD(Test_Functional, map3) {
-
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL, *_3 = NULL;
-	int ZEPHIR_LAST_CALL_STATUS;
-	zval *p, *_0 = NULL, *_2 = NULL;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(p);
-	object_init_ex(p, spl_ce_SplFixedArray);
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, 5);
-	ZEPHIR_CALL_METHOD(NULL, p, "__construct", &_1, _0);
-	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_LONG(_0, 0);
-	ZEPHIR_INIT_VAR(_2);
-	ZVAL_LONG(_2, 300);
-	ZEPHIR_CALL_METHOD(NULL, p, "offsetset", &_3, _0, _2);
-	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_LONG(_0, 1);
-	ZEPHIR_INIT_NVAR(_2);
-	ZVAL_LONG(_2, 300);
-	ZEPHIR_CALL_METHOD(NULL, p, "offsetset", &_3, _0, _2);
-	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_LONG(_0, 2);
-	ZEPHIR_INIT_NVAR(_2);
-	ZVAL_LONG(_2, 300);
-	ZEPHIR_CALL_METHOD(NULL, p, "offsetset", &_3, _0, _2);
-	zephir_check_call_status();
-	RETURN_CCTOR(p);
 
 }
 

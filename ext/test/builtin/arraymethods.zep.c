@@ -35,7 +35,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getJoin1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 5);
+	zephir_create_array(_0, 3, 0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
@@ -61,7 +61,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 5);
+	zephir_create_array(_0, 3, 0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);
@@ -87,7 +87,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	array_init_size(_0, 5);
+	zephir_create_array(_0, 3, 0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 1);
 	zephir_array_fast_append(_0, _1);

@@ -14,7 +14,7 @@
 #include "kernel/main.h"
 
 // top statement before namespace, add to after headers
-#define MAX_FACTOR 40
+#define MAX_FACTOR 10
 
 
 // top statement before class, add to after headers

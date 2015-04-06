@@ -58,7 +58,7 @@ class CommandVersion extends CommandAbstract
      */
     public function getDescription()
     {
-        return 'Shows Zephir version';
+        return 'Shows the Zephir version';
     }
 
     /**
