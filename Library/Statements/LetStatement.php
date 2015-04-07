@@ -88,9 +88,6 @@ class LetStatement extends StatementAbstract
                 case 'array-index-append':
                 case 'string-dynamic-object-property':
                 case 'variable-dynamic-object-property':
-                case 'array-index-append':
-                case 'string-dynamic-object-property':
-                case 'static-property-array-index-append':
                     $symbolVariable = $compilationContext->symbolTable->getVariableForUpdate($variable, $compilationContext, $assignment);
                     break;
 
