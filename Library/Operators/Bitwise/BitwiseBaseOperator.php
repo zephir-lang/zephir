@@ -48,50 +48,54 @@ class BitwiseBaseOperator extends BaseOperator
      */
     public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext)
     {
-        if ($expression['left']['type'] != 'int' && $expression['left']['type'] != 'double') {
+        if (!$compilationContext->config->get('constant-folding', 'optimizations')) {
             return false;
         }
 
-        if ($compilationContext->config->get('constant-folding', 'optimizations')) {
-            if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
-                switch ($this->_operator) {
+        switch ($expression['left']['type']) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'double':
+                //continue to next switch
+                break;
+            default:
+                return false;
+                break;
+        }
 
-                    case '&':
-                        return new CompiledExpression('int', $expression['left']['value'] & $expression['right']['value'], $expression);
+        switch ($expression['right']['type']) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+            case 'double':
+                //continue to operator switch
+                break;
+            default:
+                return false;
+                break;
+        }
 
-                    case '|':
-                        return new CompiledExpression('int', $expression['left']['value'] | $expression['right']['value'], $expression);
+        /**
+         * Return value will be always int
+         */
+        switch ($this->_operator) {
+            case '&':
+                return new CompiledExpression('int', $expression['left']['value'] & $expression['right']['value'], $expression);
 
-                    case '^':
-                        return new CompiledExpression('int', $expression['left']['value'] ^ $expression['right']['value'], $expression);
+            case '|':
+                return new CompiledExpression('int', $expression['left']['value'] | $expression['right']['value'], $expression);
 
-                    case '<<':
-                        return new CompiledExpression('int', $expression['left']['value'] << $expression['right']['value'], $expression);
+            case '^':
+                return new CompiledExpression('int', $expression['left']['value'] ^ $expression['right']['value'], $expression);
 
-                    case '>>':
-                        return new CompiledExpression('int', $expression['left']['value'] >> $expression['right']['value'], $expression);
-                }
-            }
+            case '<<':
+                return new CompiledExpression('int', $expression['left']['value'] << $expression['right']['value'], $expression);
 
-            if (($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') || ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') || ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')) {
-                switch ($this->_operator) {
-
-                    case '&':
-                        return new CompiledExpression('int', $expression['left']['value'] & $expression['right']['value'], $expression);
-
-                    case '|':
-                        return new CompiledExpression('int', $expression['left']['value'] | $expression['right']['value'], $expression);
-
-                    case '^':
-                        return new CompiledExpression('int', $expression['left']['value'] ^ $expression['right']['value'], $expression);
-
-                    case '<<':
-                        return new CompiledExpression('int', $expression['left']['value'] << $expression['right']['value'], $expression);
-
-                    case '>>':
-                        return new CompiledExpression('int', $expression['left']['value'] >> $expression['right']['value'], $expression);
-                }
-            }
+            case '>>':
+                return new CompiledExpression('int', $expression['left']['value'] >> $expression['right']['value'], $expression);
         }
 
         return false;
