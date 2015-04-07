@@ -629,7 +629,7 @@ class Compiler
                         if (!file_exists($path . '.gch')) {
                             $this->fileSystem->system('cd ext && gcc -c kernel/' . $file->getBaseName() . ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch', 'stdout', self::VERSION . '/compile-header');
                         } else {
-                            if (filemtime($path . '.h') > filemtime($path . '.gch')) {
+                            if (filemtime($path) > filemtime($path . '.gch')) {
                                 $this->fileSystem->system('cd ext && gcc -c kernel/' . $file->getBaseName() . ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch', 'stdout', self::VERSION . '/compile-header');
                             }
                         }

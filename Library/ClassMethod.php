@@ -1316,6 +1316,8 @@ class ClassMethod
         $callGathererPass = null;
 
         if (is_object($this->statements)) {
+            $compilationContext->currentMethod = $this;
+
             /**
              * This pass checks for zval variables than can be potentially
              * used without allocating memory and track it
