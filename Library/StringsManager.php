@@ -30,21 +30,25 @@ class StringsManager
      * List of headers
      * @var array
      */
-    protected $_concatKeys = array(
+    protected $concatKeys = array(
         'vv' => true,
         'vs' => true,
         'sv' => true
     );
 
     /**
-    * @param string $key
-    */
+     * Adds a concatenation combination to the manager
+     *
+     * @param string $key
+     */
     public function addConcatKey($key)
     {
-        $this->_concatKeys[$key] = true;
+        $this->concatKeys[$key] = true;
     }
 
     /**
+     * Generates the concatenation code
+     *
      * @return array
      */
     public function genConcatCode()
@@ -63,11 +67,17 @@ class StringsManager
 #include "kernel/memory.h"
 #include "kernel/concat.h"' . PHP_EOL . PHP_EOL;
 
+        $pcodeh = '
+#ifndef ZEPHIR_KERNEL_CONCAT_H
+#define ZEPHIR_KERNEL_CONCAT_H
+
+';
+
         $codeh = '';
 
         $macros = array();
-        ksort($this->_concatKeys, SORT_STRING);
-        foreach ($this->_concatKeys as $key => $one) {
+        ksort($this->concatKeys, SORT_STRING);
+        foreach ($this->concatKeys as $key => $one) {
             $len = strlen($key);
             $params = array();
             $zvalCopy = array();
@@ -106,7 +116,7 @@ class StringsManager
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
             $proto = 'void zephir_concat_' . $key . '(zval **result, ' . join(', ', $params) . ', int self_var TSRMLS_DC)';
 
-            $codeh.= '' . $proto . ';' . PHP_EOL;
+            $codeh .= '' . $proto . ';' . PHP_EOL;
 
             $code .= $proto . '{' . PHP_EOL . PHP_EOL;
 
@@ -234,13 +244,22 @@ void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC) /* {{{
 }
 EOF;
 
-        $codeh .= "void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);";
-        Utils::checkAndWriteIfNeeded(join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
+        $codeh .= "void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
+
+#endif /* ZEPHIR_KERNEL_CONCAT_H */
+
+";
+        Utils::checkAndWriteIfNeeded($pcodeh . join(PHP_EOL, $macros) . PHP_EOL . PHP_EOL . $codeh, 'ext/kernel/concat.h');
         Utils::checkAndWriteIfNeeded($code, 'ext/kernel/concat.c');
     }
 
+    /**
+     * Obtains the existing concatenation keys
+     *
+     * @return array
+     */
     public function getConcatKeys()
     {
-        return $this->_concatKeys;
+        return $this->concatKeys;
     }
 }

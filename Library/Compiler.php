@@ -139,7 +139,7 @@ class Compiler
             }
         }
     }
-    
+
     /**
      * Adds a function to the function definitions
      *
@@ -837,7 +837,7 @@ class Compiler
         }
 
         /**
-         * Round 5. Generate the concatenation
+         * Round 5. Generate concatenation functions
          */
         $this->stringManager->genConcatCode();
 
