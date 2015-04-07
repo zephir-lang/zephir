@@ -79,5 +79,4 @@ class Logical
 	{
 		return !a && !b || a && b;
 	}
-
 }

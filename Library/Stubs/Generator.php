@@ -168,7 +168,6 @@ EOF;
             ));
         }
 
-
         $docBlock = new DocBlock($property->getDocBlock(), 4);
         return $docBlock . "\n    " . $source . ';';
     }

@@ -333,7 +333,7 @@ class ClassMethod
     public function getParsedDocBlock()
     {
         if (!$this->parsedDocblock) {
-            if (strlen($this->docblock)>0) {
+            if (strlen($this->docblock) > 0) {
                 $parser = new DocblockParser("/" . $this->docblock ."/");
                 $this->parsedDocblock = $parser->parse();
             } else {
