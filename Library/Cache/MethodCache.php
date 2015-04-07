@@ -94,6 +94,7 @@ class MethodCache
      */
     public function get(CompilationContext $compilationContext, $method, $caller)
     {
+
         if (!is_object($method)) {
             /**
              * Try to generate a cache based on the fact the variable is not modified within the loop block
@@ -128,37 +129,38 @@ class MethodCache
                 return '&' . $this->cache[$completeName][$method->getName()]->getName();
             }
 
-            if ($method->getClassDefinition()->isInterface()) {
-                return 'NULL';
-            }
-        }
-
-        $associatedClass = null;
-        if (!$compilationContext->insideCycle) {
-            if (!($method instanceof \ReflectionMethod)) {
-                if (!$method->isPrivate() && !$method->isFinal() && !$method->getClassDefinition()->isFinal()) {
-                    $gatherer = $this->gatherer;
-                    if (is_object($gatherer)) {
-                        $number = $gatherer->getNumberOfMethodCalls($method->getClassDefinition()->getCompleteName(), $method->getName());
-                        if ($number <= 1) {
-                            $associatedClass = $caller->getAssociatedClass();
-                            if (!is_object($associatedClass)) {
-                                return 'NULL';
-                            }
-                            if (!$this->isClassCacheable($associatedClass)) {
-                                return 'NULL';
-                            }
-                        }
-                    } else {
-                        return 'NULL';
-                    }
-                }
+            $gatherer = $this->gatherer;
+            if (is_object($gatherer)) {
+                $number = $gatherer->getNumberOfMethodCalls($method->getClassDefinition()->getCompleteName(), $method->getName());
             } else {
-                return 'NULL';
+                $number = 0;
+            }
+
+            $staticCacheable = !$method->getClassDefinition()->isInterface() && ($method->getClassDefinition()->isFinal() || $method->isFinal() || $method->isPrivate());
+            $cacheable = $staticCacheable || $number > 1;
+
+        } else {
+            $staticCacheable = false;
+            $cacheable = false;
+        }
+
+        $associatedClass = false;
+        if (!$compilationContext->insideCycle) {
+            if ($caller->getName() != 'this_ptr') {
+                $associatedClass = $caller->getAssociatedClass();
+                if (!$this->isClassCacheable($associatedClass)) {
+                    $associatedClass = false;
+                } else {
+                    $staticCacheable = true;
+                }
             }
         }
 
-        if (!($method instanceof \ReflectionMethod) && ($method->isPrivate() || $method->isFinal() || $method->getClassDefinition()->isFinal() || $associatedClass)) {
+        if (!$compilationContext->insideCycle && !$cacheable && !$associatedClass) {
+            return 'NULL';
+        }
+
+        if (!($method instanceof \ReflectionMethod) && $staticCacheable) {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);

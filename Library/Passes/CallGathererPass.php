@@ -81,6 +81,16 @@ class CallGathererPass
     }
 
     /**
+     * Returns all the method calls
+     *
+     * @return int
+     */
+    public function getAllMethodCalls()
+    {
+        return $this->methodCalls;
+    }
+
+    /**
      * Do the compilation pass
      *
      * @param StatementsBlock $block
@@ -205,6 +215,20 @@ class CallGathererPass
                 break;
 
             case 'mcall':
+                if (isset($expression['variable']['value'])) {
+                    if ($expression['variable']['value'] == 'this') {
+                        $methodName = $expression['name'];
+                        $className = $this->compilationContext->classDefinition->getCompleteName();
+                        if (!isset($this->methodCalls[$className][$methodName])) {
+                            $this->methodCalls[$className][$methodName] = 1;
+                        } else {
+                            $this->methodCalls[$className][$methodName]++;
+                        }
+                    }
+                }
+                $this->passCall($expression);
+                break;
+
             case 'scall':
                 $this->passCall($expression);
                 break;
@@ -378,7 +402,7 @@ class CallGathererPass
 
                 case 'mcall':
                 case 'scall':
-                    $this->passCall($statement['expr']);
+                    $this->passExpression($statement['expr']);
                     break;
 
                 case 'fcall':
