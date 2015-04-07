@@ -620,7 +620,6 @@ class Compiler
     public function preCompileHeaders()
     {
         if (!Utils::isWindows()) {
-
             $phpIncludes = $this->getPhpIncludeDirs();
 
             foreach (new \DirectoryIterator('ext/kernel') as $file) {
@@ -894,7 +893,6 @@ class Compiler
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
             if (Utils::isWindows()) {
-
                 echo "start";
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
                 if (file_exists('ext/Release')) {
@@ -914,7 +912,6 @@ class Compiler
                 $this->logger->output('Preparing configuration file...');
                 exec('cd ext && configure --enable-' . $namespace);
             } else {
-
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
 
                 $this->logger->output('Preparing for PHP compilation...');
