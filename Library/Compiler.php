@@ -609,6 +609,37 @@ class Compiler
         }
     }
 
+    public function getPhpIncludeDirs()
+    {
+        if (!Utils::isWindows()) {
+            $this->fileSystem->system('php-config --includes', 'stdout', self::VERSION . '/php-includes');
+        }
+        return trim($this->fileSystem->read(self::VERSION . '/php-includes'));
+    }
+
+    public function preCompileHeaders()
+    {
+        if (!Utils::isWindows()) {
+
+            $phpIncludes = $this->getPhpIncludeDirs();
+
+            foreach (new \DirectoryIterator('ext/kernel') as $file) {
+                if (!$file->isDir()) {
+                    if (preg_match('/\.h$/', $file)) {
+                        $path = $file->getRealPath();
+                        if (!file_exists($path . '.gch')) {
+                            $this->fileSystem->system('cd ext && gcc -c kernel/' . $file->getBaseName() . ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch', 'stdout', self::VERSION . '/compile-header');
+                        } else {
+                            if (filemtime($path . '.h') > filemtime($path . '.gch')) {
+                                $this->fileSystem->system('cd ext && gcc -c kernel/' . $file->getBaseName() . ' -I. ' . $phpIncludes . ' -o kernel/' . $file->getBaseName() . '.gch', 'stdout', self::VERSION . '/compile-header');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Initializes a Zephir extension
      *
@@ -863,6 +894,7 @@ class Compiler
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
             if (Utils::isWindows()) {
+
                 echo "start";
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
                 if (file_exists('ext/Release')) {
@@ -870,6 +902,7 @@ class Compiler
                 }
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
+
                 /* Temporary fix till https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits
                    the PHP builds
                 */
@@ -881,6 +914,7 @@ class Compiler
                 $this->logger->output('Preparing configuration file...');
                 exec('cd ext && configure --enable-' . $namespace);
             } else {
+
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
 
                 $this->logger->output('Preparing for PHP compilation...');
@@ -901,6 +935,7 @@ class Compiler
         if (Utils::isWindows()) {
             exec('cd ext && nmake 2>' . $currentDir . '\compile-errors.log 1>' . $currentDir . '\compile.log', $output, $exit);
         } else {
+            $this->preCompileHeaders();
             exec('cd ext && (make --silent -j2 2>' . $currentDir . '/compile-errors.log 1>' . $currentDir . '/compile.log)', $output, $exit);
         }
     }

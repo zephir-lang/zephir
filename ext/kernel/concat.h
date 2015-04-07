@@ -2,6 +2,9 @@
 #ifndef ZEPHIR_KERNEL_CONCAT_H
 #define ZEPHIR_KERNEL_CONCAT_H
 
+#include <php.h>
+#include <Zend/zend.h>
+
 #define ZEPHIR_CONCAT_SS(result, op1, op2) \
 	 zephir_concat_ss(&result, op1, sizeof(op1)-1, op2, sizeof(op2)-1, 0 TSRMLS_CC);
 #define ZEPHIR_SCONCAT_SS(result, op1, op2) \
@@ -48,3 +51,4 @@ void zephir_concat_vvv(zval **result, zval *op1, zval *op2, zval *op3, int self_
 void zephir_concat_function(zval *result, zval *op1, zval *op2 TSRMLS_DC);
 
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
+

@@ -71,6 +71,9 @@ class StringsManager
 #ifndef ZEPHIR_KERNEL_CONCAT_H
 #define ZEPHIR_KERNEL_CONCAT_H
 
+#include <php.h>
+#include <Zend/zend.h>
+
 ';
 
         $codeh = '';
