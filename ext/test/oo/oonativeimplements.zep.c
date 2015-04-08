@@ -33,14 +33,12 @@ ZEPHIR_INIT_CLASS(Test_Oo_OoNativeImplements) {
 
 }
 
-/* Countable */
 PHP_METHOD(Test_Oo_OoNativeImplements, count) {
 
 
 
 }
 
-/* Iterator */
 PHP_METHOD(Test_Oo_OoNativeImplements, current) {
 
 
@@ -71,14 +69,12 @@ PHP_METHOD(Test_Oo_OoNativeImplements, valid) {
 
 }
 
-/* OuterIterator */
 PHP_METHOD(Test_Oo_OoNativeImplements, getInnerIterator) {
 
 
 
 }
 
-/* RecursiveIterator */
 PHP_METHOD(Test_Oo_OoNativeImplements, getChildren) {
 
 
@@ -91,7 +87,6 @@ PHP_METHOD(Test_Oo_OoNativeImplements, hasChildren) {
 
 }
 
-/* SeekableIterator */
 PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 
 	zval *position_param = NULL;
@@ -105,14 +100,12 @@ PHP_METHOD(Test_Oo_OoNativeImplements, seek) {
 
 }
 
-/* IteratorAggregate */
 PHP_METHOD(Test_Oo_OoNativeImplements, getIterator) {
 
 
 
 }
 
-/* ArrayAccess*/
 PHP_METHOD(Test_Oo_OoNativeImplements, offsetExists) {
 
 	zval *offset;
@@ -157,7 +150,6 @@ PHP_METHOD(Test_Oo_OoNativeImplements, offsetUnset) {
 
 }
 
-/* Serializable */
 PHP_METHOD(Test_Oo_OoNativeImplements, serialize) {
 
 

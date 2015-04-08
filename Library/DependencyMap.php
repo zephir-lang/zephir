@@ -17,41 +17,17 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Documentation;
+namespace Zephir;
 
 /**
- * Annotation
+ * DependencyMap
  *
- * A parsed Annotation
+ * Manage dependencies between files to perform incremental builds
  */
-class Annotation
+class DependencyMap
 {
-
-    protected $name;
-
-    protected $string;
-
-    protected $contentParsed = false;
-
-    public function __construct($name, $string)
+    public function addDependency()
     {
-        $this->name = $name;
-        $this->string = trim($string);
-    }
-
-    public function getString()
-    {
-        return $this->string;
-    }
-
-    public function setString($string)
-    {
-        $this->string = $string;
-    }
-
-
-    public function getName()
-    {
-        return $this->name;
+        
     }
 }

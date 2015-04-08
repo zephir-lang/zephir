@@ -33,8 +33,8 @@ class Docblock
      * @var Annotation[]
      */
     protected $annotations = array();
-    protected $summary;
 
+    protected $summary;
 
     public function getDescription()
     {
@@ -61,7 +61,7 @@ class Docblock
         }
         return $annotations;
     }
-    
+
     public function setDescription($description)
     {
         $this->description = $description;
@@ -71,7 +71,7 @@ class Docblock
     {
         $this->annotations[] = $annotation;
     }
-    
+
     public function getSummary()
     {
         return $this->summary;

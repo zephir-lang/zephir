@@ -14,17 +14,17 @@ class Template
     protected $rootDirectory;
     protected $data;
     protected $nestedLevel;
-    protected $pathToRoot="./";
+    protected $pathToRoot = "./";
     protected $themeOptions;
 
     public function __construct($data, $rootDirectory, $template, $nestedLevel = 0)
     {
 
         // todo clean buffer before exception
-        if ($nestedLevel>800) {
+        if ($nestedLevel > 800) {
             throw new Exception("Recursive inclusion detected in theme creation");
         }
-        
+
         // todo : securise parent inclusion
         $rootDirectory = rtrim($rootDirectory, "/");
 
@@ -47,7 +47,7 @@ class Template
     {
         $this->themeOptions = $themeOptions;
     }
-    
+
     /**
      * @param string $pathToRoot
      */
@@ -55,9 +55,10 @@ class Template
     {
         $this->pathToRoot = $pathToRoot;
     }
-    
+
     /**
      * Generate an url relative to the current directory
+     *
      * @param string $url the url we want to reach
      * @return the relative path to the url
      */
@@ -74,7 +75,7 @@ class Template
         } elseif ($url instanceof CompilerFile) {
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
         }
-        
+
         return;
     }
 

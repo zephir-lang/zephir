@@ -29,7 +29,6 @@ ZEPHIR_INIT_CLASS(Test_Logical) {
 
 }
 
-/* ---------- And ----------------*/
 PHP_METHOD(Test_Logical, testAnd1) {
 
 	zend_bool _0;

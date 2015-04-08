@@ -29,7 +29,7 @@ class Theme
     protected $outputDir;
     protected $themeConfig;
     protected $options;
-    
+
     public function __construct($themeDir, $outputDir, $themeConfig)
     {
         $this->outputDir   = $outputDir;
@@ -42,19 +42,16 @@ class Theme
     public function drawFile(AbstractFile $file)
     {
         $outputFile = ltrim($file->getOutputFile(), "/");
-        
+
         $output   = pathinfo($this->outputDir . "/" . $outputFile);
         $outputDirname  = $output["dirname"];
         $outputBasename = $output["basename"];
         $outputFilename = $outputDirname . "/" . $outputBasename;
 
-
         // todo : check if writable
         if (!file_exists($outputDirname)) {
             mkdir($outputDirname, 0777, true);
         }
-
-
 
         $subDirNumber= count(explode("/", $outputFile))-1;
 
@@ -63,11 +60,11 @@ class Theme
         } else {
             $pathToRoot = "./";
         }
-            
+
         $template = new Template($file->getData(), $this->themeDir, $file->getTemplateName());
         $template->setPathToRoot($pathToRoot);
         $template->setThemeOptions($this->options);
-        
+
         touch($outputFilename);
         $template->write($outputFilename);
     }
@@ -84,14 +81,14 @@ class Theme
             }
 
             $files = array();
-            
+
             $this->__copyDir($themeStt, $outputStt . "/static", $files);
-            
+
             foreach ($files as $f) {
                 foreach ($this->options as $optName => $opt) {
                     $fcontent = file_get_contents($f);
                     $fcontent = str_replace("%_" . $optName . "_%", $opt, $fcontent);
-                    
+
                     file_put_contents($f, $fcontent);
                 }
             }

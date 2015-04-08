@@ -130,16 +130,12 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3) {
 
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
-	zval *_0 = NULL;
 	zval *g;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_STRING(_0, "s", 1);
 	ZEPHIR_OBS_VAR(g);
-	zephir_read_property_zval(&g, this_ptr, _0, PH_NOISY_CC);
+	zephir_read_property(&g, this_ptr, SL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(g, SS("a"))) {
 		RETURN_MM_BOOL(1);
 	}
@@ -149,7 +145,6 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1) {
 
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
-	zval *_0 = NULL;
 	zval *inp, *g;
 
 	ZEPHIR_MM_GROW();
@@ -157,11 +152,8 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZEPHIR_INIT_NVAR(_0);
-	ZVAL_STRING(_0, "s", 1);
 	ZEPHIR_OBS_VAR(g);
-	zephir_read_property_zval(&g, inp, _0, PH_NOISY_CC);
+	zephir_read_property(&g, inp, SL("s"), PH_NOISY_CC);
 	if (zephir_array_isset_string(g, SS("a"))) {
 		RETURN_MM_BOOL(1);
 	}

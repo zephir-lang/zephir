@@ -23,8 +23,6 @@
 /**
  * Function calls
  */
-/* Test global function declaration */
-/* Test function declaration in namespace */
 ZEPHIR_INIT_CLASS(Test_Fcall) {
 
 	ZEPHIR_REGISTER_CLASS(Test, Fcall, test, fcall, test_fcall_method_entry, 0);

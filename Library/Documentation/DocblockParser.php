@@ -32,12 +32,10 @@ class DocblockParser
     protected $annotation;
     protected $annotationLen;
 
-
     protected $currentChar = null;
     protected $currentCharIndex = null;
     protected $currentLine = null;
     protected $lines = array();
-
 
     // Parsing helpers
     protected $ignoreSpaces;
@@ -53,12 +51,12 @@ class DocblockParser
     protected $currentAnnotationContentStr;
     protected $summaryStr;
     protected $descriptionStr;
+
     /**
      *
      * @var Docblock
      */
     protected $docblockObj;
-
 
     /**
      *
@@ -189,8 +187,6 @@ class DocblockParser
         return $this->docblockObj;
     }
 
-
-
     /**
      * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing
      */
@@ -235,8 +231,6 @@ class DocblockParser
 
         return $annotation;
     }
-
-
 
     /**
      * moves the current cursor to the next character

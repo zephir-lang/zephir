@@ -23,16 +23,16 @@ use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceAccessor
 {
-    
+
     /**
      *
      * @var \Zephir\CompilerFile[]
      */
     protected $classes;
-    
-    protected $namespaceTree;
-    protected $byNamespace;
 
+    protected $namespaceTree;
+    
+    protected $byNamespace;
 
     /**
      *
@@ -42,7 +42,7 @@ class NamespaceAccessor
     {
         $this->classes = $files;
     }
-    
+
     /**
      *
      * @return NamespaceHelper[]
@@ -57,12 +57,11 @@ class NamespaceAccessor
         return $this->namespaceTree;
     }
 
-        
     public function build()
     {
         $byNamespace = array();
         $tree = array();
-        
+
         foreach ($this->classes as $className => $class) {
             $ns = explode("\\", $class->getClassDefinition()->getNamespace());
             $actualStr = "";
@@ -77,27 +76,27 @@ class NamespaceAccessor
                     $isRoot = true;
                 }
                 $actualStr.= $n;
-                
+
                 if (!isset($byNamespace[$actualStr])) {
                     $byNamespace[$actualStr] = new NamespaceHelper($actualStr);
                 }
-                
+
                 $nh = $byNamespace[$actualStr];
-                
+
                 if ($previous) {
                     $previous->addNamespace($nh);
                 }
-                
+
                 if ($isRoot) {
                     if (!isset($tree[$n])) {
                         $tree[$n] = $nh;
                     }
                 }
             }
-            
+
             $nh->addClass($class);
         }
-        
+
         $this->byNamespace = $byNamespace;
         $this->namespaceTree = $tree;
     }

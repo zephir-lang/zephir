@@ -497,8 +497,8 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/");
-		COMMENT {
+        DCOMMENT = ("/**"([^*]+|[*]+[^/*])*[*]*"*/");
+		DCOMMENT {
 			token->opcode = XX_T_COMMENT;
 			token->value = strndup(q, YYCURSOR - q - 1);
 			token->len = YYCURSOR - q - 1;
@@ -514,6 +514,29 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 				s->active_char = ch;
 			}
+			q = YYCURSOR;
+			return 0;
+		}
+
+		COMMENT = ("/*"([^*]+|[*]+[^/*])*[*]*"*/");
+		COMMENT {
+			token->opcode = XX_T_IGNORE;
+			token->value = strndup(q, YYCURSOR - q - 1);
+			token->len = YYCURSOR - q - 1;
+			{
+				int k, ch = s->active_char;
+				for (k = 0; k < (token->len - 1); k++) {
+					if (token->value[k] == '\n') {
+						ch = 1;
+						s->active_line++;
+					} else {
+						ch++;
+					}
+				}
+				s->active_char = ch;
+			}
+            free(token->value);
+            token->len = 0;
 			q = YYCURSOR;
 			return 0;
 		}

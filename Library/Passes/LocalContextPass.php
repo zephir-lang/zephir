@@ -137,7 +137,6 @@ class LocalContextPass
      * Returns the number of assignment instructions that mutated a variable
      *
      * @param string $variable
-     *
      * @return int
      */
     public function getNumberOfMutations($variable)
@@ -175,6 +174,7 @@ class LocalContextPass
 
     /**
      * Returns the line where the latest unset operation was made
+     *
      * @return int
      */
     public function getLastUnsetLine()

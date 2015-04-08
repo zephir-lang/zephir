@@ -23,7 +23,7 @@ use Zephir\CompilerFile;
 
 class NamespaceHelper
 {
-    
+
     protected $fullNamespace;
 
     protected $endNamespace;
@@ -31,7 +31,7 @@ class NamespaceHelper
 
     protected $classes = array();
     protected $namespaces = array();
-    
+
     public function __construct($fullNamespace)
     {
         $this->fullNamespace = $fullNamespace;
@@ -43,19 +43,19 @@ class NamespaceHelper
 
         $this->parentName = implode("\\", $ex);
     }
-    
+
     public function addClass(CompilerFile $c)
     {
         $this->classes[] = $c;
     }
-    
+
     public function addNamespace(NamespaceHelper $n)
     {
         if (!isset($this->namespaces[$n->getFullNamespace()])) {
             $this->namespaces[$n->getFullNamespace()] = $n;
         }
     }
-    
+
     public function getFullNamespace()
     {
         return $this->fullNamespace;
@@ -76,8 +76,6 @@ class NamespaceHelper
     {
         return $this->parentName;
     }
-
-
 
     /**
      * @return CompilerFile[]

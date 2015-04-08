@@ -22,8 +22,7 @@ fi
 
 sed s/"\#line"/"\/\/"/g scanner.c > xx && mv -f xx scanner.c
 sed s/"#line"/"\/\/"/g parser.c > xx && mv -f xx parser.c
-export CFLAGS="-g3 -O0"
-gcc -Wl,-rpath /usr/local/lib -I/usr/local/include -L/usr/local/lib -L/opt/local/lib -g3 -w parser.c scanner.c -ljson-c -o ../bin/zephir-parser
+gcc -Wl,-rpath /usr/local/lib -I/usr/local/include -L/usr/local/lib -L/opt/local/lib -g3 -O0 -w parser.c scanner.c -ljson-c -o ../bin/zephir-parser
 
 cd ..
 

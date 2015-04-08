@@ -8,7 +8,7 @@ use Zephir\Documentation\NamespaceAccessor;
 class IndexFile extends AbstractFile
 {
 
-        /**
+    /**
      * @var NamespaceAccessor
      */
     protected $namespaceAccessor;

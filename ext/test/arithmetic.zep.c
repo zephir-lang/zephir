@@ -31,7 +31,6 @@ ZEPHIR_INIT_CLASS(Test_Arithmetic) {
 
 }
 
-/* ---------- SUM ----------------*/
 PHP_METHOD(Test_Arithmetic, intSum) {
 
 	int a, b, c;
@@ -936,7 +935,6 @@ PHP_METHOD(Test_Arithmetic, addSum24) {
 
 }
 
-/* --------------- SUB ----------------*/
 PHP_METHOD(Test_Arithmetic, intSub) {
 
 	int a, b, c;
@@ -1850,7 +1848,6 @@ PHP_METHOD(Test_Arithmetic, mul3) {
 
 }
 
-/* Less */
 PHP_METHOD(Test_Arithmetic, less1) {
 
 	int a = 1, b = 2;
@@ -1893,7 +1890,6 @@ PHP_METHOD(Test_Arithmetic, less4) {
 
 }
 
-/* Greater */
 PHP_METHOD(Test_Arithmetic, greater1) {
 
 	int a = 1, b = 2;

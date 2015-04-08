@@ -30,8 +30,6 @@ ZEPHIR_INIT_CLASS(Test_Quantum) {
 
 }
 
-/*
- */
 PHP_METHOD(Test_Quantum, harmos) {
 
 	zend_bool _14, _17, _33, _36;

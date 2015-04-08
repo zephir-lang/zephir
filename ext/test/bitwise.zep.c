@@ -26,7 +26,6 @@ ZEPHIR_INIT_CLASS(Test_Bitwise) {
 
 }
 
-/* ---------- And ----------------*/
 PHP_METHOD(Test_Bitwise, intAnd) {
 
 	int a, b, c;
@@ -562,7 +561,6 @@ PHP_METHOD(Test_Bitwise, complex24And) {
 
 }
 
-/* --------------- OR ----------------*/
 PHP_METHOD(Test_Bitwise, intOr) {
 
 	int a, b, c;
@@ -1110,7 +1108,6 @@ PHP_METHOD(Test_Bitwise, complex24Or) {
 
 }
 
-/* ------- shift left -------- */
 PHP_METHOD(Test_Bitwise, intShiftLeft) {
 
 	int a, b, c;
@@ -1144,7 +1141,6 @@ PHP_METHOD(Test_Bitwise, intShiftLeftSimple) {
 
 }
 
-/* ------- shift right -------- */
 PHP_METHOD(Test_Bitwise, intShiftRight) {
 
 	int a, b, c;
