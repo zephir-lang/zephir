@@ -1057,6 +1057,7 @@ class Compiler
         $this->fileSystem->clean();
         system('cd ext && sudo make clean 1> /dev/null');
         system('cd ext && sudo phpize --clean 1> /dev/null');
+        system('cd ext && sudo ./clean 1> /dev/null');
     }
 
     /**
