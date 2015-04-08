@@ -1,4 +1,6 @@
 
+namespace Test;
+
 /**
  * Test\Router
  *
@@ -25,9 +27,6 @@
  *</code>
  *
  */
-
-namespace Test;
-
 class Router
 {
 	protected _dependencyInjector;

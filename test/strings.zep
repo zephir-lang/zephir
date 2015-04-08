@@ -119,4 +119,14 @@ class Strings
             \\\"\}\$hello\$\\\"\'
         ");
     }
+
+	public function testInternedString1()
+	{
+		return ~"hello";
+	}
+
+	public function testInternedString2()
+	{
+		return ~" hello "->trim();
+	}
 }

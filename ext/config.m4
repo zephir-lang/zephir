@@ -135,6 +135,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/ternary.zep.c
 	test/testinterface.zep.c
 	test/trytest.zep.c
+	test/typeinstances.zep.c
 	test/typeoff.zep.c
 	test/unknownclass.zep.c
 	test/unsettest.zep.c

@@ -25,6 +25,8 @@ PHP_METHOD(Test_Strings, testHardcodedMultilineString);
 PHP_METHOD(Test_Strings, testEchoMultilineString);
 PHP_METHOD(Test_Strings, testTrimMultilineString);
 PHP_METHOD(Test_Strings, testWellEscapedMultilineString);
+PHP_METHOD(Test_Strings, testInternedString1);
+PHP_METHOD(Test_Strings, testInternedString2);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_strings_testtrim, 0, 0, 1)
 	ZEND_ARG_INFO(0, str)
@@ -133,5 +135,7 @@ ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testEchoMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testTrimMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

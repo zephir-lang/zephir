@@ -130,6 +130,7 @@
 #include "test/ternary.zep.h"
 #include "test/testinterface.zep.h"
 #include "test/trytest.zep.h"
+#include "test/typeinstances.zep.h"
 #include "test/typeoff.zep.h"
 #include "test/unknownclass.zep.h"
 #include "test/unsettest.zep.h"

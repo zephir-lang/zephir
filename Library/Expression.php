@@ -318,6 +318,8 @@ class Expression
                     }
                 }
                 return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
+            case 'istring':
+                return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
 
             case 'char':
                 if (!strlen($expression['value'])) {

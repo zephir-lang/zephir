@@ -54,7 +54,13 @@ class NewInstanceTypeOperator extends BaseOperator
         switch ($expression['internal-type']) {
 
             case 'array':
+                $compilationContext->headersManager->add('kernel/array');
                 $functionName = 'create_array';
+                break;
+
+            case 'string':
+                $compilationContext->headersManager->add('kernel/string');
+                $functionName = 'create_string';
                 break;
 
             default:

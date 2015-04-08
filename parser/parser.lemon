@@ -93,6 +93,10 @@ static json_object *xx_ret_literal(int type, xx_parser_token *T, xx_scanner_stat
 			json_object_object_add(ret, "type", json_object_new_string("string"));
 			break;
 
+		case XX_T_ISTRING:
+			json_object_object_add(ret, "type", json_object_new_string("istring"));
+			break;
+
 		case XX_T_CHAR:
 			json_object_object_add(ret, "type", json_object_new_string("char"));
 			break;
@@ -2882,6 +2886,11 @@ xx_common_expr(R) ::= INTEGER(I) . {
 /* y = "hello" */
 xx_common_expr(R) ::= STRING(S) . {
 	R = xx_ret_literal(XX_T_STRING, S, status->scanner_state);
+}
+
+/* y = ~"hello" */
+xx_common_expr(R) ::= ISTRING(S) . {
+	R = xx_ret_literal(XX_T_ISTRING, S, status->scanner_state);
 }
 
 /* y = 'h' */

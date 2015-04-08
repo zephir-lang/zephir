@@ -116,8 +116,9 @@
 #define XX_THROW                          116
 #define XX_PLUS                           117
 #define XX_INTEGER                        118
-#define XX_CHAR                           119
-#define XX_DOUBLE                         120
-#define XX_TRUE                           121
-#define XX_FALSE                          122
-#define XX_CBLOCK                         123
+#define XX_ISTRING                        119
+#define XX_CHAR                           120
+#define XX_DOUBLE                         121
+#define XX_TRUE                           122
+#define XX_FALSE                          123
+#define XX_CBLOCK                         124

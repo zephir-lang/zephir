@@ -189,6 +189,7 @@ class ReturnStatement extends StatementAbstract
                     break;
 
                 case 'string':
+                case 'istring':
                     $codePrinter->output('RETURN_MM_STRING("' . Utils::addSlashes($resolvedExpr->getCode()) . '", 1);');
                     break;
 

@@ -322,3 +322,24 @@ PHP_METHOD(Test_Strings, testWellEscapedMultilineString) {
 
 }
 
+PHP_METHOD(Test_Strings, testInternedString1) {
+
+
+	RETURN_STRING("\"hello", 1);
+
+}
+
+PHP_METHOD(Test_Strings, testInternedString2) {
+
+	zval *_0, _1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_STRING(&_1, "\" hello ", 0);
+	zephir_fast_trim(_0, &_1, NULL , ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	RETURN_CCTOR(_0);
+
+}
+
