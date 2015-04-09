@@ -43,7 +43,7 @@ To build the PHP extension:
 Installation
 ------------
 You can install zephir using composer.
-Run `composer require phalcon/zephir`, then run `zephir`
+Run `composer require phalcon/zephir`, run `./install` and then run `zephir`
 from your `bin-dir`. By default it is `./vendor/bin/zephir`.
 You can read more about composer binaries
 in it's [documentation](https://getcomposer.org/doc/articles/vendor-binaries.md).
