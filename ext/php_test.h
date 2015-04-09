@@ -14,7 +14,7 @@
 #define PHP_TEST_VERSION     "1.0.0"
 #define PHP_TEST_EXTNAME     "test"
 #define PHP_TEST_AUTHOR      "Zephir Team and contributors"
-#define PHP_TEST_ZEPVERSION  "0.6.1a"
+#define PHP_TEST_ZEPVERSION  "0.6.2a"
 #define PHP_TEST_DESCRIPTION "Description test for<br/>Test Extension"
 
 typedef struct _zephir_struct_test { 

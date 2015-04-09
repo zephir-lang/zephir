@@ -412,6 +412,15 @@ class DivOperator extends ArithmeticalBaseOperator
                                         }
                                         break;
 
+                                    case 'double':
+                                        $compilationContext->headersManager->add('kernel/operators');
+                                        if ($variableLeft->isLocalOnly()) {
+                                            return new CompiledExpression('double', 'zephir_safe_div_zval_double(&' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        } else {
+                                            return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        }
+                                        break;
+
                                     /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -505,6 +514,15 @@ class DivOperator extends ArithmeticalBaseOperator
                                             return new CompiledExpression('double', 'zephir_safe_div_zval_long(&' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         } else {
                                             return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        }
+                                        break;
+
+                                    case 'double':
+                                        $compilationContext->headersManager->add('kernel/operators');
+                                        if ($variableLeft->isLocalOnly()) {
+                                            return new CompiledExpression('double', 'zephir_safe_div_zval_double(&' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
+                                        } else {
+                                            return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         }
                                         break;
 

@@ -86,7 +86,6 @@ class Constants extends ConstantsParent
 	{
 	    var a;
 	    let a = PHP_VERSION;
-
 	    return a;
 	}
 }

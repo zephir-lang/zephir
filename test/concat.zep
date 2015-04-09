@@ -17,14 +17,29 @@ class Concat
 
 	public function testConcat1()
 	{
-
-	}
-
-	public function testConcat10()
-	{
 		var url;
 		let url = "test";
 		let url = "append" . url;
+		return url;
+	}
+
+	public function testConcat2()
+	{
+		var url;
+		let url = "test";
+		let url = "append" . url . "other";
+		let url = "append" . "other";
+		let url = "append" . "other" . url;
+		return url;
+	}
+
+	public function testConcatSelf1()
+	{
+		var url = "";
+		let url .= "test";
+		let url .= "append" . url . "other";
+		let url .= "append" . "other";
+		let url .= "append" . "other" . url;
 		return url;
 	}
 }

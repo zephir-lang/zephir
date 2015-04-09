@@ -49,25 +49,9 @@ class FloorOptimizer extends OptimizerAbstract
             return false;
         }
 
-        /**
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
-        }
-
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $context->headersManager->add('kernel/operators');
-        $symbolVariable->setDynamicTypes('double');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_floor(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        return new CompiledExpression('double', 'zephir_floor(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
     }
 }

@@ -7,9 +7,9 @@ namespace Test;
 
 class Assign
 {
-	protected testVar {get};
+	protected testVar { get };
 
-	protected myArray {get};
+	protected myArray { get };
 
 	protected static testVarStatic;
 

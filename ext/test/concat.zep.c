@@ -60,12 +60,6 @@ PHP_METHOD(Test_Concat, testConcatBySelfProperty) {
 
 PHP_METHOD(Test_Concat, testConcat1) {
 
-
-
-}
-
-PHP_METHOD(Test_Concat, testConcat10) {
-
 	zval *url = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
@@ -75,6 +69,51 @@ PHP_METHOD(Test_Concat, testConcat10) {
 	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_CONCAT_SV(_0, "append", url);
 	ZEPHIR_CPY_WRT(url, _0);
+	RETURN_CCTOR(url);
+
+}
+
+PHP_METHOD(Test_Concat, testConcat2) {
+
+	zval *_1;
+	zval *url = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(url);
+	ZVAL_STRING(url, "test", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CONCAT_SVS(_0, "append", url, "other");
+	ZEPHIR_CPY_WRT(url, _0);
+	ZEPHIR_INIT_VAR(_1);
+	ZEPHIR_CONCAT_SS(_1, "append", "other");
+	ZEPHIR_CPY_WRT(url, _1);
+	ZEPHIR_INIT_LNVAR(_0);
+	ZEPHIR_CONCAT_SSV(_0, "append", "other", url);
+	ZEPHIR_CPY_WRT(url, _0);
+	RETURN_CCTOR(url);
+
+}
+
+PHP_METHOD(Test_Concat, testConcatSelf1) {
+
+	zval *_1;
+	zval *url, *_0, *_2;
+
+	ZEPHIR_MM_GROW();
+	ZEPHIR_INIT_VAR(url);
+	ZVAL_STRING(url, "", 1);
+
+	zephir_concat_self_str(&url, SL("test") TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CONCAT_SVS(_0, "append", url, "other");
+	zephir_concat_self(&url, _0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZEPHIR_CONCAT_SS(_1, "append", "other");
+	zephir_concat_self(&url, _1 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	ZEPHIR_CONCAT_SSV(_2, "append", "other", url);
+	zephir_concat_self(&url, _2 TSRMLS_CC);
 	RETURN_CCTOR(url);
 
 }
