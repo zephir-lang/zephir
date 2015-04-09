@@ -136,7 +136,7 @@ class MethodCache
                 $number = 0;
             }
 
-            $staticCacheable = !$method->getClassDefinition()->isInterface() && ($method->getClassDefinition()->isFinal() || $method->isFinal() || $method->isPrivate());
+            $staticCacheable = !$method->getClassDefinition()->isInterface() && ($compilationContext->currentMethod == $method || $method->getClassDefinition()->isFinal() || $method->isFinal() || $method->isPrivate());
             $cacheable = $staticCacheable || $number > 1;
 
         } else {
