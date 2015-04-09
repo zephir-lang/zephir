@@ -12,6 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
+#include "ext/spl/spl_iterators.h"
 
 
 ZEPHIR_INIT_CLASS(Test_InternalInterfaces) {

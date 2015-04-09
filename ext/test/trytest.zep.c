@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "ext/spl/spl_exceptions.h"
 #include "kernel/operators.h"
 
 

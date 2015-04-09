@@ -64,7 +64,7 @@ class ThrowStatement extends StatementAbstract
                     return;
                 } else {
                     if ($compilationContext->compiler->isInternalClass($className)) {
-                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, true);
+                        $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if ($classEntry) {
                             $message = $expr['parameters'][0]['parameter']['value'];
                             $this->throwStringException($codePrinter, $classEntry, $message, $statement['expr']);
