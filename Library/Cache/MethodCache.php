@@ -23,6 +23,7 @@ use Zephir\Call;
 use Zephir\ClassMethod;
 use Zephir\Variable;
 use Zephir\ClassDefinition;
+use Zephir\MethodCallWarmUp;
 use Zephir\CompilationContext;
 
 /**
@@ -142,6 +143,12 @@ class MethodCache
         } else {
             $staticCacheable = false;
             $cacheable = false;
+        }
+
+        if ($compilationContext->currentMethod == $method) {
+            if (!$compilationContext->methodWarmUp) {
+                $compilationContext->methodWarmUp = new MethodCallWarmUp;
+            }
         }
 
         $associatedClass = false;

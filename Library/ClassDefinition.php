@@ -1164,54 +1164,67 @@ class ClassDefinition
              * SPL Exceptions
              */
             case 'logicexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_LogicException';
                 break;
 
             case 'badfunctioncallexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_BadFunctionCallException';
                 break;
 
             case 'badmethodcallexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_BadMethodCallException';
                 break;
 
             case 'domainexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_DomainException';
                 break;
 
             case 'invalidargumentexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_InvalidArgumentException';
                 break;
 
             case 'lengthexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_LengthException';
                 break;
 
             case 'outofrangeexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_OutOfRangeException';
                 break;
 
             case 'runtimeexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_RuntimeException';
                 break;
 
             case 'outofboundsexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_OutOfBoundsException';
                 break;
 
             case 'overflowexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_OverflowException';
                 break;
 
             case 'rangeexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_RangeException';
                 break;
 
             case 'underflowexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_UnderflowException';
                 break;
 
             case 'unexpectedvalueexception':
+                $compilationContext->headersManager->add('ext/spl/spl_exceptions');
                 $classEntry = 'spl_ce_UnexpectedValueException';
                 break;
 
@@ -1219,74 +1232,92 @@ class ClassDefinition
              * SPL Iterators Interfaces (spl/spl_iterators.h)
              */
             case 'recursiveiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveIterator';
                 break;
 
             case 'recursiveiteratoriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveIteratorIterator';
                 break;
 
             case 'recursivetreeiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveTreeIterator';
                 break;
 
             case 'filteriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_FilterIterator';
                 break;
 
             case 'recursivefilteriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveFilterIterator';
                 break;
 
             case 'parentiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_ParentIterator';
                 break;
 
             case 'seekableiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_SeekableIterator';
                 break;
 
             case 'limititerator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_LimitIterator';
                 break;
 
             case 'cachingiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_CachingIterator';
                 break;
 
             case 'recursivecachingiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveCachingIterator';
                 break;
 
             case 'outeriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_OuterIterator';
                 break;
 
             case 'iteratoriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_IteratorIterator';
                 break;
 
             case 'norewinditerator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_NoRewindIterator';
                 break;
 
             case 'infiniteiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_InfiniteIterator';
                 break;
 
             case 'emptyiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_EmptyIterator';
                 break;
 
             case 'appenditerator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_AppendIterator';
                 break;
 
             case 'regexiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RegexIterator';
                 break;
 
             case 'recursiveregexiterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveRegexIterator';
                 break;
 
@@ -1321,14 +1352,17 @@ class ClassDefinition
                 break;
 
             case 'countable':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_Countable';
                 break;
 
             case 'callbackfilteriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_CallbackFilterIterator';
                 break;
 
             case 'recursivecallbackfilteriterator':
+                $compilationContext->headersManager->add('ext/spl/spl_iterators');
                 $classEntry = 'spl_ce_RecursiveCallbackFilterIterator';
                 break;
 

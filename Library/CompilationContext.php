@@ -88,6 +88,13 @@ class CompilationContext
     public $currentMethod;
 
     /**
+     * Methods warm-up
+     *
+     * @var MethodCallWarmUp
+     */
+    public $methodWarmUp;
+
+    /**
      * Represents the c-headers added to the file
      *
      * @var HeadersManager

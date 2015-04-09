@@ -28,8 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Sort) {
 
 PHP_METHOD(Test_Sort, quick) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_10 = NULL;
-	zephir_fcall_cache_entry *_7 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_7 = NULL, *_10 = NULL;
 	zend_bool _1;
 	int i, length, pivot, item, _2, _3, ZEPHIR_LAST_CALL_STATUS;
 	zval *arr_param = NULL, *left, *right, *_0, *_4 = NULL, *_5 = NULL, *_6 = NULL, *_9 = NULL;
