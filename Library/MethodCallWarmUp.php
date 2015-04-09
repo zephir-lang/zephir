@@ -45,9 +45,6 @@ class MethodCallWarmUp
         );
     }
 
-    /**
-     * 
-     */
     public function get()
     {
 
