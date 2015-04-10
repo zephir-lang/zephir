@@ -29,7 +29,7 @@ use Zephir\Documentation\Docblock;
 class See extends Annotation
 {
     
-    protected $ressource;
+    protected $resource;
     protected $text;
 
 
@@ -38,23 +38,23 @@ class See extends Annotation
         $spaceIndex = strpos($this->string, " ");
         
         if (false !== $spaceIndex) {
-            $this->ressource = substr($this->string, 0, $spaceIndex);
+            $this->resource = substr($this->string, 0, $spaceIndex);
             $this->text = substr($this->string, $spaceIndex + 1);
         } else {
-            $this->ressource = $this->string;
+            $this->resource = $this->string;
         }
         
         $this->contentParsed = true;
     }
     
     
-    public function getRessource()
+    public function getResource()
     {
         if (!$this->contentParsed) {
             $this->parseContent();
         }
         
-        return $this->ressource;
+        return $this->resource;
     }
 
     public function getText()

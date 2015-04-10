@@ -221,7 +221,7 @@ class DocblockParser
 
             case "see":
                 $annotation = new Annotation\See($name, $string);
-                $annotation->getRessource();
+                $annotation->getResource();
                 break;
 
             default:
