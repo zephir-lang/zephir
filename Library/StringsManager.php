@@ -58,9 +58,9 @@ class StringsManager
 #include "config.h"
 #endif
 
-#include "php.h"
+#include <php.h>
 #include "php_ext.h"
-#include "ext/standard/php_string.h"
+#include <ext/standard/php_string.h>
 #include "ext.h"
 
 #include "kernel/main.h"
@@ -73,6 +73,8 @@ class StringsManager
 
 #include <php.h>
 #include <Zend/zend.h>
+
+#include "kernel/main.h"
 
 ';
 
