@@ -90,14 +90,31 @@ class Pregmatch
 		return preg_match(pattern, subject, matches, flags, offset);
 	}
 
-    /**
-     * @link https://github.com/phalcon/zephir/issues/287
-     */
-    public function testPregMatchSaveMatches(string str, string pattern)
-    {
-        var matches = null;
-        preg_match(pattern, str, matches);
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/287
+	 */
+	public function testPregMatchSaveMatches(string str, string pattern)
+	{
+		var matches = null;
+		preg_match(pattern, str, matches);
 
-        return matches;
-    }
+		return matches;
+	}
+
+	public function testMatchAll(var flags)
+	{
+		var text, matches = [];
+		let text = "test1,test2";
+		preg_match_all("/(test[0-9]+)/", text, matches, flags);
+		return matches;
+	}
+
+	public function testMatchAllInZep()
+	{
+		var m1, m2;
+		let m1 = this->testMatchAll(PREG_PATTERN_ORDER);
+		let m2 = this->testMatchAll(PREG_SET_ORDER);
+
+		return [m1, m2];
+	}
 }
