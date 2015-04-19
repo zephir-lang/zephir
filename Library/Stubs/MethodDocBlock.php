@@ -38,7 +38,7 @@ class MethodDocBlock extends DocBlock
      */
     private $aliasManager;
 
-    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = 4)
+    public function __construct(ClassMethod $method, AliasManager $aliasManager, $indent = '    ')
     {
         parent::__construct($method->getDocBlock(), $indent);
 

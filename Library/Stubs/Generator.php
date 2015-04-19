@@ -68,11 +68,17 @@ class Generator
      */
     public function generate($path)
     {
+        if ($this->config->get('indent', 'extra') === 'tabs') {
+            $indent = "\t";
+        } else {
+            $indent = '    ';
+        }
+
         $namespace = $this->config->get('namespace');
 
         foreach ($this->files as $file) {
             $class = $file->getClassDefinition();
-            $source = $this->buildClass($class);
+            $source = $this->buildClass($class, $indent);
 
             $filename = ucfirst($class->getName()) . '.zep.php';
             $filePath = $path . str_replace(
@@ -92,7 +98,14 @@ class Generator
         }
     }
 
-    protected function buildClass(ClassDefinition $class)
+    /**
+     * Build class
+     *
+     * @param ClassDefinition $class
+     * @param string $indent
+     * @return string
+     */
+    protected function buildClass(ClassDefinition $class, $indent)
     {
         $source = <<<EOF
 <?php
@@ -130,17 +143,17 @@ EOF;
         $source .= PHP_EOL . '{' . PHP_EOL;
 
         foreach ($class->getConstants() as $constant) {
-            $source .= $this->buildConstant($constant) . PHP_EOL . PHP_EOL;
+            $source .= $this->buildConstant($constant, $indent) . PHP_EOL . PHP_EOL;
         }
 
         foreach ($class->getProperties() as $property) {
-            $source .= $this->buildProperty($property) . PHP_EOL . PHP_EOL;
+            $source .= $this->buildProperty($property, $indent) . PHP_EOL . PHP_EOL;
         }
 
         $source .= PHP_EOL;
 
         foreach ($class->getMethods() as $method) {
-            $source .= $this->buildMethod($method, $class->getType() === 'interface') . "\n\n";
+            $source .= $this->buildMethod($method, $class->getType() === 'interface', $indent) . "\n\n";
         }
 
         return $source . '}' . PHP_EOL;
@@ -150,9 +163,10 @@ EOF;
      * Build property
      *
      * @param ClassProperty $property
+     * @param string $indent
      * @return string
      */
-    protected function buildProperty(ClassProperty $property)
+    protected function buildProperty(ClassProperty $property, $indent)
     {
         $visibility = $property->isPublic() ? 'public' : $property->isProtected() ? 'protected' : 'private';
         if ($property->isStatic()) {
@@ -168,16 +182,17 @@ EOF;
             ));
         }
 
-        $docBlock = new DocBlock($property->getDocBlock(), 4);
-        return $docBlock . "\n    " . $source . ';';
+        $docBlock = new DocBlock($property->getDocBlock(), $indent);
+        return $docBlock . "\n" . $indent . $source . ';';
     }
 
     /**
      * @param ClassConstant $constant
+     * @param string $indent
      *
      * @return string
      */
-    protected function buildConstant(ClassConstant $constant)
+    protected function buildConstant(ClassConstant $constant, $indent)
     {
         $source = 'const ' . $constant->getName();
 
@@ -185,24 +200,24 @@ EOF;
             'default' => $constant->getValue()
         ));
 
-        $docBlock = new DocBlock($constant->getDocBlock(), 4);
-        return $docBlock . "\n    " . $source . ' = ' . $value . ';';
+        $docBlock = new DocBlock($constant->getDocBlock(), $indent);
+        return $docBlock . "\n" . $indent . $source . ' = ' . $value . ';';
     }
 
     /**
      * @param ClassMethod $method
-     *
      * @param bool $isInterface
+     * @param string $indent
      *
      * @return string
      */
-    protected function buildMethod(ClassMethod $method, $isInterface)
+    protected function buildMethod(ClassMethod $method, $isInterface, $indent)
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
 
         $methodParameters = $method->getParameters();
         $aliasManager = $method->getClassDefinition()->getAliasManager();
-        $docBlock = new MethodDocBlock($method, $aliasManager);
+        $docBlock = new MethodDocBlock($method, $aliasManager, $indent);
 
         $parameters = array();
 
@@ -228,7 +243,7 @@ EOF;
             }
         }
 
-        $methodBody = "\t" . $modifier . ' function ' . $method->getName() . '(' . implode(', ', $parameters) . ')';
+        $methodBody = $indent . $modifier . ' function ' . $method->getName() . '(' . implode(', ', $parameters) . ')';
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
