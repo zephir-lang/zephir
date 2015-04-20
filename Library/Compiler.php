@@ -768,7 +768,17 @@ class Compiler
                 }
             }
 
-            if (is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
+            $prototypes = $this->config->get('prototypes', 'extra');
+            if ($prototypes !== null
+                && (empty($prototypes)
+                    || strcasecmp($prototypes, 'no') == 0
+                    || strncasecmp($prototypes, 'disable', 7) == 0)) {
+                $prototypes = false;
+            } else {
+                $prototypes = true;
+            }
+
+            if ($prototypes == true && is_dir(ZEPHIRPATH . 'prototypes') && is_readable(ZEPHIRPATH . 'prototypes')) {
                 /**
                  * Load additional extension prototypes
                  * @var $file \DirectoryIterator
