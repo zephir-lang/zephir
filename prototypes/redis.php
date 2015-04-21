@@ -16,4 +16,9 @@ class Redis
 	{
 
 	}
+
+	public function select($db)
+	{
+
+	}
 }
