@@ -26,7 +26,6 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
     public function testPregMatch()
     {
         $t = new Pregmatch();
-
         $this->assertSame(1, $t->testWithoutReturnAndMatches());
         $this->assertSame(array('def'), $t->testWithoutReturns());
         $this->assertSame(1, $t->testWithoutMatches());
@@ -73,5 +72,16 @@ class PregmatchTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Pregmatch;
         $this->assertSame(array('asd'), $t->testPregMatchSaveMatches("asd", "#asd#"));
+    }
+    
+    /**
+     * @link https://github.com/phalcon/zephir/issues/144
+     */
+    public function testPregMatchAllFlags()
+    {
+        $t = new Pregmatch;
+        $arr = $t->testMatchAllInZep();
+        $this->assertEquals($arr[0], array(array('test1', 'test2'), array('test1', 'test2')));
+        $this->assertEquals($arr[1], array(array('test1', 'test1'), array('test2', 'test2')));
     }
 }
