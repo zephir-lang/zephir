@@ -161,3 +161,30 @@ PHP_METHOD(Test_Compare, testNullEqualsVar) {
 
 }
 
+PHP_METHOD(Test_Compare, testNotIdenticalZeroVar) {
+
+	int a = 5;
+
+
+	RETURN_BOOL(0 != a);
+
+}
+
+PHP_METHOD(Test_Compare, testNotIdenticalZeroInt) {
+
+	int a = 5;
+
+
+	RETURN_BOOL(0 != a);
+
+}
+
+PHP_METHOD(Test_Compare, testNotIdenticalZeroLong) {
+
+	long a = 5;
+
+
+	RETURN_BOOL(0 != a);
+
+}
+
