@@ -39,8 +39,8 @@ PHP_METHOD(Test_RegexDNA, process) {
 	HashTable *_5;
 	HashPosition _4;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_3 = NULL, *_8 = NULL;
-	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard = NULL, *_0 = NULL, *_1, *_2 = NULL, **_6, *_7 = NULL, *_9 = NULL;
+	zephir_nts_static zephir_fcall_cache_entry *_3 = NULL;
+	zval *path, *variants, *vIUB, *vIUBnew, *stuffToRemove, *contents = NULL, *initialLength, *regex = NULL, *codeLength, *discard = NULL, *_0 = NULL, *_1, *_2 = NULL, **_6, *_7 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &path);
@@ -174,18 +174,16 @@ PHP_METHOD(Test_RegexDNA, process) {
 		ZEPHIR_GET_HVALUE(regex, _6);
 		zend_print_zval(regex, 0);
 		php_printf("%s", " ");
+		ZEPHIR_INIT_NVAR(_0);
 		ZEPHIR_INIT_LNVAR(_7);
 		ZEPHIR_CONCAT_SVS(_7, "/", regex, "/iS");
-		Z_SET_ISREF_P(discard);
-		ZEPHIR_CALL_FUNCTION(&_2, "preg_match_all", &_8, _7, contents, discard);
-		Z_UNSET_ISREF_P(discard);
-		zephir_check_call_status();
-		zend_print_zval(_2, 0);
+		zephir_preg_match(_0, _7, contents, discard, 1, 0 , 0  TSRMLS_CC);
+		zend_print_zval(_0, 0);
 		php_printf("%c", '\n');
 	}
-	ZEPHIR_CALL_FUNCTION(&_9, "preg_replace", &_3, vIUB, vIUBnew, contents);
+	ZEPHIR_CALL_FUNCTION(&_2, "preg_replace", &_3, vIUB, vIUBnew, contents);
 	zephir_check_call_status();
-	ZEPHIR_CPY_WRT(contents, _9);
+	ZEPHIR_CPY_WRT(contents, _2);
 	php_printf("%c", '\n');
 	zend_print_zval(initialLength, 0);
 	php_printf("%c", '\n');
