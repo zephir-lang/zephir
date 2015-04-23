@@ -13,8 +13,10 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/string.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/array.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Pregmatch) {
@@ -27,9 +29,7 @@ ZEPHIR_INIT_CLASS(Test_Pregmatch) {
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject;
+	zval *pattern, *subject, *_0, *_1, *_2;
 
 	ZEPHIR_MM_GROW();
 
@@ -37,19 +37,18 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturnAndMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_CALL_FUNCTION(NULL, "preg_match", &_0, pattern, subject);
-	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", &_0, pattern, subject);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_preg_match(_1, pattern, subject, _0, 0, 0 , 0  TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	zephir_preg_match(return_value, pattern, subject, _2, 0, 0 , 0  TSRMLS_CC);
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject, *matches = NULL;
+	zval *pattern, *subject, *matches = NULL, *_0;
 
 	ZEPHIR_MM_GROW();
 	ZEPHIR_INIT_VAR(matches);
@@ -59,19 +58,15 @@ PHP_METHOD(Test_Pregmatch, testWithoutReturns) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	Z_SET_ISREF_P(matches);
-	ZEPHIR_CALL_FUNCTION(NULL, "preg_match", &_0, pattern, subject, matches);
-	Z_UNSET_ISREF_P(matches);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(_0, pattern, subject, matches, 0, 0 , 0  TSRMLS_CC);
 	RETURN_CCTOR(matches);
 
 }
 
 PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject, *matched = NULL;
+	zval *pattern, *subject, *matched, *_0;
 
 	ZEPHIR_MM_GROW();
 
@@ -79,16 +74,15 @@ PHP_METHOD(Test_Pregmatch, testWithoutMatches) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	ZEPHIR_CALL_FUNCTION(&matched, "preg_match", &_0, pattern, subject);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(matched);
+	zephir_preg_match(matched, pattern, subject, _0, 0, 0 , 0  TSRMLS_CC);
 	RETURN_CCTOR(matched);
 
 }
 
 PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	zval *pattern, *subject, *results;
 
 	ZEPHIR_MM_GROW();
@@ -99,10 +93,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchAll) {
 	ZVAL_STRING(pattern, "/def$/", 1);
 	ZEPHIR_INIT_VAR(subject);
 	ZVAL_STRING(subject, "abcdef", 1);
-	Z_SET_ISREF_P(results);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match_all", &_0, pattern, subject, results);
-	Z_UNSET_ISREF_P(results);
-	zephir_check_call_status();
+	zephir_preg_match(return_value, pattern, subject, results, 1, 0 , 0  TSRMLS_CC);
 	RETURN_MM();
 
 }
@@ -137,37 +128,29 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 
 PHP_METHOD(Test_Pregmatch, testPregMatch2Params) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *pattern, *subject;
+	zval *pattern, *subject, *_0;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &pattern, &subject);
 
 
 
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", &_0, pattern, subject);
-	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(return_value, pattern, subject, _0, 0, 0 , 0  TSRMLS_CC);
 	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Pregmatch, testPregMatch3Params) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
 	zval *pattern, *subject, *matches;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 3, 0, &pattern, &subject, &matches);
+	zephir_fetch_params(0, 3, 0, &pattern, &subject, &matches);
 
 
 
-	Z_SET_ISREF_P(matches);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", &_0, pattern, subject, matches);
-	Z_UNSET_ISREF_P(matches);
-	zephir_check_call_status();
-	RETURN_MM();
+	zephir_preg_match(return_value, pattern, subject, matches, 0, 0 , 0  TSRMLS_CC);
+	return;
 
 }
 
@@ -214,9 +197,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
  */
 PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_0 = NULL;
-	zval *str_param = NULL, *pattern_param = NULL, *matches = NULL;
+	zval *str_param = NULL, *pattern_param = NULL, *matches = NULL, *_0;
 	zval *str = NULL, *pattern = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -228,11 +209,58 @@ PHP_METHOD(Test_Pregmatch, testPregMatchSaveMatches) {
 	ZVAL_NULL(matches);
 
 
+	ZEPHIR_INIT_VAR(_0);
+	zephir_preg_match(_0, pattern, str, matches, 0, 0 , 0  TSRMLS_CC);
+	RETURN_CCTOR(matches);
+
+}
+
+PHP_METHOD(Test_Pregmatch, testMatchAll) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
+	zval *flags, *text, *matches, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &flags);
+
+	ZEPHIR_INIT_VAR(matches);
+	array_init(matches);
+
+
+	ZEPHIR_INIT_VAR(text);
+	ZVAL_STRING(text, "test1,test2", 1);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "/(test[0-9]+)/", ZEPHIR_TEMP_PARAM_COPY);
 	Z_SET_ISREF_P(matches);
-	ZEPHIR_CALL_FUNCTION(NULL, "preg_match", &_0, pattern, str, matches);
+	ZEPHIR_CALL_FUNCTION(NULL, "preg_match_all", &_1, _0, text, matches, flags);
+	zephir_check_temp_parameter(_0);
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();
 	RETURN_CCTOR(matches);
+
+}
+
+PHP_METHOD(Test_Pregmatch, testMatchAllInZep) {
+
+	zephir_fcall_cache_entry *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *m1 = NULL, *m2 = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_LONG(_0, 1);
+	ZEPHIR_CALL_METHOD(&m1, this_ptr, "testmatchall", &_1, _0);
+	zephir_check_call_status();
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, 2);
+	ZEPHIR_CALL_METHOD(&m2, this_ptr, "testmatchall", &_1, _0);
+	zephir_check_call_status();
+	zephir_create_array(return_value, 2, 0 TSRMLS_CC);
+	zephir_array_fast_append(return_value, m1);
+	zephir_array_fast_append(return_value, m2);
+	RETURN_MM();
 
 }
 

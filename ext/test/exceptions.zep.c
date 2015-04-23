@@ -16,6 +16,7 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/operators.h"
+#include "kernel/concat.h"
 #include "kernel/object.h"
 
 
@@ -171,6 +172,49 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 
 }
 
+PHP_METHOD(Test_Exceptions, testExceptionSprintf) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
+	zval *name_param = NULL, _0, *_1 = NULL;
+	zval *name = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &name_param);
+
+	zephir_get_strval(name, name_param);
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_STRING(&_0, "Hello, %s", 0);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", &_2, &_0, name);
+	zephir_check_call_status();
+	zephir_throw_exception_debug(_1, "test/exceptions.zep", 65 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+	return;
+
+}
+
+PHP_METHOD(Test_Exceptions, testExceptionConcat) {
+
+	zval *framework_param = NULL, *language_param = NULL;
+	zval *framework = NULL, *language = NULL, *_0;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &framework_param, &language_param);
+
+	zephir_get_strval(framework, framework_param);
+	zephir_get_strval(language, language_param);
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_CONCAT_SVSV(_0, "Framework ", framework, " written using ", language);
+	zephir_throw_exception_debug(_0, "test/exceptions.zep", 70 TSRMLS_CC);
+	ZEPHIR_MM_RESTORE();
+	return;
+
+}
+
 PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
@@ -190,7 +234,7 @@ PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 		ZEPHIR_CPY_WRT(e, EG(exception));
 		if (zephir_instance_of_ev(e, zend_exception_get_default(TSRMLS_C) TSRMLS_CC)) {
 			zend_clear_exception(TSRMLS_C);
-			zephir_throw_exception_debug(e, "test/exceptions.zep", 70 TSRMLS_CC);
+			zephir_throw_exception_debug(e, "test/exceptions.zep", 80 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
