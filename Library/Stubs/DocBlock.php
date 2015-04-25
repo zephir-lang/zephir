@@ -39,11 +39,11 @@ class DocBlock
 
     /**
      * @param string $source Raw doc-block
-     * @param int    $indent Indent size, 4 by default
+     * @param string $indent Indent, 4 spaces by default
      */
-    public function __construct($source, $indent = 4)
+    public function __construct($source, $indent = '    ')
     {
-        $this->indent = str_repeat(' ', $indent);
+        $this->indent = $indent;
 
         foreach (explode("\n", trim($source, '/')) as $line) {
             $line = trim($line, "\t*\0 ");
