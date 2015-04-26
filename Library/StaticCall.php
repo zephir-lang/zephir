@@ -41,7 +41,7 @@ class StaticCall extends Call
      * @param CompilationContext $compilationContext
      * @param ClassMethod $method
      */
-    protected function call($context, $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, $method)
+    protected function call($context, $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
     {
         if (!in_array($context, array('SELF', 'STATIC'))) {
             $context = 'SELF';
@@ -115,7 +115,7 @@ class StaticCall extends Call
      * @param CompilationContext $compilationContext
      * @param ClassMethod $method
      */
-    protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, $method)
+    protected function callParent($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
     {
         $codePrinter = $compilationContext->codePrinter;
         $classCe = $classDefinition->getClassEntry($compilationContext);
@@ -187,7 +187,7 @@ class StaticCall extends Call
      * @param CompilationContext $compilationContext
      * @param ClassMethod $method
      */
-    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, $method)
+    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
     {
         $codePrinter = $compilationContext->codePrinter;
 

@@ -46,7 +46,7 @@ class EvalExpression
      * @param array $expr
      * @param CompilationContext $compilationContext
      */
-    public function optimizeNot($expr, $compilationContext)
+    public function optimizeNot($expr, CompilationContext $compilationContext)
     {
         /**
          * Compile the expression negating the evaluted expression

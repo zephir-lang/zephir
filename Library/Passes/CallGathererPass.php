@@ -21,6 +21,7 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 use Zephir\FunctionCall;
+use Zephir\CompilationContext;
 
 /**
  * CallGathererPass
@@ -46,7 +47,7 @@ class CallGathererPass
      *
      * @param CompilationContext $compilationContext
      */
-    public function __construct($compilationContext)
+    public function __construct(CompilationContext $compilationContext)
     {
         $this->compilationContext = $compilationContext;
     }

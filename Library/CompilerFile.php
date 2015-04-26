@@ -410,7 +410,7 @@ class CompilerFile
      * @param array $topStatement
      * @param CompilationContext $compilationContext
      */
-    public function preCompileClass($namespace, $topStatement, $compilationContext)
+    public function preCompileClass($namespace, $topStatement, CompilationContext $compilationContext)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->_external);
@@ -892,7 +892,7 @@ class CompilerFile
         $this->_ir = null;
     }
 
-    public function applyClassHeaders($compilationContext)
+    public function applyClassHeaders(CompilationContext $compilationContext)
     {
         $classDefinition = $this->_classDefinition;
 

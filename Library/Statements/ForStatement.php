@@ -44,7 +44,7 @@ class ForStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
-    public function compileRange($exprRaw, $compilationContext)
+    public function compileRange($exprRaw, CompilationContext $compilationContext)
     {
         if (!count($exprRaw['parameters'])) {
             return false;
@@ -433,7 +433,7 @@ class ForStatement extends StatementAbstract
      * @param \CompilationContext $compilationContext
      * @return boolean
      */
-    public function compileIterator(array $exprRaw, $compilationContext)
+    public function compileIterator(array $exprRaw, CompilationContext $compilationContext)
     {
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
 
@@ -559,7 +559,7 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param Variable $exprVariable
      */
-    public function compileStringTraverse($expression, $compilationContext, $exprVariable)
+    public function compileStringTraverse($expression, CompilationContext $compilationContext, $exprVariable)
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -687,7 +687,7 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      * @param Variable $exprVariable
      */
-    public function compileHashTraverse($expression, $compilationContext, $exprVariable)
+    public function compileHashTraverse($expression, CompilationContext $compilationContext, Variable $exprVariable)
     {
         $codePrinter = $compilationContext->codePrinter;
 

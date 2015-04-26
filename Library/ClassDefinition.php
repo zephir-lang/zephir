@@ -336,7 +336,7 @@ class ClassDefinition
      *
      * @param $classDefinition
      */
-    public function setExtendsClassDefinition($classDefinition)
+    public function setExtendsClassDefinition(ClassDefinition $classDefinition)
     {
         $this->extendsClassDefinition = $classDefinition;
     }
@@ -737,7 +737,7 @@ class ClassDefinition
      * @param ClassDefinition $interfaceDefinition
      * @throws CompilerException
      */
-    public function checkInterfaceImplements($classDefinition, $interfaceDefinition)
+    public function checkInterfaceImplements(ClassDefinition $classDefinition, ClassDefinition $interfaceDefinition)
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
@@ -1116,7 +1116,7 @@ class ClassDefinition
     /**
      * @param AliasManager $aliasManager
      */
-    public function setAliasManager($aliasManager)
+    public function setAliasManager(AliasManager $aliasManager)
     {
         $this->_aliasManager = $aliasManager;
     }
@@ -1130,7 +1130,7 @@ class ClassDefinition
      * @return string
      * @throws CompilerException
      */
-    public function getClassEntryByClassName($className, $compilationContext, $check = true)
+    public function getClassEntryByClassName($className, CompilationContext $compilationContext, $check = true)
     {
         switch (strtolower($className)) {
 
