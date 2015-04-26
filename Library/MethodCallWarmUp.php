@@ -20,7 +20,7 @@
 namespace Zephir;
 
 /**
- * MethodCallWarmpUp
+ * MethodCallWarmUp
  *
  * List of methods that require warm up
  */

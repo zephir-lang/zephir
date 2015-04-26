@@ -34,7 +34,7 @@ class Bootstrap
     protected static $commands = array();
 
     /**
-     * Shows an exception opening the file and highlighing the wrong part
+     * Shows an exception opening the file and highlighting the wrong part
      *
      * @param \Exception $e
      * @param Config $config

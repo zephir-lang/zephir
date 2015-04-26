@@ -103,7 +103,7 @@ class EvalExpression
         }
 
         /**
-         * Generate the condition according to the value returned by the evaluted expression
+         * Generate the condition according to the value returned by the evaluated expression
          */
         switch ($compiledExpression->getType()) {
 

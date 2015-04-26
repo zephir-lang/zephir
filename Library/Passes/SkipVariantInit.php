@@ -24,7 +24,7 @@ use Zephir\StatementsBlock;
 /**
  * SkipVariantInit
  *
- * In 'if'/'else' statements somtimes dynamical variables are initialized in every branch
+ * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch
  * Same case in 'switch' statements
  */
 class SkipVariantInit
@@ -93,7 +93,7 @@ class SkipVariantInit
     }
 
     /**
-     * Returns a list of variables that are initialized in every analized branch
+     * Returns a list of variables that are initialized in every analyzed branch
      *
      * @return array
      */

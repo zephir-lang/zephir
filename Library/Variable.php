@@ -494,7 +494,7 @@ class Variable
     }
 
     /**
-     * Sets the current dynamic type in a polimorphic variable
+     * Sets the current dynamic type in a polymorphic variable
      *
      * @param string|array $types
      */
@@ -518,7 +518,7 @@ class Variable
     }
 
     /**
-     * Returns the current dynamic type in a polimorphic variable
+     * Returns the current dynamic type in a polymorphic variable
      *
      * @return array
      */

@@ -240,7 +240,7 @@ class Expression
         }
 
         /**
-         * Variable that receives property accesses must be polimorphic
+         * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable() && $symbolVariable->getType() != 'array') {
             throw new CompilerException("Cannot use variable: " . $symbolVariable->getName() . '(' . $symbolVariable->getType() . ") to create empty array", $expression);
