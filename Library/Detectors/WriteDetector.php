@@ -23,7 +23,7 @@ namespace Zephir\Detectors;
  * WriteDetector
  *
  * Detects whether a variable is mutated in a given context
- * If a variable is not modified in a local context (mehtod block) we can avoid allocate
+ * If a variable is not modified in a local context (method block) we can avoid allocate
  * memory for its body (zvalue)
  *
  * Separate parameters to avoid them to be touched by modifying its reference count

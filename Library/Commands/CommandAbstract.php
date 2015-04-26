@@ -34,7 +34,7 @@ abstract class CommandAbstract implements CommandInterface
 
     /**
      * Returns parameter named $name if specified
-     * on the commmand line else null
+     * on the command line else null
      *
      * @param string $name
      * @param string $value
@@ -50,7 +50,7 @@ abstract class CommandAbstract implements CommandInterface
 
     /**
      * Returns parameter named $name if specified
-     * on the commmand line else null
+     * on the command line else null
      * @param string $name
      * @return string
      */

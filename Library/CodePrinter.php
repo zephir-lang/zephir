@@ -46,7 +46,7 @@ class CodePrinter
     }
 
     /**
-     * Add code to the output at the beggining
+     * Add code to the output at the beginning
      *
      * @param string $code
      */

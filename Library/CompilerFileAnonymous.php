@@ -234,7 +234,7 @@ class CompilerFileAnonymous
             } else {
                 /**
                  * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
-                 * thus avoiding unnecesary recompilations
+                 * thus avoiding unnecessary recompilations
                  */
                 $output = $codePrinter->getOutput();
                 $hash = hash_file('md5', $filePath);

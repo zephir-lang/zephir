@@ -252,12 +252,12 @@ class SymbolTable
                     if (count($branches) == 1) {
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if ($branches[0]->isUnreachable() === true) {
-                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
+                                throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize it at its declaration', $statement);
                             }
                         } else {
                             if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
                                 if ($branches[0]->isUnreachable() === false) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize at its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize at its declaration', $statement);
                                 }
                             }
                         }
@@ -266,7 +266,7 @@ class SymbolTable
                         while ($tempBranch) {
                             if ($tempBranch->getType() == Branch::TYPE_CONDITIONAL_TRUE) {
                                 if ($tempBranch->isUnreachable() === true) {
-                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unrecheable branch, consider initialize it at its declaration', $statement);
+                                    throw new CompilerException('Initialization of variable "' . $name . '" depends on unreacheable branch, consider initialize it at its declaration', $statement);
                                 }
                             }
 
@@ -296,7 +296,7 @@ class SymbolTable
                     if (!$found) {
                         /**
                          * Check if last assignment
-                         * Variable was initialized in a sub-branch and it's beign used in a parent branch
+                         * Variable was initialized in a sub-branch and it's being used in a parent branch
                          */
                         $possibleBadAssignment = false;
 

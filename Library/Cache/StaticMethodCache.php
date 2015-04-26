@@ -26,7 +26,7 @@ use Zephir\Call;
 /**
  * StaticMethodCache
  *
- * Calls in Zephir implement monomorphic and polimorphic caches to
+ * Calls in Zephir implement monomorphic and polymorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
  * first-level method lookup cache.
  *

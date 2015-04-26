@@ -242,7 +242,7 @@ class NativeArrayAccess
         }
 
         /**
-         * Variable that receives property accesses must be polimorphic
+         * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Cannot use variable: " . $symbolVariable->getType() . " to assign array index", $expression);

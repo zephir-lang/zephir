@@ -143,7 +143,7 @@ class ClassProperty
     }
 
     /**
-     * Returns the C-visibility accesors for the model
+     * Returns the C-visibility accessors for the model
      *
      * @return string
      */

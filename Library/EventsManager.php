@@ -32,7 +32,7 @@ class EventsManager
     private $listeners = array();
 
     /**
-     * Attachs a listener to a specific event type
+     * Attaches a listener to a specific event type
      *
      * @param $event
      * @param $callback
