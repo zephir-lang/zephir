@@ -25,6 +25,7 @@ use Zephir\Variable;
 use Zephir\ClassDefinition;
 use Zephir\MethodCallWarmUp;
 use Zephir\CompilationContext;
+use Zephir\Passes\CallGathererPass;
 
 /**
  * MethodCache
@@ -56,7 +57,7 @@ class MethodCache
      *
      * @param CallGathererPass $gatherer
      */
-    public function __construct($gatherer)
+    public function __construct(CallGathererPass $gatherer)
     {
         $this->gatherer = $gatherer;
     }
@@ -93,7 +94,7 @@ class MethodCache
      * @param ClassMethod $method
      * @param Variable $caller
      */
-    public function get(CompilationContext $compilationContext, $method, $caller)
+    public function get(CompilationContext $compilationContext, $method, Variable $caller)
     {
 
         if (!is_object($method)) {

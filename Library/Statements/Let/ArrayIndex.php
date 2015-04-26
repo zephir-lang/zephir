@@ -43,7 +43,7 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      */
-    protected function _getResolvedArrayItem($resolvedExpr, $compilationContext)
+    protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {
         $codePrinter = $compilationContext->codePrinter;
 

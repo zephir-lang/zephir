@@ -83,7 +83,7 @@ class NativeArray
      * @param CompilationContext $compilationContext
      * @return Variable
      */
-    public function getArrayValue($exprCompiled, CompilationContext $compilationContext)
+    public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
     {
         $codePrinter = $compilationContext->codePrinter;
 

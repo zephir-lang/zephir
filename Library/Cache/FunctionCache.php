@@ -21,6 +21,7 @@ namespace Zephir\Cache;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\Passes\CallGathererPass;
 
 /**
  * FunctionCache
@@ -52,7 +53,7 @@ class FunctionCache
      *
      * @param CallGathererPass $gatherer
      */
-    public function __construct($gatherer)
+    public function __construct(CallGathererPass $gatherer)
     {
         $this->gatherer = $gatherer;
     }
@@ -64,7 +65,7 @@ class FunctionCache
      * @param string $functionName
      * @return boolean
      */
-    public function canBeInternal($call, $functionName)
+    public function canBeInternal(Call $call, $functionName)
     {
         $reflector = $call->getReflector($functionName);
         if ($reflector) {

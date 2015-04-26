@@ -285,7 +285,7 @@ class FunctionCall extends Call
      * @param array $expression
      * @param CompilationContext $compilationContext
      */
-    protected function _callNormal(array $expression, $compilationContext)
+    protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
         $funcName = strtolower($expression['name']);
 
@@ -442,7 +442,7 @@ class FunctionCall extends Call
      * @param array $expression
      * @param CompilationContext $compilationContext
      */
-    protected function _callDynamic(array $expression, $compilationContext)
+    protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {
         $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
         switch ($variable->getType()) {

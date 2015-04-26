@@ -47,7 +47,7 @@ class SymbolTable
      *
      * @param CompilationContext $compilationContext
      */
-    public function __construct($compilationContext)
+    public function __construct(CompilationContext $compilationContext)
     {
         /* this_ptr */
         $thisVar = new Variable('variable', 'this', $compilationContext->currentBranch);
@@ -360,7 +360,7 @@ class SymbolTable
      * @param array $statement
      * @return Variable
      */
-    public function getVariableForWrite($name, $compilationContext, array $statement = null)
+    public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {
         /**
          * Create superglobals just in time
@@ -414,7 +414,7 @@ class SymbolTable
      * @param array $statement
      * @return Variable
      */
-    public function getVariableForUpdate($name, $compilationContext, array $statement = null)
+    public function getVariableForUpdate($name, CompilationContext $compilationContext, array $statement = null)
     {
         /**
          * Create superglobals just in time
