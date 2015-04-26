@@ -1553,6 +1553,39 @@ class ClassDefinition
             }
         }
 
+        $properties = $class->getProperties();
+        if (count($properties) > 0) {
+            foreach ($properties as $property) {
+                $visibility = array();
+
+                if ($property->isPublic()) {
+                    $visibility[] = 'public';
+                }
+
+                if ($property->isPrivate()) {
+                    $visibility[] = 'private';
+                }
+
+                if ($property->isProtected()) {
+                    $visibility[] = 'protected';
+                }
+
+                if ($property->isStatic()) {
+                    $visibility[] = 'static';
+                }
+
+                $classConstant = new ClassProperty(
+                    $classDefinition,
+                    $visibility,
+                    $property->getName(),
+                    null,
+                    null,
+                    null
+                );
+                $classDefinition->addProperty($classConstant);
+            }
+        }
+
         $classDefinition->setIsInternal(true);
 
         return $classDefinition;
