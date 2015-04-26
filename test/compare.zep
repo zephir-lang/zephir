@@ -63,4 +63,25 @@ class Compare
 
 		return false;
 	}
+
+	public function testNotIdenticalZeroVar()
+	{
+		var a = 5;
+
+		return 0 != a;
+	}
+
+	public function testNotIdenticalZeroInt()
+	{
+		int a = 5;
+
+		return 0 != a;
+	}
+
+	public function testNotIdenticalZeroLong()
+	{
+		long a = 5;
+
+		return 0 != a;
+	}
 }

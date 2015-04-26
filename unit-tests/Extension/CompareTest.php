@@ -60,4 +60,14 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testNullEqualsVar(null));
         $this->assertFalse($t->testNullEqualsVar(1));
     }
+
+
+    public function testNotEquals()
+    {
+        $t = new Compare();
+
+        $this->assertTrue($t->testNotIdenticalZeroVar());
+        $this->assertTrue($t->testNotIdenticalZeroInt());
+        $this->assertTrue($t->testNotIdenticalZeroLong());
+    }
 }
