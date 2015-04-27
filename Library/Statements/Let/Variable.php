@@ -445,6 +445,23 @@ class Variable
                 }
                 break;
 
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                switch ($statement['operator']) {
+                    case 'assign':
+                        $symbolVariable->initVariant($compilationContext);
+                        $codePrinter->output('ZVAL_STRING(' . $variable . ', "' . $resolvedExpr->getCode() . '", 1);');
+                        break;
+                    case 'concat-assign':
+                        $codePrinter->output('zephir_concat_self_str(&' . $variable . ', "' . $resolvedExpr->getCode() . '", sizeof("' . $resolvedExpr->getCode() . '")-1 TSRMLS_CC);');
+                        break;
+                    default:
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
+                }
+                break;
+
             case 'string':
                 switch ($statement['operator']) {
                     case 'assign':

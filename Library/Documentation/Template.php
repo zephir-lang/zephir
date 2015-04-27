@@ -98,7 +98,6 @@ class Template
         file_put_contents($outputFile, $content);
     }
 
-
     public function parse()
     {
         foreach ($this->data as $name => $value) {
@@ -125,7 +124,6 @@ class Template
 
         return $inputFilename;
     }
-
 
     public function partial($fileName, array $data = array())
     {
