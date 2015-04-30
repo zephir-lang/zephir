@@ -1,8 +1,16 @@
 <?php
 
 /**
+ * Predefined memcached ext constants
+ * @link http://php.net/manual/en/memcache.constants.php
+ */
+ 
+define('MEMCACHE_HAVE_SESSION', 1);
+define('MEMCACHE_COMPRESSED', 2);
+
+/**
  * Class Memcache
- * @link http://se2.php.net/manual/ru/class.memcache.php
+ * @link http://se2.php.net/manual/en/class.memcache.php
  */
 class Memcache
 {
