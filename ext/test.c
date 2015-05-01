@@ -48,6 +48,7 @@ zend_class_entry *test_5__closure_ce;
 zend_class_entry *test_6__closure_ce;
 zend_class_entry *test_7__closure_ce;
 zend_class_entry *test_8__closure_ce;
+zend_class_entry *test_9__closure_ce;
 zend_class_entry *test_arithmetic_ce;
 zend_class_entry *test_arrayobject_ce;
 zend_class_entry *test_assign_ce;
@@ -329,6 +330,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(test_6__closure);
 	ZEPHIR_INIT(test_7__closure);
 	ZEPHIR_INIT(test_8__closure);
+	ZEPHIR_INIT(test_9__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

@@ -145,5 +145,6 @@
 #include "test/6__closure.zep.h"
 #include "test/7__closure.zep.h"
 #include "test/8__closure.zep.h"
+#include "test/9__closure.zep.h"
 
 #endif

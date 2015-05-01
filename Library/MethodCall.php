@@ -460,6 +460,14 @@ class MethodCall extends Call
                                             case 'variable':
                                                 break;
 
+                                            case 'callable':
+                                                /**
+                                                 * Array can be a callable type, example: [$this, "method"]
+                                                 *
+                                                 * @todo we need to check this array if can...
+                                                 */
+                                                break;
+
                                             default:
                                                 $compilationContext->logger->warning("Passing possible incorrect type for parameter: " . $classDefinition->getCompleteName() . '::' . $method->getName() . '(' . $parameter['name'] . '), passing: ' . $resolvedDynamicTypes[$n] . ', ' . "expecting: " . $parameter['data-type'], "possible-wrong-parameter", $expression);
                                                 break;

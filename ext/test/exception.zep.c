@@ -30,6 +30,9 @@ ZEPHIR_INIT_CLASS(Test_Exception) {
 
 }
 
+/**
+ * @link https://github.com/phalcon/zephir/issues/915
+ */
 PHP_METHOD(Test_Exception, testRuntimePropertyFetch) {
 
 	zval *message_param = NULL;

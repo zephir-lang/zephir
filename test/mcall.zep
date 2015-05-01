@@ -238,6 +238,24 @@ class Mcall
 		return "hello";
 	}
 
+	public function testCallablePass()
+	{
+		var a;
+		let a = new Oo\OoParams();
+
+		return a->setCallable(function() {
+			return 5;
+		});
+	}
+
+	public function testCallableArrayThisMethodPass()
+	{
+		var a;
+		let a = new Oo\OoParams();
+
+		return a->setCallable([this, "bb"]);
+	}
+
 	public function aa()
 	{
 		var a;
