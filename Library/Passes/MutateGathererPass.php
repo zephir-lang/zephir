@@ -161,6 +161,7 @@ class MutateGathererPass
             case 'long':
             case 'ulong':
             case 'string':
+            case 'istring':
             case 'null':
             case 'char':
             case 'uchar':

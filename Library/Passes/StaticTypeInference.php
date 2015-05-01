@@ -186,7 +186,7 @@ class StaticTypeInference
     {
         $pass = false;
         foreach ($this->variables as $variable => $type) {
-            if ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'null' || $type == 'numeric') {
+            if ($type == 'variable' || $type == 'string' || $type == 'istring' || $type == 'array' || $type == 'null' || $type == 'numeric') {
                 unset($this->variables[$variable]);
             } else {
                 $pass = true;
@@ -206,7 +206,7 @@ class StaticTypeInference
     {
         if (isset($this->variables[$variable])) {
             $type = $this->variables[$variable];
-            if ($type != 'variable' && $type != 'undefined' && $type != 'string' && $type != 'array' && $type != 'null' && $type != 'numeric') {
+            if ($type != 'variable' && $type != 'undefined' && $type != 'string' && $type != 'istring' && $type != 'array' && $type != 'null' && $type != 'numeric') {
                 //echo $variable, ' ', $type, PHP_EOL;
                 return $type;
             }
@@ -294,6 +294,7 @@ class StaticTypeInference
             case 'null':
             case 'char':
             case 'uchar':
+            case 'istring':
                 return $expression['type'];
 
             case 'string':

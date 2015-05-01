@@ -167,6 +167,7 @@ class CallGathererPass
             case 'char':
             case 'uchar':
             case 'string':
+            case 'istring':
             case 'static-constant-access':
             case 'variable':
             case 'constant':
