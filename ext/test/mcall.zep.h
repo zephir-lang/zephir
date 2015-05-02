@@ -47,6 +47,8 @@ PHP_METHOD(Test_Mcall, arrayParam);
 PHP_METHOD(Test_Mcall, objectParamCastStdClass);
 PHP_METHOD(Test_Mcall, objectParamCastOoParam);
 PHP_METHOD(Test_Mcall, bb);
+PHP_METHOD(Test_Mcall, testCallablePass);
+PHP_METHOD(Test_Mcall, testCallableArrayThisMethodPass);
 PHP_METHOD(Test_Mcall, aa);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_mcall_testmethod4, 0, 0, 2)
@@ -240,6 +242,8 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, objectParamCastStdClass, arginfo_test_mcall_objectparamcaststdclass, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, objectParamCastOoParam, arginfo_test_mcall_objectparamcastooparam, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, bb, NULL, ZEND_ACC_PRIVATE)
+	PHP_ME(Test_Mcall, testCallablePass, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Mcall, testCallableArrayThisMethodPass, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, aa, NULL, ZEND_ACC_PUBLIC)
   PHP_FE_END
 };

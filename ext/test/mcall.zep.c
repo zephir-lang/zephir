@@ -17,6 +17,8 @@
 #include "kernel/fcall.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/object.h"
+#include "kernel/array.h"
 
 
 /**
@@ -746,6 +748,56 @@ PHP_METHOD(Test_Mcall, bb) {
 
 
 	RETURN_STRING("hello", 1);
+
+}
+
+PHP_METHOD(Test_Mcall, testCallablePass) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *a, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	object_init_ex(a, test_oo_ooparams_ce);
+	if (zephir_has_constructor(a TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, a, "__construct", NULL);
+		zephir_check_call_status();
+	}
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	zephir_create_closure_ex(_0, NULL, test_9__closure_ce, SS("__invoke") TSRMLS_CC);
+	ZEPHIR_RETURN_CALL_METHOD(a, "setcallable", &_1, _0);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+PHP_METHOD(Test_Mcall, testCallableArrayThisMethodPass) {
+
+	zephir_nts_static zephir_fcall_cache_entry *_2 = NULL;
+	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *a, *_1;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	object_init_ex(a, test_oo_ooparams_ce);
+	if (zephir_has_constructor(a TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, a, "__construct", NULL);
+		zephir_check_call_status();
+	}
+	ZEPHIR_INIT_VAR(_0);
+	zephir_create_array(_0, 2, 0 TSRMLS_CC);
+	zephir_array_fast_append(_0, this_ptr);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_STRING(_1, "bb", 1);
+	zephir_array_fast_append(_0, _1);
+	ZEPHIR_RETURN_CALL_METHOD(a, "setcallable", &_2, _0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
