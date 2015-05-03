@@ -190,19 +190,20 @@ class ArrayIndex
 
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
+                $variableIndexName = ($variableIndex->isLocalOnly() ? '&' : '') . $variableIndex->getName();
 
                 switch ($variableIndex->getType()) {
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
+                        $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
                         break;
                     case 'string':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
                         break;
                     case 'variable':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndex->getName() . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
                         break;
                     default:
                         throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);

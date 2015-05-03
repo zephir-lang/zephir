@@ -98,17 +98,17 @@ class IssetOperator extends BaseOperator
 
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
-                        $indexVariable->setLocalOnly(false);
+                        $indexVariableName = ($indexVariable->isLocalOnly() ? '&' : '') . $indexVariable->getName();
 
                         switch ($indexVariable->getType()) {
 
                             case 'int':
                             case 'long':
-                                return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $left['right']);
+                                return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariableName . ')', $left['right']);
 
                             case 'variable':
                             case 'string':
-                                return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariable->getName() . ')', $left['right']);
+                                return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariableName . ')', $left['right']);
 
                             default:
                                 throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
