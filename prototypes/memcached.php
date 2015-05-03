@@ -113,12 +113,49 @@ class Memcached
 	}
 
 	/**
-	 * @link http://ru2.php.net/manual/en/memcached.add.php
+	 * @link http://php.net/manual/en/memcached.add.php
 	 * @param $key
 	 * @param $value
 	 * @param int $expiration
 	 */
 	public function add($key, $value, $expiration = 0)
+	{
+
+	}
+
+	/**
+	 * @link http://php.net/manual/en//memcached.delete.php
+	 * @param $key
+	 * @param int $time
+	 */
+	public function delete($key, $time = 0)
+	{
+
+	}
+
+	/**
+	 * Retrieve an item
+	 * @link http://php.net/manual/en/memcached.get.php
+	 * @param string $key
+	 * @param callable $cache_cb
+	 * @param float $cas_token
+	 */
+	public function get ($key, callable $cache_cb = null, &$cas_token = null) {}
+
+	/**
+	 * @link http://php.net/manual/en/memcached.flush.php
+	 * @param int $delay
+	 * @return bool
+	 */
+	public function flush ($delay = 0) {}
+
+	/**
+	 * @link http://ru2.php.net/manual/en/memcached.set.php
+	 * @param $key
+	 * @param $value
+	 * @param int $expiration
+	 */
+	public function set($key, $value, $expiration = 0)
 	{
 
 	}
