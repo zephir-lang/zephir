@@ -57,7 +57,7 @@ class MethodCache
      *
      * @param CallGathererPass $gatherer
      */
-    public function __construct(CallGathererPass $gatherer)
+    public function __construct(CallGathererPass $gatherer = null)
     {
         $this->gatherer = $gatherer;
     }
