@@ -893,7 +893,6 @@ class Compiler
         $needConfigure = $this->generate($command);
         if ($needConfigure) {
             if (Utils::isWindows()) {
-                echo "start";
                 exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
                 if (file_exists('ext/Release')) {
                     exec('rd /s /q ext/Release', $output, $exit);
