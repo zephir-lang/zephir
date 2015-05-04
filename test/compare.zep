@@ -9,6 +9,11 @@ class Compare
 		return a < b;
 	}
 
+	public function isGreaterEqual(int a, int b)
+	{
+		return a >= b;
+	}
+
 	public function isLessDouble(double a, double b)
 	{
 		return a < b;

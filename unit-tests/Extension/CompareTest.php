@@ -32,6 +32,15 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($t->isLessInt(20, 10));
     }
 
+    public function testGreaterEqual()
+    {
+        $t = new Compare;
+
+        $this->assertTrue($t->isGreaterEqual(3, 2));
+        $this->assertTrue($t->isGreaterEqual(2, 2));
+        $this->assertFalse($t->isGreaterEqual(1, 2));
+    }
+
     public function testConst()
     {
         $t = new Compare;
