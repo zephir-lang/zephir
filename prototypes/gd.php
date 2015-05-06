@@ -1,7 +1,7 @@
 <?php
 
 if (function_exists('gd_info')) {
-	return false;
+    return false;
 }
 
 /**
@@ -195,7 +195,10 @@ function imagecolorclosesthwb($image, $red, $green, $blue) {}
  * @param int $color
  * @return boolean
  */
-function imagecolordeallocate($image, $color) {}
+function imagecolordeallocate($image, $color)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorexact.php
@@ -205,7 +208,10 @@ function imagecolordeallocate($image, $color) {}
  * @param int $blue
  * @return int
  */
-function imagecolorexact($image, $red, $green, $blue) {}
+function imagecolorexact($image, $red, $green, $blue)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorexactalpha.php
@@ -216,7 +222,10 @@ function imagecolorexact($image, $red, $green, $blue) {}
  * @param int $alpha
  * @return int
  */
-function imagecolorexactalpha($image, $red, $green, $blue, $alpha) {}
+function imagecolorexactalpha($image, $red, $green, $blue, $alpha)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolormatch.php
@@ -224,7 +233,10 @@ function imagecolorexactalpha($image, $red, $green, $blue, $alpha) {}
  * @param resource $image2
  * @return boolean
  */
-function imagecolormatch($image1, $image2) {}
+function imagecolormatch($image1, $image2)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorresolve.php
@@ -234,7 +246,10 @@ function imagecolormatch($image1, $image2) {}
  * @param int $blue
  * @return int
  */
-function imagecolorresolve($image, $red, $green, $blue) {}
+function imagecolorresolve($image, $red, $green, $blue)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorresolvealpha.php
@@ -245,7 +260,10 @@ function imagecolorresolve($image, $red, $green, $blue) {}
  * @param int $alpha
  * @return int
  */
-function imagecolorresolvealpha($image, $red, $green, $blue, $alpha) {}
+function imagecolorresolvealpha($image, $red, $green, $blue, $alpha)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorset.php
@@ -257,7 +275,10 @@ function imagecolorresolvealpha($image, $red, $green, $blue, $alpha) {}
  * @param int $alpha
  * @return void
  */
-function imagecolorset($image, $index, $red, $green, $blue, $alpha = 0) {}
+function imagecolorset($image, $index, $red, $green, $blue, $alpha = 0)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecolorsforindex.php
@@ -265,7 +286,10 @@ function imagecolorset($image, $index, $red, $green, $blue, $alpha = 0) {}
  * @param int $index
  * @return array
  */
-function imagecolorsforindex($image, $index) {}
+function imagecolorsforindex($image, $index)
+{
+
+}
 
 /**
  * @link http://www.php.net/manual/ru/function.imagecreate.php
@@ -273,7 +297,10 @@ function imagecolorsforindex($image, $index) {}
  * @param $height
  * @return resource
  */
-function imagecreate($width, $height) {}
+function imagecreate($width, $height)
+{
+
+}
 
 
 /**
@@ -326,19 +353,19 @@ define('PNG_FILTER_UP', 32);
 define('PNG_FILTER_AVG', 64);
 define('PNG_FILTER_PAETH', 128);
 define('PNG_ALL_FILTERS', 248);
-define('IMG_AFFINE_TRANSLATE',0);
-define('IMG_AFFINE_SCALE',1);
-define('IMG_AFFINE_ROTATE',2);
-define('IMG_AFFINE_SHEAR_HORIZONTAL',3);
-define('IMG_AFFINE_SHEAR_VERTICAL',4);
-define('IMG_CROP_DEFAULT',0);
-define('IMG_CROP_TRANSPARENT',1);
-define('IMG_CROP_BLACK',2);
-define('IMG_CROP_WHITE',3);
-define('IMG_CROP_SIDES',4);
-define('IMG_FLIP_BOTH',3);
-define('IMG_FLIP_HORIZONTAL',1);
-define('IMG_FLIP_VERTICAL',2);
+define('IMG_AFFINE_TRANSLATE', 0);
+define('IMG_AFFINE_SCALE', 1);
+define('IMG_AFFINE_ROTATE', 2);
+define('IMG_AFFINE_SHEAR_HORIZONTAL', 3);
+define('IMG_AFFINE_SHEAR_VERTICAL', 4);
+define('IMG_CROP_DEFAULT', 0);
+define('IMG_CROP_TRANSPARENT', 1);
+define('IMG_CROP_BLACK', 2);
+define('IMG_CROP_WHITE', 3);
+define('IMG_CROP_SIDES', 4);
+define('IMG_FLIP_BOTH', 3);
+define('IMG_FLIP_HORIZONTAL', 1);
+define('IMG_FLIP_VERTICAL', 2);
 define('IMG_BELL', 1);
 define('IMG_BESSEL', 2);
 define('IMG_BICUBIC', 4);
