@@ -48,6 +48,11 @@ class Cast
 		return (int) a;
 	}
 
+	public function testIntCastFromString()
+	{
+		return (int) "test";
+	}
+
 	public function testIntCastFromNull()
 	{
 		return (int) null;

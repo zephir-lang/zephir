@@ -10,6 +10,7 @@ PHP_METHOD(Test_Cast, testIntCastFromBooleanFalse);
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanTrue);
 PHP_METHOD(Test_Cast, testIntCastFromVariableBooleanFalse);
 PHP_METHOD(Test_Cast, testIntCastFromVariableNull);
+PHP_METHOD(Test_Cast, testIntCastFromString);
 PHP_METHOD(Test_Cast, testIntCastFromNull);
 PHP_METHOD(Test_Cast, testIntCastFromVariableEmptyArray);
 PHP_METHOD(Test_Cast, testIntCastFromEmptyArray);
@@ -56,6 +57,7 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testIntCastFromVariableBooleanTrue, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromVariableBooleanFalse, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromVariableNull, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Cast, testIntCastFromString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromNull, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromVariableEmptyArray, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testIntCastFromEmptyArray, NULL, ZEND_ACC_PUBLIC)

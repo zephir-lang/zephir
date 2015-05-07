@@ -178,7 +178,7 @@ PHP_METHOD(Test_Logical, testMixed2) {
 	_1 = _0;
 	if (_1) {
 		zephir_array_fetch_long(&_2, match, 0, PH_NOISY | PH_READONLY, "test/logical.zep", 65 TSRMLS_CC);
-		_1 = ZEPHIR_LT_LONG(minLength, zephir_fast_strlen_ev(_2));
+		_1 = ZEPHIR_LE_LONG(minLength, zephir_fast_strlen_ev(_2));
 	}
 	if (_1) {
 		RETURN_BOOL(1);
