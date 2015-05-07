@@ -43,6 +43,21 @@ PHP_METHOD(Test_Compare, isLessInt) {
 
 }
 
+PHP_METHOD(Test_Compare, isGreaterEqual) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	int a, b;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
+
+
+	RETURN_BOOL(a >= b);
+
+}
+
 PHP_METHOD(Test_Compare, isLessDouble) {
 
 	zval *a_param = NULL, *b_param = NULL;

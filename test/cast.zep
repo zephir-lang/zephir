@@ -9,68 +9,86 @@ class Cast
 {
 	/** To int cast */
 
-	public function testIntCastFromFloat()
+	public function testIntCastFromFloat() -> int
 	{
 		return (int) 5.0;
 	}
 
-	public function testIntCastFromVariableFloat()
+	public function testIntCastFromVariableFloat() -> int
 	{
 		var a = 5.0;
 		return (int) a;
 	}
 
-	public function testIntCastFromBooleanTrue()
+	public function testIntCastFromBooleanTrue() -> int
 	{
 		return (int) true;
 	}
 
-	public function testIntCastFromBooleanFalse()
+	public function testIntCastFromBooleanFalse() -> int
 	{
 		return (int) false;
 	}
 
-	public function testIntCastFromVariableBooleanTrue()
+	public function testIntCastFromVariableBooleanTrue() -> int
 	{
 		var a = true;
 		return (int) a;
 	}
 
-	public function testIntCastFromVariableBooleanFalse()
+	public function testIntCastFromVariableBooleanFalse() -> int
 	{
 		var a = false;
 		return (int) a;
 	}
 
-	public function testIntCastFromVariableNull()
+	public function testIntCastFromVariableNull() -> int
 	{
 		var a = null;
 		return (int) a;
 	}
 
-	public function testIntCastFromNull()
+	public function testIntCastFromStringValue() -> int
+	{
+		return (int) "test";
+	}
+
+	public function testIntCastFromVariableString() -> int
+	{
+		string a;
+		let a = "test";
+
+		return (int) a;
+	}
+
+	public function testIntCastFromParameterString(const string a) -> int
+	{
+		return (int) a;
+	}
+
+	public function testIntCastFromNull() -> int
 	{
 		return (int) null;
 	}
 
-	public function testIntCastFromVariableEmptyArray()
+	public function testIntCastFromVariableEmptyArray() -> int
 	{
 		var a = [];
 		return (int) a;
 	}
 
-	public function testIntCastFromEmptyArray()
+	public function testIntCastFromEmptyArray() -> int
 	{
 		return (int) [];
 	}
 
-	public function testIntCastFromVariableArray()
+	public function testIntCastFromVariableArray() -> int
 	{
 		var a = [1, 2, 3, 4];
 		return (int) a;
 	}
 
-	public function testIntCastFromArray()
+	public function testIntCastFromArray() -> int
 	{
 		return (int) [1, 2, 3, 4];
 	}
@@ -79,7 +97,7 @@ class Cast
 	 * Notice: Object of class stdClass could not be converted to int
 	 * @return int 1
 	 */
-	public function testIntCastFromStdClass()
+	public function testIntCastFromStdClass() -> int
 	{
 		return (int) (new \StdClass);
 	}
@@ -88,7 +106,7 @@ class Cast
 	 * Notice: Object of class stdClass could not be converted to int
 	 * @return int 1
 	 */
-	public function testIntCastFromVariableStdClass()
+	public function testIntCastFromVariableStdClass() -> int
 	{
 		var a;
 		let a = new \StdClass;

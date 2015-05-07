@@ -65,6 +65,23 @@ class CastOperator extends BaseOperator
                     case 'bool':
                         return new CompiledExpression('int', $resolved->getBooleanCode(), $expression);
 
+                    case 'string':
+                        $compilationContext->headersManager->add('kernel/operators');
+
+                        /**
+                         * zephir_get_intval_ex use zval variable
+                         * before use with it we create a new variable and assign value of literal
+                         *
+                         * @todo Optimize by creating native function for string without zval using
+                         */
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('string', $compilationContext);
+                        $let = new LetVariable();
+                        $original = $resolved->getOriginal();
+                        $original['operator'] = 'assign';
+                        $let->assign($symbolVariable->getName(), $symbolVariable, $resolved, new ReadDetector(), $compilationContext, $original);
+
+                        return new CompiledExpression('int', 'zephir_get_intval_ex(' . $symbolVariable->getName() . ')', $expression);
+
                     case 'array':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
@@ -86,6 +103,7 @@ class CastOperator extends BaseOperator
 
                             case 'array':
                             case 'variable':
+                            case 'string':
                                 return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
 
                             default:
@@ -206,7 +224,7 @@ class CastOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext, $expression);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
                         $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
 
@@ -222,9 +240,9 @@ class CastOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext);
                         $symbolVariable->setMustInitNull(true);
-                        $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
+                        $symbolVariable->setIsInitialized(true, $compilationContext);
                         $symbolVariable->increaseUses();
                         $compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
                         if ($symbolVariable->isTemporal()) {
