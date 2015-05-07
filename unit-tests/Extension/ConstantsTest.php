@@ -35,6 +35,7 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(Constants::C5 === 10.25);
         $this->assertTrue(Constants::C6 === 'test');
         $this->assertTrue(Constants::className === 'Test\Constants');
+        $this->assertTrue(Constants::STD_PROP_LIST === \ArrayObject::STD_PROP_LIST);
     }
 
     public function testConstantGetters()

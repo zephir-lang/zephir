@@ -116,6 +116,33 @@ class ClassConstant
      */
     public function compile(CompilationContext $compilationContext)
     {
+        if ($this->value['type'] == 'static-constant-access') {
+            $name = $this->value['left']['value'].'::'.$this->value['right']['value'];
+            if (defined($name)) {
+                $value = constant($name);
+
+                if (is_int($value)) {
+                    $this->value['type'] =  'int';
+                    $this->value['value'] = $value;
+                } elseif (is_float($value)) {
+                    $this->value['type'] =  'double';
+                    $this->value['value'] = $value;
+                } elseif (is_bool($value)) {
+                    $this->value['type'] =  'bool';
+                    if (!$value) {
+                        $this->value['value'] = 'false';
+                    } else {
+                        $this->value['value'] = 'true';
+                    }
+                } elseif (is_string($value)) {
+                    $this->value['type'] =  'string';
+                    $this->value['value'] = $value;
+                } elseif (is_null($value)) {
+                    $this->value['type'] =  'null';
+                }
+            }
+        }
+
         switch ($this->value['type']) {
             case 'constant':
                 $constant = new Constants();
