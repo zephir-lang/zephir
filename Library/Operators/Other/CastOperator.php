@@ -103,6 +103,7 @@ class CastOperator extends BaseOperator
 
                             case 'array':
                             case 'variable':
+                            case 'string':
                                 return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
 
                             default:

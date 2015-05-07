@@ -27,21 +27,39 @@ class CastTest extends \PHPUnit_Framework_TestCase
     {
         $t = new Cast();
 
-        $this->assertTrue($t->testIntCastFromFloat() === 5);
-        $this->assertTrue($t->testIntCastFromBooleanTrue() === 1);
-        $this->assertTrue($t->testIntCastFromBooleanFalse() === 0);
-        $this->assertTrue($t->testIntCastFromNull() === 0);
-        $this->assertTrue($t->testIntCastFromEmptyArray() === 0);
-        $this->assertTrue($t->testIntCastFromArray() === 1);
-        $this->assertTrue($t->testIntCastFromStdClass() === 1);
+        /**
+         * Value
+         */
 
-        $this->assertTrue($t->testIntCastFromVariableFloat() === 5);
-        $this->assertTrue($t->testIntCastFromVariableBooleanTrue() === 1);
-        $this->assertTrue($t->testIntCastFromVariableBooleanFalse() === 0);
-        $this->assertTrue($t->testIntCastFromVariableNull() === 0);
-        $this->assertTrue($t->testIntCastFromVariableEmptyArray() === 0);
-        $this->assertTrue($t->testIntCastFromVariableArray() === 1);
-        $this->assertTrue($t->testIntCastFromVariableStdClass() === 1);
+        $this->assertSame(5, $t->testIntCastFromFloat());
+        $this->assertSame(1, $t->testIntCastFromBooleanTrue());
+        $this->assertSame(0, $t->testIntCastFromBooleanFalse());
+        $this->assertSame(0, $t->testIntCastFromNull());
+        $this->assertSame(0, $t->testIntCastFromStringValue());
+        $this->assertSame(0, $t->testIntCastFromEmptyArray());
+        $this->assertSame(1, $t->testIntCastFromArray());
+        $this->assertSame(1, $t->testIntCastFromStdClass());
+
+
+        /**
+         * Variable types
+         */
+
+        $this->assertSame(5, $t->testIntCastFromVariableFloat());
+        $this->assertSame(1, $t->testIntCastFromVariableBooleanTrue());
+        $this->assertSame(0, $t->testIntCastFromVariableBooleanFalse());
+        $this->assertSame(0, $t->testIntCastFromVariableNull());
+
+        $this->assertSame(0, $t->testIntCastFromVariableString());
+        $this->assertSame((int) "test", $t->testIntCastFromParameterString("test"));
+        $this->assertSame((int) "1", $t->testIntCastFromParameterString("1"));
+        $this->assertSame((int) "12345", $t->testIntCastFromParameterString("12345"));
+        $this->assertSame((int) "-1", $t->testIntCastFromParameterString("-1"));
+        $this->assertSame((int) "+5", $t->testIntCastFromParameterString("+5"));
+
+        $this->assertSame(0, $t->testIntCastFromVariableEmptyArray());
+        $this->assertSame(1, $t->testIntCastFromVariableArray());
+        $this->assertSame(1, $t->testIntCastFromVariableStdClass());
     }
 
     public function testFloatCast()

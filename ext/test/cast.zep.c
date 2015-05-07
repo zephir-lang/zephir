@@ -89,7 +89,7 @@ PHP_METHOD(Test_Cast, testIntCastFromVariableNull) {
 
 }
 
-PHP_METHOD(Test_Cast, testIntCastFromString) {
+PHP_METHOD(Test_Cast, testIntCastFromStringValue) {
 
 	zval *_0 = NULL;
 
@@ -99,6 +99,33 @@ PHP_METHOD(Test_Cast, testIntCastFromString) {
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_STRING(_0, "test", 1);
 	RETURN_MM_LONG(zephir_get_intval_ex(_0));
+
+}
+
+PHP_METHOD(Test_Cast, testIntCastFromVariableString) {
+
+	zval *a;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(a);
+	ZVAL_STRING(a, "test", 1);
+	RETURN_MM_LONG(zephir_get_intval(a));
+
+}
+
+PHP_METHOD(Test_Cast, testIntCastFromParameterString) {
+
+	zval *a_param = NULL;
+	zval *a = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a_param);
+
+	zephir_get_strval(a, a_param);
+
+
+	RETURN_MM_LONG(zephir_get_intval(a));
 
 }
 
