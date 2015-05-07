@@ -193,11 +193,11 @@ class SymbolTable
                  */
                 $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
 
-                $superVar = new Variable('variable', $name, $compilationContext->currentBranch);
-                $superVar->setIsInitialized(true, $compilationContext, $statement);
-                $superVar->setDynamicTypes('array');
-                $superVar->setIsExternal(true);
-                $this->variables[$name] = $superVar;
+                $variable = new Variable('variable', $name, $compilationContext->currentBranch);
+                $variable->setIsInitialized(true, $compilationContext, $statement);
+                $variable->setDynamicTypes('array');
+                $variable->setIsExternal(true);
+                $this->variables[$name] = $variable;
             } else {
                 $found = false;
                 $variable = $this->getVariable($name);
@@ -211,6 +211,8 @@ class SymbolTable
                     $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
                 }
             }
+            $variable->increaseUses();
+            return $variable;
         }
 
         if (!$this->hasVariable($name)) {
