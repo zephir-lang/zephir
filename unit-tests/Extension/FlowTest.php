@@ -116,5 +116,8 @@ class FlowTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($t->testSwitch9(), 2);
         $this->assertEquals($t->testSwitch10(), 2);
         $this->assertEquals($t->testSwitch11(), 1);
+        $this->assertEquals($t->testSwitch12(10, 6), 1);
+        $this->assertEquals($t->testSwitch12(6, 10), 0);
+        $this->assertEquals($t->testSwitch12(2, 3), 2);
     }
 }

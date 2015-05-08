@@ -925,6 +925,18 @@ class Flow
         }
     }
 
+    public function testSwitch12(var1, var2)
+    {
+        switch true {
+            case var1 > var2 && var2 > 5:
+                return 1;
+            case var1 < var2 && var1 < 5:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
     public function testUnrechable1()
     {
         var a = 0, b = 0.0, c = false, d = "", e = '\0';
