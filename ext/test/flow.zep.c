@@ -2014,6 +2014,37 @@ PHP_METHOD(Test_Flow, testSwitch11) {
 
 }
 
+PHP_METHOD(Test_Flow, testSwitch12) {
+
+	zend_bool _0, _1, _2;
+	zval *var1, *var2;
+
+	zephir_fetch_params(0, 2, 0, &var1, &var2);
+
+
+
+	do {
+		_0 = 1;
+		_1 = ZEPHIR_GT(var1, var2);
+		if (_1) {
+			_1 = ZEPHIR_GT_LONG(var2, 5);
+		}
+		if (_0 == _1) {
+			RETURN_LONG(1);
+		}
+		_2 = ZEPHIR_LT(var1, var2);
+		if (_2) {
+			_2 = ZEPHIR_LT_LONG(var1, 5);
+		}
+		if (_0 == _2) {
+			RETURN_LONG(2);
+		}
+		RETURN_LONG(0);
+	} while(0);
+
+
+}
+
 PHP_METHOD(Test_Flow, testUnrechable1) {
 
 	char e = '\0';

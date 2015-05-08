@@ -2270,11 +2270,11 @@ xx_case_clauses(R) ::= xx_case_clause(K) . {
 	R = xx_ret_list(NULL, K);
 }
 
-xx_case_clause(R) ::= CASE xx_literal_expr(E) COLON . {
+xx_case_clause(R) ::= CASE xx_eval_expr(E) COLON . {
 	R = xx_ret_case_clause(E, NULL, status->scanner_state);
 }
 
-xx_case_clause(R) ::= CASE xx_literal_expr(E) COLON xx_statement_list(L) . {
+xx_case_clause(R) ::= CASE xx_eval_expr(E) COLON xx_statement_list(L) . {
 	R = xx_ret_case_clause(E, L, status->scanner_state);
 }
 
