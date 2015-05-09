@@ -35,6 +35,7 @@ ext/libtool
 *.la
 *.o
 *.loT
+*.gch
 ide/
 compile.log
 compile-errors.log
