@@ -28,6 +28,7 @@ class Docblock
 {
 
     protected $description;
+
     /**
      *
      * @var Annotation[]

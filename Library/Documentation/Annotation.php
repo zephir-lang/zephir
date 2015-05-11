@@ -49,7 +49,6 @@ class Annotation
         $this->string = $string;
     }
 
-
     public function getName()
     {
         return $this->name;
