@@ -14,6 +14,8 @@
 #include "kernel/main.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
+#include "kernel/fcall.h"
+#include "kernel/array.h"
 
 
 /**
@@ -78,6 +80,34 @@ PHP_METHOD(Test_BranchPrediction, testUnlikely2) {
 	} else {
 		RETURN_BOOL(0);
 	}
+
+}
+
+PHP_METHOD(Test_BranchPrediction, testBranch1) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *_0;
+	zval *a, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
+
+
+
+	if (Z_TYPE_P(a) == IS_ARRAY) {
+		ZEPHIR_INIT_VAR(_0);
+		array_init_size(_0, 3);
+		ZEPHIR_INIT_VAR(_1);
+		ZVAL_LONG(_1, 4);
+		zephir_array_fast_append(_0, _1);
+		ZEPHIR_INIT_NVAR(_1);
+		ZVAL_LONG(_1, 5);
+		zephir_array_fast_append(_0, _1);
+		ZEPHIR_CALL_METHOD(NULL, a, "merge", NULL, _0);
+		zephir_check_call_status();
+	}
+	RETVAL_ZVAL(a, 1, 0);
+	RETURN_MM();
 
 }
 
