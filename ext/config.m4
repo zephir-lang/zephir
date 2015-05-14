@@ -107,8 +107,10 @@ if test "$PHP_TEST" = "yes"; then
 	test/ooimpl/abeginning.zep.c
 	test/operator.zep.c
 	test/optimizers/arraymerge.zep.c
+	test/optimizers/cos.zep.c
 	test/optimizers/createarray.zep.c
-	test/optimizers/math.zep.c
+	test/optimizers/sin.zep.c
+	test/optimizers/sqrt.zep.c
 	test/optimizers/substr.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
