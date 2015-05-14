@@ -86,6 +86,7 @@ zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
 zend_class_entry *test_fortytwo_ce;
 zend_class_entry *test_functional_ce;
+zend_class_entry *test_geometry_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_instanceoff_ce;
 zend_class_entry *test_internalclasses_ce;
@@ -174,6 +175,13 @@ zend_class_entry *test_vars_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(test)
 
+PHP_INI_BEGIN()
+	STD_PHP_INI_BOOLEAN("test.test.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test.my_setting_1, zend_test_globals, test_globals)
+	
+	
+	STD_PHP_INI_BOOLEAN("test.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_test_globals, test_globals)
+PHP_INI_END()
+
 static PHP_MINIT_FUNCTION(test)
 {
 #if PHP_VERSION_ID < 50500
@@ -191,7 +199,7 @@ static PHP_MINIT_FUNCTION(test)
 
 	setlocale(LC_ALL, "C");
 #endif
-
+	REGISTER_INI_ENTRIES();
 	ZEPHIR_INIT(Test_TestInterface);
 	ZEPHIR_INIT(Test_MethodInterface);
 	ZEPHIR_INIT(Test_OoImpl_ZBeginning);
@@ -241,6 +249,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Flow);
 	ZEPHIR_INIT(Test_FortyTwo);
 	ZEPHIR_INIT(Test_Functional);
+	ZEPHIR_INIT(Test_Geometry);
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Instanceoff);
 	ZEPHIR_INIT(Test_InternalClasses);
@@ -349,7 +358,7 @@ static PHP_MSHUTDOWN_FUNCTION(test)
 {
 
 	zephir_deinitialize_memory(TSRMLS_C);
-
+	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
 #endif
@@ -357,43 +366,43 @@ static PHP_MSHUTDOWN_FUNCTION(test)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_test_globals *zephir_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_test_globals *test_globals TSRMLS_DC)
 {
-	zephir_globals->initialized = 0;
+	test_globals->initialized = 0;
 
 	/* Memory options */
-	zephir_globals->active_memory = NULL;
+	test_globals->active_memory = NULL;
 
 	/* Virtual Symbol Tables */
-	zephir_globals->active_symbol_table = NULL;
+	test_globals->active_symbol_table = NULL;
 
 	/* Cache Enabled */
-	zephir_globals->cache_enabled = 1;
+	test_globals->cache_enabled = 1;
 
 	/* Recursive Lock */
-	zephir_globals->recursive_lock = 0;
+	test_globals->recursive_lock = 0;
 
 	/* Static cache */
-	memset(zephir_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
+	memset(test_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
-	zephir_globals->test.my_setting_1 = 1;
-	zephir_globals->test.my_setting_2 = 100;
-	zephir_globals->test.my_setting_3 = 7.5;
-	zephir_globals->my_setting_1 = 1;
-	zephir_globals->my_setting_2 = 10;
-	zephir_globals->my_setting_3 = 15.2;
+
+	test_globals->test.my_setting_2 = 100;
+	test_globals->test.my_setting_3 = 7.5;
+	test_globals->my_setting_1 = 1;
+	test_globals->my_setting_2 = 10;
+	test_globals->my_setting_3 = 15.2;
 
 }
 
 static PHP_RINIT_FUNCTION(test)
 {
 
-	zend_test_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_test_globals *test_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(zephir_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(test_globals_ptr TSRMLS_CC);
 	//zephir_init_interned_strings(TSRMLS_C);
 
-	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
+	zephir_initialize_memory(test_globals_ptr TSRMLS_CC);
 
 	zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 
@@ -422,7 +431,6 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_TEST_ZEPVERSION);
 	php_info_print_table_end();
-
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Directive", "Value");
 	php_info_print_table_row(2, "setting1", "value1");
@@ -434,6 +442,7 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_row(2, "setting4", "value4");
 	php_info_print_table_end();
 
+	DISPLAY_INI_ENTRIES();
 }
 
 static PHP_GINIT_FUNCTION(test)

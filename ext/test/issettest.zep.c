@@ -163,6 +163,15 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 PHP_METHOD(Test_IssetTest, __construct) {
 
+
+	if (EG(called_scope) == test_issettest_ce) {
+		zephir_init_properties(this_ptr TSRMLS_CC);
+	}
+
+}
+
+static void zephir_init_properties(zval *this_ptr TSRMLS_DC) {
+
 	zval *_0;
 
 	ZEPHIR_MM_GROW();

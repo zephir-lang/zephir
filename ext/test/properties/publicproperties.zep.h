@@ -7,6 +7,7 @@ PHP_METHOD(Test_Properties_PublicProperties, setSomeGetterSetterArray);
 PHP_METHOD(Test_Properties_PublicProperties, getSomeGetterSetterArray);
 PHP_METHOD(Test_Properties_PublicProperties, test394Issue);
 PHP_METHOD(Test_Properties_PublicProperties, __construct);
+static void zephir_init_properties(zval *this_ptr TSRMLS_DC);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_properties_publicproperties_setsomegettersetterarray, 0, 0, 1)
 	ZEND_ARG_INFO(0, someGetterSetterArray)

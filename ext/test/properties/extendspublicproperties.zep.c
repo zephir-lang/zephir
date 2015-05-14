@@ -30,6 +30,15 @@ ZEPHIR_INIT_CLASS(Test_Properties_ExtendsPublicProperties) {
 
 PHP_METHOD(Test_Properties_ExtendsPublicProperties, __construct) {
 
+
+	if (EG(called_scope) == test_properties_extendspublicproperties_ce) {
+		zephir_init_properties(this_ptr TSRMLS_CC);
+	}
+
+}
+
+static void zephir_init_properties(zval *this_ptr TSRMLS_DC) {
+
 	zval *_1;
 	zval *_0;
 
