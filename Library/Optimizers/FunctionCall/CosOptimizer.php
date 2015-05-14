@@ -19,18 +19,22 @@
 
 namespace Zephir\Optimizers\FunctionCall;
 
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompilerException;
+use Zephir\CompiledExpression;
 use Zephir\Expression;
 use Zephir\Optimizers\MathOptimizer;
 
 /**
- * SqrtOptimizer
+ * CosOptimizer
  *
- * Optimizes calls to 'sqrt' using internal function
+ * Optimizes calls to 'cos' using internal function
  */
-class SqrtOptimizer extends MathOptimizer
+class CosOptimizer extends MathOptimizer
 {
     public function getFunctionName()
     {
-        return 'sqrt';
+        return 'cos';
     }
 }
