@@ -92,6 +92,7 @@ class SqrtOptimizer extends OptimizerAbstract
                 case 'float':
                 case 'long':
                 case 'ulong':
+                case 'double':
                     return new CompiledExpression('double', 'sqrt(' . $compiledExpression->getCode() . ')', $expression);
                     break;
             }

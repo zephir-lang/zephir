@@ -206,10 +206,18 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 PHP_METHOD(Test_SpectralNorm, process) {
 
+<<<<<<< HEAD
 	zephir_fcall_cache_entry *_5 = NULL, *_9 = NULL, *_14 = NULL;
 	zend_bool _1, _6, _10;
 	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_4 = NULL, *_13 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL, _18;
 	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _2, _3, _7, _8, _11, _12;
+=======
+	zephir_fcall_cache_entry *_6 = NULL, *_15 = NULL;
+	zend_bool _2, _7, _11;
+	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL, *_10 = NULL;
+	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_5 = NULL, *_14 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL;
+	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _3, _4, _8, _9, _12, _13;
+>>>>>>> SqrtOptimizer allow to work with double type
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
@@ -331,11 +339,15 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			vv += zephir_get_numberval(_17);
 		}
 	}
+<<<<<<< HEAD
 	ZEPHIR_SINIT_VAR(_18);
 	ZVAL_DOUBLE(&_18, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
 	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", NULL, 9, &_18);
 	zephir_check_call_status();
 	RETURN_MM();
+=======
+	RETURN_MM_DOUBLE(sqrt(zephir_safe_div_long_long(vBv, vv TSRMLS_CC)));
+>>>>>>> SqrtOptimizer allow to work with double type
 
 }
 
