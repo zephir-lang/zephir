@@ -610,9 +610,9 @@ int ZEPHIR_NO_OPT zephir_call_user_function(zval **object_pp, zend_class_entry *
 #endif
 			} else {
 				if (cache_entry) {
-					if (fcic.function_handler->type == ZEND_INTERNAL_FUNCTION) {
+					//if (fcic.function_handler->type == ZEND_INTERNAL_FUNCTION) {
 						*cache_entry = temp_cache_entry;
-					}
+					//}
 				}
 			}
 		}
