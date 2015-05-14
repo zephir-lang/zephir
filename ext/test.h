@@ -103,6 +103,7 @@
 #include "test/operator.zep.h"
 #include "test/optimizers/arraymerge.zep.h"
 #include "test/optimizers/createarray.zep.h"
+#include "test/optimizers/math.zep.h"
 #include "test/optimizers/substr.zep.h"
 #include "test/pdostatement.zep.h"
 #include "test/pregmatch.zep.h"

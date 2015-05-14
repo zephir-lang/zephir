@@ -1804,7 +1804,8 @@ PHP_METHOD(Test_Flow, testFor39) {
 
 PHP_METHOD(Test_Flow, testFor40) {
 
-	int _1, _2;
+	zephir_fcall_cache_entry *_4 = NULL;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool _0;
 	zval *a = NULL, *b, *_3 = NULL;
 
@@ -1827,8 +1828,8 @@ PHP_METHOD(Test_Flow, testFor40) {
 			}
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
-			ZEPHIR_INIT_NVAR(_3);
-			ZVAL_LONG(_3, sqrt(zephir_is_true(a)));
+			ZEPHIR_CALL_FUNCTION(&_3, "sqrt", &_4, 9, a);
+			zephir_check_call_status();
 			ZEPHIR_ADD_ASSIGN(b, _3);
 		}
 	}
