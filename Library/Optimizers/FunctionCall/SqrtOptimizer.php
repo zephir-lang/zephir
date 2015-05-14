@@ -23,6 +23,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
+use Zephir\Expression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
@@ -78,14 +79,24 @@ class SqrtOptimizer extends OptimizerAbstract
              * @var $resolvedParameter \Zephir\CompiledExpression
              */
 
-//            var_dump($resolvedParameter->getCode());
-
             return false;
         } else {
-            $evalExpression = new EvalExpression();
-            $compiledExpression = $evalExpression->optimize($expression['parameters'][0]['parameter'], $context);
+            $expr = new Expression($expression['parameters'][0]['parameter']);
+            $expr->setEvalMode(true);
+            $expr->setReadOnly(true);
 
-            return new CompiledExpression('long', 'sqrt(' . $compiledExpression . ')', $expression);
+            $compiledExpression = $expr->compile($context);
+
+            switch ($compiledExpression->getType()) {
+                case 'int':
+                case 'float':
+                case 'long':
+                case 'ulong':
+                    return new CompiledExpression('double', 'sqrt(' . $compiledExpression->getCode() . ')', $expression);
+                    break;
+            }
+
+            return false;
 
 //            $call->getSymbolVariable(true, $context);
 

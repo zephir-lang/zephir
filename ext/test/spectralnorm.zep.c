@@ -208,7 +208,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 
 	zephir_fcall_cache_entry *_5 = NULL, *_9 = NULL, *_14 = NULL;
 	zend_bool _1, _6, _10;
-	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_4 = NULL, *_13 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL;
+	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_4 = NULL, *_13 = NULL, *_15 = NULL, *_16 = NULL, *_17 = NULL, _18;
 	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _2, _3, _7, _8, _11, _12;
 
 	ZEPHIR_MM_GROW();
@@ -331,7 +331,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			vv += zephir_get_numberval(_17);
 		}
 	}
-	RETURN_MM_LONG(sqrt(zephir_safe_div_long_long(vBv, vv TSRMLS_CC)));
+	ZEPHIR_SINIT_VAR(_18);
+	ZVAL_DOUBLE(&_18, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
+	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", NULL, 9, &_18);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 

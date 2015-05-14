@@ -94,10 +94,12 @@ PHP_METHOD(Test_Geometry, runOptimize) {
 
 PHP_METHOD(Test_Geometry, distanceStatic) {
 
-	zval *x1_param = NULL, *y1_param = NULL, *x2_param = NULL, *y2_param = NULL;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *x1_param = NULL, *y1_param = NULL, *x2_param = NULL, *y2_param = NULL, _0;
 	double x1, y1, x2, y2;
 
-	zephir_fetch_params(0, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
 
 	x1 = zephir_get_doubleval(x1_param);
 	y1 = zephir_get_doubleval(y1_param);
@@ -105,7 +107,11 @@ PHP_METHOD(Test_Geometry, distanceStatic) {
 	y2 = zephir_get_doubleval(y2_param);
 
 
-	RETURN_LONG(sqrt(((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2))))));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_DOUBLE(&_0, ((((x1 - x2)) * ((x1 - x2))) + (((y1 - y2)) * ((y1 - y2)))));
+	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", NULL, 9, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
