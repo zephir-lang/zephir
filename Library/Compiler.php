@@ -1107,12 +1107,11 @@ class Compiler
      */
     protected function checkKernelFiles()
     {
-        
         $kernelPath = "ext/kernel";
 
-        if(!file_exists($kernelPath)){
-            $kernelDone = mkdir($kernelPath,0775,true);
-            if(!$kernelDone){
+        if (!file_exists($kernelPath)) {
+            $kernelDone = mkdir($kernelPath, 0775, true);
+            if (!$kernelDone) {
                 throw new Exception("Cannot create kernel directory");
             }
         }
