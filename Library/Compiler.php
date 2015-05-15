@@ -1107,7 +1107,17 @@ class Compiler
      */
     protected function checkKernelFiles()
     {
-        $kernelPath = realpath("ext/kernel");
+        
+        $kernelPath = "ext/kernel";
+
+        if(!file_exists($kernelPath)){
+            $kernelDone = mkdir($kernelPath,0775,true);
+            if(!$kernelDone){
+                throw new Exception("Cannot create kernel directory");
+            }
+        }
+
+        $kernelPath = realpath($kernelPath);
         $sourceKernelPath = realpath(__DIR__ . '/../ext/kernel');
 
         $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@.*\.[ch]$@', array($this, 'checkKernelFile'));
