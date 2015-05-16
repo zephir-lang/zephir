@@ -47,7 +47,7 @@ PHP_METHOD(Test_ScallParent, testCallStatic) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL);
+	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 

@@ -43,9 +43,9 @@ PHP_METHOD(Test_McallDynamic, testMagicCall1) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_1, this_ptr, "method1", NULL);
+	ZEPHIR_CALL_METHOD(&_1, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
 	zephir_add_function_ex(return_value, _0, _1 TSRMLS_CC);
 	RETURN_MM();
@@ -64,7 +64,7 @@ PHP_METHOD(Test_McallDynamic, __call) {
 
 	ZEPHIR_INIT_VAR(realMethod);
 	ZEPHIR_CONCAT_SV(realMethod, "test", method);
-	ZEPHIR_RETURN_CALL_METHOD_ZVAL(this_ptr, realMethod, NULL);
+	ZEPHIR_RETURN_CALL_METHOD_ZVAL(this_ptr, realMethod, NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 

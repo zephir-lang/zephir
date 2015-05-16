@@ -281,7 +281,7 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        $cachePointer = 'NULL';
+        $cachePointer = 'NULL, 0';
 
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
@@ -358,7 +358,7 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        $cachePointer = 'NULL';
+        $cachePointer = 'NULL, 0';
 
         if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);

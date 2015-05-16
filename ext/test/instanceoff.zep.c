@@ -50,7 +50,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2) {
 	ZEPHIR_INIT_VAR(a);
 	object_init_ex(a, test_instanceoff_ce);
 	if (zephir_has_constructor(a TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, a, "__construct", NULL);
+		ZEPHIR_CALL_METHOD(NULL, a, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	RETURN_MM_BOOL(zephir_instance_of_ev(a, test_instanceoff_ce TSRMLS_CC));

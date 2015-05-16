@@ -31,7 +31,7 @@ PHP_METHOD(Test_MethodAbstract, testInterfaceMetho) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testmethod", NULL);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testmethod", NULL, 0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

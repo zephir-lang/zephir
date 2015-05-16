@@ -586,7 +586,7 @@ class MethodCall extends Call
                 if ($variableMethod->getType() == 'variable') {
                 }
 
-                $cachePointer = 'NULL';
+                $cachePointer = 'NULL, 0';
 
                 if (!count($params)) {
                     if ($isExpecting) {

@@ -1503,7 +1503,7 @@ PHP_METHOD(Test_NativeArray, issue743c) {
  */
 PHP_METHOD(Test_NativeArray, issue709) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_6 = NULL;
+	zephir_fcall_cache_entry *_6 = NULL;
 	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
 	zend_bool works = 1, _0, _7;
 	zval *c = NULL, *arr = NULL, *_3 = NULL, *_4, *_5 = NULL;
@@ -1533,7 +1533,7 @@ PHP_METHOD(Test_NativeArray, issue709) {
 			ZEPHIR_INIT_NVAR(_3);
 			ZVAL_LONG(_3, 2);
 			zephir_array_fast_append(arr, _3);
-			ZEPHIR_CALL_FUNCTION(&_5, "array_rand", &_6, arr);
+			ZEPHIR_CALL_FUNCTION(&_5, "array_rand", &_6, 51, arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4, arr, _5, PH_NOISY | PH_READONLY, "test/nativearray.zep", 636 TSRMLS_CC);
 			ZEPHIR_CPY_WRT(arr, _4);
