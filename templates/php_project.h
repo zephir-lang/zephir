@@ -34,6 +34,8 @@ ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
 	/** Function cache */
 	HashTable *fcache;
 
+	zephir_fcall_cache_entry *scache[1024];
+
 	/* Cache enabled */
 	unsigned int cache_enabled;
 

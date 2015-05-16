@@ -50,7 +50,11 @@ class MethodCache
 {
     protected $cache = array();
 
+    protected $cacheSlots = array();
+
     protected $gatherer;
+
+    private static $slot = 0;
 
     /**
      * MethodCache
@@ -110,25 +114,26 @@ class MethodCache
                         $functionCache->setMustInitNull(true);
                         $functionCache->setReusable(false);
 
-                        return '&' . $functionCache->getName();
+                        return '&' . $functionCache->getName() . ', 0';
                     }
                 }
             }
 
-            return 'NULL';
+            return 'NULL, 0';
         }
 
         if (!($method instanceof \ReflectionMethod)) {
+
             /**
              * Avoid generate caches for external classes
              */
             if ($method->getClassDefinition()->isExternal()) {
-                return 'NULL';
+                return 'NULL, 0';
             }
 
             $completeName = $method->getClassDefinition()->getCompleteName();
             if (isset($this->cache[$completeName][$method->getName()])) {
-                return '&' . $this->cache[$completeName][$method->getName()]->getName();
+                return '&' . $this->cache[$completeName][$method->getName()]->getName() . ', ' . $this->cacheSlots[$completeName][$method->getName()];
             }
 
             $gatherer = $this->gatherer;
@@ -165,13 +170,15 @@ class MethodCache
         }
 
         if (!$compilationContext->insideCycle && !$cacheable && !$associatedClass) {
-            return 'NULL';
+            return 'NULL, 0';
         }
 
         if (!($method instanceof \ReflectionMethod) && $staticCacheable) {
-            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $cacheSlot = self::$slot++;
         } else {
             $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $cacheSlot = 0;
         }
 
         $functionCache->setMustInitNull(true);
@@ -179,8 +186,9 @@ class MethodCache
 
         if (!($method instanceof \ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
+            $this->cacheSlots[$completeName][$method->getName()] = $cacheSlot;
         }
 
-        return '&' . $functionCache->getName();
+        return '&' . $functionCache->getName() . ', ' . $cacheSlot;
     }
 }
