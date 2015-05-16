@@ -173,11 +173,11 @@ class MethodCache
             return 'NULL, 0';
         }
 
+        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+
         if (!($method instanceof \ReflectionMethod) && $staticCacheable) {
-            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
-            $cacheSlot = self::$slot++;
+            $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
-            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
             $cacheSlot = 0;
         }
 
