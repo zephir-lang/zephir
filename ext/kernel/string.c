@@ -1366,7 +1366,7 @@ int zephir_json_encode(zval *return_value, zval **return_value_ptr, zval *v, int
 	params[0] = v;
 	params[1] = &zopts;
 
-	return zephir_return_call_function(return_value, NULL, ZEND_STRL("json_encode"), NULL, 2, params TSRMLS_CC);
+	return zephir_return_call_function(return_value, NULL, ZEND_STRL("json_encode"), NULL, 0, 2, params TSRMLS_CC);
 }
 
 int zephir_json_decode(zval *return_value, zval **return_value_ptr, zval *v, zend_bool assoc TSRMLS_DC) {
@@ -1380,7 +1380,7 @@ int zephir_json_decode(zval *return_value, zval **return_value_ptr, zval *v, zen
 	params[0] = v;
 	params[1] = &zassoc;
 
-	return zephir_return_call_function(return_value, NULL, ZEND_STRL("json_decode"), NULL, 2, params TSRMLS_CC);
+	return zephir_return_call_function(return_value, NULL, ZEND_STRL("json_decode"), NULL, 0, 2, params TSRMLS_CC);
 }
 
 #endif /* ZEPHIR_USE_PHP_JSON */
