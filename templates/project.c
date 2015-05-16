@@ -86,8 +86,8 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *zephir_globals
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
-	/** Static cache */	 
-	memset(zephir_globals->scache, '\0', 1024);
+	/** Static cache */
+	memset(zephir_globals->scache, '\0', ZEPHIR_MAX_CACHE_SLOTS);
 
 %INIT_GLOBALS%
 }
