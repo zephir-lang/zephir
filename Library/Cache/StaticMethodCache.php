@@ -101,7 +101,7 @@ class StaticMethodCache
         if ($method->isPrivate() || $method->isFinal() || $mustBeCached) {
             $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
-            $cacheSlot = 0;
+            $cacheSlot = '0';
         }
 
         $functionCache->setMustInitNull(true);

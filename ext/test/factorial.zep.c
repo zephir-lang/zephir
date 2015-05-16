@@ -60,7 +60,7 @@ PHP_METHOD(Test_Factorial, intIterativeFactorial) {
 
 PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 
-	zephir_nts_static zephir_fcall_cache_entry *_4 = NULL;
+	zephir_fcall_cache_entry *_4 = NULL;
 	zend_bool _1;
 	zval *num_param = NULL, *_0, *_2 = NULL, _3;
 	int num, ZEPHIR_LAST_CALL_STATUS;
@@ -81,7 +81,7 @@ PHP_METHOD(Test_Factorial, intRecursiveFactorial) {
 	} else {
 		ZEPHIR_SINIT_VAR(_3);
 		ZVAL_LONG(&_3, (num - 1));
-		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", &_4, &_3);
+		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", &_4, 29, &_3);
 		zephir_check_call_status();
 		ZVAL_LONG(_0, (num * zephir_get_numberval(_2)));
 	}

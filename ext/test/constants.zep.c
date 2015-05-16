@@ -50,6 +50,8 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_class_constant_string(test_constants_ce, SL("className"), "Test\\Constants" TSRMLS_CC);
 
+	zend_declare_class_constant_long(test_constants_ce, SL("STD_PROP_LIST"), 1 TSRMLS_CC);
+
 	/**
 	 * Test property addSlashes for constants
 	 */

@@ -522,7 +522,7 @@ void zephir_fast_str_replace(zval **return_value_ptr, zval *search, zval *replac
 	if (Z_TYPE_P(search) == IS_ARRAY) {
 		do {
 			zval *params[] = { search, replace, subject };
-			zephir_call_func_aparams(return_value_ptr, "str_replace", sizeof("str_replace")-1, NULL, 3, params TSRMLS_CC);
+			zephir_call_func_aparams(return_value_ptr, "str_replace", sizeof("str_replace")-1, NULL, 0, 3, params TSRMLS_CC);
 			return;
 		} while(0);
 	}
@@ -1303,9 +1303,9 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 		zval *tmp_params[5] = { regex, subject, matches, &tmp_flags, &tmp_offset };
 
 		if (global) {
-			zephir_call_func_aparams(rvp, SL("preg_match_all"), NULL, 5, tmp_params TSRMLS_CC);
+			zephir_call_func_aparams(rvp, SL("preg_match_all"), NULL, 0, 5, tmp_params TSRMLS_CC);
 		} else {
-			zephir_call_func_aparams(rvp, SL("preg_match"), NULL, 5, tmp_params TSRMLS_CC);
+			zephir_call_func_aparams(rvp, SL("preg_match"), NULL, 0, 5, tmp_params TSRMLS_CC);
 		}
 	}
 	if (matches) {

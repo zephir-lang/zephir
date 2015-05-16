@@ -119,7 +119,6 @@ class MethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
-
             /**
              * Avoid generate caches for external classes
              */
@@ -174,7 +173,7 @@ class MethodCache
         if (!($method instanceof \ReflectionMethod) && $staticCacheable) {
             $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
-            $cacheSlot = 0;
+            $cacheSlot = '0';
         }
 
         $functionCache->setMustInitNull(true);

@@ -24,6 +24,7 @@
 #include <php.h>
 
 #define ZEPHIR_MAX_MEMORY_STACK 48
+#define ZEPHIR_MAX_CACHE_SLOTS 512
 
 /** Memory frame */
 typedef struct _zephir_memory_entry {

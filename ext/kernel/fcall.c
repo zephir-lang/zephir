@@ -119,7 +119,7 @@ static char *zephir_fcall_possible_method(zend_class_entry *ce, const char *wron
 		ZVAL_STRING(&method_name, wrong_name, 0);
 
 		params[0] = &method_name;
-		zephir_call_func_aparams(&right, SL("metaphone"), NULL, 1, params TSRMLS_CC);
+		zephir_call_func_aparams(&right, SL("metaphone"), NULL, 0, 1, params TSRMLS_CC);
 
 		methods = &ce->function_table;
 		zend_hash_internal_pointer_reset_ex(methods, &pos);
@@ -135,7 +135,7 @@ static char *zephir_fcall_possible_method(zend_class_entry *ce, const char *wron
 			left = NULL;
 
 			params[0] = &method_name;
-			zephir_call_func_aparams(&left, SL("metaphone"), NULL, 1, params TSRMLS_CC);
+			zephir_call_func_aparams(&left, SL("metaphone"), NULL, 0, 1, params TSRMLS_CC);
 
 			if (zephir_is_equal(left, right TSRMLS_CC)) {
 				possible_method = (char *) method->common.function_name;
@@ -650,7 +650,7 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 }
 
 int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uint func_length,
-	zephir_fcall_cache_entry **cache_entry,
+	zephir_fcall_cache_entry **cache_entry, int cache_slot,
 	uint param_count, zval **params TSRMLS_DC)
 {
 	int status;
@@ -675,7 +675,7 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 	info.func_name = func_name;
 	info.func_length = func_length;
 
-	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, 0, param_count, params, &info TSRMLS_CC);
+	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func, rvp, cache_entry, cache_slot, param_count, params, &info TSRMLS_CC);
 
 #else
 
@@ -717,7 +717,7 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 }
 
 int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
-	zephir_fcall_cache_entry **cache_entry,
+	zephir_fcall_cache_entry **cache_entry, int cache_slot,
 	uint param_count, zval **params TSRMLS_DC)
 {
 	int status;
@@ -731,7 +731,7 @@ int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
 	}
 #endif
 
-	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, 0, param_count, params, NULL TSRMLS_CC);
+	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, cache_slot, param_count, params, NULL TSRMLS_CC);
 
 	if (status == FAILURE && !EG(exception)) {
 		zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
