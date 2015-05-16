@@ -46,7 +46,20 @@ class SlotsCache
         }
 
         $slot = self::$slot++;
-        self::$cacheSlots[$className][$methodName] = $slot;        
+        self::$cacheSlots[$className][$methodName] = $slot;
+        echo $slot, PHP_EOL;
         return $slot;
+    }
+
+    public static function getExistingMethodSlot($method)
+    {
+        $className = $method->getClassDefinition()->getCompleteName();
+        $methodName = $method->getName();
+
+        if (isset(self::$cacheSlots[$className][$methodName])) {
+            return self::$cacheSlots[$className][$methodName];
+        }
+
+        return 0;
     }
 }

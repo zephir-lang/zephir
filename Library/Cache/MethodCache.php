@@ -50,11 +50,7 @@ class MethodCache
 {
     protected $cache = array();
 
-    protected $cacheSlots = array();
-
     protected $gatherer;
-
-    private static $slot = 0;
 
     /**
      * MethodCache
@@ -133,7 +129,7 @@ class MethodCache
 
             $completeName = $method->getClassDefinition()->getCompleteName();
             if (isset($this->cache[$completeName][$method->getName()])) {
-                return '&' . $this->cache[$completeName][$method->getName()]->getName() . ', ' . $this->cacheSlots[$completeName][$method->getName()];
+                return '&' . $this->cache[$completeName][$method->getName()]->getName() . ', ' . SlotsCache::getExistingMethodSlot($method);
             }
 
             $gatherer = $this->gatherer;
@@ -186,7 +182,6 @@ class MethodCache
 
         if (!($method instanceof \ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
-            $this->cacheSlots[$completeName][$method->getName()] = $cacheSlot;
         }
 
         return '&' . $functionCache->getName() . ', ' . $cacheSlot;

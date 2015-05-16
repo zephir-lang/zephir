@@ -70,7 +70,7 @@ class StaticMethodCache
             }
 
             if (isset($this->cache[$completeName][$method->getName()])) {
-                return '&' . $this->cache[$completeName][$method->getName()]->getName() . ', 0';
+                return '&' . $this->cache[$completeName][$method->getName()]->getName() . ', ' . SlotsCache::getExistingMethodSlot($method);
             }
 
             if ($method->getClassDefinition()->isInterface()) {
@@ -96,10 +96,12 @@ class StaticMethodCache
             }
         }
 
+        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+
         if ($method->isPrivate() || $method->isFinal() || $mustBeCached) {
-            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('static_zephir_fcall_cache_entry', $compilationContext);
+            $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
-            $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $cacheSlot = 0;
         }
 
         $functionCache->setMustInitNull(true);
@@ -109,6 +111,6 @@ class StaticMethodCache
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 
-        return '&' . $functionCache->getName() . ', 0';
+        return '&' . $functionCache->getName() . ', ' . $cacheSlot;
     }
 }
