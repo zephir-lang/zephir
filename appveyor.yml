@@ -1,6 +1,6 @@
 environment:
   matrix:
-  - PHP_VERSION: 5.6.8
+  - PHP_VERSION: 5.6.9
     PHP_DEP_VER: 5.6
   BUILD_PLATFORM: x86
   PHP_VC: 11
