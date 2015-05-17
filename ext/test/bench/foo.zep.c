@@ -32,7 +32,7 @@ ZEPHIR_INIT_CLASS(Test_Bench_Foo) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, empty_for_in_range) {
+PHP_METHOD(Test_Bench_Foo, emptyForInRange) {
 
 	int _1;
 	zend_bool _0;
@@ -64,7 +64,7 @@ PHP_METHOD(Test_Bench_Foo, empty_for_in_range) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, read_static) {
+PHP_METHOD(Test_Bench_Foo, readStatic) {
 
 	int _1;
 	zend_bool _0;
@@ -98,7 +98,7 @@ PHP_METHOD(Test_Bench_Foo, read_static) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, write_static) {
+PHP_METHOD(Test_Bench_Foo, writeStatic) {
 
 	int _1;
 	zend_bool _0;
@@ -133,7 +133,7 @@ PHP_METHOD(Test_Bench_Foo, write_static) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, isset_static) {
+PHP_METHOD(Test_Bench_Foo, issetStatic) {
 
 	int _1;
 	zend_bool x, _0;
@@ -166,7 +166,7 @@ PHP_METHOD(Test_Bench_Foo, isset_static) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, empty_static) {
+PHP_METHOD(Test_Bench_Foo, emptyStatic) {
 
 	int _1;
 	zend_bool x, _0;
@@ -201,48 +201,7 @@ PHP_METHOD(Test_Bench_Foo, empty_static) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, f) {
-
-
-
-}
-
-PHP_METHOD(Test_Bench_Foo, call_static) {
-
-	zephir_fcall_cache_entry *_3 = NULL;
-	int _1, ZEPHIR_LAST_CALL_STATUS;
-	zend_bool _0;
-	zval *n, *i = NULL, *_2 = NULL;
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &n);
-
-
-
-	ZEPHIR_CPY_WRT(_2, n);
-	_1 = 1;
-	_0 = 0;
-	if (ZEPHIR_GE_LONG(_2, _1)) {
-		while (1) {
-			if (_0) {
-				_1++;
-				if (!(ZEPHIR_GE_LONG(_2, _1))) {
-					break;
-				}
-			} else {
-				_0 = 1;
-			}
-			ZEPHIR_INIT_NVAR(i);
-			ZVAL_LONG(i, _1);
-			ZEPHIR_CALL_SELF(NULL, "f", &_3, 0);
-			zephir_check_call_status();
-		}
-	}
-	ZEPHIR_MM_RESTORE();
-
-}
-
-PHP_METHOD(Test_Bench_Foo, read_prop) {
+PHP_METHOD(Test_Bench_Foo, readProp) {
 
 	int _1;
 	zend_bool _0;
@@ -275,7 +234,7 @@ PHP_METHOD(Test_Bench_Foo, read_prop) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, write_prop) {
+PHP_METHOD(Test_Bench_Foo, writeProp) {
 
 	int _1;
 	zend_bool _0;
@@ -310,7 +269,7 @@ PHP_METHOD(Test_Bench_Foo, write_prop) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, assign_add_prop) {
+PHP_METHOD(Test_Bench_Foo, assignAddProp) {
 
 	int _1;
 	zend_bool _0;
@@ -362,7 +321,7 @@ PHP_METHOD(Test_Bench_Foo, assign_add_prop) {
  --$this->b;
  }
  }*/
-PHP_METHOD(Test_Bench_Foo, post_inc_prop) {
+PHP_METHOD(Test_Bench_Foo, postIncProp) {
 
 	int _1;
 	zend_bool _0;
@@ -395,7 +354,7 @@ PHP_METHOD(Test_Bench_Foo, post_inc_prop) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, post_dec_prop) {
+PHP_METHOD(Test_Bench_Foo, postDecProp) {
 
 	int _1;
 	zend_bool _0;
@@ -428,7 +387,7 @@ PHP_METHOD(Test_Bench_Foo, post_dec_prop) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, isset_prop) {
+PHP_METHOD(Test_Bench_Foo, issetProp) {
 
 	int _1;
 	zend_bool x, _0;
@@ -461,7 +420,7 @@ PHP_METHOD(Test_Bench_Foo, isset_prop) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, empty_prop) {
+PHP_METHOD(Test_Bench_Foo, emptyProp) {
 
 	int _1;
 	zend_bool x, _0;
@@ -537,7 +496,90 @@ PHP_METHOD(Test_Bench_Foo, call) {
 
 }
 
-PHP_METHOD(Test_Bench_Foo, read_const) {
+PHP_METHOD(Test_Bench_Foo, staticMethod) {
+
+
+
+}
+
+PHP_METHOD(Test_Bench_Foo, staticMethod1) {
+
+
+	RETURN_BOOL(1);
+
+}
+
+PHP_METHOD(Test_Bench_Foo, scall) {
+
+	zephir_fcall_cache_entry *_3 = NULL;
+	int _1, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *n, *i = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &n);
+
+
+
+	ZEPHIR_CPY_WRT(_2, n);
+	_1 = 1;
+	_0 = 0;
+	if (ZEPHIR_GE_LONG(_2, _1)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(ZEPHIR_GE_LONG(_2, _1))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(i);
+			ZVAL_LONG(i, _1);
+			ZEPHIR_CALL_SELF(NULL, "staticmethod", &_3, 0);
+			zephir_check_call_status();
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Bench_Foo, scallWithReturnTrue) {
+
+	zephir_fcall_cache_entry *_3 = NULL;
+	int _1, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	zval *n, *i = NULL, *_2 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &n);
+
+
+
+	ZEPHIR_CPY_WRT(_2, n);
+	_1 = 1;
+	_0 = 0;
+	if (ZEPHIR_GE_LONG(_2, _1)) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(ZEPHIR_GE_LONG(_2, _1))) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			ZEPHIR_INIT_NVAR(i);
+			ZVAL_LONG(i, _1);
+			ZEPHIR_CALL_SELF(NULL, "staticmethod1", &_3, 0);
+			zephir_check_call_status();
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
+PHP_METHOD(Test_Bench_Foo, readConst) {
 
 	int _1;
 	zend_bool _0;
