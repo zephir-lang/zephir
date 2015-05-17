@@ -67,20 +67,7 @@ class FunctionCache
      */
     public function canBeInternal(Call $call, $functionName)
     {
-        $reflector = $call->getReflector($functionName);
-        if ($reflector) {
-            if ($reflector->isInternal()) {
-                switch ($reflector->getExtensionName()) {
-                    case 'standard':
-                    case 'Core':
-                    case 'pcre':
-                        return true;
-                    default:
-                        break;
-                }
-            }
-        }
-        return false;
+        return true;
     }
 
     /**
