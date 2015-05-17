@@ -59,18 +59,6 @@ class FunctionCache
     }
 
     /**
-     * Checks if a function can be promoted to a static function call
-     *
-     * @param Call $call
-     * @param string $functionName
-     * @return boolean
-     */
-    public function canBeInternal(Call $call, $functionName)
-    {
-        return true;
-    }
-
-    /**
      * Retrieves/Creates a function cache for a function call
      *
      * @param string $functionName
@@ -92,14 +80,10 @@ class FunctionCache
 
         $number = 0;
         if (!$compilationContext->insideCycle) {
-            if (!$this->canBeInternal($call, $functionName)) {
-                $gatherer = $this->gatherer;
-                if ($gatherer) {
-                    $number = $gatherer->getNumberOfFunctionCalls($functionName);
-                    if ($number <= 1) {
-                        return 'NULL, ' . $cacheSlot;
-                    }
-                } else {
+            $gatherer = $this->gatherer;
+            if ($gatherer) {
+                $number = $gatherer->getNumberOfFunctionCalls($functionName);
+                if ($number <= 1) {
                     return 'NULL, ' . $cacheSlot;
                 }
             }
