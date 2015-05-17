@@ -81,39 +81,41 @@ class FunctionCache
     public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
     {
         if (isset($this->cache[$functionName])) {
-            return '&' . $this->cache[$functionName]->getName() . ', ' . SlotsCache::getExistingFunctionSlot($functionName);
+            return $this->cache[$functionName] . ', ' . SlotsCache::getExistingFunctionSlot($functionName);
         }
 
         if (!$exists) {
             return 'NULL, 0';
         }
 
+        $cacheSlot = SlotsCache::getFunctionSlot($functionName);
+
+        $number = 0;
         if (!$compilationContext->insideCycle) {
             if (!$this->canBeInternal($call, $functionName)) {
                 $gatherer = $this->gatherer;
                 if ($gatherer) {
                     $number = $gatherer->getNumberOfFunctionCalls($functionName);
                     if ($number <= 1) {
-                        return 'NULL, 0';
+                        return 'NULL, ' . $cacheSlot;
                     }
                 } else {
-                    return 'NULL, 0';
+                    return 'NULL, ' . $cacheSlot;
                 }
             }
         }
 
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
-
-        if ($this->canBeInternal($call, $functionName)) {
-            $cacheSlot = SlotsCache::getFunctionSlot($functionName);
+        if ($compilationContext->insideCycle || $number > 1) {
+            $functionCacheVariable = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $functionCacheVariable->setMustInitNull(true);
+            $functionCacheVariable->setReusable(false);
+            $functionCache = '&' . $functionCacheVariable->getName();
         } else {
-            $cacheSlot = '0';
+            $functionCache = 'NULL';
         }
 
-        $functionCache->setMustInitNull(true);
-        $functionCache->setReusable(false);
         $this->cache[$functionName] = $functionCache;
 
-        return '&' . $functionCache->getName() . ', ' . $cacheSlot;
+        return $functionCache . ', ' . $cacheSlot;
     }
 }
