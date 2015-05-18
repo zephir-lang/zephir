@@ -514,6 +514,9 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 				if (zephir_globals_ptr->scache[cache_slot]) {
 					reload_cache = 0;
 					temp_cache_entry = &zephir_globals_ptr->scache[cache_slot];
+					if (cache_entry) {
+						*cache_entry = *temp_cache_entry;
+					}
 				}
 			}
 
@@ -609,19 +612,19 @@ int zephir_call_user_function(zval **object_pp, zend_class_entry *obj_ce, zephir
 	if (!cache_entry || !*cache_entry) {
 		if (EXPECTED(status != FAILURE) && fcall_key && !temp_cache_entry && fcic.initialized) {
 #ifndef ZEPHIR_RELEASE
-			zephir_fcall_cache_entry *temp_cache_entry = malloc(sizeof(zephir_fcall_cache_entry));
-			temp_cache_entry->f     = fcic.function_handler;
-			temp_cache_entry->times = 0;
+			zephir_fcall_cache_entry *cache_entry_temp = malloc(sizeof(zephir_fcall_cache_entry));
+			cache_entry_temp->f     = fcic.function_handler;
+			cache_entry_temp->times = 0;
 #else
-			zephir_fcall_cache_entry *temp_cache_entry = fcic.function_handler;
+			zephir_fcall_cache_entry *cache_entry_temp = fcic.function_handler;
 #endif
-			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &temp_cache_entry, sizeof(zephir_fcall_cache_entry*), NULL)) {
+			if (FAILURE == zend_hash_quick_add(zephir_globals_ptr->fcache, fcall_key, fcall_key_len, fcall_key_hash, &cache_entry_temp, sizeof(zephir_fcall_cache_entry*), NULL)) {
 #ifndef ZEPHIR_RELEASE
 				free(temp_cache_entry);
 #endif
 			} else {
 				if (cache_entry) {
-					*cache_entry = temp_cache_entry;
+					*cache_entry = cache_entry_temp;
 					if (cache_slot > 0) {
 						zephir_globals_ptr->scache[cache_slot] = *cache_entry;
 					}
@@ -711,26 +714,6 @@ int zephir_call_func_aparams(zval **return_value_ptr, const char *func_name, uin
 	}
 	zval_ptr_dtor(&func);
 #endif
-
-	return status;
-}
-
-int zephir_call_func_aparams_fast(zval **return_value_ptr, zephir_fcall_cache_entry **cache_entry, uint param_count, zval **params TSRMLS_DC)
-{
-	int status;
-	zval *rv = NULL, **rvp = return_value_ptr ? return_value_ptr : &rv;
-
-	status = zephir_call_function_opt_fast(rvp, cache_entry, param_count, params TSRMLS_CC);
-	if (EG(exception)) {
-		status = FAILURE;
-		if (return_value_ptr) {
-			*return_value_ptr = NULL;
-		}		
-	}
-
-	if (rv) {
-		zval_ptr_dtor(&rv);
-	}
 
 	return status;
 }
