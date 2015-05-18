@@ -26,11 +26,11 @@ use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * CeilOptimizer
+ * MtRandOptimizer
  *
- * Optimizes calls to 'ceil' using internal function
+ * Optimizes calls to 'mt_rand' using internal function
  */
-class CeilOptimizer extends OptimizerAbstract
+class MtRandOptimizer extends OptimizerAbstract
 {
     /**
      * @param array $expression
@@ -45,13 +45,14 @@ class CeilOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (count($expression['parameters']) != 1) {
+        if (count($expression['parameters']) != 2) {
             return false;
         }
 
         $context->headersManager->add('kernel/math');
+        $context->headersManager->add('kernel/operators');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        return new CompiledExpression('double', 'zephir_ceil(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('long', 'zephir_mt_rand(zephir_get_intval(' . $resolvedParams[0] . '), zephir_get_intval(' . $resolvedParams[1] . ') TSRMLS_CC)', $expression);
     }
 }

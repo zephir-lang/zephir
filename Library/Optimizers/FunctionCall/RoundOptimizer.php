@@ -64,7 +64,7 @@ class RoundOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->headersManager->add('kernel/operators');
+        $context->headersManager->add('kernel/math');
         $symbolVariable->setDynamicTypes('double');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 

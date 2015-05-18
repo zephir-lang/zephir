@@ -49,7 +49,7 @@ class FloorOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $context->headersManager->add('kernel/operators');
+        $context->headersManager->add('kernel/math');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         return new CompiledExpression('double', 'zephir_floor(' . $resolvedParams[0] . ' TSRMLS_CC)', $expression);

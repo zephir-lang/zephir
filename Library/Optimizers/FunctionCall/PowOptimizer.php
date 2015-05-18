@@ -63,7 +63,7 @@ class PowOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->headersManager->add('kernel/operators');
+        $context->headersManager->add('kernel/math');
         $symbolVariable->setDynamicTypes('variable');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
