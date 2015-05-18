@@ -720,19 +720,12 @@ int zephir_call_func_aparams_fast(zval **return_value_ptr, zephir_fcall_cache_en
 	int status;
 	zval *rv = NULL, **rvp = return_value_ptr ? return_value_ptr : &rv;
 
-	status = zephir_call_user_function_fast(rvp, cache_entry, param_count, params TSRMLS_CC);
-	if (status == FAILURE && !EG(exception)) {
-		zephir_throw_exception_format(spl_ce_RuntimeException TSRMLS_CC, "Call to undefined function ?()");
+	status = zephir_call_function_opt_fast(rvp, cache_entry, param_count, params TSRMLS_CC);
+	if (EG(exception)) {
+		status = FAILURE;
 		if (return_value_ptr) {
 			*return_value_ptr = NULL;
-		}
-	} else {
-		if (EG(exception)) {
-			status = FAILURE;
-			if (return_value_ptr) {
-				*return_value_ptr = NULL;
-			}
-		}
+		}		
 	}
 
 	if (rv) {
@@ -741,7 +734,6 @@ int zephir_call_func_aparams_fast(zval **return_value_ptr, zephir_fcall_cache_en
 
 	return status;
 }
-
 
 int zephir_call_zval_func_aparams(zval **return_value_ptr, zval *func_name,
 	zephir_fcall_cache_entry **cache_entry, int cache_slot,
