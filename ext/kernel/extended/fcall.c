@@ -32,8 +32,100 @@
 #include "kernel/exception.h"
 #include "kernel/backtrace.h"
 
-#if PHP_VERSION_ID >= 50600
+/**
+ * Calls a function/method in the PHP userland
+ */
+int zephir_call_user_function_fast(zval **retval_ptr_ptr, zephir_fcall_cache_entry **cache_entry, zend_uint param_count, zval *params[] TSRMLS_DC)
+{
+	zval ***params_ptr, ***params_array = NULL;
+	zval **static_params_array[10];
+	zval *local_retval_ptr = NULL;
+	int status;
+	zend_fcall_info fci;
+	zend_fcall_info_cache fcic;
+	zend_class_entry *old_scope = EG(scope);
 
+#if PHP_VERSION_ID >= 50600
+	zephir_fcall_info info;
+
+	info.type = ZEPHIR_FCALL_TYPE_FUNC;
+	info.class_name = NULL;
+	info.func_name = "";
+	info.func_length = 0;
+#endif
+
+fprintf(stderr, "here\n");
+
+	if (retval_ptr_ptr && *retval_ptr_ptr) {
+		zval_ptr_dtor(retval_ptr_ptr);
+		*retval_ptr_ptr = NULL;
+	}
+
+	if (param_count) {
+		zend_uint i;
+
+		if (UNEXPECTED(param_count > 10)) {
+			params_array = (zval***) emalloc(param_count * sizeof(zval**));
+			params_ptr   = params_array;
+			for (i = 0; i < param_count; ++i) {
+				params_array[i] = &params[i];
+			}
+		} else {
+			params_ptr = static_params_array;
+			for (i = 0; i < param_count; ++i) {
+				static_params_array[i] = &params[i];
+			}
+		}
+	} else {
+		params_ptr = NULL;
+	}
+
+	fci.size           = sizeof(fci);
+	fci.function_table = EG(function_table);
+	fci.object_ptr     = NULL;
+	fci.function_name  = NULL;
+	fci.retval_ptr_ptr = retval_ptr_ptr ? retval_ptr_ptr : &local_retval_ptr;
+	fci.param_count    = param_count;
+	fci.params         = params_ptr;
+	fci.no_separation  = 1;
+	fci.symbol_table   = NULL;
+
+	fcic.initialized = 0;
+	fcic.function_handler = NULL;
+	fcic.calling_scope = NULL;
+	fcic.called_scope = NULL;
+	fcic.object_ptr    = NULL;
+	fcic.initialized   = 1;
+
+#ifndef ZEPHIR_RELEASE
+	fcic.function_handler = (*cache_entry)->f;
+	++(*cache_entry)->times;
+#else
+	fcic.function_handler = *cache_entry;
+#endif
+
+#if PHP_VERSION_ID >= 50600
+	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic, &info TSRMLS_CC);
+#else
+	status = ZEPHIR_ZEND_CALL_FUNCTION_WRAPPER(&fci, &fcic TSRMLS_CC);
+#endif
+
+	EG(scope) = old_scope;
+
+	if (UNEXPECTED(params_array != NULL)) {
+		efree(params_array);
+	}
+
+	if (!retval_ptr_ptr) {
+		if (local_retval_ptr) {
+			zval_ptr_dtor(&local_retval_ptr);
+		}
+	}
+
+	return status;
+}
+
+#if PHP_VERSION_ID >= 50600
 
 #if ZEND_MODULE_API_NO >= 20141001
 void zephir_clean_and_cache_symbol_table(zend_array *symbol_table)
