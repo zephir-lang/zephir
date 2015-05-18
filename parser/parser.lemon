@@ -536,7 +536,7 @@ static json_object *xx_ret_type(int type)
 		default:
 			fprintf(stderr, "unknown type?\n");
 	}
-
+	return json_object_new_string("unknown");
 }
 
 static json_object *xx_ret_list(json_object *list_left, json_object *right_list)
