@@ -94,7 +94,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					ZVAL_LONG(_7, i);
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, j);
-					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 71, _7, _8);
+					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 70, _7, _8);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
@@ -163,7 +163,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					ZVAL_LONG(_7, j);
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, i);
-					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 71, _7, _8);
+					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 70, _7, _8);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
@@ -197,9 +197,9 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", &_0, 72, n, u, w);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", &_0, 71, n, u, w);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", &_1, 73, n, w, v);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", &_1, 72, n, w, v);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -208,7 +208,7 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 PHP_METHOD(Test_SpectralNorm, process) {
 
 	zend_bool _2, _7, _11;
-	zephir_fcall_cache_entry *_1 = NULL, *_6 = NULL, *_10 = NULL, *_15 = NULL, *_20 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_6 = NULL, *_10 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_5 = NULL, *_14 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL, _19;
 	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _3, _4, _8, _9, _12, _13;
 
@@ -222,19 +222,19 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	object_init_ex(u, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, u, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, u, "__construct", &_1, 73, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(v);
 	object_init_ex(v, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, v, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, v, "__construct", &_1, 73, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(w);
 	object_init_ex(w, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, w, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, w, "__construct", &_1, 73, _0);
 	zephir_check_call_status();
 	_4 = (n - 1);
 	_3 = 0;
@@ -286,11 +286,11 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			i = _8;
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, n);
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 75, _0, u, v, w);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 74, _0, u, v, w);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, n);
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 75, _0, v, u, w);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 74, _0, v, u, w);
 			zephir_check_call_status();
 		}
 	}
@@ -334,7 +334,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	}
 	ZEPHIR_SINIT_VAR(_19);
 	ZVAL_DOUBLE(&_19, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
-	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", &_20, 9, &_19);
+	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", NULL, 9, &_19);
 	zephir_check_call_status();
 	RETURN_MM();
 

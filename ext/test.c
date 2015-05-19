@@ -368,8 +368,8 @@ static void php_zephir_init_globals(zend_test_globals *zephir_globals TSRMLS_DC)
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
-	/** Static cache */	 
-	memset(zephir_globals->scache, '\0', 1024);
+	/** Static cache */
+	memset(zephir_globals->scache, '\0', ZEPHIR_MAX_CACHE_SLOTS);
 
 	zephir_globals->test.my_setting_1 = 1;
 	zephir_globals->test.my_setting_2 = 100;
