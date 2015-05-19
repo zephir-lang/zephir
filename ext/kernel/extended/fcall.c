@@ -92,7 +92,7 @@ static void zephir_throw_exception_internal(zval *exception TSRMLS_DC)
 	EG(current_execute_data)->opline = EG(exception_op);
 }
 
-int zephir_call_func_aparams_fast(zval **retval_ptr_ptr, zephir_fcall_cache_entry **cache_entry, zend_uint param_count, zval *pparams[] TSRMLS_DC)
+int zephir_call_func_aparams_fast(zval **return_value_ptr, zephir_fcall_cache_entry **cache_entry, zend_uint param_count, zval *pparams[] TSRMLS_DC)
 {
 	zend_uint i;
 	zval **original_return_value;
@@ -108,7 +108,8 @@ int zephir_call_func_aparams_fast(zval **retval_ptr_ptr, zephir_fcall_cache_entr
 	zval **static_params_array[10];
 	zend_class_entry *old_scope = EG(scope);
 	zend_function_state *function_state = &EX(function_state);
-	zend_function *func;	
+	zend_function *func;
+	zval *rv = NULL, **retval_ptr_ptr = return_value_ptr ? return_value_ptr : &rv;
 
 	if (retval_ptr_ptr && *retval_ptr_ptr) {
 		zval_ptr_dtor(retval_ptr_ptr);
@@ -130,7 +131,7 @@ int zephir_call_func_aparams_fast(zval **retval_ptr_ptr, zephir_fcall_cache_entr
 			}
 		}
 	} else {
-		params_ptr = NULL;
+		params = NULL;
 	}
 
 	if (!EG(active)) {
@@ -298,6 +299,10 @@ int zephir_call_func_aparams_fast(zval **retval_ptr_ptr, zephir_fcall_cache_entr
 
 	if (UNEXPECTED(params_array != NULL)) {
 		efree(params_array);
+	}
+
+	if (rv) {
+		zval_ptr_dtor(&rv);
 	}
 
 	return SUCCESS;
