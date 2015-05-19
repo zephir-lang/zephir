@@ -177,6 +177,25 @@ PHP_METHOD(Test_Fcall, testCall7) {
 
 }
 
+PHP_METHOD(Test_Fcall, zvalFcallWith1Parameter) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *callback, *param1 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 1, &callback, &param1);
+
+	if (!param1) {
+		param1 = ZEPHIR_GLOBAL(global_null);
+	}
+
+
+	ZEPHIR_CALL_ZVAL_FUNCTION(NULL, callback, NULL, 0, param1);
+	zephir_check_call_status();
+	ZEPHIR_MM_RESTORE();
+
+}
+
 PHP_METHOD(Test_Fcall, testCall8) {
 
 	int ZEPHIR_LAST_CALL_STATUS;

@@ -86,6 +86,11 @@ class Fcall
 		memory_get_usage();
 	}
 
+	public function zvalFcallWith1Parameter(var callback, var param1 = null)
+	{
+		{callback}(param1);
+	}
+
 	public function testCall8(var a, var b)
 	{
 		var x;
