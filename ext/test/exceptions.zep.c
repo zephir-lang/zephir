@@ -175,7 +175,6 @@ PHP_METHOD(Test_Exceptions, testExceptionLiteral) {
 PHP_METHOD(Test_Exceptions, testExceptionSprintf) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_2 = NULL;
 	zval *name_param = NULL, _0, *_1 = NULL;
 	zval *name = NULL;
 
@@ -187,7 +186,7 @@ PHP_METHOD(Test_Exceptions, testExceptionSprintf) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "Hello, %s", 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", &_2, 4, &_0, name);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 4, &_0, name);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(_1, "test/exceptions.zep", 65 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

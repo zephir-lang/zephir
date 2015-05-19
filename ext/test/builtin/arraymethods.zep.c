@@ -54,7 +54,6 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getJoin1) {
 PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_3 = NULL;
 	zval *_1 = NULL, *_2 = NULL;
 	zval *_0;
 
@@ -71,7 +70,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 	ZEPHIR_INIT_NVAR(_1);
 	ZVAL_LONG(_1, 3);
 	zephir_array_fast_append(_0, _1);
-	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", &_3, 2, _0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_reverse", NULL, 2, _0);
 	zephir_check_call_status();
 	RETURN_CCTOR(_2);
 
@@ -80,7 +79,6 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getReversed1) {
 PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_3 = NULL;
 	zval *_1 = NULL, *_2 = NULL;
 	zval *_0;
 
@@ -100,7 +98,7 @@ PHP_METHOD(Test_BuiltIn_ArrayMethods, getMap1) {
 	ZEPHIR_INIT_NVAR(_1);
 	ZEPHIR_INIT_NVAR(_1);
 	zephir_create_closure_ex(_1, NULL, test_0__closure_ce, SS("__invoke") TSRMLS_CC);
-	ZEPHIR_CALL_FUNCTION(&_2, "array_map", &_3, 3, _1, _0);
+	ZEPHIR_CALL_FUNCTION(&_2, "array_map", NULL, 3, _1, _0);
 	zephir_check_call_status();
 	RETURN_CCTOR(_2);
 
