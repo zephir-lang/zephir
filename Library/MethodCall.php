@@ -533,7 +533,6 @@ class MethodCall extends Call
 
         // Generate the code according to the call type
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-
             // Check if the method call can have an inline cache
             $methodCache = $compilationContext->cacheManager->getMethodCache();
 
@@ -566,7 +565,6 @@ class MethodCall extends Call
             }
         } else {
             if ($type == self::CALL_DYNAMIC) {
-
                 switch ($variableMethod->getType()) {
                     case 'string':
                     case 'variable':

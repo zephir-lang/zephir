@@ -102,7 +102,6 @@ class MethodCache
         $classTypes = $caller->getClassTypes();
         foreach ($classTypes as $classType) {
             if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
-
                 if ($compiler->isInterface($classType)) {
                     continue;
                 }
@@ -125,14 +124,12 @@ class MethodCache
         }
 
         if (!$numberPoly) {
-
             // Try to generate a cache based on the fact the variable is not modified within the loop block
             if ($compilationContext->insideCycle && !$caller->isTemporal()) {
                 if (count($compilationContext->cycleBlocks) && $caller->getType() == 'variable') {
                     $currentBlock = $compilationContext->cycleBlocks[count($compilationContext->cycleBlocks) - 1];
 
                     if ($currentBlock->getMutateGatherer(true)->getNumberOfMutations($caller->getName()) == 0) {
-
                         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
                         $functionCache->setMustInitNull(true);
                         $functionCache->setReusable(false);
@@ -146,13 +143,12 @@ class MethodCache
         }
 
         if (!($method instanceof \ReflectionMethod)) {
-
             if ($method->getClassDefinition()->isExternal()) {
                 return 'NULL, 0';
             }
 
             $completeName = $method->getClassDefinition()->getCompleteName();
-            if (isset($this->cache[$completeName][$method->getName()])) {                
+            if (isset($this->cache[$completeName][$method->getName()])) {
                 return $this->cache[$completeName][$method->getName()] . ', ' . SlotsCache::getExistingMethodSlot($method);
             }
 
@@ -208,14 +204,6 @@ class MethodCache
         if (!($method instanceof \ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
-
-        /*if ($compilationContext->currentMethod->getName() == "_connect") {
-            echo $method->getClassDefinition()->getCompleteName(), PHP_EOL;
-            echo $method->getName(), PHP_EOL;
-            echo $functionCache, PHP_EOL;
-            echo $cacheSlot, PHP_EOL;
-            echo "---", PHP_EOL;
-        }*/
 
         return $functionCache . ', ' . $cacheSlot;
     }
