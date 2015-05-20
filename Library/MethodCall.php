@@ -255,7 +255,7 @@ class MethodCall extends Call
                                     throw new CompilerException("Cannot locate class definition for class " . $classType, $expression);
                                 }
 
-                                if (!$classDefinition->hasMethod($expression['name'])) {
+                                if (!$classDefinition->hasMethod($methodName)) {
                                     if (!$classDefinition->isInterface()) {
                                         if (count($classTypes) == 1) {
                                             throw new CompilerException("Class '" . $classType . "' does not implement method: '" . $expression['name'] . "'", $expression);
@@ -283,7 +283,7 @@ class MethodCall extends Call
                                 }
 
                                 /**
-                                 * Try to produce an exception if method is called with a wrong number of parameters
+                                 * Try to produce an exception if a method is called with a wrong number of parameters
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
                                  */
@@ -415,9 +415,7 @@ class MethodCall extends Call
                 }
             }
 
-            /**
-             * We check here if a correct parameter type is passed to the called method
-             */
+            // We check here if a correct parameter type is passed to the called method
             if ($type == self::CALL_NORMAL) {
                 if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
                     $resolvedTypes = $this->getResolvedTypes();
@@ -524,31 +522,24 @@ class MethodCall extends Call
             $params = array();
         }
 
-        /**
-         * Add the last call status to the current symbol table
-         */
+        // Add the last call status to the current symbol table
         $this->addCallStatusFlag($compilationContext);
 
-        /**
-         * Initialize non-temporary variables
-         */
+        // Initialize non-temporary variables
         if ($mustInit) {
             $symbolVariable->setMustInitNull(true);
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        /**
-         * Generate the code according to the call type
-         */
+        // Generate the code according to the call type
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-            /**
-             * Check if the method call can have an inline cache
-             */
+
+            // Check if the method call can have an inline cache
             $methodCache = $compilationContext->cacheManager->getMethodCache();
 
             $cachePointer = $methodCache->get(
                 $compilationContext,
-                isset($method) ? $method : null,
+                $methodName,
                 $variableVariable
             );
 
@@ -575,15 +566,13 @@ class MethodCall extends Call
             }
         } else {
             if ($type == self::CALL_DYNAMIC) {
+
                 switch ($variableMethod->getType()) {
                     case 'string':
                     case 'variable':
                         break;
                     default:
                         throw new Exception('Cannot use variable type: ' . $variableMethod->getType() . ' as method caller');
-                }
-
-                if ($variableMethod->getType() == 'variable') {
                 }
 
                 $cachePointer = 'NULL, 0';
@@ -612,23 +601,17 @@ class MethodCall extends Call
             }
         }
 
-        /**
-         * Temporary variables must be copied if they have more than one reference
-         */
+        // Temporary variables must be copied if they have more than one reference
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
             $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
         }
 
-        /**
-         * We can mark temporary variables generated as idle
-         */
+        // We can mark temporary variables generated as idle
         foreach ($this->getTemporalVariables() as $tempVariable) {
             $tempVariable->setIdle(true);
         }
 
-        /**
-         * Release parameters marked as references
-         */
+        // Release parameters marked as references
         if (isset($expression['parameters'])) {
             if (count($references)) {
                 foreach ($params as $position => $param) {
