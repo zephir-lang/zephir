@@ -806,10 +806,10 @@ class ClassDefinition
         }
 
         if (count($signatureParameters)) {
-            return 'void zep_' . $this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName() . '(zval *return_value, ' . join(', ', $signatureParameters) . ') {';
+            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC) {';
         }
 
-        return 'void zep_' . $this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName() . '(zval *return_value) {';
+        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC) {';
     }
 
     /**

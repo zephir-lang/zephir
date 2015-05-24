@@ -2291,4 +2291,13 @@ class ClassMethod
 
         return false;
     }
+
+    /**
+     * @return string
+     */
+    public function getInternalName()
+    {
+        $classDefinition = $this->getClassDefinition();
+        return 'zep_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '_' . $this->getName();
+    }
 }
