@@ -85,7 +85,7 @@ class StaticConstantAccess
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {
-                if ($compiler->isInternalClass($className) || $compiler->isInternalInterface($className)) {
+                if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
                     throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);

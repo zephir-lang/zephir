@@ -132,6 +132,13 @@ class ClassMethod
     protected $isInternal = false;
 
     /**
+     * Whether the method is bundled with PHP or not
+     *
+     * @var boolean
+     */
+    protected $isBundled = false;
+
+    /**
      * @var array|null
      *
      * @var boolean
@@ -253,6 +260,18 @@ class ClassMethod
             if (in_array('private', $visibility) && in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
             }
+
+            if (in_array('private', $visibility) && in_array('internal', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'internal' and 'private' at the same time", $original);
+            }
+
+            if (in_array('protected', $visibility) && in_array('internal', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'internal' and 'protected' at the same time", $original);
+            }
+
+            if (in_array('public', $visibility) && in_array('internal', $visibility)) {
+                throw new CompilerException("Method '$name' cannot be 'internal' and 'public' at the same time", $original);
+            }
         }
 
         if ($name == '__construct') {
@@ -272,6 +291,7 @@ class ClassMethod
             $this->isStatic = in_array('static', $visibility);
             $this->isFinal = in_array('final', $visibility);
             $this->isPublic = in_array('public', $visibility);
+            $this->isInternal = in_array('internal', $visibility);
         }
     }
 
@@ -293,6 +313,16 @@ class ClassMethod
     public function setIsInternal($internal)
     {
         $this->isInternal = $internal;
+    }
+
+    /**
+     * Sets if the method is bundled or not
+     *
+     * @param boolean $bundled
+     */
+    public function setIsBundled($bundled)
+    {
+        $this->isBundled = $bundled;
     }
 
     /**
@@ -628,6 +658,9 @@ class ClassMethod
                 case 'scoped':
                     break;
 
+                case 'internal':
+                    break;
+
                 default:
                     throw new Exception('Unknown modifier "' . $visibility . '"');
             }
@@ -741,6 +774,16 @@ class ClassMethod
     public function isInternal()
     {
         return $this->isInternal;
+    }
+
+     /**
+     * Checks whether the method is bundled
+     *
+     * @return boolean
+     */
+    public function isBundled()
+    {
+        return $this->isBundled;
     }
 
     /**
@@ -1567,67 +1610,6 @@ class ClassMethod
                     }
                 }
             }
-
-            $compilationContext->codePrinter->increaseLevel();
-
-            /**
-             * Checks that a class-hinted variable meets its declaration
-             */
-            foreach ($classCastChecks as $classCastCheck) {
-                foreach ($classCastCheck[0]->getClassTypes() as $className) {
-                    /**
-                     * If the parameter is nullable check it must pass the 'instanceof' validation
-                     */
-                    if (!isset($classCastCheck[1]['default'])) {
-                        $evalExpr = new UnaryOperatorBuilder(
-                            'not',
-                            new BinaryOperatorBuilder(
-                                'instanceof',
-                                new VariableBuilder($classCastCheck[0]->getName()),
-                                new VariableBuilder('\\' . $className)
-                            )
-                        );
-                    } else {
-                        $evalExpr = new BinaryOperatorBuilder(
-                            'and',
-                            new BinaryOperatorBuilder(
-                                'not-equals',
-                                new TypeOfOperatorBuilder(new VariableBuilder($classCastCheck[0]->getName())),
-                                new LiteralBuilder("string", "null")
-                            ),
-                            new UnaryOperatorBuilder(
-                                'not',
-                                new BinaryOperatorBuilder(
-                                    'instanceof',
-                                    new VariableBuilder($classCastCheck[0]->getName()),
-                                    new VariableBuilder('\\' . $className)
-                                )
-                            )
-                        );
-                    }
-
-                    /*$ifCheck = new IfStatementBuilder(
-                        $evalExpr,
-                        new StatementsBlockBuilder(array(
-                            new ThrowStatementBuilder(
-                                new NewInstanceOperatorBuilder('\InvalidArgumentException', array(
-                                    new ParameterBuilder(
-                                        new LiteralBuilder(
-                                            "string",
-                                            "Parameter '" . $classCastCheck[0]->getName() . "' must be an instance of '" . Utils::escapeClassName($className) . "'"
-                                        )
-                                    )
-                                ))
-                            )
-                        ))
-                    );
-
-                    $ifStatement = new IfStatement($ifCheck->get());
-                    $ifStatement->compile($compilationContext);*/
-                }
-            }
-
-            $compilationContext->codePrinter->decreaseLevel();
         }
 
         /**
@@ -1796,11 +1778,19 @@ class ClassMethod
                     case 'callable':
                     case 'resource':
                     case 'variable':
-                        $params[] = '&' . $parameter['name'];
+                        if (!$this->isInternal()) {
+                            $params[] = '&' . $parameter['name'];
+                        } else {
+                            $params[] = $parameter['name'];
+                        }
                         break;
 
                     default:
-                        $params[] = '&' . $parameter['name'] . '_param';
+                        if (!$this->isInternal()) {
+                            $params[] = '&' . $parameter['name'] . '_param';
+                        } else {
+                            $params[] = $parameter['name'] . '_param';
+                        }
                         break;
                 }
 
@@ -1943,6 +1933,7 @@ class ClassMethod
                         }
                     }
                 }
+
                 $initCode .= "\t" . '}' . PHP_EOL;
             }
 
@@ -1950,11 +1941,18 @@ class ClassMethod
              * Fetch the parameters to zval pointers
              */
             $codePrinter->preOutputBlankLine();
-            $compilationContext->headersManager->add('kernel/memory');
-            if ($symbolTable->getMustGrownStack()) {
-                $code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+
+            if (!$this->isInternal()) {
+                $compilationContext->headersManager->add('kernel/memory');
+                if ($symbolTable->getMustGrownStack()) {
+                    $code .= "\t" . 'zephir_fetch_params(1, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+                } else {
+                    $code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+                }
             } else {
-                $code .= "\t" . 'zephir_fetch_params(0, ' . $numberRequiredParams . ', ' . $numberOptionalParams . ', ' . join(', ', $params) . ');' . PHP_EOL;
+                foreach ($params as $param) {
+                    $code .= "\t" . $param . ' = ' . $param . '_ext;' . PHP_EOL;
+                }
             }
             $code .= PHP_EOL;
         }

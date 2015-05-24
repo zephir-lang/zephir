@@ -312,7 +312,7 @@ class Compiler
      *
      * @return boolean
      */
-    public function isInternalClass($className)
+    public function isBundledClass($className)
     {
         return class_exists($className, false);
     }
@@ -324,7 +324,7 @@ class Compiler
      *
      * @return boolean
      */
-    public function isInternalInterface($className)
+    public function isBundledInterface($className)
     {
         return interface_exists($className, false);
     }
@@ -921,7 +921,7 @@ class Compiler
                 $gccFlags = $this->getGccFlags($development);
 
                 exec(
-                    'cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
+                    'cd ext && export CC="ccache gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
                 );
             }
         }
@@ -1007,7 +1007,7 @@ class Compiler
         $gccFlags = $this->getGccFlags($development);
 
         $currentDir = getcwd();
-        exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
+        exec('(cd ext && export CC="ccache gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
 
         if (!file_exists("ext/modules/" . $namespace . ".so")) {
             throw new CompilerException("Internal extension compilation failed. Check compile-errors.log for more information");

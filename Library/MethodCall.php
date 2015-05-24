@@ -244,7 +244,7 @@ class MethodCall extends Call
                         $compiler = $compilationContext->compiler;
                         foreach ($classTypes as $classType) {
                             if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
-                                $compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
+                                $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
                                 if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
                                     $classDefinition = $compiler->getClassDefinition($classType);
                                 } else {
@@ -287,7 +287,7 @@ class MethodCall extends Call
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
                                  */
-                                if ($method instanceof ClassMethod && !$method->isInternal()) {
+                                if ($method instanceof ClassMethod && !$method->isBundled()) {
                                     if (isset($expression['parameters'])) {
                                         $callNumberParameters = count($expression['parameters']);
                                     } else {
