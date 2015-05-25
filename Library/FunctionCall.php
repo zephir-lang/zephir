@@ -270,13 +270,23 @@ class FunctionCall extends Call
      * @param string $functionName
      * @return boolean
      */
-    public function functionExists($functionName)
+    public function functionExists($functionName, CompilationContext $context)
     {
         if (function_exists($functionName)) {
             return true;
         }
         if ($this->isBuiltInFunction($functionName)) {
             return true;
+        }
+        
+        $internalName[] = 'f__'.$functionName;
+        if (isset($context->classDefinition)) {
+            $internalName[] = 'f_'.str_replace('\\', '_', strtolower($context->classDefinition->getNamespace())).'_'.$functionName;
+        }
+        foreach ($internalName as $name) {
+            if (isset($context->compiler->functionDefinitions[$name])) {
+                return true;
+            }
         }
         return false;
     }
@@ -302,7 +312,7 @@ class FunctionCall extends Call
         }
 
         $exists = true;
-        if (!$this->functionExists($funcName)) {
+        if (!$this->functionExists($funcName, $compilationContext)) {
             $compilationContext->logger->warning("Function \"$funcName\" does not exist at compile time", "nonexistent-function", $expression);
             $exists = false;
         }
