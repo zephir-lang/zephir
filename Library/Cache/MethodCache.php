@@ -169,7 +169,7 @@ class MethodCache
             }
 
             $staticCacheable = !$method->getClassDefinition()->isInterface() && ($compilationContext->currentMethod == $method || $method->getClassDefinition()->isFinal() || $method->isFinal() || $method->isPrivate());
-            if ($number > 0 || $compilationContext->insideCycle) {
+            if ($number > 1 || $compilationContext->insideCycle) {
                 $cacheable = true;
             } else {
                 $cacheable = false;

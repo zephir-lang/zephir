@@ -129,7 +129,6 @@ PHP_METHOD(Test_Fasta, fastRandom) {
 
 PHP_METHOD(Test_Fasta, main) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0;
 	zval *n, *alu = NULL, *iub, *homoSap, *_1;
@@ -168,7 +167,7 @@ PHP_METHOD(Test_Fasta, main) {
 	php_printf("%s", ">ONE Homo sapiens alu");
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, (2 * zephir_get_numberval(n)));
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", &_2, 0, _1, alu);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", NULL, 0, _1, alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

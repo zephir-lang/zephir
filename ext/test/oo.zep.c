@@ -41,7 +41,6 @@ PHP_METHOD(Test_Oo, testInstance1) {
 
 PHP_METHOD(Test_Oo, testInstance2) {
 
-	zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o;
 
@@ -49,7 +48,7 @@ PHP_METHOD(Test_Oo, testInstance2) {
 
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstruct_ce);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_0, 51);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 51);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -74,7 +73,6 @@ PHP_METHOD(Test_Oo, testInstance3) {
 
 PHP_METHOD(Test_Oo, testInstance4) {
 
-	zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *a, *b;
 
@@ -86,7 +84,7 @@ PHP_METHOD(Test_Oo, testInstance4) {
 	ZVAL_STRING(b, "b", 1);
 	ZEPHIR_INIT_VAR(o);
 	object_init_ex(o, test_oo_ooconstructparams_ce);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_0, 52, a, b);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, a, b);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -94,7 +92,6 @@ PHP_METHOD(Test_Oo, testInstance4) {
 
 PHP_METHOD(Test_Oo, testInstance5) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
@@ -106,7 +103,7 @@ PHP_METHOD(Test_Oo, testInstance5) {
 	ZVAL_STRING(_0, "a", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_STRING(_1, "b", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_2, 52, _0, _1);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, _0, _1);
 	zephir_check_temp_parameter(_0);
 	zephir_check_temp_parameter(_1);
 	zephir_check_call_status();
@@ -116,7 +113,6 @@ PHP_METHOD(Test_Oo, testInstance5) {
 
 PHP_METHOD(Test_Oo, testInstance6) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
@@ -128,7 +124,7 @@ PHP_METHOD(Test_Oo, testInstance6) {
 	ZVAL_LONG(_0, 1);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_2, 52, _0, _1);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, _0, _1);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -136,7 +132,6 @@ PHP_METHOD(Test_Oo, testInstance6) {
 
 PHP_METHOD(Test_Oo, testInstance7) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
@@ -148,7 +143,7 @@ PHP_METHOD(Test_Oo, testInstance7) {
 	ZVAL_BOOL(_0, 0);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_BOOL(_1, 1);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_2, 52, _0, _1);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, _0, _1);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -156,7 +151,6 @@ PHP_METHOD(Test_Oo, testInstance7) {
 
 PHP_METHOD(Test_Oo, testInstance8) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
@@ -168,7 +162,7 @@ PHP_METHOD(Test_Oo, testInstance8) {
 	ZVAL_DOUBLE(_0, 1.2);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_DOUBLE(_1, 7.30);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_2, 52, _0, _1);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, _0, _1);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 
@@ -204,7 +198,6 @@ PHP_METHOD(Test_Oo, testInstance10) {
 
 PHP_METHOD(Test_Oo, testInstance11) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *o, *_0, *_1;
 
@@ -216,7 +209,7 @@ PHP_METHOD(Test_Oo, testInstance11) {
 	ZVAL_LONG(_0, 1);
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 2);
-	ZEPHIR_CALL_METHOD(NULL, o, "__construct", &_2, 52, _0, _1);
+	ZEPHIR_CALL_METHOD(NULL, o, "__construct", NULL, 52, _0, _1);
 	zephir_check_call_status();
 	RETURN_CCTOR(o);
 

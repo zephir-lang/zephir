@@ -63,7 +63,6 @@ ZEPHIR_INIT_CLASS(Test_Router_Route) {
  */
 PHP_METHOD(Test_Router_Route, __construct) {
 
-	zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, *paths = NULL, *httpMethods = NULL;
 
@@ -78,7 +77,7 @@ PHP_METHOD(Test_Router_Route, __construct) {
 	}
 
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", &_0, 0, pattern, paths);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, 0, pattern, paths);
 	zephir_check_call_status();
 	zephir_update_property_this(this_ptr, SL("_methods"), httpMethods TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -409,9 +408,8 @@ PHP_METHOD(Test_Router_Route, extractNamedParams) {
  */
 PHP_METHOD(Test_Router_Route, reConfigure) {
 
-	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
 	int _0, ZEPHIR_LAST_CALL_STATUS;
-	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted = NULL, *_1 = NULL, *_3;
+	zval *pattern, *paths = NULL, *moduleName = NULL, *controllerName = NULL, *actionName = NULL, *parts, *routePaths = NULL, *realClassName = NULL, *namespaceName, *pcrePattern = NULL, *compiledPattern = NULL, *extracted = NULL, *_1 = NULL, *_2;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
@@ -497,18 +495,18 @@ PHP_METHOD(Test_Router_Route, reConfigure) {
 	}
 	if (!(zephir_start_with_str(pattern, SL("#")))) {
 		if (zephir_memnstr_str(pattern, SL("{"), "test/router/route.zep", 348)) {
-			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", &_2, 0, pattern);
+			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, 0, pattern);
 			zephir_check_call_status();
 			ZEPHIR_OBS_VAR(pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, extracted, 0, PH_NOISY, "test/router/route.zep", 351 TSRMLS_CC);
 			ZEPHIR_INIT_NVAR(_1);
-			zephir_array_fetch_long(&_3, extracted, 1, PH_NOISY | PH_READONLY, "test/router/route.zep", 352 TSRMLS_CC);
-			zephir_fast_array_merge(_1, &(routePaths), &(_3) TSRMLS_CC);
+			zephir_array_fetch_long(&_2, extracted, 1, PH_NOISY | PH_READONLY, "test/router/route.zep", 352 TSRMLS_CC);
+			zephir_fast_array_merge(_1, &(routePaths), &(_2) TSRMLS_CC);
 			ZEPHIR_CPY_WRT(routePaths, _1);
 		} else {
 			ZEPHIR_CPY_WRT(pcrePattern, pattern);
 		}
-		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilepattern", &_4, 0, pcrePattern);
+		ZEPHIR_CALL_METHOD(&compiledPattern, this_ptr, "compilepattern", NULL, 0, pcrePattern);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_CPY_WRT(compiledPattern, pattern);

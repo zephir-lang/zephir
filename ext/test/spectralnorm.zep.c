@@ -188,7 +188,6 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 
 PHP_METHOD(Test_SpectralNorm, AtAu) {
 
-	zephir_fcall_cache_entry *_0 = NULL, *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *n, *u, *v, *w;
 
@@ -197,9 +196,9 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", &_0, 71, n, u, w);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", NULL, 71, n, u, w);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", &_1, 72, n, w, v);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", NULL, 72, n, w, v);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
