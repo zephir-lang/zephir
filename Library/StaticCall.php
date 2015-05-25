@@ -71,25 +71,54 @@ class StaticCall extends Call
             $params = array();
         }
 
-        if (!count($params)) {
-            if ($isExpecting) {
-                if ($symbolVariable->getName() == 'return_value') {
-                    $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ');');
+        $isInternal = false;
+        if (isset($method)) {
+            $isInternal = $method->isInternal();
+        }
+        
+        if (!$isInternal) {
+            if (!count($params)) {
+                if ($isExpecting) {
+                    if ($symbolVariable->getName() == 'return_value') {
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ');');
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ');');
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ');');
+                if ($isExpecting) {
+                    if ($symbolVariable->getName() == 'return_value') {
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    }
+                } else {
+                    $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                }
             }
         } else {
-            if ($isExpecting) {
-                if ($symbolVariable->getName() == 'return_value') {
-                    $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+            if (!count($params)) {
+                if ($isExpecting) {
+                    if ($symbolVariable->getName() == 'return_value') {
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(EG(This), ' . $method->getInternalName() . ');');
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ');');
+                    }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(EG(This), ' . $method->getInternalName() . ');');
                 }
             } else {
-                $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                if ($isExpecting) {
+                    if ($symbolVariable->getName() == 'return_value') {
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                    }
+                } else {
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                }
             }
         }
 
