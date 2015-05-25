@@ -1071,7 +1071,9 @@ class ClassDefinition
         if ($this->getType() == 'class') {
             if (count($methods)) {
                 foreach ($methods as $method) {
-                    $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+                    if (!$method->isInternal()) {
+                        $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+                    }
                 }
                 $codePrinter->outputBlankLine();
             }
