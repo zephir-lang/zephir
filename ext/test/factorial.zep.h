@@ -17,5 +17,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_factorial_method_entry) {
 	PHP_ME(Test_Factorial, intIterativeFactorial, arginfo_test_factorial_intiterativefactorial, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Factorial, intRecursiveFactorial, arginfo_test_factorial_intrecursivefactorial, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

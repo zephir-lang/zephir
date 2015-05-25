@@ -43,5 +43,5 @@ ZEPHIR_INIT_FUNCS(test_spectralnorm_method_entry) {
 	PHP_ME(Test_SpectralNorm, Atu, arginfo_test_spectralnorm_atu, ZEND_ACC_PRIVATE)
 	PHP_ME(Test_SpectralNorm, AtAu, arginfo_test_spectralnorm_atau, ZEND_ACC_PRIVATE)
 	PHP_ME(Test_SpectralNorm, process, arginfo_test_spectralnorm_process, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

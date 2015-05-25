@@ -33,5 +33,5 @@ ZEPHIR_INIT_FUNCS(test_properties_protectedproperties_method_entry) {
 	PHP_ME(Test_Properties_ProtectedProperties, getSomeInteger, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Properties_ProtectedProperties, getSomeDouble, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Properties_ProtectedProperties, getSomeString, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

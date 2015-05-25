@@ -24,5 +24,5 @@ ZEPHIR_INIT_FUNCS(test_operator_method_entry) {
 	PHP_ME(Test_Operator, testIdentical, arginfo_test_operator_testidentical, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Operator, testIdenticalVarFalse, arginfo_test_operator_testidenticalvarfalse, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Operator, testIdenticalFalseVar, arginfo_test_operator_testidenticalfalsevar, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

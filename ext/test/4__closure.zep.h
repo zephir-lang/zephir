@@ -11,5 +11,5 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_4__closure_method_entry) {
 	PHP_ME(test_4__closure, __invoke, arginfo_test_4__closure___invoke, ZEND_ACC_PUBLIC|ZEND_ACC_FINAL)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -20,5 +20,5 @@ ZEPHIR_INIT_FUNCS(test_fasta_method_entry) {
 	PHP_ME(Test_Fasta, fastaRepeat, arginfo_test_fasta_fastarepeat, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fasta, fastRandom, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fasta, main, arginfo_test_fasta_main, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

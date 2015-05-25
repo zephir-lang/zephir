@@ -15,5 +15,5 @@ ZEPHIR_INIT_FUNCS(test_usetest_method_entry) {
 	PHP_ME(Test_UseTest, testUseClass1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_UseTest, testUseClass2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_UseTest, testUseNamespaceAlias, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -236,5 +236,5 @@ ZEPHIR_INIT_FUNCS(test_flow_method_entry) {
 	PHP_ME(Test_Flow, testUnrechable1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow, testUnrechable2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Flow, testUnrechable3, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

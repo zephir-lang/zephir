@@ -17,5 +17,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_exitdie_method_entry) {
 	PHP_ME(Test_ExitDie, testExit, arginfo_test_exitdie_testexit, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ExitDie, testDie, arginfo_test_exitdie_testdie, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -37,5 +37,5 @@ ZEPHIR_INIT_FUNCS(test_oo_abstractclass_method_entry) {
 	PHP_ME(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithReturnType, NULL, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithParameter, arginfo_test_oo_abstractclass_testabstractmethoddeclarationwithparameter, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_AbstractClass, testAbstractMethodDeclarationWithParameterAndReturnType, arginfo_test_oo_abstractclass_testabstractmethoddeclarationwithparameterandreturntype, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

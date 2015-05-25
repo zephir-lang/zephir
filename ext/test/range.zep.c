@@ -30,9 +30,8 @@ ZEPHIR_INIT_CLASS(Test_Range) {
 
 PHP_METHOD(Test_Range, inclusive1) {
 
-	zval *_4 = NULL;
+	zval *_3 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_3 = NULL;
 	zval _0, _1, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -41,18 +40,17 @@ PHP_METHOD(Test_Range, inclusive1) {
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", &_3, 59, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 49, &_0, &_1);
 	zephir_check_call_status();
-	zephir_get_arrval(_4, _2);
-	RETURN_CTOR(_4);
+	zephir_get_arrval(_3, _2);
+	RETURN_CTOR(_3);
 
 }
 
 PHP_METHOD(Test_Range, exclusive1) {
 
-	zval *_4 = NULL;
+	zval *_3 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_3 = NULL;
 	zval _0, _1, *_2 = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -61,10 +59,10 @@ PHP_METHOD(Test_Range, exclusive1) {
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, 10);
-	ZEPHIR_CALL_FUNCTION(&_2, "range", &_3, 59, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "range", NULL, 49, &_0, &_1);
 	zephir_check_call_status();
-	zephir_get_arrval(_4, _2);
-	RETURN_CTOR(_4);
+	zephir_get_arrval(_3, _2);
+	RETURN_CTOR(_3);
 
 }
 

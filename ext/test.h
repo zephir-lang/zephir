@@ -54,6 +54,7 @@
 #include "test/mcall.zep.h"
 #include "test/mcallchained.zep.h"
 #include "test/mcalldynamic.zep.h"
+#include "test/mcallinternal.zep.h"
 #include "test/methodabstract.zep.h"
 #include "test/methodargs.zep.h"
 #include "test/methodinterface.zep.h"

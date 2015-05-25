@@ -64,5 +64,5 @@ ZEPHIR_INIT_FUNCS(test_pregmatch_method_entry) {
 	PHP_ME(Test_Pregmatch, testPregMatchSaveMatches, arginfo_test_pregmatch_testpregmatchsavematches, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testMatchAll, arginfo_test_pregmatch_testmatchall, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Pregmatch, testMatchAllInZep, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

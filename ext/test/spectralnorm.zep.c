@@ -94,7 +94,7 @@ PHP_METHOD(Test_SpectralNorm, Au) {
 					ZVAL_LONG(_7, i);
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, j);
-					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 71, _7, _8);
+					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 0, _7, _8);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
@@ -163,7 +163,7 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 					ZVAL_LONG(_7, j);
 					ZEPHIR_INIT_NVAR(_8);
 					ZVAL_LONG(_8, i);
-					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 71, _7, _8);
+					ZEPHIR_CALL_METHOD(&_6, this_ptr, "ax", &_9, 0, _7, _8);
 					zephir_check_call_status();
 					ZEPHIR_INIT_NVAR(_7);
 					ZVAL_LONG(_7, j);
@@ -188,7 +188,6 @@ PHP_METHOD(Test_SpectralNorm, Atu) {
 
 PHP_METHOD(Test_SpectralNorm, AtAu) {
 
-	zephir_fcall_cache_entry *_0 = NULL, *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *n, *u, *v, *w;
 
@@ -197,9 +196,9 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 
 
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", &_0, 72, n, u, w);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", NULL, 0, n, u, w);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", &_1, 73, n, w, v);
+	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", NULL, 0, n, w, v);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -207,10 +206,10 @@ PHP_METHOD(Test_SpectralNorm, AtAu) {
 
 PHP_METHOD(Test_SpectralNorm, process) {
 
-	zend_bool _2, _7, _11;
-	zephir_fcall_cache_entry *_1 = NULL, *_6 = NULL, *_10 = NULL, *_15 = NULL, *_20 = NULL;
-	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_5 = NULL, *_14 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL, _19;
-	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _3, _4, _8, _9, _12, _13;
+	zephir_fcall_cache_entry *_5 = NULL, *_9 = NULL, *_10 = NULL, *_15 = NULL;
+	zend_bool _1, _6, _11;
+	zval *n_param = NULL, *u, *v, *w, *_0 = NULL, *_4 = NULL, *_14 = NULL, *_16 = NULL, *_17 = NULL, *_18 = NULL, _19;
+	int n, i, vv = 0, vBv = 0, ZEPHIR_LAST_CALL_STATUS, _2, _3, _7, _8, _12, _13;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
@@ -222,75 +221,75 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	object_init_ex(u, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, u, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, u, "__construct", NULL, 60, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(v);
 	object_init_ex(v, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, v, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, v, "__construct", NULL, 60, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(w);
 	object_init_ex(w, spl_ce_SplFixedArray);
 	ZEPHIR_INIT_NVAR(_0);
 	ZVAL_LONG(_0, n);
-	ZEPHIR_CALL_METHOD(NULL, w, "__construct", &_1, 74, _0);
+	ZEPHIR_CALL_METHOD(NULL, w, "__construct", NULL, 60, _0);
 	zephir_check_call_status();
-	_4 = (n - 1);
-	_3 = 0;
+	_3 = (n - 1);
 	_2 = 0;
-	if (_3 <= _4) {
+	_1 = 0;
+	if (_2 <= _3) {
 		while (1) {
-			if (_2) {
-				_3++;
-				if (!(_3 <= _4)) {
+			if (_1) {
+				_2++;
+				if (!(_2 <= _3)) {
 					break;
 				}
 			} else {
-				_2 = 1;
+				_1 = 1;
 			}
-			i = _3;
+			i = _2;
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_INIT_NVAR(_5);
-			ZVAL_LONG(_5, 1);
-			ZEPHIR_CALL_METHOD(NULL, u, "offsetset", &_6, 0, _0, _5);
+			ZEPHIR_INIT_NVAR(_4);
+			ZVAL_LONG(_4, 1);
+			ZEPHIR_CALL_METHOD(NULL, u, "offsetset", &_5, 61, _0, _4);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_INIT_NVAR(_5);
-			ZVAL_LONG(_5, 1);
-			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", &_6, 0, _0, _5);
+			ZEPHIR_INIT_NVAR(_4);
+			ZVAL_LONG(_4, 1);
+			ZEPHIR_CALL_METHOD(NULL, v, "offsetset", &_5, 61, _0, _4);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_INIT_NVAR(_5);
-			ZVAL_LONG(_5, 1);
-			ZEPHIR_CALL_METHOD(NULL, w, "offsetset", &_6, 0, _0, _5);
+			ZEPHIR_INIT_NVAR(_4);
+			ZVAL_LONG(_4, 1);
+			ZEPHIR_CALL_METHOD(NULL, w, "offsetset", &_5, 61, _0, _4);
 			zephir_check_call_status();
 		}
 	}
-	_9 = 9;
-	_8 = 0;
+	_8 = 9;
 	_7 = 0;
-	if (_8 <= _9) {
+	_6 = 0;
+	if (_7 <= _8) {
 		while (1) {
-			if (_7) {
-				_8++;
-				if (!(_8 <= _9)) {
+			if (_6) {
+				_7++;
+				if (!(_7 <= _8)) {
 					break;
 				}
 			} else {
-				_7 = 1;
+				_6 = 1;
 			}
-			i = _8;
+			i = _7;
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, n);
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 75, _0, u, v, w);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_9, 0, _0, u, v, w);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, n);
-			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 75, _0, v, u, w);
+			ZEPHIR_CALL_METHOD(NULL, this_ptr, "atau", &_10, 0, _0, v, u, w);
 			zephir_check_call_status();
 		}
 	}
@@ -310,22 +309,22 @@ PHP_METHOD(Test_SpectralNorm, process) {
 			i = _12;
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_CALL_METHOD(&_14, u, "offsetget", &_15, 0, _0);
+			ZEPHIR_CALL_METHOD(&_14, u, "offsetget", &_15, 62, _0);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_CALL_METHOD(&_16, v, "offsetget", &_15, 0, _0);
+			ZEPHIR_CALL_METHOD(&_16, v, "offsetget", &_15, 62, _0);
 			zephir_check_call_status();
 			ZEPHIR_INIT_LNVAR(_17);
 			mul_function(_17, _14, _16 TSRMLS_CC);
 			vBv += zephir_get_numberval(_17);
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_CALL_METHOD(&_14, v, "offsetget", &_15, 0, _0);
+			ZEPHIR_CALL_METHOD(&_14, v, "offsetget", &_15, 62, _0);
 			zephir_check_call_status();
 			ZEPHIR_INIT_NVAR(_0);
 			ZVAL_LONG(_0, i);
-			ZEPHIR_CALL_METHOD(&_16, v, "offsetget", &_15, 0, _0);
+			ZEPHIR_CALL_METHOD(&_16, v, "offsetget", &_15, 62, _0);
 			zephir_check_call_status();
 			ZEPHIR_INIT_LNVAR(_18);
 			mul_function(_18, _14, _16 TSRMLS_CC);
@@ -334,7 +333,7 @@ PHP_METHOD(Test_SpectralNorm, process) {
 	}
 	ZEPHIR_SINIT_VAR(_19);
 	ZVAL_DOUBLE(&_19, zephir_safe_div_long_long(vBv, vv TSRMLS_CC));
-	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", &_20, 9, &_19);
+	ZEPHIR_RETURN_CALL_FUNCTION("sqrt", NULL, 9, &_19);
 	zephir_check_call_status();
 	RETURN_MM();
 

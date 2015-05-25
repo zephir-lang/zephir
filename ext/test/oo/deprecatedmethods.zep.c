@@ -33,12 +33,11 @@ PHP_METHOD(Test_Oo_DeprecatedMethods, deprecatedMethod) {
 
 PHP_METHOD(Test_Oo_DeprecatedMethods, normalMethod) {
 
-	zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedepricatedmethod", &_0, 55);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedepricatedmethod", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 

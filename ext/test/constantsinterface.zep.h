@@ -17,5 +17,5 @@ ZEPHIR_INIT_FUNCS(test_constantsinterface_method_entry) {
 	PHP_ME(Test_ConstantsInterface, testReadInterfaceConstant4, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ConstantsInterface, testReadInterfaceConstant5, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ConstantsInterface, testReadInterfaceConstant6, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

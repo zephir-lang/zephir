@@ -43,5 +43,5 @@ ZEPHIR_INIT_FUNCS(test_constants_method_entry) {
 	PHP_ME(Test_Constants, testNamespaceMagicConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Constants, testDirConstant, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Constants, testPHPVersionEnvConstantInExpValue, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

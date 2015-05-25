@@ -81,5 +81,5 @@ ZEPHIR_INIT_FUNCS(test_oo_dynamicprop_method_entry) {
 	PHP_ME(Test_Oo_DynamicProp, setExistingStringProperty, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_DynamicProp, setExistingStringPropertyString, arginfo_test_oo_dynamicprop_setexistingstringpropertystring, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_DynamicProp, setNonExistingStringProperty, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

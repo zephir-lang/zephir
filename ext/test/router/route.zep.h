@@ -89,5 +89,5 @@ ZEPHIR_INIT_FUNCS(test_router_route_method_entry) {
 	PHP_ME(Test_Router_Route, getHostname, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, convert, arginfo_test_router_route_convert, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Router_Route, getConverters, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

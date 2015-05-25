@@ -19,5 +19,5 @@ ZEPHIR_INIT_FUNCS(test_properties_privateproperties_method_entry) {
 	PHP_ME(Test_Properties_PrivateProperties, getSomeInteger, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Properties_PrivateProperties, getSomeDouble, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Properties_PrivateProperties, getSomeString, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

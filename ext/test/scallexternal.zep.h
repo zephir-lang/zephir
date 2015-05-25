@@ -21,5 +21,5 @@ ZEPHIR_INIT_FUNCS(test_scallexternal_method_entry) {
 	PHP_ME(Test_ScallExternal, testCall1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ScallExternal, testCall2, arginfo_test_scallexternal_testcall2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ScallExternal, testMethod3, arginfo_test_scallexternal_testmethod3, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-  PHP_FE_END
+	PHP_FE_END
 };

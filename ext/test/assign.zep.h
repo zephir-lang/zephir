@@ -231,5 +231,5 @@ ZEPHIR_INIT_FUNCS(test_assign_method_entry) {
 	PHP_ME(Test_Assign, testConstantKeyAssign, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testArrayBoolExpressionAssign, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Assign, testAssignSuperGlobals, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

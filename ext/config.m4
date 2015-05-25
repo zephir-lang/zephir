@@ -9,7 +9,7 @@ if test "$PHP_TEST" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
-	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/arithmetic.zep.c
+	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/arithmetic.zep.c
 	test/arrayobject.zep.c
 	test/assign.zep.c
 	test/bench/foo.zep.c
@@ -59,6 +59,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/mcall.zep.c
 	test/mcallchained.zep.c
 	test/mcalldynamic.zep.c
+	test/mcallinternal.zep.c
 	test/methodabstract.zep.c
 	test/methodargs.zep.c
 	test/methodinterface.zep.c

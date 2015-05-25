@@ -17,5 +17,5 @@ ZEPHIR_INIT_FUNCS(test_scalldynamic_method_entry) {
 	PHP_ME(Test_ScallDynamic, testMethod2, NULL, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
 	PHP_ME(Test_ScallDynamic, testMethod3, NULL, ZEND_ACC_STATIC|ZEND_ACC_PRIVATE)
 	PHP_ME(Test_ScallDynamic, selfDynamicCall1, arginfo_test_scalldynamic_selfdynamiccall1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

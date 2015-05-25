@@ -51,5 +51,5 @@ ZEPHIR_INIT_FUNCS(test_trytest_method_entry) {
 	PHP_ME(Test_TryTest, testTry9, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_TryTest, testTry10, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_TryTest, testTry11, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

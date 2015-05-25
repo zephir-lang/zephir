@@ -64,5 +64,5 @@ ZEPHIR_INIT_FUNCS(test_oo_oonativeimplements_method_entry) {
 	PHP_ME(Test_Oo_OoNativeImplements, offsetUnset, arginfo_test_oo_oonativeimplements_offsetunset, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoNativeImplements, serialize, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoNativeImplements, unserialize, arginfo_test_oo_oonativeimplements_unserialize, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };
