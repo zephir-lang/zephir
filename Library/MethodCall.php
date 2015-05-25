@@ -91,7 +91,7 @@ class MethodCall extends Call
             }
         }
 
-        return [$numberPoly, $method];
+        return array($numberPoly, $method);
     }
 
     /**
@@ -583,7 +583,6 @@ class MethodCall extends Call
 
         // Generate the code according to the call type
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-
             $realMethod = $this->getRealCalledMethod($compilationContext, $variableVariable, $methodName);
 
             $isInternal = false;
@@ -595,7 +594,6 @@ class MethodCall extends Call
             }
 
             if (!$isInternal) {
-
                 // Check if the method call can have an inline cache
                 $methodCache = $compilationContext->cacheManager->getMethodCache();
 
