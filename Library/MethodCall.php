@@ -541,7 +541,6 @@ class MethodCall extends Call
          * Generate the code according to the call type
          */
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-
             $isInternal = false;
             if (isset($method)) {
                 $isInternal = $method->isInternal();
