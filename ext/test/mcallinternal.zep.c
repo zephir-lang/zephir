@@ -214,8 +214,8 @@ static void zep_Test_McallInternal_fibonacci(int ht, zval *return_value, zval **
 PHP_METHOD(Test_McallInternal, callFibonacci) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *n_param = NULL, *_0 = NULL, _1;
-	long n, f;
+	zval *n_param = NULL, _0;
+	long n;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &n_param);
@@ -223,12 +223,11 @@ PHP_METHOD(Test_McallInternal, callFibonacci) {
 	n = zephir_get_intval(n_param);
 
 
-	ZEPHIR_SINIT_VAR(_1);
-	ZVAL_LONG(&_1, n);
-	ZEPHIR_CALL_INTERNAL_METHOD_P1(&_0, this_ptr, zep_Test_McallInternal_fibonacci, &_1);
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, n);
+	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P1(this_ptr, zep_Test_McallInternal_fibonacci, &_0);
 	zephir_check_call_status();
-	f = zephir_get_intval(_0);
-	RETURN_MM_LONG(f);
+	RETURN_MM();
 
 }
 

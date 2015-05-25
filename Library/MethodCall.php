@@ -45,7 +45,57 @@ class MethodCall extends Call
     const CALL_DYNAMIC_STRING = 3;
 
     /**
+     * Examine internal class information and returns the method called
      *
+     * @param CompilationContext $compilationContext
+     * @param Variable $caller
+     * @param string $methodName
+     * @return array
+     */
+    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, $methodName)
+    {
+        $compiler = $compilationContext->compiler;
+
+        $numberPoly = 0;
+        $method = null;
+
+        if ($caller->getRealName() == 'this') {
+            $classDefinition = $compilationContext->classDefinition;
+            if ($classDefinition->hasMethod($methodName)) {
+                $numberPoly++;
+                $method = $classDefinition->getMethod($methodName);
+            }
+        } else {
+            $classTypes = $caller->getClassTypes();
+            foreach ($classTypes as $classType) {
+                if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
+                    if ($compiler->isInterface($classType)) {
+                        continue;
+                    }
+
+                    if ($compiler->isClass($classType)) {
+                        $classDefinition = $compiler->getClassDefinition($classType);
+                    } else {
+                        $classDefinition = $compiler->getInternalClassDefinition($classType);
+                    }
+
+                    if (!$classDefinition) {
+                        continue;
+                    }
+
+                    if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
+                        $numberPoly++;
+                        $method = $classDefinition->getMethod($methodName);
+                    }
+                }
+            }
+        }
+
+        return [$numberPoly, $method];
+    }
+
+    /**
+     * Compiles a method call
      *
      * @param Expression $expr
      * @param CompilationContext $compilationContext
@@ -185,7 +235,7 @@ class MethodCall extends Call
                         }
                         if (!$found) {
                             $possibleMethod = $classDefinition->getPossibleMethodName($expression['name']);
-                            if ($possibleMethod) {
+                            if ($possibleMethod && $expression['name'] != $possibleMethod) {
                                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'. Did you mean '" . $possibleMethod . "'?", $expression);
                             } else {
                                 throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not implement method: '" . $expression['name'] . "'", $expression);
@@ -533,9 +583,15 @@ class MethodCall extends Call
 
         // Generate the code according to the call type
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
+
+            $realMethod = $this->getRealCalledMethod($compilationContext, $variableVariable, $methodName);
+
             $isInternal = false;
-            if (isset($method)) {
-                $isInternal = $method->isInternal();
+            if (is_object($realMethod[1])) {
+                $isInternal = $realMethod[1]->isInternal();
+                if ($isInternal && $realMethod[0] > 1) {
+                    throw new CompilerException("Cannot resolve method: '" . $expression['name'] . "' in polymorphic variable", $expression);
+                }
             }
 
             if (!$isInternal) {

@@ -99,26 +99,35 @@ class MethodCache
         $compiler = $compilationContext->compiler;
 
         $numberPoly = 0;
-        $classTypes = $caller->getClassTypes();
-        foreach ($classTypes as $classType) {
-            if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
-                if ($compiler->isInterface($classType)) {
-                    continue;
-                }
 
-                if ($compiler->isClass($classType)) {
-                    $classDefinition = $compiler->getClassDefinition($classType);
-                } else {
-                    $classDefinition = $compiler->getInternalClassDefinition($classType);
-                }
+        if ($caller->getRealName() == 'this') {
+            $classDefinition = $compilationContext->classDefinition;
+            if ($classDefinition->hasMethod($methodName)) {
+                $numberPoly++;
+                $method = $classDefinition->getMethod($methodName);
+            }
+        } else {
+            $classTypes = $caller->getClassTypes();
+            foreach ($classTypes as $classType) {
+                if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
+                    if ($compiler->isInterface($classType)) {
+                        continue;
+                    }
 
-                if (!$classDefinition) {
-                    continue;
-                }
+                    if ($compiler->isClass($classType)) {
+                        $classDefinition = $compiler->getClassDefinition($classType);
+                    } else {
+                        $classDefinition = $compiler->getInternalClassDefinition($classType);
+                    }
 
-                if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
-                    $numberPoly++;
-                    $method = $classDefinition->getMethod($methodName);
+                    if (!$classDefinition) {
+                        continue;
+                    }
+
+                    if ($classDefinition->hasMethod($methodName) && !$classDefinition->isInterface()) {
+                        $numberPoly++;
+                        $method = $classDefinition->getMethod($methodName);
+                    }
                 }
             }
         }

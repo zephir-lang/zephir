@@ -64,8 +64,6 @@ class McallInternal
 
   	public function callFibonacci(long n) -> long
   	{
-  		long f;
-  		let f = (long) this->fibonacci(n);
-  		return f;
+  		return this->fibonacci(n);
   	}
 }

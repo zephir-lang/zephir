@@ -101,12 +101,13 @@ PHP_METHOD(Test_Exceptions, getException) {
 
 PHP_METHOD(Test_Exceptions, testException4) {
 
+	zephir_fcall_cache_entry *_1 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *_0 = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception", NULL, 0);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "getexception", &_1, 0);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(_0, "test/exceptions.zep", 38 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
@@ -212,6 +213,7 @@ PHP_METHOD(Test_Exceptions, testExceptionConcat) {
 
 PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 
+	zephir_fcall_cache_entry *_0 = NULL;
 	int ZEPHIR_LAST_CALL_STATUS;
 	zval *e = NULL;
 
@@ -220,7 +222,7 @@ PHP_METHOD(Test_Exceptions, testExceptionRethrow) {
 
 	/* try_start_1: */
 
-		ZEPHIR_CALL_METHOD(NULL, this_ptr, "testexception1", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, this_ptr, "testexception1", &_0, 0);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:
