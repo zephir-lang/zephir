@@ -63,7 +63,7 @@ class ThrowStatement extends StatementAbstract
                     $this->throwStringException($codePrinter, $class, $message, $statement['expr']);
                     return;
                 } else {
-                    if ($compilationContext->compiler->isInternalClass($className)) {
+                    if ($compilationContext->compiler->isBundledClass($className)) {
                         $classEntry = $compilationContext->classDefinition->getClassEntryByClassName($className, $compilationContext, true);
                         if ($classEntry) {
                             $message = $expr['parameters'][0]['parameter']['value'];

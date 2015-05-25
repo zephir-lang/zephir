@@ -32,5 +32,5 @@ ZEPHIR_INIT_FUNCS(test_exists_method_entry) {
 	PHP_ME(Test_Exists, testInterfaceExists, arginfo_test_exists_testinterfaceexists, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exists, testMethodExists, arginfo_test_exists_testmethodexists, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Exists, testFileExists, arginfo_test_exists_testfileexists, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

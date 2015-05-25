@@ -42,5 +42,5 @@ ZEPHIR_INIT_FUNCS(test_logical_method_entry) {
 	PHP_ME(Test_Logical, testMixed2, arginfo_test_logical_testmixed2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Logical, testMixed3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Logical, testMixed4, arginfo_test_logical_testmixed4, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

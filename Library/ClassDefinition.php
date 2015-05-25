@@ -105,7 +105,10 @@ class ClassDefinition
      */
     protected $eventsManager;
 
-    protected $isInternal = false;
+    /**
+     * @var bool
+     */
+    protected $isBundled = false;
 
     /**
      * @var AliasManager
@@ -129,21 +132,21 @@ class ClassDefinition
     /**
      * Sets if the class is internal or not
      *
-     * @param boolean $isInternal
+     * @param boolean $isBundled
      */
-    public function setIsInternal($isInternal)
+    public function setIsBundled($isBundled)
     {
-        $this->isInternal = $isInternal;
+        $this->isBundled = $isBundled;
     }
 
     /**
-     * Returns whether the class is internal or not
+     * Returns whether the class is bundled or not
      *
      * @return bool
      */
-    public function isInternal()
+    public function isBundled()
     {
-        return $this->isInternal;
+        return $this->isBundled;
     }
 
     /**
@@ -497,6 +500,7 @@ class ClassDefinition
         if (isset($this->constants[$name])) {
             return true;
         }
+
         /**
          * @todo add code to check if constant is defined in interfaces
          */
@@ -772,6 +776,43 @@ class ClassDefinition
     }
 
     /**
+     * Returns the signature of an internal method
+     *
+     * @return string
+     */
+    private function getInternalSignature(ClassMethod $method)
+    {
+
+        $signatureParameters = array();
+        $parameters = $method->getParameters();
+        if (is_object($parameters)) {
+            foreach ($parameters->getParameters() as $parameter) {
+                switch ($parameter['data-type']) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'double':
+                    case 'bool':
+                    case 'char':
+                    case 'uchar':
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
+                        break;
+
+                    default:
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext';
+                        break;
+                }
+            }
+        }
+
+        if (count($signatureParameters)) {
+            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC) {';
+        }
+
+        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC) {';
+    }
+
+    /**
      * Compiles a class/interface
      *
      * @param CompilationContext $compilationContext
@@ -828,7 +869,7 @@ class ClassDefinition
         $classExtendsDefinition = null;
         if ($this->extendsClass) {
             $classExtendsDefinition = $this->extendsClassDefinition;
-            if (!$classExtendsDefinition->isInternal()) {
+            if (!$classExtendsDefinition->isBundled()) {
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
@@ -916,7 +957,7 @@ class ClassDefinition
                     $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                     $classEntry = $classInterfaceDefinition->getClassEntry($compilationContext);
                 } else {
-                    if ($compiler->isInternalInterface($interface)) {
+                    if ($compiler->isBundledInterface($interface)) {
                         $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                         $classEntry = $this->getClassEntryByClassName($classInterfaceDefinition->getName(), $compilationContext);
                     }
@@ -946,7 +987,7 @@ class ClassDefinition
              * Interfaces in extended classes may have
              */
             if ($classExtendsDefinition) {
-                if (!$classExtendsDefinition->isInternal()) {
+                if (!$classExtendsDefinition->isBundled()) {
                     $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                     if (is_array($interfaces)) {
                         foreach ($interfaces as $interface) {
@@ -954,7 +995,7 @@ class ClassDefinition
                             if ($compiler->isInterface($interface)) {
                                 $classInterfaceDefinition = $compiler->getClassDefinition($interface);
                             } else {
-                                if ($compiler->isInternalInterface($interface)) {
+                                if ($compiler->isBundledInterface($interface)) {
                                     $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                                 }
                             }
@@ -986,7 +1027,11 @@ class ClassDefinition
             }
 
             if ($this->getType() == 'class') {
-                $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+                if (!$method->isInternal()) {
+                    $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
+                } else {
+                    $codePrinter->output($this->getInternalSignature($method));
+                }
                 $codePrinter->outputBlankLine();
 
                 if (!$method->isAbstract()) {
@@ -1077,10 +1122,12 @@ class ClassDefinition
             foreach ($methods as $method) {
                 $parameters = $method->getParameters();
                 if ($this->getType() == 'class') {
-                    if (count($parameters)) {
-                        $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
-                    } else {
-                        $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+                    if (!$method->isInternal()) {
+                        if (count($parameters)) {
+                            $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', ' . $method->getModifiers() . ')');
+                        } else {
+                            $codePrinter->output("\t" . 'PHP_ME(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ', NULL, ' . $method->getModifiers() . ')');
+                        }
                     }
                 } else {
                     if ($method->isStatic()) {
@@ -1098,7 +1145,7 @@ class ClassDefinition
                     }
                 }
             }
-            $codePrinter->output('  PHP_FE_END');
+            $codePrinter->output("\t" . 'PHP_FE_END');
             $codePrinter->output('};');
         }
 
@@ -1539,7 +1586,7 @@ class ClassDefinition
                     $parameters
                 ));
                 $classMethod->setIsStatic($method->isStatic());
-                $classMethod->setIsInternal(true);
+                $classMethod->setIsBundled(true);
                 $classDefinition->addMethod($classMethod);
             }
         }
@@ -1586,7 +1633,7 @@ class ClassDefinition
             }
         }
 
-        $classDefinition->setIsInternal(true);
+        $classDefinition->setIsBundled(true);
 
         return $classDefinition;
     }

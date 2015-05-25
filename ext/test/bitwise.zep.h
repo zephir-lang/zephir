@@ -195,5 +195,5 @@ ZEPHIR_INIT_FUNCS(test_bitwise_method_entry) {
 	PHP_ME(Test_Bitwise, intShiftRight, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bitwise, int2ShiftRight, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bitwise, intShiftRightSimple, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

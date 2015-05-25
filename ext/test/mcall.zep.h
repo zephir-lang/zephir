@@ -245,5 +245,5 @@ ZEPHIR_INIT_FUNCS(test_mcall_method_entry) {
 	PHP_ME(Test_Mcall, testCallablePass, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, testCallableArrayThisMethodPass, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Mcall, aa, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

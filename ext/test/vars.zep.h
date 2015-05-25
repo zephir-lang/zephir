@@ -62,5 +62,5 @@ ZEPHIR_INIT_FUNCS(test_vars_method_entry) {
 	PHP_ME(Test_Vars, testIntVarDump, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testDoubleVarDump, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Vars, testBoolVarDump, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

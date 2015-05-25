@@ -17,5 +17,5 @@ ZEPHIR_INIT_FUNCS(test_resourcetest_method_entry) {
 	PHP_ME(Test_ResourceTest, testTypeOffResource, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ResourceTest, testIsResource, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ResourceTest, testFunctionsForSTDIN, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -365,5 +365,5 @@ ZEPHIR_INIT_FUNCS(test_arithmetic_method_entry) {
 	PHP_ME(Test_Arithmetic, letStatementVarMinus, arginfo_test_arithmetic_letstatementvarminus, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, div1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Arithmetic, div2, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

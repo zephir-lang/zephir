@@ -18,5 +18,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_functional_method_entry) {
 	PHP_ME(Test_Functional, map1, arginfo_test_functional_map1, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Functional, map2, arginfo_test_functional_map2, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

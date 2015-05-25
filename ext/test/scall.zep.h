@@ -117,5 +117,5 @@ ZEPHIR_INIT_FUNCS(test_scall_method_entry) {
 	PHP_ME(Test_Scall, testCall17, arginfo_test_scall_testcall17, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Scall, testCall18, arginfo_test_scall_testcall18, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Test_Scall, testMethodStatic, NULL, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
-  PHP_FE_END
+	PHP_FE_END
 };

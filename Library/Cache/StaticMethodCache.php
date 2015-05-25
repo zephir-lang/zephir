@@ -82,7 +82,7 @@ class StaticMethodCache
         if (!$compilationContext->insideCycle) {
             if (!($method instanceof \ReflectionMethod)) {
                 $classDefinition = $method->getClassDefinition();
-                if (!$classDefinition->isInternal() && $allowNtsCache) {
+                if (!$classDefinition->isBundled() && $allowNtsCache) {
                     $mustBeCached = true;
                 } else {
                     if (!$method->isPrivate() && !$method->isFinal()) {

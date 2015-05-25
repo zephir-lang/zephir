@@ -16,5 +16,5 @@ ZEPHIR_INIT_FUNCS(test_mcalldynamic_method_entry) {
 	PHP_ME(Test_McallDynamic, testMethod1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_McallDynamic, testMagicCall1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_McallDynamic, __call, arginfo_test_mcalldynamic___call, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -165,5 +165,5 @@ ZEPHIR_INIT_FUNCS(test_builtin_stringmethods_method_entry) {
 	PHP_ME(Test_BuiltIn_StringMethods, getCompareLocale, arginfo_test_builtin_stringmethods_getcomparelocale, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getReversed, arginfo_test_builtin_stringmethods_getreversed, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_StringMethods, getHtmlSpecialChars, arginfo_test_builtin_stringmethods_gethtmlspecialchars, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

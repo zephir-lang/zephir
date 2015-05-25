@@ -119,6 +119,12 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
+		'internal' {
+			s->active_char += sizeof("internal")-1;
+			token->opcode = XX_T_INTERNAL;
+			return 0;
+		}
+
 		'public' {
 			s->active_char += sizeof("public")-1;
 			token->opcode = XX_T_PUBLIC;

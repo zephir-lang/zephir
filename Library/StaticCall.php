@@ -191,7 +191,7 @@ class StaticCall extends Call
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        if ($classDefinition->isInternal()) {
+        if ($classDefinition->isBundled()) {
             //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
                 $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
                 $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
@@ -493,7 +493,7 @@ class StaticCall extends Call
                     if ($compiler->isClass($className)) {
                         $classDefinition = $compiler->getClassDefinition($className);
                     } else {
-                        if ($compiler->isInternalClass($className)) {
+                        if ($compiler->isBundledClass($className)) {
                             $classDefinition = $compiler->getInternalClassDefinition($className);
                         } else {
                             throw new CompilerException("Class name: " . $className . " does not exist", $expression);
@@ -549,7 +549,7 @@ class StaticCall extends Call
                 }
 
                 if (!$classDefinition->hasMethod("__callStatic")) {
-                    if ($method instanceof ClassMethod && !$method->isInternal()) {
+                    if ($method instanceof ClassMethod && !$method->isBundled()) {
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */

@@ -12,5 +12,5 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_optimizers_arraymerge_method_entry) {
 	PHP_ME(Test_Optimizers_ArrayMerge, mergeTwoRequiredArrays, arginfo_test_optimizers_arraymerge_mergetworequiredarrays, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

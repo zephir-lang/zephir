@@ -128,7 +128,7 @@ EOF;
                 throw new \RuntimeException('Class "' . $class->getName() . '" does not have a extendsClassDefinition');
             }
 
-            $source .= ' extends ' . ($extendsClassDefinition->isInternal() ? '' : '\\') . $extendsClassDefinition->getCompleteName();
+            $source .= ' extends ' . ($extendsClassDefinition->isBundled() ? '' : '\\') . $extendsClassDefinition->getCompleteName();
         }
 
         if ($implementedInterfaces = $class->getImplementedInterfaces()) {

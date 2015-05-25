@@ -312,7 +312,7 @@ class Call
         $readOnlyParameters = array();
         if (is_object($calleeDefinition)) {
             if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $compilationContext->currentMethod == $calleeDefinition) {
+                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod == $calleeDefinition) {
                     $isFinal = true;
                     foreach ($calleeDefinition->getParameters() as $position => $parameter) {
                         if (isset($parameter['data-type'])) {

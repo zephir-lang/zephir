@@ -17,5 +17,5 @@ ZEPHIR_INIT_FUNCS(test_globals_method_entry) {
 	PHP_ME(Test_Globals, getDefaultGlobals4, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Globals, getDefaultGlobals5, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Globals, getDefaultGlobals6, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -99,5 +99,5 @@ ZEPHIR_INIT_FUNCS(test_bench_foo_method_entry) {
 	PHP_ME(Test_Bench_Foo, g, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, call, arginfo_test_bench_foo_call, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, read_const, arginfo_test_bench_foo_read_const, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

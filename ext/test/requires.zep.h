@@ -17,5 +17,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_requires_method_entry) {
 	PHP_ME(Test_Requires, requireExternal1, arginfo_test_requires_requireexternal1, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Requires, requireExternal2, arginfo_test_requires_requireexternal2, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

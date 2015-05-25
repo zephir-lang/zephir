@@ -13,5 +13,5 @@ ZEPHIR_INIT_FUNCS(test_returns_method_entry) {
 	PHP_ME(Test_Returns, testReturnCast2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Returns, testReturnCast3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Returns, testReturnCast4, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

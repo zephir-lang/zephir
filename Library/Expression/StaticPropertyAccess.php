@@ -83,7 +83,7 @@ class StaticPropertyAccess
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
             } else {
-                if ($compiler->isInternalClass($className)) {
+                if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
                     throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);

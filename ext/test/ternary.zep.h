@@ -35,5 +35,5 @@ ZEPHIR_INIT_FUNCS(test_ternary_method_entry) {
 	PHP_ME(Test_Ternary, testTernaryComplex2, arginfo_test_ternary_testternarycomplex2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Ternary, testTernaryComplex3, arginfo_test_ternary_testternarycomplex3, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Ternary, testTernaryAfterLetVariable, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

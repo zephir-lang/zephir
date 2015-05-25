@@ -33,5 +33,5 @@ ZEPHIR_INIT_FUNCS(test_fetchtest_method_entry) {
 	PHP_ME(Test_FetchTest, testFetchArray2, arginfo_test_fetchtest_testfetcharray2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_FetchTest, testFetchArray3, arginfo_test_fetchtest_testfetcharray3, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_FetchTest, testFetchObject1, arginfo_test_fetchtest_testfetchobject1, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

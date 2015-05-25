@@ -312,7 +312,7 @@ class Compiler
      *
      * @return boolean
      */
-    public function isInternalClass($className)
+    public function isBundledClass($className)
     {
         return class_exists($className, false);
     }
@@ -324,7 +324,7 @@ class Compiler
      *
      * @return boolean
      */
-    public function isInternalInterface($className)
+    public function isBundledInterface($className)
     {
         return interface_exists($className, false);
     }

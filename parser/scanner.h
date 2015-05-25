@@ -155,6 +155,7 @@
 #define XX_T_CBLOCK 451
 
 #define XX_T_ELSEIF 452
+#define XX_T_INTERNAL 453
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

@@ -19,5 +19,5 @@ ZEPHIR_INIT_FUNCS(test_issues_method_entry) {
 	PHP_ME(Test_Issues, setAdapter, arginfo_test_issues_setadapter, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Issues, someMethod, arginfo_test_issues_somemethod, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Issues, test, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };
