@@ -13,5 +13,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_optimizers_createarray_method_entry) {
 	PHP_ME(Test_Optimizers_CreateArray, createNoSize, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_CreateArray, createSize, arginfo_test_optimizers_createarray_createsize, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

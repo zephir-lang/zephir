@@ -11,5 +11,5 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_regexdna_method_entry) {
 	PHP_ME(Test_RegexDNA, process, arginfo_test_regexdna_process, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

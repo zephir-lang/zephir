@@ -103,5 +103,5 @@ ZEPHIR_INIT_FUNCS(test_cast_method_entry) {
 	PHP_ME(Test_Cast, testObjectCastFromArray, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromEmptyString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Cast, testObjectCastFromString, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

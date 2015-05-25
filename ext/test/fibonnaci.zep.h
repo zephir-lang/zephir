@@ -25,5 +25,5 @@ ZEPHIR_INIT_FUNCS(test_fibonnaci_method_entry) {
 	PHP_ME(Test_Fibonnaci, fibArray2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fibonnaci, fibonacciRecursive, arginfo_test_fibonnaci_fibonaccirecursive, ZEND_ACC_PRIVATE)
 	PHP_ME(Test_Fibonnaci, fibonacciFinalRecursive, arginfo_test_fibonnaci_fibonaccifinalrecursive, ZEND_ACC_PRIVATE|ZEND_ACC_FINAL)
-  PHP_FE_END
+	PHP_FE_END
 };

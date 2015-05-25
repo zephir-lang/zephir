@@ -20,6 +20,7 @@
 #include <Zend/zend_exceptions.h>
 #include <Zend/zend_interfaces.h>
 
+#include "kernel/globals.h"
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/memory.h"
@@ -96,6 +97,7 @@ zend_class_entry *test_logical_ce;
 zend_class_entry *test_mcall_ce;
 zend_class_entry *test_mcallchained_ce;
 zend_class_entry *test_mcalldynamic_ce;
+zend_class_entry *test_mcallinternal_ce;
 zend_class_entry *test_methodabstract_ce;
 zend_class_entry *test_methodargs_ce;
 zend_class_entry *test_nativearray_ce;
@@ -249,6 +251,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Mcall);
 	ZEPHIR_INIT(Test_McallChained);
 	ZEPHIR_INIT(Test_McallDynamic);
+	ZEPHIR_INIT(Test_McallInternal);
 	ZEPHIR_INIT(Test_MethodAbstract);
 	ZEPHIR_INIT(Test_MethodArgs);
 	ZEPHIR_INIT(Test_NativeArray);
@@ -368,8 +371,8 @@ static void php_zephir_init_globals(zend_test_globals *zephir_globals TSRMLS_DC)
 	/* Recursive Lock */
 	zephir_globals->recursive_lock = 0;
 
-	/** Static cache */
-	memset(zephir_globals->scache, '\0', ZEPHIR_MAX_CACHE_SLOTS);
+	/* Static cache */
+	memset(zephir_globals->scache, NULL, sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
 	zephir_globals->test.my_setting_1 = 1;
 	zephir_globals->test.my_setting_2 = 100;

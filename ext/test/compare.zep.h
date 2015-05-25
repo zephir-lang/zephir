@@ -62,5 +62,5 @@ ZEPHIR_INIT_FUNCS(test_compare_method_entry) {
 	PHP_ME(Test_Compare, testNotIdenticalZeroVar, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Compare, testNotIdenticalZeroInt, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Compare, testNotIdenticalZeroLong, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

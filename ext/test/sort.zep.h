@@ -11,5 +11,5 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_sort_method_entry) {
 	PHP_ME(Test_Sort, quick, arginfo_test_sort_quick, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -39,5 +39,5 @@ ZEPHIR_INIT_FUNCS(test_declaretest_method_entry) {
 	PHP_ME(Test_DeclareTest, testDeclare13, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare14, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_DeclareTest, testDeclare15, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

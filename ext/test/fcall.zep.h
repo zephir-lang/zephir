@@ -57,5 +57,5 @@ ZEPHIR_INIT_FUNCS(test_fcall_method_entry) {
 	PHP_ME(Test_Fcall, testStrtokVarBySlash, arginfo_test_fcall_teststrtokvarbyslash, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testFunctionGetArgs, arginfo_test_fcall_testfunctiongetargs, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Fcall, testArrayFill, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

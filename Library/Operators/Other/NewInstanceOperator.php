@@ -197,7 +197,7 @@ class NewInstanceOperator extends BaseOperator
 
             $callConstructor = $classDefinition->hasMethod("__construct");
         } else {
-            if ($compilationContext->compiler->isInternalClass($className)) {
+            if ($compilationContext->compiler->isBundledClass($className)) {
                 $classDefinition = $compilationContext->compiler->getInternalClassDefinition($className);
                 $callConstructor = $classDefinition->hasMethod("__construct");
             }

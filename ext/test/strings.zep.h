@@ -137,5 +137,5 @@ ZEPHIR_INIT_FUNCS(test_strings_method_entry) {
 	PHP_ME(Test_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

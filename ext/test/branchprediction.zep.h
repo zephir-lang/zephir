@@ -21,5 +21,5 @@ ZEPHIR_INIT_FUNCS(test_branchprediction_method_entry) {
 	PHP_ME(Test_BranchPrediction, testLikely2, arginfo_test_branchprediction_testlikely2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BranchPrediction, testUnlikely1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BranchPrediction, testUnlikely2, arginfo_test_branchprediction_testunlikely2, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

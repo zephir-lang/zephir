@@ -101,7 +101,7 @@ class MethodCache
         $numberPoly = 0;
         $classTypes = $caller->getClassTypes();
         foreach ($classTypes as $classType) {
-            if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
+            if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
                 if ($compiler->isInterface($classType)) {
                     continue;
                 }

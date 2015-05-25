@@ -13,5 +13,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_builtin_charmethods_method_entry) {
 	PHP_ME(Test_BuiltIn_CharMethods, getHex, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_CharMethods, getHexForString, arginfo_test_builtin_charmethods_gethexforstring, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

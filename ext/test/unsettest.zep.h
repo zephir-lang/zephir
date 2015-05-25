@@ -50,5 +50,5 @@ ZEPHIR_INIT_FUNCS(test_unsettest_method_entry) {
 	PHP_ME(Test_Unsettest, testUnsetProperty, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Unsettest, testStdClassUnset, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Unsettest, testUnsetTypedArray, arginfo_test_unsettest_testunsettypedarray, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

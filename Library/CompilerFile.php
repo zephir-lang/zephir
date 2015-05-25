@@ -683,7 +683,7 @@ class CompilerFile
                     $extendedDefinition = $compiler->getClassDefinition($extendedClass);
                     $classDefinition->setExtendsClassDefinition($extendedDefinition);
                 } else {
-                    if ($compiler->isInternalClass($extendedClass)) {
+                    if ($compiler->isBundledClass($extendedClass)) {
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
@@ -697,7 +697,7 @@ class CompilerFile
                     $extendedDefinition = $compiler->getClassDefinition($extendedClass);
                     $classDefinition->setExtendsClassDefinition($extendedDefinition);
                 } else {
-                    if ($compiler->isInternalInterface($extendedClass)) {
+                    if ($compiler->isBundledInterface($extendedClass)) {
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
@@ -717,7 +717,7 @@ class CompilerFile
                 if ($compiler->isInterface($interface)) {
                     $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
                 } else {
-                    if ($compiler->isInternalInterface($interface)) {
+                    if ($compiler->isBundledInterface($interface)) {
                         $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
                     } else {
                         $extendedDefinition = new ClassDefinitionRuntime($extendedClass);

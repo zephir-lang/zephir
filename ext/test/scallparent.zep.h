@@ -13,5 +13,5 @@ ZEPHIR_INIT_FUNCS(test_scallparent_method_entry) {
 	PHP_ME(Test_ScallParent, testMethod2, NULL, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
 	PHP_ME(Test_ScallParent, testCallStatic, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Test_ScallParent, testMethodStatic, NULL, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
-  PHP_FE_END
+	PHP_FE_END
 };

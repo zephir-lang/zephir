@@ -37,5 +37,5 @@ ZEPHIR_INIT_FUNCS(test_typeoff_method_entry) {
 	PHP_ME(Test_Typeoff, testClassPropertyAccess, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testUnknownTypeOf, arginfo_test_typeoff_testunknowntypeof, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Typeoff, testCallableTypeOf, arginfo_test_typeoff_testcallabletypeof, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

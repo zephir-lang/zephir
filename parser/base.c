@@ -215,6 +215,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_FINAL:
 				xx_(xx_parser, XX_FINAL, NULL, parser_status);
 				break;
+			case XX_T_INTERNAL:
+				xx_(xx_parser, XX_INTERNAL, NULL, parser_status);
+				break;
 			case XX_T_FUNCTION:
 				xx_(xx_parser, XX_FUNCTION, NULL, parser_status);
 				break;

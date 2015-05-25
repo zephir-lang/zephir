@@ -244,7 +244,7 @@ class MethodCall extends Call
                         $compiler = $compilationContext->compiler;
                         foreach ($classTypes as $classType) {
                             if ($compiler->isClass($classType) || $compiler->isInterface($classType) ||
-                                $compiler->isInternalClass($classType) || $compiler->isInternalInterface($classType)) {
+                                $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
                                 if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
                                     $classDefinition = $compiler->getClassDefinition($classType);
                                 } else {
@@ -287,7 +287,7 @@ class MethodCall extends Call
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
                                  */
-                                if ($method instanceof ClassMethod && !$method->isInternal()) {
+                                if ($method instanceof ClassMethod && !$method->isBundled()) {
                                     if (isset($expression['parameters'])) {
                                         $callNumberParameters = count($expression['parameters']);
                                     } else {
@@ -533,34 +533,64 @@ class MethodCall extends Call
 
         // Generate the code according to the call type
         if ($type == self::CALL_NORMAL || $type == self::CALL_DYNAMIC_STRING) {
-            // Check if the method call can have an inline cache
-            $methodCache = $compilationContext->cacheManager->getMethodCache();
+            $isInternal = false;
+            if (isset($method)) {
+                $isInternal = $method->isInternal();
+            }
 
-            $cachePointer = $methodCache->get(
-                $compilationContext,
-                $methodName,
-                $variableVariable
-            );
+            if (!$isInternal) {
 
-            if (!count($params)) {
-                if ($isExpecting) {
-                    if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                // Check if the method call can have an inline cache
+                $methodCache = $compilationContext->cacheManager->getMethodCache();
+
+                $cachePointer = $methodCache->get(
+                    $compilationContext,
+                    $methodName,
+                    $variableVariable
+                );
+
+                if (!count($params)) {
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                        }
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                        }
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    }
                 }
             } else {
-                if ($isExpecting) {
-                    if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                if (!count($params)) {
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
+                        }
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(NULL, ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    if ($isExpecting) {
+                        if ($symbolVariable->getName() == 'return_value') {
+                            $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        } else {
+                            $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        }
+                    } else {
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(NULL, ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                    }
                 }
             }
         } else {

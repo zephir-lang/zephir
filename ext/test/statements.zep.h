@@ -38,5 +38,5 @@ ZEPHIR_INIT_FUNCS(test_statements_method_entry) {
 	PHP_ME(Test_Statements, testElseIf2, arginfo_test_statements_testelseif2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Statements, test544Issue, arginfo_test_statements_test544issue, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Statements, test544IssueWithVariable, arginfo_test_statements_test544issuewithvariable, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

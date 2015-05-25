@@ -135,5 +135,5 @@ ZEPHIR_INIT_FUNCS(test_oo_ooparams_method_entry) {
 	PHP_ME(Test_Oo_OoParams, setCallable, arginfo_test_oo_ooparams_setcallable, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setResource, arginfo_test_oo_ooparams_setresource, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Oo_OoParams, setObjectClassCast, arginfo_test_oo_ooparams_setobjectclasscast, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

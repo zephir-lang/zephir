@@ -29,7 +29,7 @@
 %extra_argument {xx_parser_status *status}
 %name xx_
 
-%left PUBLIC PROTECTED STATIC PRIVATE SCOPED .
+%left INTERNAL PUBLIC PROTECTED STATIC PRIVATE SCOPED .
 
 %left COMMA .
 %right REQUIRE .
@@ -1752,6 +1752,10 @@ xx_visibility_list(R) ::= xx_visibility_list(L) xx_visibility(K) . {
 
 xx_visibility_list(R) ::= xx_visibility(K) . {
 	R = xx_ret_list(NULL, K);
+}
+
+xx_visibility(R) ::= INTERNAL . {
+	R = json_object_new_string("internal");
 }
 
 xx_visibility(R) ::= PUBLIC . {

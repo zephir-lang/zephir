@@ -136,8 +136,7 @@ PHP_METHOD(Test_Fibonnaci, fibArray2) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
-	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_3 = NULL;
+	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_2 = NULL;
 	int n, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -154,13 +153,13 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 		} else {
 			ZEPHIR_SINIT_VAR(_1);
 			ZVAL_LONG(&_1, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0, this_ptr, "fibonaccirecursive", &_2, 39, &_1);
+			ZEPHIR_CALL_METHOD(&_0, this_ptr, "fibonaccirecursive", NULL, 0, &_1);
 			zephir_check_call_status();
 			ZEPHIR_SINIT_NVAR(_1);
 			ZVAL_LONG(&_1, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3, this_ptr, "fibonaccirecursive", &_2, 39, &_1);
+			ZEPHIR_CALL_METHOD(&_2, this_ptr, "fibonaccirecursive", NULL, 0, &_1);
 			zephir_check_call_status();
-			zephir_add_function_ex(return_value, _0, _3 TSRMLS_CC);
+			zephir_add_function_ex(return_value, _0, _2 TSRMLS_CC);
 			RETURN_MM();
 		}
 	}
@@ -169,8 +168,7 @@ PHP_METHOD(Test_Fibonnaci, fibonacciRecursive) {
 
 PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 
-	zephir_fcall_cache_entry *_2 = NULL;
-	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_3 = NULL;
+	zval *n_param = NULL, *_0 = NULL, _1 = zval_used_for_init, *_2 = NULL;
 	int n, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
@@ -187,13 +185,13 @@ PHP_METHOD(Test_Fibonnaci, fibonacciFinalRecursive) {
 		} else {
 			ZEPHIR_SINIT_VAR(_1);
 			ZVAL_LONG(&_1, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0, this_ptr, "fibonaccifinalrecursive", &_2, 40, &_1);
+			ZEPHIR_CALL_METHOD(&_0, this_ptr, "fibonaccifinalrecursive", NULL, 0, &_1);
 			zephir_check_call_status();
 			ZEPHIR_SINIT_NVAR(_1);
 			ZVAL_LONG(&_1, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3, this_ptr, "fibonaccifinalrecursive", &_2, 40, &_1);
+			ZEPHIR_CALL_METHOD(&_2, this_ptr, "fibonaccifinalrecursive", NULL, 0, &_1);
 			zephir_check_call_status();
-			zephir_add_function_ex(return_value, _0, _3 TSRMLS_CC);
+			zephir_add_function_ex(return_value, _0, _2 TSRMLS_CC);
 			RETURN_MM();
 		}
 	}

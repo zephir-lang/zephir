@@ -93,5 +93,5 @@ ZEPHIR_INIT_FUNCS(test_builtin_intmethods_method_entry) {
 	PHP_ME(Test_BuiltIn_IntMethods, getAcos, arginfo_test_builtin_intmethods_getacos, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_IntMethods, getAtan, arginfo_test_builtin_intmethods_getatan, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_BuiltIn_IntMethods, getLog, arginfo_test_builtin_intmethods_getlog, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };

@@ -20,5 +20,5 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(test_optimizers_substr_method_entry) {
 	PHP_ME(Test_Optimizers_Substr, testTwoArguments, arginfo_test_optimizers_substr_testtwoarguments, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_Substr, testThreeArguments, arginfo_test_optimizers_substr_testthreearguments, ZEND_ACC_PUBLIC)
-  PHP_FE_END
+	PHP_FE_END
 };
