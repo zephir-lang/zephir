@@ -50,7 +50,7 @@ class Compiler
     /**
      * @var FunctionDefinition[]
      */
-    protected $functionDefinitions = array();
+    public $functionDefinitions = array();
 
     /**
      * @var array|string[]
