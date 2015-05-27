@@ -191,25 +191,13 @@ class SymbolTable
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
-                $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
-
                 $variable = new Variable('variable', $name, $compilationContext->currentBranch);
                 $variable->setIsInitialized(true, $compilationContext, $statement);
                 $variable->setDynamicTypes('array');
                 $variable->setIsExternal(true);
                 $this->variables[$name] = $variable;
             } else {
-                $found = false;
                 $variable = $this->getVariable($name);
-                foreach ($variable->getInitBranches() as $branch) {
-                    if ($branch->getType() == Branch::TYPE_ROOT) {
-                        $found = true;
-                    }
-                }
-
-                if (!$found) {
-                    $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
-                }
             }
             $variable->increaseUses();
             return $variable;
@@ -372,8 +360,6 @@ class SymbolTable
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
-                $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
-
                 $superVar = new Variable('variable', $name, $compilationContext->currentBranch);
                 $superVar->setIsInitialized(true, $compilationContext, $statement);
                 $superVar->setDynamicTypes('array');
@@ -426,8 +412,6 @@ class SymbolTable
                 /**
                  * @TODO, injecting globals, initialize to null and check first?
                  */
-                $compilationContext->codePrinter->output('zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
-
                 $superVar = new Variable('variable', $name, $compilationContext->currentBranch);
                 $superVar->setIsInitialized(true, $compilationContext, $statement);
                 $superVar->setDynamicTypes('array');
