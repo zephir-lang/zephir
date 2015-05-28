@@ -782,7 +782,10 @@ class ClassDefinition
      */
     private function getInternalSignature(ClassMethod $method)
     {
-
+        if ($method->getName() == 'zephir_init_static_properties') {
+            $classDefinition = $method->getClassDefinition();
+            return 'void ' . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_D)';
+        }
         $signatureParameters = array();
         $parameters = $method->getParameters();
         if (is_object($parameters)) {
@@ -806,10 +809,10 @@ class ClassDefinition
         }
 
         if (count($signatureParameters)) {
-            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC) {';
+            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
         }
 
-        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC) {';
+        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
     }
 
     /**
@@ -1030,7 +1033,7 @@ class ClassDefinition
                 if (!$method->isInternal()) {
                     $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
                 } else {
-                    $codePrinter->output($this->getInternalSignature($method));
+                    $codePrinter->output($this->getInternalSignature($method) . ' {');
                 }
                 $codePrinter->outputBlankLine();
 
@@ -1073,6 +1076,8 @@ class ClassDefinition
                 foreach ($methods as $method) {
                     if (!$method->isInternal()) {
                         $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
+                    } else {
+                        $codePrinter->output($this->getInternalSignature($method) . ';');
                     }
                 }
                 $codePrinter->outputBlankLine();
