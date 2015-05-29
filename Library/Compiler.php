@@ -41,6 +41,13 @@ class Compiler
      * @var array|string[]
      */
     protected $anonymousFiles = array();
+    
+    /**
+     * Additional initializer code
+     * used for static property initialization
+     * @var array
+     */
+    protected $internalInitializers = array();
 
     /**
      * @var ClassDefinition[]
@@ -814,6 +821,9 @@ class Compiler
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                    if ($method->getName() == 'zephir_init_static_properties') {
+                        $this->internalInitializers[] = "\t" . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_C);';
+                    }
                 }
 
                 $files[] = $compiledFile;
@@ -1721,7 +1731,7 @@ class Compiler
             '%EXTENSION_INFO%'      => $phpInfo,
             '%EXTRA_INCLUDES%'      => $includes,
             '%DESTRUCTORS%'         => $destructors,
-            '%INITIALIZERS%'         => $initializers,
+            '%INITIALIZERS%'        => implode(PHP_EOL, array_merge($this->internalInitializers, array($initializers))),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries
         );
