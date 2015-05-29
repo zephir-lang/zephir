@@ -142,6 +142,7 @@ zend_class_entry *test_properties_extendspublicproperties_ce;
 zend_class_entry *test_properties_privateproperties_ce;
 zend_class_entry *test_properties_propertyarray_ce;
 zend_class_entry *test_properties_protectedproperties_ce;
+zend_class_entry *test_properties_staticpropertyarray_ce;
 zend_class_entry *test_properties_staticprotectedproperties_ce;
 zend_class_entry *test_properties_staticpublicproperties_ce;
 zend_class_entry *test_quantum_ce;
@@ -296,6 +297,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Properties_PrivateProperties);
 	ZEPHIR_INIT(Test_Properties_PropertyArray);
 	ZEPHIR_INIT(Test_Properties_ProtectedProperties);
+	ZEPHIR_INIT(Test_Properties_StaticPropertyArray);
 	ZEPHIR_INIT(Test_Properties_StaticProtectedProperties);
 	ZEPHIR_INIT(Test_Properties_StaticPublicProperties);
 	ZEPHIR_INIT(Test_Quantum);
@@ -392,6 +394,8 @@ static PHP_RINIT_FUNCTION(test)
 	//zephir_init_interned_strings(TSRMLS_C);
 
 	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
+
+	zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 
 	return SUCCESS;
 }

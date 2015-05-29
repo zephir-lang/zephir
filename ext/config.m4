@@ -112,6 +112,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/properties/propertyarray.zep.c
 	test/properties/protectedproperties.zep.c
 	test/properties/publicproperties.zep.c
+	test/properties/staticpropertyarray.zep.c
 	test/properties/staticprotectedproperties.zep.c
 	test/properties/staticpublicproperties.zep.c
 	test/quantum.zep.c
