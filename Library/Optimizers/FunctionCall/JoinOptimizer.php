@@ -66,10 +66,6 @@ class JoinOptimizer extends OptimizerAbstract
             unset($expression['parameters'][0]);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         $context->headersManager->add('kernel/string');
@@ -80,6 +76,9 @@ class JoinOptimizer extends OptimizerAbstract
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
         $context->codePrinter->output('zephir_fast_join(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

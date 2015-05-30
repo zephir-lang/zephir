@@ -57,10 +57,6 @@ class CreateArrayOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         /**
          * Add the last call status to the current symbol table
          */
@@ -76,6 +72,10 @@ class CreateArrayOptimizer extends OptimizerAbstract
             $resolvedParams = null;
         }
 
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
+        
         if ($resolvedParams) {
             $context->codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', zephir_get_intval(' . $resolvedParams[0] . '), 1 TSRMLS_CC);');
         } else {

@@ -95,9 +95,6 @@ class PregMatchOptimizer extends OptimizerAbstract
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
 
         $context->headersManager->add('kernel/string');
 
@@ -120,6 +117,9 @@ class PregMatchOptimizer extends OptimizerAbstract
             $offset = '0 ';
         }
 
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
         $context->codePrinter->output('zephir_preg_match(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $matchesVariable->getName() . ', ' . $this::GLOBAL_MATCH . ', ' . $flags . ', ' . $offset . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

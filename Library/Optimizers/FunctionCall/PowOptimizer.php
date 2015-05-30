@@ -59,14 +59,13 @@ class PowOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
+        $context->headersManager->add('kernel/math');
+        $symbolVariable->setDynamicTypes('variable');
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-
-        $context->headersManager->add('kernel/math');
-        $symbolVariable->setDynamicTypes('variable');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         $context->codePrinter->output('zephir_pow_function(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -86,14 +86,13 @@ class SubstrOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $context->headersManager->add('kernel/string');
 
         $symbolVariable->setDynamicTypes('string');
 
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
         $context->codePrinter->output('zephir_substr(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] .', ' . $flags .');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

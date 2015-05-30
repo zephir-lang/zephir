@@ -58,10 +58,6 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         /**
          * Add the last call status to the current symbol table
          */
@@ -72,7 +68,10 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('object');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
+        
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
         /**
          * Add the last call status to the current symbol table
          */

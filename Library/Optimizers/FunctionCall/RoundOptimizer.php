@@ -60,13 +60,13 @@ class RoundOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $context->headersManager->add('kernel/math');
         $symbolVariable->setDynamicTypes('double');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
         switch (count($expression['parameters'])) {
             /**
