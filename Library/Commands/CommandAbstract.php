@@ -71,7 +71,7 @@ abstract class CommandAbstract implements CommandInterface
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
             $parser = new CommandArgumentParser();
-            $params = $parser->parseArgs(array_merge(["command"], $commandArgs));
+            $params = $parser->parseArgs(array_merge(array("command"), $commandArgs));
         } else {
             $params = [];
         }
