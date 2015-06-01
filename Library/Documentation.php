@@ -109,14 +109,15 @@ class Documentation
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
     }
 
-    private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command){
+    private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
+    {
 
         // check if the path was set from the command
         $themePath = $command->getParameter("theme-path");
-        if(null!==$themePath){
-            if(file_exists($themePath) && is_dir($themePath)){
+        if (null!==$themePath) {
+            if (file_exists($themePath) && is_dir($themePath)) {
                 return $themePath;
-            }else{
+            } else {
                 throw new Exception("Invalid value for option 'theme-path' : the theme '$themePath' was not found or is not a valid theme.");
             }
         }
@@ -125,24 +126,24 @@ class Documentation
         // check the theme from the config
 
         // check if there are additional theme paths in the config
-        $themeDirectoriesConfig = $config->get("theme-directories","api");
-        if($themeDirectoriesConfig){
-            if(is_array($themeDirectoriesConfig)){
+        $themeDirectoriesConfig = $config->get("theme-directories", "api");
+        if ($themeDirectoriesConfig) {
+            if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
-            }else{
+            } else {
                 throw new ConfigException("invalid value for theme config 'theme-directories'");
             }
-        }else{
+        } else {
             $themesDirectories = [];
         }
         $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
 
         $path = null;
 
-        foreach($themesDirectories as $themeDir){
-            $dir = rtrim($themeDir,"/") . "/";
+        foreach ($themesDirectories as $themeDir) {
+            $dir = rtrim($themeDir, "/") . "/";
             $path = realpath($dir . $themeConfig["name"]);
-            if($path){
+            if ($path) {
                 break;
             }
         }

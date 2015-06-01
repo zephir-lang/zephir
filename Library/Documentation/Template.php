@@ -46,9 +46,9 @@ class Template
     public function projectConfig($name)
     {
 
-        if(isset($this->projectConfig)){
+        if (isset($this->projectConfig)) {
             return $this->projectConfig->get($name);
-        }else{
+        } else {
             return null;
         }
 
@@ -67,7 +67,8 @@ class Template
      * set the config of the project (it usually wraps the version, the theme config, etc...)
      * @param array $projectConfig
      */
-    public function setProjectConfig($projectConfig){
+    public function setProjectConfig($projectConfig)
+    {
         $this->projectConfig = $projectConfig;
     }
 

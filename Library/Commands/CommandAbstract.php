@@ -65,17 +65,18 @@ abstract class CommandAbstract implements CommandInterface
      * Parse the input arguments for the command and returns theme as an associative array
      * @return array the list of the parameters
      */
-    public function parseArguments(){
+    public function parseArguments()
+    {
 
         if (isset($_SERVER['argv'][2])) {
             $this->setParameter('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
         }
 
-        if(count($_SERVER['argv']) > 2){
-            $commandArgs = array_slice($_SERVER['argv'],2);
+        if (count($_SERVER['argv']) > 2) {
+            $commandArgs = array_slice($_SERVER['argv'], 2);
             $parser = new CommandArgumentParser();
-            $params = $parser->parseArgs(array_merge(["command"],$commandArgs));
-        }else{
+            $params = $parser->parseArgs(array_merge(["command"], $commandArgs));
+        } else {
             $params = [];
         }
 

@@ -67,12 +67,10 @@ class CommandApi extends CommandAbstract
 
         $allowedArgs = ["theme-path" => "@.+@"];
 
-        foreach($params as $k=>$p){
-
+        foreach ($params as $k => $p) {
             if (isset($allowedArgs[$k])) {
-
                 if (preg_match($allowedArgs[$k], $p)) {
-                    $this->setParameter($k,$p);
+                    $this->setParameter($k, $p);
                 } else {
                     throw new Exception("Invalid value for argument '$k'");
                 }
