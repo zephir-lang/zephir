@@ -970,7 +970,7 @@ class Compiler
 
         $this->logger->output('Generating API...');
 
-        $documentator = new Documentation($this->files, $this->config, $this->logger);
+        $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
         $documentator->build();
     }
 

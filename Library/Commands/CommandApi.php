@@ -19,6 +19,10 @@
 
 namespace Zephir\Commands;
 
+use Zephir\Config;
+use Zephir\Exception;
+use Zephir\Logger;
+
 /**
  * CommandApi
  *
@@ -43,7 +47,7 @@ class CommandApi extends CommandAbstract
      */
     public function getUsage()
     {
-        return 'api';
+        return 'api [--theme-path=/path]';
     }
 
     /**
@@ -54,5 +58,30 @@ class CommandApi extends CommandAbstract
     public function getDescription()
     {
         return 'Generates a HTML API';
+    }
+
+    public function execute(Config $config, Logger $logger)
+    {
+
+        $params = $this->parseArguments();
+
+        $allowedArgs = ["theme-path" => "@.+@"];
+
+        foreach($params as $k=>$p){
+
+            if (isset($allowedArgs[$k])) {
+
+                if (preg_match($allowedArgs[$k], $p)) {
+                    $this->setParameter($k,$p);
+                } else {
+                    throw new Exception("Invalid value for argument '$k'");
+                }
+
+            } else {
+                throw new Exception("Invalid argument '$k''");
+            }
+        }
+
+        parent::execute($config, $logger);
     }
 }

@@ -19,6 +19,7 @@
 
 namespace Zephir;
 
+use Zephir\Commands\CommandInterface;
 use Zephir\Documentation\File;
 use Zephir\Documentation\Theme;
 use Zephir\Documentation\NamespaceAccessor;
@@ -45,22 +46,32 @@ class Documentation
      */
     protected $theme;
 
+    /**
+     * @var Logger
+     */
     protected $logger;
+
+    /**
+     * @var CommandInterface
+     */
+    protected $command;
 
     /**
      * @param CompilerFile[] $classes
      * @param Config $config
      * @param Logger $logger
+     * @param CommandInterface $command
      * @throws ConfigException
      * @throws Exception
      */
-    public function __construct(array $classes, Config $config, Logger $logger)
+    public function __construct(array $classes, Config $config, Logger $logger, CommandInterface $command)
     {
         ksort($classes);
 
         $this->config = $config;
         $this->classes = $classes;
         $this->logger  = $logger;
+        $this->command = $command;
 
         $themeConfig = $config->get("theme", "api");
 
@@ -72,10 +83,10 @@ class Documentation
             throw new ConfigException("There is no theme");
         }
 
-        $themeDir = realpath(ZEPHIRPATH . "/templates/Api/themes/" . $themeConfig["name"]);
+        $themeDir = $this->__findThemeDirectory($themeConfig, $config, $command);
 
         if (!file_exists($themeDir)) {
-            throw new ConfigException("There is no theme name " . $themeConfig["name"]);
+            throw new ConfigException("There is no theme named " . $themeConfig["name"]);
         }
 
         $outputDir = $this->config->get('path', 'api');
@@ -96,6 +107,48 @@ class Documentation
         }
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+    }
+
+    private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command){
+
+        // check if the path was set from the command
+        $themePath = $command->getParameter("theme-path");
+        if(null!==$themePath){
+            if(file_exists($themePath) && is_dir($themePath)){
+                return $themePath;
+            }else{
+                throw new Exception("Invalid value for option 'theme-path' : the theme '$themePath' was not found or is not a valid theme.");
+            }
+        }
+
+
+        // check the theme from the config
+
+        // check if there are additional theme paths in the config
+        $themeDirectoriesConfig = $config->get("theme-directories","api");
+        if($themeDirectoriesConfig){
+            if(is_array($themeDirectoriesConfig)){
+                $themesDirectories = $themeDirectoriesConfig;
+            }else{
+                throw new ConfigException("invalid value for theme config 'theme-directories'");
+            }
+        }else{
+            $themesDirectories = [];
+        }
+        $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
+
+        $path = null;
+
+        foreach($themesDirectories as $themeDir){
+            $dir = rtrim($themeDir,"/") . "/";
+            $path = realpath($dir . $themeConfig["name"]);
+            if($path){
+                break;
+            }
+        }
+
+        return $path;
+
     }
 
     public function build()
