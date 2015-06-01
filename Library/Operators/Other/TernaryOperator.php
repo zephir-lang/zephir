@@ -44,9 +44,12 @@ class TernaryOperator extends BaseOperator
     public function compile($expression, CompilationContext $compilationContext)
     {
         /**
-         * This variable is used to check if the compound and expression is evaluated as true or false
+         * This variable is used to check if the compound and expression is evaluated as true or false:
+         * Ensure that newly allocated variables are local-only (setReadOnly)
          */
+        $this->setReadOnly(false);
         $returnVariable = $this->getExpected($compilationContext, $expression, false);
+        /* Make sure that passed variables (passed symbol variables) are promoted */
         $returnVariable->setLocalOnly(false);
 
         if ($returnVariable->getType() != 'variable' || $returnVariable->getName() == 'return_value') {
