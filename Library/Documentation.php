@@ -63,14 +63,13 @@ class Documentation
         $this->logger  = $logger;
 
         $themeConfig = $config->get("theme", "api");
-        $themeConfig["options"]["version"] = $config->get('version');
 
         if (!$themeConfig) {
             throw new ConfigException("Theme configuration is not present");
         }
 
         if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
-            throw new ConfigException("There is no theme ");
+            throw new ConfigException("There is no theme");
         }
 
         $themeDir = realpath(ZEPHIRPATH . "/templates/Api/themes/" . $themeConfig["name"]);
@@ -96,7 +95,7 @@ class Documentation
             throw new Exception("Can't write output directory $outputDir");
         }
 
-        $this->theme = new Theme($themeDir, $outputDir, $themeConfig);
+        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
     }
 
     public function build()
