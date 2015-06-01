@@ -255,7 +255,17 @@ class ClassProperty
                     $visibility = array('internal');
                 }
 
+                $constructParentMethod = null;
                 $constructMethod = $compilationContext->classDefinition->getMethod($methodName);
+                /**
+                 * Make sure we do not steal the construct method of the parent,
+                 * but initialize our own with the inherited statements to ensure
+                 * valid property initialization
+                 */
+                if ($constructMethod && $constructMethod->getClassDefinition() != $this->classDefinition) {
+                    $constructParentMethod = $constructMethod;
+                    $constructMethod = null;
+                }
                 if ($constructMethod) {
                     $statementsBlock = $constructMethod->getStatementsBlock();
                     if ($statementsBlock) {
@@ -292,9 +302,12 @@ class ClassProperty
                         $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                     }
                 } else {
-                    $statementsBlock = new StatementsBlock(array(
-                        $this->getLetStatement()->get()
-                    ));
+                    $statements = array();
+                    if ($constructParentMethod) {
+                        $statements = $constructParentMethod->getStatementsBlock()->getStatements();
+                    }
+                    $statements[] = $this->getLetStatement()->get();
+                    $statementsBlock = new StatementsBlock($statements);
 
                     $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
                         $compilationContext->classDefinition,
