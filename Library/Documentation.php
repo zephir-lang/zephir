@@ -109,6 +109,22 @@ class Documentation
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
     }
 
+    /**
+     * Find the theme directory depending on the command  line options and the config.
+     *
+     * theme directory is checked in this order :
+     *  => check if the command line argument --theme-path was given
+     *  => if not ; find the different theme directories on the config $config['api']['theme-directories']
+     *  search the theme from the name ($config['api']['theme']['name'] in the theme directories,
+     * if nothing was found, we look in the zephir install dir default themes (templates/Api/themes)
+     *
+     * @param $themeConfig
+     * @param Config $config
+     * @param CommandInterface $command
+     * @return null|string
+     * @throws ConfigException
+     * @throws Exception
+     */
     private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
     {
 

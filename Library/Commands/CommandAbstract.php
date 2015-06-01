@@ -68,10 +68,6 @@ abstract class CommandAbstract implements CommandInterface
     public function parseArguments()
     {
 
-        if (isset($_SERVER['argv'][2])) {
-            $this->setParameter('namespace', strtolower(preg_replace('/[^0-9a-zA-Z]/', '', $_SERVER['argv'][2])));
-        }
-
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
             $parser = new CommandArgumentParser();
