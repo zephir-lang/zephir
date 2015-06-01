@@ -150,7 +150,7 @@ class Documentation
                 throw new ConfigException("invalid value for theme config 'theme-directories'");
             }
         } else {
-            $themesDirectories = [];
+            $themesDirectories = array();
         }
         $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
 

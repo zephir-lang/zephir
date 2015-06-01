@@ -73,7 +73,7 @@ abstract class CommandAbstract implements CommandInterface
             $parser = new CommandArgumentParser();
             $params = $parser->parseArgs(array_merge(array("command"), $commandArgs));
         } else {
-            $params = [];
+            $params = array();
         }
 
         return $params;
