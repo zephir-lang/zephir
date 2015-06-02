@@ -32,6 +32,20 @@ class Ternary
 		//return gettype(typeof a == "resource" ? "unknown": false);
 	}
 
+	/**
+	 * @link https://github.com/phalcon/zephir/issues/665
+	 */
+	public function testTernaryWithPromotedTemporaryVariable()
+	{
+		var var2, var3;
+
+		let var2 = ["_b_","_c_"];
+
+		let var3 = explode("_", isset(var2[1]) ? var2[1] : "");
+
+		return var3;
+	}
+
     /**
      * @link https://github.com/phalcon/zephir/issues/297
      */
