@@ -175,4 +175,36 @@ class Struct
 
         return $code . '} ' . substr($this->_name, 1) . ';' . PHP_EOL;
     }
+
+    /**
+     * @return string
+     */
+    public function getInitEntry($name, $global, $namespace)
+    {
+        $iniEntry = array();
+        if (isset($global['ini-entry'])) {
+            $iniEntry = $global['ini-entry'];
+        }
+        if (!isset($iniEntry['name'])) {
+            $iniName = $namespace . '.' . $this->_simpleName . '.' . $name;
+        } else {
+            $iniName = $iniEntry['name'];
+        }
+        if (!isset($iniEntry['scope'])) {
+            $scope = 'PHP_INI_ALL';
+        } else {
+            $scope = $iniEntry['scope'];
+        }
+        switch ($global['type']) {
+            case 'boolean':
+            case 'bool':
+                if ($global['default'] === true) {
+                    return 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $this->_simpleName . '.' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+                } else {
+                    return 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $this->_simpleName . '.' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+                }
+           break;
+       }
+       return '';
+   }
 }

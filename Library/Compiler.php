@@ -724,8 +724,8 @@ class Compiler
         /**
          * Check if there are module/request/global destructors
          */
-        $destructors = $this->config->get('destructors');
-        if (is_array($destructors)) {
+	$destructors = $this->config->get('destructors');
+	if (is_array($destructors)) {
             $invokeDestructors = $this->processCodeInjection($destructors);
             $includes = $invokeDestructors[0];
             $destructors = $invokeDestructors[1];
@@ -1374,7 +1374,7 @@ class Compiler
         $globalCode = '';
         $globalStruct = '';
         $globalsDefault = '';
-        $initEntries = '';
+        $initEntries = array();
 
         /**
          * Generate the extensions globals declaration
@@ -1409,6 +1409,7 @@ class Compiler
                     $structBuilder->addProperty($field, $global);
 
                     $globalsDefault .= $structBuilder->getCDefault($field, $global) . PHP_EOL;
+                    $initEntries[] = $structBuilder->getInitEntry($field, $global, $namespace);
                 }
 
                 $globalStruct .= $structBuilder . PHP_EOL;
@@ -1418,7 +1419,6 @@ class Compiler
             foreach ($structures as $structureName => $internalStructure) {
                 $globalCode .= "\t" . 'zephir_struct_' . $structureName . ' ' . $structureName . ';' . PHP_EOL . PHP_EOL;
             }
-
             /**
              * Process single variables
              */
@@ -1430,7 +1430,6 @@ class Compiler
                 if (!isset($global['default'])) {
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
-
                 $type = $global['type'];
                 switch ($global['type']) {
 
@@ -1463,38 +1462,36 @@ class Compiler
                 }
 
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
-
+                $iniEntry = array(); 
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
+                }
 
-                    if (!isset($iniEntry['name'])) {
-                        $iniName = $iniEntry['name'];
-                    } else {
-                        $iniName = $iniEntry['name'];
-                    }
+                if (!isset($iniEntry['name'])) {
+                    $iniName = $global['name'];
+                } else {
+                    $iniName = $iniEntry['name'];
+                }
 
-                    if (!isset($iniEntry['scope'])) {
-                        $scope = $iniEntry['scope'];
-                    } else {
-                        $scope = $iniEntry['scope'];
-                    }
+                if (!isset($iniEntry['scope'])) {
+                    $scope = 'PHP_INI_ALL';
+                } else {
+                    $scope = $iniEntry['scope'];
+                }
+                switch ($global['type']) {
 
-                    switch ($global['type']) {
-
-                        case 'boolean':
-                        case 'bool':
-                            if ($global['default'] === true) {
-                                $initEntries .= 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                            } else {
-                                $initEntries .= 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                            }
-                            break;
-                    }
+                    case 'boolean':
+                    case 'bool':
+                        if ($global['default'] === true) {
+                            $initEntries[] = 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+                        } else {
+                            $initEntries[] = 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
+                        }
+                        break;
                 }
             }
         }
-
-        return array($globalCode, $globalStruct, $globalsDefault);
+        return array($globalCode, $globalStruct, $globalsDefault, $initEntries);
     }
 
     /**
@@ -1693,8 +1690,7 @@ class Compiler
         /**
          * Round 3. Process extension globals
          */
-        list($globalCode, $globalStruct, $globalsDefault) = $this->processExtensionGlobals($project);
-
+        list($globalCode, $globalStruct, $globalsDefault, $initEntries) = $this->processExtensionGlobals($project);
         if ($project == 'zend') {
             $safeProject = 'zend_';
         } else {
@@ -1760,7 +1756,8 @@ class Compiler
             '%DESTRUCTORS%'         => $destructors,
             '%INITIALIZERS%'        => implode(PHP_EOL, array_merge($this->internalInitializers, array($initializers))),
             '%FE_HEADER%'           => $feHeader,
-            '%FE_ENTRIES%'          => $feEntries
+            '%FE_ENTRIES%'          => $feEntries,
+            '%PROJECT_INI_ENTRIES%' => implode(PHP_EOL . "\t", $initEntries)
         );
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
