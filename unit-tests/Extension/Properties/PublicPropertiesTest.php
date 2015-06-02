@@ -20,6 +20,7 @@
 namespace Extension\Properties;
 
 use Test\Properties\PublicProperties;
+use Test\Properties\ExtendsPublicProperties;
 
 class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,5 +44,14 @@ class PublicPropertiesTest extends \PHPUnit_Framework_TestCase
     {
         $t = new PublicProperties();
         $this->assertTrue($t->test394Issue());
+    }
+    
+    /**
+     * @link https://github.com/phalcon/zephir/issues/537
+     */
+    public function test537Issue()
+    {
+        $t = new ExtendsPublicProperties();
+        $this->assertEquals($t->getSomeGetterSetterArray(), array("holy"));
     }
 }
