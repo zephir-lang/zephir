@@ -126,12 +126,23 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
-	zval *a;
+	zval *a, *_0 = NULL;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
+	ZEPHIR_INIT_VAR(_0);
+	if (Z_TYPE_P(a) == IS_RESOURCE) {
+		ZEPHIR_INIT_NVAR(_0);
+		ZVAL_STRING(_0, "unknown", 1);
+	} else {
+		ZEPHIR_INIT_NVAR(_0);
+		ZVAL_BOOL(_0, 0);
+	}
+	zephir_gettype(return_value, _0 TSRMLS_CC);
+	RETURN_MM();
 
 }
 
