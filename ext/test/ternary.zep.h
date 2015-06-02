@@ -8,6 +8,7 @@ PHP_METHOD(Test_Ternary, testTernary2);
 PHP_METHOD(Test_Ternary, testTernaryComplex1);
 PHP_METHOD(Test_Ternary, testTernaryComplex2);
 PHP_METHOD(Test_Ternary, testTernaryComplex3);
+PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable);
 PHP_METHOD(Test_Ternary, testTernaryAfterLetVariable);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_ternary_testternary2, 0, 0, 1)
@@ -34,6 +35,7 @@ ZEPHIR_INIT_FUNCS(test_ternary_method_entry) {
 	PHP_ME(Test_Ternary, testTernaryComplex1, arginfo_test_ternary_testternarycomplex1, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Ternary, testTernaryComplex2, arginfo_test_ternary_testternarycomplex2, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Ternary, testTernaryComplex3, arginfo_test_ternary_testternarycomplex3, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Ternary, testTernaryWithPromotedTemporaryVariable, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Ternary, testTernaryAfterLetVariable, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
