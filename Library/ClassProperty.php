@@ -248,11 +248,25 @@ class ClassProperty
 
             case 'array':
             case 'empty-array':
-                $methodName = '__construct';
-                $visibility = array('public');
+                
                 if ($this->isStatic()) {
                     $methodName = 'zephir_init_static_properties';
                     $visibility = array('internal');
+                } else {
+                    $methodName = 'zephir_init_properties';
+                    $visibility = array('internal');
+                    
+                    /* Make sure a constructor exists, so that properties are initialized */
+                    $method = $compilationContext->classDefinition->getMethod('__construct');
+                    if (!$method || $method->getClassDefinition() != $this->classDefinition) {
+                        $this->classDefinition->addMethod(new ClassMethod(
+                            $compilationContext->classDefinition,
+                            array('public'),
+                            '__construct',
+                            null,
+                            null
+                        ), null);
+                    }
                 }
 
                 $constructParentMethod = null;

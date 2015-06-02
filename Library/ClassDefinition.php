@@ -782,6 +782,9 @@ class ClassDefinition
      */
     private function getInternalSignature(ClassMethod $method)
     {
+        if ($method->getName() == 'zephir_init_properties') {
+            return 'static void ' . $method->getName() . '(zval *this_ptr TSRMLS_DC)';
+        }
         if ($method->getName() == 'zephir_init_static_properties') {
             $classDefinition = $method->getClassDefinition();
             return 'void ' . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_D)';

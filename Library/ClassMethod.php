@@ -1611,6 +1611,18 @@ class ClassMethod
                 }
             }
         }
+        
+        /**
+         * Set properties of the class, if constructor
+         */
+        if ($this->getName() == '__construct' || ($this->getName() == 'unserialize' && in_array('Serializable', $this->classDefinition->getImplementedInterfaces()))) {
+            $initMethod = $this->classDefinition->getMethod('zephir_init_properties');
+            if ($initMethod && $initMethod->getClassDefinition() == $this->classDefinition) {
+                $codePrinter->increaseLevel();
+                $codePrinter->output('zephir_init_properties(this_ptr TSRMLS_CC);');
+                $codePrinter->decreaseLevel();
+            }
+        }
 
         /**
          * Compile the block of statements if any
