@@ -74,14 +74,12 @@ class StrposOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('int');
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-
-        $context->headersManager->add('kernel/string');
-
-        $symbolVariable->setDynamicTypes('int');
-
         $context->codePrinter->output('zephir_fast_strpos(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset .');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

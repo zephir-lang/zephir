@@ -55,13 +55,12 @@ class TimeOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $context->headersManager->add('kernel/time');
         $symbolVariable->setDynamicTypes('long');
 
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
         $context->codePrinter->output('zephir_time(' . $symbolVariable->getName() . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

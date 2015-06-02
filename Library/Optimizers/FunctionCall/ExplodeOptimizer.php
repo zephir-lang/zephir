@@ -77,10 +77,6 @@ class ExplodeOptimizer extends OptimizerAbstract
             }
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         if (isset($resolvedParams[$limitOffset])) {
@@ -90,7 +86,10 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('array');
-
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
+        
         if (isset($str)) {
             $context->codePrinter->output('zephir_fast_explode_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ', ' . $limit . ' TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
