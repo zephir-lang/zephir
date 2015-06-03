@@ -866,9 +866,9 @@ class Compiler
         /**
          * Round 3.4. Load extra classes sources
          */
-        $extraClasses = $this->config->get('extra-classes');  
+        $extraClasses = $this->config->get('extra-classes');
         if (is_array($extraClasses)) {
-            foreach($extraClasses as $value) {
+            foreach ($extraClasses as $value) {
                 if (isset($value['source'])) {
                     $this->extraFiles[] = $value['source'];
                 }
@@ -1735,9 +1735,9 @@ class Compiler
         /**
          * Append extra details
          */
-        $extraClasses = $this->config->get('extra-classes');  
+        $extraClasses = $this->config->get('extra-classes');
         if (is_array($extraClasses)) {
-            foreach($extraClasses as $key=>$value) {
+            foreach ($extraClasses as $key=>$value) {
                 if (isset($value['init'])) {
                     $completeClassInits[] = "ZEPHIR_INIT(".$value['init'].")";
                 }
@@ -1793,9 +1793,9 @@ class Compiler
         /**
          * Append extra headers
          */
-        $extraClasses = $this->config->get('extra-classes');  
+        $extraClasses = $this->config->get('extra-classes');
         if (is_array($extraClasses)) {
-            foreach($extraClasses as $value) {
+            foreach ($extraClasses as $value) {
                 if (isset($value['header'])) {
                     $include = '#include "' . $value['header'] . '"';
                     $includeHeaders[] = $include;
