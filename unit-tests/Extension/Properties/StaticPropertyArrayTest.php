@@ -17,26 +17,15 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Extension;
+namespace Extension\Properties;
 
-class TernaryTest extends \PHPUnit_Framework_TestCase
+use Test\Properties\StaticPropertyArray;
+
+class StaticPropertyArrayTest extends \PHPUnit_Framework_TestCase
 {
-    public function testTernary()
+    public function testAssertations()
     {
-        $t = new \Test\Ternary();
-        $this->assertEquals(101, $t->testTernary1());
-        $this->assertEquals('foo', $t->testTernary2(true));
-        $this->assertEquals('bar', $t->testTernary2(false));
-        
-        $this->assertEquals(3, $t->testTernaryAfterLetVariable());
-        $this->assertEquals(array('', 'c', ''), $t->testTernaryWithPromotedTemporaryVariable());
-    }
-
-    public function testComplex()
-    {
-        $t = new \Test\Ternary();
-        $this->assertSame(101, $t->testTernaryComplex1(array(), ""));
-        $this->assertSame(106, $t->testTernaryComplex2(array(), ""));
-        $this->assertSame("boolean", $t->testTernaryComplex3(""));
+        $this->assertSame(array(), StaticPropertyArray::$someEmptyArray);
+        $this->assertSame(array(1, 2, 3, 4), StaticPropertyArray::$someArray);
     }
 }

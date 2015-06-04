@@ -41,6 +41,13 @@ class Compiler
      * @var array|string[]
      */
     protected $anonymousFiles = array();
+    
+    /**
+     * Additional initializer code
+     * used for static property initialization
+     * @var array
+     */
+    protected $internalInitializers = array();
 
     /**
      * @var ClassDefinition[]
@@ -50,7 +57,7 @@ class Compiler
     /**
      * @var FunctionDefinition[]
      */
-    protected $functionDefinitions = array();
+    public $functionDefinitions = array();
 
     /**
      * @var array|string[]
@@ -719,9 +726,19 @@ class Compiler
          */
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processDestructors($destructors);
+            $invokeDestructors = $this->processCodeInjection($destructors);
             $includes = $invokeDestructors[0];
             $destructors = $invokeDestructors[1];
+        }
+        
+        /**
+         * Check if there are module/request/global initializers
+         */
+        $initializers = $this->config->get('initializers');
+        if (is_array($initializers)) {
+            $invokeInitializers = $this->processCodeInjection($initializers);
+            $includes = $invokeInitializers[0];
+            $initializers = $invokeInitializers[1];
         }
 
         /**
@@ -804,6 +821,9 @@ class Compiler
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
+                    if ($method->getName() == 'zephir_init_static_properties') {
+                        $this->internalInitializers[] = "\t" . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_C);';
+                    }
                 }
 
                 $files[] = $compiledFile;
@@ -1503,23 +1523,20 @@ class Compiler
     }
 
     /**
-     * Process extension destructors
+     * Process extension code injection
      *
-     * @param array $destructors
+     * @param array $entries
      * @return array
      */
-    public function processDestructors(array $destructors)
+    public function processCodeInjection(array $entries)
     {
         $codes = array();
         $includes = array();
 
-        /**
-         * Destructors thrown when the request is being shutdown
-         */
-        if (isset($destructors['request'])) {
-            foreach ($destructors['request'] as $destructor) {
-                $codes[] = $destructor['code'] . ';';
-                $includes[] = "#include \"" . $destructor['include'] . "\"";
+        if (isset($entries['request'])) {
+            foreach ($entries['request'] as $entry) {
+                $codes[] = $entry['code'] . ';';
+                $includes[] = "#include \"" . $entry['include'] . "\"";
             }
         }
 
@@ -1688,9 +1705,19 @@ class Compiler
          */
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeDestructors = $this->processDestructors($destructors);
+            $invokeDestructors = $this->processCodeInjection($destructors);
             $includes = $invokeDestructors[0];
             $destructors = $invokeDestructors[1];
+        }
+
+        /**
+         * Check if there are module/request/global initializers
+         */
+        $initializers = $this->config->get('initializers');
+        if (is_array($initializers)) {
+            $invokeInitializers = $this->processCodeInjection($initializers);
+            $includes = $invokeInitializers[0];
+            $initializers = $invokeInitializers[1];
         }
 
         $toReplace = array(
@@ -1704,6 +1731,7 @@ class Compiler
             '%EXTENSION_INFO%'      => $phpInfo,
             '%EXTRA_INCLUDES%'      => $includes,
             '%DESTRUCTORS%'         => $destructors,
+            '%INITIALIZERS%'        => implode(PHP_EOL, array_merge($this->internalInitializers, array($initializers))),
             '%FE_HEADER%'           => $feHeader,
             '%FE_ENTRIES%'          => $feEntries
         );

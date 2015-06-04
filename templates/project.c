@@ -103,6 +103,7 @@ static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 
 	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
 
+%INITIALIZERS%
 	return SUCCESS;
 }
 

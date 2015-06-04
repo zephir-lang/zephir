@@ -67,6 +67,8 @@ class PublicProperties
 		"danger": ["class": "alert alert-danger"]
 	];
 
+	protected someGetterSetterArray = [] { set, get };
+
 	public testPropertyFromSelfConstantValue = self::TEST_CONST;
 
 	public testPropertyFromClassNameConstantValue = PublicProperties::TEST_CONST;

@@ -1961,6 +1961,15 @@ class ClassMethod
         $codePrinter->preOutput($code);
 
         /**
+         * Fetch used superglobals
+         */
+        foreach ($symbolTable->getVariables() as $name => $variable) {
+            if ($symbolTable->isSuperGlobal($name)) {
+                $codePrinter->preOutput("\t" . 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
+            }
+        }
+        
+        /**
          * Grow the stack if needed
          */
         if ($symbolTable->getMustGrownStack()) {

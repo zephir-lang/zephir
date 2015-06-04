@@ -56,9 +56,6 @@ class JsonDecodeOptimizer extends OptimizerAbstract
             if (!$symbolVariable->isVariable()) {
                 throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
             }
-            if ($call->mustInitSymbolVariable()) {
-                $symbolVariable->initVariant($context);
-            }
         } else {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
             $symbolVariable->initVariant($context);
@@ -76,6 +73,10 @@ class JsonDecodeOptimizer extends OptimizerAbstract
             $options = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
         } else {
             $options = '0 ';
+        }
+        
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
         }
 
         $context->codePrinter->output('zephir_json_decode(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');

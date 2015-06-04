@@ -44,12 +44,12 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 
 	ZEPHIR_INIT_VAR(len);
 	ZVAL_LONG(len, zephir_fast_strlen_ev(seq));
-	ZEPHIR_INIT_VAR(str);
 	ZEPHIR_INIT_VAR(_0);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_LONG(&_1, ((zephir_get_numberval(len) * 60) + 1));
 	zephir_create_array(_0, zephir_get_intval(&_1), 1 TSRMLS_CC);
 	zephir_get_arrval(_2, _0);
+	ZEPHIR_INIT_VAR(str);
 	zephir_fast_join(str, seq, _2 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_3);
 	ZEPHIR_SINIT_VAR(_4);
@@ -84,7 +84,6 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZVAL_DOUBLE(&_7, zephir_safe_div_zval_long(l, i TSRMLS_CC));
 	ZEPHIR_INIT_VAR(k);
 	ZVAL_DOUBLE(k, zephir_floor(&_7 TSRMLS_CC));
-	ZEPHIR_INIT_VAR(block);
 	zephir_fast_join_str(block, SL("\n"), lines TSRMLS_CC);
 	while (1) {
 		if (!(ZEPHIR_LT(j, k))) {

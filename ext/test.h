@@ -107,6 +107,7 @@
 #include "test/properties/propertyarray.zep.h"
 #include "test/properties/protectedproperties.zep.h"
 #include "test/properties/publicproperties.zep.h"
+#include "test/properties/staticpropertyarray.zep.h"
 #include "test/properties/staticprotectedproperties.zep.h"
 #include "test/properties/staticpublicproperties.zep.h"
 #include "test/quantum.zep.h"

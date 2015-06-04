@@ -1588,6 +1588,7 @@ PHP_METHOD(Test_Assign, testArrayVarAssign2) {
 	zval *index, *value, *_POST;
 
 	ZEPHIR_MM_GROW();
+	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	zephir_fetch_params(1, 2, 0, &index, &value);
 
 
@@ -1609,6 +1610,7 @@ PHP_METHOD(Test_Assign, testArrayProperty) {
 	zval *index, *value, *_POST;
 
 	ZEPHIR_MM_GROW();
+	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	zephir_fetch_params(1, 2, 0, &index, &value);
 
 
@@ -1632,11 +1634,11 @@ PHP_METHOD(Test_Assign, testGlobalVarAssign) {
 	int _0;
 	zval *index, *value, *_POST;
 
+	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	zephir_fetch_params(0, 2, 0, &index, &value);
 
 
 
-	zephir_get_global(&_POST, SS("_POST") TSRMLS_CC);
 	_0 = zephir_maybe_separate_zval(&_POST);
 	zephir_array_update_zval(&_POST, index, &value, PH_COPY | PH_SEPARATE);
 	if (_0) {
@@ -1701,10 +1703,10 @@ PHP_METHOD(Test_Assign, testAssignSuperGlobals) {
 	zval *v, *_GET, *_0, *_3, *_5, *_7;
 
 	ZEPHIR_MM_GROW();
+	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 	ZEPHIR_INIT_VAR(v);
 	ZVAL_STRING(v, "stest2", 1);
 
-	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "stest", 1);
 	_1 = zephir_maybe_separate_zval(&_GET);

@@ -16,6 +16,7 @@
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
+#include "kernel/string.h"
 
 
 /**
@@ -125,12 +126,54 @@ PHP_METHOD(Test_Ternary, testTernaryComplex2) {
 
 PHP_METHOD(Test_Ternary, testTernaryComplex3) {
 
-	zval *a;
+	zval *a, *_0 = NULL;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
+	ZEPHIR_INIT_VAR(_0);
+	if (Z_TYPE_P(a) == IS_RESOURCE) {
+		ZEPHIR_INIT_NVAR(_0);
+		ZVAL_STRING(_0, "unknown", 1);
+	} else {
+		ZEPHIR_INIT_NVAR(_0);
+		ZVAL_BOOL(_0, 0);
+	}
+	zephir_gettype(return_value, _0 TSRMLS_CC);
+	RETURN_MM();
+
+}
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/665
+ */
+PHP_METHOD(Test_Ternary, testTernaryWithPromotedTemporaryVariable) {
+
+	zval *var2, *var3, *_0 = NULL, *_1 = NULL;
+
+	ZEPHIR_MM_GROW();
+
+	ZEPHIR_INIT_VAR(var2);
+	zephir_create_array(var2, 2, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZVAL_STRING(_0, "_b_", 1);
+	zephir_array_fast_append(var2, _0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "_c_", 1);
+	zephir_array_fast_append(var2, _0);
+	ZEPHIR_INIT_VAR(_1);
+	if (zephir_array_isset_long(var2, 1)) {
+		ZEPHIR_OBS_NVAR(_1);
+		zephir_array_fetch_long(&_1, var2, 1, PH_NOISY, "test/ternary.zep", 44 TSRMLS_CC);
+	} else {
+		ZEPHIR_INIT_NVAR(_1);
+		ZVAL_STRING(_1, "", 1);
+	}
+	ZEPHIR_INIT_VAR(var3);
+	zephir_fast_explode_str(var3, SL("_"), _1, LONG_MAX TSRMLS_CC);
+	RETURN_CCTOR(var3);
 
 }
 

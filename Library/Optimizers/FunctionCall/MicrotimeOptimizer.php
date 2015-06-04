@@ -56,19 +56,21 @@ class MicrotimeOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
         $context->headersManager->add('kernel/time');
         
 
         if (!isset($expression['parameters'])) {
             $symbolVariable->setDynamicTypes('string');
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
             $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', NULL TSRMLS_CC);');
         } else {
             $symbolVariable->setDynamicTypes('double');
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
             $context->codePrinter->output('zephir_microtime(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ' TSRMLS_CC);');
         }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

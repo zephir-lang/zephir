@@ -195,11 +195,12 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 	zval *url = NULL, *urlParts, *realUri, *_0, *_GET, *_SERVER;
 
 	ZEPHIR_MM_GROW();
+	zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
+	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_uriSource"), PH_NOISY_CC);
 	if (!(zephir_is_true(_0))) {
 		ZEPHIR_OBS_VAR(url);
-		zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 		if (zephir_array_isset_string_fetch(&url, _GET, SS("_url"), 0 TSRMLS_CC)) {
 			if (!(zephir_is_true(url))) {
 				RETURN_CCTOR(url);
@@ -207,7 +208,6 @@ PHP_METHOD(Test_Router, getRewriteUri) {
 		}
 	} else {
 		ZEPHIR_OBS_NVAR(url);
-		zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 		if (zephir_array_isset_string_fetch(&url, _SERVER, SS("REQUEST_URI"), 0 TSRMLS_CC)) {
 			ZEPHIR_INIT_VAR(urlParts);
 			zephir_fast_explode_str(urlParts, SL("?"), url, LONG_MAX TSRMLS_CC);

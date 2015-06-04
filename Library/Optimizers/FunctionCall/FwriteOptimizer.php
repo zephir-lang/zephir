@@ -61,14 +61,13 @@ class FwriteOptimizer extends OptimizerAbstract
             if ($symbolVariable->isNotVariableAndString()) {
                 throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
             }
-
-            if ($call->mustInitSymbolVariable()) {
-                $symbolVariable->initVariant($context);
-            }
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         if ($symbolVariable) {
+            if ($call->mustInitSymbolVariable()) {
+                $symbolVariable->initVariant($context);
+            }
             $context->codePrinter->output('zephir_fwrite(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {

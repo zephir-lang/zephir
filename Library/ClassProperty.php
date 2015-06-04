@@ -21,6 +21,7 @@ namespace Zephir;
 
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Statements\LetStatementBuilder;
+use Zephir\Statements\LetStatement;
 
 /**
  * ClassProperty
@@ -247,11 +248,24 @@ class ClassProperty
 
             case 'array':
             case 'empty-array':
+                $methodName = '__construct';
+                $visibility = array('public');
                 if ($this->isStatic()) {
-                    throw new CompilerException('Cannot define static property with default value: ' . $this->defaultValue['type'], $this->original);
+                    $methodName = 'zephir_init_static_properties';
+                    $visibility = array('internal');
                 }
 
-                $constructMethod = $compilationContext->classDefinition->getMethod('__construct');
+                $constructParentMethod = null;
+                $constructMethod = $compilationContext->classDefinition->getMethod($methodName);
+                /**
+                 * Make sure we do not steal the construct method of the parent,
+                 * but initialize our own with the inherited statements to ensure
+                 * valid property initialization
+                 */
+                if ($constructMethod && $constructMethod->getClassDefinition() != $this->classDefinition) {
+                    $constructParentMethod = $constructMethod;
+                    $constructMethod = null;
+                }
                 if ($constructMethod) {
                     $statementsBlock = $constructMethod->getStatementsBlock();
                     if ($statementsBlock) {
@@ -288,14 +302,17 @@ class ClassProperty
                         $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                     }
                 } else {
-                    $statementsBlock = new StatementsBlock(array(
-                        $this->getLetStatement()->get()
-                    ));
+                    $statements = array();
+                    if ($constructParentMethod) {
+                        $statements = $constructParentMethod->getStatementsBlock()->getStatements();
+                    }
+                    $statements[] = $this->getLetStatement()->get();
+                    $statementsBlock = new StatementsBlock($statements);
 
                     $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
                         $compilationContext->classDefinition,
-                        array('public'),
-                        '__construct',
+                        $visibility,
+                        $methodName,
                         null,
                         $statementsBlock
                     ), null));
@@ -323,10 +340,21 @@ class ClassProperty
      */
     protected function getLetStatement()
     {
+        if (!$this->isStatic()) {
+            return new LetStatementBuilder(array(
+                'assign-type' => 'object-property',
+                'operator'    => 'assign',
+                'variable'    => 'this',
+                'property'    => $this->name,
+                'file'        => $this->original['default']['file'],
+                'line'        => $this->original['default']['line'],
+                'char'        => $this->original['default']['char'],
+            ), $this->original['default']);
+        }
         return new LetStatementBuilder(array(
-            'assign-type' => 'object-property',
+            'assign-type' => 'static-property',
             'operator'    => 'assign',
-            'variable'    => 'this',
+            'variable'    => '\\'.$this->classDefinition->getCompleteName(),
             'property'    => $this->name,
             'file'        => $this->original['default']['file'],
             'line'        => $this->original['default']['line'],
