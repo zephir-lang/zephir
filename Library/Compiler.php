@@ -1737,13 +1737,13 @@ class Compiler
          */
         $extraClasses = $this->config->get('extra-classes');
         if (is_array($extraClasses)) {
-            foreach ($extraClasses as $key=>$value) {
+            foreach ($extraClasses as $value) {
                 if (isset($value['init'])) {
-                    $completeClassInits[] = "ZEPHIR_INIT(".$value['init'].")";
+                    $completeClassInits[] = 'ZEPHIR_INIT(' . $value['init'] . ')';
                 }
 
                 if (isset($value['entry'])) {
-                    $completeClassEntries[] = "zend_class_entry *".$value['entry'].";";
+                    $completeClassEntries[] = 'zend_class_entry *' . $value['entry'] . ';';
                 }
             }
         }
