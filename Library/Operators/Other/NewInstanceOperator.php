@@ -61,8 +61,10 @@ class NewInstanceOperator extends BaseOperator
             throw new CompilerException("Cannot use non-heap variable to store new instance", $expression);
         }
 
-        if ($symbolVariable->hasDifferentDynamicType(array('unknown', 'undefined', 'object', 'null'))) {
-            $compilationContext->logger->warning('Possible attempt to use non-object in "new" operator', 'non-valid-new', $expression);
+        if ($symbolVariable->getName() != 'return_value') {
+            if ($symbolVariable->hasDifferentDynamicType(array('unknown', 'undefined', 'object', 'null'))) {
+                $compilationContext->logger->warning('Possible attempt to use non-object in "new" operator', 'non-valid-new', $expression);
+            }
         }
 
         /**
