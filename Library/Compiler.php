@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.7.0a';
+    const VERSION = '0.7.0b';
 
     /**
      * @var CompilerFile[]
@@ -724,8 +724,8 @@ class Compiler
         /**
          * Check if there are module/request/global destructors
          */
-	$destructors = $this->config->get('destructors');
-	if (is_array($destructors)) {
+        $destructors = $this->config->get('destructors');
+        if (is_array($destructors)) {
             $invokeDestructors = $this->processCodeInjection($destructors);
             $includes = $invokeDestructors[0];
             $destructors = $invokeDestructors[1];
@@ -1408,7 +1408,7 @@ class Compiler
 
                     $structBuilder->addProperty($field, $global);
 
-                    $globalsDefault .= $structBuilder->getCDefault($field, $global) . PHP_EOL;
+                    $globalsDefault .= $structBuilder->getCDefault($field, $global, $namespace) . PHP_EOL;
                     $initEntries[] = $structBuilder->getInitEntry($field, $global, $namespace);
                 }
 
@@ -1437,9 +1437,9 @@ class Compiler
                     case 'bool':
                         $type = 'zend_bool';
                         if ($global['default'] === true) {
-                            $globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = 1;' . PHP_EOL;
+                            $globalsDefault .= "\t" . $namespace . '_globals->' . $name . ' = 1;' . PHP_EOL;
                         } else {
-                            $globalsDefault .= "\t" . 'zephir_globals->' . $name . ' = 0;' . PHP_EOL;
+                            $globalsDefault .= "\t" . $namespace . '_globals->' . $name . ' = 0;' . PHP_EOL;
                         }
                         break;
 
@@ -1448,13 +1448,13 @@ class Compiler
                     case 'long':
                     case 'double':
                         $globalsDefault
-                            .= "\t" . 'zephir_globals->' . $name . ' = ' . $global['default'] . ';' . PHP_EOL;
+                            .= "\t" . $namespace . '_globals->' . $name . ' = ' . $global['default'] . ';' . PHP_EOL;
                         break;
 
                     case 'char':
                     case 'uchar':
                         $globalsDefault
-                            .= "\t" . 'zephir_globals->' . $name . ' = \'' . $global['default'] . '\'";' . PHP_EOL;
+                            .= "\t" . $namespace . '_globals->' . $name . ' = \'' . $global['default'] . '\'";' . PHP_EOL;
                         break;
 
                     default:
@@ -1462,7 +1462,7 @@ class Compiler
                 }
 
                 $globalCode .= "\t" . $type . ' ' . $name . ';' . PHP_EOL . PHP_EOL;
-                $iniEntry = array(); 
+                $iniEntry = array();
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
                 }
@@ -1482,11 +1482,19 @@ class Compiler
 
                     case 'boolean':
                     case 'bool':
-                        if ($global['default'] === true) {
-                            $initEntries[] = 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                        } else {
-                            $initEntries[] = 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                        }
+                        $initEntries[] =
+                        'STD_PHP_INI_BOOLEAN("' .
+                        $iniName .
+                        '", "' .
+                        (int) ($global['default'] === true) .
+                        '", ' .
+                        $scope .
+                        ', OnUpdateBool, ' .
+                        $name .
+                        ', zend_' .
+                        $namespace .
+                        '_globals, ' .
+                        $namespace . '_globals)';
                         break;
                 }
             }
@@ -1904,7 +1912,7 @@ class Compiler
         return array($headerPrinter->getOutput(), $entryPrinter->getOutput());
     }
 
-    /*+
+    /**
      * Check if the project must be phpized again
      *
      * @return boolean

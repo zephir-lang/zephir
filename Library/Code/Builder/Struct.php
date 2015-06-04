@@ -129,7 +129,7 @@ class Struct
      * @param string $name
      * @param array $global
      */
-    public function getCDefault($name, $global)
+    public function getCDefault($name, $global, $namespace)
     {
         if (!isset($global['default'])) {
             throw new \Exception('Field "' . $name . '" does not have a default value');
@@ -139,15 +139,18 @@ class Struct
 
             case 'boolean':
             case 'bool':
+                return '';
+                /*
                 if ($global['default'] === true) {
-                    return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = 1;';
+                    return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = 1;';
                 } else {
                     if ($global['default'] === false) {
-                        return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = 0;';
+                        return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = 0;';
                     } else {
                         throw new \Exception('Invalid default type for boolean field "' . $name . '", it must be false/true');
                     }
                 }
+                */
                 break;
 
             case 'int':
@@ -155,7 +158,7 @@ class Struct
             case 'long':
             case 'double':
             case 'hash':
-                return "\t" . 'zephir_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
+                return "\t" . $namespace . '_globals->' . $this->_simpleName . '.' . $name . ' = ' . $global['default'] . ';';
 
             default:
                 throw new \Exception('Unknown global type: ' . $global['type']);
@@ -185,8 +188,9 @@ class Struct
         if (isset($global['ini-entry'])) {
             $iniEntry = $global['ini-entry'];
         }
+        $structName = $this->_simpleName . '.' . $name;
         if (!isset($iniEntry['name'])) {
-            $iniName = $namespace . '.' . $this->_simpleName . '.' . $name;
+            $iniName = $namespace . '.' . $structName;
         } else {
             $iniName = $iniEntry['name'];
         }
@@ -195,16 +199,25 @@ class Struct
         } else {
             $scope = $iniEntry['scope'];
         }
+
         switch ($global['type']) {
             case 'boolean':
             case 'bool':
-                if ($global['default'] === true) {
-                    return 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "1", ' . $scope . ', OnUpdateBool, ' . $this->_simpleName . '.' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                } else {
-                    return 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "0", ' . $scope . ', OnUpdateBool, ' . $this->_simpleName . '.' . $name . ', zend_' . $namespace . '_globals, ' . $namespace . '_globals)';
-                }
-           break;
-       }
-       return '';
-   }
+                return
+                    'STD_PHP_INI_BOOLEAN("' .
+                    $iniName .
+                    '", "' .
+                    (int) ($global['default'] === true) .
+                    '", ' .
+                    $scope .
+                    ', OnUpdateBool, ' .
+                    $structName .
+                    ', zend_' .
+                    $namespace .
+                    '_globals, ' .
+                    $namespace . '_globals)';
+            break;
+        }
+        return '';
+    }
 }
