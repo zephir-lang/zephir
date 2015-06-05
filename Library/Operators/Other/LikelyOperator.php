@@ -60,7 +60,7 @@ class LikelyOperator extends BaseOperator
                     return new CompiledExpression('bool', 'likely(' . $variable->getName() . ')', $expression);
 
                 default:
-                    throw new CompilerException("Cannot use expression variable type: '" . $variable->getType() . "' in 'likely' operator", $expression['left']);
+                    return new CompiledExpression('bool', 'unlikely(zephir_is_true(' . $variable->getName() . '))', $expression);
             }
         }
 

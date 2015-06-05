@@ -60,7 +60,7 @@ class UnlikelyOperator extends BaseOperator
                 case 'bool':
                     return new CompiledExpression('bool', 'unlikely(' . $variable->getName() . ')', $expression);
                 default:
-                    throw new CompilerException("Cannot use expression variable type: '" . $variable->getType() . "' in 'unlikely' operator", $expression['left']);
+                    return new CompiledExpression('bool', 'unlikely(zephir_is_true(' . $variable->getName() . '))', $expression);
             }
         }
 
