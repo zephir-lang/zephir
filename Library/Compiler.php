@@ -864,6 +864,18 @@ class Compiler
         }
 
         /**
+         * Round 3.4. Load extra classes sources
+         */
+        $extraClasses = $this->config->get('extra-classes');
+        if (is_array($extraClasses)) {
+            foreach ($extraClasses as $value) {
+                if (isset($value['source'])) {
+                    $this->extraFiles[] = $value['source'];
+                }
+            }
+        }
+
+        /**
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
          */
         $namespace      = str_replace('\\', '_', $namespace);
@@ -1720,6 +1732,22 @@ class Compiler
             $initializers = $invokeInitializers[1];
         }
 
+        /**
+         * Append extra details
+         */
+        $extraClasses = $this->config->get('extra-classes');
+        if (is_array($extraClasses)) {
+            foreach ($extraClasses as $value) {
+                if (isset($value['init'])) {
+                    $completeClassInits[] = 'ZEPHIR_INIT(' . $value['init'] . ')';
+                }
+
+                if (isset($value['entry'])) {
+                    $completeClassEntries[] = 'zend_class_entry *' . $value['entry'] . ';';
+                }
+            }
+        }
+
         $toReplace = array(
             '%PROJECT_LOWER_SAFE%'  => strtolower($safeProject),
             '%PROJECT_LOWER%'       => strtolower($project),
@@ -1759,6 +1787,19 @@ class Compiler
                 $fileH = str_replace(".c", ".zep.h", $file);
                 $include = '#include "' . $fileH . '"';
                 $includeHeaders[] = $include;
+            }
+        }
+
+        /**
+         * Append extra headers
+         */
+        $extraClasses = $this->config->get('extra-classes');
+        if (is_array($extraClasses)) {
+            foreach ($extraClasses as $value) {
+                if (isset($value['header'])) {
+                    $include = '#include "' . $value['header'] . '"';
+                    $includeHeaders[] = $include;
+                }
             }
         }
 
