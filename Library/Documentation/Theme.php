@@ -29,13 +29,15 @@ class Theme
     protected $outputDir;
     protected $themeConfig;
     protected $options;
+    protected $projectConfig;
 
-    public function __construct($themeDir, $outputDir, $themeConfig)
+    public function __construct($themeDir, $outputDir, $themeConfig, $config)
     {
         $this->outputDir   = $outputDir;
         $this->themeConfig = $themeConfig;
         $this->themeDir    = $themeDir;
         $this->options     = $themeConfig["options"];
+        $this->projectConfig= $config;
     }
 
 
@@ -64,6 +66,8 @@ class Theme
         $template = new Template($file->getData(), $this->themeDir, $file->getTemplateName());
         $template->setPathToRoot($pathToRoot);
         $template->setThemeOptions($this->options);
+        $template->setProjectConfig($this->projectConfig);
+
 
         touch($outputFilename);
         $template->write($outputFilename);

@@ -19,6 +19,7 @@
 
 namespace Zephir\Commands;
 
+use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Logger;
 use Zephir\Compiler;
@@ -57,6 +58,26 @@ abstract class CommandAbstract implements CommandInterface
     public function getParameter($name)
     {
         return (isset($this->_parameters[$name])) ? $this->_parameters[$name] : null;
+    }
+
+
+    /**
+     * Parse the input arguments for the command and returns theme as an associative array
+     * @return array the list of the parameters
+     */
+    public function parseArguments()
+    {
+
+        if (count($_SERVER['argv']) > 2) {
+            $commandArgs = array_slice($_SERVER['argv'], 2);
+            $parser = new CommandArgumentParser();
+            $params = $parser->parseArgs(array_merge(array("command"), $commandArgs));
+        } else {
+            $params = array();
+        }
+
+        return $params;
+
     }
 
     /**

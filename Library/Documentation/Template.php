@@ -2,6 +2,7 @@
 
 namespace Zephir\Documentation;
 
+use Zephir\Config;
 use Zephir\Exception;
 use Zephir\CompilerFile;
 use Zephir\ClassDefinition;
@@ -16,6 +17,10 @@ class Template
     protected $nestedLevel;
     protected $pathToRoot = "./";
     protected $themeOptions;
+    /**
+     * @var Config
+     */
+    protected $projectConfig;
 
     public function __construct($data, $rootDirectory, $template, $nestedLevel = 0)
     {
@@ -34,14 +39,42 @@ class Template
         $this->nestedLevel = $nestedLevel;
     }
 
+    /**
+     * find the value in the project configuration (e.g the version)
+     * @param string $name the name of the config to get
+     */
+    public function projectConfig($name)
+    {
+
+        if (isset($this->projectConfig)) {
+            return $this->projectConfig->get($name);
+        } else {
+            return null;
+        }
+
+    }
+
+    /**
+     * find the value of an option of the theme
+     * @param string $name the name of the option to get
+     */
     public function themeOption($name)
     {
         return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null ;
     }
 
     /**
+     * set the config of the project (it usually wraps the version, the theme config, etc...)
+     * @param array $projectConfig
+     */
+    public function setProjectConfig($projectConfig)
+    {
+        $this->projectConfig = $projectConfig;
+    }
+
+    /**
      * add theme options to make them available during the render phase
-     * @param type $themeOptions
+     * @param array $themeOptions
      */
     public function setThemeOptions($themeOptions)
     {
@@ -132,6 +165,7 @@ class Template
         $template = new Template(array_merge($this->data, $data), $this->rootDirectory, $fileName, $newLevel);
         $template->setPathToRoot($this->getPathToRoot());
         $template->setThemeOptions($this->themeOptions);
+        $template->setProjectConfig($this->projectConfig);
 
         return $template->parse();
     }

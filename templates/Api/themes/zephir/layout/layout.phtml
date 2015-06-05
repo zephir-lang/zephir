@@ -37,7 +37,11 @@
     <body onload="prettyPrint()">
         <div id="top-bar">
             <div id="top-left">
-                Zephir Documentation <span class="version">v<?php echo $this->themeOption('version'); ?></span>
+                <?php if ($this->themeOption("title")){ ?>
+                    <?= str_replace( array("%_name_%", "%_version_%") , array($this->projectConfig("name"), $this->projectConfig('version')) , $this->themeOption("title")) ?>
+                <?php }else{ ?>
+                    <?= $this->projectConfig("name") ?> Documentation <span class="version">v<?php echo $this->projectConfig('version'); ?></span>
+                <?php } ?>
             </div>
             <div id="top-right">
 
