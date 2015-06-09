@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.6.3a';
+    const VERSION = '0.7.0a';
 
     /**
      * @var CompilerFile[]
@@ -41,7 +41,7 @@ class Compiler
      * @var array|string[]
      */
     protected $anonymousFiles = array();
-    
+
     /**
      * Additional initializer code
      * used for static property initialization
@@ -730,7 +730,7 @@ class Compiler
             $includes = $invokeDestructors[0];
             $destructors = $invokeDestructors[1];
         }
-        
+
         /**
          * Check if there are module/request/global initializers
          */
