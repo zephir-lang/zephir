@@ -191,9 +191,9 @@ class CompilerFile
      *
      * @param CompilationContext $compilationContext
      * @param string $namespace
-     * @param array $topStatement
+     * @param array $classStatement
      */
-    public function compileClass(CompilationContext $compilationContext, $namespace, $topStatement)
+    public function compileClass(CompilationContext $compilationContext, $namespace, $classStatement)
     {
         $classDefinition = $this->_classDefinition;
 
@@ -203,6 +203,12 @@ class CompilerFile
         $classDefinition->compile($compilationContext);
     }
 
+    /**
+     * Compiles a function
+     *
+     * @param CompilationContext $compilationContext
+     * @param FunctionDefinition $functionDefinition
+     */
     public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
     {
         /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
@@ -237,8 +243,9 @@ class CompilerFile
      *
      * @param string $namespace
      * @param array $topStatement
+     * @param array $docblock
      */
-    public function preCompileInterface($namespace, $topStatement)
+    public function preCompileInterface($namespace, $topStatement, $docblock)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->_external);
@@ -252,6 +259,10 @@ class CompilerFile
 
         $classDefinition->setType('interface');
 
+        if (is_array($docblock)) {
+            $classDefinition->setDocblock($docblock);
+        }
+
         if (isset($topStatement['definition'])) {
             $definition = $topStatement['definition'];
 
@@ -260,7 +271,11 @@ class CompilerFile
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
-                    $classConstant = new ClassConstant($constant['name'], isset($constant['default']) ? $constant['default'] : null, isset($constant['docblock']) ? $constant['docblock'] : null);
+                    $classConstant = new ClassConstant(
+                        $constant['name'],
+                        isset($constant['default']) ? $constant['default'] : null,
+                        isset($constant['docblock']) ? $constant['docblock'] : null
+                    );
                     $classDefinition->addConstant($classConstant);
                 }
             }
@@ -270,7 +285,16 @@ class CompilerFile
              */
             if (isset($definition['methods'])) {
                 foreach ($definition['methods'] as $method) {
-                    $classMethod = new ClassMethod($classDefinition, $method['visibility'], $method['name'], isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null, null, isset($method['docblock']) ? $method['docblock'] : null, isset($method['return-type']) ? $method['return-type'] : null, $method);
+                    $classMethod = new ClassMethod(
+                        $classDefinition,
+                        $method['visibility'],
+                        $method['name'],
+                        isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+                        null,
+                        isset($method['docblock']) ? $method['docblock'] : null,
+                        isset($method['return-type']) ? $method['return-type'] : null,
+                        $method
+                    );
                     $classDefinition->addMethod($classMethod, $method);
                 }
             }
@@ -406,11 +430,12 @@ class CompilerFile
     /**
      * Creates a definition for a class
      *
+     * @param CompilationContext $compilationContext
      * @param string $namespace
      * @param array $topStatement
-     * @param CompilationContext $compilationContext
+     * @param array $docblock
      */
-    public function preCompileClass($namespace, $topStatement, CompilationContext $compilationContext)
+    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->_external);
@@ -432,6 +457,10 @@ class CompilerFile
 
         if (isset($topStatement['final'])) {
             $classDefinition->setIsFinal($topStatement['final']);
+        }
+
+        if (is_array($docblock)) {
+            $classDefinition->setDocblock($docblock);
         }
 
         if (isset($topStatement['definition'])) {
@@ -577,7 +606,6 @@ class CompilerFile
                     $this->_headerCBlocks[] = $topStatement['value'];
                     break;
 
-
                 case 'function':
                     /* Just do the precompilation of the function */
                     $functionDefinition = new FunctionDefinition(
@@ -608,6 +636,7 @@ class CompilerFile
 
         $class = false;
         $interface = false;
+        $lastComment = null;
 
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
@@ -618,8 +647,9 @@ class CompilerFile
                     }
                     $class = true;
                     $name = $topStatement['name'];
-                    $this->preCompileClass($namespace, $topStatement, $compilationContext);
+                    $this->preCompileClass($compilationContext, $namespace, $topStatement, $lastComment);
                     $this->_originalNode = $topStatement;
+                    $lastComment = null;
                     break;
 
                 case 'interface':
@@ -628,8 +658,9 @@ class CompilerFile
                     }
                     $interface = true;
                     $name = $topStatement['name'];
-                    $this->preCompileInterface($namespace, $topStatement);
+                    $this->preCompileInterface($namespace, $topStatement, $lastComment);
                     $this->_originalNode = $topStatement;
+                    $lastComment = null;
                     break;
 
                 case 'use':
@@ -637,6 +668,10 @@ class CompilerFile
                         throw new CompilerException("Aliasing must be done before declaring any class or interface", $topStatement);
                     }
                     $this->_aliasManager->add($topStatement);
+                    break;
+
+                case 'comment':
+                    $lastComment = $topStatement;
                     break;
             }
         }
@@ -798,6 +833,7 @@ class CompilerFile
 
         $class = false;
         $interface = false;
+
         foreach ($this->_ir as $topStatement) {
             switch ($topStatement['type']) {
 

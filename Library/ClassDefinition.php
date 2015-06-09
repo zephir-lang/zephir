@@ -94,10 +94,18 @@ class ClassDefinition
     protected $methods = array();
 
     /**
+     * @var array
+     */
+    protected $docblock;
+
+    /**
      * @var int
      */
     protected $dependencyRank = 0;
 
+    /**
+     * @var array
+     */
     protected $originalNode;
 
     /**
@@ -416,6 +424,26 @@ class ClassDefinition
     public function getDependencyRank()
     {
         return $this->dependencyRank;
+    }
+
+    /**
+     * Sets the class/interface docblock
+     *
+     * @param array $docblock
+     */
+    public function setDocblock($docblock)
+    {
+        $this->docblock = $docblock;
+    }
+
+    /**
+     * Returns the class/interface docblock
+     *
+     * @return array
+     */
+    public function getDocblock()
+    {
+        return $this->docblock;
     }
 
     /**
