@@ -79,10 +79,6 @@ class Documentation
             throw new ConfigException("Theme configuration is not present");
         }
 
-        if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
-            throw new ConfigException("There is no theme");
-        }
-
         $themeDir = $this->__findThemeDirectory($themeConfig, $config, $command);
 
         if (!file_exists($themeDir)) {
@@ -138,6 +134,9 @@ class Documentation
             }
         }
 
+        if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
+            throw new ConfigException("There is no theme neither in the the theme config nor as a command line argument");
+        }
 
         // check the theme from the config
 
