@@ -121,7 +121,8 @@ class Documentation
      * @return array
      * @throws Exception
      */
-    private function __prepareThemeOptions($themeConfig, CommandInterface $command){
+    private function __prepareThemeOptions($themeConfig, CommandInterface $command)
+    {
 
         $optionsFromCommand = $command->getParameter("theme-options");
 
@@ -132,8 +133,8 @@ class Documentation
                 if (!$parsedOptions || !is_array($parsedOptions)) {
                     throw new Exception("Unable to parse json from 'theme-options' argument");
                 }
-            }else{
-                if(file_exists($optionsFromCommand)){
+            } else {
+                if (file_exists($optionsFromCommand)) {
                     $unparsed = file_get_contents($optionsFromCommand);
                     $parsedOptions = json_decode($unparsed, true);
                     if (!$parsedOptions || !is_array($parsedOptions)) {
@@ -148,7 +149,7 @@ class Documentation
 
         if ($parsedOptions) {
             $options = array_merge($themeConfig["options"], $parsedOptions);
-        }else{
+        } else {
             $options = $themeConfig["options"];
         }
 
@@ -326,5 +327,4 @@ class Documentation
     {
         return $this->outputDirectory;
     }
-
 }

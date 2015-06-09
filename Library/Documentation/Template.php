@@ -44,7 +44,8 @@ class Template
      * @param $name
      * @param $value
      */
-    public function setVar($name, $value){
+    public function setVar($name, $value)
+    {
         $this->data[$name] = $value;
     }
 
@@ -53,7 +54,8 @@ class Template
      * @param $name
      * @return bool
      */
-    public function getVar($name){
+    public function getVar($name)
+    {
         return isset($this->data[$name]) ? $this->data[$name] : null;
     }
 
