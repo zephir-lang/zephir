@@ -167,7 +167,7 @@ class Template
     private function __getSecureFilePath($fileName)
     {
 
-        if("/" == $fileName{0}){
+        if ("/" == $fileName{0}) {
             return $fileName;
         }
 

@@ -283,10 +283,9 @@ class Documentation
             $this->theme->drawFile($nfile);
         }
 
-        $baseUrl = $this->config->get("base-url","api");
+        $baseUrl = $this->config->get("base-url", "api");
         if ($baseUrl) {
             $sitemapFile = new File\Sitemap($baseUrl, $this->classes, $byNamespace);
-            var_dump($sitemapFile->getTemplateName());
             $this->theme->drawFile($sitemapFile);
         }
 
