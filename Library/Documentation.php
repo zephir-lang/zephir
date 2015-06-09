@@ -107,8 +107,6 @@ class Documentation
 
         $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
 
-        var_dump($themeConfig["options"]);
-
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
     }
 

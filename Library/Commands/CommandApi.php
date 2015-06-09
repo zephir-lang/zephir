@@ -47,7 +47,7 @@ class CommandApi extends CommandAbstract
      */
     public function getUsage()
     {
-        return 'api [--theme-path=/path][--output-directory=/path]';
+        return 'api [--theme-path=/path][--output-directory=/path][--theme-options={json}|/path]';
     }
 
     /**
