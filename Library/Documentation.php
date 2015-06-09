@@ -31,6 +31,8 @@ use Zephir\Logger;
 class Documentation
 {
 
+    protected $outputDirectory;
+
     /**
      * @var Config
      */
@@ -85,12 +87,13 @@ class Documentation
             throw new ConfigException("There is no theme named " . $themeConfig["name"]);
         }
 
-        $outputDir = $this->config->get('path', 'api');
-        $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
+        $outputDir = $this->__findOutputDirectory($themeConfig, $config, $command);
 
         if (!$outputDir) {
-            throw new ConfigException("Api path is not configured");
+            throw new ConfigException("Api path (output directory) is not configured");
         }
+
+        $this->outputDirectory = $outputDir;
 
         if (!file_exists($outputDir)) {
             if (!mkdir($outputDir, 0777, true)) {
@@ -103,6 +106,40 @@ class Documentation
         }
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+    }
+
+    /**
+     * Find the directory where the doc is going to be generated depending on the command line options and the config.
+     *
+     * output directory is checked in this order :
+     *  => check if the command line argument --output-directory was given
+     *  => if not ; check if config config[api][path] was given
+     *
+     *
+     * @param $themeConfig
+     * @param Config $config
+     * @param CommandInterface $command
+     * @return null|string
+     * @throws ConfigException
+     * @throws Exception
+     */
+    private function __findOutputDirectory($themeConfig, Config $config, CommandInterface $command)
+    {
+
+        $outputDir = $command->getParameter("output-directory");
+
+        if (!$outputDir) {
+            $outputDir = $this->config->get('path', 'api');
+        }
+
+        $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
+
+        if ("/" !== $outputDir{0}) {
+            $outputDir = getcwd() . "/" . $outputDir;
+        }
+
+        return $outputDir;
+
     }
 
     /**
@@ -232,4 +269,14 @@ class Documentation
     {
         return "/source/" . str_replace("\\", "/", $c->getCompleteName()) . ".html";
     }
+
+    /**
+     * get the directory where the doc is going to be generated
+     * @return string
+     */
+    public function getOutputDirectory()
+    {
+        return $this->outputDirectory;
+    }
+
 }
