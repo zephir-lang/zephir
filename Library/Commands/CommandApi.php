@@ -66,8 +66,9 @@ class CommandApi extends CommandAbstract
         $params = $this->parseArguments();
 
         $allowedArgs = array(
-            "theme-path" => "@.+@",
+            "theme-path"       => "@.+@",
             "output-directory" => "@.+@",
+            "theme-options"    => "@.+@",
         );
 
         foreach ($params as $k => $p) {

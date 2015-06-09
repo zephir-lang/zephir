@@ -105,7 +105,57 @@ class Documentation
             throw new Exception("Can't write output directory $outputDir");
         }
 
+        $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
+
+        var_dump($themeConfig["options"]);
+
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+    }
+
+    /**
+     *
+     * Prepare the options by merging the one in the project config with the one in the command line arg "theme-options"
+     *
+     * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
+     *
+     * @param $themeConfig
+     * @param CommandInterface $command
+     * @return array
+     * @throws Exception
+     */
+    private function __prepareThemeOptions($themeConfig, CommandInterface $command){
+
+        $optionsFromCommand = $command->getParameter("theme-options");
+
+        $parsedOptions = null;
+        if ($optionsFromCommand) {
+            if ("{" == $optionsFromCommand{0}) {
+                $parsedOptions = json_decode(trim($optionsFromCommand), true);
+                if (!$parsedOptions || !is_array($parsedOptions)) {
+                    throw new Exception("Unable to parse json from 'theme-options' argument");
+                }
+            }else{
+                if(file_exists($optionsFromCommand)){
+                    $unparsed = file_get_contents($optionsFromCommand);
+                    $parsedOptions = json_decode($unparsed, true);
+                    if (!$parsedOptions || !is_array($parsedOptions)) {
+                        throw new Exception("Unable to parse json from the file '$optionsFromCommand'");
+                    }
+                } else {
+                    throw new Exception("Unable to find file '$optionsFromCommand'");
+                }
+            }
+        }
+
+
+        if ($parsedOptions) {
+            $options = array_merge($themeConfig["options"], $parsedOptions);
+        }else{
+            $options = $themeConfig["options"];
+        }
+
+        return $options;
+
     }
 
     /**
