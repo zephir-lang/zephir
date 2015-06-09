@@ -166,6 +166,11 @@ class Template
 
     private function __getSecureFilePath($fileName)
     {
+
+        if("/" == $fileName{0}){
+            return $fileName;
+        }
+
         $input   = pathinfo($this->rootDirectory . "/" . $fileName);
         $inputDirname  = $input["dirname"];
         $inputBasename = $input["basename"];

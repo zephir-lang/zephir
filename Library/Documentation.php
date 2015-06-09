@@ -283,6 +283,13 @@ class Documentation
             $this->theme->drawFile($nfile);
         }
 
+        $baseUrl = $this->config->get("base-url","api");
+        if ($baseUrl) {
+            $sitemapFile = new File\Sitemap($baseUrl, $this->classes, $byNamespace);
+            var_dump($sitemapFile->getTemplateName());
+            $this->theme->drawFile($sitemapFile);
+        }
+
         // namespaces files (namespaces.html)
         $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
         $this->theme->drawFile($nsfile);
