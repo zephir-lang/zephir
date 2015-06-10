@@ -377,7 +377,8 @@ class ClassMethod
      * the starting line of the method in the source file
      * @return mixed
      */
-    public function getLine(){
+    public function getLine()
+    {
         return $this->expression["line"];
     }
 
@@ -385,7 +386,8 @@ class ClassMethod
      * the ending line of the method in the source file
      * @return mixed
      */
-    public function getLastLine(){
+    public function getLastLine()
+    {
         return $this->expression["last-line"];
     }
 
