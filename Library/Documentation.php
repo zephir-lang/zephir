@@ -58,6 +58,8 @@ class Documentation
      */
     protected $command;
 
+    protected $baseUrl;
+
     /**
      * @param CompilerFile[] $classes
      * @param Config $config
@@ -108,6 +110,8 @@ class Documentation
         $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
 
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+
+        $this->baseUrl = $this->__parseBaseUrl($config, $command);
     }
 
     /**
@@ -192,6 +196,28 @@ class Documentation
     }
 
     /**
+     *
+     * Find the base url (useful for sitemap.xml) for either
+     *
+     * - the command line argument base-url
+     * - or the config config["api"]["base-url"]
+     *
+     * @param Config $config
+     * @param CommandInterface $command
+     * @return mixed|string
+     */
+    private function __parseBaseUrl(Config $config, CommandInterface $command)
+    {
+        $baseUrl = $command->getParameter("base-url");
+
+        if (!$baseUrl) {
+            $baseUrl = $config->get("base-url", "api");
+        }
+
+        return $baseUrl;
+    }
+
+    /**
      * Find the theme directory depending on the command  line options and the config.
      *
      * theme directory is checked in this order :
@@ -253,6 +279,8 @@ class Documentation
 
     }
 
+
+
     public function build()
     {
         $byNamespace = array();
@@ -283,9 +311,9 @@ class Documentation
             $this->theme->drawFile($nfile);
         }
 
-        $baseUrl = $this->config->get("base-url", "api");
-        if ($baseUrl) {
-            $sitemapFile = new File\Sitemap($baseUrl, $this->classes, $byNamespace);
+
+        if ($this->baseUrl) {
+            $sitemapFile = new File\Sitemap($this->baseUrl, $this->classes, $byNamespace);
             $this->theme->drawFile($sitemapFile);
         }
 

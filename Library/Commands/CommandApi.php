@@ -69,6 +69,7 @@ class CommandApi extends CommandAbstract
             "theme-path"       => "@.+@",
             "output-directory" => "@.+@",
             "theme-options"    => "@.+@",
+            "base-url"         => "@.+@",
         );
 
         foreach ($params as $k => $p) {
