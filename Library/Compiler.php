@@ -980,9 +980,8 @@ class Compiler
             $this->generate($command);
         }
 
-        $this->logger->output('Generating API...');
-
         $documentator = new Documentation($this->files, $this->config, $this->logger, $command);
+        $this->logger->output('Generating API into ' . $documentator->getOutputDirectory());
         $documentator->build();
     }
 

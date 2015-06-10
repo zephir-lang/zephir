@@ -260,7 +260,7 @@ class CompilerFile
         $classDefinition->setType('interface');
 
         if (is_array($docblock)) {
-            $classDefinition->setDocblock($docblock);
+            $classDefinition->setDocBlock($docblock["value"]);
         }
 
         if (isset($topStatement['definition'])) {
@@ -460,7 +460,7 @@ class CompilerFile
         }
 
         if (is_array($docblock)) {
-            $classDefinition->setDocblock($docblock);
+            $classDefinition->setDocBlock($docblock["value"]);
         }
 
         if (isset($topStatement['definition'])) {

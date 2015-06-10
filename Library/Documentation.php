@@ -31,6 +31,8 @@ use Zephir\Logger;
 class Documentation
 {
 
+    protected $outputDirectory;
+
     /**
      * @var Config
      */
@@ -56,6 +58,8 @@ class Documentation
      */
     protected $command;
 
+    protected $baseUrl;
+
     /**
      * @param CompilerFile[] $classes
      * @param Config $config
@@ -79,22 +83,19 @@ class Documentation
             throw new ConfigException("Theme configuration is not present");
         }
 
-        if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
-            throw new ConfigException("There is no theme");
-        }
-
         $themeDir = $this->__findThemeDirectory($themeConfig, $config, $command);
 
         if (!file_exists($themeDir)) {
             throw new ConfigException("There is no theme named " . $themeConfig["name"]);
         }
 
-        $outputDir = $this->config->get('path', 'api');
-        $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
+        $outputDir = $this->__findOutputDirectory($themeConfig, $config, $command);
 
         if (!$outputDir) {
-            throw new ConfigException("Api path is not configured");
+            throw new ConfigException("Api path (output directory) is not configured");
         }
+
+        $this->outputDirectory = $outputDir;
 
         if (!file_exists($outputDir)) {
             if (!mkdir($outputDir, 0777, true)) {
@@ -106,7 +107,114 @@ class Documentation
             throw new Exception("Can't write output directory $outputDir");
         }
 
+        $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
+
         $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+
+        $this->baseUrl = $this->__parseBaseUrl($config, $command);
+    }
+
+    /**
+     *
+     * Prepare the options by merging the one in the project config with the one in the command line arg "theme-options"
+     *
+     * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
+     *
+     * @param $themeConfig
+     * @param CommandInterface $command
+     * @return array
+     * @throws Exception
+     */
+    private function __prepareThemeOptions($themeConfig, CommandInterface $command)
+    {
+
+        $optionsFromCommand = $command->getParameter("theme-options");
+
+        $parsedOptions = null;
+        if ($optionsFromCommand) {
+            if ("{" == $optionsFromCommand{0}) {
+                $parsedOptions = json_decode(trim($optionsFromCommand), true);
+                if (!$parsedOptions || !is_array($parsedOptions)) {
+                    throw new Exception("Unable to parse json from 'theme-options' argument");
+                }
+            } else {
+                if (file_exists($optionsFromCommand)) {
+                    $unparsed = file_get_contents($optionsFromCommand);
+                    $parsedOptions = json_decode($unparsed, true);
+                    if (!$parsedOptions || !is_array($parsedOptions)) {
+                        throw new Exception("Unable to parse json from the file '$optionsFromCommand'");
+                    }
+                } else {
+                    throw new Exception("Unable to find file '$optionsFromCommand'");
+                }
+            }
+        }
+
+
+        if ($parsedOptions) {
+            $options = array_merge($themeConfig["options"], $parsedOptions);
+        } else {
+            $options = $themeConfig["options"];
+        }
+
+        return $options;
+
+    }
+
+    /**
+     * Find the directory where the doc is going to be generated depending on the command line options and the config.
+     *
+     * output directory is checked in this order :
+     *  => check if the command line argument --output-directory was given
+     *  => if not ; check if config config[api][path] was given
+     *
+     *
+     * @param $themeConfig
+     * @param Config $config
+     * @param CommandInterface $command
+     * @return null|string
+     * @throws ConfigException
+     * @throws Exception
+     */
+    private function __findOutputDirectory($themeConfig, Config $config, CommandInterface $command)
+    {
+
+        $outputDir = $command->getParameter("output-directory");
+
+        if (!$outputDir) {
+            $outputDir = $this->config->get('path', 'api');
+        }
+
+        $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
+
+        if ("/" !== $outputDir{0}) {
+            $outputDir = getcwd() . "/" . $outputDir;
+        }
+
+        return $outputDir;
+
+    }
+
+    /**
+     *
+     * Find the base url (useful for sitemap.xml) for either
+     *
+     * - the command line argument base-url
+     * - or the config config["api"]["base-url"]
+     *
+     * @param Config $config
+     * @param CommandInterface $command
+     * @return mixed|string
+     */
+    private function __parseBaseUrl(Config $config, CommandInterface $command)
+    {
+        $baseUrl = $command->getParameter("base-url");
+
+        if (!$baseUrl) {
+            $baseUrl = $config->get("base-url", "api");
+        }
+
+        return $baseUrl;
     }
 
     /**
@@ -138,6 +246,9 @@ class Documentation
             }
         }
 
+        if (!isset($themeConfig["name"]) || !$themeConfig["name"]) {
+            throw new ConfigException("There is no theme neither in the the theme config nor as a command line argument");
+        }
 
         // check the theme from the config
 
@@ -168,6 +279,8 @@ class Documentation
 
     }
 
+
+
     public function build()
     {
         $byNamespace = array();
@@ -196,6 +309,12 @@ class Documentation
             // namespace files (namespace/ns1/n2/namespace.html)
             $nfile = new File\NamespaceFile($this->config, $nh);
             $this->theme->drawFile($nfile);
+        }
+
+
+        if ($this->baseUrl) {
+            $sitemapFile = new File\Sitemap($this->baseUrl, $this->classes, $byNamespace);
+            $this->theme->drawFile($sitemapFile);
         }
 
         // namespaces files (namespaces.html)
@@ -232,5 +351,14 @@ class Documentation
     public static function sourceUrl(ClassDefinition $c)
     {
         return "/source/" . str_replace("\\", "/", $c->getCompleteName()) . ".html";
+    }
+
+    /**
+     * get the directory where the doc is going to be generated
+     * @return string
+     */
+    public function getOutputDirectory()
+    {
+        return $this->outputDirectory;
     }
 }

@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\Documentation\Docblock;
+use Zephir\Documentation\DocblockParser;
 use Zephir\HeadersManager;
 
 /**
@@ -96,7 +98,12 @@ class ClassDefinition
     /**
      * @var array
      */
-    protected $docblock;
+    protected $docBlock;
+
+    /**
+     * @var Docblock
+     */
+    protected $parsedDocblock;
 
     /**
      * @var int
@@ -427,24 +434,43 @@ class ClassDefinition
     }
 
     /**
-     * Sets the class/interface docblock
+     * Sets the class/interface docBlock
      *
-     * @param array $docblock
+     * @param array $docBlock
      */
-    public function setDocblock($docblock)
+    public function setDocBlock($docBlock)
     {
-        $this->docblock = $docblock;
+        $this->docBlock = $docBlock;
     }
 
     /**
-     * Returns the class/interface docblock
+     * Returns the class/interface docBlock
      *
      * @return array
      */
-    public function getDocblock()
+    public function getDocBlock()
     {
-        return $this->docblock;
+        return $this->docBlock;
     }
+
+    /**
+     * Returns the parsed docBlock
+     *
+     * @return DocBlock
+     */
+    public function getParsedDocBlock()
+    {
+        if (!$this->parsedDocblock) {
+            if (strlen($this->docBlock) > 0) {
+                $parser = new DocblockParser("/" . $this->docBlock ."/");
+                $this->parsedDocblock = $parser->parse();
+            } else {
+                return null;
+            }
+        }
+        return $this->parsedDocblock;
+    }
+
 
     /**
      * Adds a property to the definition

@@ -47,7 +47,7 @@ class CommandApi extends CommandAbstract
      */
     public function getUsage()
     {
-        return 'api [--theme-path=/path]';
+        return 'api [--theme-path=/path][--output-directory=/path][--theme-options={json}|/path]';
     }
 
     /**
@@ -65,7 +65,12 @@ class CommandApi extends CommandAbstract
 
         $params = $this->parseArguments();
 
-        $allowedArgs = array("theme-path" => "@.+@");
+        $allowedArgs = array(
+            "theme-path"       => "@.+@",
+            "output-directory" => "@.+@",
+            "theme-options"    => "@.+@",
+            "base-url"         => "@.+@",
+        );
 
         foreach ($params as $k => $p) {
             if (isset($allowedArgs[$k])) {

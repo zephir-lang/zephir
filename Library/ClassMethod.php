@@ -373,6 +373,23 @@ class ClassMethod
         return $this->parsedDocblock;
     }
 
+    /**
+     * the starting line of the method in the source file
+     * @return mixed
+     */
+    public function getLine()
+    {
+        return $this->expression["line"];
+    }
+
+    /**
+     * the ending line of the method in the source file
+     * @return mixed
+     */
+    public function getLastLine()
+    {
+        return $this->expression["last-line"];
+    }
 
     /**
      * Returns the parameters

@@ -40,6 +40,26 @@ class Template
     }
 
     /**
+     * set a variable that will be accessible in the template
+     * @param $name
+     * @param $value
+     */
+    public function setVar($name, $value)
+    {
+        $this->data[$name] = $value;
+    }
+
+    /**
+     * get a variable set with setVar()
+     * @param $name
+     * @return bool
+     */
+    public function getVar($name)
+    {
+        return isset($this->data[$name]) ? $this->data[$name] : null;
+    }
+
+    /**
      * find the value in the project configuration (e.g the version)
      * @param string $name the name of the config to get
      */
@@ -146,6 +166,11 @@ class Template
 
     private function __getSecureFilePath($fileName)
     {
+
+        if ("/" == $fileName{0}) {
+            return $fileName;
+        }
+
         $input   = pathinfo($this->rootDirectory . "/" . $fileName);
         $inputDirname  = $input["dirname"];
         $inputBasename = $input["basename"];
