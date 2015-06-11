@@ -38,6 +38,7 @@ class Generator
      */
     protected $ignoreModifiers = array(
         'inline',
+        'internal',
         'scoped'
     );
 
@@ -114,6 +115,7 @@ namespace {$class->getNamespace()};
 
 
 EOF;
+
         if ($class->isFinal()) {
             $source .= 'final ';
         } elseif ($class->isAbstract()) {
