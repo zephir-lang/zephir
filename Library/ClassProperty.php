@@ -248,21 +248,36 @@ class ClassProperty
 
             case 'array':
             case 'empty-array':
-                $methodName = '__construct';
-                $visibility = array('public');
+                $classDefinition = $this->classDefinition;
                 if ($this->isStatic()) {
                     $methodName = 'zephir_init_static_properties';
                     $visibility = array('internal');
+                } else {
+                    $methodName = 'zephir_init_properties';
+                    $visibility = array('internal');
+                    
+                    /* Make sure a constructor exists, so that properties are initialized */
+                    $method = $classDefinition->getMethod('__construct');
+                    if (!$method || $method->getClassDefinition() != $classDefinition) {
+                        $classDefinition->setIsGeneratedConstructor(true);
+                        $classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
+                            $classDefinition,
+                            array('public'),
+                            '__construct',
+                            null,
+                            null
+                        ), null));
+                    }
                 }
 
                 $constructParentMethod = null;
-                $constructMethod = $compilationContext->classDefinition->getMethod($methodName);
+                $constructMethod = $classDefinition->getMethod($methodName);
                 /**
                  * Make sure we do not steal the construct method of the parent,
                  * but initialize our own with the inherited statements to ensure
                  * valid property initialization
                  */
-                if ($constructMethod && $constructMethod->getClassDefinition() != $this->classDefinition) {
+                if ($constructMethod && $constructMethod->getClassDefinition() != $classDefinition) {
                     $constructParentMethod = $constructMethod;
                     $constructMethod = null;
                 }
@@ -294,12 +309,12 @@ class ClassProperty
 
                             $statementsBlock->setStatements($newStatements);
                             $constructMethod->setStatementsBlock($statementsBlock);
-                            $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
+                            $classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                         }
                     } else {
                         $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
                         $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
-                        $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
+                        $classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
                     }
                 } else {
                     $statements = array();
@@ -309,8 +324,8 @@ class ClassProperty
                     $statements[] = $this->getLetStatement()->get();
                     $statementsBlock = new StatementsBlock($statements);
 
-                    $compilationContext->classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
-                        $compilationContext->classDefinition,
+                    $classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
+                        $classDefinition,
                         $visibility,
                         $methodName,
                         null,
