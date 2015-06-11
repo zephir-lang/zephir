@@ -110,12 +110,15 @@ class DocblockParser
                     }
                 } else {
                     if ($currentChar == "*") {
-                        if ($this->nextCharacter() == "/") {
+                        $nextCharacter = $this->nextCharacter();
+                        if ("/" == $nextCharacter) {
                             // stop annotation parsing on end of comment
                             $this->__tryRegisterAnnotation();
                             break;
                         } elseif ($this->ignoreStar) {
-                            $this->nextCharacter();
+                            if ($nextCharacter == " ") {
+                                $this->nextCharacter();
+                            }
                             continue;
                         }
                     }
