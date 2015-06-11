@@ -419,6 +419,7 @@ static PHP_MINFO_FUNCTION(test)
 	php_info_print_table_header(2, PHP_TEST_NAME, "enabled");
 	php_info_print_table_row(2, "Author", PHP_TEST_AUTHOR);
 	php_info_print_table_row(2, "Version", PHP_TEST_VERSION);
+	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_TEST_ZEPVERSION);
 	php_info_print_table_end();
 

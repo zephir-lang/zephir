@@ -38,6 +38,7 @@ class Generator
      */
     protected $ignoreModifiers = array(
         'inline',
+        'internal',
         'scoped'
     );
 
@@ -114,6 +115,9 @@ namespace {$class->getNamespace()};
 
 
 EOF;
+
+        $source .= (new DocBlock($class->getDocBlock(), '')) . "\n";
+
         if ($class->isFinal()) {
             $source .= 'final ';
         } elseif ($class->isAbstract()) {

@@ -84,6 +84,7 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZVAL_DOUBLE(&_7, zephir_safe_div_zval_long(l, i TSRMLS_CC));
 	ZEPHIR_INIT_VAR(k);
 	ZVAL_DOUBLE(k, zephir_floor(&_7 TSRMLS_CC));
+	ZEPHIR_INIT_VAR(block);
 	zephir_fast_join_str(block, SL("\n"), lines TSRMLS_CC);
 	while (1) {
 		if (!(ZEPHIR_LT(j, k))) {
