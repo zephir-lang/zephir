@@ -31,6 +31,10 @@
 
 ZEND_DECLARE_MODULE_GLOBALS(%PROJECT_LOWER%)
 
+PHP_INI_BEGIN()
+	%PROJECT_INI_ENTRIES%
+PHP_INI_END()
+
 static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 {
 #if PHP_VERSION_ID < 50500
@@ -48,7 +52,7 @@ static PHP_MINIT_FUNCTION(%PROJECT_LOWER%)
 
 	setlocale(LC_ALL, "C");
 #endif
-
+	REGISTER_INI_ENTRIES();
 	%CLASS_INITS%
 
 #if PHP_VERSION_ID < 50500
@@ -63,7 +67,7 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 {
 
 	zephir_deinitialize_memory(TSRMLS_C);
-
+	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
 }
 #endif
@@ -71,24 +75,24 @@ static PHP_MSHUTDOWN_FUNCTION(%PROJECT_LOWER%)
 /**
  * Initialize globals on each request or each thread started
  */
-static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *zephir_globals TSRMLS_DC)
+static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals TSRMLS_DC)
 {
-	zephir_globals->initialized = 0;
+	%PROJECT_LOWER%_globals->initialized = 0;
 
 	/* Memory options */
-	zephir_globals->active_memory = NULL;
+	%PROJECT_LOWER%_globals->active_memory = NULL;
 
 	/* Virtual Symbol Tables */
-	zephir_globals->active_symbol_table = NULL;
+	%PROJECT_LOWER%_globals->active_symbol_table = NULL;
 
 	/* Cache Enabled */
-	zephir_globals->cache_enabled = 1;
+	%PROJECT_LOWER%_globals->cache_enabled = 1;
 
 	/* Recursive Lock */
-	zephir_globals->recursive_lock = 0;
+	%PROJECT_LOWER%_globals->recursive_lock = 0;
 
 	/* Static cache */
-	memset(zephir_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
+	memset(%PROJECT_LOWER%_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
 %INIT_GLOBALS%
 }
@@ -96,12 +100,12 @@ static void php_zephir_init_globals(zend_%PROJECT_LOWER%_globals *zephir_globals
 static PHP_RINIT_FUNCTION(%PROJECT_LOWER%)
 {
 
-	zend_%PROJECT_LOWER%_globals *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_%PROJECT_LOWER%_globals *%PROJECT_LOWER%_globals_ptr = ZEPHIR_VGLOBAL;
 
-	php_zephir_init_globals(zephir_globals_ptr TSRMLS_CC);
+	php_zephir_init_globals(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
 	//zephir_init_interned_strings(TSRMLS_C);
 
-	zephir_initialize_memory(zephir_globals_ptr TSRMLS_CC);
+	zephir_initialize_memory(%PROJECT_LOWER%_globals_ptr TSRMLS_CC);
 
 %INITIALIZERS%
 	return SUCCESS;
@@ -129,8 +133,8 @@ static PHP_MINFO_FUNCTION(%PROJECT_LOWER%)
 	php_info_print_table_row(2, "Build Date", __DATE__ " " __TIME__ );
 	php_info_print_table_row(2, "Powered by Zephir", "Version " PHP_%PROJECT_UPPER%_ZEPVERSION);
 	php_info_print_table_end();
-
 %EXTENSION_INFO%
+	DISPLAY_INI_ENTRIES();
 }
 
 static PHP_GINIT_FUNCTION(%PROJECT_LOWER%)
