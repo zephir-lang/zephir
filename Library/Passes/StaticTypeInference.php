@@ -403,6 +403,7 @@ class StaticTypeInference
                 return 'variable';
 
             case 'not':
+            case 'bitwise_not':
                 $this->passExpression($expression['left']);
                 return 'bool';
 

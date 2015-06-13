@@ -381,6 +381,9 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_NOT:
 				xx_(xx_parser, XX_NOT, NULL, parser_status);
 				break;
+			case XX_T_BITWISE_NOT:
+				xx_(xx_parser, XX_BITWISE_NOT, NULL, parser_status);
+				break;
 			case XX_T_FETCH:
 				xx_(xx_parser, XX_FETCH, NULL, parser_status);
 				break;

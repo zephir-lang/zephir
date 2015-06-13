@@ -36,6 +36,7 @@ use Zephir\Operators\Comparison\LessEqualOperator;
 use Zephir\Operators\Comparison\LessOperator;
 use Zephir\Operators\Comparison\GreaterOperator;
 use Zephir\Operators\Comparison\GreaterEqualOperator;
+use Zephir\Operators\Bitwise\BitwiseNotOperator;
 use Zephir\Operators\Bitwise\BitwiseAndOperator;
 use Zephir\Operators\Bitwise\BitwiseOrOperator;
 use Zephir\Operators\Bitwise\BitwiseXorOperator;
@@ -430,6 +431,12 @@ class Expression
 
             case 'not':
                 $expr = new NotOperator();
+                $expr->setReadOnly($this->isReadOnly());
+                $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
+                return $expr->compile($expression, $compilationContext);
+                
+            case 'bitwise_not':
+                $expr = new BitwiseNotOperator();
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);

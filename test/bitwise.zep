@@ -937,4 +937,15 @@ class Bitwise
 		let c = 1 >> 2;
 		return c;
 	}
+
+	/* bitwise not */
+	public function testBitwiseNot(int a)
+	{
+		return ~a;
+	}
+
+	public function testBitwiseAndNot(int a, int b)
+	{
+		return a & ~b;
+	}
 }
