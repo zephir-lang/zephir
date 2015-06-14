@@ -14,6 +14,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty3);
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1);
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2);
 PHP_METHOD(Test_IssetTest, __construct);
+static void zephir_init_properties(zval *this_ptr TSRMLS_DC);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray1, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)

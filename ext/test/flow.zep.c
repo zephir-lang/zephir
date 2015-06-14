@@ -19,6 +19,7 @@
 #include "kernel/array.h"
 #include "kernel/hash.h"
 #include "kernel/iterator.h"
+#include "kernel/math.h"
 
 
 /**
@@ -2038,6 +2039,31 @@ PHP_METHOD(Test_Flow, testSwitch12) {
 		}
 		if (_0 == _2) {
 			RETURN_LONG(2);
+		}
+		RETURN_LONG(0);
+	} while(0);
+
+
+}
+
+PHP_METHOD(Test_Flow, testSwitch13) {
+
+	zval *a_param = NULL, _0, _1;
+	long a, _2;
+
+	zephir_fetch_params(0, 1, 0, &a_param);
+
+	a = zephir_get_intval(a_param);
+
+
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 1);
+	ZEPHIR_SINIT_VAR(_1);
+	ZVAL_LONG(&_1, 2);
+	do {
+		_2 = zephir_mt_rand(zephir_get_intval(&_0), zephir_get_intval(&_1) TSRMLS_CC);
+		if (_2 == 100) {
+			RETURN_LONG(1);
 		}
 		RETURN_LONG(0);
 	} while(0);

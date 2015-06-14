@@ -937,6 +937,16 @@ class Flow
         }
     }
 
+    public function testSwitch13(long a)
+    {
+        switch mt_rand(1, 2) {
+            case 100:
+                return 1;
+            default:
+                return 0;
+        }
+    }
+
     public function testUnrechable1()
     {
         var a = 0, b = 0.0, c = false, d = "", e = '\0';

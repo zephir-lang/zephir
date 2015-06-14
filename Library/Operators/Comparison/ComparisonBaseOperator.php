@@ -37,6 +37,8 @@ class ComparisonBaseOperator extends BaseOperator
     protected $_commutative = false;
 
     /**
+     *
+     *
      * @param $expr
      * @param CompilationContext $compilationContext
      * @return bool|CompiledExpression
@@ -489,7 +491,7 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);
+                                return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' ' . $right->getBooleanCode(), $expression);                            
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);

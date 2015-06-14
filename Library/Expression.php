@@ -305,6 +305,9 @@ class Expression
             case 'integer':
                 return new LiteralCompiledExpression('int', $expression['value'], $expression);
 
+            case 'long':
+                return new LiteralCompiledExpression('long', $expression['value'], $expression);
+
             case 'double':
                 return new LiteralCompiledExpression('double', $expression['value'], $expression);
 
