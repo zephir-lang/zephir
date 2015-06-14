@@ -385,6 +385,7 @@ class LocalContextPass
                 break;
 
             case 'typeof':
+            case 'bitwise_not':
             case 'not':
                 $this->passExpression($expression['left']);
                 break;

@@ -213,6 +213,7 @@ class CallGathererPass
                 break;
 
             case 'not':
+            case 'bitwise_not':
                 $this->passExpression($expression['left']);
                 break;
 
