@@ -114,6 +114,14 @@ class ConcatOperator extends BaseOperator
                     $concatParts[] = '"' . Utils::addSlashes($compiledExpr->getCode()) . '"';
                     break;
 
+                case 'int':
+                case 'long':
+                    $key .= 'v';
+                    $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
+                    $compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
+                    $concatParts[] = '&' . $tempVariable->getName();
+                    break;
+
                 default:
                     throw new CompilerException("Variable type: " . $compiledExpr->getType() . " cannot be used in concat operation", $compiledExpr->getOriginal());
             }
