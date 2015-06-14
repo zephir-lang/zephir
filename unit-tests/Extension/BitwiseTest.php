@@ -124,5 +124,9 @@ class BitwiseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->intShiftRight() === 0);
         $this->assertTrue($t->int2ShiftRight() === 0);
         $this->assertTrue($t->intShiftRightSimple() === 0);
+        
+        // Bitwise NOT
+        $this->assertTrue($t->testBitwiseNot(666) == -667);
+        $this->assertTrue($t->testBitwiseAndNot(5, 4) == 1);
     }
 }

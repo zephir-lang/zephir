@@ -299,6 +299,9 @@ class MutateGathererPass
                     if (isset($statement['else_statements'])) {
                         $this->passStatementBlock($statement['else_statements']);
                     }
+                    if (isset($statement['elseif_statements'])) {
+                        $this->passStatementBlock($statement['elseif_statements']);
+                    }
                     break;
 
                 case 'switch':

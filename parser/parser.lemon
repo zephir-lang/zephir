@@ -49,6 +49,7 @@
 %right CLONE .
 %right NEW .
 %right NOT .
+%right BITWISE_NOT .
 %left BITWISE_AND .
 %right PARENTHESES_CLOSE .
 %right SBRACKET_OPEN .
@@ -2676,6 +2677,11 @@ xx_common_expr(R) ::= BITWISE_AND xx_common_expr(O1) . {
 
 xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
+}
+
+/* ~a */
+xx_common_expr(R) ::= BITWISE_NOT xx_common_expr(O1) . {
+    R = xx_ret_expr("bitwise_not", O1, NULL, NULL, status->scanner_state);
 }
 
 xx_common_expr(R) ::= SUB xx_common_expr(O1) . [NOT] {
