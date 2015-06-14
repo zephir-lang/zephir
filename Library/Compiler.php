@@ -1468,7 +1468,7 @@ class Compiler
                 }
 
                 if (!isset($iniEntry['name'])) {
-                    $iniName = $global['name'];
+                    $iniName = $name;
                 } else {
                     $iniName = $iniEntry['name'];
                 }
