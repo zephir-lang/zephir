@@ -577,9 +577,10 @@ class ClassMethod
             if (count($parameters)) {
                 $required = 0;
                 foreach ($parameters as $parameter) {
-                    if (!isset($parameter['default'])) {
-                        $required++;
+                    if (isset($parameter['default']) || (isset($parameter['mandatory']) && !$parameter['mandatory'])) {
+                        continue;
                     }
+                    $required++;
                 }
                 return $required;
             }
