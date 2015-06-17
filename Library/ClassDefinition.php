@@ -1665,13 +1665,22 @@ class ClassDefinition
                 $parameters = array();
 
                 foreach ($method->getParameters() as $row) {
-                    $parameters[] = array(
+                    $params = array(
                         'type' => 'parameter',
                         'name' => $row->getName(),
                         'const' => 0,
                         'data-type' => 'variable',
                         'mandatory' => !$row->isOptional()
                     );
+                    if (!$params['mandatory']) {
+                        try {
+                            $params['default'] = $row->getDefaultValue();
+                        } catch (\ReflectionException $e) {
+                            // TODO: dummy default value
+                            $params['default'] = true;
+                        }
+                    };
+                    $parameters[] = $params;
                 }
 
                 $classMethod = new ClassMethod($classDefinition, array(), $method->getName(), new ClassMethodParameters(
