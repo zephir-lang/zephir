@@ -255,19 +255,6 @@ class ClassProperty
                 } else {
                     $methodName = 'zephir_init_properties';
                     $visibility = array('internal');
-                    
-                    /* Make sure a constructor exists, so that properties are initialized */
-                    $method = $classDefinition->getMethod('__construct');
-                    if (!$method || $method->getClassDefinition() != $classDefinition) {
-                        $classDefinition->setIsGeneratedConstructor(true);
-                        $classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
-                            $classDefinition,
-                            array('public'),
-                            '__construct',
-                            null,
-                            null
-                        ), null));
-                    }
                 }
 
                 $constructParentMethod = null;

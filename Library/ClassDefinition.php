@@ -865,7 +865,7 @@ class ClassDefinition
     private function getInternalSignature(ClassMethod $method)
     {
         if ($method->getName() == 'zephir_init_properties') {
-            return 'static void ' . $method->getName() . '(zval *this_ptr TSRMLS_DC)';
+            return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
         }
         if ($method->getName() == 'zephir_init_static_properties') {
             $classDefinition = $method->getClassDefinition();
@@ -930,8 +930,9 @@ class ClassDefinition
          * Method entry
          */
         $methods = &$this->methods;
+        $initMethod = $this->getMethod('zephir_init_properties');
 
-        if (count($methods)) {
+        if (count($methods) || $initMethod) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
         } else {
             $methodEntry = 'NULL';
@@ -1004,6 +1005,11 @@ class ClassDefinition
 
             $property->compile($compilationContext);
             $codePrinter->outputBlankLine();
+        }
+        
+        $initMethod = $this->getMethod('zephir_init_properties');
+        if ($initMethod) {
+            $codePrinter->output($namespace . '_' . strtolower($this->getSCName($namespace)) . '_ce->create_object = zephir_init_properties;');
         }
 
         if (!$needBreak) {
@@ -1105,6 +1111,18 @@ class ClassDefinition
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
 
+        /* Make sure that when a constructor is defined, but the class does not set ANY properties, the parent's properties are anyways initialized */
+        if ($initMethod && $initMethod->getClassDefinition() != $this) {
+            $constructMethod = new ClassMethod(
+                $this,
+                array('internal'),
+                'zephir_init_properties',
+                null,
+                $initMethod->getStatementsBlock()
+            );
+            $this->getEventsManager()->dispatch('setMethod', array($constructMethod));
+        }
+        
         /**
          * Compile methods
          */
