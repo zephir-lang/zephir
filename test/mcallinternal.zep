@@ -54,16 +54,17 @@ class McallInternal
 		return a;
 	}
 
-	internal function fibonacci(long n) -> long
+	internal function other(long a, long b) -> double
 	{
-  		if n == 1 || n == 2 {
-    		return 1;
-  		}
-    	return this->fibonacci(n - 1) + this->fibonacci(n - 2);
+		return a / b;
   	}
 
-  	public function callFibonacci(long n) -> long
+  	public function callFibonacci() -> double
   	{
-  		return this->fibonacci(n);
+		double $p = 0; long $i = 0;
+		for i in range(0, 10000000) {
+            let $p += (double) $this->other($i, $i + 1);
+        }
+        return $p;
   	}
 }

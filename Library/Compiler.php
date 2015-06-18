@@ -756,8 +756,6 @@ class Compiler
             $compileFile->checkDependencies($this);
         }
 
-        echo memory_get_usage(true), PHP_EOL;
-
         /**
          * Sort the files by dependency ranking
          */
