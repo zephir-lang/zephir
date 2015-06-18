@@ -757,6 +757,22 @@ class Compiler
         }
 
         /**
+         * Sort the files by dependency ranking
+         */
+        $files = array();
+        $rankedFiles = array();
+        $this->calculateDependencies($this->files);
+        foreach ($this->files as $rankFile) {
+            $rank = $rankFile->getClassDefinition()->getDependencyRank();
+            $rankedFiles[$rank][] = $rankFile;
+        }
+        krsort($rankedFiles);
+        foreach ($rankedFiles as $rank => $rankFiles) {
+            $files = array_merge($files, $rankFiles);
+        }
+        $this->files = $files;
+
+        /**
          * Convert C-constants into PHP constants
          */
         $constantsSources = $this->config->get('constants-sources');

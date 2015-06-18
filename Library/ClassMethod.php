@@ -1628,49 +1628,19 @@ class ClassMethod
                 }
             }
         }
-        
-        /**
-         * Set properties of the class, if constructor
-         */
-        $classDefinition = $this->classDefinition;
-        if ($this->isConstructor() || ($this->getName() == 'unserialize' && in_array('Serializable', $classDefinition->getImplementedInterfaces()))) {
-            $initMethod = $classDefinition->getMethod('zephir_init_properties');
-            if ($initMethod && $initMethod->getClassDefinition() == $classDefinition) {
-                $codePrinter->increaseLevel();
-                /* Only initialize properties if the constructor was called directly on the class, e.g. make parent:: calls not trigger property initialization */
-                if ($this->isConstructor()) {
-                    $codePrinter->output('if (EG(called_scope) == '.$classDefinition->getClassEntry().') {');
-                    $codePrinter->increaseLevel();
-                }
-                $codePrinter->output('zephir_init_properties(this_ptr TSRMLS_CC);');
-                if ($this->isConstructor()) {
-                    $codePrinter->decreaseLevel();
-                    $codePrinter->output('}');
-                }
-                $codePrinter->decreaseLevel();
-            }
-            $extendsClass = $classDefinition->getExtendsClassDefinition();
-            $parentConstructor = $extendsClass ? $extendsClass->getMethod('__construct') : null;
-            if ($this->isConstructor() && $extendsClass && $parentConstructor && !$extendsClass->isGeneratedConstructor() && $classDefinition->isGeneratedConstructor()) {
-                /**
-                 * Call the parent constructor (create parent::__construct call)
-                 * since no constructor was actually defined for this class, but
-                 * generated for zephir to ensure property initialization
-                 */
-                $callExpr = new Expression(array(
-                    'type' => 'scall',
-                    'dynamic-class' => 0,
-                    'class' => 'parent',
-                    'dynamic' => 0,
-                    'name' => '__construct',
-                ));
-                $call = new StaticCall();
-                $expr = $callExpr;
-                $expr->setExpectReturn(false);
-                $call->compile($expr, $compilationContext);
-            }
-        }
 
+        /**
+         * Initialize the properties within create_object, handler code
+         */
+        if ($this->getName() == 'zephir_init_properties') {
+            $codePrinter->increaseLevel();
+            $codePrinter->output('{');
+            $codePrinter->increaseLevel();
+            $codePrinter->output('zval *this_ptr = NULL;');
+            $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
+            $codePrinter->decreaseLevel();
+        }
+        
         /**
          * Compile the block of statements if any
          */
@@ -2287,6 +2257,14 @@ class ClassMethod
             }
         }
 
+        if ($this->getName() == 'zephir_init_properties') {
+            $codePrinter->increaseLevel();
+            $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+            $codePrinter->decreaseLevel();
+        }
+        
         /**
          * Remove macros that grow/restore the memory frame stack if it wasn't used
          */
