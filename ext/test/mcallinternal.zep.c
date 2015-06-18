@@ -178,56 +178,56 @@ PHP_METHOD(Test_McallInternal, g) {
 
 }
 
-static void zep_Test_McallInternal_fibonacci(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *n_param_ext TSRMLS_DC) {
+static void zep_Test_McallInternal_other(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, zval *a_param_ext, zval *b_param_ext TSRMLS_DC) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zend_bool _0;
-	zval *n_param = NULL, *_1 = NULL, _2 = zval_used_for_init, *_3 = NULL;
-	long n;
+	zval *a_param = NULL, *b_param = NULL;
+	long a, b;
 
-	ZEPHIR_MM_GROW();
-	n_param = n_param_ext;
+	a_param = a_param_ext;
+	b_param = b_param_ext;
 
-	n = zephir_get_intval(n_param);
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
 
 
-	_0 = n == 1;
-	if (!(_0)) {
-		_0 = n == 2;
-	}
-	if (_0) {
-		RETURN_MM_LONG(1);
-	}
-	ZEPHIR_SINIT_VAR(_2);
-	ZVAL_LONG(&_2, (n - 1));
-	ZEPHIR_CALL_INTERNAL_METHOD_P1(&_1, this_ptr, zep_Test_McallInternal_fibonacci, &_2);
-	zephir_check_call_status();
-	ZEPHIR_SINIT_NVAR(_2);
-	ZVAL_LONG(&_2, (n - 2));
-	ZEPHIR_CALL_INTERNAL_METHOD_P1(&_3, this_ptr, zep_Test_McallInternal_fibonacci, &_2);
-	zephir_check_call_status();
-	zephir_add_function_ex(return_value, _1, _3 TSRMLS_CC);
-	RETURN_MM();
+	RETURN_DOUBLE(zephir_safe_div_long_long(a, b TSRMLS_CC));
 
 }
 
 PHP_METHOD(Test_McallInternal, callFibonacci) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zval *n_param = NULL, _0;
-	long n;
+	zval *_3 = NULL, _4 = zval_used_for_init, _5 = zval_used_for_init;
+	int _1, _2, ZEPHIR_LAST_CALL_STATUS;
+	zend_bool _0;
+	long i = 0;
+	double p = 0;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &n_param);
 
-	n = zephir_get_intval(n_param);
-
-
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, n);
-	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P1(this_ptr, zep_Test_McallInternal_fibonacci, &_0);
-	zephir_check_call_status();
-	RETURN_MM();
+	_2 = 10000000;
+	_1 = 0;
+	_0 = 0;
+	if (_1 <= _2) {
+		while (1) {
+			if (_0) {
+				_1++;
+				if (!(_1 <= _2)) {
+					break;
+				}
+			} else {
+				_0 = 1;
+			}
+			i = _1;
+			ZEPHIR_SINIT_NVAR(_4);
+			ZVAL_LONG(&_4, i);
+			ZEPHIR_SINIT_NVAR(_5);
+			ZVAL_LONG(&_5, (i + 1));
+			ZEPHIR_CALL_INTERNAL_METHOD_P2(&_3, this_ptr, zep_Test_McallInternal_other, &_4, &_5);
+			zephir_check_call_status();
+			p += zephir_get_doubleval(_3);
+		}
+	}
+	RETURN_MM_DOUBLE(p);
 
 }
 

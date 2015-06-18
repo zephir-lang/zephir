@@ -13,6 +13,7 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
+#include "kernel/operators.h"
 
 
 /**
@@ -1171,6 +1172,35 @@ PHP_METHOD(Test_Bitwise, intShiftRightSimple) {
 
 	c = 0;
 	RETURN_LONG(c);
+
+}
+
+PHP_METHOD(Test_Bitwise, testBitwiseNot) {
+
+	zval *a_param = NULL;
+	int a;
+
+	zephir_fetch_params(0, 1, 0, &a_param);
+
+	a = zephir_get_intval(a_param);
+
+
+	RETURN_LONG(~a);
+
+}
+
+PHP_METHOD(Test_Bitwise, testBitwiseAndNot) {
+
+	zval *a_param = NULL, *b_param = NULL;
+	int a, b;
+
+	zephir_fetch_params(0, 2, 0, &a_param, &b_param);
+
+	a = zephir_get_intval(a_param);
+	b = zephir_get_intval(b_param);
+
+
+	RETURN_LONG((a & ~b));
 
 }
 

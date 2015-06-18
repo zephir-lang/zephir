@@ -23,6 +23,7 @@ ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
+	test_issettest_ce->create_object = zephir_init_properties;
 	return SUCCESS;
 
 }
@@ -161,26 +162,26 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 }
 
-PHP_METHOD(Test_IssetTest, __construct) {
+static zend_object_value zephir_init_properties(zend_class_entry *class_type TSRMLS_DC) {
 
+		zval *_1;
+		zval *_0;
 
-	if (EG(called_scope) == test_issettest_ce) {
-		zephir_init_properties(this_ptr TSRMLS_CC);
+		ZEPHIR_MM_GROW();
+	
+	{
+		zval *this_ptr = NULL;
+		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
+		_0 = zephir_fetch_nproperty_this(this_ptr, SL("s"), PH_NOISY_CC);
+		if (Z_TYPE_P(_0) == IS_NULL) {
+			ZEPHIR_INIT_VAR(_1);
+			zephir_create_array(_1, 1, 0 TSRMLS_CC);
+			add_assoc_stringl_ex(_1, SS("a"), SL("true"), 1);
+			zephir_update_property_this(this_ptr, SL("s"), _1 TSRMLS_CC);
+		}
+		ZEPHIR_MM_RESTORE();
+		return Z_OBJVAL_P(this_ptr);
 	}
-
-}
-
-static void zephir_init_properties(zval *this_ptr TSRMLS_DC) {
-
-	zval *_0;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(_0);
-	zephir_create_array(_0, 1, 0 TSRMLS_CC);
-	add_assoc_stringl_ex(_0, SS("a"), SL("true"), 1);
-	zephir_update_property_this(this_ptr, SL("s"), _0 TSRMLS_CC);
-	ZEPHIR_MM_RESTORE();
 
 }
 

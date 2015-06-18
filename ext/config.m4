@@ -9,7 +9,17 @@ if test "$PHP_TEST" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_TEST, 1, [Whether you have Test])
-	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/arithmetic.zep.c
+	test_sources="test.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c test/testinterface.zep.c
+	test/oo/extend/exception.zep.c
+	test/oo/extend/db/exception.zep.c
+	test/scallparent.zep.c
+	test/constantsparent.zep.c
+	test/methodinterface.zep.c
+	test/oo/extend/db/query/exception.zep.c
+	test/oo/oodynamica.zep.c
+	test/ooimpl/zbeginning.zep.c
+	test/properties/publicproperties.zep.c
+	test/arithmetic.zep.c
 	test/arrayobject.zep.c
 	test/assign.zep.c
 	test/bench/foo.zep.c
@@ -28,7 +38,6 @@ if test "$PHP_TEST" = "yes"; then
 	test/constantsinterface.zep.c
 	test/constantsinterfacea.zep.c
 	test/constantsinterfaceb.zep.c
-	test/constantsparent.zep.c
 	test/declaretest.zep.c
 	test/diinterface.zep.c
 	test/echoes.zep.c
@@ -62,16 +71,12 @@ if test "$PHP_TEST" = "yes"; then
 	test/mcallinternal.zep.c
 	test/methodabstract.zep.c
 	test/methodargs.zep.c
-	test/methodinterface.zep.c
 	test/nativearray.zep.c
 	test/oo.zep.c
 	test/oo/abstractclass.zep.c
 	test/oo/constantsinterface.zep.c
 	test/oo/deprecatedmethods.zep.c
 	test/oo/dynamicprop.zep.c
-	test/oo/extend/exception.zep.c
-	test/oo/extend/db/exception.zep.c
-	test/oo/extend/db/query/exception.zep.c
 	test/oo/extend/db/query/placeholder/exception.zep.c
 	test/oo/extend/spl/arrayobject.zep.c
 	test/oo/extend/spl/directoryiterator.zep.c
@@ -92,7 +97,6 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/extendpdoclass.zep.c
 	test/oo/ooconstruct.zep.c
 	test/oo/ooconstructparams.zep.c
-	test/oo/oodynamica.zep.c
 	test/oo/oodynamicb.zep.c
 	test/oo/oonativeimplements.zep.c
 	test/oo/oonoconstruct.zep.c
@@ -100,7 +104,6 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/param.zep.c
 	test/oo/propertyaccess.zep.c
 	test/ooimpl/abeginning.zep.c
-	test/ooimpl/zbeginning.zep.c
 	test/operator.zep.c
 	test/optimizers/arraymerge.zep.c
 	test/optimizers/createarray.zep.c
@@ -111,7 +114,6 @@ if test "$PHP_TEST" = "yes"; then
 	test/properties/privateproperties.zep.c
 	test/properties/propertyarray.zep.c
 	test/properties/protectedproperties.zep.c
-	test/properties/publicproperties.zep.c
 	test/properties/staticpropertyarray.zep.c
 	test/properties/staticprotectedproperties.zep.c
 	test/properties/staticpublicproperties.zep.c
@@ -128,14 +130,12 @@ if test "$PHP_TEST" = "yes"; then
 	test/scall.zep.c
 	test/scalldynamic.zep.c
 	test/scallexternal.zep.c
-	test/scallparent.zep.c
 	test/sort.zep.c
 	test/spectralnorm.zep.c
 	test/spropertyaccess.zep.c
 	test/statements.zep.c
 	test/strings.zep.c
 	test/ternary.zep.c
-	test/testinterface.zep.c
 	test/trytest.zep.c
 	test/typeinstances.zep.c
 	test/typeoff.zep.c

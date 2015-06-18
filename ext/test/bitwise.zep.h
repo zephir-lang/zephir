@@ -98,6 +98,17 @@ PHP_METHOD(Test_Bitwise, intShiftLeftSimple);
 PHP_METHOD(Test_Bitwise, intShiftRight);
 PHP_METHOD(Test_Bitwise, int2ShiftRight);
 PHP_METHOD(Test_Bitwise, intShiftRightSimple);
+PHP_METHOD(Test_Bitwise, testBitwiseNot);
+PHP_METHOD(Test_Bitwise, testBitwiseAndNot);
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bitwise_testbitwisenot, 0, 0, 1)
+	ZEND_ARG_INFO(0, a)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bitwise_testbitwiseandnot, 0, 0, 2)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_bitwise_method_entry) {
 	PHP_ME(Test_Bitwise, intAnd, NULL, ZEND_ACC_PUBLIC)
@@ -195,5 +206,7 @@ ZEPHIR_INIT_FUNCS(test_bitwise_method_entry) {
 	PHP_ME(Test_Bitwise, intShiftRight, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bitwise, int2ShiftRight, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bitwise, intShiftRightSimple, NULL, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bitwise, testBitwiseNot, arginfo_test_bitwise_testbitwisenot, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bitwise, testBitwiseAndNot, arginfo_test_bitwise_testbitwiseandnot, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

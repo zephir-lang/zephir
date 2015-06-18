@@ -165,6 +165,18 @@ class StaticConstantAccess
             }
         }
 
+        switch ($type) {
+            case 'string':
+            case 'int':
+            case 'double':
+            case 'float':
+            case 'bool':
+            case 'null':            
+                break;
+            default:
+                return new CompiledExpression('null', null, $expression);
+        }
+
         /**
          * Return the value as a literal expression
          */

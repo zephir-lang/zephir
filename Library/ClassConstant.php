@@ -117,7 +117,7 @@ class ClassConstant
     public function compile(CompilationContext $compilationContext)
     {
         if ($this->value['type'] == 'static-constant-access') {
-            $name = $this->value['left']['value'].'::'.$this->value['right']['value'];
+            $name = $this->value['left']['value'] . '::' . $this->value['right']['value'];
             if (defined($name)) {
                 $value = constant($name);
 
@@ -140,21 +140,22 @@ class ClassConstant
                 } elseif (is_null($value)) {
                     $this->value['type'] =  'null';
                 }
+            } else {
+                throw new \Exception("here");
             }
         }
 
         switch ($this->value['type']) {
             case 'constant':
+
                 $constant = new Constants();
                 $compiledExpression = $constant->compile($this->value, $compilationContext);
 
                 $this->value['type'] = $compiledExpression->getType();
                 $this->value['value'] = $compiledExpression->getCode();
 
-                /**
-                 * With no-break this will be broken (unexpected), use re-compile for new type pass
-                 * @todo review variant without break
-                 */
+                // With no-break this will be broken (unexpected), use re-compile for new type pass
+                // @todo review variant without break
                 $this->compile($compilationContext);
                 break;
 

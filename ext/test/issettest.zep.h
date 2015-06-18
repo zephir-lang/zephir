@@ -13,8 +13,7 @@ PHP_METHOD(Test_IssetTest, testIssetProperty2);
 PHP_METHOD(Test_IssetTest, testIssetProperty3);
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty1);
 PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2);
-PHP_METHOD(Test_IssetTest, __construct);
-static void zephir_init_properties(zval *this_ptr TSRMLS_DC);
+static zend_object_value zephir_init_properties(zend_class_entry *class_type TSRMLS_DC);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_issettest_testissetarray1, 0, 0, 2)
 	ZEND_ARG_INFO(0, a)
@@ -67,6 +66,5 @@ ZEPHIR_INIT_FUNCS(test_issettest_method_entry) {
 	PHP_ME(Test_IssetTest, testIssetProperty3, arginfo_test_issettest_testissetproperty3, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_IssetTest, testIssetDynamicProperty1, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_IssetTest, testIssetDynamicProperty2, arginfo_test_issettest_testissetdynamicproperty2, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_IssetTest, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_FE_END
 };

@@ -756,16 +756,20 @@ class Compiler
             $compileFile->checkDependencies($this);
         }
 
+        echo memory_get_usage(true), PHP_EOL;
+
         /**
          * Sort the files by dependency ranking
          */
         $files = array();
         $rankedFiles = array();
         $this->calculateDependencies($this->files);
+
         foreach ($this->files as $rankFile) {
             $rank = $rankFile->getClassDefinition()->getDependencyRank();
             $rankedFiles[$rank][] = $rankFile;
         }
+
         krsort($rankedFiles);
         foreach ($rankedFiles as $rank => $rankFiles) {
             $files = array_merge($files, $rankFiles);
@@ -1611,6 +1615,7 @@ class Compiler
             }
             return;
         }
+
         $dependencyTree = $files;
         if (isset($dependencyTree[$_dependency->getCompleteName()])) {
             foreach ($dependencyTree[$_dependency->getCompleteName()] as $dependency) {

@@ -67,10 +67,11 @@ class StrReplaceOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
+
         $context->codePrinter->output('zephir_fast_str_replace(&' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
