@@ -150,13 +150,8 @@ class StaticConstantAccess
         $constantDefinition = $classDefinition->getConstant($constant);
 
         if ($constantDefinition instanceof ClassConstant) {
-            $constant = $constantDefinition->getValue();
-            if (isset($constant['value'])) {
-                $value = $constant['value'];
-            } else {
-                $value = null;
-            }
-            $type = $constant['type'];
+            $value = $constantDefinition->getValueValue();
+            $type = $constantDefinition->getValueType();
         } else {
             $value = $constantDefinition;
             $type = gettype($value);
@@ -171,9 +166,10 @@ class StaticConstantAccess
             case 'double':
             case 'float':
             case 'bool':
-            case 'null':            
+            case 'null':
                 break;
             default:
+                $compilationContext->logger->warning($constantDefinition->getName(), 'nonexistent-constant', $expression);
                 return new CompiledExpression('null', null, $expression);
         }
 

@@ -74,12 +74,26 @@ class ClassConstant
     }
 
     /**
-     * Get value of constant
+     * Get the type of the value of the constant
+     *
+     * @return string
+     */
+    public function getValueType()
+    {
+        return $this->value['type'];
+    }
+
+    /**
+     * Get value of the value of the constant
      *
      * @return mixed
      */
     public function getValueValue()
     {
+        if ($this->value['type'] == 'static-constant-access') {
+            $this->resolveClassConstant();
+        }
+
         if (isset($this->value['value'])) {
             return $this->value['value'];
         }
@@ -108,6 +122,39 @@ class ClassConstant
     }
 
     /**
+     * Resolves a class constant
+     */
+    private function resolveClassConstant()
+    {
+        $name = $this->value['left']['value'] . '::' . $this->value['right']['value'];
+        if (defined($name)) {
+            $value = constant($name);
+
+            if (is_int($value)) {
+                $this->value['type'] =  'int';
+                $this->value['value'] = $value;
+            } elseif (is_float($value)) {
+                $this->value['type'] =  'double';
+                $this->value['value'] = $value;
+            } elseif (is_bool($value)) {
+                $this->value['type'] =  'bool';
+                if (!$value) {
+                    $this->value['value'] = 'false';
+                } else {
+                    $this->value['value'] = 'true';
+                }
+            } elseif (is_string($value)) {
+                $this->value['type'] =  'string';
+                $this->value['value'] = $value;
+            } elseif (is_null($value)) {
+                $this->value['type'] =  'null';
+            }
+        } else {
+            throw new \Exception("Cannot resolve constant");
+        }
+    }
+
+    /**
      * Produce the code to register a class constant
      *
      * @param CompilationContext $compilationContext
@@ -117,32 +164,7 @@ class ClassConstant
     public function compile(CompilationContext $compilationContext)
     {
         if ($this->value['type'] == 'static-constant-access') {
-            $name = $this->value['left']['value'] . '::' . $this->value['right']['value'];
-            if (defined($name)) {
-                $value = constant($name);
-
-                if (is_int($value)) {
-                    $this->value['type'] =  'int';
-                    $this->value['value'] = $value;
-                } elseif (is_float($value)) {
-                    $this->value['type'] =  'double';
-                    $this->value['value'] = $value;
-                } elseif (is_bool($value)) {
-                    $this->value['type'] =  'bool';
-                    if (!$value) {
-                        $this->value['value'] = 'false';
-                    } else {
-                        $this->value['value'] = 'true';
-                    }
-                } elseif (is_string($value)) {
-                    $this->value['type'] =  'string';
-                    $this->value['value'] = $value;
-                } elseif (is_null($value)) {
-                    $this->value['type'] =  'null';
-                }
-            } else {
-                throw new \Exception("here");
-            }
+            $this->resolveClassConstant();
         }
 
         switch ($this->value['type']) {
@@ -154,15 +176,14 @@ class ClassConstant
                 $this->value['type'] = $compiledExpression->getType();
                 $this->value['value'] = $compiledExpression->getCode();
 
-                // With no-break this will be broken (unexpected), use re-compile for new type pass
-                // @todo review variant without break
                 $this->compile($compilationContext);
-                break;
+                return;
 
             case 'long':
             case 'int':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_long(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->value['value'] . " TSRMLS_CC);");
                 break;
+
             case 'double':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_double(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->value['value'] . " TSRMLS_CC);");
                 break;
