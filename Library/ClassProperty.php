@@ -19,8 +19,13 @@
 
 namespace Zephir;
 
+use Zephir\Builder\LiteralBuilder;
+use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\Builder\Statements\LetStatementBuilder;
+use Zephir\Builder\Statements\IfStatementBuilder;
+use Zephir\Builder\Operators\UnaryOperatorBuilder;
+use Zephir\Builder\Operators\BinaryOperatorBuilder;
 use Zephir\Statements\LetStatement;
 
 /**
@@ -282,6 +287,7 @@ class ClassProperty
                             }
                         }
 
+                        $this->removeInitializationStatements($statements);
                         if ($needLetStatementAdded) {
                             $newStatements = array();
 
@@ -308,6 +314,7 @@ class ClassProperty
                     if ($constructParentMethod) {
                         $statements = $constructParentMethod->getStatementsBlock()->getStatements();
                     }
+                    $this->removeInitializationStatements($statements);
                     $statements[] = $this->getLetStatement()->get();
                     $statementsBlock = new StatementsBlock($statements);
 
@@ -338,30 +345,60 @@ class ClassProperty
     }
 
     /**
+     * Removes all initialization statements related to this property
+     */
+    protected function removeInitializationStatements(&$statements)
+    {
+        foreach ($statements as $index => $statement) {
+            if (!$this->isStatic()) {
+                if ($statement['expr']['left']['right']['value'] == $this->name) {
+                    unset($statements[$index]);
+                }
+            } else {
+                if ($statement['assignments'][0]['property'] == $this->name) {
+                    unset($statements[$index]);
+                }
+            }
+        }
+    }
+
+    /**
      * @return LetStatementBuilder
      */
     protected function getLetStatement()
     {
-        if (!$this->isStatic()) {
+        if ($this->isStatic()) {
             return new LetStatementBuilder(array(
-                'assign-type' => 'object-property',
+                'assign-type' => 'static-property',
                 'operator'    => 'assign',
-                'variable'    => 'this',
+                'variable'    => '\\'.$this->classDefinition->getCompleteName(),
                 'property'    => $this->name,
                 'file'        => $this->original['default']['file'],
                 'line'        => $this->original['default']['line'],
                 'char'        => $this->original['default']['char'],
             ), $this->original['default']);
         }
-        return new LetStatementBuilder(array(
-            'assign-type' => 'static-property',
+        $lsb = new LetStatementBuilder(array(
+            'assign-type' => 'object-property',
             'operator'    => 'assign',
-            'variable'    => '\\'.$this->classDefinition->getCompleteName(),
+            'variable'    => 'this',
             'property'    => $this->name,
             'file'        => $this->original['default']['file'],
             'line'        => $this->original['default']['line'],
             'char'        => $this->original['default']['char'],
         ), $this->original['default']);
+        return new IfStatementBuilder(
+            new BinaryOperatorBuilder(
+                'equals',
+                new BinaryOperatorBuilder(
+                    'property-access',
+                    new VariableBuilder('this'),
+                    new LiteralBuilder('string', $this->name)
+                ),
+                new LiteralBuilder('null', null)
+            ),
+            new StatementsBlockBuilder(array($lsb))
+        );
     }
 
     /**
