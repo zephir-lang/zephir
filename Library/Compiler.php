@@ -899,8 +899,12 @@ class Compiler
          * Round 4. Create config.m4 and config.w32 files / Create project.c and project.h files
          */
         $namespace      = str_replace('\\', '_', $namespace);
-        $needConfigure  = $this->createConfigFiles($namespace);
-        $needConfigure |= $this->createProjectFiles($namespace);
+        $extensionName  = $this->config->get('extension-name');
+        if (empty($extensionName) || !is_string($extensionName)) {
+            $extensionName = $namespace;
+        }
+        $needConfigure  = $this->createConfigFiles($extensionName);
+        $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
 
         /**
