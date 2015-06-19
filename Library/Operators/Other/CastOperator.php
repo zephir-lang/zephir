@@ -240,6 +240,7 @@ class CastOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('string', $compilationContext);
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext);
@@ -260,6 +261,7 @@ class CastOperator extends BaseOperator
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('array', $compilationContext, $expression);
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
@@ -285,6 +287,7 @@ class CastOperator extends BaseOperator
                     case 'string':
                     case 'array':
                         $compilationContext->headersManager->add('kernel/operators');
+                        $compilationContext->symbolTable->mustGrownStack(true);
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
 
                         /**
