@@ -542,6 +542,7 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                                     /* a(var) + a(var) */
                                     case 'variable':
+                                    case 'array':
 
                                         $compilationContext->headersManager->add('kernel/operators');
 
