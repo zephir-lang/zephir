@@ -41,7 +41,7 @@ class Theme
      */
     protected $extendedTheme;
 
-    protected $themeInfos = [];
+    protected $themeInfos = array();
 
     public function __construct($themeDir, $outputDir, $themeConfig, $config, Documentation $documentation)
     {
