@@ -54,17 +54,16 @@ class Theme
 
 
         $themeInfosPath = $this->getThemePath("theme.json");
-        if($themeInfosPath){
+        if ($themeInfosPath) {
             $themeInfos = json_decode(file_get_contents($themeInfosPath), true);
-            if(!$themeInfos){
+            if (!$themeInfos) {
                 throw new Exception("Cant parse file $themeInfosPath");
-            }else{
+            } else {
                 $this->themeInfos = $themeInfos;
-                if(isset($themeInfos["extends"])){
-
+                if (isset($themeInfos["extends"])) {
                     $extThemePath = $documentation->findThemePathByName($themeInfos["extends"]);
-                    if(!$extThemePath){
-                        throw new Exception("Unable to find extended theme " . $themeInfos["extends"] );
+                    if (!$extThemePath) {
+                        throw new Exception("Unable to find extended theme " . $themeInfos["extends"]);
                     }
 
                     $this->extendedTheme = new Theme($extThemePath, $outputDir, $themeConfig, $config, $documentation);
@@ -146,18 +145,17 @@ class Theme
     {
         $outputStt = $this->getOutputPath("asset");
 
-        if(!file_exists($outputStt)){
+        if (!file_exists($outputStt)) {
             mkdir($outputStt, 0777, true);
         }
 
-        if($this->extendedTheme){
+        if ($this->extendedTheme) {
             $this->extendedTheme->buildStaticDirectory();
         }
 
         $themeStt = $this->getThemePath("static");
 
         if ($themeStt) {
-
             $files = array();
 
             $this->__copyDir($themeStt, $outputStt . "/static", $files);
@@ -298,7 +296,7 @@ class Theme
 
         $newPath = $this->getThemePath($path);
         if (!$newPath) {
-            if($this->extendedTheme){
+            if ($this->extendedTheme) {
                 return $this->extendedTheme->getThemePathExtendsAware($path);
             }
         }
@@ -318,7 +316,7 @@ class Theme
         $pathBasename = $path["basename"];
         $pathFilename = $pathDirname . "/" . $pathBasename;
 
-        if(!file_exists($pathFilename)){
+        if (!file_exists($pathFilename)) {
             return null;
         }
 

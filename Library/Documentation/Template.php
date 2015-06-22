@@ -100,7 +100,8 @@ class Template
     /**
      * get a value from the theme config (theme.json file placed inside the theme directory)
      */
-    public function getAssets(){
+    public function getAssets()
+    {
         $css = $this->theme->getThemeInfoExtendAware("css");
         $js = $this->theme->getThemeInfoExtendAware("javascript");
 
@@ -108,7 +109,6 @@ class Template
             "css" => $css,
             "javascript"  => $js
         );
-
     }
 
     /**

@@ -275,7 +275,8 @@ class Documentation
      * search if a theme by its name, return the absolute path to it if it exists
      * @param $name
      */
-    public function findThemePathByName($name){
+    public function findThemePathByName($name)
+    {
         // check the theme from the config
         $path = null;
 
