@@ -98,6 +98,20 @@ class Template
     }
 
     /**
+     * get a value from the theme config (theme.json file placed inside the theme directory)
+     */
+    public function getAssets(){
+        $css = $this->theme->getThemeInfoExtendAware("css");
+        $js = $this->theme->getThemeInfoExtendAware("javascript");
+
+        return array(
+            "css" => $css,
+            "javascript"  => $js
+        );
+
+    }
+
+    /**
      * the path to root for the hyperlink in the templates
      * @param string $pathToRoot
      */

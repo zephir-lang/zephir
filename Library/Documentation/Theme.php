@@ -60,7 +60,7 @@ class Theme
                 throw new Exception("Cant parse file $themeInfosPath");
             }else{
                 $this->themeInfos = $themeInfos;
-                if($themeInfos["extends"]){
+                if(isset($themeInfos["extends"])){
 
                     $extThemePath = $documentation->findThemePathByName($themeInfos["extends"]);
                     if(!$extThemePath){
@@ -110,6 +110,38 @@ class Theme
         $template->write($outputFilename);
     }
 
+    /**
+     * get assets from the theme info (theme.json file placed inside the theme directory)
+     */
+    public function getThemeInfo($name)
+    {
+        if (isset($this->themeInfos[$name])) {
+            return $this->themeInfos[$name];
+        }
+        return null;
+    }
+
+    /**
+     * similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array
+     * @return array
+     */
+    public function getThemeInfoExtendAware($name)
+    {
+
+        if ($this->extendedTheme) {
+            $data = $this->extendedTheme->getThemeInfoExtendAware($name);
+        } else {
+            $data = array();
+        }
+        $info = $this->getThemeInfo($name);
+        array_unshift($data, $info);
+
+        return $data;
+    }
+
+    /**
+     * copy the static directory of the theme into the output directory
+     */
     public function buildStaticDirectory()
     {
         $outputStt = $this->getOutputPath("asset");
