@@ -1,0 +1,11 @@
+{
+
+  "javascript" : [
+
+    "api_definition.js",
+    "static/jquery.min.js",
+    "static/zephir-doc.js"
+
+  ]
+
+}

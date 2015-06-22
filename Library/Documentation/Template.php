@@ -12,29 +12,27 @@ class Template
 {
 
     protected $template;
-    protected $rootDirectory;
     protected $data;
     protected $nestedLevel;
     protected $pathToRoot = "./";
     protected $themeOptions;
+    protected $theme;
     /**
      * @var Config
      */
     protected $projectConfig;
 
-    public function __construct($data, $rootDirectory, $template, $nestedLevel = 0)
+    public function __construct(Theme $theme, $data, $template, $nestedLevel = 0)
     {
+
 
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception("Recursive inclusion detected in theme creation");
         }
 
-        // todo : securise parent inclusion
-        $rootDirectory = rtrim($rootDirectory, "/");
-
+        $this->theme = $theme;
         $this->data = $data;
-        $this->rootDirectory = $rootDirectory;
         $this->template = $template;
         $this->nestedLevel = $nestedLevel;
     }
@@ -65,13 +63,11 @@ class Template
      */
     public function projectConfig($name)
     {
-
         if (isset($this->projectConfig)) {
             return $this->projectConfig->get($name);
         } else {
             return null;
         }
-
     }
 
     /**
@@ -102,6 +98,21 @@ class Template
     }
 
     /**
+     * get a value from the theme config (theme.json file placed inside the theme directory)
+     */
+    public function getAssets()
+    {
+        $css = $this->theme->getThemeInfoExtendAware("css");
+        $js = $this->theme->getThemeInfoExtendAware("javascript");
+
+        return array(
+            "css" => $css,
+            "javascript"  => $js
+        );
+    }
+
+    /**
+     * the path to root for the hyperlink in the templates
      * @param string $pathToRoot
      */
     public function setPathToRoot($pathToRoot)
@@ -113,7 +124,7 @@ class Template
      * Generate an url relative to the current directory
      *
      * @param string $url the url we want to reach
-     * @return the relative path to the url
+     * @return string the relative path to the url
      */
     public function url($url)
     {
@@ -129,7 +140,7 @@ class Template
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
         }
 
-        return;
+        return "";
     }
 
     /**
@@ -156,25 +167,22 @@ class Template
         foreach ($this->data as $name => $value) {
             $$name = $value;
         }
-
+        $path = $this->__getTemplatePath($this->template);
         ob_start();
-        include($this->__getSecureFilePath($this->template));
+        include($path);
         $content = ob_get_clean();
 
         return $content;
     }
 
-    private function __getSecureFilePath($fileName)
+    private function __getTemplatePath($fileName)
     {
 
         if ("/" == $fileName{0}) {
             return $fileName;
         }
 
-        $input   = pathinfo($this->rootDirectory . "/" . $fileName);
-        $inputDirname  = $input["dirname"];
-        $inputBasename = $input["basename"];
-        $inputFilename = $inputDirname . "/" . $inputBasename;
+        $inputFilename = $this->theme->getThemePathExtendsAware($fileName);
 
         if (!file_exists($inputFilename)) {
             throw new Exception("Template not found : $inputFilename");
@@ -187,7 +195,7 @@ class Template
     {
         $newLevel = $this->nestedLevel+1;
 
-        $template = new Template(array_merge($this->data, $data), $this->rootDirectory, $fileName, $newLevel);
+        $template = new Template($this->theme, array_merge($this->data, $data), $fileName, $newLevel);
         $template->setPathToRoot($this->getPathToRoot());
         $template->setThemeOptions($this->themeOptions);
         $template->setProjectConfig($this->projectConfig);

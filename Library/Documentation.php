@@ -60,6 +60,8 @@ class Documentation
 
     protected $baseUrl;
 
+    protected $themesDirectories;
+
     /**
      * @param CompilerFile[] $classes
      * @param Config $config
@@ -109,7 +111,7 @@ class Documentation
 
         $themeConfig["options"] = $this->__prepareThemeOptions($themeConfig, $command);
 
-        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config);
+        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $config, $this);
 
         $this->baseUrl = $this->__parseBaseUrl($config, $command);
     }
@@ -236,6 +238,21 @@ class Documentation
     private function __findThemeDirectory($themeConfig, Config $config, CommandInterface $command)
     {
 
+        // check if there are additional theme paths in the config
+        $themeDirectoriesConfig = $config->get("theme-directories", "api");
+        if ($themeDirectoriesConfig) {
+            if (is_array($themeDirectoriesConfig)) {
+                $themesDirectories = $themeDirectoriesConfig;
+            } else {
+                throw new ConfigException("invalid value for theme config 'theme-directories'");
+            }
+        } else {
+            $themesDirectories = array();
+        }
+        $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
+        $this->themesDirectories = $themesDirectories;
+
+
         // check if the path was set from the command
         $themePath = $command->getParameter("theme-path");
         if (null!==$themePath) {
@@ -250,36 +267,29 @@ class Documentation
             throw new ConfigException("There is no theme neither in the the theme config nor as a command line argument");
         }
 
+        return $this->findThemePathByName($themeConfig["name"]);
+
+    }
+
+    /**
+     * search if a theme by its name, return the absolute path to it if it exists
+     * @param $name
+     */
+    public function findThemePathByName($name)
+    {
         // check the theme from the config
-
-        // check if there are additional theme paths in the config
-        $themeDirectoriesConfig = $config->get("theme-directories", "api");
-        if ($themeDirectoriesConfig) {
-            if (is_array($themeDirectoriesConfig)) {
-                $themesDirectories = $themeDirectoriesConfig;
-            } else {
-                throw new ConfigException("invalid value for theme config 'theme-directories'");
-            }
-        } else {
-            $themesDirectories = array();
-        }
-        $themesDirectories[] = ZEPHIRPATH . "templates/Api/themes";
-
         $path = null;
 
-        foreach ($themesDirectories as $themeDir) {
+        foreach ($this->themesDirectories as $themeDir) {
             $dir = rtrim($themeDir, "/") . "/";
-            $path = realpath($dir . $themeConfig["name"]);
+            $path = realpath($dir . $name);
             if ($path) {
                 break;
             }
         }
 
         return $path;
-
     }
-
-
 
     public function build()
     {

@@ -123,8 +123,6 @@ var ZepDoc = (function($){
     };
 
 
-
-
     $(function(){
 
         ZepDoc.drawLeftMenu();
@@ -137,8 +135,6 @@ var ZepDoc = (function($){
             
             if(null !== searchTimer)
                 clearTimeout(searchTimer);
-            
-            
             
             searchTimer = setTimeout(function(){
                 

@@ -1,0 +1,23 @@
+<link rel="stylesheet" type="text/css" href="<?= $this->asset("static/prettify.css") ?>" />
+
+<script src="<?= $this->asset("static/prettify.js") ?>"></script>
+<script src="<?= $this->asset("api_definition.js") ?>"></script>
+
+<?php $assets = $this->getAssets() ?>
+
+<?php foreach ($assets["css"] as $cssList) { ?>
+    <?php if (is_array($cssList)) { ?>
+        <?php foreach ($cssList as $css) { ?>
+            <link rel="stylesheet" type="text/css" href="<?= $this->asset($css) ?>" />
+        <?php } ?>
+    <?php } ?>
+
+<?php } ?>
+
+<?php foreach ($assets["javascript"] as $jsList) { ?>
+    <?php if (is_array($jsList)) { ?>
+        <?php foreach ($jsList as $js) { ?>
+            <script src="<?= $this->asset($js) ?>"></script>
+        <?php } ?>
+    <?php } ?>
+<?php } ?>

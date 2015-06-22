@@ -20,6 +20,7 @@
 namespace Zephir\Documentation;
 
 use Zephir\ClassDefinition;
+use Zephir\Documentation;
 use Zephir\Exception;
 
 class Theme
@@ -30,17 +31,52 @@ class Theme
     protected $themeConfig;
     protected $options;
     protected $projectConfig;
+    /**
+     * @var Documentation
+     */
+    protected $documentation;
 
-    public function __construct($themeDir, $outputDir, $themeConfig, $config)
+    /**
+     * @var Theme
+     */
+    protected $extendedTheme;
+
+    protected $themeInfos = array();
+
+    public function __construct($themeDir, $outputDir, $themeConfig, $config, Documentation $documentation)
     {
         $this->outputDir   = $outputDir;
         $this->themeConfig = $themeConfig;
         $this->themeDir    = $themeDir;
         $this->options     = $themeConfig["options"];
         $this->projectConfig= $config;
+        $this->documentation = $documentation;
+
+
+        $themeInfosPath = $this->getThemePath("theme.json");
+        if ($themeInfosPath) {
+            $themeInfos = json_decode(file_get_contents($themeInfosPath), true);
+            if (!$themeInfos) {
+                throw new Exception("Cant parse file $themeInfosPath");
+            } else {
+                $this->themeInfos = $themeInfos;
+                if (isset($themeInfos["extends"])) {
+                    $extThemePath = $documentation->findThemePathByName($themeInfos["extends"]);
+                    if (!$extThemePath) {
+                        throw new Exception("Unable to find extended theme " . $themeInfos["extends"]);
+                    }
+
+                    $this->extendedTheme = new Theme($extThemePath, $outputDir, $themeConfig, $config, $documentation);
+                }
+            }
+        }
+
     }
 
-
+    /**
+     * parse and draw the specified file
+     * @param AbstractFile $file
+     */
     public function drawFile(AbstractFile $file)
     {
         $outputFile = ltrim($file->getOutputFile(), "/");
@@ -63,7 +99,7 @@ class Theme
             $pathToRoot = "./";
         }
 
-        $template = new Template($file->getData(), $this->themeDir, $file->getTemplateName());
+        $template = new Template($this, $file->getData(), $file->getTemplateName());
         $template->setPathToRoot($pathToRoot);
         $template->setThemeOptions($this->options);
         $template->setProjectConfig($this->projectConfig);
@@ -73,17 +109,53 @@ class Theme
         $template->write($outputFilename);
     }
 
+    /**
+     * get assets from the theme info (theme.json file placed inside the theme directory)
+     */
+    public function getThemeInfo($name)
+    {
+        if (isset($this->themeInfos[$name])) {
+            return $this->themeInfos[$name];
+        }
+        return null;
+    }
+
+    /**
+     * similar with getThemeInfo but includes the value for all extended themes, and returns the results as an array
+     * @return array
+     */
+    public function getThemeInfoExtendAware($name)
+    {
+
+        if ($this->extendedTheme) {
+            $data = $this->extendedTheme->getThemeInfoExtendAware($name);
+        } else {
+            $data = array();
+        }
+        $info = $this->getThemeInfo($name);
+        array_unshift($data, $info);
+
+        return $data;
+    }
+
+    /**
+     * copy the static directory of the theme into the output directory
+     */
     public function buildStaticDirectory()
     {
+        $outputStt = $this->getOutputPath("asset");
+
+        if (!file_exists($outputStt)) {
+            mkdir($outputStt, 0777, true);
+        }
+
+        if ($this->extendedTheme) {
+            $this->extendedTheme->buildStaticDirectory();
+        }
+
         $themeStt = $this->getThemePath("static");
 
-        if (file_exists($themeStt)) {
-            $outputStt = $this->getOutputPath("asset");
-
-            if (!file_exists($outputStt)) {
-                mkdir($outputStt);
-            }
-
+        if ($themeStt) {
             $files = array();
 
             $this->__copyDir($themeStt, $outputStt . "/static", $files);
@@ -214,12 +286,39 @@ class Theme
         closedir($dir);
     }
 
+    /**
+     * find the path to a file in the theme or from the extended theme
+     * @param $path
+     * @return string
+     */
+    public function getThemePathExtendsAware($path)
+    {
+
+        $newPath = $this->getThemePath($path);
+        if (!$newPath) {
+            if ($this->extendedTheme) {
+                return $this->extendedTheme->getThemePathExtendsAware($path);
+            }
+        }
+        return $newPath;
+
+    }
+
+    /**
+     * find the path to a file in the theme
+     * @param $path
+     * @return string
+     */
     public function getThemePath($path)
     {
         $path   = pathinfo($this->themeDir . "/" . $path);
         $pathDirname  = $path["dirname"];
         $pathBasename = $path["basename"];
         $pathFilename = $pathDirname . "/" . $pathBasename;
+
+        if (!file_exists($pathFilename)) {
+            return null;
+        }
 
         return $pathFilename;
     }
