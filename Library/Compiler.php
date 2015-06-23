@@ -957,10 +957,24 @@ class Compiler
                 /* Temporary fix till https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits
                    the PHP builds
                 */
+                if(file_exists("ext/configure.js")) {
+                    file_put_contents(
+                        "ext/configure.js",
+                        "var PHP_ANALYZER = 'disabled';\nvar PHP_PGO = 'no';\nvar PHP_PGI = 'no';".
+                        file_get_contents("ext/configure.js")
+                    );
+                } else {
+                    file_put_contents(
+                        "ext/configure.js",
+                        "var PHP_ANALYZER = 'disabled';\nvar PHP_PGO = 'no';\nvar PHP_PGI = 'no';"
+                    );
+                }
+                /**
+                 * WINNT
+                 */
                 file_put_contents(
-                    "ext/configure.js",
-                    "var PHP_ANALYZER = 'disabled';\nvar PHP_PGO = 'no';\nvar PHP_PGI = 'no';".
-                    file_get_contents("ext/configure.js")
+                    "ext/configure.bat",
+                    "@echo off\ncscript /nologo configure.js %*"
                 );
                 $this->logger->output('Preparing configuration file...');
                 exec('cd ext && configure --enable-' . $namespace);
