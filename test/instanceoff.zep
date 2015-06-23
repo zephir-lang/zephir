@@ -45,4 +45,11 @@ class Instanceoff
 
 		return false;
 	}
+
+	public function testInstanceOf6()
+	{
+		var a;
+		let a = new static();
+		return a instanceof Instanceoff;
+	}
 }

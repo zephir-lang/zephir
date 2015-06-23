@@ -1043,6 +1043,25 @@ static json_object *xx_ret_declare_variable(xx_parser_token *T, json_object *exp
 	return ret;
 }
 
+static json_object *xx_ret_new_static_instance(json_object *parameters, xx_scanner_state *state)
+{
+	json_object *ret = json_object_new_object();
+
+	json_object_object_add(ret, "type", json_object_new_string("new"));
+	json_object_object_add(ret, "class", json_object_new_string("static"));
+	json_object_object_add(ret, "dynamic", json_object_new_int(0));
+
+	if (parameters) {
+		json_object_object_add(ret, "parameters", parameters);
+	}
+
+	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
+	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
+	json_object_object_add(ret, "char", json_object_new_int(state->active_char));
+
+	return ret;
+}
+
 static json_object *xx_ret_new_instance(int dynamic, xx_parser_token *T, json_object *parameters, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
@@ -2942,6 +2961,21 @@ xx_common_expr(R) ::= SBRACKET_OPEN SBRACKET_CLOSE . {
 /* y = [1, 2, 3] */
 xx_common_expr(R) ::= SBRACKET_OPEN xx_array_list(L) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array", L, NULL, NULL, status->scanner_state);
+}
+
+/* y = new static */
+xx_common_expr(R) ::= NEW STATIC . {
+	R = xx_ret_new_static_instance(NULL, status->scanner_state);
+}
+
+/* y = new static() */
+xx_common_expr(R) ::= NEW STATIC PARENTHESES_OPEN PARENTHESES_CLOSE . {
+	R = xx_ret_new_static_instance(NULL, status->scanner_state);
+}
+
+/* y = new static(false, x) */
+xx_common_expr(R) ::= NEW STATIC PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
+	R = xx_ret_new_static_instance(P, status->scanner_state);
 }
 
 /* y = new MyClass */

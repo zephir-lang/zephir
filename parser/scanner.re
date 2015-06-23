@@ -493,7 +493,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-        ISTRING = ([~]["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["]);
+		ISTRING = ([~]["] ([\\]["]|[\\].|[\001-\377]\[\\"])* ["]);
 		ISTRING {
 			token->opcode = XX_T_ISTRING;
 			token->value = strndup(q, YYCURSOR - q - 1);
@@ -513,7 +513,7 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 			return 0;
 		}
 
-        DCOMMENT = ("/**"([^*]+|[*]+[^/*])*[*]*"*/");
+		DCOMMENT = ("/**"([^*]+|[*]+[^/*])*[*]*"*/");
 		DCOMMENT {
 			token->opcode = XX_T_COMMENT;
 			token->value = strndup(q, YYCURSOR - q - 1);
@@ -551,8 +551,8 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 				}
 				s->active_char = ch;
 			}
-            free(token->value);
-            token->len = 0;
+			free(token->value);
+			token->len = 0;
 			q = YYCURSOR;
 			return 0;
 		}
