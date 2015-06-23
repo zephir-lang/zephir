@@ -19,6 +19,7 @@
 
 namespace Zephir\Commands;
 
+use Zephir\BaseBackend;
 use Zephir\CommandArgumentParser;
 use Zephir\Config;
 use Zephir\Logger;
@@ -87,7 +88,17 @@ abstract class CommandAbstract implements CommandInterface
      */
     public function execute(Config $config, Logger $logger)
     {
-        $compiler = new Compiler($config, $logger);
+        $params = $this->parseArguments();
+        $backend = null;
+        if (!isset($params['backend'])) {
+            $params['backend'] = BaseBackend::getActiveBackend();
+        }
+        $className = 'Zephir\\Backends\\'.$params['backend'].'\\Backend';
+        if (!class_exists($className)) {
+            throw new \InvalidArgumentException('Backend '.$params['backend'].' does not exist');
+        }
+        $backend = new $className();
+        $compiler = new Compiler($config, $logger, $backend);
         $command = $this->getCommand();
         $compiler->$command($this);
     }
