@@ -12,6 +12,10 @@ class Constants extends ConstantsParent
 
 	const C5 = 10.25;
 
+	const C5_SELF = self::C5;
+
+	const C5_BY_NAME = Constants::C5;
+
 	const C6 = "test";
 
 	const className = __CLASS__;

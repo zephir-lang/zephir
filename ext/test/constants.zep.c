@@ -46,6 +46,10 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_class_constant_double(test_constants_ce, SL("C5"), 10.25 TSRMLS_CC);
 
+	zend_declare_class_constant_double(test_constants_ce, SL("C5_SELF"), 10.25 TSRMLS_CC);
+
+	zend_declare_class_constant_double(test_constants_ce, SL("C5_BY_NAME"), 10.25 TSRMLS_CC);
+
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 
 	zend_declare_class_constant_string(test_constants_ce, SL("className"), "Test\\Constants" TSRMLS_CC);

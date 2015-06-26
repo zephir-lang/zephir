@@ -90,10 +90,6 @@ class ClassConstant
      */
     public function getValueValue()
     {
-        if ($this->value['type'] == 'static-constant-access') {
-            $this->resolveClassConstant();
-        }
-
         if (isset($this->value['value'])) {
             return $this->value['value'];
         }
@@ -122,39 +118,6 @@ class ClassConstant
     }
 
     /**
-     * Resolves a class constant
-     */
-    private function resolveClassConstant()
-    {
-        $name = $this->value['left']['value'] . '::' . $this->value['right']['value'];
-        if (defined($name)) {
-            $value = constant($name);
-
-            if (is_int($value)) {
-                $this->value['type'] =  'int';
-                $this->value['value'] = $value;
-            } elseif (is_float($value)) {
-                $this->value['type'] =  'double';
-                $this->value['value'] = $value;
-            } elseif (is_bool($value)) {
-                $this->value['type'] =  'bool';
-                if (!$value) {
-                    $this->value['value'] = 'false';
-                } else {
-                    $this->value['value'] = 'true';
-                }
-            } elseif (is_string($value)) {
-                $this->value['type'] =  'string';
-                $this->value['value'] = $value;
-            } elseif (is_null($value)) {
-                $this->value['type'] =  'null';
-            }
-        } else {
-            throw new \Exception("Cannot resolve constant");
-        }
-    }
-
-    /**
      * Produce the code to register a class constant
      *
      * @param CompilationContext $compilationContext
@@ -164,7 +127,11 @@ class ClassConstant
     public function compile(CompilationContext $compilationContext)
     {
         if ($this->value['type'] == 'static-constant-access') {
-            $this->resolveClassConstant();
+            $expression = new Expression($this->value);
+            $compiledExpression = $expression->compile($compilationContext);
+
+            $this->value['type'] = $compiledExpression->getType();
+            $this->value['value'] = $compiledExpression->getCode();
         }
 
         switch ($this->value['type']) {
