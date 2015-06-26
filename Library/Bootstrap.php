@@ -139,7 +139,6 @@ class Bootstrap
                     }
 
                     switch ($parameter) {
-
                         case '-w':
                             $config->set('silent', true);
                             break;

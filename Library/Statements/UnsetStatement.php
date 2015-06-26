@@ -44,7 +44,6 @@ class UnsetStatement extends StatementAbstract
         }
 
         switch ($expression['type']) {
-
             case 'array-access':
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
@@ -85,7 +84,6 @@ class UnsetStatement extends StatementAbstract
         }
 
         switch ($exprIndex->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -100,7 +98,6 @@ class UnsetStatement extends StatementAbstract
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $exprIndex->getOriginal());
                 switch ($variableIndex->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':

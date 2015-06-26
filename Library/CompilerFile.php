@@ -27,7 +27,6 @@ namespace Zephir;
  */
 class CompilerFile
 {
-
     /**
      * Namespace of the
      */
@@ -320,7 +319,6 @@ class CompilerFile
             }
 
             switch ($shortcut['name']) {
-
                 case 'get':
                     $classDefinition->addMethod(new ClassMethod(
                         $classDefinition,
@@ -590,7 +588,6 @@ class CompilerFile
         $namespace = null;
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
-
                 case 'namespace':
                     if ($namespace !== null) {
                         throw new CompilerException("The namespace must be defined just one time", $topStatement);
@@ -640,7 +637,6 @@ class CompilerFile
 
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
-
                 case 'class':
                     if ($class || $interface) {
                         throw new CompilerException("More than one class/interface defined in the same file", $topStatement);
@@ -836,7 +832,6 @@ class CompilerFile
 
         foreach ($this->_ir as $topStatement) {
             switch ($topStatement['type']) {
-
                 case 'class':
                     if ($interface || $class) {
                         throw new CompilerException("More than one class defined in the same file", $topStatement);

@@ -23,7 +23,6 @@ use Zephir\CompilerFile;
 
 class NamespaceHelper
 {
-
     protected $fullNamespace;
 
     protected $endNamespace;

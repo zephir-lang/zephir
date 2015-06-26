@@ -56,7 +56,6 @@ use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
  */
 class LetStatement extends StatementAbstract
 {
-
     /**
      * @param CompilationContext $compilationContext
      * @throws CompilerException
@@ -73,7 +72,6 @@ class LetStatement extends StatementAbstract
              * Get the symbol from the symbol table if necessary
              */
             switch ($assignment['assign-type']) {
-
                 case 'static-property':
                 case 'static-property-append':
                 case 'static-property-array-index':
@@ -146,7 +144,6 @@ class LetStatement extends StatementAbstract
              * There are four types of assignments
              */
             switch ($assignment['assign-type']) {
-
                 case 'variable':
                     $let = new LetVariable();
                     $let->assign($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);

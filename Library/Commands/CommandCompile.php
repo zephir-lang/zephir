@@ -29,7 +29,6 @@ use Zephir\Logger;
  */
 class CommandCompile extends CommandAbstract
 {
-
     /**
      * Commands provided by this command
      *

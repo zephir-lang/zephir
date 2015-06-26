@@ -32,6 +32,5 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class LtrimOptimizer extends TrimOptimizer
 {
-
     protected static $TRIM_WHERE = 'ZEPHIR_TRIM_LEFT';
 }

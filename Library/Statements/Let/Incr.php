@@ -60,7 +60,6 @@ class Incr
         $codePrinter = &$compilationContext->codePrinter;
 
         switch ($symbolVariable->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':

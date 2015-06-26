@@ -1452,9 +1452,9 @@ class Compiler
                 if (!isset($global['default'])) {
                     throw new Exception("Extension global variable name: '" . $name . "' contains invalid characters");
                 }
+
                 $type = $global['type'];
                 switch ($global['type']) {
-
                     case 'boolean':
                     case 'bool':
                         $type = 'zend_bool';
@@ -1500,8 +1500,8 @@ class Compiler
                 } else {
                     $scope = $iniEntry['scope'];
                 }
-                switch ($global['type']) {
 
+                switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
                         $initEntries[] =
@@ -1892,7 +1892,6 @@ class Compiler
                 $headerPrinter->output('ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' . $func->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
-
                         case 'array':
                             $headerPrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;

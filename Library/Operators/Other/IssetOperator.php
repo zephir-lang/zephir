@@ -50,9 +50,7 @@ class IssetOperator extends BaseOperator
         }
 
         switch ($left['type']) {
-
             case 'array-access':
-
                 $compilationContext->headersManager->add('kernel/array');
 
                 $exprVariable = new Expression($left['left']);
@@ -66,7 +64,6 @@ class IssetOperator extends BaseOperator
 
                 $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
                 switch ($variable->getType()) {
-
                     case 'array':
                     case 'variable':
                         break;
@@ -88,7 +85,6 @@ class IssetOperator extends BaseOperator
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 switch ($resolvedExpr->getType()) {
-
                     case 'int':
                     case 'long':
                         return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $left['right']);
@@ -101,7 +97,6 @@ class IssetOperator extends BaseOperator
                         $indexVariableName = ($indexVariable->isLocalOnly() ? '&' : '') . $indexVariable->getName();
 
                         switch ($indexVariable->getType()) {
-
                             case 'int':
                             case 'long':
                                 return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariableName . ')', $left['right']);
@@ -122,7 +117,6 @@ class IssetOperator extends BaseOperator
 
             case 'property-access':
             case 'property-dynamic-access':
-
                 $compilationContext->headersManager->add('kernel/object');
 
                 $exprVariable = new Expression($left['left']);
@@ -152,11 +146,9 @@ class IssetOperator extends BaseOperator
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 switch ($resolvedExpr->getType()) {
-
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
                         switch ($indexVariable->getType()) {
-
                             case 'variable':
                             case 'string':
                                 return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $left['right']);

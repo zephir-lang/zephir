@@ -47,7 +47,6 @@ class PlusOperator extends BaseOperator
         $left = $leftExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -57,9 +56,7 @@ class PlusOperator extends BaseOperator
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariable($left->getCode());
-
                 switch ($variable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':

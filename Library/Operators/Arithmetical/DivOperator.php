@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class DivOperator extends ArithmeticalBaseOperator
 {
-
     protected $_operator = '/';
 
     protected $_bitOperator = '-';
@@ -71,7 +70,6 @@ class DivOperator extends ArithmeticalBaseOperator
             case 'long':
             case 'ulong':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -87,7 +85,6 @@ class DivOperator extends ArithmeticalBaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -120,7 +117,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
             case 'bool':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -138,7 +134,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
             case 'double':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -200,16 +195,13 @@ class DivOperator extends ArithmeticalBaseOperator
                 break;
 
             case 'variable':
-
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
                 switch ($variableLeft->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -222,7 +214,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -256,7 +247,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -269,7 +259,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -303,7 +292,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -319,7 +307,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -359,7 +346,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             /* a + 1 */
                             case 'int':
                             case 'uint':
@@ -398,7 +384,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
-
                                     /* a(var) + a(int) */
                                     case 'int':
                                     case 'uint':
@@ -433,7 +418,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
                                     /* a(var) + a(var) */
                                     case 'variable':
-
                                         $compilationContext->headersManager->add('kernel/operators');
 
                                         if ($variableLeft->isLocalOnly()) {
@@ -476,7 +460,6 @@ class DivOperator extends ArithmeticalBaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -501,9 +484,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
 
                             case 'variable':
-
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
-
                                 switch ($variableRight->getType()) {
                                     case 'int':
                                     case 'uint':
@@ -538,7 +519,6 @@ class DivOperator extends ArithmeticalBaseOperator
                                     case 'variable':
                                         $variableRight = $compilationContext->symbolTable->getVariableForRead($variableRight->getCode(), $compilationContext, $expression);
                                         switch ($variableRight->getType()) {
-
                                             case 'int':
                                                 return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 

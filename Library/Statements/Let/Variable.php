@@ -39,10 +39,8 @@ class Variable
     private function doNumericAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
     {
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = 0;');
                         break;
@@ -69,7 +67,6 @@ class Variable
             case 'long':
             case 'ulong':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
                         break;
@@ -102,7 +99,6 @@ class Variable
             case 'char':
             case 'uchar':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
                         break;
@@ -126,7 +122,6 @@ class Variable
 
             case 'double':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
                         break;
@@ -150,7 +145,6 @@ class Variable
 
             case 'bool':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
                         break;
@@ -169,10 +163,8 @@ class Variable
                 break;
 
             case 'variable':
-
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -180,9 +172,7 @@ class Variable
                     case 'bool':
                     case 'char':
                     case 'uchar':
-
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
                                 break;
@@ -226,7 +216,6 @@ class Variable
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $codePrinter->output($variable . ' = zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
                                 break;
@@ -260,7 +249,6 @@ class Variable
     private function doDoubleAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
     {
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
@@ -285,7 +273,6 @@ class Variable
             case 'long':
             case 'ulong':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
                         break;
@@ -309,7 +296,6 @@ class Variable
 
             case 'double':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
                         break;
@@ -333,7 +319,6 @@ class Variable
 
             case 'bool':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
                         break;
@@ -358,7 +343,6 @@ class Variable
             case 'variable':
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -433,7 +417,6 @@ class Variable
     private function doStringAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
     {
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
@@ -483,7 +466,6 @@ class Variable
             case 'char':
             case 'uchar':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $symbolVariable->initVariant($compilationContext);
                         if ($resolvedExpr->getCode()) {
@@ -506,13 +488,11 @@ class Variable
             case 'variable':
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
@@ -533,7 +513,6 @@ class Variable
                     case 'char':
                     case 'uchar':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $compilationContext->headersManager->add('kernel/string');
@@ -553,7 +532,6 @@ class Variable
 
                     case 'string':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $symbolVariable->setMustInitNull(true);
                                 $symbolVariable->increaseVariantIfNull();
@@ -575,7 +553,6 @@ class Variable
 
                     case 'variable':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $symbolVariable->setMustInitNull(true);
                                 $compilationContext->symbolTable->mustGrownStack(true);
@@ -606,12 +583,10 @@ class Variable
     private function doArrayAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext)
     {
         switch ($resolvedExpr->getType()) {
-
             case 'variable':
             case 'array':
                 switch ($statement['operator']) {
                     case 'assign':
-
                         if ($variable != $resolvedExpr->getCode()) {
                             $symbolVariable->setMustInitNull(true);
                             $compilationContext->symbolTable->mustGrownStack(true);
@@ -685,7 +660,6 @@ class Variable
             case 'variable':
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -735,7 +709,6 @@ class Variable
     private function doVariableAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext, $readDetector)
     {
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 switch ($statement['operator']) {
                     case 'assign':
@@ -755,7 +728,6 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
-
                 if ($symbolVariable->isLocalOnly()) {
                     $symbol = '&' . $variable;
                 } else {
@@ -763,13 +735,10 @@ class Variable
                 }
 
                 switch ($statement['operator']) {
-
                     case 'mul-assign':
                     case 'sub-assign':
                     case 'add-assign':
-
                         switch ($statement['operator']) {
-
                             case 'mul-assign':
                                 $functionName = 'ZEPHIR_MUL_ASSIGN';
                                 break;
@@ -825,7 +794,6 @@ class Variable
 
             case 'char':
             case 'uchar':
-
                 if ($symbolVariable->isLocalOnly()) {
                     $symbol = '&' . $variable;
                 } else {
@@ -851,7 +819,6 @@ class Variable
                 break;
 
             case 'double':
-
                 if ($symbolVariable->isLocalOnly()) {
                     $symbol = '&' . $variable;
                 } else {
@@ -877,7 +844,6 @@ class Variable
                 break;
 
             case 'bool':
-
                 if ($symbolVariable->isLocalOnly()) {
                     $symbol = '&' . $variable;
                 } else {
@@ -885,7 +851,6 @@ class Variable
                 }
 
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $symbolVariable->setDynamicTypes('bool');
                         if ($resolvedExpr->getCode() == 'true') {
@@ -915,7 +880,6 @@ class Variable
 
             case 'string':
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $symbolVariable->initVariant($compilationContext);
                         $symbolVariable->setDynamicTypes('string');
@@ -939,7 +903,6 @@ class Variable
             case 'array':
                 switch ($statement['operator']) {
                     case 'assign':
-
                         if ($variable != $resolvedExpr->getCode()) {
                             $symbolVariable->setMustInitNull(true);
                             $compilationContext->symbolTable->mustGrownStack(true);
@@ -958,10 +921,8 @@ class Variable
                 break;
 
             case 'variable':
-
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -969,7 +930,6 @@ class Variable
                     case 'char':
                     case 'uchar':
                         switch ($statement['operator']) {
-
                             case 'assign':
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('long');
@@ -1047,7 +1007,6 @@ class Variable
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
-
                                 if ($variable != $resolvedExpr->getCode()) {
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);
@@ -1066,7 +1025,6 @@ class Variable
                         break;
 
                     case 'variable':
-
                         switch ($statement['operator']) {
                             case 'assign':
                                 if ($itemVariable->getName() != $variable) {
@@ -1110,9 +1068,7 @@ class Variable
 
                     case 'string':
                         switch ($statement['operator']) {
-
                             case 'assign':
-
                                 if ($itemVariable->getName() != $variable) {
                                     $symbolVariable->setMustInitNull(true);
                                     $compilationContext->symbolTable->mustGrownStack(true);

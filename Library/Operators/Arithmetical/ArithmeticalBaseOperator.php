@@ -33,7 +33,6 @@ use Zephir\CompiledExpression;
  */
 class ArithmeticalBaseOperator extends BaseOperator
 {
-
     protected $_literalOnly = true;
 
     /**
@@ -54,7 +53,6 @@ class ArithmeticalBaseOperator extends BaseOperator
         if ($compilationContext->config->get('constant-folding', 'optimizations')) {
             if ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'int') {
                 switch ($this->_operator) {
-
                     case '+':
                         return new CompiledExpression('int', $expression['left']['value'] + $expression['right']['value'], $expression);
 
@@ -68,7 +66,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
             if (($expression['left']['type'] == 'double' && $expression['right']['type'] == 'double') || ($expression['left']['type'] == 'double' && $expression['right']['type'] == 'int') || ($expression['left']['type'] == 'int' && $expression['right']['type'] == 'double')) {
                 switch ($this->_operator) {
-
                     case '+':
                         return new CompiledExpression('double', $expression['left']['value'] + $expression['right']['value'], $expression);
 
@@ -98,14 +95,11 @@ class ArithmeticalBaseOperator extends BaseOperator
         }
 
         switch ($left->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -162,7 +156,6 @@ class ArithmeticalBaseOperator extends BaseOperator
             case 'long':
             case 'ulong':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -178,7 +171,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -212,7 +204,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
             case 'bool':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -230,7 +221,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
             case 'double':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -285,16 +275,13 @@ class ArithmeticalBaseOperator extends BaseOperator
                 break;
 
             case 'variable':
-
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
-
                 switch ($variableLeft->getType()) {
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -305,7 +292,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -339,7 +325,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -352,7 +337,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -386,7 +370,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -402,7 +385,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -444,11 +426,9 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
-
                                     /* a(var) + a(var) */
                                     case 'array':
                                     case 'variable':
-
                                         $compilationContext->headersManager->add('kernel/operators');
 
                                         if ($variableLeft->isLocalOnly()) {
@@ -490,7 +470,6 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             /* a + 1 */
                             case 'int':
                             case 'uint':
@@ -516,7 +495,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
-
                                     /* a(var) + a(int) */
                                     case 'int':
                                     case 'uint':
@@ -543,9 +521,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     /* a(var) + a(var) */
                                     case 'variable':
                                     case 'array':
-
                                         $compilationContext->headersManager->add('kernel/operators');
-
                                         if ($variableLeft->isLocalOnly()) {
                                             $op1 = '&' . $variableLeft->getName();
                                         } else {
@@ -573,9 +549,7 @@ class ArithmeticalBaseOperator extends BaseOperator
                                         }
 
                                         $expected->setDynamicTypes($this->getDynamicTypes($variableLeft, $variableRight));
-
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
-
                                     default:
                                         throw new CompilerException("Cannot operate 'variable' with variable ('" . $variableRight->getType() . "')", $expression);
                                 }

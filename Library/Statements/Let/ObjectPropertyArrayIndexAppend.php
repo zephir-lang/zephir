@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyArrayIndexAppend extends ArrayIndex
 {
-
     /**
      * Compiles x->y[a][b][] = {expr} (multiple offset assignment)
      *
@@ -123,7 +122,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -142,7 +140,6 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
                     switch ($variableIndex->getType()) {
-
                         case 'int':
                         case 'uint':
                         case 'long':

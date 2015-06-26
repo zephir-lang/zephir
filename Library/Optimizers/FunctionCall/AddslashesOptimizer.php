@@ -32,7 +32,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class AddslashesOptimizer extends OptimizerAbstract
 {
-
     /**
      * @param array $expression
      * @param Call $call

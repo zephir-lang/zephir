@@ -32,9 +32,9 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 
 	zend_declare_property_string(test_constants_ce, SL("propertyC6"), "test", ZEND_ACC_PROTECTED TSRMLS_CC);
 
-	zend_declare_property_string(test_constants_ce, SL("propertyC7"), "/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\n|\\*\\/)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_constants_ce, SL("propertyC7"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
-	zend_declare_property_string(test_constants_ce, SL("propertyC8"), "/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)/", ZEND_ACC_PROTECTED TSRMLS_CC);
+	zend_declare_property_null(test_constants_ce, SL("propertyC8"), ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	zend_declare_class_constant_null(test_constants_ce, SL("C1") TSRMLS_CC);
 
@@ -45,6 +45,10 @@ ZEPHIR_INIT_CLASS(Test_Constants) {
 	zend_declare_class_constant_long(test_constants_ce, SL("C4"), 10 TSRMLS_CC);
 
 	zend_declare_class_constant_double(test_constants_ce, SL("C5"), 10.25 TSRMLS_CC);
+
+	zend_declare_class_constant_double(test_constants_ce, SL("C5_SELF"), 10.25 TSRMLS_CC);
+
+	zend_declare_class_constant_double(test_constants_ce, SL("C5_BY_NAME"), 10.25 TSRMLS_CC);
 
 	zend_declare_class_constant_string(test_constants_ce, SL("C6"), "test" TSRMLS_CC);
 

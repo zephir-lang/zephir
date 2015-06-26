@@ -278,7 +278,7 @@ class FunctionCall extends Call
         if ($this->isBuiltInFunction($functionName)) {
             return true;
         }
-        
+
         $internalName[] = 'f__'.$functionName;
         if (isset($context->classDefinition)) {
             $internalName[] = 'f_'.str_replace('\\', '_', strtolower($context->classDefinition->getNamespace())).'_'.$functionName;
@@ -456,7 +456,6 @@ class FunctionCall extends Call
     {
         $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
         switch ($variable->getType()) {
-
             case 'variable':
             case 'string':
                 break;
@@ -595,10 +594,8 @@ class FunctionCall extends Call
         $expression = $expr->getExpression();
 
         switch ($expression['call-type']) {
-
             case self::CALL_NORMAL:
                 return $this->_callNormal($expression, $compilationContext);
-
             case self::CALL_DYNAMIC:
                 return $this->_callDynamic($expression, $compilationContext);
         }

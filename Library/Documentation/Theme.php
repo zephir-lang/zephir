@@ -25,7 +25,6 @@ use Zephir\Exception;
 
 class Theme
 {
-
     protected $themeDir;
     protected $outputDir;
     protected $themeConfig;
@@ -70,7 +69,6 @@ class Theme
                 }
             }
         }
-
     }
 
     /**
@@ -126,7 +124,6 @@ class Theme
      */
     public function getThemeInfoExtendAware($name)
     {
-
         if ($this->extendedTheme) {
             $data = $this->extendedTheme->getThemeInfoExtendAware($name);
         } else {
@@ -293,7 +290,6 @@ class Theme
      */
     public function getThemePathExtendsAware($path)
     {
-
         $newPath = $this->getThemePath($path);
         if (!$newPath) {
             if ($this->extendedTheme) {
@@ -301,7 +297,6 @@ class Theme
             }
         }
         return $newPath;
-
     }
 
     /**

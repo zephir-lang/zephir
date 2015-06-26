@@ -174,7 +174,6 @@ class MethodCache
             } else {
                 $cacheable = false;
             }
-
         } else {
             $staticCacheable = false;
             $cacheable = false;

@@ -29,7 +29,6 @@ use Zephir\StatementsBlock;
  */
 class LoopBreakPass
 {
-
     protected $hasBreak = false;
 
     /**
@@ -46,7 +45,6 @@ class LoopBreakPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
-
                 case 'if':
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);

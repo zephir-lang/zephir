@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyAppend
 {
-
     /**
      * Compiles x->y[] = foo
      *
@@ -96,7 +95,6 @@ class ObjectPropertyAppend
         }
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 $codePrinter->output('zephir_update_property_array_append(' . $symbolVariable->getName() . ', SL("' . $property . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
                 break;
@@ -151,7 +149,6 @@ class ObjectPropertyAppend
             case 'variable':
                 $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableExpr->getType()) {
-
                     case 'int':
                     case 'long':
                     case 'uint':

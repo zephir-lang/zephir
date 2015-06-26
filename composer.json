@@ -24,7 +24,7 @@
         "ext-ctype": "*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "~2.1",
+        "squizlabs/php_codesniffer": "~2.3.3",
         "phpunit/phpunit": "3.7.*",
         "ext-gmp": "*",
         "ext-pdo": "*",

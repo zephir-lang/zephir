@@ -687,7 +687,6 @@ class Variable
     public function enableDefaultAutoInitValue()
     {
         switch ($this->type) {
-
             case 'boolean':
             case 'bool':
             case 'int':

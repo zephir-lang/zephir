@@ -223,7 +223,7 @@ class StaticCall extends Call
         if ($classDefinition->isBundled()) {
             //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
                 $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-                $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
             //}
 
             //$classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);

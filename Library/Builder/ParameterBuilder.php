@@ -26,7 +26,6 @@ namespace Zephir\Builder;
  */
 class ParameterBuilder
 {
-
     protected $value;
 
     public function __construct($value)

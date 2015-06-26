@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class EmptyOperator extends BaseOperator
 {
-
     /**
      * @param $expression
      * @param CompilationContext $compilationContext

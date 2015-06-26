@@ -49,10 +49,8 @@ class CastOperator extends BaseOperator
         $resolved = $expr->compile($compilationContext);
 
         switch ($expression['left']) {
-
             case 'int':
                 switch ($resolved->getType()) {
-
                     case 'null':
                         return new CompiledExpression('int', 0, $expression);
 
@@ -88,7 +86,6 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
 
                     case 'variable':
-
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
                         switch ($symbolVariable->getType()) {
@@ -118,7 +115,6 @@ class CastOperator extends BaseOperator
 
             case 'long':
                 switch ($resolved->getType()) {
-
                     case 'int':
                         return new CompiledExpression('long', $resolved->getCode(), $expression);
 
@@ -221,7 +217,6 @@ class CastOperator extends BaseOperator
 
             case 'char':
                 switch ($resolved->getType()) {
-
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
@@ -237,7 +232,6 @@ class CastOperator extends BaseOperator
 
             case 'string':
                 switch ($resolved->getType()) {
-
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
@@ -258,7 +252,6 @@ class CastOperator extends BaseOperator
 
             case 'array':
                 switch ($resolved->getType()) {
-
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
@@ -278,7 +271,6 @@ class CastOperator extends BaseOperator
                 break;
 
             case 'object':
-
                 switch ($resolved->getType()) {
                     case 'int':
                     case 'double':

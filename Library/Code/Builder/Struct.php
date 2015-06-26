@@ -102,7 +102,6 @@ class Struct
     protected function convertToCType($type)
     {
         switch ($type) {
-
             case 'boolean':
             case 'bool':
                 return 'zend_bool';
@@ -136,7 +135,6 @@ class Struct
         }
 
         switch ($global['type']) {
-
             case 'boolean':
             case 'bool':
                 return '';

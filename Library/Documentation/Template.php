@@ -10,7 +10,6 @@ use Zephir\Documentation;
 
 class Template
 {
-
     protected $template;
     protected $data;
     protected $nestedLevel;
@@ -177,7 +176,6 @@ class Template
 
     private function __getTemplatePath($fileName)
     {
-
         if ("/" == $fileName{0}) {
             return $fileName;
         }

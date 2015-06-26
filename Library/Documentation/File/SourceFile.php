@@ -23,7 +23,6 @@ use Zephir\ClassDefinition;
 
 class SourceFile extends ClassFile
 {
-
     /**
      * @var ClassDefinition
      */

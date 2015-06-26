@@ -91,7 +91,6 @@ class ObjectProperty
         $compilationContext->headersManager->add('kernel/object');
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 if ($variable == 'this') {
                     $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
@@ -104,12 +103,10 @@ class ObjectProperty
             case 'long':
             case 'uint':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                 switch ($statement['operator']) {
                     case 'mul-assign':
                     case 'sub-assign':
                     case 'add-assign':
-
                         switch ($statement['operator']) {
                             case 'mul-assign':
                                 $functionName = 'ZEPHIR_MUL_ASSIGN';
@@ -146,9 +143,7 @@ class ObjectProperty
 
             case 'char':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
-
                 switch ($statement['operator']) {
-
                     case 'assign':
                         $tempVariable->initNonReferenced($compilationContext);
                         $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getBooleanCode() . '\');');
@@ -172,7 +167,6 @@ class ObjectProperty
                     case 'mul-assign':
                     case 'sub-assign':
                     case 'add-assign':
-
                         switch ($statement['operator']) {
                             case 'mul-assign':
                                 $functionName = 'ZEPHIR_MUL_ASSIGN';
@@ -244,7 +238,8 @@ class ObjectProperty
                 }
                 break;
 
-            case 'empty-array': /* unreachable code */
+            /* unreachable code */
+            case 'empty-array':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
 
                 $codePrinter->output('array_init(' . $tempVariable->getName() . ');');

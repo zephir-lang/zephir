@@ -33,7 +33,6 @@ use Zephir\Utils;
  */
 class ConcatOperator extends BaseOperator
 {
-
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext
@@ -67,7 +66,6 @@ class ConcatOperator extends BaseOperator
             $expr = new Expression($part);
             $expr->setStringOperation(true);
             switch ($part['type']) {
-
                 case 'array-access':
                 case 'property-access':
                     $expr->setReadOnly(true);
@@ -80,11 +78,9 @@ class ConcatOperator extends BaseOperator
 
             $compiledExpr = $expr->compile($compilationContext);
             switch ($compiledExpr->getType()) {
-
                 case 'variable':
                     $variable = $compilationContext->symbolTable->getVariableForRead($compiledExpr->getCode(), $compilationContext, $originalExpr);
                     switch ($variable->getType()) {
-
                         case 'variable':
                             $key .= 'v';
                             $concatParts[] = $variable->getName();
@@ -170,7 +166,6 @@ class ConcatOperator extends BaseOperator
          */
         $leftExpr = new Expression($expression['left']);
         switch ($expression['left']['type']) {
-
             case 'array-access':
             case 'property-access':
                 $leftExpr->setReadOnly(true);
@@ -188,7 +183,6 @@ class ConcatOperator extends BaseOperator
 
         $rightExpr = new Expression($expression['right']);
         switch ($expression['left']['type']) {
-
             case 'array-access':
             case 'property-access':
                 $rightExpr->setReadOnly(true);

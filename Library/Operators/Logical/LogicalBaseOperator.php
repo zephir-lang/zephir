@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class LogicalBaseOperator extends BaseOperator
 {
-
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {
@@ -52,7 +51,6 @@ class LogicalBaseOperator extends BaseOperator
         $right = $rightExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'int':
                 switch ($right->getType()) {
                     case 'int':
@@ -67,7 +65,6 @@ class LogicalBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -108,7 +105,6 @@ class LogicalBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -138,7 +134,6 @@ class LogicalBaseOperator extends BaseOperator
                 break;
             case 'double':
                 switch ($right->getType()) {
-
                     case 'int':
                         return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
@@ -161,19 +156,16 @@ class LogicalBaseOperator extends BaseOperator
                 break;
 
             case 'variable':
-
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
                 switch ($variableLeft->getType()) {
                     case 'int':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -204,7 +196,6 @@ class LogicalBaseOperator extends BaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
@@ -214,7 +205,6 @@ class LogicalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -242,7 +232,6 @@ class LogicalBaseOperator extends BaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 
@@ -255,7 +244,6 @@ class LogicalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . '  (double) ' . $variableRight->getName(), $expression);
 
@@ -298,7 +286,6 @@ class LogicalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 
@@ -332,7 +319,6 @@ class LogicalBaseOperator extends BaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             /* a && 1 */
                             case 'int':
                             case 'double':
@@ -364,7 +350,6 @@ class LogicalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
-
                                     /* a(var) && a(int) */
                                     case 'int':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -387,9 +372,7 @@ class LogicalBaseOperator extends BaseOperator
 
                                     /* a(var) && a(var) */
                                     case 'variable':
-
                                         $compilationContext->headersManager->add('kernel/operators');
-
                                         if ($variableLeft->isLocalOnly()) {
                                             $op1 = '&' . $variableLeft->getName();
                                         } else {

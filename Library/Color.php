@@ -28,7 +28,6 @@ namespace Zephir;
  */
 class Color
 {
-
     const FG_BLACK = 1;
     const FG_DARK_GRAY = 2;
     const FG_BLUE = 3;

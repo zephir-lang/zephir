@@ -62,7 +62,6 @@ class ComparisonBaseOperator extends BaseOperator
 
             if (isset($expr['type'])) {
                 switch ($expr['type']) {
-
                     case 'identical':
                     case 'equals':
                         $operator = '==';
@@ -95,10 +94,8 @@ class ComparisonBaseOperator extends BaseOperator
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
-
                 case 'double':
                     switch ($value) {
-
                         case 'double':
                         case 'float':
                             $condition = '1 ' . $operator . ' 1';
@@ -114,7 +111,6 @@ class ComparisonBaseOperator extends BaseOperator
                 case 'integer':
                 case 'long':
                     switch ($value) {
-
                         case 'int':
                         case 'integer':
                         case 'long':
@@ -129,7 +125,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                 case 'bool':
                     switch ($value) {
-
                         case 'bool':
                         case 'boolean':
                             $condition = '1 ' . $operator . ' 1';
@@ -143,7 +138,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                 case 'array':
                     switch ($value) {
-
                         case 'array':
                             $condition = '1 ' . $operator . ' 1';
                             break;
@@ -156,7 +150,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                 case 'string':
                     switch ($value) {
-
                         case 'string':
                             $condition = '1 ' . $operator . ' 1';
                             break;
@@ -169,7 +162,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                 case 'variable':
                     switch ($value) {
-
                         case 'array':
                             $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY';
                             break;
@@ -255,10 +247,8 @@ class ComparisonBaseOperator extends BaseOperator
         $right = $rightExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'null':
                 switch ($right->getType()) {
-
                     case 'null':
                         return new CompiledExpression('bool', '(0 ' . $this->_operator . ' 0)', $expression);
 
@@ -278,7 +268,6 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -312,7 +301,6 @@ class ComparisonBaseOperator extends BaseOperator
             case 'char':
             case 'uchar':
                 switch ($right->getType()) {
-
                     case 'null':
                         return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator, $expression);
 
@@ -332,7 +320,6 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -364,9 +351,7 @@ class ComparisonBaseOperator extends BaseOperator
                 break;
 
             case 'bool':
-
                 switch ($right->getType()) {
-
                     case 'null':
                         return new CompiledExpression('bool', $left->getBooleanCode() . ' ' . $this->_operator . ' 0', $expression);
 
@@ -389,7 +374,6 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -418,9 +402,7 @@ class ComparisonBaseOperator extends BaseOperator
             case 'string':
                 $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                 $compilationContext->codePrinter->output('ZVAL_STRING(&' . $variableLeft->getName() . ', "' . $left->getCode() . '", 0);');
-
                 switch ($right->getType()) {
-
                     case 'null':
                         $compilationContext->headersManager->add('kernel/operators');
                         if ($variableLeft->isLocalOnly()) {
@@ -442,7 +424,6 @@ class ComparisonBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                         switch ($variableRight->getType()) {
-
                             case 'string':
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
@@ -464,19 +445,15 @@ class ComparisonBaseOperator extends BaseOperator
                 break;
 
             case 'variable':
-
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
                 switch ($variable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
                     case 'char':
                     case 'uchar':
-
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -496,7 +473,6 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -527,7 +503,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -543,7 +518,6 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', $left->getCode() . ' ' . $this->_operator . ' \'' . $right->getCode() . '\'', $expression);
 
                             case 'variable':
-
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
                                     case 'int':
@@ -583,7 +557,6 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -612,7 +585,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                     case 'array':
                         switch ($right->getType()) {
-
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variable->isLocalOnly()) {
@@ -625,7 +597,6 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
-
                                     case 'string':
                                     case 'variable':
                                     case 'array':
@@ -649,7 +620,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                     case 'string':
                         switch ($right->getType()) {
-
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variable->isLocalOnly()) {
@@ -671,7 +641,6 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
                                 switch ($variableRight->getType()) {
-
                                     case 'string':
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -694,7 +663,6 @@ class ComparisonBaseOperator extends BaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 if ($variable->isLocalOnly()) {

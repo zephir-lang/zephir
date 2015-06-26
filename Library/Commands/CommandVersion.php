@@ -30,7 +30,6 @@ use Zephir\Compiler;
  */
 class CommandVersion extends CommandAbstract
 {
-
     /**
      * Command provided by this command
      *

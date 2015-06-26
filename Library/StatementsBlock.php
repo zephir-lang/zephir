@@ -131,7 +131,6 @@ class StatementsBlock
              */
             if ($this->unreachable === true) {
                 switch ($statement['type']) {
-
                     case 'echo':
                         $compilationContext->logger->warning('Unreachable code', "unreachable-code", $statement['expressions'][0]);
                         break;
@@ -164,7 +163,6 @@ class StatementsBlock
             }
 
             switch ($statement['type']) {
-
                 case 'let':
                     $letStatement = new LetStatement($statement);
                     $letStatement->compile($compilationContext);

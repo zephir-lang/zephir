@@ -30,7 +30,6 @@ use Zephir\Logger;
  */
 class Documentation
 {
-
     protected $outputDirectory;
 
     /**
@@ -129,7 +128,6 @@ class Documentation
      */
     private function __prepareThemeOptions($themeConfig, CommandInterface $command)
     {
-
         $optionsFromCommand = $command->getParameter("theme-options");
 
         $parsedOptions = null;
@@ -160,7 +158,6 @@ class Documentation
         }
 
         return $options;
-
     }
 
     /**
@@ -180,7 +177,6 @@ class Documentation
      */
     private function __findOutputDirectory($themeConfig, Config $config, CommandInterface $command)
     {
-
         $outputDir = $command->getParameter("output-directory");
 
         if (!$outputDir) {
@@ -194,7 +190,6 @@ class Documentation
         }
 
         return $outputDir;
-
     }
 
     /**
@@ -268,7 +263,6 @@ class Documentation
         }
 
         return $this->findThemePathByName($themeConfig["name"]);
-
     }
 
     /**

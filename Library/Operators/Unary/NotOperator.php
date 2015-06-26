@@ -45,7 +45,6 @@ class NotOperator extends BaseOperator
         $left = $leftExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'bool':
             case 'int':
             case 'uint':
@@ -56,7 +55,6 @@ class NotOperator extends BaseOperator
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
                 switch ($variable->getType()) {
-
                     case 'bool':
                     case 'int':
                     case 'uint':

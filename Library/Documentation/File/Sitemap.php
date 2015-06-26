@@ -24,8 +24,6 @@ use Zephir\Documentation\AbstractFile;
 
 class Sitemap extends AbstractFile
 {
-
-
     protected $classes;
     protected $namespaces;
     protected $baseUrl;

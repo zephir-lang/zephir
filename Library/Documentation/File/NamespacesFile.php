@@ -24,7 +24,6 @@ use Zephir\Documentation\NamespaceAccessor;
 
 class NamespacesFile extends AbstractFile
 {
-
     /**
      * @var NamespaceAccessor
      */

@@ -33,7 +33,6 @@ use Zephir\CompiledExpression;
  */
 class FetchOperator extends BaseOperator
 {
-
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext
@@ -87,7 +86,6 @@ class FetchOperator extends BaseOperator
         }
 
         switch ($expression['right']['type']) {
-
             case 'array-access':
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
@@ -115,7 +113,6 @@ class FetchOperator extends BaseOperator
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 switch ($resolvedExpr->getType()) {
-
                     case 'int':
                     case 'long':
                     case 'uint':
@@ -127,7 +124,6 @@ class FetchOperator extends BaseOperator
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
                         switch ($indexVariable->getType()) {
-
                             case 'int':
                             case 'long':
                             case 'uint':
@@ -148,7 +144,6 @@ class FetchOperator extends BaseOperator
                 break;
 
             case 'property-access':
-
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
                 $exprVariable->setNoisy(false);
@@ -173,7 +168,6 @@ class FetchOperator extends BaseOperator
                 return new CompiledExpression('bool', 'zephir_fetch_property(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SL("' . $property . '"), PH_SILENT_CC)', $expression);
 
             case 'property-dynamic-access':
-
                 $exprVariable = new Expression($expression['right']['left']);
                 $exprVariable->setReadOnly(true);
                 $exprVariable->setNoisy(false);

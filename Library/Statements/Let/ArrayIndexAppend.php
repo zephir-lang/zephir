@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ArrayIndexAppend extends ArrayIndex
 {
-
     /**
      * Compiles foo[y][x][] = {expr} (multiple offset)
      *
@@ -83,7 +82,6 @@ class ArrayIndexAppend extends ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':

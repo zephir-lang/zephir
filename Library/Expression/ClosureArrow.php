@@ -40,7 +40,6 @@ use Zephir\Builder\RawExpressionBuilder;
  */
 class ClosureArrow extends Closure
 {
-
     /**
      * Creates a closure
      *

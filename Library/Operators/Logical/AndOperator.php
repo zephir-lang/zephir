@@ -27,7 +27,6 @@ use Zephir\Statements\LetStatement;
 
 class AndOperator extends LogicalBaseOperator
 {
-
     protected $_operator = '&&';
 
     protected $_bitOperator = '&&';

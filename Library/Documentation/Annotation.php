@@ -26,7 +26,6 @@ namespace Zephir\Documentation;
  */
 class Annotation
 {
-
     protected $name;
 
     protected $string;
