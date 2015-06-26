@@ -149,6 +149,7 @@ class StaticConstantAccess
         $constantDefinition = $classDefinition->getConstant($constant);
 
         if ($constantDefinition instanceof ClassConstant) {
+            $constantDefinition->processValue($compilationContext);
             $value = $constantDefinition->getValueValue();
             $type = $constantDefinition->getValueType();
         } else {
@@ -160,6 +161,7 @@ class StaticConstantAccess
         }
 
         switch ($type) {
+
             case 'string':
             case 'int':
             case 'double':
@@ -167,6 +169,7 @@ class StaticConstantAccess
             case 'bool':
             case 'null':
                 break;
+
             default:
                 $compilationContext->logger->warning($constantDefinition->getName(), 'nonexistent-constant', $expression);
                 return new CompiledExpression('null', null, $expression);

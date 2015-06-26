@@ -118,6 +118,23 @@ class ClassConstant
     }
 
     /**
+     * Process the value of the class constant if needed
+     *
+     * @param compilationContext $compilationContext
+     */
+    public function processValue($compilationContext)
+    {
+        if ($this->value['type'] == 'static-constant-access') {
+
+            $expression = new Expression($this->value);
+            $compiledExpression = $expression->compile($compilationContext);
+
+            $this->value['type'] = $compiledExpression->getType();
+            $this->value['value'] = $compiledExpression->getCode();
+        }
+    }
+
+    /**
      * Produce the code to register a class constant
      *
      * @param CompilationContext $compilationContext
@@ -126,13 +143,7 @@ class ClassConstant
      */
     public function compile(CompilationContext $compilationContext)
     {
-        if ($this->value['type'] == 'static-constant-access') {
-            $expression = new Expression($this->value);
-            $compiledExpression = $expression->compile($compilationContext);
-
-            $this->value['type'] = $compiledExpression->getType();
-            $this->value['value'] = $compiledExpression->getCode();
-        }
+        $this->processValue($compilationContext);
 
         switch ($this->value['type']) {
             case 'constant':
