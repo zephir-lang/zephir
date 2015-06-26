@@ -1740,7 +1740,7 @@ class ClassDefinition
                     $visibility[] = 'static';
                 }
 
-                $classConstant = new ClassProperty(
+                $classProperty = new ClassProperty(
                     $classDefinition,
                     $visibility,
                     $property->getName(),
@@ -1748,7 +1748,7 @@ class ClassDefinition
                     null,
                     null
                 );
-                $classDefinition->addProperty($classConstant);
+                $classDefinition->addProperty($classProperty);
             }
         }
 
