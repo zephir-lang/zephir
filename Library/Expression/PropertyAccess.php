@@ -94,11 +94,9 @@ class PropertyAccess
         $exprVariable = $expr->compile($compilationContext);
 
         switch ($exprVariable->getType()) {
-
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
                 switch ($variableVariable->getType()) {
-
                     case 'variable':
                         break;
 

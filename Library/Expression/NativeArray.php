@@ -88,7 +88,6 @@ class NativeArray
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($exprCompiled->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -134,7 +133,6 @@ class NativeArray
             case 'variable':
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $exprCompiled->getOriginal());
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -230,12 +228,10 @@ class NativeArray
                 $resolvedExprKey = $exprKey->compile($compilationContext);
 
                 switch ($resolvedExprKey->getType()) {
-
                     case 'string':
                         $expr = new Expression($item['value']);
                         $resolvedExpr = $expr->compile($compilationContext);
                         switch ($resolvedExpr->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -292,7 +288,6 @@ class NativeArray
                         $expr = new Expression($item['value']);
                         $resolvedExpr = $expr->compile($compilationContext);
                         switch ($resolvedExpr->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -343,10 +338,8 @@ class NativeArray
                         break;
 
                     case 'variable':
-
                         $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExprKey->getCode(), $compilationContext, $item['key']);
                         switch ($variableVariable->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -393,7 +386,6 @@ class NativeArray
                                 $expr = new Expression($item['value']);
                                 $resolvedExpr = $expr->compile($compilationContext);
                                 switch ($resolvedExpr->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -434,7 +426,6 @@ class NativeArray
                                 $expr = new Expression($item['value']);
                                 $resolvedExpr = $expr->compile($compilationContext);
                                 switch ($resolvedExpr->getType()) {
-
                                     case 'null':
                                     case 'bool':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);

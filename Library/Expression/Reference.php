@@ -75,7 +75,6 @@ class Reference
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($exprCompiled->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -121,7 +120,6 @@ class Reference
             case 'variable':
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiled->getCode(), $compilationContext, $exprCompiled->getOriginal());
                 switch ($itemVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':

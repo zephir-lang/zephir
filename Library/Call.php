@@ -260,7 +260,6 @@ class Call
                     $paramExpr = new Expression($parameter['parameter']);
 
                     switch ($parameter['parameter']['type']) {
-
                         case 'property-access':
                         case 'array-access':
                         case 'static-property-access':
@@ -341,7 +340,6 @@ class Call
         foreach ($exprParams as $position => $compiledExpression) {
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
-
                 case 'null':
                     if (isset($readOnlyParameters[$position])) {
                         $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
@@ -450,11 +448,11 @@ class Call
                 case 'variable':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
                     switch ($parameterVariable->getType()) {
-
                         case 'int':
                         case 'uint':
                         case 'long':
-                        case 'ulong': /* ulong must be stored in string */
+                        /* ulong must be stored in string */
+                        case 'ulong':
                             if (isset($readOnlyParameters[$position])) {
                                 $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                                 $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $parameterVariable->getName() . ');');
@@ -544,7 +542,6 @@ class Call
         foreach ($exprParams as $compiledExpression) {
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
-
                 case 'null':
                     $params[] = 'ZEPHIR_GLOBAL(global_null)';
                     $types[] = 'null';
@@ -616,7 +613,6 @@ class Call
                 case 'variable':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
                     switch ($parameterVariable->getType()) {
-
                         case 'int':
                         case 'uint':
                         case 'long':

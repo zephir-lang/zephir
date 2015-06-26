@@ -136,7 +136,6 @@ class ClassConstant
 
         switch ($this->value['type']) {
             case 'constant':
-
                 $constant = new Constants();
                 $compiledExpression = $constant->compile($this->value, $compilationContext);
 

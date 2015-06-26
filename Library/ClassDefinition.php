@@ -1196,7 +1196,6 @@ class ClassDefinition
                 $codePrinter->output('ZEND_BEGIN_ARG_INFO_EX(arginfo_' . strtolower($this->getCNamespace() . '_' . $this->getName() . '_' . $method->getName()) . ', 0, 0, ' . $method->getNumberOfRequiredParameters() . ')');
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
-
                         case 'array':
                             $codePrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
                             break;
@@ -1290,7 +1289,6 @@ class ClassDefinition
     public function getClassEntryByClassName($className, CompilationContext $compilationContext, $check = true)
     {
         switch (strtolower($className)) {
-
             /**
              * Zend classes
              */

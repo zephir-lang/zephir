@@ -161,7 +161,6 @@ class Constants
             $type = strtolower(gettype($constantName));
 
             switch ($type) {
-
                 case 'integer':
                     return new LiteralCompiledExpression('int', $constantName, $expression);
 

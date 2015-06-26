@@ -113,7 +113,6 @@ class NativeArrayAccess
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($exprIndex->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -124,7 +123,6 @@ class NativeArrayAccess
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
                 switch ($variableIndex->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -272,9 +270,7 @@ class NativeArrayAccess
          */
         $expr = new Expression($arrayAccess['right']);
         $exprIndex = $expr->compile($compilationContext);
-
         switch ($exprIndex->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -290,7 +286,6 @@ class NativeArrayAccess
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
                 switch ($variableIndex->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -342,11 +337,9 @@ class NativeArrayAccess
          * Only dynamic variables can be used as arrays
          */
         switch ($exprVariable->getType()) {
-
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
                 switch ($variableVariable->getType()) {
-
                     case 'variable':
                     case 'array':
                     case 'string':
@@ -365,7 +358,6 @@ class NativeArrayAccess
          * Resolve the dimension according to variable's type
          */
         switch ($variableVariable->getType()) {
-
             case 'variable':
                 return $this->_accessDimensionArray($expression, $variableVariable, $compilationContext);
 

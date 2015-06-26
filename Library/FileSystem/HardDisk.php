@@ -137,7 +137,6 @@ class HardDisk
     public function system($command, $descriptor, $destination)
     {
         switch ($descriptor) {
-
             case 'stdout':
                 system($command . ' > ' . $this->basePath . $destination);
                 break;
