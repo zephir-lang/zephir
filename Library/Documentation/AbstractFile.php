@@ -23,7 +23,6 @@ use Zephir\Config;
 
 abstract class AbstractFile
 {
-
     abstract public function getTemplateName();
 
     abstract public function getOutputFile();

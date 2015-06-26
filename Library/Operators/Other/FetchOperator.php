@@ -33,7 +33,6 @@ use Zephir\CompiledExpression;
  */
 class FetchOperator extends BaseOperator
 {
-
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext

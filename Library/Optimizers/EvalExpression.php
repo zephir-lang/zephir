@@ -33,7 +33,6 @@ use Zephir\Variable;
  */
 class EvalExpression
 {
-
     protected $_unreachable = null;
 
     protected $_unreachableElse = null;

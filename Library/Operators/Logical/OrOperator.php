@@ -27,7 +27,6 @@ use Zephir\CompiledExpression;
 
 class OrOperator extends LogicalBaseOperator
 {
-
     protected $_operator = '||';
 
     protected $_bitOperator = '||';

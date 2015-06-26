@@ -26,7 +26,6 @@ namespace Zephir\Builder;
  */
 class LiteralBuilder
 {
-
     protected $type;
 
     protected $value;

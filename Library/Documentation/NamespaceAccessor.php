@@ -23,7 +23,6 @@ use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceAccessor
 {
-
     /**
      *
      * @var \Zephir\CompilerFile[]

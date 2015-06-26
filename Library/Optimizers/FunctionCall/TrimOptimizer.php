@@ -32,7 +32,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class TrimOptimizer extends OptimizerAbstract
 {
-
     protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
 
     /**

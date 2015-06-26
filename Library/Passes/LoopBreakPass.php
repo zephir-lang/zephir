@@ -29,7 +29,6 @@ use Zephir\StatementsBlock;
  */
 class LoopBreakPass
 {
-
     protected $hasBreak = false;
 
     /**

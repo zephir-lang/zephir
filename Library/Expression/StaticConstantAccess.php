@@ -33,7 +33,6 @@ use Zephir\ClassConstant;
  */
 class StaticConstantAccess
 {
-
     protected $_expecting = true;
 
     protected $_readOnly = false;

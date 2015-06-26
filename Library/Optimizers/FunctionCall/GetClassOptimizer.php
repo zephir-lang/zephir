@@ -32,7 +32,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class GetClassOptimizer extends OptimizerAbstract
 {
-
     /**
      * @param array $expression
      * @param Call $call

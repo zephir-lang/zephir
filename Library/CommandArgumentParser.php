@@ -107,7 +107,7 @@ class CommandArgumentParser
                     $value              = substr($arg, $eqPos + 1);
                     $out[$key]          = $value;
                 }
-            } else if (substr($arg, 0, 1) === '-') { // -k=value -abc
+            } elseif (substr($arg, 0, 1) === '-') { // -k=value -abc
                 // -k=value
                 if (substr($arg, 2, 1) === '=') {
                     $key                = substr($arg, 1, 1);

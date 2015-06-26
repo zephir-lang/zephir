@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class RequireOperator extends BaseOperator
 {
-
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext

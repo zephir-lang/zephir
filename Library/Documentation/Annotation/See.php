@@ -28,7 +28,6 @@ use Zephir\Documentation\Docblock;
  */
 class See extends Annotation
 {
-    
     protected $resource;
     protected $text;
 

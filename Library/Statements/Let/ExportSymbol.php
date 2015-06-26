@@ -36,7 +36,6 @@ use Zephir\Statements\LetStatement;
  */
 class ExportSymbol
 {
-
     /**
      * Compiles {var} = {expr}
      *

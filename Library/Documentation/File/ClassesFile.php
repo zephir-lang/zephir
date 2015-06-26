@@ -24,7 +24,6 @@ use Zephir\Documentation\AbstractFile;
 
 class ClassesFile extends AbstractFile
 {
-
     /**
      * @var ClassDefinition
      */

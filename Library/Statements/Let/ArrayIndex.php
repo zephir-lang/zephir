@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ArrayIndex
 {
-
     /**
      * Resolves an item that will be assigned to an array offset
      *

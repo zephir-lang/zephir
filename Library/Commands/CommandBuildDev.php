@@ -26,7 +26,6 @@ namespace Zephir\Commands;
  */
 class CommandBuildDev extends CommandAbstract
 {
-
     /**
      * Commands provided by this command
      *

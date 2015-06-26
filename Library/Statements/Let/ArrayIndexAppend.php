@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ArrayIndexAppend extends ArrayIndex
 {
-
     /**
      * Compiles foo[y][x][] = {expr} (multiple offset)
      *

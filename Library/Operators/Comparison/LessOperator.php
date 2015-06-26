@@ -21,7 +21,6 @@ namespace Zephir\Operators\Comparison;
 
 class LessOperator extends ComparisonBaseOperator
 {
-
     protected $_operator = '<';
 
     protected $_bitOperator = '<';

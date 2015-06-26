@@ -27,7 +27,6 @@ use Zephir\CompilationContext;
  */
 abstract class OptimizerAbstract
 {
-
     /**
      * @param array $expression
      * @param Call $call

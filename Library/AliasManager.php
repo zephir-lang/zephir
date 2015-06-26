@@ -26,7 +26,6 @@ namespace Zephir;
  */
 class AliasManager
 {
-
     protected $aliases = array();
 
     /**

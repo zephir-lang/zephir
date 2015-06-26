@@ -21,7 +21,6 @@ namespace Zephir\Operators\Comparison;
 
 class EqualsOperator extends ComparisonBaseOperator
 {
-
     protected $_commutative = true;
 
     protected $_operator = '==';

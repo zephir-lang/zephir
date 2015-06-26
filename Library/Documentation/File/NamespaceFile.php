@@ -26,7 +26,6 @@ use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceFile extends AbstractFile
 {
-
     /**
      * @var \Zephir\Documentation\NamespaceHelper
      */

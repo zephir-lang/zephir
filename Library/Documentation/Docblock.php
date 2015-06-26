@@ -26,7 +26,6 @@ namespace Zephir\Documentation;
  */
 class Docblock
 {
-
     protected $description;
 
     /**

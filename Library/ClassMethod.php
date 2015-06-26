@@ -1582,7 +1582,6 @@ class ClassMethod
                      * Increase uses
                      */
                     $symbolParam->increaseUses();
-
                 } else {
                     if (isset($parameter['default'])) {
                         if (isset($parameter['data-type'])) {

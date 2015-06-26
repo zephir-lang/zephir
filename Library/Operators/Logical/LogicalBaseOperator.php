@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class LogicalBaseOperator extends BaseOperator
 {
-
     public function compile($expression, CompilationContext $compilationContext)
     {
         if (!isset($expression['left'])) {

@@ -29,7 +29,6 @@ use Zephir\Logger;
  */
 interface CommandInterface
 {
-
     /**
      * Command provided by this command
      *

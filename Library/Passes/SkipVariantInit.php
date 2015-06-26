@@ -29,7 +29,6 @@ use Zephir\StatementsBlock;
  */
 class SkipVariantInit
 {
-
     protected $branches = array();
 
     protected $variablesToSkip = array();

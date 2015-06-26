@@ -27,8 +27,6 @@ use Zephir\Documentation\Docblock;
  */
 class DocblockParser
 {
-
-
     protected $annotation;
     protected $annotationLen;
 

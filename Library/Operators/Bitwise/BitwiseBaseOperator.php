@@ -35,7 +35,6 @@ use Zephir\CompiledExpression;
  */
 class BitwiseBaseOperator extends BaseOperator
 {
-
     protected $_literalOnly = true;
 
     /**

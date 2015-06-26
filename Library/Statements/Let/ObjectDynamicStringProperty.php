@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ObjectDynamicStringProperty
 {
-
     /**
      * Compiles foo->{"x"} = {expr}
      *

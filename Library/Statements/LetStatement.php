@@ -56,7 +56,6 @@ use Zephir\Statements\Let\ExportSymbolString as LetExportSymbolString;
  */
 class LetStatement extends StatementAbstract
 {
-
     /**
      * @param CompilationContext $compilationContext
      * @throws CompilerException

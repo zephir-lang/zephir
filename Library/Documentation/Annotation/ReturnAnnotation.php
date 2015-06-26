@@ -27,7 +27,6 @@ use Zephir\Documentation\Docblock;
  */
 class ReturnAnnotation extends Annotation
 {
-    
     protected $returnType;
     protected $description;
 

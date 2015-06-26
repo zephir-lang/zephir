@@ -28,7 +28,6 @@ use Zephir\Documentation\Docblock;
  */
 class Link extends Annotation
 {
-    
     protected $uri;
     protected $linkText;
 

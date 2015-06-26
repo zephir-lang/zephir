@@ -24,7 +24,6 @@ use Zephir\CompilationContext;
 
 class BaseOperator
 {
-
     protected $_expecting = true;
 
     protected $_readOnly = false;

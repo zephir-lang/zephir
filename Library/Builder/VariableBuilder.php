@@ -26,7 +26,6 @@ namespace Zephir\Builder;
  */
 class VariableBuilder
 {
-
     protected $name;
 
     public function __construct($name)

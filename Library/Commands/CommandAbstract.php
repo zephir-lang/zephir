@@ -67,7 +67,6 @@ abstract class CommandAbstract implements CommandInterface
      */
     public function parseArguments()
     {
-
         if (count($_SERVER['argv']) > 2) {
             $commandArgs = array_slice($_SERVER['argv'], 2);
             $parser = new CommandArgumentParser();
@@ -77,7 +76,6 @@ abstract class CommandAbstract implements CommandInterface
         }
 
         return $params;
-
     }
 
     /**

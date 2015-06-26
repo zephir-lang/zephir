@@ -33,7 +33,6 @@ use Zephir\Utils;
  */
 class ConcatOperator extends BaseOperator
 {
-
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext

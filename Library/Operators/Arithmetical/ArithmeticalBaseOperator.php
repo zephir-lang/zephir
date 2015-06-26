@@ -33,7 +33,6 @@ use Zephir\CompiledExpression;
  */
 class ArithmeticalBaseOperator extends BaseOperator
 {
-
     protected $_literalOnly = true;
 
     /**

@@ -32,7 +32,6 @@ use Zephir\CompiledExpression;
  */
 class ModOperator extends ArithmeticalBaseOperator
 {
-
     protected $_operator = '%';
 
     protected $_bitOperator = '-';

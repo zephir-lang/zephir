@@ -32,7 +32,6 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class DieOptimizer extends OptimizerAbstract
 {
-
     /**
      * @param array $expression
      * @param Call $call

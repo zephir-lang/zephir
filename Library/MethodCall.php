@@ -28,7 +28,6 @@ use Zephir\Detectors\ReadDetector;
  */
 class MethodCall extends Call
 {
-
     /**
      * Function is called using a normal method name
      */

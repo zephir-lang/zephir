@@ -35,7 +35,6 @@ use Zephir\CompilationContext;
  */
 class CallGathererPass
 {
-
     protected $functionCalls = array();
 
     protected $methodCalls = array();

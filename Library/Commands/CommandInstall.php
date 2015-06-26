@@ -26,7 +26,6 @@ namespace Zephir\Commands;
  */
 class CommandInstall extends CommandAbstract
 {
-
     /**
      * Command provided by this command
      *

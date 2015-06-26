@@ -29,7 +29,6 @@ use Zephir\Logger;
  */
 class CommandFullClean extends CommandAbstract
 {
-
     /**
      * Command provided by this command
      *

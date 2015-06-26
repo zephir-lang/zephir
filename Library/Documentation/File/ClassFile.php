@@ -25,7 +25,6 @@ use Zephir\CompilerFile;
 
 class ClassFile extends AbstractFile
 {
-
     /**
      * @var ClassDefinition
      */

@@ -27,7 +27,6 @@ namespace Zephir;
  */
 class CompilerFile
 {
-
     /**
      * Namespace of the
      */

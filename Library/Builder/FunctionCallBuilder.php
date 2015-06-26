@@ -26,7 +26,6 @@ namespace Zephir\Builder;
  */
 class FunctionCallBuilder
 {
-
     protected $name;
 
     protected $parameters;

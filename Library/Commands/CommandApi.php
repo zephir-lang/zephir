@@ -62,7 +62,6 @@ class CommandApi extends CommandAbstract
 
     public function execute(Config $config, Logger $logger)
     {
-
         $params = $this->parseArguments();
 
         $allowedArgs = array(
@@ -79,7 +78,6 @@ class CommandApi extends CommandAbstract
                 } else {
                     throw new Exception("Invalid value for argument '$k'");
                 }
-
             } else {
                 throw new Exception("Invalid argument '$k''");
             }

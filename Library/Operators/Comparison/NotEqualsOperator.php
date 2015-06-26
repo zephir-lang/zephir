@@ -21,7 +21,6 @@ namespace Zephir\Operators\Comparison;
 
 class NotEqualsOperator extends ComparisonBaseOperator
 {
-
     protected $_commutative = true;
 
     protected $_inverse = true;

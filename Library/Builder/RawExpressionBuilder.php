@@ -26,7 +26,6 @@ namespace Zephir\Builder;
  */
 class RawExpressionBuilder
 {
-
     protected $expr;
 
     public function __construct($expr)

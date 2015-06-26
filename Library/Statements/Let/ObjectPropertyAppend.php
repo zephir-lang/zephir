@@ -36,7 +36,6 @@ use Zephir\GlobalConstant;
  */
 class ObjectPropertyAppend
 {
-
     /**
      * Compiles x->y[] = foo
      *
