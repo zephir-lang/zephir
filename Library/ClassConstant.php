@@ -20,6 +20,7 @@
 namespace Zephir;
 
 use Zephir\Expression\Constants;
+use Zephir\Expression\StaticConstantAccess;
 
 /**
  * ClassConstant
@@ -127,8 +128,8 @@ class ClassConstant
     public function compile(CompilationContext $compilationContext)
     {
         if ($this->value['type'] == 'static-constant-access') {
-            $expression = new Expression($this->value);
-            $compiledExpression = $expression->compile($compilationContext);
+            $staticConstantAccess = new StaticConstantAccess();
+            $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
 
             $this->value['type'] = $compiledExpression->getType();
             $this->value['value'] = $compiledExpression->getCode();

@@ -33,11 +33,20 @@ use Zephir\ClassConstant;
  */
 class StaticConstantAccess
 {
-    protected $_expecting = true;
+    /**
+     * @var bool
+     */
+    protected $expecting = true;
 
-    protected $_readOnly = false;
+    /**
+     * @var bool
+     */
+    protected $readOnly = false;
 
-    protected $_expectingVariable;
+    /**
+     * @var Variable|null
+     */
+    protected $expectingVariable;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -48,8 +57,8 @@ class StaticConstantAccess
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null)
     {
-        $this->_expecting = $expecting;
-        $this->_expectingVariable = $expectingVariable;
+        $this->expecting = $expecting;
+        $this->expectingVariable = $expectingVariable;
     }
 
     /**
@@ -59,7 +68,7 @@ class StaticConstantAccess
      */
     public function setReadOnly($readOnly)
     {
-        $this->_readOnly = $readOnly;
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -121,15 +130,15 @@ class StaticConstantAccess
             /**
              * Resolves the symbol that expects the value
              */
-            if ($this->_expecting) {
-                if ($this->_expectingVariable) {
-                    $symbolVariable = $this->_expectingVariable;
+            if ($this->expecting) {
+                if ($this->expectingVariable) {
+                    $symbolVariable = $this->expectingVariable;
                     $symbolVariable->initVariant($compilationContext);
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
             }
 
             /**
