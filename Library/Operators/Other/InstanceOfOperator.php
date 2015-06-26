@@ -59,7 +59,6 @@ class InstanceOfOperator extends BaseOperator
         $resolvedVariable = $resolved->getCode();
 
         switch ($resolved->getType()) {
-
             case 'string':
                 $className = Utils::getFullName($resolvedVariable, $context->classDefinition->getNamespace(), $context->aliasManager);
 
@@ -77,10 +76,8 @@ class InstanceOfOperator extends BaseOperator
                     }
                 }
                 break;
-
             default:
                 switch ($resolved->getType()) {
-
                     case 'variable':
                         if ($resolvedVariable == 'this') {
                             /**

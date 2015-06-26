@@ -153,7 +153,6 @@ class MutateGathererPass
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
-
             case 'bool':
             case 'double':
             case 'int':
@@ -235,7 +234,8 @@ class MutateGathererPass
             case 'clone':
             case 'likely':
             case 'unlikely':
-            case 'ternary': /* do special pass later */
+            case 'ternary':
+                /* do special pass later */
                 $this->passExpression($expression['left']);
                 break;
 
@@ -272,7 +272,6 @@ class MutateGathererPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
-
                 case 'let':
                     $this->passLetStatement($statement);
                     break;

@@ -89,7 +89,6 @@ class StaticTypeInference
         }
 
         switch ($currentType) {
-
             case 'numeric':
                 switch ($type) {
                     case 'int':
@@ -218,7 +217,6 @@ class StaticTypeInference
     {
         foreach ($statement['assignments'] as $assignment) {
             switch ($assignment['assign-type']) {
-
                 case 'variable':
                     $type = $this->passExpression($assignment['expr']);
                     if (is_string($type)) {
@@ -284,7 +282,6 @@ class StaticTypeInference
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
-
             case 'bool':
             case 'double':
             case 'int':
@@ -488,7 +485,6 @@ class StaticTypeInference
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
-
                 case 'let':
                     $this->passLetStatement($statement);
                     break;
@@ -598,7 +594,8 @@ class StaticTypeInference
                 case 'unset':
                 case 'cblock':
                 case 'comment':
-                case 'empty': // empty statement != empty operator
+                // empty statement != empty operator
+                case 'empty':
                     break;
 
                 default:

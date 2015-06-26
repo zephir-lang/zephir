@@ -640,7 +640,6 @@ class ClassMethod
         $modifiers = array();
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
-
                 case 'public':
                     $modifiers['ZEND_ACC_PUBLIC'] = $visibility;
                     break;
@@ -928,14 +927,11 @@ class ClassMethod
          * @todo Refactoring this place, move to one - static-constant-access
          */
         switch ($dataType) {
-
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-
                 switch ($parameter['default']['type']) {
-
                     case 'static-constant-access':
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
@@ -976,7 +972,6 @@ class ClassMethod
                 break;
 
             case 'double':
-
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
@@ -1102,7 +1097,6 @@ class ClassMethod
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
-
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
@@ -1121,7 +1115,6 @@ class ClassMethod
 
             case 'variable':
                 switch ($parameter['default']['type']) {
-
                     case 'static-constant-access':
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
@@ -1233,7 +1226,6 @@ class ClassMethod
         $compilationContext->headersManager->add('kernel/exception');
 
         switch ($dataType) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -1329,7 +1321,6 @@ class ClassMethod
 
         $compilationContext->headersManager->add('kernel/operators');
         switch ($dataType) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -1532,7 +1523,6 @@ class ClassMethod
                 $symbolParam = null;
                 if (isset($parameter['data-type'])) {
                     switch ($parameter['data-type']) {
-
                         case 'object':
                         case 'callable':
                         case 'resource':
@@ -1639,7 +1629,7 @@ class ClassMethod
             $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
             $codePrinter->decreaseLevel();
         }
-        
+
         /**
          * Compile the block of statements if any
          */
@@ -1671,7 +1661,6 @@ class ClassMethod
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);
                             switch ($defaultValue['type']) {
-
                                 case 'int':
                                 case 'uint':
                                 case 'long':
@@ -1731,7 +1720,6 @@ class ClassMethod
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
                         switch ($defaultValue['type']) {
-
                             case 'string':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . Utils::addSlashes($defaultValue['value'], true) . '", 1);' . PHP_EOL;
@@ -1759,7 +1747,6 @@ class ClassMethod
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
                         switch ($defaultValue['type']) {
-
                             case 'null':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
@@ -1801,7 +1788,6 @@ class ClassMethod
                 }
 
                 switch ($dataType) {
-
                     case 'object':
                     case 'callable':
                     case 'resource':
@@ -1930,7 +1916,6 @@ class ClassMethod
                 }
 
                 switch ($dataType) {
-
                     case 'object':
                     case 'callable':
                     case 'resource':
@@ -1996,7 +1981,7 @@ class ClassMethod
                 $codePrinter->preOutput("\t" . 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
             }
         }
-        
+
         /**
          * Grow the stack if needed
          */
@@ -2061,7 +2046,6 @@ class ClassMethod
         foreach ($usedVariables as $type => $variables) {
             $pointer = null;
             switch ($type) {
-
                 case 'int':
                     $code = 'int ';
                     break;
@@ -2192,7 +2176,6 @@ class ClassMethod
                 $defaultValue = $variable->getDefaultInitValue();
                 if ($defaultValue !== null) {
                     switch ($type) {
-
                         case 'variable':
                         case 'string':
                         case 'array':
@@ -2263,7 +2246,7 @@ class ClassMethod
             $codePrinter->output('}');
             $codePrinter->decreaseLevel();
         }
-        
+
         /**
          * Remove macros that grow/restore the memory frame stack if it wasn't used
          */

@@ -324,7 +324,6 @@ class LocalContextPass
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
-
             case 'bool':
             case 'double':
             case 'int':
@@ -423,8 +422,9 @@ class LocalContextPass
             case 'require':
             case 'clone':
             case 'likely':
-            case 'unlikely':
-            case 'ternary': /* do special pass later */
+            case 'unlikely'
+            /* do special pass later */:
+            case 'ternary':
                 $this->passExpression($expression['left']);
                 break;
 
@@ -457,7 +457,6 @@ class LocalContextPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
-
                 case 'let':
                     $this->passLetStatement($statement);
                     break;

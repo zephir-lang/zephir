@@ -55,7 +55,6 @@ class LikelyOperator extends BaseOperator
         if ($left->getType() == 'variable') {
             $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
             switch ($variable->getType()) {
-
                 case 'bool':
                     return new CompiledExpression('bool', 'likely(' . $variable->getName() . ')', $expression);
 

@@ -199,7 +199,7 @@ class FunctionDefinition
     {
         return $this->name;
     }
-    
+
     /**
      * Get the internal name used in generated C code
      */
@@ -616,7 +616,6 @@ class FunctionDefinition
                 break;
 
             case 'double':
-
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
@@ -742,7 +741,6 @@ class FunctionDefinition
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
-
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
@@ -761,7 +759,6 @@ class FunctionDefinition
 
             case 'variable':
                 switch ($parameter['default']['type']) {
-
                     case 'static-constant-access':
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
@@ -873,7 +870,6 @@ class FunctionDefinition
         $compilationContext->headersManager->add('kernel/exception');
 
         switch ($dataType) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -969,7 +965,6 @@ class FunctionDefinition
 
         $compilationContext->headersManager->add('kernel/operators');
         switch ($dataType) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -1346,7 +1341,6 @@ class FunctionDefinition
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);
                             switch ($defaultValue['type']) {
-
                                 case 'int':
                                 case 'uint':
                                 case 'long':
@@ -1406,7 +1400,6 @@ class FunctionDefinition
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
                         switch ($defaultValue['type']) {
-
                             case 'string':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . Utils::addSlashes($defaultValue['value'], true) . '", 1);' . PHP_EOL;
@@ -1434,7 +1427,6 @@ class FunctionDefinition
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
                         switch ($defaultValue['type']) {
-
                             case 'null':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
@@ -1476,7 +1468,6 @@ class FunctionDefinition
                 }
 
                 switch ($dataType) {
-
                     case 'object':
                     case 'callable':
                     case 'resource':
@@ -1597,7 +1588,6 @@ class FunctionDefinition
                 }
 
                 switch ($dataType) {
-
                     case 'object':
                     case 'callable':
                     case 'resource':
@@ -1646,7 +1636,7 @@ class FunctionDefinition
 
         $code .= $initCode . $initVarCode;
         $codePrinter->preOutput($code);
-        
+
         /**
          * Fetch used superglobals
          */
@@ -1719,7 +1709,6 @@ class FunctionDefinition
         foreach ($usedVariables as $type => $variables) {
             $pointer = null;
             switch ($type) {
-
                 case 'int':
                     $code = 'int ';
                     break;
@@ -1850,7 +1839,6 @@ class FunctionDefinition
                 $defaultValue = $variable->getDefaultInitValue();
                 if ($defaultValue !== null) {
                     switch ($type) {
-
                         case 'variable':
                         case 'string':
                         case 'array':

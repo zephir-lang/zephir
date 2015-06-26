@@ -139,7 +139,6 @@ class BitwiseBaseOperator extends BaseOperator
         $right = $rightExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -147,7 +146,6 @@ class BitwiseBaseOperator extends BaseOperator
             case 'char':
             case 'uchar':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -165,7 +163,6 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -198,7 +195,6 @@ class BitwiseBaseOperator extends BaseOperator
 
             case 'bool':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -212,7 +208,6 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -246,7 +241,6 @@ class BitwiseBaseOperator extends BaseOperator
 
             case 'double':
                 switch ($right->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -262,7 +256,6 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -302,10 +295,8 @@ class BitwiseBaseOperator extends BaseOperator
                 break;
 
             case 'variable':
-
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
                 switch ($variableLeft->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -313,7 +304,6 @@ class BitwiseBaseOperator extends BaseOperator
                     case 'char':
                     case 'uchar':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -326,7 +316,6 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -362,7 +351,6 @@ class BitwiseBaseOperator extends BaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -375,7 +363,6 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -409,7 +396,6 @@ class BitwiseBaseOperator extends BaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -425,7 +411,6 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($expression['right']['value'], $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                     case 'uint':
                                     case 'long':
@@ -461,7 +446,6 @@ class BitwiseBaseOperator extends BaseOperator
 
                     case 'variable':
                         switch ($right->getType()) {
-
                             /* a + 1 */
                             case 'int':
                             case 'uint':
@@ -487,7 +471,6 @@ class BitwiseBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
-
                                     /* a(var) + a(int) */
                                     case 'int':
                                     case 'uint':
@@ -513,9 +496,7 @@ class BitwiseBaseOperator extends BaseOperator
 
                                     /* a(var) + a(var) */
                                     case 'variable':
-
                                         $compilationContext->headersManager->add('kernel/operators');
-
                                         if ($variableLeft->isLocalOnly()) {
                                             $op1 = '&' . $variableLeft->getName();
                                         } else {
