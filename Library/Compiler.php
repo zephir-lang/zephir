@@ -30,7 +30,7 @@ use Zephir\FileSystem\HardDisk as FileSystem;
  */
 class Compiler
 {
-    const VERSION = '0.7.0b';
+    const VERSION = '0.7.1b';
 
     /**
      * @var CompilerFile[]
