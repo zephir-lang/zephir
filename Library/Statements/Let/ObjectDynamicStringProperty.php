@@ -88,7 +88,6 @@ class ObjectDynamicStringProperty
         $propertyVariableName = $propertyName;
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 if ($variable == 'this') {
                     $codePrinter->output('zephir_update_property_zval(this_ptr, SL("' . $propertyVariableName . '"),  ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
@@ -164,7 +163,6 @@ class ObjectDynamicStringProperty
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':

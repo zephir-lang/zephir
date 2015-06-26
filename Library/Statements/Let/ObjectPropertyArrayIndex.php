@@ -93,7 +93,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         switch ($resolvedIndex->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -109,7 +108,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($resolvedIndex->getCode(), $compilationContext, $statement['index-expr']);
                 switch ($variableIndex->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -155,12 +153,9 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         }
 
         switch ($indexVariable->getType()) {
-
             case 'variable':
             case 'string':
-
                 switch ($resolvedExpr->getType()) {
-
                     case 'null':
                         $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
                         break;
@@ -212,7 +207,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                     case 'variable':
                         $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['index-expr']);
                         switch ($variableExpr->getType()) {
-
                             case 'bool':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                                 $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableExpr->getName() . ');');
@@ -301,7 +295,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -320,7 +313,6 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
                     switch ($variableIndex->getType()) {
-
                         case 'int':
                         case 'uint':
                         case 'long':

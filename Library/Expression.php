@@ -298,7 +298,6 @@ class Expression
         $type = $expression['type'];
 
         switch ($type) {
-
             case 'null':
                 return new LiteralCompiledExpression('null', null, $expression);
 
@@ -437,7 +436,7 @@ class Expression
                 $expr->setReadOnly($this->isReadOnly());
                 $expr->setExpectReturn($this->_expecting, $this->_expectingVariable);
                 return $expr->compile($expression, $compilationContext);
-                
+
             case 'bitwise_not':
                 $expr = new BitwiseNotOperator();
                 $expr->setReadOnly($this->isReadOnly());

@@ -84,7 +84,6 @@ class StaticPropertyArrayIndex extends ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':
@@ -103,7 +102,6 @@ class StaticPropertyArrayIndex extends ArrayIndex
                 case 'variable':
                     $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
                     switch ($variableIndex->getType()) {
-
                         case 'int':
                         case 'uint':
                         case 'long':

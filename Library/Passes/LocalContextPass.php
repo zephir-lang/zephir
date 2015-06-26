@@ -191,9 +191,7 @@ class LocalContextPass
             $this->increaseMutations($assignment['variable']);
 
             switch ($assignment['assign-type']) {
-
                 case 'variable':
-
                     switch ($assignment['operator']) {
                         case 'mul-assign':
                         case 'sub-assign':
@@ -203,7 +201,6 @@ class LocalContextPass
                     }
 
                     switch ($assignment['expr']['type']) {
-
                         case 'property-access':
                         case 'property-dynamic-access':
                         case 'property-string-access':
@@ -262,7 +259,6 @@ class LocalContextPass
                 case 'array-index':
                 case 'object-property-array-index':
                 case 'object-property-append':
-
                     switch ($assignment['expr']['type']) {
                         case 'variable':
                             $this->markVariableNoLocal($assignment['expr']['value']);

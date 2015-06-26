@@ -594,10 +594,8 @@ class FunctionCall extends Call
         $expression = $expr->getExpression();
 
         switch ($expression['call-type']) {
-
             case self::CALL_NORMAL:
                 return $this->_callNormal($expression, $compilationContext);
-
             case self::CALL_DYNAMIC:
                 return $this->_callDynamic($expression, $compilationContext);
         }

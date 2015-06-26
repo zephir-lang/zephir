@@ -155,7 +155,6 @@ class CallGathererPass
     public function passExpression(array $expression)
     {
         switch ($expression['type']) {
-
             case 'bool':
             case 'double':
             case 'int':
@@ -311,7 +310,6 @@ class CallGathererPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
-
                 case 'let':
                     $this->passLetStatement($statement);
                     break;
@@ -431,7 +429,8 @@ class CallGathererPass
                 case 'unset':
                 case 'cblock':
                 case 'comment':
-                case 'empty': // empty statement != empty operator
+                // empty statement != empty operator
+                case 'empty':
                     break;
 
                 default:

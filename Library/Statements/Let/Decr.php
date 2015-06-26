@@ -57,7 +57,6 @@ class Decr
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($symbolVariable->getType()) {
-
             case 'int':
             case 'uint':
             case 'long':
@@ -69,7 +68,6 @@ class Decr
                 break;
 
             case 'variable':
-
                 /**
                  * Variable is probably not initialized here
                  */

@@ -109,17 +109,13 @@ class MethodCall extends Call
 
         $builtInType = false;
         switch ($exprCompiledVariable->getType()) {
-
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
                 switch ($variableVariable->getType()) {
-
                     case 'variable':
                         $caller = $variableVariable;
                         break;
-
                     default:
-
                         /* Check if there is a built-in type optimizer available */
                         $builtInTypeClass = 'Zephir\Types\\' . ucfirst($variableVariable->getType()) . 'Type';
                         if (class_exists($builtInTypeClass)) {
@@ -133,9 +129,7 @@ class MethodCall extends Call
                         }
                 }
                 break;
-
             default:
-
                 /* Check if there is a built-in type optimizer available */
                 $builtInTypeClass = 'Zephir\Types\\' . ucfirst($exprCompiledVariable->getType()) . 'Type';
                 if (class_exists($builtInTypeClass)) {
@@ -482,11 +476,9 @@ class MethodCall extends Call
                              */
                             if ($resolvedTypes[$n] != $parameter['data-type']) {
                                 switch ($resolvedTypes[$n]) {
-
                                     case 'bool':
                                     case 'boolean':
                                         switch ($parameter['data-type']) {
-
                                             /* compatible types */
                                             case 'bool':
                                             case 'boolean':
@@ -501,7 +493,6 @@ class MethodCall extends Call
 
                                     case 'array':
                                         switch ($parameter['data-type']) {
-
                                             /* compatible types */
                                             case 'array':
                                             case 'variable':
@@ -523,7 +514,6 @@ class MethodCall extends Call
 
                                     case 'callable':
                                         switch ($parameter['data-type']) {
-
                                             /* compatible types */
                                             case 'callable':
                                             case 'variable':
@@ -537,7 +527,6 @@ class MethodCall extends Call
 
                                     case 'string':
                                         switch ($parameter['data-type']) {
-
                                             /* compatible types */
                                             case 'string':
                                             case 'variable':

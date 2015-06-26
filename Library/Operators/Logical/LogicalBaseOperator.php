@@ -51,7 +51,6 @@ class LogicalBaseOperator extends BaseOperator
         $right = $rightExpr->compile($compilationContext);
 
         switch ($left->getType()) {
-
             case 'int':
                 switch ($right->getType()) {
                     case 'int':
@@ -66,7 +65,6 @@ class LogicalBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -107,7 +105,6 @@ class LogicalBaseOperator extends BaseOperator
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
                         switch ($variableRight->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -137,7 +134,6 @@ class LogicalBaseOperator extends BaseOperator
                 break;
             case 'double':
                 switch ($right->getType()) {
-
                     case 'int':
                         return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
@@ -160,19 +156,16 @@ class LogicalBaseOperator extends BaseOperator
                 break;
 
             case 'variable':
-
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->resolve(null, $compilationContext), $compilationContext, $expression);
                 switch ($variableLeft->getType()) {
                     case 'int':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -203,7 +196,6 @@ class LogicalBaseOperator extends BaseOperator
 
                     case 'bool':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode() . ')', $expression);
 
@@ -213,7 +205,6 @@ class LogicalBaseOperator extends BaseOperator
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
                                 switch ($variableRight->getType()) {
-
                                     case 'int':
                                         return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -241,7 +232,6 @@ class LogicalBaseOperator extends BaseOperator
 
                     case 'double':
                         switch ($right->getType()) {
-
                             case 'int':
                                 return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' ' . $right->getCode(), $expression);
 

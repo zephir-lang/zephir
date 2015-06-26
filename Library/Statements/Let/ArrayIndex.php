@@ -47,7 +47,6 @@ class ArrayIndex
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 $symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
                 break;
@@ -94,7 +93,6 @@ class ArrayIndex
             case 'variable':
                 $variableExpr = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $resolvedExpr->getOriginal());
                 switch ($variableExpr->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':
@@ -173,9 +171,8 @@ class ArrayIndex
             $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
             $codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&' . $variable . ');');
         }
-        
-        switch ($exprIndex->getType()) {
 
+        switch ($exprIndex->getType()) {
             case 'int':
             case 'uint':
             case 'long':
@@ -190,7 +187,6 @@ class ArrayIndex
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
                 $variableIndexName = ($variableIndex->isLocalOnly() ? '&' : '') . $variableIndex->getName();
-
                 switch ($variableIndex->getType()) {
                     case 'int':
                     case 'uint':
@@ -211,7 +207,7 @@ class ArrayIndex
             default:
                 throw new CompilerException("Value: " . $exprIndex->getType() . " cannot be used as array index", $statement);
         }
-        
+
         if ($isGlobalVariable) {
             $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
             $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
@@ -265,7 +261,6 @@ class ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':
