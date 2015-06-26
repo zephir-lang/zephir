@@ -278,7 +278,7 @@ class FunctionCall extends Call
         if ($this->isBuiltInFunction($functionName)) {
             return true;
         }
-        
+
         $internalName[] = 'f__'.$functionName;
         if (isset($context->classDefinition)) {
             $internalName[] = 'f_'.str_replace('\\', '_', strtolower($context->classDefinition->getNamespace())).'_'.$functionName;
@@ -456,7 +456,6 @@ class FunctionCall extends Call
     {
         $variable = $compilationContext->symbolTable->getVariableForRead($expression['name'], $compilationContext, $expression);
         switch ($variable->getType()) {
-
             case 'variable':
             case 'string':
                 break;

@@ -43,7 +43,6 @@ class EchoStatement extends StatementAbstract
             $resolvedExpr = $expr->compile($compilationContext);
 
             switch ($resolvedExpr->getType()) {
-
                 case 'int':
                     $compilationContext->codePrinter->output('php_printf("%d", ' . $resolvedExpr->getCode() . ');');
                     break;
@@ -75,7 +74,6 @@ class EchoStatement extends StatementAbstract
                 case 'variable':
                     $variable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $echoExpr);
                     switch ($variable->getType()) {
-
                         case 'int':
                             $compilationContext->codePrinter->output('php_printf("%d", ' . $variable->getName() . ');');
                             break;

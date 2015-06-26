@@ -159,7 +159,6 @@ class ClassProperty
 
         foreach ($this->visibility as $visibility) {
             switch ($visibility) {
-
                 case 'protected':
                     $modifiers['ZEND_ACC_PROTECTED'] = true;
                     break;
@@ -436,7 +435,6 @@ class ClassProperty
         }
 
         switch ($type) {
-
             case 'long':
             case 'int':
                 $codePrinter->output("zend_declare_property_long(" . $compilationContext->classDefinition->getClassEntry() . ", SL(\"" . $this->getName() . "\"), " . $value . ", " . $this->getVisibilityAccesor() . " TSRMLS_CC);");

@@ -83,7 +83,6 @@ class ArrayIndexAppend extends ArrayIndex
         $offsetItems = array();
         foreach ($offsetExprs as $offsetExpr) {
             switch ($offsetExpr->getType()) {
-
                 case 'int':
                 case 'uint':
                 case 'long':

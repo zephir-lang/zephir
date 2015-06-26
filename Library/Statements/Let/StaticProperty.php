@@ -100,7 +100,6 @@ class StaticProperty
         $classEntry = $classDefinition->getClassEntry($compilationContext);
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &(ZEPHIR_GLOBAL(global_null)) TSRMLS_CC);');
                 break;
@@ -187,7 +186,6 @@ class StaticProperty
             case 'variable':
                 $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                 switch ($variableVariable->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'long':

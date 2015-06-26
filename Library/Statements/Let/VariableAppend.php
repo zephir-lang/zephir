@@ -125,7 +125,6 @@ class VariableAppend
                     case 'variable':
                         $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                         switch ($exprVariable->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':

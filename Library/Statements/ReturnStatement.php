@@ -92,7 +92,6 @@ class ReturnStatement extends StatementAbstract
              */
             if ($currentMethod->hasReturnTypes()) {
                 switch ($resolvedExpr->getType()) {
-
                     case 'null':
                         if (!$currentMethod->areReturnTypesNullCompatible()) {
                             throw new CompilerException("Returning type: " . $resolvedExpr->getType() . " but this type is not compatible with return-type hints declared in the method", $statement['expr']);
@@ -130,7 +129,6 @@ class ReturnStatement extends StatementAbstract
                     case 'variable':
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
                         switch ($symbolVariable->getType()) {
-
                             case 'int':
                             case 'uint':
                             case 'long':
@@ -167,7 +165,6 @@ class ReturnStatement extends StatementAbstract
             }
 
             switch ($resolvedExpr->getType()) {
-
                 case 'null':
                     $codePrinter->output('RETURN_MM_NULL();');
                     break;
@@ -202,7 +199,6 @@ class ReturnStatement extends StatementAbstract
                     break;
 
                 case 'variable':
-
                     if (!isset($symbolVariable)) {
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement['expr']);
                     }

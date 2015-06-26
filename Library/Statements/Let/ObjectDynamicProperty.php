@@ -90,7 +90,6 @@ class ObjectDynamicProperty
         $propertyVariableName = $compilationContext->symbolTable->getVariable($propertyName);
 
         switch ($resolvedExpr->getType()) {
-
             case 'null':
                 if ($variable == 'this') {
                     $codePrinter->output('zephir_update_property_zval_zval(this_ptr, ' . $propertyVariableName->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');

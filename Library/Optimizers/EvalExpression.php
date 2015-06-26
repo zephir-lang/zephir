@@ -106,7 +106,6 @@ class EvalExpression
          * Generate the condition according to the value returned by the evaluated expression
          */
         switch ($compiledExpression->getType()) {
-
             case 'null':
                 $this->_unreachable = true;
                 return '0';
@@ -142,9 +141,7 @@ class EvalExpression
                 return $code;
 
             case 'variable':
-
                 $variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
-
                 $possibleValue = $variableRight->getPossibleValue();
                 if (is_object($possibleValue)) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
@@ -155,7 +152,6 @@ class EvalExpression
                         if ($possibleValueBranch->getType() == Branch::TYPE_ROOT) {
                             if ($possibleValue instanceof LiteralCompiledExpression) {
                                 switch ($possibleValue->getType()) {
-
                                     case 'null':
                                         $this->_unreachable = true;
                                         break;
@@ -199,7 +195,6 @@ class EvalExpression
                  * Evaluate the variable
                  */
                 switch ($variableRight->getType()) {
-
                     case 'int':
                     case 'uint':
                     case 'char':

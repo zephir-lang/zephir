@@ -869,7 +869,6 @@ class ForStatement extends StatementAbstract
 
         $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->_statement['expr']);
         switch ($exprVariable->getType()) {
-
             case 'variable':
             case 'array':
                 $this->compileHashTraverse($expression, $compilationContext, $exprVariable);
