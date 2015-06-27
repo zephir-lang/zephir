@@ -2,8 +2,8 @@
 export CC="gcc"
 export CFLAGS="-O2 -Wall -fvisibility=hidden -fno-delete-null-pointer-checks -finline-functions -fno-builtin-memcmp -flto -DZEPHIR_RELEASE=1 -fprofile-use"
 
-if [ -f .libs/%PROJECT_LOWER%.gcda ]; then
-        cp .libs/%PROJECT_LOWER%.gcda .
+if [ -f .libs/test.gcda ]; then
+        cp .libs/test.gcda .
 else
         echo "Profile info was not found"
 fi
@@ -14,5 +14,5 @@ if [ -f Makefile ]; then
 fi
 
 phpize --silent
-./configure --silent --enable-%PROJECT_LOWER%
+./configure --silent --enable-test
 make --silent && sudo make --silent install
