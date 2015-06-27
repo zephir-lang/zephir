@@ -125,7 +125,6 @@ class ClassConstant
     public function processValue($compilationContext)
     {
         if ($this->value['type'] == 'static-constant-access') {
-
             $expression = new Expression($this->value);
             $compiledExpression = $expression->compile($compilationContext);
 
