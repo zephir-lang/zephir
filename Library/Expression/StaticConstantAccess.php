@@ -161,7 +161,6 @@ class StaticConstantAccess
         }
 
         switch ($type) {
-
             case 'string':
             case 'int':
             case 'double':
