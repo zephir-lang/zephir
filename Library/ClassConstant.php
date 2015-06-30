@@ -124,12 +124,26 @@ class ClassConstant
      */
     public function processValue($compilationContext)
     {
+        if ($this->value['type'] == 'constant') {
+            $constant = new Constants();
+            $compiledExpression = $constant->compile($this->value, $compilationContext);
+
+            $this->value = array(
+                'type' => $compiledExpression->getType(),
+                'value' => $compiledExpression->getCode()
+            );
+            return;
+        }
+
         if ($this->value['type'] == 'static-constant-access') {
             $expression = new Expression($this->value);
             $compiledExpression = $expression->compile($compilationContext);
 
-            $this->value['type'] = $compiledExpression->getType();
-            $this->value['value'] = $compiledExpression->getCode();
+            $this->value = array(
+                'type' => $compiledExpression->getType(),
+                'value' => $compiledExpression->getCode()
+            );
+            return;
         }
     }
 
@@ -145,15 +159,6 @@ class ClassConstant
         $this->processValue($compilationContext);
 
         switch ($this->value['type']) {
-            case 'constant':
-                $constant = new Constants();
-                $compiledExpression = $constant->compile($this->value, $compilationContext);
-
-                $this->value['type'] = $compiledExpression->getType();
-                $this->value['value'] = $compiledExpression->getCode();
-
-                $this->compile($compilationContext);
-                return;
 
             case 'long':
             case 'int':
