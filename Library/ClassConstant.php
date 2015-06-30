@@ -159,7 +159,6 @@ class ClassConstant
         $this->processValue($compilationContext);
 
         switch ($this->value['type']) {
-
             case 'long':
             case 'int':
                 $compilationContext->codePrinter->output("zend_declare_class_constant_long(" . $compilationContext->classDefinition->getClassEntry($compilationContext) . ", SL(\"" . $this->getName() . "\"), " . $this->value['value'] . " TSRMLS_CC);");
