@@ -112,7 +112,9 @@ class VarExportOptimizer extends OptimizerAbstract
          * let a = var_export(val);
          */
         if ($symbolVariable) {
-            if ($call->mustInitSymbolVariable()) {
+            if ($symbolVariable->getName() == 'return_value') {
+                $symbolVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
+            } else {
                 $symbolVariable->initVariant($context);
             }
             $context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $variable->getName() . ') TSRMLS_CC);');
