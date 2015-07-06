@@ -16,14 +16,18 @@
 #include "kernel/array.h"
 #include "kernel/object.h"
 
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/367
+ * @link https://github.com/phalcon/zephir/issues/188
+ */
 ZEPHIR_INIT_CLASS(Test_Properties_StaticPropertyArray) {
 
-	ZEPHIR_REGISTER_CLASS(Test\\Properties, StaticPropertyArray, test, properties_staticpropertyarray, test_properties_staticpropertyarray_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Test\\Properties, StaticPropertyArray, test, properties_staticpropertyarray, NULL, 0);
 
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
 
 	/**
 	 * This is a public property with an initial array value
@@ -34,7 +38,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPropertyArray) {
 
 }
 
-void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D) {
+void zephir_init_static_properties_Test_Properties_StaticPropertyArray_Test_Properties_StaticPropertyArray(TSRMLS_D) {
 
 	zval *_1 = NULL;
 	zval *_0;

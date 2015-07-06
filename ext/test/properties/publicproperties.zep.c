@@ -17,6 +17,7 @@
 #include "kernel/operators.h"
 #include "kernel/array.h"
 
+
 ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Properties, PublicProperties, test, properties_publicproperties, test_properties_publicproperties_method_entry, 0);
@@ -59,7 +60,6 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/**
 	 * This is a public property with an initial array value
@@ -84,7 +84,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 
 	zend_declare_property_long(test_properties_publicproperties_ce, SL("testPropertyFromClassNameConstantValue"), 123, ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	test_properties_publicproperties_ce->create_object = zephir_init_properties;
+	test_properties_publicproperties_ce->create_object = zephir_init_properties_Test_Properties_PublicProperties;
 	zend_declare_class_constant_long(test_properties_publicproperties_ce, SL("TEST_CONST"), 123 TSRMLS_CC);
 
 	return SUCCESS;
@@ -122,7 +122,7 @@ PHP_METHOD(Test_Properties_PublicProperties, test394Issue) {
 
 }
 
-static zend_object_value zephir_init_properties(zend_class_entry *class_type TSRMLS_DC) {
+static zend_object_value zephir_init_properties_Test_Properties_PublicProperties(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval *_3 = NULL, *_4 = NULL;
 		zval *_0, *_1 = NULL, *_2, *_5, *_6, *_7;

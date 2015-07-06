@@ -1621,7 +1621,7 @@ class ClassMethod
         /**
          * Initialize the properties within create_object, handler code
          */
-        if ($this->getName() == 'zephir_init_properties') {
+        if (preg_match('/^zephir_init_properties/', $this->getName())) {
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
             $codePrinter->increaseLevel();
@@ -2239,7 +2239,7 @@ class ClassMethod
             }
         }
 
-        if ($this->getName() == 'zephir_init_properties') {
+        if (preg_match('/^zephir_init_properties/', $this->getName())) {
             $codePrinter->increaseLevel();
             $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
             $codePrinter->decreaseLevel();

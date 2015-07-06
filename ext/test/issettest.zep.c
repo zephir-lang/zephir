@@ -17,13 +17,16 @@
 #include "kernel/operators.h"
 #include "kernel/object.h"
 
+
+/**
+ * Unset statement tests
+ */
 ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, IssetTest, test, issettest, test_issettest_method_entry, 0);
 
-	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	test_issettest_ce->create_object = zephir_init_properties;
+	test_issettest_ce->create_object = zephir_init_properties_Test_IssetTest;
 	return SUCCESS;
 
 }
@@ -162,7 +165,7 @@ PHP_METHOD(Test_IssetTest, testIssetDynamicProperty2) {
 
 }
 
-static zend_object_value zephir_init_properties(zend_class_entry *class_type TSRMLS_DC) {
+static zend_object_value zephir_init_properties_Test_IssetTest(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval *_1;
 		zval *_0;

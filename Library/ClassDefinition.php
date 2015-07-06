@@ -632,6 +632,22 @@ class ClassDefinition
     }
 
     /**
+     * Updates an existing method definition
+     *
+     * @param ClassMethod $method
+     * @param array $statement
+     */
+    public function updateMethod(ClassMethod $method, $statement = null)
+    {
+        $methodName = strtolower($method->getName());
+        if (!isset($this->methods[$methodName])) {
+            throw new CompilerException("Method '" . $method->getName() . "' does not exist", $statement);
+        }
+
+        $this->methods[$methodName] = $method;
+    }
+
+    /**
      * Returns all properties defined in the class
      *
      * @return ClassProperty[]
@@ -864,13 +880,15 @@ class ClassDefinition
      */
     private function getInternalSignature(ClassMethod $method)
     {
-        if ($method->getName() == 'zephir_init_properties') {
+        if (preg_match('/^zephir_init_properties/', $method->getName())) {
             return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
         }
-        if ($method->getName() == 'zephir_init_static_properties') {
+
+        if (preg_match('/^zephir_init_static_properties/', $method->getName())) {
             $classDefinition = $method->getClassDefinition();
             return 'void ' . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_D)';
         }
+
         $signatureParameters = array();
         $parameters = $method->getParameters();
         if (is_object($parameters)) {
@@ -921,7 +939,8 @@ class ClassDefinition
         /**
          * The ZEPHIR_INIT_CLASS defines properties and constants exported by the class
          */
-        $codePrinter->output('ZEPHIR_INIT_CLASS(' . $this->getCNamespace() . '_' . $this->getName() . ') {');
+        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        $codePrinter->output('ZEPHIR_INIT_CLASS(' . $initClassName . ') {');
         $codePrinter->outputBlankLine();
 
         $codePrinter->increaseLevel();
@@ -930,7 +949,7 @@ class ClassDefinition
          * Method entry
          */
         $methods = &$this->methods;
-        $initMethod = $this->getMethod('zephir_init_properties');
+        $initMethod = $this->getMethod('zephir_init_properties_' . $initClassName);
 
         if (count($methods) || $initMethod) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -980,19 +999,6 @@ class ClassDefinition
             $codePrinter->outputBlankLine();
         }
 
-        $needBreak = true;
-
-        /**
-         * @todo Remove after removing support for php 5.3
-         */
-        $currentClassHref = & $this;
-
-        $this->eventsManager->listen('setMethod', function (ClassMethod $method) use (&$methods, &$currentClassHref, $compilationContext, &$needBreak) {
-            $needBreak = false;
-            $methods[$method->getName()] = $method;
-            $compilationContext->classDefinition->setMethods($methods);
-        });
-
         /**
          * Compile properties
          * @var $property ClassProperty
@@ -1007,15 +1013,9 @@ class ClassDefinition
             $codePrinter->outputBlankLine();
         }
 
-        $initMethod = $this->getMethod('zephir_init_properties');
+        $initMethod = $this->getMethod('zephir_init_properties_' . $initClassName);
         if ($initMethod) {
-            $codePrinter->output($namespace . '_' . strtolower($this->getSCName($namespace)) . '_ce->create_object = zephir_init_properties;');
-        }
-
-        if (!$needBreak) {
-            $compilationContext->codePrinter->clear();
-            $currentClassHref->compile($compilationContext);
-            return;
+            $codePrinter->output($namespace . '_' . strtolower($this->getSCName($namespace)) . '_ce->create_object = zephir_init_properties_' . $initClassName . ';');
         }
 
         /**
@@ -1116,7 +1116,7 @@ class ClassDefinition
             $constructMethod = new ClassMethod(
                 $this,
                 array('internal'),
-                'zephir_init_properties',
+                'zephir_init_properties_' . $initClassName,
                 null,
                 $initMethod->getStatementsBlock()
             );

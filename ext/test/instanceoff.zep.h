@@ -8,6 +8,7 @@ PHP_METHOD(Test_Instanceoff, testInstanceOf2);
 PHP_METHOD(Test_Instanceoff, testInstanceOf3);
 PHP_METHOD(Test_Instanceoff, testInstanceOf4);
 PHP_METHOD(Test_Instanceoff, testInstanceOf5);
+PHP_METHOD(Test_Instanceoff, testInstanceOf6);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_test_instanceoff_testinstanceof4, 0, 0, 1)
 	ZEND_ARG_INFO(0, a)
@@ -23,5 +24,6 @@ ZEPHIR_INIT_FUNCS(test_instanceoff_method_entry) {
 	PHP_ME(Test_Instanceoff, testInstanceOf3, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Instanceoff, testInstanceOf4, arginfo_test_instanceoff_testinstanceof4, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Instanceoff, testInstanceOf5, arginfo_test_instanceoff_testinstanceof5, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Instanceoff, testInstanceOf6, NULL, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

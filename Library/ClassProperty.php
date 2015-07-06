@@ -253,16 +253,19 @@ class ClassProperty
             case 'array':
             case 'empty-array':
                 $classDefinition = $this->classDefinition;
+
+                $initClassName = $classDefinition->getCNamespace() . '_' . $classDefinition->getName();
                 if ($this->isStatic()) {
-                    $methodName = 'zephir_init_static_properties';
+                    $methodName = 'zephir_init_static_properties_' . $initClassName;
                     $visibility = array('internal');
                 } else {
-                    $methodName = 'zephir_init_properties';
+                    $methodName = 'zephir_init_properties_' . $initClassName;
                     $visibility = array('internal');
                 }
 
                 $constructParentMethod = null;
                 $constructMethod = $classDefinition->getMethod($methodName);
+
                 /**
                  * Make sure we do not steal the construct method of the parent,
                  * but initialize our own with the inherited statements to ensure
@@ -272,6 +275,7 @@ class ClassProperty
                     $constructParentMethod = $constructMethod;
                     $constructMethod = null;
                 }
+
                 if ($constructMethod) {
                     $statementsBlock = $constructMethod->getStatementsBlock();
                     if ($statementsBlock) {
@@ -301,12 +305,12 @@ class ClassProperty
 
                             $statementsBlock->setStatements($newStatements);
                             $constructMethod->setStatementsBlock($statementsBlock);
-                            $classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
+                            $classDefinition->updateMethod($constructMethod);
                         }
                     } else {
                         $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
                         $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
-                        $classDefinition->getEventsManager()->dispatch('setMethod', array($constructMethod));
+                        $classDefinition->updateMethod($constructMethod);
                     }
                 } else {
                     $statements = array();
@@ -317,16 +321,19 @@ class ClassProperty
                     $statements[] = $this->getLetStatement()->get();
                     $statementsBlock = new StatementsBlock($statements);
 
-                    $classDefinition->getEventsManager()->dispatch('setMethod', array(new ClassMethod(
-                        $classDefinition,
-                        $visibility,
-                        $methodName,
-                        null,
-                        $statementsBlock
-                    ), null));
+                    $classDefinition->addMethod(
+                        new ClassMethod(
+                            $classDefinition,
+                            $visibility,
+                            $methodName,
+                            null,
+                            $statementsBlock
+                        )
+                    );
                     return false;
                 }
                 //continue
+
             case 'null':
                 $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
                 break;

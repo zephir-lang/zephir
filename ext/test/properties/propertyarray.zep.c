@@ -17,6 +17,10 @@
 #include "kernel/object.h"
 #include "kernel/operators.h"
 
+
+/**
+ * @link https://github.com/phalcon/zephir/issues/520
+ */
 ZEPHIR_INIT_CLASS(Test_Properties_PropertyArray) {
 
 	ZEPHIR_REGISTER_CLASS(Test\\Properties, PropertyArray, test, properties_propertyarray, test_properties_propertyarray_method_entry, 0);
@@ -24,14 +28,13 @@ ZEPHIR_INIT_CLASS(Test_Properties_PropertyArray) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
-	zend_declare_property_null(test_properties_propertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/**
 	 * This is a public property with an initial array value
 	 */
 	zend_declare_property_null(test_properties_propertyarray_ce, SL("someArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
-	test_properties_propertyarray_ce->create_object = zephir_init_properties;
+	test_properties_propertyarray_ce->create_object = zephir_init_properties_Test_Properties_PropertyArray;
 	return SUCCESS;
 
 }
@@ -53,7 +56,7 @@ PHP_METHOD(Test_Properties_PropertyArray, __construct) {
 
 }
 
-static zend_object_value zephir_init_properties(zend_class_entry *class_type TSRMLS_DC) {
+static zend_object_value zephir_init_properties_Test_Properties_PropertyArray(zend_class_entry *class_type TSRMLS_DC) {
 
 		zval *_1;
 		zval *_0, *_2 = NULL, *_3;

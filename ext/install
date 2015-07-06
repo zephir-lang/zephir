@@ -1,5 +1,4 @@
 #!/bin/bash
-
 export CC="gcc"
 export CFLAGS="-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1"
 if [ -f Makefile ]; then
