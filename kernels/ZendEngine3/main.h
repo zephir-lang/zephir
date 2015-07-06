@@ -31,8 +31,8 @@
 #define PH_SILENT 1024
 #define PH_READONLY 4096
 
-#define PH_NOISY_CC PH_NOISY TSRMLS_CC
-#define PH_SILENT_CC PH_SILENT TSRMLS_CC
+#define PH_NOISY_CC PH_NOISY
+#define PH_SILENT_CC PH_SILENT
 
 #define PH_SEPARATE 256
 #define PH_COPY 1024
@@ -56,8 +56,36 @@
 		zend_class_entry ce; \
 		memset(&ce, 0, sizeof(zend_class_entry)); \
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
-		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce TSRMLS_CC); \
+		lower_ns## _ ##name## _ce = zend_register_internal_class(&ce); \
 		lower_ns## _ ##name## _ce->ce_flags |= flags;  \
 	}
+
+/** Return zval checking if it's needed to ctor */
+#define RETURN_CCTOR(var) { \
+	ZVAL_DUP(return_value, &var); \
+	ZEPHIR_MM_RESTORE(); \
+	return; \
+}
+
+/* Fetch Parameters */
+int zephir_fetch_parameters(int num_args, int required_args, int optional_args, ...);
+
+/** Low overhead parse/fetch parameters */
+#define zephir_fetch_params(memory_grow, required_params, optional_params, ...) \
+	if (zephir_fetch_parameters(ZEND_NUM_ARGS(), required_params, optional_params, __VA_ARGS__) == FAILURE) { \
+		if (memory_grow) { \
+			RETURN_MM_NULL(); \
+		} else { \
+			RETURN_NULL(); \
+		} \
+	}
+
+#ifndef ZEPHIR_RELEASE
+#define ZEPHIR_DEBUG_PARAMS , const char *file, int line
+#define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0
+#else
+#define ZEPHIR_DEBUG_PARAMS , const char *file, int line
+#define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0
+#endif
 
 #endif /* ZEPHIR_KERNEL_MAIN_H */

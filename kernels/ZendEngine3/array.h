@@ -27,5 +27,14 @@
 #include "kernel/globals.h"
 #include "kernel/main.h"
 
+void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int initialize);
+
+/** Fetch items from arrays */
+int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEPHIR_DEBUG_PARAMS);
+int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, uint index_length, int flags ZEPHIR_DEBUG_PARAMS);
+
+#define zephir_array_fast_append(arr, value) \
+  Z_ADDREF(value); \
+  zend_hash_next_index_insert(Z_ARRVAL(arr), &value);
 
 #endif /* ZEPHIR_KERNEL_ARRAY_H */

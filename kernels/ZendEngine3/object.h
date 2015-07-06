@@ -27,5 +27,6 @@
 #include "kernel/globals.h"
 #include "kernel/main.h"
 
+zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
 
 #endif

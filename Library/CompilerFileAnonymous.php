@@ -185,6 +185,8 @@ class CompilerFileAnonymous
          */
         $compilationContext->stringsManager = $stringsManager;
 
+        $compilationContext->backend = $compiler->backend;
+
         /**
          * Headers manager
          */

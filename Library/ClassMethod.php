@@ -1137,12 +1137,13 @@ class ClassMethod
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
                         $code .= "\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
+                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
                         break;
 
                     case 'empty-array':
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
+                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
                         break;
 
                     default:
@@ -1151,13 +1152,13 @@ class ClassMethod
                 break;
 
             case 'variable':
+                $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
                         /**
                          * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(
                          * @todo Rewrite all to codePrinter
                          */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                         $expression = new Expression($parameter['default']);
                         $expression->setExpectReturn(true, $symbolVariable);
                         $compiledExpression = $expression->compile($compilationContext);
@@ -1226,7 +1227,7 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
+                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
                         break;
 
                     default:
@@ -1730,13 +1731,13 @@ class ClassMethod
 
                                 case 'string':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= "\t" . 'ZVAL_STRING(' . $variable->getName() . ', "' . Utils::addSlashes($defaultValue['value'], true) . '", 1);' . PHP_EOL;
+                                    $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false);
                                     break;
 
                                 case 'array':
                                 case 'empty-array':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+                                    $initVarCode .= $compilationContext->backend->initArray($variable, $compilationContext, null, false);
                                     break;
 
                                 default:
@@ -2080,101 +2081,11 @@ class ClassMethod
         /**
          * Generate the variable definition for variables used
          */
+        $additionalCode = '';
+        $varInitCode = '';
         foreach ($usedVariables as $type => $variables) {
-            $pointer = null;
-            switch ($type) {
-                case 'int':
-                    $code = 'int ';
-                    break;
-
-                case 'uint':
-                    $code = 'unsigned int ';
-                    break;
-
-                case 'char':
-                    $code = 'char ';
-                    break;
-
-                case 'uchar':
-                    $code = 'unsigned char ';
-                    break;
-
-                case 'long':
-                    $code = 'long ';
-                    break;
-
-                case 'ulong':
-                    $code = 'unsigned long ';
-                    break;
-
-                case 'bool':
-                    $code = 'zend_bool ';
-                    break;
-
-                case 'double':
-                    $code = 'double ';
-                    break;
-
-                case 'string':
-                case 'variable':
-                case 'array':
-                case 'null':
-                    $pointer = '*';
-                    $code = 'zval ';
-                    break;
-
-                case 'HashTable':
-                    $pointer = '*';
-                    $code = 'HashTable ';
-                    break;
-
-                case 'HashPosition':
-                    $code = 'HashPosition ';
-                    break;
-
-                case 'zend_class_entry':
-                    $pointer = '*';
-                    $code = 'zend_class_entry ';
-                    break;
-
-                case 'zend_function':
-                    $pointer = '*';
-                    $code = 'zend_function ';
-                    break;
-
-                case 'zend_object_iterator':
-                    $pointer = '*';
-                    $code = 'zend_object_iterator ';
-                    break;
-
-                case 'zend_property_info':
-                    $pointer = '*';
-                    $code = 'zend_property_info ';
-                    break;
-
-                case 'zephir_fcall_cache_entry':
-                    $pointer = '*';
-                    $code = 'zephir_fcall_cache_entry ';
-                    break;
-
-                case 'static_zephir_fcall_cache_entry':
-                    $pointer = '*';
-                    $code = 'zephir_nts_static zephir_fcall_cache_entry ';
-                    break;
-
-                case 'static_zend_class_entry':
-                    $pointer = '*';
-                    $code = 'zephir_nts_static zend_class_entry ';
-                    break;
-
-                case 'zephir_ce_guard':
-                    $code = 'zephir_nts_static zend_bool ';
-                    break;
-
-                default:
-                    throw new CompilerException("Unsupported type in declare: " . $type);
-            }
-
+            list ($pointer, $code) = $compilationContext->backend->getTypeDefinition($type);
+            $code .= ' ';
             $groupVariables = array();
             $defaultValues = array();
 
@@ -2182,74 +2093,12 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-                $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
-                if ($isComplex && $variable->mustInitNull()) {
-                    if ($variable->isLocalOnly()) {
-                        $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
-                    } else {
-                        if ($variable->isDoublePointer()) {
-                            $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
-                        } else {
-                            $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
-                        }
-                    }
-                    continue;
-                }
-
-                if ($variable->isLocalOnly()) {
-                    $groupVariables[] = $variable->getName();
-                    continue;
-                }
-
-                if ($variable->isDoublePointer()) {
-                    if ($variable->mustInitNull()) {
-                        $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
-                    } else {
-                        $groupVariables[] = $pointer . $pointer . $variable->getName();
-                    }
-                    continue;
-                }
-
-                $defaultValue = $variable->getDefaultInitValue();
-                if ($defaultValue !== null) {
-                    switch ($type) {
-                        case 'variable':
-                        case 'string':
-                        case 'array':
-                        case 'resource':
-                        case 'callable':
-                        case 'object':
-                            $groupVariables[] = $pointer . $variable->getName();
-                            break;
-
-                        case 'char':
-                            if (strlen($defaultValue) > 4) {
-                                if (strlen($defaultValue) > 10) {
-                                    throw new CompilerException("Invalid char literal: '" . substr($defaultValue, 0, 10) . "...'", $variable->getOriginal());
-                                } else {
-                                    throw new CompilerException("Invalid char literal: '" . $defaultValue . "'", $variable->getOriginal());
-                                }
-                            }
-                            /* no break */
-
-                        default:
-                            $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
-                            break;
-                    }
-
-                    continue;
-                }
-
-                if ($variable->mustInitNull() && $pointer) {
-                    $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
-                    continue;
-                }
-
-                $groupVariables[] = $pointer . $variable->getName();
+                $additionalCode .= $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
             }
 
-            $codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');
+            $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';' . PHP_EOL;
         }
+        $codePrinter->preOutput($varInitCode . $additionalCode);
 
         /**
          * Finalize the method compilation

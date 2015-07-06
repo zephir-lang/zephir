@@ -48,12 +48,10 @@ class ClassEntryCache
             $zendClassEntry = $compilationContext->symbolTable->addTemp('static_zend_class_entry', $compilationContext);
             $zendClassEntry->setMustInitNull(true);
 
-            $compilationContext->codePrinter->output('if (!' . $zendClassEntry->getName() . ') {');
-            $compilationContext->codePrinter->output("\t" . $zendClassEntry->getName() . ' = zend_fetch_class(' . $className . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
-            $compilationContext->codePrinter->output('}');
+            $compilationContext->backend->fetchClass($zendClassEntry, $className, true, $compilationContext);
         } else {
             $zendClassEntry = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-            $compilationContext->codePrinter->output($zendClassEntry->getName() . ' = zend_fetch_class(' . $className . ', ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+            $compilationContext->backend->fetchClass($zendClassEntry, $className, false, $compilationContext);
         }
 
         return $zendClassEntry;

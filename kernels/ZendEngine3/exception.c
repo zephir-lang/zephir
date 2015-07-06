@@ -34,3 +34,52 @@
 
 #include "Zend/zend_exceptions.h"
 
+/**
+ * Throws an exception with a single string parameter
+ */
+void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len)
+{
+	zval object, msg;
+	int ZEPHIR_LAST_CALL_STATUS = 0;
+
+	object_init_ex(&object, ce);
+
+	ZVAL_STRINGL(&msg, message, message_len);
+
+	ZEPHIR_CALL_METHOD(NULL, &object, "__construct", NULL, 0, &msg);
+
+	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+		zend_throw_exception_object(&object);
+	}
+
+	zval_ptr_dtor(&msg);
+}
+
+/**
+ * Throws an exception with a string format as parameter
+ */
+void zephir_throw_exception_format(zend_class_entry *ce, const char *format, ...)
+{
+	zval object, msg;
+	int ZEPHIR_LAST_CALL_STATUS = 0, len;
+	char *buffer;
+	va_list args;
+
+	object_init_ex(&object, ce);
+
+	va_start(args, format);
+	len = vspprintf(&buffer, 0, format, args);
+	va_end(args);
+
+	ZVAL_STRINGL(&msg, buffer, len);
+	efree(buffer);
+
+	ZEPHIR_CALL_METHOD(NULL, &object, "__construct", NULL, 0, &msg);
+
+	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+		zend_throw_exception_object(&object);
+	}
+	zend_error(E_ERROR, "Not implemented yet TODO");
+
+	zval_ptr_dtor(&msg);
+}

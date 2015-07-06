@@ -28,3 +28,9 @@
 #include "ext/standard/php_smart_string.h"
 #include "ext/standard/php_var.h"
 
+/**
+ * var_dump outputs php variables without using the PHP userland
+ */
+void zephir_var_dump(zval *var) {
+    php_var_dump(var, 1);
+}

@@ -116,7 +116,7 @@ class Compiler
     /**
      * @var BaseBackend
      */
-    protected $backend;
+    public $backend;
 
     /**
      * Compiler constructor
@@ -128,9 +128,9 @@ class Compiler
     {
         $this->config = $config;
         $this->logger = $logger;
-        $this->stringManager = new StringsManager();
         $this->fileSystem = new FileSystem();
         $this->backend = $backend;
+        $this->stringManager = $this->backend->getStringsManager();
         $this->checkRequires();
     }
 
@@ -190,7 +190,7 @@ class Compiler
                 return ucfirst($i);
             }, explode('\\', $className)));
 
-            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger);
+            $this->files[$className] = new CompilerFile($className, $filePath, $this->config, $this->logger, $this->backend);
             $this->files[$className]->preCompile($this);
 
             $this->definitions[$className] = $this->files[$className]->getClassDefinition();

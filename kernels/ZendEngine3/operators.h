@@ -24,4 +24,12 @@
 #include <php.h>
 #include <Zend/zend.h>
 
+#define zephir_make_printable_zval(expr, expr_copy) zend_make_printable_zval(expr, expr_copy);
+
+/* concatenation */
+void zephir_concat_self(zval *left, zval *right);
+void zephir_concat_self_str(zval *left, const char *right, int right_length);
+void zephir_concat_self_long(zval *left, const long right);
+void zephir_concat_self_char(zval *left, unsigned char right);
+
 #endif

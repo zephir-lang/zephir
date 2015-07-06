@@ -25,4 +25,6 @@
 #include <Zend/zend.h>
 #include <Zend/zend_hash.h>
 
+#define zephir_hash_init(ht, nSize, pHashFunction, pDestructor, persistent) zend_hash_init(ht, nSize, pHashFunction, pDestructor, persistent)
+
 #endif

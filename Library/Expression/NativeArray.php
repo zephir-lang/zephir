@@ -124,7 +124,7 @@ class NativeArray
             case 'string':
             case 'ulong':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
+                $compilationContext->backend->assignString($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'array':
@@ -215,7 +215,7 @@ class NativeArray
             $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0 TSRMLS_CC);');
         } else {
             if ($arrayLength > 0) {
-                $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . $arrayLength . ', 0 TSRMLS_CC);');
+                $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength);
             } else {
                 $codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
             }
@@ -236,7 +236,7 @@ class NativeArray
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExprKey->getCode() . '"), ' . $resolvedExpr->getCode() . ');');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'double':
@@ -253,7 +253,7 @@ class NativeArray
                                 break;
 
                             case 'string':
-                                $codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExprKey->getCode() . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'null':
@@ -402,7 +402,7 @@ class NativeArray
                                         break;
 
                                     case 'string':
-                                        $codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $resolvedExprKey->getCode() . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         break;
 
                                     case 'null':

@@ -24,4 +24,6 @@
 #include <php.h>
 #include <Zend/zend.h>
 
+void zephir_var_dump(zval *var);
+
 #endif

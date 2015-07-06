@@ -28,8 +28,76 @@
 
 #define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
 
-void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr TSRMLS_DC);
-int zephir_cleanup_fcache(void *pDest TSRMLS_DC, int num_args, va_list args, zend_hash_key *hash_key);
-void zephir_deinitialize_memory(TSRMLS_D);
+void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
+int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key *hash_key);
+void zephir_deinitialize_memory();
+
+/* Memory Frames */
+#ifndef ZEPHIR_RELEASE
+void ZEPHIR_FASTCALL zephir_memory_grow_stack(const char *func);
+int ZEPHIR_FASTCALL zephir_memory_restore_stack(const char *func);
+
+#define ZEPHIR_MM_GROW() zephir_memory_grow_stack(NULL)
+#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack(NULL)
+
+#else
+void ZEPHIR_FASTCALL zephir_memory_grow_stack();
+int ZEPHIR_FASTCALL zephir_memory_restore_stack();
+
+#define ZEPHIR_MM_GROW() zephir_memory_grow_stack()
+#define ZEPHIR_MM_RESTORE() zephir_memory_restore_stack()
+
+#endif
+
+#define zephir_dtor(x) zval_dtor(x)
+#define zephir_ptr_dtor(x) zval_ptr_dtor(x)
+
+void ZEPHIR_FASTCALL zephir_memory_observe(zval *var);
+void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var);
+
+int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
+
+#define ZEPHIR_INIT_VAR(z) { \
+		zephir_memory_alloc(&z); \
+	} \
+
+#define ZEPHIR_INIT_NVAR(z)\
+	if (Z_REFCOUNTED(z) && !Z_ISREF(z)) { \
+		if (Z_REFCOUNT(z) > 1) { \
+			Z_DELREF(z); \
+		} else { \
+			zephir_dtor(&z); \
+		} \
+		ZVAL_NULL(&z); \
+	} \
+
+#define ZEPHIR_CPY_WRT(d, v) \
+	Z_ADDREF(v); \
+	if (Z_REFCOUNTED(d) && Z_REFCOUNT(d) > 0) { \
+		zephir_ptr_dtor(&d); \
+	} \
+	ZVAL_COPY(&d, &v);
+
+#define ZEPHIR_CPY_WRT_CTOR(d, v) \
+	if (d) { \
+		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
+			zephir_ptr_dtor(d); \
+		} \
+	} else { \
+		zephir_memory_observe(d); \
+	} \
+	ZVAL_DUP(d, v);
+
+/* TODO: this might causes troubles, since we cannot observe here, since we aren't using double pointers
+ * figure out away to fix this (if it's an issue, which it isn't if observing isn't necessary)
+ */
+#define ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(ppzv) \
+	do { \
+		zval * restrict tmp_ = (ppzv); \
+		if (tmp_ != NULL) { \
+			zephir_ptr_dtor(tmp_); \
+			ZVAL_UNDEF(tmp_); \
+		} \
+	} while (0)
 
 #endif

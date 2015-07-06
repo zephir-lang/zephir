@@ -34,3 +34,37 @@
 
 #include "Zend/zend_operators.h"
 
+/**
+ * Appends the content of the right operator to the left operator
+ */
+void zephir_concat_self_str(zval *left, const char *right, int right_length)
+{
+	zval left_copy;
+	uint length, left_length;
+	int use_copy = 0;
+	zend_string *target;
+
+	if (Z_TYPE_P(left) == IS_NULL) {
+		ZVAL_STRINGL(left, right, right_length);
+		return;
+	}
+
+	if (Z_TYPE_P(left) != IS_STRING) {
+		use_copy = zephir_make_printable_zval(left, &left_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(left, (&left_copy));
+		}
+	}
+
+	//SEPARATE_ZVAL_IF_NOT_REF(left);
+	left_length = Z_STRLEN_P(left);
+	length = left_length + right_length;
+	target = zend_string_extend(Z_STR_P(left), length, 0);
+	ZVAL_NEW_STR(left, target);
+	memcpy(target->val + left_length, right, right_length);
+	target->val[length] = '\0';
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}

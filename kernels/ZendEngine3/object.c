@@ -36,4 +36,11 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
-
+zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type)
+{
+	zend_class_entry *retval;
+	zend_string *str = zend_string_init(class_name, length, 0);
+	retval = zend_fetch_class(str, fetch_type);
+	zend_string_release(str);
+	return retval;
+}

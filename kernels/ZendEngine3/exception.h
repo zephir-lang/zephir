@@ -56,6 +56,7 @@
 #define ZEPHIR_THROW_EXCEPTION_DEBUG_ZVALW(class_entry, message, file, line) zephir_throw_exception_zval_debug(class_entry, message, file, line TSRMLS_CC)
 
 /** Throw Exceptions */
-
+void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len);
+void zephir_throw_exception_format(zend_class_entry *ce, const char *format, ...);
 
 #endif /* ZEPHIR_KERNEL_EXCEPTIONS_H */
