@@ -885,8 +885,7 @@ class ClassDefinition
         }
 
         if (preg_match('/^zephir_init_static_properties/', $method->getName())) {
-            $classDefinition = $method->getClassDefinition();
-            return 'void ' . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_D)';
+            return 'void ' . $method->getName() . '(TSRMLS_D)';
         }
 
         $signatureParameters = array();
@@ -916,6 +915,66 @@ class ClassDefinition
         }
 
         return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
+    }
+
+    /**
+     * Returns the initialization method if any does exist
+     *
+     * @return ClassMethod
+     */
+    public function getInitMethod()
+    {
+        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        return $this->getMethod('zephir_init_properties_' . $initClassName);
+    }
+
+    /**
+     * Returns the initialization method if any does exist
+     *
+     * @return ClassMethod
+     */
+    public function getStaticInitMethod()
+    {
+        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        return $this->getMethod('zephir_init_static_properties_' . $initClassName);
+    }
+
+    /**
+     * Creates the initialization method
+     *
+     * @param StatementsBlock $statementsBlock
+     */
+    public function addInitMethod(StatementsBlock $statementsBlock)
+    {
+        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        $this->addMethod(
+            new ClassMethod(
+                $this,
+                array('internal'),
+                'zephir_init_properties_' . $initClassName,
+                null,
+                $statementsBlock
+            )
+        );
+    }
+
+    /**
+     * Creates the static initialization method
+     *
+     * @param StatementsBlock $statementsBlock
+     */
+    public function addStaticInitMethod(StatementsBlock $statementsBlock)
+    {
+        $initClassName = $this->getCNamespace() . '_' . $this->getName();
+        $this->addMethod(
+            new ClassMethod(
+                $this,
+                array('internal'),
+                'zephir_init_static_properties_' . $initClassName,
+                null,
+                $statementsBlock
+            )
+        );
     }
 
     /**
@@ -949,7 +1008,7 @@ class ClassDefinition
          * Method entry
          */
         $methods = &$this->methods;
-        $initMethod = $this->getMethod('zephir_init_properties_' . $initClassName);
+        $initMethod = $this->getInitMethod();
 
         if (count($methods) || $initMethod) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -1013,9 +1072,9 @@ class ClassDefinition
             $codePrinter->outputBlankLine();
         }
 
-        $initMethod = $this->getMethod('zephir_init_properties_' . $initClassName);
+        $initMethod = $this->getInitMethod();
         if ($initMethod) {
-            $codePrinter->output($namespace . '_' . strtolower($this->getSCName($namespace)) . '_ce->create_object = zephir_init_properties_' . $initClassName . ';');
+            $codePrinter->output($namespace . '_' . strtolower($this->getSCName($namespace)) . '_ce->create_object = ' . $initMethod->getName() . ';');
         }
 
         /**
@@ -1111,16 +1170,18 @@ class ClassDefinition
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
 
-        /* Make sure that when a constructor is defined, but the class does not set ANY properties, the parent's properties are anyways initialized */
+        /**
+         * Make sure that when a constructor is defined, but the class does not set
+         * ANY properties, the parent's properties are anyways initialized
+         */
         if ($initMethod && $initMethod->getClassDefinition() != $this) {
-            $constructMethod = new ClassMethod(
+            $this->addMethod(new ClassMethod(
                 $this,
                 array('internal'),
                 'zephir_init_properties_' . $initClassName,
                 null,
                 $initMethod->getStatementsBlock()
-            );
-            $this->getEventsManager()->dispatch('setMethod', array($constructMethod));
+            ));
         }
 
         /**

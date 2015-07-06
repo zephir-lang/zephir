@@ -839,7 +839,7 @@ class Compiler
                 $classDefinition = $compileFile->getClassDefinition();
                 foreach ($classDefinition->getMethods() as $method) {
                     $methods[] = '[' . $method->getName() . ':' . join('-', $method->getVisibility()) . ']';
-                    if ($method->getName() == 'zephir_init_static_properties') {
+                    if (preg_match('/^zephir_init_static_properties_/', $method->getName())) {
                         $this->internalInitializers[] = "\t" . $method->getName() . '_' . $classDefinition->getCNamespace() . '_' . $classDefinition->getName() . '(TSRMLS_C);';
                     }
                 }

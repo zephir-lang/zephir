@@ -253,27 +253,14 @@ class ClassProperty
             case 'array':
             case 'empty-array':
                 $classDefinition = $this->classDefinition;
+                $parentClassDefinition = $classDefinition->getExtendsClass();
 
-                $initClassName = $classDefinition->getCNamespace() . '_' . $classDefinition->getName();
-                if ($this->isStatic()) {
-                    $methodName = 'zephir_init_static_properties_' . $initClassName;
-                    $visibility = array('internal');
+                if (!$this->isStatic()) {
+                    $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getInitMethod() : null;
+                    $constructMethod = $classDefinition->getInitMethod();
                 } else {
-                    $methodName = 'zephir_init_properties_' . $initClassName;
-                    $visibility = array('internal');
-                }
-
-                $constructParentMethod = null;
-                $constructMethod = $classDefinition->getMethod($methodName);
-
-                /**
-                 * Make sure we do not steal the construct method of the parent,
-                 * but initialize our own with the inherited statements to ensure
-                 * valid property initialization
-                 */
-                if ($constructMethod && $constructMethod->getClassDefinition() != $classDefinition) {
-                    $constructParentMethod = $constructMethod;
-                    $constructMethod = null;
+                    $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getStaticInitMethod() : null;
+                    $constructMethod = $classDefinition->getStaticInitMethod();
                 }
 
                 if ($constructMethod) {
@@ -321,15 +308,12 @@ class ClassProperty
                     $statements[] = $this->getLetStatement()->get();
                     $statementsBlock = new StatementsBlock($statements);
 
-                    $classDefinition->addMethod(
-                        new ClassMethod(
-                            $classDefinition,
-                            $visibility,
-                            $methodName,
-                            null,
-                            $statementsBlock
-                        )
-                    );
+                    if (!$this->isStatic()) {
+                        $classDefinition->addStaticInitMethod($statementsBlock);
+                    } else {
+                        $classDefinition->addInitMethod($statementsBlock);
+                    }
+
                     return false;
                 }
                 //continue
