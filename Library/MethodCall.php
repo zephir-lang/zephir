@@ -591,7 +591,7 @@ class MethodCall extends Call
                     $variableVariable
                 );
 
-                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : NULL, $variableVariable, $methodName, $cachePointer, count($params) ? $params : NULL, $compilationContext);
+                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $methodName, $cachePointer, count($params) ? $params : null, $compilationContext);
             } else {
                 if (!count($params)) {
                     if ($isExpecting) {

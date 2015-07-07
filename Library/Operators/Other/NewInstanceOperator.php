@@ -98,7 +98,7 @@ class NewInstanceOperator extends BaseOperator
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
             }
 
-            $compilationContext->backend->initObject($symbolVariable, NULL, $compilationContext);
+            $compilationContext->backend->initObject($symbolVariable, null, $compilationContext);
             $symbolVariable->setClassTypes('stdclass');
         } else {
             $classDefinition = false;

@@ -17,10 +17,12 @@ class Backend extends BackendZendEngine2
         return new StringsManager();
     }
 
-    public function getTypeDefinition ($type)
+    public function getTypeDefinition($type)
     {
         list ($pointer, $code) = parent::getTypeDefinition($type);
-        if ($code == 'zval') return array('', 'zval');
+        if ($code == 'zval') {
+            return array('', 'zval');
+        }
         return array($pointer, $code);
     }
 
@@ -49,7 +51,6 @@ class Backend extends BackendZendEngine2
         $defaultValue = $variable->getDefaultInitValue();
         if ($defaultValue !== null) {
             switch ($type) {
-
                 case 'variable':
                 case 'string':
                 case 'array':
@@ -86,27 +87,27 @@ class Backend extends BackendZendEngine2
     }
 
     /* Assign value to variable */
-    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
+    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
-    public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
+    public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_LONG', '&' . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
-    public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
+    public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_DOUBLE', '&' . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
-    public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
+    public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->assignHelper('ZVAL_BOOL', '&' . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
-    public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter=true)
+    public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
     {
         if (!isset($size)) {
             $output = 'array_init(&' . $variable->getName() . ');';
@@ -119,7 +120,7 @@ class Backend extends BackendZendEngine2
         return "\t" . $output;
     }
 
-    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter=true)
+    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true)
     {
         $type = null;
         switch ($value->getType()) {
@@ -147,7 +148,7 @@ class Backend extends BackendZendEngine2
         return $output;
     }
 
-    public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter=true)
+    public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true)
     {
         if (!isset($ce)) {
             $output = 'object_init(&' . $variable->getName() . ');';
@@ -160,7 +161,7 @@ class Backend extends BackendZendEngine2
         return $output;
     }
 
-    public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter=true)
+    public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true)
     {
         $indexCode = $index->getCode();
         switch ($index->getType()) {
@@ -175,7 +176,7 @@ class Backend extends BackendZendEngine2
                 $type = $index->getType();
                 break;
             default:
-                 throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
+                throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
         $output = 'zephir_array_fetch_'.$type.'(&' . $var->getName() . ', &' . $src->getName() . ', ' . $indexCode . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ');';
         if ($useCodePrinter) {
@@ -256,11 +257,10 @@ class Backend extends BackendZendEngine2
 
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
     {
-        $paramStr = $params != NULL ? ', ' . join(', ', $params) : '';
+        $paramStr = $params != null ? ', ' . join(', ', $params) : '';
         if (!isset($symbolVariable)) {
             $context->codePrinter->output('ZEPHIR_CALL_METHOD(NULL, &' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
-        }
-        else if ($symbolVariable->getName() == 'return_value') {
+        } else if ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(&' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         } else {
             $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', &' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');

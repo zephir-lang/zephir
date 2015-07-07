@@ -27,27 +27,27 @@ abstract class BaseBackend
         return realpath(__DIR__ . '/../templates/' . $this->name);
     }
 
-    abstract function getStringsManager();
-    abstract function getTypeDefinition($type);
-    abstract function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
+    abstract public function getStringsManager();
+    abstract public function getTypeDefinition($type);
+    abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 
     /* Assign values to variables */
-    abstract function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true);
-    abstract function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true);
-    abstract function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true);
-    abstract function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true);
-    abstract function initArray(Variable $variable, CompilationContext $context, $size=null, $useCodePrinter=true);
-    abstract function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter=true);
-    abstract function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter=true);
-    abstract function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
+    abstract public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
+    abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
+    abstract public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
 
-    abstract function checkConstructor(Variable $var, CompilationContext $context);
+    abstract public function checkConstructor(Variable $var, CompilationContext $context);
 
     /* Method calling */
-    abstract function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context);
+    abstract public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context);
 
     /* Read from array */
-    abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter=true);
+    abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true);
 
     /* Array update multi */
     abstract public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $context);
