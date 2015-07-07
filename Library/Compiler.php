@@ -64,6 +64,9 @@ class Compiler
      */
     protected $compiledFiles = array();
 
+    /**
+     *
+     */
     protected $constants = array();
 
     /**

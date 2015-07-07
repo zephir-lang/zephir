@@ -880,11 +880,11 @@ class ClassDefinition
      */
     private function getInternalSignature(ClassMethod $method)
     {
-        if (preg_match('/^zephir_init_properties/', $method->getName())) {
+        if ($method->isInitializer() && !$method->isStatic()) {
             return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
         }
 
-        if (preg_match('/^zephir_init_static_properties/', $method->getName())) {
+        if ($method->isInitializer() && $method->isStatic()) {
             return 'void ' . $method->getName() . '(TSRMLS_D)';
         }
 
@@ -947,15 +947,17 @@ class ClassDefinition
     public function addInitMethod(StatementsBlock $statementsBlock)
     {
         $initClassName = $this->getCNamespace() . '_' . $this->getName();
-        $this->addMethod(
-            new ClassMethod(
-                $this,
-                array('internal'),
-                'zephir_init_properties_' . $initClassName,
-                null,
-                $statementsBlock
-            )
+
+        $classMethod = new ClassMethod(
+            $this,
+            array('internal'),
+            'zephir_init_properties_' . $initClassName,
+            null,
+            $statementsBlock
         );
+
+        $classMethod->setIsInitializer(true);
+        $this->addMethod($classMethod);
     }
 
     /**
@@ -966,15 +968,17 @@ class ClassDefinition
     public function addStaticInitMethod(StatementsBlock $statementsBlock)
     {
         $initClassName = $this->getCNamespace() . '_' . $this->getName();
-        $this->addMethod(
-            new ClassMethod(
-                $this,
-                array('internal'),
-                'zephir_init_static_properties_' . $initClassName,
-                null,
-                $statementsBlock
-            )
+
+        $classMethod = new ClassMethod(
+            $this,
+            array('internal'),
+            'zephir_init_static_properties_' . $initClassName,
+            null,
+            $statementsBlock
         );
+
+        $classMethod->setIsInitializer(true);
+        $this->addMethod($classMethod);
     }
 
     /**

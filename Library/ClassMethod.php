@@ -139,6 +139,13 @@ class ClassMethod
     protected $isBundled = false;
 
     /**
+     * Whether the method is an initializer or not
+     *
+     * @var boolean
+     */
+    protected $isInitializer = false;
+
+    /**
      * @var array|null
      *
      * @var boolean
@@ -323,6 +330,16 @@ class ClassMethod
     public function setIsBundled($bundled)
     {
         $this->isBundled = $bundled;
+    }
+
+    /**
+     * Sets if the method is an initializer or not
+     *
+     * @param boolean $initializer
+     */
+    public function setIsInitializer($initializer)
+    {
+        $this->isInitializer = $initializer;
     }
 
     /**
@@ -792,7 +809,7 @@ class ClassMethod
         return $this->isInternal;
     }
 
-     /**
+    /**
      * Checks whether the method is bundled
      *
      * @return boolean
@@ -800,6 +817,16 @@ class ClassMethod
     public function isBundled()
     {
         return $this->isBundled;
+    }
+
+    /**
+     * Checks whether the method is an initializer
+     *
+     * @return boolean
+     */
+    public function isInitializer()
+    {
+        return $this->isInitializer;
     }
 
     /**
