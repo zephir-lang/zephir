@@ -31,6 +31,7 @@ ext/run-tests.php
 ext/.deps
 ext/libtool
 *.gch
+*.gcda
 *.lo
 *.la
 *.o

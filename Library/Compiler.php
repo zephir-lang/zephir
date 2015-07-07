@@ -1366,24 +1366,38 @@ class Compiler
         /**
          * ext_install
          */
-        $content = file_get_contents(__DIR__ . '/../templates/install');
-        if (empty($content)) {
-            throw new Exception("Install file doesn't exist");
-        }
-
         $toReplace = array(
             '%PROJECT_LOWER%' => strtolower($project)
         );
+
+        $this->processInstallationTemplate('install', $toReplace);
+        $this->processInstallationTemplate('pgo-install', $toReplace);
+        $this->processInstallationTemplate('pgo-use-install', $toReplace);
+
+        return $needConfigure;
+    }
+
+    /**
+     * Process installation bash template to ext directory
+     *
+     * @param $file
+     * @param $toReplace
+     * @throws Exception
+     */
+    protected function processInstallationTemplate($file, $toReplace)
+    {
+        $content = file_get_contents(__DIR__ . '/../templates/' . $file);
+        if (empty($content)) {
+            throw new Exception("Install file doesn't exist");
+        }
 
         foreach ($toReplace as $mark => $replace) {
             $content = str_replace($mark, $replace, $content);
         }
 
-        if (Utils::checkAndWriteIfNeeded($content, 'ext/install')) {
+        if (Utils::checkAndWriteIfNeeded($content, 'ext/' . $file)) {
             chmod('ext/install', 0755);
         }
-
-        return $needConfigure;
     }
 
     /**
