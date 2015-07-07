@@ -940,6 +940,26 @@ class ClassDefinition
     }
 
     /**
+     * Returns the initialization method if any does exist
+     *
+     * @return ClassMethod
+     */
+    public function getLocalOrParentInitMethod()
+    {
+        $method = $this->getInitMethod();
+        if (!$method) {
+            $parentClassDefinition = $this->getExtendsClassDefinition();
+            if ($parentClassDefinition) {
+                $method = $parentClassDefinition->getInitMethod();
+                if ($method) {
+                    $this->addInitMethod($method->getStatementsBlock());
+                }
+            }
+        }
+        return $method;
+    }
+
+    /**
      * Creates the initialization method
      *
      * @param StatementsBlock $statementsBlock
@@ -1013,7 +1033,7 @@ class ClassDefinition
          * Method entry
          */
         $methods = &$this->methods;
-        $initMethod = $this->getInitMethod();
+        $initMethod = $this->getLocalOrParentInitMethod();
 
         if (count($methods) || $initMethod) {
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
@@ -1174,20 +1194,6 @@ class ClassDefinition
 
         $codePrinter->output('}');
         $codePrinter->outputBlankLine();
-
-        /**
-         * Make sure that when a constructor is defined, but the class does not set
-         * ANY properties, the parent's properties are anyways initialized
-         */
-        if ($initMethod && $initMethod->getClassDefinition() != $this) {
-            $this->addMethod(new ClassMethod(
-                $this,
-                array('internal'),
-                'zephir_init_properties_' . $initClassName,
-                null,
-                $initMethod->getStatementsBlock()
-            ));
-        }
 
         /**
          * Compile methods

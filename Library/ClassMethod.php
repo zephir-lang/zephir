@@ -353,6 +353,16 @@ class ClassMethod
     }
 
     /**
+     * Sets the method name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Returns the method name
      *
      * @return string
