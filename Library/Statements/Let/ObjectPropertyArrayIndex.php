@@ -102,7 +102,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
             case 'string':
                 $indexVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                $codePrinter->output('ZVAL_STRING(' . $indexVariable->getName() . ', "' . $resolvedIndex->getCode() . '", 1);');
+                $compilationContext->backend->assignString($indexVariable, $resolvedIndex->getCode(), $compilationContext);
                 break;
 
             case 'variable':
@@ -195,7 +195,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
                     case 'string':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                        $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
                         $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
                         break;
 

@@ -44,10 +44,13 @@ abstract class BaseBackend
     abstract function checkConstructor(Variable $var, CompilationContext $context);
 
     /* Method calling */
-    abstract function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $compilationContext);
+    abstract function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context);
 
     /* Read from array */
     abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter=true);
+
+    /* Array update multi */
+    abstract public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $context);
 
     public static function getActiveBackend()
     {

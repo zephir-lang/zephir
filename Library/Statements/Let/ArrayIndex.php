@@ -83,7 +83,7 @@ class ArrayIndex
 
             case 'string':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'array':
@@ -255,55 +255,9 @@ class ArrayIndex
          * Create a temporal zval (if needed)
          */
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
 
-        $keys = '';
-        $numberParams = 0;
-        $offsetItems = array();
-        foreach ($offsetExprs as $offsetExpr) {
-            switch ($offsetExpr->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                    $keys .= 'l';
-                    $offsetItems[] = $offsetExpr->getCode();
-                    $numberParams++;
-                    break;
-
-                case 'string':
-                    $keys .= 's';
-                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
-                    $numberParams += 2;
-                    break;
-
-                case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
-                    switch ($variableIndex->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                            $keys .= 'l';
-                            $offsetItems[] = $variableIndex->getName();
-                            $numberParams++;
-                            break;
-                        case 'string':
-                        case 'variable':
-                            $keys .= 'z';
-                            $offsetItems[] = $variableIndex->getName();
-                            $numberParams++;
-                            break;
-                        default:
-                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
-                    }
-                    break;
-
-                default:
-                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
-            }
-        }
-
-        $codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
 
         if ($symbolVariable->isTemporal()) {
             $symbolVariable->setIdle(true);

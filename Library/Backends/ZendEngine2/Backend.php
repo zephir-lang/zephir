@@ -334,6 +334,59 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
+    {
+        $keys = '';
+        $offsetItems = array();
+        $numberParams = 0;
+
+        foreach ($offsetExprs as $offsetExpr) {
+            switch ($offsetExpr->getType()) {
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                    $keys .= 'l';
+                    $offsetItems[] = $offsetExpr->getCode();
+                    $numberParams++;
+                    break;
+
+                case 'string':
+                    $keys .= 's';
+                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
+                    $numberParams += 2;
+                    break;
+
+                case 'variable':
+                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, null);
+                    switch ($variableIndex->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                            $keys .= 'l';
+                            $offsetItems[] = $variableIndex->getName();
+                            $numberParams++;
+                            break;
+                        case 'string':
+                        case 'variable':
+                            $keys .= 'z';
+                            $offsetItems[] = $variableIndex->getName();
+                            $numberParams++;
+                            break;
+                        default:
+                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
+                    }
+                    break;
+
+                default:
+                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
+            }
+        }
+
+        $compilationContext->codePrinter->output('zephir_array_update_multi(&' . $variable->getName() . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+    }
+
     public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)
     {
         if ($guarded) {

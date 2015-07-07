@@ -2093,6 +2093,9 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
+                if ($additionalCode) {
+                    $additionalCode .= PHP_EOL;
+                }
                 $additionalCode .= $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
             }
 
@@ -2100,6 +2103,9 @@ class ClassMethod
                 $varInitCode .= PHP_EOL;
             }
             $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';';
+        }
+        if ($varInitCode) {
+            $additionalCode = PHP_EOL . $additionalCode;
         }
         $codePrinter->preOutput($varInitCode . $additionalCode);
 
