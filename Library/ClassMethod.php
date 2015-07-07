@@ -1131,19 +1131,19 @@ class ClassMethod
                 break;
 
             case 'array':
+                $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext, $parameter['default']);
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t" . 'array_init(' . $parameter['name'] . ');' . PHP_EOL;
-                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+                        $code .= "\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
                         break;
 
                     case 'empty-array':
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
                         break;
 
                     default:
@@ -1227,7 +1227,7 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
                         break;
 
                     default:
@@ -2096,7 +2096,10 @@ class ClassMethod
                 $additionalCode .= $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
             }
 
-            $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';' . PHP_EOL;
+            if ($varInitCode) {
+                $varInitCode .= PHP_EOL;
+            }
+            $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';';
         }
         $codePrinter->preOutput($varInitCode . $additionalCode);
 

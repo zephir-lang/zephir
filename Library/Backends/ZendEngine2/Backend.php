@@ -2,6 +2,7 @@
 namespace Zephir\Backends\ZendEngine2;
 
 use Zephir\Variable;
+use Zephir\Compiler;
 use Zephir\CompilerException;
 use Zephir\CompilationContext;
 use Zephir\BaseBackend;
@@ -184,14 +185,22 @@ class Backend extends BaseBackend
     }
 
     /* Assign value to variable */
-    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter)
+    protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy=null)
     {
         if ($value instanceof Variable) {
             $value = $value->getName();
         } else {
             $value = '"' . $value . '"';
         }
-        $output = $macro . '(' . $variableName . ', ' . $value . ');';
+
+        $copyStr = '';
+        if ($doCopy === true) {
+            $copyStr = ', 1';
+        } else if ($doCopy === false) {
+            $copyStr = ', 0';
+        }
+
+        $output = $macro . '(' . $variableName . ', ' . $value . $copyStr . ');';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
@@ -200,22 +209,22 @@ class Backend extends BaseBackend
 
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
     {
-        return $this->assignHelper('ZVAL_STRING', ($symbolVariable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_STRING', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter, true);
     }
 
     public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
     {
-        return $this->assignHelper('ZVAL_LONG', ($symbolVariable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_LONG', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
     public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
     {
-        return $this->assignHelper('ZVAL_DOUBLE', ($symbolVariable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_DOUBLE', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
     public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter=true)
     {
-        return $this->assignHelper('ZVAL_BOOL', ($symbolVariable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_BOOL', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
     }
 
     public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter=true)
@@ -223,12 +232,12 @@ class Backend extends BaseBackend
         if (!isset($size)) {
             $output = 'array_init(' . $variable->getName() . ');';
         } else {
-            $output = 'zephir_create_array(' . $variable->getName() . ', ' . $size . ', 0);';
+            $output = 'zephir_create_array(' . $variable->getName() . ', ' . $size . ', 0 TSRMLS_CC);';
         }
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
-        return "\t" . $output;
+        return $output;
     }
 
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter=true)
@@ -249,9 +258,15 @@ class Backend extends BaseBackend
             throw new Exception("Unknown type mapping: " . $type);
         }
 
-        $keyStr   = $key->getType() == 'string' ? 'SS("' . $key->getCode() . '")' : $key->getCode();
+
+        if ($key->getType() == 'variable') {
+            $keyStr = 'Z_STRVAL_P(' . $key->getCode() . '), Z_STRLEN_P(' . $key->getCode() . ') + 1';
+        } else {
+            $keyStr = $key->getType() == 'string' ? 'SS("' . $key->getCode() . '")' : $key->getCode();
+        }
         $valueStr = $type == 'stringl' ? 'SL("' . $value->getCode()  . '")' : $value->getCode();
-        $output = 'add_assoc_' . $value->getType() . '_ex(' . $variable->getName() . ', ' . $keyStr . ', ' . $valueStr . ');';
+        $doCopy = $type == 'stringl' ? ', 1' : '';
+        $output = 'add_assoc_' . $type . '_ex(' . $variable->getName() . ', ' . $keyStr . ', ' . $valueStr . $doCopy . ');';
 
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
@@ -261,10 +276,15 @@ class Backend extends BaseBackend
 
     public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter=true)
     {
-        if (!isset($ce)) {
-            $output = 'object_init(&' . $variable->getName() . ');';
+        if ($variable->getName() == 'return_value' || !$variable->isLocalOnly()) {
+            $variableAccess = $variable->getName();
         } else {
-            $output = 'object_init_ex(' . $variable->getName() . ', ' . $ce . ');';
+            $variableAccess = '&' . $variable->getName();
+        }
+        if (!isset($ce)) {
+            $output = 'object_init(' . $variableAccess . ');';
+        } else {
+            $output = 'object_init_ex(' . $variableAccess . ', ' . $ce . ');';
         }
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
@@ -274,6 +294,8 @@ class Backend extends BaseBackend
 
     public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter=true)
     {
+        $context->headersManager->add('kernel/array');
+        $isVariable = $index instanceof Variable;
         switch ($index->getType()) {
             case 'int':
             case 'uint':
@@ -281,20 +303,38 @@ class Backend extends BaseBackend
                 $type = 'long';
                 break;
             /* Types which map to the same */
+            case 'variable':
             case 'string':
                 $type = $index->getType();
                 break;
             default:
                  throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
-        $output = 'zephir_array_fetch_long(&' . $var->getName() . ', ' . $src->getName() . ', ' . $index->getCode() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ');';
+        if ($isVariable && in_array($index->getType(), array('variable', 'string'))) {
+            if ($index->isLocalOnly()) {
+                $output = 'zephir_array_fetch(&' . $var->getName() . ', ' . $src->getName() . ', &' . $index->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
+            } else {
+                $output = 'zephir_array_fetch(&' . $var->getName() . ', ' . $src->getName() . ', ' . $index->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
+            }
+        } else {
+            if ($isVariable) {
+                $indexAccess =  $index->getName();
+            } else {
+                $indexAccess = $index->getCode();
+                if ($type == 'string') {
+                    $indexAccess = 'SL("' . $indexAccess . '")';
+                }
+            }
+            $output = 'zephir_array_fetch_' . $type . '(&' . $var->getName() . ', ' . $src->getName() . ', ' . $indexAccess . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
+        }
+
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
         return $output;
     }
 
-    public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context)
+    public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)
     {
         if ($guarded) {
             $context->codePrinter->output('if (!' . $zendClassEntry->getName() . ') {');
