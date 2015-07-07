@@ -851,7 +851,7 @@ class Compiler
 
                 $hash .= '|' . $compiledFile . ':' . $classDefinition->getClassEntry() . '[' . join('|', $methods) . ']';
             }
-        }
+        }        
 
         /**
          * Round 3.2. Compile anonymous classes

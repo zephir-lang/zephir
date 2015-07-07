@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPropertyArray) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
+	zend_declare_property_null(test_properties_staticpropertyarray_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC|ZEND_ACC_STATIC TSRMLS_CC);
 
 	/**
 	 * This is a public property with an initial array value
@@ -38,7 +39,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_StaticPropertyArray) {
 
 }
 
-void zephir_init_static_properties_Test_Properties_StaticPropertyArray_Test_Properties_StaticPropertyArray(TSRMLS_D) {
+void zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_D) {
 
 	zval *_1 = NULL;
 	zval *_0;

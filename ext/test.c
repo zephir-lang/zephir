@@ -402,6 +402,7 @@ static PHP_RINIT_FUNCTION(test)
 
 	zephir_initialize_memory(test_globals_ptr TSRMLS_CC);
 
+	zephir_init_static_properties_Test_Properties_StaticPropertyArray(TSRMLS_C);
 
 	return SUCCESS;
 }

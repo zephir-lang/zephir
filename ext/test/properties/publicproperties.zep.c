@@ -60,6 +60,7 @@ ZEPHIR_INIT_CLASS(Test_Properties_PublicProperties) {
 	/**
 	 * This is a public property with an initial empty-array value
 	 */
+	zend_declare_property_null(test_properties_publicproperties_ce, SL("someEmptyArray"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	/**
 	 * This is a public property with an initial array value

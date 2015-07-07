@@ -978,6 +978,7 @@ class ClassDefinition
         );
 
         $classMethod->setIsInitializer(true);
+        $classMethod->setIsStatic(true);
         $this->addMethod($classMethod);
     }
 

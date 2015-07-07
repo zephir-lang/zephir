@@ -25,6 +25,7 @@ ZEPHIR_INIT_CLASS(Test_IssetTest) {
 
 	ZEPHIR_REGISTER_CLASS(Test, IssetTest, test, issettest, test_issettest_method_entry, 0);
 
+	zend_declare_property_null(test_issettest_ce, SL("s"), ZEND_ACC_PUBLIC TSRMLS_CC);
 
 	test_issettest_ce->create_object = zephir_init_properties_Test_IssetTest;
 	return SUCCESS;
