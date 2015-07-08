@@ -34,6 +34,9 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint index_length, int readonly);
 int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index, int readonly);
 
+/** Unset existing indexes */
+int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint index_length, int flags);
+
 /** Fetch items from arrays */
 int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEPHIR_DEBUG_PARAMS);
 int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, uint index_length, int flags ZEPHIR_DEBUG_PARAMS);

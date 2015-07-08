@@ -108,7 +108,7 @@ class StaticProperty
             case 'uint':
             case 'long':
                 $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                 $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &' . $tempVariable->getName() . ' TSRMLS_CC);');
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);

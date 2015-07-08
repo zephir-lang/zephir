@@ -26,10 +26,16 @@ class Backend extends BackendZendEngine2
         return array($pointer, $code);
     }
 
+    public function onPreInitVar(CompilationContext $context)
+    {
+        return "\t" . 'zval *this_ptr = getThis();' . PHP_EOL; //TODO: think about a better way to solve this.
+    }
+
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
+
         $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
-        if ($isComplex && $variable->mustInitNull()) {
+        if ($isComplex) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
             return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
         }
@@ -185,6 +191,44 @@ class Backend extends BackendZendEngine2
         return $output;
     }
 
+    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
+    {
+        $context->headersManager->add('kernel/array');
+        switch ($exprIndex->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
+                break;
+
+            case 'string':
+                $context->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
+                break;
+
+            case 'variable':
+                $variableIndex = $context->symbolTable->getVariableForRead($exprIndex->getCode(), $context, $exprIndex->getOriginal());
+                switch ($variableIndex->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                        $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+                        break;
+
+                    case 'string':
+                    case 'variable':
+                        $context->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+                        break;
+
+                    default:
+                        throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $expression['right']);
+                }
+                break;
+
+            default:
+                throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $expression['right']);
+        }
+    }
+
     public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
     {
         $keys = '';
@@ -248,6 +292,24 @@ class Backend extends BackendZendEngine2
         if ($guarded) {
             $context->codePrinter->output('}');
         }
+    }
+
+    public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false)
+    {
+        //TODO: maybe optimizations (read_nproperty/quick) for thisScope access in NG (as in ZE2 - if necessary)
+        $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+    }
+
+    public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
+    {
+        //TODO: maybe optimizations aswell as above
+        $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
+    }
+
+    public function updateProperty(Variable $symbolVariable, $propertyName, Variable $value, CompilationContext $context)
+    {
+        //TODO: maybe optimizations aswell as above
+        $context->codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), &' . $value->getName() . ');');
     }
 
     public function checkConstructor(Variable $var, CompilationContext $context)

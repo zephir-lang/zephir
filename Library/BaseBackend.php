@@ -39,7 +39,11 @@ abstract class BaseBackend
     abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
     abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
+
     abstract public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
+    abstract public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false);
+    abstract public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context);
+    abstract public function updateProperty(Variable $symbolVariable, $propertyName, Variable $value, CompilationContext $compilationContext);
 
     abstract public function checkConstructor(Variable $var, CompilationContext $context);
 
@@ -49,8 +53,13 @@ abstract class BaseBackend
     /* Read from array */
     abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true);
 
+    /* Unset array */
+    abstract public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context);
+
     /* Array update multi */
     abstract public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $context);
+
+    abstract public function onPreInitVar(CompilationContext $context);
 
     public static function getActiveBackend()
     {

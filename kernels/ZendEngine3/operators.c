@@ -56,13 +56,13 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 		}
 	}
 
-	//SEPARATE_ZVAL_IF_NOT_REF(left);
+	SEPARATE_ZVAL_IF_NOT_REF(left);
 	left_length = Z_STRLEN_P(left);
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
-	memcpy(target->val + left_length, right, right_length);
-	target->val[length] = '\0';
+	memcpy(ZSTR_VAL(target) + left_length, right, right_length);
+	ZSTR_VAL(target)[length] = '\0';
 
 	if (use_copy) {
 		zval_dtor(&left_copy);

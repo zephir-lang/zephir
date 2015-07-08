@@ -2081,8 +2081,9 @@ class ClassMethod
         /**
          * Generate the variable definition for variables used
          */
-        $additionalCode = '';
         $varInitCode = '';
+        $additionalCode = $compilationContext->backend->onPreInitVar($compilationContext);
+
         foreach ($usedVariables as $type => $variables) {
             list ($pointer, $code) = $compilationContext->backend->getTypeDefinition($type);
             $code .= ' ';

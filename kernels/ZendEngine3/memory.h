@@ -61,6 +61,9 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		zephir_memory_alloc(&z); \
 	} \
 
+#define ZEPHIR_INIT_ZVAL_NREF(z) \
+	ZVAL_UNDEF(&z); \
+
 #define ZEPHIR_INIT_NVAR(z)\
 	if (Z_REFCOUNTED(z) && !Z_ISREF(z)) { \
 		if (Z_REFCOUNT(z) > 1) { \

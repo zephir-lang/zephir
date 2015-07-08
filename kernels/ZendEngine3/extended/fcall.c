@@ -109,9 +109,9 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 
 					zend_error(E_WARNING, "Parameter %d to %s%s%s() expected to be a reference, value given",
 						i+1,
-						func->common.scope ? func->common.scope->name->val : "",
+						func->common.scope ? ZSTR_VAL(func->common.scope->name) : "",
 						func->common.scope ? "::" : "",
-						func->common.function_name->val);
+						ZSTR_VAL(func->common.function_name));
 					if (EG(current_execute_data) == &dummy_execute_data) {
 						EG(current_execute_data) = dummy_execute_data.prev_execute_data;
 					}
@@ -192,7 +192,7 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 	} else { /* ZEND_OVERLOADED_FUNCTION */
 		ZVAL_NULL(retval_ptr);
 
-		zend_error(E_EXCEPTION | E_ERROR, "Cannot call overloaded function for non-object");
+		zend_throw_error(NULL, "Cannot call overloaded function for non-object");
 		zend_vm_stack_free_args(call);
 
 		if (func->type == ZEND_OVERLOADED_FUNCTION_TEMPORARY) {
@@ -223,7 +223,7 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 {
 	int call_via_handler = 0, retval = 0;
 	zend_string *zs_lcname = zend_string_alloc(info->func_length, 0);
-	zend_str_tolower_copy(zs_lcname->val, info->func_name, info->func_length);
+	zend_str_tolower_copy(ZSTR_VAL(zs_lcname), info->func_name, info->func_length);
 
 	if (fcc->object && fcc->calling_scope == ce_org) {
 		if (strict_class && ce_org->__call) {
@@ -584,14 +584,14 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 
 	if (func->common.fn_flags & (ZEND_ACC_ABSTRACT|ZEND_ACC_DEPRECATED)) {
 		if (func->common.fn_flags & ZEND_ACC_ABSTRACT) {
-			zend_error(E_EXCEPTION | E_ERROR, "Cannot call abstract method %s::%s()", func->common.scope->name->val, func->common.function_name->val);
+			zend_throw_error(NULL, "Cannot call abstract method %s::%s()", ZSTR_VAL(func->common.scope->name), ZSTR_VAL(func->common.function_name));
 			return FAILURE;
 		}
 		if (func->common.fn_flags & ZEND_ACC_DEPRECATED) {
  			zend_error(E_DEPRECATED, "Function %s%s%s() is deprecated",
-				func->common.scope ? func->common.scope->name->val : "",
+				func->common.scope ? ZSTR_VAL(func->common.scope->name) : "",
 				func->common.scope ? "::" : "",
-				func->common.function_name->val);
+				ZSTR_VAL(func->common.function_name));
 		}
 	}
 
@@ -612,9 +612,9 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 
 					zend_error(E_WARNING, "Parameter %d to %s%s%s() expected to be a reference, value given",
 						i+1,
-						func->common.scope ? func->common.scope->name->val : "",
+						func->common.scope ? ZSTR_VAL(func->common.scope->name) : "",
 						func->common.scope ? "::" : "",
-						func->common.function_name->val);
+						ZSTR_VAL(func->common.function_name));
 					if (EG(current_execute_data) == &dummy_execute_data) {
 						EG(current_execute_data) = dummy_execute_data.prev_execute_data;
 					}
@@ -706,7 +706,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 			fci->object->handlers->call_method(func->common.function_name, fci->object, call, fci->retval);
 			EG(current_execute_data) = call->prev_execute_data;
 		} else {
-			zend_error(E_EXCEPTION | E_ERROR, "Cannot call overloaded function for non-object");
+			zend_throw_error(NULL, "Cannot call overloaded function for non-object");
 		}
 
 		zend_vm_stack_free_args(call);

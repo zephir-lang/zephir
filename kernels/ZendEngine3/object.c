@@ -44,3 +44,194 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 	zend_string_release(str);
 	return retval;
 }
+
+static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, const char *property_name, unsigned int property_length)
+{
+	zend_class_entry *original_ce = ce;
+
+	while (ce) {
+		if (zend_hash_str_exists(&ce->properties_info, property_name, property_length)) {
+			return ce;
+		}
+		ce = ce->parent;
+	}
+	return original_ce;
+}
+
+
+/**
+ * Reads a property from an object
+ */
+int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent)
+{
+	zval property;
+	zend_class_entry *ce, *old_scope;
+	zval tmp;
+	zval *res;
+
+	ZVAL_UNDEF(&tmp);
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+
+		if (silent == PH_NOISY) {
+			php_error_docref(NULL, E_NOTICE, "Trying to get property \"%s\" of non-object", property_name);
+		}
+
+		zval_ptr_dtor(result);
+		ZVAL_NULL(result);
+		return FAILURE;
+	}
+
+	ce = Z_OBJCE_P(object);
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	old_scope = EG(scope);
+	EG(scope) = ce;
+
+	if (!Z_OBJ_HT_P(object)->read_property) {
+		const char *class_name;
+
+		class_name = Z_OBJ_P(object) ? ZSTR_VAL(Z_OBJCE_P(object)->name) : "";
+		zend_error(E_CORE_ERROR, "Property %s of class %s cannot be read", property_name, class_name);
+	}
+
+	ZVAL_STRINGL(&property, property_name, property_length);
+
+	res = Z_OBJ_HT_P(object)->read_property(object, &property, silent ? BP_VAR_IS : BP_VAR_R, NULL, &tmp);
+	ZVAL_COPY(result, res);
+
+	zval_ptr_dtor(&property);
+
+	EG(scope) = old_scope;
+	return SUCCESS;
+}
+
+/**
+ * Checks whether obj is an object and updates property with another zval
+ */
+int zephir_update_property_zval(zval *object, const char *property_name, unsigned int property_length, zval *value)
+{
+	zend_class_entry *ce, *old_scope;
+	zval property;
+
+	old_scope = EG(scope);
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		php_error_docref(NULL, E_WARNING, "Attempt to assign property of non-object");
+		return FAILURE;
+	}
+
+	ce = Z_OBJCE_P(object);
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	EG(scope) = ce;
+
+	if (!Z_OBJ_HT_P(object)->write_property) {
+		const char *class_name;
+
+		class_name = Z_OBJ_P(object) ? ZSTR_VAL(Z_OBJCE_P(object)->name) : "";
+		zend_error(E_CORE_ERROR, "Property %s of class %s cannot be updated", property_name, class_name);
+	}
+
+	ZVAL_STRINGL(&property, property_name, property_length);
+
+	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
+	zval_ptr_dtor(&property);
+
+	EG(scope) = old_scope;
+	return SUCCESS;
+}
+
+int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len)
+{
+	zval *tmp = zend_read_static_property(ce, property, len, (zend_bool) ZEND_FETCH_CLASS_SILENT);
+
+	zval_ptr_dtor(result);
+	ZVAL_NULL(result);
+	if (tmp)
+	{
+		ZVAL_COPY(result, tmp);
+		return SUCCESS;
+	}
+	return FAILURE;
+}
+
+static zval *zephir_std_get_static_property(zend_class_entry *ce, const char *property_name, int property_name_len, zend_bool silent, zend_property_info **param_property_info)
+{
+	zend_property_info *property_info;
+	zval *ret;
+
+	if (param_property_info == NULL)
+	{
+		property_info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_name_len);
+		if (UNEXPECTED(property_info == NULL)) {
+			goto undeclared_property;
+		}
+
+		/*if (UNEXPECTED(!zend_verify_property_access(property_info, ce))) {
+			if (!silent) {
+				zend_throw_error(NULL, "Cannot access %s property %s::$%s", zend_visibility_string(property_info->flags), ZSTR_VAL(ce->name), property_name);
+			}
+			return NULL;
+		}*/
+
+		if (UNEXPECTED((property_info->flags & ZEND_ACC_STATIC) == 0)) {
+			goto undeclared_property;
+		}
+
+		if (UNEXPECTED(!(ce->ce_flags & ZEND_ACC_CONSTANTS_UPDATED))) {
+			if (UNEXPECTED(zend_update_class_constants(ce)) != SUCCESS) {
+				return NULL;
+			}
+		}
+		ret = CE_STATIC_MEMBERS(ce) + property_info->offset;
+
+		if (param_property_info) {
+			*param_property_info = property_info;
+		}
+	} else {
+		property_info = *param_property_info;
+	}
+
+	/* check if static properties were destoyed */
+	if (UNEXPECTED(CE_STATIC_MEMBERS(ce) == NULL)) {
+undeclared_property:
+		if (!silent) {
+			zend_throw_error(NULL, "Access to undeclared static property: %s::$%s", ZSTR_VAL(ce->name), property_name);
+		}
+		ret = NULL;
+	}
+
+	return ret;
+}
+
+static int zephir_update_static_property_ex(zend_class_entry *scope, const char *name, int name_length, zval *value, zend_property_info **property_info)
+{
+	zval *property;
+	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+	zend_class_entry *old_scope = EG(scope);
+
+	EG(scope) = scope;
+	property = zephir_std_get_static_property(scope, name, name_length, 0, property_info);
+	EG(scope) = old_scope;
+
+	if (!property) {
+		return FAILURE;
+	} else {
+		if (Z_REFCOUNTED_P(value) && Z_ISREF_P(value)) {
+			SEPARATE_ZVAL(value);
+		}
+		zval_ptr_dtor(property);
+		ZVAL_COPY(property, value);
+		return SUCCESS;
+	}
+}
+
+int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value)
+{
+	assert(ce != NULL);
+	return zephir_update_static_property_ex(ce, name, len, value, NULL);
+}

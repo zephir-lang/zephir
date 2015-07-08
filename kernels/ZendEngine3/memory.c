@@ -357,12 +357,12 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 {
 	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**) pDest;
 	zend_class_entry *scope;
-	uint len = hash_key->key->len;
+	uint len = ZSTR_LEN(hash_key->key);
 
 	assert(hash_key->key != NULL);
 	assert(len > 2 * sizeof(zend_class_entry**));
 
-	memcpy(&scope, &hash_key->key->val[(len -1) - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
+	memcpy(&scope, &ZSTR_VAL(hash_key->key)[(len -1) - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
 
 /*
 #ifndef ZEPHIR_RELEASE

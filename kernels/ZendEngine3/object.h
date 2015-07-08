@@ -29,4 +29,14 @@
 
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
 
+/** Reading properties */
+int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
+
+/** Updating properties */
+int zephir_update_property_zval(zval *obj, const char *property_name, unsigned int property_length, zval *value);
+
+/** Static properties */
+int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len);
+int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value);
+
 #endif

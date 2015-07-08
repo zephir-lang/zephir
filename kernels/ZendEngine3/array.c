@@ -151,6 +151,19 @@ int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index,
 	return 0;
 }
 
+int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint index_length, int flags)
+{
+	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		return 0;
+	}
+
+	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		SEPARATE_ZVAL_IF_NOT_REF(arr);
+	}
+
+	return zend_hash_str_del(Z_ARRVAL_P(arr), index, index_length);
+}
+
 int zephir_array_append(zval *arr, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
 {
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
@@ -418,7 +431,6 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 			case 'z':
 				item = va_arg(ap, zval*);
 				old_item[i] = item;
-				php_var_dump(item, 1);
 				if (zephir_array_isset_fetch(&fetched, &pzv, item, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
 						if (i == (types_length - 1)) {
