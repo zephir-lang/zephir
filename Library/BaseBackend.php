@@ -31,8 +31,10 @@ abstract class BaseBackend
     abstract public function getTypeDefinition($type);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
 
+    abstract public function getVariableCode(Variable $variable);
+
     /* Assign values to variables */
-    abstract public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true);
     abstract public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);

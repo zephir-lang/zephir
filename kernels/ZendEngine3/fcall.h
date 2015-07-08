@@ -114,4 +114,12 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 	} \
 	while(0)
 
+#ifdef ZEPHIR_RELEASE
+#define ZEPHIR_TEMP_PARAM_COPY 0
+#define zephir_check_temp_parameter(param) do { if (Z_REFCOUNT(param) > 1) zval_copy_ctor(&param); else ZVAL_NULL(&param); } while(0)
+#else
+#define ZEPHIR_TEMP_PARAM_COPY 1
+#define zephir_check_temp_parameter(param)
+#endif
+
 #endif /* ZEPHIR_KERNEL_FCALL_H */

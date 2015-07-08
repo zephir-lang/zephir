@@ -97,11 +97,13 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 #define ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(ppzv) \
 	do { \
 		zval * restrict tmp_ = (ppzv); \
-		if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
-			zephir_ptr_dtor(tmp_); \
-			ZVAL_UNDEF(tmp_); \
-		} else { \
-			zephir_memory_observe(tmp_); \
+		if (tmp_ != NULL) { \
+			if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
+				zephir_ptr_dtor(tmp_); \
+				ZVAL_UNDEF(tmp_); \
+			} else { \
+				zephir_memory_observe(tmp_); \
+			} \
 		} \
 	} while (0)
 

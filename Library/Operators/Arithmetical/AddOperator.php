@@ -30,5 +30,5 @@ class AddOperator extends ArithmeticalBaseOperator
 
     protected $_bitOperator = '|';
 
-    protected $_zvalOperator = 'zephir_add_function_ex';
+    protected $_zvalOperator = 'zephir_add_function';
 }

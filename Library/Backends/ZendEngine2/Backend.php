@@ -11,6 +11,14 @@ class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
 
+    public function getVariableCode(Variable $variable)
+    {
+        if ($variable->isLocalOnly()) {
+            return '&' . $variable->getName();
+        }
+        return $variable->getName();
+    }
+
     public function getStringsManager()
     {
         return new StringsManager();
@@ -202,6 +210,8 @@ class Backend extends BaseBackend
             $copyStr = ', 1';
         } else if ($doCopy === false) {
             $copyStr = ', 0';
+        } else if (isset($doCopy)) {
+            $copyStr = $doCopy;
         }
 
         $output = $macro . '(' . $variableName . ', ' . $value . $copyStr . ');';
@@ -211,9 +221,9 @@ class Backend extends BaseBackend
         return $output;
     }
 
-    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
+    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
-        return $this->assignHelper('ZVAL_STRING', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter, true);
+        return $this->assignHelper('ZVAL_STRING', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter, $doCopy);
     }
 
     public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
@@ -485,6 +495,26 @@ class Backend extends BaseBackend
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         } else {
             $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+        }
+    }
+
+    public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext)
+    {
+        if ($variableLeft->isLocalOnly()) {
+            $op1 = '&' . $variableLeft->getName();
+        } else {
+            $op1 = $variableLeft->getName();
+        }
+
+        if ($variableRight->isLocalOnly()) {
+            $op2 = '&' . $variableRight->getName();
+        } else {
+            $op2 = $variableRight->getName();
+        }
+        if ($expected->isLocalOnly()) {
+            $compilationContext->codePrinter->output($zvalOperator . '(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
+        } else {
+            $compilationContext->codePrinter->output($zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
         }
     }
 }

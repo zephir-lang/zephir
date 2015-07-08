@@ -68,3 +68,45 @@ void zephir_concat_self_str(zval *left, const char *right, int right_length)
 		zval_dtor(&left_copy);
 	}
 }
+
+/**
+ * Natural compare with long operandus on right
+ */
+int zephir_compare_strict_long(zval *op1, long op2)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return Z_LVAL_P(op1) == op2;
+		case IS_DOUBLE:
+			return Z_DVAL_P(op1) == (double) op2;
+		case IS_NULL:
+			return 0 == op2;
+		case IS_TRUE:
+		case IS_FALSE:
+			if (Z_TYPE_P(op1) == IS_TRUE) {
+				return 1 == op2;
+			} else {
+				return 0 == op2;
+			}
+		default:
+			{
+				zval result, op2_tmp;
+				ZVAL_LONG(&op2_tmp, op2);
+				is_equal_function(&result, op1, &op2_tmp);
+				return Z_TYPE(result) == IS_TRUE ? 1 : 0;
+			}
+	}
+
+	return 0;
+}
+
+/**
+ * Check if two zvals are equal
+ */
+int zephir_is_equal(zval *op1, zval *op2)
+{
+	zval result;
+
+	is_equal_function(&result, op1, op2);
+	return Z_TYPE(result) == IS_TRUE;
+}

@@ -12,6 +12,11 @@ class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
 
+    public function getVariableCode(Variable $variable)
+    {
+        return '&' . $variable->getName();
+    }
+
     public function getStringsManager()
     {
         return new StringsManager();
@@ -93,9 +98,9 @@ class Backend extends BackendZendEngine2
     }
 
     /* Assign value to variable */
-    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
+    public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = null)
     {
-        return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter, null);
     }
 
     public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
@@ -327,5 +332,22 @@ class Backend extends BackendZendEngine2
         } else {
             $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', &' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         }
+    }
+
+    public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext)
+    {
+        if ($variableLeft->isLocalOnly()) {
+            $op1 = '&' . $variableLeft->getName();
+        } else {
+            $op1 = $variableLeft->getName();
+        }
+
+        if ($variableRight->isLocalOnly()) {
+            $op2 = '&' . $variableRight->getName();
+        } else {
+            $op2 = $variableRight->getName();
+        }
+
+        $compilationContext->codePrinter->output($zvalOperator . '(' . $expected->getName() . ', &' . $op1 . ', &' . $op2 . ');');
     }
 }

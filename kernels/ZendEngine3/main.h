@@ -67,6 +67,9 @@
 	return; \
 }
 
+/** Return null restoring memory frame */
+#define RETURN_MM_NULL()            { RETVAL_NULL(); ZEPHIR_MM_RESTORE(); return; }
+
 /* Fetch Parameters */
 int zephir_fetch_parameters(int num_args, int required_args, int optional_args, ...);
 

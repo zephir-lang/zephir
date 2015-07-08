@@ -35,6 +35,71 @@
 #include "Zend/zend_exceptions.h"
 
 /**
+ * Throws a zval object as exception
+ */
+void zephir_throw_exception_debug(zval *object, const char *file, zend_uint line)
+{
+	zend_class_entry *default_exception_ce;
+	int ZEPHIR_LAST_CALL_STATUS = 0;
+	zval curline;
+
+	ZVAL_UNDEF(&curline);
+
+	ZEPHIR_MM_GROW();
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		zval_ptr_dtor(object);
+		object_init_ex(object, zend_exception_get_default());
+		ZEPHIR_CALL_METHOD(NULL, object, "__construct", NULL, 0, object);
+	}
+
+	Z_ADDREF_P(object);
+
+	if (line > 0) {
+		ZEPHIR_CALL_METHOD(&curline, object, "getline", NULL, 0);
+		zephir_check_call_status();
+		if (ZEPHIR_IS_LONG(&curline, 0)) {
+			default_exception_ce = zend_exception_get_default();
+			zend_update_property_string(default_exception_ce, object, SL("file"), file);
+			zend_update_property_long(default_exception_ce, object, SL("line"), line);
+		}
+	}
+
+	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+		zend_throw_exception_object(object);
+	}
+	ZEPHIR_MM_RESTORE();
+}
+
+/**
+ * Throws an exception with a single string parameter + debug info
+ */
+void zephir_throw_exception_string_debug(zend_class_entry *ce, const char *message, zend_uint message_len, const char *file, zend_uint line)
+{
+	zval object, msg;
+	int ZEPHIR_LAST_CALL_STATUS = 0;
+	zend_class_entry *default_exception_ce;
+
+	object_init_ex(&object, ce);
+
+	ZVAL_STRINGL(&msg, message, message_len);
+
+	ZEPHIR_CALL_METHOD(NULL, &object, "__construct", NULL, 0, &msg);
+
+	if (line > 0) {
+		default_exception_ce = zend_exception_get_default();
+		zend_update_property_string(default_exception_ce, &object, "file", sizeof("file")-1, file);
+		zend_update_property_long(default_exception_ce, &object, "line", sizeof("line")-1, line);
+	}
+
+	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
+		zend_throw_exception_object(&object);
+	}
+
+	zval_ptr_dtor(&msg);
+}
+
+/**
  * Throws an exception with a single string parameter
  */
 void zephir_throw_exception_string(zend_class_entry *ce, const char *message, zend_uint message_len)

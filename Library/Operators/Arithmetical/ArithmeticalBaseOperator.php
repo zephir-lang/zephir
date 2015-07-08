@@ -431,24 +431,8 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
 
-                                        if ($variableLeft->isLocalOnly()) {
-                                            $op1 = '&' . $variableLeft->getName();
-                                        } else {
-                                            $op1 = $variableLeft->getName();
-                                        }
-
-                                        if ($variableRight->isLocalOnly()) {
-                                            $op2 = '&' . $variableRight->getName();
-                                        } else {
-                                            $op2 = $variableRight->getName();
-                                        }
-
                                         $expected = $this->getExpected($compilationContext, $expression);
-                                        if ($expected->isLocalOnly()) {
-                                            $compilationContext->codePrinter->output($this->_zvalOperator . '(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-                                        } else {
-                                            $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-                                        }
+                                        $compilationContext->backend->zvalOperator($this->_zvalOperator, $expected, $variableLeft, $variableRight, $compilationContext);
 
                                         if ($variableLeft->isTemporal()) {
                                             $variableLeft->setIdle(true);
@@ -522,24 +506,9 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'variable':
                                     case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            $op1 = '&' . $variableLeft->getName();
-                                        } else {
-                                            $op1 = $variableLeft->getName();
-                                        }
-
-                                        if ($variableRight->isLocalOnly()) {
-                                            $op2 = '&' . $variableRight->getName();
-                                        } else {
-                                            $op2 = $variableRight->getName();
-                                        }
 
                                         $expected = $this->getExpected($compilationContext, $expression);
-                                        if ($expected->isLocalOnly()) {
-                                            $compilationContext->codePrinter->output($this->_zvalOperator . '(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-                                        } else {
-                                            $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-                                        }
+                                        $compilationContext->backend->zvalOperator($this->_zvalOperator, $expected, $variableLeft, $variableRight, $compilationContext);
 
                                         if ($variableLeft->isTemporal()) {
                                             $variableLeft->setIdle(true);

@@ -438,17 +438,17 @@ class Call
                 case 'string':
                 case 'istring':
                     $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_STRING(' . $parameterVariable->getName() . ', "' . Utils::addSlashes($compiledExpression->getCode()) . '", ZEPHIR_TEMP_PARAM_COPY);');
+                    $compilationContext->backend->assignString($parameterVariable, Utils::addSlashes($compiledExpression->getCode()), $compilationContext, true, 'ZEPHIR_TEMP_PARAM_COPY');
                     $this->_temporalVariables[] = $parameterVariable;
                     $mustCheck[] = $parameterVariable->getName();
-                    $params[] = $parameterVariable->getName();
+                    $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
 
                 case 'array':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
-                    $params[] = $parameterVariable->getName();
+                    $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();
                     break;
@@ -497,13 +497,8 @@ class Call
                             break;
 
                         case 'string':
-                            $params[] = $parameterVariable->getName();
-                            $types[] = $parameterVariable->getType();
-                            $dynamicTypes[] = $parameterVariable->getType();
-                            break;
-
                         case 'array':
-                            $params[] = $parameterVariable->getName();
+                            $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getType();
                             break;
@@ -661,11 +656,7 @@ class Call
                         case 'string':
                         case 'variable':
                         case 'array':
-                            if ($parameterVariable->isLocalOnly()) {
-                                $params[] = '&' . $parameterVariable->getName();
-                            } else {
-                                $params[] = $parameterVariable->getName();
-                            }
+                            $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $dynamicTypes[] = $parameterVariable->getType();
                             $types[] = $parameterVariable->getType();
                             break;
