@@ -114,17 +114,23 @@ class Compiler
     protected $extraFiles = array();
 
     /**
+     * @var BaseBackend
+     */
+    protected $backend;
+
+    /**
      * Compiler constructor
      *
      * @param Config $config
      * @param Logger $logger
      */
-    public function __construct(Config $config, Logger $logger)
+    public function __construct(Config $config, Logger $logger, BaseBackend $backend)
     {
         $this->config = $config;
         $this->logger = $logger;
         $this->stringManager = new StringsManager();
         $this->fileSystem = new FileSystem();
+        $this->backend = $backend;
         $this->checkRequires();
     }
 
@@ -693,7 +699,7 @@ class Compiler
         }
 
         // Copy the latest kernel files
-        $this->recursiveProcess(realpath(__DIR__ . '/../ext/kernel'), 'ext/kernel');
+        $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
     }
 
     /**
@@ -1173,7 +1179,7 @@ class Compiler
         }
 
         $kernelPath = realpath($kernelPath);
-        $sourceKernelPath = realpath(__DIR__ . '/../ext/kernel');
+        $sourceKernelPath = $this->backend->getInternalKernelPath();
 
         $configured = $this->recursiveProcess($sourceKernelPath, $kernelPath, '@.*\.[ch]$@', array($this, 'checkKernelFile'));
         if (!$configured) {
@@ -1217,15 +1223,17 @@ class Compiler
      *
      * @throws Exception
      * @return bool true if need to run configure
+     * TODO: move this to backend?
      */
     public function createConfigFiles($project)
     {
-        $contentM4 = file_get_contents(__DIR__ . '/../templates/config.m4');
+        $templatePath = $this->backend->getInternalTemplatePath();
+        $contentM4 = file_get_contents($templatePath . '/config.m4');
         if (empty($contentM4)) {
             throw new Exception("Template config.m4 doesn't exist");
         }
 
-        $contentW32 = file_get_contents(__DIR__ . '/../templates/config.w32');
+        $contentW32 = file_get_contents($templatePath . '/config.w32');
         if (empty($contentW32)) {
             throw new Exception("Template config.w32 doesn't exist");
         }
@@ -1300,7 +1308,7 @@ class Compiler
         /**
          * php_ext.h
          */
-        $content = file_get_contents(__DIR__ . '/../templates/php_ext.h');
+        $content = file_get_contents($templatePath . '/php_ext.h');
         if (empty($content)) {
             throw new Exception("Template php_ext.h doesn't exist");
         }
@@ -1318,7 +1326,7 @@ class Compiler
         /**
          * ext.h
          */
-        $content = file_get_contents(__DIR__ . '/../templates/ext.h');
+        $content = file_get_contents($templatePath . '/ext.h');
         if (empty($content)) {
             throw new Exception("Template ext.h doesn't exist");
         }
@@ -1336,7 +1344,7 @@ class Compiler
         /**
          * ext_config.h
          */
-        $content = file_get_contents(__DIR__ . '/../templates/ext_config.h');
+        $content = file_get_contents($templatePath . '/ext_config.h');
         if (empty($content)) {
             throw new Exception("Template ext_config.h doesn't exist");
         }
@@ -1366,7 +1374,7 @@ class Compiler
         /**
          * ext_install
          */
-        $content = file_get_contents(__DIR__ . '/../templates/install');
+        $content = file_get_contents($templatePath . '/install');
         if (empty($content)) {
             throw new Exception("Install file doesn't exist");
         }
@@ -1637,15 +1645,17 @@ class Compiler
      *
      * @throws Exception
      * @return boolean
+     * TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
      */
     public function createProjectFiles($project)
     {
         $needConfigure = $this->checkKernelFiles();
+        $templatePath = $this->backend->getInternalTemplatePath();
 
         /**
          * project.c
          */
-        $content = file_get_contents(__DIR__ . '/../templates/project.c');
+        $content = file_get_contents($templatePath . '/project.c');
         if (empty($content)) {
             throw new Exception("Template project.c doesn't exist");
         }
@@ -1806,7 +1816,7 @@ class Compiler
         /**
          * Round 6. Generate the project main header
          */
-        $content = file_get_contents(__DIR__ . '/../templates/project.h');
+        $content = file_get_contents($templatePath . '/project.h');
         if (empty($content)) {
             throw new Exception("Template project.h doesn't exists");
         }
@@ -1847,7 +1857,7 @@ class Compiler
         /**
          * Round 7. Create php_project.h
          */
-        $content = file_get_contents(__DIR__ . '/../templates/php_project.h');
+        $content = file_get_contents($templatePath . '/php_project.h');
         if (empty($content)) {
             throw new Exception('Template php_project.h doesn`t exist');
         }
@@ -2007,13 +2017,15 @@ class Compiler
      * @param $contentM4
      * @throws Exception
      * @return string
+     * TODO: Move the template depending part to backend?
      */
     public function generatePackageDependenciesM4($contentM4)
     {
+        $templatePath = $this->backend->getInternalTemplatePath();
         $packageDependencies = $this->config->get('package-dependencies');
         if (is_array($packageDependencies)) {
-            $pkgconfigM4 = file_get_contents(__DIR__ . '/../templates/pkg-config.m4');
-            $pkgconfigCheckM4 = file_get_contents(__DIR__ . '/../templates/pkg-config-check.m4');
+            $pkgconfigM4 = file_get_contents($templatePath . '/pkg-config.m4');
+            $pkgconfigCheckM4 = file_get_contents($templatePath . '/pkg-config-check.m4');
             $extraCFlags = '';
 
             foreach ($packageDependencies as $pkg => $version) {

@@ -1,0 +1,16 @@
+ARG_ENABLE("%PROJECT_LOWER%", "enable %PROJECT_LOWER%", "no");
+
+if (PHP_%PROJECT_UPPER% != "no") {
+  EXTENSION("%PROJECT_LOWER%", "%PROJECT_LOWER%.c", null, "-I"+configure_module_dirname);
+  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c hash.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c math.c concat.c variables.c filter.c iterator.c exit.c time.c", "%PROJECT_LOWER%");
+  ADD_SOURCES(configure_module_dirname + "/kernel/extended", "array.c fcall.c", "%PROJECT_LOWER%");
+  /* PCRE is always included on WIN32 */
+  AC_DEFINE("ZEPHIR_USE_PHP_PCRE", 1, "Whether PHP pcre extension is present at compile time");
+  if (PHP_JSON != "no") {
+    ADD_EXTENSION_DEP("%PROJECT_LOWER%", "json");
+    AC_DEFINE("ZEPHIR_USE_PHP_JSON", 1, "Whether PHP json extension is present at compile time");
+  }
+  %EXTRA_FILES_COMPILED%
+  %FILES_COMPILED%
+  ADD_FLAG("CFLAGS_%PROJECT_UPPER%", "/D ZEPHIR_RELEASE");
+}
