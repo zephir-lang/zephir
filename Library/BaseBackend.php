@@ -29,7 +29,9 @@ abstract class BaseBackend
 
     abstract public function getStringsManager();
     abstract public function getTypeDefinition($type);
+    abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
+    abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context);
 
     abstract public function getVariableCode(Variable $variable);
 
@@ -42,10 +44,13 @@ abstract class BaseBackend
     abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
 
+    abstract public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true);
     abstract public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
     abstract public function fetchProperty(Variable $symbolVariable, Variable $variableVariable, $property, $readOnly, CompilationContext $context, $useOptimized = false);
     abstract public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context);
-    abstract public function updateProperty(Variable $symbolVariable, $propertyName, Variable $value, CompilationContext $compilationContext);
+    abstract public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $compilationContext);
+    abstract public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context);
+    abstract public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context);
 
     abstract public function checkConstructor(Variable $var, CompilationContext $context);
 
@@ -61,7 +66,12 @@ abstract class BaseBackend
     /* Array update multi */
     abstract public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $context);
 
-    abstract public function onPreInitVar(CompilationContext $context);
+    abstract public function maybeSeparate(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
+    abstract public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
+
+    abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
+    abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);
+    abstract public function onPostCompile(ClassMethod $method, CompilationContext $context);
 
     public static function getActiveBackend()
     {

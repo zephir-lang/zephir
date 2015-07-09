@@ -157,7 +157,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             case 'string':
                 switch ($resolvedExpr->getType()) {
                     case 'null':
-                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ZEPHIR_GLOBAL(global_null) TSRMLS_CC);');
+                        $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, 'null', $compilationContext);
                         break;
 
                     case 'bool':
@@ -196,7 +196,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                     case 'string':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                        $codePrinter->output('zephir_update_property_array(' . $symbolVariable->getName() . ', SL("' . $property . '"), ' . $indexVariable->getName() . ', ' . $tempVariable->getName() . ' TSRMLS_CC);');
+                        $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, $tempVariable, $compilationContext);
                         break;
 
                     case 'array':

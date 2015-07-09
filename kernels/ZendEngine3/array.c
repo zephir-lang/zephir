@@ -293,7 +293,7 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 		Z_TRY_ADDREF_P(value);
 	}
 
-	zv = zend_hash_str_add(Z_ARRVAL_P(arr), index, index_length, value);
+	zv = zend_hash_str_update(Z_ARRVAL_P(arr), index, index_length, value);
 	return zv != NULL ? SUCCESS : FAILURE;
 }
 
@@ -321,7 +321,7 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 		Z_TRY_ADDREF_P(value);
 	}
 
-	zv = zend_hash_index_add(Z_ARRVAL_P(arr), index, value);
+	zv = zend_hash_index_update(Z_ARRVAL_P(arr), index, value);
 	return zv != NULL ? SUCCESS : FAILURE;
 }
 

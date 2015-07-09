@@ -179,8 +179,7 @@ class StaticProperty
                 break;
 
             case 'array':
-                $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-                $codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &' . $variableVariable->getName() . ' TSRMLS_CC);');
+                $compilationContext->backend->updateStaticProperty($classEntry, $property, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'variable':

@@ -874,50 +874,6 @@ class ClassDefinition
     }
 
     /**
-     * Returns the signature of an internal method
-     *
-     * @return string
-     */
-    private function getInternalSignature(ClassMethod $method)
-    {
-        if ($method->isInitializer() && !$method->isStatic()) {
-            return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
-        }
-
-        if ($method->isInitializer() && $method->isStatic()) {
-            return 'void ' . $method->getName() . '(TSRMLS_D)';
-        }
-
-        $signatureParameters = array();
-        $parameters = $method->getParameters();
-        if (is_object($parameters)) {
-            foreach ($parameters->getParameters() as $parameter) {
-                switch ($parameter['data-type']) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'double':
-                    case 'bool':
-                    case 'char':
-                    case 'uchar':
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
-                        break;
-
-                    default:
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext';
-                        break;
-                }
-            }
-        }
-
-        if (count($signatureParameters)) {
-            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
-        }
-
-        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
-    }
-
-    /**
      * Returns the initialization method if any does exist
      *
      * @return ClassMethod
@@ -1208,7 +1164,7 @@ class ClassDefinition
                 if (!$method->isInternal()) {
                     $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ') {');
                 } else {
-                    $codePrinter->output($this->getInternalSignature($method) . ' {');
+                    $codePrinter->output($compilationContext->backend->getInternalSignature($method, $compilationContext) . ' {');
                 }
                 $codePrinter->outputBlankLine();
 
@@ -1252,7 +1208,7 @@ class ClassDefinition
                     if (!$method->isInternal()) {
                         $codePrinter->output('PHP_METHOD(' . $this->getCNamespace() . '_' . $this->getName() . ', ' . $method->getName() . ');');
                     } else {
-                        $codePrinter->output($this->getInternalSignature($method) . ';');
+                        $codePrinter->output($compilationContext->backend->getInternalSignature($method, $compilationContext) . ';');
                     }
                 }
                 $codePrinter->outputBlankLine();

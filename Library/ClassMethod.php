@@ -1656,17 +1656,7 @@ class ClassMethod
             }
         }
 
-        /**
-         * Initialize the properties within create_object, handler code
-         */
-        if (preg_match('/^zephir_init_properties/', $this->getName())) {
-            $codePrinter->increaseLevel();
-            $codePrinter->output('{');
-            $codePrinter->increaseLevel();
-            $codePrinter->output('zval *this_ptr = NULL;');
-            $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
-            $codePrinter->decreaseLevel();
-        }
+        $compilationContext->backend->onPreCompile($this, $compilationContext);
 
         /**
          * Compile the block of statements if any
@@ -1793,7 +1783,7 @@ class ClassMethod
                             case 'array':
                             case 'empty-array':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                $initVarCode .= "\t" . 'array_init(' . $variable->getName() . ');' . PHP_EOL;
+                                $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext) . PHP_EOL;
                                 break;
 
                             default:
@@ -2016,7 +2006,8 @@ class ClassMethod
          */
         foreach ($symbolTable->getVariables() as $name => $variable) {
             if ($symbolTable->isSuperGlobal($name)) {
-                $codePrinter->preOutput("\t" . 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);');
+                $globalVar = $symbolTable->getVariable($name);
+                $codePrinter->preOutput("\t" . $compilationContext->backend->fetchGlobal($globalVar, $compilationContext, false));
             }
         }
 
@@ -2082,7 +2073,7 @@ class ClassMethod
          * Generate the variable definition for variables used
          */
         $varInitCode = '';
-        $additionalCode = $compilationContext->backend->onPreInitVar($compilationContext);
+        $additionalCode = $compilationContext->backend->onPreInitVar($this, $compilationContext);
 
         foreach ($usedVariables as $type => $variables) {
             list ($pointer, $code) = $compilationContext->backend->getTypeDefinition($type);
@@ -2135,13 +2126,7 @@ class ClassMethod
             }
         }
 
-        if (preg_match('/^zephir_init_properties/', $this->getName())) {
-            $codePrinter->increaseLevel();
-            $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
-            $codePrinter->decreaseLevel();
-            $codePrinter->output('}');
-            $codePrinter->decreaseLevel();
-        }
+        $compilationContext->backend->onPostCompile($this, $compilationContext);
 
         /**
          * Remove macros that grow/restore the memory frame stack if it wasn't used

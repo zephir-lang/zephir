@@ -75,13 +75,14 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} \
 
 #define ZEPHIR_CPY_WRT(d, v) \
-	Z_ADDREF(v); \
-	if (Z_REFCOUNTED(d) && Z_REFCOUNT(d) > 0) { \
-		zephir_ptr_dtor(&d); \
+	Z_TRY_ADDREF_P(v); \
+	if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
+		zephir_ptr_dtor(d); \
 	} \
-	ZVAL_COPY(&d, &v);
+	ZVAL_COPY_VALUE(d, v);
 
 #define ZEPHIR_CPY_WRT_CTOR(d, v) \
+	Z_TRY_ADDREF_P(v); \
 	if (d) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
 			zephir_ptr_dtor(d); \
@@ -89,7 +90,8 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} else { \
 		zephir_memory_observe(d); \
 	} \
-	ZVAL_DUP(d, v);
+	ZVAL_DUP(d, v); \
+	Z_TRY_DELREF_P(v);
 
 /* TODO: this might causes troubles, since we cannot observe here, since we aren't using double pointers
  * figure out away to fix this (if it's an issue, which it isn't if observing isn't necessary)

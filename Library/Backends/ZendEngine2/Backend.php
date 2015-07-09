@@ -5,11 +5,23 @@ use Zephir\Variable;
 use Zephir\Compiler;
 use Zephir\CompilerException;
 use Zephir\CompilationContext;
+use Zephir\ClassMethod;
 use Zephir\BaseBackend;
 
 class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
+
+    /**
+     * Get a double pointer to the variable
+     */
+    protected function getVariableCodePointer(Variable $variable)
+    {
+        if ($variable->isLocalOnly()) {
+            throw new CompilerException('Double pointer of local zval requested');
+        }
+        return '&' . $variable->getName();
+    }
 
     public function getVariableCode(Variable $variable)
     {
@@ -123,9 +135,87 @@ class Backend extends BaseBackend
         return array($pointer, $code);
     }
 
-    public function onPreInitVar(CompilationContext $context)
+    public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context)
+    {
+        $variableName = $this->getVariableCode($variableVariable);
+        switch ($value) {
+            case 'array':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY';
+                break;
+
+            case 'object':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_OBJECT';
+                break;
+
+            case 'null':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_NULL';
+                break;
+
+            case 'string':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_STRING';
+                break;
+
+            case 'int':
+            case 'long':
+            case 'integer':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG';
+                break;
+
+            case 'double':
+            case 'float':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_DOUBLE';
+                break;
+
+            case 'boolean':
+            case 'bool':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_BOOL';
+                break;
+
+            case 'resource':
+                $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_RESOURCE';
+                break;
+
+            case 'callable':
+                $condition = 'zephir_is_callable(' . $variableName . ' TSRMLS_CC) ' . $operator . ' 1';
+                break;
+
+            default:
+                throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
+        }
+        return $condition;
+    }
+
+    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
     {
         return '';
+    }
+
+    public function onPreCompile(ClassMethod $method, CompilationContext $context)
+    {
+        $codePrinter = $context->codePrinter;
+        /**
+         * Initialize the properties within create_object, handler code
+         */
+        if (preg_match('/^zephir_init_properties/', $method->getName())) {
+            $codePrinter->increaseLevel();
+            $codePrinter->output('{');
+            $codePrinter->increaseLevel();
+            $codePrinter->output('zval *this_ptr = NULL;');
+            $codePrinter->output('ZEPHIR_CREATE_OBJECT(this_ptr, class_type);');
+            $codePrinter->decreaseLevel();
+        }
+    }
+
+    public function onPostCompile(ClassMethod $method, CompilationContext $context)
+    {
+        $codePrinter = $context->codePrinter;
+        if (preg_match('/^zephir_init_properties/', $method->getName())) {
+            $codePrinter->increaseLevel();
+            $codePrinter->output('return Z_OBJVAL_P(this_ptr);');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+            $codePrinter->decreaseLevel();
+        }
     }
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
@@ -196,6 +286,48 @@ class Backend extends BaseBackend
         $groupVariables[] = $pointer . $variable->getName();
     }
 
+    /**
+     * Returns the signature of an internal method
+     */
+    public function getInternalSignature(ClassMethod $method, CompilationContext $context)
+    {
+        if ($method->isInitializer() && !$method->isStatic()) {
+            return 'static zend_object_value ' . $method->getName() . '(zend_class_entry *class_type TSRMLS_DC)';
+        }
+
+        if ($method->isInitializer() && $method->isStatic()) {
+            return 'void ' . $method->getName() . '(TSRMLS_D)';
+        }
+
+        $signatureParameters = array();
+        $parameters = $method->getParameters();
+        if (is_object($parameters)) {
+            foreach ($parameters->getParameters() as $parameter) {
+                switch ($parameter['data-type']) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'double':
+                    case 'bool':
+                    case 'char':
+                    case 'uchar':
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
+                        break;
+
+                    default:
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext';
+                        break;
+                }
+            }
+        }
+
+        if (count($signatureParameters)) {
+            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
+        }
+
+        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
+    }
+
     /* Assign value to variable */
     protected function assignHelper($macro, $variableName, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
     {
@@ -211,7 +343,7 @@ class Backend extends BaseBackend
         } else if ($doCopy === false) {
             $copyStr = ', 0';
         } else if (isset($doCopy)) {
-            $copyStr = $doCopy;
+            $copyStr = ', ' . $doCopy;
         }
 
         $output = $macro . '(' . $variableName . ', ' . $value . $copyStr . ');';
@@ -228,25 +360,25 @@ class Backend extends BaseBackend
 
     public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
-        return $this->assignHelper('ZVAL_LONG', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_LONG', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
     public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
-        return $this->assignHelper('ZVAL_DOUBLE', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_DOUBLE', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
     public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
     {
-        return $this->assignHelper('ZVAL_BOOL', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter);
+        return $this->assignHelper('ZVAL_BOOL', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
     public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
     {
         if (!isset($size)) {
-            $output = 'array_init(' . $variable->getName() . ');';
+            $output = 'array_init(' . $this->getVariableCode($variable) . ');';
         } else {
-            $output = 'zephir_create_array(' . $variable->getName() . ', ' . $size . ', 0 TSRMLS_CC);';
+            $output = 'zephir_create_array(' . $this->getVariableCode($variable) . ', ' . $size . ', 0 TSRMLS_CC);';
         }
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
@@ -290,11 +422,7 @@ class Backend extends BaseBackend
 
     public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true)
     {
-        if ($variable->getName() == 'return_value' || !$variable->isLocalOnly()) {
-            $variableAccess = $variable->getName();
-        } else {
-            $variableAccess = '&' . $variable->getName();
-        }
+        $variableAccess = $this->getVariableCode($variable);
         if (!isset($ce)) {
             $output = 'object_init(' . $variableAccess . ');';
         } else {
@@ -325,21 +453,17 @@ class Backend extends BaseBackend
                 throw new CompilerException("Variable type: " . $index->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
         }
         if ($isVariable && in_array($index->getType(), array('variable', 'string'))) {
-            if ($index->isLocalOnly()) {
-                $output = 'zephir_array_fetch(&' . $var->getName() . ', ' . $src->getName() . ', &' . $index->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
-            } else {
-                $output = 'zephir_array_fetch(&' . $var->getName() . ', ' . $src->getName() . ', ' . $index->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
-            }
+            $output = 'zephir_array_fetch(' . $this->getVariableCodePointer($var) . ', ' . $this->getVariableCode($src) . ', ' . $this->getVariableCode($index) . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
         } else {
             if ($isVariable) {
-                $indexAccess =  $index->getName();
+                $indexAccess =  $this->getVariableCode($index);
             } else {
                 $indexAccess = $index->getCode();
                 if ($type == 'string') {
                     $indexAccess = 'SL("' . $indexAccess . '")';
                 }
             }
-            $output = 'zephir_array_fetch_' . $type . '(&' . $var->getName() . ', ' . $src->getName() . ', ' . $indexAccess . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
+            $output = 'zephir_array_fetch_' . $type . '(' . $this->getVariableCodePointer($var) . ', ' . $this->getVariableCode($src) . ', ' . $indexAccess . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);';
         }
 
         if ($useCodePrinter) {
@@ -417,13 +541,13 @@ class Backend extends BaseBackend
                         case 'long':
                         case 'ulong':
                             $keys .= 'l';
-                            $offsetItems[] = $variableIndex->getName();
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
                             $numberParams++;
                             break;
                         case 'string':
                         case 'variable':
                             $keys .= 'z';
-                            $offsetItems[] = $variableIndex->getName();
+                            $offsetItems[] = $this->getVariableCode($variableIndex);
                             $numberParams++;
                             break;
                         default:
@@ -437,6 +561,16 @@ class Backend extends BaseBackend
         }
 
         $compilationContext->codePrinter->output('zephir_array_update_multi(&' . $variable->getName() . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+    }
+
+    public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
+    {
+        $name = $globalVar->getName();
+        $output = 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);';
+        if ($useCodePrinter) {
+            $codePrinter->output($output);
+        }
+        return $output;
     }
 
     public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)
@@ -472,18 +606,45 @@ class Backend extends BaseBackend
         }
     }
 
-    public function updateProperty(Variable $symbolVariable, $propertyName, Variable $value, CompilationContext $context)
+    public function resolveValue($value, CompilationContext $context)
     {
-        if ($symbolVariable->getName() == 'this_ptr') {
-            $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value->getName() . ' TSRMLS_CC);');
-        } else {
-            $context->codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $value->getName() . ' TSRMLS_CC);');
+        if ($value == 'null') {
+            $value = 'ZEPHIR_GLOBAL(global_null)';
+        } else if ($value == 'true') {
+            $value = 'ZEPHIR_GLOBAL(global_true)';
+        } else if ($value == 'false') {
+            $value = 'ZEPHIR_GLOBAL(global_false)';
+        } else if ($value instanceof Variable) {
+            $value = $this->getVariableCode($value);
         }
+        return $value;
+    }
+
+    public function updateProperty(Variable $symbolVariable, $propertyName, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        if ($symbolVariable->getName() == 'this_ptr') {
+            $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+        } else {
+            $context->codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+        }
+    }
+
+    public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_update_static_property_ce(' . $classEntry .', SL("' . $property . '"), &' . $value . ' TSRMLS_CC);');
+    }
+
+    public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
+    {
+        $value = $this->resolveValue($value, $context);
+        $context->codePrinter->output('zephir_update_property_array(' . $this->getVariableCode($variable) . ', SL("' . $property . '"), ' . $this->getVariableCode($key) . ', ' . $value . ' TSRMLS_CC);');
     }
 
     public function checkConstructor(Variable $var, CompilationContext $context)
     {
-        $context->codePrinter->output('if (zephir_has_constructor(' . $var->getName() . ' TSRMLS_CC)) {');
+        $context->codePrinter->output('if (zephir_has_constructor(' . $this->getVariableCode($var) . ' TSRMLS_CC)) {');
     }
 
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
@@ -500,21 +661,26 @@ class Backend extends BaseBackend
 
     public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext)
     {
-        if ($variableLeft->isLocalOnly()) {
-            $op1 = '&' . $variableLeft->getName();
-        } else {
-            $op1 = $variableLeft->getName();
-        }
+        $expected = $this->getVariableCode($expected);
+        $op1 = $this->getVariableCode($variableLeft);
+        $op2 = $this->getVariableCode($variableRight);
 
-        if ($variableRight->isLocalOnly()) {
-            $op2 = '&' . $variableRight->getName();
-        } else {
-            $op2 = $variableRight->getName();
+        $params = ' TSRMLS_CC';
+        if ($zvalOperator == 'zephir_add_function' || $zvalOperator == 'zephir_sub_function') {
+            $params = '';
         }
-        if ($expected->isLocalOnly()) {
-            $compilationContext->codePrinter->output($zvalOperator . '(&' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-        } else {
-            $compilationContext->codePrinter->output($zvalOperator . '(' . $expected->getName() . ', ' . $op1 . ', ' . $op2 . ' TSRMLS_CC);');
-        }
+        $compilationContext->codePrinter->output($zvalOperator . '(' . $expected . ', ' . $op1 . ', ' . $op2 . $params . ');');
+    }
+
+    public function maybeSeparate(Variable $variableTempSeparated, Variable $variable, CompilationContext $context)
+    {
+        $context->codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(' . $this->getVariableCodePointer($variable) . ');');
+    }
+
+    public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context)
+    {
+        $context->codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
+        $context->codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable->getName() . '", ' . $variable->getName() . ');');
+        $context->codePrinter->output('}');
     }
 }

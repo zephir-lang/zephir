@@ -160,6 +160,7 @@ class ArrayIndex
         /**
          * Create a temporal zval (if needed)
          */
+        $realSymbolVariable = $symbolVariable;
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
         $flags = 'PH_COPY | PH_SEPARATE';
@@ -169,7 +170,7 @@ class ArrayIndex
 
         if ($isGlobalVariable) {
             $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
-            $codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&' . $variable . ');');
+            $compilationContext->backend->maybeSeparate($variableTempSeparated, $realSymbolVariable, $compilationContext);
         }
 
         switch ($exprIndex->getType()) {
@@ -209,9 +210,7 @@ class ArrayIndex
         }
 
         if ($isGlobalVariable) {
-            $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
-            $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
-            $codePrinter->output('}');
+            $compilationContext->backend->setSymbolIfSeparated($variableTempSeparated, $realSymbolVariable, $compilationContext);
         }
     }
 

@@ -85,12 +85,6 @@ class ComparisonBaseOperator extends BaseOperator
                 throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
             }
 
-            if ($variableVariable->isLocalOnly()) {
-                $variableName = '&' . $variableVariable->getName();
-            } else {
-                $variableName = $variableVariable->getName();
-            }
-
             $value = strtolower($expr['right']['value']);
 
             switch ($variableVariable->getType()) {
@@ -161,50 +155,7 @@ class ComparisonBaseOperator extends BaseOperator
                     break;
 
                 case 'variable':
-                    switch ($value) {
-                        case 'array':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY';
-                            break;
-
-                        case 'object':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_OBJECT';
-                            break;
-
-                        case 'null':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_NULL';
-                            break;
-
-                        case 'string':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_STRING';
-                            break;
-
-                        case 'int':
-                        case 'long':
-                        case 'integer':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG';
-                            break;
-
-                        case 'double':
-                        case 'float':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_DOUBLE';
-                            break;
-
-                        case 'boolean':
-                        case 'bool':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_BOOL';
-                            break;
-
-                        case 'resource':
-                            $condition = 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_RESOURCE';
-                            break;
-
-                        case 'callable':
-                            $condition = 'zephir_is_callable(' . $variableName . ' TSRMLS_CC) ' . $operator . ' 1';
-                            break;
-
-                        default:
-                            throw new CompilerException('Unknown type: "' . $value . '" in typeof comparison', $expr['right']);
-                    }
+                    $condition = $compilationContext->backend->getTypeofCondition($variableVariable, $operator, $value, $compilationContext);
                     break;
 
                 default:
@@ -281,7 +232,8 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                return new CompiledExpression('bool', 'Z_TYPE_P(' . $variableRight->getName() . ') ' . $this->_operator . ' IS_NULL', $expression);
+                                $condition = $compilationContext->backend->getTypeofCondition($variableRight, $this->_operator, 'null', $compilationContext);
+                                return new CompiledExpression('bool', $condition, $expression);
 
                             default:
                                 throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
@@ -665,11 +617,8 @@ class ComparisonBaseOperator extends BaseOperator
                         switch ($right->getType()) {
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', 'Z_TYPE_P(&' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', 'Z_TYPE_P(' . $variable->getName() . ') ' . $this->_operator . ' IS_NULL', $expression['left']);
-                                }
+                                $condition = $compilationContext->backend->getTypeofCondition($variable, $this->_operator, 'null', $compilationContext);
+                                return new CompiledExpression('bool', $condition, $expression['left']);
                                 break;
 
                             case 'int':

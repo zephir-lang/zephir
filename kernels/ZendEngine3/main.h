@@ -70,6 +70,27 @@
 /** Return null restoring memory frame */
 #define RETURN_MM_NULL()            { RETVAL_NULL(); ZEPHIR_MM_RESTORE(); return; }
 
+/* Globals functions */
+int zephir_get_global(zval *arr, const char *global, unsigned int global_length);
+
+/* Utils functions */
+static inline int zephir_maybe_separate_zval(zval* z)
+{
+	if (Z_REFCOUNTED_P(z) && Z_REFCOUNT_P(z) > 1 && !Z_ISREF_P(z)) {
+		if (!Z_IMMUTABLE_P(z)) {
+			Z_DELREF_P(z);
+		}
+		zval_copy_ctor_func(z);
+		return 1;
+	}
+
+	return 0;
+}
+
+#define ZEPHIR_SET_SYMBOL(symbol_table, name, value) { \
+	zend_hash_str_update(symbol_table, name, sizeof(name) - 1, value); \
+}
+
 /* Fetch Parameters */
 int zephir_fetch_parameters(int num_args, int required_args, int optional_args, ...);
 
@@ -81,6 +102,14 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 		} else { \
 			RETURN_NULL(); \
 		} \
+	}
+
+#define ZEPHIR_CREATE_OBJECT(obj, class_type) \
+	{ \
+		zend_object *object = zend_objects_new(class_type); \
+		ZVAL_UNDEF(obj); \
+		ZVAL_OBJ(obj, object); \
+		object_properties_init(object, class_type); \
 	}
 
 #ifndef ZEPHIR_RELEASE
