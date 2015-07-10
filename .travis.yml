@@ -1,4 +1,5 @@
 language: php
+sudo: false
 
 php:
   - 5.3
@@ -14,15 +15,17 @@ before_install:
  - ./unit-tests/ci/before_install.sh
 
 install:
+ - export LD_LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LD_LIBRARY_PATH
+ - export LIBRARY_PATH="$TRAVIS_BUILD_DIR/build/lib":$LIBRARY_PATH
+ - export C_INCLUDE_PATH="$TRAVIS_BUILD_DIR/build/include"
  - composer --prefer-source install
  - ./install
 
 before_script:
- - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/usr/local/lib"
  - $(phpenv which php) compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
- - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && sudo make install && phpenv config-add ../unit-tests/ci/test.ini)
+ - (cd ext; export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall -fvisibility=hidden -DZEPHIR_RELEASE=1"; phpize && ./configure --silent --enable-test && make -j2 && make install && phpenv config-add ../unit-tests/ci/test.ini)
  - ulimit -c unlimited || true
 
 script:
@@ -37,3 +40,9 @@ notifications:
   email:
     - andres@phalconphp.com
     - eduar@phalconphp.com
+
+addons:
+  apt:
+    packages:
+      - re2c
+      - valgrind
