@@ -1,6 +1,6 @@
 environment:
   matrix:
-  - PHP_VERSION: 5.6.10
+  - PHP_VERSION: 5.6.11
     PHP_DEP_VER: 5.6
   BUILD_PLATFORM: x86
   PHP_VC: 11
@@ -16,7 +16,7 @@ clone_folder: c:\projects\zephir
 
 matrix:
   fast_finish: true
-  
+
 install:
   - echo Initializing Build...
   - cd %APPVEYOR_BUILD_FOLDER%
@@ -60,7 +60,7 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
   - 'copy parser\parser.exe bin\zephir-parser.exe'
   - if not exist vendor (php -r "readfile('https://getcomposer.org/installer');" | php & php composer.phar --prefer-source install)
-  
+
 build_script:
   - 'bin\zephir build'
   - 'php vendor\phpunit\phpunit\phpunit.php --debug'
