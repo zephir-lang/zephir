@@ -732,18 +732,6 @@ class ForStatement extends StatementAbstract
          */
         $compilationContext->insideCycle++;
 
-        /**
-         * Create a hash table and hash pointer temporary variables
-         */
-        $arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
-        $arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
-
-        /**
-         * Create a temporary zval to fetch the items from the hash
-         */
-        $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
-        $tempVariable->setIsDoublePointer(true);
-
         $compilationContext->headersManager->add('kernel/hash');
 
         $duplicateHash = '0';
@@ -779,49 +767,21 @@ class ForStatement extends StatementAbstract
             }
         }
 
-        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $this->_statement['reverse'] . ', "' . Compiler::getShortUserPath($this->_statement['file']) . '", ' . $this->_statement['line'] . ');');
-
-        $codePrinter->output('for (');
-        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
-        if ($this->_statement['reverse']) {
-            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
-        } else {
-            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
-        }
-        $codePrinter->output(') {');
-
-        if (isset($this->_statement['key'])) {
-            if ($duplicateKey) {
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
-            } else {
-                $codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
-            }
-        }
-
-        if (isset($this->_statement['value'])) {
-            $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $variable->getName() . ', ' . $tempVariable->getName() . ');');
-        }
-
-        /**
-         * Compile statements in the 'for' block
-         */
-        if (isset($this->_statement['statements'])) {
-            $st->isLoop(true);
-            if (isset($this->_statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
-            }
-            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
-            $st->compile($compilationContext);
-        }
+        $compilationContext->backend->forStatement(
+            $exprVariable,
+            isset($this->_statement['key']) ? $keyVariable : null,
+            isset($this->_statement['value']) ? $variable : null,
+            $duplicateKey,
+            $duplicateHash,
+            $this->_statement,
+            $st,
+            $compilationContext
+        );
 
         /**
          * Restore the cycle counter
          */
         $compilationContext->insideCycle--;
-
-        $codePrinter->output('}');
     }
 
     /**

@@ -348,12 +348,11 @@ class Call
                     if (isset($readOnlyParameters[$position])) {
                         $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
                         $params[] = '&' . $parameterVariable->getName();
-                        $codePrinter->output('ZVAL_NULL(&' . $parameterVariable->getName() . ');');
                     } else {
                         $parameterVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
                         $params[] = $parameterVariable->getName();
-                        $codePrinter->output('ZVAL_NULL(' . $parameterVariable->getName() . ');');
                     }
+                    $compilationContext->backend->assignNull($parameterVariable, $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
                     $types[] = $compiledExpression->getType();
                     $dynamicTypes[] = $compiledExpression->getType();

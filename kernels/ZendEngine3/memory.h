@@ -61,6 +61,9 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		zephir_memory_alloc(&z); \
 	} \
 
+#define ZEPHIR_SINIT_VAR(z) \
+	ZVAL_UNDEF(&z);
+
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	ZVAL_UNDEF(&z); \
 
@@ -73,6 +76,20 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		} \
 		ZVAL_NULL(&z); \
 	} \
+
+/* only removes the value body of the zval */
+#define ZEPHIR_INIT_LNVAR(z) \
+	if (Z_TYPE(z) == IS_UNDEF) { \
+		ZEPHIR_INIT_VAR(z); \
+	} \
+	else if (Z_REFCOUNTED(z) && Z_REFCOUNT(z) > 1) { \
+		Z_DELREF(z); \
+	} else { \
+		if (!Z_ISREF(z)) { \
+			zval_dtor(&z ZEND_FILE_LINE_CC); \
+		} \
+	} \
+	ZVAL_NULL(&z);
 
 #define ZEPHIR_CPY_WRT(d, v) \
 	Z_TRY_ADDREF_P(v); \
@@ -93,6 +110,21 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	ZVAL_DUP(d, v); \
 	Z_TRY_DELREF_P(v);
 
+#define ZEPHIR_OBS_VAR(z) \
+	zephir_memory_observe(&z)
+
+#define ZEPHIR_OBS_NVAR(z) \
+	if (Z_TYPE(z) != IS_UNDEF) { \
+		if (Z_REFCOUNTED(z) && Z_REFCOUNT(z) > 1) { \
+			Z_DELREF(z); \
+		} else {\
+			zephir_ptr_dtor(&z); \
+			ZVAL_NULL(&z); \
+		} \
+	} else { \
+		zephir_memory_observe(&z); \
+	}
+
 /* TODO: this might causes troubles, since we cannot observe here, since we aren't using double pointers
  * figure out away to fix this (if it's an issue, which it isn't if observing isn't necessary)
  */
@@ -108,5 +140,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 			} \
 		} \
 	} while (0)
+
+#define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(&z)
 
 #endif

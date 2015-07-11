@@ -31,6 +31,7 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 
 /** Reading properties */
 int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
+int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length);
 
 /** Updating properties */
 int zephir_update_property_zval(zval *obj, const char *property_name, unsigned int property_length, zval *value);
@@ -45,5 +46,10 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags);
 int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value);
 int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const char *property, zend_uint property_length, zval *value, const char *types, int types_length, int types_count, ...);
+
+/** Increment/Decrement properties */
+#define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
+#define zephir_property_decr(object, property) zephir_property_incr_decr(object, property, 0)
+int zephir_property_incr_decr(zval *object, char *property_name, unsigned int property_length, unsigned int increment);
 
 #endif

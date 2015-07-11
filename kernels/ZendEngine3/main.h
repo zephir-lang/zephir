@@ -60,6 +60,13 @@
 		lower_ns## _ ##name## _ce->ce_flags |= flags;  \
 	}
 
+/** Return zval with always ctor */
+#define RETURN_CTOR(var) { \
+		RETVAL_ZVAL(&var, 1, 0); \
+	} \
+	ZEPHIR_MM_RESTORE(); \
+	return;
+
 /** Return zval checking if it's needed to ctor */
 #define RETURN_CCTOR(var) { \
 	ZVAL_DUP(return_value, &var); \
@@ -67,16 +74,61 @@
 	return; \
 }
 
+/** Return zval checking if it's needed to ctor, without restoring the memory stack  */
+#define RETURN_CCTORW(var) { \
+		ZVAL_DUP(return_value, &var); \
+		return; \
+}
+
+#define RETURN_LCTORW(var) RETURN_CCTORW(var);
+
+/**
+ * Returns a zval in an object member
+ */
+#define RETURN_MEMBER(object, member_name) \
+	zephir_return_property(return_value, object, SL(member_name)); \
+	return;
+
+/** Return without change return_value */
+#define RETURN_MM()                 { ZEPHIR_MM_RESTORE(); return; }
+
+/**
+ * Returns a zval in an object member
+ */
+#define RETURN_MM_MEMBER(object, member_name) \
+  zephir_return_property(return_value, object, SL(member_name)); \
+  RETURN_MM();
+
+#define RETURN_ON_FAILURE(what) \
+	do { \
+		if (what == FAILURE) { \
+			return; \
+		} \
+	} while (0)
+
+#define RETURN_MM_ON_FAILURE(what) \
+	do { \
+		if (what == FAILURE) { \
+			ZEPHIR_MM_RESTORE(); \
+			return; \
+		} \
+	} while (0)
+
 /** Return null restoring memory frame */
 #define RETURN_MM_NULL()            { RETVAL_NULL(); ZEPHIR_MM_RESTORE(); return; }
 
 /* Globals functions */
 int zephir_get_global(zval *arr, const char *global, unsigned int global_length);
 
+/* Count */
+void zephir_fast_count(zval *result, zval *array);
+int zephir_fast_count_ev(zval *array);
+int zephir_fast_count_int(zval *value);
+
 /* Utils functions */
 static inline int zephir_maybe_separate_zval(zval* z)
 {
-	if (Z_REFCOUNTED_P(z) && Z_REFCOUNT_P(z) > 1 && !Z_ISREF_P(z)) {
+	if (!Z_REFCOUNTED_P(z) || (Z_REFCOUNT_P(z) > 1 && !Z_ISREF_P(z))) {
 		if (!Z_IMMUTABLE_P(z)) {
 			Z_DELREF_P(z);
 		}
@@ -88,8 +140,19 @@ static inline int zephir_maybe_separate_zval(zval* z)
 }
 
 #define ZEPHIR_SET_SYMBOL(symbol_table, name, value) { \
+	Z_TRY_ADDREF_P(value); \
 	zend_hash_str_update(symbol_table, name, sizeof(name) - 1, value); \
 }
+
+int zephir_is_iterable_ex(zval *arr, int duplicate);
+
+/** Check if an array is iterable or not */
+#define zephir_is_iterable(var, duplicate, file, line) \
+	if (!var || !zephir_is_iterable_ex(var, duplicate)) { \
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(), "The argument is not initialized or iterable()", file, line); \
+		ZEPHIR_MM_RESTORE(); \
+		return; \
+	}
 
 /* Fetch Parameters */
 int zephir_fetch_parameters(int num_args, int required_args, int optional_args, ...);
@@ -111,6 +174,15 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 		ZVAL_OBJ(obj, object); \
 		object_properties_init(object, class_type); \
 	}
+
+#define ZEPHIR_GET_CONSTANT(return_value, const_name) do { \
+	zval *_constant_ptr = zend_get_constant_str(SL(const_name)); \
+	if (_constant_ptr == NULL) { \
+		ZEPHIR_MM_RESTORE(); \
+		return; \
+	} \
+	ZVAL_COPY(&return_value, _constant_ptr); \
+} while(0)
 
 #ifndef ZEPHIR_RELEASE
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line

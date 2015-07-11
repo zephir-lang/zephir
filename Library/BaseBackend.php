@@ -40,8 +40,10 @@ abstract class BaseBackend
     abstract public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignNull(Variable $variable, CompilationContext $context, $useCodePrinter = true);
     abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
-    abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true);
+    abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true);
+    abstract public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null);
     abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true);
@@ -68,9 +70,13 @@ abstract class BaseBackend
 
     /* Array update multi */
     abstract public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $context);
+    abstract public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $context);
+    abstract public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext);
 
     abstract public function maybeSeparate(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
     abstract public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
+
+    abstract public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context);
 
     abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
     abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);

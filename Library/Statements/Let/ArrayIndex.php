@@ -55,17 +55,17 @@ class ArrayIndex
             case 'uint':
             case 'long':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'char':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
+                $compilationContext->backend->assignLong($symbolVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
                 break;
 
             case 'double':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $compilationContext->backend->assignDouble($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'bool':
@@ -98,7 +98,7 @@ class ArrayIndex
                     case 'long':
                     case 'ulong':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignLong($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'double':
@@ -196,10 +196,8 @@ class ArrayIndex
                         $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
                         break;
                     case 'string':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
-                        break;
                     case 'variable':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                        $compilationContext->backend->updateArray($realSymbolVariable, $variableIndex, $symbolVariable, $compilationContext, $flags);
                         break;
                     default:
                         throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);

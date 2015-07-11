@@ -8,6 +8,7 @@ use Zephir\CompilerException;
 use Zephir\CompilationContext;
 use Zephir\ClassMethod;
 use Zephir\BaseBackend;
+use Zephir\GlobalConstant;
 
 class Backend extends BaseBackend
 {
@@ -374,6 +375,15 @@ class Backend extends BaseBackend
         return $this->assignHelper('ZVAL_BOOL', $this->getVariableCode($variable), $value, $context, $useCodePrinter);
     }
 
+    public function assignNull(Variable $variable, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = 'ZVAL_NULL(' . $this->getVariableCode($variable) . ');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
     public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)
     {
         if (!isset($size)) {
@@ -387,9 +397,16 @@ class Backend extends BaseBackend
         return $output;
     }
 
-    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true)
+    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
     {
         $type = null;
+        $keyType = 'assoc';
+        if (!isset($key)) {
+            $keyType = 'append';
+        } else if ($key instanceof CompiledExpression && in_array($key->getType(), array('int', 'uint', 'long', 'ulong'))) {
+            $keyType = 'index';
+        }
+
         switch ($value->getType()) {
             case 'int':
             case 'uint':
@@ -400,25 +417,52 @@ class Backend extends BaseBackend
             case 'string':
                 $type = 'stringl';
                 break;
+            case 'variable':
+                $type = 'zval';
+                break;
         }
         if (!$type) {
-            throw new Exception("Unknown type mapping: " . $type);
+            throw new Exception("Unknown type mapping: " . $value->getType());
         }
 
-
-        if ($key->getType() == 'variable') {
-            $keyStr = 'Z_STRVAL_P(' . $key->getCode() . '), Z_STRLEN_P(' . $key->getCode() . ') + 1';
+        if (isset($key)) {
+            if ($key->getType() == 'variable') {
+                $keyStr = 'Z_STRVAL_P(' . $key->getCode() . '), Z_STRLEN_P(' . $key->getCode() . ') + 1';
+            } else {
+                $keyStr = $key->getType() == 'string' ? 'SS("' . $key->getCode() . '")' : $key->getCode();
+            }
+        }
+        if ($type == 'stringl') {
+            $valueStr = 'SL("' . $value->getCode()  . '")';
+        } else if ($type == 'zval') {
+            $valueStr = $this->getVariableCode($value->getName());
         } else {
-            $keyStr = $key->getType() == 'string' ? 'SS("' . $key->getCode() . '")' : $key->getCode();
+            $valueStr = $value->getCode();
         }
-        $valueStr = $type == 'stringl' ? 'SL("' . $value->getCode()  . '")' : $value->getCode();
         $doCopy = $type == 'stringl' ? ', 1' : '';
-        $output = 'add_assoc_' . $type . '_ex(' . $variable->getName() . ', ' . $keyStr . ', ' . $valueStr . $doCopy . ');';
+
+        if ($keyType == 'assoc') {
+            $output = 'add_assoc_' . $type . '_ex(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', ' . $valueStr . $doCopy . ');';
+        } else if ($keyType == 'append') {
+            $output = 'zephir_array_append(' . $this->getVariableCode($variable) . ', ' . $this->resolveValue($value, $compilationContext) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
+        } else {
+            $output = 'add_index_' . $type . '(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', '. $valueStr . ');';
+        }
 
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
         return $output;
+    }
+
+    public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null)
+    {
+        $value = $this->resolveValue($value, $compilationContext, true);
+        if (!isset($flags)) {
+            $flags = 'PH_COPY';
+        }
+
+        $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
     }
 
     public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true)
@@ -529,13 +573,17 @@ class Backend extends BaseBackend
         }
     }
 
-    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
+    private function resolveOffsetExprs($offsetExprs, $compilationContext)
     {
         $keys = '';
         $offsetItems = array();
         $numberParams = 0;
 
         foreach ($offsetExprs as $offsetExpr) {
+            if ($offsetExpr == 'a') {
+                $keys .= 'a';
+                continue;
+            }
             switch ($offsetExpr->getType()) {
                 case 'int':
                 case 'uint':
@@ -578,8 +626,31 @@ class Backend extends BaseBackend
                     throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
             }
         }
+        return array($keys, $offsetItems, $numberParams);
+    }
+
+    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
         $compilationContext->codePrinter->output('zephir_array_update_multi(&' . $variable->getName() . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+    }
+
+    public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+
+        $compilationContext->codePrinter->output('zephir_update_property_array_multi(' . $variable->getName() . ', SL("' . $propertyName . '"), ' . $valueVariable . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+    }
+
+    public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    {
+        list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+
+        $offsetStr = $offsetItems ? ', ' . join(', ', $offsetItems) : '';
+        $compilationContext->codePrinter->output('zephir_update_static_property_array_multi_ce(' . $classEntry .', SL("' . $propertyName . '"), ' . $valueVariable . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . $offsetStr . ');');
     }
 
     public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true)
@@ -625,16 +696,24 @@ class Backend extends BaseBackend
         }
     }
 
-    public function resolveValue($value, CompilationContext $context)
+    public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
         if ($value == 'null') {
-            $value = 'ZEPHIR_GLOBAL(global_null)';
+            $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_null)';
         } else if ($value == 'true') {
-            $value = 'ZEPHIR_GLOBAL(global_true)';
+            $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_true)';
         } else if ($value == 'false') {
-            $value = 'ZEPHIR_GLOBAL(global_false)';
+            $value = ($usePointer ? '&' : '') . 'ZEPHIR_GLOBAL(global_false)';
+            $value = $usePointer ? ('&(' . $value . ')') : $value;
+        } else if ($value instanceof GlobalConstant) {
+            return ($usePointer ? '&' : '') . $value->getName();
         } else if ($value instanceof Variable) {
-            $value = $this->getVariableCode($value);
+            $value = $usePointer ? $this->getVariableCodePointer($value) : $this->getVariableCode($value);
+        } else if ($value instanceof CompiledExpression) {
+            if ($value->getType() == 'array') {
+                $var = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
+                $value = $usePointer ? $this->getVariableCodePointer($var) : $this->getVariableCode($var);
+            }
         }
         return $value;
     }
@@ -658,7 +737,11 @@ class Backend extends BaseBackend
     public function assignArrayProperty(Variable $variable, $property, $key, $value, CompilationContext $context)
     {
         $value = $this->resolveValue($value, $context);
-        $context->codePrinter->output('zephir_update_property_array(' . $this->getVariableCode($variable) . ', SL("' . $property . '"), ' . $this->getVariableCode($key) . ', ' . $value . ' TSRMLS_CC);');
+        if (isset($key)) {
+            $context->codePrinter->output('zephir_update_property_array(' . $this->getVariableCode($variable) . ', SL("' . $property . '"), ' . $this->getVariableCode($key) . ', ' . $value . ' TSRMLS_CC);');
+        } else {
+            $context->codePrinter->output('zephir_update_property_array_append(' . $this->getVariableCode($variable) . ', SL("' . $property . '"), ' . $value . ' TSRMLS_CC);');
+        }
     }
 
     public function checkConstructor(Variable $var, CompilationContext $context)
@@ -713,5 +796,65 @@ class Backend extends BaseBackend
         $context->codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
         $context->codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable->getName() . '", ' . $variable->getName() . ');');
         $context->codePrinter->output('}');
+    }
+
+    public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context)
+    {
+        $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $this->getVariableCode($target) . ', ' . $this->getVariableCode($var) . ');');
+    }
+
+    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statementBlock, $statement, CompilationContext $compilationContext)
+    {
+        /**
+         * Create a hash table and hash pointer temporary variables
+         */
+        $arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
+        $arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
+        /**
+         * Create a temporary zval to fetch the items from the hash
+         */
+        $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+        $tempVariable->setIsDoublePointer(true);
+        $codePrinter = $compilationContext->codePrinter;
+        $reverse = $statement['reverse'] ? true : false;
+
+        $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $reverse . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+
+        $codePrinter->output('for (');
+        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
+        if ($reverse) {
+            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+        } else {
+            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
+        }
+        $codePrinter->output(') {');
+
+        if (isset($keyVariable)) {
+            if ($duplicateKey) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            } else {
+                $codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
+            }
+        }
+
+        if (isset($variable)) {
+            $compilationContext->symbolTable->mustGrownStack(true);
+            $codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $variable->getName() . ', ' . $tempVariable->getName() . ');');
+        }
+
+        /**
+         * Compile statements in the 'for' block
+         */
+        if (isset($statement['statements'])) {
+            $statementBlock->isLoop(true);
+            if (isset($this->statement['key'])) {
+                $st->getMutateGatherer()->increaseMutations($statement['key']);
+            }
+            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+            $statementBlock->compile($compilationContext);
+        }
+
+        $codePrinter->output('}');
     }
 }

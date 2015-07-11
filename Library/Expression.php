@@ -254,7 +254,7 @@ class Expression
 
         $compilationContext->backend->initArray($symbolVariable, $compilationContext);
 
-        return new CompiledExpression('array', $compilationContext->backend->getVariableCode($symbolVariable), $expression); //$symbolVariable->getRealName()
+        return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
     }
 
     /**

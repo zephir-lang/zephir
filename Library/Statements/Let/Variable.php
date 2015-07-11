@@ -715,11 +715,7 @@ class Variable
                         $symbolVariable->initVariant($compilationContext);
                         $symbolVariable->setDynamicTypes('null');
 
-                        if ($symbolVariable->isLocalOnly()) {
-                            $codePrinter->output('ZVAL_NULL(&' . $variable . ');');
-                        } else {
-                            $codePrinter->output('ZVAL_NULL(' . $variable . ');');
-                        }
+                        $compilationContext->backend->assignNull($symbolVariable, $compilationContext);
                         break;
                 }
                 break;
@@ -767,10 +763,10 @@ class Variable
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
                             $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                            $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+                            $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         }
                         break;
 
@@ -1042,7 +1038,7 @@ class Variable
                                     $symbolVariable->setClassTypes($itemVariable->getClassTypes());
                                     $symbolVariable->increaseVariantIfNull();
 
-                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                    $compilationContext->backend->copyOnWrite($symbolVariable, $itemVariable, $compilationContext);
                                     if ($itemVariable->isTemporal()) {
                                         $itemVariable->setIdle(true);
                                     }

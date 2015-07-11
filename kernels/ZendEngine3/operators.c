@@ -101,6 +101,125 @@ int zephir_compare_strict_long(zval *op1, long op2)
 }
 
 /**
+ * Natural compare with string operandus on right
+ */
+int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length)
+{
+	switch (Z_TYPE_P(op1)) {
+
+		case IS_STRING:
+			if (!Z_STRLEN_P(op1) && !op2_length) {
+				return 1;
+			}
+			if (Z_STRLEN_P(op1) != op2_length) {
+				return 0;
+			}
+			return !zend_binary_strcmp(Z_STRVAL_P(op1), Z_STRLEN_P(op1), op2, op2_length);
+
+		case IS_NULL:
+			return !zend_binary_strcmp("", 0, op2, op2_length);
+
+		case IS_TRUE:
+			return !zend_binary_strcmp("1", strlen("1"), op2, op2_length);
+
+		case IS_FALSE:
+			return !zend_binary_strcmp("0", strlen("0"), op2, op2_length);
+	}
+
+	return 0;
+}
+
+/**
+ * Returns the long value of a zval
+ */
+long zephir_get_intval_ex(const zval *op)
+{
+	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? 1 : 0;
+            break;
+
+	    case IS_CALLABLE:
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return 1;
+
+		case IS_LONG:
+			return Z_LVAL_P(op);
+
+		case IS_TRUE:
+			return 1;
+
+		case IS_FALSE:
+			return 0;
+
+		case IS_DOUBLE:
+			return (long) Z_DVAL_P(op);
+
+		case IS_STRING: {
+			long long_value = 0;
+			double double_value = 0;
+			zend_uchar type;
+
+			ASSUME(Z_STRVAL_P(op) != NULL);
+			type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0);
+			if (type == IS_LONG) {
+				return long_value;
+			}
+			if (type == IS_DOUBLE) {
+				return (long) double_value;
+			}
+			return 0;
+		}
+	}
+
+	return 0;
+}
+
+/**
+ * Returns the long value of a zval
+ */
+double zephir_get_doubleval_ex(const zval *op)
+{
+	int type;
+	long long_value = 0;
+	double double_value = 0;
+
+	switch (Z_TYPE_P(op)) {
+        case IS_ARRAY:
+            return zend_hash_num_elements(Z_ARRVAL_P(op)) ? (double) 1 : 0;
+            break;
+
+	    case IS_CALLABLE:
+	    case IS_RESOURCE:
+	    case IS_OBJECT:
+	        return (double) 1;
+		case IS_LONG:
+			return (double) Z_LVAL_P(op);
+		case IS_TRUE:
+			return (double) 1;
+		case IS_FALSE:
+			return (double) 0;
+		case IS_DOUBLE:
+			return Z_DVAL_P(op);
+		case IS_STRING:
+			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), &long_value, &double_value, 0))) {
+				if (type == IS_LONG) {
+					return (double) long_value;
+				} else {
+					if (type == IS_DOUBLE) {
+						return double_value;
+					} else {
+						return 0;
+					}
+				}
+			}
+	}
+
+	return 0;
+}
+
+/**
  * Check if two zvals are equal
  */
 int zephir_is_equal(zval *op1, zval *op2)

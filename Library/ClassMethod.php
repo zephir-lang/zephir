@@ -1711,7 +1711,7 @@ class ClassMethod
 
                                 case 'null':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
+                                    $initVarCode .= "\t" . $compilationContext->backend->assignNull($variable, $compilationContext, false) . PHP_EOL;
                                     break;
 
                                 case 'double':
@@ -1783,7 +1783,7 @@ class ClassMethod
                             case 'array':
                             case 'empty-array':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext) . PHP_EOL;
+                                $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
                                 break;
 
                             default:

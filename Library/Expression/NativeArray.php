@@ -92,13 +92,13 @@ class NativeArray
             case 'uint':
             case 'long':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $compilationContext->backend->assignLong($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'char':
             case 'uchar':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', \'' . $exprCompiled->getCode() . '\');');
+                $compilationContext->backend->assignLong($tempVar, '\'' . $exprCompiled->getCode() . '\'', $compilationContext);
                 return $tempVar;
 
             case 'double':
@@ -138,17 +138,17 @@ class NativeArray
                     case 'long':
                     case 'ulong':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignLong($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'double':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignDouble($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'bool':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignBool($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'string':
@@ -288,7 +288,7 @@ class NativeArray
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $codePrinter->output('add_index_long(' . $symbolVariable->getName() . ', ' .$resolvedExprKey->getCode() . ', ' . $resolvedExpr->getCode() . ');');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'bool':
@@ -425,7 +425,8 @@ class NativeArray
                                     case 'null':
                                     case 'bool':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
+
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }
@@ -433,7 +434,8 @@ class NativeArray
 
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
+
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }

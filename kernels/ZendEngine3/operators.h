@@ -29,7 +29,7 @@
 /** Strict comparing */
 #define ZEPHIR_IS_LONG(op1, op2)   ((Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) == op2) || zephir_compare_strict_long(op1, op2))
 #define ZEPHIR_IS_DOUBLE(op1, op2) ((Z_TYPE_P(op1) == IS_DOUBLE && Z_DVAL_P(op1) == op2) || zephir_compare_strict_double(op1, op2))
-#define ZEPHIR_IS_STRING(op1, op2) zephir_compare_strict_string(op1, op2, strlen(op2))
+#define ZEPHIR_IS_STRING(op1, op2) zephir_compare_strict_string(&op1, op2, strlen(op2))
 
 #define ZEPHIR_IS_LONG_IDENTICAL(op1, op2)   (Z_TYPE_P(op1) == IS_LONG && Z_LVAL_P(op1) == op2)
 #define ZEPHIR_IS_DOUBLE_IDENTICAL(op1, op2) (Z_TYPE_P(op1) == IS_DOUBLE && Z_DVAL_P(op1) == op2)
@@ -143,10 +143,10 @@ long zephir_safe_mod_zval_double(zval *op1, double op2);
 long zephir_safe_mod_long_zval(long op1, zval *op2);
 long zephir_safe_mod_double_zval(double op1, zval *op2);
 
-#define zephir_get_numberval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_doubleval(z))
-#define zephir_get_intval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_intval_ex(z))
-#define zephir_get_doubleval(z) (Z_TYPE_P(z) == IS_DOUBLE ? Z_DVAL_P(z) : zephir_get_doubleval_ex(z))
-#define zephir_get_boolval(z) (Z_TYPE_P(z) == IS_BOOL ? Z_BVAL_P(z) : zephir_get_boolval_ex(z))
+#define zephir_get_numberval(z) (Z_TYPE(z) == IS_LONG ? Z_LVAL(z) : zephir_get_doubleval(z))
+#define zephir_get_intval(z) (Z_TYPE(z) == IS_LONG ? Z_LVAL(z) : zephir_get_intval_ex(&z))
+#define zephir_get_doubleval(z) (Z_TYPE(z) == IS_DOUBLE ? Z_DVAL(z) : zephir_get_doubleval_ex(&z))
+#define zephir_get_boolval(z) (Z_TYPE(z) == IS_BOOL ? Z_BVAL(z) : zephir_get_boolval_ex(&z))
 
 #define zephir_add_function(result, left, right) fast_add_function(result, left, right)
 #define zephir_sub_function(result, left, right) sub_function(result, left, right)
@@ -158,12 +158,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		add_function(&tmp, z, v);  \
+		add_function(&tmp, &z, &v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL_P(z) = Z_LVAL(tmp);  \
+			Z_LVAL(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL_P(z) = Z_DVAL(tmp);  \
+				Z_DVAL(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}
@@ -172,12 +172,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		sub_function(&tmp, z, v);  \
+		sub_function(&tmp, &z, &v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL_P(z) = Z_LVAL(tmp);  \
+			Z_LVAL(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL_P(z) = Z_DVAL(tmp);  \
+				Z_DVAL(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}
@@ -186,12 +186,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		mul_function(&tmp, z, v);  \
+		mul_function(&tmp, &z, &v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL_P(z) = Z_LVAL(tmp);  \
+			Z_LVAL(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL_P(z) = Z_DVAL(tmp);  \
+				Z_DVAL(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}
@@ -201,14 +201,14 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{ \
 		int use_copy_right; \
 		zval right_tmp; \
-		if (Z_TYPE_P(right) == IS_STRING) { \
-			ZEPHIR_CPY_WRT(left, right); \
+		if (Z_TYPE(right) == IS_STRING) { \
+			ZEPHIR_CPY_WRT(&left, &right); \
 		} else { \
-			INIT_ZVAL(right_tmp); \
-			zephir_make_printable_zval(right, &right_tmp, &use_copy_right); \
+			use_copy_right = zephir_make_printable_zval(&right, &right_tmp); \
 			if (use_copy_right) { \
 				ZEPHIR_INIT_NVAR(left); \
-				ZVAL_STRINGL(left, Z_STRVAL_P(&right_tmp), Z_STRLEN_P(&right_tmp), 0); \
+				ZVAL_STRINGL(&left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
+				zval_ptr_dtor(&right_tmp); \
 			} \
 		} \
 	}

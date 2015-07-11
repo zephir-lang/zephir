@@ -83,13 +83,13 @@ class ConcatOperator extends BaseOperator
                     switch ($variable->getType()) {
                         case 'variable':
                             $key .= 'v';
-                            $concatParts[] = $variable->getName();
+                            $concatParts[] = $compilationContext->backend->getVariableCode($variable);
                             $isFullString = false;
                             break;
 
                         case 'string':
                             $key .= 'v';
-                            $concatParts[] = $variable->getName();
+                            $concatParts[] = $compilationContext->backend->getVariableCode($variable);
                             break;
 
                         case 'int':

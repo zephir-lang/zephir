@@ -116,7 +116,7 @@ class ObjectProperty
                         }
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $compilationContext->backend->assignLong($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                         $codePrinter->output($functionName . '(' . $tempVariable->getName() . ', ' . $resolvedVariable->getName() . ')');
                         break;
 
@@ -138,7 +138,7 @@ class ObjectProperty
                 switch ($statement['operator']) {
                     case 'assign':
                         $tempVariable->initNonReferenced($compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', \'' . $resolvedExpr->getBooleanCode() . '\');');
+                        $compilationContext->backend->assignLong($tempVariable, '\'' . $resolvedExpr->getBooleanCode() . '\'', $compilationContext);
                         break;
 
                     default:
@@ -168,13 +168,13 @@ class ObjectProperty
                         }
 
                         $resolvedVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $resolvedVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $compilationContext->backend->assignDouble($resolvedVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                         $codePrinter->output($functionName . '(' . $tempVariable->getName() . ', ' . $resolvedVariable->getName() . ')');
                         break;
 
                     case 'assign':
                         $tempVariable->initNonReferenced($compilationContext);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $compilationContext->backend->assignDouble($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                         break;
 
                     default:
@@ -194,7 +194,7 @@ class ObjectProperty
                         break;
                     case 'assign':
                         $tempVariable->initNonReferenced($compilationContext);
-                        $codePrinter->output('ZVAL_STRING(' . $tempVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                        $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
                         break;
                 }
 
@@ -203,7 +203,7 @@ class ObjectProperty
                 break;
 
             case 'array':
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $resolvedExpr->getCode(), $compilationContext);
+                $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $resolvedExpr, $compilationContext);
                 break;
 
             case 'bool':
@@ -229,25 +229,28 @@ class ObjectProperty
                     case 'char':
                     case 'uchar':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+                        $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
                         $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'double':
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
+                        $compilationContext->backend->assignDouble($tempVariable, $variableVariable, $compilationContext);
                         $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'bool':
-                        if ($variable == 'this') {
-                            $codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-                        } else {
-                            $codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $variableVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false) TSRMLS_CC);');
-                        }
-                        //TODO: tricky because of the zend_bool condition: $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $compilationContext);
+                        $codePrinter->output('if (' . $variableVariable->getName() . ') {');
+                        $codePrinter->increaseLevel();
+                        $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'true', $compilationContext);
+                        $codePrinter->decreaseLevel();
+                        $codePrinter->output('} else {');
+                        $codePrinter->increaseLevel();
+                        $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'false', $compilationContext);
+                        $codePrinter->decreaseLevel();
+                        $codePrinter->output('}');
                         break;
 
                     case 'array':

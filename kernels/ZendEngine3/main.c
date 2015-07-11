@@ -34,6 +34,15 @@
 #include "Zend/zend_exceptions.h"
 #include "Zend/zend_interfaces.h"
 
+int zephir_is_iterable_ex(zval *arr, int duplicate)
+{
+	if (unlikely(Z_TYPE_P(arr) != IS_ARRAY)) {
+		return 0;
+	}
+    //TODO: duplicate
+    return 1;
+}
+
 /**
  * Parses method parameters with minimum overhead
  */
@@ -100,6 +109,144 @@ int zephir_get_global(zval *arr, const char *global, unsigned int global_length)
 		}
 	}
 	array_init(arr);
+	zend_hash_update(&EG(symbol_table), str, arr);
 	zend_string_free(str);
 	return SUCCESS;
+}
+
+/**
+ * Makes fast count on implicit array types
+ */
+void zephir_fast_count(zval *result, zval *value)
+{
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		ZVAL_LONG(result, zend_hash_num_elements(Z_ARRVAL_P(value)));
+		return;
+	}
+
+	if (Z_TYPE_P(value) == IS_OBJECT) {
+
+		#ifdef HAVE_SPL
+		zval retval;
+		#endif
+
+		if (Z_OBJ_HT_P(value)->count_elements) {
+			ZVAL_LONG(result, 1);
+			if (SUCCESS == Z_OBJ_HT(*value)->count_elements(value, &Z_LVAL_P(result))) {
+				return;
+			}
+		}
+
+		#ifdef HAVE_SPL
+		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
+			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
+			if (Z_TYPE(retval) != IS_UNDEF) {
+				convert_to_long_ex(&retval);
+				ZVAL_LONG(result, Z_LVAL(retval));
+				zval_ptr_dtor(&retval);
+			}
+			return;
+		}
+		#endif
+
+		ZVAL_LONG(result, 0);
+		return;
+	}
+
+	if (Z_TYPE_P(value) == IS_NULL) {
+		ZVAL_LONG(result, 0);
+		return;
+	}
+
+	ZVAL_LONG(result, 1);
+}
+
+/**
+ * Makes fast count on implicit array types without creating a return zval value
+ */
+int zephir_fast_count_ev(zval *value)
+{
+	long count = 0;
+
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		return zend_hash_num_elements(Z_ARRVAL_P(value)) > 0;
+	}
+
+	if (Z_TYPE_P(value) == IS_OBJECT) {
+
+		#ifdef HAVE_SPL
+		zval retval;
+		#endif
+
+		if (Z_OBJ_HT_P(value)->count_elements) {
+			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			return (int) count > 0;
+		}
+
+		#ifdef HAVE_SPL
+		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
+			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
+			if (Z_TYPE(retval) != IS_UNDEF) {
+				convert_to_long_ex(&retval);
+				count = Z_LVAL(retval);
+				zval_ptr_dtor(&retval);
+				return (int) count > 0;
+			}
+			return 0;
+		}
+		#endif
+
+		return 0;
+	}
+
+	if (Z_TYPE_P(value) == IS_NULL) {
+		return 0;
+	}
+
+	return 1;
+}
+
+/**
+ * Makes fast count on implicit array types without creating a return zval value
+ */
+int zephir_fast_count_int(zval *value)
+{
+	long count = 0;
+
+	if (Z_TYPE_P(value) == IS_ARRAY) {
+		return zend_hash_num_elements(Z_ARRVAL_P(value));
+	}
+
+	if (Z_TYPE_P(value) == IS_OBJECT) {
+
+		#ifdef HAVE_SPL
+		zval retval;
+		#endif
+
+		if (Z_OBJ_HT_P(value)->count_elements) {
+			Z_OBJ_HT(*value)->count_elements(value, &count TSRMLS_CC);
+			return (int) count;
+		}
+
+		#ifdef HAVE_SPL
+		if (instanceof_function(Z_OBJCE_P(value), spl_ce_Countable)) {
+			zend_call_method_with_0_params(value, NULL, NULL, "count", &retval);
+			if (Z_TYPE(retval) != IS_UNDEF) {
+				convert_to_long_ex(&retval);
+				count = Z_LVAL(retval);
+				zval_ptr_dtor(&retval);
+				return (int) count;
+			}
+			return 0;
+		}
+		#endif
+
+		return 0;
+	}
+
+	if (Z_TYPE_P(value) == IS_NULL) {
+		return 0;
+	}
+
+	return 1;
 }

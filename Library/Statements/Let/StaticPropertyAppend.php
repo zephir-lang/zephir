@@ -56,7 +56,8 @@ class StaticPropertyAppend extends ArrayIndex
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
-        $codePrinter->output('zephir_update_static_property_array_multi_ce(' . $classEntry .', SL("' . $property . '"), &' . $variableExpr->getName() . ' TSRMLS_CC, SL("a"), 1);');
+        $offsetExprs[] = 'a';
+        $compilationContext->backend->assignStaticPropertyArrayMulti($classEntry, $variableExpr, $property, $offsetExprs, $compilationContext);
 
         if ($variableExpr->isTemporal()) {
             $variableExpr->setIdle(true);

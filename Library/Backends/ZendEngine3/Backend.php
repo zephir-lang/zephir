@@ -9,6 +9,7 @@ use Zephir\CompilationContext;
 use Zephir\ClassMethod;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\BaseBackend;
+use Zephir\GlobalConstant;
 
 class Backend extends BackendZendEngine2
 {
@@ -16,10 +17,15 @@ class Backend extends BackendZendEngine2
 
     public function getVariableCode(Variable $variable)
     {
-        if (in_array($variable->getName(), array('this_ptr'))) {
+        if (in_array($variable->getName(), array('this_ptr')) || $variable->getType() == 'zval_ptr') {
             return $variable->getName();
         }
         return '&' . $variable->getName();
+    }
+
+    protected function getVariableCodePointer(Variable $variable)
+    {
+        return $this->getVariableCode($variable);
     }
 
     public function getStringsManager()
@@ -29,6 +35,14 @@ class Backend extends BackendZendEngine2
 
     public function getTypeDefinition($type)
     {
+        switch ($type) {
+            case 'zval_ptr':
+                return array('*', 'zval');
+            case 'zend_ulong':
+                return array('', 'zend_ulong');
+            case 'zend_string':
+                return array('*', 'zend_string');
+        }
         list ($pointer, $code) = parent::getTypeDefinition($type);
         if ($code == 'zval') {
             return array('', 'zval');
@@ -180,9 +194,16 @@ class Backend extends BackendZendEngine2
         return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter, null);
     }
 
-    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $useCodePrinter = true)
+    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
     {
         $type = null;
+        $keyType = 'assoc';
+
+        if (!isset($key)) {
+            $keyType = 'append';
+        } else if ($key instanceof CompiledExpression && in_array($key->getType(), array('int', 'uint', 'long', 'ulong'))) {
+            $keyType = 'index';
+        }
         switch ($value->getType()) {
             case 'int':
             case 'uint':
@@ -193,14 +214,32 @@ class Backend extends BackendZendEngine2
             case 'string':
                 $type = 'stringl';
                 break;
+            case 'variable':
+                $type = 'zval';
+                break;
         }
         if (!$type) {
-            throw new Exception("Unknown type mapping: " . $type);
+            throw new CompilerException("Unknown type mapping: " . $value->getType());
         }
 
-        $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
-        $valueStr = $type == 'stringl' ? 'SL("' . $value->getCode()  . '")' : $value->getCode();
-        $output = 'add_assoc_' . $type . '_ex(&' . $variable->getName() . ', ' . $keyStr . ', ' . $valueStr . ');';
+        if (isset($key)) {
+            $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
+        }
+        if ($type == 'stringl') {
+            $valueStr = 'SL("' . $value->getCode()  . '")';
+        } else if ($type == 'zval') {
+            $valueStr = $this->getVariableCode($value);
+        } else {
+            $valueStr = $value->getCode();
+        }
+
+        if ($keyType == 'assoc') {
+            $output = 'add_assoc_' . $type . '_ex(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', ' . $valueStr . ');';
+        } else if ($keyType == 'append') {
+            $output = 'zephir_array_append(' . $this->getVariableCode($variable) . ', ' . $this->resolveValue($value, $context) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
+        } else {
+            $output = 'add_index_' . $type . '(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', '. $valueStr . ');';
+        }
 
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
@@ -270,18 +309,39 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
     }
 
-    public function resolveValue($value, CompilationContext $compilationContext)
+    public function resolveValue($value, CompilationContext $context)
     {
+        if ($value instanceof GlobalConstant) {
+            switch ($value->getName()) {
+                case 'ZEPHIR_GLOBAL(global_null)':
+                    $value = 'null';
+                    break;
+                case 'ZEPHIR_GLOBAL(global_true)':
+                    $value = 'true';
+                    break;
+                case 'ZEPHIR_GLOBAL(global_false)':
+                    $value = 'false';
+                    break;
+                default:
+                    throw new CompilerException('ZE3: Unknown constant '.$value->getName());
+            }
+        }
+
         if ($value == 'null') {
-            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
             //TODO: assignNull?
             $value = $this->getVariableCode($tempVariable);
         } else if ($value == 'true' || $value == 'false') {
-            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
             $this->assignBool($tempVariable, $value, $context);
             $value = $this->getVariableCode($tempVariable);
         } else if ($value instanceof Variable) {
             $value = $this->getVariableCode($value);
+        } else if ($value instanceof CompiledExpression) {
+            if ($value->getType() == 'array') {
+                $var = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
+                $value = $this->getVariableCode($var, $context);
+            }
         }
         return $value;
     }
@@ -316,5 +376,86 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
         $context->codePrinter->output("\t" . 'ZEPHIR_SET_SYMBOL(&EG(symbol_table), "' . $variable->getName() . '", &' . $variable->getName() . ');');
         $context->codePrinter->output('}');
+    }
+
+    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
+    {
+        /**
+         * Create a hash table and hash pointer temporary variables
+         */
+        //$arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
+        //$arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
+        /**
+         * Create a temporary zval to fetch the items from the hash
+         */
+        $tempVariable = $compilationContext->symbolTable->addTemp('zval_ptr', $compilationContext);
+        $codePrinter = $compilationContext->codePrinter;
+
+        $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', ' . $duplicateHash . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+
+        $macro = null;
+        $reverse = $this->_statement['reverse'] ? 'REVERSE_' : '';
+
+        if (isset($keyVariable)) {
+            $arrayNumKey = $compilationContext->symbolTable->addTemp('zend_ulong', $compilationContext);
+            $arrayStrKey = $compilationContext->symbolTable->addTemp('zend_string', $compilationContext);
+        }
+        $variable->observeVariant($compilationContext);
+
+        if (isset($keyVariable) && isset($variable)) {
+            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY_VAL';
+            $codePrinter->output($macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName() . ', ' . $arrayStrKey->getName() . ', ' . $tempVariable->getName() . ')');
+        } else if (isset($keyVariable)) {
+            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY';
+            $codePrinter->output($macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName() . ', ' . $arrayStrKey->getName() . ')');
+        } else {
+            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_VAL';
+            $codePrinter->output($macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $tempVariable->getName() . ')');
+        }
+
+        $codePrinter->output('{');
+
+        if (isset($keyVariable)) {
+            $codePrinter->increaseLevel();
+
+            $codePrinter->output('if (' . $arrayStrKey->getName() . ' != NULL) { ');
+            $codePrinter->increaseLevel();
+            if ($duplicateKey) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $codePrinter->output('ZVAL_NEW_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');');
+                //TODO: If it causes bugs duplicate it
+            } else {
+                $codePrinter->output('ZVAL_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');');
+            }
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('} else {');
+            $codePrinter->increaseLevel();
+            $codePrinter->output('ZVAL_LONG(' . $this->getVariableCode($keyVariable) . ', ' . $arrayNumKey->getName() . ');');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+            $codePrinter->decreaseLevel();
+        }
+
+        if (isset($variable)) {
+            $compilationContext->symbolTable->mustGrownStack(true);
+            $codePrinter->increaseLevel();
+            $variable->initVariant($compilationContext);
+            $codePrinter->output('ZVAL_COPY(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode($tempVariable) . ');');
+            $codePrinter->decreaseLevel();
+        }
+
+        /**
+         * Compile statements in the 'for' block
+         */
+        if (isset($statement['statements'])) {
+            $statementBlock->isLoop(true);
+            if (isset($statement['key'])) {
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            }
+            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+            $statementBlock->compile($compilationContext);
+        }
+
+        $codePrinter->output('} ZEND_HASH_FOREACH_END();');
     }
 }

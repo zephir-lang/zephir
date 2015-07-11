@@ -112,6 +112,14 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 	return SUCCESS;
 }
 
+int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)
+{
+	zval_ptr_dtor(return_value);
+	ZVAL_NULL(return_value);
+	zephir_read_property(return_value, object, property_name, property_length, 0);
+	return SUCCESS;
+}
+
 /**
  * Checks whether obj is an object and updates property with another zval
  */
@@ -162,13 +170,18 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 		zephir_read_property(&tmp, object, property, property_length, PH_NOISY | PH_READONLY);
 
 		/** Separation only when refcount > 1 */
-		if (Z_REFCOUNTED(tmp) && Z_REFCOUNT(tmp) > 1) {
-			if (!Z_ISREF(tmp)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp);
-				ZVAL_COPY_VALUE(&tmp, &new_zv);
-				separated = 1;
+		if (Z_REFCOUNTED(tmp)) {
+			if (Z_REFCOUNT(tmp) > 1) {
+				if (!Z_ISREF(tmp)) {
+					zval new_zv;
+					ZVAL_DUP(&new_zv, &tmp);
+					ZVAL_COPY_VALUE(&tmp, &new_zv);
+					Z_TRY_DELREF(new_zv);
+					separated = 1;
+				}
 			}
+		} else {
+			separated = 1;
 		}
 
 		/** Convert the value to array if not is an array */
@@ -199,6 +212,60 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 	return SUCCESS;
 }
 
+
+/**
+ * Appends a zval value to an array property
+ */
+int zephir_update_property_array_append(zval *object, char *property, unsigned int property_length, zval *value)
+{
+	zval tmp;
+	int separated = 0;
+
+	ZVAL_UNDEF(&tmp);
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return SUCCESS;
+	}
+
+	zephir_read_property(&tmp, object, property, property_length, PH_NOISY_CC);
+
+	Z_TRY_DELREF(tmp);
+
+	/** Separation only when refcount > 1 */
+	if (Z_REFCOUNTED(tmp)) {
+		if (Z_REFCOUNT(tmp) > 1) {
+			if (!Z_ISREF(tmp)) {
+				zval new_zv;
+				ZVAL_DUP(&new_zv, &tmp);
+				ZVAL_COPY_VALUE(&tmp, &new_zv);
+				Z_TRY_DELREF(new_zv);
+				separated = 1;
+			}
+		}
+	} else {
+		separated = 1;
+	}
+
+	/** Convert the value to array if not is an array */
+	if (Z_TYPE(tmp) != IS_ARRAY) {
+		if (separated) {
+			convert_to_array(&tmp);
+		} else {
+			array_init(&tmp);
+			separated = 1;
+		}
+	}
+
+	Z_TRY_ADDREF_P(value);
+	add_next_index_zval(&tmp, value);
+
+	if (separated) {
+		zephir_update_property_zval(object, property, property_length, &tmp);
+	}
+
+	return SUCCESS;
+}
+
 /**
  * Multiple array-offset update
  */
@@ -212,14 +279,18 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 		zephir_read_property(&tmp_arr, object, property, property_length, PH_NOISY | PH_READONLY);
 
 		/** Separation only when refcount > 1 */
-		if (Z_REFCOUNTED(tmp_arr) && Z_REFCOUNT(tmp_arr) > 1) {
-			Z_DELREF(tmp_arr);
-			if (!Z_ISREF(tmp_arr)) {
-				zval new_zv;
-				ZVAL_DUP(&new_zv, &tmp_arr);
-				ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-				separated = 1;
+		if (Z_REFCOUNTED(tmp_arr)) {
+			if (Z_REFCOUNT(tmp_arr) > 1) {
+				if (!Z_ISREF(tmp_arr)) {
+					zval new_zv;
+					ZVAL_DUP(&new_zv, &tmp_arr);
+					ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
+					Z_TRY_DELREF(new_zv);
+					separated = 1;
+				}
 			}
+		} else {
+			separated = 1;
 		}
 
 		/** Convert the value to array if not is an array */
@@ -356,13 +427,18 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	}
 
 	/** Separation only when refcount > 1 */
-	if (Z_REFCOUNTED(tmp_arr) && Z_REFCOUNT(tmp_arr) > 1) {
-		if (!Z_ISREF(tmp_arr)) {
-			zval new_zv;
-			ZVAL_DUP(&new_zv, &tmp_arr);
-			ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
-			separated = 1;
+	if (Z_REFCOUNTED(tmp_arr)) {
+		if (Z_REFCOUNT(tmp_arr) > 1) {
+			if (!Z_ISREF(tmp_arr)) {
+				zval new_zv;
+				ZVAL_DUP(&new_zv, &tmp_arr);
+				ZVAL_COPY_VALUE(&tmp_arr, &new_zv);
+				Z_TRY_DELREF(new_zv);
+				separated = 1;
+			}
 		}
+	} else {
+		separated = 1;
 	}
 
 	/** Convert the value to array if not is an array */
@@ -381,6 +457,61 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 
 	if (separated) {
 		zephir_update_static_property_ce(ce, property, property_length, &tmp_arr);
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * Increments an object property
+ */
+int zephir_property_incr_decr(zval *object, char *property_name, unsigned int property_length, unsigned int increment)
+{
+	zval tmp;
+	zend_class_entry *ce;
+	int separated = 0;
+
+	ZVAL_UNDEF(&tmp);
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		php_error_docref(NULL, E_WARNING, "Attempt to assign property of non-object");
+		return FAILURE;
+	}
+
+	ce = Z_OBJCE_P(object);
+	if (ce->parent) {
+		ce = zephir_lookup_class_ce(ce, property_name, property_length);
+	}
+
+	zephir_read_property(&tmp, object, property_name, property_length, 0);
+	if (Z_TYPE(tmp) > IS_UNDEF) {
+
+		Z_TRY_DELREF(tmp);
+
+		/** Separation only when refcount > 1 */
+		if (Z_REFCOUNTED(tmp)) {
+			if (Z_REFCOUNT(tmp) > 1) {
+				if (!Z_ISREF(tmp)) {
+					zval new_zv;
+					ZVAL_DUP(&new_zv, &tmp);
+					ZVAL_COPY_VALUE(&tmp, &new_zv);
+					Z_TRY_DELREF(new_zv);
+					separated = 1;
+				}
+			}
+		} else {
+			separated = 1;
+		}
+
+		if (increment) {
+			zephir_increment(&tmp);
+		} else {
+			zephir_decrement(&tmp);
+		}
+
+		if (separated) {
+			zephir_update_property_zval(object, property_name, property_length, &tmp);
+		}
 	}
 
 	return SUCCESS;
