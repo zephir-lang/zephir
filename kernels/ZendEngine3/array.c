@@ -151,6 +151,57 @@ int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index,
 	return 0;
 }
 
+int ZEPHIR_FASTCALL zephir_array_isset(const zval *arr, zval *index)
+{
+	HashTable *h;
+
+	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		return 0;
+	}
+
+	h = Z_ARRVAL_P(arr);
+	switch (Z_TYPE_P(index)) {
+		case IS_NULL:
+			return zend_hash_str_exists(h, SL(""));
+
+		case IS_DOUBLE:
+			return zend_hash_index_exists(h, (ulong)Z_DVAL_P(index));;
+
+		case IS_TRUE:
+		case IS_FALSE:
+			return zend_hash_index_exists(h, Z_TYPE_P(index) == IS_TRUE ? 1 : 0);
+
+		case IS_LONG:
+		case IS_RESOURCE:
+			return zend_hash_index_exists(h, Z_LVAL_P(index));
+
+		case IS_STRING:
+			return zend_symtable_str_exists(h, Z_STRVAL_P(index), Z_STRLEN_P(index));
+
+		default:
+			zend_error(E_WARNING, "Illegal offset type");
+			return 0;
+	}
+}
+
+int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index, uint index_length)
+{
+	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
+		return zend_hash_str_exists(Z_ARRVAL_P(arr), index, index_length);
+	}
+
+	return 0;
+}
+
+int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index)
+{
+	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
+		return zend_hash_index_exists(Z_ARRVAL_P(arr), index);
+	}
+
+	return 0;
+}
+
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint index_length, int flags)
 {
 	if (Z_TYPE_P(arr) != IS_ARRAY) {

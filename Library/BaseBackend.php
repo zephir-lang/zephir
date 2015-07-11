@@ -55,10 +55,13 @@ abstract class BaseBackend
     abstract public function checkConstructor(Variable $var, CompilationContext $context);
 
     /* Method calling */
+    abstract public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $compilationContext, $params = array(), $cache = 'NULL', $cacheSlot = 0);
     abstract public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context);
 
     /* Read from array */
     abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true);
+
+    abstract public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context);
 
     /* Unset array */
     abstract public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context);

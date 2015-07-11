@@ -87,27 +87,13 @@ class IssetOperator extends BaseOperator
                 switch ($resolvedExpr->getType()) {
                     case 'int':
                     case 'long':
-                        return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $resolvedExpr->getCode() . ')', $left['right']);
-
                     case 'string':
-                        return new CompiledExpression('bool', 'zephir_array_isset_string(' . $variable->getName() . ', SS("' . $resolvedExpr->getCode() . '"))', $left['right']);
+                        return $compilationContext->backend->arrayIsset($variable, $resolvedExpr, $left['right'], $compilationContext);
 
                     case 'variable':
                         $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
-                        $indexVariableName = ($indexVariable->isLocalOnly() ? '&' : '') . $indexVariable->getName();
 
-                        switch ($indexVariable->getType()) {
-                            case 'int':
-                            case 'long':
-                                return new CompiledExpression('bool', 'zephir_array_isset_long(' . $variable->getName() . ', ' . $indexVariableName . ')', $left['right']);
-
-                            case 'variable':
-                            case 'string':
-                                return new CompiledExpression('bool', 'zephir_array_isset(' . $variable->getName() . ', ' . $indexVariableName . ')', $left['right']);
-
-                            default:
-                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-                        }
+                        return $compilationContext->backend->arrayIsset($variable, $indexVariable, $left['right'], $compilationContext);
                         break;
 
                     default:

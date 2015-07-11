@@ -2,6 +2,7 @@
 namespace Zephir\Backends\ZendEngine3;
 
 use Zephir\Variable;
+use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\CompilerException;
 use Zephir\CompilationContext;
@@ -205,6 +206,16 @@ class Backend extends BackendZendEngine2
             $context->codePrinter->output($output);
         }
         return $output;
+    }
+
+    public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
+    {
+        if (!($resolvedExpr instanceof Variable)) {
+            if ($resolvedExpr->getType() == 'string') {
+                return new CompiledExpression('bool', 'zephir_array_isset_string(' . $this->getVariableCode($var) . ', SL("' . $resolvedExpr->getCode() . '"))', $expression);
+            }
+        }
+        return parent::arrayIsset($var, $resolvedExpr, $expression, $context);
     }
 
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)

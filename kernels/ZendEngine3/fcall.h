@@ -68,6 +68,13 @@ typedef enum _zephir_call_type {
 		} \
 	} while (0)
 
+#define ZEPHIR_CALL_ZVAL_FUNCTION(return_value_ptr, func_name, cache, cache_slot, ...) \
+	do { \
+        	zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
+        	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
+        	ZEPHIR_LAST_CALL_STATUS = zephir_call_zval_func_aparams(return_value_ptr, func_name, cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
+	} while (0)
+
 #define ZEPHIR_CALL_METHOD(return_value_ptr, object, method, cache, cache_slot, ...) \
 	do { \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \

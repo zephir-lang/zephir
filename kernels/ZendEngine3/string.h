@@ -30,5 +30,7 @@
 #define ZEPHIR_TRIM_BOTH  3
 #define ZEPHIR_SUBSTR_NO_LENGTH 1
 
+/** spprintf */
+int zephir_spprintf(char **message, int max_len, char *format, ...);
 
 #endif /* ZEPHIR_KERNEL_STRING_H */

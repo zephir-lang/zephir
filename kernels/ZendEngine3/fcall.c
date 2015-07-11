@@ -166,6 +166,99 @@ static ulong zephir_make_fcall_info_key(char **result, size_t *length, const zen
 	return hash;
 }
 
+/**
+ * Creates a unique key to cache the current method/function call address for the current scope
+ */
+static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_class_entry *obj_ce, zephir_call_type type, zval *function_name TSRMLS_DC)
+{
+	const zend_class_entry *calling_scope = EG(scope);
+	char *buf = NULL, *c;
+	size_t l = 0, len = 0;
+	const size_t ppzce_size = sizeof(zend_class_entry**);
+	ulong hash = 5381;
+
+	*result = NULL;
+	*length = 0;
+
+	if (calling_scope && type == zephir_fcall_parent) {
+		calling_scope = calling_scope->parent;
+		if (UNEXPECTED(!calling_scope)) {
+			return 0;
+		}
+	}
+	else if (type == zephir_fcall_static) {
+		calling_scope = EG(current_execute_data)->called_scope;
+		if (UNEXPECTED(!calling_scope)) {
+			return 0;
+		}
+	}
+
+	if (
+		    calling_scope
+		 && obj_ce
+		 && calling_scope != obj_ce
+		 && !instanceof_function(obj_ce, calling_scope)
+		 && !instanceof_function(calling_scope, obj_ce)
+	) {
+		calling_scope = NULL;
+	}
+
+	if (Z_TYPE_P(function_name) == IS_STRING) {
+		l   = (size_t)(Z_STRLEN_P(function_name)) + 1;
+		c   = Z_STRVAL_P(function_name);
+		len = 2 * ppzce_size + l + 1;
+		buf = emalloc(len);
+
+		memcpy(buf,                  c,               l);
+		memcpy(buf + l,              &calling_scope,  ppzce_size);
+		memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
+		buf[len - 1] = '\0';
+	}
+	else if (Z_TYPE_P(function_name) == IS_ARRAY) {
+		zval *method;
+		HashTable *function_hash = Z_ARRVAL_P(function_name);
+		if (
+			    function_hash->nNumOfElements == 2
+			 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
+			 && Z_TYPE_P(method) == IS_STRING
+		) {
+			l   = (size_t)(Z_STRLEN_P(method)) + 1;
+			c   = Z_STRVAL_P(method);
+			len = 2 * ppzce_size + l + 1;
+			buf = emalloc(len);
+
+			memcpy(buf,                  c,               l);
+			memcpy(buf + l,              &calling_scope,  ppzce_size);
+			memcpy(buf + l + ppzce_size, &obj_ce,         ppzce_size);
+			buf[len - 1] = '\0';
+		}
+	}
+
+	if (EXPECTED(buf != NULL)) {
+		size_t i;
+
+		for (i = 0; i < l; ++i) {
+			char c = buf[i];
+#if PHP_VERSION_ID >= 50500
+			c = tolower_map[(unsigned char)c];
+#else
+			c = tolower(c);
+#endif
+			buf[i] = c;
+			hash   = (hash << 5) + hash + c;
+		}
+
+		for (i = l; i < len; ++i) {
+			char c = buf[i];
+			hash = (hash << 5) + hash + c;
+		}
+	}
+
+	*result = buf;
+	*length = len;
+	return hash;
+}
+
 ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_cache *fcic, zend_fcall_info *fci, zephir_call_type type)
 {
 	switch (type) {
@@ -313,8 +406,7 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 				if (info) {
 					fcall_key_hash = zephir_make_fcall_info_key(&fcall_key, &fcall_key_len, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), type, info);
 				} else {
-					//fcall_key_hash = zephir_make_fcall_key(&fcall_key, &fcall_key_len, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), type, function_name);
-					zend_error(E_ERROR, "Zephir does not support normal fcall keys for ZE3, it shouldnt be required?");
+					fcall_key_hash = zephir_make_fcall_key(&fcall_key, &fcall_key_len, (object_pp && type != zephir_fcall_ce ? Z_OBJCE_P(object_pp) : obj_ce), type, function_name);
 				}
 			}
 		}
@@ -437,6 +529,48 @@ int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint
 			if (return_value_ptr) {
 				zval_ptr_dtor(return_value_ptr);
 				ZVAL_UNDEF(return_value_ptr);
+			}
+		}
+	}
+
+	if (!return_value_ptr) {
+		zval_ptr_dtor(&rv);
+	}
+
+	return status;
+}
+
+int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
+	zephir_fcall_cache_entry **cache_entry, int cache_slot,
+	uint param_count, zval **params)
+{
+	int status;
+	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
+
+	ZVAL_UNDEF(&rv);
+
+#ifndef ZEPHIR_RELEASE
+	if (Z_TYPE_P(return_value_ptr) > IS_NULL) {
+		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
+		zephir_print_backtrace();
+		abort();
+	}
+#endif
+
+	status = zephir_call_user_function(NULL, NULL, zephir_fcall_function, func_name, rvp, cache_entry, cache_slot, param_count, params, NULL);
+
+	if (status == FAILURE && !EG(exception)) {
+		zephir_throw_exception_format(spl_ce_RuntimeException, "Call to undefined function %s()", Z_TYPE_P(func_name) ? Z_STRVAL_P(func_name) : "undefined");
+		if (return_value_ptr) {
+			zval_ptr_dtor(return_value_ptr);
+			ZVAL_NULL(return_value_ptr);
+		}
+	} else {
+		if (EG(exception)) {
+			status = FAILURE;
+			if (return_value_ptr) {
+				zval_ptr_dtor(return_value_ptr);
+				ZVAL_NULL(return_value_ptr);
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 namespace Zephir\Backends\ZendEngine2;
 
 use Zephir\Variable;
+use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\CompilerException;
 use Zephir\CompilationContext;
@@ -472,6 +473,24 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
+    {
+        if (!($resolvedExpr instanceof Variable)) {
+            if ($resolvedExpr->getType() == 'string') {
+                return new CompiledExpression('bool', 'zephir_array_isset_string(' . $this->getVariableCode($var) . ', SS("' . $resolvedExpr->getCode() . '"))', $expression);
+            } else {
+                return new CompiledExpression('bool', 'zephir_array_isset_long(' . $this->getVariableCode($var) . ', ' . $resolvedExpr->getCode() . ')', $expression);
+            }
+        }
+
+        if ($resolvedExpr->getType() == 'int' || $resolvedExpr->getType() == 'long') {
+            return new CompiledExpression('bool', 'zephir_array_isset_long(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
+        } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
+            return new CompiledExpression('bool', 'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode($resolvedExpr) . ')', $expression);
+        }
+        throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
+    }
+
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
@@ -656,6 +675,18 @@ class Backend extends BaseBackend
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         } else {
             $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+        }
+    }
+
+    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = array(), $cache = 'NULL', $cacheSlot = 0)
+    {
+        $paramStr = $params != null ? ', ' . join(', ', $params) : '';
+        if (!isset($symbolVariable)) {
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
+        } else if ($symbolVariable->getName() == 'return_value') {
+            $context->codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
+        } else {
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(' . $this->getVariableCode($symbolVariable) . ', ' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
         }
     }
 

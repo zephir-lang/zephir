@@ -871,31 +871,25 @@ class Variable
                 break;
 
             case 'bool':
-                if ($symbolVariable->isLocalOnly()) {
-                    $symbol = '&' . $variable;
-                } else {
-                    $symbol = $variable;
-                }
-
                 switch ($statement['operator']) {
                     case 'assign':
                         $symbolVariable->setDynamicTypes('bool');
                         if ($resolvedExpr->getCode() == 'true') {
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_BOOL(' . $symbol . ', 1);');
+                            $compilationContext->backend->assignBool($symbolVariable, '1', $compilationContext);
                         } else {
                             if ($resolvedExpr->getCode() == 'false') {
                                 $symbolVariable->initVariant($compilationContext);
-                                $codePrinter->output('ZVAL_BOOL(' . $symbol . ', 0);');
+                                $compilationContext->backend->assignBool($symbolVariable, '0', $compilationContext);
                             } else {
                                 if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
                                     $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
                                     $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getBooleanCode() . ';');
                                     $symbolVariable->initVariant($compilationContext);
-                                    $codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                                    $compilationContext->backend->assignBool($symbolVariable, $tempVariable, $compilationContext);
                                 } else {
                                     $symbolVariable->initVariant($compilationContext);
-                                    $codePrinter->output('ZVAL_BOOL(' . $symbol . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                                    $compilationContext->backend->assignBool($symbolVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                                 }
                             }
                         }
