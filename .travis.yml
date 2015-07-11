@@ -6,6 +6,7 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
 
 cache:
     - apt
@@ -22,6 +23,7 @@ install:
  - ./install
 
 before_script:
+ - if [[ "$TRAVIS_PHP_VERSION" != "7" ]]; then $(phpenv which php) php7-tests.php; fi
  - $(phpenv which php) compiler.php generate
  - $(phpenv which php) compiler.php stubs
  - $(phpenv which php) compiler.php api
