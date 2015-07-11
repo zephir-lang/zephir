@@ -2,8 +2,13 @@
 /**
  * Temporary file disabling tests not supported on PHP7
  */
-$supportedZep = array('assign.zep');
-$supportedTest = array('AssignTest.php');
+$supportedZep = array(
+    'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep', 'staticpropertyarray.zep',
+    'properties'
+);
+$supportedTest = array(
+    'AssignTest.php', 'CblockTest.php', 'Properties'
+);
 
 function joinPath($path1, $path2) {
     $path1 = str_replace("\\", '/', $path1);
@@ -23,9 +28,13 @@ mkdir($testPath);
 
 /* Copy whitelisted tests */
 foreach ($supportedZep as $zep) {
-    rename(joinPath($zepPath . '2', $zep), joinPath($zepPath, $zep));
+    $target = joinPath($zepPath, $zep);
+    @mkdir(dirname($target), 0777, true);
+    rename(joinPath($zepPath . '2', $zep), $target);
 }
 
 foreach ($supportedTest as $test) {
-    rename(joinPath($testPath . '2', $test), joinPath($testPath, $test));
+    $target = joinPath($testPath, $test);
+    @mkdir(dirname($target), 0777, true);
+    rename(joinPath($testPath . '2', $test), $target);
 }

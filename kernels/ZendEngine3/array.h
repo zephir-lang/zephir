@@ -59,7 +59,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 int zephir_array_update_multi(zval *arr, zval *value, const char *types, int types_length, int types_count, ...);
 
 #define zephir_array_fast_append(arr, value) \
-  Z_ADDREF(value); \
+  Z_TRY_ADDREF(value); \
   zend_hash_next_index_insert(Z_ARRVAL(arr), &value);
 
 #endif /* ZEPHIR_KERNEL_ARRAY_H */
