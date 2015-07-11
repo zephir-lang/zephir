@@ -129,7 +129,7 @@ class VariableAppend
                             case 'uint':
                             case 'long':
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                                $compilationContext->backend->assignBool($tempVariable, $exprVariable, $compilationContext);
+                                $compilationContext->backend->assignLong($tempVariable, $exprVariable, $compilationContext);
                                 $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
                                 $tempVariable->setIdle(true);
                                 break;

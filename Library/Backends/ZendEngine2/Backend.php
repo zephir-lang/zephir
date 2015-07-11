@@ -407,6 +407,12 @@ class Backend extends BaseBackend
             $keyType = 'index';
         }
 
+        if ($value == 'null') {
+            if (!isset($key)) {
+                $context->codePrinter->output('zephir_array_append(' . $this->getVariableCodePointer($variable) . ', ZEPHIR_GLOBAL(global_null), PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+                return;
+            }
+        }
         switch ($value->getType()) {
             case 'int':
             case 'uint':
@@ -418,11 +424,12 @@ class Backend extends BaseBackend
                 $type = 'stringl';
                 break;
             case 'variable':
+            case 'array':
                 $type = 'zval';
                 break;
         }
         if (!$type) {
-            throw new Exception("Unknown type mapping: " . $value->getType());
+            throw new CompilerException("Unknown type mapping: " . $value->getType());
         }
 
         if (isset($key)) {
@@ -433,9 +440,13 @@ class Backend extends BaseBackend
             }
         }
         if ($type == 'stringl') {
-            $valueStr = 'SL("' . $value->getCode()  . '")';
+            if ($value instanceof Variable) {
+                $valueStr = 'Z_STRVAL_P(' . $this->getVariableCode($value) . '), Z_STRLEN_P(' . $this->getVariableCode($value) . ')';
+            } else {
+                $valueStr = 'SL("' . $value->getCode()  . '")';
+            }
         } else if ($type == 'zval') {
-            $valueStr = $this->getVariableCode($value->getName());
+            $valueStr = $this->getVariableCode($value);
         } else {
             $valueStr = $value->getCode();
         }
@@ -444,7 +455,7 @@ class Backend extends BaseBackend
         if ($keyType == 'assoc') {
             $output = 'add_assoc_' . $type . '_ex(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', ' . $valueStr . $doCopy . ');';
         } else if ($keyType == 'append') {
-            $output = 'zephir_array_append(' . $this->getVariableCode($variable) . ', ' . $this->resolveValue($value, $compilationContext) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
+            $output = 'zephir_array_append(' . $this->getVariableCodePointer($variable) . ', ' . $this->resolveValue($value, $context) . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');';
         } else {
             $output = 'add_index_' . $type . '(' . $this->getVariableCode($variable) . ', ' . $keyStr . ', '. $valueStr . ');';
         }
@@ -803,7 +814,7 @@ class Backend extends BaseBackend
         $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $this->getVariableCode($target) . ', ' . $this->getVariableCode($var) . ');');
     }
 
-    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statementBlock, $statement, CompilationContext $compilationContext)
+    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
     {
         /**
          * Create a hash table and hash pointer temporary variables
@@ -816,7 +827,7 @@ class Backend extends BaseBackend
         $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
         $tempVariable->setIsDoublePointer(true);
         $codePrinter = $compilationContext->codePrinter;
-        $reverse = $statement['reverse'] ? true : false;
+        $reverse = $statement['reverse'] ? 1 : 0;
 
         $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $reverse . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
 

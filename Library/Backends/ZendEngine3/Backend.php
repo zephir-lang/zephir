@@ -333,7 +333,7 @@ class Backend extends BackendZendEngine2
             $value = $this->getVariableCode($tempVariable);
         } else if ($value == 'true' || $value == 'false') {
             $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-            $this->assignBool($tempVariable, $value, $context);
+            $this->assignBool($tempVariable, $value == 'true' ? '1' : '0', $context);
             $value = $this->getVariableCode($tempVariable);
         } else if ($value instanceof Variable) {
             $value = $this->getVariableCode($value);
