@@ -93,13 +93,16 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 
 #define ZEPHIR_CPY_WRT(d, v) \
 	Z_TRY_ADDREF_P(v); \
-	if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
-		zephir_ptr_dtor(d); \
+	if (Z_TYPE_P(d) > IS_UNDEF) { \
+		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
+			zephir_ptr_dtor(d); \
+		} \
+	} else { \
+		zephir_memory_observe(d); \
 	} \
 	ZVAL_COPY_VALUE(d, v);
 
 #define ZEPHIR_CPY_WRT_CTOR(d, v) \
-	Z_TRY_ADDREF_P(v); \
 	if (d) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
 			zephir_ptr_dtor(d); \
@@ -107,8 +110,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} else { \
 		zephir_memory_observe(d); \
 	} \
-	ZVAL_DUP(d, v); \
-	Z_TRY_DELREF_P(v);
+	ZVAL_DUP(d, v);
 
 #define ZEPHIR_OBS_VAR(z) \
 	zephir_memory_observe(&z)
@@ -142,5 +144,12 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} while (0)
 
 #define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(&z)
+
+#define ZEPHIR_SEPARATE_PARAM(z) \
+	do { \
+		zval *orig_ptr = &z;\
+		zephir_memory_observe(orig_ptr);\
+		ZVAL_DUP(orig_ptr, orig_ptr); \
+	} while (0)
 
 #endif

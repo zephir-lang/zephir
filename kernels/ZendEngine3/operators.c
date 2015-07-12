@@ -129,6 +129,38 @@ int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length)
 	return 0;
 }
 
+void zephir_negate(zval *z)
+{
+	while (1) {
+		switch (Z_TYPE_P(z)) {
+			case IS_LONG:
+				ZVAL_LONG(z, -Z_LVAL_P(z));
+				return;
+
+			case IS_TRUE:
+				ZVAL_LONG(z, -1);
+				return;
+
+			case IS_DOUBLE:
+				ZVAL_DOUBLE(z, -Z_DVAL_P(z));
+				return;
+
+			case IS_NULL:
+			case IS_FALSE:
+				ZVAL_LONG(z, 0);
+				return;
+
+			default:
+				/* Force separation */
+				Z_TRY_ADDREF_P(z);
+				SEPARATE_ZVAL_IF_NOT_REF(z);
+				Z_TRY_DELREF_P(z);
+				convert_scalar_to_number(z);
+				assert(Z_TYPE_P(z) == IS_LONG || Z_TYPE_P(z) == IS_DOUBLE);
+		}
+	}
+}
+
 /**
  * Returns the long value of a zval
  */
@@ -228,4 +260,76 @@ int zephir_is_equal(zval *op1, zval *op2)
 
 	is_equal_function(&result, op1, op2);
 	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
+ * Check if a zval is less than a long value
+ */
+int zephir_less_long(zval *op1, long op2)
+{
+	zval result, op2_zval;
+	ZVAL_LONG(&op2_zval, op2);
+
+	is_smaller_function(&result, op1, &op2_zval);
+	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
+ * Check if a zval is greater than a long value
+ */
+int zephir_greater_long(zval *op1, long op2)
+{
+	zval result, op2_zval;
+	ZVAL_LONG(&op2_zval, op2);
+
+	is_smaller_or_equal_function(&result, op1, &op2_zval);
+	return Z_TYPE(result) == IS_FALSE;
+}
+
+/**
+ * Do safe divisions between two longs
+ */
+double zephir_safe_div_long_long(long op1, long op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	return (double) op1 / (double) op2;
+}
+
+/**
+ * Do safe divisions between two long/double
+ */
+double zephir_safe_div_long_double(long op1, double op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	return (double) op1 / op2;
+}
+
+/**
+ * Do safe divisions between two double/long
+ */
+double zephir_safe_div_double_long(double op1, long op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	return op1 / (double) op2;
+}
+
+/**
+ * Do safe divisions between two doubles
+ */
+double zephir_safe_div_double_double(double op1, double op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	return op1 / op2;
 }

@@ -71,10 +71,37 @@
 		INIT_NS_CLASS_ENTRY(ce, #ns, #class_name, methods); \
 		lower_ns## _ ##lcname## _ce = zend_register_internal_class_ex(&ce, parent_ce); \
 		if (!lower_ns## _ ##lcname## _ce) { \
-			fprintf(stderr, "Zephir Error: Class to extend '%s' was not found when registering class '%s'\n", (parent_ce ? parent_ce->name : "(null)"), ZEND_NS_NAME(#ns, #class_name)); \
+			fprintf(stderr, "Zephir Error: Class to extend '%s' was not found when registering class '%s'\n", (parent_ce ? ZSTR_VAL(parent_ce->name) : "(null)"), ZEND_NS_NAME(#ns, #class_name)); \
 			return FAILURE; \
 		} \
 		lower_ns## _ ##lcname## _ce->ce_flags |= flags;  \
+	}
+
+#define ZEPHIR_REGISTER_INTERFACE(ns, classname, lower_ns, name, methods) \
+	{ \
+		zend_class_entry ce; \
+		memset(&ce, 0, sizeof(zend_class_entry)); \
+		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
+		lower_ns## _ ##name## _ce = zend_register_internal_interface(&ce); \
+	}
+
+#define ZEPHIR_REGISTER_INTERFACE_EX(ns, classname, lower_ns, lcname, parent_ce, methods) \
+	{ \
+		zend_class_entry ce; \
+		if (!parent_ce) { \
+			fprintf(stderr, "Can't register interface %s with null parent\n", ZEND_NS_NAME(#ns, #classname)); \
+			return FAILURE; \
+		} \
+		memset(&ce, 0, sizeof(zend_class_entry)); \
+		INIT_NS_CLASS_ENTRY(ce, #ns, #classname, methods); \
+		lower_ns## _ ##lcname## _ce = zend_register_internal_interface(&ce); \
+		if (parent_ce) { \
+			zend_do_inheritance(ce, parent_ce); \
+		} \
+		if (!lower_ns## _ ##lcname## _ce) { \
+			fprintf(stderr, "Can't register interface %s with parent %s\n", ZEND_NS_NAME(#ns, #classname), (parent_ce ? ZSTR_VAL(parent_ce->name) : "(null)")); \
+			return FAILURE; \
+		} \
 	}
 
 /** Return zval with always ctor */
@@ -114,6 +141,12 @@
 
 /** Return without change return_value */
 #define RETURN_MM()                 { ZEPHIR_MM_RESTORE(); return; }
+
+/* Return long */
+#define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }
+
+/* Return double */
+#define RETURN_MM_DOUBLE(value)     { RETVAL_DOUBLE(value); ZEPHIR_MM_RESTORE(); return; }
 
 /**
  * Returns a zval in an object member
@@ -204,7 +237,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 		ZEPHIR_MM_RESTORE(); \
 		return; \
 	} \
-	ZVAL_COPY(&return_value, _constant_ptr); \
+	ZVAL_COPY(return_value, _constant_ptr); \
 } while(0)
 
 #ifndef ZEPHIR_RELEASE

@@ -17,7 +17,7 @@ class Backend extends BackendZendEngine2
 
     public function getVariableCode(Variable $variable)
     {
-        if (in_array($variable->getName(), array('this_ptr')) || $variable->getType() == 'zval_ptr') {
+        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || $variable->getType() == 'zval_ptr') {
             return $variable->getName();
         }
         return '&' . $variable->getName();
@@ -194,6 +194,11 @@ class Backend extends BackendZendEngine2
         return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter, null);
     }
 
+    public function returnString($value, CompilationContext $context, $useCodePrinter = true)
+    {
+        return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, null);
+    }
+
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
     {
         $type = null;
@@ -203,6 +208,13 @@ class Backend extends BackendZendEngine2
             $keyType = 'append';
         } else if ($key instanceof CompiledExpression && in_array($key->getType(), array('int', 'uint', 'long', 'ulong'))) {
             $keyType = 'index';
+        }
+        if ($value == 'null') {
+            if (!isset($key)) {
+                $value = $this->resolveValue('null', $context);
+                $context->codePrinter->output('zephir_array_append(' . $this->getVariableCode($variable) . ', '. $value . ', PH_SEPARATE, "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
+                return;
+            }
         }
         switch ($value->getType()) {
             case 'int':
@@ -215,6 +227,7 @@ class Backend extends BackendZendEngine2
                 $type = 'stringl';
                 break;
             case 'variable':
+            case 'array':
                 $type = 'zval';
                 break;
         }
@@ -226,7 +239,11 @@ class Backend extends BackendZendEngine2
             $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
         }
         if ($type == 'stringl') {
-            $valueStr = 'SL("' . $value->getCode()  . '")';
+            if ($value instanceof Variable) {
+                $valueStr = 'Z_STRVAL_P(' . $this->getVariableCode($value) . '), Z_STRLEN_P(' . $this->getVariableCode($value) . ')';
+            } else {
+                $valueStr = 'SL("' . $value->getCode()  . '")';
+            }
         } else if ($type == 'zval') {
             $valueStr = $this->getVariableCode($value);
         } else {
@@ -363,11 +380,11 @@ class Backend extends BackendZendEngine2
     {
         $paramStr = $params != null ? ', ' . join(', ', $params) : '';
         if (!isset($symbolVariable)) {
-            $context->codePrinter->output('ZEPHIR_CALL_METHOD(NULL, &' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+            $context->codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         } else if ($symbolVariable->getName() == 'return_value') {
-            $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(&' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+            $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         } else {
-            $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', &' . $variable->getName() . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+            $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
         }
     }
 
@@ -394,7 +411,7 @@ class Backend extends BackendZendEngine2
         $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', ' . $duplicateHash . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
 
         $macro = null;
-        $reverse = $this->_statement['reverse'] ? 'REVERSE_' : '';
+        $reverse = $statement['reverse'] ? 'REVERSE_' : '';
 
         if (isset($keyVariable)) {
             $arrayNumKey = $compilationContext->symbolTable->addTemp('zend_ulong', $compilationContext);
@@ -457,5 +474,14 @@ class Backend extends BackendZendEngine2
         }
 
         $codePrinter->output('} ZEND_HASH_FOREACH_END();');
+    }
+
+    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = 'if (Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF) {';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
     }
 }

@@ -355,9 +355,45 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    protected function returnHelper($macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    {
+        if ($value instanceof Variable) {
+            $value = $value->getName();
+        } else {
+            $value = $macro == 'RETURN_MM_STRING' ? '"' . $value . '"' : $value;
+        }
+
+        $copyStr = '';
+        if ($doCopy === true) {
+            $copyStr = ', 1';
+        } else if ($doCopy === false) {
+            $copyStr = ', 0';
+        } else if (isset($doCopy)) {
+            $copyStr = ', ' . $doCopy;
+        }
+
+        $output = $macro . '(' . $value . $copyStr . ');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
-        return $this->assignHelper('ZVAL_STRING', ($variable->isLocalOnly() ? '&' : '') . $variable->getName(), $value, $context, $useCodePrinter, $doCopy);
+        if ($value == 'null') {
+            $output = 'ZVAL_EMPTY_STRING(' . $this->getVariableCode($variable) . ');';
+            if ($useCodePrinter) {
+                $context->codePrinter->output($output);
+            }
+            return $output;
+        }
+        return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, $doCopy);
+    }
+
+    public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
+    {
+        return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, $doCopy);
     }
 
     public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true)
@@ -867,5 +903,14 @@ class Backend extends BaseBackend
         }
 
         $codePrinter->output('}');
+    }
+
+    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = 'if (!' . $var->getName() . ') {';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
     }
 }

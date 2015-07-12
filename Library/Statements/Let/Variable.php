@@ -689,7 +689,7 @@ class Variable
                     case 'array':
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_is_true(' . $itemVariable->getName() . ');');
+                                $codePrinter->output($variable . ' = zephir_is_true(' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
                                 break;
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);
@@ -750,7 +750,7 @@ class Variable
 
 
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVariable->getName(). ', ' . $resolvedExpr->getCode() . ');');
+                        $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getCode(), $compilationContext);
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
@@ -776,10 +776,10 @@ class Variable
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
                             $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                            $compilationContext->backend->assignDouble($symbolVariable, $tempVariable, $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+                            $compilationContext->backend->assignDouble($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         }
                         break;
 
@@ -790,12 +790,6 @@ class Variable
 
             case 'char':
             case 'uchar':
-                if ($symbolVariable->isLocalOnly()) {
-                    $symbol = '&' . $variable;
-                } else {
-                    $symbol = $variable;
-                }
-
                 switch ($statement['operator']) {
                     case 'assign':
                         $symbolVariable->setDynamicTypes('long');
@@ -803,11 +797,12 @@ class Variable
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
                             $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_LONG(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                            $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_LONG(' . $symbol . ', \'' . $resolvedExpr->getCode() . '\');');
+                            $compilationContext->backend->assignLong($symbolVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
                         }
+
                         break;
                     default:
                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
@@ -815,12 +810,6 @@ class Variable
                 break;
 
             case 'double':
-                if ($symbolVariable->isLocalOnly()) {
-                    $symbol = '&' . $variable;
-                } else {
-                    $symbol = $variable;
-                }
-
                 switch ($statement['operator']) {
                     case 'mul-assign':
                     case 'sub-assign':
@@ -855,10 +844,10 @@ class Variable
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('double', $compilationContext);
                             $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                            $compilationContext->backend->assignDouble($symbolVariable, $tempVariable, $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
-                            $codePrinter->output('ZVAL_DOUBLE(' . $symbol . ', ' . $resolvedExpr->getCode() . ');');
+                            $compilationContext->backend->assignDouble($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         }
                         break;
                     default:
@@ -954,13 +943,8 @@ class Variable
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('long');
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
-                                if ($symbolVariable->isLocalOnly()) {
-                                    $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(&' . $variable . ');');
-                                    $codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $tempVariable->getName() . ' + ' . $itemVariable->getName() . ');');
-                                } else {
-                                    $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $variable . ');');
-                                    $codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $tempVariable->getName() . ' + ' . $itemVariable->getName() . ');');
-                                }
+                                $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ') + ' . $itemVariable->getName() . ';');
+                                $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                                 break;
 
                             case 'sub-assign':
@@ -968,13 +952,8 @@ class Variable
                                 $symbolVariable->initVariant($compilationContext);
                                 $symbolVariable->setDynamicTypes('long');
                                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite($itemVariable->getType(), $compilationContext);
-                                if ($symbolVariable->isLocalOnly()) {
-                                    $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(&' . $variable . ');');
-                                    $codePrinter->output('ZVAL_LONG(&' . $variable . ', ' . $tempVariable->getName() . ' - ' . $itemVariable->getName() . ');');
-                                } else {
-                                    $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $variable . ');');
-                                    $codePrinter->output('ZVAL_LONG(' . $variable . ', ' . $tempVariable->getName() . ' - ' . $itemVariable->getName() . ');');
-                                }
+                                $codePrinter->output($tempVariable->getName() . ' = zephir_get_numberval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
+                                $compilationContext->backend->assignLong($symbolVariable, $tempVariable->getName() . ' - ' . $itemVariable->getName(), $compilationContext);
                                 break;
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $itemVariable->getType(), $statement);

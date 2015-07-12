@@ -1117,7 +1117,8 @@ class ClassMethod
 
                     case 'null':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t\t" . 'ZVAL_EMPTY_STRING(' . $parameter['name'] . ');' . PHP_EOL;
+                        $paramVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
+                        $code .= "\t\t" . $compilationContext->backend->assignString($paramVariable, null, $compilationContext, false) . PHP_EOL;
                         break;
 
                     case 'string':
@@ -1137,13 +1138,13 @@ class ClassMethod
                 switch ($parameter['default']['type']) {
                     case 'null':
                         $code .= "\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
+                        $code .= "\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false) . PHP_EOL;
                         break;
 
                     case 'empty-array':
                     case 'array':
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
+                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false) . PHP_EOL;
                         break;
 
                     default:
@@ -1227,7 +1228,7 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $code .= "\t\t" . 'ZEPHIR_INIT_VAR(' . $parameter['name'] . ');' . PHP_EOL;
-                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false);
+                        $code .= "\t\t" . $compilationContext->backend->initArray($symbolVariable, $compilationContext, null, false) . PHP_EOL;
                         break;
 
                     default:
@@ -1363,7 +1364,9 @@ class ClassMethod
             case 'uint':
             case 'long':
             case 'ulong':
-                return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameter['name'] . '_param);' . PHP_EOL;
+                $parameterVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'] . '_param', $compilationContext);
+                $parameterVariable = $compilationContext->backend->getVariableCode($parameterVariable);
+                return "\t" . $parameter['name'] . ' = zephir_get_intval(' . $parameterVariable . ');' . PHP_EOL;
 
             case 'bool':
                 return "\t" . $parameter['name'] . ' = zephir_get_boolval(' . $parameter['name'] . '_param);' . PHP_EOL;
@@ -1727,7 +1730,7 @@ class ClassMethod
                                 case 'array':
                                 case 'empty-array':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= $compilationContext->backend->initArray($variable, $compilationContext, null, false);
+                                    $initVarCode .= $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
                                     break;
 
                                 default:
@@ -1959,7 +1962,7 @@ class ClassMethod
                 /**
                  * Assign the default value according to the variable's type
                  */
-                $initCode .= "\t" . 'if (!' . $name . ') {' . PHP_EOL;
+                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($compilationContext->symbolTable->getVariableForWrite($name, $compilationContext), $compilationContext, false) . PHP_EOL;
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
                 if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {

@@ -185,11 +185,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variableRight->isLocalOnly()) {
-                                    return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
-                                } else {
-                                    return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
-                                }
+                                $variableRight = $compilationContext->backend->getVariableCode($variableRight);
+                                return new CompiledExpression('int', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
                                 break;
 
                             default:
@@ -250,11 +247,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variableRight->isLocalOnly()) {
-                                    return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
-                                } else {
-                                    return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
-                                }
+                                $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
+                                return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
                                 break;
 
                             default:
@@ -306,11 +300,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
-                                        }
+                                        $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
                                         break;
 
                                     default:
@@ -351,11 +342,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
-                                        }
+                                        $variableRight = $compilationContext->backend->getVariableCode($variableRight, $compilationContext);
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
                                         break;
 
                                     default:
@@ -399,11 +387,8 @@ class ArithmeticalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(&' . $variableRight->getName() . '))', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight->getName() . '))', $expression);
-                                        }
+                                        $variableRight = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_get_numberval(' . $variableRight . '))', $expression);
                                         break;
 
                                     default:
@@ -462,11 +447,8 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $op = $this->_operator;
-                                if ($variableLeft->isLocalOnly()) {
-                                    $op1 = '&' . $variableLeft->getName();
-                                } else {
-                                    $op1 = $variableLeft->getName();
-                                }
+
+                                $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                 $op2 = $right->getCode();
                                 if ($right->getType() == 'double') {
                                     return new CompiledExpression('double', '(zephir_get_numberval(' . $op1 . ') ' . $op . ' ' . $op2 . ')', $expression);
@@ -485,21 +467,15 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'long':
                                     case 'ulong':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(zephir_get_numberval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(zephir_get_numberval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
+                                        return new CompiledExpression('int', '(zephir_get_numberval(' . $variableLeft . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
                                         break;
 
                                     /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(zephir_get_numberval(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(zephir_get_numberval(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
+                                        return new CompiledExpression('int', '(zephir_get_numberval(' . $variableLeft . ') ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
                                         break;
 
                                     /* a(var) + a(var) */

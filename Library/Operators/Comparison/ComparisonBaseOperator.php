@@ -627,47 +627,31 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'ulong':
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', ' . $right->getCode() . ')', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $right->getCode() . ')', $expression['left']);
-                                }
+                                $variable = $compilationContext->backend->getVariableCode($variable);
+                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable . ', ' . $right->getCode() . ')', $expression['left']);
                                 break;
 
                             case 'char':
                             case 'uchar':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', \'' . $right->getCode() . '\')', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', \'' . $right->getCode() . '\')', $expression['left']);
-                                }
+                                $variable = $compilationContext->backend->getVariableCode($variable);
+                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable . ', \'' . $right->getCode() . '\')', $expression['left']);
                                 break;
 
                             case 'bool':
                                 $compilationContext->headersManager->add('kernel/operators');
+                                $variable = $compilationContext->backend->getVariableCode($variable);
                                 if ($right->getCode() == 'true') {
-                                    if ($variable->isLocalOnly()) {
-                                        return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(&' . $variable->getName() . ')', $expression['left']);
-                                    } else {
-                                        return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(' . $variable->getName() . ')', $expression['left']);
-                                    }
+                                    return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(' . $variable . ')', $expression['left']);
                                 } else {
-                                    if ($variable->isLocalOnly()) {
-                                        return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(&' . $left->getCode() . ')', $expression['left']);
-                                    } else {
-                                        return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(' . $left->getCode() . ')', $expression['left']);
-                                    }
+                                    return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(' . $variable . ')', $expression['left']);
                                 }
                                 break;
 
                             case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variable->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                                }
+                                $variable = $compilationContext->backend->getVariableCode($variable);
+                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable . ', "' . $right->getCode() . '")', $expression['left']);
                                 break;
 
                             case 'variable':

@@ -503,7 +503,7 @@ class Call
                             break;
 
                         case 'variable':
-                            $params[] = $parameterVariable->getName();
+                            $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes[] = $parameterVariable->getDynamicTypes();
                             break;
