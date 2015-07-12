@@ -10,6 +10,7 @@ use Zephir\ClassMethod;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
+use Zephir\Utils;
 
 class Backend extends BackendZendEngine2
 {
@@ -144,6 +145,39 @@ class Backend extends BackendZendEngine2
         }
 
         $groupVariables[] = $pointer . $variable->getName();
+    }
+
+    public function declareConstant($type, $name, $value, CompilationContext $context)
+    {
+        $ce = $context->classDefinition->getClassEntry($context);
+        $dType = null;
+        switch ($type) {
+            case 'bool':
+                $value = $value == 'false' ? '0' : 1;
+                break;
+            case 'long':
+            case 'int':
+                $dType = 'long';
+                break;
+            case 'double':
+                break;
+            case 'string':
+            case 'char':
+                if ($type == 'string' || $type == 'char') {
+                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                }
+                $dType = 'string';
+                break;
+        }
+        if (!isset($dType)) {
+            $dType = $type;
+        }
+
+        if ($dType == 'null') {
+            $context->codePrinter->output('zephir_declare_class_constant_null(' . $ce . ', SL("' . $name . '"));');
+        } else {
+            $context->codePrinter->output('zephir_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ');');
+        }
     }
 
     /**

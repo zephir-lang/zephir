@@ -242,6 +242,14 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 	ZVAL_COPY(return_value, _constant_ptr); \
 } while(0)
 
+/* Declare class constants */
+int zephir_declare_class_constant_null(zend_class_entry *ce, const char *name, size_t name_length);
+int zephir_declare_class_constant_long(zend_class_entry *ce, const char *name, size_t name_length, zend_long value);
+int zephir_declare_class_constant_bool(zend_class_entry *ce, const char *name, size_t name_length, zend_bool value);
+int zephir_declare_class_constant_double(zend_class_entry *ce, const char *name, size_t name_length, double value);
+int zephir_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length);
+int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value);
+
 #ifndef ZEPHIR_RELEASE
 #define ZEPHIR_DEBUG_PARAMS , const char *file, int line
 #define ZEPHIR_DEBUG_PARAMS_DUMMY , "", 0

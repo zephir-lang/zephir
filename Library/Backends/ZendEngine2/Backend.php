@@ -9,6 +9,7 @@ use Zephir\CompilationContext;
 use Zephir\ClassMethod;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
+use Zephir\Utils;
 
 class Backend extends BaseBackend
 {
@@ -328,6 +329,38 @@ class Backend extends BaseBackend
         }
 
         return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
+    }
+
+    public function declareConstant($type, $name, $value, CompilationContext $context)
+    {
+        $ce = $context->classDefinition->getClassEntry($context);
+        $dType = null;
+        switch ($type) {
+            case 'bool':
+                $value = $value == 'false' ? '0' : 1;
+                break;
+            case 'long':
+            case 'int':
+                $dType = 'long';
+                break;
+            case 'double':
+                break;
+            case 'string':
+            case 'char':
+                if ($type == 'string' || $type == 'char') {
+                    $value = "\"" . Utils::addSlashes($value) . "\"";
+                }
+                $dType = 'string';
+                break;
+        }
+        if (!isset($dType)) {
+            $dType = $type;
+        }
+        if ($dType == 'null') {
+            $context->codePrinter->output('zend_declare_class_constant_null(' . $ce . ', SL("' . $name . '") TSRMLS_CC);');
+        } else {
+            $context->codePrinter->output('zend_declare_class_constant_' . $dType . '(' . $ce . ', SL("' . $name . '"), ' . $value . ' TSRMLS_CC);');
+        }
     }
 
     /* Assign value to variable */

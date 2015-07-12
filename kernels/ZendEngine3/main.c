@@ -262,3 +262,59 @@ zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int cl
 
     return temp_ce;
 }
+
+/* Declare constants */
+int zephir_declare_class_constant(zend_class_entry *ce, const char *name, size_t name_length, zval *value)
+{
+	if (Z_CONSTANT_P(value)) {
+		ce->ce_flags &= ~ZEND_ACC_CONSTANTS_UPDATED;
+	}
+	ZVAL_NEW_PERSISTENT_REF(value, value);
+	return zend_hash_str_update(&ce->constants_table, name, name_length, value) ?
+		SUCCESS : FAILURE;
+}
+
+int zephir_declare_class_constant_null(zend_class_entry *ce, const char *name, size_t name_length)
+{
+	zval constant;
+
+	ZVAL_NULL(&constant);
+	return zephir_declare_class_constant(ce, name, name_length, &constant);
+}
+
+int zephir_declare_class_constant_long(zend_class_entry *ce, const char *name, size_t name_length, zend_long value)
+{
+	zval constant;
+
+	ZVAL_LONG(&constant, value);
+	return zephir_declare_class_constant(ce, name, name_length, &constant);
+}
+
+int zephir_declare_class_constant_bool(zend_class_entry *ce, const char *name, size_t name_length, zend_bool value)
+{
+	zval constant;
+
+	ZVAL_BOOL(&constant, value);
+	return zephir_declare_class_constant(ce, name, name_length, &constant);
+}
+
+int zephir_declare_class_constant_double(zend_class_entry *ce, const char *name, size_t name_length, double value)
+{
+	zval constant;
+
+	ZVAL_DOUBLE(&constant, value);
+	return zephir_declare_class_constant(ce, name, name_length, &constant);
+}
+
+int zephir_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length)
+{
+	zval constant;
+
+	ZVAL_NEW_STR(&constant, zend_string_init(value, value_length, ce->type & ZEND_INTERNAL_CLASS));
+	return zephir_declare_class_constant(ce, name, name_length, &constant);
+}
+
+int zephir_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value)
+{
+	return zephir_declare_class_constant_stringl(ce, name, name_length, value, strlen(value));
+}

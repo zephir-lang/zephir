@@ -35,6 +35,8 @@ abstract class BaseBackend
 
     abstract public function getVariableCode(Variable $variable);
 
+    abstract public function declareConstant($type, $name, $value, CompilationContext $context);
+
     /* Assign values to variables */
     abstract public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true);
     abstract public function assignLong(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
