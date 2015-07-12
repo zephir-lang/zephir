@@ -913,4 +913,9 @@ class Backend extends BaseBackend
         }
         return $output;
     }
+
+    public function fetchClassEntry($str)
+    {
+        return 'zephir_get_internal_ce(SS("' . $str . '") TSRMLS_CC)';
+    }
 }

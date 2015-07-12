@@ -76,6 +76,7 @@ abstract class BaseBackend
 
     abstract public function maybeSeparate(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
     abstract public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
+    abstract public function fetchClassEntry($str);
 
     abstract public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context);
 

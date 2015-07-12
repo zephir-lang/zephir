@@ -181,6 +181,8 @@ void zephir_fast_count(zval *result, zval *array);
 int zephir_fast_count_ev(zval *array);
 int zephir_fast_count_int(zval *value);
 
+zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len);
+
 /* Utils functions */
 static inline int zephir_maybe_separate_zval(zval* z)
 {

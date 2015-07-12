@@ -4,7 +4,7 @@
  */
 $supportedZep = array(
     'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep',
-    'properties', 'oo/extendpdoclass.zep', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'returns.zep',
+    'properties', 'oo/extendpdoclass.zep', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'returns.zep', 'pdostatement.zep',
     'oo/abstractclass.zep', 'oo/ooconstruct.zep', 'oo/ooconstructparams.zep', 'oo/param.zep', 'oo/deprecatedmethods.zep', 'oo/oonoconstruct.zep',
     'ooimpl', 'oo/extend', 'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep'
 );

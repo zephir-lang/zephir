@@ -250,3 +250,15 @@ int zephir_fast_count_int(zval *value)
 
 	return 1;
 }
+
+zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len)
+{
+    zend_class_entry* temp_ce;
+
+    if ((temp_ce = zend_hash_str_find_ptr(CG(class_table), class_name, class_name_len)) == NULL) {
+        zend_error(E_ERROR, "Class '%s' not found", class_name);
+        return NULL;
+    }
+
+    return temp_ce;
+}

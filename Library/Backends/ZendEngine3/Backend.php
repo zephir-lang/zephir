@@ -484,4 +484,9 @@ class Backend extends BackendZendEngine2
         }
         return $output;
     }
+
+    public function fetchClassEntry($str)
+    {
+        return 'zephir_get_internal_ce(SL("' . $str . '"))';
+    }
 }
