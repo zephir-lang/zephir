@@ -1332,8 +1332,14 @@ class ClassMethod
                  * We don't need to check array type
                  * because It's already checked with ZEND_ARG_ARRAY_INFO
                  */
-                $code = "\t" . $parameter['name'] . ' = ' . $parameterCode . ';' . PHP_EOL;
-                $code .= PHP_EOL;
+                //TODO: refactor all to use codeprinter, remove useCodePrinter arguments from backend
+                $codePrinter = new CodePrinter();
+                $codePrinter->increaseLevel();
+                $oldCodePrinter = $compilationContext->codePrinter;
+                $compilationContext->codePrinter = $codePrinter;
+                $compilationContext->backend->assignZval($parameterVariable, $inputParamVariable, $compilationContext);
+                $compilationContext->codePrinter = $oldCodePrinter;
+                $code = $codePrinter->getOutput();
                 return $code;
 
             case 'object':

@@ -36,6 +36,22 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
+/**
+ * Returns the called in class in the current scope
+ */
+void zephir_get_called_class(zval *return_value)
+{
+	if (EG(current_execute_data)->called_scope) {
+		zend_string *ret = EG(current_execute_data)->called_scope->name;
+		zend_string_addref(ret);
+		RETURN_STR(ret);
+	}
+
+	if (!EG(scope))  {
+		php_error_docref(NULL, E_WARNING, "zephir_get_called_class() called from outside a class");
+	}
+}
+
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type)
 {
 	zend_class_entry *retval;

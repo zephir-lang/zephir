@@ -27,6 +27,8 @@
 #include "kernel/globals.h"
 #include "kernel/main.h"
 
+/** Class Retrieving/Checking */
+void zephir_get_called_class(zval *return_value);
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
 
 /** Reading properties */
@@ -54,5 +56,15 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
 #define zephir_property_decr(object, property) zephir_property_incr_decr(object, property, 0)
 int zephir_property_incr_decr(zval *object, char *property_name, unsigned int property_length, unsigned int increment);
+
+#define zephir_fetch_safe_class(destination, var) { \
+		if (Z_TYPE(var) == IS_STRING) { \
+			ZEPHIR_CPY_WRT(&destination, &var); \
+		} else { \
+			ZEPHIR_INIT_NVAR(destination); \
+			ZVAL_STRING(&destination, "<undefined class>"); \
+		} \
+	}
+
 
 #endif

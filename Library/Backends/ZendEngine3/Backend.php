@@ -239,6 +239,7 @@ class Backend extends BackendZendEngine2
 
     public function assignZval(Variable $variable, $code, CompilationContext $context)
     {
+        $code = $this->resolveValue($code, $context);
         $context->codePrinter->output('ZVAL_COPY_VALUE(' . $this->getVariableCode($variable) . ', ' . $code . ');');
     }
 
@@ -354,7 +355,7 @@ class Backend extends BackendZendEngine2
         if ($guarded) {
             $context->codePrinter->output('if (!' . $zendClassEntry->getName() . ') {');
         }
-        $context->codePrinter->output("\t" . $zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ZEND_FETCH_CLASS_AUTO);');
+        $context->codePrinter->output($zendClassEntry->getName() . ' = zephir_fetch_class_str_ex(' . $className . ', ZEND_FETCH_CLASS_AUTO);');
         if ($guarded) {
             $context->codePrinter->output('}');
         }

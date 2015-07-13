@@ -464,6 +464,7 @@ class Backend extends BaseBackend
 
     public function assignZval(Variable $variable, $code, CompilationContext $context)
     {
+        $code = $this->resolveValue($code, $context);
         $context->codePrinter->output($this->getVariableCode($variable) . ' = ' . $code . ';');
     }
 
