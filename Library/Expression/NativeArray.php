@@ -458,7 +458,9 @@ class NativeArray
                 $expr = new Expression($item['value']);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                $codePrinter->output('zephir_array_fast_append(' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ');');
+                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                $item = $compilationContext->backend->resolveValue($itemVariable, $compilationContext);
+                $codePrinter->output('zephir_array_fast_append(' . $symbol . ', ' . $item . ');');
                 if ($itemVariable->isTemporal()) {
                     $itemVariable->setIdle(true);
                 }

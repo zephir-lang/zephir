@@ -34,6 +34,7 @@ abstract class BaseBackend
     abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context);
 
     abstract public function getVariableCode(Variable $variable);
+    abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function declareConstant($type, $name, $value, CompilationContext $context);
 
@@ -43,9 +44,11 @@ abstract class BaseBackend
     abstract public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignNull(Variable $variable, CompilationContext $context, $useCodePrinter = true);
+    abstract public function assignZval(Variable $variable, $code, CompilationContext $context);
     abstract public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context);
     abstract public function returnString($value, CompilationContext $context, $useCodePrinter = true);
     abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
+    abstract public function createClosure(Variable $variable, $classDefinition, CompilationContext $context);
     abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true);
     abstract public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null);
     abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
@@ -82,6 +85,9 @@ abstract class BaseBackend
     abstract public function fetchClassEntry($str);
 
     abstract public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context);
+
+    abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true);
+    abstract public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
     abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);

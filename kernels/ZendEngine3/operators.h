@@ -146,7 +146,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define zephir_get_numberval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_doubleval(z))
 #define zephir_get_intval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_intval_ex(z))
 #define zephir_get_doubleval(z) (Z_TYPE_P(z) == IS_DOUBLE ? Z_DVAL_P(z) : zephir_get_doubleval_ex(z))
-#define zephir_get_boolval(z) (Z_TYPE_P(z) == IS_BOOL ? Z_BVAL(z) : zephir_get_boolval_ex(z))
+#define zephir_get_boolval(z) (Z_TYPE_P(z) == IS_TRUE ? 1 : (Z_TYPE_P(z) == IS_FALSE ? 0 : zephir_get_boolval_ex(z)))
 
 #define zephir_add_function(result, left, right) fast_add_function(result, left, right)
 #define zephir_sub_function(result, left, right) sub_function(result, left, right)
@@ -218,7 +218,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		if (Z_TYPE_P(passValue) == IS_ARRAY) { \
 			ZEPHIR_CPY_WRT(returnValue, passValue); \
 		} else { \
-			ZEPHIR_INIT_NVAR(returnValue); \
+			ZEPHIR_INIT_NVAR((*returnValue)); \
 			array_init_size(returnValue, 0); \
 		} \
 	}

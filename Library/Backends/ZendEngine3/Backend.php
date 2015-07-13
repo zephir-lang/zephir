@@ -29,6 +29,15 @@ class Backend extends BackendZendEngine2
         return $this->getVariableCode($variable);
     }
 
+    public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
+    {
+        $code = '(Z_TYPE_P(' . $this->getVariableCode($variable) . ') == IS_TRUE)';
+        if ($useCodePrinter) {
+            $compilationContext->codePrinter->output($code);
+        }
+        return $code;
+    }
+
     public function getStringsManager()
     {
         return new StringsManager();
@@ -228,9 +237,20 @@ class Backend extends BackendZendEngine2
         return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter, null);
     }
 
+    public function assignZval(Variable $variable, $code, CompilationContext $context)
+    {
+        $context->codePrinter->output('ZVAL_COPY_VALUE(' . $this->getVariableCode($variable) . ', ' . $code . ');');
+    }
+
     public function returnString($value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter, null);
+    }
+
+    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
+    {
+        $symbol = $this->getVariableCode($variable);
+        $context->codePrinter->output('zephir_create_closure_ex(' . $symbol . ', NULL, ' . $classDefinition->getClassEntry() . ', SL("__invoke"));');
     }
 
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
@@ -380,7 +400,7 @@ class Backend extends BackendZendEngine2
 
         if ($value == 'null') {
             $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-            //TODO: assignNull?
+            $this->assignNull($tempVariable, $context);
             $value = $this->getVariableCode($tempVariable);
         } else if ($value == 'true' || $value == 'false') {
             $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
@@ -513,6 +533,16 @@ class Backend extends BackendZendEngine2
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
     {
         $output = 'if (Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF) {';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
+    public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    {
+        $varCode = $this->getVariableCode($var);
+        $output = "if (unlikely(Z_TYPE_P(" . $varCode . ') != IS_TRUE && Z_TYPE_P(' . $varCode . ') != IS_FALSE)) {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }

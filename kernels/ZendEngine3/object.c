@@ -516,3 +516,19 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 
 	return SUCCESS;
 }
+
+/**
+ * Creates a closure
+ */
+int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length)
+{
+	zend_function *function_ptr;
+
+	if ((function_ptr = zend_hash_str_find_ptr(&ce->function_table, method_name, method_length)) == NULL) {
+		ZVAL_NULL(return_value);
+		return FAILURE;
+	}
+
+	zend_create_closure(return_value, function_ptr, ce, ce, this_ptr);
+	return SUCCESS;
+}

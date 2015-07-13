@@ -134,6 +134,10 @@
 		return; \
 }
 
+/** Return zval with always ctor, without restoring the memory stack */
+#define RETURN_THISW() \
+	RETURN_ZVAL(this_ptr, 1, 0);
+
 #define RETURN_LCTORW(var) RETURN_CCTORW(var);
 
 /**

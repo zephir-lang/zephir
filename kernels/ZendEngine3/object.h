@@ -47,6 +47,9 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 int zephir_update_static_property_ce(zend_class_entry *ce, const char *name, int len, zval *value);
 int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const char *property, zend_uint property_length, zval *value, const char *types, int types_length, int types_count, ...);
 
+/** Create closures */
+int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length);
+
 /** Increment/Decrement properties */
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)
 #define zephir_property_decr(object, property) zephir_property_incr_decr(object, property, 0)

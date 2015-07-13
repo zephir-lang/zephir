@@ -34,6 +34,15 @@ class Backend extends BaseBackend
         return $variable->getName();
     }
 
+    public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = 'Z_BVAL_P(' . $this->getVariableCode($variable) . ')';
+        if ($useCodePrinter) {
+            $compilationContext->codePrinter->output($code);
+        }
+        return $output;
+    }
+
     public function getStringsManager()
     {
         return new StringsManager();
@@ -453,6 +462,11 @@ class Backend extends BaseBackend
         return $output;
     }
 
+    public function assignZval(Variable $variable, $code, CompilationContext $context)
+    {
+        $context->codePrinter->output($this->getVariableCode($variable) . ' = ' . $code . ';');
+    }
+
     public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context)
     {
         $variable = $this->getVariableCodePointer($variable);
@@ -471,6 +485,12 @@ class Backend extends BaseBackend
             $context->codePrinter->output($output);
         }
         return $output;
+    }
+
+    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
+    {
+        $symbol = $this->getVariableCode($variable);
+        $context->codePrinter->output('zephir_create_closure_ex(' . $symbol . ', NULL, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
     }
 
     public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
@@ -948,6 +968,15 @@ class Backend extends BaseBackend
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
     {
         $output = 'if (!' . $var->getName() . ') {';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($output);
+        }
+        return $output;
+    }
+
+    public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    {
+        $output = "if (unlikely(Z_TYPE_P(" . $this->getVariableCode($var) . ') != IS_BOOL)) {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }

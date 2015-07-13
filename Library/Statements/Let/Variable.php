@@ -215,21 +215,23 @@ class Variable
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
+                        $exprVariable = $compilationContext->symbolTable->getVariableForWrite($resolvedExpr->resolve(null, $compilationContext), $compilationContext);
+                        $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
 
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
 
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
 
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $resolvedExpr->resolve(null, $compilationContext) . ');');
+                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');');
                                 break;
 
                             default:
@@ -387,18 +389,19 @@ class Variable
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
+                        $itemVariable = $compilationContext->backend->getVariableCode($itemVariable);
                         switch ($statement['operator']) {
                             case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $itemVariable->getName() . ');');
+                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $itemVariable . ');');
                                 break;
                             case 'add-assign':
-                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $itemVariable->getName() . ');');
+                                $codePrinter->output($variable . ' += zephir_get_numberval(' . $itemVariable . ');');
                                 break;
                             case 'sub-assign':
-                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $itemVariable->getName() . ');');
+                                $codePrinter->output($variable . ' -= zephir_get_numberval(' . $itemVariable . ');');
                                 break;
                             case 'mul-assign':
-                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $itemVariable->getName() . ');');
+                                $codePrinter->output($variable . ' *= zephir_get_numberval(' . $itemVariable . ');');
                                 break;
                             default:
                                 throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: double", $statement);
