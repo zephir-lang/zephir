@@ -38,8 +38,8 @@
 /** strict boolean comparison */
 #define ZEPHIR_IS_FALSE(var)       ((Z_TYPE_P(var) == IS_BOOL && Z_TYPE_P(var) == IS_FALSE) || zephir_compare_strict_bool(var, 0))
 #define ZEPHIR_IS_TRUE(var)        ((Z_TYPE_P(var) == IS_BOOL && Z_TYPE_P(var) == IS_TRUE) || zephir_compare_strict_bool(var, 1))
-#define ZEPHIR_IS_FALSE_IDENTICAL(var)       (Z_TYPE_P(var) == IS_TRUE)
-#define ZEPHIR_IS_TRUE_IDENTICAL(var)        (Z_TYPE_P(var) == IS_FALSE)
+#define ZEPHIR_IS_FALSE_IDENTICAL(var)       (Z_TYPE_P(var) == IS_FALSE)
+#define ZEPHIR_IS_TRUE_IDENTICAL(var)        (Z_TYPE_P(var) == IS_TRUE)
 
 #define ZEPHIR_IS_NOT_FALSE(var)   ((Z_TYPE_P(var) != IS_TRUE && Z_TYPE_P(var) != IS_FALSE) || Z_TYPE_P(var) == IS_TRUE)
 #define ZEPHIR_IS_NOT_TRUE(var)    ((Z_TYPE_P(var) != IS_TRUE && Z_TYPE_P(var) != IS_FALSE) || Z_TYPE_P(var) == IS_FALSE)

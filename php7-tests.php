@@ -6,16 +6,16 @@ $supportedZep = array(
     'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep',
     'properties', 'oo/extendpdoclass.zep', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'pdostatement.zep',
     'oo/abstractclass.zep', 'oo/ooconstruct.zep', 'oo/ooconstructparams.zep', 'oo/param.zep', 'oo/deprecatedmethods.zep', 'oo/oonoconstruct.zep',
-    'constantsinterfaceb.zep', 'constantsinterface.zep', 'constantsinterfacea.zep', 'bitwise.zep', 'branchprediction.zep',
+    'constantsinterfaceb.zep', 'constantsinterface.zep', 'constantsinterfacea.zep', 'bitwise.zep', 'branchprediction.zep', 'oo.zep',
     'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'oo/constantsinterface.zep',
-    'oo/ooparams.zep', 'oo/oodynamica.zep',
-    'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep',
+    'oo/ooparams.zep', 'oo/oodynamica.zep', 'oo/oodynamicb.zep',
+    'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep', 'operator.zep',
     'ooimpl', 'oo/extend'
 );
 $supportedTest = array(
     'AssignTest.php', 'CblockTest.php', 'ArrayObjectTest.php', 'ArithmeticTest.php',
     'ConstantsTest.php', 'ConstantsInterfaceTest.php', 'BitwiseTest.php', 'BranchPredictionTest.php', 'ConcatTest.php', 'RequiresTest.php',
-    'TypeoffTest.php', 'MCallTest.php', 'McallChainedTest.php',
+    'TypeoffTest.php', 'MCallTest.php', 'McallChainedTest.php', 'OoTest.php', 'OperatorTest.php',
     'Properties', 'php', 'Oo'
 );
 

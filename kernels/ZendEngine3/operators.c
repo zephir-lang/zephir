@@ -359,6 +359,16 @@ int zephir_is_equal(zval *op1, zval *op2)
 }
 
 /**
+ * Check if two zvals are identical
+ */
+int zephir_is_identical(zval *op1, zval *op2)
+{
+	zval result;
+	is_identical_function(&result, op1, op2);
+	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
  * Check if a zval is less than a long value
  */
 int zephir_less_long(zval *op1, long op2)
