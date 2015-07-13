@@ -18,7 +18,7 @@ class Backend extends BaseBackend
     /**
      * Get a double pointer to the variable
      */
-    protected function getVariableCodePointer(Variable $variable)
+    public function getVariableCodePointer(Variable $variable)
     {
         if ($variable->isLocalOnly()) {
             throw new CompilerException('Double pointer of local zval requested');
@@ -451,6 +451,13 @@ class Backend extends BaseBackend
             $context->codePrinter->output($output);
         }
         return $output;
+    }
+
+    public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context)
+    {
+        $variable = $this->getVariableCodePointer($variable);
+        $itemVariable = $this->getVariableCode($itemVariable);
+        $context->codePrinter->output('zephir_concat_self(' . $variable . ', ' . $itemVariable . ' TSRMLS_CC);');
     }
 
     public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true)

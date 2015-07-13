@@ -254,7 +254,9 @@ class StaticProperty
                                 ));
                                 $expression->setExpectReturn(true, $tempVariable);
                                 $expression->compile($compilationContext);
-                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariable->getName() . ', ' . $tempVariable->getName() . ', '.$variableVariable->getName().' TSRMLS_CC);');
+                                $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);
+                                $tempVariableCode = $compilationContext->backend->getVariableCode($tempVariable);
+                                $compilationContext->codePrinter->output('zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode .' TSRMLS_CC);');
                                 //continue
 
                             case 'assign':

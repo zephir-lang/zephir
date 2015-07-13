@@ -24,7 +24,7 @@ class Backend extends BackendZendEngine2
         return '&' . $variable->getName();
     }
 
-    protected function getVariableCodePointer(Variable $variable)
+    public function getVariableCodePointer(Variable $variable)
     {
         return $this->getVariableCode($variable);
     }

@@ -86,7 +86,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		Z_DELREF(z); \
 	} else { \
 		if (!Z_ISREF(z)) { \
-			zval_dtor(&z ZEND_FILE_LINE_CC); \
+			zval_dtor(&z); \
 		} \
 	} \
 	ZVAL_NULL(&z);

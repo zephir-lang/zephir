@@ -251,6 +251,73 @@ int zephir_fast_count_int(zval *value)
 	return 1;
 }
 
+/**
+ * Checks if a zval is callable
+ */
+int zephir_is_callable(zval *var)
+{
+	char *error = NULL;
+	zend_bool retval;
+
+	retval = zend_is_callable_ex(var, NULL, 0, NULL, NULL, &error);
+	if (error) {
+		efree(error);
+	}
+
+	return (int) retval;
+}
+
+/**
+ * Returns the type of a variable as a string
+ */
+void zephir_gettype(zval *return_value, zval *arg)
+{
+	switch (Z_TYPE_P(arg)) {
+
+		case IS_NULL:
+			RETVAL_STRING("NULL");
+			break;
+
+		case IS_TRUE:
+		case IS_FALSE:
+			RETVAL_STRING("boolean");
+			break;
+
+		case IS_LONG:
+			RETVAL_STRING("integer");
+			break;
+
+		case IS_DOUBLE:
+			RETVAL_STRING("double");
+			break;
+
+		case IS_STRING:
+			RETVAL_STRING("string");
+			break;
+
+		case IS_ARRAY:
+			RETVAL_STRING("array");
+			break;
+
+		case IS_OBJECT:
+			RETVAL_STRING("object");
+			break;
+
+		case IS_RESOURCE:
+			{
+				const char *type_name = zend_rsrc_list_get_rsrc_type(Z_RES_P(arg));
+
+				if (type_name) {
+					RETVAL_STRING("resource");
+					break;
+				}
+			}
+
+		default:
+			RETVAL_STRING("unknown type");
+	}
+}
+
 zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len)
 {
     zend_class_entry* temp_ce;

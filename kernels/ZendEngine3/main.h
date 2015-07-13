@@ -42,6 +42,10 @@
  #define zend_uint uint
 #endif
 
+#ifndef ZEND_ACC_FINAL_CLASS
+ #define ZEND_ACC_FINAL_CLASS ZEND_ACC_FINAL
+#endif
+
 #define SL(str) ZEND_STRL(str)
 #define SS(str) ZEND_STRS(str)
 #define ISL(str) (zephir_interned_##str), (sizeof(#str)-1)
@@ -142,6 +146,9 @@
 /** Return without change return_value */
 #define RETURN_MM()                 { ZEPHIR_MM_RESTORE(); return; }
 
+/** Return null restoring memory frame */
+#define RETURN_MM_BOOL(value)       { RETVAL_BOOL(value); ZEPHIR_MM_RESTORE(); return; }
+
 /* Return long */
 #define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }
 
@@ -181,7 +188,11 @@ void zephir_fast_count(zval *result, zval *array);
 int zephir_fast_count_ev(zval *array);
 int zephir_fast_count_int(zval *value);
 
+int zephir_is_callable(zval *var);
 zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len);
+
+/* types */
+void zephir_gettype(zval *return_value, zval *arg);
 
 /* Utils functions */
 static inline int zephir_maybe_separate_zval(zval* z)

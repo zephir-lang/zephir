@@ -37,6 +37,60 @@
 /**
  * Appends the content of the right operator to the left operator
  */
+void zephir_concat_self(zval *left, zval *right)
+{
+	zval left_copy, right_copy;
+	uint length, left_length, right_length;
+	int use_copy_left = 0, use_copy_right = 0;
+	zend_string *target;
+
+	if (Z_TYPE_P(right) != IS_STRING) {
+		use_copy_right = zephir_make_printable_zval(right, &right_copy);
+		if (use_copy_right) {
+			right = &right_copy;
+		}
+	}
+
+	if (Z_TYPE_P(left) == IS_NULL) {
+		ZVAL_STRINGL(left, Z_STRVAL_P(right), Z_STRLEN_P(right));
+
+		if (use_copy_right) {
+			zval_dtor(&right_copy);
+		}
+
+		return;
+	}
+
+	if (Z_TYPE_P(left) != IS_STRING) {
+		use_copy_left = zephir_make_printable_zval(left, &left_copy);
+		if (use_copy_left) {
+			ZEPHIR_CPY_WRT_CTOR(left, (&left_copy));
+		}
+	}
+
+	SEPARATE_ZVAL_IF_NOT_REF(left);
+
+	left_length = Z_STRLEN_P(left);
+	right_length = Z_STRLEN_P(right);
+	length = left_length + right_length;
+	target = zend_string_extend(Z_STR_P(left), length, 0);
+	ZVAL_NEW_STR(left, target);
+	memcpy(ZSTR_VAL(target) + left_length, right, right_length);
+
+	ZSTR_VAL(target)[length] = '\0';
+
+	if (use_copy_left) {
+		zval_dtor(&left_copy);
+	}
+
+	if (use_copy_right) {
+		zval_dtor(&right_copy);
+	}
+}
+
+/**
+ * Appends the content of the right operator to the left operator
+ */
 void zephir_concat_self_str(zval *left, const char *right, int right_length)
 {
 	zval left_copy;

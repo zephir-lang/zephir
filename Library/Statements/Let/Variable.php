@@ -537,13 +537,13 @@ class Variable
                                 $symbolVariable->increaseVariantIfNull();
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 if ($variable != $itemVariable->getName()) {
-                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                    $compilationContext->backend->copyOnWrite($symbolVariable, $itemVariable, $compilationContext);
                                 }
                                 break;
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $compilationContext->backend->concatSelf($symbolVariable, $itemVariable, $compilationContext);
                                 break;
 
                             default:
@@ -562,7 +562,7 @@ class Variable
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $compilationContext->backend->concatSelf($symbolVariable, $itemVariable, $compilationContext);
                                 break;
 
                             default:
@@ -1026,7 +1026,7 @@ class Variable
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $compilationContext->backend->concatSelf($symbolVariable, $itemVariable, $compilationContext);
                                 break;
 
                             case 'add-assign':
@@ -1058,7 +1058,7 @@ class Variable
                                     $symbolVariable->setClassTypes($itemVariable->getClassTypes());
                                     $symbolVariable->increaseVariantIfNull();
 
-                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                    $compilationContext->backend->copyOnWrite($symbolVariable, $itemVariable, $compilationContext);
                                     if ($itemVariable->isTemporal()) {
                                         $itemVariable->setIdle(true);
                                     }
@@ -1067,7 +1067,7 @@ class Variable
 
                             case 'concat-assign':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_concat_self(&' . $variable . ', ' . $itemVariable->getName() . ' TSRMLS_CC);');
+                                $compilationContext->backend->concatSelf($symbolVariable, $itemVariable, $compilationContext);
                                 break;
 
                             default:

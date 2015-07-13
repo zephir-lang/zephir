@@ -43,6 +43,7 @@ abstract class BaseBackend
     abstract public function assignDouble(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignBool(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true);
     abstract public function assignNull(Variable $variable, CompilationContext $context, $useCodePrinter = true);
+    abstract public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context);
     abstract public function returnString($value, CompilationContext $context, $useCodePrinter = true);
     abstract public function initArray(Variable $variable, CompilationContext $context, $size = null, $useCodePrinter = true);
     abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true);
