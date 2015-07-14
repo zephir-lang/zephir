@@ -41,6 +41,6 @@ do
 done
 
 
-if [ -d "/etc/bash_completion.d/" ]; then
+if [[ -d "/etc/bash_completion.d/" && $EUID = 0 ]]; then
   sudo cp bin/bash_completion /etc/bash_completion.d/zephir
 fi
