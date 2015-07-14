@@ -11,7 +11,7 @@ cache:
     - apt
 
 before_install:
- - git submodule --quiet update --init --recursive
+ - git submodule update --init --recursive
  - ./unit-tests/ci/before_install.sh
 
 install:
