@@ -519,7 +519,7 @@ class Call
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
                 case 'null':
-                    $params[] = 'ZEPHIR_GLOBAL(global_null)';
+                    $params[] = $compilationContext->backend->resolveValue('null', $compilationContext);
                     $types[] = 'null';
                     $dynamicTypes[] = 'null';
                     break;
@@ -556,10 +556,10 @@ class Call
 
                 case 'bool':
                     if ($compiledExpression->getCode() == 'true') {
-                        $params[] = 'ZEPHIR_GLOBAL(global_true)';
+                        $params[] = $compilationContext->backend->resolveValue('true', $compilationContext);
                     } else {
                         if ($compiledExpression->getCode() == 'false') {
-                            $params[] = 'ZEPHIR_GLOBAL(global_false)';
+                            $params[] = $compilationContext->backend->resolveValue('false', $compilationContext);
                         } else {
                             throw new Exception('?');
                         }
@@ -621,7 +621,9 @@ class Call
                             break;
 
                         case 'bool':
-                            $params[] = '(' . $parameterVariable->getName() . ' ? ZEPHIR_GLOBAL(global_true) : ZEPHIR_GLOBAL(global_false))';
+                            $parameterTempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                            $compilationContext->backend->assignBool($parameterTempVariable, '(' . $parameterVariable->getName() . ' ? 1 : 0)', $compilationContext);
+                            $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
                             $dynamicTypes[] = $parameterVariable->getType();
                             $types[] = $parameterVariable->getType();
                             break;

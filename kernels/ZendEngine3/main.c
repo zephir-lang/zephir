@@ -73,7 +73,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 	while (num_args-- > 0) {
 		arg = ZEND_CALL_ARG(EG(current_execute_data), i + 1);
 		p = va_arg(va, zval *);
-		ZVAL_COPY_VALUE(p, arg);
+		ZVAL_COPY(p, arg);
 
 		i++;
 	}

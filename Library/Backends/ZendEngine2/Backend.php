@@ -815,13 +815,18 @@ class Backend extends BaseBackend
             $value = $usePointer ? ('&(' . $value . ')') : $value;
         } else if ($value instanceof GlobalConstant) {
             return ($usePointer ? '&' : '') . $value->getName();
-        } else if ($value instanceof Variable) {
-            $value = $usePointer ? $this->getVariableCodePointer($value) : $this->getVariableCode($value);
         } else if ($value instanceof CompiledExpression) {
             if ($value->getType() == 'array') {
                 $var = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
                 $value = $usePointer ? $this->getVariableCodePointer($var) : $this->getVariableCode($var);
+            } else if ($value->getType() == 'variable') {
+                $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
+            } else {
+                return $value->getCode();
             }
+        }
+        if ($value instanceof Variable) {
+            $value = $usePointer ? $this->getVariableCodePointer($value) : $this->getVariableCode($value);
         }
         return $value;
     }

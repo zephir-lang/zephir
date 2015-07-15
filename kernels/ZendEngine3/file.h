@@ -22,6 +22,8 @@
 
 #include <php.h>
 
+int zephir_file_exists(zval *filename);
+
 #ifdef TSRM_WIN32
 #define ZEPHIR_DIRECTORY_SEPARATOR "\\"
 #else

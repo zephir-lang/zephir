@@ -597,8 +597,9 @@ class Variable
                             /* Inherit the dynamic type data from the assigned value */
                             $symbolVariable->setDynamicTypes('array');
                             $symbolVariable->increaseVariantIfNull();
+                            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
                         }
                         break;
 
@@ -915,8 +916,9 @@ class Variable
                             /* Inherit the dynamic type data from the assigned value */
                             $symbolVariable->setDynamicTypes('array');
                             $symbolVariable->increaseVariantIfNull();
+                            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
                         }
                         break;
 
@@ -997,8 +999,9 @@ class Variable
                                     /* Inherit the dynamic type data from the assigned value */
                                     $symbolVariable->setDynamicTypes('array');
                                     $symbolVariable->increaseVariantIfNull();
+                                    $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $variable . ', ' . $resolvedExpr->getCode() . ');');
+                                    $codePrinter->output('ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue($resolvedExpr, $compilationContext) . ');');
                                 }
                                 break;
 

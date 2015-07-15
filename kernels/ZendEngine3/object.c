@@ -61,6 +61,42 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 	return retval;
 }
 
+/**
+ * Checks if a class exist
+ */
+int zephir_class_exists(const zval *class_name, int autoload)
+{
+	zend_class_entry *ce;
+
+	if (Z_TYPE_P(class_name) == IS_STRING) {
+		if ((ce = zend_lookup_class(Z_STR_P(class_name))) != NULL) {
+			return (ce->ce_flags & (ZEND_ACC_INTERFACE | (ZEND_ACC_TRAIT - ZEND_ACC_EXPLICIT_ABSTRACT_CLASS))) == 0;
+		}
+		return 0;
+	}
+
+	php_error_docref(NULL, E_WARNING, "class name must be a string");
+	return 0;
+}
+
+/**
+ * Checks if a interface exist
+ */
+int zephir_interface_exists(const zval *class_name, int autoload)
+{
+	zend_class_entry *ce;
+
+	if (Z_TYPE_P(class_name) == IS_STRING) {
+		if ((ce = zend_lookup_class(Z_STR_P(class_name))) != NULL) {
+			return ((ce->ce_flags & ZEND_ACC_INTERFACE) > 0);
+		}
+		return 0;
+	}
+
+	php_error_docref(NULL TSRMLS_CC, E_WARNING, "interface name must be a string");
+	return 0;
+}
+
 static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, const char *property_name, unsigned int property_length)
 {
 	zend_class_entry *original_ce = ce;
@@ -329,6 +365,38 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 	}
 
 	return SUCCESS;
+}
+
+int zephir_method_exists_ex(const zval *object, const char *method_name, unsigned int method_len)
+{
+	zend_class_entry *ce;
+
+	if (likely(Z_TYPE_P(object) == IS_OBJECT)) {
+		ce = Z_OBJCE_P(object);
+	} else {
+		if (Z_TYPE_P(object) == IS_STRING) {
+			ce = zend_fetch_class(Z_STR_P(object), ZEND_FETCH_CLASS_DEFAULT);
+		} else {
+			return FAILURE;
+		}
+	}
+
+	while (ce) {
+		if (zend_hash_str_exists(&ce->function_table, method_name, method_len)) {
+			return SUCCESS;
+		}
+		ce = ce->parent;
+	}
+
+	return FAILURE;
+}
+
+int zephir_method_exists(const zval *object, const zval *method_name)
+{
+	char *lcname = zend_str_tolower_dup(Z_STRVAL_P(method_name), Z_STRLEN_P(method_name));
+	int res = zephir_method_exists_ex(object, lcname, Z_STRLEN_P(method_name));
+	efree(lcname);
+	return res;
 }
 
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags)

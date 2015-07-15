@@ -381,7 +381,7 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '"), ' . $flags . ');');
     }
 
-    public function resolveValue($value, CompilationContext $context)
+    public function resolveValue($value, CompilationContext $context, $usePointer = false)
     {
         if ($value instanceof GlobalConstant) {
             switch ($value->getName()) {
@@ -407,13 +407,17 @@ class Backend extends BackendZendEngine2
             $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
             $this->assignBool($tempVariable, $value == 'true' ? '1' : '0', $context);
             $value = $this->getVariableCode($tempVariable);
-        } else if ($value instanceof Variable) {
-            $value = $this->getVariableCode($value);
         } else if ($value instanceof CompiledExpression) {
             if ($value->getType() == 'array') {
-                $var = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
-                $value = $this->getVariableCode($var, $context);
+                $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
+            } else if ($value->getType() == 'variable') {
+                $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
+            } else {
+                return $value->getCode();
             }
+        }
+        if ($value instanceof Variable) {
+            $value = $this->getVariableCode($value);
         }
         return $value;
     }

@@ -50,3 +50,23 @@
 		} \
 	}
 
+/**
+ * Checks if a file exist
+ *
+ */
+int zephir_file_exists(zval *filename)
+{
+	zval return_value;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		return FAILURE;
+	}
+
+	php_stat(Z_STRVAL_P(filename), (php_stat_len) Z_STRLEN_P(filename), FS_EXISTS, &return_value);
+
+	if (Z_TYPE(return_value) != IS_TRUE) {
+		return FAILURE;
+	}
+
+	return SUCCESS;
+}

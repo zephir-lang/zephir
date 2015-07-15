@@ -26,4 +26,7 @@
 
 void zephir_var_dump(zval *var);
 
+void zephir_var_export(zval *var);
+void zephir_var_export_ex(zval *return_value, zval *var);
+
 #endif

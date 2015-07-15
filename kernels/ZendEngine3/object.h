@@ -28,8 +28,13 @@
 #include "kernel/main.h"
 
 /** Class Retrieving/Checking */
+int zephir_class_exists(const zval *class_name, int autoload);
+int zephir_interface_exists(const zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
+
+/** Method exists */
+int zephir_method_exists(const zval *object, const zval *method_name);
 
 /** Reading properties */
 int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);

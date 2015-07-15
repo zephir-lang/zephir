@@ -155,6 +155,34 @@ int zephir_compare_strict_long(zval *op1, long op2)
 }
 
 /**
+ * Natural compare with bool operandus on right
+ */
+int zephir_compare_strict_bool(zval *op1, zend_bool op2)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (Z_LVAL_P(op1) ? 1 : 0) == op2;
+		case IS_DOUBLE:
+			return (Z_DVAL_P(op1) ? 1 : 0) == op2;
+		case IS_NULL:
+			return 0 == op2;
+		case IS_TRUE:
+			return 1;
+		case IS_FALSE:
+			return 0;
+		default:
+			{
+				zval result, op2_tmp;
+				ZVAL_BOOL(&op2_tmp, op2);
+				is_equal_function(&result, op1, &op2_tmp);
+				return Z_TYPE(result) == IS_TRUE;
+			}
+	}
+
+	return 0;
+}
+
+/**
  * Natural compare with string operandus on right
  */
 int zephir_compare_strict_string(zval *op1, const char *op2, int op2_length)
@@ -205,14 +233,15 @@ void zephir_negate(zval *z)
 				return;
 
 			default:
-				/* Force separation */
-				Z_TRY_ADDREF_P(z);
-				SEPARATE_ZVAL_IF_NOT_REF(z);
-				Z_TRY_DELREF_P(z);
 				convert_scalar_to_number(z);
 				assert(Z_TYPE_P(z) == IS_LONG || Z_TYPE_P(z) == IS_DOUBLE);
 		}
 	}
+}
+
+void zephir_convert_to_object(zval *op)
+{
+    convert_to_object(op);
 }
 
 /**
