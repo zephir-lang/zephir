@@ -76,11 +76,8 @@ class LogicalBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variableRight->isLocalOnly()) {
-                                    return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . '))', $expression);
-                                } else {
-                                    return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . '))', $expression);
-                                }
+                                $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                return new CompiledExpression('bool', '(' . $left->getCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
                                 break;
 
                             default:
@@ -115,12 +112,9 @@ class LogicalBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
                             case 'variable':
-                                if ($variableRight->isLocalOnly()) {
-                                    $compilationContext->headersManager->add('kernel/operators');
-                                    return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . '))', $expression);
-                                } else {
-                                    return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . '))', $expression);
-                                }
+                                $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                $compilationContext->headersManager->add('kernel/operators');
+                                return new CompiledExpression('bool', '(' . $left->getBooleanCode() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
                                 break;
 
                             default:
@@ -177,11 +171,8 @@ class LogicalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . '))', $expression);
-                                        } else {
-                                            return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . '))', $expression);
-                                        }
+                                        $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
                                         break;
 
                                     default:
@@ -213,11 +204,8 @@ class LogicalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . '))', $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . '))', $expression);
-                                        }
+                                        $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . '))', $expression);
                                         break;
 
                                     default:
@@ -255,11 +243,8 @@ class LogicalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . ')', $expression);
                                         break;
 
                                     default:
@@ -300,11 +285,8 @@ class LogicalBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zephir_is_true(&' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zephir_is_true(' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        $variableCode = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('bool', '(' . $variableLeft->getName() . ' && Z_STRLEN_P(' . $variableLeft->getName() . ')) ' . ' ' . $this->_operator . ' zephir_is_true(' . $variableCode . ')', $expression);
                                         break;
 
                                     default:
@@ -318,17 +300,14 @@ class LogicalBaseOperator extends BaseOperator
                         break;
 
                     case 'variable':
+                        $variableLeftCode = $compilationContext->backend->getVariableCode($variableLeft);
                         switch ($right->getType()) {
                             /* a && 1 */
                             case 'int':
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $op = $this->_operator;
-                                if ($variableLeft->isLocalOnly()) {
-                                    $op1 = '&' . $variableLeft->getName();
-                                } else {
-                                    $op1 = $variableLeft->getName();
-                                }
+                                $op1 = $variableLeftCode;
                                 $op2 = $right->getCode();
                                 $compilationContext->headersManager->add('kernel/operators');
                                 return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
@@ -337,11 +316,7 @@ class LogicalBaseOperator extends BaseOperator
                             case 'bool':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $op = $this->_operator;
-                                if ($variableLeft->isLocalOnly()) {
-                                    $op1 = '&' . $variableLeft->getName();
-                                } else {
-                                    $op1 = $variableLeft->getName();
-                                }
+                                $op1 = $variableLeftCode;
                                 $op2 = $right->getCode();
                                 $compilationContext->headersManager->add('kernel/operators');
                                 return new CompiledExpression('bool', 'zephir_is_true(' . $op1 . ') ' . $op . ' ' . $op2, $expression);
@@ -349,41 +324,25 @@ class LogicalBaseOperator extends BaseOperator
                             /* a(var) && a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
+                                $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
                                 switch ($variableRight->getType()) {
                                     /* a(var) && a(int) */
                                     case 'int':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('bool', 'zephir_is_true(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        }
+                                        return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->_operator . ' ' . $variableRightCode, $expression);
                                         break;
 
                                     /* a(var) && a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            return new CompiledExpression('bool', 'zephir_is_true(&' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeft->getName() . ') ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-                                        }
+                                        return new CompiledExpression('bool', 'zephir_is_true(' . $variableLeftCode . ') ' . $this->_operator . ' ' . $variableRightCode, $expression);
                                         break;
 
                                     /* a(var) && a(var) */
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableLeft->isLocalOnly()) {
-                                            $op1 = '&' . $variableLeft->getName();
-                                        } else {
-                                            $op1 = $variableLeft->getName();
-                                        }
-
-                                        if ($variableRight->isLocalOnly()) {
-                                            $op2 = '&' . $variableRight->getName();
-                                        } else {
-                                            $op2 = $variableRight->getName();
-                                        }
+                                        $op1 = $variableLeftCode;
+                                        $op2 = $variableRightCode;
 
                                         $expected = $this->getExpected($compilationContext, $expression);
                                         if ($expected->isLocalOnly()) {

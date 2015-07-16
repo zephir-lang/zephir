@@ -34,3 +34,21 @@
 
 #include "Zend/zend_operators.h"
 
+long zephir_mt_rand(long min, long max)
+{
+	long number;
+
+	if (max < min) {
+		php_error_docref(NULL, E_WARNING, "max(%ld) is smaller than min(%ld)", max, min);
+		return 0;
+	}
+
+	if (!BG(mt_rand_is_seeded)) {
+		php_mt_srand(GENERATE_SEED());
+	}
+
+	number = (long) (php_mt_rand() >> 1);
+	RAND_RANGE(number, min, max, PHP_MT_RAND_MAX);
+
+	return number;
+}

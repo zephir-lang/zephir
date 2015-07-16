@@ -24,6 +24,10 @@
 
 int zephir_file_exists(zval *filename);
 
+void zephir_fwrite(zval *return_value, zval *stream_zval, zval *data);
+int zephir_feof(zval *stream_zval);
+int zephir_fclose(zval *stream_zval);
+
 #ifdef TSRM_WIN32
 #define ZEPHIR_DIRECTORY_SEPARATOR "\\"
 #else

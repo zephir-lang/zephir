@@ -30,6 +30,9 @@
 #define ZEPHIR_TRIM_BOTH  3
 #define ZEPHIR_SUBSTR_NO_LENGTH 1
 
+void zephir_fast_strpos(zval *return_value, const zval *haystack, const zval *needle, unsigned int offset);
+void zephir_fast_strpos_str(zval *return_value, const zval *haystack, char *needle, unsigned int needle_length);
+
 /** spprintf */
 int zephir_spprintf(char **message, int max_len, char *format, ...);
 

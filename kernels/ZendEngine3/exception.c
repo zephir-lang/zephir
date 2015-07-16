@@ -42,15 +42,17 @@ void zephir_throw_exception_debug(zval *object, const char *file, zend_uint line
 	zend_class_entry *default_exception_ce;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
 	zval curline;
+	zval object_copy;
 
 	ZVAL_UNDEF(&curline);
 
 	ZEPHIR_MM_GROW();
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
-		zval_ptr_dtor(object);
+		ZVAL_COPY_VALUE(&object_copy, object);
 		object_init_ex(object, zend_exception_get_default());
-		ZEPHIR_CALL_METHOD(NULL, object, "__construct", NULL, 0, object);
+		ZEPHIR_CALL_METHOD(NULL, object, "__construct", NULL, 0, &object_copy);
+		zval_ptr_dtor(&object_copy);
 	}
 
 	Z_ADDREF_P(object);

@@ -121,9 +121,10 @@ class IssetOperator extends BaseOperator
                 if ($variable->hasDifferentDynamicType(array('undefined', 'object', 'null'))) {
                     $compilationContext->logger->warning('Possible attempt to use non object in isset operator', 'non-valid-isset', $expression);
                 }
+                $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 if ($left['type'] == 'property-access') {
-                    return new CompiledExpression('bool', 'zephir_isset_property(' . $variable->getName() . ', SS("' . $left['right']['value'] . '") TSRMLS_CC)', $left);
+                    return $compilationContext->backend->propertyIsset($variable, $left['right']['value'], $compilationContext);
                 }
 
                 $expr = new Expression($left['right']);
@@ -137,7 +138,8 @@ class IssetOperator extends BaseOperator
                         switch ($indexVariable->getType()) {
                             case 'variable':
                             case 'string':
-                                return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variable->getName() . ', ' . $indexVariable->getName() . ' TSRMLS_CC)', $left['right']);
+                                $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
+                                return new CompiledExpression('bool', 'zephir_isset_property_zval(' . $variableCode . ', ' . $indexVariableCode . ' TSRMLS_CC)', $left['right']);
 
                             default:
                                 throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);

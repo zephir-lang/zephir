@@ -7,6 +7,7 @@ use Zephir\Compiler;
 use Zephir\CompilerException;
 use Zephir\CompilationContext;
 use Zephir\ClassMethod;
+use Zephir\FunctionDefinition;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\BaseBackend;
 use Zephir\GlobalConstant;
@@ -18,7 +19,7 @@ class Backend extends BackendZendEngine2
 
     public function getVariableCode(Variable $variable)
     {
-        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || $variable->getType() == 'zval_ptr') {
+        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || in_array($variable->getType(), array('zval_ptr', 'int'))) {
             return $variable->getName();
         }
         return '&' . $variable->getName();
@@ -60,14 +61,17 @@ class Backend extends BackendZendEngine2
         return array($pointer, $code);
     }
 
-    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
+    public function onPreInitVar($method, CompilationContext $context)
     {
+        if ($method instanceof FunctionDefinition) {
+            return;
+        }
         if (!$method->isInternal()) {
             return "\t" . 'zval *this_ptr = getThis();' . PHP_EOL; //TODO: think about a better way to solve this.
         }
     }
 
-    public function onPreCompile(ClassMethod $method, CompilationContext $context)
+    public function onPreCompile($method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -83,7 +87,7 @@ class Backend extends BackendZendEngine2
         }
     }
 
-    public function onPostCompile(ClassMethod $method, CompilationContext $context)
+    public function onPostCompile($method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
@@ -329,6 +333,11 @@ class Backend extends BackendZendEngine2
         return parent::arrayIsset($var, $resolvedExpr, $expression, $context);
     }
 
+    public function propertyIsset(Variable $var, $key, CompilationContext $context)
+    {
+        return new CompiledExpression('bool', 'zephir_isset_property(' . $this->getVariableCode($var) . ', SL("' . $key . '"))', null);
+    }
+
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
@@ -367,8 +376,13 @@ class Backend extends BackendZendEngine2
         if ($readOnly) {
             $flags .= ' | PH_READONLY';
         }
+        $variableCode = $context->backend->getVariableCode($variableVariable);
         //TODO: maybe optimizations (read_nproperty/quick) for thisScope access in NG (as in ZE2 - if necessary)
-        $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), ' . $flags . ');');
+        if ($property instanceof Variable) {
+            $context->codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+        } else {
+            $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
+        }
     }
 
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context)
@@ -452,6 +466,16 @@ class Backend extends BackendZendEngine2
         $context->codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
         $context->codePrinter->output("\t" . 'ZEPHIR_SET_SYMBOL(&EG(symbol_table), "' . $variable->getName() . '", &' . $variable->getName() . ');');
         $context->codePrinter->output('}');
+    }
+
+    public function copyOnWrite(Variable $target, $var, CompilationContext $context)
+    {
+        if ($var == 'EG(exception)') {
+            $context->codePrinter->output('ZVAL_OBJ(' . $this->getVariableCode($target) . ', EG(exception));');
+            $context->codePrinter->output('Z_ADDREF_P(' . $this->getVariableCode($target) . ');');
+            return;
+        }
+        return parent::copyOnWrite($target, $var, $context);
     }
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)

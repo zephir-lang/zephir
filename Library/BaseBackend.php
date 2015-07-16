@@ -71,6 +71,7 @@ abstract class BaseBackend
     abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context);
+    abstract public function propertyIsset(Variable $var, $key, CompilationContext $context);
 
     /* Unset array */
     abstract public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context);
@@ -84,14 +85,14 @@ abstract class BaseBackend
     abstract public function setSymbolIfSeparated(Variable $variableTempSeparated, Variable $variable, CompilationContext $context);
     abstract public function fetchClassEntry($str);
 
-    abstract public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context);
+    abstract public function copyOnWrite(Variable $target, $var, CompilationContext $context);
 
     abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true);
     abstract public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true);
 
-    abstract public function onPreInitVar(ClassMethod $method, CompilationContext $context);
-    abstract public function onPreCompile(ClassMethod $method, CompilationContext $context);
-    abstract public function onPostCompile(ClassMethod $method, CompilationContext $context);
+    abstract public function onPreInitVar($method, CompilationContext $context);
+    abstract public function onPreCompile($method, CompilationContext $context);
+    abstract public function onPostCompile($method, CompilationContext $context);
 
     public static function getActiveBackend()
     {

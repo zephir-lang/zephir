@@ -468,3 +468,15 @@ double zephir_safe_div_double_double(double op1, double op2)
 	}
 	return op1 / op2;
 }
+
+/**
+ * Do safe divisions between two longs
+ */
+long zephir_safe_mod_long_long(long op1, long op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	return op1 % op2;
+}

@@ -36,6 +36,16 @@
 #include "kernel/array.h"
 #include "kernel/operators.h"
 
+int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce)
+{
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		php_error_docref(NULL, E_WARNING, "instanceof expects an object instance");
+		return 0;
+	}
+
+	return instanceof_function(Z_OBJCE_P(object), ce);
+}
+
 /**
  * Returns the called in class in the current scope
  */
@@ -94,6 +104,40 @@ int zephir_interface_exists(const zval *class_name, int autoload)
 	}
 
 	php_error_docref(NULL TSRMLS_CC, E_WARNING, "interface name must be a string");
+	return 0;
+}
+
+/**
+ * Checks if property exists on object
+ */
+int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
+{
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, property_name, property_length))) {
+			return 1;
+		}
+		return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), property_name, property_length);
+	}
+
+	return 0;
+}
+
+/**
+ * Checks if string property exists on object
+ */
+int zephir_isset_property_zval(zval *object, const zval *property)
+{
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		if (Z_TYPE_P(property) == IS_STRING) {
+
+			if (likely(zend_hash_str_exists(&Z_OBJCE_P(object)->properties_info, Z_STRVAL_P(property), Z_STRLEN_P(property)))) {
+				return 1;
+			} else {
+				return zend_hash_str_exists(Z_OBJ_HT_P(object)->get_properties(object), Z_STRVAL_P(property), Z_STRLEN_P(property));
+			}
+		}
+	}
+
 	return 0;
 }
 

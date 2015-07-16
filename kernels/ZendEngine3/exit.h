@@ -21,4 +21,7 @@
 
 #include <Zend/zend.h>
 
+void zephir_exit_empty();
+void zephir_exit(zval *ptr);
+
 #endif

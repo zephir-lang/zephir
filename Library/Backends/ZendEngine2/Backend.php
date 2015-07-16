@@ -28,7 +28,7 @@ class Backend extends BaseBackend
 
     public function getVariableCode(Variable $variable)
     {
-        if ($variable->isLocalOnly()) {
+        if ($variable->isLocalOnly() && !in_array($variable->getType(), array('int'))) {
             return '&' . $variable->getName();
         }
         return $variable->getName();
@@ -197,12 +197,12 @@ class Backend extends BaseBackend
         return $condition;
     }
 
-    public function onPreInitVar(ClassMethod $method, CompilationContext $context)
+    public function onPreInitVar($method, CompilationContext $context)
     {
         return '';
     }
 
-    public function onPreCompile(ClassMethod $method, CompilationContext $context)
+    public function onPreCompile($method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         /**
@@ -218,7 +218,7 @@ class Backend extends BaseBackend
         }
     }
 
-    public function onPostCompile(ClassMethod $method, CompilationContext $context)
+    public function onPostCompile($method, CompilationContext $context)
     {
         $codePrinter = $context->codePrinter;
         if (preg_match('/^zephir_init_properties/', $method->getName())) {
@@ -643,6 +643,11 @@ class Backend extends BaseBackend
         throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
     }
 
+    public function propertyIsset(Variable $var, $key, CompilationContext $context)
+    {
+        return new CompiledExpression('bool', 'zephir_isset_property(' . $this->getVariableCode($var) . ', SS("' . $key . '") TSRMLS_CC)', null);
+    }
+
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
@@ -791,7 +796,11 @@ class Backend extends BaseBackend
                 $context->codePrinter->output('zephir_read_property_this(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
             }
         } else {
-            $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+            if ($property instanceof Variable) {
+                $context->codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+            } else {
+                $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
+            }
         }
     }
 
@@ -911,9 +920,9 @@ class Backend extends BaseBackend
         $context->codePrinter->output('}');
     }
 
-    public function copyOnWrite(Variable $target, Variable $var, CompilationContext $context)
+    public function copyOnWrite(Variable $target, $var, CompilationContext $context)
     {
-        $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $this->getVariableCode($target) . ', ' . $this->getVariableCode($var) . ');');
+        $context->codePrinter->output('ZEPHIR_CPY_WRT(' . $this->getVariableCode($target) . ', ' . $this->resolveValue($var, $context) . ');');
     }
 
     public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)

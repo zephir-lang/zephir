@@ -72,3 +72,59 @@ int zephir_spprintf(char **message, int max_len, char *format, ...)
 	va_end(arg);
 	return len;
 }
+
+/**
+ * Immediate function resolution for strpos function
+ */
+void zephir_fast_strpos(zval *return_value, const zval *haystack, const zval *needle, unsigned int offset)
+{
+	const char *found = NULL;
+
+	if (unlikely(Z_TYPE_P(haystack) != IS_STRING || Z_TYPE_P(needle) != IS_STRING)) {
+		ZVAL_NULL(return_value);
+		zend_error(E_WARNING, "Invalid arguments supplied for strpos()");
+		return;
+	}
+
+	if (offset > Z_STRLEN_P(haystack)) {
+		ZVAL_NULL(return_value);
+		zend_error(E_WARNING, "Offset not contained in string");
+		return;
+	}
+
+	if (!Z_STRLEN_P(needle)) {
+		ZVAL_NULL(return_value);
+		zend_error(E_WARNING, "Empty delimiter");
+		return;
+	}
+
+	found = php_memnstr(Z_STRVAL_P(haystack)+offset, Z_STRVAL_P(needle), Z_STRLEN_P(needle), Z_STRVAL_P(haystack) + Z_STRLEN_P(haystack));
+
+	if (found) {
+		ZVAL_LONG(return_value, found - Z_STRVAL_P(haystack));
+	} else {
+		ZVAL_BOOL(return_value, 0);
+	}
+}
+
+/**
+ * Immediate function resolution for strpos function
+ */
+void zephir_fast_strpos_str(zval *return_value, const zval *haystack, char *needle, unsigned int needle_length)
+{
+	const char *found = NULL;
+
+	if (unlikely(Z_TYPE_P(haystack) != IS_STRING)) {
+		ZVAL_NULL(return_value);
+		zend_error(E_WARNING, "Invalid arguments supplied for strpos()");
+		return;
+	}
+
+	found = php_memnstr(Z_STRVAL_P(haystack), needle, needle_length, Z_STRVAL_P(haystack) + Z_STRLEN_P(haystack));
+
+	if (found) {
+		ZVAL_LONG(return_value, found - Z_STRVAL_P(haystack));
+	} else {
+		ZVAL_BOOL(return_value, 0);
+	}
+}

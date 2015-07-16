@@ -33,8 +33,15 @@ int zephir_interface_exists(const zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
 
+/** Cloning/Instance of */
+int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce);
+
 /** Method exists */
 int zephir_method_exists(const zval *object, const zval *method_name);
+
+/** Isset properties */
+int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length);
+int zephir_isset_property_zval(zval *object, const zval *property);
 
 /** Reading properties */
 int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);

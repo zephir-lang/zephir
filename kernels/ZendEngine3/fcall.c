@@ -720,3 +720,8 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 
 	return status;
 }
+
+void zephir_eval_php(zval *str, zval *retval_ptr, char *context)
+{
+	zend_eval_string_ex(Z_STRVAL_P(str), retval_ptr, context, 1);
+}

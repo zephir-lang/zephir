@@ -3,20 +3,22 @@
  * Temporary file disabling tests not supported on PHP7
  */
 $supportedZep = array(
-    'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep',
-    'properties', 'oo/extendpdoclass.zep', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'pdostatement.zep', 'vars.zep',
+    'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep', 'exitdie.zep', 'compare.zep',
+    'properties', 'oo/extendpdoclass.zep', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'pdostatement.zep', 'vars.zep', 'emptytest.zep',
     'oo/abstractclass.zep', 'oo/ooconstruct.zep', 'oo/ooconstructparams.zep', 'oo/param.zep', 'oo/deprecatedmethods.zep', 'oo/oonoconstruct.zep',
     'constantsinterfaceb.zep', 'constantsinterface.zep', 'constantsinterfacea.zep', 'bitwise.zep', 'branchprediction.zep', 'oo.zep', 'closures.zep',
-    'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'oo/constantsinterface.zep',
+    'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'oo/constantsinterface.zep', 'evaltest.zep', 'factorial.zep',
     'oo/ooparams.zep', 'oo/oodynamica.zep', 'oo/oodynamicb.zep',
-    'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep', 'operator.zep', 'exists.zep', 'cast.zep',
+    'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep', 'operator.zep', 'exists.zep', 'cast.zep', 'exception.zep', 'exceptions.zep',
+    'fannkuch.zep', 'fibonnaci.zep', 'globals.zep', 'issettest.zep', 'fcall.zep',
     'ooimpl', 'oo/extend'
 );
 $supportedTest = array(
-    'AssignTest.php', 'CblockTest.php', 'ArrayObjectTest.php', 'ArithmeticTest.php', 'VarsTest.php',
-    'ConstantsTest.php', 'ConstantsInterfaceTest.php', 'BitwiseTest.php', 'BranchPredictionTest.php', 'ConcatTest.php', 'RequiresTest.php',
+    'AssignTest.php', 'CblockTest.php', 'ArrayObjectTest.php', 'ArithmeticTest.php', 'VarsTest.php', 'ExitDieTest.php', 'CompareTest.php', 'ExceptionsTest.php',
+    'ConstantsTest.php', 'ConstantsInterfaceTest.php', 'BitwiseTest.php', 'BranchPredictionTest.php', 'ConcatTest.php', 'RequiresTest.php', 'EvalTest.php',
     'TypeoffTest.php', 'MCallTest.php', 'McallChainedTest.php', 'OoTest.php', 'OperatorTest.php', 'ExistsTest.php', 'CastTest.php', 'ExtendedInterfaceTest.php',
-    'Properties', 'php', 'Oo'
+    'FibonnaciTest.php', 'GlobalsTest.php', 'IssetTest.php', 'FcallTest.php', 'EmptyTest.php',
+    'Properties', 'php', 'Oo', 'fixtures'
 );
 
 function joinPath($path1, $path2) {

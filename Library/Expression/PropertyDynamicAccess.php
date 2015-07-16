@@ -150,11 +150,10 @@ class PropertyDynamicAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        if ($propertyVariable) {
-            $codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $propertyVariable->getName() . ', PH_NOISY_CC);');
-        } else {
-            $codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . Utils::addSlashes($expression['right']['value']) . '"), PH_NOISY_CC);');
-        }
+        $property = $propertyVariable ? $propertyVariable : Utils::addSlashes($expression['right']['value']);
+        $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext, false);
+
+
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

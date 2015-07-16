@@ -335,6 +335,38 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 	return FAILURE;
 }
 
+int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, int flags ZEPHIR_DEBUG_PARAMS)
+{
+	zval *zv;
+
+	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
+		if ((zv = zend_hash_index_find(Z_ARRVAL_P(arr), index)) != NULL) {
+
+			if ((flags & PH_READONLY) == PH_READONLY) {
+				ZVAL_COPY_VALUE(return_value, zv);
+			} else {
+				ZVAL_COPY(return_value, zv);
+			}
+			return SUCCESS;
+		}
+		if ((flags & PH_NOISY) == PH_NOISY) {
+			zend_error(E_NOTICE, "Undefined index: %s", index);
+		}
+	} else {
+		if ((flags & PH_NOISY) == PH_NOISY) {
+			zend_error(E_NOTICE, "Cannot use a scalar value as an array in %s on line %d", file, line);
+		}
+	}
+
+	if (return_value == NULL) {
+		zend_error(E_ERROR, "No return value passed to zephir_array_fetch_string");
+		return FAILURE;
+	}
+	zval_ptr_dtor(return_value);
+	ZVAL_NULL(return_value);
+	return FAILURE;
+}
+
 int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags)
 {
 	HashTable *ht;

@@ -354,24 +354,17 @@ class ComparisonBaseOperator extends BaseOperator
 
             case 'string':
                 $variableLeft = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
-                $compilationContext->codePrinter->output('ZVAL_STRING(&' . $variableLeft->getName() . ', "' . $left->getCode() . '", 0);');
+                $variableLeftCode = $compilationContext->backend->getVariableCode($variableLeft);
+                $compilationContext->backend->assignString($variableLeft, $left->getCode(), $compilationContext, true, false);
                 switch ($right->getType()) {
                     case 'null':
                         $compilationContext->headersManager->add('kernel/operators');
-                        if ($variableLeft->isLocalOnly()) {
-                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variableLeft->getName() . ', "")', $expression['left']);
-                        } else {
-                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeft->getName() . ', "")', $expression['left']);
-                        }
+                        return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeftCode . ', "")', $expression['left']);
                         break;
 
                     case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
-                        if ($variableLeft->isLocalOnly()) {
-                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variableLeft->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                        } else {
-                            return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeft->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                        }
+                        return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableLeftCode . ', "' . $right->getCode() . '")', $expression['left']);
                         break;
 
                     case 'variable':
@@ -380,9 +373,8 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'string':
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-                                return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableLeft . ', ' . $variableRight . ')', $expression);
+                                return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableLeftCode . ', ' . $variableRight . ')', $expression);
                                 break;
 
                             default:
@@ -397,6 +389,7 @@ class ComparisonBaseOperator extends BaseOperator
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+                $variableCode = $compilationContext->backend->getVariableCode($variable);
                 switch ($variable->getType()) {
                     case 'int':
                     case 'uint':
@@ -538,11 +531,7 @@ class ComparisonBaseOperator extends BaseOperator
                         switch ($right->getType()) {
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variable->getName() . ', "")', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable->getName() . ', "")', $expression['left']);
-                                }
+                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableCode . ', "")', $expression['left']);
                                 break;
 
                             case 'variable':
@@ -552,9 +541,8 @@ class ComparisonBaseOperator extends BaseOperator
                                     case 'variable':
                                     case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $variable = $compilationContext->backend->getVariableCode($variable);
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable . ', ' . $variableRight . ')', $expression);
+                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
                                         break;
 
                                     default:
@@ -571,20 +559,12 @@ class ComparisonBaseOperator extends BaseOperator
                         switch ($right->getType()) {
                             case 'null':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variable->getName() . ', "")', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable->getName() . ', "")', $expression['left']);
-                                }
+                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableCode . ', "")', $expression['left']);
                                 break;
 
                             case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variable->isLocalOnly()) {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(&' . $variable->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                                } else {
-                                    return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable->getName() . ', "' . $right->getCode() . '")', $expression['left']);
-                                }
+                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableCode . ', "' . $right->getCode() . '")', $expression['left']);
                                 break;
 
                             case 'variable':
@@ -593,10 +573,9 @@ class ComparisonBaseOperator extends BaseOperator
                                     case 'string':
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $variable = $compilationContext->backend->getVariableCode($variable);
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable . ', ' . $variableRight . ')', $expression);
+                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
                                         break;
 
                                     default:
@@ -623,31 +602,27 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'ulong':
                             case 'double':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $variable = $compilationContext->backend->getVariableCode($variable);
-                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable . ', ' . $right->getCode() . ')', $expression['left']);
+                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variableCode . ', ' . $right->getCode() . ')', $expression['left']);
                                 break;
 
                             case 'char':
                             case 'uchar':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $variable = $compilationContext->backend->getVariableCode($variable);
-                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable . ', \'' . $right->getCode() . '\')', $expression['left']);
+                                return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $$variableCode . ', \'' . $right->getCode() . '\')', $expression['left']);
                                 break;
 
                             case 'bool':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $variable = $compilationContext->backend->getVariableCode($variable);
                                 if ($right->getCode() == 'true') {
-                                    return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(' . $variable . ')', $expression['left']);
+                                    return new CompiledExpression('bool', $this->_zvalBoolTrueOperator . '(' . $variableCode . ')', $expression['left']);
                                 } else {
-                                    return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(' . $variable . ')', $expression['left']);
+                                    return new CompiledExpression('bool', $this->_zvalBoolFalseOperator . '(' . $variableCode . ')', $expression['left']);
                                 }
                                 break;
 
                             case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $variable = $compilationContext->backend->getVariableCode($variable);
-                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variable . ', "' . $right->getCode() . '")', $expression['left']);
+                                return new CompiledExpression('bool', $this->_zvalStringOperator . '(' . $variableCode . ', "' . $right->getCode() . '")', $expression['left']);
                                 break;
 
                             case 'variable':
@@ -658,29 +633,20 @@ class ComparisonBaseOperator extends BaseOperator
                                     case 'long':
                                     case 'ulong':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variable->isLocalOnly()) {
-                                            return new CompiledExpression('bool', $this->_zvalLongOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        return new CompiledExpression('bool', $this->_zvalLongOperator . '(' . $variableCode . ', ' . $variableRight->getName() . ')', $expression);
                                         break;
 
                                     case 'double':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variable->isLocalOnly()) {
-                                            return new CompiledExpression('bool', $this->_zvalDoubleOperator . '(&' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
-                                        } else {
-                                            return new CompiledExpression('bool', $this->_zvalDoubleOperator . '(' . $variable->getName() . ', ' . $variableRight->getName() . ')', $expression);
-                                        }
+                                        return new CompiledExpression('bool', $this->_zvalDoubleOperator . '(' . $variableCode . ', ' . $variableRight->getName() . ')', $expression);
                                         break;
 
                                     case 'string':
                                     case 'variable':
                                     case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $variable = $compilationContext->backend->getVariableCode($variable);
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
-                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variable . ', ' . $variableRight . ')', $expression);
+                                        return new CompiledExpression('bool', $this->_zvalOperator . '(' . $variableCode . ', ' . $variableRight . ')', $expression);
                                         break;
 
                                     default:

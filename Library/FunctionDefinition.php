@@ -1314,6 +1314,7 @@ class FunctionDefinition
             $compilationContext->codePrinter->decreaseLevel();
         }
 
+        $compilationContext->backend->onPreCompile($this, $compilationContext);
         /**
          * Compile the block of statements if any
          */
@@ -1706,101 +1707,12 @@ class FunctionDefinition
         /**
          * Generate the variable definition for variables used
          */
+        $varInitCode = '';
+        $additionalCode = $compilationContext->backend->onPreInitVar($this, $compilationContext);
+
         foreach ($usedVariables as $type => $variables) {
-            $pointer = null;
-            switch ($type) {
-                case 'int':
-                    $code = 'int ';
-                    break;
-
-                case 'uint':
-                    $code = 'unsigned int ';
-                    break;
-
-                case 'char':
-                    $code = 'char ';
-                    break;
-
-                case 'uchar':
-                    $code = 'unsigned char ';
-                    break;
-
-                case 'long':
-                    $code = 'long ';
-                    break;
-
-                case 'ulong':
-                    $code = 'unsigned long ';
-                    break;
-
-                case 'bool':
-                    $code = 'zend_bool ';
-                    break;
-
-                case 'double':
-                    $code = 'double ';
-                    break;
-
-                case 'string':
-                case 'variable':
-                case 'array':
-                case 'null':
-                    $pointer = '*';
-                    $code = 'zval ';
-                    break;
-
-                case 'HashTable':
-                    $pointer = '*';
-                    $code = 'HashTable ';
-                    break;
-
-                case 'HashPosition':
-                    $code = 'HashPosition ';
-                    break;
-
-                case 'zend_class_entry':
-                    $pointer = '*';
-                    $code = 'zend_class_entry ';
-                    break;
-
-                case 'zend_function':
-                    $pointer = '*';
-                    $code = 'zend_function ';
-                    break;
-
-                case 'zend_object_iterator':
-                    $pointer = '*';
-                    $code = 'zend_object_iterator ';
-                    break;
-
-                case 'zend_property_info':
-                    $pointer = '*';
-                    $code = 'zend_property_info ';
-                    break;
-
-                case 'zephir_fcall_cache_entry':
-                    $pointer = '*';
-                    $code = 'zephir_fcall_cache_entry ';
-                    break;
-
-                case 'static_zephir_fcall_cache_entry':
-                    $pointer = '*';
-                    $code = 'zephir_nts_static zephir_fcall_cache_entry ';
-                    break;
-
-                case 'static_zend_class_entry':
-                    $pointer = '*';
-                    $code = 'zephir_nts_static zend_class_entry ';
-                    break;
-
-                case 'zephir_ce_guard':
-                    $code = 'zephir_nts_static zend_bool ';
-                    break;
-
-                default:
-                    throw new CompilerException("Unsupported type in declare: " . $type);
-            }
-
+            list ($pointer, $code) = $compilationContext->backend->getTypeDefinition($type);
+            $code .= ' ';
             $groupVariables = array();
             $defaultValues = array();
 
@@ -1808,74 +1720,21 @@ class FunctionDefinition
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-                $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
-                if ($isComplex && $variable->mustInitNull()) {
-                    if ($variable->isLocalOnly()) {
-                        $groupVariables[] = $variable->getName() . ' = zval_used_for_init';
-                    } else {
-                        if ($variable->isDoublePointer()) {
-                            $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
-                        } else {
-                            $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
-                        }
-                    }
-                    continue;
+                if ($additionalCode) {
+                    $additionalCode .= PHP_EOL;
                 }
-
-                if ($variable->isLocalOnly()) {
-                    $groupVariables[] = $variable->getName();
-                    continue;
-                }
-
-                if ($variable->isDoublePointer()) {
-                    if ($variable->mustInitNull()) {
-                        $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
-                    } else {
-                        $groupVariables[] = $pointer . $pointer . $variable->getName();
-                    }
-                    continue;
-                }
-
-                $defaultValue = $variable->getDefaultInitValue();
-                if ($defaultValue !== null) {
-                    switch ($type) {
-                        case 'variable':
-                        case 'string':
-                        case 'array':
-                        case 'resource':
-                        case 'callable':
-                        case 'object':
-                            $groupVariables[] = $pointer . $variable->getName();
-                            break;
-
-                        case 'char':
-                            if (strlen($defaultValue) > 4) {
-                                if (strlen($defaultValue) > 10) {
-                                    throw new CompilerException("Invalid char literal: '" . substr($defaultValue, 0, 10) . "...'", $variable->getOriginal());
-                                } else {
-                                    throw new CompilerException("Invalid char literal: '" . $defaultValue . "'", $variable->getOriginal());
-                                }
-                            }
-                            /* no break */
-
-                        default:
-                            $groupVariables[] = $pointer . $variable->getName() . ' = ' . $defaultValue;
-                            break;
-                    }
-
-                    continue;
-                }
-
-                if ($variable->mustInitNull() && $pointer) {
-                    $groupVariables[] = $pointer . $variable->getName() . ' = NULL';
-                    continue;
-                }
-
-                $groupVariables[] = $pointer . $variable->getName();
+                $additionalCode .= $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
             }
 
-            $codePrinter->preOutput("\t" . $code . join(', ', $groupVariables) . ';');
+            if ($varInitCode) {
+                $varInitCode .= PHP_EOL;
+            }
+            $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';';
         }
+        if ($varInitCode) {
+            $additionalCode = PHP_EOL . $additionalCode;
+        }
+        $codePrinter->preOutput($varInitCode . $additionalCode);
 
         /**
          * Finalize the method compilation
@@ -1901,6 +1760,8 @@ class FunctionDefinition
                 }
             }
         }
+
+        $compilationContext->backend->onPostCompile($this, $compilationContext);
 
         /**
          * Remove macros that grow/restore the memory frame stack if it wasn't used
