@@ -1140,7 +1140,7 @@ class Compiler
 
         $this->logger->output('Running tests...');
         system(
-            'export CC="ccache gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
+            'export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test',
             $exit
         );
     }
@@ -1988,11 +1988,18 @@ class Compiler
             $headerPrinter->output('PHP_FUNCTION(' . $funcName . ');');
             $parameters = $func->getParameters();
             if (count($parameters)) {
-                $headerPrinter->output('ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' . $func->getNumberOfRequiredParameters() . ')');
+                $headerPrinter->output(
+                    'ZEND_BEGIN_ARG_INFO_EX(' . $argInfoName . ', 0, 0, ' .
+                    $func->getNumberOfRequiredParameters() . ')'
+                );
+
                 foreach ($parameters->getParameters() as $parameter) {
                     switch ($parameter['data-type']) {
                         case 'array':
-                            $headerPrinter->output("\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                            $headerPrinter->output(
+                                "\t" . 'ZEND_ARG_ARRAY_INFO(0, ' . $parameter['name'] . ', ' .
+                                (isset($parameter['default']) ? 1 : 0) . ')'
+                            );
                             break;
 
                         case 'variable':
@@ -2000,7 +2007,12 @@ class Compiler
                                 switch ($parameter['cast']['type']) {
                                     case 'variable':
                                         $value = $parameter['cast']['value'];
-                                        $headerPrinter->output("\t" . 'ZEND_ARG_OBJ_INFO(0, ' . $parameter['name'] . ', ' . Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' . (isset($parameter['default']) ? 1 : 0) . ')');
+                                        $headerPrinter->output(
+                                            "\t" . 'ZEND_ARG_OBJ_INFO(0, ' .
+                                            $parameter['name'] . ', ' .
+                                            Utils::escapeClassName($compilationContext->getFullName($value)) . ', ' .
+                                            (isset($parameter['default']) ? 1 : 0) . ')'
+                                        );
                                         break;
 
                                     default:
@@ -2023,9 +2035,16 @@ class Compiler
             $paramData = (count($parameters) ? $argInfoName : 'NULL');
 
             if ($func->isGlobal()) {
-                $entryPrinter->output('ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
+                $entryPrinter->output(
+                    'ZEND_NAMED_FE(' . $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')'
+                );
             } else {
-                $entryPrinter->output('ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", '. $func->getName() . ', ZEND_FN('. $funcName . '), ' . $paramData . ')');
+                $entryPrinter->output(
+                    'ZEND_NS_NAMED_FE("' . str_replace('\\', '\\\\', $func->getNamespace()) . '", '.
+                    $func->getName() .
+                    ', ZEND_FN('. $funcName . '), ' .
+                    $paramData . ')'
+                );
             }
         }
         $entryPrinter->output('ZEND_FE_END');
