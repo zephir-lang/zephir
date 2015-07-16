@@ -972,6 +972,7 @@ class Compiler
                     file_get_contents("ext/configure.js")
                 );
                 $this->logger->output('Preparing configuration file...');
+
                 exec('cd ext && configure --enable-' . $namespace);
             } else {
                 exec('cd ext && make clean && phpize --clean', $output, $exit);
@@ -984,7 +985,7 @@ class Compiler
                 $gccFlags = $this->getGccFlags($development);
 
                 exec(
-                    'cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
+                    'cd ext && export CC="ccache gcc" && export CFLAGS="' . $gccFlags . '" && ./configure --enable-' . $namespace
                 );
             }
         }
@@ -1069,7 +1070,7 @@ class Compiler
         $gccFlags = $this->getGccFlags($development);
 
         $currentDir = getcwd();
-        exec('(cd ext && export CC="gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
+        exec('(cd ext && export CC="ccache gcc" && export CFLAGS="' . $gccFlags . '" && sudo make install 2>>' . $currentDir . '/compile-errors.log 1>>' . $currentDir . '/compile.log)', $output, $exit);
 
         if (!file_exists("ext/modules/" . $namespace . ".so")) {
             throw new CompilerException("Internal extension compilation failed. Check compile-errors.log for more information");
@@ -1095,7 +1096,7 @@ class Compiler
         $namespace = $this->checkDirectory();
 
         $this->logger->output('Running tests...');
-        system('export CC="gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
+        system('export CC="ccache gcc" && export CFLAGS="-O0 -g" && export NO_INTERACTION=1 && cd ext && make test', $exit);
     }
 
     /**
