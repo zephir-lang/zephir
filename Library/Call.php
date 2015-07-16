@@ -74,7 +74,11 @@ class Call
             if (is_object($symbolVariable)) {
                 $readDetector = new ReadDetector($expression);
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                        'variable',
+                        $compilationContext,
+                        $expression
+                    );
                 } else {
                     $mustInit = true;
                 }
@@ -374,7 +378,11 @@ class Call
 
                 case 'double':
                     if (isset($readOnlyParameters[$position])) {
-                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $expression);
+                        $parameterVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $expression
+                        );
                         $codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                         $params[] = '&' . $parameterVariable->getName();
                     } else {
@@ -705,7 +713,9 @@ class Call
         if (!$compilationContext->insideTryCatch) {
             $compilationContext->codePrinter->output('zephir_check_call_status();');
         } else {
-            $compilationContext->codePrinter->output('zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');');
+            $compilationContext->codePrinter->output(
+                'zephir_check_call_status_or_jump(try_end_' . $compilationContext->insideTryCatch . ');'
+            );
         }
     }
 

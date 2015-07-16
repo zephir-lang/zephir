@@ -27,11 +27,11 @@ namespace Zephir;
  */
 class CompiledExpression
 {
-    protected $_type;
+    protected $type;
 
-    protected $_code;
+    protected $code;
 
-    protected $_originalExpr;
+    protected $originalExpr;
 
     /**
      *
@@ -41,9 +41,9 @@ class CompiledExpression
      */
     public function __construct($type, $code, $originalExpr)
     {
-        $this->_type = $type;
-        $this->_code = $code;
-        $this->_originalExpr = $originalExpr;
+        $this->type = $type;
+        $this->code = $code;
+        $this->originalExpr = $originalExpr;
     }
 
     /**
@@ -53,7 +53,7 @@ class CompiledExpression
      */
     public function getType()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     /**
@@ -63,7 +63,7 @@ class CompiledExpression
      */
     public function getCode()
     {
-        return $this->_code;
+        return $this->code;
     }
 
     /**
@@ -73,7 +73,7 @@ class CompiledExpression
      */
     public function getOriginal()
     {
-        return $this->_originalExpr;
+        return $this->originalExpr;
     }
 
     /**
@@ -83,15 +83,15 @@ class CompiledExpression
      */
     public function getBooleanCode()
     {
-        if ($this->_code && ($this->_code == 'true' || $this->_code === true)) {
+        if ($this->code && ($this->code == 'true' || $this->code === true)) {
             return '1';
         } else {
-            if ($this->_code == 'false' || $this->_code === false) {
+            if ($this->code == 'false' || $this->code === false) {
                 return '0';
             }
         }
 
-        return $this->_code;
+        return $this->code;
     }
 
     /**
@@ -101,7 +101,7 @@ class CompiledExpression
      */
     public function isIntCompatibleType()
     {
-        switch ($this->_type) {
+        switch ($this->type) {
             case 'int':
             case 'uint':
             case 'long':
@@ -120,7 +120,7 @@ class CompiledExpression
      */
     public function isCharCompatibleType()
     {
-        switch ($this->_type) {
+        switch ($this->type) {
             case 'char':
             case 'uchar':
                 return true;
@@ -140,17 +140,19 @@ class CompiledExpression
      */
     public function resolve($result, CompilationContext $compilationContext)
     {
-        if ($this->_code instanceof \Closure) {
-            $code = $this->_code;
+        if ($this->code instanceof \Closure) {
+            $code = $this->code;
             if (!$result) {
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
                 $compilationContext->codePrinter->output($code($tempVariable->getName()));
                 $tempVariable->setIsInitialized(true, $compilationContext, array());
                 return $tempVariable->getName();
-            } else {
-                return $code($result);
             }
+            return $code($result);
         }
-        return $this->_code;
+        return $this->code;
     }
 }

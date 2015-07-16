@@ -26,13 +26,13 @@ namespace Zephir;
  */
 class CodePrinter
 {
-    protected $_code;
+    protected $code;
 
-    protected $_lastLine;
+    protected $lastLine;
 
-    protected $_level = 0;
+    protected $level = 0;
 
-    protected $_currentPrints = 0;
+    protected $currentPrints = 0;
 
     /**
      * Adds a line to the output without the automatic line feed
@@ -41,8 +41,8 @@ class CodePrinter
      */
     public function outputNoLineFeed($code)
     {
-        $this->_lastLine = $code;
-        $this->_code .= str_repeat("\t", $this->_level) . $code;
+        $this->lastLine = $code;
+        $this->code .= str_repeat("\t", $this->level) . $code;
     }
 
     /**
@@ -52,9 +52,9 @@ class CodePrinter
      */
     public function preOutput($code)
     {
-        $this->_lastLine = $code;
-        $this->_code = str_repeat("\t", $this->_level) . $code . PHP_EOL . $this->_code;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code = str_repeat("\t", $this->level) . $code . PHP_EOL . $this->code;
+        $this->currentPrints++;
     }
 
     /**
@@ -64,8 +64,8 @@ class CodePrinter
      */
     public function preOutputNoLineFeed($code)
     {
-        $this->_lastLine = $code;
-        $this->_code = str_repeat("\t", $this->_level) . $code . $this->_code;
+        $this->lastLine = $code;
+        $this->code = str_repeat("\t", $this->level) . $code . $this->code;
     }
 
     /**
@@ -75,9 +75,9 @@ class CodePrinter
      */
     public function preOutputNoLevel($code)
     {
-        $this->_lastLine = $code;
-        $this->_code = $code . PHP_EOL . $this->_code;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code = $code . PHP_EOL . $this->code;
+        $this->currentPrints++;
     }
 
     /**
@@ -87,9 +87,9 @@ class CodePrinter
      */
     public function outputNoIndent($code)
     {
-        $this->_lastLine = $code;
-        $this->_code .= $code . PHP_EOL;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code .= $code . PHP_EOL;
+        $this->currentPrints++;
     }
 
     /**
@@ -99,9 +99,9 @@ class CodePrinter
      */
     public function output($code)
     {
-        $this->_lastLine = $code;
-        $this->_code .= str_repeat("\t", $this->_level) . $code . PHP_EOL;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code .= str_repeat("\t", $this->level) . $code . PHP_EOL;
+        $this->currentPrints++;
     }
 
     /**
@@ -117,15 +117,15 @@ class CodePrinter
 
         foreach (explode("\n", $docblock) as $line) {
             if ($replaceTab) {
-                $code .= str_repeat("\t", $this->_level) . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
+                $code .= str_repeat("\t", $this->level) . preg_replace('/^[ \t]+/', ' ', $line) . PHP_EOL;
             } else {
                 $code .= $line . PHP_EOL;
             }
         }
 
-        $this->_lastLine = $code;
-        $this->_code .= $code;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code .= $code;
+        $this->currentPrints++;
     }
 
     /**
@@ -135,9 +135,9 @@ class CodePrinter
      */
     public function outputNoLevel($code)
     {
-        $this->_lastLine = $code;
-        $this->_code .= $code . PHP_EOL;
-        $this->_currentPrints++;
+        $this->lastLine = $code;
+        $this->code .= $code . PHP_EOL;
+        $this->currentPrints++;
     }
 
     /**
@@ -150,14 +150,14 @@ class CodePrinter
     public function preOutputBlankLine($ifPrevNotBlank = false)
     {
         if (!$ifPrevNotBlank) {
-            $this->_code = PHP_EOL . $this->_code;
-            $this->_lastLine = PHP_EOL;
-            $this->_currentPrints++;
+            $this->code = PHP_EOL . $this->code;
+            $this->lastLine = PHP_EOL;
+            $this->currentPrints++;
         } else {
-            if (trim($this->_lastLine)) {
-                $this->_code = PHP_EOL . $this->_code;
-                $this->_lastLine = PHP_EOL;
-                $this->_currentPrints++;
+            if (trim($this->lastLine)) {
+                $this->code = PHP_EOL . $this->code;
+                $this->lastLine = PHP_EOL;
+                $this->currentPrints++;
             }
         }
     }
@@ -172,14 +172,14 @@ class CodePrinter
     public function outputBlankLine($ifPrevNotBlank = false)
     {
         if (!$ifPrevNotBlank) {
-            $this->_code .= PHP_EOL;
-            $this->_lastLine = PHP_EOL;
-            $this->_currentPrints++;
+            $this->code .= PHP_EOL;
+            $this->lastLine = PHP_EOL;
+            $this->currentPrints++;
         } else {
-            if (trim($this->_lastLine)) {
-                $this->_code .= PHP_EOL;
-                $this->_lastLine = PHP_EOL;
-                $this->_currentPrints++;
+            if (trim($this->lastLine)) {
+                $this->code .= PHP_EOL;
+                $this->lastLine = PHP_EOL;
+                $this->currentPrints++;
             }
         }
     }
@@ -189,7 +189,7 @@ class CodePrinter
      */
     public function increaseLevel()
     {
-        $this->_level++;
+        $this->level++;
     }
 
     /**
@@ -197,7 +197,7 @@ class CodePrinter
      */
     public function decreaseLevel()
     {
-        $this->_level--;
+        $this->level--;
     }
 
     /**
@@ -207,7 +207,7 @@ class CodePrinter
      */
     public function getOutput()
     {
-        return $this->_code;
+        return $this->code;
     }
 
     /**
@@ -217,7 +217,7 @@ class CodePrinter
      */
     public function getNumberPrints()
     {
-        return $this->_currentPrints;
+        return $this->currentPrints;
     }
 
     /**
@@ -225,8 +225,8 @@ class CodePrinter
      */
     public function clear()
     {
-        $this->_code = null;
-        $this->_lastLine = null;
-        $this->_level = 0;
+        $this->code = null;
+        $this->lastLine = null;
+        $this->level = 0;
     }
 }
