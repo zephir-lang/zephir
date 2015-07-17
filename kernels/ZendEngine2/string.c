@@ -256,7 +256,7 @@ void zephir_fast_join_str(zval *return_value, char *glue, unsigned int glue_leng
  */
 void zephir_camelize(zval *return_value, const zval *str) {
 
-	int i, len;
+	int i, len, first = 0;
 	smart_str camelize_str = {0};
 	char *marker, ch;
 
@@ -272,7 +272,13 @@ void zephir_camelize(zval *return_value, const zval *str) {
 
 		ch = marker[i];
 
-		if (i == 0) {
+		if (first == 0) {
+
+			if (ch == '-' || ch == '_') {
+				continue;
+			}
+
+			first = 1;
 			smart_str_appendc(&camelize_str, toupper(ch));
 			continue;
 		}
@@ -314,10 +320,13 @@ void zephir_uncamelize(zval *return_value, const zval *str) {
 
 	marker = Z_STRVAL_P(str);
 	for (i = 0; i < Z_STRLEN_P(str); i++) {
+
 		ch = *marker;
+
 		if (ch == '\0') {
 			break;
 		}
+
 		if (ch >= 'A' && ch <= 'Z') {
 			if (i > 0) {
 				smart_str_appendc(&uncamelize_str, '_');
@@ -326,6 +335,7 @@ void zephir_uncamelize(zval *return_value, const zval *str) {
 		} else {
 			smart_str_appendc(&uncamelize_str, (*marker));
 		}
+
 		marker++;
 	}
 	smart_str_0(&uncamelize_str);
