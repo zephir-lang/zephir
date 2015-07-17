@@ -69,12 +69,17 @@ class JsonEncodeOptimizer extends OptimizerAbstract
         } else {
             $options = '0 ';
         }
-        
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output('zephir_json_encode(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        if ($context->backend->getName() == 'ZendEngine3') {
+            $context->codePrinter->output('zephir_json_encode(' . $symbol . ', ' . $resolvedParams[0] . ', '. $options .');');
+        } else {
+            $context->codePrinter->output('zephir_json_encode(' . $symbol . ', &(' . $symbol . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');
+        }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

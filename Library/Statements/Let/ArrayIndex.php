@@ -103,12 +103,12 @@ class ArrayIndex
 
                     case 'double':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignDouble($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'bool':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignBool($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'variable':

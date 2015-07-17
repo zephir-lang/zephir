@@ -75,7 +75,7 @@ class StaticCall extends Call
         if (isset($method)) {
             $isInternal = $method->isInternal();
         }
-        
+
         if (!$isInternal) {
             if (!count($params)) {
                 if ($isExpecting) {
@@ -222,8 +222,9 @@ class StaticCall extends Call
 
         if ($classDefinition->isBundled()) {
             //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
-                $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-            $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+
+            $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+            $compilationContext->backend->fetchClass($classEntryVariable, 'SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '")', false, $compilationContext);
             //}
 
             //$classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);

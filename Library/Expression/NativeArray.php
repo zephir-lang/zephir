@@ -103,7 +103,7 @@ class NativeArray
 
             case 'double':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $compilationContext->backend->assignDouble($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'bool':

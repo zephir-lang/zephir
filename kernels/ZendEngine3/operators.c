@@ -75,7 +75,7 @@ void zephir_concat_self(zval *left, zval *right)
 	length = left_length + right_length;
 	target = zend_string_extend(Z_STR_P(left), length, 0);
 	ZVAL_NEW_STR(left, target);
-	memcpy(ZSTR_VAL(target) + left_length, right, right_length);
+	memcpy(ZSTR_VAL(target) + left_length, Z_STRVAL_P(right), right_length);
 
 	ZSTR_VAL(target)[length] = '\0';
 

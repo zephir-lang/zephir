@@ -66,7 +66,8 @@ class UcfirstOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_ucfirst(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_ucfirst(' . $symbol . ', ' . $resolvedParams[0] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

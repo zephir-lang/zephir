@@ -581,7 +581,7 @@ class Call
 
                 case 'array':
                     $parameterVariable = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $expression);
-                    $params[] = $parameterVariable->getName();
+                    $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $types[] = $parameterVariable->getType();
                     $dynamicTypes[] = $parameterVariable->getType();
                     break;

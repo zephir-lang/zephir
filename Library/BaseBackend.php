@@ -9,6 +9,11 @@ abstract class BaseBackend
      */
     protected $name;
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     /**
      * Resolves the path to the source kernel files of the backend
      * @return string Absolute path to kernel files

@@ -63,11 +63,12 @@ class Md5Optimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_md5(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ');');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_md5(' . $symbol . ', ' . $resolvedParams[0] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
