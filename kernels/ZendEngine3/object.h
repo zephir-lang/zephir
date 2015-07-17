@@ -35,6 +35,7 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 
 /** Cloning/Instance of */
 int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce);
+int zephir_zval_is_traversable(zval *object);
 
 /** Method exists */
 int zephir_method_exists(const zval *object, const zval *method_name);
@@ -49,6 +50,7 @@ int zephir_return_property(zval *return_value, zval *object, char *property_name
 
 /** Updating properties */
 int zephir_update_property_zval(zval *obj, const char *property_name, unsigned int property_length, zval *value);
+int zephir_update_property_zval_zval(zval *obj, zval *property, zval *value);
 
 /** Updating array properties */
 int zephir_update_property_array(zval *object, const char *property, zend_uint property_length, const zval *index, zval *value);

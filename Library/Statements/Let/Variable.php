@@ -424,7 +424,7 @@ class Variable
                 switch ($statement['operator']) {
                     case 'assign':
                         $symbolVariable->initVariant($compilationContext);
-                        $codePrinter->output('ZVAL_EMPTY_STRING(' . $variable . ');');
+                        $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
                         break;
                     default:
                         throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: string", $statement);
@@ -455,7 +455,7 @@ class Variable
                         if ($resolvedExpr->getCode()) {
                             $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         } else {
-                            $codePrinter->output('ZVAL_EMPTY_STRING(' . $variable . ');');
+                            $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
                         }
                         break;
                     case 'concat-assign':
@@ -474,7 +474,7 @@ class Variable
                         if ($resolvedExpr->getCode()) {
                             $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                         } else {
-                            $codePrinter->output('ZVAL_EMPTY_STRING(' . $variable . ');');
+                            $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
                         }
                         break;
 

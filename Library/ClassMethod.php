@@ -1185,14 +1185,14 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
-                        $codePrinter->output('ZVAL_LONG(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');');
+                        $compilationContext->backend->assignLong($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'double':
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
-                        $codePrinter->output('ZVAL_DOUBLE(' . $parameter['name'] . ', ' . $parameter['default']['value'] . ');');
+                        $compilationContext->backend->assignDouble($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'string':
@@ -1718,7 +1718,7 @@ class ClassMethod
                                 case 'uint':
                                 case 'long':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
+                                    $initVarCode .= "\t" . $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
                                     break;
 
                                 case 'char':

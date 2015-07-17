@@ -99,9 +99,9 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 
 		if (ARG_SHOULD_BE_SENT_BY_REF(func, i + 1)) {
 			if (!Z_ISREF_P(arg)) {
-				if (!ARG_MAY_BE_SENT_BY_REF(func, i + 1)) {
+				/*if (!ARG_MAY_BE_SENT_BY_REF(func, i + 1)) {
 					if (i) {
-						/* hack to clean up the stack */
+						// hack to clean up the stack
 						ZEND_CALL_NUM_ARGS(call) = i;
 						zend_vm_stack_free_args(call);
 					}
@@ -116,7 +116,7 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 						EG(current_execute_data) = dummy_execute_data.prev_execute_data;
 					}
 					return FAILURE;
-				}
+				}*/
 
 				ZVAL_NEW_REF(arg, arg);
 			}
@@ -1070,10 +1070,10 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 
 		if (ARG_SHOULD_BE_SENT_BY_REF(func, i + 1)) {
 			if (UNEXPECTED(!Z_ISREF_P(arg))) {
-				if (fci->no_separation &&
+				/*if (fci->no_separation &&
 					!ARG_MAY_BE_SENT_BY_REF(func, i + 1)) {
 					if (i) {
-						/* hack to clean up the stack */
+						// hack to clean up the stack
 						ZEND_CALL_NUM_ARGS(call) = i;
 						zend_vm_stack_free_args(call);
 					}
@@ -1088,7 +1088,7 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 						EG(current_execute_data) = dummy_execute_data.prev_execute_data;
 					}
 					return FAILURE;
-				}
+				} */
 
 				ZVAL_NEW_REF(arg, arg);
 			}

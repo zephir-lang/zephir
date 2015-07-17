@@ -91,6 +91,43 @@ void zephir_concat_self(zval *left, zval *right)
 /**
  * Appends the content of the right operator to the left operator
  */
+void zephir_concat_self_char(zval *left, unsigned char right)
+{
+	zval left_copy;
+	int use_copy = 0, length;
+	zend_string *target;
+
+	if (Z_TYPE_P(left) == IS_NULL) {
+		target = zend_string_alloc(1, 0);
+		ZSTR_VAL(target)[0] = right;
+		ZSTR_VAL(target)[1] = 0;
+		ZVAL_STR(left, target);;
+		return;
+	}
+
+	if (Z_TYPE_P(left) != IS_STRING) {
+		use_copy = zephir_make_printable_zval(left, &left_copy);
+		if (use_copy) {
+			ZEPHIR_CPY_WRT_CTOR(left, (&left_copy));
+		}
+	}
+
+	SEPARATE_ZVAL_IF_NOT_REF(left);
+
+	length = Z_STRLEN_P(left) + 1;
+	target = zend_string_extend(Z_STR_P(left), length, 0);
+	ZVAL_NEW_STR(left, target);
+	ZSTR_VAL(target)[length - 1] = right;
+	ZSTR_VAL(target)[length] = 0;
+
+	if (use_copy) {
+		zval_dtor(&left_copy);
+	}
+}
+
+/**
+ * Appends the content of the right operator to the left operator
+ */
 void zephir_concat_self_str(zval *left, const char *right, int right_length)
 {
 	zval left_copy;
@@ -385,6 +422,26 @@ int zephir_is_equal(zval *op1, zval *op2)
 
 	is_equal_function(&result, op1, op2);
 	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
+ * Check if a zval is less than other
+ */
+int zephir_less(zval *op1, zval *op2)
+{
+	zval result;
+	is_smaller_function(&result, op1, op2);
+	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
+ * Check if a zval is greater than other
+ */
+int zephir_greater(zval *op1, zval *op2)
+{
+	zval result;
+	is_smaller_or_equal_function(&result, op1, op2);
+	return Z_TYPE(result) == IS_FALSE;
 }
 
 /**

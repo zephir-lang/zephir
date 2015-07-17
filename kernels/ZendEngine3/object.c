@@ -46,6 +46,32 @@ int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce)
 	return instanceof_function(Z_OBJCE_P(object), ce);
 }
 
+
+int zephir_zval_is_traversable(zval *object)
+{
+	zend_class_entry *ce;
+	zend_uint i;
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		ce = Z_OBJCE_P(object);
+
+		if (ce->get_iterator || (ce->parent && ce->parent->get_iterator)) {
+			return 1;
+		}
+
+		for (i = 0; i < ce->num_interfaces; i++) {
+			if (ce->interfaces[i] == zend_ce_aggregate ||
+				ce->interfaces[i] == zend_ce_iterator ||
+				ce->interfaces[i] == zend_ce_traversable
+			) {
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+}
+
 /**
  * Returns the called in class in the current scope
  */
@@ -253,6 +279,18 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 	return SUCCESS;
 }
 
+/**
+ * Checks whether obj is an object and updates zval property with another zval
+ */
+int zephir_update_property_zval_zval(zval *object, zval *property, zval *value)
+{
+	if (Z_TYPE_P(property) != IS_STRING) {
+		php_error_docref(NULL, E_WARNING, "Property should be string");
+		return FAILURE;
+	}
+
+	return zephir_update_property_zval(object, Z_STRVAL_P(property), Z_STRLEN_P(property), value);
+}
 
 /**
  * Updates an array property

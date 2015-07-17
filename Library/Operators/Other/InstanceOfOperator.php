@@ -88,7 +88,8 @@ class InstanceOfOperator extends BaseOperator
                             $className = $context->getFullName($resolvedVariable);
 
                             if ($className == 'Traversable') {
-                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbolVariable->getName() . ' TSRMLS_CC)', $expression);
+                                $symbol = $context->backend->getVariableCode($symbolVariable);
+                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbol . ' TSRMLS_CC)', $expression);
                             }
 
                             if ($context->compiler->isClass($className)) {

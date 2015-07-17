@@ -228,7 +228,8 @@ class CastOperator extends BaseOperator
                         $compilationContext->headersManager->add('kernel/operators');
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-                        $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
+                        $variableCode = $compilationContext->backend->getVariableCode($symbolVariable);
+                        $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $variableCode . ');');
 
                         return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 

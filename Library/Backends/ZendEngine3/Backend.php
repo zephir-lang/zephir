@@ -440,7 +440,11 @@ class Backend extends BackendZendEngine2
     {
         //TODO: maybe optimizations aswell as above
         $value = $this->resolveValue($value, $context);
-        $context->codePrinter->output('zephir_update_property_zval(' . $this->getVariableCode($symbolVariable) . ', SL("' . $propertyName . '"), ' . $value . ');');
+        if ($propertyName instanceof Variable) {
+            $context->codePrinter->output('zephir_update_property_zval_zval(' . $this->getVariableCode($symbolVariable) . ', ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
+        } else {
+            $context->codePrinter->output('zephir_update_property_zval(' . $this->getVariableCode($symbolVariable) . ', SL("' . $propertyName . '"), ' . $value . ');');
+        }
     }
 
     public function updateStaticProperty($classEntry, $property, $value, CompilationContext $context)
@@ -557,6 +561,13 @@ class Backend extends BackendZendEngine2
         }
 
         $codePrinter->output('} ZEND_HASH_FOREACH_END();');
+    }
+
+    public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
+    {
+        $compilationContext->codePrinter->output('zval *ZEPHIR_TMP_ITERATOR_PTR;');
+        $compilationContext->codePrinter->output('ZEPHIR_TMP_ITERATOR_PTR = ' . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
+        $this->copyOnWrite($targetVariable, '(ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
     }
 
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)

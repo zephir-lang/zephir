@@ -83,12 +83,10 @@ class Decr
                 }
 
                 $compilationContext->headersManager->add('kernel/operators');
-                if ($symbolVariable->isLocalOnly()) {
-                    $codePrinter->output('zephir_decrement(&' . $variable . ');');
-                } else {
+                if (!$symbolVariable->isLocalOnly()) {
                     $symbolVariable->separate($compilationContext);
-                    $codePrinter->output('zephir_decrement(' . $variable . ');');
                 }
+                $codePrinter->output('zephir_decrement(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');');
                 break;
 
             default:

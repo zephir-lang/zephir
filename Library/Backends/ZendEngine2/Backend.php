@@ -423,7 +423,7 @@ class Backend extends BaseBackend
 
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
     {
-        if ($value == 'null') {
+        if ($value === null) {
             $output = 'ZVAL_EMPTY_STRING(' . $this->getVariableCode($variable) . ');';
             if ($useCodePrinter) {
                 $context->codePrinter->output($output);
@@ -844,9 +844,17 @@ class Backend extends BaseBackend
     {
         $value = $this->resolveValue($value, $context);
         if ($symbolVariable->getName() == 'this_ptr') {
-            $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+            if ($propertyName instanceof Variable) {
+                $context->codePrinter->output('zephir_update_property_zval_zval(this_ptr, ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
+            } else {
+                $context->codePrinter->output('zephir_update_property_this(this_ptr, SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+            }
         } else {
-            $context->codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+            if ($propertyName instanceof Variable) {
+                $context->codePrinter->output('zephir_update_property_zval_zval(' . $this->getVariableCode($symbolVariable) . ', ' . $this->getVariableCode($propertyName) . ', ' . $value . ' TSRMLS_CC);');
+            } else {
+                $context->codePrinter->output('zephir_update_property_zval(' . $symbolVariable->getName() . ', SL("' . $propertyName . '"), ' . $value . ' TSRMLS_CC);');
+            }
         }
     }
 
@@ -978,6 +986,13 @@ class Backend extends BaseBackend
         }
 
         $codePrinter->output('}');
+    }
+
+    public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
+    {
+        $compilationContext->codePrinter->output('zval **ZEPHIR_TMP_ITERATOR_PTR;');
+        $compilationContext->codePrinter->output($iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);');
+        $this->copyOnWrite($targetVariable, '(*ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
     }
 
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
