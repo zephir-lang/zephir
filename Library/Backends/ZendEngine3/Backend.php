@@ -19,7 +19,7 @@ class Backend extends BackendZendEngine2
 
     public function getVariableCode(Variable $variable)
     {
-        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || in_array($variable->getType(), array('zval_ptr', 'int'))) {
+        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || in_array($variable->getType(), array('zval_ptr', 'int', 'long'))) {
             return $variable->getName();
         }
         return '&' . $variable->getName();
@@ -265,8 +265,15 @@ class Backend extends BackendZendEngine2
 
         if (!isset($key)) {
             $keyType = 'append';
-        } else if ($key instanceof CompiledExpression && in_array($key->getType(), array('int', 'uint', 'long', 'ulong'))) {
-            $keyType = 'index';
+        } else if ($key instanceof CompiledExpression) {
+            $typeKey = $key->getType();
+            if ($typeKey == 'variable') {
+                $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
+                $typeKey = $var->getType();
+            }
+            if (in_array($typeKey, array('int', 'uint', 'long', 'ulong'))) {
+                $keyType = 'index';
+            }
         }
         if ($value == 'null') {
             if (!isset($key)) {
@@ -275,12 +282,16 @@ class Backend extends BackendZendEngine2
                 return;
             }
         }
+
         switch ($value->getType()) {
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
                 $type = 'long';
+                break;
+            case 'double':
+                $type = 'double';
                 break;
             case 'string':
                 $type = 'stringl';
@@ -295,7 +306,12 @@ class Backend extends BackendZendEngine2
         }
 
         if (isset($key)) {
-            $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
+            if ($key->getType() == 'variable') {
+                $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
+                $keyStr = $typeKey == 'string' ? 'Z_STRVAL_P(' . $this->getVariableCode($var) . '), Z_STRLEN_P(' . $this->getVariableCode($var) . ')' : $this->getVariableCode($var);
+            } else {
+                $keyStr = $key->getType() == 'string' ? 'SL("' . $key->getCode() . '")' : $key->getCode();
+            }
         }
         if ($type == 'stringl') {
             if ($value instanceof Variable) {
@@ -456,12 +472,19 @@ class Backend extends BackendZendEngine2
     public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
     {
         $paramStr = $params != null ? ', ' . join(', ', $params) : '';
-        if (!isset($symbolVariable)) {
-            $context->codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
-        } else if ($symbolVariable->getName() == 'return_value') {
-            $context->codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+        $macro = 'CALL_METHOD';
+        if ($methodName instanceof Variable) {
+            $macro = 'CALL_METHOD_ZVAL';
+            $methodName = $this->getVariableCode($methodName);
         } else {
-            $context->codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $this->getVariableCode($variable) . ', "' . $methodName . '", ' . $cachePointer . $paramStr . ');');
+            $methodName = '"' . $methodName . '"';
+        }
+        if (!isset($symbolVariable)) {
+            $context->codePrinter->output('ZEPHIR_' . $macro . '(NULL, ' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
+        } else if ($symbolVariable->getName() == 'return_value') {
+            $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
+        } else {
+            $context->codePrinter->output('ZEPHIR_' . $macro . '(&' . $symbolVariable->getName() . ', ' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
         }
     }
 

@@ -481,6 +481,29 @@ int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int fl
 	return zv != NULL ? SUCCESS : FAILURE;
 }
 
+void zephir_array_keys(zval *return_value, zval *input)
+{
+    zval *entry, new_val;
+	zend_ulong num_idx;
+	zend_string *str_idx;
+
+	if (likely(Z_TYPE_P(input) == IS_ARRAY)) {
+		array_init_size(return_value, zend_hash_num_elements(Z_ARRVAL_P(input)));
+		zend_hash_real_init(Z_ARRVAL_P(return_value), 1);
+		ZEND_HASH_FILL_PACKED(Z_ARRVAL_P(return_value)) {
+			/* Go through input array and add keys to the return array */
+			ZEND_HASH_FOREACH_KEY_VAL_IND(Z_ARRVAL_P(input), num_idx, str_idx, entry) {
+				if (str_idx) {
+					ZVAL_STR_COPY(&new_val, str_idx);
+				} else {
+					ZVAL_LONG(&new_val, num_idx);
+				}
+				ZEND_HASH_FILL_ADD(&new_val);
+			} ZEND_HASH_FOREACH_END();
+		} ZEND_HASH_FILL_END();
+	}
+}
+
 /**
  * Implementation of Multiple array-offset update
  */

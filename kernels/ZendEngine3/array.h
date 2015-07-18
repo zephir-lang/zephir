@@ -55,6 +55,8 @@ int zephir_array_update_zval(zval *arr, zval *index, zval *value, int flags);
 int zephir_array_update_string(zval *arr, const char *index, uint index_length, zval *value, int flags);
 int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int flags ZEPHIR_DEBUG_PARAMS);
 
+void zephir_array_keys(zval *return_value, zval *arr);
+
 /* Update array using multiple keys */
 void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int types_length, int types_count, va_list ap);
 int zephir_array_update_multi(zval *arr, zval *value, const char *types, int types_length, int types_count, ...);

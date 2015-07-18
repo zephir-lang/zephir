@@ -1775,7 +1775,7 @@ class ClassMethod
                         switch ($defaultValue['type']) {
                             case 'string':
                                 $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                $code .= "\t\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
+                                $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
                                 break;
 
                             case 'null':

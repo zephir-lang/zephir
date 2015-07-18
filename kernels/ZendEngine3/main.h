@@ -140,6 +140,8 @@
 
 #define RETURN_LCTORW(var) RETURN_CCTORW(var);
 
+#define RETURN_LCTOR(var) RETURN_CCTOR(var);
+
 /**
  * Returns a zval in an object member
  */

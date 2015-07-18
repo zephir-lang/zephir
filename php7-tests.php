@@ -7,7 +7,7 @@ $supportedZep = array(
     'properties', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'pdostatement.zep', 'vars.zep', 'emptytest.zep',
     'constantsinterfaceb.zep', 'constantsinterface.zep', 'constantsinterfacea.zep', 'bitwise.zep', 'branchprediction.zep', 'oo.zep', 'closures.zep',
     'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'evaltest.zep', 'factorial.zep',
-    'flow.zep', 'json.zep',
+    'flow.zep', 'json.zep', 'methodargs.zep', 'nativearray.zep', 'mcalldynamic.zep',
     'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep', 'operator.zep', 'exists.zep', 'cast.zep', 'exception.zep', 'exceptions.zep',
     'fannkuch.zep', 'fibonnaci.zep', 'globals.zep', 'issettest.zep', 'fcall.zep', 'instanceoff.zep', 'internalclasses.zep', 'internalinterfaces.zep',
     'ooimpl', 'oo', 'builtin'
@@ -17,7 +17,7 @@ $supportedTest = array(
     'ConstantsTest.php', 'ConstantsInterfaceTest.php', 'BitwiseTest.php', 'BranchPredictionTest.php', 'ConcatTest.php', 'RequiresTest.php', 'EvalTest.php',
     'TypeoffTest.php', 'MCallTest.php', 'McallChainedTest.php', 'OoTest.php', 'OperatorTest.php', 'ExistsTest.php', 'CastTest.php', 'ExtendedInterfaceTest.php',
     'FibonnaciTest.php', 'GlobalsTest.php', 'IssetTest.php', 'FcallTest.php', 'EmptyTest.php', 'DynamicPropTest.php', 'FlowTest.php', 'InstanceOffTest.php',
-    'InternalClassesTest.php', 'JsonTest.php',
+    'InternalClassesTest.php', 'JsonTest.php', 'MCallDynamicTest.php', 'MethodArgsTest.php', 'NativeArrayTest.php',
     'Properties', 'php', 'Oo', 'fixtures', 'BuiltIn'
 );
 

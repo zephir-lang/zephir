@@ -734,7 +734,7 @@ static zend_bool zephir_is_info_dynamic_callable(zephir_fcall_info *info, zend_f
 		}
 	}
 
-	zend_string_free(zs_lcname);
+	zend_string_release(zs_lcname);
 	return retval;
 }
 
