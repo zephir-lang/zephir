@@ -63,6 +63,21 @@ double zephir_sin(zval *op1 TSRMLS_DC)
 	return sin(zephir_get_numberval(op1));
 }
 
+double zephir_asin(zval *op1 TSRMLS_DC)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return asin(zephir_get_numberval(op1));
+}
+
 double zephir_cos(zval *op1 TSRMLS_DC)
 {
 	switch (Z_TYPE_P(op1)) {
@@ -75,7 +90,22 @@ double zephir_cos(zval *op1 TSRMLS_DC)
 			break;
 	}
 
-	return sin(zephir_get_numberval(op1));
+	return cos(zephir_get_numberval(op1));
+}
+
+double zephir_acos(zval *op1 TSRMLS_DC)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return acos(zephir_get_numberval(op1));
 }
 
 double zephir_sqrt(zval *op1 TSRMLS_DC)

@@ -49,6 +49,13 @@ abstract class MathOptimizer extends OptimizerAbstract
             return false;
         }
 
+        /**
+         * Resolve parameters as vars
+         */
+        $call->getResolvedParams($expression['parameters'], $context, $expression);
+        /**
+         * Get CompiledExpression(s) for resolved var(s)
+         */
         $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
         $compiledExpression = $resolvedParams[0];
 
@@ -58,7 +65,8 @@ abstract class MathOptimizer extends OptimizerAbstract
             case 'long':
             case 'ulong':
             case 'double':
-            return $this->passNativeFCall($compiledExpression, $expression);
+                $context->headersManager->add('math');
+                return $this->passNativeFCall($compiledExpression, $expression);
                 break;
             case 'variable':
                 $variable = $context->symbolTable->getVariable($compiledExpression->getCode());
@@ -68,9 +76,11 @@ abstract class MathOptimizer extends OptimizerAbstract
                     case 'long':
                     case 'ulong':
                     case 'double':
+                        $context->headersManager->add('math');
                         return $this->passNativeFCall($compiledExpression, $expression);
                         break;
                     case 'variable':
+                        $context->headersManager->add('kernel/math');
                         return new CompiledExpression(
                             'double',
                             'zephir_' . $this->getFunctionName() . '(' . $compiledExpression->getCode() . ' TSRMLS_CC)',
