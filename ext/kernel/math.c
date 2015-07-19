@@ -127,7 +127,7 @@ double zephir_tan(zval *op1 TSRMLS_DC)
 {
 	switch (Z_TYPE_P(op1)) {
 		case IS_LONG:
-			return (double) Z_LVAL_P(op1);
+			return tan(Z_LVAL_P(op1));
 		case IS_ARRAY:
 		case IS_OBJECT:
 		case IS_RESOURCE:

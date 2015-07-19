@@ -23,6 +23,7 @@ use Test\Optimizers\Sin;
 use Test\Optimizers\ASin;
 use Test\Optimizers\Cos;
 use Test\Optimizers\ACos;
+use Test\Optimizers\Tan;
 
 class MathTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,7 +94,6 @@ class MathTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(acos(0), $t->testVarParameter(0));
     }
 
-
     public function testASin()
     {
         $t = new ASin();
@@ -108,5 +108,30 @@ class MathTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(asin(1), $t->testVarParameter(1));
         $this->assertSame(asin(0), $t->testVarParameter(0));
+    }
+
+    public function testTan()
+    {
+        $t = new Tan();
+
+        $this->assertSame(tan(0), $t->testInt());
+        $this->assertSame(tan(0), $t->testVar());
+
+        $this->assertSame(tan(1), $t->testVar2());
+        $this->assertSame(tan(1), $t->testIntValue1());
+        $this->assertSame(tan(2), $t->testIntValue2());
+
+        $this->assertSame(tan(0), $t->testIntParameter(0));
+        $this->assertSame(tan(1), $t->testIntParameter(1));
+        $this->assertSame(tan(2), $t->testIntParameter(2));
+        $this->assertSame(tan(3), $t->testIntParameter(3));
+        $this->assertSame(tan(4), $t->testIntParameter(4));
+
+        $this->assertSame(tan(0), $t->testVarParameter(0));
+        $this->assertSame(tan(1), $t->testVarParameter(1));
+        $this->assertSame(tan(2), $t->testVarParameter(2));
+        $this->assertSame(tan(3), $t->testVarParameter(3));
+        $this->assertSame(tan(4), $t->testVarParameter(4));
+        $this->assertSame(tan(0), $t->testVarParameter("0"));
     }
 }
