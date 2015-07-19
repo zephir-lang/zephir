@@ -114,6 +114,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/optimizers/sin.zep.c
 	test/optimizers/sqrt.zep.c
 	test/optimizers/substr.zep.c
+	test/optimizers/tan.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c

@@ -58,11 +58,12 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->class->complexSum() === 3.0);
         $this->assertTrue($this->class->complex2Sum() === true);
         $this->assertTrue($this->class->complex3Sum() === true);
-        $this->assertTrue($this->class->complex4Sum() === 2.0);
-        $this->assertTrue($this->class->complex5Sum() === 2);
-        $this->assertTrue($this->class->complex6Sum() === true);
-        $this->assertTrue($this->class->complex7Sum() === 3);
-        $this->assertTrue($this->class->complex9Sum() === 3);
+
+        $this->assertSame(2.0, $this->class->complex4Sum());
+        $this->assertSame(2, $this->class->complex5Sum());
+        $this->assertTrue($this->class->complex6Sum());
+        $this->assertSame(3, $this->class->complex7Sum());
+        $this->assertSame(3, $this->class->complex9Sum());
         $this->assertTrue($this->class->complex10Sum() === 3.0);
         $this->assertTrue($this->class->complex11Sum() === 3.0);
         $this->assertTrue($this->class->complex12Sum() === 3);

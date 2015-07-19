@@ -20,7 +20,9 @@ namespace Extension\Optimizers;
 
 use Test\Optimizers\Sqrt;
 use Test\Optimizers\Sin;
+use Test\Optimizers\ASin;
 use Test\Optimizers\Cos;
+use Test\Optimizers\ACos;
 
 class MathTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,5 +75,38 @@ class MathTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(cos(4), $t->testVarParameter(4));
         $this->assertSame(cos(16), $t->testVarParameter(16));
+    }
+
+    public function testACos()
+    {
+        $t = new ACos();
+
+        $this->assertSame(acos(1), $t->testInt());
+        $this->assertSame(acos(1), $t->testVar());
+
+        $this->assertSame(acos(0), $t->testIntValue1());
+
+        $this->assertSame(acos(1), $t->testIntParameter(1));
+        $this->assertSame(acos(0), $t->testIntParameter(0));
+
+        $this->assertSame(acos(1), $t->testVarParameter(1));
+        $this->assertSame(acos(0), $t->testVarParameter(0));
+    }
+
+
+    public function testASin()
+    {
+        $t = new ASin();
+
+        $this->assertSame(asin(1), $t->testInt());
+        $this->assertSame(asin(1), $t->testVar());
+
+        $this->assertSame(asin(0), $t->testIntValue1());
+
+        $this->assertSame(asin(1), $t->testIntParameter(1));
+        $this->assertSame(asin(0), $t->testIntParameter(0));
+
+        $this->assertSame(asin(1), $t->testVarParameter(1));
+        $this->assertSame(asin(0), $t->testVarParameter(0));
     }
 }

@@ -109,6 +109,7 @@
 #include "test/optimizers/sin.zep.h"
 #include "test/optimizers/sqrt.zep.h"
 #include "test/optimizers/substr.zep.h"
+#include "test/optimizers/tan.zep.h"
 #include "test/pdostatement.zep.h"
 #include "test/pregmatch.zep.h"
 #include "test/properties/extendspublicproperties.zep.h"

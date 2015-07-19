@@ -5,26 +5,21 @@ class ACos
 {
 	public function testInt()
 	{
-		int a = 4;
+		int a = 1;
 
 		return acos(a);
 	}
 
 	public function testVar()
 	{
-		var a = 4;
+		var a = 1;
 
 		return acos(a);
 	}
 
 	public function testIntValue1()
 	{
-		return acos(4);
-	}
-
-	public function testIntValue2()
-	{
-		return acos(16);
+		return acos(0);
 	}
 
 	public function testIntParameter(int a)

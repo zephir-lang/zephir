@@ -28,7 +28,7 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ASin) {
 PHP_METHOD(Test_Optimizers_ASin, testInt) {
 
 	zval _0;
-	int a = 4, ZEPHIR_LAST_CALL_STATUS;
+	int a = 1, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -43,7 +43,7 @@ PHP_METHOD(Test_Optimizers_ASin, testInt) {
 PHP_METHOD(Test_Optimizers_ASin, testVar) {
 
 	zval _0;
-	int a = 4, ZEPHIR_LAST_CALL_STATUS;
+	int a = 1, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
@@ -63,22 +63,7 @@ PHP_METHOD(Test_Optimizers_ASin, testIntValue1) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, 4);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
-	zephir_check_call_status();
-	RETURN_MM();
-
-}
-
-PHP_METHOD(Test_Optimizers_ASin, testIntValue2) {
-
-	int ZEPHIR_LAST_CALL_STATUS;
-	zval _0;
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_SINIT_VAR(_0);
-	ZVAL_LONG(&_0, 16);
+	ZVAL_LONG(&_0, 0);
 	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 9, &_0);
 	zephir_check_call_status();
 	RETURN_MM();

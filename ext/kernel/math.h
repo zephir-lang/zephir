@@ -25,6 +25,7 @@
 
 double zephir_sin(zval *op1 TSRMLS_DC);
 double zephir_asin(zval *op1 TSRMLS_DC);
+double zephir_tan(zval *op1 TSRMLS_DC);
 double zephir_cos(zval *op1 TSRMLS_DC);
 double zephir_acos(zval *op1 TSRMLS_DC);
 double zephir_sqrt(zval *op1 TSRMLS_DC);

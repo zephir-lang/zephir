@@ -6,7 +6,6 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ASin);
 PHP_METHOD(Test_Optimizers_ASin, testInt);
 PHP_METHOD(Test_Optimizers_ASin, testVar);
 PHP_METHOD(Test_Optimizers_ASin, testIntValue1);
-PHP_METHOD(Test_Optimizers_ASin, testIntValue2);
 PHP_METHOD(Test_Optimizers_ASin, testIntParameter);
 PHP_METHOD(Test_Optimizers_ASin, testVarParameter);
 
@@ -22,7 +21,6 @@ ZEPHIR_INIT_FUNCS(test_optimizers_asin_method_entry) {
 	PHP_ME(Test_Optimizers_ASin, testInt, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_ASin, testVar, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_ASin, testIntValue1, NULL, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Optimizers_ASin, testIntValue2, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_ASin, testIntParameter, arginfo_test_optimizers_asin_testintparameter, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Optimizers_ASin, testVarParameter, arginfo_test_optimizers_asin_testvarparameter, ZEND_ACC_PUBLIC)
 	PHP_FE_END

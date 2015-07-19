@@ -34,6 +34,9 @@ class Sqrt
 
 	public function testVarParameter(var a)
 	{
+        var_dump(a);
+        var_dump(sqrt(a));
+        var_dump(sqrt(16));
 		return sqrt(a);
 	}
 }

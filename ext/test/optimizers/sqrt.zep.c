@@ -15,6 +15,7 @@
 #include "kernel/memory.h"
 #include "math.h"
 #include "kernel/operators.h"
+#include "kernel/variables.h"
 #include "kernel/math.h"
 
 
@@ -95,13 +96,25 @@ PHP_METHOD(Test_Optimizers_Sqrt, testIntParameter) {
 
 PHP_METHOD(Test_Optimizers_Sqrt, testVarParameter) {
 
-	zval *a;
+	zval *a, *_0 = NULL, *_1, *_2 = NULL;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
-	RETURN_DOUBLE(zephir_sqrt(a TSRMLS_CC));
+	zephir_var_dump(&a TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_LONG(_0, zephir_sqrt(a TSRMLS_CC));
+	zephir_var_dump(&_0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_1);
+	ZVAL_LONG(_1, 16);
+	ZEPHIR_INIT_VAR(_2);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_LONG(_2, sqrt(16));
+	zephir_var_dump(&_2 TSRMLS_CC);
+	RETURN_MM_DOUBLE(zephir_sqrt(a TSRMLS_CC));
 
 }
 

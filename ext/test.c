@@ -142,6 +142,7 @@ zend_class_entry *test_optimizers_createarray_ce;
 zend_class_entry *test_optimizers_sin_ce;
 zend_class_entry *test_optimizers_sqrt_ce;
 zend_class_entry *test_optimizers_substr_ce;
+zend_class_entry *test_optimizers_tan_ce;
 zend_class_entry *test_pdostatement_ce;
 zend_class_entry *test_pregmatch_ce;
 zend_class_entry *test_properties_extendspublicproperties_ce;
@@ -310,6 +311,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Optimizers_Sin);
 	ZEPHIR_INIT(Test_Optimizers_Sqrt);
 	ZEPHIR_INIT(Test_Optimizers_Substr);
+	ZEPHIR_INIT(Test_Optimizers_Tan);
 	ZEPHIR_INIT(Test_PdoStatement);
 	ZEPHIR_INIT(Test_Pregmatch);
 	ZEPHIR_INIT(Test_Properties_ExtendsPublicProperties);

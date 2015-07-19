@@ -1,34 +1,39 @@
 
 namespace Test\Optimizers;
 
-class ASin
+class Tan
 {
 	public function testInt()
 	{
-		int a = 1;
+		int a = 4;
 
-		return asin(a);
+		return tan(a);
 	}
 
 	public function testVar()
 	{
-		var a = 1;
+		var a = 4;
 
-		return asin(a);
+		return tan(a);
 	}
 
 	public function testIntValue1()
 	{
-		return asin(0);
+		return tan(4);
+	}
+
+	public function testIntValue2()
+	{
+		return tan(16);
 	}
 
 	public function testIntParameter(int a)
 	{
-		return asin(a);
+		return tan(a);
 	}
 
 	public function testVarParameter(var a)
 	{
-		return asin(a);
+		return tan(a);
 	}
 }
