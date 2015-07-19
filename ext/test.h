@@ -52,6 +52,7 @@
 #include "test/flow.zep.h"
 #include "test/fortytwo.zep.h"
 #include "test/functional.zep.h"
+#include "test/geometry.zep.h"
 #include "test/globals.zep.h"
 #include "test/instanceoff.zep.h"
 #include "test/internalclasses.zep.h"

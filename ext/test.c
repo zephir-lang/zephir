@@ -86,6 +86,7 @@ zend_class_entry *test_fibonnaci_ce;
 zend_class_entry *test_flow_ce;
 zend_class_entry *test_fortytwo_ce;
 zend_class_entry *test_functional_ce;
+zend_class_entry *test_geometry_ce;
 zend_class_entry *test_globals_ce;
 zend_class_entry *test_instanceoff_ce;
 zend_class_entry *test_internalclasses_ce;
@@ -248,6 +249,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Flow);
 	ZEPHIR_INIT(Test_FortyTwo);
 	ZEPHIR_INIT(Test_Functional);
+	ZEPHIR_INIT(Test_Geometry);
 	ZEPHIR_INIT(Test_Globals);
 	ZEPHIR_INIT(Test_Instanceoff);
 	ZEPHIR_INIT(Test_InternalClasses);

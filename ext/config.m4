@@ -57,6 +57,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/flow.zep.c
 	test/fortytwo.zep.c
 	test/functional.zep.c
+	test/geometry.zep.c
 	test/globals.zep.c
 	test/instanceoff.zep.c
 	test/internalclasses.zep.c
