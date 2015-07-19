@@ -67,7 +67,13 @@ class ArrayMergeOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_fast_array_merge(' . $symbolVariable->getName() . ', &(' . $resolvedParams[0] . '), &(' . $resolvedParams[1] . ') TSRMLS_CC);');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $resolveParam = $context->backend->getName() != 'ZendEngine3' ? function ($str) {
+            return '&(' . $str . ')';
+        } : function ($str) {
+            return $str;
+        };
+        $context->codePrinter->output('zephir_fast_array_merge(' . $symbol . ', ' . $resolveParam($resolvedParams[0]) . ', ' . $resolveParam($resolvedParams[1]) . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

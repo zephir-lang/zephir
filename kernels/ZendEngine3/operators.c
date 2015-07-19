@@ -414,6 +414,32 @@ zend_bool zephir_get_boolval_ex(const zval *op)
 }
 
 /**
+ * Returns the long value of a zval
+ */
+int zephir_is_numeric_ex(const zval *op)
+{
+	int type;
+
+	switch (Z_TYPE_P(op)) {
+		case IS_LONG:
+			return 1;
+		case IS_TRUE:
+		case IS_FALSE:
+			return 0;
+		case IS_DOUBLE:
+			return 1;
+		case IS_STRING:
+			if ((type = is_numeric_string(Z_STRVAL_P(op), Z_STRLEN_P(op), NULL, NULL, 0))) {
+				if (type == IS_LONG || type == IS_DOUBLE) {
+					return 1;
+				}
+			}
+	}
+
+	return 0;
+}
+
+/**
  * Check if two zvals are equal
  */
 int zephir_is_equal(zval *op1, zval *op2)
@@ -524,6 +550,25 @@ double zephir_safe_div_double_double(double op1, double op2)
 		return 0;
 	}
 	return op1 / op2;
+}
+
+/**
+ * Do safe divisions between two long/zval
+ */
+double zephir_safe_div_long_zval(long op1, zval *op2)
+{
+	if (!zephir_get_numberval(op2)) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	switch (Z_TYPE_P(op2)) {
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+	return (double) op1 / ((double) zephir_get_numberval(op2));
 }
 
 /**

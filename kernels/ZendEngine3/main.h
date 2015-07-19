@@ -138,6 +138,13 @@
 #define RETURN_THISW() \
 	RETURN_ZVAL(this_ptr, 1, 0);
 
+/** Return this pointer */
+#define RETURN_THIS() { \
+		RETVAL_ZVAL(this_ptr, 1, 0); \
+	} \
+	ZEPHIR_MM_RESTORE(); \
+	return;
+
 #define RETURN_LCTORW(var) RETURN_CCTORW(var);
 
 #define RETURN_LCTOR(var) RETURN_CCTOR(var);
@@ -154,6 +161,10 @@
 
 /** Return null restoring memory frame */
 #define RETURN_MM_BOOL(value)       { RETVAL_BOOL(value); ZEPHIR_MM_RESTORE(); return; }
+
+/** Return string restoring memory frame */
+#define RETURN_MM_STRING(str)       { RETVAL_STRING(str); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); ZEPHIR_MM_RESTORE(); return; }
 
 /* Return long */
 #define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }

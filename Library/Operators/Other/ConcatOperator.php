@@ -96,8 +96,8 @@ class ConcatOperator extends BaseOperator
                         case 'long':
                             $key .= 'v';
                             $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
-                            $compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
-                            $concatParts[] = '&' . $tempVariable->getName();
+                            $compilationContext->backend->assignLong($tempVariable, $compiledExpr->getCode(), $compilationContext);
+                            $concatParts[] = $compilationContext->backend->getVariableCode($tempVariable);
                             break;
 
                         default:
@@ -157,7 +157,8 @@ class ConcatOperator extends BaseOperator
             }
 
             $expected->setDynamicTypes('string');
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
+            $expectedCode = $compilationContext->backend->getVariableCode($expected);
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expectedCode . ', ' . $optimized[1] . ');');
             return new CompiledExpression('variable', $expected->getName(), $expression);
         }
 

@@ -32,6 +32,8 @@ int zephir_class_exists(const zval *class_name, int autoload);
 int zephir_interface_exists(const zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
+void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
+void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
 
 /** Cloning/Instance of */
 int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce);
@@ -57,6 +59,10 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 int zephir_update_property_array_string(zval *object, char *property, unsigned int property_length, char *index, unsigned int index_length, zval *value);
 int zephir_update_property_array_append(zval *object, char *property, unsigned int property_length, zval *value);
 int zephir_update_property_array_multi(zval *object, const char *property, zend_uint property_length, zval *value, const char *types, int types_length, int types_count, ...);
+
+/** Unset properties */
+int zephir_unset_property(zval* object, const char* name);
+int zephir_unset_property_array(zval *object, char *property, unsigned int property_length, zval *index);
 
 /** Static properties */
 int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const char *property, int len, int flags);

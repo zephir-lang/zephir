@@ -98,11 +98,8 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_long_double(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                             case 'variable':
-                                if ($variableRight->isLocalOnly()) {
-                                    return new CompiledExpression('double', 'zephir_safe_div_long_zval(' . $left->getCode() . ', &' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                } else {
-                                    return new CompiledExpression('double', 'zephir_safe_div_long_zval(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                }
+                                $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+                                return new CompiledExpression('double', 'zephir_safe_div_long_zval(' . $left->getCode() . ', ' . $variableRightCode . ' TSRMLS_CC)', $expression);
                                 break;
 
                             default:

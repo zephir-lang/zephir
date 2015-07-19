@@ -780,6 +780,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 				return 0;
 			}
 			fcc->calling_scope = Z_OBJCE_P(info->object_ptr); /* TBFixed: what if it's overloaded? */
+			fcc->called_scope = fcc->calling_scope;
 			fcc->object = Z_OBJ_P(info->object_ptr);
 
 			if (!ce_org) {
@@ -813,6 +814,7 @@ static zend_bool zephir_is_info_callable_ex(zephir_fcall_info *info, zend_fcall_
 			}
 
 			fcc->called_scope = EG(current_execute_data)->called_scope;
+			fcc->calling_scope = EG(scope);
 			if (!fcc->object) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);
 			}

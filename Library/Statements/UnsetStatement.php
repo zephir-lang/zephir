@@ -48,6 +48,7 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
 
                 $expr = new Expression($expression['right']);
                 $expr->setReadOnly(true);
@@ -58,13 +59,11 @@ class UnsetStatement extends StatementAbstract
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
+                $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
+                $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 $compilationContext->headersManager->add('kernel/object');
-                if ($exprVar->getCode() == 'this') {
-                    $compilationContext->codePrinter->output('zephir_unset_property(this_ptr, "' . $expression['right']['value'] . '" TSRMLS_CC);');
-                } else {
-                    $compilationContext->codePrinter->output('zephir_unset_property(' . $exprVar->getCode() . ', "' . $expression['right']['value'] . '" TSRMLS_CC);');
-                }
+                $compilationContext->codePrinter->output('zephir_unset_property(' . $variableCode . ', "' . $expression['right']['value'] . '" TSRMLS_CC);');
                 return true;
 
             case 'property-dynamic-access':
@@ -74,7 +73,6 @@ class UnsetStatement extends StatementAbstract
                 throw new CompilerException('Cannot use expression type: ' . $expression['type'] . ' in "unset"', $expression);
         }
 
-        $variable = $compilationContext->symbolTable->getVariableForWrite($exprVar->getCode(), $compilationContext, $this->_statement);
         if (!in_array($variable->getType(), array('variable', 'array'))) {
             throw new CompilerException('Cannot use variable type: ' . $variable->gettype() . ' in "unset"', $expression['left']);
         }

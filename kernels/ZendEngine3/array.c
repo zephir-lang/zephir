@@ -202,6 +202,46 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 	return 0;
 }
 
+int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags)
+{
+	HashTable *ht;
+
+	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		return FAILURE;
+	}
+
+	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		SEPARATE_ZVAL_IF_NOT_REF(arr);
+	}
+
+	ht = Z_ARRVAL_P(arr);
+
+	switch (Z_TYPE_P(index)) {
+		case IS_NULL:
+			return (zend_hash_str_del(ht, "", 1) == SUCCESS);
+
+		case IS_DOUBLE:
+			return (zend_hash_index_del(ht, (ulong)Z_DVAL_P(index)) == SUCCESS);
+
+		case IS_TRUE:
+			return (zend_hash_index_del(ht, 1) == SUCCESS);
+
+		case IS_FALSE:
+			return (zend_hash_index_del(ht, 0) == SUCCESS);
+
+		case IS_LONG:
+		case IS_RESOURCE:
+			return (zend_hash_index_del(ht, Z_LVAL_P(index)) == SUCCESS);
+
+		case IS_STRING:
+			return (zend_symtable_del(ht, Z_STR_P(index)) == SUCCESS);
+
+		default:
+			zend_error(E_WARNING, "Illegal offset type");
+			return 0;
+	}
+}
+
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint index_length, int flags)
 {
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
@@ -213,6 +253,19 @@ int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint
 	}
 
 	return zend_hash_str_del(Z_ARRVAL_P(arr), index, index_length);
+}
+
+int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int flags)
+{
+	if (Z_TYPE_P(arr) != IS_ARRAY) {
+		return 0;
+	}
+
+	if ((flags & PH_SEPARATE) == PH_SEPARATE) {
+		SEPARATE_ZVAL_IF_NOT_REF(arr);
+	}
+
+	return zend_hash_index_del(Z_ARRVAL_P(arr), index);
 }
 
 int zephir_array_append(zval *arr, zval *value, int flags ZEPHIR_DEBUG_PARAMS)
@@ -709,4 +762,34 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 	va_end(ap);
 
 	return 0;
+}
+
+/**
+ * Fast array merge
+ */
+void zephir_fast_array_merge(zval *return_value, zval *array1, zval *array2)
+{
+	int init_size, num;
+
+	if (Z_TYPE_P(array1) != IS_ARRAY) {
+		zend_error(E_WARNING, "First argument is not an array");
+		RETURN_NULL();
+	}
+
+	if (Z_TYPE_P(array2) != IS_ARRAY) {
+		zend_error(E_WARNING, "Second argument is not an array");
+		RETURN_NULL();
+	}
+
+	init_size = zend_hash_num_elements(Z_ARRVAL_P(array1));
+	num = zend_hash_num_elements(Z_ARRVAL_P(array2));
+	if (num > init_size) {
+		init_size = num;
+	}
+
+	array_init_size(return_value, init_size);
+
+	php_array_merge(Z_ARRVAL_P(return_value), Z_ARRVAL_P(array1));
+
+	php_array_merge(Z_ARRVAL_P(return_value), Z_ARRVAL_P(array2));
 }

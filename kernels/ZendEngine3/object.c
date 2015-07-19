@@ -98,6 +98,135 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 }
 
 /**
+ * Returns a class name into a zval result
+ */
+void zephir_get_class_ns(zval *result, zval *object, int lower)
+{
+	int found = 0;
+	zend_class_entry *ce;
+	unsigned int i, class_length;
+	char *cursor, *class_name;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		if (Z_TYPE_P(object) != IS_STRING) {
+			ZVAL_NULL(result);
+			php_error_docref(NULL, E_WARNING, "zephir_get_class_ns expects an object");
+			return;
+		}
+	}
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		ce = Z_OBJCE_P(object);
+		class_name = ZSTR_VAL(ce->name);
+		class_length = ZSTR_LEN(ce->name);
+	} else {
+		class_name = Z_STRVAL_P(object);
+		class_length = Z_STRLEN_P(object);
+	}
+
+	if (!class_length) {
+		ZVAL_NULL(result);
+		return;
+	}
+
+	i = class_length;
+	cursor = (char *) (class_name + class_length - 1);
+
+	while (i > 0) {
+		if ((*cursor) == '\\') {
+			found = 1;
+			break;
+		}
+		cursor--;
+		i--;
+	}
+
+	if (found) {
+		int cursor_length = class_length - i;
+		cursor = (char *) emalloc(cursor_length + 1);
+		memcpy(cursor, class_name + i, cursor_length);
+		cursor[cursor_length] = 0;
+		ZVAL_STRING(result, cursor);
+		efree(cursor);
+	} else {
+		ZVAL_STRINGL(result, class_name, class_length);
+	}
+
+	if (lower) {
+		zend_str_tolower(Z_STRVAL_P(result), Z_STRLEN_P(result));
+	}
+
+}
+
+/**
+ * Returns a namespace from a class name
+ */
+void zephir_get_ns_class(zval *result, zval *object, int lower)
+{
+	zend_class_entry *ce;
+	int found = 0;
+	unsigned int i, j, class_length;
+	char *cursor, *class_name;
+
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		if (Z_TYPE_P(object) != IS_STRING) {
+			php_error_docref(NULL, E_WARNING, "zephir_get_ns_class expects an object");
+			ZVAL_NULL(result);
+			return;
+		}
+	}
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		ce = Z_OBJCE_P(object);
+		class_name = ZSTR_VAL(ce->name);
+		class_length = ZSTR_LEN(ce->name);
+	} else {
+		class_name = Z_STRVAL_P(object);
+		class_length = Z_STRLEN_P(object);
+	}
+
+	if (!class_length) {
+		ZVAL_NULL(result);
+		return;
+	}
+
+	j = 0;
+	i = class_length;
+	cursor = (char *) (class_name + class_length - 1);
+
+	while (i > 0) {
+		if ((*cursor) == '\\') {
+			found = 1;
+			break;
+		}
+		cursor--;
+		i--;
+		j++;
+	}
+
+	if (j > 0) {
+
+		if (found) {
+			int cursor_length = class_length - j - 1;
+			cursor = (char *) emalloc(cursor_length + 1);
+			memcpy(cursor, class_name, cursor_length);
+			cursor[cursor_length] = 0;
+			ZVAL_STRING(result, cursor);
+			efree(cursor);
+		} else {
+			ZVAL_EMPTY_STRING(result);
+		}
+
+		if (lower) {
+			zend_str_tolower(Z_STRVAL_P(result), Z_STRLEN_P(result));
+		}
+	} else {
+		ZVAL_NULL(result);
+	}
+
+}
+
+/**
  * Checks if a class exist
  */
 int zephir_class_exists(const zval *class_name, int autoload)
@@ -272,6 +401,7 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 
 	ZVAL_STRINGL(&property, property_name, property_length);
 
+	Z_TRY_ADDREF_P(value);
 	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
 	zval_ptr_dtor(&property);
 
@@ -449,6 +579,60 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 	return SUCCESS;
 }
 
+int zephir_unset_property(zval* object, const char* name)
+{
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+		zval member;
+		zend_class_entry *old_scope;
+
+		ZVAL_STRING(&member, name);
+		old_scope = EG(scope);
+		EG(scope) = Z_OBJCE_P(object);
+
+		Z_OBJ_HT_P(object)->unset_property(object, &member, 0);
+
+		EG(scope) = old_scope;
+
+		return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
+/**
+ * Unsets an index in an array property
+ */
+int zephir_unset_property_array(zval *object, char *property, unsigned int property_length, zval *index)
+{
+	zval tmp;
+	int separated = 0;
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+
+		zephir_read_property(&tmp, object, property, property_length, PH_NOISY_CC);
+		Z_TRY_DELREF(tmp);
+
+		/** Separation only when refcount > 1 */
+		if (Z_REFCOUNTED(tmp) && Z_REFCOUNT(tmp) > 1) {
+			if (!Z_ISREF(tmp)) {
+				zval new_zv;
+				ZVAL_DUP(&new_zv, &tmp);
+				ZVAL_COPY_VALUE(&tmp, &new_zv);
+				Z_TRY_DELREF(new_zv);
+				separated = 1;
+			}
+		}
+
+		zephir_array_unset(&tmp, index, PH_SEPARATE);
+
+		if (separated) {
+			zephir_update_property_zval(object, property, property_length, &tmp);
+		}
+	}
+
+	return SUCCESS;
+}
+
 int zephir_method_exists_ex(const zval *object, const char *method_name, unsigned int method_len)
 {
 	zend_class_entry *ce;
@@ -475,6 +659,10 @@ int zephir_method_exists_ex(const zval *object, const char *method_name, unsigne
 
 int zephir_method_exists(const zval *object, const zval *method_name)
 {
+	if (Z_TYPE_P(method_name) != IS_STRING) {
+		zend_error(E_WARNING, "method_exists expected a string");
+		return 0;
+	}
 	char *lcname = zend_str_tolower_dup(Z_STRVAL_P(method_name), Z_STRLEN_P(method_name));
 	int res = zephir_method_exists_ex(object, lcname, Z_STRLEN_P(method_name));
 	efree(lcname);

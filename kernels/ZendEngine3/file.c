@@ -158,3 +158,33 @@ int zephir_fclose(zval *stream_zval)
 
 	return 1;
 }
+
+void zephir_file_get_contents(zval *return_value, zval *filename)
+{
+	zend_string *contents;
+	php_stream *stream;
+	long maxlen = PHP_STREAM_COPY_ALL;
+	zval *zcontext = NULL;
+	php_stream_context *context = NULL;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_file_get_contents()");
+		RETVAL_FALSE;
+		return;
+	}
+
+	context = php_stream_context_from_zval(zcontext, 0);
+
+	stream = php_stream_open_wrapper_ex(Z_STRVAL_P(filename), "rb", 0 | REPORT_ERRORS, NULL, context);
+	if (!stream) {
+		RETURN_FALSE;
+	}
+
+	if ((contents = php_stream_copy_to_mem(stream, maxlen, 0)) != NULL) {
+		RETVAL_STR(contents);
+	} else {
+		RETVAL_EMPTY_STRING();
+	}
+
+	php_stream_close(stream);
+}

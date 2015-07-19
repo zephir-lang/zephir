@@ -6,19 +6,23 @@ $supportedZep = array(
     'assign.zep', 'cblock.zep', 'declaretest.zep', 'echoes.zep', 'unknownclass.zep', 'returns.zep', 'references.zep', 'exitdie.zep', 'compare.zep',
     'properties', 'testinterface.zep', 'constants.zep', 'constantsparent.zep', 'pdostatement.zep', 'vars.zep', 'emptytest.zep',
     'constantsinterfaceb.zep', 'constantsinterface.zep', 'constantsinterfacea.zep', 'bitwise.zep', 'branchprediction.zep', 'oo.zep', 'closures.zep',
-    'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'evaltest.zep', 'factorial.zep',
-    'flow.zep', 'json.zep', 'methodargs.zep', 'nativearray.zep', 'mcalldynamic.zep',
+    'diinterface.zep', 'extendedinterface.zep', 'arrayobject.zep', 'arithmetic.zep', 'evaltest.zep', 'factorial.zep', 'strings.zep', 'ternary.zep',
+    'flow.zep', 'json.zep', 'methodargs.zep', 'nativearray.zep', 'mcalldynamic.zep', 'pregmatch.zep', 'statements.zep', 'resourcetest.zep',
     'concat.zep', 'requires.zep', 'typeoff.zep', 'mcall.zep', 'mcallchained.zep', 'operator.zep', 'exists.zep', 'cast.zep', 'exception.zep', 'exceptions.zep',
+    'unsettest.zep', 'scall.zep', 'scallparent.zep', 'scallexternal.zep', 'trytest.zep', 'sort.zep', 'regexdna.zep', 'optimizers',
     'fannkuch.zep', 'fibonnaci.zep', 'globals.zep', 'issettest.zep', 'fcall.zep', 'instanceoff.zep', 'internalclasses.zep', 'internalinterfaces.zep',
-    'ooimpl', 'oo', 'builtin'
+    'ooimpl', 'oo', 'builtin', 'router', 'router.zep'
 );
+
+/* not supported: preg-match test since we pass by value only (due to internal changes in ZE) */
 $supportedTest = array(
     'AssignTest.php', 'CblockTest.php', 'ArrayObjectTest.php', 'ArithmeticTest.php', 'VarsTest.php', 'ExitDieTest.php', 'CompareTest.php', 'ExceptionsTest.php',
     'ConstantsTest.php', 'ConstantsInterfaceTest.php', 'BitwiseTest.php', 'BranchPredictionTest.php', 'ConcatTest.php', 'RequiresTest.php', 'EvalTest.php',
     'TypeoffTest.php', 'MCallTest.php', 'McallChainedTest.php', 'OoTest.php', 'OperatorTest.php', 'ExistsTest.php', 'CastTest.php', 'ExtendedInterfaceTest.php',
     'FibonnaciTest.php', 'GlobalsTest.php', 'IssetTest.php', 'FcallTest.php', 'EmptyTest.php', 'DynamicPropTest.php', 'FlowTest.php', 'InstanceOffTest.php',
-    'InternalClassesTest.php', 'JsonTest.php', 'MCallDynamicTest.php', 'MethodArgsTest.php', 'NativeArrayTest.php',
-    'Properties', 'php', 'Oo', 'fixtures', 'BuiltIn'
+    'InternalClassesTest.php', 'JsonTest.php', 'MCallDynamicTest.php', 'MethodArgsTest.php', 'NativeArrayTest.php', 'StatementsTest.php', 'ResourceTest.php',
+    'StringTest.php', 'TernaryTest.php', 'UnsetTest.php', 'ScallTest.php', 'ScallExternalTest.php', 'TryTest.php', 'RouterTest.php', 'Optimizers',
+    'Properties', 'php', 'Oo', 'fixtures', 'BuiltIn', 'Integral'
 );
 
 function joinPath($path1, $path2) {

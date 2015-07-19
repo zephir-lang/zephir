@@ -62,7 +62,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 	} \
 
 #define ZEPHIR_SINIT_VAR(z) \
-	ZVAL_UNDEF(&z);
+	ZVAL_NULL(&z);
 
 #define ZEPHIR_SINIT_NVAR(z) /*Z_SET_REFCOUNT_P(&z, 1)*/
 

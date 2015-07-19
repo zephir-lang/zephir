@@ -458,7 +458,7 @@ void ZEPHIR_FASTCALL zephir_memory_alloc(zval *var)
 {
 	zend_zephir_globals_def *g = ZEPHIR_VGLOBAL;
 	zephir_do_memory_observe(var, g);
-	ZVAL_UNDEF(var);
+	ZVAL_NULL(var);
 }
 
 /**

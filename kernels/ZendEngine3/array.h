@@ -40,6 +40,8 @@ int ZEPHIR_FASTCALL zephir_array_isset_long(const zval *arr, unsigned long index
 int ZEPHIR_FASTCALL zephir_array_isset_string(const zval *arr, const char *index, uint index_length);
 
 /** Unset existing indexes */
+int ZEPHIR_FASTCALL zephir_array_unset(zval *arr, zval *index, int flags);
+int ZEPHIR_FASTCALL zephir_array_unset_long(zval *arr, unsigned long index, int flags);
 int ZEPHIR_FASTCALL zephir_array_unset_string(zval *arr, const char *index, uint index_length, int flags);
 
 /** Fetch items from arrays */
@@ -60,6 +62,9 @@ void zephir_array_keys(zval *return_value, zval *arr);
 /* Update array using multiple keys */
 void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int types_length, int types_count, va_list ap);
 int zephir_array_update_multi(zval *arr, zval *value, const char *types, int types_length, int types_count, ...);
+
+/** Fast Array Merge */
+void zephir_fast_array_merge(zval *return_value, zval *array1, zval *array2);
 
 #define zephir_array_fast_append(arr, value) \
   Z_TRY_ADDREF_P(value); \

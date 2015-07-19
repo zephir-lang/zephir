@@ -110,8 +110,8 @@ class StringsManager extends BaseStringsManager
                 }
             }
 
-            $macros[] = '#define ZEPHIR_CONCAT_' . strtoupper($key) . '(result, ' . join(', ', $sparams) . ') \\' . PHP_EOL . "\t" . ' zephir_concat_' . $key . '(&result, ' . join(', ', $lparams) . ', 0);';
-            $macros[] = '#define ZEPHIR_SCONCAT_' . strtoupper($key) . '(result, ' . join(', ', $sparams) . ') \\' . PHP_EOL . "\t" . ' zephir_concat_' . $key . '(&result, ' . join(', ', $lparams) . ', 1);';
+            $macros[] = '#define ZEPHIR_CONCAT_' . strtoupper($key) . '(result, ' . join(', ', $sparams) . ') \\' . PHP_EOL . "\t" . ' zephir_concat_' . $key . '(result, ' . join(', ', $lparams) . ', 0);';
+            $macros[] = '#define ZEPHIR_SCONCAT_' . strtoupper($key) . '(result, ' . join(', ', $sparams) . ') \\' . PHP_EOL . "\t" . ' zephir_concat_' . $key . '(result, ' . join(', ', $lparams) . ', 1);';
             $macros[] = '';
 
             $proto = 'void zephir_concat_' . $key . '(zval *result, ' . join(', ', $params) . ', int self_var)';

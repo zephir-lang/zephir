@@ -349,6 +349,17 @@ class Backend extends BackendZendEngine2
         return parent::arrayIsset($var, $resolvedExpr, $expression, $context);
     }
 
+    public function arrayIssetFetch(Variable $target, Variable $var, $resolvedExpr, $flags, $expression, CompilationContext $context)
+    {
+        if (!($resolvedExpr instanceof Variable)) {
+            $code = $this->getVariableCode($target) . ', ' . $this->getVariableCode($var);
+            if ($resolvedExpr->getType() == 'string') {
+                return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(' . $code . ', SL("' . $resolvedExpr->getCode() . '"), ' . $flags . ')', $expression);
+            }
+        }
+        return parent::arrayIssetFetch($target, $var, $resolvedExpr, $flags, $expression, $context);
+    }
+
     public function propertyIsset(Variable $var, $key, CompilationContext $context)
     {
         return new CompiledExpression('bool', 'zephir_isset_property(' . $this->getVariableCode($var) . ', SL("' . $key . '"))', null);
@@ -357,7 +368,7 @@ class Backend extends BackendZendEngine2
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
-        if ($exprIndex->getType()) {
+        if ($exprIndex->getType() == 'string') {
             $context->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
             return;
         }
@@ -596,16 +607,6 @@ class Backend extends BackendZendEngine2
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
     {
         $output = 'if (Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF) {';
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
-        }
-        return $output;
-    }
-
-    public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true)
-    {
-        $varCode = $this->getVariableCode($var);
-        $output = "if (unlikely(Z_TYPE_P(" . $varCode . ') != IS_TRUE && Z_TYPE_P(' . $varCode . ') != IS_FALSE)) {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }

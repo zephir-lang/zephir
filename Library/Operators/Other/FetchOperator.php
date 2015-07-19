@@ -112,35 +112,7 @@ class FetchOperator extends BaseOperator
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
 
-                switch ($resolvedExpr->getType()) {
-                    case 'int':
-                    case 'long':
-                    case 'uint':
-                        return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                    case 'string':
-                        return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"), ' . $flags . ' TSRMLS_CC)', $expression);
-
-                    case 'variable':
-                        $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
-                        switch ($indexVariable->getType()) {
-                            case 'int':
-                            case 'long':
-                            case 'uint':
-                                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                            case 'string':
-                            case 'variable':
-                                return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                            default:
-                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
-                }
+                return $compilationContext->backend->arrayIssetFetch($variable, $evalVariable, $resolvedExpr, $flags, $expression, $compilationContext);
                 break;
 
             case 'property-access':

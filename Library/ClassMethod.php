@@ -1272,96 +1272,15 @@ class ClassMethod
 
         $compilationContext->headersManager->add('ext/spl/spl_exceptions');
         $compilationContext->headersManager->add('kernel/exception');
-        $inputParamVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'], $compilationContext);
-        $inputParamCode = $compilationContext->backend->getVariableCode($inputParamVariable);
 
-        if (!in_array($dataType, array('variable', 'object', 'resource', 'callable'))) {
-            $parameterVariable = $compilationContext->symbolTable->getVariableForWrite($parameter['name'] . '_param', $compilationContext);
-            $parameterCode = $compilationContext->backend->getVariableCode($parameterVariable);
-        }
+        $codePrinter = new CodePrinter();
+        $codePrinter->increaseLevel();
+        $oldCodePrinter = $compilationContext->codePrinter;
+        $compilationContext->codePrinter = $codePrinter;
+        $compilationContext->backend->checkStrictType($dataType, $parameter, $compilationContext);
 
-        switch ($dataType) {
-            case 'int':
-            case 'uint':
-            case 'long':
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameterCode . ') != IS_LONG)) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a long/integer") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                $code .= "\t" . $parameter['name'] . ' = Z_LVAL_P(' . $parameterCode . ');' . PHP_EOL;
-                return $code;
-
-            case 'bool':
-                $code = "\t" . $compilationContext->backend->ifVariableIsNotBool($parameterVariable, $compilationContext, false) . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a bool") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                $code .= "\t" . $parameter['name'] . ' = ' . $compilationContext->backend->getBoolCode($parameterVariable, $compilationContext, false) . ';' . PHP_EOL;
-                return $code;
-
-            case 'double':
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameterCode . ') != IS_DOUBLE)) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a double") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                $code .= "\t" . $parameter['name'] . ' = Z_DVAL_P(' . $parameterCode . ');' . PHP_EOL;
-                return $code;
-
-            case 'string':
-            case 'ulong':
-                $compilationContext->headersManager->add('kernel/operators');
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $parameterCode . ') != IS_STRING && Z_TYPE_P(' . $parameterCode . ') != IS_NULL)) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be a string") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                $code .= "\tif (likely(Z_TYPE_P(" . $parameterCode . ') == IS_STRING)) {' . PHP_EOL;
-                $code .= "\t\tzephir_get_strval(" . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
-                $code .= "\t" . '} else {' . PHP_EOL;
-                $code .= "\t\tZEPHIR_INIT_VAR(" . $parameter['name'] . ');' . PHP_EOL;
-                $code .= "\t\tZVAL_EMPTY_STRING(" . $inputParamCode . ');' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                return $code;
-
-            case 'array':
-                /**
-                 * We don't need to check array type
-                 * because It's already checked with ZEND_ARG_ARRAY_INFO
-                 */
-                //TODO: refactor all to use codeprinter, remove useCodePrinter arguments from backend
-                $codePrinter = new CodePrinter();
-                $codePrinter->increaseLevel();
-                $oldCodePrinter = $compilationContext->codePrinter;
-                $compilationContext->codePrinter = $codePrinter;
-                $compilationContext->backend->assignZval($parameterVariable, $inputParamVariable, $compilationContext);
-                $compilationContext->codePrinter = $oldCodePrinter;
-                $code = $codePrinter->getOutput();
-                return $code;
-
-            case 'object':
-            case 'resource':
-                $code  = "\tif (unlikely(Z_TYPE_P(" . $inputParamCode . ') != IS_' . strtoupper($dataType) . ')) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be an ' . $dataType . '") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                return $code;
-
-            case 'callable':
-                $code  = "\tif (unlikely(zephir_is_callable(" . $inputParamCode . ' TSRMLS_CC) != 1)) {' . PHP_EOL;
-                $code .= "\t\t" . 'zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $parameter['name'] . '\' must be callable") TSRMLS_CC);' . PHP_EOL;
-                $code .= "\t\t" . 'RETURN_MM_NULL();' . PHP_EOL;
-                $code .= "\t" . '}' . PHP_EOL;
-                $code .= PHP_EOL;
-                return $code;
-
-            default:
-                throw new CompilerException("Parameter type: " . $dataType, $parameter);
-        }
+        $compilationContext->codePrinter = $oldCodePrinter;
+        return $codePrinter->getOutput();
     }
 
     /**

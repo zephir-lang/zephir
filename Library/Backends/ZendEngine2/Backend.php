@@ -669,6 +669,28 @@ class Backend extends BaseBackend
         throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
     }
 
+    public function arrayIssetFetch(Variable $target, Variable $var, $resolvedExpr, $flags, $expression, CompilationContext $context)
+    {
+        $code = $this->getVariableCodePointer($target) . ', ' . $this->getVariableCode($var);
+
+        if (!($resolvedExpr instanceof Variable)) {
+            if ($resolvedExpr->getType() == 'string') {
+                return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode() . '"), '. $flags . ' TSRMLS_CC)', $expression);
+            } else if (in_array($resolvedExpr->getType(), array('int', 'uint', 'long'))) {
+                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $exprValue . ', ' . $flags . ' TSRMLS_CC)', $expression);
+            } else {
+                $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
+            }
+        }
+
+        if ($resolvedExpr->getType() == 'int' || $resolvedExpr->getType() == 'long') {
+            return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $this->getVariableCode($resolvedExpr) . ', ' . $flags . ' TSRMLS_CC)', $expression);
+        } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
+            return new CompiledExpression('bool', 'zephir_array_isset_fetch(' . $code . ', ' . $this->getVariableCode($resolvedExpr) . ', ' . $flags . ' TSRMLS_CC)', $expression);
+        }
+        throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
+    }
+
     public function propertyIsset(Variable $var, $key, CompilationContext $context)
     {
         return new CompiledExpression('bool', 'zephir_isset_property(' . $this->getVariableCode($var) . ', SS("' . $key . '") TSRMLS_CC)', null);
@@ -690,16 +712,17 @@ class Backend extends BaseBackend
 
             case 'variable':
                 $variableIndex = $context->symbolTable->getVariableForRead($exprIndex->getCode(), $context, $exprIndex->getOriginal());
+                $indexCode = $this->getVariableCode($variableIndex);
                 switch ($variableIndex->getType()) {
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+                        $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $indexCode . ', ' . $flags . ');');
                         break;
 
                     case 'string':
                     case 'variable':
-                        $context->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ');');
+                        $context->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $indexCode . ', ' . $flags . ');');
                         break;
 
                     default:
@@ -1037,13 +1060,104 @@ class Backend extends BaseBackend
         return $output;
     }
 
-    public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    public function checkStrictType($type, $var, CompilationContext $context)
     {
-        $output = "if (unlikely(Z_TYPE_P(" . $this->getVariableCode($var) . ') != IS_BOOL)) {';
-        if ($useCodePrinter) {
-            $context->codePrinter->output($output);
+        $codePrinter = $context->codePrinter;
+        $conditions = array();
+
+        $inputParamVariable = $context->symbolTable->getVariableForWrite($var['name'], $context);
+        $inputParamCode = $this->getVariableCode($inputParamVariable);
+        $cond = 'Z_TYPE_P(' . $inputParamCode . ') != ';
+        if ($context->symbolTable->hasVariable($var['name'] . '_param')) {
+            $parameterVariable = $context->symbolTable->getVariableForWrite($var['name'] . '_param', $context);
+            $parameterCode = $context->backend->getVariableCode($parameterVariable);
+            $cond = 'Z_TYPE_P(' . $parameterCode . ') != ';
         }
-        return $output;
+
+
+        switch ($type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $conditions[] = $cond . ' IS_LONG';
+                break;
+            case 'bool':
+                if ($this->getName() != 'ZendEngine3') {
+                    $conditions[] = $cond . ' IS_BOOL';
+                } else {
+                    $conditions[] = $cond . ' IS_TRUE';
+                    $conditions[] = $cond . ' IS_FALSE';
+                }
+                break;
+            case 'double':
+                $conditions[] = $cond . ' IS_DOUBLE';
+                break;
+            case 'string':
+            case 'ulong':
+                $conditions[] = $cond . ' IS_STRING';
+                $conditions[] = $cond . ' IS_NULL';
+                break;
+            case 'array':
+                break;
+            case 'object':
+            case 'resource':
+                $conditions[] = $cond . ' IS_' . strtoupper($type);
+                break;
+            case 'callable':
+                $conditions[] = 'zephir_is_callable(' . $inputParamCode . ' TSRMLS_CC) != 1';
+                break;
+            default:
+                throw new CompilerException('Unknown type ' . $type);
+        }
+
+        /* Generate verification code */
+        if (count($conditions)) {
+            $codePrinter->output('if (unlikely(' . implode(' && ', $conditions) . ')) {');
+            $codePrinter->increaseLevel();
+            $codePrinter->output('zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter \'' . $var['name'] . '\' must be an ' . $type . '") TSRMLS_CC);');
+            $codePrinter->output('RETURN_MM_NULL();');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+        }
+
+        /* Assign param */
+        switch ($type) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $codePrinter->output($var['name'] . ' = Z_LVAL_P(' . $parameterCode . ');');
+                break;
+            case 'bool':
+                $codePrinter->output($var['name'] . ' = ' . $this->getBoolCode($parameterVariable, $context, false) . ';');
+                break;
+            case 'double':
+                $codePrinter->output($var['name'] . ' = Z_DVAL_P(' . $parameterCode . ');');
+                break;
+            case 'string':
+            case 'ulong':
+                $context->headersManager->add('kernel/operators');
+                $context->symbolTable->mustGrownStack(true);
+                $codePrinter->output('if (likely(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
+                $codePrinter->increaseLevel();
+                $codePrinter->output('zephir_get_strval(' . $var['name'] . ', ' . $var['name'] . '_param);');
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $codePrinter->output('ZEPHIR_INIT_VAR(' . $var['name'] . ');');
+                $codePrinter->output('ZVAL_EMPTY_STRING(' . $inputParamCode . ');');
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
+                break;
+            case 'array':
+                $context->backend->assignZval($parameterVariable, $inputParamVariable, $context);
+                break;
+            case 'object':
+            case 'resource':
+            case 'callable':
+                break;
+            default:
+                throw new CompilerException('Unknown type: ' . $type);
+        }
     }
 
     public function fetchClassEntry($str)

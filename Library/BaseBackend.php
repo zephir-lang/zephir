@@ -93,7 +93,6 @@ abstract class BaseBackend
     abstract public function copyOnWrite(Variable $target, $var, CompilationContext $context);
 
     abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true);
-    abstract public function ifVariableIsNotBool(Variable $var, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function onPreInitVar($method, CompilationContext $context);
     abstract public function onPreCompile($method, CompilationContext $context);

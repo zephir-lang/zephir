@@ -54,11 +54,11 @@ class SubstrOptimizer extends OptimizerAbstract
         /**
          * Process parameters
          */
-        
+
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         $params = array();
         $flags = '0';
-        
+
         for ($param = 1; $param <= 2; ++$param) {
             if (!isset($expression['parameters'][$param])) {
                 $params[] = '0';
@@ -92,7 +92,8 @@ class SubstrOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_substr(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] .', ' . $flags .');');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_substr(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] .', ' . $flags .');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
