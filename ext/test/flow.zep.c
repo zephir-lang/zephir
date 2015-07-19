@@ -1828,7 +1828,7 @@ PHP_METHOD(Test_Flow, testFor40) {
 			ZEPHIR_INIT_NVAR(a);
 			ZVAL_LONG(a, _1);
 			ZEPHIR_INIT_NVAR(_3);
-			ZVAL_LONG(_3, zephir_sqrt(a TSRMLS_CC));
+			ZVAL_DOUBLE(_3, zephir_sqrt(a TSRMLS_CC));
 			ZEPHIR_ADD_ASSIGN(b, _3);
 		}
 	}

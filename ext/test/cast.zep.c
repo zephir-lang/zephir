@@ -523,7 +523,7 @@ PHP_METHOD(Test_Cast, testObjectCastFromFloat) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, 5.0);
+	ZVAL_DOUBLE(_0, 5.0);
 	zephir_convert_to_object(_0);
 	RETURN_CCTOR(_0);
 

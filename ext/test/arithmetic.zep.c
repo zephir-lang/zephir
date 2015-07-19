@@ -355,7 +355,7 @@ PHP_METHOD(Test_Arithmetic, complex4Sum) {
 
 
 	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, (1.0 + 1));
+	ZVAL_DOUBLE(&c, (1.0 + 1));
 	RETURN_LCTORW(c);
 
 }
@@ -894,7 +894,7 @@ PHP_METHOD(Test_Arithmetic, addSum22) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(a);
-	ZVAL_LONG(a, 0.0);
+	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_NVAR(a);
 	_0 = zephir_get_numberval(a);
@@ -1230,7 +1230,7 @@ PHP_METHOD(Test_Arithmetic, complex4Sub) {
 
 
 	ZEPHIR_SINIT_VAR(c);
-	ZVAL_LONG(&c, (1.0 - 1));
+	ZVAL_DOUBLE(&c, (1.0 - 1));
 	RETURN_LCTORW(c);
 
 }
@@ -1769,7 +1769,7 @@ PHP_METHOD(Test_Arithmetic, sub22) {
 	ZEPHIR_MM_GROW();
 
 	ZEPHIR_INIT_VAR(a);
-	ZVAL_LONG(a, 0.0);
+	ZVAL_DOUBLE(a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_NVAR(a);
 	_0 = zephir_get_numberval(a);

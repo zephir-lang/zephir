@@ -194,7 +194,7 @@ class ArithmeticTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->class->complexSub() === 1.0);
         $this->assertTrue($this->class->complex2Sub() === true);
         $this->assertTrue($this->class->complex3Sub() === true);
-        $this->assertTrue($this->class->complex4Sub() === 0.0);
+        $this->assertSame(0.0, $this->class->complex4Sub());
         $this->assertTrue($this->class->complex5Sub() === 0);
         $this->assertTrue($this->class->complex6Sub() === true);
         $this->assertTrue($this->class->complex7Sub() === -1);
