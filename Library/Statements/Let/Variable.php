@@ -58,7 +58,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
@@ -92,7 +92,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
@@ -116,7 +116,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
@@ -139,7 +139,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
@@ -158,7 +158,7 @@ class Variable
                         break;
 
                     default:
-                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: int", $statement);
+                        throw new CompilerException("Operator '" . $statement['operator'] . "' is not supported for variable type: " . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
@@ -728,6 +728,7 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
+            case 'double':
                 if ($symbolVariable->isLocalOnly()) {
                     $symbol = '&' . $variable;
                 } else {
