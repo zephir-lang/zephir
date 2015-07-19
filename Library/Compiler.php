@@ -1614,7 +1614,6 @@ class Compiler
             foreach ($info as $table) {
                 $phpinfo .= "\t" . 'php_info_print_table_start();' . PHP_EOL;
                 if (isset($table['header'])) {
-
                     $headerArray = array();
                     foreach ($table['header'] as $header) {
                         $headerArray[] = '"' . htmlentities($header) . '"';
@@ -1625,7 +1624,6 @@ class Compiler
                 }
                 if (isset($table['rows'])) {
                     foreach ($table['rows'] as $row) {
-
                         $rowArray = array();
                         foreach ($row as $field) {
                             $rowArray[] = '"' . htmlentities($field) . '"';
