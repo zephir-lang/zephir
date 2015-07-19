@@ -49,32 +49,52 @@ abstract class MathOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $resolvedParameter = $expression['parameters'][0]['parameter'];
-        if ($resolvedParameter instanceof \Zephir\CompiledExpression) {
-            /**
-             * @var $resolvedParameter \Zephir\CompiledExpression
-             */
-//            var_dump($resolvedParameter->getType());
-//            var_dump($resolvedParameter->getCode());
-        } else {
-            $expr = new Expression($expression['parameters'][0]['parameter']);
-            $expr->setEvalMode(true);
-            $expr->setReadOnly(true);
+        $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
+        $compiledExpression = $resolvedParams[0];
 
-            $compiledExpression = $expr->compile($context);
-
-            switch ($compiledExpression->getType()) {
-                case 'int':
-                case 'float':
-                case 'long':
-                case 'ulong':
-                case 'double':
-                    return new CompiledExpression('double', $this->getFunctionName() . '(' . $compiledExpression->getCode() . ')',
-                        $expression);
-                    break;
-            }
+        switch ($compiledExpression->getType()) {
+            case 'int':
+            case 'float':
+            case 'long':
+            case 'ulong':
+            case 'double':
+            return $this->passNativeFCall($compiledExpression, $expression);
+                break;
+            case 'variable':
+                $variable = $context->symbolTable->getVariable($compiledExpression->getCode());
+                switch ($variable->getType()) {
+                    case 'int':
+                    case 'float':
+                    case 'long':
+                    case 'ulong':
+                    case 'double':
+                        return $this->passNativeFCall($compiledExpression, $expression);
+                        break;
+                    case 'variable':
+                        return new CompiledExpression(
+                            'double',
+                            'zephir_' . $this->getFunctionName() . '(' . $compiledExpression->getCode() . ' TSRMLS_CC)',
+                            $expression
+                        );
+                        break;
+                }
+                break;
         }
 
         return false;
+    }
+
+    /**
+     * @param CompiledExpression $compiledExpression
+     * @param array $expression
+     * @return CompiledExpression
+     */
+    protected function passNativeFCall($compiledExpression, $expression)
+    {
+        return new CompiledExpression(
+            'double',
+            $this->getFunctionName() . '(' . $compiledExpression->getCode() . ')',
+            $expression
+        );
     }
 }

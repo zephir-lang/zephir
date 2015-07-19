@@ -79,11 +79,11 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZEPHIR_SINIT_NVAR(_6);
 	ZVAL_DOUBLE(&_6, zephir_safe_div_zval_long(n, 60 TSRMLS_CC));
 	ZEPHIR_INIT_VAR(l);
-	ZVAL_DOUBLE(l, zephir_floor(&_6 TSRMLS_CC));
+	ZVAL_LONG(l, zephir_floor(&_6 TSRMLS_CC));
 	ZEPHIR_SINIT_NVAR(_7);
 	ZVAL_DOUBLE(&_7, zephir_safe_div_zval_long(l, i TSRMLS_CC));
 	ZEPHIR_INIT_VAR(k);
-	ZVAL_DOUBLE(k, zephir_floor(&_7 TSRMLS_CC));
+	ZVAL_LONG(k, zephir_floor(&_7 TSRMLS_CC));
 	ZEPHIR_INIT_VAR(block);
 	zephir_fast_join_str(block, SL("\n"), lines TSRMLS_CC);
 	while (1) {
@@ -97,7 +97,7 @@ PHP_METHOD(Test_Fasta, fastaRepeat) {
 	ZEPHIR_INIT_NVAR(j);
 	ZVAL_LONG(j, 0);
 	ZEPHIR_INIT_NVAR(k);
-	ZVAL_DOUBLE(k, zephir_safe_mod_zval_long(l, i TSRMLS_CC));
+	ZVAL_LONG(k, zephir_safe_mod_zval_long(l, i TSRMLS_CC));
 	while (1) {
 		if (!(ZEPHIR_LT(j, k))) {
 			break;

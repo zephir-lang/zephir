@@ -48,6 +48,50 @@ double zephir_floor(zval *op1 TSRMLS_DC)
 	return floor(zephir_get_numberval(op1));
 }
 
+double zephir_sin(zval *op1 TSRMLS_DC)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return sin(zephir_get_numberval(op1));
+}
+
+double zephir_cos(zval *op1 TSRMLS_DC)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return sin(zephir_get_numberval(op1));
+}
+
+double zephir_sqrt(zval *op1 TSRMLS_DC)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return sin(zephir_get_numberval(op1));
+}
 
 double zephir_ceil(zval *op1 TSRMLS_DC)
 {
@@ -143,6 +187,8 @@ void zephir_pow_function_ex(zval *return_value, zval *zbase, zval *zexp TSRMLS_D
 	RETURN_DOUBLE(pow(Z_DVAL_P(zbase), Z_DVAL_P(zexp)));
 }
 #endif
+
+
 
 long zephir_mt_rand(long min, long max TSRMLS_DC) {
 
