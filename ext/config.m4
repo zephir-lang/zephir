@@ -57,6 +57,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/flow.zep.c
 	test/fortytwo.zep.c
 	test/functional.zep.c
+	test/geometry.zep.c
 	test/globals.zep.c
 	test/instanceoff.zep.c
 	test/internalclasses.zep.c
@@ -105,9 +106,15 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/propertyaccess.zep.c
 	test/ooimpl/abeginning.zep.c
 	test/operator.zep.c
+	test/optimizers/acos.zep.c
 	test/optimizers/arraymerge.zep.c
+	test/optimizers/asin.zep.c
+	test/optimizers/cos.zep.c
 	test/optimizers/createarray.zep.c
+	test/optimizers/sin.zep.c
+	test/optimizers/sqrt.zep.c
 	test/optimizers/substr.zep.c
+	test/optimizers/tan.zep.c
 	test/pdostatement.zep.c
 	test/pregmatch.zep.c
 	test/properties/extendspublicproperties.zep.c
