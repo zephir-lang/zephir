@@ -1936,7 +1936,14 @@ class ClassMethod
                 }
             } else {
                 foreach ($params as $param) {
-                    $code .= "\t" . $param . ' = ' . $param . '_ext;' . PHP_EOL;
+                    /* TODO: Migrate all this code to codeprinter, get rid of temp code printer */
+                    $tempCodePrinter = new CodePrinter();
+                    $realCodePrinter = $compilationContext->codePrinter;
+                    $compilationContext->codePrinter = $tempCodePrinter;
+                    $paramVar = $compilationContext->symbolTable->getVariableForRead($param, $compilationContext);
+                    $compilationContext->backend->assignZval($paramVar, $param . '_ext', $compilationContext);
+                    $code .= "\t" . $tempCodePrinter->getOutput() . PHP_EOL;
+                    $compilationContext->codePrinter = $realCodePrinter;
                 }
             }
             $code .= PHP_EOL;

@@ -363,6 +363,27 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 	return SUCCESS;
 }
 
+/**
+ * Fetches a property using a zval property
+ */
+int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
+{
+	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+		zval_ptr_dtor(result);
+		ZVAL_NULL(result);
+		return 0;
+	}
+
+	if (zephir_isset_property(object, Z_STRVAL_P(property), Z_STRLEN_P(property))) {
+		zephir_read_property(result, object, Z_STRVAL_P(property), Z_STRLEN_P(property), 0);
+		return 1;
+	}
+
+	zval_ptr_dtor(result);
+	ZVAL_NULL(result);
+	return 0;
+}
+
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)
 {
 	zval_ptr_dtor(return_value);

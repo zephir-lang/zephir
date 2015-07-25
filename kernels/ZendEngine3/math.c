@@ -34,6 +34,20 @@
 
 #include "Zend/zend_operators.h"
 
+double zephir_floor(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+	return floor(zephir_get_numberval(op1));
+}
+
 long zephir_mt_rand(long min, long max)
 {
 	long number;

@@ -173,7 +173,11 @@ class FetchOperator extends BaseOperator
 
                 $compilationContext->headersManager->add('kernel/object');
 
-                return new CompiledExpression('bool', 'zephir_fetch_property_zval(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $evalVariableProperty->getName() . ', PH_SILENT_CC)', $expression);
+                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
+                $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
+
+                return new CompiledExpression('bool', 'zephir_fetch_property_zval(' . $symbol . ', ' . $evalSymbol . ', ' . $evalPropertySymbol . ', PH_SILENT_CC)', $expression);
 
             default:
                 throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);

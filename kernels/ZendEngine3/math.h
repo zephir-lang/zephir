@@ -23,6 +23,7 @@
 #include <php.h>
 #include <Zend/zend.h>
 
+double zephir_floor(zval *op1);
 long zephir_mt_rand(long min, long max);
 
 #endif

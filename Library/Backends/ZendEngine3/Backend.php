@@ -229,10 +229,10 @@ class Backend extends BackendZendEngine2
         }
 
         if (count($signatureParameters)) {
-            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
+            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ')';
         }
 
-        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
+        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used)';
     }
 
     /* Assign value to variable */
