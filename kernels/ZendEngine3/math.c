@@ -34,6 +34,96 @@
 
 #include "Zend/zend_operators.h"
 
+double zephir_sqrt(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return sqrt(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return sqrt(zephir_get_numberval(op1));
+}
+
+double zephir_sin(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return sin(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return sin(zephir_get_numberval(op1));
+}
+
+double zephir_asin(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return asin(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return asin(zephir_get_numberval(op1));
+}
+
+double zephir_cos(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return cos(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return cos(zephir_get_numberval(op1));
+}
+
+double zephir_acos(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return acos(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return acos(zephir_get_numberval(op1));
+}
+
+double zephir_tan(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return tan(Z_LVAL_P(op1));
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+
+	return tan(zephir_get_numberval(op1));
+}
+
 double zephir_floor(zval *op1)
 {
 	switch (Z_TYPE_P(op1)) {

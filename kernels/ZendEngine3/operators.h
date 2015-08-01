@@ -158,12 +158,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		add_function(&tmp, &z, &v);  \
+		add_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL(z) = Z_LVAL(tmp);  \
+			Z_LVAL_P(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL(z) = Z_DVAL(tmp);  \
+				Z_DVAL_P(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}
@@ -172,12 +172,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		sub_function(&tmp, &z, &v);  \
+		sub_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL(z) = Z_LVAL(tmp);  \
+			Z_LVAL_P(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL(z) = Z_DVAL(tmp);  \
+				Z_DVAL_P(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}
@@ -186,12 +186,12 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{  \
 		zval tmp;  \
 		ZEPHIR_SEPARATE(z);  \
-		mul_function(&tmp, &z, &v);  \
+		mul_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
-			Z_LVAL(z) = Z_LVAL(tmp);  \
+			Z_LVAL_P(z) = Z_LVAL(tmp);  \
 		} else {  \
 			if (Z_TYPE(tmp) == IS_DOUBLE) {  \
-				Z_DVAL(z) = Z_DVAL(tmp);  \
+				Z_DVAL_P(z) = Z_DVAL(tmp);  \
 			}  \
 		}  \
 	}

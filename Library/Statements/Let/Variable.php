@@ -728,11 +728,7 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
-                if ($symbolVariable->isLocalOnly()) {
-                    $symbol = '&' . $variable;
-                } else {
-                    $symbol = $variable;
-                }
+                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
                 switch ($statement['operator']) {
                     case 'mul-assign':
@@ -758,7 +754,7 @@ class Variable
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output($functionName . '(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                        $codePrinter->output($functionName . '(' . $symbol . ', ' . $compilationContext->backend->getVariableCode($tempVariable) . ');');
                         break;
 
                     case 'assign':
@@ -839,7 +835,7 @@ class Variable
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $tempVariable->getName() . ');');
+                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($tempVariable) . ');');
                         break;
 
                     case 'assign':
@@ -1038,13 +1034,13 @@ class Variable
                             case 'add-assign':
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                $codePrinter->output('ZEPHIR_ADD_ASSIGN(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
                                 break;
 
                             case 'sub-assign':
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                $codePrinter->output('ZEPHIR_SUB_ASSIGN(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
                                 break;
 
                             default:

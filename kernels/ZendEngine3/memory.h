@@ -134,7 +134,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		} \
 	} while (0)
 
-#define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(&z)
+#define ZEPHIR_SEPARATE(z) SEPARATE_ZVAL(z)
 
 #define ZEPHIR_SEPARATE_PARAM(z) \
 	do { \

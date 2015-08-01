@@ -83,7 +83,7 @@ abstract class MathOptimizer extends OptimizerAbstract
                         $context->headersManager->add('kernel/math');
                         return new CompiledExpression(
                             'double',
-                            'zephir_' . $this->getFunctionName() . '(' . $compiledExpression->getCode() . ' TSRMLS_CC)',
+                            'zephir_' . $this->getFunctionName() . '(' . $context->backend->getVariableCode($variable) . ' TSRMLS_CC)',
                             $expression
                         );
                         break;
