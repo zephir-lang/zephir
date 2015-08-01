@@ -31,11 +31,15 @@
 int zephir_class_exists(const zval *class_name, int autoload);
 int zephir_interface_exists(const zval *interface_name, int autoload);
 void zephir_get_called_class(zval *return_value);
+zend_class_entry *zephir_fetch_class(const zval *class_name);
 zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int fetch_type);
+void zephir_get_class(zval *result, zval *object, int lower);
 void zephir_get_class_ns(zval *result, zval *object, int lower TSRMLS_DC);
 void zephir_get_ns_class(zval *result, zval *object, int lower TSRMLS_DC);
 
 /** Cloning/Instance of */
+int zephir_clone(zval *destination, zval *obj);
+int zephir_is_instance_of(zval *object, const char *class_name, unsigned int class_length);
 int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce);
 int zephir_zval_is_traversable(zval *object);
 
@@ -48,7 +52,9 @@ int zephir_isset_property_zval(zval *object, const zval *property);
 
 /** Reading properties */
 int zephir_read_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
+int zephir_read_property_zval(zval *result, zval *object, zval *property, int silent);
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length);
+int zephir_fetch_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent);
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent);
 
 /** Updating properties */
@@ -72,6 +78,9 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 
 /** Create closures */
 int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entry *ce, const char *method_name, zend_uint method_length);
+
+/** Create instances */
+int zephir_create_instance(zval *return_value, const zval *class_name);
 
 /** Increment/Decrement properties */
 #define zephir_property_incr(object, property) zephir_property_incr_decr(object, property, 1)

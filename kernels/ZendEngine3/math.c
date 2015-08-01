@@ -48,6 +48,57 @@ double zephir_floor(zval *op1)
 	return floor(zephir_get_numberval(op1));
 }
 
+double zephir_ceil(zval *op1)
+{
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			return (double) Z_LVAL_P(op1);
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+	return ceil(zephir_get_numberval(op1));
+}
+
+extern double _php_math_round(double value, int places, int mode);
+
+void zephir_round(zval *return_value, zval *op1, zval *op2, zval *op3)
+{
+	int places = 0;
+	long mode = PHP_ROUND_HALF_UP;
+	double return_val;
+
+	convert_scalar_to_number_ex(op1);
+
+	if (op2) {
+		places = zephir_get_intval_ex(op2);
+	}
+	if (op3) {
+		mode = zephir_get_intval_ex(op3);
+	}
+
+	switch (Z_TYPE_P(op1)) {
+		case IS_LONG:
+			/* Simple case - long that doesn't need to be rounded. */
+			if (places >= 0) {
+				RETURN_DOUBLE((double) Z_LVAL_P(op1));
+			}
+			/* break omitted intentionally */
+
+		case IS_DOUBLE:
+			return_val = (Z_TYPE_P(op1) == IS_LONG) ? (double)Z_LVAL_P(op1) : Z_DVAL_P(op1);
+			return_val = _php_math_round(return_val, places, mode);
+			RETURN_DOUBLE(return_val);
+			break;
+
+		default:
+			RETURN_FALSE;
+			break;
+	}
+}
+
 long zephir_mt_rand(long min, long max)
 {
 	long number;

@@ -203,7 +203,8 @@ class EvalExpression
                         return $variableRight->getName();
 
                     case 'string':
-                        return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
+                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+                        return $compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false) . ' && Z_STRLEN_P(' . $variableRightCode . ')';
 
                     case 'bool':
                         return $variableRight->getName();

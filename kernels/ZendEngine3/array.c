@@ -43,19 +43,14 @@ void ZEPHIR_FASTCALL zephir_create_array(zval *return_value, uint size, int init
 	HashTable *hashTable;
 	ZVAL_NULL(&null_value);
 
+	array_init_size(return_value, size);
+	hashTable = Z_ARRVAL_P(return_value);
 	if (size > 0) {
-
-		ALLOC_HASHTABLE(hashTable);
-		zephir_hash_init(hashTable, size, NULL, ZVAL_PTR_DTOR, 0);
-
 		if (initialize) {
 			for (i = 0; i < size; i++) {
 				zend_hash_next_index_insert(hashTable, &null_value);
 			}
 		}
-		ZVAL_ARR(return_value, hashTable);
-	} else {
-		array_init(return_value);
 	}
 }
 
@@ -64,7 +59,6 @@ int zephir_array_isset_fetch(zval *fetched, const zval *arr, zval *index, int re
 	HashTable *h;
 	zval *result;
 
-	zval_ptr_dtor(fetched);
 	ZVAL_NULL(fetched);
 
 	if (Z_TYPE_P(arr) != IS_ARRAY) {
@@ -115,7 +109,6 @@ int zephir_array_isset_string_fetch(zval *fetched, zval *arr, char *index, uint 
 {
 	zval *zv;
 
-	zval_ptr_dtor(fetched);
 	ZVAL_NULL(fetched);
 
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
@@ -135,7 +128,6 @@ int zephir_array_isset_long_fetch(zval *fetched, zval *arr, unsigned long index,
 {
 	zval *zv;
 
-	zval_ptr_dtor(fetched);
 	ZVAL_NULL(fetched);
 
 	if (likely(Z_TYPE_P(arr) == IS_ARRAY)) {
@@ -351,7 +343,6 @@ int zephir_array_fetch(zval *return_value, zval *arr, zval *index, int flags ZEP
 		}
 	}
 
-	zval_ptr_dtor(return_value);
 	ZVAL_NULL(return_value);
 	return FAILURE;
 }
@@ -383,7 +374,7 @@ int zephir_array_fetch_string(zval *return_value, zval *arr, const char *index, 
 		zend_error(E_ERROR, "No return value passed to zephir_array_fetch_string");
 		return FAILURE;
 	}
-	zval_ptr_dtor(return_value);
+
 	ZVAL_NULL(return_value);
 	return FAILURE;
 }
@@ -415,7 +406,7 @@ int zephir_array_fetch_long(zval *return_value, zval *arr, unsigned long index, 
 		zend_error(E_ERROR, "No return value passed to zephir_array_fetch_string");
 		return FAILURE;
 	}
-	zval_ptr_dtor(return_value);
+
 	ZVAL_NULL(return_value);
 	return FAILURE;
 }
@@ -557,6 +548,29 @@ void zephir_array_keys(zval *return_value, zval *input)
 	}
 }
 
+int zephir_array_key_exists(zval *arr, zval *key)
+{
+	HashTable *h = Z_ARRVAL_P(arr);
+	if (h) {
+		switch (Z_TYPE_P(key)) {
+			case IS_STRING:
+				return zend_symtable_exists(h, Z_STR_P(key));
+
+			case IS_LONG:
+				return zend_hash_index_exists(h, Z_LVAL_P(key));
+
+			case IS_NULL:
+				return zend_hash_str_exists(h, "", 1);
+
+			default:
+				zend_error(E_WARNING, "The key should be either a string or an integer");
+				return 0;
+		}
+	}
+
+	return 0;
+}
+
 /**
  * Implementation of Multiple array-offset update
  */
@@ -597,7 +611,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 				l = va_arg(ap, int);
 				old_s[i] = s;
 				old_l[i] = l;
-				if (zephir_array_isset_string_fetch(&fetched, &pzv, s, l, 0)) {
+				if (zephir_array_isset_string_fetch(&fetched, &pzv, s, l, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
 						if (i == (types_length - 1)) {
 							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -605,12 +619,12 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
+							Z_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
-				} else {
-					Z_TRY_DELREF(fetched);
 				}
+
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
 					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -633,7 +647,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 			case 'l':
 				ll = va_arg(ap, long);
 				old_ll[i] = ll;
-				if (zephir_array_isset_long_fetch(&fetched, &pzv, ll, 0)) {
+				if (zephir_array_isset_long_fetch(&fetched, &pzv, ll, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
 						if (i == (types_length - 1)) {
 							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -641,12 +655,12 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
+							Z_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
-				} else {
-					Z_TRY_DELREF(fetched);
 				}
+
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
 					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -669,7 +683,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 			case 'z':
 				item = va_arg(ap, zval*);
 				old_item[i] = item;
-				if (zephir_array_isset_fetch(&fetched, &pzv, item, 0)) {
+				if (zephir_array_isset_fetch(&fetched, &pzv, item, 1)) {
 					if (Z_TYPE(fetched) == IS_ARRAY) {
 						if (i == (types_length - 1)) {
 							re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -677,12 +691,12 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 							p = Z_ARRVAL(pzv);
 						} else {
 							p = Z_ARRVAL(fetched);
+							Z_ADDREF(fetched);
 						}
 						must_continue = 1;
 					}
-				} else {
-					Z_TRY_DELREF(fetched);
 				}
+
 				if (!must_continue) {
 					ZVAL_ARR(&pzv, p);
 					re_update = !Z_REFCOUNTED(pzv) || (Z_REFCOUNT(pzv) > 1 && !Z_ISREF(pzv));
@@ -760,6 +774,36 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 
 	zephir_array_update_multi_ex(arr, value, types, types_length, types_count, ap);
 	va_end(ap);
+
+	return 0;
+}
+
+/**
+ * Fast in_array function
+ */
+int zephir_fast_in_array(zval *value, zval *haystack)
+{
+	zval *entry;
+	zend_ulong num_idx;
+	zend_string *str_idx;
+
+	if (Z_TYPE_P(haystack) != IS_ARRAY) {
+		return 0;
+	}
+
+	if (Z_TYPE_P(value) == IS_STRING) {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(haystack), num_idx, str_idx, entry) {
+			if (fast_equal_check_string(value, entry)) {
+				return 1;
+			}
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(haystack), num_idx, str_idx, entry) {
+			if (fast_equal_check_function(value, entry)) {
+				return 1;
+			}
+		} ZEND_HASH_FOREACH_END();
+	}
 
 	return 0;
 }

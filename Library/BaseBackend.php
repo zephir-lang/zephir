@@ -41,6 +41,8 @@ abstract class BaseBackend
     abstract public function getVariableCode(Variable $variable);
     abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
+    abstract public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true);
+
     abstract public function declareConstant($type, $name, $value, CompilationContext $context);
 
     /* Assign values to variables */
@@ -92,7 +94,7 @@ abstract class BaseBackend
 
     abstract public function copyOnWrite(Variable $target, $var, CompilationContext $context);
 
-    abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true);
+    abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $onlyBody = false, $useCodePrinter = true);
 
     abstract public function onPreInitVar($method, CompilationContext $context);
     abstract public function onPreCompile($method, CompilationContext $context);

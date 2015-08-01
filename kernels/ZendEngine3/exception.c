@@ -146,7 +146,6 @@ void zephir_throw_exception_format(zend_class_entry *ce, const char *format, ...
 	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 		zend_throw_exception_object(&object);
 	}
-	zend_error(E_ERROR, "Not implemented yet TODO");
 
 	zval_ptr_dtor(&msg);
 }

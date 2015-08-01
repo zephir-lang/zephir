@@ -254,16 +254,9 @@ class NativeArray
                                 break;
 
                             case 'array':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }

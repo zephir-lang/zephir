@@ -252,6 +252,29 @@ int zephir_fast_count_int(zval *value)
 }
 
 /**
+ * Check if a function exists using explicit char param (using precomputed hash key)
+ */
+int zephir_function_quick_exists_ex(const char *method_name, unsigned int method_len)
+{
+	if (zend_hash_str_exists(CG(function_table), method_name, method_len)) {
+		return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
+/**
+ * Check if a function exists using explicit char param
+ *
+ * @param function_name
+ * @param function_len strlen(function_name)+1
+ */
+int zephir_function_exists_ex(const char *function_name, unsigned int function_len)
+{
+	return zephir_function_quick_exists_ex(function_name, function_len);
+}
+
+/**
  * Checks if a zval is callable
  */
 int zephir_is_callable(zval *var)

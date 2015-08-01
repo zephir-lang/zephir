@@ -835,11 +835,11 @@ class Variable
 
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                         $tempVariable->setDynamicTypes('double');
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVariable->getName(). ', ' . $resolvedExpr->getCode() . ');');
+                        $compilationContext->backend->assignDouble($tempVariable, $resolvedExpr->getCode(), $compilationContext);
 
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/operators');
-                        $codePrinter->output($functionName . '(' . $symbol . ', ' . $tempVariable->getName() . ');');
+                        $codePrinter->output($functionName . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $tempVariable->getName() . ');');
                         break;
 
                     case 'assign':

@@ -163,6 +163,10 @@ class FunctionCall extends Call
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
+                            /* TODO Fix this better */
+                            if ($compilationContext->backend->getName() == 'ZendEngine3' && $parameters[$n - 1][0] == '&') {
+                                $parameters[$n - 1] = substr($parameters[$n - 1], 1);
+                            }
                             if (!preg_match('/^[a-zA-Z0-9\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
                                 continue;
@@ -171,7 +175,7 @@ class FunctionCall extends Call
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
-                                $compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
+                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $parameters[$n - 1] . ');');
                                 $references[] = $parameters[$n - 1] ;
                                 return false;
                             }
@@ -427,7 +431,7 @@ class FunctionCall extends Call
 
         if (is_array($references)) {
             foreach ($references as $reference) {
-                $compilationContext->codePrinter->output('Z_UNSET_ISREF_P(' . $reference . ');');
+                $compilationContext->codePrinter->output('ZEPHIR_UNREF(' . $reference . ');');
             }
         }
 

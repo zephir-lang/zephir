@@ -485,6 +485,9 @@ static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
 		object_properties_init(object, class_type); \
 	}
 
+#define ZEPHIR_MAKE_REF(obj) Z_SET_ISREF_P(obj);
+#define ZEPHIR_UNREF(obj) Z_UNSET_ISREF_P(obj);
+
 #define ZEPHIR_REGISTER_INTERFACE(ns, classname, lower_ns, name, methods) \
 	{ \
 		zend_class_entry ce; \

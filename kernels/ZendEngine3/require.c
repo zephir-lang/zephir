@@ -45,8 +45,10 @@ int zephir_require_ret(zval *return_value_ptr, const char *require_path)
 	zend_op_array *new_op_array;
 	zval dummy, local_retval;
 
+	ZVAL_UNDEF(&local_retval);
+
 #ifndef ZEPHIR_RELEASE
-	if (Z_TYPE_P(return_value_ptr) > IS_NULL) {
+	if (return_value_ptr != NULL && Z_TYPE_P(return_value_ptr) > IS_NULL) {
 		fprintf(stderr, "%s: *return_value_ptr is expected to be NULL", __func__);
 		zephir_print_backtrace();
 		abort();

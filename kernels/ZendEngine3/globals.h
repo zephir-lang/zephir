@@ -58,7 +58,7 @@ typedef struct _zephir_function_cache {
 
 typedef struct _zephir_fcall_cache_entry {
 	zend_function *f;
-	zend_uint times;
+	uint times;
 } zephir_fcall_cache_entry;
 
 #else

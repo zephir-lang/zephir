@@ -206,6 +206,7 @@ int zephir_fast_count_ev(zval *array);
 int zephir_fast_count_int(zval *value);
 
 int zephir_is_callable(zval *var);
+int zephir_function_exists_ex(const char *func_name, unsigned int func_len);
 zend_class_entry* zephir_get_internal_ce(const char *class_name, unsigned int class_name_len);
 
 /* types */
@@ -260,6 +261,9 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 		ZVAL_OBJ(obj, object); \
 		object_properties_init(object, class_type); \
 	}
+
+#define ZEPHIR_MAKE_REF(obj) ZVAL_NEW_REF(&obj, &obj);
+#define ZEPHIR_UNREF(obj) ZVAL_UNREF(&obj);
 
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) do { \
 	zval *_constant_ptr = zend_get_constant_str(SL(const_name)); \

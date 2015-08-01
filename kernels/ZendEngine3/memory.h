@@ -61,37 +61,27 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 		zephir_memory_alloc(&z); \
 	} \
 
-#define ZEPHIR_SINIT_VAR(z) \
-	ZVAL_NULL(&z);
+#define ZEPHIR_SINIT_VAR(z) ZVAL_NULL(&z);
 
 #define ZEPHIR_SINIT_NVAR(z) /*Z_SET_REFCOUNT_P(&z, 1)*/
 
 #define ZEPHIR_INIT_ZVAL_NREF(z) \
 	ZVAL_UNDEF(&z); \
 
-#define ZEPHIR_INIT_NVAR(z)\
-	if (Z_REFCOUNTED(z) && !Z_ISREF(z)) { \
+#define ZEPHIR_INIT_NVAR(z) \
+	if (Z_TYPE(z) == IS_UNDEF) { \
+		zephir_memory_observe(&z); \
+	} else if (Z_REFCOUNTED(z) && !Z_ISREF(z)) { \
 		if (Z_REFCOUNT(z) > 1) { \
 			Z_DELREF(z); \
 		} else { \
 			zephir_dtor(&z); \
 		} \
-		ZVAL_NULL(&z); \
 	} \
+	ZVAL_NULL(&z); \
 
 /* only removes the value body of the zval */
-#define ZEPHIR_INIT_LNVAR(z) \
-	if (Z_TYPE(z) == IS_UNDEF) { \
-		ZEPHIR_INIT_VAR(z); \
-	} \
-	else if (Z_REFCOUNTED(z) && Z_REFCOUNT(z) > 1) { \
-		Z_DELREF(z); \
-	} else { \
-		if (!Z_ISREF(z)) { \
-			zval_dtor(&z); \
-		} \
-	} \
-	ZVAL_NULL(&z);
+#define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(z)
 
 #define ZEPHIR_CPY_WRT(d, v) \
 	if (Z_TYPE_P(d) > IS_UNDEF) { \
@@ -99,7 +89,7 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack(TSRMLS_D);
 			zephir_ptr_dtor(d); \
 		} \
 	} else { \
-		/*TODO: check if observed? prevent multiple observes when initVar before, zephir_memory_observe(d); */ \
+		zephir_memory_observe(d); \
 	} \
 	ZVAL_COPY(d, v);
 

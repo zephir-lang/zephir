@@ -266,10 +266,10 @@ static int zephir_is_callable_check_class(const char *name, int name_len, zend_f
 	} else {
 		zend_string *class_name;
 		class_name = zend_string_init(name, name_len, 0);
-		if ((pce = zend_lookup_class_ex(name, NULL, 1)) != NULL) {
+		if ((pce = zend_lookup_class_ex(class_name, NULL, 1)) != NULL) {
 			zend_class_entry *scope = EG(current_execute_data) ? EG(current_execute_data)->func->common.scope : NULL;
 			fcc->calling_scope = pce;
-			if (scope && !fcc->object && EG(current_execute_data) &&
+			if (scope && !fcc->object && EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) &&
 				instanceof_function(Z_OBJCE(EG(current_execute_data)->This), scope TSRMLS_CC) &&
 				instanceof_function(scope, fcc->calling_scope TSRMLS_CC)) {
 				fcc->object = Z_OBJ(EG(current_execute_data)->This);

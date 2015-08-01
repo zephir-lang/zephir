@@ -548,7 +548,7 @@ class ForStatement extends StatementAbstract
 
         $codePrinter->output('}');
 
-        $codePrinter->output($iteratorVariable ->getName() . '->funcs->dtor(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
+        $compilationContext->backend->destroyIterator($iteratorVariable, $compilationContext);
     }
 
     /**

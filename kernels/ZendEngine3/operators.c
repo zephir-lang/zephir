@@ -481,6 +481,36 @@ int zephir_is_identical(zval *op1, zval *op2)
 }
 
 /**
+ * Do bitwise_and function keeping ref_count and is_ref
+ */
+int zephir_bitwise_and_function(zval *result, zval *op1, zval *op2)
+{
+	int status;
+	status = bitwise_and_function(result, op1, op2);
+	return status;
+}
+
+/**
+ * Do bitwise_or function keeping ref_count and is_ref
+ */
+int zephir_bitwise_or_function(zval *result, zval *op1, zval *op2)
+{
+	int status;
+	status = bitwise_or_function(result, op1, op2);
+	return status;
+}
+
+/**
+ * Check if a zval is less/equal than other
+ */
+int zephir_less_equal(zval *op1, zval *op2)
+{
+	zval result;
+	is_smaller_or_equal_function(&result, op1, op2);
+	return Z_TYPE(result) == IS_TRUE;
+}
+
+/**
  * Check if a zval is less than a long value
  */
 int zephir_less_long(zval *op1, long op2)
@@ -510,6 +540,16 @@ int zephir_greater_long(zval *op1, long op2)
 	ZVAL_LONG(&op2_zval, op2);
 
 	is_smaller_or_equal_function(&result, op1, &op2_zval);
+	return Z_TYPE(result) == IS_FALSE;
+}
+
+/**
+ * Check if a zval is greater/equal than other
+ */
+int zephir_greater_equal(zval *op1, zval *op2)
+{
+	zval result;
+	is_smaller_function(&result, op1, op2);
 	return Z_TYPE(result) == IS_FALSE;
 }
 
@@ -546,6 +586,25 @@ double zephir_safe_div_long_double(long op1, double op2)
 		return 0;
 	}
 	return (double) op1 / op2;
+}
+
+/**
+ * Do safe divisions between two double/zval
+ */
+double zephir_safe_div_double_zval(double op1, zval *op2)
+{
+	if (!zephir_get_numberval(op2)) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	switch (Z_TYPE_P(op2)) {
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+	return op1 / ((double) zephir_get_numberval(op2));
 }
 
 /**
@@ -608,6 +667,25 @@ double zephir_safe_div_long_zval(long op1, zval *op2)
 			break;
 	}
 	return (double) op1 / ((double) zephir_get_numberval(op2));
+}
+
+/**
+ * Do safe divisions between two zval/double
+ */
+double zephir_safe_div_zval_double(zval *op1, double op2)
+{
+	if (!op2) {
+		zend_error(E_WARNING, "Division by zero");
+		return 0;
+	}
+	switch (Z_TYPE_P(op1)) {
+		case IS_ARRAY:
+		case IS_OBJECT:
+		case IS_RESOURCE:
+			zend_error(E_WARNING, "Unsupported operand types");
+			break;
+	}
+	return ((double) zephir_get_numberval(op1)) / op2;
 }
 
 /**

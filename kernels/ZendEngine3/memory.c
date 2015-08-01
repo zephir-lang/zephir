@@ -474,3 +474,63 @@ int ZEPHIR_FASTCALL zephir_clean_restore_stack() {
 
 	return SUCCESS;
 }
+
+/* Debugging */
+#ifndef ZEPHIR_RELEASE
+
+/**
+ * Dumps a memory frame for debug purposes
+ */
+void zephir_dump_memory_frame(zephir_memory_entry *active_memory)
+{
+	size_t i;
+
+	assert(active_memory != NULL);
+
+	fprintf(stderr, "Dump of the memory frame %p (%s)\n", active_memory, active_memory->func);
+
+	if (active_memory->hash_pointer) {
+		for (i = 0; i < active_memory->hash_pointer; ++i) {
+			assert(active_memory->hash_addresses[i] != NULL);
+			fprintf(stderr, "Hash ptr %lu (%p), type=%u, refcnted=%d, refcnt=%u\n", (ulong)i, active_memory->hash_addresses[i], Z_TYPE_P(active_memory->hash_addresses[i]),
+				Z_REFCOUNTED_P(active_memory->hash_addresses[i]),
+				Z_REFCOUNTED_P(active_memory->hash_addresses[i]) ? Z_REFCOUNT_P(active_memory->hash_addresses[i]) : 0
+			);
+		}
+	}
+
+	for (i = 0; i < active_memory->pointer; ++i) {
+		if (EXPECTED(active_memory->addresses[i] != NULL)) {
+			zval *var = active_memory->addresses[i];
+			fprintf(stderr, "Obs var %lu (%p), type=%u, refcnted=%d, refcnt=%u; ", (ulong)i, var, Z_TYPE_P(var), Z_REFCOUNTED_P(var), Z_REFCOUNTED_P(var) ? Z_REFCOUNT_P(var) : 0);
+			switch (Z_TYPE_P(var)) {
+				case IS_NULL:     fprintf(stderr, "value=NULL\n"); break;
+				case IS_LONG:     fprintf(stderr, "value=%ld\n", Z_LVAL_P(var)); break;
+				case IS_DOUBLE:   fprintf(stderr, "value=%E\n", Z_DVAL_P(var)); break;
+				case IS_TRUE:     fprintf(stderr, "value=(bool)true\n"); break;
+				case IS_FALSE:    fprintf(stderr, "value=(bool)false\n"); break;
+				case IS_ARRAY:    fprintf(stderr, "value=array(%p), %d elements\n", Z_ARRVAL_P(var), zend_hash_num_elements(Z_ARRVAL_P(var))); break;
+				case IS_OBJECT:   fprintf(stderr, "value=object(%u), %s\n", Z_OBJ_HANDLE_P(var), ZSTR_VAL(Z_OBJCE_P(var)->name)); break;
+				case IS_STRING:   fprintf(stderr, "value=%*s (%p)\n", Z_STRLEN_P(var), Z_STRVAL_P(var), Z_STRVAL_P(var)); break;
+				case IS_RESOURCE: fprintf(stderr, "value=(resource)%ld\n", Z_LVAL_P(var)); break;
+				default:          fprintf(stderr, "\n"); break;
+			}
+		}
+	}
+
+	fprintf(stderr, "End of the dump of the memory frame %p\n", active_memory);
+}
+
+void zephir_dump_current_frame()
+{
+	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
+
+	if (UNEXPECTED(zephir_globals_ptr->active_memory == NULL)) {
+		fprintf(stderr, "WARNING: calling %s() without an active memory frame!\n", __func__);
+		zephir_print_backtrace();
+		return;
+	}
+
+	zephir_dump_memory_frame(zephir_globals_ptr->active_memory);
+}
+#endif

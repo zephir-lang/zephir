@@ -58,6 +58,7 @@ int zephir_array_update_string(zval *arr, const char *index, uint index_length, 
 int zephir_array_update_long(zval *arr, unsigned long index, zval *value, int flags ZEPHIR_DEBUG_PARAMS);
 
 void zephir_array_keys(zval *return_value, zval *arr);
+int zephir_array_key_exists(zval *arr, zval *key);
 
 /* Update array using multiple keys */
 void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int types_length, int types_count, va_list ap);
@@ -65,6 +66,9 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 
 /** Fast Array Merge */
 void zephir_fast_array_merge(zval *return_value, zval *array1, zval *array2);
+
+/* In Array */
+int zephir_fast_in_array(zval *needle, zval *haystack);
 
 #define zephir_array_fast_append(arr, value) \
   Z_TRY_ADDREF_P(value); \

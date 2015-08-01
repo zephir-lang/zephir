@@ -25,5 +25,7 @@
 
 double zephir_floor(zval *op1);
 long zephir_mt_rand(long min, long max);
+double zephir_ceil(zval *op1);
+void zephir_round(zval *return_value, zval *op1, zval *op2, zval *op3);
 
 #endif

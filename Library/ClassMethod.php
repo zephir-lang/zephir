@@ -1206,17 +1206,17 @@ class ClassMethod
                         $expectedMutations = $compilationContext->symbolTable->getExpectedMutations($parameter['name']);
                         if ($expectedMutations < 2) {
                             if ($parameter['default']['value'] == 'true') {
-                                $codePrinter->output($parameter['name'] . ' = ' . $compilationContext->backend->resolveValue('true', $compilationContext) . ';');
+                                $compilationContext->backend->assignZval($paramVariable, $compilationContext->backend->resolveValue('true', $compilationContext), $compilationContext);
                             } else {
-                                $codePrinter->output($parameter['name'] . ' = ' . $compilationContext->backend->resolveValue('false', $compilationContext));
+                                $compilationContext->backend->assignZval($paramVariable, $compilationContext->backend->resolveValue('false', $compilationContext), $compilationContext);
                             }
                         } else {
                             $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->headersManager->add('kernel/memory');
                             if ($parameter['default']['value'] == 'true') {
-                                $codePrinter->output('ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ' . $compilationContext->backend->resolveValue('true', $compilationContext) . ');');
+                                $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('true', $compilationContext), $compilationContext);
                             } else {
-                                $codePrinter->output('ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ' . $compilationContext->backend->resolveValue('false', $compilationContext) . ');');
+                                $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('false', $compilationContext), $compilationContext);
                             }
                         }
                         break;
@@ -1228,7 +1228,7 @@ class ClassMethod
                         } else {
                             $compilationContext->symbolTable->mustGrownStack(true);
                             $compilationContext->headersManager->add('kernel/memory');
-                            $codePrinter->output('ZEPHIR_CPY_WRT(' . $parameter['name'] . ', ' . $compilationContext->backend->resolveValue('null', $compilationContext) . ');');
+                            $compilationContext->backend->copyOnWrite($paramVariable, $compilationContext->backend->resolveValue('null', $compilationContext), $compilationContext);
                         }
                         break;
 
@@ -1671,7 +1671,7 @@ class ClassMethod
                                 case 'array':
                                 case 'empty-array':
                                     $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
-                                    $initVarCode .= $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
+                                    $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
                                     break;
 
                                 default:
@@ -1903,7 +1903,7 @@ class ClassMethod
                 /**
                  * Assign the default value according to the variable's type
                  */
-                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($compilationContext->symbolTable->getVariableForWrite($name, $compilationContext), $compilationContext, false) . PHP_EOL;
+                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($compilationContext->symbolTable->getVariableForWrite($name, $compilationContext), $compilationContext, false, false) . PHP_EOL;
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
                 if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {
@@ -1974,7 +1974,13 @@ class ClassMethod
          * Check if there are unused variables
          */
         $usedVariables = array();
-        $completeName = $compilationContext->classDefinition->getCompleteName();
+        $classDefinition = $this->getClassDefinition();
+        if ($classDefinition) {
+            $completeName = $classDefinition->getCompleteName();
+        } else {
+            $completeName = '[unknown]';
+        }
+
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
                 if ($variable->isExternal() == false) {
@@ -2023,7 +2029,7 @@ class ClassMethod
         /**
          * Generate the variable definition for variables used
          */
-        $varInitCode = '';
+        $varInitCode = array();
         $additionalCode = $compilationContext->backend->onPreInitVar($this, $compilationContext);
 
         foreach ($usedVariables as $type => $variables) {
@@ -2036,21 +2042,21 @@ class ClassMethod
              * @var $variables Variable[]
              */
             foreach ($variables as $variable) {
-                if ($additionalCode) {
-                    $additionalCode .= PHP_EOL;
+                $nextCode = $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
+                if ($nextCode && $additionalCode) {
+                    $additionalCode .= PHP_EOL . $nextCode;
+                } else {
+                    $additionalCode .= $nextCode;
                 }
-                $additionalCode .= $compilationContext->backend->generateInitCode($groupVariables, $type, $pointer, $variable);
             }
 
-            if ($varInitCode) {
-                $varInitCode .= PHP_EOL;
-            }
-            $varInitCode .= "\t" . $code . join(', ', $groupVariables) . ';';
+            $varInitCode[] = "\t" . $code . join(', ', $groupVariables) . ';';
         }
-        if ($varInitCode) {
-            $additionalCode = PHP_EOL . $additionalCode;
+        $varInitCode[] = $additionalCode;
+        $initCode = implode(PHP_EOL, $varInitCode);
+        if ($initCode) {
+            $codePrinter->preOutput($initCode);
         }
-        $codePrinter->preOutput($varInitCode . $additionalCode);
 
         /**
          * Finalize the method compilation

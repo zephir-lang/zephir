@@ -66,6 +66,7 @@ void zephir_preg_match(zval *return_value, zval *regex, zval *subject, zval *mat
 
 /** Hash */
 void zephir_md5(zval *return_value, zval *str);
+void zephir_crc32(zval *return_value, zval *str);
 
 /** */
 void zephir_ucfirst(zval *return_value, zval *s);

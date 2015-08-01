@@ -1051,13 +1051,19 @@ class Backend extends BaseBackend
         $this->copyOnWrite($targetVariable, '(*ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
     }
 
-    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)
     {
-        $output = 'if (!' . $var->getName() . ') {';
+        $context->codePrinter->output($iteratorVariable->getName() . '->funcs->dtor(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
+    }
+
+    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $onlyBody = false, $useCodePrinter = true)
+    {
+        $body = '!' . $var->getName();
+        $output = 'if (' . $body. ') {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
-        return $output;
+        return $onlyBody ? $body : $output;
     }
 
     public function checkStrictType($type, $var, CompilationContext $context)
@@ -1149,7 +1155,7 @@ class Backend extends BaseBackend
                 $codePrinter->output('}');
                 break;
             case 'array':
-                $context->backend->assignZval($parameterVariable, $inputParamVariable, $context);
+                $context->backend->assignZval($inputParamVariable, $parameterVariable, $context);
                 break;
             case 'object':
             case 'resource':
@@ -1163,5 +1169,13 @@ class Backend extends BaseBackend
     public function fetchClassEntry($str)
     {
         return 'zephir_get_internal_ce(SS("' . $str . '") TSRMLS_CC)';
+    }
+
+    public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true)
+    {
+        if ($isLocal) {
+            return $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
+        }
+        return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext, $expression);
     }
 }

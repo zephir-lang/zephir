@@ -67,7 +67,7 @@ class Backend extends BackendZendEngine2
             return;
         }
         if (!$method->isInternal()) {
-            return "\t" . 'zval *this_ptr = getThis();' . PHP_EOL; //TODO: think about a better way to solve this.
+            return "\t" . 'zval *this_ptr = getThis();'; //TODO: think about a better way to solve this.
         }
     }
 
@@ -105,6 +105,14 @@ class Backend extends BackendZendEngine2
         $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
         if ($isComplex) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
+
+            if ($variable->getName() == '__$null') {
+                return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
+            } else if ($variable->getName() == '__$true') {
+                return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);';
+            } else if ($variable->getName() == '__$false') {
+                return "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);';
+            }
             return "\t".'ZVAL_UNDEF(&' . $variable->getName() . ');';
         }
 
@@ -440,13 +448,19 @@ class Backend extends BackendZendEngine2
             }
         }
 
-        if ($value == 'null') {
-            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-            $this->assignNull($tempVariable, $context);
-            $value = $this->getVariableCode($tempVariable);
-        } else if ($value == 'true' || $value == 'false') {
-            $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
-            $this->assignBool($tempVariable, $value == 'true' ? '1' : '0', $context);
+        if ($value == 'null' || $value == 'true' || $value == 'false') {
+            $varName = '__$' . $value;
+            if (!$context->symbolTable->hasVariable($varName)) {
+                $tempVariable = $context->symbolTable->addVariable('variable', $varName, $context);
+            }
+            $tempVariable = $context->symbolTable->getVariableForWrite($varName, $context);
+            $tempVariable->increaseUses();
+            $tempVariable->setUsed(true, null);
+            if ($value == 'null') {
+                $tempVariable->setDynamicTypes('null');
+            } else {
+                $tempVariable->setDynamicTypes('bool');
+            }
             $value = $this->getVariableCode($tempVariable);
         } else if ($value instanceof CompiledExpression) {
             if ($value->getType() == 'array') {
@@ -538,7 +552,6 @@ class Backend extends BackendZendEngine2
             $arrayNumKey = $compilationContext->symbolTable->addTemp('zend_ulong', $compilationContext);
             $arrayStrKey = $compilationContext->symbolTable->addTemp('zend_string', $compilationContext);
         }
-        $variable->observeVariant($compilationContext);
 
         if (isset($keyVariable) && isset($variable)) {
             $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY_VAL';
@@ -555,13 +568,14 @@ class Backend extends BackendZendEngine2
 
         if (isset($keyVariable)) {
             $codePrinter->increaseLevel();
-
+            if ($duplicateKey) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $keyVariable->initVariant($compilationContext);
+            }
             $codePrinter->output('if (' . $arrayStrKey->getName() . ' != NULL) { ');
             $codePrinter->increaseLevel();
             if ($duplicateKey) {
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $codePrinter->output('ZVAL_NEW_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');');
-                //TODO: If it causes bugs duplicate it
+                $codePrinter->output('ZVAL_STR_COPY(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');');
             } else {
                 $codePrinter->output('ZVAL_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');');
             }
@@ -595,6 +609,14 @@ class Backend extends BackendZendEngine2
         }
 
         $codePrinter->output('} ZEND_HASH_FOREACH_END();');
+
+        /* Since we do not observe, still do cleanup */
+        if (isset($variable)) {
+            $variable->initVariant($compilationContext);
+        }
+        if (isset($keyVariable)) {
+            $keyVariable->initVariant($compilationContext);
+        }
     }
 
     public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
@@ -604,17 +626,29 @@ class Backend extends BackendZendEngine2
         $this->copyOnWrite($targetVariable, '(ZEPHIR_TMP_ITERATOR_PTR)', $compilationContext);
     }
 
-    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useCodePrinter = true)
+    public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)
     {
-        $output = 'if (Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF) {';
+        parent::destroyIterator($iteratorVariable, $context);
+        $context->codePrinter->output('zend_iterator_dtor(' . $iteratorVariable->getName() . ');');
+    }
+
+    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useBody = false, $useCodePrinter = true)
+    {
+        $body = 'Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF';
+        $output = 'if (' . $body . ') {';
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
-        return $output;
+        return $useBody ? $body : $output;
     }
 
     public function fetchClassEntry($str)
     {
         return 'zephir_get_internal_ce(SL("' . $str . '"))';
+    }
+
+    public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true)
+    {
+        return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
     }
 }

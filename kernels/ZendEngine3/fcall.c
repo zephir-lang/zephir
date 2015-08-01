@@ -305,7 +305,8 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			fcic->initialized      = 1;
 			fcic->calling_scope    = EG(scope);
 			fcic->object       	   = NULL;
-			if (scope && EG(current_execute_data) && instanceof_function(Z_OBJCE(EG(current_execute_data)->This), scope) &&
+			if (scope && EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) &&
+				instanceof_function(Z_OBJCE(EG(current_execute_data)->This), scope) &&
 				instanceof_function(scope, fcic->calling_scope)) {
 				fcic->object = Z_OBJ(EG(current_execute_data)->This);
 				fcic->called_scope = fcic->object->ce;
@@ -432,8 +433,8 @@ int zephir_call_user_function(zval *object_pp, zend_class_entry *obj_ce, zephir_
 			zephir_fcall_populate_fci_cache(&fcic, &fci, type);
 
 #ifndef ZEPHIR_RELEASE
-			fcic.function_handler = (*temp_cache_entry)->f;
-			++(*temp_cache_entry)->times;
+			fcic.function_handler = temp_cache_entry->f;
+			++(temp_cache_entry->times);
 #else
 			fcic.function_handler = temp_cache_entry;
 #endif
@@ -503,7 +504,7 @@ int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint
 	ZVAL_UNDEF(&rv);
 
 #ifndef ZEPHIR_RELEASE
-	if (Z_TYPE_P(return_value_ptr) > IS_NULL) {
+	if (return_value_ptr != NULL && Z_TYPE_P(return_value_ptr) > IS_NULL) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
 		zephir_print_backtrace();
 		abort();
@@ -550,7 +551,7 @@ int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
 	ZVAL_UNDEF(&rv);
 
 #ifndef ZEPHIR_RELEASE
-	if (Z_TYPE_P(return_value_ptr) > IS_NULL) {
+	if (return_value_ptr != NULL && Z_TYPE_P(return_value_ptr) > IS_NULL) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
 		zephir_print_backtrace();
 		abort();
@@ -596,7 +597,7 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	ZVAL_UNDEF(&rv);
 
 #ifndef ZEPHIR_RELEASE
-	if (Z_TYPE_P(return_value_ptr) > IS_NULL) {
+	if (return_value_ptr != NULL && Z_TYPE_P(return_value_ptr) > IS_NULL) {
 		fprintf(stderr, "%s: *return_value_ptr must be NULL\n", __func__);
 		zephir_print_backtrace();
 		abort();

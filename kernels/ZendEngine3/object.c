@@ -46,6 +46,30 @@ int zephir_instance_of_ev(const zval *object, const zend_class_entry *ce)
 	return instanceof_function(Z_OBJCE_P(object), ce);
 }
 
+/**
+ * Check if an object is instance of a class
+ */
+int zephir_is_instance_of(zval *object, const char *class_name, unsigned int class_length)
+{
+	zend_class_entry *ce, *temp_ce;
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+
+		ce = Z_OBJCE_P(object);
+		if (ZSTR_LEN(ce->name) == class_length) {
+			if (!zend_binary_strcasecmp(ZSTR_VAL(ce->name), ZSTR_LEN(ce->name), class_name, class_length)) {
+				return 1;
+			}
+		}
+
+		temp_ce = zephir_fetch_class_str_ex(class_name, class_length, ZEND_FETCH_CLASS_DEFAULT);
+		if (temp_ce) {
+			return instanceof_function(ce, temp_ce);
+		}
+	}
+
+	return 0;
+}
 
 int zephir_zval_is_traversable(zval *object)
 {
@@ -95,6 +119,44 @@ zend_class_entry *zephir_fetch_class_str_ex(char *class_name, size_t length, int
 	retval = zend_fetch_class(str, fetch_type);
 	zend_string_release(str);
 	return retval;
+}
+
+/**
+ * Fetches a zend class entry from a zval value
+ */
+zend_class_entry *zephir_fetch_class(const zval *class_name)
+{
+	if (Z_TYPE_P(class_name) == IS_STRING) {
+		return zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_DEFAULT TSRMLS_CC);
+	}
+
+	php_error_docref(NULL, E_WARNING, "class name must be a string");
+	return zephir_fetch_class_str_ex(SL("stdclass"), ZEND_FETCH_CLASS_DEFAULT);
+}
+
+/**
+ * Returns a class name into a zval result
+ */
+void zephir_get_class(zval *result, zval *object, int lower)
+{
+	zend_class_entry *ce;
+	zend_string *class_name;
+
+	if (Z_TYPE_P(object) == IS_OBJECT) {
+
+		ce = Z_OBJCE_P(object);
+		//zval_ptr_dtor(result);
+		class_name = zend_string_init(ZSTR_VAL(ce->name), ZSTR_LEN(ce->name), 0);
+		ZVAL_STR(result, class_name);
+
+		if (lower) {
+			zend_str_tolower(Z_STRVAL_P(result), Z_STRLEN_P(result));
+		}
+
+	} else {
+		ZVAL_NULL(result);
+		php_error_docref(NULL, E_WARNING, "zephir_get_class expects an object");
+	}
 }
 
 /**
@@ -263,6 +325,42 @@ int zephir_interface_exists(const zval *class_name, int autoload)
 }
 
 /**
+ * Clones an object from obj to destination
+ */
+int zephir_clone(zval *destination, zval *obj)
+{
+	int status = SUCCESS;
+	zend_class_entry *ce;
+	zend_object_clone_obj_t clone_call;
+
+	if (Z_TYPE_P(obj) != IS_OBJECT) {
+		php_error_docref(NULL, E_ERROR, "__clone method called on non-object");
+		status = FAILURE;
+	} else {
+		ce = Z_OBJCE_P(obj);
+		clone_call =  Z_OBJ_HT_P(obj)->clone_obj;
+		if (!clone_call) {
+			if (ce) {
+				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object of class %s", ce->name);
+			} else {
+				php_error_docref(NULL, E_ERROR, "Trying to clone an uncloneable object");
+			}
+			status = FAILURE;
+		} else {
+			if (!EG(exception)) {
+				//zval_ptr_dtor(destination);
+				ZVAL_OBJ(destination, clone_call(obj));
+				if (EG(exception)) {
+					zval_ptr_dtor(destination);
+				}
+			}
+		}
+	}
+
+	return status;
+}
+
+/**
  * Checks if property exists on object
  */
 int zephir_isset_property(zval *object, const char *property_name, unsigned int property_length)
@@ -328,7 +426,6 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 			php_error_docref(NULL, E_NOTICE, "Trying to get property \"%s\" of non-object", property_name);
 		}
 
-		zval_ptr_dtor(result);
 		ZVAL_NULL(result);
 		return FAILURE;
 	}
@@ -364,12 +461,26 @@ int zephir_read_property(zval *result, zval *object, const char *property_name, 
 }
 
 /**
+ * Fetches a property using a const char
+ */
+int zephir_fetch_property(zval *result, zval *object, const char *property_name, zend_uint property_length, int silent)
+{
+	if (zephir_isset_property(object, property_name, property_length)) {
+		zephir_read_property(result, object, property_name, property_length, 0);
+		return 1;
+	}
+
+	//zval_ptr_dtor(result);
+	ZVAL_NULL(result);
+	return 0;
+}
+
+/**
  * Fetches a property using a zval property
  */
 int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int silent)
 {
 	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
-		zval_ptr_dtor(result);
 		ZVAL_NULL(result);
 		return 0;
 	}
@@ -379,17 +490,32 @@ int zephir_fetch_property_zval(zval *result, zval *object, zval *property, int s
 		return 1;
 	}
 
-	zval_ptr_dtor(result);
 	ZVAL_NULL(result);
 	return 0;
 }
 
 int zephir_return_property(zval *return_value, zval *object, char *property_name, unsigned int property_length)
 {
-	zval_ptr_dtor(return_value);
 	ZVAL_NULL(return_value);
 	zephir_read_property(return_value, object, property_name, property_length, 0);
 	return SUCCESS;
+}
+
+/**
+ * Reads a property from an object
+ */
+int zephir_read_property_zval(zval *result, zval *object, zval *property, int flags)
+{
+	if (unlikely(Z_TYPE_P(property) != IS_STRING)) {
+		if ((flags & PH_NOISY) == PH_NOISY) {
+			php_error_docref(NULL, E_NOTICE, "Cannot access empty property %d", Z_TYPE_P(property));
+		}
+
+		ZVAL_NULL(result);
+		return FAILURE;
+	}
+
+	return zephir_read_property(result, object, Z_STRVAL_P(property), Z_STRLEN_P(property), flags);
 }
 
 /**
@@ -422,7 +548,7 @@ int zephir_update_property_zval(zval *object, const char *property_name, unsigne
 
 	ZVAL_STRINGL(&property, property_name, property_length);
 
-	Z_TRY_ADDREF_P(value);
+	/* write_property will add 1 to refcount, so no Z_TRY_ADDREF_P(value); is necessary */
 	Z_OBJ_HT_P(object)->write_property(object, &property, value, 0);
 	zval_ptr_dtor(&property);
 
@@ -477,8 +603,8 @@ int zephir_update_property_array(zval *object, const char *property, zend_uint p
 				array_init(&tmp);
 				separated = 1;
 			}
+			Z_DELREF(tmp);
 		}
-
 		Z_TRY_ADDREF_P(value);
 
 		if (Z_TYPE_P(index) == IS_STRING) {
@@ -539,6 +665,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 			array_init(&tmp);
 			separated = 1;
 		}
+		Z_DELREF(tmp);
 	}
 
 	Z_TRY_ADDREF_P(value);
@@ -586,6 +713,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, zend_
 				array_init(&tmp_arr);
 				separated = 1;
 			}
+			Z_DELREF(tmp_arr);
 		}
 
 		va_start(ap, types_count);
@@ -694,7 +822,7 @@ int zephir_read_static_property_ce(zval *result, zend_class_entry *ce, const cha
 {
 	zval *tmp = zend_read_static_property(ce, property, len, (zend_bool) ZEND_FETCH_CLASS_SILENT);
 
-	zval_ptr_dtor(result);
+	//zval_ptr_dtor(result);
 	ZVAL_NULL(result);
 	if (tmp)
 	{
@@ -759,6 +887,7 @@ undeclared_property:
 
 static int zephir_update_static_property_ex(zend_class_entry *scope, const char *name, int name_length, zval *value, zend_property_info **property_info)
 {
+	zval garbage;
 	zval *property;
 	zend_zephir_globals_def *zephir_globals_ptr = ZEPHIR_VGLOBAL;
 	zend_class_entry *old_scope = EG(scope);
@@ -770,10 +899,12 @@ static int zephir_update_static_property_ex(zend_class_entry *scope, const char 
 	if (!property) {
 		return FAILURE;
 	} else {
-		if (Z_REFCOUNTED_P(value) && Z_ISREF_P(value)) {
+		ZVAL_COPY_VALUE(&garbage, property);
+		if (Z_ISREF_P(value)) {
 			SEPARATE_ZVAL(value);
 		}
 		ZVAL_COPY(property, value);
+		zval_ptr_dtor(&garbage);
 		return SUCCESS;
 	}
 }
@@ -796,10 +927,6 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 	ZVAL_UNDEF(&tmp_arr);
 
 	zephir_read_static_property_ce(&tmp_arr, ce, property, property_length, PH_NOISY | PH_READONLY);
-	if (Z_TYPE(tmp_arr) <= IS_NULL) {
-		array_init(&tmp_arr);
-		separated = 1;
-	}
 
 	/** Separation only when refcount > 1 */
 	if (Z_REFCOUNTED(tmp_arr)) {
@@ -824,9 +951,11 @@ int zephir_update_static_property_array_multi_ce(zend_class_entry *ce, const cha
 			array_init(&tmp_arr);
 			separated = 1;
 		}
+		Z_DELREF(tmp_arr);
 	}
 
 	va_start(ap, types_count);
+	SEPARATE_ZVAL_IF_NOT_REF(&tmp_arr);
 	zephir_array_update_multi_ex(&tmp_arr, value, types, types_length, types_count, ap);
 	va_end(ap);
 
@@ -905,5 +1034,31 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 	}
 
 	zend_create_closure(return_value, function_ptr, ce, ce, this_ptr);
+	return SUCCESS;
+}
+
+/**
+ * Creates a new instance dynamically. Call constructor without parameters
+ */
+int zephir_create_instance(zval *return_value, const zval *class_name)
+{
+	zend_class_entry *ce;
+
+	if (Z_TYPE_P(class_name) != IS_STRING) {
+		zephir_throw_exception_string(spl_ce_RuntimeException, SL("Invalid class name"));
+		return FAILURE;
+	}
+
+	ce = zend_fetch_class(Z_STR_P(class_name), ZEND_FETCH_CLASS_DEFAULT);
+	if (!ce) {
+		ZVAL_NULL(return_value);
+		return FAILURE;
+	}
+
+	object_init_ex(return_value, ce);
+	if (zephir_has_constructor_ce(ce)) {
+		return zephir_call_class_method_aparams(NULL, ce, zephir_fcall_method, return_value, SL("__construct"), NULL, 0, 0, NULL);
+	}
+
 	return SUCCESS;
 }

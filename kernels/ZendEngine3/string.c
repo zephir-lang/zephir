@@ -122,6 +122,7 @@ void zephir_fast_strtolower(zval *return_value, zval *str)
 	}
 
 	ZVAL_STRINGL(return_value, lower_str, length);
+	efree(lower_str);
 }
 
 /**
@@ -150,6 +151,7 @@ void zephir_fast_strtoupper(zval *return_value, zval *str)
 	}
 
 	ZVAL_STRINGL(return_value, lower_str, length);
+	efree(lower_str);
 }
 
 /**
@@ -448,19 +450,19 @@ void zephir_fast_explode(zval *return_value, zval *delimiter, zval *str, long li
 /**
  * Fast call to explode php function
  */
-void zephir_fast_explode_str(zval *return_value, const char *delimiter, int delimiter_length, zval *str, long limit)
+void zephir_fast_explode_str(zval *return_value, const char *delim, int delim_length, zval *str, long limit)
 {
-	zval delimiter_zval;
+	zend_string *delimiter;
 
 	if (unlikely(Z_TYPE_P(str) != IS_STRING)) {
 		zend_error(E_WARNING, "Invalid arguments supplied for explode()");
 		RETURN_EMPTY_STRING();
 	}
 
-	ZVAL_STRINGL(&delimiter_zval, delimiter, delimiter_length);
-
+	delimiter = zend_string_init(delim, delim_length, 0);
 	array_init(return_value);
-	php_explode(Z_STR(delimiter_zval), Z_STR_P(str), return_value, limit);
+	php_explode(delimiter, Z_STR_P(str), return_value, limit);
+	zend_string_free(delimiter);
 }
 
 /**
@@ -709,8 +711,7 @@ void zephir_fast_str_replace(zval *return_value_ptr, zval *search, zval *replace
 	if (Z_TYPE_P(search) == IS_ARRAY) {
 		do {
 			zval *params[] = { search, replace, subject };
-			zval_ptr_dtor(return_value_ptr);
-			ZVAL_UNDEF(return_value_ptr);
+			ZVAL_NULL(return_value_ptr);
 			zephir_call_func_aparams(return_value_ptr, "str_replace", sizeof("str_replace")-1, NULL, 0, 3, params);
 			return;
 		} while(0);
@@ -924,6 +925,37 @@ void zephir_md5(zval *return_value, zval *str)
 	make_digest(hexdigest, digest);
 
 	ZVAL_STRINGL(return_value, hexdigest, 32);
+}
+
+void zephir_crc32(zval *return_value, zval *str)
+{
+	zval copy;
+	int use_copy = 0;
+	size_t nr;
+	char *p;
+	php_uint32 crc;
+	php_uint32 crcinit = 0;
+
+	if (Z_TYPE_P(str) != IS_STRING) {
+		use_copy = zend_make_printable_zval(str, &copy);
+		if (use_copy) {
+			str = &copy;
+		}
+	}
+
+	p = Z_STRVAL_P(str);
+	nr = Z_STRLEN_P(str);
+
+	crc = crcinit^0xFFFFFFFF;
+	for (; nr--; ++p) {
+		crc = ((crc >> 8) & 0x00FFFFFF) ^ crc32tab[(crc ^ (*p)) & 0xFF];
+	}
+
+	if (use_copy) {
+		zval_dtor(str);
+	}
+
+	RETVAL_LONG(crc ^ 0xFFFFFFFF);
 }
 
 void zephir_ucfirst(zval *return_value, zval *s)

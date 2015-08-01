@@ -188,3 +188,89 @@ void zephir_file_get_contents(zval *return_value, zval *filename)
 
 	php_stream_close(stream);
 }
+
+/**
+ * Writes a zval to a stream
+ */
+void zephir_file_put_contents(zval *return_value, zval *filename, zval *data)
+{
+	php_stream *stream;
+	int numbytes = 0, use_copy = 0;
+	zval *zcontext = NULL;
+	zval copy;
+	php_stream_context *context = NULL;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_file_put_contents()");
+		if (return_value) {
+			RETVAL_FALSE;
+		}
+		return;
+	}
+
+	context = php_stream_context_from_zval(zcontext, 0 & PHP_FILE_NO_DEFAULT_CONTEXT);
+
+	stream = php_stream_open_wrapper_ex(Z_STRVAL_P(filename), "wb", ((0 & PHP_FILE_USE_INCLUDE_PATH) ? USE_PATH : 0) | REPORT_ERRORS, NULL, context);
+	if (stream == NULL) {
+		if (return_value) {
+			RETURN_FALSE;
+		}
+		return;
+	}
+
+	switch (Z_TYPE_P(data)) {
+
+		case IS_NULL:
+		case IS_LONG:
+		case IS_DOUBLE:
+		case IS_TRUE:
+		case IS_FALSE:
+		case IS_CONSTANT:
+			use_copy = zend_make_printable_zval(data, &copy);
+			if (use_copy) {
+				data = &copy;
+			}
+			/* no break */
+
+		case IS_STRING:
+			if (Z_STRLEN_P(data)) {
+				numbytes = php_stream_write(stream, Z_STRVAL_P(data), Z_STRLEN_P(data));
+				if (numbytes != Z_STRLEN_P(data)) {
+					php_error_docref(NULL, E_WARNING, "Only %d of %d bytes written, possibly out of free disk space", numbytes, Z_STRLEN_P(data));
+					numbytes = -1;
+				}
+			}
+			break;
+		default:
+			numbytes = -1;
+			break;
+	}
+
+	php_stream_close(stream);
+
+	if (use_copy) {
+		zval_dtor(data);
+	}
+
+	if (numbytes < 0) {
+		if (return_value) {
+			RETURN_FALSE;
+		} else {
+			return;
+		}
+	}
+
+	if (return_value) {
+		RETURN_LONG(numbytes);
+	}
+	return;
+}
+
+void zephir_filemtime(zval *return_value, zval *path)
+{
+	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value);
+	} else {
+		ZVAL_FALSE(return_value);
+	}
+}

@@ -99,25 +99,26 @@ class StaticCall extends Call
                 }
             }
         } else {
+            $thisPtr = $compilationContext->backend->getName() == 'ZendEngine3' ? '&(EG(current_execute_data)->This)' : 'EG(This)';
             if (!count($params)) {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(EG(This), ' . $method->getInternalName() . ');');
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(' . $thisPtr . ', ' . $method->getInternalName() . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ');');
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', ' . $thisPtr . ', ' . $method->getInternalName() . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(EG(This), ' . $method->getInternalName() . ');');
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(' . $thisPtr . ', ' . $method->getInternalName() . ');');
                 }
             } else {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', ' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                 }
             }
         }
@@ -330,7 +331,7 @@ class StaticCall extends Call
         $compilationContext->headersManager->add('kernel/object');
 
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $compilationContext->backend->getVariableCode($classNameVariable) . ' TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
 
         if (!count($params)) {
