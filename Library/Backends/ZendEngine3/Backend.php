@@ -19,7 +19,9 @@ class Backend extends BackendZendEngine2
 
     public function getVariableCode(Variable $variable)
     {
-        if (in_array($variable->getName(), array('this_ptr', 'return_value')) || in_array($variable->getType(), array('zval_ptr', 'int', 'long'))) {
+        if ($variable->isDoublePointer() ||
+            in_array($variable->getName(), array('this_ptr', 'return_value')) ||
+            in_array($variable->getType(), array('int', 'long'))) {
             return $variable->getName();
         }
         return '&' . $variable->getName();
@@ -47,17 +49,12 @@ class Backend extends BackendZendEngine2
     public function getTypeDefinition($type)
     {
         switch ($type) {
-            case 'zval_ptr':
-                return array('*', 'zval');
             case 'zend_ulong':
                 return array('', 'zend_ulong');
             case 'zend_string':
                 return array('*', 'zend_string');
         }
         list ($pointer, $code) = parent::getTypeDefinition($type);
-        if ($code == 'zval') {
-            return array('', 'zval');
-        }
         return array($pointer, $code);
     }
 
@@ -103,9 +100,9 @@ class Backend extends BackendZendEngine2
     {
 
         $isComplex = ($type == 'variable' || $type == 'string' || $type == 'array' || $type == 'resource' || $type == 'callable' || $type == 'object');
-        if ($isComplex) { /* && $variable->mustInitNull() */
-            $groupVariables[] = $variable->getName();
 
+        if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
+            $groupVariables[] = $variable->getName();
             if ($variable->getName() == '__$null') {
                 return "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');';
             } else if ($variable->getName() == '__$true') {
@@ -122,10 +119,12 @@ class Backend extends BackendZendEngine2
         }
 
         if ($variable->isDoublePointer()) {
+            /* Double pointers for ZE3 are used as zval * */
+            $ptr = $isComplex ? $pointer : $pointer . $pointer;
             if ($variable->mustInitNull()) {
-                $groupVariables[] = $pointer . $pointer . $variable->getName() . ' = NULL';
+                $groupVariables[] = $ptr . $variable->getName() . ' = NULL';
             } else {
-                $groupVariables[] = $pointer . $pointer . $variable->getName();
+                $groupVariables[] = $ptr . $variable->getName();
             }
             return;
         }
@@ -246,13 +245,17 @@ class Backend extends BackendZendEngine2
     /* Assign value to variable */
     public function assignString(Variable $variable, $value, CompilationContext $context, $useCodePrinter = true, $doCopy = null)
     {
-        return $this->assignHelper('ZVAL_STRING', '&' . $variable->getName(), $value, $context, $useCodePrinter, null);
+        return $this->assignHelper('ZVAL_STRING', $this->getVariableCode($variable), $value, $context, $useCodePrinter, null);
     }
 
     public function assignZval(Variable $variable, $code, CompilationContext $context)
     {
         $code = $this->resolveValue($code, $context);
-        $context->codePrinter->output('ZVAL_COPY_VALUE(' . $this->getVariableCode($variable) . ', ' . $code . ');');
+        if (!$variable->isDoublePointer()) {
+            $context->codePrinter->output('ZVAL_COPY_VALUE(' . $this->getVariableCode($variable) . ', ' . $code . ');');
+        } else {
+            $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
+        }
     }
 
     public function returnString($value, CompilationContext $context, $useCodePrinter = true)
@@ -376,8 +379,9 @@ class Backend extends BackendZendEngine2
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
+        $variableCode = $this->getVariableCodePointer($variable);
         if ($exprIndex->getType() == 'string') {
-            $context->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
+            $context->codePrinter->output('zephir_array_unset_string(' . $variableCode . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ');');
             return;
         }
         return parent::arrayUnset($variable, $exprIndex, $flags, $context);
@@ -411,12 +415,13 @@ class Backend extends BackendZendEngine2
         if ($readOnly) {
             $flags .= ' | PH_READONLY';
         }
-        $variableCode = $context->backend->getVariableCode($variableVariable);
+        $variableCode = $this->getVariableCode($variableVariable);
+        $symbol = $this->getVariableCode($symbolVariable);
         //TODO: maybe optimizations (read_nproperty/quick) for thisScope access in NG (as in ZE2 - if necessary)
         if ($property instanceof Variable) {
-            $context->codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+            $context->codePrinter->output('zephir_read_property_zval(' . $symbol . ', ' . $variableCode . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
         } else {
-            $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
+            $context->codePrinter->output('zephir_read_property(' . $symbol . ', ' . $variableCode . ', SL("' . $property . '"), ' . $flags . ');');
         }
     }
 
@@ -509,7 +514,8 @@ class Backend extends BackendZendEngine2
         } else if ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_' . $macro . '(' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
         } else {
-            $context->codePrinter->output('ZEPHIR_' . $macro . '(&' . $symbolVariable->getName() . ', ' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
+            $symbol = $this->getVariableCode($symbolVariable);
+            $context->codePrinter->output('ZEPHIR_' . $macro . '(' . $symbol . ', ' . $this->getVariableCode($variable) . ', ' . $methodName . ', ' . $cachePointer . $paramStr . ');');
         }
     }
 
@@ -540,7 +546,8 @@ class Backend extends BackendZendEngine2
         /**
          * Create a temporary zval to fetch the items from the hash
          */
-        $tempVariable = $compilationContext->symbolTable->addTemp('zval_ptr', $compilationContext);
+        $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+        $tempVariable->setIsDoublePointer(true);
         $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('zephir_is_iterable(' . $this->getVariableCode($exprVariable) . ', ' . $duplicateHash . ', "' . Compiler::getShortUserPath($statement['file']) . '", ' . $statement['line'] . ');');
@@ -634,6 +641,9 @@ class Backend extends BackendZendEngine2
 
     public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useBody = false, $useCodePrinter = true)
     {
+        if ($var->isDoublePointer()) {
+            return parent::ifVariableValueUndefined($var, $context, $useBody, $useCodePrinter);
+        }
         $body = 'Z_TYPE_P(' . $this->getVariableCode($var) . ') == IS_UNDEF';
         $output = 'if (' . $body . ') {';
         if ($useCodePrinter) {

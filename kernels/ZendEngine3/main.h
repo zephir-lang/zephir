@@ -262,8 +262,8 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 		object_properties_init(object, class_type); \
 	}
 
-#define ZEPHIR_MAKE_REF(obj) ZVAL_NEW_REF(&obj, &obj);
-#define ZEPHIR_UNREF(obj) ZVAL_UNREF(&obj);
+#define ZEPHIR_MAKE_REF(obj) ZVAL_NEW_REF(obj, obj);
+#define ZEPHIR_UNREF(obj) ZVAL_UNREF(obj);
 
 #define ZEPHIR_GET_CONSTANT(return_value, const_name) do { \
 	zval *_constant_ptr = zend_get_constant_str(SL(const_name)); \

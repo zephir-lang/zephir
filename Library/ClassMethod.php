@@ -1125,12 +1125,12 @@ class ClassMethod
                         break;
 
                     case 'null':
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->assignString($paramVariable, null, $compilationContext);
                         break;
 
                     case 'string':
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
                         break;
 
@@ -1144,13 +1144,13 @@ class ClassMethod
                 $compilationContext->headersManager->add('kernel/memory');
                 switch ($parameter['default']['type']) {
                     case 'null':
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
                         break;
 
                     case 'empty-array':
                     case 'array':
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
                         break;
 
@@ -1184,21 +1184,21 @@ class ClassMethod
                     case 'ulong':
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignLong($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'double':
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignDouble($symbolVariable, $parameter['default']['value'], $compilationContext);
                         break;
 
                     case 'string':
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignString($paramVariable, Utils::addSlashes($parameter['default']['value'], true), $compilationContext);
                         break;
 
@@ -1235,7 +1235,7 @@ class ClassMethod
                     case 'empty-array':
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
-                        $codePrinter->output('ZEPHIR_INIT_VAR(' . $parameter['name'] . ');');
+                        $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->initArray($symbolVariable, $compilationContext, null);
                         break;
 
@@ -1323,7 +1323,7 @@ class ClassMethod
 
             case 'string':
                 $compilationContext->symbolTable->mustGrownStack(true);
-                return "\t" . 'zephir_get_strval(' . $parameter['name'] . ', ' . $parameter['name'] . '_param);' . PHP_EOL;
+                return "\t" . 'zephir_get_strval(' . $inputParamCode . ', ' . $parameterCode . ');' . PHP_EOL;
 
             case 'array':
                 $compilationContext->symbolTable->mustGrownStack(true);
@@ -1482,6 +1482,7 @@ class ClassMethod
              * Round 1. Create variables in parameters in the symbol table
              */
             $classCastChecks = array();
+            $substituteVars = array();
             foreach ($parameters->getParameters() as $parameter) {
                 /**
                  * Change dynamic variables to low level types
@@ -1503,6 +1504,7 @@ class ClassMethod
                 }
 
                 $symbolParam = null;
+
                 if (isset($parameter['data-type'])) {
                     switch ($parameter['data-type']) {
                         case 'object':
@@ -1510,11 +1512,18 @@ class ClassMethod
                         case 'resource':
                         case 'variable':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
+                            if ($compilationContext->backend->getName() == 'ZendEngine3') {
+                                $symbol->setIsDoublePointer(true);
+                                $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'] . '_sub', $compilationContext);
+                            }
                             break;
 
                         default:
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
+                            if ($compilationContext->backend->getName() == 'ZendEngine3') {
+                                $symbolParam->setIsDoublePointer(true);
+                            }
                             if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
                                 $symbol->setMustInitNull(true);
                             }
@@ -1522,6 +1531,12 @@ class ClassMethod
                     }
                 } else {
                     $symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
+                }
+
+                /* ZE3 */
+                if (isset($substituteVars[$parameter['name']])) {
+                    $substituteVar = $substituteVars[$parameter['name']];
+                    $substituteVar->increaseUses();
                 }
 
                 /**
@@ -1632,11 +1647,11 @@ class ClassMethod
                         $defaultValue = $variable->getDefaultInitValue();
                         if (is_array($defaultValue)) {
                             $symbolTable->mustGrownStack(true);
+                            $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
                             switch ($defaultValue['type']) {
                                 case 'int':
                                 case 'uint':
                                 case 'long':
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
                                     break;
 
@@ -1649,28 +1664,23 @@ class ClassMethod
                                             throw new CompilerException("Invalid char literal: '" . $defaultValue['value'] . "'", $defaultValue);
                                         }
                                     }
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . 'ZVAL_LONG(' . $variable->getName() . ', \'' . $defaultValue['value'] . '\');' . PHP_EOL;
                                     break;
 
                                 case 'null':
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . $compilationContext->backend->assignNull($variable, $compilationContext, false) . PHP_EOL;
                                     break;
 
                                 case 'double':
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . 'ZVAL_DOUBLE(' . $variable->getName() . ', ' . $defaultValue['value'] . ');' . PHP_EOL;
                                     break;
 
                                 case 'string':
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false);
                                     break;
 
                                 case 'array':
                                 case 'empty-array':
-                                    $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                     $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
                                     break;
 
@@ -1691,14 +1701,13 @@ class ClassMethod
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
+                        $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
                         switch ($defaultValue['type']) {
                             case 'string':
-                                $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
                                 break;
 
                             case 'null':
-                                $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_EMPTY_STRING(' . $variable->getName() . ');' . PHP_EOL;
                                 break;
 
@@ -1718,15 +1727,14 @@ class ClassMethod
                     $defaultValue = $variable->getDefaultInitValue();
                     if (is_array($defaultValue)) {
                         $symbolTable->mustGrownStack(true);
+                        $initVarCode .= "\t" . $compilationContext->backend->initVar($variable, $compilationContext, false) . PHP_EOL;
                         switch ($defaultValue['type']) {
                             case 'null':
-                                $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . 'ZVAL_NULL(' . $variable->getName() . ');' . PHP_EOL;
                                 break;
 
                             case 'array':
                             case 'empty-array':
-                                $initVarCode .= "\t" . 'ZEPHIR_INIT_VAR(' . $variable->getName() . ');' . PHP_EOL;
                                 $initVarCode .= "\t" . $compilationContext->backend->initArray($variable, $compilationContext, null, false) . PHP_EOL;
                                 break;
 
@@ -1903,7 +1911,15 @@ class ClassMethod
                 /**
                  * Assign the default value according to the variable's type
                  */
-                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($compilationContext->symbolTable->getVariableForWrite($name, $compilationContext), $compilationContext, false, false) . PHP_EOL;
+                $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
+                $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($targetVar, $compilationContext, false, false) . PHP_EOL;
+                /* ZE3: */
+                if ($compilationContext->backend->getName() == 'ZendEngine3') {
+                    if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
+                        $substituteVar = $substituteVars[$parameter['name']];
+                        $initCode .= "\t\t" . $targetVar->getName() . ' = &' . $substituteVar->getName() . ';' . PHP_EOL;
+                    }
+                }
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
                 if (isset($parametersToSeparate[$name]) || $dataType != 'variable') {

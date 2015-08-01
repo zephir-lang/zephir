@@ -216,7 +216,7 @@ typedef enum _zephir_call_type {
 	do { \
 		zval *old_this_ptr = this_ptr; \
 		ZEPHIR_SET_THIS(object); \
-		ZEPHIR_INIT_NVAR((*return_value_ptr)); \
+		ZEPHIR_INIT_NVAR(return_value_ptr); \
 		method(0, return_value_ptr, object, 1); \
 		ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \
 		ZEPHIR_SET_THIS(old_this_ptr); \
@@ -226,7 +226,7 @@ typedef enum _zephir_call_type {
 	do { \
 		zend_object *old_this_ptr = Z_OBJ_P(this_ptr); \
 		Z_OBJ(EG(current_execute_data)->This) = Z_OBJ_P(object); \
-		ZEPHIR_INIT_NVAR((*return_value_ptr)); \
+		ZEPHIR_INIT_NVAR(return_value_ptr); \
 		Z_TRY_ADDREF_P(p1); \
 		method(0, return_value_ptr, object, 1, p1); \
 		Z_TRY_DELREF_P(p1); \
@@ -238,7 +238,7 @@ typedef enum _zephir_call_type {
 	do { \
 		zend_object *old_this_ptr = Z_OBJ_P(this_ptr); \
 		Z_OBJ(EG(current_execute_data)->This) = Z_OBJ_P(object); \
-		ZEPHIR_INIT_NVAR((*return_value_ptr)); \
+		ZEPHIR_INIT_NVAR(return_value_ptr); \
 		Z_TRY_ADDREF_P(p1); \
 		Z_TRY_ADDREF_P(p2); \
 		method(0, return_value_ptr, object, 1, p1, p2); \
@@ -252,7 +252,7 @@ typedef enum _zephir_call_type {
 	do { \
 		zend_object *old_this_ptr = Z_OBJ_P(this_ptr); \
 		Z_OBJ(EG(current_execute_data)->This) = Z_OBJ_P(object); \
-		ZEPHIR_INIT_NVAR((*return_value_ptr)); \
+		ZEPHIR_INIT_NVAR(return_value_ptr); \
 		Z_TRY_ADDREF_P(p1); \
 		Z_TRY_ADDREF_P(p2); \
 		Z_TRY_ADDREF_P(p3); \

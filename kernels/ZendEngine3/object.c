@@ -397,9 +397,10 @@ int zephir_isset_property_zval(zval *object, const zval *property)
 static inline zend_class_entry *zephir_lookup_class_ce(zend_class_entry *ce, const char *property_name, unsigned int property_length)
 {
 	zend_class_entry *original_ce = ce;
+	zend_property_info *info;
 
 	while (ce) {
-		if (zend_hash_str_exists(&ce->properties_info, property_name, property_length)) {
+		if ((info = zend_hash_str_find_ptr(&ce->properties_info, property_name, property_length)) != NULL && (info->flags & ZEND_ACC_SHADOW) != ZEND_ACC_SHADOW)  {
 			return ce;
 		}
 		ce = ce->parent;

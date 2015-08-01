@@ -299,16 +299,9 @@ class NativeArray
                                 break;
 
                             case 'array':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }
@@ -328,18 +321,27 @@ class NativeArray
                             case 'ulong':
                                 $expr = new Expression($item['value']);
                                 $resolvedExpr = $expr->compile($compilationContext);
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                /*switch ($resolvedExpr->getType()) {
+                                switch ($resolvedExpr->getType()) {
+                                    case 'int':
+                                    case 'uint':
+                                    case 'long':
+                                    case 'ulong':
+                                    case 'bool':
+                                    case 'double':
+                                    case 'null':
+                                    case 'string':
+                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                                        break;
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($item['file']) . '", ' . $item['line'] . ');');
+                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }
                                         break;
                                     default:
                                         throw new CompilerException("Invalid value type: " . $item['value']['type'], $item['value']);
-                                }*/
+                                }
                                 break;
 
                             case 'string':

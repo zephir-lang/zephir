@@ -38,7 +38,7 @@ class Backend extends BaseBackend
     {
         $output = 'Z_BVAL_P(' . $this->getVariableCode($variable) . ')';
         if ($useCodePrinter) {
-            $compilationContext->codePrinter->output($code);
+            $context->codePrinter->output($output);
         }
         return $output;
     }
@@ -296,6 +296,16 @@ class Backend extends BaseBackend
         }
 
         $groupVariables[] = $pointer . $variable->getName();
+    }
+
+    public function initVar(Variable $variable, CompilationContext $context, $useCodePrinter = true, $second = false)
+    {
+        $macro = !$second ? 'ZEPHIR_INIT_VAR' : 'ZEPHIR_INIT_NVAR';
+        $code = $macro . '(' . $this->getVariableCode($variable) . ');';
+        if ($useCodePrinter) {
+            $context->codePrinter->output($code);
+        }
+        return $code;
     }
 
     /**
@@ -581,7 +591,17 @@ class Backend extends BaseBackend
         }
 
         if ($key instanceof Variable) {
-            $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
+            switch ($key->getType()) {
+                case 'string':
+                case 'variable':
+                    $compilationContext->codePrinter->output('zephir_array_update_zval(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $this->getVariableCode($key) . ', ' . $value . ', ' . $flags . ');');
+                    break;
+                case 'int':
+                case 'uint':
+                case 'long':
+                    $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getName() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
+                    break;
+            }
         } else if ($key instanceof CompiledExpression) {
             switch ($key->getType()) {
                 case 'string':
@@ -699,15 +719,16 @@ class Backend extends BaseBackend
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
+        $variableCode = $this->getVariableCodePointer($variable);
         switch ($exprIndex->getType()) {
             case 'int':
             case 'uint':
             case 'long':
-                $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
+                $context->codePrinter->output('zephir_array_unset_long(' . $variableCode . ', ' . $exprIndex->getCode() . ', ' . $flags . ');');
                 break;
 
             case 'string':
-                $context->codePrinter->output('zephir_array_unset_string(&' . $variable->getName() . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
+                $context->codePrinter->output('zephir_array_unset_string(' . $variableCode . ', SS("' . $exprIndex->getCode() . '"), ' . $flags . ');');
                 break;
 
             case 'variable':
@@ -717,12 +738,12 @@ class Backend extends BaseBackend
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $context->codePrinter->output('zephir_array_unset_long(&' . $variable->getName() . ', ' . $indexCode . ', ' . $flags . ');');
+                        $context->codePrinter->output('zephir_array_unset_long(' . $variableCode . ', ' . $indexCode . ', ' . $flags . ');');
                         break;
 
                     case 'string':
                     case 'variable':
-                        $context->codePrinter->output('zephir_array_unset(&' . $variable->getName() . ', ' . $indexCode . ', ' . $flags . ');');
+                        $context->codePrinter->output('zephir_array_unset(' . $variableCode . ', ' . $indexCode . ', ' . $flags . ');');
                         break;
 
                     default:
@@ -796,7 +817,8 @@ class Backend extends BaseBackend
         list ($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
         $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
-        $compilationContext->codePrinter->output('zephir_array_update_multi(&' . $variable->getName() . ', ' . $symbol . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+        $varCode = $this->getVariableCodePointer($variable);
+        $compilationContext->codePrinter->output('zephir_array_update_multi(' . $varCode . ', ' . $symbol . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
     }
 
     public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
@@ -821,7 +843,7 @@ class Backend extends BaseBackend
         $name = $globalVar->getName();
         $output = 'zephir_get_global(&' . $name . ', SS("' . $name . '") TSRMLS_CC);';
         if ($useCodePrinter) {
-            $codePrinter->output($output);
+            $compilationContext->codePrinter->output($output);
         }
         return $output;
     }
@@ -847,7 +869,7 @@ class Backend extends BaseBackend
             }
         } else {
             if ($property instanceof Variable) {
-                $context->codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $this->getVariableCode($property) . ', ' . $flags . ');');
+                $context->codePrinter->output('zephir_read_property_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $this->getVariableCode($property) . ', PH_NOISY_CC);');
             } else {
                 $context->codePrinter->output('zephir_read_property(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $property . '"), PH_NOISY_CC);');
             }
@@ -1034,8 +1056,8 @@ class Backend extends BaseBackend
          */
         if (isset($statement['statements'])) {
             $statementBlock->isLoop(true);
-            if (isset($this->statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($statement['key']);
+            if (isset($statement['key'])) {
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
             }
             $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
             $statementBlock->compile($compilationContext);
@@ -1145,11 +1167,15 @@ class Backend extends BaseBackend
                 $context->symbolTable->mustGrownStack(true);
                 $codePrinter->output('if (likely(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
                 $codePrinter->increaseLevel();
-                $codePrinter->output('zephir_get_strval(' . $var['name'] . ', ' . $var['name'] . '_param);');
+                $targetVar = $var['name'];
+                if ($this->getName() == 'ZendEngine3') {
+                    $targetVar = '&' . $targetVar;
+                }
+                $codePrinter->output('zephir_get_strval(' . $targetVar . ', ' . $var['name'] . '_param);');
                 $codePrinter->decreaseLevel();
                 $codePrinter->output('} else {');
                 $codePrinter->increaseLevel();
-                $codePrinter->output('ZEPHIR_INIT_VAR(' . $var['name'] . ');');
+                $this->initVar($inputParamVariable, $context);
                 $codePrinter->output('ZVAL_EMPTY_STRING(' . $inputParamCode . ');');
                 $codePrinter->decreaseLevel();
                 $codePrinter->output('}');

@@ -50,7 +50,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 {
 	va_list va;
 	int arg_count = ZEND_CALL_NUM_ARGS(EG(current_execute_data));
-	zval *arg, *p;
+	zval *arg, **p;
 	int i;
 
 	if (num_args < required_args || (num_args > (required_args + optional_args))) {
@@ -72,8 +72,8 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 	i = 0;
 	while (num_args-- > 0) {
 		arg = ZEND_CALL_ARG(EG(current_execute_data), i + 1);
-		p = va_arg(va, zval *);
-		ZVAL_COPY(p, arg);
+		p = va_arg(va, zval **);
+		*p = arg;
 
 		i++;
 	}

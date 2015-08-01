@@ -800,17 +800,17 @@ class Variable
                 $compilationContext->symbolTable->mustGrownStack(true);
                 if ($compilationContext->insideCycle) {
                     $this->mustInitNull = true;
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+                    $compilationContext->backend->initVar($this, $compilationContext, true, true);
                 } else {
                     if ($this->variantInits > 0) {
                         if ($this->initBranch === 0) {
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR(' . $this->getName() . ');');
                         } else {
                             $this->mustInitNull = true;
-                            $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(' . $this->getName() . ');');
+                            $compilationContext->backend->initVar($this, $compilationContext, true, true);
                         }
                     } else {
-                        $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+                        $compilationContext->backend->initVar($this, $compilationContext);
                     }
                 }
             } else {
@@ -895,7 +895,7 @@ class Variable
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_LNVAR(' . $this->getName() . ');');
                 } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(' . $this->getName() . ');');
+                    $compilationContext->backend->initVar($this, $compilationContext);
                 }
             } else {
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
@@ -929,11 +929,12 @@ class Variable
 
             $compilationContext->headersManager->add('kernel/memory');
             $compilationContext->symbolTable->mustGrownStack(true);
+            $symbol = $compilationContext->backend->getVariableCode($this);
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
-                $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');
+                $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $symbol . ');');
             } else {
-                $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
+                $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $symbol . ');');
             }
             $this->variantInits++;
         }

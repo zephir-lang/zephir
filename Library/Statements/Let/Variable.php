@@ -560,7 +560,7 @@ class Variable
                                 $symbolVariable->setMustInitNull(true);
                                 $compilationContext->symbolTable->mustGrownStack(true);
                                 $compilationContext->headersManager->add('kernel/operators');
-                                $codePrinter->output('zephir_get_strval(' . $variable . ', ' . $itemVariable->getName() . ');');
+                                $codePrinter->output('zephir_get_strval(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', ' . $compilationContext->backend->getVariableCode($itemVariable) . ');');
                                 break;
 
                             case 'concat-assign':
@@ -763,7 +763,7 @@ class Variable
                             $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('int', $compilationContext);
                             $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
                             $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
+                            $compilationContext->backend->assignLong($symbolVariable, $tempVariable, $compilationContext);
                         } else {
                             $symbolVariable->initVariant($compilationContext);
                             $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);

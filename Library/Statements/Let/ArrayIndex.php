@@ -178,23 +178,17 @@ class ArrayIndex
             case 'uint':
             case 'long':
             case 'ulong':
-                $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
-                break;
-
             case 'string':
                 $compilationContext->backend->updateArray($realSymbolVariable, $exprIndex, $symbolVariable, $compilationContext, $flags);
                 break;
 
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
-                $variableIndexName = ($variableIndex->isLocalOnly() ? '&' : '') . $variableIndex->getName();
                 switch ($variableIndex->getType()) {
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
-                        break;
                     case 'string':
                     case 'variable':
                         $compilationContext->backend->updateArray($realSymbolVariable, $variableIndex, $symbolVariable, $compilationContext, $flags);

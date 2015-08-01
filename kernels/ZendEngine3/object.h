@@ -91,7 +91,7 @@ int zephir_property_incr_decr(zval *object, char *property_name, unsigned int pr
 		if (Z_TYPE(var) == IS_STRING) { \
 			ZEPHIR_CPY_WRT(&destination, &var); \
 		} else { \
-			ZEPHIR_INIT_NVAR(destination); \
+			ZEPHIR_INIT_NVAR(&destination); \
 			ZVAL_STRING(&destination, "<undefined class>"); \
 		} \
 	}

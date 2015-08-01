@@ -175,7 +175,7 @@ class FunctionCall extends Call
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
-                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $parameters[$n - 1] . ');');
+                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $compilationContext->backend->getVariableCode($variable) . ');');
                                 $references[] = $parameters[$n - 1] ;
                                 return false;
                             }
@@ -369,6 +369,7 @@ class FunctionCall extends Call
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
         /**
@@ -401,7 +402,7 @@ class FunctionCall extends Call
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
@@ -415,7 +416,7 @@ class FunctionCall extends Call
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -431,7 +432,8 @@ class FunctionCall extends Call
 
         if (is_array($references)) {
             foreach ($references as $reference) {
-                $compilationContext->codePrinter->output('ZEPHIR_UNREF(' . $reference . ');');
+                $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
+                $compilationContext->codePrinter->output('ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');');
             }
         }
 

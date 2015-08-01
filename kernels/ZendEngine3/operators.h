@@ -201,13 +201,13 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 	{ \
 		int use_copy_right; \
 		zval right_tmp; \
-		if (Z_TYPE(right) == IS_STRING) { \
-			ZEPHIR_CPY_WRT(&left, &right); \
+		if (Z_TYPE_P(right) == IS_STRING) { \
+			ZEPHIR_CPY_WRT(left, right); \
 		} else { \
-			use_copy_right = zephir_make_printable_zval(&right, &right_tmp); \
+			use_copy_right = zephir_make_printable_zval(right, &right_tmp); \
 			if (use_copy_right) { \
 				ZEPHIR_INIT_NVAR(left); \
-				ZVAL_STRINGL(&left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
+				ZVAL_STRINGL(left, Z_STRVAL(right_tmp), Z_STRLEN(right_tmp)); \
 				zval_ptr_dtor(&right_tmp); \
 			} \
 		} \
@@ -218,7 +218,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		if (Z_TYPE_P(passValue) == IS_ARRAY) { \
 			ZEPHIR_CPY_WRT(returnValue, passValue); \
 		} else { \
-			ZEPHIR_INIT_NVAR((*returnValue)); \
+			ZEPHIR_INIT_NVAR(returnValue); \
 			array_init_size(returnValue, 0); \
 		} \
 	}

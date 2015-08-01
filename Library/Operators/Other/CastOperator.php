@@ -247,7 +247,10 @@ class CastOperator extends BaseOperator
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext);
                         $symbolVariable->increaseUses();
-                        $compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                        $resolvedVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext);
+                        $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
+                        $compilationContext->codePrinter->output('zephir_get_strval(' . $symbol . ', ' . $resolvedCode . ');');
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
