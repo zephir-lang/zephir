@@ -141,7 +141,6 @@ class ObjectDynamicStringProperty
 
                     case 'bool':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_BOOL(' . $tempVariable->getName() . ', ' . $variableVariable->getName() . ');');
                         $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
                         $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $compilationContext);
                         break;

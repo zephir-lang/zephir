@@ -160,11 +160,8 @@ class DivOperator extends ArithmeticalBaseOperator
 
                             case 'variable':
                                 $compilationContext->headersManager->add('kernel/operators');
-                                if ($variableRight->isLocalOnly()) {
-                                    return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $left->getCode() . ', &' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                } else {
-                                    return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                }
+                                $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
+                                return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ' TSRMLS_CC)', $expression);
                                 break;
 
                             default:
@@ -318,11 +315,8 @@ class DivOperator extends ArithmeticalBaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        if ($variableRight->isLocalOnly()) {
-                                            return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $variableLeft->getName() . ', &' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                        } else {
-                                            return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                        }
+                                        $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $variableLeft->getName() . ', ' . $symbolRight . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     default:

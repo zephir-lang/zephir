@@ -168,7 +168,7 @@ class StringsManager extends BaseStringsManager
             }
 
             $code .= "\t" . 'Z_STRVAL_P(result)[length] = 0;' . PHP_EOL;
-            $code .= "\t" . 'ZVAL_NEW_STR(result, Z_STR_P(result));' . PHP_EOL;
+            $code .= "\t" . 'zend_string_forget_hash_val(Z_STR_P(result));' . PHP_EOL;
 
             foreach ($zvars as $zvar) {
                 $code .= "\t" . 'if (use_copy' . $zvar . ') {' . PHP_EOL;

@@ -67,6 +67,8 @@ class RoundOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
+        /* Todo: move var return type -> double as with round, floor */
+        $symbol = $context->backend->getVariableCode($symbolVariable);
 
         switch (count($expression['parameters'])) {
             /**
@@ -74,7 +76,7 @@ class RoundOptimizer extends OptimizerAbstract
              */
             case 1:
                 $context->codePrinter->output(
-                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', NULL, NULL TSRMLS_CC);'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', NULL, NULL TSRMLS_CC);'
                 );
                 break;
 
@@ -83,13 +85,13 @@ class RoundOptimizer extends OptimizerAbstract
              */
             case 2:
                 $context->codePrinter->output(
-                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL TSRMLS_CC);'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL TSRMLS_CC);'
                 );
                 break;
 
             default:
                 $context->codePrinter->output(
-                    'zephir_round(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ' TSRMLS_CC);'
                 );
                 break;
         }

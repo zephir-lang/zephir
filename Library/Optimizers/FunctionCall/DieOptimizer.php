@@ -29,31 +29,8 @@ use Zephir\Optimizers\OptimizerAbstract;
  * DieOptimizer
  *
  * Optimizes calls to 'die' using internal function
+ * Alias of exit
  */
-class DieOptimizer extends OptimizerAbstract
+class DieOptimizer extends ExitOptimizer
 {
-    /**
-     * @param array $expression
-     * @param Call $call
-     * @param CompilationContext $context
-     * @return bool|CompiledExpression|mixed
-     * @throws CompilerException
-     */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
-    {
-        if (isset($expression['parameters']) && count($expression['parameters']) > 1) {
-            return false;
-        }
-
-        $context->headersManager->add('kernel/exit');
-        if (!isset($expression['parameters'])) {
-            $context->codePrinter->output('zephir_exit_empty();');
-        } else {
-            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            $context->codePrinter->output('zephir_exit(' . $resolvedParams[0] .');');
-        }
-
-        $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
-        return new CompiledExpression('null', '', $expression);
-    }
 }

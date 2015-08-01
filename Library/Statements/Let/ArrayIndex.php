@@ -76,7 +76,7 @@ class ArrayIndex
                         $symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $compilationContext->backend->assignBool($symbolVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                     }
                 }
                 break;
@@ -182,7 +182,7 @@ class ArrayIndex
                 break;
 
             case 'string':
-                $codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                $compilationContext->backend->updateArray($realSymbolVariable, $exprIndex, $symbolVariable, $compilationContext, $flags);
                 break;
 
             case 'variable':
