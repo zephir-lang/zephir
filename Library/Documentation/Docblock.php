@@ -126,7 +126,11 @@ class Docblock
         if ($description = $this->getDescription()) {
             $docBlock.= PHP_EOL . ' *';
             $docBlock.= PHP_EOL . ' *';
-            $docBlock.= PHP_EOL . ' * ' . $description;
+
+            foreach ((array)explode("\n", $description) as $line) {
+                $docBlock.= PHP_EOL . ' * ' . trim($line);
+            }
+
             $docBlock.= PHP_EOL . ' *';
         }
 
