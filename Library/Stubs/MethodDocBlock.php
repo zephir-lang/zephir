@@ -68,7 +68,7 @@ class MethodDocBlock extends DocBlock
         if ($returnTypes) {
             foreach ($returnTypes as $type) {
                 if (isset($type['data-type'])) {
-                    $return[] = $type['data-type'];
+                    $return[] = $type['data-type'] == 'variable' ? 'mixed' : $type['data-type'];
                 }
             }
         }
