@@ -19,7 +19,6 @@
 
 namespace Zephir;
 
-
 use Zephir\Documentation\DocblockParser;
 
 /**
@@ -325,7 +324,6 @@ class CompilerFile
             $returnsType = array();
 
             if ($docBlock) {
-
                 $docBlockParser = new DocblockParser('/' . $docBlock .'/');
                 $docBlockParsed = $docBlockParser->parse();
 
