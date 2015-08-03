@@ -157,6 +157,10 @@ EOF;
         $source .= PHP_EOL;
 
         foreach ($class->getMethods() as $method) {
+            if ($method->isInternal()) {
+                continue;
+            }
+
             $source .= $this->buildMethod($method, $class->getType() === 'interface', $indent) . "\n\n";
         }
 
