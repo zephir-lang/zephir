@@ -15,6 +15,12 @@ class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
 
+    /* TODO: This should not be used, temporary (until its completely refactored) */
+    public function isZE3()
+    {
+        return false;
+    }
+
     /**
      * Get a double pointer to the variable
      */
@@ -1110,7 +1116,7 @@ class Backend extends BaseBackend
                 $conditions[] = $cond . ' IS_LONG';
                 break;
             case 'bool':
-                if ($this->getName() != 'ZendEngine3') {
+                if (!$this->isZE3()) {
                     $conditions[] = $cond . ' IS_BOOL';
                 } else {
                     $conditions[] = $cond . ' IS_TRUE';
@@ -1168,7 +1174,7 @@ class Backend extends BaseBackend
                 $codePrinter->output('if (likely(Z_TYPE_P(' . $parameterCode . ') == IS_STRING)) {');
                 $codePrinter->increaseLevel();
                 $targetVar = $var['name'];
-                if ($this->getName() == 'ZendEngine3') {
+                if ($this->isZE3()) {
                     $targetVar = '&' . $targetVar;
                 }
                 $codePrinter->output('zephir_get_strval(' . $targetVar . ', ' . $var['name'] . '_param);');

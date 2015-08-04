@@ -68,7 +68,7 @@ class ArrayMergeOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $resolveParam = $context->backend->getName() != 'ZendEngine3' ? function ($str) {
+        $resolveParam = !$context->backend->isZE3() ? function ($str) {
             return '&(' . $str . ')';
         } : function ($str) {
             return $str;

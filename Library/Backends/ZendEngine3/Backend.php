@@ -17,6 +17,12 @@ class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
 
+    /* TODO: This should not be used, temporary (until its completely refactored) */
+    public function isZE3()
+    {
+        return true;
+    }
+
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isDoublePointer() ||

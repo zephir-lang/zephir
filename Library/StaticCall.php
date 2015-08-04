@@ -103,7 +103,7 @@ class StaticCall extends Call
                 }
             }
         } else {
-            $thisPtr = $compilationContext->backend->getName() == 'ZendEngine3' ? '&(EG(current_execute_data)->This)' : 'EG(This)';
+            $thisPtr = $compilationContext->backend->isZE3() ? '&(EG(current_execute_data)->This)' : 'EG(This)';
             if (!count($params)) {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
