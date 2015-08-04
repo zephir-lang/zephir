@@ -80,7 +80,9 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        if ($context->backend->getName() == 'ZendEngine3') {
+
+        /* TODO: This (and other optimizers using isZE3) should be fixed, when moving optimizers to backends */
+        if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_json_decode(' . $symbol . ', ' . $resolvedParams[0] . ', '. $options .');');
         } else {
             $context->codePrinter->output('zephir_json_decode(' . $symbol . ', &(' . $symbol . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');

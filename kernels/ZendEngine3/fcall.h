@@ -82,10 +82,10 @@ typedef enum _zephir_call_type {
 #define ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(object, method) \
 	do { \
 		zval *old_this_ptr = this_ptr; \
-		ZVAL_COPY_VALUE(&EG(current_execute_data)->This, Z_OBJ_P(object)); \
+		ZEPHIR_SET_THIS(object); \
 		method(0, return_value, object, 1); \
 		ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \
-		ZVAL_COPY_VALUE(&EG(current_execute_data)->This, old_this_ptr); \
+		ZEPHIR_SET_THIS(old_this_ptr); \
 	} while (0)
 
 #define ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P1(object, method, p1) \

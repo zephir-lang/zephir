@@ -75,7 +75,7 @@ class JsonEncodeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        if ($context->backend->getName() == 'ZendEngine3') {
+        if ($context->backend->isZE3()) {
             $context->codePrinter->output('zephir_json_encode(' . $symbol . ', ' . $resolvedParams[0] . ', '. $options .');');
         } else {
             $context->codePrinter->output('zephir_json_encode(' . $symbol . ', &(' . $symbol . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');

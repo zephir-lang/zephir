@@ -163,8 +163,8 @@ class FunctionCall extends Call
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
-                            /* TODO Fix this better */
-                            if ($compilationContext->backend->getName() == 'ZendEngine3' && $parameters[$n - 1][0] == '&') {
+                            /* TODO hack, fix this better */
+                            if ($compilationContext->backend->isZE3() && $parameters[$n - 1][0] == '&') {
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
                             if (!preg_match('/^[a-zA-Z0-9\_]+$/', $parameters[$n - 1])) {

@@ -45,7 +45,7 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         $condition = 'Z_TYPE_P(' . $resolvedParams[0] . ') == ' . $this->getType();
-        if ($context->backend->getName() == 'ZendEngine3') {
+        if ($context->backend->isZE3()) {
             if ($this->getType() == 'IS_BOOL') {
                 $condition = '(Z_TYPE_P(' . $resolvedParams[0] . ') == IS_TRUE || Z_TYPE_P(' . $resolvedParams[0] . ') == IS_FALSE)';
             }

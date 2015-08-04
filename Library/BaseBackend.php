@@ -38,7 +38,6 @@ abstract class BaseBackend
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
     abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context);
 
-    abstract public function getVariableCode(Variable $variable);
     abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true);
@@ -78,6 +77,7 @@ abstract class BaseBackend
     abstract public function arrayFetch(Variable $var, Variable $src, $index, $flags, $arrayAccess, CompilationContext $context, $useCodePrinter = true);
 
     abstract public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context);
+    abstract public function arrayIssetFetch(Variable $target, Variable $var, $resolvedExpr, $flags, $expression, CompilationContext $context);
     abstract public function propertyIsset(Variable $var, $key, CompilationContext $context);
 
     /* Unset array */

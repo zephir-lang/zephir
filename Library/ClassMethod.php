@@ -1512,7 +1512,8 @@ class ClassMethod
                         case 'resource':
                         case 'variable':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
-                            if ($compilationContext->backend->getName() == 'ZendEngine3') {
+                            /* TODO: Move this to the respective backend, which requires refactoring how this works */
+                            if ($compilationContext->backend->isZE3()) {
                                 $symbol->setIsDoublePointer(true);
                                 $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'] . '_sub', $compilationContext);
                             }
@@ -1521,7 +1522,8 @@ class ClassMethod
                         default:
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             $symbolParam = $symbolTable->addVariable('variable', $parameter['name'] . '_param', $compilationContext);
-                            if ($compilationContext->backend->getName() == 'ZendEngine3') {
+                            /* TODO: Move this to the respective backend, which requires refactoring how this works */
+                            if ($compilationContext->backend->isZE3()) {
                                 $symbolParam->setIsDoublePointer(true);
                             }
                             if ($parameter['data-type'] == 'string' || $parameter['data-type'] == 'array') {
@@ -1533,7 +1535,7 @@ class ClassMethod
                     $symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
                 }
 
-                /* ZE3 */
+                /* ZE3 only */
                 if (isset($substituteVars[$parameter['name']])) {
                     $substituteVar = $substituteVars[$parameter['name']];
                     $substituteVar->increaseUses();
@@ -1676,7 +1678,7 @@ class ClassMethod
                                     break;
 
                                 case 'string':
-                                    $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false);
+                                    $initVarCode .= "\t" . $compilationContext->backend->assignString($variable, Utils::addSlashes($defaultValue['value'], true), $compilationContext, false) . PHP_EOL;
                                     break;
 
                                 case 'array':
@@ -1913,8 +1915,8 @@ class ClassMethod
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
                 $initCode .= "\t" . $compilationContext->backend->ifVariableValueUndefined($targetVar, $compilationContext, false, false) . PHP_EOL;
-                /* ZE3: */
-                if ($compilationContext->backend->getName() == 'ZendEngine3') {
+
+                if ($compilationContext->backend->isZE3()) {
                     if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                         $substituteVar = $substituteVars[$parameter['name']];
                         $initCode .= "\t\t" . $targetVar->getName() . ' = &' . $substituteVar->getName() . ';' . PHP_EOL;
@@ -2068,7 +2070,9 @@ class ClassMethod
 
             $varInitCode[] = "\t" . $code . join(', ', $groupVariables) . ';';
         }
-        $varInitCode[] = $additionalCode;
+        /* Keep order consistent with previous zephir versions (BC-only) */
+        $varInitCode = array_reverse($varInitCode);
+        if ($additionalCode) $varInitCode[] = $additionalCode;
         $initCode = implode(PHP_EOL, $varInitCode);
         if ($initCode) {
             $codePrinter->preOutput($initCode);
