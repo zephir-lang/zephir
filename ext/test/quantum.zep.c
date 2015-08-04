@@ -76,7 +76,7 @@ PHP_METHOD(Test_Quantum, harmos) {
 	ZVAL_STRING(&_1, "harmos.txt", 0);
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_STRING(&_2, "w", 0);
-	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 26, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 24, &_1, &_2);
 	zephir_check_call_status();
 	if (!(zephir_is_true(fp))) {
 		RETURN_MM_LONG(1);
@@ -287,13 +287,13 @@ PHP_METHOD(Test_Quantum, harmos) {
 					ZVAL_DOUBLE(&_2, ((double) i * dx));
 					ZEPHIR_SINIT_NVAR(_26);
 					ZVAL_DOUBLE(&_26, ((double) n * dt));
-					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_35, 53, fp, &_1, &_2, &_26, _17);
+					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_35, 51, fp, &_1, &_2, &_26, _17);
 					zephir_check_call_status();
 					i = (i + 10);
 				}
 				ZEPHIR_SINIT_NVAR(_1);
 				ZVAL_STRING(&_1, "\n", 0);
-				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_35, 53, fp, &_1);
+				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_35, 51, fp, &_1);
 				zephir_check_call_status();
 			}
 			j = 1;
