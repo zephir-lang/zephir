@@ -204,7 +204,7 @@ class FetchOperator extends BaseOperator
                 return new CompiledExpression('bool', 'zephir_fetch_property_zval(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $evalVariableProperty->getName() . ', PH_SILENT_CC)', $expression);
 
             default:
-                throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);
+                throw new CompilerException('Cannot use this expression for "fetch" operators: ' . $expression['right']['type'], $expression);
         }
     }
 }
