@@ -50,3 +50,227 @@
 		} \
 	}
 
+/**
+ * Checks if a file exist
+ *
+ */
+int zephir_file_exists(zval *filename)
+{
+	zval return_value;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		return FAILURE;
+	}
+
+	php_stat(Z_STRVAL_P(filename), (php_stat_len) Z_STRLEN_P(filename), FS_EXISTS, &return_value);
+
+	if (Z_TYPE(return_value) != IS_TRUE) {
+		return FAILURE;
+	}
+
+	return SUCCESS;
+}
+
+
+void zephir_fwrite(zval *return_value, zval *stream_zval, zval *data)
+{
+
+	int num_bytes;
+	php_stream *stream;
+
+	if (Z_TYPE_P(stream_zval) != IS_RESOURCE) {
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		if (return_value) {
+			RETVAL_FALSE;
+		} else {
+			return;
+		}
+	}
+
+	if (Z_TYPE_P(data) != IS_STRING) {
+		/* @todo convert data to string */
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		if (return_value) {
+			RETVAL_FALSE;
+		} else {
+			return;
+		}
+	}
+
+	if (!Z_STRLEN_P(data)) {
+		if (return_value) {
+			RETURN_LONG(0);
+		} else {
+			return;
+		}
+	}
+
+	PHP_STREAM_TO_ZVAL(stream, stream_zval);
+
+	num_bytes = php_stream_write(stream, Z_STRVAL_P(data), Z_STRLEN_P(data));
+	if (return_value) {
+		RETURN_LONG(num_bytes);
+	}
+}
+
+int zephir_feof(zval *stream_zval)
+{
+
+	php_stream *stream;
+
+	if (Z_TYPE_P(stream_zval) != IS_RESOURCE) {
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_feof()");
+		return 0;
+	}
+
+	php_stream_from_zval_no_verify(stream, stream_zval);
+	if (stream == NULL) {
+		return 0;
+	}
+
+	return php_stream_eof(stream);
+}
+
+int zephir_fclose(zval *stream_zval)
+{
+	php_stream *stream;
+
+	if (Z_TYPE_P(stream_zval) != IS_RESOURCE) {
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_fwrite()");
+		return 0;
+	}
+
+	php_stream_from_zval_no_verify(stream, stream_zval);
+	if (stream == NULL) {
+		return 0;
+	}
+
+	if ((stream->flags & PHP_STREAM_FLAG_NO_FCLOSE) != 0) {
+		php_error_docref(NULL, E_WARNING, "%d is not a valid stream resource", stream->res->handle);
+		return 0;
+	}
+
+	if (!stream->is_persistent) {
+		php_stream_close(stream);
+	} else {
+		php_stream_pclose(stream);
+	}
+
+	return 1;
+}
+
+void zephir_file_get_contents(zval *return_value, zval *filename)
+{
+	zend_string *contents;
+	php_stream *stream;
+	long maxlen = PHP_STREAM_COPY_ALL;
+	zval *zcontext = NULL;
+	php_stream_context *context = NULL;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Invalid arguments supplied for zephir_file_get_contents()");
+		RETVAL_FALSE;
+		return;
+	}
+
+	context = php_stream_context_from_zval(zcontext, 0);
+
+	stream = php_stream_open_wrapper_ex(Z_STRVAL_P(filename), "rb", 0 | REPORT_ERRORS, NULL, context);
+	if (!stream) {
+		RETURN_FALSE;
+	}
+
+	if ((contents = php_stream_copy_to_mem(stream, maxlen, 0)) != NULL) {
+		RETVAL_STR(contents);
+	} else {
+		RETVAL_EMPTY_STRING();
+	}
+
+	php_stream_close(stream);
+}
+
+/**
+ * Writes a zval to a stream
+ */
+void zephir_file_put_contents(zval *return_value, zval *filename, zval *data)
+{
+	php_stream *stream;
+	int numbytes = 0, use_copy = 0;
+	zval *zcontext = NULL;
+	zval copy;
+	php_stream_context *context = NULL;
+
+	if (Z_TYPE_P(filename) != IS_STRING) {
+		php_error_docref(NULL, E_WARNING, "Invalid arguments supplied for zephir_file_put_contents()");
+		if (return_value) {
+			RETVAL_FALSE;
+		}
+		return;
+	}
+
+	context = php_stream_context_from_zval(zcontext, 0 & PHP_FILE_NO_DEFAULT_CONTEXT);
+
+	stream = php_stream_open_wrapper_ex(Z_STRVAL_P(filename), "wb", ((0 & PHP_FILE_USE_INCLUDE_PATH) ? USE_PATH : 0) | REPORT_ERRORS, NULL, context);
+	if (stream == NULL) {
+		if (return_value) {
+			RETURN_FALSE;
+		}
+		return;
+	}
+
+	switch (Z_TYPE_P(data)) {
+
+		case IS_NULL:
+		case IS_LONG:
+		case IS_DOUBLE:
+		case IS_TRUE:
+		case IS_FALSE:
+		case IS_CONSTANT:
+			use_copy = zend_make_printable_zval(data, &copy);
+			if (use_copy) {
+				data = &copy;
+			}
+			/* no break */
+
+		case IS_STRING:
+			if (Z_STRLEN_P(data)) {
+				numbytes = php_stream_write(stream, Z_STRVAL_P(data), Z_STRLEN_P(data));
+				if (numbytes != Z_STRLEN_P(data)) {
+					php_error_docref(NULL, E_WARNING, "Only %d of %d bytes written, possibly out of free disk space", numbytes, Z_STRLEN_P(data));
+					numbytes = -1;
+				}
+			}
+			break;
+		default:
+			numbytes = -1;
+			break;
+	}
+
+	php_stream_close(stream);
+
+	if (use_copy) {
+		zval_dtor(data);
+	}
+
+	if (numbytes < 0) {
+		if (return_value) {
+			RETURN_FALSE;
+		} else {
+			return;
+		}
+	}
+
+	if (return_value) {
+		RETURN_LONG(numbytes);
+	}
+	return;
+}
+
+void zephir_filemtime(zval *return_value, zval *path)
+{
+	if (likely(Z_TYPE_P(path) == IS_STRING)) {
+		php_stat(Z_STRVAL_P(path), (php_stat_len)(Z_STRLEN_P(path)), FS_MTIME, return_value);
+	} else {
+		ZVAL_FALSE(return_value);
+	}
+}

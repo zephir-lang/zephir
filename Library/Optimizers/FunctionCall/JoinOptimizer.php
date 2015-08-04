@@ -75,12 +75,13 @@ class JoinOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
+        $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
-            $context->codePrinter->output('zephir_fast_join_str(' . $symbolVariable->getName() . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
+            $context->codePrinter->output('zephir_fast_join_str(' . $symbol . ', SL("' . $str . '"), ' . $resolvedParams[0] . ' TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_fast_join(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_fast_join(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

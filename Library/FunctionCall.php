@@ -163,6 +163,10 @@ class FunctionCall extends Call
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
+                            /* TODO hack, fix this better */
+                            if ($compilationContext->backend->isZE3() && $parameters[$n - 1][0] == '&') {
+                                $parameters[$n - 1] = substr($parameters[$n - 1], 1);
+                            }
                             if (!preg_match('/^[a-zA-Z0-9\_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning("Cannot mark complex expression as reference", "invalid-reference", $expression);
                                 continue;
@@ -171,7 +175,7 @@ class FunctionCall extends Call
                             $variable = $compilationContext->symbolTable->getVariable($parameters[$n - 1]);
                             if ($variable) {
                                 $variable->setDynamicTypes('undefined');
-                                $compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $parameters[$n - 1] . ');');
+                                $compilationContext->codePrinter->output('ZEPHIR_MAKE_REF(' . $compilationContext->backend->getVariableCode($variable) . ');');
                                 $references[] = $parameters[$n - 1] ;
                                 return false;
                             }
@@ -365,6 +369,7 @@ class FunctionCall extends Call
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
         /**
@@ -397,7 +402,7 @@ class FunctionCall extends Call
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ');');
@@ -411,7 +416,7 @@ class FunctionCall extends Call
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(&' . $symbolVariable->getName() . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_FUNCTION(' . $symbol . ', "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_FUNCTION(NULL, "' . $funcName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -427,7 +432,8 @@ class FunctionCall extends Call
 
         if (is_array($references)) {
             foreach ($references as $reference) {
-                $compilationContext->codePrinter->output('Z_UNSET_ISREF_P(' . $reference . ');');
+                $variable = $compilationContext->symbolTable->getVariable($reference, $compilationContext);
+                $compilationContext->codePrinter->output('ZEPHIR_UNREF(' . $compilationContext->backend->getVariableCode($variable) . ');');
             }
         }
 
@@ -513,46 +519,40 @@ class FunctionCall extends Call
 
         if (!isset($expression['parameters'])) {
             if ($this->isExpectingReturn()) {
-                if ($symbolVariable->getName() == 'return_value') {
-                    $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL, 0);');
-                } else {
+                if ($symbolVariable->getName() != 'return_value') {
                     if ($this->mustInitSymbolVariable()) {
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->trackVariant($compilationContext);
                     }
-                    $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL, 0);');
                 }
+                $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext);
             } else {
-                $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $variable->getName() . ', NULL, 0);');
+                $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext);
             }
         } else {
             if (count($params)) {
                 if ($this->isExpectingReturn()) {
-                    if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL, 0, ' . join(', ', $params) . ');');
-                    } else {
+                    if ($symbolVariable->getName() != 'return_value') {
                         if ($this->mustInitSymbolVariable()) {
                             $symbolVariable->setMustInitNull(true);
                             $symbolVariable->trackVariant($compilationContext);
                         }
-                        $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL, 0, ' . join(', ', $params) . ');');
                     }
+                    $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext, $params);
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $variable->getName() . ', NULL, 0, ' . join(', ', $params) . ');');
+                    $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext, $params);
                 }
             } else {
                 if ($this->isExpectingReturn()) {
-                    if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $variable->getName() . ', NULL, 0);');
-                    } else {
+                    if ($symbolVariable->getName() != 'return_value') {
                         if ($this->mustInitSymbolVariable()) {
                             $symbolVariable->setMustInitNull(true);
                             $symbolVariable->trackVariant($compilationContext);
                         }
-                        $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(&' . $symbolVariable->getName() . ', ' . $variable->getName() . ', NULL, 0);');
                     }
+                    $compilationContext->backend->callDynamicFunction($symbolVariable, $variable, $compilationContext);
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $variable->getName() . ', NULL, 0);');
+                    $compilationContext->backend->callDynamicFunction(null, $variable, $compilationContext);
                 }
             }
         }

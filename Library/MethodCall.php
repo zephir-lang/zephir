@@ -591,27 +591,7 @@ class MethodCall extends Call
                     $variableVariable
                 );
 
-                if (!count($params)) {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
-                    }
-                } else {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD(' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_METHOD(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD(NULL, ' . $variableVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                    }
-                }
+                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $methodName, $cachePointer, count($params) ? $params : null, $compilationContext);
             } else {
                 if (!count($params)) {
                     if ($isExpecting) {
@@ -647,27 +627,7 @@ class MethodCall extends Call
 
                 $cachePointer = 'NULL, 0';
 
-                if (!count($params)) {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD_ZVAL(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . $cachePointer . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_METHOD_ZVAL(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ',  ' . $cachePointer . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD_ZVAL(NULL, ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . $cachePointer . ');');
-                    }
-                } else {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_METHOD_ZVAL(' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_METHOD_ZVAL(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_METHOD_ZVAL(NULL, ' . $variableVariable->getName() . ', ' . $variableMethod->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
-                    }
-                }
+                $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $variableMethod, $cachePointer, count($params) ? $params : null, $compilationContext);
             }
         }
 

@@ -75,14 +75,18 @@ class StaticCall extends Call
         if (isset($method)) {
             $isInternal = $method->isInternal();
         }
-        
+
+        if ($symbolVariable) {
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+        }
+
         if (!$isInternal) {
             if (!count($params)) {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ');');
+                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(' . $symbol . ', "' . $methodName . '", ' . $cachePointer . ');');
                     }
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ');');
@@ -92,32 +96,33 @@ class StaticCall extends Call
                     if ($symbolVariable->getName() == 'return_value') {
                         $codePrinter->output('ZEPHIR_RETURN_CALL_' . $context . '("' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(&' . $symbolVariable->getName() . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_CALL_' . $context . '(' . $symbol . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                     }
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_' . $context . '(NULL, "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             }
         } else {
+            $thisPtr = $compilationContext->backend->isZE3() ? '&(EG(current_execute_data)->This)' : 'EG(This)';
             if (!count($params)) {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(EG(This), ' . $method->getInternalName() . ');');
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(' . $thisPtr . ', ' . $method->getInternalName() . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ');');
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(' . $symbol . ', ' . $thisPtr . ', ' . $method->getInternalName() . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(EG(This), ' . $method->getInternalName() . ');');
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(' . $thisPtr . ', ' . $method->getInternalName() . ');');
                 }
             } else {
                 if ($isExpecting) {
                     if ($symbolVariable->getName() == 'return_value') {
-                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(' . $symbol . ', ' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                     }
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(EG(This), ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(' . $thisPtr . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
                 }
             }
         }
@@ -222,8 +227,9 @@ class StaticCall extends Call
 
         if ($classDefinition->isBundled()) {
             //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
-                $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-            $codePrinter->output($classEntryVariable->getName().' = zend_fetch_class(SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);');
+
+            $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
+            $compilationContext->backend->fetchClass($classEntryVariable, 'SL("' . str_replace('\\', '\\\\', $classDefinition->getName()) . '")', false, $compilationContext);
             //}
 
             //$classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);
@@ -254,12 +260,16 @@ class StaticCall extends Call
             $params = array();
         }
 
+        if ($symbolVariable) {
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+        }
+
         if (!count($params)) {
             if ($isExpecting) {
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
@@ -269,7 +279,7 @@ class StaticCall extends Call
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -329,15 +339,20 @@ class StaticCall extends Call
         $compilationContext->headersManager->add('kernel/object');
 
         $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
-        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $classNameVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output($classEntryVariable->getName() . ' = zephir_fetch_class(' . $compilationContext->backend->getVariableCode($classNameVariable) . ' TSRMLS_CC);');
         $classEntry = $classEntryVariable->getName();
+
+
+        if ($symbolVariable) {
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+        }
 
         if (!count($params)) {
             if ($isExpecting) {
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ');');
@@ -347,7 +362,7 @@ class StaticCall extends Call
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC(' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(&' . $symbolVariable->getName() . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC(' . $symbol . ', ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC(NULL, ' . $classEntry . ', "' . $methodName . '", ' . $cachePointer . ', ' . join(', ', $params) . ');');
@@ -417,12 +432,17 @@ class StaticCall extends Call
             throw new CompilerException("Only dynamic/string variables can be used in dynamic methods", $expression);
         }
 
+
+        if ($symbolVariable) {
+            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+        }
+
         if (!count($params)) {
             if ($isExpecting) {
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(&' . $symbolVariable->getName() . ', ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(' . $symbol . ', ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(NULL, ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ');');
@@ -432,7 +452,7 @@ class StaticCall extends Call
                 if ($symbolVariable->getName() == 'return_value') {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL(' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 } else {
-                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(&' . $symbolVariable->getName() . ', ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
+                    $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(' . $symbol . ', ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');
                 }
             } else {
                 $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL(NULL, ' . $classEntry . ', ' . $methodNameVariable->getName() . ', ' . $cachePointer . ', ' . join(', ', $params) . ');');

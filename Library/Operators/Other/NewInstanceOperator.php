@@ -98,7 +98,7 @@ class NewInstanceOperator extends BaseOperator
                 throw new CompilerException("stdclass does not receive parameters in its constructor", $expression);
             }
 
-            $codePrinter->output('object_init(' . $symbolVariable->getName() . ');');
+            $compilationContext->backend->initObject($symbolVariable, null, $compilationContext);
             $symbolVariable->setClassTypes('stdclass');
         } else {
             $classDefinition = false;
@@ -110,7 +110,7 @@ class NewInstanceOperator extends BaseOperator
              * Classes inside the same extension
              */
             if ($classDefinition) {
-                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry($compilationContext) . ');');
+                $compilationContext->backend->initObject($symbolVariable, $classDefinition->getClassEntry($compilationContext), $compilationContext);
                 $symbolVariable->setClassTypes($className);
                 $symbolVariable->setAssociatedClass($classDefinition);
             } else {
@@ -134,7 +134,8 @@ class NewInstanceOperator extends BaseOperator
 
                     $compilationContext->codePrinter->output('zephir_fetch_safe_class(' . $safeSymbolVariable->getName() .', ' . $classNameVariable->getName() .');');
 
-                    $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbolVariable->getName() . '), Z_STRLEN_P(' . $safeSymbolVariable->getName() . ')';
+                    $safeSymbol = $compilationContext->backend->getVariableCode($safeSymbolVariable);
+                    $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbol . '), Z_STRLEN_P(' . $safeSymbol . ')';
                     $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
                     $classEntry = $zendClassEntry->getName();
                 } else {
@@ -168,7 +169,7 @@ class NewInstanceOperator extends BaseOperator
 
                     $symbolVariable->setClassTypes($className);
                 }
-                $codePrinter->output('object_init_ex(' . $symbolVariable->getName() . ', ' . $classEntry . ');');
+                $compilationContext->backend->initObject($symbolVariable, $classEntry, $compilationContext);
             }
         }
 
@@ -240,7 +241,7 @@ class NewInstanceOperator extends BaseOperator
             $compilationContext->headersManager->add('kernel/fcall');
 
             /* @todo, generate the code using builders */
-            $codePrinter->output('if (zephir_has_constructor(' . $symbolVariable->getName() . ' TSRMLS_CC)) {');
+            $compilationContext->backend->checkConstructor($symbolVariable, $compilationContext);
             $codePrinter->increaseLevel();
 
             $methodCall = new MethodCall();

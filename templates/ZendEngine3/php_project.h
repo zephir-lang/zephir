@@ -42,10 +42,6 @@ ZEND_BEGIN_MODULE_GLOBALS(%PROJECT_LOWER%)
 	/* Max recursion control */
 	unsigned int recursive_lock;
 
-	/* Global constants */
-	zval *global_true;
-	zval *global_false;
-	zval *global_null;
 	%EXTENSION_GLOBALS%
 ZEND_END_MODULE_GLOBALS(%PROJECT_LOWER%)
 

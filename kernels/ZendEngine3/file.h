@@ -22,6 +22,16 @@
 
 #include <php.h>
 
+int zephir_file_exists(zval *filename);
+
+void zephir_fwrite(zval *return_value, zval *stream_zval, zval *data);
+int zephir_feof(zval *stream_zval);
+int zephir_fclose(zval *stream_zval);
+void zephir_file_get_contents(zval *return_value, zval *filename);
+void zephir_file_put_contents(zval *return_value, zval *filename, zval *data);
+
+void zephir_filemtime(zval *return_value, zval *path);
+
 #ifdef TSRM_WIN32
 #define ZEPHIR_DIRECTORY_SEPARATOR "\\"
 #else

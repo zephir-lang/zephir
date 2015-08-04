@@ -88,7 +88,8 @@ class InstanceOfOperator extends BaseOperator
                             $className = $context->getFullName($resolvedVariable);
 
                             if ($className == 'Traversable') {
-                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbolVariable->getName() . ' TSRMLS_CC)', $expression);
+                                $symbol = $context->backend->getVariableCode($symbolVariable);
+                                return new CompiledExpression('bool', 'zephir_zval_is_traversable(' . $symbol . ' TSRMLS_CC)', $expression);
                             }
 
                             if ($context->compiler->isClass($className)) {
@@ -131,10 +132,11 @@ class InstanceOfOperator extends BaseOperator
 
         /* @TODO, Possible optimization is use zephir_is_instance when the const class name is an internal class or interface */
         $context->headersManager->add('kernel/object');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($code)) {
-            return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbolVariable->getName() . ', ' . $code . ' TSRMLS_CC)', $expression);
+            return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbol . ', ' . $code . ' TSRMLS_CC)', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_instance_of_ev(' . $symbolVariable->getName() . ', ' . $classEntry . ' TSRMLS_CC)', $expression);
+        return new CompiledExpression('bool', 'zephir_instance_of_ev(' . $symbol . ', ' . $classEntry . ' TSRMLS_CC)', $expression);
     }
 }

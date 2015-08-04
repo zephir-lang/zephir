@@ -62,11 +62,12 @@ class PowOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/math');
         $symbolVariable->setDynamicTypes('variable');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_pow_function(' . $symbolVariable->getName() . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_pow_function(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

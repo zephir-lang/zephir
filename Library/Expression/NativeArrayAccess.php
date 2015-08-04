@@ -270,47 +270,11 @@ class NativeArrayAccess
          */
         $expr = new Expression($arrayAccess['right']);
         $exprIndex = $expr->compile($compilationContext);
-        switch ($exprIndex->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-                $compilationContext->headersManager->add('kernel/array');
-                $codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $exprIndex->getCode() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);');
-                break;
-
-            case 'string':
-                $compilationContext->headersManager->add('kernel/array');
-                $codePrinter->output('zephir_array_fetch_string(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', SL("' . $exprIndex->getCode() . '"), ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);');
-                break;
-
-            case 'variable':
-                $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
-                switch ($variableIndex->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $compilationContext->headersManager->add('kernel/array');
-                        $codePrinter->output('zephir_array_fetch_long(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);');
-                        break;
-
-                    case 'string':
-                    case 'variable':
-                        $compilationContext->headersManager->add('kernel/array');
-                        if ($variableIndex->isLocalOnly()) {
-                            $codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $variableIndex->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);');
-                        } else {
-                            $codePrinter->output('zephir_array_fetch(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $variableIndex->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($arrayAccess['file']) . '", ' . $arrayAccess['line'] . ' TSRMLS_CC);');
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException("Variable type: " . $variableIndex->getType() . " cannot be used as array index without cast", $arrayAccess['right']);
-                }
-                break;
-
-            default:
-                throw new CompilerException("Cannot use expression: " . $exprIndex->getType() . " as array index without cast", $arrayAccess['right']);
+        $compilationContext->headersManager->add('kernel/array');
+        if ($exprIndex->getType() == 'variable') {
+            $exprIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
         }
+        $compilationContext->backend->arrayFetch($symbolVariable, $variableVariable, $exprIndex, $flags, $arrayAccess, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

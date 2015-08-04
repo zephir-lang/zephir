@@ -112,35 +112,7 @@ class FetchOperator extends BaseOperator
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
 
-                switch ($resolvedExpr->getType()) {
-                    case 'int':
-                    case 'long':
-                    case 'uint':
-                        return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                    case 'string':
-                        return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SS("' . $resolvedExpr->getCode() . '"), ' . $flags . ' TSRMLS_CC)', $expression);
-
-                    case 'variable':
-                        $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $expression['right']['left']);
-                        switch ($indexVariable->getType()) {
-                            case 'int':
-                            case 'long':
-                            case 'uint':
-                                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                            case 'string':
-                            case 'variable':
-                                return new CompiledExpression('bool', 'zephir_array_isset_fetch(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $indexVariable->getName() . ', ' . $flags . ' TSRMLS_CC)', $expression);
-
-                            default:
-                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException('[' . $expression['right']['right']['type'] . ']', $expression);
-                }
+                return $compilationContext->backend->arrayIssetFetch($variable, $evalVariable, $resolvedExpr, $flags, $expression, $compilationContext);
                 break;
 
             case 'property-access':
@@ -165,7 +137,9 @@ class FetchOperator extends BaseOperator
                 $property = $expression['right']['right']['value'];
 
                 $compilationContext->headersManager->add('kernel/object');
-                return new CompiledExpression('bool', 'zephir_fetch_property(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', SL("' . $property . '"), PH_SILENT_CC)', $expression);
+                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
+                return new CompiledExpression('bool', 'zephir_fetch_property(' . $symbol . ', ' . $evalSymbol . ', SL("' . $property . '"), PH_SILENT_CC)', $expression);
 
             case 'property-dynamic-access':
                 $exprVariable = new Expression($expression['right']['left']);
@@ -201,7 +175,11 @@ class FetchOperator extends BaseOperator
 
                 $compilationContext->headersManager->add('kernel/object');
 
-                return new CompiledExpression('bool', 'zephir_fetch_property_zval(&' . $variable->getName() . ', ' . $evalVariable->getName() . ', ' . $evalVariableProperty->getName() . ', PH_SILENT_CC)', $expression);
+                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
+                $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
+
+                return new CompiledExpression('bool', 'zephir_fetch_property_zval(' . $symbol . ', ' . $evalSymbol . ', ' . $evalPropertySymbol . ', PH_SILENT_CC)', $expression);
 
             default:
                 throw new CompilerException('Cannot use this expression for "fetch" operators', $expression);

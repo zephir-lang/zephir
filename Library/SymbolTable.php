@@ -521,13 +521,13 @@ class SymbolTable
      * @param CompilationContext $context
      * @return Variable
      */
-    public function getTempVariableForWrite($type, CompilationContext $context)
+    public function getTempVariableForWrite($type, CompilationContext $context, $init = true)
     {
         $variable = $this->reuseTempVariable($type, 'heap');
         if (is_object($variable)) {
             $variable->increaseUses();
             $variable->increaseMutates();
-            if ($type == 'variable' || $type == 'string' || $type == 'array') {
+            if ($init && ($type == 'variable' || $type == 'string' || $type == 'array')) {
                 $variable->initVariant($context);
             }
             return $variable;

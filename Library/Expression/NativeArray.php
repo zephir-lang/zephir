@@ -92,18 +92,18 @@ class NativeArray
             case 'uint':
             case 'long':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $compilationContext->backend->assignLong($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'char':
             case 'uchar':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', \'' . $exprCompiled->getCode() . '\');');
+                $compilationContext->backend->assignLong($tempVar, '\'' . $exprCompiled->getCode() . '\'', $compilationContext);
                 return $tempVar;
 
             case 'double':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $exprCompiled->getCode() . ');');
+                $compilationContext->backend->assignDouble($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'bool':
@@ -124,7 +124,7 @@ class NativeArray
             case 'string':
             case 'ulong':
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('ZVAL_STRING(' . $tempVar->getName() . ', "' . $exprCompiled->getCode() . '", 1);');
+                $compilationContext->backend->assignString($tempVar, $exprCompiled->getCode(), $compilationContext);
                 return $tempVar;
 
             case 'array':
@@ -138,17 +138,17 @@ class NativeArray
                     case 'long':
                     case 'ulong':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_LONG(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignLong($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'double':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_DOUBLE(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignDouble($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'bool':
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                        $codePrinter->output('ZVAL_BOOL(' . $tempVar->getName() . ', ' . $itemVariable->getName() . ');');
+                        $compilationContext->backend->assignBool($tempVar, $itemVariable, $compilationContext);
                         return $tempVar;
 
                     case 'string':
@@ -214,11 +214,7 @@ class NativeArray
         if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
             $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . gmp_strval(gmp_nextprime($arrayLength - 1)) . ', 0 TSRMLS_CC);');
         } else {
-            if ($arrayLength > 0) {
-                $codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', ' . $arrayLength . ', 0 TSRMLS_CC);');
-            } else {
-                $codePrinter->output('array_init(' . $symbolVariable->getName() . ');');
-            }
+            $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
         }
 
         foreach ($expression['left'] as $item) {
@@ -236,41 +232,31 @@ class NativeArray
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $codePrinter->output('add_assoc_long_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExprKey->getCode() . '"), ' . $resolvedExpr->getCode() . ');');
-                                break;
-
                             case 'double':
-                                $codePrinter->output('add_assoc_double_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExprKey->getCode() . '"), ' . $resolvedExpr->getCode() . ');');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'bool':
                                 $compilationContext->headersManager->add('kernel/array');
                                 if ($resolvedExpr->getCode() == 'true') {
-                                    $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &ZEPHIR_GLOBAL(global_true), PH_COPY | PH_SEPARATE);');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 } else {
-                                    $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &ZEPHIR_GLOBAL(global_false), PH_COPY | PH_SEPARATE);');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 }
                                 break;
 
                             case 'string':
-                                $codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', SS("' . $resolvedExprKey->getCode() . '"), SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'null':
-                                $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &ZEPHIR_GLOBAL(global_null), PH_COPY | PH_SEPARATE);');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 break;
 
                             case 'array':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_string(&' . $symbolVariable->getName() . ', SL("' . $resolvedExprKey->getCode() . '"), &' . $valueVariable->getName() . ', PH_COPY | PH_SEPARATE);');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }
@@ -292,41 +278,30 @@ class NativeArray
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $codePrinter->output('add_index_long(' . $symbolVariable->getName() . ', ' .$resolvedExprKey->getCode() . ', ' . $resolvedExpr->getCode() . ');');
+                            case 'double':
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'bool':
-                                $codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getBooleanCode() . ');');
                                 if ($resolvedExpr->getCode() == 'true') {
-                                    $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &ZEPHIR_GLOBAL(global_true), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY');
                                 } else {
-                                    $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &ZEPHIR_GLOBAL(global_false), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY');
                                 }
-                                break;
-
-                            case 'double':
-                                $codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getCode() . ');');
                                 break;
 
                             case 'null':
-                                $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &ZEPHIR_GLOBAL(global_null), PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY');
                                 break;
 
                             case 'string':
-                                $codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'array':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
                             case 'variable':
                                 $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($expression['file']) . '", ' . $expression['line'] . ');');
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
                                 if ($valueVariable->isTemporal()) {
                                     $valueVariable->setIdle(true);
                                 }
@@ -351,28 +326,15 @@ class NativeArray
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        $codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getCode() . ');');
-                                        break;
-
                                     case 'bool':
-                                        $codePrinter->output('add_index_bool(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getBooleanCode() . ');');
-                                        break;
-
                                     case 'double':
-                                        $codePrinter->output('add_index_double(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', ' . $resolvedExpr->getCode() . ');');
-                                        break;
-
                                     case 'null':
-                                        $codePrinter->output('add_index_null(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ');');
-                                        break;
-
                                     case 'string':
-                                        $codePrinter->output('add_index_stringl(' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         break;
-
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_long(&' . $symbolVariable->getName() . ', ' . $resolvedExprKey->getCode() . ', &' . $valueVariable->getName() . ', PH_COPY, "' . Compiler::getShortUserPath($item['file']) . '", ' . $item['line'] . ');');
+                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }
@@ -402,7 +364,7 @@ class NativeArray
                                         break;
 
                                     case 'string':
-                                        $codePrinter->output('add_assoc_stringl_ex(' . $symbolVariable->getName() . ', Z_STRVAL_P(' . $resolvedExprKey->getCode() . '), Z_STRLEN_P(' . $item['key']['value'] . ') + 1, SL("' . $resolvedExpr->getCode() . '"), 1);');
+                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                         break;
 
                                     case 'null':
@@ -429,7 +391,8 @@ class NativeArray
                                     case 'null':
                                     case 'bool':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
+
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }
@@ -437,7 +400,8 @@ class NativeArray
 
                                     case 'variable':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $codePrinter->output('zephir_array_update_zval(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', &' . $valueVariable->getName() . ', PH_COPY);');
+                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
+
                                         if ($valueVariable->isTemporal()) {
                                             $valueVariable->setIdle(true);
                                         }
@@ -460,7 +424,9 @@ class NativeArray
                 $expr = new Expression($item['value']);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                $codePrinter->output('zephir_array_fast_append(' . $symbolVariable->getName() . ', ' . $itemVariable->getName() . ');');
+                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                $item = $compilationContext->backend->resolveValue($itemVariable, $compilationContext);
+                $codePrinter->output('zephir_array_fast_append(' . $symbol . ', ' . $item . ');');
                 if ($itemVariable->isTemporal()) {
                     $itemVariable->setIdle(true);
                 }

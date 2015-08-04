@@ -187,7 +187,7 @@ class ReturnStatement extends StatementAbstract
 
                 case 'string':
                 case 'istring':
-                    $codePrinter->output('RETURN_MM_STRING("' . Utils::addSlashes($resolvedExpr->getCode()) . '", 1);');
+                    $compilationContext->backend->returnString(Utils::addSlashes($resolvedExpr->getCode()), $compilationContext);
                     break;
 
                 case 'array':
@@ -241,7 +241,7 @@ class ReturnStatement extends StatementAbstract
                                             }
                                         }
                                     } else {
-                                        $codePrinter->output('RETVAL_ZVAL(' . $symbolVariable->getName() . ', 1, 0);');
+                                        $codePrinter->output('RETVAL_ZVAL(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', 1, 0);');
                                         $codePrinter->output('RETURN_MM();');
                                     }
                                 } else {

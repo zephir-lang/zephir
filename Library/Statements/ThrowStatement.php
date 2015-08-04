@@ -93,7 +93,8 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException("Variable '" . $variableVariable->getType() . "' cannot be used as exception", $expr);
         }
 
-        $codePrinter->output('zephir_throw_exception_debug(' . $variableVariable->getName() . ', "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ' TSRMLS_CC);');
+        $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
+        $codePrinter->output('zephir_throw_exception_debug(' . $variableCode . ', "' . Compiler::getShortUserPath($statement['expr']['file']) . '", ' . $statement['expr']['line'] . ' TSRMLS_CC);');
         if (!$compilationContext->insideTryCatch) {
             $codePrinter->output('ZEPHIR_MM_RESTORE();');
             $codePrinter->output('return;');

@@ -73,7 +73,10 @@ class CloneOperator extends BaseOperator
         $symbolVariable->setDynamicTypes($clonedVariable->getDynamicTypes());
         $symbolVariable->setClassTypes($clonedVariable->getClassTypes());
 
-        $compilationContext->codePrinter->output('if (zephir_clone(' . $symbolVariable->getName() . ', ' . $clonedVariable->getName() . ' TSRMLS_CC) == FAILURE) {');
+        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+        $clonedSymbol = $compilationContext->backend->getVariableCode($symbolVariable);
+
+        $compilationContext->codePrinter->output('if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ' TSRMLS_CC) == FAILURE) {');
         $compilationContext->codePrinter->output("\t" . 'RETURN_MM();');
         $compilationContext->codePrinter->output('}');
 

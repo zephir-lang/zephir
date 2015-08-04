@@ -28,3 +28,37 @@
 #include "ext/standard/php_smart_string.h"
 #include "ext/standard/php_var.h"
 
+static zend_always_inline void zephir_smart_str_0(smart_str *str)
+{
+	if (str->s) {
+		ZSTR_VAL(str->s)[ZSTR_LEN(str->s)] = '\0';
+	}
+}
+
+/**
+ * var_dump outputs php variables without using the PHP userland
+ */
+void zephir_var_dump(zval *var)
+{
+    php_var_dump(var, 1);
+}
+
+/**
+ * var_export outputs php variables without using the PHP userland
+ */
+void zephir_var_export(zval *var)
+{
+    php_var_export(var, 1);
+}
+
+/**
+ * var_export returns php variables without using the PHP userland
+ */
+void zephir_var_export_ex(zval *return_value, zval *var)
+{
+    smart_str buf = { 0 };
+
+    php_var_export_ex(var, 1, &buf);
+    zephir_smart_str_0(&buf);
+    ZVAL_STR(return_value, buf.s);
+}

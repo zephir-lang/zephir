@@ -107,6 +107,7 @@ class VarExportOptimizer extends OptimizerAbstract
              */
             $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
         }
+        $variableSymbol = $context->backend->getVariableCodePointer($variable);
 
         /**
          * let a = var_export(val);
@@ -117,11 +118,12 @@ class VarExportOptimizer extends OptimizerAbstract
             } else {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_var_export_ex(' . $symbolVariable->getName() . ', &(' . $variable->getName() . ') TSRMLS_CC);');
+            $symbol = $context->backend->getVariableCode($symbolVariable);
+            $context->codePrinter->output('zephir_var_export_ex(' . $symbol . ', ' . $variableSymbol . ' TSRMLS_CC);');
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_var_export(&' . $variable->getName() . ' TSRMLS_CC);');
+        $context->codePrinter->output('zephir_var_export(' . $variableSymbol . ' TSRMLS_CC);');
         return new CompiledExpression('null', 'null', $expression);
     }
 }

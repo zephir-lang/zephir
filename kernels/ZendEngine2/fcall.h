@@ -351,8 +351,10 @@ typedef enum _zephir_call_type {
 		EG(This) = object; \
 		ZEPHIR_INIT_NVAR(*return_value_ptr); \
 		Z_ADDREF_P(p1); \
+		Z_ADDREF_P(p2); \
 		method(0, *return_value_ptr, return_value_ptr, object, 1, p1, p2 TSRMLS_CC); \
 		Z_DELREF_P(p1); \
+		Z_DELREF_P(p2); \
 		ZEPHIR_LAST_CALL_STATUS = EG(exception) ? FAILURE : SUCCESS; \
 		EG(This) = old_this_ptr; \
 	} while (0)

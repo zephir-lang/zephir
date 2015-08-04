@@ -142,7 +142,7 @@ class Closure
         }
 
         $symbolVariable->initVariant($compilationContext);
-        $compilationContext->codePrinter->output('zephir_create_closure_ex(' . $symbolVariable->getName() . ', NULL, ' . $classDefinition->getClassEntry() . ', SS("__invoke") TSRMLS_CC);');
+        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
         self::$id++;
 
