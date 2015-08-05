@@ -37,6 +37,7 @@ abstract class BaseBackend
     abstract public function getTypeofCondition(Variable $variableVariable, $operator, $value, CompilationContext $context);
     abstract public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable);
     abstract public function getInternalSignature(ClassMethod $method, CompilationContext $context);
+    abstract public function checkStrictType($type, $var, CompilationContext $context);
 
     abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
@@ -58,6 +59,9 @@ abstract class BaseBackend
     abstract public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true);
     abstract public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null);
     abstract public function initObject(Variable $variable, $ce, CompilationContext $context, $useCodePrinter = true);
+    abstract public function initVar(Variable $variable, CompilationContext $context, $useCodePrinter = true, $second = false);
+
+    abstract public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext);
 
     abstract public function fetchGlobal(Variable $globalVar, CompilationContext $compilationContext, $useCodePrinter = true);
     abstract public function fetchClass(Variable $var, $name, $guarded, CompilationContext $context);
@@ -95,6 +99,11 @@ abstract class BaseBackend
     abstract public function copyOnWrite(Variable $target, $var, CompilationContext $context);
 
     abstract public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $onlyBody = false, $useCodePrinter = true);
+
+    /* For statement */
+    abstract public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $context);
+    abstract public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext);
+    abstract public function destroyIterator(Variable $iteratorVariable, CompilationContext $context);
 
     abstract public function onPreInitVar($method, CompilationContext $context);
     abstract public function onPreCompile($method, CompilationContext $context);
