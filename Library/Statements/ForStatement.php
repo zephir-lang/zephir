@@ -624,7 +624,7 @@ class ForStatement extends StatementAbstract
          */
         if ($expression->getType() == 'string') {
             $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->_statement);
-            $compilationContext->backend->assignString($constantVariable, Utils::addSlashes($expression->getCode()), $compilationContext);
+            $compilationContext->backend->assignString($constantVariable, Utils::addSlashes($expression->getCode()), $compilationContext, true, false);
             $stringVariable = $constantVariable;
         } else {
             $stringVariable = $exprVariable;

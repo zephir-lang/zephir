@@ -771,6 +771,7 @@ class Backend extends BaseBackend
         foreach ($offsetExprs as $offsetExpr) {
             if ($offsetExpr == 'a') {
                 $keys .= 'a';
+                $numberParams++;
                 continue;
             }
             switch ($offsetExpr->getType()) {
@@ -1113,29 +1114,29 @@ class Backend extends BaseBackend
             case 'int':
             case 'uint':
             case 'long':
-                $conditions[] = $cond . ' IS_LONG';
+                $conditions[] = $cond . 'IS_LONG';
                 break;
             case 'bool':
                 if (!$this->isZE3()) {
-                    $conditions[] = $cond . ' IS_BOOL';
+                    $conditions[] = $cond . 'IS_BOOL';
                 } else {
-                    $conditions[] = $cond . ' IS_TRUE';
-                    $conditions[] = $cond . ' IS_FALSE';
+                    $conditions[] = $cond . 'IS_TRUE';
+                    $conditions[] = $cond . 'IS_FALSE';
                 }
                 break;
             case 'double':
-                $conditions[] = $cond . ' IS_DOUBLE';
+                $conditions[] = $cond . 'IS_DOUBLE';
                 break;
             case 'string':
             case 'ulong':
-                $conditions[] = $cond . ' IS_STRING';
-                $conditions[] = $cond . ' IS_NULL';
+                $conditions[] = $cond . 'IS_STRING';
+                $conditions[] = $cond . 'IS_NULL';
                 break;
             case 'array':
                 break;
             case 'object':
             case 'resource':
-                $conditions[] = $cond . ' IS_' . strtoupper($type);
+                $conditions[] = $cond . 'IS_' . strtoupper($type);
                 break;
             case 'callable':
                 $conditions[] = 'zephir_is_callable(' . $inputParamCode . ' TSRMLS_CC) != 1';

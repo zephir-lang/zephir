@@ -79,6 +79,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
             $offsetExprs[] = $resolvedIndex;
         }
 
+        $offsetExprs[] = 'a';
         $compilationContext->backend->assignStaticPropertyArrayMulti($classEntry, $variableExpr, $property, $offsetExprs, $compilationContext);
 
         if ($variableExpr->isTemporal()) {
