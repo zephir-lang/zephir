@@ -74,12 +74,19 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         } else {
             $options = '0 ';
         }
-        
+
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output('zephir_json_decode(' . $symbolVariable->getName() . ', &(' . $symbolVariable->getName() . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+
+        /* TODO: This (and other optimizers using isZE3) should be fixed, when moving optimizers to backends */
+        if ($context->backend->isZE3()) {
+            $context->codePrinter->output('zephir_json_decode(' . $symbol . ', ' . $resolvedParams[0] . ', '. $options .');');
+        } else {
+            $context->codePrinter->output('zephir_json_decode(' . $symbol . ', &(' . $symbol . '), ' . $resolvedParams[0] . ', '. $options .' TSRMLS_CC);');
+        }
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

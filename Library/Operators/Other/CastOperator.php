@@ -77,13 +77,15 @@ class CastOperator extends BaseOperator
                         $original = $resolved->getOriginal();
                         $original['operator'] = 'assign';
                         $let->assign($symbolVariable->getName(), $symbolVariable, $resolved, new ReadDetector(), $compilationContext, $original);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                        return new CompiledExpression('int', 'zephir_get_intval_ex(' . $symbolVariable->getName() . ')', $expression);
+                        return new CompiledExpression('int', 'zephir_get_intval_ex(' . $symbol . ')', $expression);
 
                     case 'array':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-                        return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                        return new CompiledExpression('int', 'zephir_get_intval(' . $symbol . ')', $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -101,7 +103,8 @@ class CastOperator extends BaseOperator
                             case 'array':
                             case 'variable':
                             case 'string':
-                                return new CompiledExpression('int', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+                                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                                return new CompiledExpression('int', 'zephir_get_intval(' . $symbol . ')', $expression);
 
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
@@ -138,7 +141,8 @@ class CastOperator extends BaseOperator
                             case 'double':
                                 return new CompiledExpression('long', '(long) (' . $symbolVariable->getName() . ')', $expression);
                             case 'variable':
-                                return new CompiledExpression('long', 'zephir_get_intval(' . $symbolVariable->getName() . ')', $expression);
+                                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                                return new CompiledExpression('long', 'zephir_get_intval(' . $symbol . ')', $expression);
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
@@ -163,7 +167,8 @@ class CastOperator extends BaseOperator
                     case 'array':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-                        return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbolVariable->getName() . ')', $expression);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                        return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbol . ')', $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -178,7 +183,8 @@ class CastOperator extends BaseOperator
                                 return new CompiledExpression('double', '(double) (' . $symbolVariable->getName() . ')', $expression);
                             case 'array':
                             case 'variable':
-                                return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbolVariable->getName() . ')', $expression);
+                                $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                                return new CompiledExpression('double', 'zephir_get_doubleval(' . $symbol . ')', $expression);
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
@@ -199,12 +205,13 @@ class CastOperator extends BaseOperator
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
                         switch ($symbolVariable->getType()) {
                             case 'variable':
-                                return new CompiledExpression('bool', 'zephir_get_boolval(' . $symbolVariable->getName() . ')', $expression);
+                                return new CompiledExpression('bool', 'zephir_get_boolval(' . $symbol . ')', $expression);
                             default:
                                 throw new CompilerException("Cannot cast: " . $resolved->getType() . "(" . $symbolVariable->getType() . ") to " . $expression['left'], $expression);
                         }
@@ -221,7 +228,8 @@ class CastOperator extends BaseOperator
                         $compilationContext->headersManager->add('kernel/operators');
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('char', $compilationContext);
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
-                        $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $symbolVariable->getName() . ');');
+                        $variableCode = $compilationContext->backend->getVariableCode($symbolVariable);
+                        $compilationContext->codePrinter->output($tempVariable->getName() . ' = (char) zephir_get_intval(' . $variableCode . ');');
 
                         return new CompiledExpression('variable', $tempVariable->getName(), $expression);
 
@@ -239,7 +247,10 @@ class CastOperator extends BaseOperator
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext);
                         $symbolVariable->increaseUses();
-                        $compilationContext->codePrinter->output('zephir_get_strval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                        $resolvedVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext);
+                        $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
+                        $compilationContext->codePrinter->output('zephir_get_strval(' . $symbol . ', ' . $resolvedCode . ');');
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
@@ -259,7 +270,10 @@ class CastOperator extends BaseOperator
                         $symbolVariable->setMustInitNull(true);
                         $symbolVariable->setIsInitialized(true, $compilationContext, $expression);
                         $symbolVariable->increaseUses();
-                        $compilationContext->codePrinter->output('zephir_get_arrval(' . $symbolVariable->getName() . ', ' . $resolved->getCode() . ');');
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+                        $resolvedVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext);
+                        $resolvedCode = $compilationContext->backend->getVariableCode($resolvedVariable);
+                        $compilationContext->codePrinter->output('zephir_get_arrval(' . $symbol . ', ' . $resolvedCode . ');');
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
@@ -281,6 +295,7 @@ class CastOperator extends BaseOperator
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $symbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
                         /**
                          * zephir_convert_to_object use zval variable
@@ -291,17 +306,18 @@ class CastOperator extends BaseOperator
                         $original['operator'] = 'assign';
                         $let->assign($symbolVariable->getName(), $symbolVariable, $resolved, new ReadDetector(), $compilationContext, $original);
 
-                        $compilationContext->codePrinter->output('zephir_convert_to_object('.$symbolVariable->getName().');');
+                        $compilationContext->codePrinter->output('zephir_convert_to_object(' . $symbol . ');');
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead($resolved->getCode(), $compilationContext, $expression);
+                        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
 
-                        $compilationContext->codePrinter->output('zephir_convert_to_object(' . $symbolVariable->getName() . ');');
+                        $compilationContext->codePrinter->output('zephir_convert_to_object(' . $symbol . ');');
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     default:

@@ -96,7 +96,8 @@ class VarDumpOptimizer extends OptimizerAbstract
                 $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
             }
 
-            $context->codePrinter->output('zephir_var_dump(&' . $variable->getName() . ' TSRMLS_CC);');
+            $symbol = $context->backend->getVariableCodePointer($variable);
+            $context->codePrinter->output('zephir_var_dump(' . $symbol . ' TSRMLS_CC);');
         }
 
         return new CompiledExpression('null', 'null', $expression);

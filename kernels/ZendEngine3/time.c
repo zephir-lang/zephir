@@ -36,3 +36,24 @@
 #include "kernel/time.h"
 #include "kernel/operators.h"
 
+void zephir_time(zval *return_value)
+{
+	RETURN_LONG(time(NULL));
+}
+
+void zephir_microtime(zval *return_value, zval *get_as_float)
+{
+	struct timeval tp = {0};
+	char ret[100];
+
+	if (gettimeofday(&tp, NULL)) {
+		RETURN_FALSE;
+	}
+
+	if (get_as_float && ZEPHIR_IS_TRUE(get_as_float)) {
+		RETURN_DOUBLE((double)(tp.tv_sec + tp.tv_usec / MICRO_IN_SEC));
+	}
+
+	snprintf(ret, 100, "%.8F %ld", tp.tv_usec / MICRO_IN_SEC, tp.tv_sec);
+	RETURN_STRING(ret);
+}

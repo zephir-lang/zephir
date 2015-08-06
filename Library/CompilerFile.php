@@ -582,6 +582,8 @@ class CompilerFile
          */
         $compilationContext->aliasManager = $this->_aliasManager;
 
+        $compilationContext->backend = $compiler->backend;
+
         /**
          * Traverse the top level statements looking for the namespace
          */
@@ -807,6 +809,8 @@ class CompilerFile
          * Set global strings manager
          */
         $compilationContext->stringsManager = $stringsManager;
+
+        $compilationContext->backend = $compiler->backend;
 
         /**
          * Headers manager

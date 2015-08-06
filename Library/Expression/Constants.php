@@ -228,7 +228,7 @@ class Constants
             throw new CompilerException('Cannot use variable: ' . $symbolVariable->getType() . ' to assign property value', $expression);
         }
 
-        $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT(' . $symbolVariable->getName() . ', "' . $expression['value'] . '");');
+        $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT(' . $compilationContext->backend->getVariableCode($symbolVariable) . ', "' . $expression['value'] . '");');
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }
 }

@@ -61,7 +61,8 @@ class TimeOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $context->codePrinter->output('zephir_time(' . $symbolVariable->getName() . ');');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_time(' . $symbol . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

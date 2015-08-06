@@ -154,14 +154,13 @@ class StaticPropertyAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        if ($this->_readOnly) {
-            $compilationContext->codePrinter->output($symbolVariable->getName() . ' = zephir_fetch_static_property_ce(' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
-        } else {
+        $readOnly = $this->_readOnly;
+        if (!$readOnly) {
             if ($symbolVariable->getName() != 'return_value') {
                 $symbolVariable->observeVariant($compilationContext);
             }
-            $compilationContext->codePrinter->output('zephir_read_static_property_ce(&' . $symbolVariable->getName() . ', ' . $classDefinition->getClassEntry() . ', SL("' . $property . '") TSRMLS_CC);');
         }
+        $compilationContext->backend->fetchStaticProperty($symbolVariable, $classDefinition, $property, $this->_readOnly, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

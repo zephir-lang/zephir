@@ -507,7 +507,7 @@ class ForStatement extends StatementAbstract
          */
         $compilationContext->insideCycle++;
 
-        $codePrinter->output($iteratorVariable ->getName() . ' = zephir_get_iterator(' . $exprVariable->getName() . ' TSRMLS_CC);');
+        $codePrinter->output($iteratorVariable ->getName() . ' = zephir_get_iterator(' . $compilationContext->backend->getVariableCode($exprVariable) . ' TSRMLS_CC);');
 
         $codePrinter->output($iteratorVariable ->getName() . '->funcs->rewind(' . $iteratorVariable->getName() . ' TSRMLS_CC);');
         $codePrinter->output('for (;' . $iteratorVariable->getName() . '->funcs->valid(' . $iteratorVariable->getName() . ' TSRMLS_CC) == SUCCESS && !EG(exception); ' . $iteratorVariable ->getName() . '->funcs->move_forward(' . $iteratorVariable ->getName() . ' TSRMLS_CC)) {');
@@ -519,11 +519,13 @@ class ForStatement extends StatementAbstract
 
         if (isset($this->_statement['value'])) {
             $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . '{');
-            $codePrinter->output("\t\t" . 'zval **ZEPHIR_TMP_ITERATOR_PTR;');
-            $codePrinter->output("\t\t" . $iteratorVariable->getName() . '->funcs->get_current_data(' . $iteratorVariable->getName() . ', &ZEPHIR_TMP_ITERATOR_PTR TSRMLS_CC);');
-            $codePrinter->output("\t\t" . 'ZEPHIR_CPY_WRT(' . $variable->getName() . ', (*ZEPHIR_TMP_ITERATOR_PTR));');
-            $codePrinter->output("\t" . '}');
+            $codePrinter->increaseLevel();
+            $codePrinter->output('{');
+            $codePrinter->increaseLevel();
+            $compilationContext->backend->forStatementIterator($iteratorVariable, $variable, $compilationContext);
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+            $codePrinter->decreaseLevel();
         }
 
         /**
@@ -546,7 +548,7 @@ class ForStatement extends StatementAbstract
 
         $codePrinter->output('}');
 
-        $codePrinter->output($iteratorVariable ->getName() . '->funcs->dtor(' . $iteratorVariable ->getName() . ' TSRMLS_CC);');
+        $compilationContext->backend->destroyIterator($iteratorVariable, $compilationContext);
     }
 
     /**
@@ -622,24 +624,17 @@ class ForStatement extends StatementAbstract
          */
         if ($expression->getType() == 'string') {
             $constantVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $this->_statement);
-            $codePrinter->output('ZVAL_STRING(&' . $constantVariable->getName() . ', "' . Utils::addSlashes($expression->getCode()) . '", 0);');
+            $compilationContext->backend->assignString($constantVariable, Utils::addSlashes($expression->getCode()), $compilationContext, true, false);
             $stringVariable = $constantVariable;
         } else {
             $stringVariable = $exprVariable;
         }
 
+        $stringVariableCode = $compilationContext->backend->getVariableCode($stringVariable);
         if ($this->_statement['reverse']) {
-            if ($stringVariable->isLocalOnly()) {
-                $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(&' . $stringVariable->getName() . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');
-            } else {
-                $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $stringVariable->getName() . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');
-            }
+            $codePrinter->output('for (' . $tempVariable->getName() . ' = Z_STRLEN_P(' . $stringVariableCode . '); ' . $tempVariable->getName() . ' >= 0; ' . $tempVariable->getName() . '--) {');
         } else {
-            if ($stringVariable->isLocalOnly()) {
-                $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' . $tempVariable->getName() . ' < Z_STRLEN_P(&' . $stringVariable->getName() . '); ' . $tempVariable->getName() . '++) {');
-            } else {
-                $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' . $tempVariable->getName() . ' < Z_STRLEN_P(' . $stringVariable->getName() . '); ' . $tempVariable->getName() . '++) {');
-            }
+            $codePrinter->output('for (' . $tempVariable->getName() . ' = 0; ' . $tempVariable->getName() . ' < Z_STRLEN_P(' . $stringVariableCode . '); ' . $tempVariable->getName() . '++) {');
         }
 
         if (isset($this->_statement['key'])) {
@@ -647,11 +642,7 @@ class ForStatement extends StatementAbstract
         }
 
         $compilationContext->headersManager->add('kernel/operators');
-        if ($stringVariable->isLocalOnly()) {
-            $codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(&' . $stringVariable->getName() . ', ' . $tempVariable->getName() . ');');
-        } else {
-            $codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $stringVariable->getName() . ', ' . $tempVariable->getName() . ');');
-        }
+        $codePrinter->output("\t" . $variable->getName() . ' = ZEPHIR_STRING_OFFSET(' . $stringVariableCode . ', ' . $tempVariable->getName() . ');');
 
         /**
          * Variables are initialized in a different way inside cycle
@@ -732,18 +723,6 @@ class ForStatement extends StatementAbstract
          */
         $compilationContext->insideCycle++;
 
-        /**
-         * Create a hash table and hash pointer temporary variables
-         */
-        $arrayPointer = $compilationContext->symbolTable->addTemp('HashPosition', $compilationContext);
-        $arrayHash = $compilationContext->symbolTable->addTemp('HashTable', $compilationContext);
-
-        /**
-         * Create a temporary zval to fetch the items from the hash
-         */
-        $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
-        $tempVariable->setIsDoublePointer(true);
-
         $compilationContext->headersManager->add('kernel/hash');
 
         $duplicateHash = '0';
@@ -779,49 +758,21 @@ class ForStatement extends StatementAbstract
             }
         }
 
-        $codePrinter->output('zephir_is_iterable(' . $expression->getCode() . ', &' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ', ' . $duplicateHash . ', ' . $this->_statement['reverse'] . ', "' . Compiler::getShortUserPath($this->_statement['file']) . '", ' . $this->_statement['line'] . ');');
-
-        $codePrinter->output('for (');
-        $codePrinter->output('  ; zephir_hash_get_current_data_ex(' . $arrayHash->getName() . ', (void**) &' . $tempVariable->getName() . ', &' . $arrayPointer ->getName() . ') == SUCCESS');
-        if ($this->_statement['reverse']) {
-            $codePrinter->output('  ; zephir_hash_move_backwards_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
-        } else {
-            $codePrinter->output('  ; zephir_hash_move_forward_ex(' . $arrayHash->getName() . ', &' . $arrayPointer ->getName() . ')');
-        }
-        $codePrinter->output(') {');
-
-        if (isset($this->_statement['key'])) {
-            if ($duplicateKey) {
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $codePrinter->output("\t" . 'ZEPHIR_GET_HMKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
-            } else {
-                $codePrinter->output("\t" . 'ZEPHIR_GET_HKEY(' . $keyVariable->getName() . ', ' . $arrayHash->getName() . ', ' . $arrayPointer ->getName() . ');');
-            }
-        }
-
-        if (isset($this->_statement['value'])) {
-            $compilationContext->symbolTable->mustGrownStack(true);
-            $codePrinter->output("\t" . 'ZEPHIR_GET_HVALUE(' . $variable->getName() . ', ' . $tempVariable->getName() . ');');
-        }
-
-        /**
-         * Compile statements in the 'for' block
-         */
-        if (isset($this->_statement['statements'])) {
-            $st->isLoop(true);
-            if (isset($this->_statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->_statement['key']);
-            }
-            $st->getMutateGatherer()->increaseMutations($this->_statement['value']);
-            $st->compile($compilationContext);
-        }
+        $compilationContext->backend->forStatement(
+            $exprVariable,
+            isset($this->_statement['key']) ? $keyVariable : null,
+            isset($this->_statement['value']) ? $variable : null,
+            $duplicateKey,
+            $duplicateHash,
+            $this->_statement,
+            $st,
+            $compilationContext
+        );
 
         /**
          * Restore the cycle counter
          */
         $compilationContext->insideCycle--;
-
-        $codePrinter->output('}');
     }
 
     /**

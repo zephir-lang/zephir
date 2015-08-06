@@ -66,7 +66,8 @@ class GetCalledClassOptimizer extends OptimizerAbstract
 
         $symbolVariable->setDynamicTypes('string');
 
-        $context->codePrinter->output('zephir_get_called_class(' . $symbolVariable->getName() . ' TSRMLS_CC);');
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output('zephir_get_called_class(' . $symbol . ' TSRMLS_CC);');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

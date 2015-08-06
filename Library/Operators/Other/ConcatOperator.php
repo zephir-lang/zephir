@@ -83,21 +83,21 @@ class ConcatOperator extends BaseOperator
                     switch ($variable->getType()) {
                         case 'variable':
                             $key .= 'v';
-                            $concatParts[] = $variable->getName();
+                            $concatParts[] = $compilationContext->backend->getVariableCode($variable);
                             $isFullString = false;
                             break;
 
                         case 'string':
                             $key .= 'v';
-                            $concatParts[] = $variable->getName();
+                            $concatParts[] = $compilationContext->backend->getVariableCode($variable);
                             break;
 
                         case 'int':
                         case 'long':
                             $key .= 'v';
                             $tempVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext, $originalExpr);
-                            $compilationContext->codePrinter->output('ZVAL_LONG(&' . $tempVariable->getName() . ', ' . $compiledExpr->getCode() . ');');
-                            $concatParts[] = '&' . $tempVariable->getName();
+                            $compilationContext->backend->assignLong($tempVariable, $compiledExpr->getCode(), $compilationContext);
+                            $concatParts[] = $compilationContext->backend->getVariableCode($tempVariable);
                             break;
 
                         default:
@@ -157,7 +157,8 @@ class ConcatOperator extends BaseOperator
             }
 
             $expected->setDynamicTypes('string');
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expected->getName() . ', ' . $optimized[1] . ');');
+            $expectedCode = $compilationContext->backend->getVariableCode($expected);
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_' . strtoupper($optimized[0]) . '(' . $expectedCode . ', ' . $optimized[1] . ');');
             return new CompiledExpression('variable', $expected->getName(), $expression);
         }
 
@@ -179,6 +180,7 @@ class ConcatOperator extends BaseOperator
 
         if ($left->getType() == 'variable') {
             $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['right']);
+            $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
         }
 
         $rightExpr = new Expression($expression['right']);
@@ -195,21 +197,23 @@ class ConcatOperator extends BaseOperator
         $right = $rightExpr->compile($compilationContext);
 
         if ($right->getType() == 'variable') {
-            $variableLeft = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
+            $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
+            $variableRight = $compilationContext->backend->getVariableCode($variableRight);
         }
 
         $expected = $this->getExpectedComplexLiteral($compilationContext, $expression);
+        $expectedCode = $compilationContext->backend->getVariableCode($expected);
 
         if ($left->getType() == 'string' && $right->getType() == 'variable') {
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_SV(' . $expected->getName() . ', "' . $left->getCode() . '", ' . $right->getCode() . ');');
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_SV(' . $expectedCode . ', "' . $left->getCode() . '", ' . $variableRight . ');');
         }
 
         if ($left->getType() == 'variable' && $right->getType() == 'string') {
-            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_VS(' . $expected->getName() . ', ' . $left->getCode() . ', "' . $right->getCode() . '");');
+            $compilationContext->codePrinter->output('ZEPHIR_CONCAT_VS(' . $expectedCode . ', ' . $variableLeft . ', "' . $right->getCode() . '");');
         }
 
         if ($left->getType() == 'variable' && $right->getType() == 'variable') {
-            $compilationContext->codePrinter->output('zephir_concat_function(' . $expected->getName() . ', ' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC);');
+            $compilationContext->codePrinter->output('zephir_concat_function(' . $expectedCode . ', ' . $variableLeft . ', ' . $variableRight . ' TSRMLS_CC);');
         }
 
         $expected->setDynamicTypes('string');

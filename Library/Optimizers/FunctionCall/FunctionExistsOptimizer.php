@@ -58,7 +58,9 @@ class FunctionExistsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         if (isset($str)) {
-            return new CompiledExpression('bool', '(zephir_function_exists_ex(' . 'SS("' . strtolower($str) . '") TSRMLS_CC) == SUCCESS)', $expression);
+            /* TODO: Solve this macro stuff better, move to backend */
+            $macro = $context->backend->isZE3() ? 'SL' : 'SS';
+            return new CompiledExpression('bool', '(zephir_function_exists_ex(' . $macro . '("' . strtolower($str) . '") TSRMLS_CC) == SUCCESS)', $expression);
         }
 
         return new CompiledExpression('bool', '(zephir_function_exists(' . $resolvedParams[0] . ' TSRMLS_CC)  == SUCCESS)', $expression);

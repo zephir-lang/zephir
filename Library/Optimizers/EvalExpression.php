@@ -203,7 +203,8 @@ class EvalExpression
                         return $variableRight->getName();
 
                     case 'string':
-                        return $variableRight->getName() . ' && Z_STRLEN_P(' . $variableRight->getName() . ')';
+                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+                        return $compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false) . ' && Z_STRLEN_P(' . $variableRightCode . ')';
 
                     case 'bool':
                         return $variableRight->getName();
@@ -213,11 +214,8 @@ class EvalExpression
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        if ($variableRight->isLocalOnly()) {
-                            return 'zephir_is_true(&' . $variableRight->getName() . ')';
-                        } else {
-                            return 'zephir_is_true(' . $variableRight->getName() . ')';
-                        }
+                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+                        return 'zephir_is_true(' . $variableRightCode . ')';
                         break;
 
                     default:

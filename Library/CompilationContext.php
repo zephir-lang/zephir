@@ -192,6 +192,13 @@ class CompilationContext
     public $logger;
 
     /**
+     * The current backend
+     *
+     * @var BaseBackend
+     */
+    public $backend;
+
+    /**
      * Transform class/interface name to FQN format
      * @todo WHY WHY :'(
      *

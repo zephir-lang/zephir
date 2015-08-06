@@ -55,17 +55,17 @@ class ArrayIndex
             case 'uint':
             case 'long':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $compilationContext->backend->assignLong($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'char':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', \'' . $resolvedExpr->getCode() . '\');');
+                $compilationContext->backend->assignLong($symbolVariable, '\'' . $resolvedExpr->getCode() . '\'', $compilationContext);
                 break;
 
             case 'double':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getCode() . ');');
+                $compilationContext->backend->assignDouble($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'bool':
@@ -76,14 +76,14 @@ class ArrayIndex
                         $symbolVariable = new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
                     } else {
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $resolvedExpr->getBooleanCode() . ');');
+                        $compilationContext->backend->assignBool($symbolVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
                     }
                 }
                 break;
 
             case 'string':
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                $codePrinter->output('ZVAL_STRING(' . $symbolVariable->getName() . ', "' . $resolvedExpr->getCode() . '", 1);');
+                $compilationContext->backend->assignString($symbolVariable, $resolvedExpr->getCode(), $compilationContext);
                 break;
 
             case 'array':
@@ -98,17 +98,17 @@ class ArrayIndex
                     case 'long':
                     case 'ulong':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_LONG(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignLong($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'double':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_DOUBLE(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignDouble($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'bool':
                         $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $resolvedExpr->getOriginal());
-                        $codePrinter->output('ZVAL_BOOL(' . $symbolVariable->getName() . ', ' . $variableExpr->getName() . ');');
+                        $compilationContext->backend->assignBool($symbolVariable, $variableExpr, $compilationContext);
                         break;
 
                     case 'variable':
@@ -160,6 +160,7 @@ class ArrayIndex
         /**
          * Create a temporal zval (if needed)
          */
+        $realSymbolVariable = $symbolVariable;
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
         $flags = 'PH_COPY | PH_SEPARATE';
@@ -169,7 +170,7 @@ class ArrayIndex
 
         if ($isGlobalVariable) {
             $variableTempSeparated = $compilationContext->symbolTable->getTempLocalVariableForWrite('int', $compilationContext);
-            $codePrinter->output($variableTempSeparated->getName().' = zephir_maybe_separate_zval(&' . $variable . ');');
+            $compilationContext->backend->maybeSeparate($variableTempSeparated, $realSymbolVariable, $compilationContext);
         }
 
         switch ($exprIndex->getType()) {
@@ -177,28 +178,20 @@ class ArrayIndex
             case 'uint':
             case 'long':
             case 'ulong':
-                $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $exprIndex->getCode() . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
-                break;
-
             case 'string':
-                $codePrinter->output('zephir_array_update_string(&' . $variable . ', SL("' . $exprIndex->getCode() . '"), &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                $compilationContext->backend->updateArray($realSymbolVariable, $exprIndex, $symbolVariable, $compilationContext, $flags);
                 break;
 
             case 'variable':
                 $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $statement);
-                $variableIndexName = ($variableIndex->isLocalOnly() ? '&' : '') . $variableIndex->getName();
                 switch ($variableIndex->getType()) {
                     case 'int':
                     case 'uint':
                     case 'long':
                     case 'ulong':
-                        $codePrinter->output('zephir_array_update_long(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ', "' . Compiler::getShortUserPath($statement['index-expr'][0]['file']) . '", ' . $statement['index-expr'][0]['line'] . ');');
-                        break;
                     case 'string':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
-                        break;
                     case 'variable':
-                        $codePrinter->output('zephir_array_update_zval(&' . $variable . ', ' . $variableIndexName . ', &' . $symbolVariable->getName() . ', ' . $flags . ');');
+                        $compilationContext->backend->updateArray($realSymbolVariable, $variableIndex, $symbolVariable, $compilationContext, $flags);
                         break;
                     default:
                         throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
@@ -209,9 +202,7 @@ class ArrayIndex
         }
 
         if ($isGlobalVariable) {
-            $codePrinter->output('if (' . $variableTempSeparated->getName() . ') {');
-            $codePrinter->output("\t" . 'ZEND_SET_SYMBOL(&EG(symbol_table), "' . $variable . '", ' . $variable . ');');
-            $codePrinter->output('}');
+            $compilationContext->backend->setSymbolIfSeparated($variableTempSeparated, $realSymbolVariable, $compilationContext);
         }
     }
 
@@ -255,55 +246,9 @@ class ArrayIndex
          * Create a temporal zval (if needed)
          */
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
 
-        $keys = '';
-        $numberParams = 0;
-        $offsetItems = array();
-        foreach ($offsetExprs as $offsetExpr) {
-            switch ($offsetExpr->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                    $keys .= 'l';
-                    $offsetItems[] = $offsetExpr->getCode();
-                    $numberParams++;
-                    break;
-
-                case 'string':
-                    $keys .= 's';
-                    $offsetItems[] = 'SL("' . $offsetExpr->getCode() . '")';
-                    $numberParams += 2;
-                    break;
-
-                case 'variable':
-                    $variableIndex = $compilationContext->symbolTable->getVariableForRead($offsetExpr->getCode(), $compilationContext, $statement);
-                    switch ($variableIndex->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                            $keys .= 'l';
-                            $offsetItems[] = $variableIndex->getName();
-                            $numberParams++;
-                            break;
-                        case 'string':
-                        case 'variable':
-                            $keys .= 'z';
-                            $offsetItems[] = $variableIndex->getName();
-                            $numberParams++;
-                            break;
-                        default:
-                            throw new CompilerException("Variable: " . $variableIndex->getType() . " cannot be used as array index", $statement);
-                    }
-                    break;
-
-                default:
-                    throw new CompilerException("Value: " . $offsetExpr->getType() . " cannot be used as array index", $statement);
-            }
-        }
-
-        $codePrinter->output('zephir_array_update_multi(&' . $variable . ', &' . $symbolVariable->getName() . ' TSRMLS_CC, SL("' . $keys . '"), ' . $numberParams . ', ' . join(', ', $offsetItems) . ');');
+        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
 
         if ($symbolVariable->isTemporal()) {
             $symbolVariable->setIdle(true);

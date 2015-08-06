@@ -75,11 +75,12 @@ class CreateArrayOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
         if ($resolvedParams) {
-            $context->codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', zephir_get_intval(' . $resolvedParams[0] . '), 1 TSRMLS_CC);');
+            $context->codePrinter->output('zephir_create_array(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . '), 1 TSRMLS_CC);');
         } else {
-            $context->codePrinter->output('zephir_create_array(' . $symbolVariable->getName() . ', 0, 1 TSRMLS_CC);');
+            $context->codePrinter->output('zephir_create_array(' . $symbol . ', 0, 1 TSRMLS_CC);');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

@@ -59,7 +59,8 @@ class LikelyOperator extends BaseOperator
                     return new CompiledExpression('bool', 'likely(' . $variable->getName() . ')', $expression);
 
                 default:
-                    return new CompiledExpression('bool', 'unlikely(zephir_is_true(' . $variable->getName() . '))', $expression);
+                    $symbol = $compilationContext->backend->getVariableCode($variable);
+                    return new CompiledExpression('bool', 'unlikely(zephir_is_true(' . $symbol . '))', $expression);
             }
         }
 
