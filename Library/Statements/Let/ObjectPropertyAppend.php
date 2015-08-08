@@ -100,7 +100,15 @@ class ObjectPropertyAppend
                 break;
 
             case 'bool':
-                $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, $resolvedExpr->getBooleanCode() ? 'true' : 'false', $compilationContext);
+                $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                $codePrinter->increaseLevel();
+                $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, 'true', $compilationContext);
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $compilationContext->backend->assignArrayProperty($symbolVariable, $property, null, 'false', $compilationContext);
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
                 break;
 
             case 'char':

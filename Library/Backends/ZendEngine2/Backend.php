@@ -980,7 +980,7 @@ class Backend extends BaseBackend
     {
         $paramStr = $params != null ? ', ' . join(', ', $params) : '';
         if (!isset($symbolVariable)) {
-            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCodePointer($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION(NULL, ' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
         } else if ($symbolVariable->getName() == 'return_value') {
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(' . $this->getVariableCode($variable) . ', ' . $cache . ', ' . $cacheSlot . $paramStr . ');');
         } else {
