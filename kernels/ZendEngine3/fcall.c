@@ -239,11 +239,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 
 		for (i = 0; i < l; ++i) {
 			char c = buf[i];
-#if PHP_VERSION_ID >= 50500
 			c = tolower_map[(unsigned char)c];
-#else
-			c = tolower(c);
-#endif
 			buf[i] = c;
 			hash   = (hash << 5) + hash + c;
 		}

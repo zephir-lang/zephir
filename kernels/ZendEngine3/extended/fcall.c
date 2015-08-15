@@ -143,8 +143,8 @@ int zephir_call_func_aparams_fast(zval *return_value_ptr, zephir_fcall_cache_ent
 		EG(scope) = func->common.scope;
 		call->symbol_table = NULL;
 		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
-			ZEND_ASSERT(GC_TYPE(func->op_array.prototype) == IS_OBJECT);
-			GC_REFCOUNT(func->op_array.prototype)++;
+			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
+			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
 		}
 		if (EXPECTED((func->op_array.fn_flags & ZEND_ACC_GENERATOR) == 0)) {
@@ -1120,8 +1120,8 @@ int zephir_call_function_opt(zend_fcall_info *fci, zend_fcall_info_cache *fci_ca
 		EG(scope) = func->common.scope;
 		call->symbol_table = fci->symbol_table;
 		if (UNEXPECTED(func->op_array.fn_flags & ZEND_ACC_CLOSURE)) {
-			ZEND_ASSERT(GC_TYPE(func->op_array.prototype) == IS_OBJECT);
-			GC_REFCOUNT(func->op_array.prototype)++;
+			ZEND_ASSERT(GC_TYPE((zend_object*)func->op_array.prototype) == IS_OBJECT);
+			GC_REFCOUNT((zend_object*)func->op_array.prototype)++;
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_CLOSURE);
 		}
 		if (EXPECTED((func->op_array.fn_flags & ZEND_ACC_GENERATOR) == 0)) {
