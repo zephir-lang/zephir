@@ -50,5 +50,6 @@ class IsScalarTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($t->testVarParameter(array(1,2,3,4,5)));
         $this->assertFalse($t->testVarParameter($this));
         $this->assertFalse($t->testVarParameter(function() {}));
+        $this->assertFalse($t->testVarParameter(null));
     }
 }
