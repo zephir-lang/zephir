@@ -106,6 +106,7 @@ if test "$PHP_TEST" = "yes"; then
 	test/oo/propertyaccess.zep.c
 	test/ooimpl/abeginning.zep.c
 	test/operator.zep.c
+	test/optimizers/isscalar.zep.c
 	test/optimizers/acos.zep.c
 	test/optimizers/arraymerge.zep.c
 	test/optimizers/asin.zep.c
