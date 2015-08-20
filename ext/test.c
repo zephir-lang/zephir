@@ -139,6 +139,7 @@ zend_class_entry *test_optimizers_arraymerge_ce;
 zend_class_entry *test_optimizers_asin_ce;
 zend_class_entry *test_optimizers_cos_ce;
 zend_class_entry *test_optimizers_createarray_ce;
+zend_class_entry *test_optimizers_isscalar_ce;
 zend_class_entry *test_optimizers_sin_ce;
 zend_class_entry *test_optimizers_sqrt_ce;
 zend_class_entry *test_optimizers_substr_ce;
@@ -308,6 +309,7 @@ static PHP_MINIT_FUNCTION(test)
 	ZEPHIR_INIT(Test_Optimizers_ArrayMerge);
 	ZEPHIR_INIT(Test_Optimizers_Cos);
 	ZEPHIR_INIT(Test_Optimizers_CreateArray);
+	ZEPHIR_INIT(Test_Optimizers_IsScalar);
 	ZEPHIR_INIT(Test_Optimizers_Sin);
 	ZEPHIR_INIT(Test_Optimizers_Sqrt);
 	ZEPHIR_INIT(Test_Optimizers_Substr);

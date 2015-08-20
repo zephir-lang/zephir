@@ -101,6 +101,7 @@
 #include "test/oo/propertyaccess.zep.h"
 #include "test/ooimpl/abeginning.zep.h"
 #include "test/operator.zep.h"
+#include "test/optimizers/isscalar.zep.h"
 #include "test/optimizers/acos.zep.h"
 #include "test/optimizers/arraymerge.zep.h"
 #include "test/optimizers/asin.zep.h"

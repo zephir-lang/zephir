@@ -229,8 +229,8 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getTan) {
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 
-	zval *num_param = NULL, *_0;
-	int num;
+	zval *num_param = NULL, _0, *_1 = NULL;
+	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -238,16 +238,18 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAsin) {
 	num = zephir_get_intval(num_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, num);
-	RETURN_MM_DOUBLE(asin(num));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, num);
+	ZEPHIR_CALL_FUNCTION(&_1, "asin", NULL, 9, &_0);
+	zephir_check_call_status();
+	RETURN_CCTOR(_1);
 
 }
 
 PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 
-	zval *num_param = NULL, *_0;
-	int num;
+	zval *num_param = NULL, _0, *_1 = NULL;
+	int num, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &num_param);
@@ -255,9 +257,11 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAcos) {
 	num = zephir_get_intval(num_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, num);
-	RETURN_MM_DOUBLE(acos(num));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, num);
+	ZEPHIR_CALL_FUNCTION(&_1, "acos", NULL, 10, &_0);
+	zephir_check_call_status();
+	RETURN_CCTOR(_1);
 
 }
 
@@ -274,7 +278,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getAtan) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 9, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 11, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);
 
@@ -299,7 +303,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 	if (base == -1) {
 		ZEPHIR_SINIT_VAR(_0);
 		ZVAL_LONG(&_0, num);
-		ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 10, &_0);
+		ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 12, &_0);
 		zephir_check_call_status();
 		RETURN_CCTOR(_1);
 	}
@@ -307,7 +311,7 @@ PHP_METHOD(Test_BuiltIn_IntMethods, getLog) {
 	ZVAL_LONG(&_0, num);
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_LONG(&_2, base);
-	ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 10, &_0, &_2);
+	ZEPHIR_CALL_FUNCTION(&_1, "log", NULL, 12, &_0, &_2);
 	zephir_check_call_status();
 	RETURN_CCTOR(_1);
 
