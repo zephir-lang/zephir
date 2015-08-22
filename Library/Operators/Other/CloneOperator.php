@@ -74,7 +74,7 @@ class CloneOperator extends BaseOperator
         $symbolVariable->setClassTypes($clonedVariable->getClassTypes());
 
         $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-        $clonedSymbol = $compilationContext->backend->getVariableCode($symbolVariable);
+        $clonedSymbol = $compilationContext->backend->getVariableCode($clonedVariable);
 
         $compilationContext->codePrinter->output('if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ' TSRMLS_CC) == FAILURE) {');
         $compilationContext->codePrinter->output("\t" . 'RETURN_MM();');

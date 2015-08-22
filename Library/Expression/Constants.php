@@ -183,14 +183,14 @@ class Constants
                 case '__CLASS__':
                     return new CompiledExpression(
                         'string',
-                        $compilationContext->classDefinition->getCompleteName(),
+                        Utils::addSlashes($compilationContext->classDefinition->getCompleteName(), true, Types::STRING),
                         $expression
                     );
                     //no break
                 case '__NAMESPACE__':
                     return new CompiledExpression(
                         'string',
-                        $compilationContext->classDefinition->getNamespace(),
+                        Utils::addSlashes($compilationContext->classDefinition->getNamespace(), true, Types::STRING),
                         $expression
                     );
                     //no break

@@ -216,7 +216,15 @@ class ObjectProperty
                 break;
 
             case 'bool':
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyName, $resolvedExpr->getBooleanCode()  ? 'true' : 'false', $compilationContext);
+                $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                $codePrinter->increaseLevel();
+                $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'true', $compilationContext);
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $compilationContext->backend->updateProperty($symbolVariable, $propertyName, 'false', $compilationContext);
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
                 break;
 
             /* unreachable code */

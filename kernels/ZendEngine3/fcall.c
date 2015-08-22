@@ -239,11 +239,7 @@ static ulong zephir_make_fcall_key(char **result, size_t *length, const zend_cla
 
 		for (i = 0; i < l; ++i) {
 			char c = buf[i];
-#if PHP_VERSION_ID >= 50500
 			c = tolower_map[(unsigned char)c];
-#else
-			c = tolower(c);
-#endif
 			buf[i] = c;
 			hash   = (hash << 5) + hash + c;
 		}
@@ -300,11 +296,13 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			break;
 
 		case zephir_fcall_ce: {
-			zend_class_entry *scope = EG(current_execute_data)->func ? EG(current_execute_data)->func->common.scope : NULL;
-
 			fcic->initialized      = 1;
 			fcic->calling_scope    = EG(scope);
+			/* called_scope: Instead of the checks below, which seem unnecessary/broken? */
+			fcic->called_scope     = fcic->calling_scope;
 			fcic->object       	   = NULL;
+			/*
+			zend_class_entry *scope = EG(current_execute_data)->func ? EG(current_execute_data)->func->op_array.scope : NULL;
 			if (scope && EG(current_execute_data) && Z_OBJ(EG(current_execute_data)->This) &&
 				instanceof_function(Z_OBJCE(EG(current_execute_data)->This), scope) &&
 				instanceof_function(scope, fcic->calling_scope)) {
@@ -313,7 +311,7 @@ ZEPHIR_ATTR_NONNULL static void zephir_fcall_populate_fci_cache(zend_fcall_info_
 			}
 			else {
 				fcic->called_scope = fcic->calling_scope;
-			}
+			}*/
 
 			break;
 		}
