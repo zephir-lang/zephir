@@ -355,7 +355,7 @@ class Compiler
      *
      * @param string $className
      *
-     * @return ClassDefinition
+     * @return ClassDefinition|false returns false if no class definition is found
      */
     public function getClassDefinition($className)
     {
