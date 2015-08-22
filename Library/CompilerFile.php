@@ -19,6 +19,8 @@
 
 namespace Zephir;
 
+use Zephir\Documentation\DocblockParser;
+
 /**
  * CompilerFile
  *
@@ -318,6 +320,24 @@ class CompilerFile
                 $name = $property['name'];
             }
 
+            $docBlock = isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null;
+            $returnsType = array();
+
+            if ($docBlock) {
+                $docBlockParser = new DocblockParser('/' . $docBlock .'/');
+                $docBlockParsed = $docBlockParser->parse();
+
+                if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
+                    $returnsType = array_map(function ($type) {
+                        return ($type = trim($type)) == 'mixed' ? 'variable' : $type;
+                    }, (array)explode('|', $annotations[0]->getString()));
+                }
+
+                // Clear annotations
+                $docBlockParsed->setAnnotations(array());
+                $docBlock = $docBlockParsed->generate();
+            }
+
             switch ($shortcut['name']) {
                 case 'get':
                     $classDefinition->addMethod(new ClassMethod(
@@ -341,8 +361,8 @@ class CompilerFile
                                 )
                             )
                         )),
-                        isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-                        null,
+                        $docBlock,
+                        $this->createReturnsType($returnsType),
                         $shortcut
                     ), $shortcut);
                     break;
@@ -357,7 +377,7 @@ class CompilerFile
                                 'type' => 'parameter',
                                 'name' => $name,
                                 'const' => 0,
-                                'data-type' => 'variable',
+                                'data-type' => count($returnsType) == 1 ? $returnsType[0] : 'variable',
                                 'mandatory' => 0
                             )
                         )),
@@ -384,7 +404,7 @@ class CompilerFile
                                 )
                             )
                         )),
-                        isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
+                        $docBlock,
                         null,
                         $shortcut
                     ), $shortcut);
@@ -413,8 +433,8 @@ class CompilerFile
                                 )
                             )
                         )),
-                        isset($shortcut['docblock']) ? $shortcut['docblock'] : isset($property['docblock']) ? $property['docblock'] : null,
-                        null,
+                        $docBlock,
+                        $this->createReturnsType(array('string')),
                         $shortcut
                     ), $shortcut);
                     break;
@@ -991,5 +1011,32 @@ class CompilerFile
     public function getFilePath()
     {
         return $this->_filePath;
+    }
+
+    /**
+     * @param array $types
+     * @return array|null
+     */
+    protected function createReturnsType(Array $types)
+    {
+        if (empty($types)) {
+            return null;
+        }
+
+        $list = array();
+
+        foreach ($types as $type) {
+            $list[] = array(
+                'type' => 'return-type-parameter',
+                'data-type' => $type == 'mixed' ? 'variable' : $type,
+                'mandatory' => false
+            );
+        }
+
+        return array(
+            'type' => 'return-type',
+            'list' => $list,
+            'void' => empty($list),
+        );
     }
 }

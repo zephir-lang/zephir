@@ -13,9 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "math.h"
+#include "kernel/fcall.h"
 #include "kernel/operators.h"
-#include "kernel/math.h"
 
 
 ZEPHIR_INIT_CLASS(Test_Optimizers_ACos) {
@@ -28,46 +27,53 @@ ZEPHIR_INIT_CLASS(Test_Optimizers_ACos) {
 
 PHP_METHOD(Test_Optimizers_ACos, testInt) {
 
-	zval *_0;
-	int a = 1;
+	zval _0;
+	int a = 1, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, a);
-	RETURN_MM_DOUBLE(acos(a));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Optimizers_ACos, testVar) {
 
-	zval *_0;
-	int a = 1;
+	zval _0;
+	int a = 1, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, a);
-	RETURN_MM_DOUBLE(acos(a));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Optimizers_ACos, testIntValue1) {
 
-	zval *_0;
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval _0;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, 0);
-	RETURN_MM_DOUBLE(acos(0));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, 0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Optimizers_ACos, testIntParameter) {
 
-	zval *a_param = NULL, *_0;
-	int a;
+	zval *a_param = NULL, _0;
+	int a, ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &a_param);
@@ -75,21 +81,27 @@ PHP_METHOD(Test_Optimizers_ACos, testIntParameter) {
 	a = zephir_get_intval(a_param);
 
 
-	ZEPHIR_INIT_VAR(_0);
-	ZVAL_LONG(_0, a);
-	RETURN_MM_DOUBLE(acos(a));
+	ZEPHIR_SINIT_VAR(_0);
+	ZVAL_LONG(&_0, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 
 PHP_METHOD(Test_Optimizers_ACos, testVarParameter) {
 
+	int ZEPHIR_LAST_CALL_STATUS;
 	zval *a;
 
-	zephir_fetch_params(0, 1, 0, &a);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a);
 
 
 
-	RETURN_DOUBLE(zephir_acos(a TSRMLS_CC));
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 10, a);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 

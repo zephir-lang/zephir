@@ -71,6 +71,7 @@ int zephir_init_global(char *global, unsigned int global_length TSRMLS_DC);
 int zephir_get_global(zval **arr, const char *global, unsigned int global_length TSRMLS_DC);
 
 int zephir_is_callable(zval *var TSRMLS_DC);
+int zephir_is_scalar(zval *var);
 int zephir_function_exists(const zval *function_name TSRMLS_DC);
 int zephir_function_exists_ex(const char *func_name, unsigned int func_len TSRMLS_DC);
 int zephir_function_quick_exists_ex(const char *func_name, unsigned int func_len, unsigned long key TSRMLS_DC);

@@ -283,7 +283,7 @@ class FunctionCall extends Call
             return true;
         }
 
-        $internalName[] = 'f__'.$functionName;
+        $internalName = array('f__'.$functionName);
         if (isset($context->classDefinition)) {
             $internalName[] = 'f_'.str_replace('\\', '_', strtolower($context->classDefinition->getNamespace())).'_'.$functionName;
         }
