@@ -290,6 +290,21 @@ int zephir_is_callable(zval *var)
 	return (int) retval;
 }
 
+int zephir_is_scalar(zval *var)
+{
+	switch (Z_TYPE_P(var)) {
+		case IS_TRUE:
+		case IS_FALSE:
+		case IS_DOUBLE:
+		case IS_LONG:
+		case IS_STRING:
+			return 1;
+			break;
+	}
+
+	return 0;
+}
+
 /**
  * Returns the type of a variable as a string
  */
