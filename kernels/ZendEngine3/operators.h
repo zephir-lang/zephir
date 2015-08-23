@@ -23,6 +23,7 @@
 
 #include <php.h>
 #include <Zend/zend.h>
+#include "kernel/main.h"
 
 #define zephir_make_printable_zval(expr, expr_copy) zend_make_printable_zval(expr, expr_copy);
 
