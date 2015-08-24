@@ -25,6 +25,7 @@ class EvalTest extends \PHPUnit_Framework_TestCase
     {
         $t = new \Test\EvalTest();
 
-        $this->assertSame(2, $t->evalCode('1 + 1'));
+        $this->assertSame(2, $t->evalCode('return 1 + 1;'));
+        $this->assertSame(8, $t->evalCode('$g = pow(2, 2); return $g * 2;'));
     }
 }

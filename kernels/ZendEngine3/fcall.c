@@ -720,7 +720,47 @@ int zephir_call_class_method_aparams(zval *return_value_ptr, zend_class_entry *c
 	return status;
 }
 
+
+/**
+ * If a retval_ptr is specified, PHP's implementation of zend_eval_stringl
+ * simply prepends a "return " which causes only the first statement to be executed
+ */
 void zephir_eval_php(zval *str, zval *retval_ptr, char *context)
 {
-	zend_eval_string_ex(Z_STRVAL_P(str), retval_ptr, context, 1);
+	zval local_retval;
+	zend_op_array *new_op_array = NULL;
+	uint32_t original_compiler_options;
+
+	ZVAL_UNDEF(&local_retval);
+
+	original_compiler_options = CG(compiler_options);
+	CG(compiler_options) = ZEND_COMPILE_DEFAULT_FOR_EVAL;
+	new_op_array = zend_compile_string(str, context);
+	CG(compiler_options) = original_compiler_options;
+
+	if (new_op_array)
+	{
+		EG(no_extensions) = 1;
+		zend_try {
+			zend_execute(new_op_array, &local_retval);
+		} zend_catch {
+			destroy_op_array(new_op_array);
+			efree_size(new_op_array, sizeof(zend_op_array));
+			zend_bailout();
+		} zend_end_try();
+		EG(no_extensions) = 0;
+
+		if (Z_TYPE(local_retval) != IS_UNDEF) {
+			if (retval_ptr) {
+				ZVAL_COPY_VALUE(retval_ptr, &local_retval);
+			} else {
+				zval_ptr_dtor(&local_retval);
+			}
+		} else if (retval_ptr) {
+			ZVAL_NULL(retval_ptr);
+		}
+
+		destroy_op_array(new_op_array);
+		efree_size(new_op_array, sizeof(zend_op_array));
+	}
 }
