@@ -23,6 +23,10 @@ class Backend extends BackendZendEngine2
         return true;
     }
 
+    /**
+     * @param Variable $variable
+     * @return string
+     */
     public function getVariableCode(Variable $variable)
     {
         if ($variable->isDoublePointer() ||

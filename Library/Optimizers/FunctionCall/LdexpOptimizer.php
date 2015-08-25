@@ -36,6 +36,23 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class LdexpOptimizer extends MathOptimizer
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameters()
+    {
+        return array(
+            array(
+                'name' => 'value',
+                'type' => 'mixed'
+            ),
+            array(
+                'name' => 'exp',
+                'type' => 'integer'
+            )
+        );
+    }
+
     public function getFunctionName()
     {
         return 'ldexp';

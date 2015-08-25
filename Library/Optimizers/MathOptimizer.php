@@ -33,6 +33,21 @@ abstract class MathOptimizer extends OptimizerAbstract
     abstract public function getFunctionName();
 
     /**
+     * Get array of needed parameters for function optimizer
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return array(
+            array(
+                'name' => 'value',
+                'type' => 'mixed'
+            )
+        );
+    }
+
+    /**
      * @param array $expression
      * @param Call $call
      * @param CompilationContext $context
@@ -41,11 +56,13 @@ abstract class MathOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
+        $parameters = $this->getParameters();
+
         if (!isset($expression['parameters'])) {
             return false;
         }
 
-        if (count($expression['parameters']) > 1) {
+        if (count($expression['parameters']) != count($parameters)) {
             return false;
         }
 
