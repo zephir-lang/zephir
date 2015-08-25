@@ -33,16 +33,25 @@ class OperatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($t->testIdentical(true, true));
         $this->assertTrue($t->testIdentical('phalcon', 'phalcon'));
     }
-    
+
     public function test829Issue()
     {
         $t = new \Test\Operator();
-        
+
         $this->assertTrue($t->testIdenticalVarFalse(false));
         $this->assertFalse($t->testIdenticalVarFalse(0));
         $this->assertFalse($t->testIdenticalVarFalse(''));
         $this->assertTrue($t->testIdenticalFalseVar(false));
         $this->assertFalse($t->testIdenticalFalseVar(0));
         $this->assertFalse($t->testIdenticalFalseVar(''));
+    }
+
+    public function test1072Issue()
+    {
+        $t = new \Test\Operator();
+
+        $this->assertFalse($t->testIdenticalIfComplex(false));
+        $this->assertTrue($t->testIdenticalIfComplex(0));
+        $this->assertTrue($t->testIdenticalIfComplex(''));
     }
 }

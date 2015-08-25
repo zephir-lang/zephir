@@ -495,22 +495,21 @@ class ComparisonBaseOperator extends BaseOperator
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
+
                                 switch ($variableRight->getType()) {
                                     case 'int':
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression('bool', $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-
                                     case 'bool':
-                                        return new CompiledExpression('bool', $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
-
                                     case 'double':
                                         return new CompiledExpression('bool', $variable->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName(), $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression('bool', $this->_zvalBoolOperator . '(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
+                                        $boolOperator = $left->getBooleanCode() == '1' ? $this->_zvalBoolTrueOperator : $this->_zvalBoolFalseOperator;
+                                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+                                        return new CompiledExpression('bool', $boolOperator . '(' . $variableRightCode . ')', $expression);
 
                                     default:
                                         throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);

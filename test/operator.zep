@@ -7,6 +7,18 @@ class Operator
 		return param1 === param2;
 	}
 
+	public function testIdenticalIfComplex(var input)
+	{
+		var a, b;
+		let a = ["1": input];
+		let b = false;
+
+		if b !== a["1"] {
+			return true;
+		}
+		return false;
+	}
+
 	public function testIdenticalVarFalse(param)
 	{
 		return param === FALSE;
