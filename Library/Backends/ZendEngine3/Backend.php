@@ -42,7 +42,7 @@ class Backend extends BackendZendEngine2
     {
         $code = '(Z_TYPE_P(' . $this->getVariableCode($variable) . ') == IS_TRUE)';
         if ($useCodePrinter) {
-            $compilationContext->codePrinter->output($code);
+            $context->codePrinter->output($code);
         }
         return $code;
     }
