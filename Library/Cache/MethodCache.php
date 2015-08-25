@@ -186,7 +186,6 @@ class MethodCache
             }
         }
 
-        $associatedClass = false;
         if ($caller->getName() != 'this_ptr') {
             $associatedClass = $caller->getAssociatedClass();
             if ($this->isClassCacheable($associatedClass)) {
