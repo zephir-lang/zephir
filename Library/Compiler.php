@@ -1198,7 +1198,7 @@ class Compiler
      */
     protected function checkKernelFile($src, $dst)
     {
-        if (strstr($src, 'ext' . DIRECTORY_SEPARATOR . 'kernel' . DIRECTORY_SEPARATOR . 'concat.') !== false) {
+        if (preg_match('#kernels/ZendEngine[2-9]/concat\.#', $src)) {
             return true;
         }
 

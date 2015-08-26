@@ -118,7 +118,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatchFallback) {
 	ZEPHIR_INIT_VAR(_1);
 	ZVAL_LONG(_1, 0);
 	Z_SET_ISREF_P(matches);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 55, pattern, subject, matches, _0, _1);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 51, pattern, subject, matches, _0, _1);
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -164,7 +164,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch4Params) {
 
 
 	Z_SET_ISREF_P(matches);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 55, pattern, subject, matches, flags);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 51, pattern, subject, matches, flags);
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -182,7 +182,7 @@ PHP_METHOD(Test_Pregmatch, testPregMatch5Params) {
 
 
 	Z_SET_ISREF_P(matches);
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 55, pattern, subject, matches, flags, offset);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_match", NULL, 51, pattern, subject, matches, flags, offset);
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -229,7 +229,7 @@ PHP_METHOD(Test_Pregmatch, testMatchAll) {
 	ZEPHIR_INIT_VAR(_0);
 	ZVAL_STRING(_0, "/(test[0-9]+)/", ZEPHIR_TEMP_PARAM_COPY);
 	Z_SET_ISREF_P(matches);
-	ZEPHIR_CALL_FUNCTION(NULL, "preg_match_all", NULL, 56, _0, text, matches, flags);
+	ZEPHIR_CALL_FUNCTION(NULL, "preg_match_all", NULL, 52, _0, text, matches, flags);
 	zephir_check_temp_parameter(_0);
 	Z_UNSET_ISREF_P(matches);
 	zephir_check_call_status();

@@ -132,7 +132,7 @@ class SymbolTable
      * Returns a variable in the symbol table
      *
      * @param $name
-     * @return bool
+     * @return \Zephir\Variable|bool
      */
     public function getVariable($name)
     {
