@@ -237,8 +237,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-
                             case 'bool':
                                 return new CompiledExpression('double', '(' . $left->getCode() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -290,8 +288,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-
                                     case 'bool':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 
@@ -332,8 +328,6 @@ class ArithmeticalBaseOperator extends BaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
-
                                     case 'double':
                                         return new CompiledExpression('int', '(' . $variableLeft->getName() . ' ' . $this->_operator . ' ' . $variableRight->getName() . ')', $expression);
 

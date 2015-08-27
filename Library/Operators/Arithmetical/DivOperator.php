@@ -89,8 +89,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-
                             case 'bool':
                                 return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
@@ -150,8 +148,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-
                             case 'bool':
                                 return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
@@ -159,7 +155,6 @@ class DivOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_div_double_double(' . $left->getCode() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
                             case 'variable':
-                                $compilationContext->headersManager->add('kernel/operators');
                                 $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
                                 return new CompiledExpression('double', 'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ' TSRMLS_CC)', $expression);
                                 break;
@@ -175,16 +170,10 @@ class DivOperator extends ArithmeticalBaseOperator
                 break;
 
             case 'string':
-                switch ($right->getType()) {
-                    default:
-                        throw new CompilerException("Operation is not supported between strings", $expression);
-                }
-                break;
-
             case 'array':
                 switch ($right->getType()) {
                     default:
-                        throw new CompilerException("Operation is not supported between arrays", $expression);
+                        throw new CompilerException("Operation is not supported between " . $right->getType(), $expression);
                 }
                 break;
 
@@ -212,8 +201,6 @@ class DivOperator extends ArithmeticalBaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-
                                     case 'bool':
                                         return new CompiledExpression('double', 'zephir_safe_div_long_long(' . $variableLeft->getName() . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
 
@@ -290,8 +277,6 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
-
                             case 'double':
                                 return new CompiledExpression('double', 'zephir_safe_div_double_long(' . $left->getCode() . ', ' . $right->getCode() . ' TSRMLS_CC)', $expression);
 
@@ -336,21 +321,18 @@ class DivOperator extends ArithmeticalBaseOperator
                         throw new CompilerException("Cannot operate array variables'", $expression);
 
                     case 'variable':
+                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                         switch ($right->getType()) {
                             /* a + 1 */
                             case 'int':
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                 $op2 = $right->getCode();
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
                                 break;
 
                             case 'double':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                 $op2 = $right->getCode();
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
                                 break;
@@ -364,29 +346,20 @@ class DivOperator extends ArithmeticalBaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     case 'double':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     /* a(var) + a(bool) */
                                     case 'bool':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                         return new CompiledExpression('int', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     /* a(var) + a(var) */
                                     case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
-
-                                        $op1 = $compilationContext->backend->getVariableCode($variableLeft);
                                         $op2 = $compilationContext->backend->getVariableCode($variableRight);
 
                                         $expected = $this->getExpected($compilationContext, $expression);
@@ -419,12 +392,10 @@ class DivOperator extends ArithmeticalBaseOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                $compilationContext->headersManager->add('kernel/operators');
                                 $op2 = $right->getCode();
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
 
                             case 'double':
-                                $compilationContext->headersManager->add('kernel/operators');
                                 $op2 = $right->getCode();
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $op2 . ' TSRMLS_CC)', $expression);
 
@@ -435,18 +406,12 @@ class DivOperator extends ArithmeticalBaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        $compilationContext->headersManager->add('kernel/operators');
+                                    case 'bool':
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     case 'double':
-                                        $compilationContext->headersManager->add('kernel/operators');
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_double(' . $op1 . ', ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
-                                        break;
-
-                                    case 'bool':
-                                        $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression('double', 'zephir_safe_div_zval_long(' . $op1 . '), ' . $variableRight->getName() . ' TSRMLS_CC)', $expression);
                                         break;
 
                                     case 'variable':
@@ -463,8 +428,6 @@ class DivOperator extends ArithmeticalBaseOperator
                                                 return new CompiledExpression('bool', $variableLeft->getName() . ' ' . $this->_bitOperator . ' ' . $variableRight->getName(), $expression);
 
                                             case 'variable':
-                                                $compilationContext->headersManager->add('kernel/operators');
-
                                                 $expected = $this->getExpected($compilationContext, $expression);
                                                 $expectedCode = $compilationContext->backend->getVariableCode($expected);
                                                 $compilationContext->codePrinter->output($this->_zvalOperator . '(' . $expectedCode . ', ' . $op1 . ', ' . $op2 . ');');
