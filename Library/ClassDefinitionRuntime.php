@@ -28,7 +28,15 @@ use Zephir\HeadersManager;
  */
 class ClassDefinitionRuntime
 {
+    private $className;
+
     public function __construct($className)
     {
+        $this->className = $className;
+    }
+
+    public function getName()
+    {
+        return $this->className;
     }
 }

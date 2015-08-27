@@ -382,7 +382,7 @@ class ClassDefinition
      *
      * @param $classDefinition
      */
-    public function setExtendsClassDefinition(ClassDefinition $classDefinition)
+    public function setExtendsClassDefinition($classDefinition)
     {
         $this->extendsClassDefinition = $classDefinition;
     }
@@ -692,7 +692,7 @@ class ClassDefinition
         }
 
         $extendsClassDefinition = $this->extendsClassDefinition;
-        if ($extendsClassDefinition) {
+        if ($extendsClassDefinition instanceof ClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return true;
             }
@@ -716,7 +716,7 @@ class ClassDefinition
         }
 
         $extendsClassDefinition = $this->extendsClassDefinition;
-        if ($extendsClassDefinition) {
+        if ($extendsClassDefinition instanceof ClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
                 return $extendsClassDefinition->getMethod($methodName);
             }
@@ -905,7 +905,7 @@ class ClassDefinition
         $method = $this->getInitMethod();
         if (!$method) {
             $parentClassDefinition = $this->getExtendsClassDefinition();
-            if ($parentClassDefinition) {
+            if ($parentClassDefinition instanceof ClassDefinition) {
                 $method = $parentClassDefinition->getInitMethod();
                 if ($method) {
                     $this->addInitMethod($method->getStatementsBlock());
@@ -1017,7 +1017,7 @@ class ClassDefinition
         $classExtendsDefinition = null;
         if ($this->extendsClass) {
             $classExtendsDefinition = $this->extendsClassDefinition;
-            if (!$classExtendsDefinition->isBundled()) {
+            if ($classExtendsDefinition instanceof ClassDefinition && !$classExtendsDefinition->isBundled()) {
                 $classEntry = $classExtendsDefinition->getClassEntry($compilationContext);
             } else {
                 $classEntry = $this->getClassEntryByClassName($classExtendsDefinition->getName(), $compilationContext);
@@ -1121,7 +1121,7 @@ class ClassDefinition
              * Interfaces in extended classes may have
              */
             if ($classExtendsDefinition) {
-                if (!$classExtendsDefinition->isBundled()) {
+                if ($classExtendsDefinition instanceof ClassDefinition && !$classExtendsDefinition->isBundled()) {
                     $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                     if (is_array($interfaces)) {
                         foreach ($interfaces as $interface) {
