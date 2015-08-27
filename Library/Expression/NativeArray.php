@@ -279,6 +279,7 @@ class NativeArray
                             case 'long':
                             case 'ulong':
                             case 'double':
+                            case 'string':
                                 $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
@@ -292,10 +293,6 @@ class NativeArray
 
                             case 'null':
                                 $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY');
-                                break;
-
-                            case 'string':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'array':
