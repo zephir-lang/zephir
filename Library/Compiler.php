@@ -987,11 +987,13 @@ class Compiler
                 $this->logger->output('Preparing for PHP compilation...');
                 exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
 
-                file_put_contents(
-                    "ext/configure.js",
-                    "var PHP_ANALYZER = 'disabled';\nvar PHP_PGO = 'no';\nvar PHP_PGI = 'no';".
-                    file_get_contents("ext/configure.js")
-                );
+                /* fix until https://github.com/php/php-src/commit/9a3af83ee2aecff25fd4922ef67c1fb4d2af6201 hits all supported PHP builds */
+                $fixMarker = "/* zephir_phpize_fix */";
+                $configureFile = file_get_contents("ext/configure.js");
+                $configureFix = array("var PHP_ANALYZER = 'disabled';", "var PHP_PGO = 'no';", "var PHP_PGI = 'no';");
+                if (strpos($configureFile, $fixMarker) === false) {
+                    file_put_contents("ext/configure.js", $fixMarker . PHP_EOL . implode($configureFix, PHP_EOL) . PHP_EOL . $configureFile);
+                }
                 $this->logger->output('Preparing configuration file...');
 
                 exec('cd ext && configure --enable-' . $namespace);
