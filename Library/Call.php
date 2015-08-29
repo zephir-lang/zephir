@@ -249,7 +249,8 @@ class Call
                             throw new CompilerException('Named parameter "' . $parameter['name'] . '" is not a valid parameter name, available: ' . join(', ', array_keys($positionalParameters)), $parameter['parameter']);
                         }
                     }
-                    for ($i = 0; $i < count($parameters); $i++) {
+                    $parameters_count = count($parameters);
+                    for ($i = 0; $i < $parameters_count; $i++) {
                         if (!isset($orderedParameters[$i])) {
                             $orderedParameters[$i] = array('parameter' => array('type' => 'null'));
                         }
