@@ -83,7 +83,8 @@ class Config
             'constant-folding'                   => true,
             'static-constant-class-folding'      => true,
             'call-gatherer-pass'                 => true,
-            'check-invalid-reads'                => false
+            'check-invalid-reads'                => false,
+            'internal-call-transformation'       => false
         ),
         'namespace'   => '',
         'name'        => '',

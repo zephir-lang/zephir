@@ -215,6 +215,10 @@ class DeclareStatement extends StatementAbstract
                                 $symbolVariable->setDynamicTypes('double');
                                 break;
 
+                            case 'bool':
+                                $symbolVariable->setDynamicTypes('bool');
+                                break;
+
                             case 'string':
                             case 'ulong':
                                 $symbolVariable->setDynamicTypes('string');

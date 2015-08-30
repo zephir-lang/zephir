@@ -89,6 +89,11 @@ class Compiler
     protected $stringManager;
 
     /**
+     * @var FcallManager
+     */
+    protected $fcallManager;
+
+    /**
      * @var Config
      */
     protected $config;
@@ -131,6 +136,7 @@ class Compiler
         $this->fileSystem = new FileSystem();
         $this->backend = $backend;
         $this->stringManager = $this->backend->getStringsManager();
+        $this->fcallManager = $this->backend->getFcallManager();
         $this->checkRequires();
     }
 
@@ -957,6 +963,7 @@ class Compiler
          * Round 5. Generate concatenation functions
          */
         $this->stringManager->genConcatCode();
+        $this->fcallManager->genFcallCode();
 
         if ($this->config->get('stubs-run-after-generate', 'stubs')) {
             $this->stubs($command, true);

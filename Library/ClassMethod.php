@@ -185,7 +185,12 @@ class ClassMethod
         $this->docblock = $docblock;
         $this->expression = $original;
 
-        if ($returnType['void']) {
+        $this->setReturnTypes($returnType);
+    }
+
+    public function setReturnTypes($returnType)
+    {
+        if (isset($returnType['void']) && $returnType['void']) {
             $this->void = true;
             return;
         }
@@ -338,6 +343,64 @@ class ClassMethod
     public function getClassDefinition()
     {
         return $this->classDefinition;
+    }
+
+    /**
+     * Generate internal method's based on the equivalent PHP methods,
+     * allowing bypassing php userspace for internal method calls
+     */
+    public function setupOptimized(CompilationContext $compilationContext)
+    {
+        if (!$compilationContext->config->get('internal-call-transformation', 'optimizations')) {
+            return;
+        }
+        $classDefinition = $this->getClassDefinition();
+        /* Skip for closures */
+        if ($this->getName() == '__invoke' || $classDefinition->isInterface()) {
+            return;
+        }
+        if (!$this->isInternal() && !$classDefinition->isBundled()) {
+            /* Not supported for now */
+            if ($this->getNumberOfRequiredParameters() != $this->getNumberOfParameters()) {
+                return $this;
+            }
+            if ($this->isConstructor()) {
+                return $this;
+            }
+            $optimizedName = $this->getName() . '_zephir_internal_call';
+
+            $visibility = array('internal');
+
+            $statements = null;
+            if ($this->statements) {
+                $statements = new StatementsBlock(json_decode(json_encode($this->statements->getStatements()), true));
+            }
+
+            $optimizedMethod = new ClassMethod(
+                $classDefinition,
+                $visibility,
+                $optimizedName,
+                $this->parameters,
+                $statements,
+                $this->docblock,
+                null,
+                $this->expression
+            );
+            $optimizedMethod->typeInference = $this->typeInference;
+            $optimizedMethod->setReturnTypes($this->returnTypes);
+            $classDefinition->addMethod($optimizedMethod);
+        }
+    }
+    public $optimizable = true;
+
+    public function getOptimizedMethod()
+    {
+        $optimizedName = $this->getName() . '_zephir_internal_call';
+        $optimizedMethod = $this->classDefinition->getMethod($optimizedName, false);
+        if (!$optimizedMethod || !$this->optimizable) {
+            return $this;
+        }
+        return $optimizedMethod;
     }
 
     /**
@@ -1643,6 +1706,10 @@ class ClassMethod
                                 case 'uint':
                                 case 'long':
                                     $initVarCode .= "\t" . $compilationContext->backend->assignLong($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
+                                    break;
+
+                                case 'bool':
+                                    $initVarCode .= "\t" . $compilationContext->backend->assignBool($variable, $defaultValue['value'], $compilationContext, false) . PHP_EOL;
                                     break;
 
                                 case 'char':

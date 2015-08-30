@@ -575,6 +575,8 @@ class MethodCall extends Call
 
             $isInternal = false;
             if (is_object($realMethod[1])) {
+                $realMethod[1] = $realMethod[1]->getOptimizedMethod();
+                $method = $realMethod[1];
                 $isInternal = $realMethod[1]->isInternal();
                 if ($isInternal && $realMethod[0] > 1) {
                     throw new CompilerException("Cannot resolve method: '" . $expression['name'] . "' in polymorphic variable", $expression);
@@ -593,26 +595,25 @@ class MethodCall extends Call
 
                 $compilationContext->backend->callMethod($isExpecting ? $symbolVariable : null, $variableVariable, $methodName, $cachePointer, count($params) ? $params : null, $compilationContext);
             } else {
-                if (!count($params)) {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P0(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
-                        }
+                //TODO: also move to backend
+                if ($isExpecting) {
+                    $symbolCode = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+                }
+                $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
+                $paramCount = count($params);
+                $paramsStr = $paramCount ? ', ' . join(', ', $params) : '';
+
+                if ($isExpecting) {
+                    if ($symbolVariable->getName() == 'return_value') {
+                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, true, $paramCount);
+                        $codePrinter->output($macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');');
                     } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P0(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ');');
+                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 2, $paramCount);
+                        $codePrinter->output($macro . '(' . $symbolCode . ', ' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');');
                     }
                 } else {
-                    if ($isExpecting) {
-                        if ($symbolVariable->getName() == 'return_value') {
-                            $codePrinter->output('ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P' . count($params) . '(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
-                        } else {
-                            $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_P' . count($params) . '(&' . $symbolVariable->getName() . ', ' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
-                        }
-                    } else {
-                        $codePrinter->output('ZEPHIR_CALL_INTERNAL_METHOD_NORETURN_P' . count($params) . '(' . $variableVariable->getName() . ', ' . $method->getInternalName() . ', ' . join(', ', $params) . ');');
-                    }
+                    $macro = $compilationContext->backend->getFcallManager()->getMacro(false, false, $paramCount);
+                    $codePrinter->output($macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');');
                 }
             }
         } else {

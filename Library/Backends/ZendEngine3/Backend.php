@@ -17,6 +17,8 @@ class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
 
+    protected $fcallManager;
+
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
@@ -52,6 +54,14 @@ class Backend extends BackendZendEngine2
         return new StringsManager();
     }
 
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->fcallManager = new FcallManager();
+        }
+        return $this->fcallManager;
+    }
+
     public function getTypeDefinition($type)
     {
         switch ($type) {
@@ -70,7 +80,12 @@ class Backend extends BackendZendEngine2
             return;
         }
         if (!$method->isInternal()) {
-            return "\t" . 'zval *this_ptr = getThis();'; //TODO: think about a better way to solve this.
+            return "\t" . 'zval this_zv;' . "\n\t" .
+                'zval *this_ptr = getThis();' . "\n\t" .
+                'if (EXPECTED(this_ptr)) {' . "\n\t\t" .
+                'ZVAL_OBJ(&this_zv, Z_OBJ_P(this_ptr));' . "\n\t\t" .
+                'this_ptr = &this_zv;' . "\n\t" .
+                '} else this_ptr = NULL;'. "\n\t"; //TODO: think about a better way to solve this.
         }
     }
 
@@ -231,21 +246,23 @@ class Backend extends BackendZendEngine2
                     case 'bool':
                     case 'char':
                     case 'uchar':
+                    case 'string':
+                    case 'array':
                         $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
                         break;
 
                     default:
-                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext';
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext ';
                         break;
                 }
             }
         }
 
         if (count($signatureParameters)) {
-            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ')';
+            return 'void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ')';
         }
 
-        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used)';
+        return 'void ' . $method->getInternalName() . '(int ht, zval *return_value, zval *this_ptr, int return_value_used)';
     }
 
     /* Assign value to variable */
