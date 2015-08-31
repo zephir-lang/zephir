@@ -15,6 +15,8 @@ class Backend extends BaseBackend
 {
     protected $name = 'ZendEngine2';
 
+    protected $fcallManager;
+
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
@@ -52,6 +54,15 @@ class Backend extends BaseBackend
     public function getStringsManager()
     {
         return new StringsManager();
+    }
+
+
+    public function getFcallManager()
+    {
+        if (!$this->fcallManager) {
+            $this->fcallManager = new FcallManager();
+        }
+        return $this->fcallManager;
     }
 
     public function getTypeDefinition($type)
@@ -339,6 +350,8 @@ class Backend extends BaseBackend
                     case 'bool':
                     case 'char':
                     case 'uchar':
+                    case 'string':
+                    case 'array':
                         $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
                         break;
 
@@ -350,10 +363,10 @@ class Backend extends BaseBackend
         }
 
         if (count($signatureParameters)) {
-            return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
+            return 'void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used, ' . join(', ', $signatureParameters) . ' TSRMLS_DC)';
         }
 
-        return 'static void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
+        return 'void ' . $method->getInternalName() . '(int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC)';
     }
 
     public function declareConstant($type, $name, $value, CompilationContext $context)

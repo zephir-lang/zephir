@@ -17,18 +17,50 @@
  +--------------------------------------------------------------------------+
 */
 
-namespace Zephir\Backends\ZendEngine3;
+namespace Zephir\Backends\ZendEngine2;
 
 use Zephir\CodePrinter;
 use Zephir\Utils;
-use Zephir\Backends\ZendEngine2\FcallManager as ZE2FcallManager;
 
 /**
  * Class FcallManager
  *
  */
-class FcallManager extends ZE2FcallManager
+class FcallManager
 {
+    protected $requiredMacros = array();
+
+
+    public function macroIsRequired($macro)
+    {
+        return isset($this->requiredMacros[$macro]);
+    }
+
+    /**
+     * Resolve internal fcall attributes to a suitable macro and ensure that it's generated during compilation
+     * @param doReturn tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     */
+    public function getMacro($static, $doReturn, $paramCount)
+    {
+        /*
+        $scopes = array('', 'STATIC');
+        $modes = array('CALL_INTERNAL_METHOD_P', 'RETURN_CALL_INTERNAL_METHOD_P', 'CALL_INTERNAL_METHOD_NORETURN_P');
+        */
+        $scope = $static ? 'STATIC' : '';
+        $mode = 'CALL_INTERNAL_METHOD_NORETURN_P';
+        if ($doReturn) {
+            $mode = 'RETURN_CALL_INTERNAL_METHOD_P';
+            if ($doReturn === 2) {
+                $mode = 'CALL_INTERNAL_METHOD_P';
+            }
+        }
+        $macroName = 'ZEPHIR_' . ($scope ? $scope . '_' : '') . $mode . $paramCount;
+        if (!$this->macroIsRequired($macroName)) {
+            $this->requiredMacros[$macroName] = array($scope, $mode, $paramCount);
+        }
+        return $macroName;
+    }
+
     public function genFcallCode()
     {
         $codePrinter = new CodePrinter();
@@ -57,7 +89,7 @@ class FcallManager extends ZE2FcallManager
             if ($mode == 'CALL_INTERNAL_METHOD_P') {
                 $retValueUsed = '1';
                 $retParam = 'return_value_ptr';
-                $initStatements[] = 'ZEPHIR_INIT_NVAR((return_value_ptr)); \\';
+                $initStatements[] = 'ZEPHIR_INIT_NVAR(*(return_value_ptr)); \\';
             }
             $objParam = $scope ? 'scope_ce, ' : 'object, ';
             $macroName = $name . '(' . ($retParam ? $retParam . ', ' : '') . $objParam . 'method' . $paramsStr . ')';
@@ -70,9 +102,9 @@ class FcallManager extends ZE2FcallManager
             $codePrinter->increaseLevel();
 
             if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
-                $codePrinter->output('zval rv; \\');
-                $codePrinter->output('zval *rvp = &rv; \\');
-                $codePrinter->output('ZVAL_UNDEF(&rv); \\');
+                $codePrinter->output('zval *rv = NULL; \\');
+                $codePrinter->output('zval **rvp = &rv; \\');
+                $codePrinter->output('ALLOC_INIT_ZVAL(rv); \\');
                 $retParam = 'rvp';
             }
 
@@ -80,28 +112,40 @@ class FcallManager extends ZE2FcallManager
             $codePrinter->output('ZEPHIR_BACKUP_THIS_PTR(); \\');
             if (!$scope) {
                 $codePrinter->output('ZEPHIR_SET_THIS(object); \\');
-                $codePrinter->output('ZEPHIR_SET_SCOPE((Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL), (Z_OBJ_P(object) ? Z_OBJCE_P(object) : NULL)); \\');
+                $codePrinter->output('ZEPHIR_SET_SCOPE((Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL), (Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL)); \\');
             } else {
-                $codePrinter->output('ZEPHIR_SET_THIS_EXPLICIT_NULL(); \\');
+                $codePrinter->output('ZEPHIR_SET_THIS(NULL); \\');
                 $codePrinter->output('ZEPHIR_SET_SCOPE(scope_ce, scope_ce); \\');
             }
 
             /* Create new zval's for parameters */
             for ($i = 0; $i < $paramCount; ++$i) {
-                $zv = '_' . $params[$i];
+                //$zv = '_' . $params[$i];
+                //$zvals[] = $zv;
+                //$initStatements[] = 'ALLOC_ZVAL(' . $zv . '); \\';
+                //$initStatements[] = 'INIT_PZVAL_COPY(' . $zv . ', ' . $params[$i] . '); \\';
+                //$postStatements[] = 'zval_ptr_dtor(&' . $zv . '); \\';
+                $zv = $params[$i];
                 $zvals[] = $zv;
-                $initStatements[] = 'ZVAL_COPY(&' . $zv . ', ' . $params[$i] . '); \\';
-                $postStatements[] = 'Z_TRY_DELREF_P(' . $params[$i] . '); \\';
-                //$postStatements[] = 'zval_ptr_dtor(' . $params[$i] . '); \\';
+                $initStatements[] = 'Z_ADDREF_P(' . $zv . '); \\';
+                $postStatements[] = 'Z_DELREF_P(' . $zv . '); \\';
             }
             if ($i) {
-                $codePrinter->output('zval ' . implode(', ', $zvals) . '; \\');
+                //$codePrinter->output('zval *' . implode(', *', $zvals) . '; \\');
             }
             foreach ($initStatements as $statement) {
                 $codePrinter->output($statement);
             }
-            $zvalStr = $i ? ', &' . implode(', &', $zvals) : '';
-            $codePrinter->output('method(0, ' . $retParam . ', ' . ($scope ? 'NULL, ' : $objParam) . $retValueUsed . $zvalStr . '); \\');
+            $zvalStr = $i ? ', ' . implode(', ', $zvals) : '';
+            $retExpr = '';
+            if ($retParam) {
+                if ($retParam == 'return_value') {
+                    $retExpr = ', return_value, return_value_ptr';
+                } else {
+                    $retExpr = ', *' . $retParam . ', ' . $retParam;
+                }
+            }
+            $codePrinter->output('method(0' . $retExpr . ', ' . ($scope ? 'NULL, ' : $objParam) . $retValueUsed . $zvalStr . ' TSRMLS_CC); \\');
             if ($mode == 'CALL_INTERNAL_METHOD_NORETURN_P') {
                 $postStatements[] = 'zval_ptr_dtor(rvp); \\';
             }

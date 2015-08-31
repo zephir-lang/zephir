@@ -17,8 +17,6 @@ class Backend extends BackendZendEngine2
 {
     protected $name = 'ZendEngine3';
 
-    protected $fcallManager;
-
     /* TODO: This should not be used, temporary (until its completely refactored) */
     public function isZE3()
     {
