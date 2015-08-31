@@ -108,8 +108,8 @@ class FcallManager
                 $retParam = 'rvp';
             }
 
-            $codePrinter->output('ZEPHIR_BACKUP_SCOPE(); \\');
-            $codePrinter->output('ZEPHIR_BACKUP_THIS_PTR(); \\');
+            $codePrinter->output('ZEPHIR_BACKUP_SCOPE() \\');
+            $codePrinter->output('ZEPHIR_BACKUP_THIS_PTR() \\');
             if (!$scope) {
                 $codePrinter->output('ZEPHIR_SET_THIS(object); \\');
                 $codePrinter->output('ZEPHIR_SET_SCOPE((Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL), (Z_TYPE_P(object) == IS_OBJECT ? Z_OBJCE_P(object) : NULL)); \\');

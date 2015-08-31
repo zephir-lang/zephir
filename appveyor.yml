@@ -63,6 +63,8 @@ install:
 
 build_script:
   - 'bin\zephir build'
+  - 'type compile-errors.log'
+  - 'type compile.log'
   - 'php vendor\phpunit\phpunit\phpunit.php --debug'
 
 artifacts:
