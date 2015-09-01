@@ -3,73 +3,71 @@ extern zend_class_entry *test_bench_foo_ce;
 
 ZEPHIR_INIT_CLASS(Test_Bench_Foo);
 
-PHP_METHOD(Test_Bench_Foo, empty_for_in_range);
-PHP_METHOD(Test_Bench_Foo, read_static);
-PHP_METHOD(Test_Bench_Foo, write_static);
-PHP_METHOD(Test_Bench_Foo, isset_static);
-PHP_METHOD(Test_Bench_Foo, empty_static);
-PHP_METHOD(Test_Bench_Foo, f);
-PHP_METHOD(Test_Bench_Foo, call_static);
-PHP_METHOD(Test_Bench_Foo, read_prop);
-PHP_METHOD(Test_Bench_Foo, write_prop);
-PHP_METHOD(Test_Bench_Foo, assign_add_prop);
-PHP_METHOD(Test_Bench_Foo, post_inc_prop);
-PHP_METHOD(Test_Bench_Foo, post_dec_prop);
-PHP_METHOD(Test_Bench_Foo, isset_prop);
-PHP_METHOD(Test_Bench_Foo, empty_prop);
+PHP_METHOD(Test_Bench_Foo, emptyForInRange);
+PHP_METHOD(Test_Bench_Foo, readStatic);
+PHP_METHOD(Test_Bench_Foo, writeStatic);
+PHP_METHOD(Test_Bench_Foo, issetStatic);
+PHP_METHOD(Test_Bench_Foo, emptyStatic);
+PHP_METHOD(Test_Bench_Foo, readProp);
+PHP_METHOD(Test_Bench_Foo, writeProp);
+PHP_METHOD(Test_Bench_Foo, assignAddProp);
+PHP_METHOD(Test_Bench_Foo, postIncProp);
+PHP_METHOD(Test_Bench_Foo, postDecProp);
+PHP_METHOD(Test_Bench_Foo, issetProp);
+PHP_METHOD(Test_Bench_Foo, emptyProp);
 PHP_METHOD(Test_Bench_Foo, g);
 PHP_METHOD(Test_Bench_Foo, call);
-PHP_METHOD(Test_Bench_Foo, read_const);
+PHP_METHOD(Test_Bench_Foo, staticMethod);
+PHP_METHOD(Test_Bench_Foo, staticMethod1);
+PHP_METHOD(Test_Bench_Foo, scall);
+PHP_METHOD(Test_Bench_Foo, scallWithReturnTrue);
+PHP_METHOD(Test_Bench_Foo, readConst);
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_empty_for_in_range, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_emptyforinrange, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_read_static, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_readstatic, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_write_static, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_writestatic, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_isset_static, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_issetstatic, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_empty_static, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_emptystatic, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_call_static, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_readprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_read_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_writeprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_write_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_assignaddprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_assign_add_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_postincprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_post_inc_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_postdecprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_post_dec_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_issetprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_isset_prop, 0, 0, 1)
-	ZEND_ARG_INFO(0, n)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_empty_prop, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_emptyprop, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
@@ -77,27 +75,37 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_call, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_read_const, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_scall, 0, 0, 1)
+	ZEND_ARG_INFO(0, n)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_scallwithreturntrue, 0, 0, 1)
+	ZEND_ARG_INFO(0, n)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_test_bench_foo_readconst, 0, 0, 1)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(test_bench_foo_method_entry) {
-	PHP_ME(Test_Bench_Foo, empty_for_in_range, arginfo_test_bench_foo_empty_for_in_range, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, read_static, arginfo_test_bench_foo_read_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, write_static, arginfo_test_bench_foo_write_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, isset_static, arginfo_test_bench_foo_isset_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, empty_static, arginfo_test_bench_foo_empty_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, f, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, call_static, arginfo_test_bench_foo_call_static, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-	PHP_ME(Test_Bench_Foo, read_prop, arginfo_test_bench_foo_read_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, write_prop, arginfo_test_bench_foo_write_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, assign_add_prop, arginfo_test_bench_foo_assign_add_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, post_inc_prop, arginfo_test_bench_foo_post_inc_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, post_dec_prop, arginfo_test_bench_foo_post_dec_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, isset_prop, arginfo_test_bench_foo_isset_prop, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, empty_prop, arginfo_test_bench_foo_empty_prop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, emptyForInRange, arginfo_test_bench_foo_emptyforinrange, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Bench_Foo, readStatic, arginfo_test_bench_foo_readstatic, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Bench_Foo, writeStatic, arginfo_test_bench_foo_writestatic, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Bench_Foo, issetStatic, arginfo_test_bench_foo_issetstatic, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Bench_Foo, emptyStatic, arginfo_test_bench_foo_emptystatic, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Test_Bench_Foo, readProp, arginfo_test_bench_foo_readprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, writeProp, arginfo_test_bench_foo_writeprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, assignAddProp, arginfo_test_bench_foo_assignaddprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, postIncProp, arginfo_test_bench_foo_postincprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, postDecProp, arginfo_test_bench_foo_postdecprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, issetProp, arginfo_test_bench_foo_issetprop, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, emptyProp, arginfo_test_bench_foo_emptyprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, g, NULL, ZEND_ACC_PUBLIC)
 	PHP_ME(Test_Bench_Foo, call, arginfo_test_bench_foo_call, ZEND_ACC_PUBLIC)
-	PHP_ME(Test_Bench_Foo, read_const, arginfo_test_bench_foo_read_const, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, staticMethod, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, staticMethod1, NULL, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, scall, arginfo_test_bench_foo_scall, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, scallWithReturnTrue, arginfo_test_bench_foo_scallwithreturntrue, ZEND_ACC_PUBLIC)
+	PHP_ME(Test_Bench_Foo, readConst, arginfo_test_bench_foo_readconst, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
