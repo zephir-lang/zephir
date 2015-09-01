@@ -184,7 +184,7 @@ class Apc
      */
     public function getHashFile($algorithm, $path, $cache = false)
     {
-        if ($cache == false) {
+        if ($cache === false) {
             return hash_file($algorithm, $path);
         } else {
             $changed = false;
