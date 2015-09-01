@@ -706,7 +706,7 @@ class ClassDefinition
      * @param string string
      * @return boolean|ClassMethod
      */
-    public function getMethod($methodName)
+    public function getMethod($methodName, $checkExtends = true)
     {
         $methodNameLower = strtolower($methodName);
         foreach ($this->methods as $name => $method) {
@@ -715,6 +715,9 @@ class ClassDefinition
             }
         }
 
+        if (!$checkExtends) {
+            return false;
+        }
         $extendsClassDefinition = $this->extendsClassDefinition;
         if ($extendsClassDefinition instanceof ClassDefinition) {
             if ($extendsClassDefinition->hasMethod($methodName)) {
@@ -995,6 +998,10 @@ class ClassDefinition
             $methodEntry = strtolower($this->getCNamespace()) . '_' . strtolower($this->getName()) . '_method_entry';
         } else {
             $methodEntry = 'NULL';
+        }
+
+        foreach ($methods as $method) {
+            $method->setupOptimized($compilationContext);
         }
 
         $namespace = str_replace('\\', '_', $compilationContext->config->get('namespace'));
