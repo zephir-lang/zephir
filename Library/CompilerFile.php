@@ -89,6 +89,7 @@ class CompilerFile
         $this->_headerCBlocks = array();
         $this->_config = $config;
         $this->_logger = $logger;
+        $this->_aliasManager = new AliasManager();
     }
 
     /**
@@ -571,11 +572,6 @@ class CompilerFile
         if (isset($ir['type']) && $ir['type'] == 'error') {
             throw new ParseException($ir['message'], $ir);
         }
-
-        /**
-         * Alias Manager
-         */
-        $this->_aliasManager = new AliasManager();
 
         /**
          * Compilation context stores common objects required by compilation entities
