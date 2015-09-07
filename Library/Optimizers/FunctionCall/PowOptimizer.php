@@ -59,7 +59,7 @@ class PowOptimizer extends OptimizerAbstract
             throw new CompilerException("Returned values by functions can only be assigned to variant variables", $expression);
         }
 
-        $context->headersManager->add('kernel/math');
+        $context->headersManager->add('kernel/operators');
         $symbolVariable->setDynamicTypes('variable');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
