@@ -311,6 +311,13 @@ class Assign
 		return arr;
 	}
 
+	public function testAssign38(index)
+	{
+		var arr = [];
+		let arr[index] = "val";
+		return arr;
+	}
+
 	public function testPropertyAssign1()
 	{
 		let this->testVar = 1;

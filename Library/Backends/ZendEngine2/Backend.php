@@ -620,6 +620,8 @@ class Backend extends BaseBackend
                 case 'long':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getName() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+                default:
+                    throw new CompilerException('updateArray: Found a variable with unsupported type ' . $key->getType());
             }
         } else if ($key instanceof CompiledExpression) {
             switch ($key->getType()) {
@@ -629,10 +631,12 @@ class Backend extends BaseBackend
                 case 'int':
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getCode() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
+                case 'variable':
+                    $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key), $value, $compilationContext, $flags);
+                    break;
                 default:
-                    throw new CompilerException('updateArray: ' . $key->getType());
+                    throw new CompilerException('updateArray: Found an expression with unsupported type ' . $key->getType());
             }
-
         } else {
             throw new CompilerException("?");
         }
