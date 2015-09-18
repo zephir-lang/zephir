@@ -632,7 +632,7 @@ class Backend extends BaseBackend
                     $compilationContext->codePrinter->output('zephir_array_update_long(' . $this->getVariableCodePointer($symbolVariable) . ', ' . $key->getCode() . ', ' . $value . ', ' . $flags . ' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
                 case 'variable':
-                    $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key), $value, $compilationContext, $flags);
+                    $this->updateArray($symbolVariable, $compilationContext->symbolTable->getVariableForRead($key->getCode()), $value, $compilationContext, $flags);
                     break;
                 default:
                     throw new CompilerException('updateArray: Found an expression with unsupported type ' . $key->getType());
@@ -720,7 +720,7 @@ class Backend extends BaseBackend
             if ($resolvedExpr->getType() == 'string') {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch(' . $code . ', SS("' . $resolvedExpr->getCode() . '"), '. $flags . ' TSRMLS_CC)', $expression);
             } else if (in_array($resolvedExpr->getType(), array('int', 'uint', 'long'))) {
-                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $exprValue . ', ' . $flags . ' TSRMLS_CC)', $expression);
+                return new CompiledExpression('bool', 'zephir_array_isset_long_fetch(' . $code . ', ' . $resolvedExpr->getCode() . ', ' . $flags . ' TSRMLS_CC)', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
@@ -731,7 +731,7 @@ class Backend extends BaseBackend
         } else if ($resolvedExpr->getType() == 'variable' || $resolvedExpr->getType() == 'string') {
             return new CompiledExpression('bool', 'zephir_array_isset_fetch(' . $code . ', ' . $this->getVariableCode($resolvedExpr) . ', ' . $flags . ' TSRMLS_CC)', $expression);
         }
-        throw new CompilerException('[' . $resolvedExpr->getType() . ']', $expression);
+        throw new CompilerException('arrayIssetFetch [' . $resolvedExpr->getType() . ']', $expression);
     }
 
     public function propertyIsset(Variable $var, $key, CompilationContext $context)
