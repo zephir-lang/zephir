@@ -26,4 +26,15 @@ class StrReplaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(StrReplace::issue1055(), "bla bla aaa aaaa askks");
     }
+
+    public static function issue1087()
+    {
+        $this->assertEquals(StrReplace::issue1087(), "test_test");
+    }
+
+    public static function issue732()
+    {
+        $this->assertEquals(StrReplace::issue732A(), "F");
+        $this->assertEquals(StrReplace::issue732B(), "The slow black bear jumped over the lazy dog.");
+    }
 }
