@@ -193,6 +193,9 @@ class DeclareStatement extends StatementAbstract
                             case 'null':
                             case 'array':
                             case 'empty-array':
+                                $expression = new Expression($defaultValue);
+                                $expression->setExpectReturn(true, $symbolVariable);
+                                $expression->compile($compilationContext);
                                 break;
 
                             default:
@@ -225,12 +228,11 @@ class DeclareStatement extends StatementAbstract
                                 break;
 
                             case 'array':
-                                $expression = new Expression($variable['expr']);
+                                $expression = new Expression($defaultValue);
                                 $expression->setExpectReturn(true, $symbolVariable);
                                 $expression->compile($compilationContext);
                                 // no break
 
-                            case 'array':
                             case 'empty-array':
                                 $symbolVariable->setDynamicTypes('array');
                                 break;
