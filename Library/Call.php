@@ -346,7 +346,7 @@ class Call
             $expression = $compiledExpression->getOriginal();
             switch ($compiledExpression->getType()) {
                 case 'null':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignNull($parameterVariable, $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
@@ -357,7 +357,7 @@ class Call
                 case 'int':
                 case 'uint':
                 case 'long':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignLong($parameterVariable, $compiledExpression->getCode(), $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
@@ -366,7 +366,7 @@ class Call
                     break;
 
                 case 'double':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignDouble($parameterVariable, $compiledExpression->getCode(), $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
@@ -380,7 +380,7 @@ class Call
                     } else if ($value == 'false') {
                         $value = '0';
                     }
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                     $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                     $compilationContext->backend->assignBool($parameterVariable, $value, $compilationContext);
 
@@ -419,7 +419,7 @@ class Call
                         case 'long':
                         /* ulong must be stored in string */
                         case 'ulong':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
                             $compilationContext->backend->assignLong($parameterTempVariable, $parameterVariable, $compilationContext);
                             $this->_temporalVariables[] = $parameterTempVariable;
@@ -428,7 +428,7 @@ class Call
                             break;
 
                         case 'double':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression, isset($readOnlyParameters[$position]));
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $compilationContext->backend->assignDouble($parameterTempVariable, $parameterVariable, $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
                             $this->_temporalVariables[] = $parameterTempVariable;
@@ -437,7 +437,7 @@ class Call
                             break;
 
                         case 'bool':
-                            $tempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                            $tempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $codePrinter->output('if (' . $parameterVariable->getName() . ') {');
                             $codePrinter->increaseLevel();
                             $compilationContext->backend->assignBool($tempVariable, '1', $compilationContext);
@@ -510,8 +510,8 @@ class Call
                 case 'int':
                 case 'uint':
                 case 'long':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
+                    $compilationContext->backend->assignLong($parameterVariable, $compiledExpression->getCode(), $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
@@ -520,8 +520,8 @@ class Call
 
                 case 'char':
                 case 'uchar':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
-                    $codePrinter->output('ZVAL_LONG(&' . $parameterVariable->getName() . ', \'' . $compiledExpression->getCode() . '\');');
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
+                    $compilationContext->backend->assignLong($parameterVariable, '\'' . $compiledExpression->getCode() . '\'', $compilationContext);
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
                     $types[] = $parameterVariable->getType();
@@ -529,7 +529,7 @@ class Call
                     break;
 
                 case 'double':
-                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                    $parameterVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                     $codePrinter->output('ZVAL_DOUBLE(&' . $parameterVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                     $this->_temporalVariables[] = $parameterVariable;
                     $params[] = '&' . $parameterVariable->getName();
@@ -580,7 +580,7 @@ class Call
                         case 'uint':
                         case 'long':
                         case 'ulong':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                             $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
                             $types[] = $parameterTempVariable->getType();
@@ -590,7 +590,7 @@ class Call
 
                         case 'char':
                         case 'uchar':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                             $codePrinter->output('ZVAL_LONG(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
                             $types[] = $parameterTempVariable->getType();
@@ -599,7 +599,7 @@ class Call
                             break;
 
                         case 'double':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                             $codePrinter->output('ZVAL_DOUBLE(&' . $parameterTempVariable->getName() . ', ' . $compiledExpression->getCode() . ');');
                             $params[] = '&' . $parameterTempVariable->getName();
                             $types[] = $parameterTempVariable->getType();
@@ -608,7 +608,7 @@ class Call
                             break;
 
                         case 'bool':
-                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, $expression);
+                            $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext, true);
                             $compilationContext->backend->assignBool($parameterTempVariable, '(' . $parameterVariable->getName() . ' ? 1 : 0)', $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);
                             $dynamicTypes[] = $parameterTempVariable->getType();

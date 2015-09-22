@@ -1221,11 +1221,11 @@ class Backend extends BaseBackend
         return 'zephir_get_internal_ce(SS("' . $str . '") TSRMLS_CC)';
     }
 
-    public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true)
+    public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = false)
     {
         if ($isLocal) {
-            return $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext, $expression);
+            return $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
         }
-        return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext, $expression);
+        return $compilationContext->symbolTable->getTempVariableForWrite($type, $compilationContext);
     }
 }

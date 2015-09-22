@@ -41,7 +41,7 @@ abstract class BaseBackend
 
     abstract public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true);
 
-    abstract public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true);
+    abstract public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = true);
 
     abstract public function declareConstant($type, $name, $value, CompilationContext $context);
 

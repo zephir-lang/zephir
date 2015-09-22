@@ -678,7 +678,7 @@ class Backend extends BackendZendEngine2
         return 'zephir_get_internal_ce(SL("' . $str . '"))';
     }
 
-    public function getScalarTempVariable($type, CompilationContext $compilationContext, $expression, $isLocal = true)
+    public function getScalarTempVariable($type, CompilationContext $compilationContext, $isLocal = true)
     {
         return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
     }
