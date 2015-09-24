@@ -454,9 +454,7 @@ class ComparisonBaseOperator extends BaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
-                                        $variableCode = $compilationContext->backend->getVariableCode($variable);
-                                        return new CompiledExpression('bool', $this->_zvalDoubleNegOperator . '(' . $variableRightCode . ', ' . $variableCode . ')', $expression);
+                                        return new CompiledExpression('bool', 'ZEPHIR_IS_DOUBLE(' . $variableRight->getName() . ', ' . $variable->getName() . ')', $expression);
 
                                     default:
                                         throw new CompilerException("Unknown type: " . $variableRight->getType(), $expression['right']);
