@@ -109,14 +109,15 @@ class NativeArray
             case 'bool':
                 if ($exprCompiled->getCode() == 'true') {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
-                } else {
-                    if ($exprCompiled->getCode() == 'false') {
-                        return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
-                    } else {
-                        throw new Exception('?');
-                    }
                 }
-                break;
+
+                if ($exprCompiled->getCode() == 'false') {
+                    return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
+                }
+
+                $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $compilationContext->backend->assignBool($tempVar, $exprCompiled->getCode(), $compilationContext);
+                return $tempVar;
 
             case 'null':
                 return new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
