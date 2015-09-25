@@ -30,4 +30,8 @@ class GreaterEqualOperator extends ComparisonBaseOperator
     protected $_zvalLongOperator = 'ZEPHIR_GE_LONG';
 
     protected $_zvalLongNegOperator = 'ZEPHIR_LE_LONG';
+
+    protected $_zvalDoubleOperator = '!ZEPHIR_LT_DOUBLE';
+
+    protected $_zvalDoubleNegOperator = '!ZEPHIR_GT_DOUBLE';
 }
