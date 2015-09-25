@@ -572,6 +572,6 @@ static inline char *_str_erealloc(char *str, size_t new_len, size_t old_len) {
 
 #define ZEPHIR_CHECK_POINTER(v) if (!v) fprintf(stderr, "%s:%d\n", __PRETTY_FUNCTION__, __LINE__);
 
-#define zephir_is_php_version(id) ((PHP_VERSION_ID >= id && PHP_VERSION_ID <= (id + 10000)) ?  1 : 0)
+#define zephir_is_php_version(id) (PHP_VERSION_ID / 10 == id / 10 ?  1 : 0)
 
 #endif /* ZEPHIR_KERNEL_MAIN_H */
