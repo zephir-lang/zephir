@@ -731,6 +731,7 @@ class ForStatement extends StatementAbstract
         /**
          * We have to check if hashes are modified within the for's block
          */
+        $st = null;
         if (isset($this->_statement['statements'])) {
             /**
              * Create the statements block here to obtain the last use line
