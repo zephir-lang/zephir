@@ -576,6 +576,7 @@ class ClassDefinition
      * Checks if class definition has a property
      *
      * @param string $name
+     * @return bool
      */
     public function hasConstant($name)
     {
@@ -584,9 +585,9 @@ class ClassDefinition
         }
 
         /**
-         * @todo add code to check if constant is defined in interfaces
+         * Check if constant is defined in interfaces
          */
-        return false;
+        return $this->hasConstantFromInterfaces($name);
     }
 
     /**
@@ -610,9 +611,9 @@ class ClassDefinition
         }
 
         /**
-         * @todo add code to get constant from interfaces
+         * Gets constant from interfaces
          */
-        return false;
+        return $this->getConstantFromInterfaces($constantName);
     }
 
     /**
@@ -620,6 +621,9 @@ class ClassDefinition
      *
      * @param ClassMethod $method
      * @param array $statement
+     *
+     * @return void
+     * @throws CompilerException
      */
     public function addMethod(ClassMethod $method, $statement = null)
     {
@@ -636,6 +640,9 @@ class ClassDefinition
      *
      * @param ClassMethod $method
      * @param array $statement
+     *
+     * @return void
+     * @throws CompilerException
      */
     public function updateMethod(ClassMethod $method, $statement = null)
     {
@@ -704,6 +711,8 @@ class ClassDefinition
      * Returns a method by its name
      *
      * @param string string
+     * @param bool|true $checkExtends
+     *
      * @return boolean|ClassMethod
      */
     public function getMethod($methodName, $checkExtends = true)
@@ -776,7 +785,9 @@ class ClassDefinition
      * Returns the name of the zend_class_entry according to the class name
      *
      * @param CompilationContext $compilationContext
+     *
      * @return string
+     * @throws Exception
      */
     public function getClassEntry(CompilationContext $compilationContext = null)
     {
@@ -965,7 +976,9 @@ class ClassDefinition
      * Compiles a class/interface
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext)
     {
@@ -1705,6 +1718,8 @@ class ClassDefinition
      * Builds a class definition from reflection
      *
      * @param \ReflectionClass $class
+     *
+     * @return ClassDefinition
      */
     public static function buildFromReflection(\ReflectionClass $class)
     {
@@ -1805,5 +1820,39 @@ class ClassDefinition
         }
 
         return $map[$phpType];
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function hasConstantFromInterfaces($name)
+    {
+        if ($interfaces = $this->getImplementedInterfaceDefinitions()) {
+            foreach ($interfaces as $interface) {
+                if ($interface->hasConstant($name)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $name
+     * @return bool|ClassConstant
+     */
+    protected function getConstantFromInterfaces($name)
+    {
+        if ($interfaces = $this->getImplementedInterfaceDefinitions()) {
+            foreach ($interfaces as $interface) {
+                if ($interface->hasConstant($name)) {
+                    return $interface->getConstant($name);
+                }
+            }
+        }
+
+        return false;
     }
 }
