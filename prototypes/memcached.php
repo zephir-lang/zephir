@@ -2,7 +2,7 @@
 
 /**
  * Class Memcached
- * @link http://ru2.php.net/manual/en/book.memcached.php
+ * @link http://php.net/manual/en/book.memcached.php
  */
 class Memcached
 {
@@ -46,7 +46,7 @@ class Memcached
 
     const DISTRIBUTION_MODULA = 0;
     const DISTRIBUTION_CONSISTENT = 1;
-
+    const DISTRIBUTION_VIRTUAL_BUCKET = 6;
     const OPT_SERVER_FAILURE_LIMIT = 21;
     const OPT_AUTO_EJECT_HOSTS = 28;
     const OPT_HASH_WITH_PREFIX_KEY = 25;
@@ -104,45 +104,459 @@ class Memcached
     const GET_ERROR_RETURN_VALUE = false;
 
     /**
-     * http://ru2.php.net/manual/en/memcached.construct.php
+     * @link http://php.net/manual/en/memcached.construct.php
      * @param string $persistent_id
      */
     public function __construct($persistent_id)
     {
-
     }
 
     /**
-     * @link http://php.net/manual/en/memcached.add.php
-     * @param $key
-     * @param $value
-     * @param int $expiration
+     * @link http://php.net/manual/en/memcached.getresultcode.php
+     * @return int
      */
-    public function add($key, $value, $expiration = 0)
+    public function getResultCode()
     {
-
     }
 
     /**
-     * @link http://php.net/manual/en//memcached.delete.php
-     * @param $key
-     * @param int $time
+     * @link http://php.net/manual/en/memcached.getresultmessage.php
+     * @return string
      */
-    public function delete($key, $time = 0)
+    public function getResultMessage()
     {
-
     }
 
     /**
-     * Retrieve an item
      * @link http://php.net/manual/en/memcached.get.php
      * @param string $key
      * @param callable $cache_cb
      * @param float $cas_token
+     * @return mixed
      */
-    public function get ($key, callable $cache_cb = null, &$cas_token = null)
+    public function get($key, callable $cache_cb = null, &$cas_token = null)
     {
+    }
 
+    /**
+     * @link http://php.net/manual/en/memcached.getbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param callable $cache_cb
+     * @param float $cas_token
+     * @return mixed
+     */
+    public function getByKey($server_key, $key, callable $cache_cb = null, &$cas_token = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getmulti.php
+     * @param array $keys
+     * @param array $cas_tokens
+     * @param int $flags
+     * @return mixed
+     */
+    public function getMulti(array $keys, array &$cas_tokens = null, $flags = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getmultibykey.php
+     * @param string $server_key
+     * @param array $keys
+     * @param string $cas_tokens
+     * @param int $flags
+     * @return array
+     */
+    public function getMultiByKey($server_key, array $keys, &$cas_tokens = null, $flags = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getdelayed.php
+     * @param array $keys
+     * @param bool $with_cas
+     * @param callable $value_cb
+     * @return bool
+     */
+    public function getDelayed(array $keys, $with_cas = null, callable $value_cb = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getdelayedbykey.php
+     * @param string $server_key
+     * @param array $keys
+     * @param bool $with_cas
+     * @param callable $value_cb
+     * @return bool
+     */
+    public function getDelayedByKey($server_key, array $keys, $with_cas = null, callable $value_cb = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.fetch.php
+     * @return array
+     */
+    public function fetch()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.fetchall.php
+     * @return array
+     */
+    public function fetchAll()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.set.php
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function set($key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.setbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function setByKey($server_key, $key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.touch.php
+     * @param string $key
+     * @param int $expiration
+     * @return bool
+     */
+    public function touch($key, $expiration)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.touchbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param int $expiration
+     * @return bool
+     */
+    public function touchByKey($server_key, $key, $expiration)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.setmulti.php
+     * @param array $items
+     * @param int $expiration
+     * @return bool
+     */
+    public function setMulti(array $items, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.setmultibykey.php
+     * @param string $server_key
+     * @param array $items
+     * @param int $expiration
+     * @return bool
+     */
+    public function setMultiByKey($server_key, array $items, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.cas.php
+     * @param float $cas_token
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function cas($cas_token, $key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.casbykey.php
+     * @param float $cas_token
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function casByKey($cas_token, $server_key, $key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.add.php
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function add($key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.addbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function addByKey($server_key, $key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.append.php
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
+    public function append($key, $value)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.appendbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
+    public function appendByKey($server_key, $key, $value)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.prepend.php
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
+    public function prepend($key, $value)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.prependbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param string $value
+     * @return bool
+     */
+    public function prependByKey($server_key, $key, $value)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.replace.php
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function replace($key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.replacebykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param mixed $value
+     * @param int $expiration
+     * @return bool
+     */
+    public function replaceByKey($server_key, $key, $value, $expiration = null)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.delete.php
+     * @param string $key
+     * @param int $time
+     * @return bool
+     */
+    public function delete($key, $time = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.deletemulti.php
+     * @param array $keys
+     * @param int $time
+     * @return bool
+     */
+    public function deleteMulti(array $keys, $time = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.deletebykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param int $time
+     * @return bool
+     */
+    public function deleteByKey($server_key, $key, $time = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.deletemultibykey.php
+     * @param string $server_key
+     * @param array $keys
+     * @param int $time
+     * @return bool
+     */
+    public function deleteMultiByKey($server_key, array $keys, $time = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.increment.php
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
+     * @return int
+     */
+    public function increment($key, $offset = 1, $initial_value = 0, $expiry = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.decrement.php
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
+     * @return int
+     */
+    public function decrement($key, $offset = 1, $initial_value = 0, $expiry = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.incrementbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
+     * @return int
+     */
+    public function incrementByKey($server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.decrementbykey.php
+     * @param string $server_key
+     * @param string $key
+     * @param int $offset
+     * @param int $initial_value
+     * @param int $expiry
+     * @return int
+     */
+    public function decrementByKey($server_key, $key, $offset = 1, $initial_value = 0, $expiry = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.addserver.php
+     * @param string $host
+     * @param int $port
+     * @param int $weight
+     * @return bool
+     */
+    public function addServer($host, $port, $weight = 0)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.addservers.php
+     * @param array $servers
+     * @return bool
+     */
+    public function addServers(array $servers)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getserverlist.php
+     * @return array
+     */
+    public function getServerList()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getserverbykey.php
+     * @param string $server_key
+     * @return array
+     */
+    public function getServerByKey($server_key)
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.resetserverlist.php
+     * @return bool
+     */
+    public function resetServerList()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.quit.php
+     * @return bool
+     */
+    public function quit()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getstats.php
+     * @return array
+     */
+    public function getStats()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getversion.php
+     * @return array
+     */
+    public function getVersion()
+    {
+    }
+
+    /**
+     * @link http://php.net/manual/en/memcached.getallkeys.php
+     * @return array
+     */
+    public function getAllKeys()
+    {
     }
 
     /**
@@ -150,102 +564,52 @@ class Memcached
      * @param int $delay
      * @return bool
      */
-    public function flush ($delay = 0)
+    public function flush($delay = 0)
     {
-
     }
 
     /**
-     * @link http://ru2.php.net/manual/en/memcached.set.php
-     * @param $key
-     * @param $value
-     * @param int $expiration
+     * @link http://php.net/manual/en/memcached.getoption.php
+     * @param int $option
+     * @return mixed
      */
-    public function set($key, $value, $expiration = 0)
+    public function getOption($option)
     {
-
     }
 
     /**
-     * @link http://ru2.php.net/manual/en/memcached.addbykey.php
-     * @param $server_key
-     * @param $key
-     * @param $value
-     * @param int $expiration
-     */
-    public function addByKey($server_key, $key, $value, $expiration = 0)
-    {
-
-    }
-
-    /**
-     * @link http://ru2.php.net/manual/en/memcached.addserver.php
-     * @param $host
-     * @param $port
-     * @param int $weight
-     */
-    public function addServer($host, $port, $weight = 0)
-    {
-
-    }
-
-    /**
-     * @link http://ru2.php.net/manual/en/memcached.addservers.php
-     * @param array $servers
-     */
-    public function addServers($servers)
-    {
-
-    }
-
-    /**
-     * @link http://ru2.php.net/manual/en/memcached.setoption.php
+     * @link http://php.net/manual/en/memcached.setoption.php
      * @param int $option
      * @param mixed $value
+     * @return bool
      */
     public function setOption($option, $value)
     {
-
     }
 
     /**
-     * @link http://ru2.php.net/manual/en/memcached.setoption.php
+     * @link http://php.net/manual/en/memcached.setoptions.php
      * @param array $options
+     * @return bool
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
-
     }
 
     /**
-     * @link http://ru2.php.net/manual/en/memcached.setsaslauthdata.php
-     * @param string $username
-     * @param string $password
+     * @link http://php.net/manual/en/memcached.ispersistent.php
+     * @return bool
      */
-    public function setSaslAuthData($username, $password)
+    public function isPersistent()
     {
-
     }
 
     /**
-     * @link http://ru2.php.net/manual/en/memcached.touch.php
-     * @param string $key
-     * @param int $expiration
+     * @link http://php.net/manual/en/memcached.ispristine.php
+     * @return bool
      */
-    public function touch($key, $expiration)
+    public function isPristine()
     {
-
-    }
-
-    /**
-     * @link http://ru2.php.net/manual/en/memcached.touchbykey.php
-     * @param $server_key
-     * @param $key
-     * @param $expiration
-     */
-    public function touchByKey($server_key, $key, $expiration)
-    {
-
     }
 }
 
