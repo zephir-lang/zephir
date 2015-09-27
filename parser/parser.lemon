@@ -430,11 +430,16 @@ static json_object *xx_ret_class_method(json_object *visibility, xx_parser_token
 }
 
 static json_object *xx_ret_parameter(int const_param, json_object *type, json_object *cast, xx_parser_token *N, json_object *default_value,
-	int mandatory, int reference, xx_scanner_state *state)
+	int mandatory, int reference, int variables_args, xx_scanner_state *state)
 {
 	json_object *ret = json_object_new_object();
 
-	json_object_object_add(ret, "type", json_object_new_string("parameter"));
+	if (variables_args) {
+		json_object_object_add(ret, "type", json_object_new_string("parameter-variables"));
+	} else {
+		json_object_object_add(ret, "type", json_object_new_string("parameter"));
+	}
+
 	json_object_object_add(ret, "name", json_object_new_string(N->token));
 	json_object_object_add(ret, "const", json_object_new_int(const_param));
 
@@ -453,7 +458,7 @@ static json_object *xx_ret_parameter(int const_param, json_object *type, json_ob
 		json_object_object_add(ret, "default", default_value);
 	}
 
-    json_object_object_add(ret, "reference", json_object_new_int(reference));
+	json_object_object_add(ret, "reference", json_object_new_int(reference));
 
 	json_object_object_add(ret, "file", json_object_new_string(state->active_file));
 	json_object_object_add(ret, "line", json_object_new_int(state->active_line));
@@ -1291,7 +1296,7 @@ xx_top_statement(R) ::= xx_use_aliases(T) . {
 }
 
 xx_top_statement(R) ::= xx_function_def(T) . {
-    R = T;
+	R = T;
 }
 
 xx_top_statement(R) ::= xx_class_def(T) . {
@@ -1857,7 +1862,7 @@ xx_method_return_type_item(R) ::= xx_parameter_cast_collection(T) . {
 }
 
 /* parameters list */
-xx_parameter_list(R) ::= xx_parameter_list(L) COMMA xx_parameter(P) . {
+xx_parameter_list(R) ::= xx_parameter_list_without_variables_args(L) COMMA xx_parameter(P) . {
 	R = xx_ret_list(L, P);
 }
 
@@ -1865,166 +1870,202 @@ xx_parameter_list(R) ::= xx_parameter(P) . {
 	R = xx_ret_list(NULL, P);
 }
 
+xx_parameter_list(R) ::= xx_variables_args(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
+xx_parameter_list(R) ::= xx_parameter_list_without_variables_args(L) COMMA xx_variables_args(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_parameter_list_without_variables_args(R) ::= xx_parameter_list_without_variables_args(L) COMMA xx_parameter(P) . {
+	R = xx_ret_list(L, P);
+}
+
+xx_parameter_list_without_variables_args(R) ::= xx_parameter(P) . {
+	R = xx_ret_list(NULL, P);
+}
+
 /* xx_parameter_list */
+
+// ...a
+xx_variables_args(R) ::= EXCLUSIVE_RANGE IDENTIFIER(I) . {
+	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 0, 1, status->scanner_state);
+}
+
+// type ...a
+xx_variables_args(R) ::= xx_parameter_type(T) EXCLUSIVE_RANGE IDENTIFIER(I) . {
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 0, 1, status->scanner_state);
+}
+
+// type! ...a
+xx_variables_args(R) ::= xx_parameter_type(T) NOT EXCLUSIVE_RANGE IDENTIFIER(I) . {
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 0, 1, status->scanner_state);
+}
+
+// <cast> ...a
+xx_variables_args(R) ::= xx_parameter_cast(C) EXCLUSIVE_RANGE IDENTIFIER(I) . {
+	R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 0, 1, status->scanner_state);
+}
 
 // a
 xx_parameter(R) ::= IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // &a
 xx_parameter(R) ::= BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, NULL, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // const a
 xx_parameter(R) ::= CONST IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // const &a
 xx_parameter(R) ::= CONST BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // type a
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // type &a
 xx_parameter(R) ::= xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // const type a
 xx_parameter(R) ::= CONST xx_parameter_type(T) IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // const type &a
 xx_parameter(R) ::= CONST xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // type! a
 xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) . {
-	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 0, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 0, NULL, status->scanner_state);
 }
 
 // type! &a
 xx_parameter(R) ::= xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, NULL, 1, 1, NULL, status->scanner_state);
 }
 
 // const type! a
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 0, NULL, status->scanner_state);
 }
 
 // const type! &a
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, NULL, 1, 1, NULL, status->scanner_state);
 }
 
 // <cast> a
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) . {
-    R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // <cast> &a
 xx_parameter(R) ::= xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, C, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // const <cast> a
 xx_parameter(R) ::= CONST xx_parameter_cast(C) IDENTIFIER(I) . {
-	R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 0, NULL, status->scanner_state);
 }
 
 // const <cast> &a
 xx_parameter(R) ::= CONST xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) . {
-    R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, NULL, 0, 1, NULL, status->scanner_state);
 }
 
 // a = default_value
 xx_parameter(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // &a = default_value
 xx_parameter(R) ::= BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, NULL, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 // const a = default_value
 xx_parameter(R) ::= CONST IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // const &a = default_value
 xx_parameter(R) ::= CONST BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, NULL, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 // type a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, T, NULL, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // type &a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, T, NULL, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 // const type a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, T, NULL, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // const type &a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(1, T, NULL, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 // type! a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) NOT IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, T, NULL, I, E, 1, 0, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, E, 1, 0, NULL, status->scanner_state);
 }
 
 // type! &a = default_value
 xx_parameter(R) ::= xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, T, NULL, I, E, 1, 1, status->scanner_state);
+	R = xx_ret_parameter(0, T, NULL, I, E, 1, 1, NULL, status->scanner_state);
 }
 
 // const type! a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, T, NULL, I, E, 1, 0, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 1, 0, NULL, status->scanner_state);
 }
 
 // const type! &a = default_value
 xx_parameter(R) ::= CONST xx_parameter_type(T) NOT BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(1, T, NULL, I, E, 1, 1, status->scanner_state);
+	R = xx_ret_parameter(1, T, NULL, I, E, 1, 1, NULL, status->scanner_state);
 }
 
 // <cast> a = default_value
 xx_parameter(R) ::= xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(0, NULL, C, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, C, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // <cast> &a = default_value
 xx_parameter(R) ::= xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(0, NULL, C, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(0, NULL, C, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 // const <cast> a = default_value
 xx_parameter(R) ::= CONST xx_parameter_cast(C) IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-	R = xx_ret_parameter(1, NULL, C, I, E, 0, 0, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, E, 0, 0, NULL, status->scanner_state);
 }
 
 // const <cast> &a = default_value
 xx_parameter(R) ::= CONST xx_parameter_cast(C) BITWISE_AND IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
-    R = xx_ret_parameter(1, NULL, C, I, E, 0, 1, status->scanner_state);
+	R = xx_ret_parameter(1, NULL, C, I, E, 0, 1, NULL, status->scanner_state);
 }
 
 /* xx_parameter_cast */
@@ -2694,107 +2735,132 @@ xx_common_expr(R) ::= BITWISE_AND xx_common_expr(O1) . {
 	R = xx_ret_expr("reference", O1, NULL, NULL, status->scanner_state);
 }
 
+// !a
 xx_common_expr(R) ::= NOT xx_common_expr(O1) . {
 	R = xx_ret_expr("not", O1, NULL, NULL, status->scanner_state);
 }
 
 /* ~a */
 xx_common_expr(R) ::= BITWISE_NOT xx_common_expr(O1) . {
-    R = xx_ret_expr("bitwise_not", O1, NULL, NULL, status->scanner_state);
+	R = xx_ret_expr("bitwise_not", O1, NULL, NULL, status->scanner_state);
 }
 
+// -a
 xx_common_expr(R) ::= SUB xx_common_expr(O1) . [NOT] {
 	R = xx_ret_expr("minus", O1, NULL, NULL, status->scanner_state);
 }
 
+// +a
 xx_common_expr(R) ::= PLUS xx_common_expr(O1) . [NOT] {
 	R = xx_ret_expr("plus", O1, NULL, NULL, status->scanner_state);
 }
 
+// isset a
 xx_common_expr(R) ::= ISSET xx_common_expr(O1) . {
 	R = xx_ret_expr("isset", O1, NULL, NULL, status->scanner_state);
 }
 
+// require a
 xx_common_expr(R) ::= REQUIRE xx_common_expr(O1) . {
 	R = xx_ret_expr("require", O1, NULL, NULL, status->scanner_state);
 }
 
+// clone a
 xx_common_expr(R) ::= CLONE xx_common_expr(O1) . {
 	R = xx_ret_expr("clone", O1, NULL, NULL, status->scanner_state);
 }
 
+// empty
 xx_common_expr(R) ::= EMPTY xx_common_expr(O1) . {
 	R = xx_ret_expr("empty", O1, NULL, NULL, status->scanner_state);
 }
 
+// likely a
 xx_common_expr(R) ::= LIKELY xx_common_expr(O1) . {
 	R = xx_ret_expr("likely", O1, NULL, NULL, status->scanner_state);
 }
 
+// unlikely a
 xx_common_expr(R) ::= UNLIKELY xx_common_expr(O1) . {
 	R = xx_ret_expr("unlikely", O1, NULL, NULL, status->scanner_state);
 }
 
+// y = a == b
 xx_common_expr(R) ::= xx_common_expr(O1) EQUALS xx_common_expr(O2) . {
 	R = xx_ret_expr("equals", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a != b
 xx_common_expr(R) ::= xx_common_expr(O1) NOTEQUALS xx_common_expr(O2) . {
 	R = xx_ret_expr("not-equals", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a === b
 xx_common_expr(R) ::= xx_common_expr(O1) IDENTICAL xx_common_expr(O2) . {
 	R = xx_ret_expr("identical", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a !== b
 xx_common_expr(R) ::= xx_common_expr(O1) NOTIDENTICAL xx_common_expr(O2) . {
 	R = xx_ret_expr("not-identical", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a < b
 xx_common_expr(R) ::= xx_common_expr(O1) LESS xx_common_expr(O2) . {
 	R = xx_ret_expr("less", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a > b
 xx_common_expr(R) ::= xx_common_expr(O1) GREATER xx_common_expr(O2) . {
 	R = xx_ret_expr("greater", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a <= b
 xx_common_expr(R) ::= xx_common_expr(O1) LESSEQUAL xx_common_expr(O2) . {
 	R = xx_ret_expr("less-equal", O1, O2, NULL, status->scanner_state);
 }
 
+// y = a >= b
 xx_common_expr(R) ::= xx_common_expr(O1) GREATEREQUAL xx_common_expr(O2) . {
 	R = xx_ret_expr("greater-equal", O1, O2, NULL, status->scanner_state);
 }
 
+// y = (a)
 xx_common_expr(R) ::= PARENTHESES_OPEN xx_common_expr(O1) PARENTHESES_CLOSE . {
 	R = xx_ret_expr("list", O1, NULL, NULL, status->scanner_state);
 }
 
+// y = (type) a
 xx_common_expr(R) ::= PARENTHESES_OPEN xx_parameter_type(O1) PARENTHESES_CLOSE xx_common_expr(O2) . {
 	R = xx_ret_expr("cast", O1, O2, NULL, status->scanner_state);
 }
 
+// y = <TYPE> a
 xx_common_expr(R) ::= LESS IDENTIFIER(I) GREATER xx_common_expr(O2) . {
 	R = xx_ret_expr("type-hint", xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), O2, NULL, status->scanner_state);
 }
 
+// y = a -> b
 xx_common_expr(R) ::= xx_common_expr(V) ARROW IDENTIFIER(I) . {
 	R = xx_ret_expr("property-access", V, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
+// y = a -> {b}
 xx_common_expr(R) ::= xx_common_expr(V) ARROW BRACKET_OPEN IDENTIFIER(I) BRACKET_CLOSE . {
 	R = xx_ret_expr("property-dynamic-access", V, xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
+// y = a -> {"string"}
 xx_common_expr(R) ::= xx_common_expr(V) ARROW BRACKET_OPEN STRING(S) BRACKET_CLOSE . {
 	R = xx_ret_expr("property-string-access", V, xx_ret_literal(XX_T_STRING, S, status->scanner_state), NULL, status->scanner_state);
 }
 
+// y = a :: b
 xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON IDENTIFIER(I) . {
 	R = xx_ret_expr("static-property-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
 
+// y = a :: CONSTANT
 xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 	R = xx_ret_expr("static-constant-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), xx_ret_literal(XX_T_IDENTIFIER, I, status->scanner_state), NULL, status->scanner_state);
 }
@@ -2804,6 +2870,7 @@ xx_common_expr(R) ::= IDENTIFIER(V) DOUBLECOLON CONSTANT(I) . {
 	R = xx_ret_expr("array-access", xx_ret_literal(XX_T_IDENTIFIER, V, status->scanner_state), I, NULL, status->scanner_state);
 }*/
 
+// y = a[expr]
 xx_common_expr(R) ::= xx_common_expr(V) SBRACKET_OPEN xx_common_expr(I) SBRACKET_CLOSE . {
 	R = xx_ret_expr("array-access", V, I, NULL, status->scanner_state);
 }
@@ -3045,12 +3112,12 @@ xx_scall_expr(R) ::= IDENTIFIER(O) DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx
 
 /* static::m(false, x) */
 xx_scall_expr(R) ::= STATIC DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN xx_call_parameters(P) PARENTHESES_CLOSE . {
-    R = xx_ret_scall(0, "static", 0, M, P, status->scanner_state);
+	R = xx_ret_scall(0, "static", 0, M, P, status->scanner_state);
 }
 
 /* static::m() */
 xx_scall_expr(R) ::= STATIC DOUBLECOLON IDENTIFIER(M) PARENTHESES_OPEN PARENTHESES_CLOSE . {
-    R = xx_ret_scall(0, "static", 0, M, NULL, status->scanner_state);
+	R = xx_ret_scall(0, "static", 0, M, NULL, status->scanner_state);
 }
 
 /* {o}::m() */
