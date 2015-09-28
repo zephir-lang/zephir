@@ -108,4 +108,10 @@ class DeclareTest
 		var a = null;
 		return a;
 	}
+
+	public function testDeclareMcallExpression()
+	{
+		var a = this->testDeclare14();
+		return a;
+	}
 }

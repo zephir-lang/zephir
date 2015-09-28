@@ -687,12 +687,14 @@ class Variable
     public function enableDefaultAutoInitValue()
     {
         switch ($this->type) {
+            case 'char':
             case 'boolean':
             case 'bool':
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
+            case 'double':
             case 'zephir_ce_guard':
                 $this->defaultInitValue = 0;
                 break;

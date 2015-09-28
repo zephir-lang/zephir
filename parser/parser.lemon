@@ -2682,7 +2682,7 @@ xx_declare_variable(R) ::= IDENTIFIER(I) . {
 	R = xx_ret_declare_variable(I, NULL, status->scanner_state);
 }
 
-xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_literal_expr(E) . {
+xx_declare_variable(R) ::= IDENTIFIER(I) ASSIGN xx_common_expr(E) . {
 	R = xx_ret_declare_variable(I, E, status->scanner_state);
 }
 
