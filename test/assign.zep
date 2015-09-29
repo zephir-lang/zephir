@@ -851,4 +851,54 @@ class Assign
 		let _GET["stestint2"] = 2;
 		let _GET[v] = "testval";
 	}
+
+	public function testAssignBitwiseX(string! op, int a, int b)
+	{
+		var i, j;
+		int r;
+		array result = [];
+
+		switch op {
+			case "or":
+				let a |= b;
+				break;
+			case "and":
+				let a &= b;
+				break;
+			case "xor":
+				let a ^= b;
+				break;
+			case "shiftleft":
+				let a <<= b;
+				break;
+			case "shiftright":
+				let a >>= b;
+				break;
+
+			default:
+				throw new \InvalidArgumentException("First argument must have: or, and, xor, shiftleft, shiftright");
+		}
+
+		for i in [0, 1] {
+			for j in [0, 1] {
+				let r = i;
+				switch op {
+					case "or":
+						let r |= j;
+						break;
+					case "and":
+						let r &= j;
+						break;
+					case "xor":
+						let r ^= j;
+						break;
+				}
+
+				let result[] = r;
+			}
+		}
+
+		let a += array_sum(result);
+		return a;
+	}
 }

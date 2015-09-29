@@ -118,4 +118,62 @@ class AssignTest extends \PHPUnit_Framework_TestCase
         assert($_GET["stestint2"] == 2);
         assert($_GET["stest2"] == "testval");
     }
+
+    public function testAssignBitwiseX()
+    {
+        $a = 900; // 1110000100
+        $b = 5;   // 0000000101
+
+        $test = new \Test\Assign();
+
+        foreach (array("or", "and", "xor", "shiftleft", "shiftright") as $op) {
+            $this->assertEquals($test->testAssignBitwiseX($op, $a, $b), $this->resultNativeBitwiseX($op, $a, $b));
+        }
+    }
+
+    protected function resultNativeBitwiseX($op, $a, $b)
+    {
+        $result = array();
+        $r      = 0;
+
+        switch ($op) {
+            case 'or':
+                $a |= $b;
+                break;
+            case 'and':
+                $a &= $b;
+                break;
+            case 'xor':
+                $a ^= $b;
+                break;
+            case 'shiftleft':
+                $a <<= $b;
+                break;
+            case 'shiftright':
+                $a >>= $b;
+                break;
+        }
+
+        for ($i = 0; $i < 2; $i++) {
+            for ($j = 0; $j < 2; $j++) {
+                $r = $i;
+                switch ($op) {
+                    case 'or':
+                        $r |= $j;
+                        break;
+                    case 'and':
+                        $r &= $j;
+                        break;
+                    case 'xor':
+                        $r ^= $j;
+                        break;
+                }
+
+                $result[] = $r;
+            }
+        }
+
+        $a += array_sum($result);
+        return $a;
+    }
 }
