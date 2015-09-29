@@ -138,15 +138,15 @@
 #define XX_T_BITWISE_NOT '~'
 #define XX_T_GREATEREQUAL 408
 #define XX_T_LESSEQUAL 409
-#define XX_T_ADDASSIGN 410
-#define XX_T_SUBASSIGN 411
-#define XX_T_MULASSIGN 412
-#define XX_T_DIVASSIGN 413
-#define XX_T_CONCATASSIGN 414
+#define XX_T_ASSIGN_ADD 410
+#define XX_T_ASSIGN_SUB 411
+#define XX_T_ASSIGN_MUL 412
+#define XX_T_ASSIGN_DIV 413
+#define XX_T_ASSIGN_CONCAT 414
 #define XX_T_AND 415
 #define XX_T_OR 416
 #define XX_T_DOUBLECOLON 417
-#define XX_T_MODASSIGN 418
+#define XX_T_ASSIGN_MOD 418
 #define XX_T_BITWISE_SHIFTLEFT 419
 #define XX_T_BITWISE_SHIFTRIGHT 420
 #define XX_T_DOUBLEARROW 440
@@ -157,6 +157,12 @@
 
 #define XX_T_ELSEIF 452
 #define XX_T_INTERNAL 453
+
+#define XX_T_ASSIGN_BITWISE_AND           454
+#define XX_T_ASSIGN_BITWISE_OR            455
+#define XX_T_ASSIGN_BITWISE_XOR           456
+#define XX_T_ASSIGN_BITWISE_SHIFTLEFT     457
+#define XX_T_ASSIGN_BITWISE_SHIFTRIGHT    458
 
 /* List of tokens and their names */
 typedef struct _xx_token_names {

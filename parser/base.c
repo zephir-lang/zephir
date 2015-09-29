@@ -315,23 +315,38 @@ int xx_parse_program(char *program, unsigned int program_length, char *file_path
 			case XX_T_ASSIGN:
 				xx_(xx_parser, XX_ASSIGN, NULL, parser_status);
 				break;
-			case XX_T_ADDASSIGN:
-				xx_(xx_parser, XX_ADDASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_ADD:
+				xx_(xx_parser, XX_ASSIGN_ADD, NULL, parser_status);
 				break;
-			case XX_T_SUBASSIGN:
-				xx_(xx_parser, XX_SUBASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_SUB:
+				xx_(xx_parser, XX_ASSIGN_SUB, NULL, parser_status);
 				break;
-			case XX_T_DIVASSIGN:
-				xx_(xx_parser, XX_DIVASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_DIV:
+				xx_(xx_parser, XX_ASSIGN_DIV, NULL, parser_status);
 				break;
-			case XX_T_MULASSIGN:
-				xx_(xx_parser, XX_MULASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_MUL:
+				xx_(xx_parser, XX_ASSIGN_MUL, NULL, parser_status);
 				break;
-			case XX_T_CONCATASSIGN:
-				xx_(xx_parser, XX_CONCATASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_CONCAT:
+				xx_(xx_parser, XX_ASSIGN_CONCAT, NULL, parser_status);
 				break;
-			case XX_T_MODASSIGN:
-				xx_(xx_parser, XX_MODASSIGN, NULL, parser_status);
+			case XX_T_ASSIGN_MOD:
+				xx_(xx_parser, XX_ASSIGN_MOD, NULL, parser_status);
+				break;
+			case XX_T_ASSIGN_BITWISE_AND:
+				xx_(xx_parser, XX_ASSIGN_BITWISE_AND, NULL, parser_status);
+				break;
+			case XX_T_ASSIGN_BITWISE_OR:
+				xx_(xx_parser, XX_ASSIGN_BITWISE_OR, NULL, parser_status);
+				break;
+			case XX_T_ASSIGN_BITWISE_XOR:
+				xx_(xx_parser, XX_ASSIGN_BITWISE_XOR, NULL, parser_status);
+				break;
+			case XX_T_ASSIGN_BITWISE_SHIFTLEFT:
+				xx_(xx_parser, XX_ASSIGN_BITWISE_SHIFTLEFT, NULL, parser_status);
+				break;
+			case XX_T_ASSIGN_BITWISE_SHIFTRIGHT:
+				xx_(xx_parser, XX_ASSIGN_BITWISE_SHIFTRIGHT, NULL, parser_status);
 				break;
 			case XX_T_EQUALS:
 				xx_(xx_parser, XX_EQUALS, NULL, parser_status);

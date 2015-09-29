@@ -768,37 +768,67 @@ int xx_get_token(xx_scanner_state *s, xx_scanner_token *token) {
 
 		"+=" {
 			s->active_char++;
-			token->opcode = XX_T_ADDASSIGN;
+			token->opcode = XX_T_ASSIGN_ADD;
 			return 0;
 		}
 
 		"-=" {
 			s->active_char++;
-			token->opcode = XX_T_SUBASSIGN;
+			token->opcode = XX_T_ASSIGN_SUB;
 			return 0;
 		}
 
 		"*=" {
 			s->active_char++;
-			token->opcode = XX_T_MULASSIGN;
+			token->opcode = XX_T_ASSIGN_MUL;
 			return 0;
 		}
 
 		"/=" {
 			s->active_char++;
-			token->opcode = XX_T_DIVASSIGN;
+			token->opcode = XX_T_ASSIGN_DIV;
 			return 0;
 		}
 
 		"%=" {
 			s->active_char++;
-			token->opcode = XX_T_MODASSIGN;
+			token->opcode = XX_T_ASSIGN_MOD;
+			return 0;
+		}
+
+		"&=" {
+			s->active_char++;
+			token->opcode = XX_T_ASSIGN_BITWISE_AND;
+			return 0;
+		}
+
+		"|=" {
+			s->active_char++;
+			token->opcode = XX_T_ASSIGN_BITWISE_OR;
+			return 0;
+		}
+
+		"^=" {
+			s->active_char++;
+			token->opcode = XX_T_ASSIGN_BITWISE_XOR;
+			return 0;
+		}
+
+		"<<=" {
+			s->active_char++;
+			token->opcode = XX_T_ASSIGN_BITWISE_SHIFTLEFT;
+			return 0;
+		}
+
+		">>=" {
+			s->active_char++;
+			token->opcode = XX_T_ASSIGN_BITWISE_SHIFTRIGHT;
 			return 0;
 		}
 
 		".=" {
 			s->active_char++;
-			token->opcode = XX_T_CONCATASSIGN;
+			token->opcode = XX_T_ASSIGN_CONCAT;
 			return 0;
 		}
 

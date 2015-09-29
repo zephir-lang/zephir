@@ -2421,33 +2421,58 @@ xx_assignment_operator(R) ::= ASSIGN . {
 }
 
 // +=
-xx_assignment_operator(R) ::= ADDASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_ADD . {
 	R = json_object_new_string("add-assign");
 }
 
 // -=
-xx_assignment_operator(R) ::= SUBASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_SUB . {
 	R = json_object_new_string("sub-assign");
 }
 
 // *=
-xx_assignment_operator(R) ::= MULASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_MUL . {
 	R = json_object_new_string("mul-assign");
 }
 
 // /=
-xx_assignment_operator(R) ::= DIVASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_DIV . {
 	R = json_object_new_string("div-assign");
 }
 
 // .=
-xx_assignment_operator(R) ::= CONCATASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_CONCAT . {
 	R = json_object_new_string("concat-assign");
 }
 
 // %=
-xx_assignment_operator(R) ::= MODASSIGN . {
+xx_assignment_operator(R) ::= ASSIGN_MOD . {
 	R = json_object_new_string("mod-assign");
+}
+
+// &=
+xx_assignment_operator(R) ::= ASSIGN_BITWISE_AND . {
+	R = json_object_new_string("bitwise-and-assign");
+}
+
+// |=
+xx_assignment_operator(R) ::= ASSIGN_BITWISE_OR . {
+	R = json_object_new_string("bitwise-or-assign");
+}
+
+// ^=
+xx_assignment_operator(R) ::= ASSIGN_BITWISE_XOR . {
+	R = json_object_new_string("bitwise-xor-assign");
+}
+
+// <<=
+xx_assignment_operator(R) ::= ASSIGN_BITWISE_SHIFTLEFT . {
+	R = json_object_new_string("bitwise-shiftleft-assign");
+}
+
+// >>=
+xx_assignment_operator(R) ::= ASSIGN_BITWISE_SHIFTRIGHT . {
+	R = json_object_new_string("bitwise-shiftright-assign");
 }
 
 /* y = {expr} */
