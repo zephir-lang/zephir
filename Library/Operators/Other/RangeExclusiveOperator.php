@@ -22,6 +22,7 @@ namespace Zephir\Operators\Other;
 use Zephir\Operators\BaseOperator;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\CompilerException;
 use Zephir\CompiledExpression;
 use Zephir\Builder\FunctionCallBuilder;
@@ -50,17 +51,15 @@ class RangeExclusiveOperator extends BaseOperator
             throw new CompilerException("Invalid 'right' operand for 'irange' expression", $expression['right']);
         }
 
-        $builder = new FunctionCallBuilder('range', array(
-            array('parameter' => $expression['left']),
-            array('parameter' => $expression['right'])
-        ));
+        $exprBuilder = BuilderFactory::getInstance();
 
         /**
          * Implicit type coercing
          */
-        $castBuilder = new CastOperatorBuilder('array', $builder);
+        $castBuilder = $exprBuilder->operators()->cast('array', $exprBuilder->statements()
+            ->functionCall('range', array($expression['left'], $expression['right'])));
 
-        $expression = new Expression($castBuilder->get());
+        $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->_readOnly);
         return $expression->compile($compilationContext);
     }

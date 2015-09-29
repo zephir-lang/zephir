@@ -22,6 +22,7 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\CompilerException;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\LiteralCompiledExpression;
 
 /**
@@ -102,17 +103,13 @@ class DeclareStatement extends StatementAbstract
             //$symbolVariable->increaseVariantIfNull();
 
             if (isset($variable['expr'])) {
-                $letStatement = new LetStatement(array(
-                    'type' => 'let',
-                    'assignments' => array(
-                        array(
-                            'assign-type' => 'variable',
-                            'variable' => $variable['variable'],
-                            'operator' => 'assign',
-                            'expr' => $variable['expr']
-                        )
-                    )
+                $builder = BuilderFactory::getInstance();
+                $letBuilder = $builder->statements()->let(array(
+                    $builder->operators()
+                        ->assignVariable($variable['variable'], $builder->raw($variable['expr']))
                 ));
+
+                $letStatement = new LetStatement($letBuilder->build());
                 $letStatement->compile($compilationContext);
             } else {
                 $symbolVariable->enableDefaultAutoInitValue();

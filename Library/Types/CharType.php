@@ -22,8 +22,10 @@ namespace Zephir\Types;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;
 use Zephir\Builder\FunctionCallBuilder;
+use Zephir\Types;
 
 class CharType extends AbstractType
 {
@@ -46,19 +48,14 @@ class CharType extends AbstractType
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder(
-            'sprintf',
-            array(
-                array('parameter' => array('type' => 'string', 'value' => '%X')),
-                array('parameter' => $caller)
-            ),
-            FunctionCall::CALL_NORMAL,
-            $expression['file'],
-            $expression['line'],
-            $expression['char']
-        );
+        $exprBuilder = BuilderFactory::getInstance();
+        $functionCall = $exprBuilder->statements()
+            ->functionCall('sprintf', array($exprBuilder->literal(Types::STRING, '%X'), $caller))
+            ->setFile($expression['file'])
+            ->setLine($expression['line'])
+            ->setChar($expression['char']);
 
-        $expression = new Expression($builder->get());
+        $expression = new Expression($functionCall->build());
 
         return $expression->compile($compilationContext);
     }

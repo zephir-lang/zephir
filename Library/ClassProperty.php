@@ -19,6 +19,9 @@
 
 namespace Zephir;
 
+use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
+use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Builder\LiteralBuilder;
 use Zephir\Builder\VariableBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
@@ -250,7 +253,7 @@ class ClassProperty
             $statementsBlock = $constructMethod->getStatementsBlock();
             if ($statementsBlock) {
                 $statements = $statementsBlock->getStatements();
-                $letStatement = $this->getLetStatement()->get();
+                $letStatement = $this->getLetStatement()->build();
 
                 $needLetStatementAdded = true;
                 foreach ($statements as $statement) {
@@ -278,8 +281,9 @@ class ClassProperty
                     $classDefinition->updateMethod($constructMethod);
                 }
             } else {
-                $statementsBlockBuilder = new StatementsBlockBuilder(array($this->getLetStatement()), false);
-                $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->get()));
+                $statementsBlockBuilder = BuilderFactory::getInstance()->statements()
+                    ->block(array($this->getLetStatement()));
+                $constructMethod->setStatementsBlock(new StatementsBlock($statementsBlockBuilder->build()));
                 $classDefinition->updateMethod($constructMethod);
             }
         } else {
@@ -288,7 +292,7 @@ class ClassProperty
                 $statements = $constructParentMethod->getStatementsBlock()->getStatements();
             }
             $this->removeInitializationStatements($statements);
-            $statements[] = $this->getLetStatement()->get();
+            $statements[] = $this->getLetStatement()->build();
             $statementsBlock = new StatementsBlock($statements);
 
             if ($this->isStatic()) {
@@ -356,42 +360,45 @@ class ClassProperty
     }
 
     /**
-     * @return LetStatementBuilder
+     * @return $this|ExpressionLetStatement
      */
     protected function getLetStatement()
     {
+        $exprBuilder = BuilderFactory::getInstance();
+
         if ($this->isStatic()) {
-            return new LetStatementBuilder(array(
-                'assign-type' => 'static-property',
-                'operator'    => 'assign',
-                'variable'    => '\\'.$this->classDefinition->getCompleteName(),
-                'property'    => $this->name,
-                'file'        => $this->original['default']['file'],
-                'line'        => $this->original['default']['line'],
-                'char'        => $this->original['default']['char'],
-            ), $this->original['default']);
+            $className = '\\' . $this->classDefinition->getCompleteName();
+            $expr      = $exprBuilder->raw($this->original['default']);
+            return $exprBuilder->statements()->let(array(
+                $exprBuilder->operators()
+                    ->assignStaticProperty($className, $this->name, $expr)
+                    ->setFile($this->original['default']['file'])
+                    ->setLine($this->original['default']['line'])
+                    ->setChar($this->original['default']['char'])
+            ));
         }
-        $lsb = new LetStatementBuilder(array(
-            'assign-type' => 'object-property',
-            'operator'    => 'assign',
-            'variable'    => 'this',
-            'property'    => $this->name,
-            'file'        => $this->original['default']['file'],
-            'line'        => $this->original['default']['line'],
-            'char'        => $this->original['default']['char'],
-        ), $this->original['default']);
-        return new IfStatementBuilder(
-            new BinaryOperatorBuilder(
-                'equals',
-                new BinaryOperatorBuilder(
-                    'property-access',
-                    new VariableBuilder('this'),
-                    new LiteralBuilder('string', $this->name)
-                ),
-                new LiteralBuilder('null', null)
-            ),
-            new StatementsBlockBuilder(array($lsb))
-        );
+
+        $lsb = $exprBuilder->statements()->let(array(
+            $exprBuilder->operators()
+                ->assignProperty('this', $this->name, $exprBuilder->raw($this->original['default']))
+                ->setFile($this->original['default']['file'])
+                ->setLine($this->original['default']['line'])
+                ->setChar($this->original['default']['char'])
+        ));
+
+        return $exprBuilder->statements()->ifX()
+            ->setCondition(
+                $exprBuilder->operators()->binary(
+                    BinaryOperator::OPERATOR_EQUALS,
+                    $exprBuilder->operators()->binary(
+                        BinaryOperator::OPERATOR_ACCESS_PROPERTY,
+                        $exprBuilder->variable('this'),
+                        $exprBuilder->literal(Types::STRING, $this->name)
+                    ),
+                    $exprBuilder->literal(Types::NULL_)
+                )
+            )
+            ->setStatements($exprBuilder->statements()->block(array($lsb)));
     }
 
     /**

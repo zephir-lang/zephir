@@ -144,9 +144,11 @@ abstract class AbstractBuilder
     protected function resolve($expr)
     {
         if (is_array($expr)) {
-            array_walk_recursive($expr, function (&$value) {
-                $value = $this->resolve($value);
-            });
+            foreach ($expr as &$value) {
+                if (!is_scalar($value)) {
+                    $value = $this->resolve($value);
+                }
+            }
 
             return $expr;
         }

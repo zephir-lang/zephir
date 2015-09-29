@@ -22,6 +22,7 @@ namespace Zephir\Types;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\FunctionCall;
 
@@ -112,16 +113,15 @@ class ArrayType extends AbstractType
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $builder = new FunctionCallBuilder(
-            'join',
-            array_merge($expression['parameters'], array(array('parameter' => $caller))),
-            FunctionCall::CALL_NORMAL,
-            $expression['file'],
-            $expression['line'],
-            $expression['char']
-        );
 
-        $expression = new Expression($builder->get());
+        $functionCall = BuilderFactory::getInstance()->statements()
+            ->functionCall('join', $expression['parameters'])
+            ->addArgument($caller)
+            ->setFile($expression['file'])
+            ->setLine($expression['line'])
+            ->setChar($expression['char']);
+
+        $expression = new Expression($functionCall->build());
 
         return $expression->compile($compilationContext);
     }
