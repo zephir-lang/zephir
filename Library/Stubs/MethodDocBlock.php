@@ -24,6 +24,7 @@ use Zephir\ClassMethod;
 
 /**
  * Stubs Generator
+ * @todo: Merge class with documentation generator
  */
 class MethodDocBlock extends DocBlock
 {
@@ -65,6 +66,7 @@ class MethodDocBlock extends DocBlock
         $return = array();
         $returnTypes = $method->getReturnTypes();
 
+
         if ($returnTypes) {
             foreach ($returnTypes as $type) {
                 if (isset($type['data-type'])) {
@@ -72,7 +74,6 @@ class MethodDocBlock extends DocBlock
                 }
             }
         }
-
         $returnClassTypes = $method->getReturnClassTypes();
         if ($returnClassTypes) {
             foreach ($returnClassTypes as $key => $returnClassType) {
@@ -82,6 +83,24 @@ class MethodDocBlock extends DocBlock
             }
 
             $return = array_merge($return, $returnClassTypes);
+        }
+
+        //@TODO: refactoring
+        if (($returnClassTypes = $method->getReturnTypesRaw()) && isset($returnClassTypes['list'])) {
+            foreach ($returnClassTypes['list'] as $returnType) {
+                if (empty($returnType['cast']) || !$returnType['collection']) {
+                    continue;
+                }
+
+                $key  = $returnType['cast']['value'];
+                $type = $key;
+
+                if ($this->aliasManager->isAlias($type)) {
+                    $returnClassTypes[$key] = "\\" . $this->aliasManager->getAlias($type);
+                }
+
+                $return[$key] = $type . '[]';
+            }
         }
 
         if ($return) {

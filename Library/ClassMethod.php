@@ -73,6 +73,13 @@ class ClassMethod
     protected $returnTypes = array();
 
     /**
+     * Raw-types returned by the method
+     *
+     * @var array
+     */
+    protected $returnTypesRaw = array();
+
+    /**
      * Class type hints returned by the method
      */
     protected $returnClassTypes = array();
@@ -190,6 +197,8 @@ class ClassMethod
 
     public function setReturnTypes($returnType)
     {
+        $this->returnTypesRaw = $returnType;
+
         if (isset($returnType['void']) && $returnType['void']) {
             $this->void = true;
             return;
@@ -216,6 +225,14 @@ class ClassMethod
                 $this->returnTypes = $types;
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getReturnTypesRaw()
+    {
+        return $this->returnTypesRaw;
     }
 
     /**
