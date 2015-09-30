@@ -21,7 +21,8 @@
         "php": ">=5.3",
         "ext-json": "*",
         "ext-hash": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "fezfez/zephir-testcase": "^0.2.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~2.3.3",
